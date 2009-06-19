@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="strobe" basedir=".." default="mediaframework">
+
+  <!--
+    ============================================================================
+    PROPERTIES
+    ======================================================================== -->
+
+  <property name="build.dir" location="build"/>
+  <property name="build.dist.dir" location="${build.dir}/dist"/>
+  <property name="build.lib.dir" location="${build.dir}/lib"/>
+  <property name="build.templates.dir" location="${build.dir}/templates"/>
+  <property name="build.unittests.dir" value="${build.dir}/unittests"/>
+  <property name="build.unittests.libs.dir" value="${build.dir}/unittests/libs"/>
+  <property name="build.apps.dir" value="${build.dir}/apps"/>
+  <property name="build.generated.dir" value="${build.dir}/generated"/>
+  <property name="build.report.dir" value="${build.dir}/report"/>
+  <property name="ant.sourcelib.dir" value="${build.dir}/tools/ant_libraries"/>
+
+  <property file="${build.dir}/buildnum.properties"/>
+  <property file="${build.dir}/paths.properties"/>
+  <property file="${build.dir}/perforce.properties"/>
+
+  <property name="sdk.dir" value="${build.dir}/sdk/${sdk.flex.dir}"/>
+
+  <!-- FLEX_HOME is required for the mxmlc task. -->
+<!--  <property name="FLEX_HOME" value="${sdk.dir}"/> -->
+  <property name="FLEX_HOME" value="${build.dir}/sdk/curflexsdk"/>
+
+  <property file="${cruisecontrol.dir}/config.properties"/>
+
+  <!-- Email Properties -->
+  <property name="mail.host" value="namailhost.corp.adobe.com"/>
+  <property name="mail.user" value="philobld"/>
+  <property name="mail.password" value="Frn5wrt#"/>
+  <property name="mail.strobe.p4" value="Strobe-p4@adobe.com"/>
+  <property name="mail.strobe.dev" value="Strobe-dev@adobe.com"/>
+
+  <!--
+    ==============================================================================
+    COPY LIBRARIES
+    ========================================================================== -->
+
+  <!-- Copy necessary ant libraries. -->
+  <copy file="${ant.sourcelib.dir}/ant-contrib-1.0b3.jar" 
+        tofile="${antHome}/lib/ant-contrib-1.0b3.jar" />
+
+  <copy file="${build.dir}/sdk/${sdk.flex.dir}/ant/lib/flexTasks.jar" 
+        tofile="${antHome}/lib/flexTasks.jar" />
+
+  <!-- modifying to copy latest sdk flexTasks rather than manual one in sourcelib -->
+  <copy file="${ant.sourcelib.dir}/FlexAntTasks.jar" tofile="${antHome}/lib/FlexAntTasks.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/jakarta-oro-2.0.8.jar" 
+        tofile="${antHome}/lib/jakarta-oro-2.0.8.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/mail.jar" 
+        tofile="${antHome}/lib/mail.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/PhiloAntTasks.jar" 
+        tofile="${antHome}/lib/PhiloAntTasks.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/CodexWS-Client.jar" 
+        tofile="${antHome}/lib/CodexWS-Client.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/jaxrpc.jar" 
+        tofile="${antHome}/lib/jaxrpc.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/versioninfo-2.0.0.jar" 
+        tofile="${antHome}/lib/versioninfo-2.0.0.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/stax-api-1.0-2.jar" 
+        tofile="${antHome}/lib/stax-api-1.0-2.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/activation-1.1.jar" 
+        tofile="${antHome}/lib/activation-1.1.jar" />
+	
+  <copy file="${ant.sourcelib.dir}/jaxb-api-2.1.jar" 
+        tofile="${antHome}/lib/jaxb-api-2.1.jar" />
+
+  <copy file="${ant.sourcelib.dir}/jaxb-impl-2.1.3.jar" 
+        tofile="${antHome}/lib/jaxb-impl-2.1.3.jar" />
+
+  <copy file="${ant.sourcelib.dir}/commons-logging-api-1.1.1.jar" 
+        tofile="${antHome}/lib/commons-logging-api-1.1.1.jar" />
+
+  <copy file="${ant.sourcelib.dir}/axis.jar" 
+        tofile="${antHome}/lib/axis.jar" />
+
+  <copy file="${ant.sourcelib.dir}/commons-discovery-0.2.jar" 
+        tofile="${antHome}/lib/commons-discovery-0.2.jar" />
+
+  <copy file="${ant.sourcelib.dir}/saaj.jar" 
+        tofile="${antHome}/lib/saaj.jar" />
+
+  <copy file="${ant.sourcelib.dir}/wsdl4j-1.5.1.jar" 
+        tofile="${antHome}/lib/wsdl4j-1.5.1.jar" />
+
+  <!--
+    ============================================================================
+    CUSTOM TASKS
+    ======================================================================== -->
+
+  <!-- Define a task for generating the class list for compc from the 
+       appropriate .flexLibProperties file -->
+  <macrodef name="generateClassList">
+    <attribute name="project"/>
+    <attribute name="projectDir"/>
+    <sequential>
+      <xmlproperty file="@{projectDir}/.flexLibProperties" 
+                   prefix="@{project}" 
+                   keepRoot="false" 
+                   collapseAttributes="true"/>
+      <propertyregex property="@{project}.classes" 
+                     input="${@{project}.includeClasses.classEntry.path}"
+                     regexp="," 
+                     replace=" "/>
+    </sequential>
+  </macrodef>
+
+  <!-- Define a task for building a typical component project. -->
+  <macrodef name="component.compile">
+    <attribute name="project"/>
+    <sequential>
+      <generateClassList project="@{project}" projectDir="${frameworkSourceRoot}/@{project}"/>
+
+      <compc 
+        output="${build.lib.dir}/@{project}.swc"
+        include-classes="${@{project}.classes}"
+        >
+        <load-config filename="${frameworkSourceRoot}/@{project}/@{project}-build-config.xml"/>
+      </compc>
+
+    </sequential>
+  </macrodef>
+<!--
+  <macrodef name="unittest.tests.compile">
+    <attribute name="project"/>
+    <sequential>
+      <generateClassList project="@{project}" projectDir="${frameworkSourceRoot}/@{project}"/>
+
+      <compc 
+        output="${build.unittests.libs.dir}/@{project}.swc"
+        include-classes="${@{project}.classes}"
+        >
+        <load-config filename="${frameworkSourceRoot}/@{project}/@{project}-build-config.xml"/>
+      </compc>
+
+    </sequential>
+  </macrodef>
+-->
+
+  <macrodef name="unittest.component.compile">
+    <attribute name="project"/>
+    <sequential>
+      <generateClassList project="@{project}" projectDir="${frameworkSourceRoot}/../libs/adobe/@{project}"/>
+
+      <compc 
+        output="${build.unittests.libs.dir}/@{project}.swc"
+        include-classes="${@{project}.classes}"
+        >
+        <load-config filename="${frameworkSourceRoot}/../libs/adobe/@{project}/@{project}-build-config.xml"/>
+      </compc>
+
+    </sequential>
+  </macrodef>
+
+  <!-- Define a task for compiling a unit test project. -->
+  <macrodef name="unittest.compile">
+    <attribute name="testproject"/>
+    <sequential>
+      <mkdir dir="${build.unittests.dir}/@{testproject}"/>
+      <mxmlc output="${build.unittests.dir}/@{testproject}/@{testproject}.swf"
+             file="${frameworkSourceRoot}/@{testproject}/@{testproject}.mxml" keep-generated-actionscript="true">
+        <load-config filename="${frameworkSourceRoot}/@{testproject}/@{testproject}-build-config.xml"/>
+      </mxmlc>
+ 
+      <html-wrapper
+        title="@{testproject}"
+        file="index.html"
+        height="100%"
+        width="100%"
+        swf="@{testproject}"
+        template="express-installation"
+        output="${build.unittests.dir}/@{testproject}/"/>
+    </sequential>
+  </macrodef>
+
+  <!-- Define a task for compiling an application project. -->
+  <macrodef name="application.compile">
+    <attribute name="appproject"/>
+    <attribute name="appdir"/>
+    <sequential>
+      <mkdir dir="${build.apps.dir}/@{appproject}"/>
+      <mxmlc output="${build.apps.dir}/@{appproject}/@{appproject}.swf"
+             file="@{appdir}/@{appproject}.mxml" keep-generated-actionscript="true">
+        <load-config filename="@{appdir}/@{appproject}-build-config.xml"/>
+      </mxmlc>
+ 
+      <html-wrapper
+        title="@{appproject}"
+        file="index.html"
+        height="100%"
+        width="100%"
+        swf="@{appproject}"
+        template="express-installation"
+        output="${build.apps.dir}/@{appproject}/"/>
+    </sequential>
+  </macrodef>
+
+  <!-- Define a task for running a unit test project as an AIR application. -->
+  <macrodef name="unittest.air.run">
+    <attribute name="testproject"/>
+	<attribute name="assetsDir"/>
+    <sequential>
+
+      <!-- Copy the application descriptor for the unit test app. -->
+      <copy file="${frameworkSourceRoot}/@{testproject}/@{testproject}-app.xml" 
+            tofile="${build.unittests.dir}/@{testproject}/@{testproject}-app.xml" />
+      <replace file="${build.unittests.dir}/@{testproject}/@{testproject}-app.xml" 
+               token="[SWF reference is generated]" value="@{testproject}.swf"/>
+
+      <!-- If there is an assets directory, copy it as well. -->
+      <if>
+        <available file="@{assetsDir}" type="dir"/>
+        <then>
+          <copy todir="${build.unittests.dir}/@{testproject}/assets" failonerror="false">
+            <fileset dir="@{assetsDir}" />
+          </copy>
+        </then>
+      </if>
+
+      <!-- Run the tests with ADL. -->
+      <adl descriptor="${build.unittests.dir}/@{testproject}/@{testproject}-app.xml"/>
+
+      <!-- Examine the test output XML and determine if there were any failures. -->
+      <xmlproperty file="${build.report.dir}/@{testproject}.xml" 
+                   prefix="@{testproject}" 
+                   collapseAttributes="true" 
+                   keepRoot="true"/>
+
+      <condition property="unittests.failed" value="@{testproject}">
+        <or>
+          <not>
+            <equals arg1="${@{testproject}.testsuite.failures}" arg2="0"/>
+          </not>
+          <not>
+            <equals arg1="${@{testproject}.testsuite.errors}" arg2="0"/>
+          </not>
+        </or>
+      </condition>
+
+      <!-- Fail the build if any tests failed. -->
+      <fail message="UNIT TESTS FAILED: @{testproject}">
+	    <condition>
+		  <isset property="unittests.failed"/>
+		</condition>
+	  </fail>
+
+    </sequential>
+  </macrodef>
+
+  <!-- Define an ADL task. -->
+  <macrodef name="adl">
+    <attribute name="descriptor"/>
+    <attribute name="timeout" default="360000"/>
+    <sequential>
+      <echo>Executing @{descriptor} with ADL...</echo>
+      <exec executable="${sdk.dir}/bin/adl${exeHack}" failonerror="false" timeout="@{timeout}"
+	outputproperty="unittest.output">
+	<arg value="@{descriptor}"/>
+	<arg value="--"/>
+	<arg value="-autoexit"/>
+      </exec>
+      <echo>Execution complete.</echo>
+    </sequential>
+  </macrodef>
+
+  <!-- Define a task for running a unit test project as a FLEX application. -->
+  <macrodef name="unittest.flex.run">
+    <attribute name="testproject"/>
+    <attribute name="assetsDir"/>
+    <sequential>
+      <!-- If there is an assets directory, copy it as well. -->
+      <if>
+        <available file="${frameworkSourceRoot}/@{assetsDir}" type="dir"/>
+        <then>
+          <copy todir="${build.unittests.dir}/@{testproject}/assets" failonerror="false">
+            <fileset dir="${frameworkSourceRoot}/@{assetsDir}" />
+          </copy>
+        </then>
+      </if>
+
+      <create.flash.trust dir="@{testproject}"/>
+<sleep seconds="10"/>
+
+	  <flexunit
+        swf="${build.unittests.dir}/@{testproject}/@{testproject}.swf"
+        toDir="${build.report.dir}"
+        haltonfailure="false"
+        verbose="true"
+        failureproperty="flexunit.failed"/>
+		
+      <junitreport todir="${build.report.dir}">
+        <fileset dir="${build.report.dir}">
+          <include name="TEST-*.xml"/>
+        </fileset>
+			
+<!--        <report format="frames" todir="${build.report.dir}/flex"/> -->
+			
+      </junitreport>
+
+      <delete.flash.trust/>
+
+      <condition property="unittests.failed" value="@{testproject}">
+	    <isset property="flexunit.failed"/>
+	  </condition>
+
+	  <fail message="FLEX UNIT TESTS FAILED: @{testproject}" if="flexunit.failed"/>
+
+	</sequential>
+  </macrodef>
+
+  <macrodef name="create.flash.trust">
+    <attribute name="dir"/>
+    <sequential>
+      <copy file="${build.templates.dir}/strobetrust.cfg" todir="${flashTrustDir}" overwrite="true"/>
+	  <replace file="${flashTrustDir}/strobetrust.cfg" token="#path#" value="${build.unittests.dir}/@{dir}"/>
+	</sequential>
+  </macrodef>
+
+  <macrodef name="delete.flash.trust">
+    <sequential>
+	  <delete file="${flashTrustDir}/strobetrust.cfg"/>
+	</sequential>
+  </macrodef>
+
+  <!-- Define a task for generating ASDocs. -->
+  <macrodef name="document.compile">
+    <attribute name="project"/>
+    <sequential>
+      <exec executable="${sdk.dir}/bin/asdoc${exeHack}" failonerror="${p4.failonerror}" errorproperty="document.all.failed">
+        <arg line='-doc-sources ${frameworkSourceRoot}/@{project}'/>
+        <arg line='-main-title "${document.title}@{project}"'/>
+        <arg line='-window-title "@{project}"'/>
+        <arg line='-output ${docTarget}/@{project}'/>
+        <arg line='-external-library-path ${swc.airglobal}'/>
+      </exec>
+
+      <echo message="${document.all.failed}"/>
+      <fail message="${document.all.failed}"> 
+	    <condition>
+		  <and>
+		    <isset property="document.all.failed"/>
+		    <not>
+              <length string="${document.all.failed}" trim="true" length="0"/>
+		    </not>
+		  </and>
+		</condition>
+	  </fail>
+	</sequential>
+  </macrodef>
+
+  <!-- Task for sending notification emails. -->
+  <macrodef name="email">
+    <attribute name="messageFile"/>
+    <attribute name="subject"/>
+	<attribute name="mailTo"/>
+    <sequential>
+      <echo>About to send email</echo>
+      <mail mailhost="${mail.host}" subject="@{subject}" user="${mail.user}" password="${mail.password}">
+        <from address="${mail.user}@adobe.com"/>
+        <to address="@{mailTo}"/>
+        <replyto address="${mail.user}@adobe.com"/>
+        <message src="@{messageFile}"/>
+      </mail>
+      <echo>Email sent!</echo>
+    </sequential>
+  </macrodef>
+
+  <!-- Task for creating symbolic links or junctions -->
+  <macrodef name="link">
+    <attribute name="source"/>
+    <attribute name="target"/>
+    <sequential>
+      <if>
+        <equals arg1="${runningOnWindows}" arg2="true" />
+      <then>
+        <echo>Removing old junction</echo>
+        <exec executable="${build.dir}/tools/junction" searchpath="false">
+          <arg line="-d @{source}"/>
+        </exec>
+
+        <echo>Creating new junction</echo>
+        <exec executable="${build.dir}/tools/junction" searchpath="false">
+          <arg value="@{source}"/>
+          <arg value="@{target}"/>
+        </exec>
+
+      </then>
+      <else>
+        <echo>Removing old symbolic link</echo>
+        <exec executable="rm" searchpath="true">
+          <arg value="@{source}"/>
+        </exec>
+
+        <echo>Creating new symbolic link</echo>
+        <exec executable="ln" searchpath="true">
+          <arg value="-s"/>
+          <arg value="@{target}"/>
+          <arg value="@{source}"/>
+        </exec>
+      </else>
+      </if>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="move.file">
+    <attribute name="root"/>
+    <attribute name="project"/>
+    <attribute name="source"/>
+    <attribute name="target"/>
+
+    <sequential>
+      <delete file="@{root}/@{project}/@{target}"/>
+      <copy file="@{root}/@{project}/@{source}"
+	        tofile="@{root}/@{project}/@{target}"/>
+    </sequential>
+
+  </macrodef>
+
+  <macrodef name="copy.to.dist">
+    <attribute name="dir"/>
+
+    <sequential>
+	  <copy todir="${build.dist.dir}/@{dir}">
+	    <fileset dir="${build.lib.dir}"/>
+	  </copy>
+    </sequential>
+  </macrodef>
+
+  <!--
+    ============================================================================
+    UTILITY TARGETS
+    ======================================================================== -->
+
+  <target name="clean">
+    <delete dir="${build.lib.dir}"/>
+    <delete dir="${build.dist.dir}"/>
+    <delete dir="${build.dist.dir}/flex"/>
+    <delete dir="${build.dist.dir}/flexcov"/>
+    <delete dir="${build.unittests.libs.dir}"/>  
+    <delete dir="${build.unittests.dir}"/>  
+    <delete dir="${build.report.dir}"/>
+    <delete dir="${docTarget}"/>
+  </target>
+
+  <target name="init" depends="exeHack">
+    <!-- Create necessary directories for building. -->
+    <mkdir dir="${build.lib.dir}"/>
+    <mkdir dir="${build.dist.dir}"/>
+    <mkdir dir="${build.dist.dir}/flex"/>
+    <mkdir dir="${build.dist.dir}/flexcov"/>
+    <mkdir dir="${build.unittests.dir}"/>
+    <mkdir dir="${build.unittests.libs.dir}"/>
+    <mkdir dir="${build.report.dir}"/>
+    <mkdir dir="${docTarget}"/>
+
+    <antcall target="prepare"/>
+  </target>
+
+  <target name="prepare.flexcov" depends="declare">
+	<link source="${FLEX_HOME}" target="${build.dir}/sdk/${sdk.flexcov.dir}"/>
+
+    <move.file root="${frameworkSourceRoot}" project="MediaFrameworkFlexTest" 
+	  source="MediaFrameworkFlexTest.flexcov" target="MediaFrameworkFlexTest.mxml"/>
+    <move.file root="${frameworkSourceRoot}" project="MediaFrameworkFlexTest" 
+	  source="mediaframeworkflextest-build-config.flexcov" target="mediaframeworkflextest-build-config.xml"/>
+    <move.file root="${frameworkSourceRoot}" project="MediaFramework" 
+	  source="mediaframework-build-config.flexcov" target="mediaframework-build-config.xml"/>
+
+  </target>
+
+  <target name="prepare.flex" depends="declare">
+	<link source="${FLEX_HOME}" target="${build.dir}/sdk/${sdk.flex.dir}"/>
+
+    <move.file root="${frameworkSourceRoot}" project="MediaFrameworkFlexTest" 
+	  source="MediaFrameworkFlexTest.flex" target="MediaFrameworkFlexTest.mxml"/>
+    <move.file root="${frameworkSourceRoot}" project="MediaFrameworkFlexTest" 
+	  source="mediaframeworkflextest-build-config.flex" target="mediaframeworkflextest-build-config.xml"/>
+    <move.file root="${frameworkSourceRoot}" project="MediaFramework" 
+	  source="mediaframework-build-config.flex" target="mediaframework-build-config.xml"/>
+
+  </target>
+
+  <target name="prepare.dist.flex" depends="declare">
+    <copy.to.dist dir="flex"/>
+  </target>
+
+  <target name="prepare.dist.flexcov" depends="declare">
+    <copy.to.dist dir="flexcov"/>
+  </target>
+
+  <target name="declare">
+    <!-- Flex Ant Tasks -->
+    <taskdef resource="flexTasks.tasks" classpath="${antHome}/lib/flexTasks.jar" />
+
+    <!-- Ant-contrib tasks -->
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${antHome}/lib/ant-contrib-1.0b3.jar"/>
+
+    <!-- Custom Philo Ant Tasks -->
+    <taskdef resource="PhiloAntTasks.properties" classpath="${antHome}/lib/PhiloAntTasks.jar"/>
+
+    <!-- Codex Ant Tasks -->
+    <taskdef resource="com/adobe/codex/ws/client/ant/tasks/taskdefs.properties" 
+       classpath="${antHome}/lib/CodexWS-Client.jar;${antHome}/lib/jaxrpc.jar"/>
+
+    <!-- make the task "flexunit" available -->
+    <taskdef resource="com/adobe/ac/ant/tasks/tasks.properties" classpath="${antHome}/lib/FlexAntTasks.jar"/>
+  </target>
+
+  <target name="exeHack" depends="declare">
+    <!-- Set up windows hack, this is not supposed to be necessary but Windows
+         can't find the right executable without the file extension specifically attached -->
+
+    <if>
+      <equals arg1="${runningOnWindows}" arg2="true" />
+    <then>
+      <echo>Configured for Windows</echo>
+      <property name="exeHack" value=".exe"/>
+      <property name="batHack" value=".bat"/>
+    </then>
+    <else>
+      <echo>Configured for !Windows</echo>
+      <property name="exeHack" value=""/>
+      <property name="batHack" value=""/>
+    </else>
+    </if>
+  </target>
+
+  <!--
+    ============================================================================
+    PERFORCE TARGETS AND PROPERTIES
+    ======================================================================== -->
+
+  <target name="source.sync">
+    <if>
+      <equals arg1="${p4.force}" arg2="true" />
+    <then>
+      <p4sync view="//depot/main/strobe/dev/trunk/..." force="foo" failonerror="${p4.failonerror}" globalopts="-P ${p4.pw}"/>
+    </then>
+    <else>
+      <p4sync view="//depot/main/strobe/dev/trunk/..."  failonerror="${p4.failonerror}" globalopts="-P ${p4.pw}"/>
+    </else>
+    </if>
+  </target>
+	
+  <!--
+    ============================================================================
+    DOCUMENTATION TARGETS AND PROPERTIES
+    ======================================================================== -->
+  <property name="document.title" value="Strobe ASDocs: "/>
+  <property name="sourceRoot" value="${frameworkSourceRoot}"/>
+
+  <property name="swc.airglobal" value="${sdk.dir}/frameworks/libs/air/airglobal.swc"/>
+
+<!--
+  <property name="swc.airframework" value="${sdk.dir}/frameworks/libs/air/airframework.swc"/>
+  <property name="swc.servicemonitor" value="${sdk.dir}/frameworks/libs/air/servicemonitor.swc"/>
+
+-->
+
+  <target name="document.all" depends="exeHack,document.mediaframework"/>
+
+  <target name="document.mediaframework" depends="exeHack">
+    <document.compile project="MediaFramework"/>
+  </target>
+
+  <!--
+    ============================================================================
+    COMPONENTS
+    ======================================================================== -->
+  
+  <target name="mediaframework" depends="init, source.sync">
+    <component.compile project="MediaFramework"/>
+  </target>
+
+  <!--
+    ============================================================================
+    CRUISECONTROL TARGETS
+    ======================================================================== -->
+
+  <target name="cruisecontrol.nightly" depends="framework.build.run, document.all, nightly.publish, videoperformance.dist"/>
+
+  <target name="cruisecontrol.integration" depends="framework.build.run, document.all, integration.publish, notify.fixed"/>
+
+  <target name="framework.build.run">
+    <antcall target="clean"/>
+	<antcall target="flexcov.run"/>
+    <delete dir="${build.lib.dir}"/>
+    <mkdir dir="${build.lib.dir}"/>
+	<antcall target="flex.run"/>
+  </target>
+
+  <target name="flexcov.run">
+	<antcall target="unittest.run.all">
+		<param name="config" value="flexcov"/>
+	</antcall>
+	<copy.to.dist dir="flexcov"/>
+  </target>
+
+  <target name="flex.run">
+	<antcall target="unittest.run.all">
+		<param name="config" value="flex"/>
+	</antcall>
+	<copy.to.dist dir="flex"/>
+  </target>
+
+  <!--
+    ============================================================================
+    POST-BUILD TARGETS
+    ======================================================================== -->
+  <target name="nightly.publish">
+    <mkdir dir="${deploy.dir}/${label}"/>
+    <mkdir dir="${deploy.dir}/${label}/components"/>
+    <copy todir="${deploy.dir}/${label}/components" >
+      <fileset dir="${build.dist.dir}" />
+<!--      <fileset dir="${build.lib.dir}" /> -->
+    </copy>
+
+    <delete dir="${deploy.dir}/${label}/docs"/>
+    <mkdir dir="${deploy.dir}/${label}/docs"/>
+    <copy todir="${deploy.dir}/${label}/docs" >
+      <fileset dir="${docTarget}" />
+    </copy>
+
+    <link source="${deploy.dir}/latest" target="${deploy.dir}/${label}"/>
+
+<!--    <addbuild label="${label}"/> -->
+
+  </target>
+
+  <target name="integration.publish">
+    <delete file="${integration.deploy.dir}"/>
+    <mkdir dir="${integration.deploy.dir}/components"/>
+    <copy todir="${integration.deploy.dir}/components" >
+      <fileset dir="${build.dist.dir}" />
+    </copy>
+
+    <delete dir="${integration.deploy.dir}/docs"/>
+    <mkdir dir="${integration.deploy.dir}/docs"/>
+    <copy todir="${integration.deploy.dir}/docs" >
+		<fileset dir="${docTarget}" />
+    </copy>
+  </target>
+
+  <target name="notify" depends="notify.success, notify.warning">
+  </target>
+
+  <target name="notify.success" unless="unittests.failed">
+    <email subject="Strobe ${build.type} build complete!" 
+	       messageFile="build/email-success.txt"
+		   mailTo="${mail.strobe.dev}"/>
+  </target>
+
+  <target name="notify.warning" if="unittests.failed">
+    <email subject="Strobe ${build.type} build complete, tests FAILED!"
+	       messageFile="build/email-warning.txt"
+		   mailTo="${mail.strobe.p4}"/>
+  </target>
+
+  <target name="notify.warning.integration" if="unittests.failed">
+    <email subject="Strobe ${build.type} build complete, tests FAILED!" 
+           messageFile="build/email-warning-integration.txt"
+		   mailTo="${mail.strobe.p4}"/>
+  </target>
+
+  <target name="notify.failure">
+    <email subject="Strobe ${build.type} build FAILED!" 
+	       messageFile="build/email-failure.txt"
+		   mailTo="${mail.strobe.p4}"/>
+  </target>
+	
+  <target name="notify.fixed">
+    <if>
+      <isfalse value="${lastbuildsuccessful}"/>
+      <then>
+        <email subject="Strobe ${build.type} build complete!" 
+               messageFile="build/email-success-integration.txt"
+			   mailTo="${mail.strobe.dev}"/>
+      </then>
+    </if>
+  </target>
+
+  <!--
+    ============================================================================
+    UNIT TESTS
+    ======================================================================== -->
+
+  <target name="strobeunit" depends="init, mediaframework">
+    <unittest.component.compile project="StrobeUnit"/>
+  </target>
+
+  <target name="netmocker">
+    <unittest.component.compile project="NetMocker"/>
+  </target>
+
+  <target name="mediaframeworkairtest" depends="strobeunit, mediaframework, netmocker">
+    <unittest.compile testproject="MediaFrameworkAirTest"/>
+  </target>
+
+  <target name="mediaframeworkairtest.run" depends="mediaframeworkairtest">
+    <unittest.air.run testproject="MediaFrameworkAirTest" assetsDir="${frameworkSourceRoot}/MediaFrameworkFlexTest/assets"/>
+  </target>
+
+  <target name="mediaframeworkflextest" depends="mediaframework, netmocker">
+    <unittest.compile testproject="MediaFrameworkFlexTest"/>
+  </target>
+
+  <target name="mediaframeworkflextest.run" depends="mediaframeworkflextest, launch.coverageviewer">
+    <unittest.flex.run testproject="MediaFrameworkFlexTest" assetsDir="MediaFrameworkFlexTest/assets"/>
+  </target>
+
+  <!-- Temporarily disable AIR unit tests until we can get better feedback (i.e. which tests fail) -->
+  <!-- target name="unittest.run.all" depends="mediaframeworkairtest.run, mediaframeworkflextest.run"/ -->
+  <target name="unittest.run.all" depends="mediaframeworkflextest.run, mediaframeworkairtest.run"/>
+
+  <target name="launch.coverageviewer" depends="declare">
+    <if>
+	  <equals arg1="${config}" arg2="flexcov" />
+      <then> 
+      <exec executable="${sdk.dir}/bin/adl${exeHack}" spawn="true">
+	<arg line="${coverageViewer}/META-INF/AIR/application.xml ${coverageViewer} -- -output ${build.dist.dir}/flexcov/testingcoverage.cvr ${build.lib.dir}/MediaFramework.cvm"/>
+      </exec>
+
+	  </then>
+	</if>
+  </target>
+
+  <target name="flexcov.build.and.test.all" 
+          depends="declare, prepare.flexcov, mediaframeworkflextest, launch.coverageviewer, mediaframeworkflextest.run">    
+  </target>
+
+  <target name="prepare" depends="declare">
+    <if>
+	  <equals arg1="${config}" arg2="flexcov" />
+      <then> 
+	    <antcall target="prepare.flexcov"/>
+	  </then>
+	  <else>
+	    <antcall target="prepare.flex"/>
+	  </else>
+	</if>
+  </target>
+
+  <!--
+    ============================================================================
+    Performance TESTS
+    ======================================================================== -->
+  <target name="videoperformance" depends="mediaframework">
+    <application.compile appproject="VideoPerformance" appdir="${frameworkSourceRoot}/../apps/qe/VideoPerformance"/>
+  </target>
+
+  <target name="videoperformance.dist" depends="videoperformance">
+    <copy todir="${perfDistDir}" >
+      <fileset dir="${build.apps.dir}/VideoPerformance" />
+    </copy>
+  </target>
+
+  <target name="videoperformance.run" depends="videoperformance.dist">
+	<if>
+		<equals arg1="${runningOnWindows}" arg2="true" />
+	<then>
+		<exec executable="${frameworkSourceRoot}/../qe/VideoPerformance/videoperf.bat" dir="${frameworkSourceRoot}/../qe/VideoPerformance"/>
+	</then>
+	<else>
+		<echo>NO implementation yet</echo>
+	</else>
+	</if>
+
+  </target>
+
+</project>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	>
+			
+			<mx:TextInput
+				id			="screenWidth" 
+				width		="50"
+				/>
+				
+			<mx:TextInput
+				id			="screenHeight"
+				width		="50"
+				/>
+				
+			<mx:ComboBox id="scaleModeCombo">
+			     <mx:ArrayCollection>
+        			 <mx:String>LETTERBOX</mx:String>
+       			     <mx:String>STRETCH</mx:String>
+        			 <mx:String>CROP</mx:String>
+        			 <mx:String>NONE</mx:String>
+     			 </mx:ArrayCollection>
+			</mx:ComboBox>				
+
+				
+</mx:HBox>

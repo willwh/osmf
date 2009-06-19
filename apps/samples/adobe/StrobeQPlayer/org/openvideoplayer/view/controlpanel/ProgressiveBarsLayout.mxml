@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	>
+			 
+		 	 <mx:Text
+				id			="durationTxt"
+				color		="#FFF000"
+			  	/>	
+			  	
+			  <mx:Text
+				id			="playHeadTxt"
+				color		="#FFF000"
+			  	/>		
+		
+			<mx:Canvas 
+				width="100%"
+				height="100%"
+				>
+			
+					<mx:ProgressBar 
+						id					="progressBar" 
+						labelPlacement		="bottom"
+						themeColor			="#0000FF" 
+						color				="#FFFFFF"
+		            	minimum				="0" 
+		            	visible				="true" 
+		            	mode				="manual"  
+		            	direction			="right" 
+		            	x					="11" 
+		            	y					="{seekBar.height/2}" 
+						width				="{seekBar.width-22}" 
+		            	height				="50%"
+		            	/>
+		            	
+			
+					<mx:HSlider
+						id			="scrubBar"		
+						width       ="{progressBar.width}"
+						x			="10" 
+						/>	
+
+				
+	            	
+					<mx:HSlider
+						id					="seekBar" 
+						minimum				="0"
+						maximum				="100" 
+						value				="0"
+						width				="100%" 
+						height="30%"
+						x="0" 
+						y="0"
+						labels="['0%', '25%', '50%', '75%', '100%']"
+			            dataTipPlacement="top" 
+			            tickColor="white" 
+			            snapInterval="1" 
+			            tickInterval="10"  
+			            allowTrackClick="true" 
+			            liveDragging="true"
+			            showDataTip="true"/>					
+						
+	            			
+			</mx:Canvas>
+			
+</mx:HBox>
+
+

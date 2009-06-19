@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*************************************************************************
+* 
+*  Copyright (c) 2009, openvideoplayer.org
+*  All rights reserved.
+*  
+*  Redistribution and use in source and binary forms, with or without 
+*  modification, are permitted provided that the following conditions are 
+*  met:
+*  
+*     * Redistributions of source code must retain the above copyright 
+*  		notice, this list of conditions and the following disclaimer.
+*     * Redistributions in binary form must reproduce the above 
+*  		copyright notice, this list of conditions and the following 
+*  		disclaimer in the documentation and/or other materials provided 
+*  		with the distribution.
+*     * Neither the name of the openvideoplayer.org nor the names of its 
+*  		contributors may be used to endorse or promote products derived 
+*  		from this software without specific prior written permission.
+*  
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
+*  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+*  HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+*  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+*  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+*  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
+*  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+*  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+*  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**************************************************************************/
+-->
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	xmlns:players="com.adobe.strobe.players.*"
+	color="white"
+	creationComplete="init()"
+	backgroundColor="black" xmlns:display="org.openvideoplayer.display.*">
+    <players:MediaPlayerWrapper 
+		id="wrapper"
+		width="100%"
+		height="100%"
+		/>
+	<mx:Script>
+		<![CDATA[
+			import org.openvideoplayer.events.DurationChangeEvent;
+			import org.openvideoplayer.events.PlayheadChangeEvent;
+			import org.openvideoplayer.display.ScaleMode;
+			import org.openvideoplayer.display.MediaPlayerSprite;
+			import org.openvideoplayer.audio.AudioElement;
+			
+			import org.openvideoplayer.net.NetLoader;
+			import org.openvideoplayer.traits.ILoadable;
+			import org.openvideoplayer.traits.MediaTraitType;			
+			import org.openvideoplayer.image.ImageLoader;
+			import org.openvideoplayer.image.ImageElement;
+			import org.openvideoplayer.media.URLResource;			
+			import org.openvideoplayer.video.VideoElement;
+			import mx.events.SliderEvent;
+			
+			/**
+			 * The MediaPlayerTest app shows how a MediaPlayer can be used to create Audio, Image, and Video elements.
+			 * In order to use the mediaplayer, we created a MediapPlayerWrapper, deisgned to be used in flex apps. The wrapper has a source property which
+			 * corresponds to the mediaElement being shown or played.  The MediaElement is created in the loadItem function.  the type of element created is determined by the
+			 * mediaTypeBox, which is a ComboBox with five media types.  
+			 */ 
+			private function init():void
+			{
+				wrapper.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayhead);				
+			}
+					
+			private function onPlayhead(event:PlayheadChangeEvent):void
+			{				
+				if(!dragging)
+				{					
+					timeline.value = event.newPosition;			
+				}	
+			}	
+					
+			private function loadItem():void
+			{				
+				if (mediaTypeBox.selectedItem.type == "Video") 
+				{
+					loadVideo(mediaTypeBox.selectedItem.url);
+				}
+				else if (mediaTypeBox.selectedItem.type == "Image")  
+				{
+					loadImage(mediaTypeBox.selectedItem.url);
+				}	
+				else if	(mediaTypeBox.selectedItem.type == "Audio")  
+				{
+					loadSound(mediaTypeBox.selectedItem.url);
+				}	
+			}
+			
+			private function loadVideo(url:String):void
+			{
+				var resource:URLResource = new URLResource(url);
+				var element:VideoElement = new VideoElement(new NetLoader(), resource);
+				wrapper.element = element;				
+			}
+			
+			private function loadImage(url:String):void
+			{
+				var resource:URLResource = new URLResource(url);
+				var element:ImageElement = new ImageElement(new ImageLoader(), resource);		
+				wrapper.element = element;			
+						
+			}
+			
+			private function loadSound(url:String):void
+			{
+				var resource:URLResource = new URLResource(url);
+				var element:AudioElement = new AudioElement(new NetLoader(), resource);
+				wrapper.element = element;			
+			}
+			
+			private function onProgressPress(event:SliderEvent):void
+			{			
+				dragging = true;
+			}	
+							
+			private function onProgressRelease(event:SliderEvent):void
+			{			
+				wrapper.seek(event.value);	
+				dragging = false;						
+			}
+			
+			private function onVolumeChange(event:SliderEvent):void
+			{
+				wrapper.volume = event.value;				
+			}
+			
+			private function onMuteChange(event:Event):void
+			{
+				wrapper.muted = muteButton.selected;			
+			}
+			
+			private function onPanChange(event:SliderEvent):void
+			{
+				wrapper.pan = event.value;				
+			}
+						
+			private var dragging:Boolean = false;
+			
+		]]>
+	</mx:Script>
+	<mx:VBox 
+		width="100%"
+		height="100%">		
+		
+		<mx:HBox>
+			<mx:Button label="Play" click="{wrapper.play()}"
+				enabled="{wrapper.playable}" />
+			<mx:Button label="Pause" click="{wrapper.pause()}"
+				enabled="{wrapper.playable}"  />
+	
+			<mx:Button label="Load" click="{loadItem()}" />
+
+			<mx:HSlider id="timeline"
+				maximum="{wrapper.duration}"
+				thumbPress="{onProgressPress(event)}"
+				thumbRelease="{onProgressRelease(event)}"
+				width="100%" 								
+				 />		 			
+		</mx:HBox>	
+		<mx:VBox>
+			<mx:HBox>				
+				<mx:Label text="Volume:" />
+				<mx:HSlider 						
+					width="100%" maximum="1"
+					value="{wrapper.volume}" 
+					change="onVolumeChange(event)"/>
+			 </mx:HBox>
+			<mx:CheckBox id="muteButton"
+				toggle="true"
+				label="mute"
+				change="onMuteChange(event)"	/>
+			<mx:HBox>		
+			<mx:Label text="Pan:" />
+			<mx:HSlider 				
+				width="100%" 
+				minimum="-1"
+				maximum="1"
+				value="{wrapper.pan}" 
+				change="onPanChange(event)" />	
+			</mx:HBox>
+		</mx:VBox>
+		<mx:HBox>
+			<mx:CheckBox 
+				label="autoPlay"
+				id="autoPlay"
+				selected="true"
+				change="wrapper.autoPlay = autoPlay.selected"				
+				/>
+			<mx:ComboBox
+				id="scaleCombo"
+				color="black"
+				selectedIndex="0"
+				change="{wrapper.scaleMode = scaleCombo.selectedItem as ScaleMode}">
+				<mx:dataProvider>
+					{[ScaleMode.CROP, ScaleMode.LETTERBOX, ScaleMode.NONE, ScaleMode.STRETCH]}
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:HBox>
+		
+		<mx:ComboBox id="mediaTypeBox"
+			color="black" >
+			<mx:dataProvider>
+				<mx:Object label="Video Progressive" type="Video" url="http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv" />
+				<mx:Object label="Video Streaming"  type="Video" url="rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv" />
+				<mx:Object label="Image" type="Image" url="http://mediapm.edgesuite.net/strobe/content/test/train.jpg"   />
+				<mx:Object label="Audio Progressive" type="Audio" url="http://mediapm.edgesuite.net/strobe/content/test/train_1500.mp3"  />	
+				<mx:Object label="Audio Streaming"  type="Audio" url="rtmp://example.com/appName/mp3:mySoundStream.mp3" />					
+			</mx:dataProvider>
+		</mx:ComboBox>	
+	</mx:VBox>
+</mx:WindowedApplication>

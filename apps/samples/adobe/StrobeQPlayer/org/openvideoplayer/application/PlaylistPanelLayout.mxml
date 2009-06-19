@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow  xmlns:mx				=	"http://www.adobe.com/2006/mxml" 
+			   	 xmlns:view				=	"org.openvideoplayer.view.*"
+			   	 xmlns:controlpanel 	= 	"org.openvideoplayer.view.controlpanel.*"
+				 layout					=	"absolute" 
+				 alpha					=	"1.0"
+				 title					=	"PlayList"
+				 visible				=	"false"
+				 width					=	"100%"
+				 height					=	"100%"
+				 showEffect				=	"{fadeIn}" 
+				 hideEffect				=	"{fadeOut}"
+				 showCloseButton		=	"true"	
+				 horizontalScrollPolicy	=	"off"
+		   		 verticalScrollPolicy	=	"off" 
+			>
+			
+				 
+	<mx:Fade id="fadeOut" duration="1000" alphaFrom="1.0" alphaTo="0.0"/>
+	
+	<mx:Fade id="fadeIn" duration="1000" alphaFrom="0.0" alphaTo="1.0"/>
+	
+	<mx:Form label="Playlist" width="100%" height="100%" >	
+		   
+			    <mx:VBox>
+			    		<mx:FormItem label="" direction="horizontal" horizontalAlign="center">
+			        		<mx:Label 
+			        			text="Playlists"
+			        			/>
+			        		<mx:ComboBox 
+			        			id="playlistsComboBox"
+			        			/>
+			        			
+			        	</mx:FormItem>
+			        		   
+			        	<mx:FormItem label="" direction="horizontal" horizontalAlign="center">
+			        		<mx:Label 
+			        			text="Playlist media"
+			        			/>
+			        		<mx:ComboBox 
+			        			id="playlistList"
+			        			/>
+			        	</mx:FormItem>
+			        	
+			        	<mx:FormItem label="" direction="horizontal" horizontalAlign="center">
+			        		<mx:Label 
+			        			text="Playlist status : "
+			        			/>
+			                <mx:Text 
+			                	id="currentPlaylistStatus" 
+			                	text=""  
+			                	width="262"
+			                	/>
+	        			</mx:FormItem>		
+        		</mx:VBox>
+        		
+			   <mx:VBox width="100%">
+        				<mx:Label text="Available media in the current list"/>
+						<mx:DataGrid 
+							id="currentMediaPlaylist" 
+							width="100%"
+							showHeaders="false"
+							>
+							<mx:columns>
+								<mx:DataGridColumn 
+									headerText="Stream" 
+									dataField="label"
+									/>
+							</mx:columns>
+						</mx:DataGrid>
+        		</mx:VBox>
+        		
+        		<mx:VBox width="100%">
+        		 	<mx:FormItem label="" direction="horizontal" horizontalAlign="center">
+        				<mx:Label 
+        					text="CompositionMedia"/>
+						<mx:ComboBox 
+							id="compositionMedia" />
+					</mx:FormItem>	
+        		</mx:VBox> 
+        		
+        		<mx:Label 
+        			id="mLabel" 
+        			text="select composition test case from combo box." 
+        			/>  			
+	</mx:Form>	        	
+	
+	
+
+	<view:MediaControlPanelLayout
+		id	=	"mediaControlPanel"
+		bottom				=	"35"
+		left				=	"35"
+		
+		/>
+
+
+  	<mx:NumberFormatter 
+	 	id						=	"numberFormatter"
+	 	precision				=	"2" 
+        useThousandsSeparator	=	"true" 
+        useNegativeSign			=	"true"
+       />	
+       
+	<view:MediaQPlayerWrapper id="wrapperQplayer" width="100%" height="100%" />
+
+</mx:TitleWindow>
+
+

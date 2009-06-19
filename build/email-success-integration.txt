@@ -1,0 +1,10 @@
+Previous errors have been fixed, and integration build ${label} of the Strobe completed successfully.
+
+Build ${label} of the Strobe is now available here:
+
+http://exodar.corp.adobe.com/strobe/integration/
+
+
+Detailed build results are available here:
+
+http://exodar.corp.adobe.com:8080/buildresults/${projectname}?log=log${cctimestamp}L${label}

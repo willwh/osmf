@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	xmlns:players="com.adobe.strobe.players.*"
+	width="1000" height="800"
+	creationComplete="onComplete(event)">
+
+
+	<mx:Script>
+		<![CDATA[
+			import org.openvideoplayer.plugin.PluginFactory;
+			import org.openvideoplayer.plugin.PluginClassResource;
+			import org.openvideoplayer.traits.MediaTraitType;
+			import org.openvideoplayer.events.LoadableStateChangeEvent;
+			import mx.controls.Alert;
+			import mx.core.Window;
+			import org.openvideoplayer.media.MediaInfo;
+			import org.openvideoplayer.media.MediaFactory;
+			import org.openvideoplayer.events.LoaderEvent;
+			import org.openvideoplayer.traits.LoadState;
+			import org.openvideoplayer.events.MediaPlayerStateChangeEvent;
+			import org.openvideoplayer.media.MediaElement;
+			import org.openvideoplayer.media.IMediaResource;
+			import org.openvideoplayer.plugin.PluginClassResource;
+			import flash.utils.getDefinitionByName;
+			import flash.net.getClassByAlias;
+			import org.openvideoplayer.plugin.PluginFactory;
+			
+			import org.openvideoplayer.net.NetLoader;
+			import org.openvideoplayer.traits.ILoadable;
+			import org.openvideoplayer.traits.MediaTraitType;			
+			import org.openvideoplayer.image.ImageLoader;
+			import org.openvideoplayer.image.ImageElement;
+			import org.openvideoplayer.media.URLResource;			
+			import org.openvideoplayer.video.VideoElement;
+			import mx.events.SliderEvent;
+			import org.openvideoplayer.plugins.video.SimpleVideoPlauginInfo;
+			
+			private function onComplete(event:Event):void
+			{	
+				var v:SimpleVideoPlauginInfo;							
+				init();
+			}
+			
+			
+			private function init():void
+			{
+				mediaFactory = new MediaFactory();
+				pluginFactory = new PluginFactory(mediaFactory);
+				// registerDefaultMediaTypes();
+			}
+			
+			private function registerDefaultMediaTypes():void
+			{
+				var netLoader:NetLoader = new NetLoader();
+				var videoMediaInfo:MediaInfo = new MediaInfo("org.openvideoplayer.video.Video", netLoader, VideoElement, new Array(netLoader));
+				
+				var imgLoader:ImageLoader = new ImageLoader();
+				var imgMediaInfo:MediaInfo = new MediaInfo("org.openvideoplayer.image.Image", imgLoader, ImageElement, new Array(imgLoader));
+				
+				mediaFactory.addMediaInfo(videoMediaInfo);
+				mediaFactory.addMediaInfo(imgMediaInfo);
+			}
+			
+			private function loadItem(url:String):void
+			{
+				wrapper.stretchToFit = true;
+				wrapper.maintainAspectRatio = true;
+				wrapper.autoPlay = true;
+//				wrapper.player.autoLoad = true;
+				
+				// wrapper.player.source = new VideoElement(new NetLoader(), new URLResource(urlInput.text));
+				var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(url));
+				if (mediaElement == null)
+				{
+					Alert.show("No registered MediaInfo for this resource");
+				}
+				else
+				{
+					wrapper.source = mediaElement;
+				}
+			}
+			
+			private function loadPlugin(source:String):void
+			{
+				var pluginResource:IMediaResource;
+				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
+				{
+					// this is a URL
+					// Create a URLResource
+					pluginResource = new URLResource(source);
+				}
+				else
+				{
+					// Assume this is a class
+					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
+					pluginResource = new PluginClassResource(pluginInfoRef);
+				}
+				
+				loadPluginFromResource(pluginResource);			
+			}
+			
+			private function loadPluginFromResource(pluginResource:IMediaResource):void
+			{
+				// get the right plugin element from plugin factory
+				pluginElement = pluginFactory.createMediaElement(pluginResource);
+				if (pluginElement != null && pluginElement.hasTrait(MediaTraitType.LOADABLE))
+				{
+					loadable = pluginElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.load();
+				}
+			}
+			
+			private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			{
+				if (event.newState == LoadState.LOADED)
+				{
+					trace("Plugin Loaded Successfully");
+					pluginLoadState.text = "LOADED";
+					pluginLoadState.visible = true;
+				}
+				else if (event.newState == LoadState.LOAD_FAILED)
+				{
+					trace("Plugin Loading Failed");
+					pluginLoadState.text = "LOAD FAILED!";
+					pluginLoadState.visible = true;
+
+				}
+			}
+	
+			private var mediaFactory:MediaFactory;
+			private var pluginFactory:PluginFactory;
+			private var pluginElement:MediaElement;
+			private var loadable:ILoadable;
+		]]>
+	</mx:Script>
+
+
+	<mx:VBox height="100%" width="100%">
+		
+		<mx:Spacer height="10" />
+		<mx:HBox height="60">
+			<mx:Spacer width="10" />
+
+			<mx:TextInput
+				width="500"
+				id="urlInput"
+				text="org.openvideoplayer.plugins.video.SimpleVideoPlauginInfo"
+			/>
+
+
+			<!--
+
+			<mx:TextInput
+				width="500"
+				id="urlInput"
+				text="file:///C:/Projects/Strobe/root/dev/branches/sprint2_pretrunk/plugins/ASPlugin/bin-debug/ASPlugin.swf"
+			/>
+
+			<mx:TextInput
+				width="500"
+				id="urlInput"
+				text="http://flipside.corp.adobe.com/vijay/strobe/swfs/PluginTestApp.swf"
+			/>
+
+			<mx:TextInput
+				width="500"
+				id="urlInput"
+				text="file:///C:/Projects/Strobe/root/dev/branches/sprint2_pretrunk/plugins/smil/bin-debug/SMILPlugin.swf"
+			/>
+			
+			-->
+
+
+			<mx:Button label="Load Plugin" click="{loadPlugin(urlInput.text)}"/>
+			
+			<mx:Label id="pluginLoadState" text="" visible="false" />
+
+		</mx:HBox>	
+		<mx:HBox height="60">
+			<mx:Spacer width="10" />
+			<mx:TextInput
+				width="500"
+				id="mediaInput"
+				text="rtmp://flipside.corp.adobe.com/Reno911_D6/Reno911-112_terry.flv"
+			/>
+			<mx:Button label="Load Media Resource" click="{loadItem(mediaInput.text)}"/>
+
+			<mx:Button label="Play" click="{wrapper.play()}"
+				enabled="{wrapper.playable}" />
+			<mx:Button label="Pause" click="{wrapper.pause()}"
+				enabled="{wrapper.playable}"  />
+			
+			<!--
+			<mx:HSlider width="100%" maximum="{wrapper.player.duration}"
+				value="{wrapper.player.playhead}" 
+				change="onProgressChange(event)"/>
+			-->					
+		</mx:HBox>	
+
+		<mx:Spacer height="5" />
+		<mx:HBox height="100%" width="100%">
+			<mx:Spacer width="10" />
+		    <players:MediaPlayerWrapper 
+				id="wrapper"
+				width="100%"
+				height="100%"
+			/>
+		</mx:HBox>
+
+	</mx:VBox>
+
+</mx:WindowedApplication>
+

@@ -1,0 +1,37 @@
+<DataRoot>
+<MediaList url="http://flipside.corp.adobe.com/test_assets/images/">
+  <Playlist label="http_png">
+	<Media stream="01.png" />
+    <Media stream="02.png" />
+    <Media stream="03.png" />
+  </Playlist>
+  <Playlist label="http_bmp">
+	<Media stream="alpha24_100.bmp" />
+    <Media stream="alpha8_10.bmp" />
+    <Media stream="03.png" />
+  </Playlist>
+  <Playlist label="http_gif">
+	<Media stream="banner1.gif" />
+    <Media stream="banner2.gif" />
+    <Media stream="banner3.gif" />
+  </Playlist>
+  <Playlist label="http_jpg">
+	<Media stream="bg-aspen.jpg" />
+    <Media stream="bg-green.png" />
+    <Media stream="elvis-jrock.jpg" />
+  </Playlist>
+  <Playlist label="http_transparent">
+	<Media stream="transparent24.tif" />
+    <Media stream="transparent8.bmp" />
+    <Media stream="transparentb.jpg" />
+    <Media stream="transparentb.png" />
+  </Playlist>
+   <Playlist label="http_slideshow">
+	<Media stream="assets/Images/ThumbnailVacation1.jpg" />
+ 	<Media stream="assets/Images/ThumbnailVacation2.jpg" />
+	<Media stream="assets/Images/ThumbnailVacation3.jpg" />
+   	<Media stream="assets/Images/ThumbnailVacation4.jpg" />
+   	<Media stream="assets/Images/ThumbnailVacation5.jpg" />
+  </Playlist>
+</MediaList>
+</DataRoot>

@@ -1,0 +1,20 @@
+<DataRoot>
+<MediaList url="http://flipside.corp.adobe.com/test_assets/">
+  <Playlist label="http_flv">
+	<Media stream="flv/EvanAlmighty.flv" />
+	<Media stream="flv/TheGoldenCompass.flv" />
+    <Media stream="mp3/batmanTAS.mp3" />
+  </Playlist>
+  <Playlist label="http_mov">
+	<Media stream="flv/H264/the.it.crowd.s01e01.x264Video50FullScreenSD.mov" />
+	<Media stream="flv/H264/the.it.crowd.s01e02.x264-Video50FullScreenSD.mov" />
+	<Media stream="flv/H264/the.it.crowd.s01e03.x264-Video50FullScreenSD.mov" />
+	<Media stream="flv/H264/the.it.crowd.s01e04.x264Video50FullScreenSD.mov" />
+	<Media stream="flv/H264/the.it.crowd.s01e05.x264Video50FullScreenSD.mov" />				
+  </Playlist>
+   <Playlist label="http_mp4">
+	<Media stream="flv/H264/Athletic_Juggling.mp4" />
+	<Media stream="flv/H264/GITS_1_0.mp4" />		
+  </Playlist>
+</MediaList>
+</DataRoot>

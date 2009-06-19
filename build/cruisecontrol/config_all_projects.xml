@@ -1,0 +1,940 @@
+<?xml version="1.0"?>
+<cruisecontrol>
+	<property file="config.properties"/>
+	<plugin name="labelincrementer" classname="com.adobe.philo.build.cc.PhiloP4ChangelistLabelIncrementer"/>
+
+	<!-- Projects -->
+	<project name="PhiloSigned" buildafterfailed="false" forceOnly="true">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${philo.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+       	-->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant
+				anthome="${ant.home}" 
+				buildfile="${philo.dir}/build.xml" 
+				target="cruisecontrol.signed" 
+				uselogger="true"
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="SIGNED"/>
+			</ant>
+		</schedule>
+
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${philo.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${philo.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					<property name="build.type" value="SIGNED"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+
+
+
+	<project name="PhiloIntegration">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${philo.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule interval="300">
+			<ant anthome="${ant.home}" 
+				buildfile="${philo.dir}/build.xml" 
+				target="cruisecontrol.integration" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="INTEGRATION"/>
+			</ant>
+			<!-- <pause  starttime="0900" endtime="1000"/>-->
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${philo.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${philo.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					
+					<property name="build.type" value="INTEGRATION"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+	<project name="PhiloNightly">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${philo.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+       	-->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${philo.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="0930" 
+				anthome="${ant.home}" 
+				buildfile="${philo.dir}/build.xml" 
+				target="cruisecontrol.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${philo.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${philo.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+	
+	
+	<!-- 
+		FMS Receiver Projects 
+	-->		
+	<project name="FMSReceiverNightly" buildafterfailed="false" forceOnly="true">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${fms.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${fms.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${fms.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="0930" 
+				anthome="${ant.home}" 
+				buildfile="${fms.dir}/build.xml" 
+				target="cruisecontrol.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${fms.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${fms.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+	
+	
+	
+	<!-- 
+		AMP Services Projects 
+	-->
+	<project name="CatalogIntegration">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${catalog.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+       	-->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true"
+				 port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule interval="300">
+			<ant anthome="${ant.home}" 
+				buildfile="${catalog.dir}/build.xml" 
+				target="cruisecontrol.integration" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="INTEGRATION"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${catalog.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${catalog.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					<property name="build.type" value="INTEGRATION"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+	
+<!-- Catalog Nightly -->	
+	<project name="CatalogNightly">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${catalog.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="0930" 
+				anthome="${ant.home}" 
+				buildfile="${catalog.dir}/build.xml" 
+				target="cruisecontrol.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${catalog.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${catalog.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.failure">
+					
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+<!--end Catalog nightly-->
+
+
+<!-- Neloo Nightly -->	
+	<project name="NelooNightly">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${catalog.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="1030" 
+				anthome="${ant.home}" 
+				buildfile="${catalog.dir}/build.xml" 
+				target="cruisecontrol.neloo.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${catalog.dir}/report/${project.name}"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${catalog.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.neloo.failure">
+					
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+<!--end Neloo nightly-->
+
+
+<!-- Wasabi Nightly -->	
+	<project name="SocialServerNightly">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${catalog.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="1030" 
+				anthome="${ant.home}" 
+				buildfile="${catalog.dir}/build.xml" 
+				target="cruisecontrol.wasabi.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${catalog.dir}/report/${project.name}"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${catalog.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.wasabi.failure">
+					
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+<!--end Wasabi nightly-->
+
+<!-- Wasabi Integration -->	
+	<project name="SocialServerIntegration">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${catalog.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers>
+			<p4bootstrapper 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</bootstrappers>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${catalog.p4view}"/>
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule interval="300">
+			<ant 
+				anthome="${ant.home}" 
+				buildfile="${catalog.dir}/build.xml" 
+				target="cruisecontrol.wasabi.integration" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="INTEGRATION"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${catalog.dir}/report/${project.name}"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${catalog.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="notify.wasabi.failure">
+					
+					<property name="build.type" value="INTEGRATION"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+<!--end Wasabi integration-->
+
+<!-- begin Tools integration-->
+
+	<project name="Tools">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${sushi.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+    -->
+		<bootstrappers/>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushi.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushicontracts.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushitest.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${modrunner.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${champ.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${champtest.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${acceptancetests.p4view}"/>
+
+
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule interval="300">
+			<ant anthome="${ant.home}" 
+				buildfile="${philo.dir}/build.xml" 
+				target="tools.cruisecontrol.build.integration" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="INTEGRATION"/>
+			</ant>
+			<!-- <pause  starttime="0900" endtime="1000"/>-->
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${philo.dir}/report/sushi"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${philo.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="tools.notify.failure">
+					
+					<property name="build.type" value="INTEGRATION"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+
+<!-- end Tools integration -->
+
+<!-- begin Tools nightly note that the labelincrementer is keying off sushi changelist #s -->
+
+	<project name="ToolsNightly">
+		<labelincrementer 
+			port="${p4port}" 
+			client="${p4client}" 
+			user="${p4user}" 
+			passwd="${p4password}" 
+			view="${sushi.p4view}"/>
+	<!--
+	Listeners are notified of project events e.g. build in progress, which are
+	used by the CruiseControl console.
+	-->
+		<listeners>
+			<currentbuildstatuslistener file="logs/${project.name}/status.txt"/>
+		</listeners>
+	<!--
+	Bootstrappers are run every time the build runs, *before* the modification checks.
+       	-->
+		<bootstrappers/>
+	<!--
+	Defines where CruiseControl looks for changes, to decide whether to run the build.
+	-->
+		<modificationset quietperiod="10">
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushi.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushicontracts.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${sushitest.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${modrunner.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${champ.p4view}"/>
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${champtest.p4view}"/>
+
+			<p4 
+				correctForServerTime="true" 
+				port="${p4port}" 
+				client="${p4client}" 
+				user="${p4user}" 
+				passwd="${p4password}" 
+				view="${acceptancetests.p4view}"/>
+
+
+		</modificationset>
+	<!--
+	Configures the actual build loop, how often and which build file/target.
+	-->
+		<schedule>
+			<ant time="0900" 
+				anthome="${ant.home}" 
+				buildfile="${philo.dir}/build.xml" 
+				target="tools.cruisecontrol.build.nightly" 
+				uselogger="true" 
+				usedebug="false">
+				
+				<property name="projectname" value="${project.name}"/>
+				<property name="build.type" value="NIGHTLY"/>
+			</ant>
+		</schedule>
+	<!--
+	Directory to write build logs to.
+	-->
+		<log>
+			<merge dir="${philo.dir}/report"/>
+		</log>
+	<!--
+	Publishers are run *after* a build completes.
+	-->
+		<publishers>
+			<onfailure>
+				<antpublisher 
+					anthome="${ant.home}" 
+					buildfile="${philo.dir}/build.xml" 
+					uselogger="true" 
+					usedebug="false" 
+					target="tools.notify.failure">
+					<property name="build.type" value="NIGHTLY"/>
+				</antpublisher>
+			</onfailure>
+		</publishers>
+	</project>
+
+<!-- end Tools nightly -->
+
+</cruisecontrol>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx				=	"http://www.adobe.com/2006/mxml" 
+	xmlns:controlPanel		=	"org.openvideoplayer.view.controlPanel.*"
+	xmlns:view 				= 	"org.openvideoplayer.view.*"
+	xmlns:controlpanel		=	"org.openvideoplayer.view.controlpanel.*">
+	
+	<mx:VBox>
+
+		<controlpanel:MediaButtonsLayout
+			id			=	"mediaBtns"
+			visible		=	"false"
+			/>
+			
+		<controlpanel:ViewableControlPanelLayout
+			id			=	"viewableControlPanel"
+			visible		=	"false"
+			/>
+
+	   <controlpanel:ProgressiveBarsLayout 
+   			id			=	"progressBars"
+   			visible		=	"false"
+   		    width		=	"{mediaBtns.width}"	
+			/>
+				
+		<mx:HBox 
+			visible			="true"
+			>
+		
+			<mx:TextInput 
+				id			="urlInput" 
+				text		="http://flipside.corp.adobe.com/test_assets/flv/ads/Amp%20Energy.flv" 
+				/>
+				
+			<mx:Button 
+				label		="load" 
+				id			="loadBtn"  
+				/>
+							
+			
+			<mx:Button 
+				label		="unload" 
+				id			="unloadBtn" 
+				/>
+				
+			<mx:CheckBox 
+				label		="autoLoad"
+				id			="autoLoad" 
+				selected	="true"
+				color		="#FFFFFF"
+				/>	
+								
+			<mx:Text 
+				id			="loadStateTxt" 
+			    color		="#FFF000"	
+				/>
+				
+		</mx:HBox>		
+	</mx:VBox>
+</mx:Canvas>

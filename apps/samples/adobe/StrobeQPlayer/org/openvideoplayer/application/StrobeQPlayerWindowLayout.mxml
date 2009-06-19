@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+	xmlns:mx				="http://www.adobe.com/2006/mxml" 
+	xmlns:view				="org.openvideoplayer.view.*"
+	xmlns:application		="org.openvideoplayer.application.*"
+ 	horizontalScrollPolicy	="off"
+	verticalScrollPolicy	="off"
+	autoLayout="true"
+	>
+
+	<mx:UIComponent id="uic" />
+	
+	<mx:Fade
+		id					="fadeOut"
+		duration			="1000"
+		alphaFrom			="1.0"
+		alphaTo				="0.0"
+		/>
+		
+	<mx:Fade
+		id					="fadeIn"
+		duration			="1000"
+		alphaFrom			="0.0"
+		alphaTo				="1.0"
+		/>
+		
+	<view:MediaControlPanelLayout 
+		id					="mediaControlPanel" 
+		bottom				="35"
+		left				="35"	
+		/>		
+		
+
+	<mx:VBox 
+		top					="5" 
+		right				="100"
+		>
+		
+		<mx:Text
+			id				= "fplayerVer" 
+			color			= "#FFFFFF" 
+ 	
+			/>
+			
+		<mx:Text 
+			id				="frameworkVer" 
+			color			="#FFFFFF" 
+			/>
+			
+		<mx:Text 
+			id				="qplayerkVer" 
+			color			="#FFFFFF" 
+			/>			
+			
+	</mx:VBox>
+
+	
+	
+	<application:PlaylistPanel 
+		id					="playlistPanel" 
+		/>
+
+	<application:LogPanel 
+		id					="logPanel" 
+		/>		
+
+	<mx:Image 
+		id					="infoImg" 
+		toolTip				="logTrace" 
+		x					="{logPanel.x + 200}"
+		source				="@Embed(source='/assets/info.jpg')"
+		width				="25"
+		height				="25"
+		alpha				="0.7"
+		click				="logPanel.displayLogPanel()"
+		mouseOver			="{event.target.alpha=1.0}"
+		mouseOut			="{event.target.alpha=0.7}"
+		/>		
+	
+	<mx:Image 
+		id					="playlistImg" 
+		toolTip				="playlist" 
+		x					="{infoImg.x + infoImg.width }"
+		source				="@Embed(source='/assets/video.png')" 
+		width				="25" 
+		height				="25"
+		alpha				="0.7" 
+		click				="playlistPanel.displayPlaylistPanel()"
+		mouseOver			="{event.target.alpha=1.0}"
+		mouseOut			="{event.target.alpha=0.7}"
+		/>
+	
+
+	
+	 <mx:NumberFormatter 
+	 	id="numberFormatter"
+	 	precision="2" 
+        useThousandsSeparator="true" 
+        useNegativeSign="true"
+       />	
+       
+  
+		
+</mx:Canvas>

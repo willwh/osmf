@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx				="http://www.adobe.com/2006/mxml"
+	xmlns:application		="org.openvideoplayer.application.*"
+	xmlns:wrapper			="org.openvideoplayer.view.wrapper.*"
+    backgroundImage			="@Embed(source='/assets/strobelogo.swf')"
+    backgroundSize			="auto"
+    backgroundColor			="#151515"
+    layout					="absolute"
+    backgroundGradientColors="#FFFFFF"
+    backgroundGradientAlphas="[ 1.0, 8.0 ]"
+	modalTransparency		="0.5"
+	>
+	
+	<mx:Panel
+	     >
+		<mx:Label
+			 width="100%"
+			 color="0x323232"
+			 fontWeight="bold"
+			 text="Select the tabs to change the strobeplayerSprite"
+			 />
+			 
+		<mx:TabNavigator id="tabNav"
+			width="100%"
+		 	height="100%"
+		    color="0x323232"
+		   >
+			
+	
+			<mx:VBox label="StrobeQPlayerSprite">
+			
+				<wrapper:MediaPlayerUIWrapper
+					 width			="100%"
+					 height			="100%"
+				/> 
+					 
+			</mx:VBox>	 
+			
+			<mx:VBox label="Strobe ElementSprite">
+				
+				<wrapper:MediaElementUIWrapper
+					 width			="100%"
+					 height			="100%"
+					/>
+					
+			</mx:VBox>
+			
+		</mx:TabNavigator> 
+		
+	</mx:Panel>
+	
+	<application:StrobeQPlayerWindow
+					width				="100%"
+					height				="100%"
+				/>
+
+					
+</mx:Application>
