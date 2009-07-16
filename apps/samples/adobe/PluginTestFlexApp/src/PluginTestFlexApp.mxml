@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	xmlns:players="com.adobe.strobe.players.*"
+	width="1000" height="800"
+	creationComplete="onComplete(event)">
+
+
+	<mx:Script>
+		<![CDATA[
+			import org.openvideoplayer.traits.MediaTraitType;
+			import org.openvideoplayer.events.LoadableStateChangeEvent;
+			import mx.controls.Alert;
+			import org.openvideoplayer.media.MediaInfo;
+			import org.openvideoplayer.media.MediaFactory;
+			import org.openvideoplayer.events.LoaderEvent;
+			import org.openvideoplayer.traits.LoadState;
+			import org.openvideoplayer.events.MediaPlayerStateChangeEvent;
+			import org.openvideoplayer.media.MediaElement;
+			import org.openvideoplayer.media.IMediaResource;
+			import org.openvideoplayer.plugin.PluginClassResource;
+			import flash.utils.getDefinitionByName;
+			import flash.net.getClassByAlias;
+			import org.openvideoplayer.plugin.PluginFactory;
+			
+			import org.openvideoplayer.net.NetLoader;
+			import org.openvideoplayer.traits.ILoadable;
+			import org.openvideoplayer.traits.MediaTraitType;			
+			import org.openvideoplayer.image.ImageLoader;
+			import org.openvideoplayer.image.ImageElement;
+			import org.openvideoplayer.media.URLResource;			
+			import org.openvideoplayer.video.VideoElement;
+			import mx.events.SliderEvent;
+			import org.openvideoplayer.plugins.video.SimpleVideoPluginInfo;
+			
+			
+			// Steps to run this app:
+			//
+			// SCENARIO - 1 (Loading a Static Plugin)
+			//
+			// 1. Enter 'org.openvideoplayer.plugins.video.SimpleVideoPluginInfo' (without the quotes) in the top textbox 
+			// 2. Enter a URL to an FLV file (RTMP or HTTP) in the second textbox
+			// 3. Click on the button 'Load Media Resource'
+			// 4. Confirm that you get the Alert dialog "No registered MediaInfo for this resource"
+			// 5. Now click on the button 'Load Plugin'
+			// 6. Now click again on the button 'Load Media Resource'
+			// 7. Watch the video play back successfully
+			//
+			// What happened here?
+			//
+			// To start with, the MediaFactory was empty. When you clicked on 'Load Media Resource' for the video URL, the MediaFactory
+			// could not create a MediaElement that had an associated IMediaResourceHandler for the URLResource (pointing to the video).
+			// When you loaded the plugin (org.openvideoplayer.plugins.video.SimpleVideoPluginInfo - this class is compiled in with this project)
+			// the MediaFactory got populated with 1 MediaInfo object that had the IMediaResourceHandler for handling videos. On the subsequent
+			// click to load the media resource, the video started playing back.
+			//
+			//
+			// Notice that the method 'loadPlugin' parses the input string and creates an appropriate IMediaResource for loading the plugin.
+			// If you specify a URL to a plugin, it will create a URLResource. In the above example, since the string represented a class name,
+			// the PluginFactory returned a plugin element that knows how to load plugins statically.
+			//
+			//
+			// SCENARIO - 2 (Loading a Dynamic Plugin)
+			//
+			// In order to see dynamic plugin loading in action, you need to do the following:
+			//
+			// 1. Compile this project and drop the resulting SWF into a location accessible via HTTP, say, http://www.foo.com/strobe/PluginTestFlexApp.swf
+			// 2. Compile the ASPlugin project (included in this package as a separate project), and drop the SWF in the same location (http://www.foo.com/strobe/ASPlugin.swf)
+			// 3. Edit the SMIL file (included in this package) VideoSequence.smi to contain URLs to real video assets (either RTMP or HTTP), and put it in the same location
+			//    (http://www.foo.com/strobe/VideoSequence.smi)
+			// 4. Open a browser and point to the application SWF (http://www.foo.com/strobe/PluginTestFlexApp.swf)
+			// 5. Enter the Plugin SWF URL in the top box (http://www.foo.com/strobe/ASPlugin.swf)
+			// 6. Enter the SMIL URL in the second textbox (http://www.foo.com/strobe/VideoSequence.smi)
+			// 7. Hit Load Media Resource, confirm the Alert saying "No registered MediaInfo for this resource"
+			// 8. Now hit Load Plugin to load the SMIL plugin
+			// 9. Now hit the Load Media Resource button again to see the video sequence playing back
+			//
+			// What happened here?
+			//
+			// Pretty much the same as scenario 1. First, there was no handler for a URLResource pointing to a SMIL document. After the plugin was loaded,
+			// the MediaFactory was populated with one, and playback worked. 
+			
+			private function onComplete(event:Event):void
+			{
+				// declaring the class variable so that the Flex Builder compiler
+				// includes this class in the compiled SWF. Since this class is not used anywhere
+				// in the code, Flex Builder won't include it by default. However, for
+				// loading the video plugin statically (scenario 1 described above),
+				// this class needs to be included.
+				var v:SimpleVideoPluginInfo;
+				
+				// initialization						
+				mediaFactory = new MediaFactory();
+				pluginFactory = new PluginFactory(mediaFactory);
+			}
+			
+			private function loadItem(url:String):void
+			{
+				wrapper.autoPlay = true;
+
+				var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(url));
+				if (mediaElement == null)
+				{
+					Alert.show("No registered MediaInfo for this resource");
+				}
+				else
+				{
+					wrapper.element = mediaElement;
+				}
+			}
+			
+			private function loadPlugin(source:String):void
+			{
+				var pluginResource:IMediaResource;
+				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
+				{
+					// Create a URLResource if the source is URL based
+					pluginResource = new URLResource(source);
+				}
+				else
+				{
+					// Assume the source is a class
+					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
+					pluginResource = new PluginClassResource(pluginInfoRef);
+				}
+				
+				loadPluginFromResource(pluginResource);			
+			}
+			
+			private function loadPluginFromResource(pluginResource:IMediaResource):void
+			{
+				// get the right plugin element from plugin factory
+				pluginElement = pluginFactory.createMediaElement(pluginResource);
+				if (pluginElement != null && pluginElement.hasTrait(MediaTraitType.LOADABLE))
+				{
+					loadable = pluginElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.load();
+				}
+			}
+			
+			private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			{
+				if (event.newState == LoadState.LOADED)
+				{
+					trace("Plugin Loaded Successfully");
+					pluginLoadState.text = "LOADED";
+					pluginLoadState.visible = true;
+				}
+				else if (event.newState == LoadState.LOAD_FAILED)
+				{
+					trace("Plugin Loading Failed");
+					pluginLoadState.text = "LOAD FAILED!";
+					pluginLoadState.visible = true;
+
+				}
+			}
+	
+			private var mediaFactory:MediaFactory;
+			private var pluginFactory:PluginFactory;
+			private var pluginElement:MediaElement;
+			private var loadable:ILoadable;
+		]]>
+	</mx:Script>
+
+
+	<mx:VBox height="100%" width="100%">
+		
+		<mx:Spacer height="10" />
+		<mx:HBox height="60">
+			<mx:Spacer width="10" />
+
+			<!-- Replace this text with "org.openvideoplayer.plugins.video.SimpleVideoPlauginInfo" 
+				for the static plugin example -->
+			<mx:TextInput
+				width="500"
+				id="urlInput"
+				text="http://yourserver.com/strobeplugin/yourDynamicPlugin.swf"
+			/>
+
+			<mx:Button label="Load Plugin" click="{loadPlugin(urlInput.text)}"/>
+			
+			<mx:Label id="pluginLoadState" text="" visible="false" />
+
+		</mx:HBox>	
+		
+		<mx:HBox height="60">
+		
+			<mx:Spacer width="10" />
+
+			<!-- Replace this text with a url to a real video (http or rtmp) 
+				for the static plugin example -->
+			<mx:TextInput
+				width="500"
+				id="mediaInput"
+				text="http://yourserver.com/strobeplugin/sampleSmil.smi"
+			/>
+			
+			<mx:Button label="Load Media Resource" click="{loadItem(mediaInput.text)}"/>
+
+			<mx:Button label="Play" click="{wrapper.play()}"
+				enabled="{wrapper.playable}" />
+				
+			<mx:Button label="Pause" click="{wrapper.pause()}"
+				enabled="{wrapper.playable}"  />
+			
+		</mx:HBox>	
+
+		<mx:Spacer height="5" />
+		
+		<mx:HBox height="100%" width="100%">
+		
+			<mx:Spacer width="10" />
+			
+		    <players:MediaPlayerWrapper 
+				id="wrapper"
+				width="100%"
+				height="100%"
+			/>
+		</mx:HBox>
+
+	</mx:VBox>
+
+</mx:Application>
+
