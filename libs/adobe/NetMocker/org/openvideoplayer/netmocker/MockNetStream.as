@@ -137,7 +137,7 @@ package org.openvideoplayer.netmocker
 				}
 			}
 			//The flash player sets the buferTime to a .1 minimum for VOD (http://)
-			if(arguments[0].toString().substr(0,4) == "http")
+			if(arguments != null && arguments.length > 0 && arguments[0].toString().substr(0,4) == "http")
 			{
 				bufferTime = bufferTime < .1 ? .1 : bufferTime; 
 			}
