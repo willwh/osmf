@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:players="com.adobe.strobe.players.*"
+	creationComplete="setupFactory()"
+	 verticalAlign="middle"
+	 horizontalAlign="center">
+	 <mx:Script>
+	 	<![CDATA[
+	 		import org.openvideoplayer.events.PlayingChangeEvent;
+	 		import org.openvideoplayer.metadata.IFacet;
+	 		import __AS3__.vec.Vector;
+	 		import org.openvideoplayer.metadata.KeyValueFacet;
+	 		import org.openvideoplayer.metadata.MetadataNamespaces;
+	 		import org.openvideoplayer.metadata.FacetType;
+	 		import org.openvideoplayer.utils.MediaFrameworkStrings;
+	 		import org.openvideoplayer.metadata.IMetadata;
+	 		import org.openvideoplayer.audio.AudioElement;
+	 		import org.openvideoplayer.video.VideoElement;
+	 		import org.openvideoplayer.image.ImageElement;
+	 		import org.openvideoplayer.image.ImageLoader;
+	 		import org.openvideoplayer.media.MediaInfo;
+	 		import org.openvideoplayer.media.MediaFactory;
+	 		import org.openvideoplayer.metadata.MediaType;
+	 		import mx.controls.TextArea;
+	 		import mx.controls.Label;
+	 		import mx.containers.FormItem;
+	 		import org.openvideoplayer.media.MediaFactory;
+	 		import org.openvideoplayer.metadata.KeyValueFacet;
+	 		import org.openvideoplayer.utils.URL;
+	 		import org.openvideoplayer.media.URLResource;
+	 		import org.openvideoplayer.net.NetLoader;
+	 		 		
+	 		private var factory:MediaFactory;
+	 			 		
+	 		protected function setupFactory():void
+	 		{
+	 			wrapper.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlaying);		
+	 			factory = new MediaFactory();
+	 			var sharedNetLoader:NetLoader = new NetLoader();
+	 			var sharedLoader:ImageLoader = new ImageLoader();
+	 			factory.addMediaInfo(new MediaInfo(MediaType.AUDIO, new MetadataResourceHandler(MediaType.AUDIO), AudioElement,[sharedNetLoader]));
+	 			factory.addMediaInfo(new MediaInfo(MediaType.IMAGE, sharedLoader, ImageElement,[sharedLoader]));	 			
+	 			factory.addMediaInfo(new MediaInfo(MediaType.VIDEO, new MetadataResourceHandler(MediaType.VIDEO), VideoElement,[sharedNetLoader]));	 			
+	 		}
+	 		
+	 		protected function createElement():void
+	 		{	
+	 			var resourceData:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DEFAULT_METADATA); 
+	 			resourceData.addValue(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE, typeCombo.selectedItem);	
+	 			var resource:URLResource = new URLResource(	new URL(mediaURL.text) );
+	 			resource.metadata.addFacet(resourceData);
+	 			wrapper.element = factory.createMediaElement(resource);	  	 			
+	 		}
+	 		
+	 		protected function onPlaying(event:PlayingChangeEvent):void
+	 		{
+	 			if(event.playing)
+	 			{
+	 				wrapper.muted = true;
+	 			}	
+	 		}
+	 		
+	 			 		
+	 		//Gets a list of all maps on the resource's metadata
+	 		protected function getMaps():void
+	 		{
+	 			metadataListProvider.removeAll();
+	 			var ns:URL = new URL(nameSpace.selectedItem.toString());	 				
+	 			var facets:Vector.<FacetType> = wrapper.element.resource.metadata.getFacetTypes(ns);
+	 			
+	 			for each( var type:FacetType in facets)
+	 			{
+	 				metadataListProvider.addItem(wrapper.element.resource.metadata.getFacet(ns, type));
+	 			}
+	 		}
+	 		
+	 		protected function getValues():void
+	 		{
+	 			if (metadataList.selectedItem && metadataList.selectedItem as KeyValueFacet)
+				{
+					metadataItemProvider.removeAll();
+					var kvMetadata:KeyValueFacet = metadataList.selectedItem as KeyValueFacet;
+					var keys:Vector.<Object> = kvMetadata.keys;
+					var itr:Number = 0;
+					for (;itr < keys.length; ++itr)
+					{
+						var data:Object = kvMetadata.getValue(keys[itr]);
+						metadataItemProvider.addItem({data:data, key:keys[itr]});
+					}					
+				}
+	 		}
+	 		
+	 		//Adds a new Map to the metadata list
+	 		protected function addNewMap():void
+	 		{
+	 			wrapper.element.resource.metadata.addFacet(new KeyValueFacet(new URL(nameSpace.text)));
+	 			getMaps();
+	 		}
+	 		
+	 		//Adds a value to the Map
+			protected function addValue():void
+			{
+				if (metadataList.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataList.selectedItem as KeyValueFacet;
+					kvMetadata.addValue(key.text, value.text);
+					getValues();
+				}
+			}
+			
+			protected function keySelected():void
+			{
+				if (keyValueList.selectedItem)
+				{					
+					value.text = keyValueList.selectedItem.data;
+					key.text = keyValueList.selectedItem.key;					
+				}
+			}	
+			
+			protected function removeValue():void
+			{
+				if (keyValueList.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataList.selectedItem as KeyValueFacet;
+					kvMetadata.removeValue(	keyValueList.selectedItem.key);		
+					value.text = "";
+					key.text = "";	
+					getValues();
+				}
+			}
+			
+			protected function updateValue():void
+			{
+				if (keyValueList.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataList.selectedItem as KeyValueFacet;
+					kvMetadata.addValue(keyValueList.selectedItem.key, value.text);					
+					getValues();					
+				}
+			}
+			
+			 		
+	 	]]>
+	 </mx:Script>
+		 
+	<players:MediaPlayerWrapper id="wrapper" width="50%" height="50%" />
+	<mx:HBox>	
+		<mx:Form id="metadataForm" width="50%" height="50%" >
+			<mx:FormItem label="Media URL:">
+				<mx:TextInput id="mediaURL" text="http://mediapm.edgesuite.net/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv" />
+			</mx:FormItem>
+			<mx:FormItem label="Media Type:">
+				<mx:ComboBox id="typeCombo">
+				 	<mx:dataProvider>
+				 		{[MediaType.AUDIO, MediaType.IMAGE, MediaType.SWF, MediaType.VIDEO]}
+				 	</mx:dataProvider>
+				</mx:ComboBox>
+			</mx:FormItem>
+			<mx:FormItem>
+				<mx:Button label="Create Media Element" click="createElement()" />			
+			</mx:FormItem>
+		</mx:Form>
+		
+		<mx:VBox>
+			<mx:Label text="Facet List:" />
+			<mx:List id="metadataList" change="{getValues()}" >
+				<mx:dataProvider>
+					<mx:ArrayCollection id="metadataListProvider" />
+				</mx:dataProvider>
+			</mx:List>
+			<mx:ComboBox id="nameSpace" >		
+				<mx:dataProvider>
+					{[MetadataNamespaces.DEFAULT_METADATA.rawUrl, "http://example.com", "http://akamai.com"]}				
+				</mx:dataProvider>							
+			</mx:ComboBox>			
+			<mx:Button label="Refresh Facets for namespace" click="getMaps()" />				
+			<mx:Button label="Add New KeyValueMap" click="addNewMap()" />				
+		</mx:VBox>
+		
+		<mx:VBox>
+			<mx:Label text="Data for Selected Facet:" />
+			<mx:List id="keyValueList" change="{keySelected()}" >
+				<mx:dataProvider>
+					<mx:ArrayCollection id="metadataItemProvider" />
+				</mx:dataProvider>
+			</mx:List>
+			<mx:Label text="Key:" />
+			<mx:TextInput id="key" />
+			<mx:Label text="Value:" />
+			<mx:TextInput id="value" />	
+			<mx:Button label="Add Value" click="addValue()" />	
+			<mx:Button label="Update Value" click="updateValue()" />
+			<mx:Button label="Remove Selected Value" click="removeValue()" />		
+		</mx:VBox>
+		
+	</mx:HBox>
+</mx:Application>

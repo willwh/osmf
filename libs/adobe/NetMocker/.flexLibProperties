@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="org.openvideoplayer.netmocker.DefaultNetConnectionFactory"/>
+    <classEntry path="org.openvideoplayer.netmocker.EventInfo"/>
+    <classEntry path="org.openvideoplayer.netmocker.MockNetConnection"/>
+    <classEntry path="org.openvideoplayer.netmocker.MockNetLoader"/>
+    <classEntry path="org.openvideoplayer.netmocker.MockNetNegotiator"/>
+    <classEntry path="org.openvideoplayer.netmocker.MockNetStream"/>
+    <classEntry path="org.openvideoplayer.netmocker.NetConnectionExpectation"/>
+    <classEntry path="org.openvideoplayer.netmocker.NetStatusEventInterceptor"/>
+    <classEntry path="org.openvideoplayer.netmocker.TracingNetLoader"/>
+    <classEntry path="org.openvideoplayer.netmocker.TracingNetNegotiator"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
