@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+-->
+<mx:Canvas 
+	xmlns:mx					="http://www.adobe.com/2006/mxml"
+	xmlns:players				="com.adobe.strobe.players.*"
+	>
+	
+	<!-- Center (Player) Region -->
+	
+	<players:MediaPlayerWrapper
+		id						="mediaPlayerWrapper"
+		top						="0"
+		left					="0"
+		bottom					="0"
+		right					="0"
+		/>
+	
+	<!-- Upper Right Region -->
+	
+	<mx:HBox
+		color					="white"
+		right					="0"
+		width					="120"
+		height					="20"
+		top						="20"
+		>
+		
+		<mx:Label
+			id					="version"
+			/>
+			
+	</mx:HBox>
+	
+	<!-- Lower Right Region -->
+	
+	<mx:HBox
+		right					="0"
+		width					="500"
+		height					="30"
+		bottom					="140"
+		verticalAlign			="middle"
+		>
+
+		<mx:Label
+			text				="Media: "
+			color				="white"
+			/>
+		<mx:ComboBox
+			id					="mediaMenu" 
+			/>
+		<mx:Button
+			id					="buttonLoad"
+			label				="Load"
+			visible				="false"
+			/>
+		<mx:Button
+			id					="buttonPlay"
+			label				="Play"
+			visible				="false"
+			/>
+		<mx:Button
+			id					="buttonPause"
+			label				="Pause"
+			visible				="false"
+			/>
+
+	</mx:HBox>
+
+	
+	<mx:HBox
+		id						="seekControls" 
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="120"
+		verticalAlign			="middle"
+		>
+		
+		<mx:Label
+			text				="Position:  0"
+			/>
+		<mx:HSlider 				
+			width				="100%" 			
+			id					="seekBar" 
+			/>			
+		<mx:Label
+			id					="duration"
+			/>
+			
+	</mx:HBox>
+	
+	<mx:HBox
+		id						="bufferable"
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="100"
+		verticalAlign			="middle"
+		>
+		
+		<mx:Label
+			text				="Buffer Time: "
+			/>
+		<mx:Label
+			id					="bufferTime"
+			/>
+		<mx:Label
+			text				="Buffer Length: "
+			/>
+		<mx:Label
+			id					="bufferLength"
+			/>
+
+	</mx:HBox>
+	
+	<mx:HBox
+		id						="audioControls" 
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="80"
+		color					="white"
+		verticalAlign			="middle"
+		>
+		
+		<mx:Label
+			text				="Volume:"
+			/>
+		<mx:HSlider 			
+			value				="1"	
+			width				="100%"
+			maximum				="1"
+			id					="volumeSlider" 
+			/>
+		<mx:CheckBox
+			id					="muteToggle"
+			toggle				="true"
+			label				="Mute"
+			textRollOverColor	="white"
+			textSelectedColor	="white"
+			/>
+		<mx:Label
+			text				="Pan:"
+			/>	
+		<mx:HSlider 
+			width				="100%" 
+			minimum				="-1"
+			value				="0"
+			maximum				="1"
+			id					="panControl" 
+			/>
+			
+	</mx:HBox>
+	
+	<mx:HBox
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="60"
+		verticalAlign			="middle"
+		>
+		
+		<mx:Label
+			text				="Load State: "
+			/>
+		<mx:Text
+			id					="loadState"
+			/>
+
+	</mx:HBox>
+	
+	<mx:HBox
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="40"
+		verticalAlign			="middle"
+		>
+
+		<mx:Label
+			text				="Error Code: "
+			/>
+		<mx:Label
+			id					="errorCode"
+			text				=""
+			/>
+			
+	</mx:HBox>
+	
+	<mx:HBox
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="20"
+		verticalAlign			="middle"
+		>
+	
+		<mx:Label
+			text				="Error Description: "
+			/>
+		<mx:Label
+			id					="errorDescription"
+			text				=""
+			/>
+	</mx:HBox>
+
+	<mx:HBox
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="0"
+		verticalAlign			="middle"
+		horizontalScrollPolicy	="off"
+		>
+	
+		<mx:Label
+			text				="Error Detail: "
+			/>
+		<mx:Label
+			id					="errorDetail"
+			width				="100%"
+			toolTip				="{errorDetail.text}"
+			/>
+	</mx:HBox>
+	
+</mx:Canvas>
