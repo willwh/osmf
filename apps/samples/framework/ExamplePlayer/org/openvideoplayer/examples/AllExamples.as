@@ -241,7 +241,7 @@ package org.openvideoplayer.examples
 							var mediaElement2:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
 							parallelElement.addChild(mediaElement2);
 							
-							applyAdjecentLayout(parallelElement, mediaElement1, mediaElement2);
+							applyAdjacentLayout(parallelElement, mediaElement1, mediaElement2);
 							
 							return parallelElement;
 				  	   	} 
@@ -397,7 +397,7 @@ package org.openvideoplayer.examples
 			return examples;
 		}
 		
-		private static function applyAdjecentLayout(parent:MediaElement, left:MediaElement, right:MediaElement):void
+		private static function applyAdjacentLayout(parent:MediaElement, left:MediaElement, right:MediaElement):void
 		{
 			var relativeLayout:RelativeLayoutFacet = new RelativeLayoutFacet();
 			relativeLayout.width = 50;
