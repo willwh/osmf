@@ -201,7 +201,7 @@ package org.openvideoplayer.plugin
 		private static const AKAMAI_VIDEO_MEDIA_INFO_ID:String = "com.akamai.osmf.BasicStreamingVideoElement";
 		private static const AKAMAI_AUDIO_MEDIA_INFO_ID:String = "com.akamai.osmf.BasicStreamingAudioElement";
 		
-		private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://localhost/test/AkamaiBasicStreamingPlugin.swf";
+		private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://mediapm.edgesuite.net/osmf/swf/AkamaiBasicStreamingPlugin.swf";
 		private static const TEST_TIME:int = 4000;
 
 		private static const PROGRESSIVE_FLV:String 		= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";

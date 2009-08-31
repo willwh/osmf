@@ -68,7 +68,7 @@
 			private var waitForSeek:Boolean;
 		
 			
-			private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://localhost/test/AkamaiBasicStreamingPlugin.swf";
+			private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://mediapm.edgesuite.net/osmf/swf/AkamaiBasicStreamingPlugin.swf";
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;					
 
 			// ------ TEST CONTENT ------
