@@ -24,6 +24,7 @@ package org.openvideoplayer.layout
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
 	import org.openvideoplayer.metadata.Metadata;
@@ -83,6 +84,36 @@ package org.openvideoplayer.layout
 			return 0;
 		}
 		
+		public function updateIntrinsicDimensions():void
+		{
+			var bounds:Rectangle = getBounds(this);
+			var newIntrinsicWidth:Number
+				= isNaN(absoluteWidth)
+					? (bounds.width || NaN)
+					: absoluteWidth;
+					
+			var newIntrinsicHeight:Number
+				= isNaN(absoluteHeight)
+					? (bounds.height || NaN)
+					: absoluteHeight;
+					
+			if 	(	(_intrinsicWidth != newIntrinsicWidth)
+				||	(_intrinsicHeight != newIntrinsicHeight)  
+				)
+			{
+				var event:DimensionChangeEvent
+					= new DimensionChangeEvent
+						( _intrinsicWidth, _intrinsicHeight
+						, newIntrinsicWidth, newIntrinsicHeight
+						);
+				
+				_intrinsicWidth = newIntrinsicWidth;
+				_intrinsicHeight = newIntrinsicHeight;
+			
+				dispatchEvent(event);	
+			}
+		}
+		
 		// ILayoutTarget
 		
 		/**
@@ -111,20 +142,7 @@ package org.openvideoplayer.layout
 		 */
 		public function get intrinsicWidth():Number
 		{
-			if (!isNaN(_intrinsicWidth))
-			{
-				return _intrinsicWidth;	
-			}
-			else if (!isNaN(availableWidth))
-			{
-				return availableWidth;
-			}
-			else
-			{
-				return getBounds(this).width
-					|| NaN;	// return NaN rather than 0, so no relative
-							// calculations get triggered.
-			}
+			return _intrinsicWidth;
 		}
 		
 		/**
@@ -135,102 +153,30 @@ package org.openvideoplayer.layout
 		 */
 		public function get intrinsicHeight():Number
 		{
-			if (!isNaN(_intrinsicHeight))
-			{
-				return _intrinsicHeight;	
-			}
-			else if (!isNaN(availableHeight))
-			{
-				return availableHeight;
-			}
-			else
-			{
-				return getBounds(this).height 
-					|| NaN; // return NaN rather than 0, so no relative
-							// calculations get triggered.
-			}
+			return _intrinsicHeight;
 		}
 		
-		// Overrides
-		//
-		
-		/** 
-		 * @inheritDoc
-		 */
-		override public function set width(value:Number):void
-		{
-			if (availableWidth != value)
-			{
-				var oldWidth:Number = availableWidth;
-				availableWidth = value;
-				
-				// If no intrinsic width is set, then the available
-				// width is determining our dimensions:
-				if (isNaN(_intrinsicWidth))
-				{
-					dispatchEvent
-						( new DimensionChangeEvent
-							( oldWidth	, _intrinsicHeight
-							, value		, _intrinsicHeight
-							)
-						);
-				}
-			}
-		}
-		override public function get width():Number
-		{
-			return availableWidth;
-		}
-		
-		/** 
-		 * @inheritDoc
-		 */
-		override public function set height(value:Number):void
-		{
-			if (availableHeight != value)
-			{
-				var oldHeight:Number = availableHeight;
-				availableHeight = value;
-				
-				// If no intrinsic height is set, then the available
-				// height is determining our dimensions:
-				if (isNaN(_intrinsicHeight))
-				{
-					dispatchEvent
-						( new DimensionChangeEvent
-							( _intrinsicWidth, oldHeight
-							, _intrinsicWidth, value
-							)
-						);
-				}
-			}
-		}
-		override public function get height():Number
-		{
-			return availableHeight;
-		}
-			
 		// Internals
 		//
 		
 		private function absoluteLayoutParametersChangeCallback(absolute:AbsoluteLayoutFacet):void
 		{
 			if	(	absolute
-				&&	(	absolute.width != _intrinsicWidth
-					||	absolute.height != _intrinsicHeight
+				&&	(	absolute.width != absoluteWidth
+					||	absolute.height != absoluteHeight
 					)
 				)
 			{
-				var oldWidth:Number = _intrinsicWidth;
-				var oldHeight:Number = _intrinsicHeight;
+				var oldWidth:Number = absoluteWidth;
+				var oldHeight:Number = absoluteHeight;
 				
-				_intrinsicWidth = absolute.width;
-				_intrinsicHeight = absolute.height;
+				_intrinsicWidth = absoluteWidth = absolute.width;
+				_intrinsicHeight = absoluteHeight = absolute.height;
 				
 				dispatchEvent
 					( new DimensionChangeEvent
 						( oldWidth, oldHeight
-						, _intrinsicWidth, _intrinsicHeight
+						, absoluteWidth, absoluteHeight
 						)
 					);
 			}
@@ -238,10 +184,10 @@ package org.openvideoplayer.layout
 		
 		private var _metadata:Metadata;
 		
+		private var absoluteWidth:Number;
+		private var absoluteHeight:Number;
+		
 		private var _intrinsicWidth:Number;
 		private var _intrinsicHeight:Number;
-		
-		private var availableWidth:Number;
-		private var availableHeight:Number;
 	}
 }

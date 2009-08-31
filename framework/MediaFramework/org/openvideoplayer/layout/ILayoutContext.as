@@ -46,5 +46,11 @@ package org.openvideoplayer.layout
 		 * its first target onto the container. 
 		 */		
 		function get firstChildIndex():uint;
+	
+		/**
+		 * Method invoked by an ILayoutRenderer class to inform the context that it
+		 * should recalculate its intrinsicWidth and intrinsicHeight fields:
+		 */		
+		function updateIntrinsicDimensions():void
 	}
 }

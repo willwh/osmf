@@ -408,6 +408,9 @@ package org.openvideoplayer.layout
 			// Invoke subclass render function:
 			render(targets);
 			
+			// Have our context re-asses its intrinsical width and height:
+			_context.updateIntrinsicDimensions();
+						
 			// We're no longer dirty:
 			dirty = false;
 		}
