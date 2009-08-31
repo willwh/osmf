@@ -1,0 +1,90 @@
+/*****************************************************
+*  
+*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
+*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
+*  Technologies, Inc. All Rights Reserved. 
+*  
+*****************************************************/
+@font-face {
+	src: local("Verdana");
+	fontFamily: "Verdana";
+	unicodeRange:'U+0020-U+007E'; 
+}
+
+@font-face {
+	src: local("Verdana");
+	fontFamily: "Verdana";
+	fontWeight: bold;
+	unicodeRange:'U+0020-U+007E'; 
+}
+
+global {
+   color: #FFFFFF;
+   fontFamily: "Verdana";
+   fontSize: 11px;
+   fontWeight: normal;
+}
+
+.title {
+	fontSize: 20px;
+	fontWeight: normal;
+}
+
+.timeCode {
+	fontSize: 10px;
+	color: #999999;
+}
+
+.error {
+	fontSize: 10px;
+	color: #FF1111;
+}
+
+Label {
+	fontSize: 10px;
+	color: #aaaaaa;
+}
+
+ComboBox {
+	color: #333333;
+	themeColor: "haloSilver";
+}
+
+
+Button {
+	themeColor: "haloSilver";
+}
+
+TextInput {
+	color: #000000;
+}
+
+TextArea {
+	color: #222222;
+	disabledColor: #222222;
+}
+
+HSlider {
+	themeColor: "haloSilver";
+    dataTipStyleName: "dataTip";
+    dataTipOffset: 6;
+}
+
+.dataTip {
+    backgroundColor: black;
+}
+

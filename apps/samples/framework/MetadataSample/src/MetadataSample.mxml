@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:players="com.adobe.strobe.players.*"
+	creationComplete="setupFactory()"
+	 verticalAlign="middle"
+	 backgroundColor="black"
+	 color="black"
+	 themeColor="black"
+	 horizontalAlign="center">
+	 <mx:Script>
+	 	<![CDATA[
+	 		import org.openvideoplayer.layout.PaddingLayoutFacet;
+	 		import org.openvideoplayer.layout.AnchorLayoutFacet;
+	 		import org.openvideoplayer.layout.AbsoluteLayoutFacet;
+	 		import org.openvideoplayer.display.ScaleMode;
+	 		import org.openvideoplayer.layout.RelativeLayoutFacet;
+	 		import org.openvideoplayer.layout.LayoutAttributesFacet;
+	 		import org.openvideoplayer.metadata.IFacet;
+	 		import org.openvideoplayer.media.MediaElement;
+	 		import org.openvideoplayer.composition.ParallelElement;
+	 		import org.openvideoplayer.composition.SerialElement;
+	 		import org.openvideoplayer.image.ImageElement;
+	 		import org.openvideoplayer.video.VideoElement;
+	 		import org.openvideoplayer.audio.AudioElement;
+	 		import org.openvideoplayer.media.MediaInfo;
+	 		import org.openvideoplayer.composition.CompositeElement;
+	 		import org.openvideoplayer.metadata.MetadataNamespaces;
+	 		import org.openvideoplayer.metadata.MediaType;
+	 		import org.openvideoplayer.utils.MediaFrameworkStrings;
+	 		import org.openvideoplayer.metadata.ObjectIdentifier;
+	 		import org.openvideoplayer.utils.URL;
+	 		import org.openvideoplayer.media.URLResource;
+	 		import org.openvideoplayer.metadata.KeyValueFacet;
+	 		import org.openvideoplayer.image.ImageLoader;
+	 		import org.openvideoplayer.net.NetLoader;
+	 		import org.openvideoplayer.media.MediaFactory;
+	 		import org.openvideoplayer.events.MediaErrorEvent;
+	 		import org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent;
+	 		import org.openvideoplayer.events.MetadataEvent;
+	 		
+	 		private var factory:MediaFactory;
+	 			 		
+	 		protected function setupFactory():void
+	 		{
+	 			wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE, onAudible);		 	
+	 			wrapper.mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
+	 			factory = new MediaFactory();
+	 			var sharedNetLoader:NetLoader = new NetLoader();
+	 			var sharedLoader:ImageLoader = new ImageLoader();
+	 			factory.addMediaInfo(new MediaInfo(MediaType.AUDIO, new MetadataResourceHandler(MediaType.AUDIO), AudioElement,[sharedNetLoader]));
+	 			factory.addMediaInfo(new MediaInfo(MediaType.IMAGE, sharedLoader, ImageElement,[sharedLoader]));	 			
+	 			factory.addMediaInfo(new MediaInfo(MediaType.VIDEO, new MetadataResourceHandler(MediaType.VIDEO), VideoElement,[sharedNetLoader]));	 			
+	 		}
+	 		
+	 		protected function createVideoComposition(serial:Boolean = false):void
+	 		{
+	 			facetProvider.removeAll();
+	 			var resourceData:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DEFAULT_METADATA); 
+	 			var comp:CompositeElement = serial ? new SerialElement() : new ParallelElement();
+	 				 			
+	 			var resource0:URLResource = new URLResource(new URL(sampleURLCollection[0]));
+	 			var resource1:URLResource = new URLResource(new URL(sampleURLCollection[1]));
+	 			var resource2:URLResource = new URLResource(new URL(sampleURLCollection[2]));	
+	 			resourceData.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), MediaType.VIDEO);
+	 			resource0.metadata.addFacet(resourceData);
+	 			resource1.metadata.addFacet(resourceData);
+	 			resource2.metadata.addFacet(resourceData);
+	 				
+	 			comp.metadata.addEventListener(MetadataEvent.FACET_ADD, onMetadataAdd);
+	 			comp.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onMetadataRemove);
+	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource2))));	 
+	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource0))));
+	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource1))));			
+	 			
+	 			var layout:RelativeLayoutFacet;
+	 			if(serial)
+	 			{
+		 			layout = new RelativeLayoutFacet();					
+					layout.width = 100;
+					layout.height = 100;
+					comp.getChildAt(0).metadata.addFacet(layout);
+					comp.getChildAt(1).metadata.addFacet(layout);
+					comp.getChildAt(2).metadata.addFacet(layout);
+				}
+				else //Parallel
+				{
+					layout = new RelativeLayoutFacet();					
+					layout.width = 100/3;
+					layout.height = 100;
+					var layout2:RelativeLayoutFacet  = new RelativeLayoutFacet();	
+					layout2.x = 100/3;
+					layout2.width = 100/3;
+					layout2.height = 100;
+					var layout3:RelativeLayoutFacet  = new RelativeLayoutFacet();	
+					layout3.x = 2/3*100;	
+					layout3.width = 100/3;
+					layout3.height = 100;			
+					comp.getChildAt(0).metadata.addFacet(layout);
+					comp.getChildAt(1).metadata.addFacet(layout2);
+					comp.getChildAt(2).metadata.addFacet(layout3);
+				}
+	 			wrapper.scaleMode = ScaleMode.STRETCH;
+	 				 				 				 			
+	 			wrapper.element = comp;  			
+	 		}
+	 			 		
+	 		protected function onMetadataAdd(event:MetadataEvent):void
+	 		{	 			
+	 			ArrayCollection(metadataFacets.dataProvider).addItem(event.facet);
+	 			if (event.facet is KeyValueFacet)
+	 			{
+	 				var md:KeyValueFacet = event.facet as KeyValueFacet;	 				
+	 				var keys:Vector.<ObjectIdentifier> = md.keys;	 						
+	 			}
+	 		}
+	 		
+	 		protected function onMetadataRemove(event:MetadataEvent):void
+	 		{		 			
+	 			if (event.facet is KeyValueFacet)
+	 			{ 	
+		 			var idx:int = ArrayCollection(metadataFacets.dataProvider).getItemIndex(event.facet);		 			
+		 			ArrayCollection(metadataFacets.dataProvider).removeItemAt(idx);		
+		 			getValues();
+		 		}	 		
+	 		}
+	 			 		
+	 		protected function createElement():void
+	 		{	
+	 			facetProvider.removeAll();
+	 			var resourceData:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DEFAULT_METADATA); 
+	 			resourceData.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), typeCombo.selectedItem);	
+	 			var url:URL =  new URL(mediaURL.text);
+	 				 			
+	 			var resource:URLResource = new URLResource(	url );
+	 			resource.metadata.addFacet(resourceData);
+	 			var elem:MediaElement = factory.createMediaElement(resource);
+	 			if (typeCombo.selectedItem == MediaType.VIDEO)
+	 			{
+	 				elem = new MetadataProxy(VideoElement(elem));
+	 			}
+	 			
+	 			wrapper.element = elem;	  
+	 			wrapper.element.metadata.addEventListener(MetadataEvent.FACET_ADD, onMetadataAdd);
+	 			wrapper.element.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onMetadataRemove);	 			
+	 		}
+	 		
+	 		protected function onAudible(event:MediaPlayerCapabilityChangeEvent):void
+	 		{
+	 			if(wrapper.mediaPlayer.audible)
+	 			{
+	 				wrapper.mediaPlayer.volume = .25;
+	 			}	
+	 		}	 	
+	 			 		
+	 		//Gets all values form the selected facet.	 		
+	 		protected function getValues():void
+	 		{	 			
+	 			metadataItemProvider.removeAll();
+	 			if (metadataFacets.selectedItem && metadataFacets.selectedItem is KeyValueFacet )
+				{					
+					var kvMetadata:KeyValueFacet = metadataFacets.selectedItem as KeyValueFacet;
+					var keys:Vector.<ObjectIdentifier> = kvMetadata.keys;					
+					for (var itr:Number = 0;itr < keys.length; ++itr)
+					{
+						var data:Object = kvMetadata.getValue(keys[itr]);
+						metadataItemProvider.addItem({data:data, key:keys[itr]});
+					}									
+				}	
+				else if(metadataFacets.selectedItem is AbsoluteLayoutFacet	)	
+				{
+					var absFacet:AbsoluteLayoutFacet = AbsoluteLayoutFacet(metadataFacets.selectedItem);
+					metadataItemProvider.addItem({data:absFacet.x, key:new ObjectIdentifier('x')});
+					metadataItemProvider.addItem({data:absFacet.y, key:new ObjectIdentifier('y')});
+					metadataItemProvider.addItem({data:absFacet.width, key:new ObjectIdentifier('width')});
+					metadataItemProvider.addItem({data:absFacet.height, key:new ObjectIdentifier('height')});					
+				}	
+				else if(metadataFacets.selectedItem is AnchorLayoutFacet	)	
+				{
+					var ancFacet:AnchorLayoutFacet = AnchorLayoutFacet(metadataFacets.selectedItem);
+					metadataItemProvider.addItem({data:ancFacet.bottom, key:new ObjectIdentifier('bottom')});
+					metadataItemProvider.addItem({data:ancFacet.top, key:new ObjectIdentifier('top')});
+					metadataItemProvider.addItem({data:ancFacet.left, key:new ObjectIdentifier('left')});
+					metadataItemProvider.addItem({data:ancFacet.right, key:new ObjectIdentifier('right')});					
+				}	
+				else if(metadataFacets.selectedItem is PaddingLayoutFacet	)	
+				{
+					var padFacet:PaddingLayoutFacet = PaddingLayoutFacet(metadataFacets.selectedItem);
+					metadataItemProvider.addItem({data:padFacet.bottom, key:new ObjectIdentifier('bottom')});
+					metadataItemProvider.addItem({data:padFacet.top, key:new ObjectIdentifier('top')});
+					metadataItemProvider.addItem({data:padFacet.left, key:new ObjectIdentifier('left')});
+					metadataItemProvider.addItem({data:padFacet.right, key:new ObjectIdentifier('right')});					
+				}	
+				else if(metadataFacets.selectedItem is RelativeLayoutFacet	)	
+				{
+					var relFacet:RelativeLayoutFacet = RelativeLayoutFacet(metadataFacets.selectedItem);
+					metadataItemProvider.addItem({data:relFacet.x, key:new ObjectIdentifier('x')});
+					metadataItemProvider.addItem({data:relFacet.y, key:new ObjectIdentifier('y')});
+					metadataItemProvider.addItem({data:relFacet.width, key:new ObjectIdentifier('width')});
+					metadataItemProvider.addItem({data:relFacet.height, key:new ObjectIdentifier('height')});					
+				}	
+				else if(metadataFacets.selectedItem is LayoutAttributesFacet	)	
+				{
+					var attribFacet:LayoutAttributesFacet = LayoutAttributesFacet(metadataFacets.selectedItem);
+					metadataItemProvider.addItem({data:attribFacet.alignment, key:new ObjectIdentifier('alignment')});
+					metadataItemProvider.addItem({data:attribFacet.order, key:new ObjectIdentifier('order')});
+					metadataItemProvider.addItem({data:attribFacet.snapToPixel, key:new ObjectIdentifier('snapToPixel')});	
+					metadataItemProvider.addItem({data:attribFacet.scaleMode, key:new ObjectIdentifier('scaleMode')});	
+					metadataItemProvider.addItem({data:attribFacet.registrationPoint, key:new ObjectIdentifier('registrationPoint')});															
+				}				
+	 		}
+	 		
+	 		protected function keyLabel(item:Object, column:DataGridColumn):String
+	 		{
+	 			return item.key.key.toString();
+	 		}
+	 		
+	 		//Adds a new KeyValueFacet to the metadata list
+	 		protected function addFacet():void
+	 		{
+	 			wrapper.element.metadata.addFacet(new KeyValueFacet(new URL(nameSpace.text)));	 			
+	 		}
+	 		
+	 		//Adds a new KeyValueFacet to the metadata list
+	 		protected function removeFacet():void
+	 		{
+	 			wrapper.element.metadata.removeFacet(metadataFacets.selectedItem as IFacet);	 			
+	 		}
+	 			 		
+	 		//Adds a value to the KeyValueFacet
+			protected function addValue():void
+			{
+				if (metadataFacets.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataFacets.selectedItem as KeyValueFacet;
+					kvMetadata.addValue(new ObjectIdentifier(key.text), value.text);
+					getValues();
+				}
+			}
+			
+			protected function retrieveKeyValue():void
+			{
+				if (keyValueList.selectedItem)
+				{					
+					value.text = keyValueList.selectedItem.data;
+					key.text = keyValueList.selectedItem.key.key;					
+				}
+			}	
+			
+			protected function removeValue():void
+			{
+				if (keyValueList.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataFacets.selectedItem as KeyValueFacet;
+					kvMetadata.removeValue(	keyValueList.selectedItem.key);		
+					value.text = "";
+					key.text = "";	
+					getValues();
+				}
+			}
+			
+			protected function updateValue():void
+			{
+				if (keyValueList.selectedItem)
+				{
+					var kvMetadata:KeyValueFacet = metadataFacets.selectedItem as KeyValueFacet;
+					kvMetadata.addValue(keyValueList.selectedItem.key, value.text);					
+					getValues();					
+				}
+			}
+					
+			protected function generateLabelForFacet(item:Object, column:DataGridColumn):String
+			{
+				if(column.dataField == "type")
+				{
+					 return flash.utils.getQualifiedClassName(item);
+				}
+				else
+				{
+					return item.namespaceURL.toString();
+				}
+			}		
+			
+			protected function onMediaError(event:MediaErrorEvent):void
+			{
+				//Handle Media Errors Here.
+			}
+									 		
+	 	]]>
+	 </mx:Script>
+	 
+	 <mx:Style>
+	 	Label
+	 	{
+	 		color:white
+	 	}
+	 </mx:Style>
+		 
+	<players:MediaPlayerWrapper id="wrapper" width="100%" height="50%" />
+	<mx:HBox
+		width="100%"
+		height="50%"
+		>	
+		<mx:Form 
+			id="metadataForm" 
+			width="35%" 
+			height="50%" >		
+			<mx:FormItem label="Media URL:">
+				
+				<mx:TextInput 
+					id="mediaURL" 
+					width="470"
+					text="{sampleURLs.selectedLabel}" />					
+				<mx:ComboBox 
+					id="sampleURLs" 
+					width="470"
+					change="{mediaURL.text = sampleURLs.selectedItem.toString()}">
+					<mx:ArrayCollection id="sampleURLCollection">					
+						["http://mediapm.edgesuite.net/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv",
+						"http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv",
+						"http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv",
+						"rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short",
+						"rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/elephants_dream_768x428_24_short",
+						"rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short"]
+					</mx:ArrayCollection>
+				</mx:ComboBox>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Media Type:">
+				<mx:ComboBox id="typeCombo">
+				 	<mx:dataProvider>
+				 		{[MediaType.VIDEO, MediaType.AUDIO, MediaType.IMAGE, MediaType.SWF]}
+				 	</mx:dataProvider>
+				</mx:ComboBox>
+			</mx:FormItem>
+			
+			<mx:FormItem>
+				<mx:Button label="Create Media Element" click="createElement()" />			
+			</mx:FormItem>
+			
+			<mx:FormItem>
+				<mx:Button label="Create Serial Video Comp" click="createVideoComposition(true)" />	
+			</mx:FormItem>
+			
+			<mx:FormItem>
+				<mx:Button label="Create Parallel Video Comp" click="createVideoComposition()" />
+			</mx:FormItem>
+		</mx:Form>
+		
+		<mx:VBox 
+			height="100%" 
+			width="35%">			
+			<mx:Label text="Facet List:" />
+			
+			<mx:DataGrid id="metadataFacets" 
+				width="100%"
+				height="100%"
+				change="getValues()" 				
+				labelFunction="{generateLabelForFacet}"  
+				>
+				<mx:ArrayCollection id="facetProvider" />				
+				<mx:columns>
+					<mx:DataGridColumn dataField="namespaceURL" />
+					<mx:DataGridColumn dataField="type" />
+				</mx:columns>				
+			</mx:DataGrid>
+						
+			<mx:ComboBox id="nameSpace" >		
+				<mx:dataProvider>
+					{[MetadataNamespaces.DEFAULT_METADATA.rawUrl, "http://example.com", "http://akamai.com"]}				
+				</mx:dataProvider>							
+			</mx:ComboBox>	
+								
+			<mx:Button label="Add New Facet" click="addFacet()" />		
+			<mx:Button label="Remove Selected Facet" click="removeFacet()" />				
+		</mx:VBox>
+		
+		<mx:VBox
+			width="25%"
+			height="100%"
+			>
+			<mx:Label text="Data for Selected Facet:" />
+			
+			<mx:DataGrid id="keyValueList"
+				width="100%"
+				height="100%"
+				change="retrieveKeyValue()" >
+				<mx:ArrayCollection id="metadataItemProvider" />
+				<mx:columns>
+					<mx:DataGridColumn headerText="Key" 
+						labelFunction="keyLabel" 
+						dataField="key" 
+						/>
+					<mx:DataGridColumn headerText="Data" 
+						dataField="data"  
+						/>
+				</mx:columns>				
+			</mx:DataGrid>
+			
+			<mx:HBox>
+				<mx:Label text="Key" />
+				<mx:TextInput id="key" />
+			</mx:HBox>
+			
+			<mx:HBox>
+				<mx:Label text="Value" />
+				<mx:TextInput id="value" />
+			</mx:HBox>	
+					
+			<mx:Button 
+				label="Add Value" 
+				click="addValue()" 
+				/>				
+			<mx:Button 
+				label="Remove Value" 
+				click="removeValue()" 
+				/>		
+		</mx:VBox>
+		
+	</mx:HBox>
+</mx:Application>
