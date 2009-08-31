@@ -6,11 +6,11 @@
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="1" path="libs/FlexUnitOptional.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="libs/FlexUnit.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/MediaFramework/bin/MediaFramework.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/NetMocker/bin/NetMocker.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/StrobeUnit/bin/StrobeUnit.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/FlexUnit/FlexUnit.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/FlexUnit/FlexUnitOptional.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
