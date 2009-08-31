@@ -213,11 +213,11 @@ package org.openvideoplayer.plugin
 		public function testIsPluginLoaded():void
 		{
 			assertTrue(pluginManager.isPluginLoaded(null) == false);
-			assertTrue(pluginManager.isPluginLoaded(new DynamicStreamingResource(new FMSURL("rtmp://localhost/vod"))) == false);
+			assertTrue(pluginManager.isPluginLoaded(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))) == false);
 			
 			assertTrue(pluginManager.isPluginLoaded(new URLResource(null)) == false);
 			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL(""))) == false);
-			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL("rtmp://localhost/vod"))) == false);			
+			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL("rtmp://example.com/vod"))) == false);			
 
 			assertTrue(pluginManager.isPluginLoaded(new PluginClassResource(SimpleVideoPluginInfo)) == false);			
 		}
@@ -225,13 +225,13 @@ package org.openvideoplayer.plugin
 		public function testLoadPluginWithInvalidParameters():void
 		{
 			assertTrue(doLoadPluginWithInvalidParameter(null));
-			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://localhost/vod"))));
+			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
 		}
 		
 		public function testUnloadPluginWithInvalidParameters():void
 		{
 			assertTrue(doUnloadPluginWithInvalidParameter(null));
-			assertTrue(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://localhost/vod"))));
+			assertTrue(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
 		}
 		
 		private function doUnloadPluginWithInvalidParameter(resource:IMediaResource):Boolean
