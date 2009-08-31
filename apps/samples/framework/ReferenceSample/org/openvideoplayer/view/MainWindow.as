@@ -146,6 +146,6 @@ package org.openvideoplayer.view
 		private var mediaFactory:MediaFactory;
 
 		private static const REMOTE_STREAM:String 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
-		private static const REMOTE_SWF:String				= "http://mediapm.edgesuite.net/osmf/swf/OverlaySampleSWF.swf";
+		private static const REMOTE_SWF:String				= "http://mediapm.edgesuite.net/osmf/swf/ReferenceSampleSWF.swf";
 	}
 }
