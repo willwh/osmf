@@ -53,7 +53,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			
 		override protected function createInterfaceObject(... args):Object
 		{
-			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("http://localhost/ondemand"));
+			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("http://www.example.com/ondemand"));
 			dsr.addItem(new DynamicStreamingItem("stream_500kbps", 500));
 			dsr.addItem(new DynamicStreamingItem("stream_800kbps", 800));
 			dsr.addItem(new DynamicStreamingItem("stream_1000kbps", 1000));
