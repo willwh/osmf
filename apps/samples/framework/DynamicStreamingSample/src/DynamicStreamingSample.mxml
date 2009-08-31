@@ -29,7 +29,6 @@
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import org.openvideoplayer.traits.IViewable;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;
 			import mx.events.DropdownEvent;		
@@ -37,9 +36,6 @@
 			import mx.controls.Alert;
 			import mx.core.UIComponent;
 			
-			import flash.utils.getDefinitionByName;
-			import flash.net.getClassByAlias;
-
 			import org.openvideoplayer.parsers.SMILParser;
 			import org.openvideoplayer.plugin.PluginClassResource;
 
@@ -49,6 +45,7 @@
 			import org.openvideoplayer.traits.MediaTraitType;			
 			import org.openvideoplayer.traits.ISpatial;
 			import org.openvideoplayer.traits.ISwitchable;
+			import org.openvideoplayer.traits.IViewable;
 
 			import org.openvideoplayer.events.*;
 
@@ -101,13 +98,6 @@
 			private var _autoswitchBtnLabel:String = "Manual";
 			
 			private var _viewable:IViewable;
-			private var _video:Video;
-			
-			private var _savedWidth:Number;
-			private var _savedHeight:Number;
-			private var _savedSmoothing:Boolean;
-			private var _savedDeblocking:int;			
-			private var _videoHolder:UIComponent;
 			
 			private function initApp():void
 			{
@@ -115,8 +105,6 @@
 				wrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
 				wrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
 				wrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
-				wrapper.mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange );
-				wrapper.mediaPlayer.addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, onMediaWrapperStateChange);		
 				
 				wrapper.mediaPlayer.playheadUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
@@ -139,11 +127,7 @@
 							_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
 						
-						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-						_video = _viewable.view as Video;
-						_video.smoothing = false;
-						_video.deblocking = 0;
-						
+						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;		
 						updateSwitchingControls();
 						break;					
 					case LoadState.LOAD_FAILED:
@@ -239,11 +223,6 @@
 				taDebug.verticalScrollPosition = taDebug.maxVerticalScrollPosition;
 			}
 
-			private function onMediaWrapperStateChange(event:StateChangeEvent):void
-			{
-				trace(">>>onMediaWrapperStateChange: newState=" + event.newState + " oldState=" + event.oldState);
-			}
-						
 			private function createDynamicStreamingElement(res:IMediaResource):void
 			{	
 				clearDebugText();
@@ -280,7 +259,6 @@
 				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOADABLE))
 				{
 					var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					trace("loadable.loadState="+loadable.loadState);
 					if (loadable.loadState == LoadState.LOADED)
 					{
 						loadable.unload();
@@ -336,16 +314,8 @@
 			
 			private function onDimensionChange(event:DimensionChangeEvent):void 
 			{
-				if (stage.displayState == StageDisplayState.FULL_SCREEN)
-				{
-					_video.smoothing = true;
-					return;
-				}
-				
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
-				
-				trace(">>> width = "+width+", height="+height);
 				
 				// Scale to native or smaller
 				if (width > MAX_VIDEO_WIDTH || height > MAX_VIDEO_HEIGHT)
@@ -366,8 +336,6 @@
 					wrapper.width = event.newWidth;
 					wrapper.height = event.newHeight;			
 				}
-				
-				trace(">>> wrapper.width was set to "+wrapper.width+", wrapper.height was set to "+wrapper.height);
 			}
 			
 			private function onDurationChange(event:DurationChangeEvent):void
@@ -405,15 +373,7 @@
    					}
    				}
    			}
-   			
-   			private function onPlayingChange(event:PlayingChangeEvent):void
-   			{
-   				if (event.playing)
-   				{
-   					trace("onPlayingChange - event.playing = "+event.playing);
-   				}
-   			}
-   			
+   			   			
    			private function onMediaError(event:MediaErrorEvent):void
    			{
    				if (taDebug.text.length)
@@ -487,62 +447,7 @@
 					wrapper.mediaPlayer.play();
 				}
 			}
-			
-			private function onFullScreen():void
-			{
-				stage.addEventListener(FullScreenEvent.FULL_SCREEN, fullScreenHandler);
-				
-				// Hide some controls
-				showControls(false);
-				
-				// When going out of full screen mode we'll use these values
-				_savedWidth = _video.width;
-				_savedHeight = _video.height;
-				_savedSmoothing = _video.smoothing;
-				_savedDeblocking = _video.deblocking;
-				
-				// If we're not playing the highest quality stream, turn smoothing on
-				_video.smoothing = (_switchable.currentIndex < _switchable.maxIndex) ? true : false;
-				
-				// In order to maximize hardware scaling we need to set the video object 
-				// to the original size of the stream
-				_video.width = _video.videoWidth;
-				_video.height = _video.videoHeight;
-				
-				_video.deblocking = 0;
-
-			    wrapperContainer.removeChild(wrapper);
-			    _videoHolder = new UIComponent();
-			    _videoHolder.addChild(_video);
-			    addChild(_videoHolder);
-				
-				var rect:Rectangle = _video.getBounds(stage);
-				stage.fullScreenSourceRect = rect;
-				
-				stage.displayState = StageDisplayState.FULL_SCREEN;
-
-			}
-			
-			public function fullScreenHandler(e:FullScreenEvent):void
-			{
-				if (stage.displayState == StageDisplayState.NORMAL)
-				{
-					stage.removeEventListener(FullScreenEvent.FULL_SCREEN, fullScreenHandler);
-					stage.fullScreenSourceRect = null;
-					_video.width = _savedWidth;
-					_video.height = _savedHeight;
-					_video.smoothing = _savedSmoothing;
-					_video.deblocking = _savedDeblocking;
-					
-					_videoHolder.removeChild(_video);
-					removeChild(_videoHolder);
-					_videoHolder = null;
-					wrapperContainer.addChild(wrapper);
-
-					showControls();
-				}
-			}
-			
+						
 			private function showControls(show:Boolean=true):void
 			{
 				mainContainer.visible = mainContainer.includeInLayout = show;
@@ -552,7 +457,7 @@
 
 
 	<mx:VBox id="mainContainer" height="100%" width="100%" paddingLeft="10" paddingTop="10">
-		<mx:Label text="OSMF Dynamic Streaming Test App" styleName="title" width="100%" textAlign="left" paddingLeft="20"/>
+		<mx:Label text="OSMF Dynamic Streaming Sample App" styleName="title" width="100%" textAlign="left" paddingLeft="20"/>
 		<mx:Spacer height="20" />
 		<mx:HBox id="inputContainer" height="60">
 			<mx:Spacer width="10" />
@@ -580,7 +485,6 @@
 						<mx:Button id="autoSwitchBtn" label="{_autoswitchBtnLabel}" click="onAutoSwitchable()" enabled="{_switchable!=null}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />
-						<mx:Button id="fullScreenBtn" label="Full Screen" click="onFullScreen()" visible="false" includeInLayout="false" enabled="{wrapper.mediaPlayer.playable}" />
 	    			</mx:HBox>
 				</mx:VBox>	    						
 			</mx:VBox>
