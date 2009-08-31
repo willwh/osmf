@@ -78,7 +78,7 @@ package org.openvideoplayer.composition
 			container = constructLayoutContext();
 			container.addEventListener
 				( DimensionChangeEvent.DIMENSION_CHANGE
-				, onLayoutDimensionChange
+				, onContainerDimensionChange
 				);
 			
 			// Watch our owner's metadata for a layout class being set:
@@ -136,7 +136,7 @@ package org.openvideoplayer.composition
 			return new LayoutContextSprite(owner.metadata);
 		}
 		
-		protected function onLayoutDimensionChange(event:DimensionChangeEvent):void
+		protected function onContainerDimensionChange(event:DimensionChangeEvent):void
 		{
 			// Re-dispatch the event, this time as ISpatial.
 			dispatchEvent(event.clone());
