@@ -25,15 +25,13 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.audio.SoundLoader;
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.examples.chromeless.ChromelessPlayerElement;
 	import org.openvideoplayer.examples.loaderproxy.VideoProxyElement;
 	import org.openvideoplayer.examples.text.TextElement;
 	import org.openvideoplayer.examples.traceproxy.TraceProxyElement;
 	import org.openvideoplayer.image.ImageElement;
 	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.layout.LayoutAttributesFacet;
-	import org.openvideoplayer.layout.RegistrationPoint;
+	import org.openvideoplayer.layout.AbsoluteLayoutFacet;
 	import org.openvideoplayer.layout.RelativeLayoutFacet;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
@@ -202,7 +200,7 @@ package org.openvideoplayer.examples
 
 			examples.push
 				( new Example
-					( 	"Serial Composition (Default Layout)"
+					( 	"Serial Composition"
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that the duration of the second video is not incorporated into the SerialElement until its playback begins (because we don't know the duration until it is loaded)."
 				  	,  	function():MediaElement
 				  	   	{
@@ -211,27 +209,6 @@ package org.openvideoplayer.examples
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
 							return serialElement; 
 				  	   	} 
-				  	)
-				);
-
-			examples.push
-				( new Example
-					( 	"Serial Composition (Centered)"
-					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), with the video laid out in the center of the screen.  Note that the duration of the second video is not incorporated into the SerialElement until its playback begins (because we don't know the duration until it is loaded)."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							
-							var mediaElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)))
-							assignLayoutMetadata(mediaElement, RegistrationPoint.CENTER);
-							serialElement.addChild(mediaElement);
-							
-							mediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))) 
-							assignLayoutMetadata(mediaElement, RegistrationPoint.CENTER);
-							serialElement.addChild(mediaElement);
-							
-							return serialElement;
-				  	   	}
 				  	)
 				);
 
@@ -258,13 +235,13 @@ package org.openvideoplayer.examples
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
 							
-							var mediaElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
-							assignLayoutMetadata(mediaElement, RegistrationPoint.MIDDLE_LEFT);
-							parallelElement.addChild(mediaElement);
+							var mediaElement1:MediaElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							parallelElement.addChild(mediaElement1);
 							
-							mediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
-							assignLayoutMetadata(mediaElement, RegistrationPoint.MIDDLE_RIGHT);
-							parallelElement.addChild(mediaElement);
+							var mediaElement2:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+							parallelElement.addChild(mediaElement2);
+							
+							applyAdjacentLayout(parallelElement, mediaElement1, mediaElement2);
 							
 							return parallelElement;
 				  	   	} 
@@ -306,10 +283,7 @@ package org.openvideoplayer.examples
 							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
 							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
 							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE3)))));
-							for (var i:int = 0; i < serialElement.numChildren; i++)
-							{
-								assignLayoutMetadata(serialElement.getChildAt(i), RegistrationPoint.CENTER);				
-							}
+							
 							return serialElement;
 				  	   	}
 				  	)
@@ -351,10 +325,7 @@ package org.openvideoplayer.examples
 							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: You know what you doing.")));
 							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: Move 'ZIG'.")));
 							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: For great justice.")));
-							for (var i:int = 0; i < serialElement.numChildren; i++)
-							{
-								assignLayoutMetadata(serialElement.getChildAt(i), RegistrationPoint.CENTER);
-							}
+							
 							return serialElement;
 				  	   	}
 				  	)
@@ -426,16 +397,26 @@ package org.openvideoplayer.examples
 			return examples;
 		}
 		
-		private static function assignLayoutMetadata(mediaElement:MediaElement, alignment:RegistrationPoint):void
+		private static function applyAdjacentLayout(parent:MediaElement, left:MediaElement, right:MediaElement):void
 		{
 			var relativeLayout:RelativeLayoutFacet = new RelativeLayoutFacet();
-			relativeLayout.width = 100;
-			relativeLayout.height = 100;
-			mediaElement.metadata.addFacet(relativeLayout);
-			var layoutAttributes:LayoutAttributesFacet = new LayoutAttributesFacet();
-			layoutAttributes.scaleMode = ScaleMode.NONE;
-			layoutAttributes.alignment = alignment;
-			mediaElement.metadata.addFacet(layoutAttributes);
+			relativeLayout.width = 50;
+			relativeLayout.height = 50;
+			
+			left.metadata.addFacet(relativeLayout);
+			
+			relativeLayout = new RelativeLayoutFacet();
+			relativeLayout.width = 50;
+			relativeLayout.height = 50;
+			relativeLayout.x = 50;
+			
+			right.metadata.addFacet(relativeLayout);
+			
+			var absoluteLayout:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
+			absoluteLayout.width = 640
+			absoluteLayout.height = 500;
+			
+			parent.metadata.addFacet(absoluteLayout);
 		}
 
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
