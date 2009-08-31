@@ -411,7 +411,7 @@ package org.openvideoplayer.media
          *  Provides a high level indication of the current operations of the media.
          *  All states here are not completely disjoint (i.e. initialized + playing have some overlap).
          */      
-        [ChangeEvent(name="mediaPlayerStateChange", type="org.openvideoplayer.events.MediaPlayerStateChangeEvent")]
+       
         public function get state():MediaPlayerState
         {
         	return _state;
@@ -422,7 +422,7 @@ package org.openvideoplayer.media
 		/**
 		 *  Indicates whether the media is playable.
 		 */ 		
-		[ChangeEvent(name="playableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get playable():Boolean
 		{
 			return _playable;
@@ -431,7 +431,7 @@ package org.openvideoplayer.media
 		/**
 		 *  Indicates whether the media is Pausable.
 		 */		
-		[ChangeEvent(name="pausableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get pausable():Boolean
 		{
 			return _pausable;
@@ -441,7 +441,7 @@ package org.openvideoplayer.media
 		 * Indicates whether the media is seekable.
 		 * Seekable media can jump to a specified time.
 		 */
-		[ChangeEvent(name="seekableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get seekable():Boolean
 		{
 			return _seekable;
@@ -451,7 +451,7 @@ package org.openvideoplayer.media
 		 * Indicates whether the media is temporal.
 		 * Temporal media supports a duration and a position within that duration.
 		 */	
-		[ChangeEvent(name="temporalChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get temporal():Boolean
 		{
 			return _temporal;
@@ -459,7 +459,7 @@ package org.openvideoplayer.media
 		/**
 		 *  Indicates whether the media is audible.
 		 */		
-		[ChangeEvent(name="audibleChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get audible():Boolean
 		{
 			return _audible;
@@ -470,7 +470,7 @@ package org.openvideoplayer.media
 		 * Viewable media is exposed by a DisplayObject.
 		 * @see flash.display.DisplayObject
 		 */		
-		[ChangeEvent(name="viewableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+		
 		public function get viewable():Boolean
 		{
 			return _viewable;
@@ -482,7 +482,7 @@ package org.openvideoplayer.media
 		 * <p>For example, the intrinsic dimensions of an image are the height and width
 		 * of the image source as it is stored.</p>
 		 */	
-		[ChangeEvent(name="spatialChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")] 
+		
 		public function get spatial():Boolean
 		{
 			return _spatial;
@@ -491,7 +491,7 @@ package org.openvideoplayer.media
 		/**
 		 *  Indicates whether the media is loadable.
 		 */
-		[ChangeEvent(name="loadableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]	
+		
 		public function get loadable():Boolean
 		{
 			return _loadable;
@@ -500,7 +500,7 @@ package org.openvideoplayer.media
 		/**
 		 * Indicates whether the media is capable of buffering.
 		 */
-		[ChangeEvent(name="bufferableChange", type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]	
+		
 		public function get bufferable():Boolean
 		{
 			return _bufferable;
@@ -520,7 +520,7 @@ package org.openvideoplayer.media
 		 * @throws IllegalOperationError if capability isn't supported
          * @see org.openvideoplayer.traits.IAudible
 		 */			 
-		[ChangeEvent(name="volumeChange", type="org.openvideoplayer.events.VolumeChangeEvent")]   
+		  
 	    public function get volume():Number
 	    {	
 	    	return IAudible(getTrait(MediaTraitType.AUDIBLE)).volume;	    		    
@@ -558,7 +558,7 @@ package org.openvideoplayer.media
 		 * @throws IllegalOperationError if capability isn't supported
          * @see org.openvideoplayer.traits.IAudible
 		 */					
-		[ChangeEvent(name="panChange", type="org.openvideoplayer.events.PanChangeEvent")]
+		
 	    public function get pan():Number
 	    {
 	    	return IAudible(getTrait(MediaTraitType.AUDIBLE)).pan;	    		
@@ -726,7 +726,7 @@ package org.openvideoplayer.media
 		 * @throws IllegalOperationError if capability isn't supported
          * @see org.openvideoplayer.traits.ITemporal
 		 */	
-		[ChangeEvent(name="durationChange", type="org.openvideoplayer.events.DurationChangeEvent")]
+		
 	    public function get duration():Number
 	    {
 	    	return (getTrait(MediaTraitType.TEMPORAL) as ITemporal).duration;	    	
