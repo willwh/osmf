@@ -86,6 +86,9 @@ package org.openvideoplayer.layout
 		
 		public function updateIntrinsicDimensions():void
 		{
+			scaleX = 1;
+			scaleY = 1;
+			
 			var bounds:Rectangle = getBounds(this);
 			var newIntrinsicWidth:Number
 				= isNaN(absoluteWidth)
@@ -109,8 +112,19 @@ package org.openvideoplayer.layout
 				
 				_intrinsicWidth = newIntrinsicWidth;
 				_intrinsicHeight = newIntrinsicHeight;
-			
+				
 				dispatchEvent(event);	
+			}
+			
+			if (intrinsicWidth && intrinsicHeight)
+			{
+				// Draw a placeholder shim to make our size 'real' (for we
+				// may be set a certain size, we don't really have to be
+				// that size:
+				graphics.clear();
+				graphics.beginFill(0,0);
+				graphics.drawRect(intrinsicWidth-1,intrinsicHeight-1,1,1);
+				graphics.endFill();
 			}
 		}
 		

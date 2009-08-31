@@ -25,15 +25,13 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.audio.SoundLoader;
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.examples.chromeless.ChromelessPlayerElement;
 	import org.openvideoplayer.examples.loaderproxy.VideoProxyElement;
 	import org.openvideoplayer.examples.text.TextElement;
 	import org.openvideoplayer.examples.traceproxy.TraceProxyElement;
 	import org.openvideoplayer.image.ImageElement;
 	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.layout.LayoutAttributesFacet;
-	import org.openvideoplayer.layout.RegistrationPoint;
+	import org.openvideoplayer.layout.AbsoluteLayoutFacet;
 	import org.openvideoplayer.layout.RelativeLayoutFacet;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
@@ -243,7 +241,7 @@ package org.openvideoplayer.examples
 							var mediaElement2:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
 							parallelElement.addChild(mediaElement2);
 							
-							applyAdjecentLayout(mediaElement1,mediaElement2);
+							applyAdjecentLayout(parallelElement, mediaElement1, mediaElement2);
 							
 							return parallelElement;
 				  	   	} 
@@ -399,20 +397,26 @@ package org.openvideoplayer.examples
 			return examples;
 		}
 		
-		private static function applyAdjecentLayout(mediaElementLeft:MediaElement, mediaElementRight:MediaElement):void
+		private static function applyAdjecentLayout(parent:MediaElement, left:MediaElement, right:MediaElement):void
 		{
 			var relativeLayout:RelativeLayoutFacet = new RelativeLayoutFacet();
 			relativeLayout.width = 50;
 			relativeLayout.height = 50;
 			
-			mediaElementLeft.metadata.addFacet(relativeLayout);
+			left.metadata.addFacet(relativeLayout);
 			
 			relativeLayout = new RelativeLayoutFacet();
 			relativeLayout.width = 50;
 			relativeLayout.height = 50;
 			relativeLayout.x = 50;
 			
-			mediaElementRight.metadata.addFacet(relativeLayout);
+			right.metadata.addFacet(relativeLayout);
+			
+			var absoluteLayout:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
+			absoluteLayout.width = 640
+			absoluteLayout.height = 500;
+			
+			parent.metadata.addFacet(absoluteLayout);
 		}
 
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
