@@ -85,6 +85,11 @@ internal class MyLayoutRenderer extends EventDispatcher implements ILayoutRender
 	
 	}
 	
+	public function targets(target:ILayoutTarget):Boolean
+	{
+		return false;
+	}
+	
 	public function invalidate():void
 	{
 		
