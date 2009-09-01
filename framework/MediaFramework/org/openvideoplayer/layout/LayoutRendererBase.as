@@ -43,7 +43,7 @@ package org.openvideoplayer.layout
 	 * Use LayoutRendererBase as the base class for custom layout renders. The class
 	 * provides a number of facilities:
 	 * 
-	 *  * A base implementation for collecting and managing layout targets.
+	 *  * A base implementation for collecting and managing layout layoutTargets.
 	 *  * A base implementation for metadata watching: override usedMetadataFacets to
 	 *    return the set of metadata facet namespaces that	your renderer reads from its
 	 *    target on rendering them. All specified facets will be watched for change, at
@@ -57,9 +57,9 @@ package org.openvideoplayer.layout
 	 * 
 	 * Optionally, the following protected methods may be overridden:
 	 * 
-	 *  * get usedMetadataFacets, used when targets get added or removed, to add
+	 *  * get usedMetadataFacets, used when layoutTargets get added or removed, to add
 	 *    change watchers that will trigger invalidation of the renderer.
-	 *  * compareTargets, which is used to put the targets in a particular display
+	 *  * compareTargets, which is used to put the layoutTargets in a particular display
 	 *    list index order.
 	 * 
 	 *  * processContextChange, invoked when the renderer's context changed.
@@ -117,10 +117,10 @@ package org.openvideoplayer.layout
 				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
 			}
 			
-			if (targets.indexOf(target) == -1)
+			if (layoutTargets.indexOf(target) == -1)
 			{
 				// Add the target to our listing:
-				targets.push(target);	
+				layoutTargets.push(target);	
 				
 				// Watch the facets on the target's metadata that we're interested in:
 				var watchers:Array = metaDataWatchers[target] = new Array();
@@ -141,6 +141,10 @@ package org.openvideoplayer.layout
 				
 				invalidate();
 			}
+			else
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+			}
 		}
 		
 		/**
@@ -153,7 +157,7 @@ package org.openvideoplayer.layout
 				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
 			}
 			
-			var index:Number = targets.indexOf(target);
+			var index:Number = layoutTargets.indexOf(target);
 			if (index != -1)
 			{
 				// Remove the target from the context stage:
@@ -169,7 +173,7 @@ package org.openvideoplayer.layout
 				}
 				
 				// Remove the target from our listing:
-				var target:ILayoutTarget = targets.splice(index,1)[0];
+				var target:ILayoutTarget = layoutTargets.splice(index,1)[0];
 				
 				// Un-watch the target's view and dimenions change:
 				target.removeEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
@@ -185,6 +189,18 @@ package org.openvideoplayer.layout
 				
 				invalidate();
 			}
+			else
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		final public function targets(target:ILayoutTarget):Boolean
+		{
+			return layoutTargets.indexOf(target) != -1;
 		}
 		
 		/**
@@ -219,7 +235,7 @@ package org.openvideoplayer.layout
 		 * 
 		 * @throws IllegalOperationError If not overridden.
 		 */
-		protected function render(targets:Vector.<ILayoutTarget>):void
+		protected function render(layoutTargets:Vector.<ILayoutTarget>):void
 		{
 			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
 		}
@@ -290,7 +306,7 @@ package org.openvideoplayer.layout
 		
 		private function reset():void
 		{
-			for each (var target:ILayoutTarget in targets)
+			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				removeTarget(target);
 			}
@@ -338,12 +354,12 @@ package org.openvideoplayer.layout
 			container.removeEventListener(Event.EXIT_FRAME, onExitFrame);
 			
 			// Make sure that our children are in their correct order:
-			targets.sort(compareTargets);
+			layoutTargets.sort(compareTargets);
 		
 			// Setup a view counter:
 			var displayListCounter:int = _context.firstChildIndex;
 			
-			for each (var target:ILayoutTarget in targets)
+			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				var view:DisplayObject = target.view;
 				if (view)
@@ -406,7 +422,7 @@ package org.openvideoplayer.layout
 			}
 		
 			// Invoke subclass render function:
-			render(targets);
+			render(layoutTargets);
 			
 			// Have our context re-asses its intrinsical width and height:
 			_context.updateIntrinsicDimensions();
@@ -419,7 +435,7 @@ package org.openvideoplayer.layout
 		private var container:DisplayObjectContainer;
 		private var metadata:Metadata;
 		
-		private var targets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
+		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
 		private var staged:Dictionary = new Dictionary(true);
 		
 		private var dirty:Boolean;

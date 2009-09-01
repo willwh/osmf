@@ -23,8 +23,6 @@ package org.openvideoplayer.layout
 {
 	import flash.events.IEventDispatcher;
 	
-	import org.openvideoplayer.media.MediaElement;
-	
 	/**
 	 * ILayoutRenderer represents the interface within the OSMF for objects that
 	 * can calculate and apply the size and position of a set of targets, given
@@ -49,6 +47,8 @@ package org.openvideoplayer.layout
 		 * list of the renderer's context.
 		 * 
 		 * @param target The target to add.
+		 * @throws IllegalOperationError when the specified target is null, or 
+		 * already a target of the renderer.
 		 */		
 		function addTarget(target:ILayoutTarget):void;
 		
@@ -57,8 +57,18 @@ package org.openvideoplayer.layout
 		 * that it will render. See addTarget for more information.
 		 * 
 		 * @param target The target to remove.
+		 * @throws IllegalOperationErrror when the specified target is null, or
+		 * not a target of the renderer.
 		 */		
 		function removeTarget(target:ILayoutTarget):void;
+		
+		/**
+		 * Method for querying if a layout target is currently a target of this
+		 * layout renderer.
+		 *  
+		 * @return True if the specified target is a target of this renderer.
+		 */		
+		function targets(target:ILayoutTarget):Boolean
 		
 		/**
 		 * Method that will mark the renderer's last rendering pass invalid. At
