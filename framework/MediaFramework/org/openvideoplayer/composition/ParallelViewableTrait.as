@@ -23,9 +23,11 @@ package org.openvideoplayer.composition
 {
 	import flash.utils.Dictionary;
 	
+	import org.openvideoplayer.events.RegionChangeEvent;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.media.MediaElement;
+	import org.openvideoplayer.regions.IRegion;
 	import org.openvideoplayer.traits.IViewable;
 	import org.openvideoplayer.traits.MediaTraitType;
 
@@ -48,15 +50,20 @@ package org.openvideoplayer.composition
 			
 			super(traitAggregator, owner);
 			
-			// Add all of our children to the _layoutRenderer:
+			// Add all of our children to the layout renderer:
 			for (var i:int = 0; i < this.owner.numChildren; i++)
 			{
 				var child:MediaElement = this.owner.getChildAt(i);
 				
-				layoutRenderer.addTarget
-					( mediaElementLayoutTargets[child]
-					= new MediaElementLayoutTarget(child)
+				var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
+				target.addEventListener
+					( RegionChangeEvent.REGION_CHANGE
+					, onLayoutTargetRegionChange
 					);
+				
+				mediaElementLayoutTargets[child] = target;
+				
+				setupLayoutTarget(target);
 			}
 		}
 		
@@ -77,11 +84,15 @@ package org.openvideoplayer.composition
 				
 				if (layoutTarget == null)
 				{
-					layoutTarget = new MediaElementLayoutTarget(child);
+					var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
+					target.addEventListener
+						( RegionChangeEvent.REGION_CHANGE
+						, onLayoutTargetRegionChange
+						);
 					
-					mediaElementLayoutTargets[child] = layoutTarget;
+					mediaElementLayoutTargets[child] = target;
 					
-					layoutRenderer.addTarget(layoutTarget);
+					setupLayoutTarget(target);
 				}	
 			}
 		}
@@ -96,7 +107,18 @@ package org.openvideoplayer.composition
 			
 			if (child)
 			{
-				layoutRenderer.removeTarget(mediaElementLayoutTargets[child]);
+				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
+				var region:IRegion = target.regionTarget;
+				
+				if (region && region.containsElement(child))
+				{
+					region.removeChildElement(child);
+				}
+				else if (layoutRenderer.targets(target))
+				{
+					layoutRenderer.removeTarget(target);
+				}
+				
 				delete mediaElementLayoutTargets[child];	
 			}
 		}
@@ -126,6 +148,46 @@ package org.openvideoplayer.composition
 			}
 			
 			return result;
+		}
+		
+		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
+		{
+			var region:IRegion = target.regionTarget; 
+			var mediaElement:MediaElement = target.mediaElement;
+			
+			if (region)
+			{
+				if (layoutRenderer.targets(target))
+				{
+					layoutRenderer.removeTarget(target);
+				}
+				
+				if (region.containsElement(mediaElement) == false)
+				{
+					region.addChildElement(mediaElement);
+				}
+			}
+			else
+			{
+				if (layoutRenderer.targets(target) == false)
+				{
+					layoutRenderer.addTarget(target);
+				}
+			}
+		}
+		
+		private function onLayoutTargetRegionChange(event:RegionChangeEvent):void
+		{
+			var oldRegion:IRegion = event.oldValue;
+			var target:MediaElementLayoutTarget = MediaElementLayoutTarget(event.target);
+			var mediaElement:MediaElement = target.mediaElement;
+			
+			if (oldRegion && oldRegion.containsElement(mediaElement))
+			{
+				oldRegion.removeChildElement(mediaElement);
+			}
+			
+			setupLayoutTarget(target);
 		}
 		
 		private var mediaElementLayoutTargets:Dictionary = new Dictionary();

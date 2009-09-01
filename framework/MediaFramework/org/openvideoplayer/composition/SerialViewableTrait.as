@@ -21,9 +21,11 @@
 *****************************************************/
 package org.openvideoplayer.composition
 {
+	import org.openvideoplayer.events.RegionChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
 	import org.openvideoplayer.media.MediaElement;
+	import org.openvideoplayer.regions.IRegion;
 
 	/**
 	 * Dispatched when the trait's view has changed.
@@ -55,15 +57,8 @@ package org.openvideoplayer.composition
 				, onListenedChildChange
 				);
 			
-			// If we currently have an active child, then add it to our
-			// layout renderer:
-			var child:MediaElement = traitAggregator.listenedChild; 
-			if (child)
-			{
-				currentLayoutTarget = new MediaElementLayoutTarget(child);
-					
-				layoutRenderer.addTarget(currentLayoutTarget);
-			}
+			// Setup the current active child:
+			setupLayoutTarget(traitAggregator.listenedChild);
 		}
 		
 		// IReusable
@@ -82,22 +77,81 @@ package org.openvideoplayer.composition
 		 */		
 		private function onListenedChildChange(event:TraitAggregatorEvent):void
 		{
-			if (currentLayoutTarget)
+			setupLayoutTarget(event.newListenedChild);
+		}
+		
+		private function onTargetRegionChange(event:RegionChangeEvent):void
+		{
+			var oldRegion:IRegion = event.oldValue;
+			var newRegion:IRegion = event.newValue;
+			var element:MediaElement = layoutTarget.mediaElement;
+		
+			if (oldRegion != null)
 			{
-				layoutRenderer.removeTarget(currentLayoutTarget);	
+				if (oldRegion.containsElement(element))
+				{
+					oldRegion.removeChildElement(element);
+				}
 			}
 			
-			var child:MediaElement = event.newListenedChild;
-			
-			if (child)
-			{
-				currentLayoutTarget = new MediaElementLayoutTarget(child);
-					
-				layoutRenderer.addTarget(currentLayoutTarget);
+			var targetInLayoutRenderer:Boolean
+				= layoutRenderer.targets(layoutTarget);
 				
+			if (newRegion == null)
+			{
+				if (targetInLayoutRenderer == false)
+				{
+					layoutRenderer.addTarget(layoutTarget);
+				}
+			}
+			else
+			{ 
+				if (targetInLayoutRenderer)
+				{
+					layoutRenderer.removeTarget(layoutTarget);
+				}
+				
+				if (newRegion.containsElement(layoutTarget.mediaElement) == false)
+				{
+					newRegion.addChildElement(layoutTarget.mediaElement);	
+				}
 			}
 		}
 		
-		private var currentLayoutTarget:MediaElementLayoutTarget;
+		private function setupLayoutTarget(listenedChild:MediaElement):void
+		{
+			if (layoutTarget != null)
+			{
+				layoutTarget.removeEventListener
+					( RegionChangeEvent.REGION_CHANGE
+					, onTargetRegionChange
+					);
+				
+				var region:IRegion = layoutTarget.regionTarget;
+				var mediaElement:MediaElement = layoutTarget.mediaElement;
+					
+				if (region && region.containsElement(mediaElement))
+				{
+					region.removeChildElement(mediaElement);
+				}
+				else if (layoutRenderer.targets(layoutTarget))
+				{
+					layoutRenderer.removeTarget(layoutTarget);
+				}
+			}
+			
+			if (listenedChild != null)
+			{
+				layoutTarget = new MediaElementLayoutTarget(listenedChild);
+				layoutTarget.addEventListener
+					( RegionChangeEvent.REGION_CHANGE
+					, onTargetRegionChange
+					);
+					
+				onTargetRegionChange(new RegionChangeEvent(null, layoutTarget.regionTarget));
+			}
+		}
+		
+		private var layoutTarget:MediaElementLayoutTarget;
 	}
 }

@@ -26,10 +26,16 @@ package org.openvideoplayer.layout
 	import flash.events.EventDispatcher;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
+	import org.openvideoplayer.events.RegionChangeEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.media.MediaElement;
+	import org.openvideoplayer.metadata.IFacet;
 	import org.openvideoplayer.metadata.Metadata;
+	import org.openvideoplayer.metadata.MetadataNamespaces;
+	import org.openvideoplayer.metadata.MetadataUtils;
+	import org.openvideoplayer.metadata.MetadataWatcher;
+	import org.openvideoplayer.regions.IRegion;
 	import org.openvideoplayer.traits.ISpatial;
 	import org.openvideoplayer.traits.IViewable;
 	import org.openvideoplayer.traits.MediaTraitType;
@@ -49,16 +55,28 @@ package org.openvideoplayer.layout
 	[Event(name="dimensionChange",type="org.openvideoplayer.events.DimensionChangeEvent")]
 
 	/**
+	 * Dispatched when a layout element's 'regionTarget' metadata value changed. 
+	 */	
+	[Event(name="regionChange",type="org.openvideoplayer.events.RegionChangeEvent")]
+
+	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
 	 */	
 	public class MediaElementLayoutTarget extends EventDispatcher implements ILayoutTarget
 	{
-		public function MediaElementLayoutTarget(mediaElement:MediaElement)
+		public function MediaElementLayoutTarget(_mediaElement:MediaElement)
 		{
-			this.mediaElement = mediaElement;
+			this._mediaElement = _mediaElement;
 			
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
+			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+			
+			regionTargetWatcher
+				= MetadataUtils.watchFacet
+					( _mediaElement.metadata
+					, MetadataNamespaces.REGION_TARGET
+					, regionTargetChangeCallback
+					);
 			
 			updateViewableTrait();
 			updateSpatialTrait();
@@ -72,7 +90,7 @@ package org.openvideoplayer.layout
 		 */
 		public function get metadata():Metadata
 		{
-			return mediaElement.metadata;
+			return _mediaElement.metadata;
 		}
 		
 		/**
@@ -99,6 +117,19 @@ package org.openvideoplayer.layout
 			return spatialTrait ? spatialTrait.height : NaN;
 		}
 		
+		// Public interface
+		//
+		
+		public function get mediaElement():MediaElement
+		{
+			return _mediaElement;
+		}
+		
+		public function get regionTarget():IRegion
+		{
+			return _regionTarget;
+		}
+		
 		// Internals
 		//
 		
@@ -119,7 +150,7 @@ package org.openvideoplayer.layout
 			var oldTrait:IViewable = viewableTrait;
 			var oldView:DisplayObject = view;
 			
-			viewableTrait = mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
+			viewableTrait = _mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
 			
 			if (oldTrait)
 			{
@@ -143,7 +174,7 @@ package org.openvideoplayer.layout
 			var oldWidth:Number = intrinsicWidth;
 			var oldHeight:Number = intrinsicHeight;
 			
-			spatialTrait = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
+			spatialTrait = _mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
 			
 			if (oldTrait)
 			{
@@ -168,9 +199,31 @@ package org.openvideoplayer.layout
 			dispatchEvent(event.clone());
 		}
 		
-		private var mediaElement:MediaElement;
+		private function regionTargetChangeCallback(facet:IFacet):void
+		{
+			var newTarget:IRegion 
+				= 	( facet 
+						? facet.getValue(null)
+						: null
+					)
+					as IRegion;
+					
+			if (newTarget != _regionTarget)
+			{
+				var event:RegionChangeEvent	= new RegionChangeEvent(_regionTarget, newTarget);
+				
+				_regionTarget = newTarget;
+				
+				dispatchEvent(event);
+			}
+		}
+		
+		private var _mediaElement:MediaElement;
 		
 		private var viewableTrait:IViewable;
 		private var spatialTrait:ISpatial;
+		
+		private var regionTargetWatcher:MetadataWatcher;
+		private var _regionTarget:IRegion;
 	}
 }

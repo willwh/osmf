@@ -30,6 +30,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.events.*;
 	import org.openvideoplayer.image.*;
 	import org.openvideoplayer.layout.*;
+	import org.openvideoplayer.regions.*;
 	import org.openvideoplayer.loaders.*;
 	import org.openvideoplayer.media.*;
 	import org.openvideoplayer.metadata.*;
@@ -63,7 +64,12 @@ package org.openvideoplayer
 			addTestSuite(TestPaddingLayoutFacet);
 			addTestSuite(TestRegistrationPoint);
 			addTestSuite(TestRelativeLayoutFacet);
-		
+			
+			addTestSuite(TestRegionSprite);
+			addTestSuite(TestRegionTargetFacet);
+			addTestSuite(TestSerialViewableTrait);
+			addTestSuite(TestParallelViewableTrait);
+						
 			addTestSuite(TestMetadata);
 			addTestSuite(TestMediaType);
 			addTestSuite(TestKeyValueFacet);
