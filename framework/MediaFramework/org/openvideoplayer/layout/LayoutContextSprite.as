@@ -86,8 +86,11 @@ package org.openvideoplayer.layout
 		
 		public function updateIntrinsicDimensions():void
 		{
+			// Reset out scaling, and removing any pending
+			// size pixel:
 			scaleX = 1;
 			scaleY = 1;
+			graphics.clear();
 			
 			var bounds:Rectangle = getBounds(this);
 			var newIntrinsicWidth:Number
@@ -118,13 +121,13 @@ package org.openvideoplayer.layout
 			
 			if (intrinsicWidth && intrinsicHeight)
 			{
-				// Draw a placeholder shim to make our size 'real' (for we
+				// Draw a placeholder pixel to make our size 'real' (for we
 				// may be set a certain size, we don't really have to be
-				// that size:
-				graphics.clear();
-				graphics.beginFill(0,0);
-				graphics.drawRect(intrinsicWidth-1,intrinsicHeight-1,1,1);
-				graphics.endFill();
+				// that size. The pixel is invisible (0% alpha):
+				
+				graphics.lineStyle(0,0,0);
+				graphics.moveTo(intrinsicWidth-1,intrinsicHeight-1);
+				graphics.lineTo(intrinsicWidth,intrinsicHeight);
 			}
 		}
 		
