@@ -86,8 +86,7 @@ package org.openvideoplayer.layout
 		
 		public function updateIntrinsicDimensions():void
 		{
-			// Reset out scaling, and removing any pending
-			// size pixel:
+			// Reset scaling, and remove sizing pixel:
 			scaleX = 1;
 			scaleY = 1;
 			graphics.clear();
