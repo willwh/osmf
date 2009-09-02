@@ -62,7 +62,7 @@ package org.openvideoplayer.regions
 			
 			// Setup a content sprite for holding the assigned MediaElement(s):
 			
-			var content:LayoutContextSprite = new LayoutContextSprite();
+			var content:LayoutContextSprite = new LayoutContextSprite(this.metadata);
 			addChild(content);
 			
 			this.contentLayoutRenderer = contentLayoutRenderer || new DefaultLayoutRenderer();
