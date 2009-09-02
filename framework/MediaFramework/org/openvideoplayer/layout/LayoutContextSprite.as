@@ -58,6 +58,16 @@ package org.openvideoplayer.layout
 				, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
 				, absoluteLayoutParametersChangeCallback
 				);
+				
+			var absolute:AbsoluteLayoutFacet
+				= _metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+				as AbsoluteLayoutFacet;
+				
+			if (absolute)
+			{
+				_intrinsicWidth = absoluteWidth = absolute.width;
+				_intrinsicHeight = absoluteHeight = absolute.height;
+			}
 		}
 		
 		// ILayoutContext

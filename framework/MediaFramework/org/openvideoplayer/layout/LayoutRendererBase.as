@@ -211,7 +211,7 @@ package org.openvideoplayer.layout
 			if (dirty == false)
 			{
 				dirty = true;
-				container.addEventListener(Event.EXIT_FRAME, onExitFrame);
+				LayoutUtils.callLater(container, preRender);
 			}
 		}
 		
@@ -350,8 +350,6 @@ package org.openvideoplayer.layout
 				// no-op:
 				return;	
 			}
-			
-			container.removeEventListener(Event.EXIT_FRAME, onExitFrame);
 			
 			// Make sure that our children are in their correct order:
 			layoutTargets.sort(compareTargets);
