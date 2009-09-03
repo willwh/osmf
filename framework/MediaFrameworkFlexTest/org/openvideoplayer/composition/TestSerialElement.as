@@ -553,6 +553,15 @@ package org.openvideoplayer.composition
 			serial.addChildAt(mediaElement4, 0);
 			assertTrue(temporal.position == 93);
 			assertTrue(temporal.duration == 93);
+			
+			// Adding a child whose duration is NaN should not affect the
+			// composite duration.
+			var mediaElement5:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
+			var temporal5:TemporalTrait = mediaElement5.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
+			temporal5.duration = NaN;
+			serial.addChildAt(mediaElement5, 0);
+			assertTrue(temporal.position == 93);
+			assertTrue(temporal.duration == 93);
 		}
 		
 		public function testGetTraitPlayable():void
@@ -1187,6 +1196,17 @@ package org.openvideoplayer.composition
 			
 			assertTrue(seekable.canSeekTo(20) == true);
 			assertTrue(seekable.canSeekTo(40) == true);
+			
+			// A SerialElement whose duration is NaN should be unseekable.
+			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
+			var temporal4:TemporalTrait = mediaElement4.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
+			var seekable4:SeekableTrait = mediaElement4.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
+			temporal4.duration = NaN;
+			serial = new SerialElement();
+			serial.addChild(mediaElement4);
+			seekable = serial.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			assertTrue(seekable.canSeekTo(0) == false);
+			assertTrue(seekable4.canSeekTo(0) == false);
 		}
 		
 		protected function runAddSeekingCurrentChildren():void

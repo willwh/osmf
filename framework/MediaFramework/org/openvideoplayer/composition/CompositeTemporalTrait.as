@@ -246,16 +246,20 @@ package org.openvideoplayer.composition
 				(
 					function(mediaTrait:IMediaTrait):void
 				  	{
-				  		if (mode == CompositionMode.PARALLEL)
-				  	 	{ 
-				  	 		// The duration is the max of all child durations.
-				     	 	newDuration = Math.max(newDuration, ITemporal(mediaTrait).duration);
-				     	}
-				     	else // SERIAL
-				     	{
-				     	 	// The duration is the sum of all child durations.
-				     	 	newDuration += ITemporal(mediaTrait).duration;
-				     	}
+				  		var duration:Number = ITemporal(mediaTrait).duration;
+				  		if (!isNaN(duration))
+				  		{
+					  		if (mode == CompositionMode.PARALLEL)
+					  	 	{ 
+					  	 		// The duration is the max of all child durations.
+					     	 	newDuration = Math.max(newDuration, duration);
+					     	}
+					     	else // SERIAL
+					     	{
+					     	 	// The duration is the sum of all child durations.
+					     	 	newDuration += duration;
+					     	}
+					   }
 				  	}
 					, MediaTraitType.TEMPORAL
 				);
@@ -289,10 +293,13 @@ package org.openvideoplayer.composition
 				(
 					function(mediaTrait:IMediaTrait):void
 				  	{
+				  		var position:Number = ITemporal(mediaTrait).position;
+				  		position = isNaN(position) ? 0 : position;
+				  		
 				  		if (mode == CompositionMode.PARALLEL)
 				  	 	{
 			  	 	 		// The position is the max of all child positions.
-			     	 		newPosition = Math.max(newPosition, ITemporal(mediaTrait).position);
+			     	 		newPosition = Math.max(newPosition, position);
 			     	 	}
 			     	 	else // SERIAL
 			     	 	{
@@ -303,13 +310,17 @@ package org.openvideoplayer.composition
 					  	 	{
 						  	 	if (mediaTrait == traitOfCurrentChild)
 						  	 	{
-						  	 	 	newPosition += ITemporal(mediaTrait).position;
+						  	 	 	newPosition += position;
 						  	 	
 						  	 	 	positionCalculated = true;
 						  	 	}
 						  	 	else
 						  	 	{
-						  	 	 	newPosition += ITemporal(mediaTrait).duration;
+						  	 		var duration:Number = ITemporal(mediaTrait).duration;
+						  	 		if (!isNaN(duration))
+						  	 		{
+						  	 	 		newPosition += duration;
+						  	 	 	}
 						  	 	}
 						 	}
 					 	}
@@ -323,7 +334,7 @@ package org.openvideoplayer.composition
 		private function setPosition(value:Number):void
 		{
 			// Don't ever let the position exceed the duration.
-			value = Math.min(value, duration);
+			value = Math.min(value, isNaN(duration) ? 0 : duration);
 
 			if (_position != value)
 			{

@@ -162,26 +162,35 @@ package org.openvideoplayer.composition
 
 			var seekToOp:SerialSeekOperationInfo;
 			var curChildIndex:int = traitAggregator.getChildIndex(traitAggregator.listenedChild);
-			var curChildSeekOperation:SerialElementSegment = serialSegments[curChildIndex];
-			
-			// Check whether this is a seek within the current child
-			if (curChildSeekOperation.relativeStart <= time && time < curChildSeekOperation.relativeEnd)
+			if (curChildIndex < serialSegments.length)
 			{
-				seekToOp = new SerialSeekOperationInfo();
-				seekToOp.canSeekTo = true;
-				seekToOp.fromChild = curChildSeekOperation.mediaElement;
-				seekToOp.toChild = curChildSeekOperation.mediaElement;
+				var curChildSeekOperation:SerialElementSegment = serialSegments[curChildIndex];
 				
-				// Convert from the composite playhead position to child playhead position
-				seekToOp.toChildTime = time - curChildSeekOperation.relativeStart;
-			}
-			else if (time < curChildSeekOperation.relativeStart)
-			{
-				seekToOp = canSeekBackward(time, serialSegments, curChildIndex);
+				// Check whether this is a seek within the current child
+				if (curChildSeekOperation.relativeStart <= time && time < curChildSeekOperation.relativeEnd)
+				{
+					seekToOp = new SerialSeekOperationInfo();
+					seekToOp.canSeekTo = true;
+					seekToOp.fromChild = curChildSeekOperation.mediaElement;
+					seekToOp.toChild = curChildSeekOperation.mediaElement;
+					
+					// Convert from the composite playhead position to child playhead position
+					seekToOp.toChildTime = time - curChildSeekOperation.relativeStart;
+				}
+				else if (time < curChildSeekOperation.relativeStart)
+				{
+					seekToOp = canSeekBackward(time, serialSegments, curChildIndex);
+				}
+				else
+				{
+					seekToOp = canSeekForward(time, serialSegments, curChildIndex);
+				}
 			}
 			else
 			{
-				seekToOp = canSeekForward(time, serialSegments, curChildIndex);
+				// Seeking is not possible within the current child.
+				seekToOp = new SerialSeekOperationInfo();
+				seekToOp.canSeekTo = false;
 			}
 
 			return seekToOp;
