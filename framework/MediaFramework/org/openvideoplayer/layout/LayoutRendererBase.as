@@ -211,7 +211,8 @@ package org.openvideoplayer.layout
 			if (dirty == false && rendering == false)
 			{
 				dirty = true;
-				LayoutUtils.callLater(container, preRender);
+				
+				callLater(container, preRender);
 			}
 		}
 		
@@ -445,5 +446,63 @@ package org.openvideoplayer.layout
 		private var dirty:Boolean;
 		private var rendering:Boolean;
 		private var metaDataWatchers:Dictionary = new Dictionary();
+		
+		// Private Static
+		//
+		
+		/**
+		 * Function to postpone the execution of a method until the EXIT_FRAME event gets
+		 * fired on the specified display object.
+		 * 
+		 * If this method is invoke multiple times before an EXIT_FRAME event occurs, then
+		 * the system will queue them. Successive invokations will not add a new EXIT_FRAME
+		 * listeners: all methods in the queue will be invoked as soon as the primary
+		 * listener fires. The queue is executed first-in, first-out. 
+		 *  
+		 * @param displayObject The display object to listen on.
+		 * @param method The method to invoke.
+		 * @param arguments Optional array of arguments to pass to the method on invoking it.
+		 */		
+		private static function callLater(displayObject:DisplayObject, method:Function, arguments:Array=null):void
+		{
+			if (displayObject == null || method == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			pendingCalls.push(method);
+			pendingCallArguments.push(arguments || []);
+			
+			if	(	executingPendingCalls == false
+				&&	dispatcher == null
+				)
+			{
+				dispatcher = displayObject;
+				dispatcher.addEventListener(Event.EXIT_FRAME, onExitFrame);
+			}
+		}
+		
+		private static function onExitFrame(event:Event):void
+		{
+			dispatcher.removeEventListener(Event.EXIT_FRAME, onExitFrame);
+			dispatcher = null;
+			
+			executingPendingCalls = true;
+			
+			while (pendingCalls.length != 0)
+			{
+				var func:Function = pendingCalls.shift();
+				var args:Array = pendingCallArguments.shift();
+				
+				func.apply(null,args);
+			}
+			
+			executingPendingCalls = false;
+		}
+		
+		private static var dispatcher:DisplayObject;
+		private static var executingPendingCalls:Boolean;
+		private static var pendingCalls:Vector.<Function> = new Vector.<Function>;
+		private static var pendingCallArguments:Vector.<Array> = new Vector.<Array>;
 	}
 }
