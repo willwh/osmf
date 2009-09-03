@@ -208,7 +208,7 @@ package org.openvideoplayer.layout
 		 */
 		final public function invalidate():void
 		{
-			if (dirty == false)
+			if (dirty == false && rendering == false)
 			{
 				dirty = true;
 				LayoutUtils.callLater(container, preRender);
@@ -345,6 +345,9 @@ package org.openvideoplayer.layout
 		
 		private function preRender():void
 		{
+			// Raise the rendering flag:
+			rendering = true;
+			
 			if (_context == null || container == null)
 			{
 				// no-op:
@@ -427,6 +430,9 @@ package org.openvideoplayer.layout
 						
 			// We're no longer dirty:
 			dirty = false;
+			
+			// Lower the rendering flag:
+			rendering = false;
 		}
 		
 		private var _context:ILayoutContext;		
@@ -437,6 +443,7 @@ package org.openvideoplayer.layout
 		private var staged:Dictionary = new Dictionary(true);
 		
 		private var dirty:Boolean;
+		private var rendering:Boolean;
 		private var metaDataWatchers:Dictionary = new Dictionary();
 	}
 }
