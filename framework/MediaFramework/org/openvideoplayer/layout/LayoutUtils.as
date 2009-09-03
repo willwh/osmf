@@ -25,8 +25,11 @@ package org.openvideoplayer.layout
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
+	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.metadata.Metadata;
 	import org.openvideoplayer.metadata.MetadataNamespaces;
+	import org.openvideoplayer.regions.IRegion;
+	import org.openvideoplayer.regions.RegionTargetFacet;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
@@ -78,8 +81,9 @@ package org.openvideoplayer.layout
 		 * @param y
 		 * @param width
 		 * @param height
-		 * @return Either a newly created, or existing AbsoluteLayoutFacet instance that
+		 * @return Either a newly created, or updated AbsoluteLayoutFacet instance that
 		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
 		 * 
 		 * Please referer to the AbsoluteLayoutFacet documentation for the semantics of
 		 * the x, y, width, and height parameters.
@@ -87,7 +91,8 @@ package org.openvideoplayer.layout
 		public static function setAbsoluteLayout
 								( target:Metadata
 								, width:Number, height:Number
-								, x:Number = NaN, y:Number = NaN
+								, x:Number = Number.NEGATIVE_INFINITY
+								, y:Number = Number.NEGATIVE_INFINITY
 								):AbsoluteLayoutFacet
 		{
 			if (target == null)
@@ -106,25 +111,18 @@ package org.openvideoplayer.layout
 				absoluteLayout = new AbsoluteLayoutFacet();
 			}
 			
-			if (!isNaN(x))
+			if (x != Number.NEGATIVE_INFINITY)
 			{
 				absoluteLayout.x = x;
 			}
 			
-			if (!isNaN(y))
+			if (y != Number.NEGATIVE_INFINITY)
 			{
 				absoluteLayout.y = y;
 			}
 			
-			if (!isNaN(width))
-			{
-				absoluteLayout.width = width;
-			}
-			
-			if (!isNaN(height))
-			{
-				absoluteLayout.height = height;
-			}
+			absoluteLayout.width = width;
+			absoluteLayout.height = height;
 			
 			if (addFacet)
 			{
@@ -132,6 +130,139 @@ package org.openvideoplayer.layout
 			}
 			
 			return absoluteLayout;
+		}
+		
+		/**
+		 * Applies the specified relative layout properties to a media element's metadata:
+		 * 
+		 * @param target Metadata that will get the specified properties set on its
+		 * relative layout facet.
+		 * @param x
+		 * @param y
+		 * @param width
+		 * @param height
+		 * @return Either a newly created, or updated RelativeLayoutFacet instance that
+		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * Please referer to the RelativeLayoutFacet documentation for the semantics of
+		 * the x, y, width, and height parameters.
+		 */		
+		public static function setRelativeLayout
+								( target:Metadata
+								, width:Number, height:Number
+								, x:Number = Number.NEGATIVE_INFINITY
+								, y:Number = Number.NEGATIVE_INFINITY
+								):RelativeLayoutFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var addFacet:Boolean;
+			var relativeLayout:RelativeLayoutFacet
+				= 	target.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+					as RelativeLayoutFacet;
+				
+			if (relativeLayout == null)
+			{
+				addFacet = true;
+				relativeLayout = new RelativeLayoutFacet();
+			}
+			
+			if (x != Number.NEGATIVE_INFINITY)
+			{
+				relativeLayout.x = x;
+			}
+			
+			if (y != Number.NEGATIVE_INFINITY)
+			{
+				relativeLayout.y = y;
+			}
+			
+			relativeLayout.width = width;
+			relativeLayout.height = height;
+			
+			if (addFacet)
+			{
+				target.addFacet(relativeLayout);
+			}
+			
+			return relativeLayout;
+		}
+		
+		/**
+		 * Applies the specified scale mode (and alignment, if non null) to the specified metadata target.
+		 *  
+		 * @param target Metadata that will get the specified properties set on its
+		 * layout attributes facet.
+		 * @param scaleMode
+		 * @param alignment
+		 * @return Either a newly created, or updated LayoutAttributesFacet instance that
+		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * Please referer to the LayoutAttributesFacet documentation for the semantics of
+		 * the scaleMode and alignment parameters.
+		 */		
+		public static function setScaleMode(target:Metadata, scaleMode:ScaleMode, alignment:RegistrationPoint = null):LayoutAttributesFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var addFacet:Boolean;
+			var layoutAttributes:LayoutAttributesFacet
+				= target.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES)
+				as LayoutAttributesFacet;
+			
+			if (layoutAttributes == null)
+			{
+				layoutAttributes = new LayoutAttributesFacet();
+				addFacet = true;
+			}
+			
+			layoutAttributes.scaleMode = scaleMode;
+			
+			if (alignment)
+			{
+				layoutAttributes.alignment = alignment;
+			}
+			
+			if (addFacet)
+			{
+				target.addFacet(layoutAttributes);
+			}
+			
+			return layoutAttributes;
+		}
+		
+		/**
+		 * Applies the specified region as a region target to the specified metadata target.
+		 * 
+		 * @param target
+		 * @param region
+		 * @return A newly created RegionTargetFacet, as it has been added to the metadata
+		 * target.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * For more information on the semantics of setting a region target, please refer
+		 * to the RegionTargetFacet documentation.
+		 */		
+		public static function setRegionTarget(target:Metadata, region:IRegion):RegionTargetFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var regionTarget:RegionTargetFacet = new RegionTargetFacet(region);
+			
+			target.addFacet(regionTarget);
+			
+			return regionTarget;
 		}
 		
 		// Internals
