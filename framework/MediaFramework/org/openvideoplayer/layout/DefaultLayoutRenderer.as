@@ -115,8 +115,9 @@ package org.openvideoplayer.layout
 		private function renderTarget(target:ILayoutTarget):void
 		{
 			var view:DisplayObject = target.view;
-			var parentWidth:Number = _context.intrinsicWidth;
-			var parentHeight:Number = _context.intrinsicHeight;
+			
+			var parentWidth:Number = _context.intrinsicWidth; 
+			var parentHeight:Number	= _context.intrinsicHeight;
 				
 			if (view)
 			{
@@ -227,16 +228,32 @@ package org.openvideoplayer.layout
 							toDo ^= Y;
 						}
 						
-						if (!isNaN(parentWidth) && (toDo & WIDTH) && !isNaN(anchors.right))
+						if (!isNaN(parentWidth) && !isNaN(anchors.right))
 						{
-							rect.width = Math.max(0, parentWidth - anchors.right - ((toDo & X) ? 0 : rect.x));
-							toDo ^= WIDTH; 
+							if ((toDo & X) && !(toDo & WIDTH))
+							{
+								rect.x = Math.max(0, parentWidth - rect.width - anchors.right);
+								toDo ^= X;
+							}
+							else if ((toDo & WIDTH) && !(toDo & X))
+							{
+								rect.width = Math.max(0, parentWidth - anchors.right - rect.x);
+								toDo ^= WIDTH;
+							}
 						}
 						
-						if (!isNaN(parentHeight) && (toDo & HEIGHT) && !isNaN(anchors.bottom))
+						if (!isNaN(parentHeight) && !isNaN(anchors.bottom))
 						{
-							rect.height = Math.max(0, parentHeight - anchors.bottom - ((toDo & Y) ? 0: rect.y));
-							toDo ^= HEIGHT;
+							if ((toDo & Y) && !(toDo & HEIGHT)) 
+							{
+								rect.y = Math.max(0, parentHeight - rect.height - anchors.bottom);
+								toDo ^= Y;
+							}
+							else if ((toDo & HEIGHT) && !(toDo & Y))
+							{
+								rect.height = Math.max(0, parentHeight - anchors.bottom - rect.y);
+								toDo ^= HEIGHT;
+							}
 						}
 					}
 				}
