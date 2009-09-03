@@ -21,18 +21,14 @@
 *****************************************************/
 package org.openvideoplayer.layout
 {
-	import flash.events.EventDispatcher;
-	
-	import org.openvideoplayer.metadata.IFacet;
-	import org.openvideoplayer.metadata.IIdentifier;
 	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.utils.URL;
+	import org.openvideoplayer.metadata.ObjectFacet;
 
 	/**
 	 * The LayoutRendererFacet is a facet that holds a single value of type
 	 * Class that implements ILayoutRenderer.
 	 */	
-	public class LayoutRendererFacet extends EventDispatcher implements IFacet
+	public class LayoutRendererFacet extends ObjectFacet
 	{
 		/**
 		 * Constructor
@@ -42,36 +38,7 @@ package org.openvideoplayer.layout
 		 */		
 		public function LayoutRendererFacet(renderer:Class)
 		{
-			_renderer = renderer;
-		}
-		
-		// IFacet
-		//
-		
-		/**
-		 * @inheritDoc
-		 */		
-		public function get namespaceURL():URL
-		{
-			return MetadataNamespaces.LAYOUT_RENDERER;
-		}
-		
-		/**
-		 * Always returns the renderer type that this facet holds.
-		 * 
-		 * @inheritDoc 
-		 */		
-		public function getValue(identifier:IIdentifier):*
-		{
-			return _renderer;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */		
-		public function merge(childFacet:IFacet):IFacet
-		{
-			return null;
+			super(MetadataNamespaces.LAYOUT_RENDERER,renderer);
 		}
 		
 		// Public API
@@ -79,12 +46,7 @@ package org.openvideoplayer.layout
 		
 		public function get renderer():Class
 		{
-			return _renderer;
+			return _object as Class;
 		}
-		
-		// Internals
-		//
-		
-		private var _renderer:Class;
 	}
 }

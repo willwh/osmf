@@ -21,18 +21,14 @@
 *****************************************************/
 package org.openvideoplayer.regions
 {
-	import flash.events.EventDispatcher;
-	
-	import org.openvideoplayer.metadata.IFacet;
-	import org.openvideoplayer.metadata.IIdentifier;
 	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.utils.URL;
+	import org.openvideoplayer.metadata.ObjectFacet;
 
 	/**
 	 * The RegionTargetFacet is a facet that holds a single value of type
 	 * IFacet.
 	 */	
-	public class RegionTargetFacet extends EventDispatcher implements IFacet
+	public class RegionTargetFacet extends ObjectFacet
 	{
 		/**
 		 * Constructor
@@ -42,36 +38,7 @@ package org.openvideoplayer.regions
 		 */		
 		public function RegionTargetFacet(region:IRegion)
 		{
-			_region = region;
-		}
-	
-		// IFacet
-		//
-	
-		/**
-		 * @inheritDoc
-		 */		
-		public function get namespaceURL():URL
-		{
-			return MetadataNamespaces.REGION_TARGET;
-		}
-		
-		/**
-		 * Always returns the region value that this facet holds.
-		 *
-		 * @inheritDoc
-		 */
-		public function getValue(identifyer:IIdentifier):*
-		{
-			return _region;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */		
-		public function merge(childFacet:IFacet):IFacet
-		{
-			return null;
+			super(MetadataNamespaces.REGION_TARGET, region);
 		}
 		
 		// Public API
@@ -79,13 +46,7 @@ package org.openvideoplayer.regions
 		
 		public function get region():IRegion
 		{
-			return _region;
+			return _object as IRegion;
 		}
-		
-		// Internals
-		//
-		
-		private var _region:IRegion;
-		
 	}
 }
