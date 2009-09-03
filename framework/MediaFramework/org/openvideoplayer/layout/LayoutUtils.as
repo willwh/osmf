@@ -53,7 +53,7 @@ package org.openvideoplayer.layout
 		 * @param method The method to invoke.
 		 * @param arguments Optional array of arguments to pass to the method on invoking it.
 		 */		
-		public static function callLater(displayObject:DisplayObject, method:Function,arguments:Array=null):void
+		public static function callLater(displayObject:DisplayObject, method:Function, arguments:Array=null):void
 		{
 			if (displayObject == null || method == null)
 			{
@@ -190,6 +190,57 @@ package org.openvideoplayer.layout
 			}
 			
 			return relativeLayout;
+		}
+		
+		/**
+		 * Applies the specified anchor layout properties to a media element's metadata:
+		 * 
+		 * @param target Metadata that will get the specified properties set on its
+		 * anchor layout facet.
+		 * @param left
+		 * @param top
+		 * @param right
+		 * @param bottom
+		 * @return Either a newly created, or updated AnchorLayoutFacet instance that
+		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * Please referer to the AnchorLayoutFacet documentation for the semantics of
+		 * the left, top, right, and bottom parameters.
+		 */		
+		public static function setAnchorLayout
+								( target:Metadata
+								, left:Number, top:Number
+								, right:Number, bottom:Number
+								):AnchorLayoutFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var addFacet:Boolean;
+			var anchorLayout:AnchorLayoutFacet
+				= 	target.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+					as AnchorLayoutFacet;
+				
+			if (anchorLayout == null)
+			{
+				addFacet = true;
+				anchorLayout = new AnchorLayoutFacet();
+			}
+			
+			anchorLayout.left = left;
+			anchorLayout.top = top;
+			anchorLayout.right = right;
+			anchorLayout.bottom = bottom;
+			
+			if (addFacet)
+			{
+				target.addFacet(anchorLayout);
+			}
+			
+			return anchorLayout;
 		}
 		
 		/**
