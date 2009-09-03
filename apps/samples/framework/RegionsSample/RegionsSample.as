@@ -24,23 +24,23 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.display.MediaPlayerSprite;
 	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.image.ImageElement;
 	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.layout.LayoutAttributesFacet;
 	import org.openvideoplayer.layout.LayoutUtils;
 	import org.openvideoplayer.layout.RegistrationPoint;
-	import org.openvideoplayer.layout.RelativeLayoutFacet;
 	import org.openvideoplayer.media.MediaElement;
+	import org.openvideoplayer.media.MediaPlayer;
 	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.net.NetLoader;
 	import org.openvideoplayer.proxies.TemporalProxyElement;
 	import org.openvideoplayer.regions.RegionSprite;
-	import org.openvideoplayer.regions.RegionTargetFacet;
 	import org.openvideoplayer.utils.URL;
 	import org.openvideoplayer.video.VideoElement;
 
@@ -49,102 +49,134 @@ package
 	{
 		public function RegionsSample()
 		{
+			// Setup the Flash stage:
+			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
-
-			// Setup a banner region:
-			bannerRegion = new RegionSprite();
-			LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, 468, 60);
-			
-			bannerTarget = new RegionTargetFacet(bannerRegion);
-			addChild(bannerRegion);
+            
+            runSample();
+  		} 
+        
+        private function runSample():void
+        {   
+			// Construct a small tree of media elements:
 			
 			var rootElement:ParallelElement = new ParallelElement();
 			
-			var banners:SerialElement = new SerialElement();
-			banners.metadata.addFacet(bannerTarget);
-			banners.addChild(constructBanner1());
-			banners.addChild(constructBanner2());
-			banners.addChild(constructBanner3());
+				var mainContent:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
+				rootElement.addChild(mainContent);
+				
+				var banners:SerialElement = new SerialElement();
+					banners.addChild(constructBanner(BANNER_1));
+					banners.addChild(constructBanner(BANNER_2));
+					banners.addChild(constructBanner(BANNER_3));
+				rootElement.addChild(banners);
+					
+				var skyScraper:MediaElement = constructImage(SKY_SCRAPER_1);
+				rootElement.addChild(skyScraper);
 			
-			var bannersRelative:RelativeLayoutFacet = new RelativeLayoutFacet();
-			bannersRelative.width = 100;
-			bannersRelative.height = 100;
-			banners.metadata.addFacet(bannersRelative);
+			// Next, decorate the content tree with attributes:
 			
-			var bannersAttributes:LayoutAttributesFacet = new LayoutAttributesFacet();
-			bannersAttributes.scaleMode = ScaleMode.NONE;
-			bannersAttributes.alignment = RegistrationPoint.CENTER;
-			banners.metadata.addFacet(bannersAttributes);
+			LayoutUtils.setRelativeLayout(banners.metadata, 100, 100);
+			LayoutUtils.setScaleMode(banners.metadata, ScaleMode.NONE, RegistrationPoint.BOTTOM_MIDDLE);
 			
-			var mainContent:VideoElement = constructVideo();
+			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
+			LayoutUtils.setScaleMode(mainContent.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
 			
-			rootElement.addChild(mainContent);
-			rootElement.addChild(banners);
+			// Consruct 3 regions:
+
+			var bannerRegion:RegionSprite = new RegionSprite();
+			addChild(bannerRegion);
+			LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, 600, 70);
+
+			var mainRegion:RegionSprite = new RegionSprite();
+			mainRegion.y = 80;
+			addChild(mainRegion);
+			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 600, 400);
 			
-			var player:MediaPlayerSprite = new MediaPlayerSprite();
-			player.setAvailableSize(468,468 * 3 / 4);
-			player.y = 50;
-			addChild(player);
+			var skyScraperRegion:RegionSprite = new RegionSprite();
+			skyScraperRegion.x = 610;
+			skyScraperRegion.y = 10;
+			addChild(skyScraperRegion);
+			LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, 600);
 			
-			player.element = rootElement;
+			// Bind media elements to their target regions:
+			
+			LayoutUtils.setRegionTarget(banners.metadata, bannerRegion);
+			LayoutUtils.setRegionTarget(mainContent.metadata, mainRegion);
+			LayoutUtils.setRegionTarget(skyScraper.metadata, skyScraperRegion); 
+			
+			// To operate playback of the content tree, construct a
+			// media player. Assignment of the root element to its source will
+			// automatically start its loading and playback:
+			
+			var player:MediaPlayer = new MediaPlayer();
+			player.source = rootElement;
+			
+			// Next, to make things more interesting by adding some interactivity:
+			// Let's create another region, at the bottom of the main content. Now,
+			// if we click the top banner, let's have it moved to this region, and
+			// vice-versa:
+			
+			var bottomBannerRegion:RegionSprite = new RegionSprite();
+			bottomBannerRegion.y = 490;
+			addChild(bottomBannerRegion);
+			LayoutUtils.setAbsoluteLayout(bottomBannerRegion.metadata, 600, 70);
+			
+			bannerRegion.addEventListener
+				( MouseEvent.CLICK
+				, function (event:MouseEvent):void
+					{
+						LayoutUtils.setRegionTarget(banners.metadata, bottomBannerRegion);		
+					}
+				);
+				
+			bottomBannerRegion.addEventListener
+				( MouseEvent.CLICK
+				, function (event:MouseEvent):void
+					{
+						LayoutUtils.setRegionTarget(banners.metadata, bannerRegion);		
+					}
+				);
+				
+			// Let's link to the IAB site on the sky-scraper being clicked:
+			
+			skyScraperRegion.addEventListener
+				( MouseEvent.CLICK
+				, function (event:MouseEvent):void	
+					{
+						navigateToURL(new URLRequest(IAB_URL));
+					}
+				);
 		}
 		
-		private function constructBanner1():MediaElement
+		// Utilities
+		//
+		
+		private function constructBanner(url:String):MediaElement
 		{
-			var result:MediaElement 
-				= new TemporalProxyElement
+			return new TemporalProxyElement
 					( BANNER_INTERVAL
-					, new ImageElement
-						( new ImageLoader()
-						, new URLResource(new URL(BANNER_1))
-						) 
+					, constructImage(url)
 					);
-			
-			return result;
 		}
 		
-		private function constructBanner2():MediaElement
+		private function constructImage(url:String):MediaElement
 		{
-			var result:MediaElement 
-				= new TemporalProxyElement
-					( BANNER_INTERVAL
-					, new ImageElement
-						( new ImageLoader()
-						, new URLResource(new URL(BANNER_2))
-						) 
-					);
-			
-			return result;
+			return new ImageElement
+					( new ImageLoader()
+					, new URLResource(new URL(url))
+					) 
+				
 		}
 		
-		private function constructBanner3():MediaElement
+		private function constructVideo(url:String):VideoElement
 		{
-			var result:MediaElement 
-				= new TemporalProxyElement
-					( BANNER_INTERVAL
-					, new ImageElement
-						( new ImageLoader()
-						, new URLResource(new URL(BANNER_3))
-						) 
-					);
-			
-			return result;
-		}
-		
-		private function constructVideo():VideoElement
-		{
-			var result:VideoElement 
-				= new VideoElement
+			return new VideoElement
 					( new NetLoader
-					, new URLResource(new URL(REMOTE_PROGRESSIVE))
+					, new URLResource(new URL(url))
 					);
-			
-			return result;
 		}
-		
-		private var bannerRegion:RegionSprite;
-		private var bannerTarget:RegionTargetFacet;
 		
 		private static const BANNER_INTERVAL:int = 5;
 		
@@ -152,7 +184,8 @@ package
 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 			
 		// IAB standard banners from:
-		// http://www.iab.net/iab_products_and_industry_services/1421/1443/1452
+		private static const IAB_URL:String
+			= "http://www.iab.net/iab_products_and_industry_services/1421/1443/1452";
 		
 		private static const BANNER_1:String
 			= "http://www.iab.net/media/image/468x60.gif";
@@ -162,6 +195,9 @@ package
 			
 		private static const BANNER_3:String
 			= "http://www.iab.net/media/image/120x60.gif";
+			
+		private static const SKY_SCRAPER_1:String
+			= "http://www.iab.net/media/image/120x600.gif"
 		
 	}
 }
