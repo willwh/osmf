@@ -91,6 +91,7 @@ package org.openvideoplayer.view
 			
 			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
+			mediaPlayerWrapper.mediaPlayer.autoRewind = false;
 
 			// Sync the UI to the current (empty) state.
 			//
@@ -153,6 +154,7 @@ package org.openvideoplayer.view
 			
 			errorCodeBox.visible = errorDescriptionBox.visible = errorDetailBox.visible = false;
 			errorCode.text = errorDescription.text = errorDetail.text = "";
+			duration.text = "";
 			
 			updateControls();
 		}
@@ -162,7 +164,8 @@ package org.openvideoplayer.view
 		
 		private function onStateChange(event:MediaPlayerStateChangeEvent):void
 		{
-			//playerState.text = event.newState.name;
+			stateControls.visible = true;
+			playerState.text = event.newState.name;
 		}
 		
 		private function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void

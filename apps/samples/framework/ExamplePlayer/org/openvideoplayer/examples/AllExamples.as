@@ -42,6 +42,8 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.proxies.TemporalProxyElement;
 	import org.openvideoplayer.swf.SWFElement;
 	import org.openvideoplayer.swf.SWFLoader;
+	import org.openvideoplayer.traits.ILoadable;
+	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.FMSURL;
 	import org.openvideoplayer.utils.URL;
 	import org.openvideoplayer.video.VideoElement;
@@ -207,6 +209,24 @@ package org.openvideoplayer.examples
 							var serialElement:SerialElement = new SerialElement();
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Serial Composition (Preloaded)"
+					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling quicking transitions and a priori knowledge of the full duration."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							serialElement.addChild(videoElement);
+							(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+							videoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+							serialElement.addChild(videoElement);
+							(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
 							return serialElement; 
 				  	   	} 
 				  	)
@@ -393,7 +413,7 @@ package org.openvideoplayer.examples
 				  	   	}
 				  	)
 				);
-			
+				
 			return examples;
 		}
 		
