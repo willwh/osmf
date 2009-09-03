@@ -25,6 +25,7 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.audio.SoundLoader;
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
+	import org.openvideoplayer.events.LoadableStateChangeEvent;
 	import org.openvideoplayer.examples.chromeless.ChromelessPlayerElement;
 	import org.openvideoplayer.examples.loaderproxy.VideoProxyElement;
 	import org.openvideoplayer.examples.text.TextElement;
@@ -43,6 +44,9 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.swf.SWFElement;
 	import org.openvideoplayer.swf.SWFLoader;
 	import org.openvideoplayer.traits.ILoadable;
+	import org.openvideoplayer.traits.IPausable;
+	import org.openvideoplayer.traits.IPlayable;
+	import org.openvideoplayer.traits.LoadState;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.FMSURL;
 	import org.openvideoplayer.utils.URL;
@@ -217,17 +221,35 @@ package org.openvideoplayer.examples
 			examples.push
 				( new Example
 					( 	"Serial Composition (Preloaded)"
-					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling quicking transitions and a priori knowledge of the full duration."
+					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling a quicker transition from one to the other."
 				  	,  	function():MediaElement
 				  	   	{
+				  	   		function preload(mediaElement:MediaElement):void
+				  	   		{
+								var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+								loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+								loadable.load();
+								
+								function onLoadableStateChange(event:LoadableStateChangeEvent):void
+								{
+									if (event.loadable.loadState == LoadState.LOADED)
+									{
+										loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+										
+										(mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();
+										(mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable).pause();
+									}
+								}
+				  	   		}
+				  	   		
 							var serialElement:SerialElement = new SerialElement();
 							var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							preload(videoElement);
 							serialElement.addChild(videoElement);
-							(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
 							videoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+							preload(videoElement);
 							serialElement.addChild(videoElement);
-							(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
-							return serialElement; 
+							return serialElement;
 				  	   	} 
 				  	)
 				);
@@ -413,7 +435,7 @@ package org.openvideoplayer.examples
 				  	   	}
 				  	)
 				);
-				
+							
 			return examples;
 		}
 		
