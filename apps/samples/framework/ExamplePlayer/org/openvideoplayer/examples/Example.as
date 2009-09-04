@@ -31,11 +31,12 @@ package org.openvideoplayer.examples
 		/**
 		 * Constructor.
 		 **/
-		public function Example(name:String, description:String, mediaElementCreatorFunc:Function)
+		public function Example(name:String, description:String, mediaElementCreatorFunc:Function, disposeFunc:Function = null)
 		{
 			_name = name;
 			_description = description;
 			_mediaElementCreatorFunc = mediaElementCreatorFunc;
+			this.disposeFunc = disposeFunc;
 		}
 		
 		/**
@@ -62,8 +63,20 @@ package org.openvideoplayer.examples
 			return _mediaElementCreatorFunc.apply(this) as MediaElement;
 		}
 		
+		/**
+		 * To be invoked when the example should clean-up.
+		 */
+		public function dispose():void
+		{
+			if (disposeFunc != null)
+			{
+				disposeFunc();
+			}
+		}
+		
 		private var _name:String;
 		private var _description:String;
 		private var _mediaElementCreatorFunc:Function;
+		private var disposeFunc:Function;
 	}
 }

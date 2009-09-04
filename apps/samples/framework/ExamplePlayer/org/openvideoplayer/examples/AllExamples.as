@@ -21,6 +21,10 @@
 *****************************************************/
 package org.openvideoplayer.examples
 {
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
 	import org.openvideoplayer.audio.AudioElement;
 	import org.openvideoplayer.audio.SoundLoader;
 	import org.openvideoplayer.composition.ParallelElement;
@@ -36,6 +40,7 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.layout.RelativeLayoutFacet;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
+	import org.openvideoplayer.metadata.MetadataNamespaces;
 	import org.openvideoplayer.net.NetLoader;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -63,8 +68,10 @@ package org.openvideoplayer.examples
 		public static function get examples():Array
 		{
 			var examples:Array = [];
-			
 			var mediaElement:MediaElement = null;
+			
+			var timer:Timer = new Timer(20);
+			var timerHandler:Function;
 			
 			examples.push
 				( new Example
@@ -435,7 +442,68 @@ package org.openvideoplayer.examples
 				  	   	}
 				  	)
 				);
+			
+			examples.push
+				( new Example
+					( 	"Dynamic Layouts"
+					, 	"Demonstrates the use of the default OSMF layout renderer to dynamically change the spatial ordering of MediaElements within compositions."
+				  	,  	function():MediaElement
+				  	   	{
+							var parallelElement:ParallelElement = new ParallelElement();
+							var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))); 
+							parallelElement.addChild(video1);
+							parallelElement.addChild(video2);
+				  	   		
+				  	   		applyAdjacentLayout(parallelElement, video1, video2);
+				  	   		
+				  	   		var relativeLayout1:RelativeLayoutFacet
+				  	   			= video1.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
+				  	   			as RelativeLayoutFacet;
+				  	   			
+				  	   		var relativeLayout2:RelativeLayoutFacet
+				  	   			= video2.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
+				  	   			as RelativeLayoutFacet;
+				  	   		
+				  	   		relativeLayout2.y = 0;
+				  	   		
+				  	   		var delta:int = 1;
 							
+							timer.addEventListener
+								( TimerEvent.TIMER
+								, timerHandler = onTimer
+								);
+								
+							function onTimer(event:Event):void
+							{
+								relativeLayout1.width += delta;
+								relativeLayout1.height += delta;
+								
+								relativeLayout2.y += delta / 2;
+									
+								if 	(	relativeLayout1.width < 25
+									||	relativeLayout1.width > 75
+									)
+								{
+									delta = -delta;
+								}
+							}
+								
+							timer.start();
+								  	   	
+							return parallelElement;
+						}
+					,	function():void
+						{
+							timer.stop();
+							timer.removeEventListener
+								( TimerEvent.TIMER
+								, timerHandler
+								);
+						}
+					)
+				);
+				
 			return examples;
 		}
 		

@@ -139,9 +139,14 @@ package org.openvideoplayer.view
 
 		private function onExampleListSelect(event:ListEvent):void
 		{
+			if (example != null)
+			{
+				example.dispose();
+			}
+			
 			if (exampleList.selectedIndex >= 0)
 			{
-				var example:Example = examples[exampleList.selectedIndex] as Example;
+				example = examples[exampleList.selectedIndex] as Example;
 				
 				mediaPlayerWrapper.element = example.mediaElement;
 				exampleDescription.text = example.description;
@@ -246,5 +251,6 @@ package org.openvideoplayer.view
 		}
 		
 		private var examples:Array;
+		private var example:Example;
 	}
 }

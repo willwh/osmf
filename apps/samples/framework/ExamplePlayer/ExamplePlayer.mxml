@@ -26,6 +26,7 @@
 	xmlns:mx			="http://www.adobe.com/2006/mxml"
 	xmlns:view			="org.openvideoplayer.view.*"
 	backgroundColor		="#333333"
+	frameRate			="30"
 	>
 
 	<mx:Style source="assets/ExamplePlayer.css"/>
