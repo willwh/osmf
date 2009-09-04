@@ -40,6 +40,7 @@
 	<!-- Upper Left Region -->
 	
 	<mx:VBox
+		styleName				="panel"
 		left					="0"
 		top						="0"
 		height					="100%"
@@ -106,13 +107,15 @@
 		>
 
 		<mx:Button
+			styleName			="buttonPlay"
 			id					="buttonPlay"
-			label				="Play"
+			label				=""
 			visible				="false"
 			/>
 		<mx:Button
+			styleName			="buttonPause"
 			id					="buttonPause"
-			label				="Pause"
+			label				=""
 			visible				="false"
 			/>
 

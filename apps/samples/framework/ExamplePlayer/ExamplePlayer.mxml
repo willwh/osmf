@@ -28,6 +28,7 @@
 	backgroundColor		="#333333"
 	>
 
+	<mx:Style source="assets/ExamplePlayer.css"/>
 
 	<view:MainWindow
 		id				="mainWindow"
