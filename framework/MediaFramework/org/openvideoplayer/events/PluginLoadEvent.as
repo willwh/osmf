@@ -52,6 +52,17 @@ package org.openvideoplayer.events
 			return _resource;
 		}
 		
+		// Overrides
+		//
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function clone():Event
+		{
+			return new PluginLoadEvent(type, resource, bubbles, cancelable);
+		}
+		
 		// Internals
 		//
 

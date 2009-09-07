@@ -32,7 +32,7 @@ package org.openvideoplayer.media
 		  * Constructor.
 		  * @private
 		 **/        	
-		public function MediaPlayerState(name:String):void
+		public function MediaPlayerState(name:String)
 		{
 			_name = name;
         }

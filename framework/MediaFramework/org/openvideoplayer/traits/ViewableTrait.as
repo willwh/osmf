@@ -21,11 +21,9 @@
 *****************************************************/
 package org.openvideoplayer.traits
 {
-	import org.openvideoplayer.events.ViewChangeEvent;
-	import org.openvideoplayer.traits.IViewable;
-	
 	import flash.display.DisplayObject;
-	import flash.events.EventDispatcher;
+	
+	import org.openvideoplayer.events.ViewChangeEvent;
 
 	/**
 	 * Dispatched when the trait's <code>view</code> property has changed.

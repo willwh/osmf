@@ -51,5 +51,13 @@ package org.openvideoplayer.events
 			super(type, bubbles, cancelable);
 		}
 		
+		/**
+		 * @private
+		 * @inheritDoc
+		 **/
+		override public function clone():Event
+		{
+			return new TraitEvent(type, bubbles, cancelable);
+		}
 	}
 }

@@ -23,7 +23,6 @@
 package org.openvideoplayer.net.dynamicstreaming
 {
 	import flash.net.NetStream;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
 	
 	/**
 	 * NetStream Metrics Interface

@@ -27,10 +27,8 @@ package org.openvideoplayer.net.dynamicstreaming
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
 	import flash.net.NetStreamInfo;
-	import flash.net.SharedObject;
 	import flash.utils.Timer;
 	
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
 	import org.openvideoplayer.net.NetStreamCodes;
 		
 	/**

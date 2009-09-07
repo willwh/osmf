@@ -37,7 +37,7 @@ package org.openvideoplayer.utils
 		 * The constructor takes a URI/URL string and begins parsing it. The URI/URL can also 
 		 * be set via the <code>url</code> property.
 		 */
-		public function URL(url:String):void 
+		public function URL(url:String) 
 		{
 			_rawUrl = url;
 			_protocol = "";
