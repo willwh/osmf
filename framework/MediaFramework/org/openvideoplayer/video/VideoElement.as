@@ -142,6 +142,7 @@ package org.openvideoplayer.video
 			var seekable:SeekableTrait = new NetStreamSeekableTrait(stream);
 			var temporal:NetStreamTemporalTrait = new NetStreamTemporalTrait(stream); 
 			spatial = new SpatialTrait();
+			spatial.setDimensions(video.width, video.height);
 			seekable.temporal = temporal;
 					
 			addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, resource));
@@ -187,7 +188,10 @@ package org.openvideoplayer.video
 		}
 
 		private function onMetaData(info:Object):void 
-    	{   		
+    	{   
+    		video.width = info.width;
+    		video.height = info.height;
+    				
 			spatial.setDimensions(info.width, info.height);			
      	}
      	

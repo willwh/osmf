@@ -49,6 +49,7 @@ package org.openvideoplayer.video
 	import org.openvideoplayer.traits.ILoadable;
 	import org.openvideoplayer.traits.IPlayable;
 	import org.openvideoplayer.traits.ISpatial;
+	import org.openvideoplayer.traits.IViewable;
 	import org.openvideoplayer.traits.LoadState;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.NetFactory;
@@ -139,11 +140,17 @@ package org.openvideoplayer.video
 				{
 					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestGetMetadata);
 					
-					// We should now have a spatial trait with no dimensions.
+					// We should now have a spatial trait with video's default dimensions:
 					var spatial:ISpatial = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
 					assertTrue(spatial != null);
-					assertTrue(spatial.width == 0);
-					assertTrue(spatial.height == 0);
+					assertTrue(spatial.width == 320);
+					assertTrue(spatial.height == 240);
+					
+					// See if the view matches the reported size:
+					var viewable:IViewable = mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
+					assertNotNull(viewable);
+					assertEquals(320, viewable.view.width);
+					assertEquals(240, viewable.view.height);
 					
 					spatial.addEventListener
 							( DimensionChangeEvent.DIMENSION_CHANGE
@@ -162,6 +169,9 @@ package org.openvideoplayer.video
 						
 						assertTrue(spatial.width == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
 						assertTrue(spatial.height == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
+						
+						assertEquals(spatial.width, viewable.view.width);
+						assertEquals(spatial.height, viewable.view.height);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}

@@ -52,14 +52,14 @@ package org.openvideoplayer.display
 			var view2:DisplayObject = (element2.getTrait(MediaTraitType.VIEWABLE) as IViewable).view;
 			
 			var w:Number = 300;
-			var h:Number = 400;
+			var h:Number = 225;
 			sprite.setAvailableSize(w, h);
 			
 			assertEquals(w, view.width);
 			assertEquals(h, view.height);
 			
 			w = 500;
-			h = 900;
+			h = 375;
 			sprite.setAvailableSize(w, h);
 			
 			assertEquals(w, view.width);
