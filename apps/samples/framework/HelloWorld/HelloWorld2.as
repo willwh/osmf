@@ -44,7 +44,7 @@ package
 		public function HelloWorld2()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-            stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.TOP_LEFT;
   
   			// Create the Sprite class that holds our MediaPlayer.
  			var sprite:MediaPlayerSprite = new MediaPlayerSprite();

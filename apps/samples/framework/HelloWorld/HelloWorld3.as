@@ -49,7 +49,7 @@ package
 		public function HelloWorld3()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-            stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.TOP_LEFT;
             
   			// Create the Sprite class that holds our MediaPlayer.
  			sprite = new MediaPlayerSprite();
@@ -63,11 +63,11 @@ package
 			
 			// Make sure we resize the Sprite when the stage dimensions
 			// change.
-            stage.addEventListener(Event.RESIZE, onStageResize);
+			stage.addEventListener(Event.RESIZE, onStageResize);
             
-            // Create a composite MediaElement, consisting of a video
-            // followed by a SWF, followed by another video.
-            var mediaElement:MediaElement = createMediaElement();
+			// Create a composite MediaElement, consisting of a video
+			// followed by a SWF, followed by another video.
+			var mediaElement:MediaElement = createMediaElement();
 			
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
@@ -79,16 +79,16 @@ package
 			var serialElement:SerialElement = new SerialElement();
 			
 			// First child is a progressive video.
-           	serialElement.addChild
-           		( new VideoElement
+			serialElement.addChild
+				( new VideoElement
 					( new NetLoader
 					, new URLResource(new URL(REMOTE_PROGRESSIVE))
 					)
 				);
 
 			// Second child is a SWF that shows for three seconds.
-           	serialElement.addChild
-           		( new TemporalProxyElement
+			serialElement.addChild
+				( new TemporalProxyElement
 					( 3
 					, new SWFElement
 						( new SWFLoader()
@@ -98,8 +98,8 @@ package
 				);
 
 			// Third child is a progressive video.
-           	serialElement.addChild
-           		( new VideoElement
+			serialElement.addChild
+				( new VideoElement
 					( new NetLoader
 					, new URLResource(new URL(REMOTE_STREAM))
 					)
