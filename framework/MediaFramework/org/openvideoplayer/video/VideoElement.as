@@ -189,10 +189,15 @@ package org.openvideoplayer.video
 
 		private function onMetaData(info:Object):void 
     	{   
-    		video.width = info.width;
-    		video.height = info.height;
+    		if 	(	info.width != spatial.width
+    			||	info.height != spatial.height
+    			)
+    		{	
+    			video.width = info.width;
+    			video.height = info.height;
     				
-			spatial.setDimensions(info.width, info.height);			
+				spatial.setDimensions(info.width, info.height);
+    		}
      	}
      	
      	private function onNetStatusEvent(event:NetStatusEvent):void
