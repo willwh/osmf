@@ -72,8 +72,6 @@ package org.openvideoplayer.layout
 		
 		public function LayoutAttributesFacet()
 		{
-			// Getting inconsistent results on initializing these values
-			// at their variable declarations:
 			_registrationPoint = RegistrationPoint.TOP_LEFT;
 			_scaleMode = null;
 			_alignment = RegistrationPoint.CENTER;
@@ -209,7 +207,7 @@ package org.openvideoplayer.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired alilgn mode to be applied to the target when
+		 * Defines the desired alignment mode to be applied to the target when
 		 * scaling of the target leaves a blank space.
 		 */
 		public function get alignment():RegistrationPoint
