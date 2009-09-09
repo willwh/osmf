@@ -39,8 +39,9 @@ package
 	import org.openvideoplayer.video.VideoElement;
 
 	/**
-	 * Simple OSMF application.  Centers SWF and content.  Plays a video, then
-	 * shows an orange (SWF) box, then plays another video.
+	 * Another simple OSMF application, building on HelloWorld2.as.
+	 * 
+	 * Plays a video, then shows a SWF, then plays another video.
 	 **/
 	[SWF(backgroundColor="0x333333")]
 	public class HelloWorld3 extends Sprite
@@ -49,20 +50,35 @@ package
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
-            stage.addEventListener(Event.RESIZE, onStageResize);
-  
+            
+  			// Create the Sprite class that holds our MediaPlayer.
  			sprite = new MediaPlayerSprite();
-			sprite.scaleMode = ScaleMode.NONE;
-			fitSpriteToStage();
 			addChild(sprite);
 			
-			sprite.element = createMediaElement();
+			// Set the Sprite's size to match that of the stage, and
+			// prevent the content from being scaled.
+			sprite.scaleMode = ScaleMode.NONE;
+			sprite.width = stage.stageWidth;
+			sprite.height = stage.stageHeight;
+			
+			// Make sure we resize the Sprite when the stage dimensions
+			// change.
+            stage.addEventListener(Event.RESIZE, onStageResize);
+            
+            // Create a composite MediaElement, consisting of a video
+            // followed by a SWF, followed by another video.
+            var mediaElement:MediaElement = createMediaElement();
+			
+			// Set the MediaElement on the MediaPlayer.  Because
+			// autoPlay defaults to true, playback begins immediately.
+			sprite.element = mediaElement;
 		}
 		
 		private function createMediaElement():MediaElement
 		{
 			var serialElement:SerialElement = new SerialElement();
 			
+			// First child is a progressive video.
            	serialElement.addChild
            		( new VideoElement
 					( new NetLoader
@@ -70,6 +86,7 @@ package
 					)
 				);
 
+			// Second child is a SWF that shows for three seconds.
            	serialElement.addChild
            		( new TemporalProxyElement
 					( 3
@@ -80,6 +97,7 @@ package
 					)
 				);
 
+			// Third child is a progressive video.
            	serialElement.addChild
            		( new VideoElement
 					( new NetLoader
@@ -91,11 +109,6 @@ package
 		}
 		
 		private function onStageResize(event:Event):void
-		{
-			fitSpriteToStage();
-		}
-		
-		private function fitSpriteToStage():void
 		{
 			sprite.width = stage.stageWidth;
 			sprite.height = stage.stageHeight;

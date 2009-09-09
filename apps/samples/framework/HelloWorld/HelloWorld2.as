@@ -33,7 +33,10 @@ package
 	import org.openvideoplayer.video.VideoElement;
 
 	/**
-	 * Simple OSMF application.  Centers SWF and content.
+	 * A simple OSMF application, building on HelloWorld.as.
+	 * 
+	 * Rather than specify explicit dimensions for the SWF, we now
+	 * maximize the SWF and center the content.
 	 **/
 	[SWF(backgroundColor="0x333333")]
 	public class HelloWorld2 extends Sprite
@@ -43,12 +46,18 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
   
+  			// Create the Sprite class that holds our MediaPlayer.
  			var sprite:MediaPlayerSprite = new MediaPlayerSprite();
-			sprite.scaleMode = ScaleMode.NONE;
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
 			addChild(sprite);
 			
+			// Set the Sprite's size to match that of the stage, and
+			// prevent the content from being scaled.
+			sprite.width = stage.stageWidth;
+			sprite.height = stage.stageHeight;
+			sprite.scaleMode = ScaleMode.NONE;
+			
+			// Set the MediaElement on the MediaPlayer.  Because
+			// autoPlay defaults to true, playback begins immediately.
 			sprite.element = new VideoElement
 				( new NetLoader
 				, new URLResource(new URL(REMOTE_PROGRESSIVE))

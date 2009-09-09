@@ -31,14 +31,20 @@ package
 
 	/**
 	 * The simplest OSMF application possible.
+	 * 
+	 * The metadata sets the SWF size to match that of the video.
 	 **/
+	[SWF(width="640", height="352")]
 	public class HelloWorld extends Sprite
 	{
 		public function HelloWorld()
 		{
+			// Create the Sprite class that holds our MediaPlayer.
  			var sprite:MediaPlayerSprite = new MediaPlayerSprite();
 			addChild(sprite);
 			
+			// Set the MediaElement on the MediaPlayer.  Because
+			// autoPlay defaults to true, playback begins immediately.
 			sprite.element = new VideoElement
 				( new NetLoader
 				, new URLResource(new URL(REMOTE_PROGRESSIVE))
