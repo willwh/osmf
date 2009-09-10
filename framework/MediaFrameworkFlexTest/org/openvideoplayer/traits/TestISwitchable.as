@@ -67,6 +67,7 @@ package org.openvideoplayer.traits
 			
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable.autoSwitch = false;
+			switchable.switchTo(switchable.maxIndex);
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 			switchable.switchTo(0);
 		}

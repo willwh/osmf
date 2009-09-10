@@ -62,10 +62,11 @@ package org.openvideoplayer.traits
 		
 		/**
 		 * @inheritDoc
+		 * This property defaults to true.
 		 */
 		public function set autoSwitch(value:Boolean):void
 		{
-			if (_autoSwitch != value)
+			if (autoSwitch != value)
 			{
 				if (canProcessAutoSwitchChange(value))
 				{
@@ -101,7 +102,7 @@ package org.openvideoplayer.traits
 		
 		public function set maxIndex(value:int):void
 		{
-			if (_maxIndex != value)
+			if (maxIndex != value)
 			{
 				if (canProcessMaxIndexChange(value))
 				{
@@ -121,7 +122,7 @@ package org.openvideoplayer.traits
 				
 		public function switchTo(index:int):void
 		{
-			if (index != _currentIndex)
+			if (index != currentIndex)
 			{
 				if (canProcessSwitchTo(index))
 				{
@@ -179,9 +180,20 @@ package org.openvideoplayer.traits
 			// MaxIndex is proccessed here
 		}
 			
-		private var _autoSwitch:Boolean = false;
-		private var _currentIndex:int = 0;
-		private var _maxIndex:int = 0;
+		/**
+		 * Backing variable for autoSwitch
+		 */ 	
+		protected var _autoSwitch:Boolean = true;
+		
+		/**
+		 * Backing variable for currentIndex
+		 */ 
+		protected var _currentIndex:int = 0;
+	
+		/**
+		 * Backing variable for maxIndex
+		 */ 
+		protected var _maxIndex:int = 0;
 		
 	}
 }

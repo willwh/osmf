@@ -43,11 +43,16 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		public function NetStreamSwitchableTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
 		{
-			super();
+			super();	
+			
+			_autoSwitch = !ns.useManualSwitchMode;	
+			_maxIndex = ns.maxIndex;
+			_currentIndex = ns.renderingIndex;
+				
 			_ns = ns;
 			_resource = res;
 			_newState = _oldState = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
-			
+						
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
 		}
@@ -66,15 +71,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		override public function getBitrateForIndex(index:int):Number
 		{
 			return _resource.getItemAt(index).bitrate;
-		} 
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function get maxIndex():int
-		{
-			return _ns.maxIndex;
-		}
+		}	
 				
 		/**
 		 * @inheritDoc
@@ -97,7 +94,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		override protected function processAutoSwitchChange(value:Boolean):void
 		{
-			_ns.useManualSwitchMode = value;
+			_ns.useManualSwitchMode = !value;
 		}
 		
 		/**
