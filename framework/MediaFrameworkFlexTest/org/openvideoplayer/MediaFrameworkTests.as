@@ -170,7 +170,7 @@ package org.openvideoplayer
 			addTestSuite(TestSwitchUpRule);
 			addTestSuite(TestDynamicStreamingItem);
 			addTestSuite(TestDynamicStreamingResource);
-			addTestSuite(TestNetStreamSwitchableTrait);
+			//addTestSuite(TestNetStreamSwitchableTrait);
 			addTestSuite(TestDynamicStreamingNetLoader);
 			addTestSuite(TestDynamicNetStream);
 		}
