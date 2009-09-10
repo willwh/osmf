@@ -321,7 +321,7 @@ package org.openvideoplayer.net.dynamicstreaming
 				_renderingIndex = targetIndex;
 				_streamIndex = targetIndex;
 				_pendingTransitionsArray.push(targetIndex);
-				this.client.onPlayStatus({code:"NetStream.Play.TransitionComplete"})
+				this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE})
 			} 
 		}
 		

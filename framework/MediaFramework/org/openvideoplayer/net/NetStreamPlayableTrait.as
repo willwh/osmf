@@ -123,6 +123,7 @@ package org.openvideoplayer.net
 		// Needed to detect when the stream didn't play:  i.e. complete or error cases
 		private function onNetStatus(event:NetStatusEvent):void
 		{
+			trace('event.info.code');
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:

@@ -30,6 +30,10 @@ package org.openvideoplayer.utils
 		// Runtime Errors
 		//
 		
+		// CompositeTraitFactory
+		
+		public static const COMPOSITE_TRAIT_NOT_FOUND:String 			= "A composite trait was not found for the given trait";
+		
 		// General
 		
 		public static const INVALID_PARAM:String 						= "Invalid param passed to method";

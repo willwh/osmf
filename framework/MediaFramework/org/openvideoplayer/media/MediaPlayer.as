@@ -142,6 +142,23 @@ package org.openvideoplayer.media
 	 **/
     [Event(name="playheadChange",type="org.openvideoplayer.events.PlayheadChangeEvent")]  
     
+    // ISwitchable
+    
+	/**
+	 * Dispatched when a stream switch is requested, completed, or failed.
+	 * 
+	 * @eventType org.openvideoplayer.events.SwitchingChangeEvent.SWITCHING_CHANGE
+	 */
+	[Event(name="switchingChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
+	
+	/**
+	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * 
+	 * @eventType org.openvideoplayer.events.TraitEvent.INDICES_CHANGE
+	 */
+	[Event(name="indicesChange",type="org.openvideoplayer.events.TraitEvent")]
+
+    
     // IBufferable
         
 	/**
@@ -188,6 +205,14 @@ package org.openvideoplayer.media
 	 * @eventType org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE
 	 */
 	[Event(name="seekableChange",type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+	
+	/**
+	 * Dispatched when the <code>seekable</code> property has changed.
+	 * 
+	 * @eventType org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE
+	 */
+	[Event(name="switchableChange",type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
+	
 	
 	/**
 	 * Dispatched when the <code>temporal</code> property has changed.
@@ -489,6 +514,17 @@ package org.openvideoplayer.media
 		}
 		
 		/**
+		 * Indicates whether the media is switchable.
+		 * Wwitchable exposes the ability to autoswitch or manually switch
+		 * between multiple bitrate streams.
+		 */	
+		
+		public function get switchable():Boolean
+		{
+			return _switchable;
+		}
+				
+		/**
 		 *  Indicates whether the media is loadable.
 		 */
 		
@@ -698,6 +734,92 @@ package org.openvideoplayer.media
 	    	var trait:ISpatial = getTrait(MediaTraitType.SPATIAL) as ISpatial;
 	    	return trait.height;		
 	    }
+	    
+	    // ISwitchable
+	    
+	    /**
+		 * Defines whether or not the ISwitchable trait should be in manual 
+		 * or autoswitch mode. If in manual mode the <code>switchTo</code>
+		 * method can be used to manually switch to a specific stream.
+		 */
+		public function get autoSwitch():Boolean
+		{
+			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch;
+		}
+		
+		public function set autoSwitch(value:Boolean):void
+		{
+			 (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = value;
+		}
+		
+		/**
+		 * The index of the stream currently rendering. Uses a zero-based index.
+		 */
+		public function get currentStreamIndex():int
+		{
+			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex; 
+		}
+		
+		/**
+		 * Gets the associated bitrate, in kilobytes for the specified index.
+		 * 
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than the highest index available.
+		 */ 
+		public function getBitrateForIndex(index:int):Number
+		{
+			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).getBitrateForIndex(index);
+		}
+		
+		/**
+		 * The maximum available index. This can be set at run-time to 
+		 * provide a ceiling for your switching profile. For example,
+		 * to keep from switching up to a higher quality stream when 
+		 * the current video is too small to realize the added value
+		 * of a higher quality stream.
+		 * 
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than the highest index available.
+		 */
+		public function get maxStreamIndex():int
+		{
+			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex;
+		}
+		
+		public function set maxStreamIndex(value:int):void
+		{
+			 (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex = value; 
+		}
+		
+		/**
+		 * Indicates whether or not a switch is currently in progress.
+		 * This property will return <code>true</code> while a switch has been 
+		 * requested and the switch has not yet been acknowledged and no switch failure 
+		 * has occurred.  Once the switch request has been acknowledged or a 
+		 * failure occurs, the property will return <code>false</code>.
+		 */
+		public function get switchUnderway():Boolean
+		{
+			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway;
+		}
+		
+		/**
+		 * Switch to a specific index. To switch up, use the <code>currentIndex</code>
+		 * property, such as:<p>
+		 * <code>
+		 * obj.switchTo(obj.currentStreamIndex + 1);
+		 * </code>
+		 * </p>
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than <code>maxIndex</code>.
+		 * @throws IllegalOperationError If the stream is not in manual switch mode.
+		 * 
+		 * @see maxIndex
+		 */
+		public function switchTo(streamIndex:int):void
+		{
+			 (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchTo(streamIndex);
+		}	    
 	
 	    // IViewable
 		/**
@@ -826,8 +948,8 @@ package org.openvideoplayer.media
 			switch (trait)
 			{
 				case MediaTraitType.TEMPORAL:									
-					changeListeners(add, _source, MediaTraitType.TEMPORAL, DurationChangeEvent.DURATION_CHANGE, [redispatchEvent]);							
-					changeListeners(add, _source, MediaTraitType.TEMPORAL, TraitEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
+					changeListeners(add, _source, trait, DurationChangeEvent.DURATION_CHANGE, [redispatchEvent]);							
+					changeListeners(add, _source, trait, TraitEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
 					if (add && _playheadUpdateInterval > 0 && !isNaN(_playheadUpdateInterval) )
 					{
 						_playheadTimer.start();
@@ -840,7 +962,7 @@ package org.openvideoplayer.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
 					break;
 				case MediaTraitType.PLAYABLE:						
-					changeListeners(add, _source, MediaTraitType.PLAYABLE, PlayingChangeEvent.PLAYING_CHANGE, [redispatchEvent,onPlaying] );			
+					changeListeners(add, _source, trait, PlayingChangeEvent.PLAYING_CHANGE, [redispatchEvent,onPlaying] );			
 					_playable = add;							
 					if (autoPlay && playable && !loadable)
 					{
@@ -849,37 +971,44 @@ package org.openvideoplayer.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIBLE:					
-					changeListeners(add, _source, MediaTraitType.AUDIBLE, VolumeChangeEvent.VOLUME_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _source, MediaTraitType.AUDIBLE, MutedChangeEvent.MUTED_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _source, MediaTraitType.AUDIBLE, PanChangeEvent.PAN_CHANGE, [redispatchEvent]);	
+					changeListeners(add, _source, trait, VolumeChangeEvent.VOLUME_CHANGE, [redispatchEvent]);			
+					changeListeners(add, _source, trait, MutedChangeEvent.MUTED_CHANGE, [redispatchEvent]);			
+					changeListeners(add, _source, trait, PanChangeEvent.PAN_CHANGE, [redispatchEvent]);	
 					_audible = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;					
 					break;
 				case MediaTraitType.PAUSABLE:											
-					changeListeners(add, _source, MediaTraitType.PAUSABLE, PausedChangeEvent.PAUSED_CHANGE, [redispatchEvent, onPaused]);						
+					changeListeners(add, _source, trait, PausedChangeEvent.PAUSED_CHANGE, [redispatchEvent, onPaused]);						
 					_pausable = add;		
 					traitChangeName = MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE;	
 					break;
 				case MediaTraitType.SEEKABLE:														
-					changeListeners(add, _source, MediaTraitType.SEEKABLE, SeekingChangeEvent.SEEKING_CHANGE, [redispatchEvent, onSeeking]);
+					changeListeners(add, _source, trait, SeekingChangeEvent.SEEKING_CHANGE, [redispatchEvent, onSeeking]);
 					_seekable = add;					
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
 					break;
 				case MediaTraitType.SPATIAL:	
-					changeListeners(add, _source, MediaTraitType.SPATIAL, DimensionChangeEvent.DIMENSION_CHANGE, [redispatchEvent]);								
+					changeListeners(add, _source, trait, DimensionChangeEvent.DIMENSION_CHANGE, [redispatchEvent]);								
 					_spatial = add;						
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE;					
 					break;
+				case MediaTraitType.SWITCHABLE:	
+					changeListeners(add, _source, trait, SwitchingChangeEvent.SWITCHING_CHANGE, [redispatchEvent]);								
+					_switchable = add;						
+					traitChangeName = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
+					break;						
 				case MediaTraitType.VIEWABLE:					
-					changeListeners(add, _source, MediaTraitType.VIEWABLE, ViewChangeEvent.VIEW_CHANGE, [redispatchEvent]);											
+					changeListeners(add, _source, trait, ViewChangeEvent.VIEW_CHANGE, [redispatchEvent]);											
 					_viewable = add;						
 					traitChangeName = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	
 				case MediaTraitType.LOADABLE:					
-					changeListeners(add, _source, MediaTraitType.LOADABLE, LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, [redispatchEvent, onLoadState]);					
+					changeListeners(add, _source, trait, LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, [redispatchEvent, onLoadState]);					
 					if (add)
 					{
-						if( (_source.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState != LoadState.LOADED)
+						var loadState:LoadState = (_source.getTrait(trait) as ILoadable).loadState;
+						if( loadState != LoadState.LOADED && 
+							loadState != LoadState.LOADING  )
 						{
 							load();
 						}
@@ -892,8 +1021,8 @@ package org.openvideoplayer.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFERABLE:
-					changeListeners(add, _source, MediaTraitType.BUFFERABLE, BufferingChangeEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
-					changeListeners(add, _source, MediaTraitType.BUFFERABLE, BufferTimeChangeEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
+					changeListeners(add, _source, trait, BufferingChangeEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
+					changeListeners(add, _source, trait, BufferTimeChangeEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
 					_bufferable = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
@@ -1085,5 +1214,6 @@ package org.openvideoplayer.media
 		private var _spatial:Boolean;
 		private var _loadable:Boolean;
 		private var _bufferable:Boolean;
+		private var _switchable:Boolean;
 	}
 }

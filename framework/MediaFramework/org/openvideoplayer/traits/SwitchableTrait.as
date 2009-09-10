@@ -23,14 +23,22 @@
 package org.openvideoplayer.traits
 {
 	import org.openvideoplayer.events.SwitchingChangeEvent;
-	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetail;
 	
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.openvideoplayer.events.SwitchingChangeEvent
+	 * @eventType org.openvideoplayer.events.SwitchingChangeEvent.SWITCHING_CHANGE
 	 */
 	[Event(name="switchingChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
+	
+	/**
+	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * 
+	 * @eventType org.openvideoplayer.events.TraitEvent.INDICES_CHANGE
+	 */
+	[Event(name="indicesChange",type="org.openvideoplayer.events.TraitEvent")]
+
+		
 		
 	/**
 	 * The SwitchableTrait class provides a base ISwitchable implementation.
@@ -41,26 +49,44 @@ package org.openvideoplayer.traits
 	{
 		public function SwitchableTrait()
 		{
-			super();
-			_newState = _oldState = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
+			super();			
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		public function get autoSwitch():Boolean
-		{
-			return true;
+		{			
+			return _autoSwitch;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function set autoSwitch(value:Boolean):void
 		{
+			if (_autoSwitch != value)
+			{
+				if (canProcessAutoSwitchChange(value))
+				{
+					_autoSwitch = value;
+					processAutoSwitchChange(value);
+				}
+			}
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		public function get currentIndex():int
+		{
+			return _currentIndex;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */ 
+		public function getBitrateForIndex(index:int):Number
 		{
 			return -1;
 		}
@@ -70,11 +96,19 @@ package org.openvideoplayer.traits
 		 */	
 		public function get maxIndex():int
 		{
-			return -1;
+			return _maxIndex;
 		}
 		
 		public function set maxIndex(value:int):void
 		{
+			if (_maxIndex != value)
+			{
+				if (canProcessMaxIndexChange(value))
+				{
+					processMaxIndexChange(value);
+					_maxIndex = value;
+				}
+			}		
 		}
 		
 		/**
@@ -87,22 +121,67 @@ package org.openvideoplayer.traits
 				
 		public function switchTo(index:int):void
 		{
+			if (index != _currentIndex)
+			{
+				if (canProcessSwitchTo(index))
+				{
+					_currentIndex = index;
+					processSwitchTo(index);
+				}
+			}			
 		}
 		
 		/**
-		 * A handy utility method for classes extending this class. Keeps track of
-		 * the last state and dispatches a SwitchingChangeEvent containing the new state
-		 * and the old state.
-		 */
-		protected function updateSwitchState(newState:int, detail:SwitchingDetail=null):void
+		 * Returns if this trait can change autoSwitch mode.
+		 */ 
+		protected function canProcessAutoSwitchChange(value:Boolean):Boolean
 		{
-			_oldState = _newState;
-			_newState = newState;
-			dispatchEvent(new SwitchingChangeEvent(_newState, _oldState, detail));
+			return true; 
 		}
 		
-		private var _newState:int;
-		private var _oldState:int;
+		/**
+		 * Does the acutal processing of changes to the autoSwitch property
+		 */ 
+		protected function processAutoSwitchChange(value:Boolean):void
+		{			
+			// autoswitching is proccessed here
+		}
+				
+		/**
+		 * Returns if this trait can switch to the specified stream index.
+		 */ 
+		protected function canProcessSwitchTo(value:int):Boolean
+		{
+			return true; 
+		}
+		
+		/**
+		 * Does the acutal switching of indices.
+		 */ 
+		protected function processSwitchTo(value:int):void
+		{			
+			// switchTo is proccessed here
+		}
+		
+		/**
+		 * Returns if this trait can change the max index to specified value
+		 */ 
+		protected function canProcessMaxIndexChange(value:int):Boolean
+		{
+			return true; 
+		}
+		
+		/**
+		 * Does the setting of the max index.
+		 */ 
+		protected function processMaxIndexChange(value:int):void
+		{			
+			// MaxIndex is proccessed here
+		}
+			
+		private var _autoSwitch:Boolean = false;
+		private var _currentIndex:int = 0;
+		private var _maxIndex:int = 0;
 		
 	}
 }

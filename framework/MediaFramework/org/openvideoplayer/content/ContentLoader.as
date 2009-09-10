@@ -89,6 +89,7 @@ package org.openvideoplayer.content
 			var urlReq:URLRequest = new URLRequest((loadable.resource as IURLResource).url.toString());
 			var loader:Loader = new Loader();
 			var context:LoaderContext = new LoaderContext();
+			context.checkPolicyFile = true;
 			if (useCurrentSecurityDomain)
 			{
 				context.securityDomain = SecurityDomain.currentDomain;

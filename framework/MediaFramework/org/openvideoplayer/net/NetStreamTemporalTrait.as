@@ -64,7 +64,7 @@ package org.openvideoplayer.net
 		{			
 			switch(event.code)
 			{
-				case "NetStream.Play.Complete":	 //for Streaming, NetStream.Play.Complete means duration reached, This isn't fired for prog.
+				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:	 //for Streaming, NetStream.Play.Complete means duration reached, This isn't fired for prog.
 					processDurationReached();
 					break;
 			}

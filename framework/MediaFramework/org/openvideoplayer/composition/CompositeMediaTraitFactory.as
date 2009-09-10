@@ -99,19 +99,13 @@ package org.openvideoplayer.composition
 							? new ParallelViewableTrait(traitAggregator, owner)
 							: new SerialViewableTrait(traitAggregator, owner);
 					break;
-					
+				case MediaTraitType.SWITCHABLE:
+					compositeTrait
+						= mode == CompositionMode.PARALLEL
+							? new ParallelSwitchableTrait(traitAggregator)
+							: new SerialSwitchableTrait(traitAggregator);					
 				default:
-					// TODO: Currently our default returns an arbitrary child.
-					// We should remove this once we've implemented all of the
-					// other composite traits.
-					traitAggregator.forEachChildTrait
-						(
-						  function(mediaTrait:IMediaTrait):void
-						  {
-						     compositeTrait = mediaTrait;
-						  }
-						, traitType
-						);
+					throw new Error("");
 					break;
 			}
 			

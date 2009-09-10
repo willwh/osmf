@@ -21,7 +21,6 @@
 *****************************************************/
 package org.openvideoplayer.netmocker
 {
-	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStreamPlayOptions;
@@ -172,7 +171,7 @@ package org.openvideoplayer.netmocker
 			//dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE));
 			switchCompleteTimer.removeEventListener(TimerEvent.TIMER, sendSwitchCompleteMsg);
 			switchCompleteTimer = null;
-			this.client.onPlayStatus({code:"NetStream.Play.TransitionComplete"});
+			this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE});
 			this.client.onPlayStatus({code:"Anything"});
 		}
 		

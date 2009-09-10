@@ -25,6 +25,7 @@ package org.openvideoplayer.net.dynamicstreaming
 	import flash.events.NetStatusEvent;
 	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
+	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.traits.SwitchableTrait;
 
 	/**
@@ -45,24 +46,12 @@ package org.openvideoplayer.net.dynamicstreaming
 			super();
 			_ns = ns;
 			_resource = res;
+			_newState = _oldState = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 			
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
 		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function get autoSwitch():Boolean
-		{
-			return !_ns.useManualSwitchMode;
-		}
-		
-		override public function set autoSwitch(value:Boolean):void
-		{
-			_ns.useManualSwitchMode = !value;	
-		}
-		
+			
 		/**
 		 * @inheritDoc
 		 */
@@ -74,16 +63,19 @@ package org.openvideoplayer.net.dynamicstreaming
 		/**
 		 * @inheritDoc
 		 */
+		override public function getBitrateForIndex(index:int):Number
+		{
+			return _resource.getItemAt(index).bitrate;
+		} 
+		
+		/**
+		 * @inheritDoc
+		 */
 		override public function get maxIndex():int
 		{
 			return _ns.maxIndex;
 		}
-		
-		override public function set maxIndex(value:int):void
-		{
-			_ns.maxIndex = value;
-		}
-		
+				
 		/**
 		 * @inheritDoc
 		 */		
@@ -95,9 +87,25 @@ package org.openvideoplayer.net.dynamicstreaming
 		/**
 		 * @inheritDoc
 		 */
-		override public function switchTo(index:int):void
+		override protected function processSwitchTo(value:int):void
 		{
-			_ns.switchTo(index);
+			_ns.switchTo(value);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override protected function processAutoSwitchChange(value:Boolean):void
+		{
+			_ns.useManualSwitchMode = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */ 
+		override protected function processMaxIndexChange(value:int):void
+		{
+			_ns.maxIndex = value;
 		}
 				
 		private function onNetStatus(event:NetStatusEvent):void
@@ -109,7 +117,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			
 			switch (event.info.code) 
 			{
-				case "NetStream.Play.Failed":
+				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 					updateSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED);
 					break;
 			}			
@@ -119,7 +127,21 @@ package org.openvideoplayer.net.dynamicstreaming
 		{
 			updateSwitchState(event.newState, event.detail);
 		}
-				
+		
+		/**
+		 * A handy utility method for classes extending this class. Keeps track of
+		 * the last state and dispatches a SwitchingChangeEvent containing the new state
+		 * and the old state.
+		 */
+		private function updateSwitchState(newState:int, detail:SwitchingDetail=null):void
+		{
+			_oldState = _newState;
+			_newState = newState;
+			dispatchEvent(new SwitchingChangeEvent(_newState, _oldState, detail));
+		}
+		
+		private var _newState:int;
+		private var _oldState:int;				
 		private var _ns:DynamicNetStream;
 		private var _resource:DynamicStreamingResource;		
 	}

@@ -83,6 +83,15 @@ package org.openvideoplayer.events
 		public static const VIEWABLE_CHANGE:String = "viewableChange";
 	
 		/**
+		 * Dispatched when a MediaPlayer's ability to switchbetween multiple bitrate
+		 * streams changes.
+		 * 
+		 * @eventType mediaPlayerCapabilityChangeEvent
+		 * @see flash.display.DisplayObject
+		 **/
+		public static const SWITCHABLE_CHANGE:String = "switchableChange";
+	
+		/**
 		 * Dispatched when a MediaPlayer's ability to expose the intrinsic dimensions of
 		 * its media has changed. 
 		 * 

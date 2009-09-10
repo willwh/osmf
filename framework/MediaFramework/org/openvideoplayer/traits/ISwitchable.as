@@ -27,10 +27,18 @@ package org.openvideoplayer.traits
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.openvideoplayer.events.SwitchingChangeEvent
+	 * @eventType org.openvideoplayer.events.SwitchingChangeEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchStateChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
+	
+	/**
+	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * 
+	 * @eventType org.openvideoplayer.events.TraitEvent.INDICES_CHANGE
+	 */
+	[Event(name="indicesChange",type="org.openvideoplayer.events.TraitEvent")]
 
+	
 	/**
 	 * ISwitchable defines the trait interface for media supporting dynamic stream switching.
 	 * 
@@ -60,6 +68,14 @@ package org.openvideoplayer.traits
 		 * The index of the item currently rendering. Uses a zero-based index.
 		 */
 		function get currentIndex():int;
+		
+		/**
+		 * Gets the associated bitrate, in kilobits per second for the specified index.
+		 * 
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than the highest index available.
+		 */ 
+		function getBitrateForIndex(index:int):Number
 		
 		/**
 		 * The maximum available index. This can be set at run-time to 

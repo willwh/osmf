@@ -44,6 +44,14 @@ package org.openvideoplayer.events
 		public static const DURATION_REACHED:String = "durationReached";
 		
 		/**
+		 * The Switching Indices change event is triggered when the indices on a ISwitchable trait change.
+		 * Conditions for change include removal of indices, addition of indices, or bitrate change of a given index.
+		 *  
+		 * @eventType INDICES_CHANGE 
+		 */ 
+		public static const INDICES_CHANGE:String = "indicesChange";
+		
+		/**
 		 * @inheritDoc 
 		 */		
 		public function TraitEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
