@@ -29,10 +29,14 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.openvideoplayer.logging.flex.FlexLogWrapper;
+			import org.openvideoplayer.logging.TraceLoggerFactory;
 			import mx.events.ListEvent;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.SliderEvent;
+			import mx.logging.targets.TraceTarget;
+			import mx.logging.LogEventLevel;
 
 			import flash.utils.getDefinitionByName;
 			import flash.net.getClassByAlias;
@@ -40,6 +44,8 @@
 			import org.openvideoplayer.events.*;
 			import org.openvideoplayer.image.*;
 			import org.openvideoplayer.loaders.*;
+			import org.openvideoplayer.logging.ILogger;
+			import org.openvideoplayer.logging.Log;
 			import org.openvideoplayer.media.*;
 			import org.openvideoplayer.model.*;
 			import org.openvideoplayer.net.*;
@@ -137,6 +143,26 @@
 				var v:SimpleVideoPluginInfo;
 				
 				initUI();
+				initLogging();
+			}
+
+			private function initLogging():void
+			{
+				if (traceLogger.selected)
+				{
+					Log.loggerFactory = new TraceLoggerFactory();
+				}
+				else
+				{
+					var flexLogWrapper:FlexLogWrapper = new FlexLogWrapper();
+					var traceTarget:TraceTarget = new TraceTarget();
+					traceTarget.level = LogEventLevel.DEBUG;
+					flexLogWrapper.addTarget(traceTarget);
+					Log.loggerFactory = flexLogWrapper;
+				}
+				
+				_logger = Log.getLogger("PluginSample");
+				_logger.debug("initLogging finished");
 			}
 
 			private function initUI():void
@@ -148,8 +174,21 @@
 				
 				resourceHandlerList.addEventListener(ListEvent.ITEM_CLICK, onItemClick);
 				update.addEventListener(MouseEvent.CLICK, onUpdateClicked);
+
+				traceLogger.addEventListener(MouseEvent.CLICK, onDefaultLoggerSelected);
+				flexLogger.addEventListener(MouseEvent.CLICK, onFlexLoggerSelected);
 			}
 			
+			private function onDefaultLoggerSelected(event:MouseEvent):void
+			{
+				initLogging();
+			}
+			
+			private function onFlexLoggerSelected(event:MouseEvent):void
+			{
+				initLogging();
+			}
+
 			private function refreshResourceHandlerList():void
 			{
 				var resourceHandlers:ArrayCollection = Model.getInstance().resourceHandlers;
@@ -236,7 +275,10 @@
 			
 			private function onPluginLoaded(event:PluginLoadEvent):void
 			{
-				trace("Plugin Loaded Successfully");
+				if (_logger != null && _logger.debugEnabled)
+				{
+					_logger.debug("Plugin Loaded Successfully");
+				}
 				pluginLoadState.text = "LOADED";
 				pluginLoadState.visible = true;
 				
@@ -246,13 +288,17 @@
 			
 			private function onPluginLoadFailed(event:PluginLoadEvent):void
 			{
-				trace("Plugin Loading Failed");
+				if (_logger != null && _logger.debugEnabled)
+				{
+					_logger.debug("Plugin Loading Failed");
+				}
 				pluginLoadState.text = "LOAD FAILED!";
 				pluginLoadState.visible = true;
 			}
 			
 			private var pluginElement:MediaElement;
 			private var loadable:ILoadable;
+			private var _logger:ILogger;
 		]]>
 	</mx:Script>
 
@@ -298,6 +344,13 @@
 				enabled="{wrapper.mediaPlayer.playable}"  />
 			
 		</mx:HBox>	
+		
+		<mx:Form>
+			<mx:HBox>
+				<mx:RadioButton groupName="logger" id="traceLogger" label="Trace Logger" selected="true"/>
+				<mx:RadioButton groupName="logger" id="flexLogger" label="Flex Logger"/>
+			</mx:HBox>
+		</mx:Form>
 		
 		<mx:Form>
 			<mx:Label 

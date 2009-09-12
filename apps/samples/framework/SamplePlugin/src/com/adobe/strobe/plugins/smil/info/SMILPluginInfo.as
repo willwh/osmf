@@ -24,6 +24,8 @@ package com.adobe.strobe.plugins.smil.info
 	import com.adobe.strobe.plugins.smil.loader.SMILLoader;
 	import com.adobe.strobe.plugins.smil.media.SMILElement;
 	
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 	import org.openvideoplayer.media.IMediaInfo;
 	import org.openvideoplayer.media.MediaInfo;
 	import org.openvideoplayer.plugin.IPluginInfo;
@@ -35,6 +37,7 @@ package com.adobe.strobe.plugins.smil.info
 		 */
 		public function SMILPluginInfo()
 		{
+			logger = Log.getLogger("com.adobe.strobe.plugins.smil.info.SMILPluginInfo");
 		}
 
 		/**
@@ -51,6 +54,11 @@ package com.adobe.strobe.plugins.smil.info
 		 */
 		public function getMediaInfoAt(index:int):IMediaInfo
 		{
+			if (logger != null && logger.debugEnabled)
+			{
+				logger.debug("MediaInfo with ID {0} has been created.", "com.adobe.smil.SMIL");
+			}
+			
 			var smilLoader:SMILLoader = new SMILLoader();
 			return new MediaInfo("com.adobe.smil.SMIL", smilLoader, SMILElement, new Array(smilLoader));
 		}
@@ -62,7 +70,16 @@ package com.adobe.strobe.plugins.smil.info
 		 */
 		public function isFrameworkVersionSupported(version:String):Boolean
 		{
+			if (logger != null && logger.debugEnabled)
+			{
+				logger.debug("OSMF version is: " + version);
+			}
+			
 			return true;
 		}
+		
+		// internal
+		
+		private var logger:ILogger;
 	}
 }
