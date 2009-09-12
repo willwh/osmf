@@ -36,6 +36,7 @@ package org.openvideoplayer.utils
 	import org.openvideoplayer.traits.PlayableTrait;
 	import org.openvideoplayer.traits.SeekableTrait;
 	import org.openvideoplayer.traits.SpatialTrait;
+	import org.openvideoplayer.traits.SwitchableTrait;
 	import org.openvideoplayer.traits.TemporalTrait;
 	import org.openvideoplayer.traits.ViewableTrait;
 	
@@ -73,6 +74,9 @@ package org.openvideoplayer.utils
 							break;
 						case MediaTraitType.SPATIAL:
 							trait = new SpatialTrait();
+							break;
+						case MediaTraitType.SWITCHABLE:
+							trait = new SwitchableTrait();
 							break;
 						case MediaTraitType.TEMPORAL:
 							trait = new TemporalTrait();

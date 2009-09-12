@@ -4,7 +4,8 @@ package org.openvideoplayer.composition
 	
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
-
+	
+	import org.openvideoplayer.events.SwitchingChangeEvent;
 	import org.openvideoplayer.events.TraitEvent;
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.traits.ISwitchable;
@@ -57,7 +58,6 @@ package org.openvideoplayer.composition
 			if(value != _autoSwitch)
 			{
 				_autoSwitch = value;
-				var switching:Boolean = false;
 				traitAggregator.forEachChildTrait(
 						function(mediaTrait:ISwitchable):void
 						{
@@ -96,7 +96,11 @@ package org.openvideoplayer.composition
 		 * @inheritDoc
 		 */ 
 		public function set maxIndex(value:int):void
-		{			
+		{		
+			if(value >= bitRates.length)
+			{
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			}	
 			_maxIndex = value;
 		}
 		
@@ -109,7 +113,7 @@ package org.openvideoplayer.composition
 			traitAggregator.forEachChildTrait(
 					function(mediaTrait:ISwitchable):void
 					{
-						switching = mediaTrait.autoSwitch || switching;
+						switching = mediaTrait.switchUnderway || switching;
 					}
 				,   MediaTraitType.SWITCHABLE
 				);
@@ -174,10 +178,22 @@ package org.openvideoplayer.composition
 		{			
 			var aggregatedBR:int = 0;
 			var childTrait:ISwitchable = ISwitchable(child);
+			if(traitAggregator.getNumTraits(MediaTraitType.SWITCHABLE) == 1)
+			{
+				_autoSwitch = childTrait.autoSwitch;				
+			}
+			else
+			{
+				childTrait.autoSwitch = _autoSwitch;
+			}
+						
 			mergeChildRates(childTrait);
-			childTrait.autoSwitch = _autoSwitch;
+			
 			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatch);	
-			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);				
+			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);
+			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);
+			_maxIndex = bitRates.length-1; 			
+			
 		}
 		
 		/**
@@ -187,7 +203,8 @@ package org.openvideoplayer.composition
 		{		
 			rebuildBitRateTable();
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatch);		
-			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);	
+			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);
+			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);	
 		}
 		
 		private function rebuildBitRateTable():void
@@ -206,29 +223,29 @@ package org.openvideoplayer.composition
 		
 		private function mergeChildRates(child:ISwitchable):void
 		{	
-			var aggregatedBR:int = 0;
+			var aggregatedIndex:int = 0;
 						
-			for (var childBR:int = 0; childBR < child.maxIndex; ++childBR)
+			for (var childBR:int = 0; childBR <= child.maxIndex; ++childBR)
 			{
 				var rate:Number = child.getBitrateForIndex(childBR);
 				
-				if (bitRates.length <= aggregatedBR) //Add it to the end
+				if (bitRates.length <= aggregatedIndex) //Add it to the end
 				{
 					bitRates.push(rate);
-					aggregatedBR++;					
+					aggregatedIndex++;					
 				} 
-				else if (bitRates[aggregatedBR] == rate)
+				else if (bitRates[aggregatedIndex] == rate)
 				{
 					continue;  //NO operation for rates that already are in the list. 
 				}			
-				else if (bitRates[aggregatedBR] < rate)
+				else if (bitRates[aggregatedIndex] < rate)
 				{
-				 	aggregatedBR++;			
+				 	aggregatedIndex++;			
 				 	childBR--;  //backup one, we need to keep going through the aggregatedBR's until we find a spot.	 	
 				}
 				else  //bitrate is smaller than the current bitrate.
 				{
-					bitRates.splice(aggregatedBR, 0, rate);
+					bitRates.splice(aggregatedIndex, 0, rate);
 				}
 			}	
 		}
@@ -236,8 +253,7 @@ package org.openvideoplayer.composition
 		private function recomputeIndicies(event:TraitEvent):void
 		{
 			var oldBitRate:Number = bitRates[currentIndex];
-			rebuildBitRateTable();
-			var newB:Number = bitRates[0];
+			rebuildBitRateTable();			
 			var newBIndex:Number = 0;
 			while(newBIndex < bitRates.length)
 			{
@@ -247,7 +263,8 @@ package org.openvideoplayer.composition
 				}	
 				newBIndex++;			
 			}
-			switchTo(newBIndex-1 < 0 ? 0 : newBIndex-1);			
+			switchTo(newBIndex-1 < 0 ? 0 : newBIndex-1);	
+			_maxIndex = bitRates.length-1; 			
 		}
 		
 		/**
@@ -258,12 +275,40 @@ package org.openvideoplayer.composition
 			trace(">>> CompositeSwitchable."+args);			
 		}
 		
-		protected function redispatch(event:Event):void
+		protected function childSwitchingChange(event:SwitchingChangeEvent):void
 		{
-			dispatchEvent(event.clone());
+			switch(event.newState)
+			{
+				case SwitchingChangeEvent.SWITCHSTATE_COMPLETE:
+					if (switchUnderway)
+					{
+						return; //NO-OP if we have pending switches.
+					}
+					_state = SwitchingChangeEvent.SWITCHSTATE_COMPLETE;
+					break;
+					
+				case SwitchingChangeEvent.SWITCHSTATE_REQUESTED:
+					if (_state == SwitchingChangeEvent.SWITCHSTATE_REQUESTED)
+					{
+						return; //NO-OP if we are already in this situation.
+					} 
+					_state = SwitchingChangeEvent.SWITCHSTATE_REQUESTED;
+					break;
+			}
+			_state = event.newState;	
+			dispatchEvent(new SwitchingChangeEvent(event.newState, event.oldState, event.detail));	
+							
+			//trace('newState:' + SwitchingChangeEvent(event).newState);
+			
+			trace('ParalllelSwitchable: ' + _state);		
 		}
 		
+		protected function redispatch(event:Event):void
+		{			
+			dispatchEvent(event.clone());		
+		}
 		
+		private var _state:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 		private var _autoSwitch:Boolean = false;
 		private var _maxIndex:int = int.MAX_VALUE;
 		private var _currentIndex:int = -1;

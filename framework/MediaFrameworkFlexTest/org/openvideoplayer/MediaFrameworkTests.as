@@ -30,7 +30,6 @@ package org.openvideoplayer
 	import org.openvideoplayer.events.*;
 	import org.openvideoplayer.image.*;
 	import org.openvideoplayer.layout.*;
-	import org.openvideoplayer.regions.*;
 	import org.openvideoplayer.loaders.*;
 	import org.openvideoplayer.media.*;
 	import org.openvideoplayer.metadata.*;
@@ -38,6 +37,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.net.dynamicstreaming.*;
 	import org.openvideoplayer.plugin.*;
 	import org.openvideoplayer.proxies.*;
+	import org.openvideoplayer.regions.*;
 	import org.openvideoplayer.swf.*;
 	import org.openvideoplayer.traits.*;
 	import org.openvideoplayer.utils.*;
@@ -173,6 +173,8 @@ package org.openvideoplayer
 			addTestSuite(TestNetStreamSwitchableTrait);
 			addTestSuite(TestDynamicStreamingNetLoader);
 			addTestSuite(TestDynamicNetStream);
+			addTestSuite(TestParallelSwitchableTrait);
+			addTestSuite(TestSerialSwitchableTrait);
 		}
 	}
 }

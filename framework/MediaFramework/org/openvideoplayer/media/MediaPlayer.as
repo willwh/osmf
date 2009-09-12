@@ -207,7 +207,7 @@ package org.openvideoplayer.media
 	[Event(name="seekableChange",type="org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>seekable</code> property has changed.
+	 * Dispatched when the <code>switchable</code> property has changed.
 	 * 
 	 * @eventType org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE
 	 */

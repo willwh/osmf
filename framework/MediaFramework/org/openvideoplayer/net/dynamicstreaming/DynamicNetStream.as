@@ -69,7 +69,6 @@ package org.openvideoplayer.net.dynamicstreaming
 			
 			_startingBuffer = BUFFER_START;
 			_metricsProvider = new MetricsProvider(this);
-			
 			_checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			_checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
 									
@@ -83,6 +82,19 @@ package org.openvideoplayer.net.dynamicstreaming
 			_dsiLockLevel = int.MAX_VALUE;
 			
 			_failedDSI = new Dictionary();		
+		}
+		
+		/**
+		 * The stream resources to use for this netstream.
+		 */ 
+		public function set resource(value:DynamicStreamingResource):void
+		{
+			_dsResource = value;			
+		}
+	
+		public function get resource():DynamicStreamingResource
+		{
+			return _dsResource;			
 		}
 		
 		/**
@@ -110,6 +122,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			else
 			{
 				addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+				NetClient(this.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 				
 				initDSIFailedCounts();
 				
@@ -121,9 +134,7 @@ package org.openvideoplayer.net.dynamicstreaming
 				_metricsProvider.optimizeForLivebandwidthEstimate = _isLive;
 				
 				debug("play() - max buffer="+_maxBufferLength+", isLive="+_isLive);
-				
-				NetClient(this.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
-	
+					
 				_metricsProvider.dynamicStreamingResource = _dsResource;
 				
 				// Start playing the first stream			
@@ -316,11 +327,12 @@ package org.openvideoplayer.net.dynamicstreaming
 			}
 
 			if (firstPlay) 
-			{
+			{				
 				_switchUnderway  = false;
 				_renderingIndex = targetIndex;
 				_streamIndex = targetIndex;
 				_pendingTransitionsArray.push(targetIndex);
+				trace('FIRSTPLAY');
 				this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE})
 			} 
 		}
@@ -425,9 +437,10 @@ package org.openvideoplayer.net.dynamicstreaming
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					_renderingIndex = _pendingTransitionsArray[0];
+					trace("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.getItemAt(_renderingIndex).bitrate) + " kbps");
 					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.getItemAt(_renderingIndex).bitrate) + " kbps");
 					_pendingTransitionsArray.shift();
-					dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE));
+					dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, SwitchingChangeEvent.SWITCHSTATE_REQUESTED));
 					_detail = null;
 					break;
 			}
@@ -645,6 +658,6 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * Set this to <code>true</code> to see run-time debug
 		 * messages (traces).
 		 */
-		private const DEBUG:Boolean = true;
+		private const DEBUG:Boolean = false;
 	}
 }

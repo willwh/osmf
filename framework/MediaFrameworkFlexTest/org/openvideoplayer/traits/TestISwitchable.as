@@ -41,9 +41,8 @@ package org.openvideoplayer.traits
 		override public function tearDown():void
 		{
 			super.tearDown();
-			switchable = null;
-			_eventDispatcher = null;
-			
+			//switchable = null;
+			//_eventDispatcher = null;						
 		}
 		
 		public function testSwitchUp():void
@@ -54,6 +53,7 @@ package org.openvideoplayer.traits
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 			
 			switchable.autoSwitch = false;
+			switchable.switchTo(0);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 			
@@ -67,8 +67,9 @@ package org.openvideoplayer.traits
 			
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable.autoSwitch = false;
-			switchable.switchTo(switchable.maxIndex);
+			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
+			switchable.switchTo(switchable.maxIndex);
 			switchable.switchTo(0);
 		}
 		
@@ -79,8 +80,9 @@ package org.openvideoplayer.traits
 			
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable.autoSwitch = false;
-			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
-			switchable.switchTo(switchable.maxIndex);			
+			
+			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));			
+			switchable.switchTo(switchable.maxIndex);		
 		}
 		
 		public function testBadMaxIndex():void

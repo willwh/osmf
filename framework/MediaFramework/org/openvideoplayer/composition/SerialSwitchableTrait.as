@@ -122,13 +122,13 @@ package org.openvideoplayer.composition
 					{
 						if(currentChild.getBitrateForIndex(itr) == _lastBitrate ||
 							itr == currentChild.maxIndex)
-						{
+						{						
 							currentChild.switchTo(itr);	
 							break;	
 						}
-						else if (currentChild.getBitrateForIndex(itr) >_lastBitrate)							
+						else if (currentChild.getBitrateForIndex(itr) > _lastBitrate)							
 						{						
-							currentChild.switchTo(itr-1);	
+							currentChild.switchTo(Math.max(itr-1, 0));	
 							break;	
 						}				 
 					}					
@@ -136,6 +136,7 @@ package org.openvideoplayer.composition
 			}					
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);		
+			
 		}
 		
 		/**
@@ -145,7 +146,7 @@ package org.openvideoplayer.composition
 		{
 			_autoSwitch = currentChild.autoSwitch;
 			_lastBitrate = currentChild.getBitrateForIndex(currentChild.currentIndex);
-			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
+			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);	
 			currentChild = null;
 		}	

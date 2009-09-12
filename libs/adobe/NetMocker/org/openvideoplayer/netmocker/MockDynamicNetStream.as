@@ -28,6 +28,7 @@ package org.openvideoplayer.netmocker
 	
 	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicNetStream;
+	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
 
 	public class MockDynamicNetStream extends DynamicNetStream implements IMockNetStream
 	{
@@ -129,7 +130,7 @@ package org.openvideoplayer.netmocker
 			{
 				if (switchCompleteTimer == null)
 				{
-					switchCompleteTimer = new Timer(3000, 1);
+					switchCompleteTimer = new Timer(200, 1);
 					switchCompleteTimer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSwitchCompleteMsg);
 					switchCompleteTimer.start();
 				}
@@ -167,6 +168,7 @@ package org.openvideoplayer.netmocker
 		
 		private function sendSwitchCompleteMsg(e:TimerEvent):void
 		{
+			trace('sendSwitchCompleteMsg');
 			switchUnderway = false;
 			//dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE));
 			switchCompleteTimer.removeEventListener(TimerEvent.TIMER, sendSwitchCompleteMsg);

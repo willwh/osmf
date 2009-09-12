@@ -87,6 +87,7 @@ package org.openvideoplayer.net.dynamicstreaming
 						tempTrait.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
 									
 						var netLoadedContext:NetLoadedContext = tempTrait.loadedContext as NetLoadedContext;
+						DynamicNetStream(netLoadedContext.stream).resource = dsResource;
 																					
 						loadable.loadedContext = new DynamicStreamingNetLoadedContext(netLoadedContext.connection, netLoadedContext.stream,
 																						netLoadedContext.shareable, netLoadedContext.netConnectionFactory,
@@ -143,7 +144,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * Overridden to allow the creation of a DynamicNetStream object.
 		 */
 		override protected function createNetStream(connection:NetConnection,loadable:ILoadable):NetStream
-		{
+		{			
 			return new DynamicNetStream(connection);
 		}
 	}

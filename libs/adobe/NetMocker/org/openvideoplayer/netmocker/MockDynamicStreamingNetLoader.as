@@ -24,10 +24,10 @@ package org.openvideoplayer.netmocker
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.openvideoplayer.net.NetConnectionFactory;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.openvideoplayer.traits.ILoadable;
 	import org.openvideoplayer.net.NetClient;
+	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
+	import org.openvideoplayer.traits.ILoadable;
 	
 
 	public class MockDynamicStreamingNetLoader extends DynamicStreamingNetLoader implements IMockNetLoader
@@ -108,8 +108,8 @@ package org.openvideoplayer.netmocker
 	     **/
 	    override protected function createNetStream(connection:NetConnection, loadable:ILoadable):NetStream
 	    {
-			var mockNetStream:MockDynamicNetStream = new MockDynamicNetStream(connection);
-			mockNetStream.client = new NetClient();
+			var mockNetStream:MockDynamicNetStream = new MockDynamicNetStream(connection);			
+			mockNetStream.client = new NetClient();			
 			mockNetStream.expectedDuration = _netStreamExpectedDuration;
 			mockNetStream.expectedWidth = _netStreamExpectedWidth;
 			mockNetStream.expectedHeight = _netStreamExpectedHeight;

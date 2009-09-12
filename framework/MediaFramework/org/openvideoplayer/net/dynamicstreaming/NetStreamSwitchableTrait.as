@@ -46,12 +46,12 @@ package org.openvideoplayer.net.dynamicstreaming
 			super();	
 			
 			_autoSwitch = !ns.useManualSwitchMode;	
-			_maxIndex = ns.maxIndex;
+			_maxIndex = res.numItems-1;
 			_currentIndex = ns.renderingIndex;
 				
 			_ns = ns;
 			_resource = res;
-			_newState = _oldState = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
+			_state = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 						
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
@@ -115,14 +115,14 @@ package org.openvideoplayer.net.dynamicstreaming
 			switch (event.info.code) 
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
-					updateSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED);
+					updateSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED, _state);
 					break;
 			}			
 		}
 		
 		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
 		{
-			updateSwitchState(event.newState, event.detail);
+			updateSwitchState(event.newState, event.oldState, event.detail);
 		}
 		
 		/**
@@ -130,15 +130,16 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * the last state and dispatches a SwitchingChangeEvent containing the new state
 		 * and the old state.
 		 */
-		private function updateSwitchState(newState:int, detail:SwitchingDetail=null):void
+		private function updateSwitchState(newState:int, oldState:int,  detail:SwitchingDetail=null):void
 		{
-			_oldState = _newState;
-			_newState = newState;
-			dispatchEvent(new SwitchingChangeEvent(_newState, _oldState, detail));
+			//_oldState = oldState;
+			//_newState = newState;
+			trace('NewStreamSwitchable newState:' + newState + ' oldState:' + oldState);
+			_state = newState;
+			dispatchEvent(new SwitchingChangeEvent(newState, oldState, detail));
 		}
 		
-		private var _newState:int;
-		private var _oldState:int;				
+		private var _state:int;			
 		private var _ns:DynamicNetStream;
 		private var _resource:DynamicStreamingResource;		
 	}

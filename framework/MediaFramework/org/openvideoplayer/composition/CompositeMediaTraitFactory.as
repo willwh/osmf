@@ -103,7 +103,8 @@ package org.openvideoplayer.composition
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelSwitchableTrait(traitAggregator)
-							: new SerialSwitchableTrait(traitAggregator);					
+							: new SerialSwitchableTrait(traitAggregator);		
+					break;			
 				default:
 					throw new Error("");
 					break;
