@@ -11,7 +11,7 @@
       
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
-         <path-element>src</path-element>
+         <path-element>.</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
@@ -50,8 +50,6 @@
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
          <path-element>../../../../build/lib/MediaFramework.swc</path-element>
-         <path-element>../../../../build/samples/framework/MediaPlayer/MediaPlayer.swc</path-element>
-         <path-element>../../../../build/samples/framework/SampleLoggers/SampleLoggers.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
       </library-path>
