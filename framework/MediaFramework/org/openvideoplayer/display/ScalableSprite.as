@@ -118,8 +118,8 @@ package org.openvideoplayer.display
 			if (_view)
 			{
 				addChild(_view);				
-				instrinsicWidth = _view.width / _view.scaleX;
-				instrinsicHeight = _view.height / _view.scaleY;				
+				intrinsicWidth = _view.width / _view.scaleX;
+				intrinsicHeight = _view.height / _view.scaleY;				
 			}
 			updateView(availableWidth, availableHeight);			
 		}
@@ -137,8 +137,8 @@ package org.openvideoplayer.display
 		 */
 		public function setIntrinsicSize(width:Number, height:Number):void
 		{
-			instrinsicWidth = width;
-			instrinsicHeight = height;
+			intrinsicWidth = width;
+			intrinsicHeight = height;
 			updateView(availableWidth, availableHeight);
 		}
 						
@@ -146,7 +146,7 @@ package org.openvideoplayer.display
 		{			
 			if (_view && !isNaN(availableWidth) && !isNaN(availableHeight))						
 			{
-				var size:Point = _scaleMode.getScaledSize(width, height, instrinsicWidth, instrinsicHeight);		
+				var size:Point = _scaleMode.getScaledSize(width, height, intrinsicWidth, intrinsicHeight);		
 							
 				_view.width = size.x;
 				_view.height = size.y;				 
@@ -158,8 +158,8 @@ package org.openvideoplayer.display
 		private var _view:DisplayObject;
 		private var availableWidth:Number = NaN;
 		private var availableHeight:Number = NaN;
-		private var instrinsicWidth:Number = NaN;
-		private var instrinsicHeight:Number = NaN;				
+		private var intrinsicWidth:Number = NaN;
+		private var intrinsicHeight:Number = NaN;				
 		private var _scaleMode:ScaleMode;		
 		
 		
