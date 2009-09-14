@@ -618,16 +618,31 @@ package org.openvideoplayer.composition
 			assertTrue(playable3.playing == false);
 			assertTrue(playingChangedEventCount == 1);
 			
-			// When the current child stops playing, the next child doesn't
-			// automatically play (that's based on the temporal trait reaching
-			// its duration).
+			// When the current child stops playing, the next child should
+			// automatically play.
 			playable1.resetPlaying();
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == true);
+			assertTrue(playable3.playing == false);
+			assertTrue(playingChangedEventCount == 3);
+			
+			playable2.resetPlaying();
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == true);
+			assertTrue(playingChangedEventCount == 5);
+
+			playable3.resetPlaying();
 			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			assertTrue(playable.playing == false);
 			assertTrue(playable1.playing == false);
 			assertTrue(playable2.playing == false);
 			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 2);
+			assertTrue(playingChangedEventCount == 6);
 			
 			// Playing a non-current child when the composite trait is not
 			// playing should have no effect on the composite trait.
@@ -636,26 +651,211 @@ package org.openvideoplayer.composition
 			assertTrue(playable1.playing == false);
 			assertTrue(playable2.playing == true);
 			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 2);
+			assertTrue(playingChangedEventCount == 6);
 
 			playable2.resetPlaying();
 			
 			// But playing the current child should.
-			playable1.play();
+			playable3.play();
 			assertTrue(playable.playing == true);
-			assertTrue(playable1.playing == true);
+			assertTrue(playable1.playing == false);
 			assertTrue(playable2.playing == false);
-			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 3);
+			assertTrue(playable3.playing == true);
+			assertTrue(playingChangedEventCount == 7);
 
 			// Playing a non-current child when the composite trait is
 			// playing should also have no effect on the composite trait.
 			playable2.play();
 			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == true);
+			assertTrue(playable3.playing == true);
+			assertTrue(playingChangedEventCount == 7);
+		}
+		
+		public function testGetTraitPlayableInParallelWithPlayingPlayable():void
+		{
+			// We'll place our SerialElement in parallel with another element
+			// which is playing.
+			var parallel:ParallelElement = new ParallelElement();
+			var mediaElement0:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			parallel.addChild(mediaElement0);
+			var playable0:PlayableTrait = mediaElement0.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+			playable0.play();
+			assertTrue(playable0.playing);
+			
+			var serial:SerialElement = createSerialElement();
+			parallel.addChild(serial);
+			
+			// No trait to begin with.
+			assertTrue(serial.getTrait(MediaTraitType.PLAYABLE) == null);
+			
+			// Create a few media elements with the IPlayable trait.
+			//
+
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE]);
+			var playable1:PlayableTrait = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE]);
+			var playable2:PlayableTrait = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+
+			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE]);
+			var playable3:PlayableTrait = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+			
+			// Adding a playing child should cause the composite trait to be
+			// "playing".
+			playable1.play();
+			serial.addChild(mediaElement1);
+			var playable:IPlayable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable != null);
+			assertTrue(playable.playing == true);
+			
+			// Removing the last child should cause the composite trait to
+			// disappear.
+			serial.removeChild(mediaElement1);
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable == null);
+			
+			playable1.resetPlaying();
+
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			serial.addChild(mediaElement3);
+			
+			// The first child should be playing by virtue of being in parallel
+			// with a playing element.
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable != null);
+			assertTrue(playable.playing == true);
 			assertTrue(playable1.playing == true);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == false);
+			
+			// When the current child stops playing, the next child should
+			// automatically play.
+			playable1.resetPlaying();
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
 			assertTrue(playable2.playing == true);
 			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 3);
+			
+			var playable3HasPlayed:Boolean = false;
+			
+			function onPlayable3PlayingChange(event:PlayingChangeEvent):void
+			{
+				playable3.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayable3PlayingChange);
+				if (event.playing)
+				{
+					playable3.resetPlaying();
+					playable3HasPlayed = true;
+				}
+			}
+			
+			// If the playing of a child is synchronous (i.e. it resets its
+			// own playing state within its play call), then we should
+			// expect the following child to play.
+			playable3.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayable3PlayingChange);
+			playable2.resetPlaying();
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == false);
+			
+			assertTrue(playable3HasPlayed == true);
+			
+			// Playing a non-current child when the composite trait is not
+			// playing should have no effect on the composite trait.
+			playable2.play();
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == true);
+			assertTrue(playable3.playing == false);
+
+			playable2.resetPlaying();
+			
+			// But playing the current child should.
+			playable3.play();
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == true);
+
+			// Playing a non-current child when the composite trait is
+			// playing should also have no effect on the composite trait.
+			playable2.play();
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == true);
+			assertTrue(playable3.playing == true);
+		}
+		
+		public function testGetTraitPlayableWithTemporal():void
+		{
+			var serial:SerialElement = createSerialElement();
+			
+			// No trait to begin with.
+			assertTrue(serial.getTrait(MediaTraitType.PLAYABLE) == null);
+			
+			// Create a few media elements with the IPlayable trait.
+			//
+
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			var playable1:PlayableTrait = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			var playable2:PlayableTrait = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+
+			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			var playable3:PlayableTrait = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
+			
+			// Adding a playing child should cause the composite trait to be
+			// "playing".
+			playable1.play();
+			serial.addChild(mediaElement1);
+			var playable:IPlayable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable != null);
+			assertTrue(playable.playing == true);
+			
+			// Removing the last child should cause the composite trait to
+			// disappear.
+			serial.removeChild(mediaElement1);
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable == null);
+			
+			playable1.resetPlaying();
+
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			serial.addChild(mediaElement3);
+			
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable != null);
+			assertTrue(playable.playing == false);
+			
+			playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChanged);
+			
+			// Playing the composite trait should cause the current child to
+			// play (and dispatch an event).
+			playable.play();
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == true);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == false);
+			assertTrue(playingChangedEventCount == 1);
+			
+			// When the current child stops playing, the next child does not
+			// automatically play.  When the temporal trait is present, the
+			// durationReached event is what's used to trigger playback of
+			// the next child.
+			playable1.resetPlaying();
+			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+			assertTrue(playable3.playing == false);
+			assertTrue(playingChangedEventCount == 2);
 		}
 		
 		public function testGetTraitPlayableWithLoadable():void
@@ -900,6 +1100,62 @@ package org.openvideoplayer.composition
 			// No trait to begin with.
 			assertTrue(serial.getTrait(MediaTraitType.PAUSABLE) == null);
 			
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PAUSABLE, MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			var pausable1:IPausable = mediaElement1.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+			var playable1:IPlayable = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PAUSABLE, MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
+			var pausable2:IPausable = mediaElement2.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+			var playable2:IPlayable = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			pausable2.pause();
+			
+			// Add the first child. This should cause its properties to 
+			// propagate to the composition.
+			serial.addChild(mediaElement1);
+			var pausable:IPausable = serial.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+			var playable:IPlayable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(pausable.paused == false);
+			
+			// Add the second child.
+			serial.addChild(mediaElement2);
+
+			// The paused state of the second child should not affect the paused state of the composition.
+			assertTrue(pausable.paused == false);
+			
+			// Pausing the composite trait before it's playing should have no effect.
+			pausable.pause();
+			assertTrue(pausable.paused == false);
+			assertTrue(pausable1.paused == false);
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+			
+			playable.play();
+			assertTrue(pausable.paused == false);
+			assertTrue(pausable1.paused == false);
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == true);
+			assertTrue(playable2.playing == false);
+   
+			// Pause the composite trait and then check the state of the composition and the current child
+			pausable1.pause();
+			assertTrue(pausable.paused == true);
+			assertTrue(pausable1.paused == true);
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
+		}
+
+		public function testGetTraitPausableWithoutTemporal():void
+		{
+			var serial:SerialElement = createSerialElement();
+			
+			// No trait to begin with.
+			assertTrue(serial.getTrait(MediaTraitType.PAUSABLE) == null);
+			
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PAUSABLE, MediaTraitType.PLAYABLE]);
 			var pausable1:IPausable = mediaElement1.getTrait(MediaTraitType.PAUSABLE) as IPausable;
 			var playable1:IPlayable = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
@@ -925,18 +1181,42 @@ package org.openvideoplayer.composition
 			// Pausing the composite trait before it's playing should have no effect.
 			pausable.pause();
 			assertTrue(pausable.paused == false);
-			assertTrue(pausable.paused == pausable1.paused);
+			assertTrue(pausable1.paused == false);
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
 			
 			playable.play();
 			assertTrue(pausable.paused == false);
-			assertTrue(pausable.paused == pausable1.paused);
+			assertTrue(pausable1.paused == false);
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == true);
+			assertTrue(playable2.playing == false);
    
-			// Pause the composite trait and then check the state of the composition and the current child
+			// When we pause a non-temporal element, this is equivalent to saying
+			// that it's done (otherwise, how would we signal completion?).  So
+			// we'd expect that the next child would begin playback.  (Yes, the
+			// case of a non-temporal pausable element is a bit nonsensical, but
+			// we want to capture the behavior here.)
 			pausable1.pause();
+			assertTrue(pausable.paused == false);
 			assertTrue(pausable1.paused == true);
-			assertTrue(pausable.paused == true);		
+			assertTrue(pausable2.paused == false);
+			assertTrue(playable.playing == true);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == true);
+			
+			pausable2.pause();
+			assertTrue(pausable.paused == true);
+			assertTrue(pausable1.paused == true);
+			assertTrue(pausable2.paused == true);
+			assertTrue(playable.playing == false);
+			assertTrue(playable1.playing == false);
+			assertTrue(playable2.playing == false);
 		}
-
+		
 		public function testGetTraitBufferable():void
 		{
 			runBufferablePropertiesTests();

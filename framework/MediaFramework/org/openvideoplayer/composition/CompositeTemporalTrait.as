@@ -165,54 +165,16 @@ package org.openvideoplayer.composition
 					var playable:IPlayable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 					if (playable)
 					{
-						// Make a list of all children that follow the current
-						// child.
-						var nextChildren:Array = [];
-						var reachedCurrentChild:Boolean = false;
-						for (var i:int = 0; i < traitAggregator.numChildren; i++)
-						{
-							var child:MediaElement = traitAggregator.getChildAt(i);
-							var childTemporal:ITemporal = child.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-							if (childTemporal == temporal)
-							{
-								reachedCurrentChild = true;
-							}
-							else if (reachedCurrentChild)
-							{
-								nextChildren.push(child);
-							}
-						}
-						
-						// Use a TraitLoader to find the next child that's
-						// playable, loading along the way if necessary.
-						var traitLoader:TraitLoader = new TraitLoader();
-						traitLoader.addEventListener(TraitLoaderEvent.TRAIT_FOUND, onTraitFound);
-						traitLoader.findOrLoadMediaElementWithTrait(nextChildren, MediaTraitType.PLAYABLE);
-						
-						function onTraitFound(event:TraitLoaderEvent):void
-						{
-							traitLoader.removeEventListener(TraitLoaderEvent.TRAIT_FOUND, onTraitFound);
-							
-							// If we do have a next playable child, then we play it.
-							// Otherwise we're done playing.
-							if (event.mediaElement)
-							{
-								var traitOfNextPlayableChild:IPlayable = event.mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-								traitOfNextPlayableChild.play();
-
-								traitAggregator.listenedChild = event.mediaElement;
-							}
-							else
-							{
-								// Note that we don't check whether to dispatch the 
-								// event until the children are loaded -- otherwise
-								// we'd almost certainly dispatch it when it
-								// shouldn't be dispatched since subsequent children
-								// are likely to lack the temporal trait until
-								// they're loaded.
-								checkDispatchDurationReachedEvent();
-							}
-						}
+						// Note that we don't check whether to dispatch the 
+						// durationReached event until we determine that
+						// there's no more playable children -- otherwise we'd
+						// almost certainly dispatch it when it shouldn't be
+						// dispatched since subsequent children are likely to
+						// lack the temporal trait until they're loaded.
+						SerialElementTransitionManager.playNextPlayableChild
+							( traitAggregator
+							, checkDispatchDurationReachedEvent
+							);
 					}
 					else
 					{

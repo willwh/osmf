@@ -172,6 +172,22 @@ package org.openvideoplayer.composition
 			{
 				// The composition should reflect what its children do.
 				setPlaying(playable.playing);
+				
+				// Typically, the CompositeTemporalTrait will handle
+				// transitioning from one child to the next based on the
+				// receipt of the durationReached event.  However, if the
+				// current child isn't temporal, then it obviously can't
+				// do so.  So we check here for that case.
+				if (playable.playing == false &&
+					traitAggregator.listenedChild.hasTrait(MediaTraitType.TEMPORAL) == false)
+				{
+					// If the current child has another sibling ahead of it,
+					// then the next playable sibling should be played.
+					SerialElementTransitionManager.playNextPlayableChild
+						( traitAggregator
+						, null
+						);
+				}
 			}
 		}
 		
