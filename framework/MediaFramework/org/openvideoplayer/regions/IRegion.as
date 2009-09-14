@@ -33,17 +33,18 @@ package org.openvideoplayer.regions
 		 * Adds a MediaElement instance to the region.
 		 * 
 		 * @param element The MediaElementInstance to add to the region.
+		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
 		 * or already a child of the region.
 		 */		
-		function addChildElement(element:MediaElement):void;
+		function addChildElement(element:MediaElement):MediaElement;
 		
 		
 		/**
 		 * Removes a MediaElement instance from the region.
 		 * 
 		 * @param element The element to remove from the region.
-		 * @return The removed MediaElement instance.
+		 * @returns The removed MediaElement instance.
 		 * @throws IllegalOperationError if the specified element isn't
 		 * a child element, or is null.
 		 */

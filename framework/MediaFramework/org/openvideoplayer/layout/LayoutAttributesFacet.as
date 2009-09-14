@@ -73,8 +73,8 @@ package org.openvideoplayer.layout
 		public function LayoutAttributesFacet()
 		{
 			_registrationPoint = RegistrationPoint.TOP_LEFT;
+			_alignment = RegistrationPoint.TOP_LEFT;
 			_scaleMode = null;
-			_alignment = RegistrationPoint.CENTER;
 		}
 		
 		// IFacet

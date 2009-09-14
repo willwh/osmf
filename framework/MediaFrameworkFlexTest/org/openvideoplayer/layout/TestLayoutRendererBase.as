@@ -22,18 +22,50 @@
 package org.openvideoplayer.layout
 {
 	import flexunit.framework.TestCase;
-	
-	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	public class TestLayoutRendererBase extends TestCase
 	{
 		public function testBaseLayoutRenderer():void
 		{
-			// Since the base-class holds a number of functions
-			// that must be overriden, we can't test it stand-
-			// alone (we cover a lot with TestDefaultLayout, though):
 			var renderer:LayoutRendererBase = new LayoutRendererBase();
 			assertNotNull(renderer);
+			
+			var c:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			
+			var l1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			l1.setIntrinsicDimensions(50,200);
+			
+			var l2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			l2.setIntrinsicDimensions(100,150);
+			
+			renderer.context = c;
+			c.layoutRenderer = renderer;
+			
+			renderer.addTarget(l1);
+			renderer.addTarget(l2);
+			
+			renderer.validateNow();
+			
+			assertEquals(50, l1.calculatedWidth);
+			assertEquals(200, l1.calculatedHeight);
+			
+			assertEquals(100, l2.calculatedWidth);
+			assertEquals(150, l2.calculatedHeight);
+			
+			assertEquals(50, l1.projectedWidth);
+			assertEquals(200, l1.projectedHeight);
+			
+			assertEquals(100, l2.projectedWidth);
+			assertEquals(150, l2.projectedHeight); 
+			
+			// Top level container does not have projected dimensions (for
+			// there's no-one rendering it:)
+			assertEquals(NaN, c.projectedWidth);
+			assertEquals(NaN, c.projectedHeight);
+			
+			// Top level container should have aggregate calculated dimensions:
+			assertEquals(100, c.calculatedWidth);
+			assertEquals(200, c.calculatedHeight);
 		}
 		
 	}

@@ -524,7 +524,7 @@ package org.openvideoplayer.examples
 			
 			var absoluteLayout:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
 			absoluteLayout.width = 640
-			absoluteLayout.height = 500;
+			absoluteLayout.height = 358;
 			
 			parent.metadata.addFacet(absoluteLayout);
 		}

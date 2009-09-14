@@ -22,6 +22,7 @@
 package org.openvideoplayer.layout
 {
 	import flash.events.IEventDispatcher;
+	import flash.geom.Rectangle;
 	
 	/**
 	 * ILayoutRenderer represents the interface within the OSMF for objects that
@@ -30,6 +31,12 @@ package org.openvideoplayer.layout
 	 */	
 	public interface ILayoutRenderer extends IEventDispatcher
 	{
+		/**
+		 * Defines the renderer that this renderer is a child of.
+		 */		
+		function set parent(value:ILayoutRenderer):void;
+		function get parent():ILayoutRenderer;
+		
 		/**
 		 * Defines the context against which the renderer will calculate the size
 		 * and position values of its targets. The renderer additionally manages
@@ -49,8 +56,9 @@ package org.openvideoplayer.layout
 		 * @param target The target to add.
 		 * @throws IllegalOperationError when the specified target is null, or 
 		 * already a target of the renderer.
+		 * @returns The added target.
 		 */		
-		function addTarget(target:ILayoutTarget):void;
+		function addTarget(target:ILayoutTarget):ILayoutTarget;
 		
 		/**
 		 * Method for removing a target from the layout render's list of objects
@@ -59,8 +67,9 @@ package org.openvideoplayer.layout
 		 * @param target The target to remove.
 		 * @throws IllegalOperationErrror when the specified target is null, or
 		 * not a target of the renderer.
+		 * @returns The removed target.
 		 */		
-		function removeTarget(target:ILayoutTarget):void;
+		function removeTarget(target:ILayoutTarget):ILayoutTarget;
 		
 		/**
 		 * Method for querying if a layout target is currently a target of this
@@ -84,5 +93,8 @@ package org.openvideoplayer.layout
 		 * since the last rendering pass. 
 		 */		
 		function validateNow():void;
+		
+		function updateCalculatedBounds():Rectangle;
+		function updateLayout():void;
 	}
 }

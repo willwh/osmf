@@ -24,11 +24,9 @@ package org.openvideoplayer.layout
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
 	import org.openvideoplayer.metadata.Metadata;
-	import org.openvideoplayer.metadata.MetadataNamespaces;
 	import org.openvideoplayer.metadata.MetadataUtils;
 
 	/**
@@ -52,92 +50,6 @@ package org.openvideoplayer.layout
 		public function LayoutContextSprite(metadata:Metadata=null)
 		{
 			_metadata = metadata || new Metadata();
-			
-			MetadataUtils.watchFacet
-				( _metadata
-				, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
-				, absoluteLayoutParametersChangeCallback
-				);
-				
-			var absolute:AbsoluteLayoutFacet
-				= _metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
-				as AbsoluteLayoutFacet;
-				
-			if (absolute)
-			{
-				_intrinsicWidth = absoluteWidth = absolute.width;
-				_intrinsicHeight = absoluteHeight = absolute.height;
-			}
-		}
-		
-		// ILayoutContext
-		//
-		
-		/**
-		 * A reference to this instance.
-		 * 
-		 * @inheritDoc
-		 */
-		public function get container():DisplayObjectContainer
-		{
-			return this;
-		}
-		
-		/**
-		 * Returns 0, for this context has no children other than the ones placed on
-		 * it by the layout renderer.
-		 * 
-		 * @inheritDoc
-		 */		
-		public function get firstChildIndex():uint
-		{
-			return 0;
-		}
-		
-		public function updateIntrinsicDimensions():void
-		{
-			// Reset scaling, and remove sizing pixel:
-			scaleX = 1;
-			scaleY = 1;
-			graphics.clear();
-			
-			var bounds:Rectangle = getBounds(this);
-			var newIntrinsicWidth:Number
-				= isNaN(absoluteWidth)
-					? (bounds.width || NaN)
-					: absoluteWidth;
-					
-			var newIntrinsicHeight:Number
-				= isNaN(absoluteHeight)
-					? (bounds.height || NaN)
-					: absoluteHeight;
-					
-			if 	(	(_intrinsicWidth != newIntrinsicWidth)
-				||	(_intrinsicHeight != newIntrinsicHeight)  
-				)
-			{
-				var event:DimensionChangeEvent
-					= new DimensionChangeEvent
-						( _intrinsicWidth, _intrinsicHeight
-						, newIntrinsicWidth, newIntrinsicHeight
-						);
-				
-				_intrinsicWidth = newIntrinsicWidth;
-				_intrinsicHeight = newIntrinsicHeight;
-				
-				dispatchEvent(event);	
-			}
-			
-			if (intrinsicWidth && intrinsicHeight)
-			{
-				// Draw a placeholder pixel to make our size 'real' (for we
-				// may be set a certain size, we don't really have to be
-				// that size. The pixel is invisible (0% alpha):
-				
-				graphics.lineStyle(0,0,0);
-				graphics.moveTo(intrinsicWidth-1,intrinsicHeight-1);
-				graphics.lineTo(intrinsicWidth,intrinsicHeight);
-			}
 		}
 		
 		// ILayoutTarget
@@ -161,9 +73,6 @@ package org.openvideoplayer.layout
 		}
 		
 		/**
-		 * The instance's intrinsic width if availabe, otherwise
-		 * the last indicated available width, instead.
-		 * 
 		 * @inheritDoc
 		 */
 		public function get intrinsicWidth():Number
@@ -172,9 +81,6 @@ package org.openvideoplayer.layout
 		}
 		
 		/**
-		 * The instance's intrinsic height if availabe, otherwise
-		 * the last indicated available height, instead.
-		 * 
 		 * @inheritDoc
 		 */
 		public function get intrinsicHeight():Number
@@ -182,38 +88,166 @@ package org.openvideoplayer.layout
 			return _intrinsicHeight;
 		}
 		
+		public function updateIntrinsicDimensions():void
+		{
+			updateIntrinsicWidth();
+			updateIntrinsicHeight();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */		
+		public function get layoutRenderer():ILayoutRenderer
+		{
+			return _renderer;
+		}
+
+		public function set layoutRenderer(value:ILayoutRenderer):void
+		{
+			_renderer = value;
+		}
+				
+		/**
+		 * A reference to this instance.
+		 * 
+		 * @inheritDoc
+		 */
+		public function get container():DisplayObjectContainer
+		{
+			return this;
+		}
+		
+		/**
+		 * Returns 0, for this context has no children other than the ones placed on
+		 * it by the layout renderer.
+		 * 
+		 * @inheritDoc
+		 */		
+		public function get firstChildIndex():uint
+		{
+			return 0;
+		}
+		
+		public function set calculatedWidth(value:Number):void
+		{
+			_calculatedWidth = value;
+			updateIntrinsicWidth();
+		}
+		public function get calculatedWidth():Number
+		{
+			return _calculatedWidth;
+		}
+		
+		public function set calculatedHeight(value:Number):void
+		{
+			_calculatedHeight = value;	
+			updateIntrinsicHeight();
+		}
+		public function get calculatedHeight():Number
+		{
+			return _calculatedHeight;
+		}
+		
+		public function set projectedWidth(value:Number):void
+		{
+			_projectedWidth = value;
+		}
+		public function get projectedWidth():Number
+		{
+			return _projectedWidth;
+		}
+		
+		public function set projectedHeight(value:Number):void
+		{
+			_projectedHeight = value;	
+			updateIntrinsicHeight();
+		}
+		public function get projectedHeight():Number
+		{
+			return _projectedHeight;
+		}
+		
+		
+		// Overrides
+		//
+		
+		override public function set width(value:Number):void
+		{
+			if (_width != value)
+			{
+				_width = value;
+				updateIntrinsicWidth();
+			}
+		}
+		override public function get width():Number
+		{
+			return _width;
+		}
+		
+		override public function set height(value:Number):void
+		{
+			if (_height != value)
+			{
+				_height = value;
+				updateIntrinsicHeight();
+			}
+		}
+		override public function get height():Number
+		{
+			return _height;
+		}
+		
 		// Internals
 		//
 		
-		private function absoluteLayoutParametersChangeCallback(absolute:AbsoluteLayoutFacet):void
+		private function updateIntrinsicWidth():void
 		{
-			if	(	absolute
-				&&	(	absolute.width != absoluteWidth
-					||	absolute.height != absoluteHeight
-					)
-				)
+			var newIntrinsicWidth:Number = getBounds(this).width;
+					
+			if (newIntrinsicWidth != _intrinsicWidth)
 			{
-				var oldWidth:Number = absoluteWidth;
-				var oldHeight:Number = absoluteHeight;
-				
-				_intrinsicWidth = absoluteWidth = absolute.width;
-				_intrinsicHeight = absoluteHeight = absolute.height;
-				
-				dispatchEvent
-					( new DimensionChangeEvent
-						( oldWidth, oldHeight
-						, absoluteWidth, absoluteHeight
-						)
-					);
+				var event:DimensionChangeEvent
+						= new DimensionChangeEvent
+							( _intrinsicWidth	, _intrinsicHeight
+							, newIntrinsicWidth	, _intrinsicHeight
+							);
+							
+				_intrinsicWidth = newIntrinsicWidth;
+				dispatchEvent(event);
+			}
+		}
+		
+		private function updateIntrinsicHeight():void
+		{
+			var newIntrinsicHeight:Number = getBounds(this).height;
+			
+			if (newIntrinsicHeight != _intrinsicHeight)
+			{
+				var event:DimensionChangeEvent
+						= new DimensionChangeEvent
+							( _intrinsicWidth	, _intrinsicHeight
+							, _intrinsicWidth	, newIntrinsicHeight
+							);
+							
+				_intrinsicHeight = newIntrinsicHeight;
+				dispatchEvent(event);
 			}
 		}
 		
 		private var _metadata:Metadata;
-		
-		private var absoluteWidth:Number;
-		private var absoluteHeight:Number;
+		private var _renderer:ILayoutRenderer;
 		
 		private var _intrinsicWidth:Number;
 		private var _intrinsicHeight:Number;
+		
+		private var _calculatedWidth:Number;
+		private var _calculatedHeight:Number;
+		
+		private var _projectedWidth:Number;
+		private var _projectedHeight:Number;
+		
+		private var _width:Number;
+		private var _height:Number;
+		
 	}
 }

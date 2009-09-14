@@ -67,22 +67,33 @@ package org.openvideoplayer.composition
 
 import org.openvideoplayer.layout.*;
 import flash.events.EventDispatcher;
+import flash.geom.Rectangle;
 
 internal class MyLayoutRenderer extends EventDispatcher implements ILayoutRenderer
 {
+	public function get parent():ILayoutRenderer
+	{
+		return _parent;
+	}
+	
+	public function set parent(value:ILayoutRenderer):void
+	{
+		_parent = value;
+	}
+	
 	public function set context(value:ILayoutContext):void
 	{
 		
 	}
 	
-	public function addTarget(target:ILayoutTarget):void
+	public function addTarget(target:ILayoutTarget):ILayoutTarget
 	{
-		
+		return null;
 	}
 	
-	public function removeTarget(target:ILayoutTarget):void
+	public function removeTarget(target:ILayoutTarget):ILayoutTarget
 	{
-	
+		return null;
 	}
 	
 	public function targets(target:ILayoutTarget):Boolean
@@ -99,4 +110,15 @@ internal class MyLayoutRenderer extends EventDispatcher implements ILayoutRender
 	{
 	
 	}
+	
+	public function updateCalculatedBounds():Rectangle
+	{
+		return null;
+	}
+	
+	public function updateLayout():void
+	{
+	}
+	
+	private var _parent:ILayoutRenderer;
 }

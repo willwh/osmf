@@ -28,12 +28,14 @@ package org.openvideoplayer.layout
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.metadata.IFacet;
 	import org.openvideoplayer.metadata.Metadata;
+	import org.openvideoplayer.metadata.MetadataNamespaces;
 	import org.openvideoplayer.metadata.MetadataUtils;
 	import org.openvideoplayer.metadata.MetadataWatcher;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
@@ -74,6 +76,16 @@ package org.openvideoplayer.layout
 		// ILayoutRenderer
 		//
 		
+		final public function set parent(value:ILayoutRenderer):void
+		{
+			_parent = value;
+		}
+		
+		final public function get parent():ILayoutRenderer
+		{
+			return _parent;	
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -94,6 +106,13 @@ package org.openvideoplayer.layout
 					container = _context.container;
 					metadata = _context.metadata;
 					
+					absoluteLayoutWatcher
+						= MetadataUtils.watchFacet
+							( metadata
+							, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
+							, absoluteLayoutChangeCallback
+							);
+					
 					_context.addEventListener
 						( DimensionChangeEvent.DIMENSION_CHANGE
 						, invalidatingEventHandler
@@ -110,7 +129,7 @@ package org.openvideoplayer.layout
 		/**
 		 * @inheritDoc
 		 */
-		final public function addTarget(target:ILayoutTarget):void
+		final public function addTarget(target:ILayoutTarget):ILayoutTarget
 		{
 			if (target == null)
 			{
@@ -121,6 +140,13 @@ package org.openvideoplayer.layout
 			{
 				// Add the target to our listing:
 				layoutTargets.push(target);	
+				
+				// Parent the added layout renderer (if available):
+				var targetContext:ILayoutContext = target as ILayoutContext;
+				if (targetContext && targetContext.layoutRenderer)
+				{
+					targetContext.layoutRenderer.parent = this;
+				}
 				
 				// Watch the facets on the target's metadata that we're interested in:
 				var watchers:Array = metaDataWatchers[target] = new Array();
@@ -145,18 +171,21 @@ package org.openvideoplayer.layout
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
 			}
+			
+			return target;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		final public function removeTarget(target:ILayoutTarget):void
+		final public function removeTarget(target:ILayoutTarget):ILayoutTarget
 		{
 			if (target == null)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
 			}
 			
+			var removedTarget:ILayoutTarget;
 			var index:Number = layoutTargets.indexOf(target);
 			if (index != -1)
 			{
@@ -173,7 +202,14 @@ package org.openvideoplayer.layout
 				}
 				
 				// Remove the target from our listing:
-				var target:ILayoutTarget = layoutTargets.splice(index,1)[0];
+				removedTarget = layoutTargets.splice(index,1)[0];
+				
+				// Un-parent the target if it is a layout renderer:
+				var targetContext:ILayoutContext = target as ILayoutContext;
+				if (targetContext && targetContext.layoutRenderer)
+				{
+					targetContext.layoutRenderer.parent = null;
+				}
 				
 				// Un-watch the target's view and dimenions change:
 				target.removeEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
@@ -193,6 +229,8 @@ package org.openvideoplayer.layout
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
 			}
+			
+			return removedTarget;
 		}
 		
 		/**
@@ -208,11 +246,17 @@ package org.openvideoplayer.layout
 		 */
 		final public function invalidate():void
 		{
-			if (dirty == false && rendering == false)
+			if (cleaning == false && dirty == false)
 			{
 				dirty = true;
-				
-				callLater(container, preRender);
+				if (_parent != null)
+				{
+					_parent.invalidate();
+				}
+				else
+				{
+					flagDirty(this, _context.container);
+				}
 			}
 		}
 		
@@ -221,25 +265,128 @@ package org.openvideoplayer.layout
 		 */
 		final public function validateNow():void
 		{
-			if (dirty == true)
+			if (_context == null || container == null || cleaning == true)
 			{
-				preRender();
+				// no-op:
+				return;	
 			}
+			
+			if (_parent)
+			{
+				// Have validation triggered from the root-node down:
+				_parent.validateNow();
+				return;
+			}
+			
+			// This is a root-node. Flag that we're cleaning up:
+			cleaning = true;
+			
+			updateCalculatedBounds();
+			updateLayout();
+			
+			cleaning = false;
+			dirty = false;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function updateCalculatedBounds():Rectangle
+		{
+			var bounds:Rectangle;
+			
+			// Traverse, execute bottom-up:
+			for each (var target:ILayoutTarget in layoutTargets)
+			{
+				var targetContext:ILayoutContext = target as ILayoutContext;
+				var targetRenderer:ILayoutRenderer;
+				var targetBounds:Rectangle;
+				
+				if (targetContext)
+				{
+					// Reset the last calculations:
+					targetContext.calculatedWidth = NaN;
+					targetContext.calculatedHeight = NaN;
+					targetContext.projectedWidth = NaN;
+					targetContext.projectedHeight = NaN;
+					
+					targetRenderer = targetContext.layoutRenderer;
+				}
+						
+				if (targetRenderer) 
+				{
+					// Process another node (going in, top to bottom):
+					targetBounds = targetRenderer.updateCalculatedBounds();
+					flagClean(targetRenderer as LayoutRendererBase);
+				}
+				else
+				{
+					// Process a leaf:
+					targetBounds = calculateTargetBounds(target);
+				}
+				
+				if (targetBounds)
+				{
+					if (targetContext)
+					{
+						targetContext.calculatedWidth = targetBounds.width;
+						targetContext.calculatedHeight = targetBounds.height;
+					}
+					
+					// Set X and Y to zero: if they're NaN, then the union with the
+					// previously calculated bounds fails:
+					targetBounds.x ||= 0;
+					targetBounds.y ||= 0;
+				
+					bounds = bounds ? bounds.union(targetBounds) : targetBounds;
+				}
+			}
+			
+			if (parent == null)
+			{
+				_context.calculatedWidth = bounds ? bounds.width : NaN;
+				_context.calculatedHeight = bounds ? bounds.height : NaN;
+			}
+			
+			return bounds;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function updateLayout():void
+		{
+			prepareTargets();
+			
+			// Traverse, execute top-down:
+			for each (var target:ILayoutTarget in layoutTargets)
+			{
+				var targetContext:ILayoutContext = target as ILayoutContext;
+				var targetRenderer:ILayoutRenderer = targetContext ? targetContext.layoutRenderer : null;
+				var targetBounds:Rectangle 
+					= applyTargetLayout
+						( target
+						, _context.projectedWidth || _context.calculatedWidth
+						, _context.projectedHeight || _context.calculatedHeight
+						);
+				
+				if (targetContext)
+				{
+					targetContext.projectedWidth = targetBounds.width;
+					targetContext.projectedHeight = targetBounds.height;
+				}
+				
+				if (targetRenderer)
+				{
+					targetRenderer.updateLayout();
+				}
+			}
+			
+			_context.updateIntrinsicDimensions();
 		}
 		
 		// Subclass stubs
 		//
-		
-		/**
-		 * Subclasses <b>must</b> override this method, providing the algorithm
-		 * by which the targets of the renderer get layed out.
-		 * 
-		 * @throws IllegalOperationError If not overridden.
-		 */
-		protected function render(layoutTargets:Vector.<ILayoutTarget>):void
-		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
-		}
 		
 		/**
 		 * Subclasses may override this method to have it return the list
@@ -278,7 +425,7 @@ package org.openvideoplayer.layout
 		 * @param newContext The new context.
 		 * 
 		 */		
-		protected function processContextChange(oldContext:ILayoutContext, newContext:ILayoutContext):void
+		protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
 		{	
 		}
 		
@@ -302,11 +449,29 @@ package org.openvideoplayer.layout
 		{	
 		}
 		
+		protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
+		{
+			return target.view.getBounds(target.view);
+		}
+		
+		protected function applyTargetLayout(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
+		{
+			var view:DisplayObject;
+			
+			return new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
+		}
+		
 		// Internals
 		//
 		
 		private function reset():void
 		{
+			if (absoluteLayoutWatcher)
+			{
+				absoluteLayoutWatcher.unwatch();
+				absoluteLayoutWatcher = null;
+			}
+			
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				removeTarget(target);
@@ -329,11 +494,6 @@ package org.openvideoplayer.layout
 			this.metadata = null;
 		}
 		
-		private function onExitFrame(event:Event):void
-		{
-			preRender();
-		}
-		
 		private function targetMetadataChangeCallback(facet:IFacet):void
 		{
 			invalidate();
@@ -344,17 +504,22 @@ package org.openvideoplayer.layout
 			invalidate();
 		}
 		
-		private function preRender():void
+		private function absoluteLayoutChangeCallback(absoluteLayout:AbsoluteLayoutFacet):void
 		{
-			// Raise the rendering flag:
-			rendering = true;
-			
-			if (_context == null || container == null)
+			if (_parent == null && absoluteLayout != null)
 			{
-				// no-op:
-				return;	
+				_context.projectedWidth = absoluteLayout.width;
+				_context.projectedHeight = absoluteLayout.height;
+				
+				_context.container.width = absoluteLayout.width;
+				_context.container.height = absoluteLayout.height;
+				
+				invalidate();
 			}
-			
+		}
+		
+		private function prepareTargets():void
+		{
 			// Make sure that our children are in their correct order:
 			layoutTargets.sort(compareTargets);
 		
@@ -366,7 +531,7 @@ package org.openvideoplayer.layout
 				var view:DisplayObject = target.view;
 				if (view)
 				{
-					// If the target's view is not on our container, then place it. If
+					// If the target's view is not on our container, then stage it. If
 					// it is already present, then make sure it is at the right index
 					// of the display list:
 					if (container.contains(view))
@@ -374,7 +539,7 @@ package org.openvideoplayer.layout
 						container.setChildIndex
 							( view
 							// Make sure that the display index that we pass, is within
-							// bounds:
+							// dimensions:
 							, Math.min(Math.max(0,container.numChildren-1),displayListCounter)
 							);
 					}
@@ -383,7 +548,7 @@ package org.openvideoplayer.layout
 						container.addChildAt
 							( view
 							// Make sure that the display index that we pass, is within
-							// bounds:
+							// dimensions:
 							, Math.min(Math.max(0,container.numChildren),displayListCounter)
 							);
 					}
@@ -422,58 +587,41 @@ package org.openvideoplayer.layout
 					}
 				}
 			}
-		
-			// Invoke subclass render function:
-			render(layoutTargets);
-			
-			// Have our context re-asses its intrinsical width and height:
-			_context.updateIntrinsicDimensions();
-						
-			// We're no longer dirty:
-			dirty = false;
-			
-			// Lower the rendering flag:
-			rendering = false;
 		}
 		
+		private var _parent:ILayoutRenderer;
 		private var _context:ILayoutContext;		
 		private var container:DisplayObjectContainer;
 		private var metadata:Metadata;
+		private var absoluteLayoutWatcher:MetadataWatcher;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
 		private var staged:Dictionary = new Dictionary(true);
 		
 		private var dirty:Boolean;
-		private var rendering:Boolean;
+		private var cleaning:Boolean;
+		
 		private var metaDataWatchers:Dictionary = new Dictionary();
 		
 		// Private Static
 		//
 		
-		/**
-		 * Function to postpone the execution of a method until the EXIT_FRAME event gets
-		 * fired on the specified display object.
-		 * 
-		 * If this method is invoke multiple times before an EXIT_FRAME event occurs, then
-		 * the system will queue them. Successive invokations will not add a new EXIT_FRAME
-		 * listeners: all methods in the queue will be invoked as soon as the primary
-		 * listener fires. The queue is executed first-in, first-out. 
-		 *  
-		 * @param displayObject The display object to listen on.
-		 * @param method The method to invoke.
-		 * @param arguments Optional array of arguments to pass to the method on invoking it.
-		 */		
-		private static function callLater(displayObject:DisplayObject, method:Function, arguments:Array=null):void
+		private static function flagDirty(renderer:LayoutRendererBase, displayObject:DisplayObject):void
 		{
-			if (displayObject == null || method == null)
+			if (renderer == null || dirtyRenderers.indexOf(renderer) != -1)
+			{
+				// no-op;
+				return;
+			}
+			
+			if (displayObject == null)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
 			}
 			
-			pendingCalls.push(method);
-			pendingCallArguments.push(arguments || []);
+			dirtyRenderers.push(renderer);
 			
-			if	(	executingPendingCalls == false
+			if	(	cleaningRenderers == false
 				&&	dispatcher == null
 				)
 			{
@@ -482,27 +630,33 @@ package org.openvideoplayer.layout
 			}
 		}
 		
+		private static function flagClean(renderer:LayoutRendererBase):void
+		{
+			var index:Number = dirtyRenderers.indexOf(renderer);
+			if (index != -1)
+			{
+				dirtyRenderers.splice(index,1);
+			}
+		}
+		
 		private static function onExitFrame(event:Event):void
 		{
 			dispatcher.removeEventListener(Event.EXIT_FRAME, onExitFrame);
 			dispatcher = null;
 			
-			executingPendingCalls = true;
+			cleaningRenderers = true;
 			
-			while (pendingCalls.length != 0)
+			while (dirtyRenderers.length != 0)
 			{
-				var func:Function = pendingCalls.shift();
-				var args:Array = pendingCallArguments.shift();
-				
-				func.apply(null,args);
+				var renderer:LayoutRendererBase = dirtyRenderers.shift();
+				renderer.validateNow();
 			}
 			
-			executingPendingCalls = false;
+			cleaningRenderers = false;
 		}
 		
 		private static var dispatcher:DisplayObject;
-		private static var executingPendingCalls:Boolean;
-		private static var pendingCalls:Vector.<Function> = new Vector.<Function>;
-		private static var pendingCallArguments:Vector.<Array> = new Vector.<Array>;
+		private static var cleaningRenderers:Boolean;
+		private static var dirtyRenderers:Vector.<LayoutRendererBase> = new Vector.<LayoutRendererBase>;
 	}
 }

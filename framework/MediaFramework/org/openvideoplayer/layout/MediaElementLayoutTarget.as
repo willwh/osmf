@@ -22,6 +22,7 @@
 package org.openvideoplayer.layout
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
@@ -41,7 +42,7 @@ package org.openvideoplayer.layout
 	import org.openvideoplayer.traits.MediaTraitType;
 
 	/**
-	 * Dispatched when a layout child's view has changed.
+	 * Dispatched when a layout child's _view has changed.
 	 * 
 	 * @eventType org.openvideoplayer.events.ViewChangeEvent.VIEW_CHANGE
 	 */	
@@ -62,11 +63,16 @@ package org.openvideoplayer.layout
 	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
 	 */	
-	public class MediaElementLayoutTarget extends EventDispatcher implements ILayoutTarget
+	public class MediaElementLayoutTarget extends EventDispatcher implements ILayoutTarget, ILayoutContext
 	{
-		public function MediaElementLayoutTarget(_mediaElement:MediaElement)
+		/**
+		 * Constructor
+		 * 
+		 * @param _mediaElement
+		 */		
+		public function MediaElementLayoutTarget(mediaElement:MediaElement)
 		{
-			this._mediaElement = _mediaElement;
+			this._mediaElement = mediaElement;
 			
 			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
 			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
@@ -81,10 +87,26 @@ package org.openvideoplayer.layout
 			updateViewableTrait();
 			updateSpatialTrait();
 		}
-
+		
 		// ILayoutTarget
 		//
 
+		/**
+		 * @inheritDoc
+		 */
+		public function get layoutRenderer():ILayoutRenderer
+		{
+			return viewLayoutTarget ? viewLayoutTarget.layoutRenderer : null;
+		}
+		
+		public function set layoutRenderer(value:ILayoutRenderer):void
+		{
+			if (viewLayoutTarget)
+			{
+				viewLayoutTarget.layoutRenderer = value;
+			}
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -98,7 +120,23 @@ package org.openvideoplayer.layout
 		 */
 		public function get view():DisplayObject
 		{
-			return viewableTrait ? viewableTrait.view : null;
+			return _view;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get container():DisplayObjectContainer
+		{
+			return viewLayoutTarget ? viewLayoutTarget.container : null; 
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get firstChildIndex():uint
+		{
+			return viewLayoutTarget ? viewLayoutTarget.firstChildIndex : 0;
 		}
 		
 		/**
@@ -106,7 +144,11 @@ package org.openvideoplayer.layout
 		 */
 		public function get intrinsicWidth():Number
 		{
-			return spatialTrait ? spatialTrait.width : NaN;
+			return viewLayoutTarget
+					? viewLayoutTarget.intrinsicWidth
+				 	: spatialTrait 
+				 		? spatialTrait.width
+				 		: NaN;
 		}
 		
 		/**
@@ -114,7 +156,85 @@ package org.openvideoplayer.layout
 		 */
 		public function get intrinsicHeight():Number
 		{
-			return spatialTrait ? spatialTrait.height : NaN;
+			return viewLayoutTarget
+					? viewLayoutTarget.intrinsicHeight
+					: spatialTrait
+						? spatialTrait.height
+						: NaN;
+		}
+		
+		public function updateIntrinsicDimensions():void
+		{
+			if (viewLayoutTarget)
+			{
+				viewLayoutTarget.updateIntrinsicDimensions();
+			}
+		}
+		
+	 	public function set calculatedWidth(value:Number):void
+	 	{
+	 		if (viewLayoutTarget)
+	 		{
+	 			viewLayoutTarget.calculatedWidth = value;
+	 		}
+	 		else
+	 		{
+	 			_calculatedWidth = value;
+	 		}
+	 	}
+	 	public function get calculatedWidth():Number
+	 	{
+	 		return viewLayoutTarget
+	 				? viewLayoutTarget.calculatedWidth
+	 				: _calculatedWidth;
+	 	}
+	 	
+		public function set calculatedHeight(value:Number):void
+		{
+			_calculatedHeight = value;
+			if (viewLayoutTarget)
+	 		{
+	 			viewLayoutTarget.calculatedHeight = value;
+	 		}
+		}
+		public function get calculatedHeight():Number
+		{
+			return viewLayoutTarget
+					? viewLayoutTarget.calculatedHeight
+					: _calculatedHeight;
+		}
+		
+		public function set projectedWidth(value:Number):void
+	 	{
+	 		if (viewLayoutTarget)
+	 		{
+	 			viewLayoutTarget.projectedWidth = value;
+	 		}
+	 		else
+	 		{
+	 			_projectedWidth = value;
+	 		}
+	 	}
+	 	public function get projectedWidth():Number
+	 	{
+	 		return viewLayoutTarget
+	 				? viewLayoutTarget.projectedWidth
+	 				: _projectedWidth;
+	 	}
+	 	
+		public function set projectedHeight(value:Number):void
+		{
+	 		_projectedHeight = value;
+			if (viewLayoutTarget)
+	 		{
+	 			viewLayoutTarget.projectedHeight = value;
+	 		}
+		}
+		public function get projectedHeight():Number
+		{
+			return viewLayoutTarget
+					? viewLayoutTarget.projectedHeight
+					: _projectedHeight;
 		}
 		
 		// Public interface
@@ -148,23 +268,28 @@ package org.openvideoplayer.layout
 		private function updateViewableTrait():void
 		{
 			var oldTrait:IViewable = viewableTrait;
-			var oldView:DisplayObject = view;
+			var oldView:DisplayObject = _view;
 			
 			viewableTrait = _mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
 			
 			if (oldTrait)
 			{
-				oldTrait.removeEventListener(ViewChangeEvent.VIEW_CHANGE, redispatchingEventHandler);
+				oldTrait.removeEventListener(ViewChangeEvent.VIEW_CHANGE, viewChangeEventHandler);
 			}
 			
 			if (viewableTrait)
 			{
-				viewableTrait.addEventListener(ViewChangeEvent.VIEW_CHANGE, redispatchingEventHandler, false, 0, true);
+				processViewChange(viewableTrait.view);
+				viewableTrait.addEventListener(ViewChangeEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
+			}
+			else
+			{
+				processViewChange(null);
 			}
 			
-			if 	(oldView != view)
+			if 	(oldView != _view)
 			{
-				dispatchEvent(new ViewChangeEvent(oldView, view));
+				dispatchEvent(new ViewChangeEvent(oldView, _view));
 			}
 		}
 		
@@ -178,12 +303,12 @@ package org.openvideoplayer.layout
 			
 			if (oldTrait)
 			{
-				oldTrait.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, redispatchingEventHandler);
+				oldTrait.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
 			}
 			
 			if (spatialTrait)
 			{
-				spatialTrait.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, redispatchingEventHandler, false, 0, true);
+				spatialTrait.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
 			}
 			
 			if 	(	oldWidth != intrinsicWidth
@@ -194,7 +319,14 @@ package org.openvideoplayer.layout
 			}
 		}
 		
-		private function redispatchingEventHandler(event:Event):void
+		private function viewChangeEventHandler(event:ViewChangeEvent):void
+		{
+			processViewChange(event.newView);
+			
+			dispatchEvent(event.clone());
+		}
+		
+		private function dimensionChangeEventHandler(event:Event):void
 		{
 			dispatchEvent(event.clone());
 		}
@@ -218,12 +350,28 @@ package org.openvideoplayer.layout
 			}
 		}
 		
+		private function processViewChange(newView:DisplayObject):void
+		{
+			_view = newView;
+			viewLayoutTarget = _view as ILayoutContext;
+		}
+		
 		private var _mediaElement:MediaElement;
+		private var _view:DisplayObject;
+		private var viewLayoutTarget:ILayoutContext;
 		
 		private var viewableTrait:IViewable;
 		private var spatialTrait:ISpatial;
 		
 		private var regionTargetWatcher:MetadataWatcher;
 		private var _regionTarget:IRegion;
+		
+		private var _calculatedWidth:Number;
+		private var _calculatedHeight:Number;
+		
+		private var _projectedWidth:Number;
+		private var _projectedHeight:Number;
+		
+		private var _hasChildDerivedDimensions:int;
 	}
 }

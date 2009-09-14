@@ -42,5 +42,7 @@ package org.openvideoplayer.metadata
 		public static const ANCHOR_LAYOUT_PARAMETERS: URL	= new URL("http://www.openvideoplayer.org/layout/anchor");
 		public static const PADDING_LAYOUT_PARAMETERS:URL 	= new URL("http://www.openvideoplayer.org/layout/padding");
 		public static const LAYOUT_ATTRIBUTES: URL 			= new URL("http://www.openvideoplayer.org/layout/attributes");
+		
+		public static const ELEMENT_ID: URL 				= new URL("http://www.openvideoplayer.org/elementId");
 	}
 }

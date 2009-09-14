@@ -22,6 +22,7 @@
 package org.openvideoplayer.layout
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
 	
 	import org.openvideoplayer.metadata.Metadata;
@@ -52,6 +53,14 @@ package org.openvideoplayer.layout
 		 */		
 		function get metadata():Metadata;
 	 
+		/**
+		 * A reference to the display object that represents the target. An
+		 * ILayoutRenderer may use this reference to effect its calculated
+		 * values onto the target, as well as correctly parenting the target on
+		 * its context's display object container.
+		 */		
+		function get view():DisplayObject;
+		
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
@@ -66,14 +75,8 @@ package org.openvideoplayer.layout
 	 	 * would be 768 pixels. An ILayoutRenderer may use this value to
 	 	 * for example keep ratio on scaling the element.
 	 	 */
-	 	function get intrinsicHeight():Number; 
-		
-		/**
-		 * A reference to the display object that represents the target. An
-		 * ILayoutRenderer may use this reference to effect its calculated
-		 * values onto the target, as well as correctly parenting the target on
-		 * its context's display object container.
-		 */		
-		function get view():DisplayObject;
+	 	function get intrinsicHeight():Number;
+	 	
+	 	
 	}
 }

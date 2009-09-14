@@ -21,11 +21,21 @@
 *****************************************************/
 package org.openvideoplayer.regions
 {
+	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	
 	import flexunit.framework.TestCase;
 	
+	import org.openvideoplayer.display.ScaleMode;
+	import org.openvideoplayer.layout.LayoutUtils;
+	import org.openvideoplayer.layout.RegistrationPoint;
+	import org.openvideoplayer.layout.TesterSprite;
+	import org.openvideoplayer.metadata.MetadataUtils;
+	import org.openvideoplayer.traits.MediaTraitType;
+	import org.openvideoplayer.traits.SpatialTrait;
+	import org.openvideoplayer.traits.ViewableTrait;
 	import org.openvideoplayer.utils.DynamicMediaElement;
+
 
 	public class TestRegionSprite extends TestCase
 	{
@@ -93,6 +103,38 @@ package org.openvideoplayer.regions
 			
 			assertNotNull(error);
 			assertTrue(error is IllegalOperationError);
+		}
+		
+		public function testRegion_ScaleAndAlign():void
+		{
+			// Child
+			
+			var mediaElement:DynamicMediaElement
+				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			
+			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			
+			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
+			spatial.setDimensions(486,60);
+			
+			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
+			var viewableSprite:Sprite = new TesterSprite();
+			viewable.view = viewableSprite;
+			
+			LayoutUtils.setScaleMode(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
+
+			var region:RegionSprite = new RegionSprite();
+			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
+			
+			region.addChildElement(mediaElement);
+			
+			region.validateContentNow();
+			
+			assertEquals(486, viewableSprite.width);
+			assertEquals(60, viewableSprite.height);
+			
+			assertEquals(800/2 - 486/2, viewableSprite.x);
+			assertEquals(80/2 - 60/2, viewableSprite.y);
 		}
 	}
 }

@@ -22,12 +22,14 @@
 package org.openvideoplayer.layout
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
 	import org.openvideoplayer.metadata.Metadata;
+	import org.openvideoplayer.utils.NullResource;
 
-	public class TesterLayoutTargetSprite extends Sprite implements ILayoutTarget
+	public class TesterLayoutTargetSprite extends Sprite implements ILayoutContext
 	{
 		// ILayoutTarget
 		//
@@ -35,6 +37,30 @@ package org.openvideoplayer.layout
 		public function get metadata():Metadata
 		{
 			return _metadata;
+		}
+		
+		public function get view():DisplayObject
+		{
+			return this;
+		}
+		
+		public function get container():DisplayObjectContainer
+		{
+			return this;
+		}
+		
+		public function get firstChildIndex():uint
+		{
+			return 0;
+		}
+		
+		public function get layoutRenderer():ILayoutRenderer
+		{
+			return null;
+		}
+		
+		public function set layoutRenderer(value:ILayoutRenderer):void
+		{
 		}
 		
 		public function get intrinsicWidth():Number
@@ -47,9 +73,48 @@ package org.openvideoplayer.layout
 			return _intrinsicHeight;
 		}
 		
-		public function get view():DisplayObject
+		public function updateIntrinsicDimensions():void
 		{
-			return this;
+		}
+		
+		public function get calculatedWidth():Number
+		{
+			return _calculatedWidth;
+		}
+		
+		public function set calculatedWidth(value:Number):void
+		{
+			_calculatedWidth = value;
+		}
+		
+		public function get calculatedHeight():Number
+		{
+			return _calculatedHeight;
+		}
+		
+		public function set calculatedHeight(value:Number):void
+		{
+			_calculatedHeight = value;
+		}
+		
+		public function get projectedWidth():Number
+		{
+			return _projectedWidth;
+		}
+		
+		public function set projectedWidth(value:Number):void
+		{
+			_projectedWidth = value;
+		}
+		
+		public function get projectedHeight():Number
+		{
+			return _projectedHeight;
+		}
+		
+		public function set projectedHeight(value:Number):void
+		{
+			_projectedHeight = value;
 		}
 		
 		//  Public API
@@ -74,8 +139,17 @@ package org.openvideoplayer.layout
 		}
 		
 		private var _metadata:Metadata = new Metadata();
+		
+		private var _layoutRenderer:ILayoutRenderer;
+		
 		private var _intrinsicWidth:Number;
 		private var _intrinsicHeight:Number;
+		
+		private var _calculatedWidth:Number;
+		private var _calculatedHeight:Number;
+		
+		private var _projectedWidth:Number;
+		private var _projectedHeight:Number;
 		
 	}
 }

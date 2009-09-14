@@ -215,6 +215,28 @@ package org.openvideoplayer.metadata
 			return watcher;
 		}
 		
+		/**
+		 * Adds an element string identifier to a metadata instance.
+		 *  
+		 * @param target The metadata instance to set the id on.
+		 * @param id The id to set.
+		 * @return The constructed ObjectFacet that holds the id.
+		 * 
+		 */		
+		public static function setElementId(target:Metadata, id:String):ObjectFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var idFacet:ObjectFacet = new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id);
+			
+			target.addFacet(idFacet);
+			
+			return idFacet;	
+		}
+		
 		public static const METADATA_MATCH_FOUND:int		= 0;
 		public static const METADATA_CONFLICTS_FOUND:int	= 1;
 		public static const METADATA_MATCH_UNKNOWN:int		= 2;

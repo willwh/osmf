@@ -48,9 +48,39 @@ package org.openvideoplayer.layout
 		function get firstChildIndex():uint;
 	
 		/**
+		 * Defines the layout renderer that manages this target's children (if any).
+		 */
+		function get layoutRenderer():ILayoutRenderer;
+		function set layoutRenderer(value:ILayoutRenderer):void;
+		
+		/**
 		 * Method invoked by an ILayoutRenderer class to inform the context that it
 		 * should recalculate its intrinsicWidth and intrinsicHeight fields:
 		 */		
 		function updateIntrinsicDimensions():void
+		
+		/**
+		 * Defines the context's last calculated width.
+		 */
+		function get calculatedWidth():Number;
+	 	function set calculatedWidth(value:Number):void;
+	 	
+	 	/**
+	 	 * Defines the context's last calculated height.
+	 	 */
+	 	function get calculatedHeight():Number;
+	 	function set calculatedHeight(value:Number):void;
+	 	
+	 	/**
+	 	 * Defines the context's last projected width.
+	 	 */
+	 	function get projectedWidth():Number;
+	 	function set projectedWidth(value:Number):void;
+	 	
+	 	/**
+	 	 * Defines the context's last projected height.
+	 	 */
+	 	function get projectedHeight():Number;
+	 	function set projectedHeight(value:Number):void;
 	}
 }

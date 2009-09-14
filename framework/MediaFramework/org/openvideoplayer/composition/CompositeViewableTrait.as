@@ -29,6 +29,7 @@ package org.openvideoplayer.composition
 	import org.openvideoplayer.layout.DefaultLayoutRenderer;
 	import org.openvideoplayer.layout.ILayoutContext;
 	import org.openvideoplayer.layout.ILayoutRenderer;
+	import org.openvideoplayer.layout.ILayoutTarget;
 	import org.openvideoplayer.layout.LayoutContextSprite;
 	import org.openvideoplayer.layout.LayoutRendererFacet;
 	import org.openvideoplayer.media.MediaElement;
@@ -175,6 +176,7 @@ package org.openvideoplayer.composition
 				_layoutRenderer = new DefaultLayoutRenderer();
 			}
 			
+			container.layoutRenderer = _layoutRenderer;
 			_layoutRenderer.context = container;
 		}
 		

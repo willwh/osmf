@@ -38,6 +38,8 @@ package
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.MediaPlayer;
 	import org.openvideoplayer.media.URLResource;
+	import org.openvideoplayer.metadata.MetadataUtils;
+	import org.openvideoplayer.metadata.ObjectFacet;
 	import org.openvideoplayer.net.NetLoader;
 	import org.openvideoplayer.proxies.TemporalProxyElement;
 	import org.openvideoplayer.regions.RegionSprite;
@@ -74,6 +76,14 @@ package
 					
 				var skyScraper:MediaElement = constructImage(SKY_SCRAPER_1);
 				rootElement.addChild(skyScraper);
+				
+			// DEBUG: add id's to the elements at hand:
+			MetadataUtils.setElementId(rootElement.metadata, "rootElement");
+			MetadataUtils.setElementId(banners.metadata, "banners");
+			MetadataUtils.setElementId(skyScraper.metadata, "skyScraper");
+			MetadataUtils.setElementId(banners.getChildAt(0).metadata, "banner1");
+			MetadataUtils.setElementId(banners.getChildAt(1).metadata, "banner2");
+			MetadataUtils.setElementId(banners.getChildAt(2).metadata, "banner3");
 			
 			// Next, decorate the content tree with attributes:
 			
@@ -86,19 +96,30 @@ package
 			// Consruct 3 regions:
 
 			var bannerRegion:RegionSprite = new RegionSprite();
-			addChild(bannerRegion);
 			LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, 600, 70);
-
+			bannerRegion.backgroundColor = 0xFF0000;
+			bannerRegion.backgroundAlpha = .2;
+			addChild(bannerRegion);
+			
 			var mainRegion:RegionSprite = new RegionSprite();
+			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 600, 400);
+			mainRegion.backgroundColor = 0xFFFFFF;
+			mainRegion.backgroundAlpha = .2;
 			mainRegion.y = 80;
 			addChild(mainRegion);
-			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 600, 400);
 			
 			var skyScraperRegion:RegionSprite = new RegionSprite();
+			LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, 600);
+			skyScraperRegion.backgroundColor = 0xFF00;
+			skyScraperRegion.backgroundAlpha = .2;
 			skyScraperRegion.x = 610;
 			skyScraperRegion.y = 10;
 			addChild(skyScraperRegion);
-			LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, 600);
+			
+			// DEBUG: add id's to the elements at hand:
+			MetadataUtils.setElementId(mainRegion.metadata, "mainRegion");
+			MetadataUtils.setElementId(bannerRegion.metadata, "bannerRegion");
+			MetadataUtils.setElementId(skyScraperRegion.metadata, "skyScraperRegion");
 			
 			// Bind media elements to their target regions:
 			
@@ -119,9 +140,11 @@ package
 			// vice-versa:
 			
 			var bottomBannerRegion:RegionSprite = new RegionSprite();
+			LayoutUtils.setAbsoluteLayout(bottomBannerRegion.metadata, 600, 70);
+			bottomBannerRegion.backgroundColor = 0xFF;
+			bottomBannerRegion.backgroundAlpha = .2;
 			bottomBannerRegion.y = 490;
 			addChild(bottomBannerRegion);
-			LayoutUtils.setAbsoluteLayout(bottomBannerRegion.metadata, 600, 70);
 			
 			bannerRegion.addEventListener
 				( MouseEvent.CLICK

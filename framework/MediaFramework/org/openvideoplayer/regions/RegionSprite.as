@@ -62,16 +62,18 @@ package org.openvideoplayer.regions
 			
 			// Setup a content sprite for holding the assigned MediaElement(s):
 			
-			var content:LayoutContextSprite = new LayoutContextSprite(this.metadata);
+			content = new LayoutContextSprite(this.metadata);
 			addChild(content);
 			
 			this.contentLayoutRenderer = contentLayoutRenderer || new DefaultLayoutRenderer();
 			this.contentLayoutRenderer.context = content;
+			content.layoutRenderer = this.contentLayoutRenderer;
 			
 			// Setup the layout renderer that will govern sub-regions:
 			
 			this.regionsLayoutRenderer = regionsLayoutRenderer || new DefaultLayoutRenderer();
 			this.regionsLayoutRenderer.context = this;
+			layoutRenderer = this.regionsLayoutRenderer; 
 		}
 		
 		// IRegion
@@ -80,7 +82,7 @@ package org.openvideoplayer.regions
 		/**
 		 * @inheritDoc
 		 */
-		public function addChildElement(element:MediaElement):void
+		public function addChildElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
 			{
@@ -90,6 +92,7 @@ package org.openvideoplayer.regions
 			if (contentLayoutTargets[element] == undefined)
 			{
 				var contentTarget:MediaElementLayoutTarget = new MediaElementLayoutTarget(element);
+				
 				contentLayoutTargets[element] = contentTarget;
 				contentLayoutRenderer.addTarget(contentTarget);
 			}
@@ -97,6 +100,8 @@ package org.openvideoplayer.regions
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
 			}
+			
+			return element;
 		}
 		
 		/**
@@ -148,6 +153,50 @@ package org.openvideoplayer.regions
 			// The content sprite is at index 0, add sub-regions
 			// at index 1 and up:
 			return 1;
+		}
+		
+		override public function set calculatedWidth(value:Number):void
+		{
+			content.calculatedWidth = value;
+			super.calculatedWidth = value;
+		}
+		
+		override public function set calculatedHeight(value:Number):void
+		{
+			content.calculatedHeight = value;
+			super.calculatedHeight = value;
+		}
+		
+		override public function set projectedWidth(value:Number):void
+		{
+			content.projectedWidth = value;
+			super.projectedWidth = value;
+		}
+		
+		override public function set projectedHeight(value:Number):void
+		{
+			content.projectedHeight = value;
+			super.projectedHeight = value;
+		}
+		
+		override public function set width(value:Number):void
+		{
+			super.width = content.width = value;
+			
+			if (!isNaN(backgroundColor))
+			{
+				drawBackground();
+			}
+		}
+		
+		override public function set height(value:Number):void
+		{
+			super.height = content.height = value;
+			
+			if (!isNaN(backgroundColor))
+			{
+				drawBackground();
+			}
 		}
 		
 		// Public Interface
@@ -214,16 +263,78 @@ package org.openvideoplayer.regions
 			return regionsLayoutRenderer.targets(region);
 		}
 		
+		public function validateContentNow():void
+		{
+			contentLayoutRenderer.validateNow();
+		}
+		
+		/**
+		 * Defines the region's background color. By default, this value
+		 * is set to NaN, which results in no background being drawn.
+		 */		
+		public function set backgroundColor(value:Number):void
+		{
+			if (value != _backgroundColor)
+			{
+				_backgroundColor = value;
+				drawBackground();
+			}
+		}
+		public function get backgroundColor():Number
+		{
+			return _backgroundColor;
+		}
+		
+		/**
+		 * Defines the region's background alpha. By default, this value
+		 * is set to 1, which results in the background being fully opaque.
+		 * 
+		 * Note that a region will not have a background drawn unless its
+		 * backgroundColor property is set.
+		 */
+		public function set backgroundAlpha(value:Number):void
+		{
+			if (value != _backgroundAlpha)
+			{
+				_backgroundAlpha = value;
+				drawBackground();
+			}
+		}
+		public function get backgroundAlpha():Number
+		{
+			return _backgroundAlpha;
+		}
+		
 		// Internals
 		//
+		
+		private function drawBackground():void
+		{
+			graphics.clear();
+			
+			if	(	!isNaN(_backgroundColor)
+				&& 	_backgroundAlpha != 0
+				&&	width
+				&&	height
+				)
+			{
+				graphics.beginFill(_backgroundColor,_backgroundAlpha);
+				graphics.drawRect(0, 0, width, height);
+				graphics.endFill();
+			}
+		}
 		
 		/**
 		 * Dictionary of MediaElementLayoutTarget instances, index by the
 		 * media elements that they wrap: 
 		 */		
 		private var contentLayoutTargets:Dictionary = new Dictionary();
+		private var content:LayoutContextSprite;
 		
 		private var contentLayoutRenderer:ILayoutRenderer;
 		private var regionsLayoutRenderer:ILayoutRenderer;
+		
+		private var _backgroundColor:Number;
+		private var _backgroundAlpha:Number;
 	}
 }
