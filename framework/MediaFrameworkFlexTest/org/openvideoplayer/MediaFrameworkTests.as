@@ -114,6 +114,8 @@ package org.openvideoplayer
 			addTestSuite(TestViewableTrait);
 			addTestSuite(TestBufferableTrait);
 			
+			addTestSuite(TestSwitchableTrait);
+			
 			addTestSuite(TestNetLoader);
 			addTestSuite(TestNetLoadedContext);
 			addTestSuite(TestNetConnectionFactory);
@@ -128,7 +130,8 @@ package org.openvideoplayer
 			addTestSuite(TestNetStreamPausableTrait);
 			addTestSuite(TestNetStreamSeekableTrait);
 			addTestSuite(TestNetStreamTemporalTrait);
-
+			addTestSuite(TestNetStreamSwitchableTrait);
+			
 			addTestSuite(TestContentLoader);
 			addTestSuite(TestContentElement);
 			
@@ -171,7 +174,7 @@ package org.openvideoplayer
 			addTestSuite(TestSwitchUpRule);
 			addTestSuite(TestDynamicStreamingItem);
 			addTestSuite(TestDynamicStreamingResource);
-			addTestSuite(TestNetStreamSwitchableTrait);
+			
 			addTestSuite(TestDynamicStreamingNetLoader);
 			addTestSuite(TestDynamicNetStream);
 			addTestSuite(TestParallelSwitchableTrait);

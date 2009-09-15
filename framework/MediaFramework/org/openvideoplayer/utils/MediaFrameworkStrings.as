@@ -127,7 +127,8 @@ package org.openvideoplayer.utils
 		public static const SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE:String= "Average dropped Frames per Second is unacceptable for the current stream";
 		public static const SWITCHING_DOWN_OTHER:String					= "Switching down";
 		public static const SWITCHING_UP_OTHER:String					= "Switching up";
-		
+		public static const SWITCHING_MANUAL:String						= "Switching Manual";
+				
 		// CompositeViewableTrait
 		
 		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "Unable to construct ILayoutRenderer implementation";		

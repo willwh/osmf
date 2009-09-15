@@ -23,6 +23,7 @@ package org.openvideoplayer.net
 {
 	import flash.utils.Dictionary;
 	import flash.utils.Proxy;
+	import flash.utils.Timer;
 	import flash.utils.flash_proxy;
 
 	/**
@@ -77,7 +78,7 @@ package org.openvideoplayer.net
 		 * @see NetStreamCodes
 		 */		
 		public function addHandler(name:String,handler:Function):void
-		{
+		{			
 			var handlersForName:Array 
 				= handlers.hasOwnProperty(name)
 					? handlers[name]

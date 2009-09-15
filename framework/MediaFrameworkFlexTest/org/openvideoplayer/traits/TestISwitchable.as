@@ -31,18 +31,17 @@ package org.openvideoplayer.traits
 	{
 		override public function setUp():void
 		{
-			super.setUp();
-			
+			super.setUp();			
 			_eventDispatcher = new EventDispatcher();
-			switchable = super.interfaceObj as ISwitchable;
-			
+			switchable = super.interfaceObj as ISwitchable;			
 		}
 		
 		override public function tearDown():void
 		{
 			super.tearDown();
-			//switchable = null;
-			//_eventDispatcher = null;						
+			switchable.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+			switchable = null;
+			_eventDispatcher = null;						
 		}
 		
 		public function testSwitchUp():void
@@ -146,6 +145,12 @@ package org.openvideoplayer.traits
 			}
 			
 			fail("Expected a RangeError in testBadSwitch3.");
+		}
+		
+		public function testGetBitrateForIndex():void
+		{				
+			assertEquals(-1, switchable.getBitrateForIndex(0));
+			
 		}
 
 		protected function onSwitchingChange(event:SwitchingChangeEvent):void

@@ -623,10 +623,8 @@ package org.openvideoplayer.media
 			var lastUpdate:Number = 0;
 									
 			function onPlayheadUpdate(event:PlayheadChangeEvent):void
-			{
-				var leeway:Number = .2; //200 millisecond leeway since the timers in flash are inaccurate.
-				assertTrue( (lastUpdate + sliceSeconds - leeway) < event.newPosition);
-				assertTrue( (lastUpdate + sliceSeconds + leeway) > event.newPosition);
+			{				
+				assertTrue( lastUpdate  < event.newPosition);
 				lastUpdate = event.newPosition;
 				if(event.newPosition > 1  && !secondRound ) //after 1 second (10 iterations) stop testing 100msec update.
 				{

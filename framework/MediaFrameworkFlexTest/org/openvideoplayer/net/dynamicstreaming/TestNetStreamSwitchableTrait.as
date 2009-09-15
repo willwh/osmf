@@ -50,6 +50,14 @@ package org.openvideoplayer.net.dynamicstreaming
 			this.switchable.maxIndex = 2;
 			assertTrue(2, this.switchable.maxIndex);
 		}
+		
+		override public function testGetBitrateForIndex():void
+		{
+			assertEquals(500, switchable.getBitrateForIndex(0));
+			assertEquals(800, switchable.getBitrateForIndex(1));
+			assertEquals(1000, switchable.getBitrateForIndex(2));
+			assertEquals(3000, switchable.getBitrateForIndex(3));		
+		}
 			
 		override protected function createInterfaceObject(... args):Object
 		{

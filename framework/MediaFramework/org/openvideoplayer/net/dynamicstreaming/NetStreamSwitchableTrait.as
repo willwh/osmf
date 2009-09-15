@@ -27,6 +27,7 @@ package org.openvideoplayer.net.dynamicstreaming
 	import org.openvideoplayer.events.SwitchingChangeEvent;
 	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.traits.SwitchableTrait;
+	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
 	 * The NetStreamSwitchableTrait class implements an ISwitchable interface that uses a DynamicNetStream.
@@ -43,16 +44,14 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		public function NetStreamSwitchableTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
 		{
-			super();	
+			super(res.numItems);	
 			
 			_autoSwitch = !ns.useManualSwitchMode;	
-			_maxIndex = res.numItems-1;
 			_currentIndex = ns.renderingIndex;
 				
 			_ns = ns;
 			_resource = res;
-			_state = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
-						
+									
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
 		}
@@ -70,17 +69,10 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
+			super.getBitrateForIndex(index);
 			return _resource.getItemAt(index).bitrate;
 		}	
 				
-		/**
-		 * @inheritDoc
-		 */		
-		override public function get switchUnderway():Boolean
-		{
-			return _ns.switchUnderway;
-		}
-		
 		/**
 		 * @inheritDoc
 		 */
@@ -102,7 +94,18 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */ 
 		override protected function processMaxIndexChange(value:int):void
 		{
-			_ns.maxIndex = value;
+			if(_ns != null)
+			{
+				_ns.maxIndex = value;
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */ 
+		override protected function postProcessSwitchTo():void
+		{
+			//Do nothing, wait for onNetStreamSwitchingChange handler to dispatch SwitchComplete.
 		}
 				
 		private function onNetStatus(event:NetStatusEvent):void
@@ -114,32 +117,17 @@ package org.openvideoplayer.net.dynamicstreaming
 			
 			switch (event.info.code) 
 			{
-				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
-					updateSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED, _state);
+				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
+					processSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED);					
 					break;
 			}			
 		}
 		
 		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
-		{
-			updateSwitchState(event.newState, event.oldState, event.detail);
-		}
-		
-		/**
-		 * A handy utility method for classes extending this class. Keeps track of
-		 * the last state and dispatches a SwitchingChangeEvent containing the new state
-		 * and the old state.
-		 */
-		private function updateSwitchState(newState:int, oldState:int,  detail:SwitchingDetail=null):void
-		{
-			//_oldState = oldState;
-			//_newState = newState;
-			trace('NewStreamSwitchable newState:' + newState + ' oldState:' + oldState);
-			_state = newState;
-			dispatchEvent(new SwitchingChangeEvent(newState, oldState, detail));
-		}
-		
-		private var _state:int;			
+		{			
+			processSwitchState(event.newState, event.detail);
+		}				
+						
 		private var _ns:DynamicNetStream;
 		private var _resource:DynamicStreamingResource;		
 	}

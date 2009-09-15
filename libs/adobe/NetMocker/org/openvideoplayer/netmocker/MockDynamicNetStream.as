@@ -21,6 +21,8 @@
 *****************************************************/
 package org.openvideoplayer.netmocker
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStreamPlayOptions;
@@ -28,7 +30,6 @@ package org.openvideoplayer.netmocker
 	
 	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicNetStream;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
 
 	public class MockDynamicNetStream extends DynamicNetStream implements IMockNetStream
 	{
@@ -127,13 +128,12 @@ package org.openvideoplayer.netmocker
 				handleFirstPlay();
 			}
 			else
-			{
-				if (switchCompleteTimer == null)
-				{
-					switchCompleteTimer = new Timer(200, 1);
-					switchCompleteTimer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSwitchCompleteMsg);
-					switchCompleteTimer.start();
-				}
+			{				
+				trace(new Date().toTimeString() + " -Creating new timer for switch complete");
+				var newTimer:Timer = new Timer(350, 1);
+				switchCompleteTimers.push(newTimer);
+				newTimer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSwitchCompleteMsg);
+				newTimer.start();				
 			}
 			
 			super.switchToIndex(targetIndex, firstPlay);
@@ -168,14 +168,15 @@ package org.openvideoplayer.netmocker
 		
 		private function sendSwitchCompleteMsg(e:TimerEvent):void
 		{
-			trace('sendSwitchCompleteMsg');
+			trace('sendSwitchCompleteMsg'  );
 			switchUnderway = false;
 			//dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE));
-			switchCompleteTimer.removeEventListener(TimerEvent.TIMER, sendSwitchCompleteMsg);
-			switchCompleteTimer = null;
+			var oldtimer:Timer = switchCompleteTimers.shift();
+			oldtimer.removeEventListener(TimerEvent.TIMER, sendSwitchCompleteMsg);
+			
 			this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE});
 			this.client.onPlayStatus({code:"Anything"});
-		}
+		}		
 		
 		private function handleFirstPlay():void
 		{
@@ -222,7 +223,7 @@ package org.openvideoplayer.netmocker
 					, {"code":NetStreamCodes.NETSTREAM_PLAY_START, 	"level":LEVEL_STATUS}
 					, {"code":NetStreamCodes.NETSTREAM_BUFFER_FULL,	"level":LEVEL_STATUS}
 					];
-			eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+			eventInterceptor.dispatchNetStatusEvents(infos, 2*EVENT_DELAY);
 		}
 		
 		private function onPlayheadTimer(event:TimerEvent):void
@@ -282,8 +283,8 @@ package org.openvideoplayer.netmocker
 		private var _expectedEvents:Array = [];
 		
 		private var playheadTimer:Timer;
-		private var switchCompleteTimer:Timer;
-		
+		private var switchCompleteTimers:Vector.<Timer> = new Vector.<Timer>;
+				
 		private var playing:Boolean = false;
 		private var elapsedTime:Number = 0; // seconds
 

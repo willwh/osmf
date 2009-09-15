@@ -107,6 +107,6 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * Set this to <code>true</code> to see debugging messages (traces)
 		 * at run-time.
 		 */
-		private const DEBUG:Boolean = true;
+		private const DEBUG:Boolean = false;
 	}
 }

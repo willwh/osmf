@@ -254,7 +254,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		{
 			if (DEBUG)
 			{
-				trace(">>> DynamicNetStream."+args);
+				trace(new Date().toTimeString() + ">>> DynamicNetStream."+args);
 			}
 		}
 		
@@ -308,8 +308,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			
 			if (!firstPlay)
 			{
-				_switchUnderway = true;
-				dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, -1, _detail));
+				_switchUnderway = true;	
 			}
 			
 			this.playStream(nso);
@@ -332,7 +331,6 @@ package org.openvideoplayer.net.dynamicstreaming
 				_renderingIndex = targetIndex;
 				_streamIndex = targetIndex;
 				_pendingTransitionsArray.push(targetIndex);
-				trace('FIRSTPLAY');
 				this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE})
 			} 
 		}
@@ -437,7 +435,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					_renderingIndex = _pendingTransitionsArray[0];
-					trace("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.getItemAt(_renderingIndex).bitrate) + " kbps");
+					
 					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.getItemAt(_renderingIndex).bitrate) + " kbps");
 					_pendingTransitionsArray.shift();
 					dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, SwitchingChangeEvent.SWITCHSTATE_REQUESTED));

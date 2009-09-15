@@ -88,7 +88,7 @@ package org.openvideoplayer.net.dynamicstreaming
 									
 						var netLoadedContext:NetLoadedContext = tempTrait.loadedContext as NetLoadedContext;
 						DynamicNetStream(netLoadedContext.stream).resource = dsResource;
-																					
+																										
 						loadable.loadedContext = new DynamicStreamingNetLoadedContext(netLoadedContext.connection, netLoadedContext.stream,
 																						netLoadedContext.shareable, netLoadedContext.netConnectionFactory,
 																						netLoadedContext.resource, tempTrait);

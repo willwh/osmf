@@ -367,6 +367,6 @@ package org.openvideoplayer.net.dynamicstreaming
 		private const DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE:Number = 50;
 		private const DEFAULT_AVG_FRAMERATE_SAMPLE_SIZE:Number = 50;		
 		
-		private const DEBUG:Boolean = true;
+		private const DEBUG:Boolean = false;
 	}
 }

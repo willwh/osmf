@@ -54,7 +54,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			{
 				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_BUFFER_EMPTY, "status", 9),
 																						new EventInfo(NetStreamCodes.NETSTREAM_BUFFER_FULL, "status", 13) ];
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 20;
+				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 2;
 			}
 		}
 		
@@ -95,7 +95,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			if (_loader is MockDynamicStreamingNetLoader)
 			{
 				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_PLAY_FAILED, "status", 3) ];
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 5;
+				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 1;
 			}
 			
 			createDynamicStreamingElement();						
@@ -107,7 +107,7 @@ package org.openvideoplayer.net.dynamicstreaming
 			if (_loader is MockDynamicStreamingNetLoader)
 			{
 				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_SEEK_NOTIFY, "status", 3) ];
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 5;
+				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 1;
 			}
 			
 			createDynamicStreamingElement();									

@@ -7,7 +7,6 @@ package org.openvideoplayer.composition
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.traits.ISwitchable;
 	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.traits.SwitchableTrait;
 
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
@@ -106,59 +105,58 @@ package org.openvideoplayer.composition
 			//nothing to do here, required for IReusable.
 		}
 		
+		
 		/**
 		 * @inheritDoc
 		 */ 
 		override protected function processAggregatedChild(child:IMediaTrait):void
-		{
-			currentChild = SwitchableTrait(child);
+		{		
 			
-			if (!isNaN(_lastBitrate)) //This isn't our first child, carry on properties
+			if (currentChild != null)
 			{				
-				currentChild.autoSwitch = _autoSwitch;
+				ISwitchable(child).autoSwitch = currentChild.autoSwitch;
 				if (!currentChild.autoSwitch)
 				{
-					for (var itr:Number = 0; itr <= currentChild.maxIndex; itr++)
+					for (var itr:Number = 0; itr <= ISwitchable(child).maxIndex; itr++)
 					{
-						if(currentChild.getBitrateForIndex(itr) == _lastBitrate ||
-							itr == currentChild.maxIndex)
-						{						
-							currentChild.switchTo(itr);	
+						if (ISwitchable(child).getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
+							itr == maxIndex)
+						{							
+							ISwitchable(child).switchTo(itr);	
 							break;	
 						}
-						else if (currentChild.getBitrateForIndex(itr) > _lastBitrate)							
-						{						
-							currentChild.switchTo(Math.max(itr-1, 0));	
+						else if (ISwitchable(child).getBitrateForIndex(itr) > getBitrateForIndex(currentIndex))							
+						{										
+							ISwitchable(child).switchTo(Math.max(itr-1, 0));	
 							break;	
 						}				 
 					}					
-				}				
-			}					
+				}
+				currentChild.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
+				currentChild.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);		
+										
+			}	
+										
+			currentChild = ISwitchable(child);
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
-			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);		
-			
+			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);					
 		}
 		
 		/**
 		 * @inheritDoc
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
-		{
-			_autoSwitch = currentChild.autoSwitch;
-			_lastBitrate = currentChild.getBitrateForIndex(currentChild.currentIndex);
+		{				
 			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);	
-			currentChild = null;
 		}	
 		
 		private function redispatchEvent(event:Event):void
 		{
 			dispatchEvent(event.clone());
 		}
-		
-		private var _lastBitrate:Number = NaN;
-		private var _autoSwitch:Boolean;
-		private var currentChild:SwitchableTrait;
+				
+		private var currentChild:ISwitchable;
 		
 	}
 }

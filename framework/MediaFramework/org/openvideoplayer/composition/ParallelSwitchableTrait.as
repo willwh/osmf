@@ -3,11 +3,11 @@ package org.openvideoplayer.composition
 	import __AS3__.vec.Vector;
 	
 	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
 	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
 	import org.openvideoplayer.events.TraitEvent;
 	import org.openvideoplayer.media.IMediaTrait;
+	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.traits.ISwitchable;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
@@ -55,7 +55,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function set autoSwitch(value:Boolean):void
 		{
-			if(value != _autoSwitch)
+			if (value != _autoSwitch)
 			{
 				_autoSwitch = value;
 				traitAggregator.forEachChildTrait(
@@ -81,6 +81,10 @@ package org.openvideoplayer.composition
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
+			if (index >= bitRates.length || index < 0)
+			{
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			}
 			return bitRates[index];
 		}
 		
@@ -97,7 +101,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function set maxIndex(value:int):void
 		{		
-			if(value >= bitRates.length)
+			if (value >= bitRates.length || value < 0)
 			{
 				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 			}	
@@ -108,16 +112,17 @@ package org.openvideoplayer.composition
 		 * @inheritDoc
 		 */ 
 		public function get switchUnderway():Boolean
-		{
-			var switching:Boolean = false;
-			traitAggregator.forEachChildTrait(
-					function(mediaTrait:ISwitchable):void
-					{
-						switching = mediaTrait.switchUnderway || switching;
-					}
-				,   MediaTraitType.SWITCHABLE
-				);
-			return switching;
+		{		
+			var child:MediaElement = traitAggregator.getNextChildWithTrait(null, MediaTraitType.SWITCHABLE);
+			while (child != null)
+			{
+				if ((child.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway)
+				{
+					return true;
+				}
+				child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.SWITCHABLE);				
+			}			
+			return false;
 		}
 		
 		/**
@@ -132,8 +137,7 @@ package org.openvideoplayer.composition
 					throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 				}
 				else
-				{
-					debug("switchTo() - manually switching to index: " + index);
+				{					
 					traitAggregator.forEachChildTrait(
 						function(mediaTrait:ISwitchable):void
 						{
@@ -178,7 +182,7 @@ package org.openvideoplayer.composition
 		{			
 			var aggregatedBR:int = 0;
 			var childTrait:ISwitchable = ISwitchable(child);
-			if(traitAggregator.getNumTraits(MediaTraitType.SWITCHABLE) == 1)
+			if (traitAggregator.getNumTraits(MediaTraitType.SWITCHABLE) == 1)
 			{
 				_autoSwitch = childTrait.autoSwitch;				
 			}
@@ -187,10 +191,12 @@ package org.openvideoplayer.composition
 				childTrait.autoSwitch = _autoSwitch;
 			}
 						
-			mergeChildRates(childTrait);
+			if (mergeChildRates(childTrait))
+			{
+				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+			}
 			
-			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatch);	
-			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);
+			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);
 			_maxIndex = bitRates.length-1; 			
 			
@@ -200,30 +206,48 @@ package org.openvideoplayer.composition
 		 * @inheritDoc
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
-		{		
-			rebuildBitRateTable();
-			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatch);		
-			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndicies);
-			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);	
+		{	
+			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
+			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);		
+			recomputeIndices();	
 		}
 		
-		private function rebuildBitRateTable():void
+		/**
+		 * Rebuilds the child bitrates from the children's switchable traits.
+		 * updates the max index based on the children's max indices.
+		 * 
+		 * @returns if there were changes to the bitrate table.
+		 */ 
+		private function rebuildBitRateTable():Boolean
 		{
 			//Rebuild bitRate table
+			var oldBitRates:Vector.<Number> = bitRates;
 			bitRates = new Vector.<Number>;
-						
+								
 			traitAggregator.forEachChildTrait(
 				function(mediaTrait:ISwitchable):void
 				{	
-					mergeChildRates(mediaTrait);			
+					mergeChildRates(mediaTrait);							
 				}
 			,   MediaTraitType.SWITCHABLE
 			);
+			_maxIndex = bitRates.length -1;
+			
+			//Currently doesn't detect in place changes.
+			//since this is never called after an in place change, this check is good enough.
+			return oldBitRates.length != bitRates.length;
 		}
 		
-		private function mergeChildRates(child:ISwitchable):void
+		/**
+		 * Add a new child to the bitrate table.  Insertions are made in
+		 * soted order.
+		 * 
+		 * @returns if the indices changed.
+		 */ 
+		private function mergeChildRates(child:ISwitchable):Boolean
 		{	
 			var aggregatedIndex:int = 0;
+			var indicesChanged:Boolean = false;
 						
 			for (var childBR:int = 0; childBR <= child.maxIndex; ++childBR)
 			{
@@ -231,6 +255,7 @@ package org.openvideoplayer.composition
 				
 				if (bitRates.length <= aggregatedIndex) //Add it to the end
 				{
+					indicesChanged = true;
 					bitRates.push(rate);
 					aggregatedIndex++;					
 				} 
@@ -245,37 +270,48 @@ package org.openvideoplayer.composition
 				}
 				else  //bitrate is smaller than the current bitrate.
 				{
+					indicesChanged = true;
 					bitRates.splice(aggregatedIndex, 0, rate);
 				}
 			}	
-		}
-		
-		private function recomputeIndicies(event:TraitEvent):void
-		{
-			var oldBitRate:Number = bitRates[currentIndex];
-			rebuildBitRateTable();			
-			var newBIndex:Number = 0;
-			while(newBIndex < bitRates.length)
-			{
-				if(bitRates[newBIndex] > oldBitRate)
-				{
-					break;
-				}	
-				newBIndex++;			
-			}
-			switchTo(newBIndex-1 < 0 ? 0 : newBIndex-1);	
-			_maxIndex = bitRates.length-1; 			
+			return indicesChanged;
 		}
 		
 		/**
-		 * If DEBUG is true, traces out debug messages.
-		 */
-		private function debug(...args):void
-		{
-			trace(">>> CompositeSwitchable."+args);			
+		 * Rebuilds the bitrate table and switches to the appropriate bit rate.
+		 */ 
+		private function recomputeIndices(event:TraitEvent = null):void
+		{			
+			var oldBitRate:Number = bitRates[currentIndex];
+			if(rebuildBitRateTable())
+			{
+				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+			}			
+			
+			if (!_autoSwitch)
+			{
+				var newBIndex:Number = 0;
+				while(newBIndex < bitRates.length)
+				{
+					if(bitRates[newBIndex] > oldBitRate)
+					{
+						break;
+					}	
+					newBIndex++;			
+				}			
+				if (newBIndex-1 != currentIndex)
+				{
+					switchTo(newBIndex-1 < 0 ? 0 : newBIndex-1);	
+				}
+				
+			}					
 		}
-		
-		protected function childSwitchingChange(event:SwitchingChangeEvent):void
+				
+		/**
+		 * Handle the child switchable changing.  If collapse multiple events
+		 * into a single event when switching muple children simultaneously.   
+		 */ 
+		private function childSwitchingChange(event:SwitchingChangeEvent):void
 		{
 			switch(event.newState)
 			{
@@ -296,22 +332,13 @@ package org.openvideoplayer.composition
 					break;
 			}
 			_state = event.newState;	
-			dispatchEvent(new SwitchingChangeEvent(event.newState, event.oldState, event.detail));	
-							
-			//trace('newState:' + SwitchingChangeEvent(event).newState);
-			
-			trace('ParalllelSwitchable: ' + _state);		
+			dispatchEvent(new SwitchingChangeEvent(event.newState, event.oldState, event.detail));			
 		}
-		
-		protected function redispatch(event:Event):void
-		{			
-			dispatchEvent(event.clone());		
-		}
-		
+				
 		private var _state:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 		private var _autoSwitch:Boolean = false;
 		private var _maxIndex:int = int.MAX_VALUE;
-		private var _currentIndex:int = -1;
+		private var _currentIndex:int = 0;
 		private var bitRates:Vector.<Number> = new Vector.<Number>;
 		
 		

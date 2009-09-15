@@ -25,7 +25,7 @@ package org.openvideoplayer.traits
 	{		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new SwitchableTrait();
+			return new SwitchableTrait(5);
 		}
 	}
 }

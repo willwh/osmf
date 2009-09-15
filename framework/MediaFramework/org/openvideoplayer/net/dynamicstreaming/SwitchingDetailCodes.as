@@ -38,6 +38,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		public static const SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE:int		= 4;
 		public static const SWITCHING_DOWN_OTHER:int						= 5;
 		public static const SWITCHING_UP_OTHER:int							= 6;
+		public static const SWITCHING_MANUAL:int							= 7;
 
 		/**
 		 * Returns a description of the switching detail for the specified detail code.  If
@@ -70,7 +71,8 @@ package org.openvideoplayer.net.dynamicstreaming
 			{code:SWITCHING_DOWN_BUFFER_INSUFFICIENT,		description:MediaFrameworkStrings.SWITCHING_DOWN_BUFFER_INSUFFICIENT},
 			{code:SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE,	description:MediaFrameworkStrings.SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE},
 			{code:SWITCHING_DOWN_OTHER,						description:MediaFrameworkStrings.SWITCHING_DOWN_OTHER},
-			{code:SWITCHING_UP_OTHER,						description:MediaFrameworkStrings.SWITCHING_UP_OTHER}
+			{code:SWITCHING_UP_OTHER,						description:MediaFrameworkStrings.SWITCHING_UP_OTHER},
+			{code:SWITCHING_MANUAL,							description:MediaFrameworkStrings.SWITCHING_MANUAL}
 		];
 	}
 }

@@ -22,7 +22,12 @@
 
 package org.openvideoplayer.traits
 {
+	import flash.errors.IllegalOperationError;
+	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
+	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetail;
+	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetailCodes;
+	import org.openvideoplayer.utils.MediaFrameworkStrings;
 	
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
@@ -47,9 +52,14 @@ package org.openvideoplayer.traits
 	 */	
 	public class SwitchableTrait extends MediaTraitBase implements ISwitchable
 	{
-		public function SwitchableTrait()
+		/**
+		 * Creates a new SwitchableTrait with the ability to switch to 
+		 */ 
+		public function SwitchableTrait(numIndices:int)
 		{
 			super();			
+			this.numIndices = numIndices;
+			maxIndex = numIndices - 1;			
 		}
 		
 		/**
@@ -89,6 +99,10 @@ package org.openvideoplayer.traits
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
+			if (index > (numIndices-1) || index < 0)
+			{
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			}
 			return -1;
 		}
 			
@@ -116,18 +130,31 @@ package org.openvideoplayer.traits
 		 * @inheritDoc
 		 */
 		public function get switchUnderway():Boolean
-		{
-			return false;
+		{			
+			return (switchState == SwitchingChangeEvent.SWITCHSTATE_REQUESTED);
 		}
-				
+		
+		/**
+		 * @inheritDoc
+		 */ 		
 		public function switchTo(index:int):void
 		{
 			if (index != currentIndex)
 			{
-				if (canProcessSwitchTo(index))
+				if(autoSwitch)
 				{
+					throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
+				}
+				else if (canProcessSwitchTo(index))
+				{					
+					if (!switchUnderway)
+					{
+						switchState = SwitchingChangeEvent.SWITCHSTATE_REQUESTED;
+						dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, switchState, new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL)));
+					}					
 					_currentIndex = index;
 					processSwitchTo(index);
+					postProcessSwitchTo();
 				}
 			}			
 		}
@@ -151,9 +178,15 @@ package org.openvideoplayer.traits
 		/**
 		 * Returns if this trait can switch to the specified stream index.
 		 */ 
-		protected function canProcessSwitchTo(value:int):Boolean
+		protected function canProcessSwitchTo(index:int):Boolean
 		{
-			return true; 
+			if (index <= maxIndex && index >= 0)
+			{
+				return true; 
+			}
+			throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			return false;
+		
 		}
 		
 		/**
@@ -165,11 +198,34 @@ package org.openvideoplayer.traits
 		}
 		
 		/**
+		 * Fires the SwitchState complete event
+		 */ 
+		protected function postProcessSwitchTo():void
+		{
+			processSwitchState(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, null);
+		}
+		
+		/**
+		 * Does the acutal switching of indices.
+		 */ 
+		protected function processSwitchState(newState:int, detail:SwitchingDetail = null):void
+		{			
+			var oldState:int = switchState;
+			switchState = newState;
+			dispatchEvent(new SwitchingChangeEvent(newState, oldState, detail));
+		}
+		
+		/**
 		 * Returns if this trait can change the max index to specified value
 		 */ 
 		protected function canProcessMaxIndexChange(value:int):Boolean
 		{
-			return true; 
+			if (value < numIndices && value >= 0)
+			{				
+				return true;
+			}
+			throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			return false;
 		}
 		
 		/**
@@ -179,7 +235,7 @@ package org.openvideoplayer.traits
 		{			
 			// MaxIndex is proccessed here
 		}
-			
+					
 		/**
 		 * Backing variable for autoSwitch
 		 */ 	
@@ -195,5 +251,15 @@ package org.openvideoplayer.traits
 		 */ 
 		protected var _maxIndex:int = 0;
 		
+		/**
+		 * tracks the number of possible indices
+		 */ 
+		protected var numIndices:int;
+		
+		/**
+		 * Tracks the current switching state of this trait.  
+		 * See SwitchingChangeEvent for all possible states.
+		 */ 
+		protected var switchState:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 	}
 }
