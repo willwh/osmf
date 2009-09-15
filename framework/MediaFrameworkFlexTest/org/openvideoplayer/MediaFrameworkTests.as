@@ -31,6 +31,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.image.*;
 	import org.openvideoplayer.layout.*;
 	import org.openvideoplayer.loaders.*;
+	import org.openvideoplayer.logging.*;
 	import org.openvideoplayer.media.*;
 	import org.openvideoplayer.metadata.*;
 	import org.openvideoplayer.net.*;
@@ -175,6 +176,10 @@ package org.openvideoplayer
 			addTestSuite(TestDynamicNetStream);
 			addTestSuite(TestParallelSwitchableTrait);
 //			addTestSuite(TestSerialSwitchableTrait); Temporarily comment out this test suite such that the automated build system can resume
+
+			addTestSuite(TestLog);
+			addTestSuite(TestTraceLoggerFactory);
+			addTestSuite(TestTraceLogger);
 		}
 	}
 }
