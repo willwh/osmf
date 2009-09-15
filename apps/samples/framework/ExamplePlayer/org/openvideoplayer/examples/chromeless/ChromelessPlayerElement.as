@@ -24,10 +24,12 @@ package org.openvideoplayer.examples.chromeless
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
+	import org.openvideoplayer.events.DimensionChangeEvent;
 	import org.openvideoplayer.media.IURLResource;
 	import org.openvideoplayer.swf.SWFElement;
 	import org.openvideoplayer.swf.SWFLoader;
 	import org.openvideoplayer.traits.MediaTraitType;
+	import org.openvideoplayer.traits.SpatialTrait;
 	
 	/**
 	 * SWFElement which can control the SWF it wraps via a custom SWF API
@@ -47,8 +49,9 @@ package org.openvideoplayer.examples.chromeless
 			// Flex SWFs load differently from pure AS3 SWFs.  For the former,
 			// we need to wait until the applicationComplete event is
 			// dispatched before we can access the SWF's API.
-			if (swfRoot.hasOwnProperty("application") &&
-				Object(swfRoot).application == null)
+			if	(	swfRoot.hasOwnProperty("application")
+				&&	Object(swfRoot).application == null
+				)
 			{
 				swfRoot.addEventListener("applicationComplete", finishProcessLoadedState, false, 0, true);
 			}
@@ -75,6 +78,15 @@ package org.openvideoplayer.examples.chromeless
 				addTrait(MediaTraitType.PAUSABLE, new SWFPausableTrait(theSwfRoot, this));
 				addTrait(MediaTraitType.AUDIBLE, new SWFAudibleTrait(theSwfRoot));
 				addTrait(MediaTraitType.TEMPORAL, new SWFTemporalTrait(theSwfRoot));
+				
+				if	(	swfRoot.hasOwnProperty("application")
+					&&	Object(swfRoot).application != null
+					)
+				{
+					// Re-dispatch our dimensions:
+					var spatial:SpatialTrait = getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
+					spatial.dispatchEvent(new DimensionChangeEvent(0,spatial.width,0,spatial.height));
+				}
 			}
 		}
 		
