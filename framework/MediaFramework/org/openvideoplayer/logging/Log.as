@@ -60,6 +60,14 @@ package org.openvideoplayer.logging
 		 */
 		public static function getLogger(name:String):ILogger
 		{
+			CONFIG::LOGGING
+			{
+				if (_loggerFactory == null)
+				{
+					_loggerFactory = new TraceLoggerFactory();
+				}
+			}
+			
 			return (_loggerFactory == null)? null : _loggerFactory.getLogger(name);
 		}
 

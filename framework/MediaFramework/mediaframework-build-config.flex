@@ -4,6 +4,11 @@
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       
+      <define>
+        <name>CONFIG::LOGGING</name>
+        <value>false</value>
+      </define>
+      
       <!-- Specifies the locales for internationalization. -->
       <locale>
           <locale-element>en_US</locale-element>
