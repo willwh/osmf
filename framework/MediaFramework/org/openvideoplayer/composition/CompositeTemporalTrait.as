@@ -141,8 +141,12 @@ package org.openvideoplayer.composition
 					(
 						function(mediaTrait:IMediaTrait):void
 						{
-							var temporal:ITemporal = ITemporal(mediaTrait);
-							if (temporal.position < temporal.duration)
+							var iterTemporal:ITemporal = ITemporal(mediaTrait);
+							
+							// Assume that the child that fired the event has
+							// finished.
+							if (iterTemporal != temporal &&
+								iterTemporal.position < iterTemporal.duration)
 							{
 								allHaveReachedDuration = false;
 							}
