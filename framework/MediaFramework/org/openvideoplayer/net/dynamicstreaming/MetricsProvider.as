@@ -30,6 +30,8 @@ package org.openvideoplayer.net.dynamicstreaming
 	import flash.utils.Timer;
 	
 	import org.openvideoplayer.net.NetStreamCodes;
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 		
 	/**
 	 * The purpose of the MetricsProvider class is to provide run-time metrics to the switching rules. It 
@@ -335,9 +337,13 @@ package org.openvideoplayer.net.dynamicstreaming
 		
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>>MetricsProvider." + args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.MetricsProvider");
+				}
+				_logger.debug(">>> MetricsProvider."+args);
 			}
 		}
 		
@@ -367,6 +373,9 @@ package org.openvideoplayer.net.dynamicstreaming
 		private const DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE:Number = 50;
 		private const DEFAULT_AVG_FRAMERATE_SAMPLE_SIZE:Number = 50;		
 		
-		private const DEBUG:Boolean = false;
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }

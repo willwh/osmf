@@ -22,7 +22,8 @@
 
 package org.openvideoplayer.net.dynamicstreaming
 {
-	import flash.events.Event;
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 
 	/**
 	 * Switching rule for frame drop detection. Monitors frame drops using the data 
@@ -103,9 +104,13 @@ package org.openvideoplayer.net.dynamicstreaming
         
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> FrameDropRule."+args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.DroppedFramesRule");
+				}
+				_logger.debug(">>> FrameDropRule."+args);
 			}
 		}        
 		
@@ -113,10 +118,9 @@ package org.openvideoplayer.net.dynamicstreaming
 		private var _dropTwoFrameDropFPS:int;
 		private var _panicFrameDropFPS:int;
 				
-		/**
-		 * Set this to <code>true</code> to show
-		 * run-time debug messages.
-		 */
-		private const DEBUG:Boolean = false;		
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }

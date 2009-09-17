@@ -36,6 +36,8 @@ package org.openvideoplayer.net.dynamicstreaming
 	import flash.utils.getTimer;
 	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 	import org.openvideoplayer.net.NetClient;
 	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
@@ -252,9 +254,13 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(new Date().toTimeString() + ">>> DynamicNetStream."+args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.DynamicNetStream");
+				}
+				_logger.debug(new Date().toTimeString() + ">>> DynamicNetStream."+args);
 			}
 		}
 		
@@ -667,10 +673,9 @@ package org.openvideoplayer.net.dynamicstreaming
 		private const DEFAULT_WAIT_PERIOD_FOR_FAILED_STREAM_RETRY:int = 30000;
 		private const DEFAULT_CLEAR_FAILED_COUNTS_INTERVAL:Number = 300000;	// default of 5 minutes for clearing failed counts on stream items
 		
-		/**
-		 * Set this to <code>true</code> to see run-time debug
-		 * messages (traces).
-		 */
-		private const DEBUG:Boolean = false;
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }

@@ -25,6 +25,8 @@ package org.openvideoplayer.net.dynamicstreaming
 	import flash.events.NetStatusEvent;
 	
 	import org.openvideoplayer.net.NetStreamCodes;
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 	
 	/**
 	 * Switching rule for Buffer detection.
@@ -102,9 +104,13 @@ package org.openvideoplayer.net.dynamicstreaming
 		
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> BufferRule."+args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.InsufficientBufferRule");
+				}
+				_logger.debug(">>> BufferRule."+args);
 			}
 		}		
 				
@@ -112,10 +118,9 @@ package org.openvideoplayer.net.dynamicstreaming
 		private var _moreDetail:String;
 		private var _panicBufferLevel:int;
 				
-		/**
-		 * Set this to <code>true</code> to see debugging messages (traces)
-		 * at run-time.
-		 */
-		private const DEBUG:Boolean = false;							
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }

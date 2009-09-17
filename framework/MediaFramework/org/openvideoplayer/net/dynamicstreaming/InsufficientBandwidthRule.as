@@ -23,6 +23,9 @@
 package org.openvideoplayer.net.dynamicstreaming
 {
 	import flash.events.Event;
+	
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
 
 	/**
 	 * Switching rule for Bandwidth detection. This rule switches down when
@@ -94,19 +97,21 @@ package org.openvideoplayer.net.dynamicstreaming
 				
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> BandwidthRule."+args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.InsufficientBandwidthRule");
+				}
+				_logger.debug(">>> BandwidthRule."+args);
 			}
 		}
 
 		private var _safetyMultiple:Number;
-		
-	
-		/**
-		 * Set this to <code>true</code> to see debugging messages (traces)
-		 * at run-time.
-		 */
-		private const DEBUG:Boolean = false;
+			
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }

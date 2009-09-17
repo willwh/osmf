@@ -24,6 +24,9 @@ package org.openvideoplayer.net.dynamicstreaming
 {
 	import flash.events.Event;
 
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
+	
 	/**
 	 * The only switching rule that switches up, all the others switch down.
 	 */
@@ -85,15 +88,22 @@ package org.openvideoplayer.net.dynamicstreaming
 		
 		private function debug(...args):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> SwitchUpRule."+args);
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.openvideoplayer.net.dynamicstreaming.SufficientBandwidthRule");
+				}
+				_logger.debug(">>> SwitchUpRule."+args);
 			}
 		}
 		
 		private const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
 		private const MIN_DROPPED_FPS:int = 2;
 		
-		private const DEBUG:Boolean = true;
+		CONFIG::LOGGING
+		{
+			private var _logger:ILogger;
+		}
 	}
 }
