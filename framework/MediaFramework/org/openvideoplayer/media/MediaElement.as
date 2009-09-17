@@ -27,6 +27,7 @@ package org.openvideoplayer.media
 	import org.openvideoplayer.events.MediaErrorEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
 	import org.openvideoplayer.metadata.Metadata;
+	import org.openvideoplayer.traits.IDisposable;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
@@ -289,6 +290,10 @@ package org.openvideoplayer.media
 			{
 				// Stop listening for errors:
 				result.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				if (result is IDisposable)
+				{
+					(result as IDisposable).dispose();
+				}
 
 				// Signal removal is about to occur:
 				dispatchEvent(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_REMOVE, type));

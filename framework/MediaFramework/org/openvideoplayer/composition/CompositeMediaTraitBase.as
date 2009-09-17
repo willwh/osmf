@@ -22,13 +22,14 @@
 package org.openvideoplayer.composition
 {
 	import org.openvideoplayer.media.IMediaTrait;
+	import org.openvideoplayer.traits.IDisposable;
 	import org.openvideoplayer.traits.MediaTraitBase;
 	import org.openvideoplayer.traits.MediaTraitType;
 	
 	/**
 	 * Base class for all composite media traits.
 	 **/
-	internal class CompositeMediaTraitBase extends MediaTraitBase 
+	internal class CompositeMediaTraitBase extends MediaTraitBase implements IDisposable
 	{
 		/**
 		 * Constructor.

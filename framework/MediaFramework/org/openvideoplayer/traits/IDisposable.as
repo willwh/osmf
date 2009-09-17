@@ -19,47 +19,19 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.logging
+package org.openvideoplayer.traits
 {
-	import flexunit.framework.TestCase;
-
-	public class TestLog extends TestCase
+	/**
+	 * The IDisposable interface is implemented by various media traits who needs
+	 * to do a cleanup before being de-commissioned. 
+	 */
+	public interface IDisposable
 	{
-		public function TestLog(methodName:String=null)
-		{
-			super(methodName);
-		}
-		
-		override public function tearDown():void
-		{
-			super.tearDown();
-			
-			Log.loggerFactory = null;
-		}
-		
-		public function testAccessLoggerFactory():void
-		{
-			var loggerFactory:TraceLoggerFactory = new TraceLoggerFactory();
-			Log.loggerFactory = loggerFactory;
-			
-			assertTrue(loggerFactory == Log.loggerFactory);
-		}
-		
-		public function testGetLogger():void
-		{
-			var logger:ILogger = Log.getLogger("testLogger");
-			CONFIG::LOGGING
-			{
-				assertTrue(logger != null);
-				logger = null;
-			}
-			
-			assertTrue(logger == null);
-
-			Log.loggerFactory = new TraceLoggerFactory();
-			
-			logger = Log.getLogger("testLogger");
-			assertTrue(logger != null);
-		}
+		/**
+		 * The function is called by the framework to signal that the trait will be
+		 * de-commissioned soon and it is time to clean up, such as releasing any 
+		 * resources.
+		 */
+		function dispose():void;
 	}
 }

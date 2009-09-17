@@ -4,6 +4,11 @@
       <!-- Turn on flexcov instrumentation of the swf. -->
       <coverage>true</coverage>
 
+      <define>
+        <name>CONFIG::LOGGING</name>
+        <value>false</value>
+      </define>
+      
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       

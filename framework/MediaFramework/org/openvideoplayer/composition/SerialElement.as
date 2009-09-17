@@ -229,11 +229,6 @@ package org.openvideoplayer.composition
 				)
 			{
 				var trait:IMediaTrait = removeTrait(traitType);
-				if (trait is CompositeMediaTraitBase)
-				{
-					(trait as CompositeMediaTraitBase).dispose();
-				}
-				
 				if (trait != null && trait is IReusable) 
 				{
 					reusableTraits[traitType] = trait;
