@@ -3,6 +3,7 @@
 	<name>DynamicStreamingSample</name>
 	<comment></comment>
 	<projects>
+		<project>MediaFramework</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

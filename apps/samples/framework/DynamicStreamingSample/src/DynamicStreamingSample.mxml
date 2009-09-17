@@ -24,11 +24,13 @@
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
 	xmlns:players="com.adobe.strobe.players.*" applicationComplete="initApp()"
-	backgroundColor="#000000">
+	backgroundColor="#000000" xmlns:examples="org.openvideoplayer.examples.*">
 
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.openvideoplayer.traits.IAudible;
+			import org.openvideoplayer.examples.Compositions;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;
 			import mx.events.DropdownEvent;		
@@ -69,19 +71,6 @@
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
 			private static const MAX_VIDEO_WIDTH:int = 640;
 			private static const MAX_VIDEO_HEIGHT:int = 360;		
-
-			// ------ TEST CONTENT ------
-			// SMIL
-			private static const SMIL_TEST1:String 		= "http://mediapm.edgesuite.net/ovp/content/demo/smil/elephants_dream.smil";
-			private static const SMIL_TEST2:String		= "http://www.streamflashhd.com/video/train.smil";
-			// NON-DYNAMIC PROGRESSIVE
-			private static const PROGRESSIVE_FLV:String = "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
-			// NON-DYNAMIC STREAMING
-			private static const STREAMING_F4V:String	= "rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/sample1_700kbps.f4v";
-			
-				
-			[Bindable]
-			private var smilFiles:Array = [ SMIL_TEST1, SMIL_TEST2, PROGRESSIVE_FLV, STREAMING_F4V ];
 			
 			private var _smilParser:SMILParser;
 			
@@ -126,7 +115,9 @@
 						{
 							_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
-						
+						(wrapper.element.getTrait(MediaTraitType.AUDIBLE) as IAudible).volume = 0;
+						(wrapper.element.getTrait(MediaTraitType.AUDIBLE) as IAudible).muted = true;
+								
 						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;		
 						updateSwitchingControls();
 						break;					
@@ -181,7 +172,7 @@
 					var streamMsg:String = "Current streaming profile index: " + _switchable.currentIndex + " of " + _switchable.maxIndex;
 					debug(streamMsg);
 					
-					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.getItemAt(_switchable.currentIndex).bitrate + "kbps";
+					streamMsg = "Current bitrate = " + _switchable.getBitrateForIndex(_switchable.currentIndex) + "kbps";
 					debug(streamMsg);
 				}
 				
@@ -267,27 +258,63 @@
 				clear(false);
 			}			
 			
+			protected function onSwitchableChange(event:Event):void
+			{
+				_switchable = wrapper.element.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
+
+				if (_switchable != null)
+				{
+					setupCustomSwitchable();
+				}				
+			}
 			
-			private function loadSMIL():void
+			private function setupCustomSwitchable():void
+			{
+				_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+				_switchable.autoSwitch = false;
+				_autoswitchBtnLabel = "Auto";
+				_isAutoSwitchable = false;
+			}
+						
+			private function load():void
 			{
 				clear();
-				
-				var smilURL:String = cbMediaURL.text as String;
-				
-				if (smilURL.search(/\.smil$/i) == -1)
+								
+				if (cbMediaURL.selectedItem is MediaElement)
+				{
+					wrapper.element = MediaElement(cbMediaURL.selectedItem);
+					wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE, onSwitchableChange);
+					_switchable = wrapper.element.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
+
+					if (_switchable != null)
+					{
+						setupCustomSwitchable();						
+					}
+					
+					var loadable:ILoadable = wrapper.element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					
+					wrapper.mediaPlayer.autoPlay = true;
+				}				
+				else if (cbMediaURL.text.search(/\.smil$/i) == -1)
 				{
 					// This sample player can handle "regular" content as well
 					this.createDynamicStreamingElement(new URLResource(new FMSURL(smilURL)));
 					return;
 				}
-				_smilParser = new SMILParser();
-				
-				_smilParser.addEventListener(SMILParser.PARSED, onSMILParsed, false, 0, true);
-				_smilParser.addEventListener(SMILParser.ERROR, onSMILParseError, false, 0, true);
-				_smilParser.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSMILSecurityError, false, 0, true);
-				_smilParser.addEventListener(SMILParser.BUSY, onSMILParserBusy, false, 0, true);
-				
-				_smilParser.load(smilURL);		
+				else
+				{
+					var smilURL:String = cbMediaURL.text as String;
+					
+					_smilParser = new SMILParser();
+					
+					_smilParser.addEventListener(SMILParser.PARSED, onSMILParsed, false, 0, true);
+					_smilParser.addEventListener(SMILParser.ERROR, onSMILParseError, false, 0, true);
+					_smilParser.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSMILSecurityError, false, 0, true);
+					_smilParser.addEventListener(SMILParser.BUSY, onSMILParserBusy, false, 0, true);
+					
+					_smilParser.load(smilURL);	
+				}	
 			}
 			
 			private function onSMILParsed(e:Event):void
@@ -452,17 +479,18 @@
 			{
 				mainContainer.visible = mainContainer.includeInLayout = show;
 			}
+						
 		]]>
 	</mx:Script>
 
-
+	<examples:Compositions id="creator" />
 	<mx:VBox id="mainContainer" height="100%" width="100%" paddingLeft="10" paddingTop="10">
 		<mx:Label text="OSMF Dynamic Streaming Sample App" styleName="title" width="100%" textAlign="left" paddingLeft="20"/>
 		<mx:Spacer height="20" />
 		<mx:HBox id="inputContainer" height="60">
 			<mx:Spacer width="10" />
-			<mx:ComboBox id="cbMediaURL" editable="true" dataProvider="{this.smilFiles}" />
-			<mx:Button label="Load" click="{loadSMIL()}"/>
+			<mx:ComboBox id="cbMediaURL" editable="true" dataProvider="{creator.comps}" />
+			<mx:Button label="Load" click="{load()}"/>
 			<mx:Button label="Unload" click="{unload()}"/>
 			<mx:Label text="{_smilFileLoadState}"/>
 		</mx:HBox>	

@@ -140,38 +140,35 @@ package org.openvideoplayer.composition
 				{					
 					traitAggregator.forEachChildTrait(
 						function(mediaTrait:ISwitchable):void
-						{
-							if (mediaTrait.getBitrateForIndex(0) > bitRates[index])
-							{
-								mediaTrait.switchTo(0);
-								return;
-							}
-							for (var itr:Number  = 0; itr < mediaTrait.maxIndex; itr++)
-							{							
-								if (mediaTrait.getBitrateForIndex(mediaTrait.currentIndex) == bitRates[index])
+						{	
+							var desiredBitRate:Number = bitRates[index];	
+							var childIndex:Number;		
+							for (childIndex = 0; childIndex <= mediaTrait.maxIndex; childIndex++)
+							{		
+								var childBitRate:Number = mediaTrait.getBitrateForIndex(childIndex);
+													
+								if (childBitRate == desiredBitRate)								   
 								{
-									mediaTrait.switchTo(itr);
-									return;
-								}
-								else if (itr > 0 &&
-										mediaTrait.getBitrateForIndex(itr-1) < bitRates[index] &&
-										mediaTrait.getBitrateForIndex(itr) > bitRates[index])
-								{									
-									mediaTrait.switchTo(itr-1);
-									return;
-								}								
-							}	
+									break;
+								}									
+								else if (childBitRate > desiredBitRate)
+								{
+									childBitRate--;
+									break;
+								}				
+							}							
 							//If we made it here, the last item is the correct stream
-							mediaTrait.switchTo(mediaTrait.maxIndex);													
+							mediaTrait.switchTo(Math.min(childIndex, mediaTrait.maxIndex));													
 						}
 					    , MediaTraitType.SWITCHABLE);
+					    _currentIndex = index;
+					    trace('new parallel index:' + _currentIndex);
 				}
 			}
 			else
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
-			}	
-			_currentIndex = index;		
+			}						
 		}
 		
 		/**
@@ -282,6 +279,7 @@ package org.openvideoplayer.composition
 		 */ 
 		private function recomputeIndices(event:TraitEvent = null):void
 		{			
+			trace('recomputeIndices');
 			var oldBitRate:Number = bitRates[currentIndex];
 			if(rebuildBitRateTable()) //Update current index, and dispatch event if indices changed.
 			{
@@ -291,7 +289,7 @@ package org.openvideoplayer.composition
 					traitAggregator.forEachChildTrait(
 						function(mediaTrait:ISwitchable):void
 						{	
-							highestBitRate = mediaTrait.getBitrateForIndex(mediaTrait.currentIndex);							
+							highestBitRate = Math.max(mediaTrait.getBitrateForIndex(mediaTrait.currentIndex), highestBitRate);							
 						}
 						,   MediaTraitType.SWITCHABLE);
 					var newBIndex:Number = 0;
