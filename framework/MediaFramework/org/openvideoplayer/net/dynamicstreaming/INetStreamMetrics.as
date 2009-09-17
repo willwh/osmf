@@ -72,6 +72,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * The current stream index.
 		 */
 		function get currentIndex():int;
+		function set currentIndex(value:int):void;
 		
 		/**
 		 * Returns the maximum index value 
@@ -82,7 +83,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * The DynamicStreamingResource which the class is referencing.
 		 */
 		function get dynamicStreamingResource():DynamicStreamingResource;
-		
+		function set dynamicStreamingResource(value:DynamicStreamingResource):void;
 		/**
 		 * The current buffer length of the NetStream.
 		 */

@@ -264,7 +264,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 * rules or add to them by overridding the <code>addSwitchingRules</code>
 		 * method.
 		 */
-		private function addSwitchingRule(rule:ISwitchingRule):void
+		protected function addSwitchingRule(rule:ISwitchingRule):void
 		{
 			if (_switchingRules == null)
 			{
@@ -598,6 +598,22 @@ package org.openvideoplayer.net.dynamicstreaming
 		}
 		
 		/**
+		 * The object implementing the INetStreamMetrics interface which 
+		 * provides metrics to the switching rules. This class
+		 * creates a metrics class by default but it can be overridden by a class
+		 * extending this class. 
+		 */
+		protected function get metricsProvider():INetStreamMetrics
+		{
+			return _metricsProvider;
+		}
+		
+		protected function set metricsProvider(value:INetStreamMetrics):void
+		{
+			_metricsProvider = value;
+		}
+		 
+		/**
 		 * Sets the lock level at the provided index. Any item at this index or higher will be unavailable until the LOCK_INTERVAL
 		 * has passed.
 		 * 
@@ -622,7 +638,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		private var _checkRulesTimer:Timer;
 		private var _clearFailedCountsTimer:Timer;
 		private var _switchingRules:Vector.<ISwitchingRule>;
-		private var _metricsProvider:MetricsProvider;
+		private var _metricsProvider:INetStreamMetrics;
 		private var _streamIndex:int;
 		private var _oldStreamName:String;
 		private var _dsResource:DynamicStreamingResource;
