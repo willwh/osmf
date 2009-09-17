@@ -30,7 +30,9 @@ package org.openvideoplayer.media
 	import org.openvideoplayer.events.*;
 	import org.openvideoplayer.netmocker.MockNetLoader;
 	import org.openvideoplayer.netmocker.NetConnectionExpectation;
+	import org.openvideoplayer.traits.IBufferable;
 	import org.openvideoplayer.traits.ILoadable;
+	import org.openvideoplayer.traits.ISwitchable;
 	import org.openvideoplayer.traits.ITemporal;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.traits.TemporalTrait;
@@ -221,7 +223,7 @@ package org.openvideoplayer.media
 				assertTrue(mediaPlayer.paused);
 				
 				assertTrue(pauseTransitions.length == 0);
-				assertTrue(playingTransitions.length == 0);
+				assertTrue(playingTransitions.length == 0 );
 				
 				mediaPlayer.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlaying);
 				mediaPlayer.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPause);
@@ -230,6 +232,46 @@ package org.openvideoplayer.media
 				testCalled = true;
 			}
 			assertTrue(testCalled);
+		}
+		
+		public function testSwitchable():void
+		{
+			assertFalse(mediaPlayer.switchable);
+			
+			mediaPlayer.source = new DynamicMediaElement([MediaTraitType.SWITCHABLE]);
+			
+			var switchable:ISwitchable = mediaPlayer.source.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
+			switchable.autoSwitch = false;
+			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex);
+			
+			switchable.switchTo(0);
+			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex);
+			switchable.switchTo(switchable.maxIndex);
+			
+			assertEquals(switchable.autoSwitch, mediaPlayer.autoSwitch);
+			mediaPlayer.autoSwitch = true;
+			assertEquals(true, mediaPlayer.autoSwitch, switchable.autoSwitch);
+			
+			assertEquals(switchable.getBitrateForIndex(0), mediaPlayer.getBitrateForIndex(0));
+			
+			assertEquals(switchable.switchUnderway, mediaPlayer.switchUnderway);
+			
+			assertTrue(mediaPlayer.switchable);
+			
+			switchable.maxIndex = 2;
+						
+			assertEquals(switchable.maxIndex, mediaPlayer.maxStreamIndex, 2);
+			
+			mediaPlayer.maxStreamIndex = 3;
+			
+			assertEquals(switchable.maxIndex, mediaPlayer.maxStreamIndex, 3);
+			
+			switchable.autoSwitch = false;
+			mediaPlayer.switchTo(3);
+			
+			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex, 3);
+			
+			
 		}
 		
 		public function testViewableSpatial():void
@@ -650,11 +692,14 @@ package org.openvideoplayer.media
 			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));	
 			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE, onBufferable);
 			var onBufferableCallback:Function = addAsync(function():void{}, 6000);
-			
+						
 			function onBufferable(event:MediaPlayerCapabilityChangeEvent):void
 			{
 				if(event.enabled)
 				{
+					var buff:IBufferable = mediaPlayer.source.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
+					assertEquals(mediaPlayer.bufferLength, buff.bufferLength);					
+					
 					mediaPlayer.bufferTime = 10;			
 					assertEquals(mediaPlayer.bufferTime, 10);
 					onBufferableCallback(null);

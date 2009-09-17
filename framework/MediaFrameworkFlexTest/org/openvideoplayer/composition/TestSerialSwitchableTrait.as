@@ -86,6 +86,42 @@ package org.openvideoplayer.composition
 			}			
 		}
 		
+		public function testSerialSwitchMaxIndex():void
+		{
+			var ch1:MediaElement = serialElem.getChildAt(0);
+									
+			switchable.maxIndex = 1;
+			
+			assertEquals(switchable.maxIndex, (ch1.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex, 1);
+			
+			switchable.maxIndex = 2;
+			
+			assertEquals(switchable.maxIndex, (ch1.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex, 2);
+
+		}
+		
+		public function testSerialSwitchAutoOn():void
+		{
+			var ch1:MediaElement = serialElem.getChildAt(0);
+			var ch2:MediaElement = serialElem.getChildAt(1);
+			
+			serialElem.removeChildAt(0);
+			serialElem.removeChildAt(0);
+			
+			(ch1.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = false;
+			
+			(ch2.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+			(ch2.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = false;
+			
+			serialElem.addChild(ch1);
+			serialElem.addChild(ch2);	
+			
+			assertEquals(switchable.autoSwitch, (ch1.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch, false );
+			assertEquals(switchable.autoSwitch, (ch2.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch, false );
+				
+			
+		}
+		
 		public function testSerialSwitchSequence():void
 		{
 			var asynchTrigger:Function = addAsync(function():void {}, 10000);

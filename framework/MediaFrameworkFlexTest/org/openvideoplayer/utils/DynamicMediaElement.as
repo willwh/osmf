@@ -76,7 +76,7 @@ package org.openvideoplayer.utils
 							trait = new SpatialTrait();
 							break;
 						case MediaTraitType.SWITCHABLE:
-							trait = new SwitchableTrait(0);
+							trait = new SwitchableTrait(5);
 							break;
 						case MediaTraitType.TEMPORAL:
 							trait = new TemporalTrait();

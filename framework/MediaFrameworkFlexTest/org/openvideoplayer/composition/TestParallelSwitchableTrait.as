@@ -1,6 +1,7 @@
 package org.openvideoplayer.composition
 {
 	import org.openvideoplayer.events.TraitEvent;
+	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
 	import org.openvideoplayer.netmocker.MockDynamicStreamingNetLoader;
@@ -29,6 +30,17 @@ package org.openvideoplayer.composition
 			playable.play();	
 												
 			return parallelElem.getTrait(MediaTraitType.SWITCHABLE);
+		}
+		
+		public function testSerialSwitchMaxIndex():void
+		{									
+			switchable.maxIndex = 1;
+			
+			assertEquals(switchable.maxIndex, 1);
+			
+			switchable.maxIndex = 2;
+			
+			assertEquals(switchable.maxIndex, 2);
 		}
 		
 		override public function testGetBitrateForIndex():void
