@@ -62,6 +62,10 @@ package org.openvideoplayer.events
 		public static const AUDIO_IO_LOAD_ERROR:int 					= 301;
 		public static const AUDIO_SECURITY_LOAD_ERROR:int				= 302;
 		public static const PLAY_FAILED_NO_SOUND_CHANNELS:int			= 303;
+		
+		public static const HTTP_IO_LOAD_ERROR:int 						= 351;
+		public static const HTTP_SECURITY_LOAD_ERROR:int				= 352;
+
 
 		/**
 		 * Returns a description of the error for the specified error code.  If
@@ -114,6 +118,8 @@ package org.openvideoplayer.events
 			, {code:AUDIO_IO_LOAD_ERROR,					description:MediaFrameworkStrings.AUDIO_IO_LOAD_ERROR}
 			, {code:AUDIO_SECURITY_LOAD_ERROR,				description:MediaFrameworkStrings.AUDIO_SECURITY_LOAD_ERROR}
 			, {code:PLAY_FAILED_NO_SOUND_CHANNELS,			description:MediaFrameworkStrings.PLAY_FAILED_NO_SOUND_CHANNELS}
+			, {code:HTTP_IO_LOAD_ERROR,						description:MediaFrameworkStrings.HTTP_IO_LOAD_ERROR}
+			, {code:HTTP_SECURITY_LOAD_ERROR,				description:MediaFrameworkStrings.HTTP_SECURITY_LOAD_ERROR}
 		];
 	}
 }

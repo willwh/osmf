@@ -413,7 +413,7 @@ package org.openvideoplayer.loaders
 			mediaErrors.push(event.error);
 		}
 		
-		private static const TEST_TIME:int = 4000;
+		private static const TEST_TIME:int = 8000;
 		
 		private var eventDispatcher:EventDispatcher;
 		private var eventCount:int = 0;

@@ -185,6 +185,7 @@
     <classEntry path="org.openvideoplayer.traits.BufferableTrait"/>
     <classEntry path="org.openvideoplayer.traits.IAudible"/>
     <classEntry path="org.openvideoplayer.traits.IBufferable"/>
+    <classEntry path="org.openvideoplayer.traits.IDisposable"/>
     <classEntry path="org.openvideoplayer.traits.ILoadable"/>
     <classEntry path="org.openvideoplayer.traits.ILoadedContext"/>
     <classEntry path="org.openvideoplayer.traits.IPausable"/>
@@ -207,6 +208,8 @@
     <classEntry path="org.openvideoplayer.traits.ViewableTrait"/>
     <classEntry path="org.openvideoplayer.utils.FMSHost"/>
     <classEntry path="org.openvideoplayer.utils.FMSURL"/>
+    <classEntry path="org.openvideoplayer.utils.HTTPLoadedContext"/>
+    <classEntry path="org.openvideoplayer.utils.HTTPLoader"/>
     <classEntry path="org.openvideoplayer.utils.MediaFrameworkStrings"/>
     <classEntry path="org.openvideoplayer.utils.URL"/>
     <classEntry path="org.openvideoplayer.version.Version"/>

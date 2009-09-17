@@ -32,6 +32,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.swf.TestSWFElementIntegration;
 	import org.openvideoplayer.swf.TestSWFLoaderIntegration;
 	import org.openvideoplayer.utils.NetFactory;
+	import org.openvideoplayer.utils.TestHTTPLoader;
 	import org.openvideoplayer.video.TestVideoElement;
 
 	public class MediaFrameworkIntegrationTests extends TestSuite
@@ -49,6 +50,8 @@ package org.openvideoplayer
 			this.addTestSuite(TestMediaPlayer);
 
 			this.addTestSuite(TestNetLoader);
+
+			this.addTestSuite(TestHTTPLoader);
 			
 			this.addTestSuite(TestVideoElement);
 			

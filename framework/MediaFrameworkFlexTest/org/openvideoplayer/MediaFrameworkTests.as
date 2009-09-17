@@ -183,6 +183,8 @@ package org.openvideoplayer
 			addTestSuite(TestLog);
 			addTestSuite(TestTraceLogger);
 			addTestSuite(TestTraceLoggerFactory);
+			
+			addTestSuite(TestHTTPLoader);
 		}
 	}
 }
