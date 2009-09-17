@@ -125,6 +125,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		
 		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
 		{			
+			trace('onNetStreamSwitchingChange - ' + event.newState);
 			processSwitchState(event.newState, event.detail);
 		}				
 						

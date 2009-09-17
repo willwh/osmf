@@ -66,7 +66,7 @@ package org.openvideoplayer.composition
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onState);
 			switchable.autoSwitch = false;
 			
-			var stateQueue:Array = [SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
+			var stateQueue:Array = [SwitchingChangeEvent.SWITCHSTATE_REQUESTED,SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
 			
 			switchable.switchTo(2);
 						
@@ -94,12 +94,11 @@ package org.openvideoplayer.composition
 			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onState);
 			switchable.autoSwitch = false;
 			
-			var stateQueue:Array = [ SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
+			var stateQueue:Array = [ SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
 			switchable.switchTo(2);
 			
 			function onState(event:SwitchingChangeEvent):void
-			{						
-				trace('onState' + event.newState );
+			{				
 				assertEquals(stateQueue.shift(), event.newState);
 				assertFalse(switchable.autoSwitch);
 				if(stateQueue.length == 0)

@@ -305,11 +305,9 @@ package org.openvideoplayer.net.dynamicstreaming
 			nso.transition = firstPlay ? NetStreamPlayTransitions.RESET : NetStreamPlayTransitions.SWITCH;
 			
 			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.getItemAt(targetIndex).bitrate) + " kbps");
-			
-			if (!firstPlay)
-			{
-				_switchUnderway = true;	
-			}
+						
+			_switchUnderway = true;	
+			dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_UNDEFINED, new SwitchingDetail(SwitchingDetailCodes.SWITCHING_UP_OTHER)));
 			
 			this.playStream(nso);
 			
@@ -327,6 +325,7 @@ package org.openvideoplayer.net.dynamicstreaming
 
 			if (firstPlay) 
 			{				
+				this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION})
 				_switchUnderway  = false;
 				_renderingIndex = targetIndex;
 				_streamIndex = targetIndex;

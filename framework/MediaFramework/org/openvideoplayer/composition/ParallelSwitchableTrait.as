@@ -112,15 +112,15 @@ package org.openvideoplayer.composition
 		 * @inheritDoc
 		 */ 
 		public function get switchUnderway():Boolean
-		{		
-			var child:MediaElement = traitAggregator.getNextChildWithTrait(null, MediaTraitType.SWITCHABLE);
-			while (child != null)
+		{				
+			for( var itr:Number = 0; itr < traitAggregator.numChildren; ++itr)
 			{
-				if ((child.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway)
+				var child:MediaElement = traitAggregator.getChildAt(itr);
+				if (child.hasTrait(MediaTraitType.SWITCHABLE) &&
+					(child.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway)
 				{
 					return true;
-				}
-				child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.SWITCHABLE);				
+				}							
 			}			
 			return false;
 		}
@@ -156,8 +156,7 @@ package org.openvideoplayer.composition
 								else if (itr > 0 &&
 										mediaTrait.getBitrateForIndex(itr-1) < bitRates[index] &&
 										mediaTrait.getBitrateForIndex(itr) > bitRates[index])
-								{
-									
+								{									
 									mediaTrait.switchTo(itr-1);
 									return;
 								}								
@@ -195,7 +194,7 @@ package org.openvideoplayer.composition
 			{
 				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
 			}
-			
+			trace('adding SwitchingChangeEvent.SWITCHING_CHANGE listener');
 			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);
 			_maxIndex = bitRates.length-1; 			
@@ -207,6 +206,7 @@ package org.openvideoplayer.composition
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{	
+			trace('removing SwitchingChangeEvent.SWITCHING_CHANGE listener');
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
 			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);		
 			recomputeIndices();	
@@ -283,28 +283,26 @@ package org.openvideoplayer.composition
 		private function recomputeIndices(event:TraitEvent = null):void
 		{			
 			var oldBitRate:Number = bitRates[currentIndex];
-			if(rebuildBitRateTable())
+			if(rebuildBitRateTable()) //Update current index, and dispatch event if indices changed.
 			{
-				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
-			}			
-			
-			if (!_autoSwitch)
-			{
-				var newBIndex:Number = 0;
-				while(newBIndex < bitRates.length)
-				{
-					if(bitRates[newBIndex] > oldBitRate)
+				if (!_autoSwitch)
+				{			
+					var highestBitRate:Number = 0;		
+					traitAggregator.forEachChildTrait(
+						function(mediaTrait:ISwitchable):void
+						{	
+							highestBitRate = mediaTrait.getBitrateForIndex(mediaTrait.currentIndex);							
+						}
+						,   MediaTraitType.SWITCHABLE);
+					var newBIndex:Number = 0;
+					while(highestBitRate != bitRates[newBIndex])
 					{
-						break;
+						newBIndex++;								
 					}	
-					newBIndex++;			
-				}			
-				if (newBIndex-1 != currentIndex)
-				{
-					switchTo(newBIndex-1 < 0 ? 0 : newBIndex-1);	
+					_currentIndex = newBIndex;					
 				}
-				
-			}					
+				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+			}								
 		}
 				
 		/**
@@ -312,27 +310,21 @@ package org.openvideoplayer.composition
 		 * into a single event when switching muple children simultaneously.   
 		 */ 
 		private function childSwitchingChange(event:SwitchingChangeEvent):void
-		{
-			switch(event.newState)
-			{
-				case SwitchingChangeEvent.SWITCHSTATE_COMPLETE:
-					if (switchUnderway)
-					{
-						return; //NO-OP if we have pending switches.
-					}
-					_state = SwitchingChangeEvent.SWITCHSTATE_COMPLETE;
-					break;
-					
-				case SwitchingChangeEvent.SWITCHSTATE_REQUESTED:
-					if (_state == SwitchingChangeEvent.SWITCHSTATE_REQUESTED)
-					{
-						return; //NO-OP if we are already in this situation.
-					} 
-					_state = SwitchingChangeEvent.SWITCHSTATE_REQUESTED;
-					break;
+		{			
+			trace('childSwitchingChange received, new state:' + event.newState + "  current state:" + _state);
+		 
+			if(event.newState != _state)
+			{					
+				if(event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE && switchUnderway)
+				{
+					trace('switchComplete received, current state:' + switchUnderway);
+					return; //NO-OP if we have pending switches.				
+				}			
+				trace('changing parallel to new state:' + event.newState);
+				var oldState:int = 	_state;											
+				_state = event.newState;	
+				dispatchEvent(new SwitchingChangeEvent(event.newState, oldState, event.detail));			
 			}
-			_state = event.newState;	
-			dispatchEvent(new SwitchingChangeEvent(event.newState, event.oldState, event.detail));			
 		}
 				
 		private var _state:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
