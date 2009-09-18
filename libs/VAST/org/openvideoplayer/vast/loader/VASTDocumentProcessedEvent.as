@@ -19,29 +19,34 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.utils
+package org.openvideoplayer.vast.loader
 {
-	import flash.net.URLLoader;
+	import flash.events.Event;
 	
-	public class MockHTTPLoader extends HTTPLoader
+	import org.openvideoplayer.vast.model.VASTDocument;
+	
+	internal class VASTDocumentProcessedEvent extends Event
 	{
-		public function MockHTTPLoader()
+		public static const PROCESSED:String = "processed";
+		public static const PROCESSING_FAILED:String = "processingFailed";
+		
+		public function VASTDocumentProcessedEvent(type:String, vastDocument:VASTDocument=null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
-			super();
+			super(type, bubbles, cancelable);
 			
-			urlLoader = new MockURLLoader();
+			_vastDocument = vastDocument;
 		}
 		
-		public function setExpectationForURL(url:String, expectSuccess:Boolean, expectedData:*):void
+		public function get vastDocument():VASTDocument
 		{
-			urlLoader.setExpectationForURL(url, expectSuccess, expectedData);
+			return _vastDocument;
 		}
 
-		override protected function createURLLoader():URLLoader
+		override public function clone():Event
 		{
-			return urlLoader;
+			return new VASTDocumentProcessedEvent(type, vastDocument, bubbles, cancelable);
 		}
 		
-		private var urlLoader:MockURLLoader;
+		private var _vastDocument:VASTDocument;
 	}
 }

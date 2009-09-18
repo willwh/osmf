@@ -17,31 +17,43 @@
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
+* 
+*  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-package org.openvideoplayer.utils
+package org.openvideoplayer.vast.loader
 {
-	import flash.net.URLLoader;
+	import org.openvideoplayer.traits.ILoadedContext;
+	import org.openvideoplayer.vast.model.VASTDocument;
 	
-	public class MockHTTPLoader extends HTTPLoader
+	/**
+	 * The VASTLoadedContext class contains information about the output of a load operation
+	 * performed by a VASTLoader, specifically, the VASTDocument object which is the root
+	 * level object in the object model representation of a VAST document. 
+	 * 
+	 * @see http://www.iab.net/vast
+ 	 * @see VASTLoader
+	 **/
+	public class VASTLoadedContext implements ILoadedContext
 	{
-		public function MockHTTPLoader()
+		/**
+		 * Constructor.
+		 * 
+		 * @param vastDocument The root level object of the VAST document object model.
+		 */
+		public function VASTLoadedContext(vastDocument:VASTDocument)
 		{
-			super();
-			
-			urlLoader = new MockURLLoader();
+			_vastDocument = vastDocument;
 		}
 		
-		public function setExpectationForURL(url:String, expectSuccess:Boolean, expectedData:*):void
+		/**
+		 * The root level object in the VAST document object model.
+		 */
+		public function get vastDocument():VASTDocument
 		{
-			urlLoader.setExpectationForURL(url, expectSuccess, expectedData);
-		}
-
-		override protected function createURLLoader():URLLoader
-		{
-			return urlLoader;
+			return _vastDocument;
 		}
 		
-		private var urlLoader:MockURLLoader;
+		private var _vastDocument:VASTDocument;
 	}
 }

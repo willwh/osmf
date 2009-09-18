@@ -25,29 +25,46 @@ package org.openvideoplayer.utils
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.Dictionary;
 	
 	public class MockURLLoader extends URLLoader
 	{
-		public function MockURLLoader(expectSuccess:Boolean)
+		public function MockURLLoader()
 		{
 			super();
 			
-			this.expectSuccess = expectSuccess;
+			expectations = new Dictionary();
 		}
 		
+		public function setExpectationForURL(url:String, expectSuccess:Boolean, expectedData:*):void
+		{
+			expectations[url] = {"success":expectSuccess, "data":expectedData};
+		}
+				
 		override public function load(request:URLRequest):void
 		{
-			// Prevent the network request from happening.
-			if (expectSuccess)
+			var expectation:Object = expectations[request.url];
+			if (expectation != null)
 			{
-				dispatchEvent(new Event(Event.COMPLETE));
+				data = expectation["data"];
+				
+				// Prevent the network request from happening.
+				if (expectation["success"] == true)
+				{
+					dispatchEvent(new Event(Event.COMPLETE));
+				}
+				else
+				{
+					data = null;
+					dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
+				}
 			}
 			else
 			{
-				dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
+				throw new Error("Expectation needs to be set on MockURLLoader!");
 			}
 		}
 		
-		private var expectSuccess:Boolean;
+		private var expectations:Dictionary;
 	}
 }

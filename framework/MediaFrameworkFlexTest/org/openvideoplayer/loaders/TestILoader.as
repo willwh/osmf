@@ -367,6 +367,11 @@ package org.openvideoplayer.loaders
 			return createInterfaceObject() as ILoader; 
 		}
 		
+		protected function setOverriddenLoader(value:ILoader):void
+		{
+			_loader = value;
+		}
+		
 		final protected function get loader():ILoader
 		{
 			return _loader;

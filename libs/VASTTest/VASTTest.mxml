@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
@@ -19,29 +21,28 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.utils
-{
-	import flash.net.URLLoader;
+-->
+<mx:Application
+	xmlns:mx		="http://www.adobe.com/2006/mxml"
+	xmlns:flexunit	="flexunit.flexui.*"
+	layout			="absolute"
+	creationComplete="runTests()"
+	>
 	
-	public class MockHTTPLoader extends HTTPLoader
-	{
-		public function MockHTTPLoader()
-		{
-			super();
-			
-			urlLoader = new MockURLLoader();
-		}
-		
-		public function setExpectationForURL(url:String, expectSuccess:Boolean, expectedData:*):void
-		{
-			urlLoader.setExpectationForURL(url, expectSuccess, expectedData);
-		}
+	<mx:Script>
+		<![CDATA[
 
-		override protected function createURLLoader():URLLoader
-		{
-			return urlLoader;
-		}
-		
-		private var urlLoader:MockURLLoader;
-	}
-}
+			import org.openvideoplayer.vast.VASTTests;
+			import flexunit.framework.TestSuite;
+			
+			private function runTests():void
+			{
+				testRunner.test = new VASTTests();
+				testRunner.startTest();
+			}
+		]]>
+	</mx:Script>
+	
+	<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%"/>
+
+</mx:Application>

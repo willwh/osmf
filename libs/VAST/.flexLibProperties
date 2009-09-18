@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="org.openvideoplayer.vast.loader.VASTDocumentProcessedEvent"/>
+    <classEntry path="org.openvideoplayer.vast.loader.VASTDocumentProcessor"/>
+    <classEntry path="org.openvideoplayer.vast.loader.VASTLoadedContext"/>
+    <classEntry path="org.openvideoplayer.vast.loader.VASTLoader"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTAdPackageBase"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTDocument"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTInlineAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTWrapperAd"/>
+    <classEntry path="org.openvideoplayer.vast.parser.VASTParser"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

@@ -19,29 +19,19 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.utils
+package org.openvideoplayer.vast
 {
-	import flash.net.URLLoader;
+	import flexunit.framework.TestSuite;
 	
-	public class MockHTTPLoader extends HTTPLoader
-	{
-		public function MockHTTPLoader()
-		{
-			super();
-			
-			urlLoader = new MockURLLoader();
-		}
-		
-		public function setExpectationForURL(url:String, expectSuccess:Boolean, expectedData:*):void
-		{
-			urlLoader.setExpectationForURL(url, expectSuccess, expectedData);
-		}
+	import org.openvideoplayer.vast.loader.*;
 
-		override protected function createURLLoader():URLLoader
+	public class VASTTests extends TestSuite
+	{
+		public function VASTTests(param:Object=null)
 		{
-			return urlLoader;
+			super(param);
+			
+			addTestSuite(TestVASTLoader);
 		}
-		
-		private var urlLoader:MockURLLoader;
 	}
 }

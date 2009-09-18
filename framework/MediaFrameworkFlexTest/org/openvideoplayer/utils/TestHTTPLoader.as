@@ -54,15 +54,15 @@ package org.openvideoplayer.utils
 			{
 				if (resource == SUCCESSFUL_RESOURCE)
 				{
-					mockLoader.expectSuccess = true;
+					mockLoader.setExpectationForURL(SUCCESSFUL_RESOURCE.url.rawUrl, true, null);
 				}
 				else if (resource == FAILED_RESOURCE)
 				{
-					mockLoader.expectSuccess = false;
+					mockLoader.setExpectationForURL(FAILED_RESOURCE.url.rawUrl, false, null);
 				}
 				else if (resource == UNHANDLED_RESOURCE)
 				{
-					mockLoader.expectSuccess = false;
+					mockLoader.setExpectationForURL(UNHANDLED_RESOURCE.url.rawUrl, false, null);
 				}
 			}	
 			return new LoadableTrait(loader, resource);
