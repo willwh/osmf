@@ -123,14 +123,15 @@ package org.openvideoplayer.logging
 		 * console using the trace statement. It also applies the parameters, if any, 
 		 * to the message string.
 		 */
-		protected function log(level:String, message:String, params:Array):void {
+		protected function log(level:String, message:String, params:Array):void
+		{
 			var msg:String = "";
 			
 			// add datetime
-			msg += (new Date()).toString() + " " + level + " - ";
+			msg += new Date().toLocaleString() + " [" + level + "] ";
 			
 			// add name and params
-			msg += name + " - " + applyParams(message, params);
+			msg += name + " " + applyParams(message, params);
 			
 			// trace the message
 			trace(msg);
@@ -139,11 +140,13 @@ package org.openvideoplayer.logging
 		/**
 		 * Returns a string with the parameters replaced.
 		 */
-		protected function applyParams(message:String, params:Array):String {
+		protected function applyParams(message:String, params:Array):String
+		{
 			var result:String = message;
 			var numParams:int = params.length;
 			
-			for (var i:int = 0; i < numParams; i++) {
+			for (var i:int = 0; i < numParams; i++)
+			{
 				result = result.replace(new RegExp("\\{" + i + "\\}", "g"), params[i]);
 			}
 			
