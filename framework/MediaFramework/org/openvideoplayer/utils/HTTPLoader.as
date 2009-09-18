@@ -158,14 +158,13 @@ package org.openvideoplayer.utils
 		}
 		
 		/**
-		 * Unloads content.  
+		 * Unloads the resource.  
 		 * 
 		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
 		 * while unloading and to CONSTRUCTED upon completing a successful unload.</p>
 		 *
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.openvideoplayer.traits.LoadState
-		 * @see flash.display.Loader#unload()
 		 */ 
 		override public function unload(loadable:ILoadable):void
 		{
