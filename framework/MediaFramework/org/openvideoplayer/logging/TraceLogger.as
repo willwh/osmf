@@ -131,7 +131,7 @@ package org.openvideoplayer.logging
 			msg += new Date().toLocaleString() + " [" + level + "] ";
 			
 			// add name and params
-			msg += name + " " + applyParams(message, params);
+			msg += "[" + name + "] " + applyParams(message, params);
 			
 			// trace the message
 			trace(msg);
