@@ -33,11 +33,7 @@ package org.openvideoplayer.examples
 									  	 SMIL_TEST1,
 									     SMIL_TEST2,
 									  	 PROGRESSIVE_FLV,
-									  	 STREAMING_F4V, 
-									  	 new VideoElement(new DynamicStreamingNetLoader(), createDyn5()),
-									  	 new VideoElement(new DynamicStreamingNetLoader(), createDyn3()),
-									  	 new VideoElement(new DynamicStreamingNetLoader(), createDyn4()),
-									  	 new VideoElement(new DynamicStreamingNetLoader(), createDyn1())]);		
+									  	 STREAMING_F4V ]);		
 		}
 		
 		private function createDyn1():DynamicStreamingResource
@@ -60,48 +56,11 @@ package org.openvideoplayer.examples
 			return resource;
 		}
 		
-		private function createDyn3():DynamicStreamingResource
-		{      
-			var resource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL('rtmp://cp60395.edgefcs.net/ondemand'));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_3500H_29.970.mp4", 3500000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_3000_29.970.mp4", 3000000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_2200_29.970.mp4", 2200000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_1400_29.970.mp4", 1500000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_700_29.970.mp4", 700000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/Holly_Hunter_Final_Mix.mov16x9_450_29.970.mp4", 450000));
-			return resource;
-		}
-		
-		private function createDyn4():DynamicStreamingResource
-		{      
-			var resource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL('rtmp://cp60395.edgefcs.net/ondemand'));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_3500H_29.970.mp4", 3500000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_3200H_29.970.mp4", 3200000));
-		    resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_3000_29.970.mp4", 3000000));
-		    resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_2200_29.970.mp4", 2200000));
-		    resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_1400_29.970.mp4", 1400000));
-		    resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_700_29.970.mp4", 700000));
-		    resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/mlb_on_tbs_prores.mov16x9_450_29.970.mp4", 450000));
-			return resource;
-		}
-		
-		private function createDyn5():DynamicStreamingResource
-		{
-			var resource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL('rtmp://cp60395.edgefcs.net/ondemand'));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022hd-720-inoutedit.mov16x9_3500H_29.970.mp4", 3500000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022HD-720-inoutedit.mov16x9_3000_23.976.mp4", 3000000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022HD-720-inoutedit.mov16x9_2200_23.976.mp4", 2200000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022HD-720-inoutedit.mov16x9_1400_23.976.mp4", 1500000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022HD-720-inoutedit.mov16x9_700_23.976.mp4", 700000));
-			resource.addItem(new DynamicStreamingItem("mp4:videos/encoded2/FW_FC3_022HD-720-inoutedit.mov16x9_450_23.976.mp4", 450000));
-			return 	resource;	
-		}
-			
 		private function createParallel():MediaElement
 		{
 			var parallel:ParallelElement = new ParallelElement();
 			parallel.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn1()));			
-			parallel.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn5()));			
+			parallel.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn2()));			
 			return parallel;
 		}
 		
@@ -109,7 +68,7 @@ package org.openvideoplayer.examples
 		{
 			var serial:SerialElement = new SerialElement();
 			serial.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn1()));
-			serial.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn5()));
+			serial.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn2()));
 			return serial;
 		}
 		

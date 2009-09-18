@@ -115,9 +115,8 @@
 						{
 							_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
-						(wrapper.element.getTrait(MediaTraitType.AUDIBLE) as IAudible).volume = 0;
-						(wrapper.element.getTrait(MediaTraitType.AUDIBLE) as IAudible).muted = true;
-								
+						wrapper.mediaPlayer.volume = .5;
+														
 						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;		
 						updateSwitchingControls();
 						break;					
@@ -271,9 +270,12 @@
 			private function setupCustomSwitchable():void
 			{
 				_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+				/*
+				Uncomment to start in manual mode.
 				_switchable.autoSwitch = false;
 				_autoswitchBtnLabel = "Auto";
 				_isAutoSwitchable = false;
+				*/
 			}
 						
 			private function load():void
