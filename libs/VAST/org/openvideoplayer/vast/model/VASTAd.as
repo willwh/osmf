@@ -36,16 +36,9 @@ package org.openvideoplayer.vast.model
 		 * 
 		 * @param id The id attribute (on the Ad element) from the 
 		 * VAST document.
-		 * 
-		 * @throws IllegalOperationError when the id is null or empty.
 		 */
 		public function VASTAd(id:String) 
 		{
-			if (id == null || id.length == 0)
-			{
-				throw new IllegalOperationError("A valid id is required for the VASTAd constructor.");
-			}
-			
 			_id = id;
 		}
 

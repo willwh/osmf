@@ -44,19 +44,6 @@ package org.openvideoplayer.vast.model
 		}
 		
 		/**
-		 * Indicates version of the source ad server.
-		 */
-		public function get adSystemVersion():String 
-		{
-			return _adSystemVersion;
-		}
-		
-		public function set adSystemVersion(value:String):void 
-		{
-			_adSystemVersion = value;
-		}
-		
-		/**
 		 * An optional error URL so the various ad servers can be informed
 		 * if the ad did not play for any reason.
 		 */
@@ -70,19 +57,8 @@ package org.openvideoplayer.vast.model
 			_errorURL = value;
 		}
 		
-		/**
-		 * Extension elements in the VAST document allow
-		 * for customization or for ad server specific features 
-		 * (e.g., geo data, unique identifiers).
-		 */
-		public function get extensions():Vector.<XML> 
-		{
-			return _extensions;
-		}
-		
 		private var _adSystem:String;
 		private var _adSystemVersion:String;
 		private var _errorURL:String;
-		private var _extensions:Vector.<XML>;
 	}
 }

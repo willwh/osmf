@@ -23,7 +23,8 @@ package org.openvideoplayer.vast
 {
 	import flexunit.framework.TestSuite;
 	
-	import org.openvideoplayer.vast.loader.*;
+	import org.openvideoplayer.vast.loader.TestVASTLoader;
+	import org.openvideoplayer.vast.parser.TestVASTParser;
 
 	public class VASTTests extends TestSuite
 	{
@@ -32,6 +33,7 @@ package org.openvideoplayer.vast
 			super(param);
 			
 			addTestSuite(TestVASTLoader);
+			addTestSuite(TestVASTParser);
 		}
 	}
 }

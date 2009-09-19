@@ -51,8 +51,8 @@ package org.openvideoplayer.vast.parser
 		 * 
 		 * @throws ArgumentError If xml is null.
 		 * 
-		 * @returns The parsed document, or null if any error was
-		 * encountered during the parse. 
+		 * @returns The parsed document, or null if any error was encountered
+		 * during the parse. 
 		 */
 		public function parse(xml:XML):VASTDocument 
 		{
@@ -63,7 +63,7 @@ package org.openvideoplayer.vast.parser
 			
 			var vastDocument:VASTDocument = null;
 
-			if (xml.localName() == "VideoAdServingTemplate")
+			if (xml.localName() == ROOT_TAG)
 			{
 				vastDocument = new VASTDocument();
 					
@@ -82,15 +82,16 @@ package org.openvideoplayer.vast.parser
 						vastDocument.addAd(vastAdObj);
 					}
 				}
-				catch(err:Error) 
+				catch (err:Error) 
 				{
 					CONFIG::LOGGING
 					{
-						logger.debug("parse() - Exception occurred : " + err.message);
+						logger.debug("Exception during parsing: " + err.message);
 					}
 					vastDocument = null;
 				}
 			}
+			
 			return vastDocument;
 		}
 		
@@ -128,6 +129,36 @@ package org.openvideoplayer.vast.parser
 		private function parseInLineTag(inlineNode:XML, vastAdObj:VASTAd):void 
 		{
 			var vastInlineObj:VASTInlineAd = new VASTInlineAd();
+			
+			var children:XMLList = inlineNode.children();
+			
+			for (var i:uint = 0; i < children.length(); i++) 
+			{
+				var child:XML = children[i];
+				
+				switch (child.nodeKind()) 
+				{
+					case "element":
+						switch(child.localName()) 
+						{
+							case "AdSystem":
+								vastInlineObj.adSystem = child.toString();
+								break;
+							case "AdTitle":
+								vastInlineObj.adTitle = child.toString();
+								break;
+							case "Description":
+								vastInlineObj.description = child.toString();
+								break;
+							case "Survey":
+								vastInlineObj.surveyURL = parseURL(child);
+								break;
+							case "Error":
+								vastInlineObj.errorURL = parseURL(child);
+								break;							
+						}
+				}
+			}
 
 			vastAdObj.inlineAd = vastInlineObj;
 		}
@@ -148,7 +179,7 @@ package org.openvideoplayer.vast.parser
 						switch(child.localName()) 
 						{
 							case "VASTAdTagURL":
-								vastWrapperObj.vastAdTagURL = child.URL.toString();
+								vastWrapperObj.vastAdTagURL = parseURL(child);
 								break;
 						}
 				}
@@ -156,6 +187,17 @@ package org.openvideoplayer.vast.parser
 
 			vastAdObj.wrapperAd = vastWrapperObj;
 		}
+		
+		private function parseURL(node:XML):String
+		{
+			// TODO: May need some work here.
+			var child:String = node.children()[0];
+			
+			// Strip all leading and trailing whitespace.
+			return child != null ? child.replace(/^\s*|\s*$/g, "") : child;
+		}
+		
+		private static const ROOT_TAG:String = "VideoAdServingTemplate";
 		
 		CONFIG::LOGGING
 		private static const logger:ILogger = Log.getLogger("VASTParser");
