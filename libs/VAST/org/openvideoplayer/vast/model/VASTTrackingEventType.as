@@ -34,7 +34,7 @@ package org.openvideoplayer.vast.model
 		/**
 		 * Event constant for when the playhead reaches the 25% mark.
 		 **/
-		public static const FIRST_QUARTILE:VASTTrackingEventType 	= new VASTTrackingEventType("firstQuartile");
+		public static const FIRST_QUARTILE:VASTTrackingEventType 	= new VASTTrackingEventType("firstquartile");
 		
 		/**
 		 * Event constant for when the playhead reaches the 50% mark.
@@ -44,7 +44,7 @@ package org.openvideoplayer.vast.model
 		/**
 		 * Event constant for when the playhead reaches the 75% mark.
 		 **/
-		public static const THIRD_QUARTILE:VASTTrackingEventType 	= new VASTTrackingEventType("thirdQuartile");
+		public static const THIRD_QUARTILE:VASTTrackingEventType 	= new VASTTrackingEventType("thirdquartile");
 
 		/**
 		 * Event constant for when the playhead reaches the 100% mark.
@@ -94,9 +94,11 @@ package org.openvideoplayer.vast.model
 		 **/
 		public static function fromString(name:String):VASTTrackingEventType
 		{
+			var lowerCaseName:String = name != null ? name.toLowerCase() : name;
+			
 			for each (var eventType:VASTTrackingEventType in ALL_EVENT_TYPES)
 			{
-				if (name == eventType.name)
+				if (lowerCaseName == eventType.name)
 				{
 					return eventType;
 				}

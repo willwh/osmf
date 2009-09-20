@@ -34,6 +34,7 @@ package org.openvideoplayer.vast.parser
 	import org.openvideoplayer.vast.model.VASTDocument;
 	import org.openvideoplayer.vast.model.VASTInlineAd;
 	import org.openvideoplayer.vast.model.VASTNonLinearAd;
+	import org.openvideoplayer.vast.model.VASTResourceType;
 	import org.openvideoplayer.vast.model.VASTTrackingEvent;
 	import org.openvideoplayer.vast.model.VASTTrackingEventType;
 	import org.openvideoplayer.vast.model.VASTUrl;
@@ -562,7 +563,7 @@ package org.openvideoplayer.vast.parser
 			vastAdBase.height 			= parseAttributeAsInt	(xml, "height");
 			vastAdBase.expandedWidth 	= parseAttributeAsInt	(xml, "expandedWidth");
 			vastAdBase.expandedHeight 	= parseAttributeAsInt	(xml, "expandedHeight");
-			vastAdBase.resourceType 	= parseAttributeAsString(xml, "resourceType");
+			vastAdBase.resourceType 	= VASTResourceType.fromString(parseAttributeAsString(xml, "resourceType"));
 			vastAdBase.creativeType 	= parseAttributeAsString(xml, "creativeType");
 
 			for (var i:int = 0; i < children.length(); i++) 

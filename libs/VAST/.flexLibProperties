@@ -12,6 +12,7 @@
     <classEntry path="org.openvideoplayer.vast.model.VASTDocument"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTInlineAd"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTNonLinearAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTResourceType"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTTrackingEvent"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTTrackingEventType"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTUrl"/>

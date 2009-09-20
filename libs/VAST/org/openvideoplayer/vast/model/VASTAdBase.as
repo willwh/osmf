@@ -159,14 +159,13 @@ package org.openvideoplayer.vast.model
 		
 		/**
 		 * Defines whether the ad is an ad tag or a link to a static image.
-		 * Possible values might be iframe, script, HTML, static, or other.
 		 */
-		public function get resourceType():String 
+		public function get resourceType():VASTResourceType 
 		{
 			return _resourceType;
 		}
 		
-		public function set resourceType(value:String):void 
+		public function set resourceType(value:VASTResourceType):void 
 		{
 			_resourceType = value;
 		}
@@ -190,7 +189,7 @@ package org.openvideoplayer.vast.model
 		private var _height:int;
 		private var _expandedWidth:int;
 		private var _expandedHeight:int;
-		private var _resourceType:String;	// iframe, script, html, static, other
+		private var _resourceType:VASTResourceType;
 		private var _creativeType:String;
 		private var _url:String;
 		private var _code:String;

@@ -28,6 +28,7 @@ package org.openvideoplayer.vast.parser
 	import org.openvideoplayer.vast.model.VASTDocument;
 	import org.openvideoplayer.vast.model.VASTInlineAd;
 	import org.openvideoplayer.vast.model.VASTNonLinearAd;
+	import org.openvideoplayer.vast.model.VASTResourceType;
 	import org.openvideoplayer.vast.model.VASTTrackingEvent;
 	import org.openvideoplayer.vast.model.VASTTrackingEventType;
 	import org.openvideoplayer.vast.model.VASTUrl;
@@ -192,7 +193,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(companion.id == "rich media banner");
 			assertTrue(companion.width == 468);
 			assertTrue(companion.height == 60);
-			assertTrue(companion.resourceType == "iframe");
+			assertTrue(companion.resourceType == VASTResourceType.IFRAME);
 			assertTrue(companion.creativeType == "any");
 			assertTrue(companion.url == "http://ad.server.com/adi/etc.html");
 			assertTrue(companion.adParameters == null);
@@ -206,7 +207,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(companion.id == "banner1");
 			assertTrue(companion.width == 728);
 			assertTrue(companion.height == 90);
-			assertTrue(companion.resourceType == "script");
+			assertTrue(companion.resourceType == VASTResourceType.SCRIPT);
 			assertTrue(companion.creativeType == "any");
 			assertTrue(companion.url == "http://ad.server.com/adj/etc.js");
 			assertTrue(companion.adParameters == null);
@@ -220,7 +221,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(companion.id == "banner2");
 			assertTrue(companion.width == 468);
 			assertTrue(companion.height == 60);
-			assertTrue(companion.resourceType == "static");
+			assertTrue(companion.resourceType == VASTResourceType.STATIC);
 			assertTrue(companion.creativeType == "JPEG");
 			assertTrue(companion.url == "http://media.doubleclick.net/foo.jpg");
 			assertTrue(companion.adParameters == null);
@@ -234,7 +235,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(companion.id == "banner3");
 			assertTrue(companion.width == 468);
 			assertTrue(companion.height == 60);
-			assertTrue(companion.resourceType == "static");
+			assertTrue(companion.resourceType == VASTResourceType.STATIC);
 			assertTrue(companion.creativeType == "JPEG");
 			assertTrue(companion.url == null);
 			assertTrue(companion.adParameters == "param=value");
@@ -251,7 +252,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(nonLinearAd.id == "overlay");
 			assertTrue(nonLinearAd.width == 150);
 			assertTrue(nonLinearAd.height == 60);
-			assertTrue(nonLinearAd.resourceType == "static");
+			assertTrue(nonLinearAd.resourceType == VASTResourceType.STATIC);
 			assertTrue(nonLinearAd.creativeType == "SWF");
 			assertTrue(nonLinearAd.url == "http://ad.server.com/adx/etc.xml");
 			assertTrue(nonLinearAd.adParameters == null);
@@ -267,7 +268,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(nonLinearAd.id == "bumper");
 			assertTrue(nonLinearAd.width == 250);
 			assertTrue(nonLinearAd.height == 300);
-			assertTrue(nonLinearAd.resourceType == "static");
+			assertTrue(nonLinearAd.resourceType == VASTResourceType.STATIC);
 			assertTrue(nonLinearAd.creativeType == "JPEG");
 			assertTrue(nonLinearAd.url == "http://ad.doubleclick.net/adx/etc.jpg");
 			assertTrue(nonLinearAd.adParameters == null);
@@ -283,7 +284,7 @@ package org.openvideoplayer.vast.parser
 			assertTrue(nonLinearAd.id == "overlay2");
 			assertTrue(nonLinearAd.width == 350);
 			assertTrue(nonLinearAd.height == 100);
-			assertTrue(nonLinearAd.resourceType == "other");
+			assertTrue(nonLinearAd.resourceType == VASTResourceType.OTHER);
 			assertTrue(nonLinearAd.creativeType == "JPEG");
 			assertTrue(nonLinearAd.adParameters == "param=value");
 			assertTrue(nonLinearAd.clickThroughURL == "http://www.thirdparty.com/tracker?click2");
