@@ -36,6 +36,9 @@ package org.openvideoplayer.vast.model
 		public function VASTInlineAd()
 		{
 			super();
+
+			_companionAds = new Vector.<VASTCompanionAd>();
+			_nonLinearAds = new Vector.<VASTNonLinearAd>();
 		}
 
 		/**
@@ -76,9 +79,58 @@ package org.openvideoplayer.vast.model
 		{
 			_surveyURL = value;
 		}
-				
+		
+		/**
+		 * The video (if any) for the ad.
+		 */ 
+/* 		public function get video():VASTVideo 
+		{
+			return _video;
+		}
+		
+		public function set video(value:VASTVideo):void
+		{
+			_video = value;
+		}
+ */		
+		
+		/**
+		 * The collection of VASTCompanionAds within this ad package.
+		 */
+		public function get companionAds():Vector.<VASTCompanionAd>
+		{
+			return _companionAds;
+		}
+		
+		/**
+		 * The collection of VASTNonLinearAds within this ad package.
+		 */
+		public function get nonLinearAds():Vector.<VASTNonLinearAd> 
+		{
+			return _nonLinearAds;
+		}
+		
+		/**
+		 * Adds the given VASTCompanionAd to this ad package.
+		 */
+		public function addCompanionAd(companionAd:VASTCompanionAd):void 
+		{
+			_companionAds.push(companionAd);
+		}
+		
+		/**
+		 * Adds the given VASTNonLinearAd to this ad package.
+		 */
+		public function addNonLinearAd(nonLinearAd:VASTNonLinearAd):void 
+		{
+			_nonLinearAds.push(nonLinearAd);
+		}
+
 		private var _adTitle:String;
 		private var _description:String;
 		private var _surveyURL:String;
+		//private var _video:VASTVideo;
+		private var _companionAds:Vector.<VASTCompanionAd>;
+		private var	_nonLinearAds:Vector.<VASTNonLinearAd>;
 	}
 }

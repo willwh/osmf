@@ -19,44 +19,44 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *  Contributor(s): Adobe Systems Inc.
-* 
+*  
 *****************************************************/
 package org.openvideoplayer.vast.model
 {
-	import __AS3__.vec.Vector;
-	
 	/**
-	 * This class represents the top level object of the VAST document object
-	 * model.
+	 * This class represents a URL in a VAST document.
 	 */
-	public class VASTDocument
+	public class VASTUrl
 	{
 		/**
 		 * Constructor.
-		 **/
-		public function VASTDocument()
+		 * 
+		 * @param url The URL.
+		 * @param id An optional id associated with the URL.
+ * 		 */
+		public function VASTUrl(url:String, id:String=null) 
 		{
-			super();
-			
-			_ads = new Vector.<VASTAd>();
-		}
-		
-		/**
-		 * Adds the given VASTAd to the document.
-		 */		
-		public function addAd(ad:VASTAd):void
-		{
-			_ads.push(ad);
+			_url = url;
+			_id = id;
 		}
 
 		/**
-		 * The collection of VASTAds in the document.
+		 * The URL.
 		 */
-		public function get ads():Vector.<VASTAd>
+		public function get url():String 
 		{
-			return _ads;
+			return _url;
 		}
-			
-		private var _ads:Vector.<VASTAd>;
+
+		/**
+		 * An optional id associated with the URL.
+		 */
+		public function get id():String 
+		{
+			return _id;
+		}
+		
+		private var _url:String;		
+		private var _id:String;
 	}
 }

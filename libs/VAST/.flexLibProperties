@@ -6,9 +6,16 @@
     <classEntry path="org.openvideoplayer.vast.loader.VASTLoadedContext"/>
     <classEntry path="org.openvideoplayer.vast.loader.VASTLoader"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTAdBase"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAdPackageBase"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTCompanionAd"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTDocument"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTInlineAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTNonLinearAd"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTTrackingEvent"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTTrackingEventType"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTUrl"/>
+    <classEntry path="org.openvideoplayer.vast.model.VASTVideoClick"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTWrapperAd"/>
     <classEntry path="org.openvideoplayer.vast.parser.VASTParser"/>
   </includeClasses>

@@ -23,40 +23,62 @@
 *****************************************************/
 package org.openvideoplayer.vast.model
 {
-	import __AS3__.vec.Vector;
-	
 	/**
-	 * This class represents the top level object of the VAST document object
-	 * model.
+	 * This class represents a NonLinear tag in a VAST document.
 	 */
-	public class VASTDocument
+	public class VASTNonLinearAd extends VASTAdBase
 	{
 		/**
 		 * Constructor.
-		 **/
-		public function VASTDocument()
+		 */
+		public function VASTNonLinearAd()
 		{
 			super();
-			
-			_ads = new Vector.<VASTAd>();
 		}
 		
 		/**
-		 * Adds the given VASTAd to the document.
-		 */		
-		public function addAd(ad:VASTAd):void
-		{
-			_ads.push(ad);
-		}
-
-		/**
-		 * The collection of VASTAds in the document.
+		 * Whether or not it is acceptable to scale the image.
 		 */
-		public function get ads():Vector.<VASTAd>
+		public function get scalable():Boolean 
 		{
-			return _ads;
+			return _scalable;
 		}
-			
-		private var _ads:Vector.<VASTAd>;
+		
+		public function set scalable(value:Boolean):void 
+		{
+			_scalable = value;
+		}
+		
+		/**
+		 * Whether or not the ad must have its aspect ratio maintained when
+		 * scaled.
+		 */
+		public function get maintainAspectRatio():Boolean 
+		{
+			return _maintainAspectRatio;
+		}
+		
+		public function set maintainAspectRatio(value:Boolean):void 
+		{
+			_maintainAspectRatio = value;
+		}
+		
+		/**
+		 * Framework, if any, used for communication from ad to Video Player,
+		 * such as "FlashVars".
+		 */
+		public function get apiFramework():String 
+		{
+			return _apiFramework;
+		}
+		
+		public function set apiFramework(value:String):void 
+		{
+			_apiFramework = value;
+		}
+		
+		private var _scalable:Boolean;
+		private var _maintainAspectRatio:Boolean;
+		private var _apiFramework:String;
 	}
 }

@@ -23,40 +23,36 @@
 *****************************************************/
 package org.openvideoplayer.vast.model
 {
-	import __AS3__.vec.Vector;
-	
 	/**
-	 * This class represents the top level object of the VAST document object
-	 * model.
+	 * This class represents a Companion Ad in a VAST document.  A companion ad
+	 * is commonly text, display ads, rich media, or skins that wrap around the
+	 * video experience. These ads come in a number of sizes and shapes and
+	 * typically run alongside or surrounding the media player.
 	 */
-	public class VASTDocument
-	{
+	public class VASTCompanionAd extends VASTAdBase
+	{		
 		/**
 		 * Constructor.
-		 **/
-		public function VASTDocument()
+		 */
+		public function VASTCompanionAd()
 		{
 			super();
-			
-			_ads = new Vector.<VASTAd>();
 		}
 		
 		/**
-		 * Adds the given VASTAd to the document.
-		 */		
-		public function addAd(ad:VASTAd):void
-		{
-			_ads.push(ad);
-		}
-
-		/**
-		 * The collection of VASTAds in the document.
+		 * Alt text to be displayed when the companion ad is rendered in an
+		 * HTML environment.
 		 */
-		public function get ads():Vector.<VASTAd>
+		public function get altText():String 
 		{
-			return _ads;
+			return _altText;
 		}
-			
-		private var _ads:Vector.<VASTAd>;
+		
+		public function set altText(value:String):void 
+		{
+			_altText = value;
+		}
+		
+		private var _altText:String;
 	}
 }

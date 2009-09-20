@@ -23,11 +23,17 @@
 *****************************************************/
 package org.openvideoplayer.vast.model
 {
+	import __AS3__.vec.Vector;
+	
 	public class VASTAdPackageBase
 	{
 		public function VASTAdPackageBase()
 		{
 			super();
+			
+			_impressions = new Vector.<VASTUrl>();
+			_trackingEvents = new Vector.<VASTTrackingEvent>();
+			_extensions = new Vector.<XML>(); 
 		}
 
 		/**
@@ -57,8 +63,60 @@ package org.openvideoplayer.vast.model
 			_errorURL = value;
 		}
 		
+
+		/**
+		 * URLs to track impression.
+		 */
+		public function get impressions():Vector.<VASTUrl> 
+		{
+			return _impressions;
+		}
+
+		/**
+		 * Adds the given VASTUrl to this ad package as an impression.
+		 */
+		public function addImpression(value:VASTUrl):void 
+		{
+			_impressions.push(value);
+		}
+
+		/**
+		 * Tracking events associated with this ad package.
+		 */
+		public function get trackingEvents():Vector.<VASTTrackingEvent> 
+		{
+			return _trackingEvents;
+		}
+		
+		/**
+		 * Extension elements in the VAST document allow for customization or
+		 * for ad server specific features (e.g. geo data, unique identifiers).
+		 */
+		public function get extensions():Vector.<XML> 
+		{
+			return _extensions;
+		}
+		
+		/**
+		 * Adds the given VASTTrackingEvent to this ad package.
+		 */
+		public function addTrackingEvent(value:VASTTrackingEvent):void 
+		{
+			_trackingEvents.push(value);
+		}
+
+		/**
+		 * Adds the given extension XML to this ad package.
+		 */
+		public function addExtension(value:XML):void 
+		{
+			_extensions.push(value);
+		}
+		
 		private var _adSystem:String;
-		private var _adSystemVersion:String;
 		private var _errorURL:String;
+		private var _trackingEvents:Vector.<VASTTrackingEvent>;
+		private var _extensions:Vector.<XML>;
+		private var _impressions:Vector.<VASTUrl>;
 	}
 }

@@ -23,40 +23,50 @@
 *****************************************************/
 package org.openvideoplayer.vast.model
 {
-	import __AS3__.vec.Vector;
-	
 	/**
-	 * This class represents the top level object of the VAST document object
-	 * model.
+	 * This class represents a Tracking element in a VAST document.
 	 */
-	public class VASTDocument
-	{
+	public class VASTTrackingEvent
+	{		
 		/**
 		 * Constructor.
-		 **/
-		public function VASTDocument()
+		 * 
+		 * @param type The type of the event to track.
+		 */
+		public function VASTTrackingEvent(type:VASTTrackingEventType) 
 		{
-			super();
+			this.type = type;
 			
-			_ads = new Vector.<VASTAd>();
+			_urls = new Vector.<VASTUrl>();
 		}
 		
 		/**
-		 * Adds the given VASTAd to the document.
-		 */		
-		public function addAd(ad:VASTAd):void
-		{
-			_ads.push(ad);
-		}
-
-		/**
-		 * The collection of VASTAds in the document.
+		 * The type of the event to track.
 		 */
-		public function get ads():Vector.<VASTAd>
+		public function get type():VASTTrackingEventType 
 		{
-			return _ads;
+			return _type;
 		}
-			
-		private var _ads:Vector.<VASTAd>;
+		public function set type(value:VASTTrackingEventType):void 
+		{
+			_type = value;
+		}
+		
+		/**
+		 * URL(s) to track this event during play back. There could be zero or
+		 * many for this event.
+		 */
+		public function get urls():Vector.<VASTUrl> 
+		{
+			return _urls;
+		}
+		
+		public function set urls(value:Vector.<VASTUrl>):void 
+		{
+			_urls = _urls.concat(value);
+		}
+		
+		private var _type:VASTTrackingEventType;
+		private var _urls:Vector.<VASTUrl>;		
 	}
 }
