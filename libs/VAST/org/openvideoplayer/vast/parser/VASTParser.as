@@ -82,7 +82,7 @@ package org.openvideoplayer.vast.parser
 					{
 						var adXML:XML = xml.Ad[i];
 						
-						var id:String = parseAttributeAsString(adXML, "id");
+						var id:String = parseAttributeAsString(adXML, ID);
 						var vastAd:VASTAd = new VASTAd(id);
 						parseAdTag(adXML, vastAd);
 						vastDocument.addAd(vastAd);
@@ -288,7 +288,7 @@ package org.openvideoplayer.vast.parser
 						{
 							case TRACKING:
 							{
-								var eventType:String = parseAttributeAsString(child, "event");
+								var eventType:String = parseAttributeAsString(child, EVENT);
 								var trackingEvent:VASTTrackingEvent =
 									new VASTTrackingEvent
 										(VASTTrackingEventType.fromString(eventType)
@@ -528,9 +528,9 @@ package org.openvideoplayer.vast.parser
 			var nonLinearAd:VASTNonLinearAd = new VASTNonLinearAd();
 			parseAdBase(xml, nonLinearAd);
 
-			nonLinearAd.scalable 			= parseAttributeAsBoolean(xml, "scalable")
-			nonLinearAd.maintainAspectRatio = parseAttributeAsBoolean(xml, "maintainAspectRatio");
-			nonLinearAd.apiFramework 		= parseAttributeAsString (xml, "apiFramework");
+			nonLinearAd.scalable 			= parseAttributeAsBoolean(xml, SCALABLE)
+			nonLinearAd.maintainAspectRatio = parseAttributeAsBoolean(xml, MAINTAIN_ASPECT_RATIO);
+			nonLinearAd.apiFramework 		= parseAttributeAsString (xml, API_FRAMEWORK);
 			
 			var children:XMLList = xml.children();
 			
@@ -558,13 +558,13 @@ package org.openvideoplayer.vast.parser
 		{
 			var children:XMLList = xml.children();
 			
-			vastAdBase.id 				= parseAttributeAsString(xml, "id");
-			vastAdBase.width 			= parseAttributeAsInt	(xml, "width");
-			vastAdBase.height 			= parseAttributeAsInt	(xml, "height");
-			vastAdBase.expandedWidth 	= parseAttributeAsInt	(xml, "expandedWidth");
-			vastAdBase.expandedHeight 	= parseAttributeAsInt	(xml, "expandedHeight");
-			vastAdBase.resourceType 	= VASTResourceType.fromString(parseAttributeAsString(xml, "resourceType"));
-			vastAdBase.creativeType 	= parseAttributeAsString(xml, "creativeType");
+			vastAdBase.id 				= parseAttributeAsString(xml, ID);
+			vastAdBase.width 			= parseAttributeAsInt	(xml, WIDTH);
+			vastAdBase.height 			= parseAttributeAsInt	(xml, HEIGHT);
+			vastAdBase.expandedWidth 	= parseAttributeAsInt	(xml, EXPANDED_WIDTH);
+			vastAdBase.expandedHeight 	= parseAttributeAsInt	(xml, EXPANDED_HEIGHT);
+			vastAdBase.resourceType 	= VASTResourceType.fromString(parseAttributeAsString(xml, RESOURCE_TYPE));
+			vastAdBase.creativeType 	= parseAttributeAsString(xml, CREATIVE_TYPE);
 
 			for (var i:int = 0; i < children.length(); i++) 
 			{
@@ -668,7 +668,7 @@ package org.openvideoplayer.vast.parser
 
 		private function parseVASTUrl(xml:XML):VASTUrl
 		{
-			return new VASTUrl(parseURL(xml), parseAttributeAsString(xml, "id"));
+			return new VASTUrl(parseURL(xml), parseAttributeAsString(xml, ID));
 		}
 		
 		private function parseURL(node:XML):String
@@ -734,6 +734,18 @@ package org.openvideoplayer.vast.parser
 		private static const NON_LINEAR_AD_TAG:String			= "NonLinearAdTag";
 		private static const EXTENSIONS:String 					= "Extensions";
 		private static const EXTENSION:String 					= "Extension";
+		
+		private static const ID:String							= "id";
+		private static const EVENT:String						= "event";
+		private static const WIDTH:String						= "width";
+		private static const HEIGHT:String						= "height";
+		private static const EXPANDED_WIDTH:String				= "expandedWidth";
+		private static const EXPANDED_HEIGHT:String				= "expandedHeight";
+		private static const RESOURCE_TYPE:String				= "resourceType";
+		private static const CREATIVE_TYPE:String				= "creativeType";
+		private static const SCALABLE:String					= "scalable";
+		private static const MAINTAIN_ASPECT_RATIO:String		= "maintainAspectRatio";
+		private static const API_FRAMEWORK:String				= "apiFramework";
 
 		CONFIG::LOGGING
 		private static const logger:ILogger = Log.getLogger("VASTParser");
