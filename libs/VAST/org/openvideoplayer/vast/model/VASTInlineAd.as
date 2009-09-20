@@ -83,7 +83,7 @@ package org.openvideoplayer.vast.model
 		/**
 		 * The video (if any) for the ad.
 		 */ 
-/* 		public function get video():VASTVideo 
+ 		public function get video():VASTVideo 
 		{
 			return _video;
 		}
@@ -91,8 +91,7 @@ package org.openvideoplayer.vast.model
 		public function set video(value:VASTVideo):void
 		{
 			_video = value;
-		}
- */		
+		}		
 		
 		/**
 		 * The collection of VASTCompanionAds within this ad package.
@@ -129,7 +128,7 @@ package org.openvideoplayer.vast.model
 		private var _adTitle:String;
 		private var _description:String;
 		private var _surveyURL:String;
-		//private var _video:VASTVideo;
+		private var _video:VASTVideo;
 		private var _companionAds:Vector.<VASTCompanionAd>;
 		private var	_nonLinearAds:Vector.<VASTNonLinearAd>;
 	}

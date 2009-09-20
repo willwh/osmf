@@ -33,11 +33,13 @@ package org.openvideoplayer.vast.parser
 	import org.openvideoplayer.vast.model.VASTCompanionAd;
 	import org.openvideoplayer.vast.model.VASTDocument;
 	import org.openvideoplayer.vast.model.VASTInlineAd;
+	import org.openvideoplayer.vast.model.VASTMediaFile;
 	import org.openvideoplayer.vast.model.VASTNonLinearAd;
 	import org.openvideoplayer.vast.model.VASTResourceType;
 	import org.openvideoplayer.vast.model.VASTTrackingEvent;
 	import org.openvideoplayer.vast.model.VASTTrackingEventType;
 	import org.openvideoplayer.vast.model.VASTUrl;
+	import org.openvideoplayer.vast.model.VASTVideo;
 	import org.openvideoplayer.vast.model.VASTVideoClick;
 	import org.openvideoplayer.vast.model.VASTWrapperAd;
 
@@ -148,13 +150,13 @@ package org.openvideoplayer.vast.parser
 						switch (child.localName()) 
 						{
 							case AD_SYSTEM:
-								vastInlineAd.adSystem = child.toString();
+								vastInlineAd.adSystem = parseString(child);
 								break;
 							case AD_TITLE:
-								vastInlineAd.adTitle = child.toString();
+								vastInlineAd.adTitle = parseString(child);
 								break;
 							case DESCRIPTION:
-								vastInlineAd.description = child.toString();
+								vastInlineAd.description = parseString(child);
 								break;
 							case SURVEY:
 								vastInlineAd.surveyURL = parseURL(child);
@@ -169,8 +171,7 @@ package org.openvideoplayer.vast.parser
 								parseTrackingEvents(child, vastInlineAd);
 								break;
 							case VIDEO:
-								// TODO
-								//parseVideo(child, vastInlineAd);
+								parseVideo(child, vastInlineAd);
 								break;
 							case COMPANION_ADS:
 								parseInlineCompanionAds(child, vastInlineAd);
@@ -211,7 +212,7 @@ package org.openvideoplayer.vast.parser
 						switch (child.localName()) 
 						{
 							case AD_SYSTEM:
-								vastWrapperAd.adSystem = child.toString();
+								vastWrapperAd.adSystem = parseString(child);
 								break;
 							case VAST_AD_TAG_URL:
 								vastWrapperAd.vastAdTagURL = parseURL(child);
@@ -232,7 +233,7 @@ package org.openvideoplayer.vast.parser
 								parseTrackingEvents(child, vastWrapperAd);
 								break;
 							case VIDEO_CLICKS:
-								parseVideoClicks(child, vastWrapperAd);
+								vastWrapperAd.videoClick = parseVideoClicks(child);
 								break;
 							case EXTENSIONS:
 								parseExtensions(child, vastWrapperAd);
@@ -355,6 +356,94 @@ package org.openvideoplayer.vast.parser
 			return urls;
 		}
 		
+		private function parseVideo(xml:XML, vastInlineAd:VASTInlineAd):void
+		{
+			var video:VASTVideo = new VASTVideo();
+			
+			var children:XMLList = xml.children();
+			
+			for (var i:int = 0; i < children.length(); i++) 
+			{
+				var child:XML = children[i];
+				
+				switch (child.nodeKind()) 
+				{
+					case NODEKIND_ELEMENT:
+						switch(child.localName()) 
+						{
+							case DURATION:
+							{
+								video.duration = parseString(child);
+								break;
+							}
+							case AD_ID:
+							{
+								video.adID = parseString(child);
+								break;
+							}
+							case VIDEO_CLICKS:
+							{
+								video.videoClick = parseVideoClicks(child);
+								break;
+							}
+							case MEDIA_FILES:
+							{
+								parseMediaFiles(child, video);
+								break;
+							}
+							default:
+								CONFIG::LOGGING
+								{
+									logger.debug("parseVideo() - Unsupported VAST tag: " + child.localName());
+								}
+								break;								
+						}
+						break;
+				}
+			}
+			
+			vastInlineAd.video = video;
+		}
+		
+		private function parseMediaFiles(xml:XML, video:VASTVideo):void
+		{
+			var children:XMLList = xml.children();
+			
+			for (var i:int = 0; i < children.length(); i++) 
+			{
+				var child:XML = children[i];
+				switch (child.nodeKind()) 
+				{
+					case NODEKIND_ELEMENT:
+						switch(child.localName()) 
+						{
+							case MEDIA_FILE:
+							{
+								var mediaFile:VASTMediaFile = new VASTMediaFile();
+								
+								mediaFile.id 		= parseAttributeAsString(child, ID);
+								mediaFile.bitrate 	= parseAttributeAsNumber(child, BITRATE);
+								mediaFile.height 	= parseAttributeAsInt	(child, HEIGHT);
+								mediaFile.width 	= parseAttributeAsInt	(child, WIDTH);
+								mediaFile.delivery 	= parseAttributeAsString(child, DELIVERY);
+								mediaFile.type 		= parseAttributeAsString(child, TYPE);
+								mediaFile.url 		= parseURL(child);
+								
+								video.addMediaFile(mediaFile);
+								break;									
+							}
+							default:
+								CONFIG::LOGGING
+								{
+									logger.debug("parseMediaFiles() - Unsupported VAST tag: " + child.localName());
+								}
+								break;
+						}
+						break;
+				}
+			}
+		}
+		
 		private function parseInlineCompanionAds(xml:XML, vastInlineAd:VASTInlineAd):void 
 		{
 			var children:XMLList = xml.children();
@@ -402,7 +491,7 @@ package org.openvideoplayer.vast.parser
 						switch(child.localName()) 
 						{
 							case ALT_TEXT:
-								companionAd.altText = child.toString();
+								companionAd.altText = parseString(child);
 								break;
 							case COMPANION_CLICK_THROUGH:
 								companionAd.clickThroughURL = parseURL(child);
@@ -579,10 +668,10 @@ package org.openvideoplayer.vast.parser
 								vastAdBase.url = parseURL(child);
 								break;
 							case CODE:
-								vastAdBase.code = child.toString();
+								vastAdBase.code = parseString(child);
 								break;
 							case AD_PARAMETERS:
-								vastAdBase.adParameters = child.toString();
+								vastAdBase.adParameters = parseString(child);
 								break;
 						}
 						break;
@@ -618,7 +707,7 @@ package org.openvideoplayer.vast.parser
 			}
 		}
 		
-		private function parseVideoClicks(xml:XML, vastAdPackage:VASTWrapperAd):void
+		private function parseVideoClicks(xml:XML):VASTVideoClick
 		{
 			var videoClick:VASTVideoClick = new VASTVideoClick();
 			
@@ -663,7 +752,7 @@ package org.openvideoplayer.vast.parser
 				}
 			}
 			
-			vastAdPackage.videoClick = videoClick;
+			return videoClick;
 		}
 
 		private function parseVASTUrl(xml:XML):VASTUrl
@@ -671,12 +760,26 @@ package org.openvideoplayer.vast.parser
 			return new VASTUrl(parseURL(xml), parseAttributeAsString(xml, ID));
 		}
 		
-		private function parseURL(node:XML):String
+		private function parseURL(xml:XML):String
 		{
-			var child:String = node.children()[0];
+			var child:String = xml.children()[0];
+			if (child != null)
+			{
+				// Strip all leading and trailing whitespace.
+				child = child.replace(/^\s*|\s*$/g, "");
+				if (child.length == 0)
+				{
+					child = null;
+				}
+			}
 			
-			// Strip all leading and trailing whitespace.
-			return child != null ? child.replace(/^\s*|\s*$/g, "") : child;
+			return child;
+		}
+		
+		private function parseString(xml:XML):String
+		{
+			var s:String = xml.toString();
+			return s.length > 0 ? s : null;
 		}
 
 		private function parseAttributeAsString(xml:XML, attribute:String):String
@@ -699,6 +802,11 @@ package org.openvideoplayer.vast.parser
 			return xml.@[attribute];
 		}
 
+		private function parseAttributeAsNumber(xml:XML, attribute:String):Number
+		{
+			return xml.@[attribute];
+		}
+
 		private static const NODEKIND_ELEMENT:String = "element";
 				
 		private static const ROOT_TAG:String 					= "VideoAdServingTemplate";
@@ -716,6 +824,10 @@ package org.openvideoplayer.vast.parser
 		private static const URL:String 						= "URL";
 		private static const CODE:String 						= "Code";
 		private static const VIDEO:String 						= "Video";
+		private static const DURATION:String 					= "Duration";
+		private static const AD_ID:String 						= "AdID";
+		private static const MEDIA_FILES:String 				= "MediaFiles";
+		private static const MEDIA_FILE:String 					= "MediaFile";
 		private static const VIDEO_CLICKS:String 				= "VideoClicks";
 		private static const CLICK_TRACKING:String 				= "ClickTracking";
 		private static const CLICK_THROUGH:String 				= "ClickThrough";
@@ -746,6 +858,9 @@ package org.openvideoplayer.vast.parser
 		private static const SCALABLE:String					= "scalable";
 		private static const MAINTAIN_ASPECT_RATIO:String		= "maintainAspectRatio";
 		private static const API_FRAMEWORK:String				= "apiFramework";
+		private static const BITRATE:String 					= "bitrate";
+		private static const DELIVERY:String 					= "delivery";
+		private static const TYPE:String 						= "type";
 
 		CONFIG::LOGGING
 		private static const logger:ILogger = Log.getLogger("VASTParser");

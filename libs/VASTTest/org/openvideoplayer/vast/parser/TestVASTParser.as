@@ -27,11 +27,13 @@ package org.openvideoplayer.vast.parser
 	import org.openvideoplayer.vast.model.VASTCompanionAd;
 	import org.openvideoplayer.vast.model.VASTDocument;
 	import org.openvideoplayer.vast.model.VASTInlineAd;
+	import org.openvideoplayer.vast.model.VASTMediaFile;
 	import org.openvideoplayer.vast.model.VASTNonLinearAd;
 	import org.openvideoplayer.vast.model.VASTResourceType;
 	import org.openvideoplayer.vast.model.VASTTrackingEvent;
 	import org.openvideoplayer.vast.model.VASTTrackingEventType;
 	import org.openvideoplayer.vast.model.VASTUrl;
+	import org.openvideoplayer.vast.model.VASTVideo;
 	import org.openvideoplayer.vast.model.VASTVideoClick;
 	import org.openvideoplayer.vast.model.VASTWrapperAd;
 		
@@ -186,6 +188,93 @@ package org.openvideoplayer.vast.parser
 			assertTrue(trackingURL.id == "myadsever");
 			assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?stop");
 			
+			var video:VASTVideo = inlineAd.video;
+			assertTrue(video != null);
+			assertTrue(video.duration == "00:00:15");
+			assertTrue(video.adID == "AdID");
+			
+			assertTrue(video.videoClick != null);
+			var videoClick:VASTVideoClick = video.videoClick;
+			
+			assertTrue(videoClick.clickThrough != null);
+			assertTrue(videoClick.clickThrough.id == "myadsever");
+			assertTrue(videoClick.clickThrough.url == "http://www.primarysite.com/tracker?clickthrough");
+			
+			assertTrue(videoClick.clickTrackings != null);
+			assertTrue(videoClick.clickTrackings.length == 2);
+			var clickTracking:VASTUrl = videoClick.clickTrackings[0];
+			assertTrue(clickTracking.id == "anotheradsever");
+			assertTrue(clickTracking.url == "http://www.thirdparty.com/tracker?click1");
+			clickTracking = videoClick.clickTrackings[1];
+			assertTrue(clickTracking.id == "athirdadsever");
+			assertTrue(clickTracking.url == "http://www.thirdparty.com/tracker?click2");
+			
+			assertTrue(videoClick.customClicks != null);
+			assertTrue(videoClick.customClicks.length == 2);
+			var customClick:VASTUrl = videoClick.customClicks[0];
+			assertTrue(customClick.id == "redclick");
+			assertTrue(customClick.url == "http://www.thirdparty.com/tracker?redclick");
+			customClick = videoClick.customClicks[1];
+			assertTrue(customClick.id == "blueclick");
+			assertTrue(customClick.url == "http://www.thirdparty.com/tracker?blueclick");
+			
+			assertTrue(video.mediaFiles != null);
+			assertTrue(video.mediaFiles.length == 6);
+			
+			var mediaFile:VASTMediaFile = video.mediaFiles[0];
+			assertTrue(mediaFile.id == "mymedia");
+			assertTrue(mediaFile.url == "rtmp://streamingserver/streamingpath/medium/filename.flv");
+			assertTrue(mediaFile.delivery == "streaming");
+			assertTrue(mediaFile.bitrate == 250);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-flv");
+			
+			mediaFile = video.mediaFiles[1];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == "http://progressive.hostlocation.com//high/filename.flv");
+			assertTrue(mediaFile.delivery == "progressive");
+			assertTrue(mediaFile.bitrate == 400);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-flv");
+
+			mediaFile = video.mediaFiles[2];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == "mms://streaming.hostlocaltion.com/ondemand/streamingpath/high/filename.wmv");
+			assertTrue(mediaFile.delivery == "streaming");
+			assertTrue(mediaFile.bitrate == 400);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-ms-wmv");
+
+			mediaFile = video.mediaFiles[3];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == "http://progressive.hostlocation.com//high/filename.wmv");
+			assertTrue(mediaFile.delivery == "progressive");
+			assertTrue(mediaFile.bitrate == 400);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-ms-wmv");
+
+			mediaFile = video.mediaFiles[4];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == "rtsp://streaming.hostlocaltion.com/ondemand/streamingpath/low/filename.ra");
+			assertTrue(mediaFile.delivery == "streaming");
+			assertTrue(mediaFile.bitrate == 75);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-ra");
+			
+			mediaFile = video.mediaFiles[5];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == "http://progressive.hostlocation.com/progressivepath/low/filename.ra");
+			assertTrue(mediaFile.delivery == "progressive");
+			assertTrue(mediaFile.bitrate == 75);
+			assertTrue(mediaFile.width == 200);
+			assertTrue(mediaFile.height == 200);
+			assertTrue(mediaFile.type == "video/x-ra");
+	
 			assertTrue(inlineAd.companionAds != null);
 			assertTrue(inlineAd.companionAds.length == 4);
 			
@@ -455,6 +544,170 @@ package org.openvideoplayer.vast.parser
 			assertTrue(extension.toXMLString() == expectedXML.toXMLString());
 		}
 		
+		public function testParseEmptyInlineAd():void
+		{
+			var document:VASTDocument = parser.parse(EMPTY_INLINE_VAST_DOCUMENT);
+			assertTrue(document != null);
+			
+			assertTrue(document != null);
+			assertTrue(document.ads.length == 1);
+			var vastAd:VASTAd = document.ads[0];
+			assertTrue(vastAd != null);
+			assertTrue(vastAd.id == null);
+			assertTrue(vastAd.inlineAd != null);
+			assertTrue(vastAd.wrapperAd == null);
+			
+			var inlineAd:VASTInlineAd = vastAd.inlineAd;
+			
+			assertTrue(inlineAd.adSystem == null);
+			assertTrue(inlineAd.adTitle == null);
+			assertTrue(inlineAd.description == null);
+			assertTrue(inlineAd.errorURL == null);
+			assertTrue(inlineAd.surveyURL == null);
+			
+			assertTrue(inlineAd.impressions != null);
+			assertTrue(inlineAd.impressions.length == 0);
+			
+			assertTrue(inlineAd.trackingEvents != null);
+			assertTrue(inlineAd.trackingEvents.length == 0);
+			
+			var video:VASTVideo = inlineAd.video;
+			assertTrue(video != null);
+			assertTrue(video.duration == null);
+			assertTrue(video.adID == null);
+			
+			assertTrue(video.videoClick != null);
+			var videoClick:VASTVideoClick = video.videoClick;
+			
+			assertTrue(videoClick.clickThrough == null);
+			
+			assertTrue(videoClick.clickTrackings != null);
+			assertTrue(videoClick.clickTrackings.length == 0);
+			
+			assertTrue(videoClick.customClicks != null);
+			assertTrue(videoClick.customClicks.length == 0);
+			
+			assertTrue(video.mediaFiles != null);
+			assertTrue(video.mediaFiles.length == 2);
+			
+			var mediaFile:VASTMediaFile = video.mediaFiles[0];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == null);
+			assertTrue(mediaFile.delivery == null);
+			assertTrue(mediaFile.bitrate == 0);
+			assertTrue(mediaFile.width == 0);
+			assertTrue(mediaFile.height == 0);
+			assertTrue(mediaFile.type == null);
+
+			mediaFile = video.mediaFiles[1];
+			assertTrue(mediaFile.id == null);
+			assertTrue(mediaFile.url == null);
+			assertTrue(mediaFile.delivery == null);
+			assertTrue(mediaFile.bitrate == 0);
+			assertTrue(mediaFile.width == 0);
+			assertTrue(mediaFile.height == 0);
+			assertTrue(mediaFile.type == null);
+			
+			assertTrue(inlineAd.companionAds != null);
+			assertTrue(inlineAd.companionAds.length == 3);
+			
+			var companion:VASTCompanionAd = inlineAd.companionAds[0];
+			assertTrue(companion.id == null);
+			assertTrue(companion.width == 0);
+			assertTrue(companion.height == 0);
+			assertTrue(companion.resourceType == null);
+			assertTrue(companion.creativeType ==null);
+			assertTrue(companion.url == null);
+			assertTrue(companion.adParameters == null);
+			assertTrue(companion.altText == null);
+			assertTrue(companion.clickThroughURL == null);
+			assertTrue(companion.code == null);
+			assertTrue(companion.expandedWidth == 0);
+			assertTrue(companion.expandedHeight == 0);
+
+			companion = inlineAd.companionAds[1];
+			assertTrue(companion.id == null);
+			assertTrue(companion.width == 0);
+			assertTrue(companion.height == 0);
+			assertTrue(companion.resourceType == null);
+			assertTrue(companion.creativeType ==null);
+			assertTrue(companion.url == null);
+			assertTrue(companion.adParameters == null);
+			assertTrue(companion.altText == null);
+			assertTrue(companion.clickThroughURL == null);
+			assertTrue(companion.code == null);
+			assertTrue(companion.expandedWidth == 0);
+			assertTrue(companion.expandedHeight == 0);
+
+			companion = inlineAd.companionAds[2];
+			assertTrue(companion.id == null);
+			assertTrue(companion.width == 0);
+			assertTrue(companion.height == 0);
+			assertTrue(companion.resourceType == null);
+			assertTrue(companion.creativeType ==null);
+			assertTrue(companion.url == null);
+			assertTrue(companion.adParameters == null);
+			assertTrue(companion.altText == null);
+			assertTrue(companion.clickThroughURL == null);
+			assertTrue(companion.code == null);
+			assertTrue(companion.expandedWidth == 0);
+			assertTrue(companion.expandedHeight == 0);
+			
+			assertTrue(inlineAd.nonLinearAds != null);
+			assertTrue(inlineAd.nonLinearAds.length == 3);
+			
+			var nonLinearAd:VASTNonLinearAd = inlineAd.nonLinearAds[0];
+			assertTrue(nonLinearAd.id == null);
+			assertTrue(nonLinearAd.width == 0);
+			assertTrue(nonLinearAd.height == 0);
+			assertTrue(nonLinearAd.resourceType == null);
+			assertTrue(nonLinearAd.creativeType == null);
+			assertTrue(nonLinearAd.url == null);
+			assertTrue(nonLinearAd.adParameters == null);
+			assertTrue(nonLinearAd.clickThroughURL == null);
+			assertTrue(nonLinearAd.code == null);
+			assertTrue(nonLinearAd.expandedWidth == 0);
+			assertTrue(nonLinearAd.expandedHeight == 0);
+			assertTrue(nonLinearAd.scalable == false);
+			assertTrue(nonLinearAd.maintainAspectRatio == false);
+			assertTrue(nonLinearAd.apiFramework == null);
+
+			nonLinearAd = inlineAd.nonLinearAds[1];
+			assertTrue(nonLinearAd.id == null);
+			assertTrue(nonLinearAd.width == 0);
+			assertTrue(nonLinearAd.height == 0);
+			assertTrue(nonLinearAd.resourceType == null);
+			assertTrue(nonLinearAd.creativeType == null);
+			assertTrue(nonLinearAd.url == null);
+			assertTrue(nonLinearAd.adParameters == null);
+			assertTrue(nonLinearAd.clickThroughURL == null);
+			assertTrue(nonLinearAd.code == null);
+			assertTrue(nonLinearAd.expandedWidth == 0);
+			assertTrue(nonLinearAd.expandedHeight == 0);
+			assertTrue(nonLinearAd.scalable == false);
+			assertTrue(nonLinearAd.maintainAspectRatio == false);
+			assertTrue(nonLinearAd.apiFramework == null);
+
+			nonLinearAd = inlineAd.nonLinearAds[2];
+			assertTrue(nonLinearAd.id == null);
+			assertTrue(nonLinearAd.width == 0);
+			assertTrue(nonLinearAd.height == 0);
+			assertTrue(nonLinearAd.resourceType == null);
+			assertTrue(nonLinearAd.creativeType == null);
+			assertTrue(nonLinearAd.url == null);
+			assertTrue(nonLinearAd.adParameters == null);
+			assertTrue(nonLinearAd.clickThroughURL == null);
+			assertTrue(nonLinearAd.code == null);
+			assertTrue(nonLinearAd.expandedWidth == 0);
+			assertTrue(nonLinearAd.expandedHeight == 0);
+			assertTrue(nonLinearAd.scalable == false);
+			assertTrue(nonLinearAd.maintainAspectRatio == false);
+			assertTrue(nonLinearAd.apiFramework == null);
+			
+			assertTrue(inlineAd.extensions != null);
+			assertTrue(inlineAd.extensions.length == 0);
+		}
+		
 		public function testParseWrapperAdWithCompanionAndNonLinearAdTags():void
 		{
 			var document:VASTDocument = parser.parse(WRAPPER_VAST_DOCUMENT_WITH_AD_TAGS);
@@ -567,63 +820,33 @@ package org.openvideoplayer.vast.parser
 							<AdID>AdID</AdID>
 							<VideoClicks>
 								<ClickThrough>
-									<URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?click]]></URL>
+									<URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?clickthrough]]></URL>
 								</ClickThrough>
 								<ClickTracking>
-									<URL id="anotheradsever"><![CDATA[http://www.thirdparty.com/tracker?click]]></URL>
-									<URL id="athirdadsever"><![CDATA[http://www.thirdparty.com/tracker?click]]></URL>
+									<URL id="anotheradsever"><![CDATA[http://www.thirdparty.com/tracker?click1]]></URL>
+									<URL id="athirdadsever"><![CDATA[http://www.thirdparty.com/tracker?click2]]></URL>
 								</ClickTracking>
 								<CustomClick>
-									<URL id="redclick"><![CDATA[http://www.thirdparty.com/tracker?click]]></URL>
-									<URL id="blueclick"><![CDATA[http://www.thirdparty.com/tracker?click]]></URL>
+									<URL id="redclick"><![CDATA[http://www.thirdparty.com/tracker?redclick]]></URL>
+									<URL id="blueclick"><![CDATA[http://www.thirdparty.com/tracker?blueclick]]></URL>
 								</CustomClick>
 							</VideoClicks>
 							<MediaFiles>
-								<MediaFile delivery="streaming" bitrate="250" width="200" height="200" type="video/x-flv">
+								<MediaFile id="mymedia" delivery="streaming" bitrate="250" width="200" height="200" type="video/x-flv">
 									<URL><![CDATA[rtmp://streamingserver/streamingpath/medium/filename.flv]]></URL>
-								</MediaFile>
-								<MediaFile delivery="streaming" bitrate="75" width="200" height="200" type="video/x-flv">
-									<URL><![CDATA[rtmp://streamingserver/streamingpath/low/filename.flv]]></URL>
 								</MediaFile>
 								<MediaFile delivery="progressive" bitrate="400" width="200" height="200" type="video/x-flv">
 									<URL><![CDATA[http://progressive.hostlocation.com//high/filename.flv]]></URL>
 								</MediaFile>
-								<MediaFile delivery="progressive" bitrate="200" width="200" height="200" type="video/x-flv">
-									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/medium/filename.flv]]></URL>
-								</MediaFile>
-								<MediaFile delivery="progressive" bitrate="75" width="200" height="200" type="video/x-flv">
-									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/low/filename.flv]]></URL>
-								</MediaFile>
 								<MediaFile delivery="streaming" bitrate="400" width="200" height="200" type="video/x-ms-wmv">
 									<URL><![CDATA[mms://streaming.hostlocaltion.com/ondemand/streamingpath/high/filename.wmv]]></URL>
-					            </MediaFile>
-					            <MediaFile delivery="streaming" bitrate="200" width="200" height="200" type="video/x-ms-wmv">
-					                <URL><![CDATA[mms://streaming.hostlocaltion.com/ondemand/streamingpath/medium/filename.wmv]]></URL>
-					            </MediaFile>
-					            <MediaFile delivery="streaming" bitrate="75" width="200" height="200" type="video/x-ms-wmv">
-					                <URL><![CDATA[mms://streaming.hostlocaltion.com/ondemand/streamingpath/low/filename.wmv]]></URL>
 					            </MediaFile>
 					            <MediaFile delivery="progressive" bitrate="400" width="200" height="200" type="video/x-ms-wmv">
 					                <URL><![CDATA[http://progressive.hostlocation.com//high/filename.wmv]]></URL>
 								</MediaFile>
-								<MediaFile delivery="progressive" bitrate="200" width="200" height="200" type="video/x-ms-wmv">
-									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/medium/filename.wmv]]></URL>
-								</MediaFile>
-								<MediaFile delivery="progressive" bitrate="75" width="200" height="200" type="video/x-ms-wmv">
-									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/low/filename.wmv]]></URL>
-								</MediaFile>
-								<MediaFile delivery="streaming" bitrate="200" width="200" height="200" type="video/x-ra">
-									<URL><![CDATA[rtsp://streaming.hostlocaltion.com/ondemand/streamingpath/medium/filename.ra]]></URL>
-					            </MediaFile>
 					            <MediaFile delivery="streaming" bitrate="75" width="200" height="200" type="video/x-ra">
 					                <URL><![CDATA[rtsp://streaming.hostlocaltion.com/ondemand/streamingpath/low/filename.ra]]></URL>
 					            </MediaFile>
-					            <MediaFile delivery="progressive" bitrate="400" width="200" height="200" type="video/x-ra">
-			                		<URL><![CDATA[http://progressive.hostlocation.com//high/filename.ra]]></URL>
-								</MediaFile>
-								<MediaFile delivery="progressive" bitrate="200" width="200" height="200" type="video/x-ra">
-									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/medium/filename.ra]]></URL>
-								</MediaFile>
 								<MediaFile delivery="progressive" bitrate="75" width="200" height="200" type="video/x-ra">
 									<URL><![CDATA[http://progressive.hostlocation.com/progressivepath/low/filename.ra]]></URL>
 								</MediaFile>
@@ -823,6 +1046,72 @@ package org.openvideoplayer.vast.parser
 				</NonLinearAds>
 			   </Wrapper>
 			  </Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const EMPTY_INLINE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem/>
+						<AdTitle/>
+						<Description/>
+						<Survey/>
+						<Error>
+							<URL/>
+						</Error>
+						<Impression/>
+						<TrackingEvents>
+							<Tracking event="start"/>
+							<Tracking>
+								<URL/>
+							</Tracking>
+							<Tracking event="midpoint"/>
+							<Tracking>
+								<URL/>
+							</Tracking>
+						</TrackingEvents>
+						<Video>
+							<Duration/>
+							<AdID/>
+							<VideoClicks>
+								<ClickThrough/>
+								<ClickTracking/>
+								<CustomClick/>
+							</VideoClicks>
+							<MediaFiles>
+								<MediaFile/>
+								<MediaFile>
+									<URL/>
+								</MediaFile>
+							</MediaFiles>
+						</Video>
+						<CompanionAds>
+							<Companion/>
+							<Companion>
+								<URL/>
+							</Companion>
+							<Companion>
+								<Code/>
+								<CompanionClickThrough/>
+								<AltText/>
+								<AdParameters/>
+							</Companion>
+						</CompanionAds>
+						<NonLinearAds>
+							<NonLinear/>
+							<NonLinear>
+								<URL/>
+								<NonLinearClickThrough/>
+							</NonLinear>
+							<NonLinear>
+								<Code/>
+								<NonLinearClickThrough/>
+								<AdParameters/>
+							</NonLinear>
+						</NonLinearAds>
+						<Extensions/>
+					</InLine>
+				</Ad>
 			</VideoAdServingTemplate>;
 	}
 }
