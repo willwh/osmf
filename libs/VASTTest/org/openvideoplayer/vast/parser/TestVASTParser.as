@@ -546,7 +546,8 @@ package org.openvideoplayer.vast.parser
 		
 		public function testParseEmptyInlineAd():void
 		{
-			var document:VASTDocument = parser.parse(EMPTY_INLINE_VAST_DOCUMENT);
+			// Parse without using strict mode, so that errors are ignored.
+			var document:VASTDocument = parser.parse(EMPTY_INLINE_VAST_DOCUMENT, false);
 			assertTrue(document != null);
 			
 			assertTrue(document != null);
@@ -569,7 +570,18 @@ package org.openvideoplayer.vast.parser
 			assertTrue(inlineAd.impressions.length == 0);
 			
 			assertTrue(inlineAd.trackingEvents != null);
-			assertTrue(inlineAd.trackingEvents.length == 0);
+			assertTrue(inlineAd.trackingEvents.length == 2);
+			var trackingEvent:VASTTrackingEvent = inlineAd.trackingEvents[0];
+			assertTrue(trackingEvent.type == VASTTrackingEventType.START);
+			assertTrue(trackingEvent.urls != null);
+			assertTrue(trackingEvent.urls.length == 0);
+			trackingEvent = inlineAd.trackingEvents[1];
+			assertTrue(trackingEvent.type == null);
+			assertTrue(trackingEvent.urls != null);
+			assertTrue(trackingEvent.urls.length == 1);
+			var trackingURL:VASTUrl = trackingEvent.urls[0];
+			assertTrue(trackingURL.id == null);
+			assertTrue(trackingURL.url == null);
 			
 			var video:VASTVideo = inlineAd.video;
 			assertTrue(video != null);
@@ -758,6 +770,11 @@ package org.openvideoplayer.vast.parser
 			assertTrue(wrapperAd.nonLinearAdTag != null);
 			assertTrue(wrapperAd.nonLinearAdTag.id == "myadsever");
 			assertTrue(wrapperAd.nonLinearAdTag.url == "http://www.primarysite.com/tracker?nl1");
+		}
+		
+		public function testParseWithInvalidDocuments():void
+		{
+			assertTrue(parser.parse(DUPLICATE_INLINE_WRAPPER_VAST_DOCUMENT) == null);
 		}
 
 		private var parser:VASTParser;
@@ -1065,10 +1082,6 @@ package org.openvideoplayer.vast.parser
 							<Tracking>
 								<URL/>
 							</Tracking>
-							<Tracking event="midpoint"/>
-							<Tracking>
-								<URL/>
-							</Tracking>
 						</TrackingEvents>
 						<Video>
 							<Duration/>
@@ -1113,5 +1126,14 @@ package org.openvideoplayer.vast.parser
 					</InLine>
 				</Ad>
 			</VideoAdServingTemplate>;
+			
+		private static const DUPLICATE_INLINE_WRAPPER_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad id="myinlinead">
+					<InLine/>
+					<Wrapper/>
+				</Ad>
+			</VideoAdServingTemplate>
+
 	}
 }

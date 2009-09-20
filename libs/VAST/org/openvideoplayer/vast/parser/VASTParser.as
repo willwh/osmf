@@ -60,12 +60,20 @@ package org.openvideoplayer.vast.parser
 		 * A synchronous method to parse the raw VAST XML data into a VAST
 		 * object model.
 		 * 
+		 * @param xml The XML representation of the VAST document.
+		 * @param useStrictMode Whether the parser should be strict about
+		 * ensuring that the XML conforms to the VAST specification.  If true,
+		 * then any lack of adherence to the VAST spec (such as missing a
+		 * required element) will be treated as an error, resulting in a null
+		 * return value.  If false, then only fatal parsing errors will result
+		 * in a null return value.  The default is true. 
+		 * 
 		 * @throws ArgumentError If xml is null.
 		 * 
 		 * @returns The parsed document, or null if any error was encountered
 		 * during the parse. 
 		 */
-		public function parse(xml:XML):VASTDocument 
+		public function parse(xml:XML, useStrictMode:Boolean=true):VASTDocument 
 		{
 			if (xml == null)
 			{
@@ -88,6 +96,13 @@ package org.openvideoplayer.vast.parser
 						var vastAd:VASTAd = new VASTAd(id);
 						parseAdTag(adXML, vastAd);
 						vastDocument.addAd(vastAd);
+					}
+					
+					// Validate if necessary.
+					if (useStrictMode && 
+						validate(vastDocument) == false)
+					{
+						vastDocument = null;
 					}
 				}
 				catch (error:Error) 
@@ -296,12 +311,8 @@ package org.openvideoplayer.vast.parser
 										);
 								var trackingURLs:Vector.<VASTUrl> = parseURLTags(child);
 									
-								if (trackingURLs.length > 0 &&
-									trackingEvent.type != null) 
-								{
-									trackingEvent.urls = trackingURLs;
-									vastAdPackage.addTrackingEvent(trackingEvent);
-								}
+								trackingEvent.urls = trackingURLs;
+								vastAdPackage.addTrackingEvent(trackingEvent);
 								break;
 							}
 							default:
@@ -805,6 +816,181 @@ package org.openvideoplayer.vast.parser
 		private function parseAttributeAsNumber(xml:XML, attribute:String):Number
 		{
 			return xml.@[attribute];
+		}
+		
+		private function validate(document:VASTDocument):Boolean
+		{
+			var isValid:Boolean = true;
+			
+			for each (var ad:VASTAd in document.ads)
+			{
+				var inlineAd:VASTInlineAd = ad.inlineAd;
+				var wrapperAd:VASTWrapperAd = ad.wrapperAd;
+				
+				if (inlineAd != null &&
+					wrapperAd != null)
+				{
+					CONFIG::LOGGING
+					{
+						logger.debug("Invalid VAST document:  Ad cannot have both Inline and Wrapper");
+					}
+
+					isValid = false;
+					break;
+				}
+				
+				// Validate any InlineAd.
+				if (inlineAd != null)
+				{
+					if (inlineAd.adSystem == null ||
+						inlineAd.adTitle == null ||
+						inlineAd.impressions.length == 0)
+					{
+						CONFIG::LOGGING
+						{
+							logger.debug("Invalid VAST document:  InlineAd requires AdSystem, AdTitle, and Impression");
+						}
+								
+						isValid = false;
+						break;
+					}
+					
+					// Validate all TrackingEvents.
+					if (validateTrackingEvents(inlineAd.trackingEvents) == false)
+					{
+						isValid = false
+						break;
+					}
+					
+					// Validate any Video.
+					var video:VASTVideo = inlineAd.video;
+					if (video != null)
+					{
+						if (video.duration == null)
+						{
+							CONFIG::LOGGING
+							{
+								logger.debug("Invalid VAST document:  Video requires Duration");
+							}
+									
+							isValid = false;
+							break;
+						}
+						
+						// Validate all MediaFiles.
+						for each (var mediaFile:VASTMediaFile in video.mediaFiles)
+						{
+							if (mediaFile.url == null ||
+								mediaFile.delivery == null ||
+								mediaFile.bitrate == 0 ||
+								mediaFile.width == 0 ||
+								mediaFile.height == 0)
+							{
+								CONFIG::LOGGING
+								{
+									logger.debug("Invalid VAST document:  MediaFile requires URL, plus delivery, bitrate, width and height attributes");
+								}
+										
+								isValid = false;
+								break;
+							}
+						}
+					}
+
+					// Validate all CompanionAds.
+					for each (var companionAd:VASTCompanionAd in inlineAd.companionAds)
+					{
+						if (validateAdBase(companionAd) == false)
+						{
+							CONFIG::LOGGING
+							{
+								logger.debug("Invalid VAST document:  CompanionAd requires width, height, and resourceType attributes");
+							}
+									
+							isValid = false;
+							break;
+						}
+					}
+					
+					// Validate all NonLinearAds.
+					for each (var nonLinearAd:VASTNonLinearAd in inlineAd.nonLinearAds)
+					{
+						if (validateAdBase(nonLinearAd) == false)
+						{
+							CONFIG::LOGGING
+							{
+								logger.debug("Invalid VAST document:  NonLinearAd requires width, height, and resourceType attributes");
+							}
+									
+							isValid = false;
+							break;
+						}
+					}
+					
+					if (isValid == false)
+					{
+						break;
+					}
+				}
+				
+				// Validate any WrapperAd.
+				if (wrapperAd != null)
+				{
+					if (wrapperAd.adSystem == null ||
+						wrapperAd.vastAdTagURL == null ||
+						wrapperAd.impressions.length == 0)
+					{
+						CONFIG::LOGGING
+						{
+							logger.debug("Invalid VAST document:  WrapperAd requires AdSystem, VASTAdTagURL, and Impression");
+						}
+								
+						isValid = false;
+						break;
+					}
+					
+					// Validate all TrackingEvents.
+					if (validateTrackingEvents(wrapperAd.trackingEvents) == false)
+					{
+						isValid = false
+						break;
+					}
+				}
+			}
+			
+			return isValid;
+		}
+		
+		private function validateTrackingEvents(trackingEvents:Vector.<VASTTrackingEvent>):Boolean
+		{
+			// Validate all TrackingEvents.
+			for each (var event:VASTTrackingEvent in trackingEvents)
+			{
+				if (event.type == null)
+				{
+					CONFIG::LOGGING
+					{
+						logger.debug("Invalid VAST document:  TrackingEvent requires valid type attribute");
+					}
+									
+					return false;
+				}
+			}
+			
+			return true;
+		}
+
+		
+		private function validateAdBase(adBase:VASTAdBase):Boolean
+		{
+			if (adBase.width == 0 ||
+				adBase.height == 0 ||
+				adBase.resourceType == null)
+			{
+				return false;
+			}
+				
+			return true;
 		}
 
 		private static const NODEKIND_ELEMENT:String = "element";
