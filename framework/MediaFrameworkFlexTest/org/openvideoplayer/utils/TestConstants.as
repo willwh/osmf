@@ -81,8 +81,8 @@ package org.openvideoplayer.utils
 		// Images
 		//
 		
-		public static const REMOTE_IMAGE_FILE:String = "http://www.adobe.com/ubi/globalnav/include/adobe-lq.png";
-		public static const REMOTE_INVALID_IMAGE_FILE:String = "http://www.adobe.com/ubi/fail/globalnav/include/adobe-lq.png";
+		public static const REMOTE_IMAGE_FILE:String = "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
+		public static const REMOTE_INVALID_IMAGE_FILE:String = "http://mediapm.edgesuite.net/fail/strobe/content/test/train.jpg";
 		
 		public static const LOCAL_IMAGE_FILE:String = "assets/image.gif";
 
