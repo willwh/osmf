@@ -5,6 +5,8 @@
     <classEntry path="org.openvideoplayer.vast.loader.VASTDocumentProcessor"/>
     <classEntry path="org.openvideoplayer.vast.loader.VASTLoadedContext"/>
     <classEntry path="org.openvideoplayer.vast.loader.VASTLoader"/>
+    <classEntry path="org.openvideoplayer.vast.media.DefaultVASTMediaFileResolver"/>
+    <classEntry path="org.openvideoplayer.vast.media.IVASTMediaFileResolver"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAd"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAdBase"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAdPackageBase"/>

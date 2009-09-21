@@ -16,26 +16,29 @@
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
-*  
+*  Incorporated. All Rights Reserved.
+* 
 *****************************************************/
-package org.openvideoplayer.vast
+package org.openvideoplayer.metadata
 {
-	import flexunit.framework.TestSuite;
-	
-	import org.openvideoplayer.vast.loader.TestVASTLoader;
-	import org.openvideoplayer.vast.media.TestDefaultVASTMediaFileResolver;
-	import org.openvideoplayer.vast.parser.TestVASTParser;
-
-	public class VASTTests extends TestSuite
+	/**
+	 * Utility class for media MIME types.
+	 **/
+	public class MimeTypes
 	{
-		public function VASTTests(param:Object=null)
-		{
-			super(param);
-			
-			addTestSuite(TestVASTLoader);
-			addTestSuite(TestVASTParser);
-			addTestSuite(TestDefaultVASTMediaFileResolver);
-		}
+		/**
+		 * All video MIME types supported by the Flash Player.
+		 **/
+		public static const SUPPORTED_VIDEO_MIME_TYPES:Vector.<String> = Vector.<String>
+		([
+			"video/x-flv", 
+			"video/x-f4v", 
+			"video/mp4", 
+			"video/mp4v-es", 
+			"video/x-m4v", 
+			"video/3gpp", 
+			"video/3gpp2", 
+			"video/quicktime", 
+		]);
 	}
 }

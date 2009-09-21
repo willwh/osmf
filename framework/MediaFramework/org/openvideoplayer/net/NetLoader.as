@@ -21,13 +21,10 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-
 package org.openvideoplayer.net
 {
-	
 	import __AS3__.vec.Vector;
 	
-	import flash.errors.IllegalOperationError;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
@@ -40,9 +37,9 @@ package org.openvideoplayer.net
 	import org.openvideoplayer.media.IURLResource;
 	import org.openvideoplayer.metadata.MediaType;
 	import org.openvideoplayer.metadata.MetadataUtils;
+	import org.openvideoplayer.metadata.MimeTypes;
 	import org.openvideoplayer.traits.ILoadable;
 	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
 	 * The NetLoader class implements ILoader to provide
@@ -182,7 +179,7 @@ package org.openvideoplayer.net
 		**/
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
-			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
+			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MimeTypes.SUPPORTED_VIDEO_MIME_TYPES);
 			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
 			{
 				return rt == MetadataUtils.METADATA_MATCH_FOUND;
@@ -347,17 +344,6 @@ package org.openvideoplayer.net
 		private static const PROTOCOL_FILE:String = "file";
 		private static const PROTOCOL_EMPTY:String = "";
 				
-		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([
-			"video/x-flv", 
-			"video/x-f4v", 
-			"video/mp4", 
-			"video/mp4v-es", 
-			"video/x-m4v", 
-			"video/3gpp", 
-			"video/3gpp2", 
-			"video/quicktime", 
-		]);
-
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.VIDEO]);
 	}
 }

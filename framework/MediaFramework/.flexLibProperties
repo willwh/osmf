@@ -131,6 +131,7 @@
     <classEntry path="org.openvideoplayer.metadata.MetadataNamespaces"/>
     <classEntry path="org.openvideoplayer.metadata.MetadataUtils"/>
     <classEntry path="org.openvideoplayer.metadata.MetadataWatcher"/>
+    <classEntry path="org.openvideoplayer.metadata.MimeTypes"/>
     <classEntry path="org.openvideoplayer.metadata.ObjectFacet"/>
     <classEntry path="org.openvideoplayer.metadata.ObjectIdentifier"/>
     <classEntry path="org.openvideoplayer.metadata.StringIdentifier"/>
