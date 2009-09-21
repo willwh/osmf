@@ -27,6 +27,7 @@ package org.openvideoplayer.view
 	import mx.events.SliderEvent;
 	
 	import org.openvideoplayer.display.ScaleMode;
+	import org.openvideoplayer.events.BufferTimeChangeEvent;
 	import org.openvideoplayer.events.DurationChangeEvent;
 	import org.openvideoplayer.events.MediaErrorEvent;
 	import org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent;
@@ -85,6 +86,7 @@ package org.openvideoplayer.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 
 			// Set up the MediaPlayer.
 			//
@@ -211,6 +213,12 @@ package org.openvideoplayer.view
 		private function onMutedChange(event:MutedChangeEvent):void
 		{
 			muteToggle.selected = event.muted;
+		}
+		
+
+		private function onBufferTimeChange(event:BufferTimeChangeEvent):void
+		{
+			bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
 		}
 		
 		private function updateControls():void

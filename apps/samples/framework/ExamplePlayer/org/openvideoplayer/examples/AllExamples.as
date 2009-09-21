@@ -48,6 +48,7 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.proxies.TemporalProxyElement;
 	import org.openvideoplayer.swf.SWFElement;
 	import org.openvideoplayer.swf.SWFLoader;
+	import org.openvideoplayer.traits.IBufferable;
 	import org.openvideoplayer.traits.ILoadable;
 	import org.openvideoplayer.traits.IPausable;
 	import org.openvideoplayer.traits.IPlayable;
@@ -70,7 +71,7 @@ package org.openvideoplayer.examples
 			var examples:Array = [];
 			var mediaElement:MediaElement = null;
 			
-			var timer:Timer = new Timer(20);
+			var timer:Timer = new Timer(1000);
 			var timerHandler:Function;
 			
 			examples.push
@@ -109,6 +110,52 @@ package org.openvideoplayer.examples
 							
 				  	   		return new VideoElement(new DynamicStreamingNetLoader(), dsResource)
 				  	   	}
+					)
+				);
+
+			examples.push
+				( new Example
+					( 	"Progressive Video With Dynamic Buffer"
+					, 	"Demonstrates playback of a progressive video with a dynamic buffer.  The size of the buffer grows slowly as the video plays, then shrinks back down again."
+				  	,  	function():MediaElement
+				  	   	{
+							var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+
+							// Trigger the timer every second.
+				  	   		timer.delay = 1000;
+				  	   		timer.repeatCount = 20;
+				  	   		timer.addEventListener(TimerEvent.TIMER, timerHandler = onTimer);
+				  	   		timer.start();
+				  	   		
+				  	   		function onTimer(event:TimerEvent):void
+				  	   		{
+				  	   			// Only adjust the buffer while we're playing.
+				  	   			var playable:IPlayable = videoElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+				  	   			var bufferable:IBufferable = videoElement.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
+				  	   			if (bufferable && !bufferable.buffering && playable && playable.playing)
+				  	   			{
+				  	   				if (timer.currentCount <= 10)
+				  	   				{
+				  	   					bufferable.bufferTime += 1.0;
+				  	   				}
+				  	   				else
+				  	   				{
+				  	   					bufferable.bufferTime -= 1.0;
+				  	   				}
+				  	   			}
+				  	   		}
+				  	    	
+				  	    	return videoElement;
+				  	   	}
+				  	, 	function():void
+						{
+							timer.stop();
+							timer.reset();
+							timer.removeEventListener
+								( TimerEvent.TIMER
+								, timerHandler
+								);
+						}
 					)
 				);
 
@@ -469,6 +516,8 @@ package org.openvideoplayer.examples
 				  	   		
 				  	   		var delta:int = 1;
 							
+							timer.delay = 20;
+							timer.repeatCount = 0;
 							timer.addEventListener
 								( TimerEvent.TIMER
 								, timerHandler = onTimer
@@ -496,6 +545,7 @@ package org.openvideoplayer.examples
 					,	function():void
 						{
 							timer.stop();
+							timer.reset();
 							timer.removeEventListener
 								( TimerEvent.TIMER
 								, timerHandler
