@@ -89,6 +89,23 @@ package org.openvideoplayer.vast.model
 		}
 		
 		/**
+		 * Returns the VASTTrackingEvent with the given event type, null if no
+		 * such tracking event exists.
+		 **/
+		public function getTrackingEventByType(eventType:VASTTrackingEventType):VASTTrackingEvent
+		{
+			for each (var trackingEvent:VASTTrackingEvent in _trackingEvents)
+			{
+				if (trackingEvent.type == eventType)
+				{
+					return trackingEvent;
+				}
+			}
+			
+			return null;
+		}
+		
+		/**
 		 * Extension elements in the VAST document allow for customization or
 		 * for ad server specific features (e.g. geo data, unique identifiers).
 		 */

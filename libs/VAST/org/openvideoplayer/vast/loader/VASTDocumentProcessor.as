@@ -35,6 +35,10 @@ package org.openvideoplayer.vast.loader
 	import org.openvideoplayer.utils.URL;
 	import org.openvideoplayer.vast.model.VASTAd;
 	import org.openvideoplayer.vast.model.VASTDocument;
+	import org.openvideoplayer.vast.model.VASTInlineAd;
+	import org.openvideoplayer.vast.model.VASTTrackingEvent;
+	import org.openvideoplayer.vast.model.VASTUrl;
+	import org.openvideoplayer.vast.model.VASTWrapperAd;
 	import org.openvideoplayer.vast.parser.VASTParser;
 
 	[Event("processed")]
@@ -263,8 +267,36 @@ package org.openvideoplayer.vast.loader
 			
 			// Now that we've merged, we need to copy the relevant properties
 			// from the rootAd's wrapperAd into its new inlineAd.
-			// TODO: Implement and test!
+			//
 			
+			var wrapperAd:VASTWrapperAd = rootAd.wrapperAd;
+			var inlineAd:VASTInlineAd = rootAd.inlineAd;
+			
+			// Copy the impressions over.
+			for each (var impression:VASTUrl in wrapperAd.impressions)
+			{
+				inlineAd.addImpression(impression);
+			}
+			
+			// Copy the tracking events over.
+			for each (var trackingEvent:VASTTrackingEvent in wrapperAd.trackingEvents)
+			{
+				var inlineAdTrackingEvent:VASTTrackingEvent = inlineAd.getTrackingEventByType(trackingEvent.type);
+				if (inlineAdTrackingEvent != null)
+				{
+					inlineAdTrackingEvent.urls = inlineAdTrackingEvent.urls.concat(trackingEvent.urls);
+				}
+				else
+				{
+					inlineAd.addTrackingEvent(trackingEvent);
+				}
+			}
+			
+			// TODO: Merge companion ads, nonlinear ads, and video clicks.
+			// Note that the spec is ambiguous about merging impressions from
+			// companion and non-linear ads.  Should the impression be matched
+			// by ID?  Should each impression be copied to each ad?  Not sure.
+			 
 			// Now, we can remove the rootAd's wrapperAd, since the inlineAd
 			// now contains the merged details of both the original wrapperAd
 			// and the nested inlineAd.

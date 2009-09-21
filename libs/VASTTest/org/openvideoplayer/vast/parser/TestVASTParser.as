@@ -959,7 +959,7 @@ package org.openvideoplayer.vast.parser
 			        <URL><![CDATA[http://www.primarysite.com/tracker?noPlay=true&impressionTracked=false]]></URL>
 			    </Error>
 			    <Impression>
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+			        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
 			    </Impression>
 			    <TrackingEvents>
 			        <Tracking event="midpoint">

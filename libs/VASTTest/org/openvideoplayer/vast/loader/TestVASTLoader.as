@@ -21,6 +21,8 @@
 *****************************************************/
 package org.openvideoplayer.vast.loader
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
@@ -41,6 +43,9 @@ package org.openvideoplayer.vast.loader
 	import org.openvideoplayer.vast.VASTTestConstants;
 	import org.openvideoplayer.vast.model.VASTAd;
 	import org.openvideoplayer.vast.model.VASTDocument;
+	import org.openvideoplayer.vast.model.VASTTrackingEvent;
+	import org.openvideoplayer.vast.model.VASTTrackingEventType;
+	import org.openvideoplayer.vast.model.VASTUrl;
 		
 	public class TestVASTLoader extends TestILoader
 	{
@@ -112,7 +117,7 @@ package org.openvideoplayer.vast.loader
 				// Verify that the result has an inline ad (which would have
 				// come from the nested VAST document) and that the wrapper ad
 				// (which would have come from the original VAST document) has
-				// been merged and remove.
+				// been merged and removed.
 				var document:VASTDocument = loadedContext.vastDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
@@ -120,6 +125,154 @@ package org.openvideoplayer.vast.loader
 				assertTrue(ad.inlineAd != null);
 				assertTrue(ad.wrapperAd == null);
 				
+				// Verify the impressions were merged over.
+				var impressions:Vector.<VASTUrl> = ad.inlineAd.impressions;
+				assertTrue(impressions != null);
+				assertTrue(impressions.length == 4);
+				var impression:VASTUrl = impressions[0];
+				assertTrue(impression.id == "myadsever");
+				assertTrue(impression.url == "http://www.primarysite.com/tracker?imp");
+				impression = impressions[1];
+				assertTrue(impression.id == "anotheradsever");
+				assertTrue(impression.url == "http://www.thirdparty.com/tracker?imp");
+				impression = impressions[2];
+				assertTrue(impression.id == "myadsever");
+				assertTrue(impression.url == "http://www.secondarysite.com/tracker?imp");
+				impression = impressions[3];
+				assertTrue(impression.id == "myadsever");
+				assertTrue(impression.url == "http://www.wrapper.com/tracker?imp");
+				
+				// Verify the tracking events were merged over.
+				var trackingEvents:Vector.<VASTTrackingEvent> = ad.inlineAd.trackingEvents;
+				assertTrue(trackingEvents.length == 10);
+				
+				var trackingEvent:VASTTrackingEvent = trackingEvents[0];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.START);
+				assertTrue(trackingEvent.urls.length == 1);
+				var trackingURL:VASTUrl = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?start");
+				
+				trackingEvent = trackingEvents[1];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.MIDPOINT);
+				assertTrue(trackingEvent.urls.length == 4);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?mid");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "anotheradsever");
+				assertTrue(trackingURL.url == "http://www.thirdparty.com/tracker?mid");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?mid");
+				trackingURL = trackingEvent.urls[3];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?mid");
+
+				trackingEvent = trackingEvents[2];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.FIRST_QUARTILE);
+				assertTrue(trackingEvent.urls.length == 4);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?fqtl");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "anotheradsever");
+				assertTrue(trackingURL.url == "http://www.thirdparty.com/tracker?fqtl");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?fqtl");
+				trackingURL = trackingEvent.urls[3];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?fqtl");
+	
+				trackingEvent = trackingEvents[3];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.THIRD_QUARTILE);
+				assertTrue(trackingEvent.urls.length == 4);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?tqtl");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "anotheradsever");
+				assertTrue(trackingURL.url == "http://www.thirdparty.com/tracker?tqtl");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?tqtl");
+				trackingURL = trackingEvent.urls[3];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?tqtl");
+	
+				trackingEvent = trackingEvents[4];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.COMPLETE);
+				assertTrue(trackingEvent.urls.length == 4);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?comp");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "anotheradsever");
+				assertTrue(trackingURL.url == "http://www.thirdparty.com/tracker?comp");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?comp");
+				trackingURL = trackingEvent.urls[3];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?comp");
+		
+				trackingEvent = trackingEvents[5];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.PAUSE);
+				assertTrue(trackingEvent.urls.length == 3);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?pause");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?pause");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?pause");
+	
+				trackingEvent = trackingEvents[6];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.REPLAY);
+				assertTrue(trackingEvent.urls.length == 3);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?replay");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?replay");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?replay");
+	
+				trackingEvent = trackingEvents[7];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.FULLSCREEN);
+				assertTrue(trackingEvent.urls.length == 3);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?full");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?full");
+				trackingURL = trackingEvent.urls[2];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?full");
+	
+				trackingEvent = trackingEvents[8];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.STOP);
+				assertTrue(trackingEvent.urls.length == 1);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.primarysite.com/tracker?stop");
+				
+				trackingEvent = trackingEvents[9];
+				assertTrue(trackingEvent.type == VASTTrackingEventType.MUTE);
+				assertTrue(trackingEvent.urls.length == 2);
+				trackingURL = trackingEvent.urls[0];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.secondarysite.com/tracker?mute");
+				trackingURL = trackingEvent.urls[1];
+				assertTrue(trackingURL.id == "myadsever");
+				assertTrue(trackingURL.url == "http://www.wrapper.com/tracker?mute");
+
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}

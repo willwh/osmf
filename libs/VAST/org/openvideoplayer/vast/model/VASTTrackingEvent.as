@@ -63,7 +63,7 @@ package org.openvideoplayer.vast.model
 		
 		public function set urls(value:Vector.<VASTUrl>):void 
 		{
-			_urls = _urls.concat(value);
+			_urls = value;
 		}
 		
 		private var _type:VASTTrackingEventType;

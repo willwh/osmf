@@ -74,9 +74,6 @@ package org.openvideoplayer.vast
 								<URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?comp]]></URL>
 								<URL id="anotheradsever"><![CDATA[http://www.thirdparty.com/tracker?comp]]></URL>
 							</Tracking>
-							<Tracking event="mute">
-								<URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mute]]></URL>
-							</Tracking>
 							<Tracking event="pause">
 								<URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?pause]]></URL>
 							</Tracking>
@@ -210,42 +207,42 @@ package org.openvideoplayer.vast
 			        <URL><![CDATA[http://flipside.corp.adobe.com/brian/strobe/vast/sample_vast_wrapper_ad_response2.xml]]></URL>
 			    </VASTAdTagURL>
 			    <Error>
-			        <URL><![CDATA[http://www.primarysite.com/tracker?noPlay=true&impressionTracked=false]]></URL>
+			        <URL><![CDATA[http://www.wrapper.com/tracker?noPlay=true&impressionTracked=false]]></URL>
 			    </Error>
 			    <Impression>
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+			        <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?imp]]></URL>
 			    </Impression>
 			    <TrackingEvents>
 			        <Tracking event="midpoint">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mid]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?mid]]></URL>
 			        </Tracking>
 			        <Tracking event="firstQuartile">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?fqtl]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?fqtl]]></URL>
 			        </Tracking>
 			        <Tracking event="thirdQuartile">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?tqtl]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?tqtl]]></URL>
 			        </Tracking>
 			        <Tracking event="complete">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?comp]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?comp]]></URL>
 			        </Tracking>
 			        <Tracking event="mute">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mute]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?mute]]></URL>
 			        </Tracking>
 			        <Tracking event="pause">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?pause]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?pause]]></URL>
 			        </Tracking>
 			        <Tracking event="replay">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?replay]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?replay]]></URL>
 			        </Tracking>
 			        <Tracking event="fullscreen">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?full]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?full]]></URL>
 			        </Tracking>
 			     </TrackingEvents>
-			        <VideoClicks>
-			            <ClickTracking>
-							 <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?click]]></URL>
-			            </ClickTracking>
-			        </VideoClicks>
+			     <VideoClicks>
+			        <ClickTracking>
+						 <URL id="myadsever"><![CDATA[http://www.wrapper.com/tracker?click]]></URL>
+			        </ClickTracking>
+			    </VideoClicks>
 			   </Wrapper>
 			  </Ad>
 			</VideoAdServingTemplate>;
@@ -260,42 +257,42 @@ package org.openvideoplayer.vast
 			        <URL><![CDATA[http://flipside.corp.adobe.com/brian/strobe/vast/sample_vast_inline_ad_response.xml]]></URL>
 			    </VASTAdTagURL>
 			    <Error>
-			        <URL><![CDATA[http://www.primarysite.com/tracker?noPlay=true&impressionTracked=false]]></URL>
+			        <URL><![CDATA[http://www.secondarysite.com/tracker?noPlay=true&impressionTracked=false]]></URL>
 			    </Error>
 			    <Impression>
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+			        <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?imp]]></URL>
 			    </Impression>
 			    <TrackingEvents>
 			        <Tracking event="midpoint">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mid]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?mid]]></URL>
 			        </Tracking>
 			        <Tracking event="firstQuartile">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?fqtl]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?fqtl]]></URL>
 			        </Tracking>
 			        <Tracking event="thirdQuartile">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?tqtl]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?tqtl]]></URL>
 			        </Tracking>
 			        <Tracking event="complete">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?comp]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?comp]]></URL>
 			        </Tracking>
 			        <Tracking event="mute">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mute]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?mute]]></URL>
 			        </Tracking>
 			        <Tracking event="pause">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?pause]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?pause]]></URL>
 			        </Tracking>
 			        <Tracking event="replay">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?replay]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?replay]]></URL>
 			        </Tracking>
 			        <Tracking event="fullscreen">
-			            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?full]]></URL>
+			            <URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?full]]></URL>
 			        </Tracking>
 			     </TrackingEvents>
-			        <VideoClicks>
-			            <ClickTracking>
-							 <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?click]]></URL>
-			            </ClickTracking>
-			        </VideoClicks>
+			     <VideoClicks>
+			        <ClickTracking>
+						<URL id="myadsever"><![CDATA[http://www.secondarysite.com/tracker?click]]></URL>
+			        </ClickTracking>
+			     </VideoClicks>
 			   </Wrapper>
 			  </Ad>
 			</VideoAdServingTemplate>;
