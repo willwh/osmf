@@ -86,31 +86,19 @@ package org.openvideoplayer.vast.parser
 			{
 				vastDocument = new VASTDocument();
 					
-				try 
+				for (var i:int = 0; i < xml.Ad.length(); i++)
 				{
-					for (var i:int = 0; i < xml.Ad.length(); i++)
-					{
-						var adXML:XML = xml.Ad[i];
-						
-						var id:String = parseAttributeAsString(adXML, ID);
-						var vastAd:VASTAd = new VASTAd(id);
-						parseAdTag(adXML, vastAd);
-						vastDocument.addAd(vastAd);
-					}
+					var adXML:XML = xml.Ad[i];
 					
-					// Validate if necessary.
-					if (useStrictMode && 
-						validate(vastDocument) == false)
-					{
-						vastDocument = null;
-					}
+					var id:String = parseAttributeAsString(adXML, ID);
+					var vastAd:VASTAd = new VASTAd(id);
+					parseAdTag(adXML, vastAd);
+					vastDocument.addAd(vastAd);
 				}
-				catch (error:Error) 
+				
+				// Validate if necessary.
+				if (useStrictMode && validate(vastDocument) == false)
 				{
-					CONFIG::LOGGING
-					{
-						logger.debug("Exception during parsing: " + error.message);
-					}
 					vastDocument = null;
 				}
 			}

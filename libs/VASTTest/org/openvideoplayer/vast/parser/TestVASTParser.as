@@ -775,6 +775,26 @@ package org.openvideoplayer.vast.parser
 		public function testParseWithInvalidDocuments():void
 		{
 			assertTrue(parser.parse(DUPLICATE_INLINE_WRAPPER_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_AD_SYSTEM_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_AD_TITLE_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_IMPRESSION_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_TRACKING_EVENT_TYPE_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_DURATION_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_URL_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_BITRATE_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_DELIVERY_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_WIDTH_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_VIDEO_HEIGHT_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_COMPANION_AD_WIDTH_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_COMPANION_AD_HEIGHT_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_COMPANION_AD_RESOURCE_TYPE_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_NON_LINEAR_AD_WIDTH_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_NON_LINEAR_AD_HEIGHT_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_INLINE_NON_LINEAR_AD_RESOURCE_TYPE_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_WRAPPER_AD_SYSTEM_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_WRAPPER_VAST_AD_TAG_URL_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_WRAPPER_IMPRESSION_VAST_DOCUMENT) == null);
+			assertTrue(parser.parse(MISSING_WRAPPER_TRACKING_EVENT_TYPE_VAST_DOCUMENT) == null);
 		}
 
 		private var parser:VASTParser;
@@ -972,12 +992,6 @@ package org.openvideoplayer.vast.parser
 						 <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?comp1]]></URL>
 						 <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?comp2]]></URL>
 					</CompanionImpression>
-					<!-- CompanionAdTag>
-						 <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?adtag]]></URL>
-					</CompanionImpression>
-					<CompanionAdTag>
-						 <Code id="myadsever">insert code here</URL>
-					</CompanionImpression -->
 				 </CompanionAds>
 				 <NonLinearAds>
 					<NonLinearImpression>
@@ -1129,11 +1143,345 @@ package org.openvideoplayer.vast.parser
 			
 		private static const DUPLICATE_INLINE_WRAPPER_VAST_DOCUMENT:XML =
 			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
-				<Ad id="myinlinead">
+				<Ad>
 					<InLine/>
 					<Wrapper/>
 				</Ad>
 			</VideoAdServingTemplate>
 
+		private static const MISSING_INLINE_AD_SYSTEM_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_AD_TITLE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_IMPRESSION_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_TRACKING_EVENT_TYPE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					    <TrackingEvents>
+					        <Tracking event="wrong">
+					            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mid]]></URL>
+					        </Tracking>
+					    </TrackingEvents>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+		
+		private static const MISSING_INLINE_VIDEO_DURATION_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video/>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_VIDEO_URL_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video>
+							<Duration>00:15:00</Duration>
+							<MediaFiles>
+								<MediaFile delivery="streaming" bitrate="250" width="200" height="200"/>
+							</MediaFiles>
+						</Video>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+		
+		private static const MISSING_INLINE_VIDEO_BITRATE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video>
+							<Duration>00:15:00</Duration>
+							<MediaFiles>
+								<MediaFile delivery="streaming" width="200" height="200">
+									<URL><![CDATA[rtmp://streamingserver/streamingpath/medium/filename.flv]]></URL>
+								</MediaFile>
+							</MediaFiles>
+						</Video>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_VIDEO_DELIVERY_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video>
+							<Duration>00:15:00</Duration>
+							<MediaFiles>
+								<MediaFile bitrate="250" width="200" height="200">
+									<URL><![CDATA[rtmp://streamingserver/streamingpath/medium/filename.flv]]></URL>
+								</MediaFile>
+							</MediaFiles>
+						</Video>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_VIDEO_WIDTH_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video>
+							<Duration>00:15:00</Duration>
+							<MediaFiles>
+								<MediaFile delivery="streaming" bitrate="250" height="200">
+									<URL><![CDATA[rtmp://streamingserver/streamingpath/medium/filename.flv]]></URL>
+								</MediaFile>
+							</MediaFiles>
+						</Video>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_VIDEO_HEIGHT_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+						<Video>
+							<Duration>00:15:00</Duration>
+							<MediaFiles>
+								<MediaFile delivery="streaming" bitrate="250" width="200">
+									<URL><![CDATA[rtmp://streamingserver/streamingpath/medium/filename.flv]]></URL>
+								</MediaFile>
+							</MediaFiles>
+						</Video>					    
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_COMPANION_AD_WIDTH_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<CompanionAds>
+							<Companion height="60" resourceType="iframe">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</Companion>
+						</CompanionAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_COMPANION_AD_HEIGHT_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<CompanionAds>
+							<Companion width="468" resourceType="iframe">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</Companion>
+						</CompanionAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_COMPANION_AD_RESOURCE_TYPE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<CompanionAds>
+							<Companion width="468" height="60">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</Companion>
+						</CompanionAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_INLINE_NON_LINEAR_AD_WIDTH_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<NonLinearAds>
+							<NonLinear height="60" resourceType="iframe">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</NonLinear>
+						</NonLinearAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_NON_LINEAR_AD_HEIGHT_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<NonLinearAds>
+							<NonLinear width="468" resourceType="iframe">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</NonLinear>
+						</NonLinearAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_INLINE_NON_LINEAR_AD_RESOURCE_TYPE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<InLine>
+						<AdSystem>DART</AdSystem>
+						<AdTitle>Spiderman 3 Trailer</AdTitle>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+   						<NonLinearAds>
+							<NonLinear width="468" height="60">
+								<URL><![CDATA[http://ad.server.com/adi/etc.html]]></URL>
+							</NonLinear>
+						</NonLinearAds>
+					</InLine>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_WRAPPER_AD_SYSTEM_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<Wrapper>
+					    <VASTAdTagURL>
+					        <URL><![CDATA[http://www.secondaryadserver.com/ad/tag/parameters?time=1234567]]></URL>
+					    </VASTAdTagURL>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					</Wrapper>
+				</Ad>
+			</VideoAdServingTemplate>;
+
+		private static const MISSING_WRAPPER_VAST_AD_TAG_URL_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<Wrapper>
+						<AdSystem>DART</AdSystem>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					</Wrapper>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_WRAPPER_IMPRESSION_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<Wrapper>
+						<AdSystem>DART</AdSystem>
+					    <VASTAdTagURL>
+					        <URL><![CDATA[http://www.secondaryadserver.com/ad/tag/parameters?time=1234567]]></URL>
+					    </VASTAdTagURL>
+					</Wrapper>
+				</Ad>
+			</VideoAdServingTemplate>;
+			
+		private static const MISSING_WRAPPER_TRACKING_EVENT_TYPE_VAST_DOCUMENT:XML =
+			<VideoAdServingTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+				<Ad>
+					<Wrapper>
+						<AdSystem>DART</AdSystem>
+					    <VASTAdTagURL>
+					        <URL><![CDATA[http://www.secondaryadserver.com/ad/tag/parameters?time=1234567]]></URL>
+					    </VASTAdTagURL>
+					    <Impression>
+					        <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?imp]]></URL>
+					    </Impression>
+					    <TrackingEvents>
+					        <Tracking event="wrong">
+					            <URL id="myadsever"><![CDATA[http://www.primarysite.com/tracker?mid]]></URL>
+					        </Tracking>
+					    </TrackingEvents>
+					</Wrapper>
+				</Ad>
+			</VideoAdServingTemplate>;
 	}
 }
