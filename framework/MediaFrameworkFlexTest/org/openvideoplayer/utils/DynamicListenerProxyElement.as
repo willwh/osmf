@@ -63,35 +63,48 @@ package org.openvideoplayer.utils
 
 		override protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void
 		{
+			changeEventQueue.push({"oldState":oldState, "newState":newState});
 		}
 		
 		override protected function processPlayingChange(playing:Boolean):void
 		{
+			changeEventQueue.push({"playing":playing});
 		}
 
 		override protected function processPausedChange(paused:Boolean):void
 		{
+			changeEventQueue.push({"paused":paused});
 		}
 
 		override protected function processSeekingChange(seeking:Boolean, time:Number):void
 		{
+			changeEventQueue.push({"seeking":seeking, "time":time});
 		}
 		
 		override protected function processDurationReached():void
 		{
+			changeEventQueue.push({"durationReached":true});
 		}
 
 		override protected function processDurationChange(oldDuration:Number, newDuration:Number):void
 		{
+			changeEventQueue.push({"oldDuration":oldDuration, "newDuration":newDuration});
 		}
 
 		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
 		{
+			changeEventQueue.push({"oldWidth":oldWidth, "oldHeight":oldHeight, "newWidth":newWidth, "newHeight":newHeight});
 		}
 		
 		override protected function processSwitchingChange(oldState:int, newState:int, detail:SwitchingDetail):void
 		{
-		}	
+			changeEventQueue.push({"oldState":oldState, "newState":newState, "detail":detail});
+		}
+
+		override protected function processIndicesChange():void
+		{
+			changeEventQueue.push({"indicesChange":true});
+		}
 
 		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void
 		{

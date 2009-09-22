@@ -29,7 +29,6 @@ package org.openvideoplayer.net.dynamicstreaming
 	import org.openvideoplayer.events.SwitchingChangeEvent;
 	import org.openvideoplayer.net.NetStreamCodes;
 	import org.openvideoplayer.traits.SwitchableTrait;
-	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
 	 * The NetStreamSwitchableTrait class implements an ISwitchable interface that uses a DynamicNetStream.
@@ -94,9 +93,9 @@ package org.openvideoplayer.net.dynamicstreaming
 		/**
 		 * @inheritDoc
 		 */ 
-		override protected function postProcessSwitchTo():void
+		override protected function postProcessSwitchTo(detail:SwitchingDetail=null):void
 		{
-			//Do nothing, wait for onNetStreamSwitchingChange handler to dispatch SwitchComplete.
+			// Do nothing, wait for onNetStreamSwitchingChange handler to dispatch SwitchComplete.
 		}
 				
 		private function onNetStatus(event:NetStatusEvent):void

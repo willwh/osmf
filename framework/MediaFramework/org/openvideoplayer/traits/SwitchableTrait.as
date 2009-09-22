@@ -27,6 +27,7 @@ package org.openvideoplayer.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
+	import org.openvideoplayer.events.TraitEvent;
 	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetail;
 	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
@@ -67,7 +68,25 @@ package org.openvideoplayer.traits
 			_autoSwitch = autoSwitch;
 			_currentIndex = currentIndex;		
 			this.numIndices = numIndices;
-			maxIndex = numIndices - 1;			
+		}
+		
+		/**
+		 * The number of indices this trait can switch between.
+		 **/
+		public function get numIndices():int
+		{
+			return _numIndices;
+		}
+		
+		public function set numIndices(value:int):void
+		{
+			if (value != _numIndices)
+			{
+				_numIndices = value;
+				maxIndex = _numIndices - 1;
+				
+				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+			}			
 		}
 		
 		/**
@@ -154,15 +173,13 @@ package org.openvideoplayer.traits
 			else if (index != currentIndex)
 			{
 				if (canProcessSwitchTo(index))
-				{					
-					if (!switchUnderway)
-					{
-						switchState = SwitchingChangeEvent.SWITCHSTATE_REQUESTED;
-						dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, switchState, new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL)));
-					}					
+				{
+					var detail:SwitchingDetail = new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL);
+					
+					processSwitchState(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, detail);
 					_currentIndex = index;
 					processSwitchTo(index);
-					postProcessSwitchTo();
+					postProcessSwitchTo(detail);
 				}
 			}			
 		}
@@ -208,15 +225,15 @@ package org.openvideoplayer.traits
 		 */ 
 		protected function processSwitchTo(value:int):void
 		{			
-			// switchTo is proccessed here
+			// switchTo is processed here
 		}
 		
 		/**
 		 * Fires the SwitchState complete event
 		 */ 
-		protected function postProcessSwitchTo():void
+		protected function postProcessSwitchTo(detail:SwitchingDetail = null):void
 		{
-			processSwitchState(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, null);
+			processSwitchState(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, detail);
 		}
 		
 		/**
@@ -268,7 +285,7 @@ package org.openvideoplayer.traits
 		/**
 		 * tracks the number of possible indices
 		 */ 
-		private var numIndices:int;
+		private var _numIndices:int;
 		
 		/**
 		 * Tracks the current switching state of this trait.  

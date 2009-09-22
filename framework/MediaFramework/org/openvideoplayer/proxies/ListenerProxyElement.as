@@ -207,7 +207,15 @@ package org.openvideoplayer.proxies
 		 **/
 		protected function processSwitchingChange(oldState:int, newState:int, detail:SwitchingDetail):void
 		{
-		}	
+		}
+		
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processIndicesChange():void
+		{
+		}
 
 		/**
 		 * Subclasses can override to perform custom processing in response to
@@ -282,6 +290,11 @@ package org.openvideoplayer.proxies
 		private function onSwitchingChange(event:SwitchingChangeEvent):void
 		{
 			processSwitchingChange(event.oldState, event.newState, event.detail);
+		}
+		
+		private function onIndicesChange(event:TraitEvent):void
+		{
+			processIndicesChange();
 		}
 
 		private function onViewChange(event:ViewChangeEvent):void
@@ -473,10 +486,12 @@ package org.openvideoplayer.proxies
 				if (added)
 				{
 					switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.addEventListener(TraitEvent.INDICES_CHANGE, onIndicesChange);
 				}
 				else
 				{
 					switchable.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.removeEventListener(TraitEvent.INDICES_CHANGE, onIndicesChange);
 				}
 			}
 		}
