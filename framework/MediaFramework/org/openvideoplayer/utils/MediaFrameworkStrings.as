@@ -120,6 +120,7 @@ package org.openvideoplayer.utils
 		public static const PLAY_FAILED_NO_SOUND_CHANNELS:String		= "Playback failed due to no sound channels being available";
 		public static const HTTP_IO_LOAD_ERROR:String					= "I/O error when loading URL over HTTP";
 		public static const HTTP_SECURITY_LOAD_ERROR:String				= "Security error when loading URL over HTTP";
+		public static const BEACON_FAILURE_ERROR:String					= "Beacon failed to successfully ping its HTTP URL";
 		
 		// SwitchingDetailCodes
 		

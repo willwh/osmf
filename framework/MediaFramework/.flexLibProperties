@@ -52,6 +52,7 @@
     <classEntry path="org.openvideoplayer.display.MediaPlayerSprite"/>
     <classEntry path="org.openvideoplayer.display.ScalableSprite"/>
     <classEntry path="org.openvideoplayer.display.ScaleMode"/>
+    <classEntry path="org.openvideoplayer.events.BeaconEvent"/>
     <classEntry path="org.openvideoplayer.events.BufferTimeChangeEvent"/>
     <classEntry path="org.openvideoplayer.events.BufferingChangeEvent"/>
     <classEntry path="org.openvideoplayer.events.DimensionChangeEvent"/>
@@ -183,6 +184,9 @@
     <classEntry path="org.openvideoplayer.regions.RegionTargetFacet"/>
     <classEntry path="org.openvideoplayer.swf.SWFElement"/>
     <classEntry path="org.openvideoplayer.swf.SWFLoader"/>
+    <classEntry path="org.openvideoplayer.tracking.Beacon"/>
+    <classEntry path="org.openvideoplayer.tracking.BeaconElement"/>
+    <classEntry path="org.openvideoplayer.tracking.BeaconPlayableTrait"/>
     <classEntry path="org.openvideoplayer.traits.AudibleTrait"/>
     <classEntry path="org.openvideoplayer.traits.BufferableTrait"/>
     <classEntry path="org.openvideoplayer.traits.IAudible"/>

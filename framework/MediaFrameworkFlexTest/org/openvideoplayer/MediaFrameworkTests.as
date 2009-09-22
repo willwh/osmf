@@ -40,6 +40,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.proxies.*;
 	import org.openvideoplayer.regions.*;
 	import org.openvideoplayer.swf.*;
+	import org.openvideoplayer.tracking.*;
 	import org.openvideoplayer.traits.*;
 	import org.openvideoplayer.utils.*;
 	import org.openvideoplayer.version.*;
@@ -108,6 +109,9 @@ package org.openvideoplayer
 			addTestSuite(TestTemporalProxyElement);
 			addTestSuite(TestListenerProxyElement);
 			addTestSuite(TestListenerProxyElementAsSubclass);
+			
+			addTestSuite(TestBeacon);
+			addTestSuite(TestBeaconElement);
 			
 			addTestSuite(TestPlayableTrait);
 			addTestSuite(TestPausableTrait);
