@@ -353,7 +353,7 @@ package org.openvideoplayer.proxies
 					// merged with the trait addition/removal event.  So we
 					// forcibly signal a view change event.
 					var viewable:IViewable = wrappedElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-					if (viewable != null)
+					if (viewable != null && viewable.view != null)
 					{
 						processViewChange(added ? null : viewable.view, added ? viewable.view : null);
 					}

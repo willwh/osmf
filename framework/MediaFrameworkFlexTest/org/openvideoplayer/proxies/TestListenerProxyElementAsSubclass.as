@@ -21,6 +21,9 @@
 *****************************************************/
 package org.openvideoplayer.proxies
 {
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
+	
 	import org.openvideoplayer.events.SwitchingChangeEvent;
 	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetail;
 	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetailCodes;
@@ -35,6 +38,7 @@ package org.openvideoplayer.proxies
 	import org.openvideoplayer.traits.SpatialTrait;
 	import org.openvideoplayer.traits.SwitchableTrait;
 	import org.openvideoplayer.traits.TemporalTrait;
+	import org.openvideoplayer.traits.ViewableTrait;
 	import org.openvideoplayer.utils.DynamicListenerProxyElement;
 	import org.openvideoplayer.utils.DynamicMediaElement;
 	import org.openvideoplayer.utils.SimpleLoader;
@@ -360,6 +364,59 @@ package org.openvideoplayer.proxies
 			spatial.setDimensions(0, 0);
 			
 			assertTrue(events.length == 1);
+		}
+		
+		public function testProcessViewableChanges():void
+		{
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.VIEWABLE);
+			
+			assertTrue(events.length == 0);
+			
+			// Changing properties should result in events.
+			//
+			
+			var viewable:ViewableTrait = proxyElement.getTrait(MediaTraitType.VIEWABLE) as ViewableTrait;
+			
+			var aView:DisplayObject = new Sprite();
+						
+			viewable.view = aView; 
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["oldView"] == null);
+			assertTrue(events[0]["newView"] == aView);
+			
+			viewable.view = null; 
+			assertTrue(events.length == 2);
+			assertTrue(events[1]["oldView"] == aView);
+			assertTrue(events[1]["newView"] == null);
+			
+			// We shouldn't get any events when we're no longer proxying the
+			// wrapped element.
+			//
+			
+			proxyElement.wrappedElement = null;
+			
+			viewable.view = aView;
+			
+			assertTrue(events.length == 2);
+		}
+		
+		public function testProcessViewableChangesOnAddViewable():void
+		{
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAYABLE);
+			
+			var viewable:ViewableTrait = new ViewableTrait();
+			var aView:DisplayObject = new Sprite();
+			viewable.view = aView;
+			
+			assertTrue(events.length == 0);
+			
+			// VIEWABLE is the one trait where adding the trait to the
+			// MediaElement can trigger a ListenerProxyElement event.
+			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.VIEWABLE, viewable);
+			
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["oldView"] == null);
+			assertTrue(events[0]["newView"] == aView);
 		}
 		
 		private function createProxyWithTrait(traitType:MediaTraitType):ProxyElement

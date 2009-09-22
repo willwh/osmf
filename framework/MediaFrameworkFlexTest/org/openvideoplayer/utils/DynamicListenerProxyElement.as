@@ -35,7 +35,7 @@ package org.openvideoplayer.utils
 			
 			this.changeEventQueue = changeEventQueue; 
 		}
-
+		
 		override protected function processVolumeChange(oldVolume:Number, newVolume:Number):void
 		{
 			changeEventQueue.push({"oldVolume":oldVolume, "newVolume":newVolume});
@@ -108,6 +108,7 @@ package org.openvideoplayer.utils
 
 		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void
 		{
+			changeEventQueue.push({"oldView":oldView, "newView":newView});
 		}
 		
 		private var changeEventQueue:Array;
