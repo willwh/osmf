@@ -195,7 +195,7 @@ package org.openvideoplayer.layout
 
 			LayoutUtils.setRelativeLayout(mediaElement.metadata, 80, 80 /* width, height */, 10, 10 /* x,y */);
 			var meAttr:LayoutAttributesFacet
-				= LayoutUtils.setScaleMode
+				= LayoutUtils.setLayoutAttributes
 					( mediaElement.metadata
 					, ScaleMode.NONE, RegistrationPoint.MIDDLE_RIGHT
 					);

@@ -121,7 +121,7 @@ package org.openvideoplayer.regions
 			var viewableSprite:Sprite = new TesterSprite();
 			viewable.view = viewableSprite;
 			
-			LayoutUtils.setScaleMode(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
+			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 
 			var region:RegionSprite = new RegionSprite();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
