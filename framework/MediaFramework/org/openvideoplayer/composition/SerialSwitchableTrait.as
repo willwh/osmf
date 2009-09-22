@@ -26,7 +26,7 @@ package org.openvideoplayer.composition
 	 * The Composite Serial switchable trait will aggregate switchable traits, acting as a single
 	 * switchable trait.  This trait will match settinngs between child traits when switching between children.
 	 */ 
-	public class SerialSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable, IReusable
+	internal class SerialSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable, IReusable
 	{
 		/**
 		 * Constructs a Composite Serial switchable trait.
@@ -121,7 +121,7 @@ package org.openvideoplayer.composition
 					{
 						if (ISwitchable(child).getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
 							itr == maxIndex)
-						{							
+						{																
 							ISwitchable(child).switchTo(itr);	
 							break;	
 						}
@@ -141,7 +141,7 @@ package org.openvideoplayer.composition
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);					
 		}
-		
+			
 		/**
 		 * @inheritDoc
 		 */ 

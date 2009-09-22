@@ -21,9 +21,7 @@
 *****************************************************/
 package org.openvideoplayer.layout
 {
-	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
 	
 	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.metadata.Metadata;
@@ -225,7 +223,7 @@ package org.openvideoplayer.layout
 		 * Please referer to the LayoutAttributesFacet documentation for the semantics of
 		 * the scaleMode and alignment parameters.
 		 */		
-		public static function setScaleMode(target:Metadata, scaleMode:ScaleMode, alignment:RegistrationPoint = null):LayoutAttributesFacet
+		public static function setLayoutAttributes(target:Metadata, scaleMode:ScaleMode, alignment:RegistrationPoint = null, order:Number = NaN):LayoutAttributesFacet
 		{
 			if (target == null)
 			{
@@ -249,6 +247,11 @@ package org.openvideoplayer.layout
 			{
 				layoutAttributes.alignment = alignment;
 			}
+			if (!isNaN(order))
+			{
+				layoutAttributes.order = order;			
+			}
+			
 			
 			if (addFacet)
 			{

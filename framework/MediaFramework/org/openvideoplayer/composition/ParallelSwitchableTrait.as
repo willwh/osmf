@@ -32,7 +32,7 @@ package org.openvideoplayer.composition
 	 * If a child doesn't have the same bitrate as an another, the closest match will be chosen
 	 * when switching between bitrates.
 	 */ 
-	public class ParallelSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable
+	internal class ParallelSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable
 	{
 		/**
 		 * Construcs a CompositeSwitchableTrait

@@ -122,7 +122,8 @@ package org.openvideoplayer.net.dynamicstreaming
 				super.play.apply(this, args);
 			}
 			else
-			{
+			{				
+								
 				addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 				NetClient(this.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 				
@@ -576,7 +577,15 @@ package org.openvideoplayer.net.dynamicstreaming
 					var moreDetail:String = "manually switching to index: " + index;
 					_detail = new SwitchingDetail((index < this._renderingIndex) ? SwitchingDetailCodes.SWITCHING_DOWN_OTHER : SwitchingDetailCodes.SWITCHING_UP_OTHER, 
 													moreDetail);
-					switchToIndex(index, false);
+					if(_streamIndex == -1)
+					{
+						_dsResource.initialIndex = index;
+					}
+					else
+					{
+						switchToIndex(index, false);
+					}
+					
 				}
 			}
 			else
@@ -639,12 +648,12 @@ package org.openvideoplayer.net.dynamicstreaming
 		{
 			return (index >= _dsiLockLevel) && (getTimer() - _dsiLastLockTime) < DSI_LOCK_INTERVAL;
 		}
-					
+						
 		private var _checkRulesTimer:Timer;
 		private var _clearFailedCountsTimer:Timer;
 		private var _switchingRules:Vector.<ISwitchingRule>;
 		private var _metricsProvider:INetStreamMetrics;
-		private var _streamIndex:int;
+		private var _streamIndex:int = -1;
 		private var _oldStreamName:String;
 		private var _dsResource:DynamicStreamingResource;
 		private var _useManualSwitchMode:Boolean;
