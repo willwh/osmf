@@ -31,7 +31,7 @@ package org.openvideoplayer.display
 	public class ScaleMode
 	{				
 		/**
-		 * <code>NONE</code> implies that the media size is not changed, regardless of the container size.
+		 * <code>NONE</code> implies that the media size is set to match its intrinsic size.
 		 **/
 		public static const NONE:ScaleMode 		= new ScaleMode("NONE"); 
 		
