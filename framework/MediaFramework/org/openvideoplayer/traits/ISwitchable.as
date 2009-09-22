@@ -32,7 +32,7 @@ package org.openvideoplayer.traits
 	[Event(name="switchingChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
 	
 	/**
-	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * Dispatched when the number of indices or associated bitrates have changed.
 	 * 
 	 * @eventType org.openvideoplayer.events.TraitEvent.INDICES_CHANGE
 	 */

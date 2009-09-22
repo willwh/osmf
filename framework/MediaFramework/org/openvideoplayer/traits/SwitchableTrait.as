@@ -37,7 +37,7 @@ package org.openvideoplayer.traits
 	[Event(name="switchingChange",type="org.openvideoplayer.events.SwitchingChangeEvent")]
 	
 	/**
-	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * Dispatched when the number of indices or associated bitrates have changed.
 	 * 
 	 * @eventType org.openvideoplayer.events.TraitEvent.INDICES_CHANGE
 	 */
@@ -139,13 +139,13 @@ package org.openvideoplayer.traits
 		 */ 		
 		public function switchTo(index:int):void
 		{
-			if (index != currentIndex)
+			if (autoSwitch)
 			{
-				if(autoSwitch)
-				{
-					throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
-				}
-				else if (canProcessSwitchTo(index))
+				throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
+			}
+			else if (index != currentIndex)
+			{
+				if (canProcessSwitchTo(index))
 				{					
 					if (!switchUnderway)
 					{
@@ -168,11 +168,11 @@ package org.openvideoplayer.traits
 		}
 		
 		/**
-		 * Does the acutal processing of changes to the autoSwitch property
+		 * Does the actual processing of changes to the autoSwitch property
 		 */ 
 		protected function processAutoSwitchChange(value:Boolean):void
 		{			
-			// autoswitching is proccessed here
+			// autoswitching is processed here
 		}
 				
 		/**
@@ -180,17 +180,16 @@ package org.openvideoplayer.traits
 		 */ 
 		protected function canProcessSwitchTo(index:int):Boolean
 		{
-			if (index <= maxIndex && index >= 0)
+			if (index < 0 || index > maxIndex)
 			{
-				return true; 
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 			}
-			throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
-			return false;
-		
+
+			return true; 
 		}
 		
 		/**
-		 * Does the acutal switching of indices.
+		 * Does the actual switching of indices.
 		 */ 
 		protected function processSwitchTo(value:int):void
 		{			
@@ -220,12 +219,12 @@ package org.openvideoplayer.traits
 		 */ 
 		protected function canProcessMaxIndexChange(value:int):Boolean
 		{
-			if (value < numIndices && value >= 0)
+			if (value < 0 || value >= numIndices)
 			{				
-				return true;
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 			}
-			throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
-			return false;
+			
+			return true;
 		}
 		
 		/**
