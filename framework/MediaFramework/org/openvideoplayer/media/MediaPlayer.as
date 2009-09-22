@@ -1133,11 +1133,6 @@ package org.openvideoplayer.media
 				seek(0);
 				pause();				
 			}	
-			else if(temporal && seekable &&  //Coerce to be at the end once play has stopped (if doesn't match).
-					(playhead != duration))
-			{
-				seek(duration);
-			}		
 		}			
 								
 		private function onPlayheadTimer(event:TimerEvent):void
