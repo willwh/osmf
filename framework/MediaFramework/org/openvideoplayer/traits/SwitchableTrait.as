@@ -18,6 +18,8 @@
 *  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
 *  Technologies, Inc. All Rights Reserved. 
 *  
+*  Contributor(s): Adobe Systems Incorporated.
+* 
 *****************************************************/
 
 package org.openvideoplayer.traits
@@ -53,11 +55,17 @@ package org.openvideoplayer.traits
 	public class SwitchableTrait extends MediaTraitBase implements ISwitchable
 	{
 		/**
-		 * Creates a new SwitchableTrait with the ability to switch to 
+		 * Creates a new SwitchableTrait with the ability to switch to.  The
+		 * maxIndex is initially set to numIndices - 1.
+		 * @param autoSwitch the initial autoSwitch state for the trait.
+		 * @param currentIndex the start index for the swichable trait.
+		 * @param numIndices the maximum value allow to be set on maxIndex 
 		 */ 
-		public function SwitchableTrait(numIndices:int)
+		public function SwitchableTrait(autoSwitch:Boolean=true, currentIndex:int=0, numIndices:int=1)
 		{
-			super();			
+			super();	
+			_autoSwitch = autoSwitch;
+			_currentIndex = currentIndex;		
 			this.numIndices = numIndices;
 			maxIndex = numIndices - 1;			
 		}
@@ -180,12 +188,19 @@ package org.openvideoplayer.traits
 		 */ 
 		protected function canProcessSwitchTo(index:int):Boolean
 		{
+			validateIndex(index);
+			return true; 
+		}
+		
+		/**
+		 * 
+		 */ 
+		protected function validateIndex(index:int):void
+		{
 			if (index < 0 || index > maxIndex)
 			{
 				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 			}
-
-			return true; 
 		}
 		
 		/**
@@ -238,27 +253,27 @@ package org.openvideoplayer.traits
 		/**
 		 * Backing variable for autoSwitch
 		 */ 	
-		protected var _autoSwitch:Boolean = true;
+		private var _autoSwitch:Boolean;
 		
 		/**
 		 * Backing variable for currentIndex
 		 */ 
-		protected var _currentIndex:int = 0;
+		private var _currentIndex:int = 0;
 	
 		/**
 		 * Backing variable for maxIndex
 		 */ 
-		protected var _maxIndex:int = 0;
+		private var _maxIndex:int = 0;
 		
 		/**
 		 * tracks the number of possible indices
 		 */ 
-		protected var numIndices:int;
+		private var numIndices:int;
 		
 		/**
 		 * Tracks the current switching state of this trait.  
 		 * See SwitchingChangeEvent for all possible states.
 		 */ 
-		protected var switchState:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
+		private var switchState:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
 	}
 }

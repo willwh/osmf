@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.openvideoplayer.composition
 {
 	import __AS3__.vec.Vector;
@@ -113,7 +134,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function get switchUnderway():Boolean
 		{				
-			for( var itr:Number = 0; itr < traitAggregator.numChildren; ++itr)
+			for (var itr:Number = 0; itr < traitAggregator.numChildren; ++itr)
 			{
 				var child:MediaElement = traitAggregator.getChildAt(itr);
 				if (child.hasTrait(MediaTraitType.SWITCHABLE) &&
@@ -127,43 +148,41 @@ package org.openvideoplayer.composition
 		
 		/**
 		 * @inheritDoc
+		 * 
 		 */ 
 		public function switchTo(index:int):void
-		{		
-			if (!_autoSwitch)
+		{
+			if ((index < 0) || (index > maxIndex))
 			{
-				if ((index < 0) || (index > maxIndex))
-				{
-					throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+			}
+					
+			if (!_autoSwitch)
+			{	
+				traitAggregator.forEachChildTrait(
+				function(mediaTrait:ISwitchable):void
+				{	
+					var desiredBitRate:Number = bitRates[index];	
+					var childIndex:Number;		
+					for (childIndex = 0; childIndex <= mediaTrait.maxIndex; childIndex++)
+					{		
+						var childBitRate:Number = mediaTrait.getBitrateForIndex(childIndex);
+											
+						if (childBitRate == desiredBitRate)								   
+						{
+							break;
+						}									
+						else if (childBitRate > desiredBitRate)
+						{
+							childIndex--;
+							break;
+						}				
+					}							
+					//If we made it here, the last item is the correct stream
+					mediaTrait.switchTo(Math.min(childIndex, mediaTrait.maxIndex));													
 				}
-				else
-				{					
-					traitAggregator.forEachChildTrait(
-						function(mediaTrait:ISwitchable):void
-						{	
-							var desiredBitRate:Number = bitRates[index];	
-							var childIndex:Number;		
-							for (childIndex = 0; childIndex <= mediaTrait.maxIndex; childIndex++)
-							{		
-								var childBitRate:Number = mediaTrait.getBitrateForIndex(childIndex);
-													
-								if (childBitRate == desiredBitRate)								   
-								{
-									break;
-								}									
-								else if (childBitRate > desiredBitRate)
-								{
-									childBitRate--;
-									break;
-								}				
-							}							
-							//If we made it here, the last item is the correct stream
-							mediaTrait.switchTo(Math.min(childIndex, mediaTrait.maxIndex));													
-						}
-					    , MediaTraitType.SWITCHABLE);
-					    _currentIndex = index;
-					    trace('new parallel index:' + _currentIndex);
-				}
+			    , MediaTraitType.SWITCHABLE);
+			    _currentIndex = index;
 			}
 			else
 			{
@@ -191,7 +210,7 @@ package org.openvideoplayer.composition
 			{
 				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
 			}
-			trace('adding SwitchingChangeEvent.SWITCHING_CHANGE listener');
+			
 			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);
 			_maxIndex = bitRates.length-1; 			
@@ -203,7 +222,6 @@ package org.openvideoplayer.composition
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{	
-			trace('removing SwitchingChangeEvent.SWITCHING_CHANGE listener');
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
 			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);		
 			recomputeIndices();	
@@ -279,9 +297,8 @@ package org.openvideoplayer.composition
 		 */ 
 		private function recomputeIndices(event:TraitEvent = null):void
 		{			
-			trace('recomputeIndices');
 			var oldBitRate:Number = bitRates[currentIndex];
-			if(rebuildBitRateTable()) //Update current index, and dispatch event if indices changed.
+			if (rebuildBitRateTable()) //Update current index, and dispatch event if indices changed.
 			{
 				if (!_autoSwitch)
 				{			
@@ -293,7 +310,7 @@ package org.openvideoplayer.composition
 						}
 						,   MediaTraitType.SWITCHABLE);
 					var newBIndex:Number = 0;
-					while(highestBitRate != bitRates[newBIndex])
+					while (highestBitRate != bitRates[newBIndex])
 					{
 						newBIndex++;								
 					}	
@@ -309,16 +326,12 @@ package org.openvideoplayer.composition
 		 */ 
 		private function childSwitchingChange(event:SwitchingChangeEvent):void
 		{			
-			trace('childSwitchingChange received, new state:' + event.newState + "  current state:" + _state);
-		 
-			if(event.newState != _state)
+			if (event.newState != _state)
 			{					
-				if(event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE && switchUnderway)
+				if (event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE && switchUnderway)
 				{
-					trace('switchComplete received, current state:' + switchUnderway);
 					return; //NO-OP if we have pending switches.				
 				}			
-				trace('changing parallel to new state:' + event.newState);
 				var oldState:int = 	_state;											
 				_state = event.newState;	
 				dispatchEvent(new SwitchingChangeEvent(event.newState, oldState, event.detail));			

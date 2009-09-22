@@ -18,6 +18,8 @@
 *  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
 *  Technologies, Inc. All Rights Reserved. 
 *  
+*  Contributor(s): Adobe Systems Incorporated.
+* 
 *****************************************************/
 
 package org.openvideoplayer.net.dynamicstreaming
@@ -44,24 +46,13 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		public function NetStreamSwitchableTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
 		{
-			super(res.numItems);	
+			super(!ns.useManualSwitchMode, ns.renderingIndex, res.numItems);	
 			
-			_autoSwitch = !ns.useManualSwitchMode;	
-			_currentIndex = ns.renderingIndex;
-				
 			_ns = ns;
 			_resource = res;
 									
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
-		}
-			
-		/**
-		 * @inheritDoc
-		 */
-		override public function get currentIndex():int
-		{
-			return _ns.renderingIndex;
 		}
 		
 		/**
@@ -69,7 +60,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
-			super.getBitrateForIndex(index);
+			validateIndex(index);
 			return _resource.getItemAt(index).bitrate;
 		}	
 				
@@ -124,8 +115,7 @@ package org.openvideoplayer.net.dynamicstreaming
 		}
 		
 		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
-		{			
-			trace('onNetStreamSwitchingChange - ' + event.newState);
+		{		
 			processSwitchState(event.newState, event.detail);
 		}				
 						

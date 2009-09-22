@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.openvideoplayer.composition
 {
 	import flash.events.Event;
@@ -41,7 +62,7 @@ package org.openvideoplayer.composition
 		 */ 	
 		public function get autoSwitch():Boolean
 		{
-			return currentChild.autoSwitch;
+			return switchable.autoSwitch;
 		}
 		
 		/**
@@ -49,7 +70,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function set autoSwitch(value:Boolean):void
 		{
-			currentChild.autoSwitch = value;;		
+			switchable.autoSwitch = value;;		
 		}
 		
 		/**
@@ -57,7 +78,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function get currentIndex():int
 		{
-			return currentChild.currentIndex;
+			return switchable.currentIndex;
 		}
 		
 		/**
@@ -65,7 +86,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
-			return currentChild.getBitrateForIndex(index);
+			return switchable.getBitrateForIndex(index);
 		}
 		
 		/**
@@ -73,7 +94,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function get maxIndex():int
 		{
-			return currentChild.maxIndex;
+			return switchable.maxIndex;
 		}
 		
 		/**
@@ -81,7 +102,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function set maxIndex(value:int):void
 		{			
-			currentChild.maxIndex = value;
+			switchable.maxIndex = value;
 		}
 		
 		/**
@@ -89,7 +110,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function get switchUnderway():Boolean
 		{
-			return currentChild.switchUnderway;
+			return switchable.switchUnderway;
 		}
 		
 		/**
@@ -97,7 +118,7 @@ package org.openvideoplayer.composition
 		 */ 
 		public function switchTo(index:int):void
 		{	
-			currentChild.switchTo(index);		
+			switchable.switchTo(index);		
 		}	
 		
 		public function prepare():void
@@ -105,39 +126,45 @@ package org.openvideoplayer.composition
 			//nothing to do here, required for IReusable.
 		}
 		
+		private function get switchable():ISwitchable
+		{
+			return traitAggregator.listenedChild.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
+		}
 		
 		/**
 		 * @inheritDoc
+		 * Adds the child as the current listened child.  Sets the autoswitch, property to 
+		 * carry over from the previous child.  If autoswitch is false, attempts to match the bitrate
+		 * for the next media element.
 		 */ 
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{		
-			
+			var switchable:ISwitchable = ISwitchable(child);
 			if (currentChild != null)
 			{				
-				ISwitchable(child).autoSwitch = currentChild.autoSwitch;
+				switchable.autoSwitch = currentChild.autoSwitch;
 				if (!currentChild.autoSwitch)
 				{
 					for (var itr:Number = 0; itr <= ISwitchable(child).maxIndex; itr++)
 					{
-						if (ISwitchable(child).getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
+						if (switchable.getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
 							itr == maxIndex)
 						{																
-							ISwitchable(child).switchTo(itr);	
+							switchable.switchTo(itr);	
 							break;	
 						}
-						else if (ISwitchable(child).getBitrateForIndex(itr) > getBitrateForIndex(currentIndex))							
+						else if (switchable.getBitrateForIndex(itr) > getBitrateForIndex(currentIndex))							
 						{										
-							ISwitchable(child).switchTo(Math.max(itr-1, 0));	
+							switchable.switchTo(Math.max(itr-1, 0));	
 							break;	
 						}				 
 					}					
 				}
 				currentChild.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
-				currentChild.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);		
-										
+				currentChild.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);										
 			}	
 										
-			currentChild = ISwitchable(child);
+			currentChild = switchable;
 			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);					
 		}
@@ -149,7 +176,7 @@ package org.openvideoplayer.composition
 		{				
 			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
 			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);	
-		}	
+		}
 		
 		private function redispatchEvent(event:Event):void
 		{
