@@ -26,14 +26,17 @@ package org.openvideoplayer.proxies
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
+	import org.openvideoplayer.media.IMediaResource;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.TestMediaElement;
+	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.traits.ITemporal;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.traits.PausableTrait;
 	import org.openvideoplayer.traits.PlayableTrait;
 	import org.openvideoplayer.traits.SeekableTrait;
 	import org.openvideoplayer.traits.TemporalTrait;
+	import org.openvideoplayer.utils.URL;
 
 	public class TestTemporalProxyElement extends TestMediaElement
 	{
@@ -153,6 +156,34 @@ package org.openvideoplayer.proxies
 			events.push(event);
 		}
 		
+		// Overrides
+		//
+		
+		override protected function createMediaElement():MediaElement
+		{
+			return new TemporalProxyElement();
+		}
+		
+		override protected function get loadable():Boolean
+		{
+			return false;
+		}
+		
+		override protected function get resourceForMediaElement():IMediaResource
+		{
+			return new URLResource(new URL("http://example.com"));
+		}
+		
+		override protected function get existentTraitTypesOnInitialization():Array
+		{
+			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+		}
+
+		override protected function get existentTraitTypesAfterLoad():Array
+		{
+			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+		}
+
 		private var events:Vector.<Event>;
 	}
 }

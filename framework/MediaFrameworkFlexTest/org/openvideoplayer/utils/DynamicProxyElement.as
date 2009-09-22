@@ -45,7 +45,10 @@ package org.openvideoplayer.utils
 		{
 			super(wrappedElement);
 			
-			initialize([traitTypes, loader, resource]);
+			if (traitTypes != null || loader != null || resource != null)
+			{
+				initialize([traitTypes, loader, resource]);
+			}
 		}
 				
 		public function doAddTrait(type:MediaTraitType,instance:IMediaTrait):void

@@ -175,6 +175,7 @@
     <classEntry path="org.openvideoplayer.plugin.PluginLoadingState"/>
     <classEntry path="org.openvideoplayer.plugin.PluginManager"/>
     <classEntry path="org.openvideoplayer.plugin.StaticPluginLoader"/>
+    <classEntry path="org.openvideoplayer.proxies.ListenerProxyElement"/>
     <classEntry path="org.openvideoplayer.proxies.ProxyElement"/>
     <classEntry path="org.openvideoplayer.proxies.TemporalProxyElement"/>
     <classEntry path="org.openvideoplayer.regions.IRegion"/>

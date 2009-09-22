@@ -104,7 +104,10 @@ package org.openvideoplayer
 			addTestSuite(TestURLResource);
 			
 			addTestSuite(TestProxyElement);
+			addTestSuite(TestProxyElementAsDynamicProxy);
 			addTestSuite(TestTemporalProxyElement);
+			addTestSuite(TestListenerProxyElement);
+			addTestSuite(TestListenerProxyElementAsSubclass);
 			
 			addTestSuite(TestPlayableTrait);
 			addTestSuite(TestPausableTrait);
