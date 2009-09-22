@@ -29,6 +29,18 @@ package org.openvideoplayer.vast.model
 	public class VASTMediaFile
 	{
 		/**
+		 * Constant for the delivery property, when the media file is
+		 * delivered as a stream.
+		 **/
+		public static const DELIVERY_STREAMING:String 	= "streaming";
+
+		/**
+		 * Constant for the delivery property, when the media file is
+		 * delivered progressively.
+		 **/
+		public static const DELIVERY_PROGRESSIVE:String = "progressive";		
+
+		/**
 		 * Constructor.
 		 */			
 		public function VASTMediaFile()
