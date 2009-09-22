@@ -53,10 +53,12 @@ package org.openvideoplayer.utils
 		
 		override protected function processBufferingChange(buffering:Boolean):void
 		{
+			changeEventQueue.push({"buffering":buffering});
 		}
 
 		override protected function processBufferTimeChange(oldTime:Number, newTime:Number):void
 		{
+			changeEventQueue.push({"oldBufferTime":oldTime, "newBufferTime":newTime});
 		}
 
 		override protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void

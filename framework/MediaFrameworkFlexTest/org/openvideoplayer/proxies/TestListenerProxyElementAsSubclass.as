@@ -22,6 +22,7 @@
 package org.openvideoplayer.proxies
 {
 	import org.openvideoplayer.traits.IAudible;
+	import org.openvideoplayer.traits.BufferableTrait;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.DynamicListenerProxyElement;
 	import org.openvideoplayer.utils.DynamicMediaElement;
@@ -31,6 +32,20 @@ package org.openvideoplayer.proxies
 		// Overrides
 		//
 		
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			events = new Array();
+		}
+		
+		override public function tearDown():void
+		{
+			super.tearDown();
+			
+			events = null;
+		}
+		
 		override protected function createProxyElement():ProxyElement
 		{
 			return new DynamicListenerProxyElement([]);
@@ -38,18 +53,14 @@ package org.openvideoplayer.proxies
 		
 		public function testProcessAudibleChanges():void
 		{
-			var events:Array = [];
-			
-			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events);
-			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE]);
-			proxyElement.wrappedElement = wrappedElement;
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.AUDIBLE);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var audible:IAudible = wrappedElement.getTrait(MediaTraitType.AUDIBLE) as IAudible;
+			var audible:IAudible = proxyElement.getTrait(MediaTraitType.AUDIBLE) as IAudible;
 			
 			audible.volume = 0.57;
 			assertTrue(events.length == 1);
@@ -69,7 +80,6 @@ package org.openvideoplayer.proxies
 			// wrapped element.
 			//
 			
-			
 			proxyElement.wrappedElement = null;
 			
 			audible.volume = 0.27;
@@ -78,5 +88,52 @@ package org.openvideoplayer.proxies
 			
 			assertTrue(events.length == 3);
 		}
+
+		public function testProcessBufferableChanges():void
+		{
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.BUFFERABLE);
+			
+			assertTrue(events.length == 0);
+			
+			// Changing properties should result in events.
+			//
+			
+			var bufferable:BufferableTrait = proxyElement.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
+			
+			// No event for bufferLength changes.
+			bufferable.bufferLength = 5;
+			assertTrue(events.length == 0);
+
+			bufferable.bufferTime = 15;
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["oldBufferTime"] == 0.0);
+			assertTrue(events[0]["newBufferTime"] == 15.0);
+
+			bufferable.buffering = true;
+			assertTrue(events.length == 2);
+			assertTrue(events[1]["buffering"] == true);
+
+			// We shouldn't get any events when we're no longer proxying the
+			// wrapped element.
+			//
+			
+			proxyElement.wrappedElement = null;
+			
+			bufferable.bufferLength = 1;
+			bufferable.bufferTime = 1;
+			bufferable.buffering = false;
+			
+			assertTrue(events.length == 2);
+		}
+		
+		private function createProxyWithTrait(traitType:MediaTraitType):ProxyElement
+		{
+			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events);
+			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([traitType]);
+			proxyElement.wrappedElement = wrappedElement;
+			return proxyElement;
+		}
+		
+		private var events:Array;
 	}
 }
