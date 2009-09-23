@@ -104,7 +104,23 @@ package org.openvideoplayer.proxies
 		
 		// Protected
 		//
-		
+	
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processTraitAdd(traitType:MediaTraitType):void
+		{
+		}
+
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processTraitRemove(traitType:MediaTraitType):void
+		{
+		}
+	
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
@@ -307,12 +323,16 @@ package org.openvideoplayer.proxies
 		
 		private function onTraitAdd(event:TraitsChangeEvent):void
 		{
+			processTraitAdd(event.traitType);
+			
 			processTrait(event.traitType, true);
 		}
 
 		private function onTraitRemove(event:TraitsChangeEvent):void
 		{
 			processTrait(event.traitType, false);
+
+			processTraitRemove(event.traitType);
 		}
 		
 		private function processTrait(traitType:MediaTraitType, added:Boolean):void

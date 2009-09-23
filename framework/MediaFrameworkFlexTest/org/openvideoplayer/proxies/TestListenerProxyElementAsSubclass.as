@@ -67,6 +67,36 @@ package org.openvideoplayer.proxies
 			return new DynamicListenerProxyElement([]);
 		}
 		
+		public function testProcessTraitChanges():void
+		{
+			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events, true);
+			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([], new SimpleLoader());
+			proxyElement.wrappedElement = wrappedElement;
+			
+			assertTrue(events.length == 0);
+						
+			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
+			
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["traitTypeAdded"] == MediaTraitType.PLAYABLE);
+			
+			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			
+			assertTrue(events.length == 2);
+			assertTrue(events[1]["traitTypeRemoved"] == MediaTraitType.PLAYABLE);
+			
+			// We shouldn't get any events when we're no longer proxying the
+			// wrapped element.
+			//
+			
+			proxyElement.wrappedElement = null;
+			
+			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
+			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			
+			assertTrue(events.length == 2);
+		}
+		
 		public function testProcessAudibleChanges():void
 		{
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.AUDIBLE);

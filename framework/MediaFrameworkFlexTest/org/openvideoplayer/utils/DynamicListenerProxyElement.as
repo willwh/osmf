@@ -26,14 +26,32 @@ package org.openvideoplayer.utils
 	import org.openvideoplayer.net.dynamicstreaming.SwitchingDetail;
 	import org.openvideoplayer.proxies.ListenerProxyElement;
 	import org.openvideoplayer.traits.LoadState;
+	import org.openvideoplayer.traits.MediaTraitType;
 		
 	public class DynamicListenerProxyElement extends ListenerProxyElement
 	{
-		public function DynamicListenerProxyElement(changeEventQueue:Array)
+		public function DynamicListenerProxyElement(changeEventQueue:Array, processTraitEvents:Boolean = false)
 		{
 			super();
 			
-			this.changeEventQueue = changeEventQueue; 
+			this.changeEventQueue = changeEventQueue;
+			this.processTraitEvents = processTraitEvents;
+		}
+		
+		override protected function processTraitAdd(traitType:MediaTraitType):void
+		{
+			if (processTraitEvents)
+			{
+				changeEventQueue.push({"traitTypeAdded":traitType});
+			}
+		}
+
+		override protected function processTraitRemove(traitType:MediaTraitType):void
+		{
+			if (processTraitEvents)
+			{
+				changeEventQueue.push({"traitTypeRemoved":traitType});
+			}
 		}
 		
 		override protected function processVolumeChange(oldVolume:Number, newVolume:Number):void
@@ -112,5 +130,6 @@ package org.openvideoplayer.utils
 		}
 		
 		private var changeEventQueue:Array;
+		private var processTraitEvents:Boolean;
 	}
 }
