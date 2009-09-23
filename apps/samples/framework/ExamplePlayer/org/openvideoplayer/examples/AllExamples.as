@@ -21,6 +21,8 @@
 *****************************************************/
 package org.openvideoplayer.examples
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -30,6 +32,7 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
 	import org.openvideoplayer.events.LoadableStateChangeEvent;
+	import org.openvideoplayer.examples.buffering.BufferingProxyElement;
 	import org.openvideoplayer.examples.chromeless.ChromelessPlayerElement;
 	import org.openvideoplayer.examples.loaderproxy.VideoProxyElement;
 	import org.openvideoplayer.examples.text.TextElement;
@@ -48,6 +51,8 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.proxies.TemporalProxyElement;
 	import org.openvideoplayer.swf.SWFElement;
 	import org.openvideoplayer.swf.SWFLoader;
+	import org.openvideoplayer.tracking.Beacon;
+	import org.openvideoplayer.tracking.BeaconElement;
 	import org.openvideoplayer.traits.IBufferable;
 	import org.openvideoplayer.traits.ILoadable;
 	import org.openvideoplayer.traits.IPausable;
@@ -56,6 +61,8 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.FMSURL;
 	import org.openvideoplayer.utils.URL;
+	import org.openvideoplayer.vast.media.VASTImpressionProxyElement;
+	import org.openvideoplayer.vast.model.VASTUrl;
 	import org.openvideoplayer.video.VideoElement;
 	
 	/**
@@ -554,6 +561,60 @@ package org.openvideoplayer.examples
 					)
 				);
 				
+			examples.push
+				( new Example
+					( 	"BeaconElement"
+					, 	"Demonstrates the use of BeaconElement to fire tracking events.  Every few seconds, a \"ping\" is made.  If you run this example while sniffing HTTP traffic, you can see the requests being made."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(5));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(10));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(2));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		return serialElement; 
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"BeaconElement with a VideoElement"
+					, 	"Demonstrates the use of BeaconElement to fire tracking events in parallel with a VideoElement."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var parallelElement:ParallelElement = new ParallelElement();
+				  	   		parallelElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
+				  	   		var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(5));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(10));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new TemporalProxyElement(2));
+				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		parallelElement.addChild(serialElement);
+				  	   		return parallelElement; 
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"VASTImpressionProxyElement"
+					, 	"Demonstrates the use of VASTImpressionProxyElement to record a video impression in accordance with IAB guidelines.  The IAB dictates than an impression should be recorded after the video has finished its initial buffering.  We use a custom ProxyElement that sets the VideoElement's buffer time to a large value, so that it's possible to verify that the impression isn't recorded immediately."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var urls:Vector.<VASTUrl> = new Vector.<VASTUrl>();
+				  	   		urls.push(new VASTUrl(BEACON_URL + "?random=" + Math.random()));
+				  	   		return new VASTImpressionProxyElement(urls, null, new BufferingProxyElement(20, new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM)))));
+				  	   	}
+				  	)
+				);
+				
 			return examples;
 		}
 		
@@ -595,6 +656,7 @@ package org.openvideoplayer.examples
 		private static const LOCAL_PROGRESSIVE:String 			= "video.flv";
 		private static const CHROMELESS_SWF_AS3:String			= "http://mediapm.edgesuite.net/osmf/swf/ChromelessPlayer.swf";
 		private static const CHROMELESS_SWF_FLEX:String			= "http://mediapm.edgesuite.net/osmf/swf/ChromelessFlexPlayer.swf";
+		private static const BEACON_URL:String					= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
 		
 		private static const MBR_STREAM_ITEMS:Array =
 			[ new DynamicStreamingItem("mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_408kbps.mp4", 408, 768, 428)
