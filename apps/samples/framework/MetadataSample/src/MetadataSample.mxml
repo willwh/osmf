@@ -121,8 +121,7 @@
 					comp.getChildAt(1).metadata.addFacet(layout2);
 					comp.getChildAt(2).metadata.addFacet(layout3);
 				}
-	 			wrapper.scaleMode = ScaleMode.STRETCH;
-	 				 				 				 			
+	 				 				 				 				 			
 	 			wrapper.element = comp;  			
 	 		}
 	 			 		
