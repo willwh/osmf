@@ -49,19 +49,19 @@ package org.openvideoplayer.gateways
 			assertFalse(parent.containsElement(element1));
 			assertFalse(parent.containsElement(element2));
 			
-			parent.addChildElement(element1);
+			parent.addElement(element1);
 			assertTrue(parent.containsElement(element1));
 			
-			parent.addChildElement(element2);
+			parent.addElement(element2);
 			assertTrue(parent.containsElement(element2));
 			
-			assertTrue(element1 == parent.removeChildElement(element1));
+			assertTrue(element1 == parent.removeElement(element1));
 			assertFalse(parent.containsElement(element1));
 			
 			var error:Error;
 			try
 			{
-				parent.removeChildElement(element1);
+				parent.removeElement(element1);
 			}
 			catch(e:Error)
 			{
@@ -126,7 +126,7 @@ package org.openvideoplayer.gateways
 			var region:RegionSprite = new RegionSprite();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
 			
-			region.addChildElement(mediaElement);
+			region.addElement(mediaElement);
 			
 			region.validateContentNow();
 			

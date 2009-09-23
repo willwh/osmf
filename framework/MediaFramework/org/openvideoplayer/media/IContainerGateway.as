@@ -35,7 +35,7 @@ package org.openvideoplayer.media
 		 * @throws IllegalOperationError if the specified element is null,
 		 * or already a child of the region.
 		 */		
-		function addChildElement(element:MediaElement):MediaElement;
+		function addElement(element:MediaElement):MediaElement;
 		
 		
 		/**
@@ -46,7 +46,7 @@ package org.openvideoplayer.media
 		 * @throws IllegalOperationError if the specified element isn't
 		 * a child element, or is null.
 		 */
-		function removeChildElement(element:MediaElement):MediaElement;
+		function removeElement(element:MediaElement):MediaElement;
 		
 		/**
 		 * Verifies if an element is a child of the region.

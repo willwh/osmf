@@ -228,7 +228,7 @@ package org.openvideoplayer.media
 				var containerGateway:IContainerGateway = _gateway as IContainerGateway;
 				if (containerGateway && containerGateway.containsElement(this))
 				{
-					containerGateway.removeChildElement(this);	
+					containerGateway.removeElement(this);	
 				}
 				
 				var event:GatewayChangeEvent = new GatewayChangeEvent(_gateway, value);
@@ -238,7 +238,7 @@ package org.openvideoplayer.media
 				
 				if (containerGateway && containerGateway.containsElement(this) == false)
 				{
-					containerGateway.addChildElement(this);
+					containerGateway.addElement(this);
 				}
 				
 				dispatchEvent(event);

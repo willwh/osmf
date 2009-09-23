@@ -83,7 +83,7 @@ package org.openvideoplayer.gateways
 		/**
 		 * @inheritDoc
 		 */
-		public function addChildElement(element:MediaElement):MediaElement
+		public function addElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
 			{
@@ -108,7 +108,7 @@ package org.openvideoplayer.gateways
 		/**
 		 * @inheritDoc
 		 */
-		public function removeChildElement(element:MediaElement):MediaElement
+		public function removeElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
 			{

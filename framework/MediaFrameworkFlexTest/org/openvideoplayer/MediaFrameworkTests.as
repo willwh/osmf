@@ -28,6 +28,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.content.*;
 	import org.openvideoplayer.display.*;
 	import org.openvideoplayer.events.*;
+	import org.openvideoplayer.gateways.*;
 	import org.openvideoplayer.image.*;
 	import org.openvideoplayer.layout.*;
 	import org.openvideoplayer.loaders.*;
@@ -38,7 +39,6 @@ package org.openvideoplayer
 	import org.openvideoplayer.net.dynamicstreaming.*;
 	import org.openvideoplayer.plugin.*;
 	import org.openvideoplayer.proxies.*;
-	import org.openvideoplayer.gateways.*;
 	import org.openvideoplayer.swf.*;
 	import org.openvideoplayer.tracking.*;
 	import org.openvideoplayer.traits.*;
@@ -68,6 +68,7 @@ package org.openvideoplayer
 			addTestSuite(TestRelativeLayoutFacet);
 			
 			addTestSuite(TestRegionSprite);
+			addTestSuite(TestHTMLGateway);
 			addTestSuite(TestSerialViewableTrait);
 			addTestSuite(TestParallelViewableTrait);
 						

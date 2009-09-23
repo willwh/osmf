@@ -45,7 +45,7 @@ package org.openvideoplayer.gateways
 		/**
 		 * @inheritDoc
 		 */
-		public function addChildElement(child:MediaElement):MediaElement
+		public function addElement(child:MediaElement):MediaElement
 		{
 			requireExternalInterface;
 			
@@ -89,7 +89,7 @@ package org.openvideoplayer.gateways
 		/**
 		 * @inheritDoc
 		 */
-		public function removeChildElement(child:MediaElement):MediaElement
+		public function removeElement(child:MediaElement):MediaElement
 		{
 			requireExternalInterface;
 			
@@ -710,7 +710,7 @@ package org.openvideoplayer.gateways
         	
         	// See if the gateway with the specified name has been registered:
         	
-        	var identifier = objectId + "_" + gatewayId; 
+        	var identifier = objectId + "_" + gatewayId;
         	
         	if (gateways.identifier != null)
         	{
