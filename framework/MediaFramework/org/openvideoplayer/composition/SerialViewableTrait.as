@@ -24,7 +24,6 @@ package org.openvideoplayer.composition
 	import org.openvideoplayer.events.GatewayChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
-	import org.openvideoplayer.media.IContainerGateway;
 	import org.openvideoplayer.media.IMediaGateway;
 	import org.openvideoplayer.media.MediaElement;
 
