@@ -21,9 +21,6 @@
 *****************************************************/
 package org.openvideoplayer.media
 {
-	import org.openvideoplayer.media.IMediaGateway;
-	import org.openvideoplayer.media.MediaElement;
-	
 	/**
 	 * IRegion defines the interface of objects within the OSMF that
 	 * act as a gateway to one or more MediaElements.

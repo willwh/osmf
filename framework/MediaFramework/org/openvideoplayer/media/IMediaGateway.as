@@ -21,8 +21,6 @@
 *****************************************************/
 package org.openvideoplayer.media
 {
-	import org.openvideoplayer.media.MediaElement;
-	
 	/**
 	 * Defines the interface of objects within the OSMF that
 	 * act as a gateway to a media object.
