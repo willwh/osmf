@@ -25,8 +25,7 @@ package org.openvideoplayer.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.openvideoplayer.regions.RegionSprite;
-	import org.openvideoplayer.regions.RegionTargetFacet;
+	import org.openvideoplayer.gateways.RegionSprite;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.traits.ViewableTrait;
 	import org.openvideoplayer.utils.DynamicMediaElement;
@@ -64,8 +63,7 @@ package org.openvideoplayer.composition
 			
 			// Making me1 go to a region should change the dimension:
 			var region:RegionSprite = new RegionSprite();
-			var regionTarget:RegionTargetFacet = new RegionTargetFacet(region);
-			me1.metadata.addFacet(regionTarget);
+			me1.gateway = region;
 			
 			// With me1 out, we should be 0x0 - our view being ignored.
 			svt.layoutRenderer.validateNow();
@@ -73,13 +71,13 @@ package org.openvideoplayer.composition
 			assertEquals(0, svt.height);
 			
 			// Removing the facet should restore our dimensions:
-			me1.metadata.removeFacet(regionTarget);
+			me1.gateway = null;
 			
 			svt.layoutRenderer.validateNow();
 			assertEquals(100, svt.width);
 			assertEquals(100, svt.height);
 			
-			me3.metadata.addFacet(regionTarget);
+			me3.gateway = region;
 			serial.addChild(me3);
 			
 			// Poor man's way of changing the active child:

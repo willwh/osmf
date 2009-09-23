@@ -24,6 +24,7 @@ package org.openvideoplayer.media
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import org.openvideoplayer.events.GatewayChangeEvent;
 	import org.openvideoplayer.events.MediaErrorEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
 	import org.openvideoplayer.metadata.Metadata;
@@ -52,6 +53,13 @@ package org.openvideoplayer.media
 	 * @eventType org.openvideoplayer.events.MediaErrorEvent.MEDIA_ERROR
 	 **/
 	[Event(name="mediaError",type="org.openvideoplayer.events.MediaErrorEvent")]
+	
+	/**
+	 * Dispatched when the element's gateway property changed.
+	 * 
+	 * @eventType org.openvideoplayer.events.GatewayChangeEvent.GATEWAY_CHANGE
+	 */	
+	[Event(name="gatewayChange",type="org.openvideoplayer.events.GatewayChangeEvent")]
 		
 	/**
      * A MediaElement represents a unified media experience.
@@ -206,6 +214,38 @@ package org.openvideoplayer.media
 		}
 		
 		/**
+		 * The gateway that this element uses.
+		 */
+		public function get gateway():IMediaGateway
+		{
+			return _gateway;
+		}
+		
+		public function set gateway(value:IMediaGateway):void
+		{
+			if (_gateway != value)
+			{
+				var containerGateway:IContainerGateway = _gateway as IContainerGateway;
+				if (containerGateway && containerGateway.containsElement(this))
+				{
+					containerGateway.removeChildElement(this);	
+				}
+				
+				var event:GatewayChangeEvent = new GatewayChangeEvent(_gateway, value);
+					
+				_gateway = value;
+				containerGateway = _gateway as IContainerGateway;
+				
+				if (containerGateway && containerGateway.containsElement(this) == false)
+				{
+					containerGateway.addChildElement(this);
+				}
+				
+				dispatchEvent(event);
+			}
+		}
+		
+		/**
 		 * @returns The metadata container associated with this MediaElement
 		 */ 
 		public function get metadata():Metadata
@@ -325,6 +365,7 @@ package org.openvideoplayer.media
 		private var _traitTypes:Array = [];
 		private var _traits:Dictionary = new Dictionary();
 		private var _resource:IMediaResource;
+		private var _gateway:IMediaGateway;
 		private var _metadata:Metadata;
 		
 	}

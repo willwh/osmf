@@ -40,7 +40,7 @@ package
 	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.net.NetLoader;
 	import org.openvideoplayer.proxies.TemporalProxyElement;
-	import org.openvideoplayer.regions.RegionSprite;
+	import org.openvideoplayer.gateways.RegionSprite;
 	import org.openvideoplayer.utils.URL;
 	import org.openvideoplayer.video.VideoElement;
 
@@ -78,13 +78,13 @@ package
 			// Next, decorate the content tree with attributes:
 			
 			LayoutUtils.setRelativeLayout(banners.metadata, 100, 100);
-			LayoutUtils.setScaleMode(banners.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
+			LayoutUtils.setLayoutAttributes(banners.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
 			
 			LayoutUtils.setRelativeLayout(skyScraper.metadata, 100, 100);
-			LayoutUtils.setScaleMode(skyScraper.metadata, ScaleMode.LETTERBOX, RegistrationPoint.MIDDLE_RIGHT);
+			LayoutUtils.setLayoutAttributes(skyScraper.metadata, ScaleMode.LETTERBOX, RegistrationPoint.MIDDLE_RIGHT);
 			
 			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
-			LayoutUtils.setScaleMode(mainContent.metadata, ScaleMode.STRETCH, RegistrationPoint.TOP_MIDDLE);
+			LayoutUtils.setLayoutAttributes(mainContent.metadata, ScaleMode.STRETCH, RegistrationPoint.TOP_MIDDLE);
 			
 			// Consruct a tree of regions:
 
@@ -110,9 +110,9 @@ package
 				
 			// Bind media elements to their target regions:
 			
-			LayoutUtils.setRegionTarget(mainContent.metadata, mainRegion);
-			LayoutUtils.setRegionTarget(banners.metadata, bannerRegion);
-			LayoutUtils.setRegionTarget(skyScraper.metadata, skyScraperRegion);
+			mainContent.gateway = mainRegion;
+			banners.gateway = bannerRegion;
+			skyScraper.gateway = skyScraperRegion;
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will

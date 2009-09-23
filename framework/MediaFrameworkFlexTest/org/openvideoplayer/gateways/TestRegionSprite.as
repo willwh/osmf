@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.regions
+package org.openvideoplayer.gateways
 {
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;

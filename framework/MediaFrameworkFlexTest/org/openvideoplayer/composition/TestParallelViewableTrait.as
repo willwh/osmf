@@ -25,9 +25,7 @@ package org.openvideoplayer.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.openvideoplayer.regions.IRegion;
-	import org.openvideoplayer.regions.RegionSprite;
-	import org.openvideoplayer.regions.RegionTargetFacet;
+	import org.openvideoplayer.gateways.RegionSprite;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.traits.ViewableTrait;
 	import org.openvideoplayer.utils.DynamicMediaElement;
@@ -48,9 +46,8 @@ package org.openvideoplayer.composition
 			me2Sprite.graphics.drawRect(0,0,200,200);
 			ViewableTrait(me2.getTrait(MediaTraitType.VIEWABLE)).view = me2Sprite;
 			
-			var region2:IRegion = new RegionSprite();
-			var regionTarget2:RegionTargetFacet = new RegionTargetFacet(region2);
-			me2.metadata.addFacet(regionTarget2);
+			var region2:RegionSprite = new RegionSprite();
+			me2.gateway = region2;
 			
 			var me3:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
 			var me3Sprite:Sprite = new Sprite();
@@ -71,23 +68,22 @@ package org.openvideoplayer.composition
 			assertEquals(300, pvt.width);
 			assertEquals(300, pvt.height);
 			
-			var region3:IRegion = new RegionSprite();
-			var regionTarget3:RegionTargetFacet = new RegionTargetFacet(region3);
+			var region3:RegionSprite = new RegionSprite();
 			
 			// Assigning me3 to a region should result in its size changing:
-			me3.metadata.addFacet(regionTarget3);
+			me3.gateway = region3;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(100, pvt.width);
 			assertEquals(100, pvt.height);
 			
-			me2.metadata.removeFacet(regionTarget2);
+			me2.gateway = null;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(200, pvt.width);
 			assertEquals(200, pvt.height);
 			
-			me3.metadata.removeFacet(regionTarget3);
+			me3.gateway = null;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(300, pvt.width);

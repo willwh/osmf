@@ -27,7 +27,7 @@ package org.openvideoplayer.layout
 	import flash.events.EventDispatcher;
 	
 	import org.openvideoplayer.events.DimensionChangeEvent;
-	import org.openvideoplayer.events.RegionChangeEvent;
+	import org.openvideoplayer.events.GatewayChangeEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.media.MediaElement;
@@ -36,7 +36,7 @@ package org.openvideoplayer.layout
 	import org.openvideoplayer.metadata.MetadataNamespaces;
 	import org.openvideoplayer.metadata.MetadataUtils;
 	import org.openvideoplayer.metadata.MetadataWatcher;
-	import org.openvideoplayer.regions.IRegion;
+	
 	import org.openvideoplayer.traits.ISpatial;
 	import org.openvideoplayer.traits.IViewable;
 	import org.openvideoplayer.traits.MediaTraitType;
@@ -56,11 +56,6 @@ package org.openvideoplayer.layout
 	[Event(name="dimensionChange",type="org.openvideoplayer.events.DimensionChangeEvent")]
 
 	/**
-	 * Dispatched when a layout element's 'regionTarget' metadata value changed. 
-	 */	
-	[Event(name="regionChange",type="org.openvideoplayer.events.RegionChangeEvent")]
-
-	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
 	 */	
 	public class MediaElementLayoutTarget extends EventDispatcher implements ILayoutTarget, ILayoutContext
@@ -76,13 +71,6 @@ package org.openvideoplayer.layout
 			
 			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
 			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
-			
-			regionTargetWatcher
-				= MetadataUtils.watchFacet
-					( _mediaElement.metadata
-					, MetadataNamespaces.REGION_TARGET
-					, regionTargetChangeCallback
-					);
 			
 			updateViewableTrait();
 			updateSpatialTrait();
@@ -245,11 +233,6 @@ package org.openvideoplayer.layout
 			return _mediaElement;
 		}
 		
-		public function get regionTarget():IRegion
-		{
-			return _regionTarget;
-		}
-		
 		// Internals
 		//
 		
@@ -331,25 +314,6 @@ package org.openvideoplayer.layout
 			dispatchEvent(event.clone());
 		}
 		
-		private function regionTargetChangeCallback(facet:IFacet):void
-		{
-			var newTarget:IRegion 
-				= 	( facet 
-						? facet.getValue(null)
-						: null
-					)
-					as IRegion;
-					
-			if (newTarget != _regionTarget)
-			{
-				var event:RegionChangeEvent	= new RegionChangeEvent(_regionTarget, newTarget);
-				
-				_regionTarget = newTarget;
-				
-				dispatchEvent(event);
-			}
-		}
-		
 		private function processViewChange(newView:DisplayObject):void
 		{
 			_view = newView;
@@ -362,9 +326,6 @@ package org.openvideoplayer.layout
 		
 		private var viewableTrait:IViewable;
 		private var spatialTrait:ISpatial;
-		
-		private var regionTargetWatcher:MetadataWatcher;
-		private var _regionTarget:IRegion;
 		
 		private var _calculatedWidth:Number;
 		private var _calculatedHeight:Number;

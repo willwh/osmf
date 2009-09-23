@@ -38,7 +38,7 @@ package org.openvideoplayer
 	import org.openvideoplayer.net.dynamicstreaming.*;
 	import org.openvideoplayer.plugin.*;
 	import org.openvideoplayer.proxies.*;
-	import org.openvideoplayer.regions.*;
+	import org.openvideoplayer.gateways.*;
 	import org.openvideoplayer.swf.*;
 	import org.openvideoplayer.tracking.*;
 	import org.openvideoplayer.traits.*;
@@ -68,7 +68,6 @@ package org.openvideoplayer
 			addTestSuite(TestRelativeLayoutFacet);
 			
 			addTestSuite(TestRegionSprite);
-			addTestSuite(TestRegionTargetFacet);
 			addTestSuite(TestSerialViewableTrait);
 			addTestSuite(TestParallelViewableTrait);
 						

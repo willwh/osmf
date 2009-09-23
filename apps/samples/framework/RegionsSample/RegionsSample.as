@@ -42,7 +42,7 @@ package
 	import org.openvideoplayer.metadata.ObjectFacet;
 	import org.openvideoplayer.net.NetLoader;
 	import org.openvideoplayer.proxies.TemporalProxyElement;
-	import org.openvideoplayer.regions.RegionSprite;
+	import org.openvideoplayer.gateways.RegionSprite;
 	import org.openvideoplayer.utils.URL;
 	import org.openvideoplayer.video.VideoElement;
 
@@ -88,10 +88,10 @@ package
 			// Next, decorate the content tree with attributes:
 			
 			LayoutUtils.setRelativeLayout(banners.metadata, 100, 100);
-			LayoutUtils.setScaleMode(banners.metadata, ScaleMode.NONE, RegistrationPoint.BOTTOM_MIDDLE);
+			LayoutUtils.setLayoutAttributes(banners.metadata, ScaleMode.NONE, RegistrationPoint.BOTTOM_MIDDLE);
 			
 			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
-			LayoutUtils.setScaleMode(mainContent.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
+			LayoutUtils.setLayoutAttributes(mainContent.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
 			
 			// Consruct 3 regions:
 
@@ -123,9 +123,9 @@ package
 			
 			// Bind media elements to their target regions:
 			
-			LayoutUtils.setRegionTarget(banners.metadata, bannerRegion);
-			LayoutUtils.setRegionTarget(mainContent.metadata, mainRegion);
-			LayoutUtils.setRegionTarget(skyScraper.metadata, skyScraperRegion); 
+			banners.gateway = bannerRegion;
+			mainContent.gateway = mainRegion;
+			skyScraper.gateway = skyScraperRegion; 
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will
@@ -150,7 +150,7 @@ package
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						LayoutUtils.setRegionTarget(banners.metadata, bottomBannerRegion);		
+						banners.gateway = bottomBannerRegion;		
 					}
 				);
 				
@@ -158,7 +158,7 @@ package
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						LayoutUtils.setRegionTarget(banners.metadata, bannerRegion);		
+						banners.gateway = bannerRegion;		
 					}
 				);
 				

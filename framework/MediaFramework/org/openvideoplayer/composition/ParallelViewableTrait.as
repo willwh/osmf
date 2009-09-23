@@ -23,11 +23,11 @@ package org.openvideoplayer.composition
 {
 	import flash.utils.Dictionary;
 	
-	import org.openvideoplayer.events.RegionChangeEvent;
+	import org.openvideoplayer.events.GatewayChangeEvent;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
+	import org.openvideoplayer.media.IMediaGateway;
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.regions.IRegion;
 	import org.openvideoplayer.traits.IViewable;
 	import org.openvideoplayer.traits.MediaTraitType;
 
@@ -57,8 +57,8 @@ package org.openvideoplayer.composition
 				
 				var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
 				target.addEventListener
-					( RegionChangeEvent.REGION_CHANGE
-					, onLayoutTargetRegionChange
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, onLayoutTargetGatewayChange
 					);
 				
 				mediaElementLayoutTargets[child] = target;
@@ -85,9 +85,10 @@ package org.openvideoplayer.composition
 				if (layoutTarget == null)
 				{
 					var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
-					target.addEventListener
-						( RegionChangeEvent.REGION_CHANGE
-						, onLayoutTargetRegionChange
+					
+					child.addEventListener
+						( GatewayChangeEvent.GATEWAY_CHANGE
+						, onLayoutTargetGatewayChange
 						);
 					
 					mediaElementLayoutTargets[child] = target;
@@ -108,13 +109,13 @@ package org.openvideoplayer.composition
 			if (child)
 			{
 				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
-				var region:IRegion = target.regionTarget;
 				
-				if (region && region.containsElement(child))
-				{
-					region.removeChildElement(child);
-				}
-				else if (layoutRenderer.targets(target))
+				child.removeEventListener
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, onLayoutTargetGatewayChange
+					);
+				
+				if (layoutRenderer.targets(target))
 				{
 					layoutRenderer.removeTarget(target);
 				}
@@ -152,19 +153,14 @@ package org.openvideoplayer.composition
 		
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
 		{
-			var region:IRegion = target.regionTarget; 
+			var gateway:IMediaGateway = target.mediaElement.gateway; 
 			var mediaElement:MediaElement = target.mediaElement;
 			
-			if (region)
+			if (gateway && gateway != owner.gateway)
 			{
 				if (layoutRenderer.targets(target))
 				{
 					layoutRenderer.removeTarget(target);
-				}
-				
-				if (region.containsElement(mediaElement) == false)
-				{
-					region.addChildElement(mediaElement);
 				}
 			}
 			else
@@ -176,18 +172,11 @@ package org.openvideoplayer.composition
 			}
 		}
 		
-		private function onLayoutTargetRegionChange(event:RegionChangeEvent):void
+		private function onLayoutTargetGatewayChange(event:GatewayChangeEvent):void
 		{
-			var oldRegion:IRegion = event.oldValue;
-			var target:MediaElementLayoutTarget = MediaElementLayoutTarget(event.target);
-			var mediaElement:MediaElement = target.mediaElement;
+			var mediaElement:MediaElement = event.target as MediaElement;
 			
-			if (oldRegion && oldRegion.containsElement(mediaElement))
-			{
-				oldRegion.removeChildElement(mediaElement);
-			}
-			
-			setupLayoutTarget(target);
+			setupLayoutTarget(mediaElementLayoutTargets[event.target]);
 		}
 		
 		private var mediaElementLayoutTargets:Dictionary = new Dictionary();

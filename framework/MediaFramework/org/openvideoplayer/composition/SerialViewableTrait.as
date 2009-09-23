@@ -21,11 +21,12 @@
 *****************************************************/
 package org.openvideoplayer.composition
 {
-	import org.openvideoplayer.events.RegionChangeEvent;
+	import org.openvideoplayer.events.GatewayChangeEvent;
 	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
+	import org.openvideoplayer.media.IContainerGateway;
+	import org.openvideoplayer.media.IMediaGateway;
 	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.regions.IRegion;
 
 	/**
 	 * Dispatched when the trait's view has changed.
@@ -48,6 +49,8 @@ package org.openvideoplayer.composition
 		 */		
 		public function SerialViewableTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
+			this.owner = owner;
+			
 			super(traitAggregator, owner);
 			
 			// In order to forward the serial's active child's view, we need
@@ -80,24 +83,17 @@ package org.openvideoplayer.composition
 			setupLayoutTarget(event.newListenedChild);
 		}
 		
-		private function onTargetRegionChange(event:RegionChangeEvent):void
+		private function onTargetGatewayChange(event:GatewayChangeEvent):void
 		{
-			var oldRegion:IRegion = event.oldValue;
-			var newRegion:IRegion = event.newValue;
+			var oldGateway:IMediaGateway = event.oldValue;
+			var newGateway:IMediaGateway = event.newValue;
 			var element:MediaElement = layoutTarget.mediaElement;
 		
-			if (oldRegion != null)
-			{
-				if (oldRegion.containsElement(element))
-				{
-					oldRegion.removeChildElement(element);
-				}
-			}
 			
 			var targetInLayoutRenderer:Boolean
 				= layoutRenderer.targets(layoutTarget);
 				
-			if (newRegion == null)
+			if (newGateway == null || newGateway == owner.gateway)
 			{
 				if (targetInLayoutRenderer == false)
 				{
@@ -110,11 +106,6 @@ package org.openvideoplayer.composition
 				{
 					layoutRenderer.removeTarget(layoutTarget);
 				}
-				
-				if (newRegion.containsElement(layoutTarget.mediaElement) == false)
-				{
-					newRegion.addChildElement(layoutTarget.mediaElement);	
-				}
 			}
 		}
 		
@@ -122,19 +113,14 @@ package org.openvideoplayer.composition
 		{
 			if (layoutTarget != null)
 			{
-				layoutTarget.removeEventListener
-					( RegionChangeEvent.REGION_CHANGE
-					, onTargetRegionChange
+				layoutTarget.mediaElement.removeEventListener
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, onTargetGatewayChange
 					);
 				
-				var region:IRegion = layoutTarget.regionTarget;
 				var mediaElement:MediaElement = layoutTarget.mediaElement;
 					
-				if (region && region.containsElement(mediaElement))
-				{
-					region.removeChildElement(mediaElement);
-				}
-				else if (layoutRenderer.targets(layoutTarget))
+				if (layoutRenderer.targets(layoutTarget))
 				{
 					layoutRenderer.removeTarget(layoutTarget);
 				}
@@ -143,15 +129,22 @@ package org.openvideoplayer.composition
 			if (listenedChild != null)
 			{
 				layoutTarget = new MediaElementLayoutTarget(listenedChild);
-				layoutTarget.addEventListener
-					( RegionChangeEvent.REGION_CHANGE
-					, onTargetRegionChange
+				
+				listenedChild.addEventListener
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, onTargetGatewayChange
 					);
 					
-				onTargetRegionChange(new RegionChangeEvent(null, layoutTarget.regionTarget));
+				onTargetGatewayChange
+					( new GatewayChangeEvent
+						( null
+						, layoutTarget.mediaElement.gateway
+						)
+					);
 			}
 		}
 		
 		private var layoutTarget:MediaElementLayoutTarget;
+		private var owner:MediaElement;
 	}
 }

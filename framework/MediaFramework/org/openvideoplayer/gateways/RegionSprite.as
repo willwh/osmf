@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.regions
+package org.openvideoplayer.gateways
 {
 	import flash.errors.IllegalOperationError;
 	import flash.utils.Dictionary;
@@ -28,6 +28,7 @@ package org.openvideoplayer.regions
 	import org.openvideoplayer.layout.ILayoutRenderer;
 	import org.openvideoplayer.layout.LayoutContextSprite;
 	import org.openvideoplayer.layout.MediaElementLayoutTarget;
+	import org.openvideoplayer.media.IContainerGateway;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.metadata.Metadata;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
@@ -35,7 +36,7 @@ package org.openvideoplayer.regions
 	/**
 	 * RegionSprite defines a Sprite based IRegion implementation.
 	 */	
-	public class RegionSprite extends LayoutContextSprite implements IRegion
+	public class RegionSprite extends LayoutContextSprite implements IContainerGateway
 	{
 		/**
 		 * Constructor

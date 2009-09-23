@@ -19,23 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.regions
+package org.openvideoplayer.media
 {
-	import flexunit.framework.TestCase;
+	import org.openvideoplayer.media.MediaElement;
 	
-	import org.openvideoplayer.metadata.StringIdentifier;
-
-	public class TestRegionTargetFacet extends TestCase
+	/**
+	 * Defines the interface of objects within the OSMF that
+	 * act as a gateway to a media object.
+	 */	
+	public interface IMediaGateway
 	{
-		public function testRegionTargetFacet():void
-		{
-			var region:IRegion = new RegionSprite();
-			var facet:RegionTargetFacet = new RegionTargetFacet(region);
-			
-			assertNotNull(facet);
-			assertEquals(facet.region, region);
-			assertEquals(facet.getValue(null), region);
-			assertEquals(facet.getValue(new StringIdentifier("any id")), region);
-		}		
+		// Marker interface
 	}
 }

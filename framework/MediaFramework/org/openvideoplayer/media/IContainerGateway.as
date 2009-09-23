@@ -19,15 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.regions
+package org.openvideoplayer.media
 {
+	import org.openvideoplayer.media.IMediaGateway;
 	import org.openvideoplayer.media.MediaElement;
 	
 	/**
 	 * IRegion defines the interface of objects within the OSMF that
 	 * act as a gateway to one or more MediaElements.
 	 */	
-	public interface IRegion
+	public interface IContainerGateway extends IMediaGateway
 	{
 		/**
 		 * Adds a MediaElement instance to the region.

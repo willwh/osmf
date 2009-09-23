@@ -26,8 +26,6 @@ package org.openvideoplayer.layout
 	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.metadata.Metadata;
 	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.regions.IRegion;
-	import org.openvideoplayer.regions.RegionTargetFacet;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
@@ -259,32 +257,6 @@ package org.openvideoplayer.layout
 			}
 			
 			return layoutAttributes;
-		}
-		
-		/**
-		 * Applies the specified region as a region target to the specified metadata target.
-		 * 
-		 * @param target
-		 * @param region
-		 * @return A newly created RegionTargetFacet, as it has been added to the metadata
-		 * target.
-		 * @throws IllegalOperationError on a null argument being passed for target.
-		 * 
-		 * For more information on the semantics of setting a region target, please refer
-		 * to the RegionTargetFacet documentation.
-		 */		
-		public static function setRegionTarget(target:Metadata, region:IRegion):RegionTargetFacet
-		{
-			if (target == null)
-			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
-			}
-			
-			var regionTarget:RegionTargetFacet = new RegionTargetFacet(region);
-			
-			target.addFacet(regionTarget);
-			
-			return regionTarget;
 		}
 	}
 }

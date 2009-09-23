@@ -23,43 +23,43 @@ package org.openvideoplayer.events
 {
 	import flash.events.Event;
 	
-	import org.openvideoplayer.regions.IRegion;
+	import org.openvideoplayer.media.IMediaGateway;
 
 	/**
-	 * RegionChangeEvent signals that a reference to an IRegion has changed.
+	 * GatewayChangeEvent signals that a reference to an IGateway has changed.
 	 */	
-	public class RegionChangeEvent extends Event
+	public class GatewayChangeEvent extends Event
 	{
-		public static const REGION_CHANGE:String = "regionChange";
+		public static const GATEWAY_CHANGE:String = "gatewayChange";
 		
 		/**
 		 * Constructor
 		 *  
-		 * @param oldValue Old IRegion reference.
-		 * @param newValue New IRegion reference.
+		 * @param oldValue Old IGateway reference.
+		 * @param newValue New IGateway reference.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 */		
-		public function RegionChangeEvent(oldValue:IRegion, newValue:IRegion, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function GatewayChangeEvent(oldValue:IMediaGateway, newValue:IMediaGateway, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
-			super(REGION_CHANGE, bubbles, cancelable);
+			super(GATEWAY_CHANGE, bubbles, cancelable);
 			
 			_oldValue = oldValue;
 			_newValue = newValue;
 		}
 		
 		/**
-		 * Defines the old region reference.
+		 * Defines the old gateway reference.
 		 */		
-		public function get oldValue():IRegion
+		public function get oldValue():IMediaGateway
 		{
 			return _oldValue;
 		}
 		
 		/**
-		 * Defines the new region reference.
+		 * Defines the new gateway reference.
 		 */		
-		public function get newValue():IRegion
+		public function get newValue():IMediaGateway
 		{
 			return _newValue;
 		}
@@ -72,13 +72,13 @@ package org.openvideoplayer.events
 		 */
 		override public function clone():Event
 		{
-			return new RegionChangeEvent(_oldValue, _newValue, bubbles, cancelable);
+			return new GatewayChangeEvent(_oldValue, _newValue, bubbles, cancelable);
 		}
 		
 		// Internals
 		//
 		
-		private var _oldValue:IRegion;
-		private var _newValue:IRegion;
+		private var _oldValue:IMediaGateway;
+		private var _newValue:IMediaGateway;
 	}
 }
