@@ -8,6 +8,8 @@
     <classEntry path="org.openvideoplayer.vast.media.DefaultVASTMediaFileResolver"/>
     <classEntry path="org.openvideoplayer.vast.media.IVASTMediaFileResolver"/>
     <classEntry path="org.openvideoplayer.vast.media.VASTImpressionProxyElement"/>
+    <classEntry path="org.openvideoplayer.vast.media.VASTMediaGenerator"/>
+    <classEntry path="org.openvideoplayer.vast.media.VASTTrackingProxyElement"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAd"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAdBase"/>
     <classEntry path="org.openvideoplayer.vast.model.VASTAdPackageBase"/>
