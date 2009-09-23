@@ -267,7 +267,6 @@ package org.openvideoplayer.vast.media
 
 		private function createProxyElementWithWrappedElement():ProxyElement
 		{
-			//return new VASTImpressionProxyElement();
 			var vastURLs:Vector.<VASTUrl> = new Vector.<VASTUrl>();
 			vastURLs.push(VAST_URL1);
 			vastURLs.push(VAST_URL2);
