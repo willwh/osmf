@@ -83,7 +83,11 @@
 <classEntry path="org.openvideoplayer.events.TraitsChangeEvent"/>
 <classEntry path="org.openvideoplayer.events.ViewChangeEvent"/>
 <classEntry path="org.openvideoplayer.events.VolumeChangeEvent"/>
+<classEntry path="org.openvideoplayer.gateways.HTMLGateway"/>
+<classEntry path="org.openvideoplayer.gateways.HTMLGatewayElementProxy"/>
 <classEntry path="org.openvideoplayer.gateways.RegionSprite"/>
+<classEntry path="org.openvideoplayer.html.HTMLElement"/>
+<classEntry path="org.openvideoplayer.html.HTMLLoadableTrait"/>
 <classEntry path="org.openvideoplayer.image.ImageElement"/>
 <classEntry path="org.openvideoplayer.image.ImageLoader"/>
 <classEntry path="org.openvideoplayer.layout.AbsoluteLayoutFacet"/>

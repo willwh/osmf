@@ -54,6 +54,16 @@ package org.openvideoplayer.traits
 		public static const LOAD_FAILED:LoadState	= new LoadState("loadFailed");
 		
 		/**
+		 * Lists all known load states
+		 */
+		public static const ALL_STATES:Vector.<LoadState> = new Vector.<LoadState>(5);
+		ALL_STATES[0] = CONSTRUCTED;
+		ALL_STATES[1] = LOADING;
+		ALL_STATES[2] = UNLOADING;
+		ALL_STATES[3] = LOADED;
+		ALL_STATES[4] = LOAD_FAILED;
+		
+		/**
 		 * @private
 		 **/
 		public function LoadState(name:String)

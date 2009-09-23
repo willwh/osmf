@@ -134,6 +134,14 @@ package org.openvideoplayer.utils
 				
 		// CompositeViewableTrait
 		
-		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "Unable to construct ILayoutRenderer implementation";		
+		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "Unable to construct ILayoutRenderer implementation";	
+		
+		// HTMLElement
+		
+		public static const UNSUPPORTED_TRAIT_TYPE:String				= "The specified trait type is not supported";
+		
+		// HTMLLoadableTrait
+		
+		public static const NULL_SCRIPT_PATH:String						= "Operation requires a valid script path to be set";
 	}
 }

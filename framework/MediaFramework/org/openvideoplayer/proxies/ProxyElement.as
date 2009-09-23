@@ -26,6 +26,7 @@ package org.openvideoplayer.proxies
 	
 	import org.openvideoplayer.events.MediaErrorEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
+	import org.openvideoplayer.media.IMediaGateway;
 	import org.openvideoplayer.media.IMediaResource;
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.media.MediaElement;
@@ -218,6 +219,20 @@ package org.openvideoplayer.proxies
 			validateWrappedElement();
 			
 			wrappedElement.resource = value;
+		}
+		
+		override public function get gateway():IMediaGateway
+		{
+			validateWrappedElement();
+			
+			return wrappedElement.gateway;
+		}
+		
+		override public function set gateway(value:IMediaGateway):void
+		{
+			validateWrappedElement();
+			
+			wrappedElement.gateway = value;
 		}
 		
 		/**
