@@ -26,6 +26,7 @@ package org.openvideoplayer.vast
 	import org.openvideoplayer.vast.loader.TestVASTLoader;
 	import org.openvideoplayer.vast.media.TestDefaultVASTMediaFileResolver;
 	import org.openvideoplayer.vast.parser.TestVASTParser;
+	import org.openvideoplayer.vast.media.TestVASTImpressionProxyElement;
 
 	public class VASTTests extends TestSuite
 	{
@@ -36,6 +37,7 @@ package org.openvideoplayer.vast
 			addTestSuite(TestVASTLoader);
 			addTestSuite(TestVASTParser);
 			addTestSuite(TestDefaultVASTMediaFileResolver);
+			addTestSuite(TestVASTImpressionProxyElement);
 		}
 	}
 }

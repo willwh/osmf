@@ -26,6 +26,9 @@ package org.openvideoplayer.vast
 	 **/
 	public class VASTTestConstants
 	{
+		public static const IMPRESSION_URL1:String = "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
+		public static const IMPRESSION_URL2:String = "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
+
 		public static const MISSING_VAST_DOCUMENT_URL:String = "http://flipside.corp.adobe.com/brian/strobe/vast/missing_vast_inline_ad_response.xml";
 		
 		public static const INVALID_XML_VAST_DOCUMENT_URL:String = "http://flipside.corp.adobe.com/brian/strobe/vast/invalid_xml_vast_inline_ad_response.xml";
