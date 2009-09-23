@@ -23,11 +23,15 @@ package org.openvideoplayer.vast.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
 	
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.proxies.ListenerProxyElement;
 	import org.openvideoplayer.tracking.Beacon;
+	import org.openvideoplayer.traits.ITemporal;
+	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.HTTPLoader;
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
 	import org.openvideoplayer.utils.URL;
@@ -54,6 +58,9 @@ package org.openvideoplayer.vast.media
 		{
 			setEvents(events);
 			this.httpLoader = httpLoader;
+			
+			playheadTimer = new Timer(250);
+			playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);
 			
 			super(wrappedElement);
 		}
@@ -91,12 +98,50 @@ package org.openvideoplayer.vast.media
 		/**
 		 * @private
 		 **/
+		override protected function processPlayingChange(playing:Boolean):void
+		{
+			if (playing)
+			{
+				playheadTimer.start();
+				if (startReached == false)
+				{
+					startReached = true;
+					
+					fireEventOfType(VASTTrackingEventType.START);
+				}
+			}
+			else
+			{
+				playheadTimer.stop();
+			}
+		}
+
+		
+		/**
+		 * @private
+		 **/
 		override protected function processPausedChange(paused:Boolean):void
 		{
 			if (paused)
 			{
 				fireEventOfType(VASTTrackingEventType.PAUSE);
 			}
+		}
+		
+		/**
+		 * @private
+		 **/
+		override protected function processDurationReached():void
+		{
+			playheadTimer.stop();
+			
+			// Reset our flags so the events can fire once more.
+			startReached = false;
+			firstQuartileReached = false;
+			midpointReached = false;
+			thirdQuartileReached = false;
+			
+			fireEventOfType(VASTTrackingEventType.COMPLETE);
 		}
 
 		// Internals
@@ -127,10 +172,59 @@ package org.openvideoplayer.vast.media
 				}
 			}
 		}
+		
+		private function onPlayheadTimer(event:TimerEvent):void
+		{
+			// Check for 25%, 50%, and 75%.
+			var percent:Number = this.percentPlayback;
+			
+			if (percent >= 25 && firstQuartileReached == false)
+			{
+				firstQuartileReached = true;
+				
+				fireEventOfType(VASTTrackingEventType.FIRST_QUARTILE);
+			}
+			else if (percent >= 50 && midpointReached == false)
+			{
+				midpointReached = true;
+				
+				fireEventOfType(VASTTrackingEventType.MIDPOINT);
+			}
+			else if (percent >= 75 && thirdQuartileReached == false)
+			{
+				thirdQuartileReached = true;
+				
+				fireEventOfType(VASTTrackingEventType.THIRD_QUARTILE);
+			}
+		}
+		
+		private function get position():Number
+		{
+			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			return temporal != null ? temporal.position : 0;
+		}
+
+		private function get percentPlayback():Number
+		{
+			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			if (temporal != null)
+			{
+				var duration:Number = temporal.duration;
+				return duration > 0 ? 100 * temporal.position / duration : 0;
+			}
+			
+			return 0;
+		}
 
 		private var eventsMap:Dictionary;
 			// Key:   VASTTrackingEventType
 			// Value: VASTTrackingEvent
 		private var httpLoader:HTTPLoader;
+		private var playheadTimer:Timer;
+		
+		private var startReached:Boolean = false;
+		private var firstQuartileReached:Boolean = false;
+		private var midpointReached:Boolean = false;
+		private var thirdQuartileReached:Boolean = false;
 	}
 }
