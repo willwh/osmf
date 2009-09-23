@@ -33,6 +33,8 @@ package org.openvideoplayer.tracking
 	import org.openvideoplayer.traits.LoadState;
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.HTTPLoader;
+	import org.openvideoplayer.utils.MockHTTPLoader;
+	import org.openvideoplayer.utils.NetFactory;
 	import org.openvideoplayer.utils.TestConstants;
 	import org.openvideoplayer.utils.URL;
 	
@@ -124,7 +126,16 @@ package org.openvideoplayer.tracking
 		
 		private function createHTTPLoader():HTTPLoader
 		{
-			return new HTTPLoader();
+			if (NetFactory.neverUseMockObjects)
+			{
+				return new HTTPLoader();
+			}
+			else
+			{
+				var loader:MockHTTPLoader = new MockHTTPLoader();
+				loader.setExpectationForURL(RESOURCE.url.rawUrl, true, null);
+				return loader;
+			}
 		}
 		
 		private static const RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
