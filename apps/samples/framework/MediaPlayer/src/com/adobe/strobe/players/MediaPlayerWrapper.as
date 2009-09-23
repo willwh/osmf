@@ -25,13 +25,10 @@ package com.adobe.strobe.players
 	
 	import mx.core.UIComponent;
 	
-	import org.openvideoplayer.events.ViewChangeEvent;
-	import org.openvideoplayer.layout.AbsoluteLayoutFacet;
+	import org.openvideoplayer.gateways.RegionSprite;
 	import org.openvideoplayer.layout.LayoutUtils;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.MediaPlayer;
-	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.regions.RegionSprite;
 	
 	/**
 	 * Defines a Flex wrapper class for the MediaPlayerSprite class.
@@ -44,7 +41,7 @@ package com.adobe.strobe.players
 		public function set element(value:MediaElement):void
 		{
 			mediaPlayer.source = value;					
-			_playerSprite.addChildElement(value);		
+			_playerSprite.addElement(value);		
 		}
 		
 		public function get element():MediaElement
