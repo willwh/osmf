@@ -105,8 +105,11 @@ package org.openvideoplayer.vast.media
 			{
 				// Only record the impressions if we're not buffering.
 				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				if (	bufferable.buffering == false 
-					&& 	bufferable.bufferLength >= bufferable.bufferTime)
+				if (	bufferable == null
+					||  ( 	bufferable.buffering == false 
+						&& 	bufferable.bufferLength >= bufferable.bufferTime
+						)
+				   )
 				{
 					recordImpressions();
 				}
@@ -123,10 +126,10 @@ package org.openvideoplayer.vast.media
 		 **/
 		override protected function processBufferingChange(buffering:Boolean):void
 		{
-			var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
 			if (	buffering == false
 				&&  impressionsRecorded == false
-				&&  waitForBufferingExit)
+				&&  waitForBufferingExit
+				)
 			{
 				recordImpressions();
 			}

@@ -44,7 +44,7 @@ package org.openvideoplayer.vast.parser
 	import org.openvideoplayer.vast.model.VASTWrapperAd;
 
 	/**
-	 * This class parses a VAST document into a VAST object model.
+	 * This class parses a VAST 1.0 document into a VAST object model.
 	 */
 	public class VASTParser
 	{		
@@ -117,6 +117,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch (child.localName()) 
 						{
 							case INLINE:
@@ -133,6 +134,7 @@ package org.openvideoplayer.vast.parser
 								break;							
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -150,6 +152,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch (child.localName()) 
 						{
 							case AD_SYSTEM:
@@ -193,6 +196,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 
@@ -212,6 +216,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch (child.localName()) 
 						{
 							case AD_SYSTEM:
@@ -249,6 +254,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 
@@ -266,6 +272,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case URL:
@@ -273,6 +280,7 @@ package org.openvideoplayer.vast.parser
 								break;
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -288,6 +296,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case TRACKING:
@@ -311,6 +320,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -335,13 +345,12 @@ package org.openvideoplayer.vast.parser
 				switch(child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch (child.localName()) 
 						{
 							case URL:
-							{
 								urls.push(parseVASTUrl(child));
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -350,6 +359,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 			return urls;
@@ -368,28 +378,21 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case DURATION:
-							{
 								video.duration = parseString(child);
 								break;
-							}
 							case AD_ID:
-							{
 								video.adID = parseString(child);
 								break;
-							}
 							case VIDEO_CLICKS:
-							{
 								video.videoClick = parseVideoClicks(child);
 								break;
-							}
 							case MEDIA_FILES:
-							{
 								parseMediaFiles(child, video);
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -398,6 +401,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 			
@@ -414,6 +418,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case MEDIA_FILE:
@@ -439,6 +444,7 @@ package org.openvideoplayer.vast.parser
 								break;
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -454,13 +460,12 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case COMPANION:
-							{
 								parseInlineCompanionAd(child, vastInlineAd);								
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -469,6 +474,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -487,6 +493,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case ALT_TEXT:
@@ -497,6 +504,7 @@ package org.openvideoplayer.vast.parser
 								break;
 						}
 						break;
+					}
 				}
 			}
 			
@@ -514,22 +522,19 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case COMPANION_IMPRESSION:
-							{
 								vastWrapperAd.companionImpressions = parseURLTags(child);
 								break;
-							}
 							case COMPANION_AD_TAG:
-							{
 								var urls:Vector.<VASTUrl> = parseURLTags(child, 1);
 								if (urls.length > 0)
 								{
 									vastWrapperAd.companionAdTag = urls[0];
 								}
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -538,6 +543,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -553,22 +559,19 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case NON_LINEAR_IMPRESSION:
-							{
 								vastWrapperAd.nonLinearImpressions = parseURLTags(child);
 								break;
-							}
 							case NON_LINEAR_AD_TAG:
-							{
 								var urls:Vector.<VASTUrl> = parseURLTags(child, 1);
 								if (urls.length > 0)
 								{
 									vastWrapperAd.nonLinearAdTag = urls[0];
 								}
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -577,6 +580,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -592,13 +596,12 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case NON_LINEAR:
-							{
 								parseInlineNonLinearAd(child, vastInlineAd);								
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -607,6 +610,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -629,6 +633,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case NON_LINEAR_CLICK_THROUGH:
@@ -636,6 +641,7 @@ package org.openvideoplayer.vast.parser
 								break;
 						}
 						break;
+					}
 				}
 			}
 			
@@ -661,6 +667,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case URL:
@@ -674,6 +681,7 @@ package org.openvideoplayer.vast.parser
 								break;
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -689,6 +697,7 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case EXTENSION:
@@ -702,6 +711,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 		}
@@ -719,27 +729,22 @@ package org.openvideoplayer.vast.parser
 				switch (child.nodeKind()) 
 				{
 					case NODEKIND_ELEMENT:
+					{
 						switch(child.localName()) 
 						{
 							case CLICK_THROUGH:
-							{
 								var urls:Vector.<VASTUrl> = parseURLTags(child, 1);
 								if (urls.length > 0)
 								{
 									videoClick.clickThrough = urls[0];
 								}
 								break;
-							}
 							case CLICK_TRACKING:
-							{
 								videoClick.clickTrackings = parseURLTags(child);
 								break;
-							}
 							case CUSTOM_CLICK:
-							{
 								videoClick.customClicks = parseURLTags(child);
 								break;
-							}
 							default:
 								CONFIG::LOGGING
 								{
@@ -748,6 +753,7 @@ package org.openvideoplayer.vast.parser
 								break;								
 						}
 						break;
+					}
 				}
 			}
 			

@@ -43,7 +43,6 @@ package org.openvideoplayer.vast.media
 				if (supportsMimeType(mediaFiles[i].type))
 				{
 					return mediaFiles[i];
-					break;
 				}
 			}
 			

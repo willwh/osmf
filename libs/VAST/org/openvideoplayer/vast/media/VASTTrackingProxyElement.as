@@ -198,12 +198,6 @@ package org.openvideoplayer.vast.media
 			}
 		}
 		
-		private function get position():Number
-		{
-			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			return temporal != null ? temporal.position : 0;
-		}
-
 		private function get percentPlayback():Number
 		{
 			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
