@@ -21,6 +21,8 @@
 *****************************************************/
 package org.openvideoplayer.proxies
 {
+	import org.openvideoplayer.media.MediaElement;
+	
 	public class TestListenerProxyElement extends TestProxyElement
 	{
 		// Overrides
@@ -29,6 +31,11 @@ package org.openvideoplayer.proxies
 		override protected function createProxyElement():ProxyElement
 		{
 			return new ListenerProxyElement();
+		}
+
+		override protected function createMediaElement():MediaElement
+		{
+			return new ListenerProxyElement(new MediaElement());
 		}
 	}
 }
