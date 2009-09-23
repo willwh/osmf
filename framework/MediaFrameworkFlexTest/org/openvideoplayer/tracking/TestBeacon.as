@@ -94,6 +94,22 @@ package org.openvideoplayer.tracking
 			assertTrue(event.errorText == null);
 		}
 		
+		public function testPingWithInvalidURL():void
+		{
+			var loader:HTTPLoader = createHTTPLoader();
+			
+			var beacon:Beacon = new Beacon(INVALID_URL, loader);
+			beacon.addEventListener(BeaconEvent.PING_COMPLETE, dontCall);
+			beacon.addEventListener(BeaconEvent.PING_FAILED, addAsync(onTestPingWithInvalidURL, 4000));
+			beacon.ping();
+		}
+		
+		private function onTestPingWithInvalidURL(event:BeaconEvent):void
+		{
+			assertTrue(event.type == BeaconEvent.PING_FAILED);
+			assertTrue(event.errorText == null);
+		}
+		
 		private function dontCall(event:Event):void
 		{
 			fail();
@@ -101,5 +117,6 @@ package org.openvideoplayer.tracking
 
 		private var SUCCESSFUL_URL:URL = new URL(TestConstants.REMOTE_IMAGE_FILE);
 		private var FAILED_URL:URL = new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE);
+		private var INVALID_URL:URL = new URL("ftp://example.com");
 	}
 }

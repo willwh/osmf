@@ -79,23 +79,33 @@ package org.openvideoplayer.tracking
 		public function ping():void
 		{
 			var urlResource:URLResource = new URLResource(url);
-			var loadable:LoadableTrait = new LoadableTrait(httpLoader, urlResource);
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
-			loadable.load();
-
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			// Make sure we can actually load the resource.  If we can't
+			// we treat this as a ping failure.
+			if (httpLoader.canHandleResource(urlResource))
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				var loadable:LoadableTrait = new LoadableTrait(httpLoader, urlResource);
+				
+				loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+				loadable.load();
+	
+				function onLoadableStateChange(event:LoadableStateChangeEvent):void
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
-					
-					dispatchEvent(new BeaconEvent(BeaconEvent.PING_COMPLETE));
+					if (event.loadable.loadState == LoadState.LOADED)
+					{
+						loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+						
+						dispatchEvent(new BeaconEvent(BeaconEvent.PING_COMPLETE));
+					}
+					else if (event.loadable.loadState == LoadState.LOAD_FAILED)
+					{
+						dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
+					}
 				}
-				else if (event.loadable.loadState == LoadState.LOAD_FAILED)
-				{
-					dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
-				}
+			}
+			else
+			{
+				dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
 			}
 		}
 		
