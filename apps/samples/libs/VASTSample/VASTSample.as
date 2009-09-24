@@ -46,9 +46,9 @@ package
 	 * document.
 	 **/
 	[SWF(backgroundColor="0x333333")]
-	public class VASTPlayer extends Sprite
+	public class VASTSample extends Sprite
 	{
-		public function VASTPlayer()
+		public function VASTSample()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
