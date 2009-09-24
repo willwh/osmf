@@ -61,8 +61,6 @@ package org.openvideoplayer.examples
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.utils.FMSURL;
 	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.vast.media.VASTImpressionProxyElement;
-	import org.openvideoplayer.vast.model.VASTUrl;
 	import org.openvideoplayer.video.VideoElement;
 	
 	/**
@@ -602,6 +600,8 @@ package org.openvideoplayer.examples
 				  	)
 				);
 
+			/* TODO: Uncomment this once we have the VAST library integrated
+			   with the build system.
 			examples.push
 				( new Example
 					( 	"VASTImpressionProxyElement"
@@ -614,6 +614,7 @@ package org.openvideoplayer.examples
 				  	   	}
 				  	)
 				);
+			*/
 				
 			return examples;
 		}
