@@ -135,11 +135,11 @@
 				urlInput.text = plugins[0].url;
 				mediaInput.text = streams[0].url;
 				
-				wrapper.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
-				wrapper.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
-				wrapper.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
-				wrapper.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
-				wrapper.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange );			
+				wrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
+				wrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
+				wrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+				wrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+				wrapper.mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange );			
 				
 				wrapper.mediaPlayer.playheadUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
