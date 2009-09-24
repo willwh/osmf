@@ -74,7 +74,7 @@ package org.openvideoplayer.vast.model
 			return _videoClick;
 		}
 
-		public function set videoClick(value:VASTVideoClick ):void
+		public function set videoClick(value:VASTVideoClick):void
 		{
 			_videoClick = value;
 		}

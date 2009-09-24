@@ -68,7 +68,7 @@ package org.openvideoplayer.vast.model
 		}
 		
 		/**
-		 * URL of request to survey vender.
+		 * URL of request to survey vendor.
 		 */
 		public function get surveyURL():String 
 		{

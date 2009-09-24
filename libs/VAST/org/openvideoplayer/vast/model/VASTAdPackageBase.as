@@ -25,8 +25,14 @@ package org.openvideoplayer.vast.model
 {
 	import __AS3__.vec.Vector;
 	
+	/**
+	 * Base class for the top-level VAST ad packages (inline ads and wrapper ads).
+	 **/
 	public class VASTAdPackageBase
 	{
+		/**
+		 * Constructor.
+		 **/
 		public function VASTAdPackageBase()
 		{
 			super();
