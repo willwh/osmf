@@ -25,8 +25,9 @@ package com.adobe.strobe.players
 	
 	import mx.core.UIComponent;
 	
-	import org.openvideoplayer.gateways.RegionSprite;
-	import org.openvideoplayer.layout.LayoutUtils;
+	import org.openvideoplayer.display.MediaPlayerSprite;
+	import org.openvideoplayer.display.ScaleMode;
+	import org.openvideoplayer.events.ViewChangeEvent;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.MediaPlayer;
 	
@@ -40,8 +41,7 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
-			mediaPlayer.source = value;					
-			_playerSprite.addElement(value);		
+			mediaPlayer.source = value;
 		}
 		
 		public function get element():MediaElement
@@ -52,18 +52,27 @@ package com.adobe.strobe.players
 		[ChangeEvent('mediaPlayerChange')]
 		public function get mediaPlayer():MediaPlayer
 		{
-			return _mediaPlayer;
+			return _playerSprite.mediaPlayer;
 		}
-				
+		
+		public function set scaleMode(value:ScaleMode):void
+		{
+			_playerSprite.scaleMode = value;
+		}
+		
+		public function get scaleMode():ScaleMode
+		{
+			return _playerSprite.scaleMode;
+		}
+		
 		// Overrides
 		//
 		
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			_mediaPlayer = new MediaPlayer();
 			
-			_playerSprite = new RegionSprite();				
+			_playerSprite = new MediaPlayerSprite();				
 			addChild(_playerSprite);
 			
 			dispatchEvent(new Event("mediaPlayerChange"));
@@ -71,16 +80,34 @@ package com.adobe.strobe.players
 			
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{	
-			super.updateDisplayList(w,h);	
-			_playerSprite.projectedWidth = w;
-			_playerSprite.projectedHeight = h;
-			if(element != null)
-			{
-				LayoutUtils.setAbsoluteLayout(element.metadata, w, h,0,0);
-			}				
-		}
+			super.updateDisplayList(w,h);
 			
-		protected var _mediaPlayer:MediaPlayer;			
-		protected var _playerSprite:RegionSprite;
+			_playerSprite.setAvailableSize(w,h);
+		}
+				
+		// Internals
+		//
+													
+		protected function onView(event:ViewChangeEvent):void
+		{
+			if (event.oldView)
+			{
+				removeChild(event.oldView);
+			}
+			
+			if (event.newView)
+			{				
+				addChild(mediaPlayer.view);
+			}
+			
+			invalidateDisplayList();			
+		}
+				
+		private function redispatch(event:Event):void
+		{
+			dispatchEvent(event.clone());
+		}
+					
+		protected var _playerSprite:MediaPlayerSprite;
 	}
 }

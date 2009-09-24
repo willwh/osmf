@@ -91,6 +91,7 @@ package org.openvideoplayer.view
 			// Set up the MediaPlayer.
 			//
 			
+			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
 			mediaPlayerWrapper.mediaPlayer.autoRewind = false;
 
