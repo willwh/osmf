@@ -29,7 +29,7 @@ Learn more about Flex at http://flex.org
 body { margin: 0px; overflow:hidden }
 </style>
 <script language="JavaScript" type="text/javascript">
-<!--
+
 // -----------------------------------------------------------------------------
 // Globals
 // Major version of Flash required
@@ -39,7 +39,6 @@ var requiredMinorVersion = ${version_minor};
 // Minor version of Flash required
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
-// -->
 
 function onOSMFGatewayRegistered(gateway)
 {
@@ -63,6 +62,7 @@ function onOSMFGatewayRegistered(gateway)
 				activeBanner = this;
 				osmf.trace(this.elementId + " loading " + url);
 				bannerImage.src = url;
+				bannerImage.onclick = onBannerClick;
 				this.loadState = osmf.constants.loadState.LOADED;
 				
 				// Set the duration of the element, and
@@ -85,7 +85,7 @@ function onOSMFGatewayRegistered(gateway)
 			element.unload = function()
 			{
 				activeBanner = null;
-				osmf.this(element.elementId + "unloading " + url);
+				osmf.trace(element.elementId + "unloading " + url);
 				bannerImage.src = null;
 				this.loadState = osmf.constants.CONSTRUCTED;
 			}
@@ -125,7 +125,7 @@ function onBannerClick()
 
 <body scroll="no">
 <div id="bannerRegion">
-	<img id="bannerImage" src="" alt="banner" name="banner" width="468" height="60" align="middle" onClick="onBannerClick();">
+	<img id="bannerImage" src="" alt="banner" name="banner" width="468" height="60" align="middle">
 </div>
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -153,7 +153,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"quality", "high",
 		"bgcolor", "${bgcolor}",
 		"name", "${application}",
-		"allowScriptAccess","sameDomain",
+		"allowScriptAccess","alwyays",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -169,7 +169,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"quality", "high",
 			"bgcolor", "${bgcolor}",
 			"name", "${application}",
-			"allowScriptAccess","sameDomain",
+			"allowScriptAccess","alwyays",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -195,7 +195,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				play="true"
 				loop="false"
 				quality="high"
-				allowScriptAccess="sameDomain"
+				allowScriptAccess="alwyays"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
