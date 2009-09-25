@@ -74,8 +74,8 @@ TextInput {
 }
 
 TextArea {
-	color: #FF1111;
-	disabledColor: #FF1111;
+	color: #111111;
+	disabledColor: #111111;
 }
 
 HSlider {
