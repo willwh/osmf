@@ -45,6 +45,10 @@ package org.openvideoplayer
 	import org.openvideoplayer.utils.*;
 	import org.openvideoplayer.version.*;
 	import org.openvideoplayer.video.*;
+	import org.openvideoplayer.vast.*;
+	import org.openvideoplayer.vast.loader.*;
+	import org.openvideoplayer.vast.media.*;
+	import org.openvideoplayer.vast.parser.*;
 
 	public class MediaFrameworkTests extends TestSuite
 	{
@@ -192,6 +196,13 @@ package org.openvideoplayer
 			addTestSuite(TestTraceLoggerFactory);
 			
 			addTestSuite(TestHTTPLoader);
+
+			addTestSuite(TestVASTLoader);
+			addTestSuite(TestVASTParser);
+			addTestSuite(TestDefaultVASTMediaFileResolver);
+			addTestSuite(TestVASTImpressionProxyElement);
+			addTestSuite(TestVASTMediaGenerator);
+			addTestSuite(TestVASTTrackingProxyElement);
 		}
 	}
 }
