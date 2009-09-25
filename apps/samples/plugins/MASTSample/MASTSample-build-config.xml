@@ -13,7 +13,6 @@
       <source-path>
          <path-element>src</path-element>
          <path-element>../../../../plugins/MASTPlugin</path-element>
-         <path-element>../../../../plugins/akamai/AkamaiBasicStreamingPlugin</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
