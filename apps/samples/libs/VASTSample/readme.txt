@@ -17,6 +17,9 @@ B. Installation Instructions (Flex Builder)
 7. Build the project.
 8. Launch the application from the Run menu.
 
+NOTE: this sample project requires the MediaFramework project and the VAST project, you will need to 
+import those Flex projects as well in order to build the VASTSample project.
+
 C. Usage Instructions
 
 The VASTSample app is a pure AS3 application which loads a VAST document as as preroll or postroll video ad.
