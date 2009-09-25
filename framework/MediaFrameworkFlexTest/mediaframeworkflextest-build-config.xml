@@ -55,6 +55,7 @@
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
          <path-element>../../build/lib/MediaFramework.swc</path-element>
+         <path-element>../../build/lib/VAST.swc</path-element>
          <path-element>../../libs/adobe/FlexUnit/FlexUnit.swc</path-element>
          <path-element>../../libs/adobe/FlexUnit/FlexUnitOptional.swc</path-element>
          <path-element>../../build/unittests/libs/NetMocker.swc</path-element>
