@@ -1,0 +1,129 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+* 
+*  Contributor(s): Akamai Technologies
+* 
+******************************************************/
+package org.openvideoplayer.mast.loader
+{
+	import org.openvideoplayer.events.LoaderEvent;
+	import org.openvideoplayer.events.MediaErrorEvent;
+	import org.openvideoplayer.loaders.LoaderBase;
+	import org.openvideoplayer.mast.model.*;
+	import org.openvideoplayer.mast.parser.MASTParser;
+	import org.openvideoplayer.media.IMediaResource;
+	import org.openvideoplayer.media.URLResource;
+	import org.openvideoplayer.traits.ILoadable;
+	import org.openvideoplayer.traits.LoadState;
+	import org.openvideoplayer.traits.LoadableTrait;
+	import org.openvideoplayer.utils.HTTPLoadedContext;
+	import org.openvideoplayer.utils.HTTPLoader;
+	import org.openvideoplayer.utils.URL;
+	
+	/**
+	 * Loader for the MASTProxyElement.
+	 **/
+	public class MASTLoader extends LoaderBase
+	{
+		/**
+		 * @private
+		 **/
+		override public function canHandleResource(resource:IMediaResource):Boolean
+		{
+			return new HTTPLoader().canHandleResource(resource); 
+		}
+		
+		/**
+		 * Loads a MAST document.
+		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
+		 * while loading and to LOADED upon completing a successful load and parse of the
+		 * MAST document.</p>
+		 * 
+		 * @see org.openvideoplayer.traits.LoadState
+		 * @param loadable The ILoadable to be loaded.
+		 */
+		override public function load(loadable:ILoadable):void
+		{
+			super.load(loadable);
+						
+			// Using the HTTPLoader in the VAST library to load the MAST document
+			var httpLoader:HTTPLoader = new HTTPLoader();
+			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
+			
+			// Create a temporary ILoadable for this purpose, so that our main
+			// ILoadable doesn't reflect any of the state changes from the
+			// loading of the URL, and so that we can catch any errors.
+			var httpLoadable:LoadableTrait = new LoadableTrait(httpLoader, loadable.resource);
+						
+			httpLoadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+			
+			trace("MASTLoader: Downloading document at " + URLResource(httpLoadable.resource).url.rawUrl);
+			
+			httpLoader.load(httpLoadable);
+			
+			function onHTTPLoaderStateChange(event:LoaderEvent):void
+			{
+				if (event.newState == LoadState.LOADED)
+				{
+					// This is a terminal state, so remove all listeners.
+					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
+					httpLoadable.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+	
+					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
+					
+					var parser:MASTParser = new MASTParser();
+					
+					try
+					{
+						parser.parse(loadedContext.urlLoader.data.toString());
+					}
+					catch(e:Error)
+					{
+						updateLoadable(loadable, LoadState.LOAD_FAILED);
+						throw e;
+					}
+					
+					updateLoadable(loadable, LoadState.LOADED, new MASTLoadedContext(parser.mastDocument));
+					
+				}
+				else if (event.newState == LoadState.LOAD_FAILED)
+				{
+					// This is a terminal state, so remove the listener.  But
+					// don't remove the error event listener, as that will be
+					// removed when the error event for this failure is
+					// dispatched.
+					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
+					
+					updateLoadable(loadable, event.newState);
+				}
+			}
+			
+			function onLoadableError(event:MediaErrorEvent):void
+			{
+				// Only remove this listener, as there will be a corresponding
+				// event for the load failure.
+				httpLoadable.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+				
+				loadable.dispatchEvent(event.clone());
+			}						
+		}
+		
+	}
+}
