@@ -35,19 +35,9 @@ package org.openvideoplayer.mast.traits
 		{
 			super(owner);
 			
-			this._mastProxyElement = owner as MASTProxyElement;
 			_playRequestPending = false;
 		}
 		
-		public function set mastDocument(value:MASTDocument):void
-		{
-			_mastDocument = value;
-		}
-		
-		public function set documentProcessor(value:MASTDocumentProcessor):void
-		{
-			_processor = value;
-		}
 		
 		public function get playRequestPending():Boolean
 		{
@@ -55,11 +45,8 @@ package org.openvideoplayer.mast.traits
 		}
 		
 		/**
-		 * The purpose of this method is to check to see if a MAST start condition
-		 * is present that would affect our order of media, such as an OnItemStart, 
-		 * and if that condition is going to cause a source payload to be loaded. 
-		 * If so, this class allows us to wait until the source payload has completely 
-		 * loaded before calling play() on the wrappedElement.
+		 * The purpose of this method is to allows us to wait until the MAST 
+		 * source payload has completely loaded before calling play() on the wrappedElement.
 		 */
 		override protected function processPlayingChange(newPlaying:Boolean):void
 		{
@@ -67,52 +54,10 @@ package org.openvideoplayer.mast.traits
 			
 			if (newPlaying)
 			{
-				// See if there is a start condition
-				for each (var trigger:MASTTrigger in _mastDocument.triggers)
-				{	
-					for each (var startCondition:MASTCondition in trigger.startConditions)
-					{
-						if (conditionCausesPendingPlayRequest(startCondition))
-						{
-							for each (var source:MASTSource in trigger.sources)
-							{
-								if (source.format == "vast")
-								{
-									_playRequestPending = true;
-									_processor.loadVastDocument(source, startCondition);
-								}
-							}							
-						}
-					}
-				}
-				
-				if (!_playRequestPending)
-				{
-					// We can remove this trait now
-					_mastProxyElement.removeCustomPlayableTrait();
-					
-				}
+				_playRequestPending = true;
 			}
 		}
-		
-		public static function conditionCausesPendingPlayRequest(cond:MASTCondition):Boolean
-		{
-			return (cond.type == MASTConditionType.EVENT && (conditionIsPreRoll(cond) || conditionIsPostRoll(cond)));
-		}
-		
-		public static function conditionIsPreRoll(cond:MASTCondition):Boolean
-		{
-			return ((cond.name == MASTAdapter.ON_ITEM_START) || (cond.name == MASTAdapter.ON_PLAY));
-		}
-		
-		public static function conditionIsPostRoll(cond:MASTCondition):Boolean
-		{
-			return ((cond.name == MASTAdapter.ON_ITEM_END) || (cond.name == MASTAdapter.ON_END) || (cond.name == MASTAdapter.ON_STOP));
-		}
-		
-		private var _mastProxyElement:MASTProxyElement;
-		private var _mastDocument:MASTDocument;
-		private var _processor:MASTDocumentProcessor;
+				
 		private var _playRequestPending:Boolean;	
 	}
 }

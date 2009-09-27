@@ -18,6 +18,8 @@
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
+*  Contributor(s): Akamai Technologies
+* 
 *****************************************************/
 package org.openvideoplayer.mast.loader
 {
@@ -25,6 +27,9 @@ package org.openvideoplayer.mast.loader
 	import flash.events.EventDispatcher;
 	
 	import org.openvideoplayer.events.LoadableStateChangeEvent;
+	import org.openvideoplayer.mast.managers.MASTConditionManager;
+	import org.openvideoplayer.mast.model.*;
+	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.traits.LoadState;
@@ -35,11 +40,6 @@ package org.openvideoplayer.mast.loader
 	import org.openvideoplayer.vast.media.DefaultVASTMediaFileResolver;
 	import org.openvideoplayer.vast.media.IVASTMediaFileResolver;
 	import org.openvideoplayer.vast.media.VASTMediaGenerator;
-	
-	import org.openvideoplayer.mast.traits.MASTPlayableTrait
-	import org.openvideoplayer.mast.managers.MASTConditionManager;
-	import org.openvideoplayer.mast.model.*;
-	import org.openvideoplayer.mast.types.MASTConditionType;
 	
 	public class MASTDocumentProcessor extends EventDispatcher
 	{
@@ -70,15 +70,26 @@ package org.openvideoplayer.mast.loader
 			}
 		}
 		
+		/**
+		 * Loads any payload (source) associated with a trigger.
+		 * <p>
+		 * To add support for an additional payload, override this
+		 * method.
+		 * </p>
+		 */
+		public function loadSources(trigger:MASTTrigger, condition:MASTCondition):void
+		{
+			for each (var source:MASTSource in trigger.sources)
+			{
+				if (source.format == SOURCE_FORMAT_VAST)
+				{
+					loadVastDocument(source, condition);
+				}
+			}
+		}
+		
 		private function processMASTCondition(trigger:MASTTrigger, condition:MASTCondition, mediaElement:MediaElement, start:Boolean):void
 		{
-			if (start && MASTPlayableTrait.conditionCausesPendingPlayRequest(condition))
-			{
-				// We only need to process condition events other than those events which 
-				// require pre-processing.				
-				return;
-			}
-			
 			var conditionManager:MASTConditionManager = new MASTConditionManager();
 			conditionManager.addEventListener("conditionTrue", onConditionTrue);
 			conditionManager.setContext(mediaElement, condition);
@@ -86,14 +97,7 @@ package org.openvideoplayer.mast.loader
 			function onConditionTrue(event:Event):void
 			{
 				conditionManager.removeEventListener("conditionTrue", onConditionTrue);
-				
-				for each (var source:MASTSource in trigger.sources)
-				{
-					if (source.format == SOURCE_FORMAT_VAST)
-					{
-						loadVastDocument(source, condition);
-					}
-				}
+				loadSources(trigger, condition);
 			}
 		}
 		

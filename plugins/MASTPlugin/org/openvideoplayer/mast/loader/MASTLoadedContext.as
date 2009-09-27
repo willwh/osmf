@@ -16,7 +16,9 @@
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
+*  Incorporated. All Rights Reserved.
+* 
+*  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
 package org.openvideoplayer.mast.loader

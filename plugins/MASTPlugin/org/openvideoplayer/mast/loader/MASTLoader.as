@@ -35,7 +35,6 @@ package org.openvideoplayer.mast.loader
 	import org.openvideoplayer.traits.LoadableTrait;
 	import org.openvideoplayer.utils.HTTPLoadedContext;
 	import org.openvideoplayer.utils.HTTPLoader;
-	import org.openvideoplayer.utils.URL;
 	
 	/**
 	 * Loader for the MASTProxyElement.
@@ -89,10 +88,11 @@ package org.openvideoplayer.mast.loader
 					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
 					
 					var parser:MASTParser = new MASTParser();
+					var mastDocument:MASTDocument;
 					
 					try
 					{
-						parser.parse(loadedContext.urlLoader.data.toString());
+						mastDocument = parser.parse(loadedContext.urlLoader.data.toString());
 					}
 					catch(e:Error)
 					{
@@ -100,7 +100,7 @@ package org.openvideoplayer.mast.loader
 						throw e;
 					}
 					
-					updateLoadable(loadable, LoadState.LOADED, new MASTLoadedContext(parser.mastDocument));
+					updateLoadable(loadable, LoadState.LOADED, new MASTLoadedContext(mastDocument));
 					
 				}
 				else if (event.newState == LoadState.LOAD_FAILED)

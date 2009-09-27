@@ -17,6 +17,8 @@
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
+* 
+*  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
 package org.openvideoplayer.mast.managers
@@ -29,17 +31,31 @@ package org.openvideoplayer.mast.managers
 	import flash.utils.getDefinitionByName;
 	
 	import org.openvideoplayer.events.*;
-	import org.openvideoplayer.traits.MediaTraitType;
-	
 	import org.openvideoplayer.mast.adapter.MASTAdapter;
 	import org.openvideoplayer.mast.model.MASTCondition;
 	import org.openvideoplayer.mast.types.MASTConditionOperator;
 	import org.openvideoplayer.mast.types.MASTConditionType;
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.media.MediaElement;
+	import org.openvideoplayer.traits.MediaTraitType;
 	
+	/**
+	 * Dispatched when the condition (and it's child conditions)
+	 * evaluate to <code>true</code>
+	 * 
+	 * @eventType flash.events.Event
+	 */
+	[Event(name="conditionTrue",type="flash.events.Event")]
+	
+	
+	/**
+	 * Eacth MASTCondition has a MASTConditionManager which knows how to 
+	 * listen for events and check properties on a MediaElement.
+	 */
 	public class MASTConditionManager extends EventDispatcher
-	{
+	{		
+		public static const CONDITION_TRUE:String = "conditionTrue";
+		
 		public function MASTConditionManager()
 		{
 			super();
@@ -56,21 +72,34 @@ package org.openvideoplayer.mast.managers
 
 		private function processCondition():void
 		{
-			// Ask the MASTAdapter class to give us the OSMF trait.property or event.type
-			var propOrEventName:String = _mastAdapter.lookup(_condition.name);
-			
-			if (propOrEventName == null)
+			// If the condition causes a pending play request, such as OnItemStart,
+			// we don't need to set any event listeners, we just need to evaluate
+			// the condition and dispatch the CONDITION_TRUE event.
+			if (conditionCausesPendingPlayRequest())
 			{
-				throw new IllegalOperationError("Unknown trait name or event name in MAST document");
+				if (this.evaluateChildConditions())
+				{
+					onConditionTrue();
+				}
 			}
-			
-			if (_condition.type == MASTConditionType.EVENT)
+			else
 			{
-				processEventCondition(propOrEventName);
-			}
-			else // PROPERTY
-			{
-				processPropertyCondition(propOrEventName);
+				// Ask the MASTAdapter class to give us the OSMF trait.property or event.type
+				var propOrEventName:String = _mastAdapter.lookup(_condition.name);
+				
+				if (propOrEventName == null)
+				{
+					throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
+				}
+				
+				if (_condition.type == MASTConditionType.EVENT)
+				{
+					processEventCondition(propOrEventName);
+				}
+				else // PROPERTY
+				{
+					processPropertyCondition(propOrEventName);
+				}
 			}
 		}
 		
@@ -83,16 +112,14 @@ package org.openvideoplayer.mast.managers
 			var traitType:MediaTraitType = getTraitTypeForTraitName(traitName);
 			if (traitType == null)
 			{
-				throw new IllegalOperationError("Unknown trait name in MAST document");
+				throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
 			}
 			
 			listenForTraitProperty(traitType, traitProperty, _condition.value, _condition.operator);			
 		}
 		
 		private function processEventCondition(eventName:String):void
-		{		
-			trace("adding a listener for this event: " +eventName);
-			
+		{					
 			// Get the event class name and the event type
 			var result:Array = eventName.match(/^(.*\.)(.*)$/);
 			var eventClassName:String = result[1];
@@ -106,9 +133,27 @@ package org.openvideoplayer.mast.managers
 			{
 				throw new IllegalOperationError("Unable to map an event condition in the MAST document to a trait that dispatches that event.");
 			}
+						
+			trace("adding a listener for this event: " +eventName);
 									
 			listenForTraitEvent(traitType, getDefinitionByName(eventClassName), eventType)			
 		}
+		
+		private function conditionCausesPendingPlayRequest():Boolean
+		{
+			return (_condition.type == MASTConditionType.EVENT && (conditionIsPreRoll() || conditionIsPostRoll(_condition)));
+		}
+		
+		private function conditionIsPreRoll():Boolean
+		{
+			return ((_condition.name == MASTAdapter.ON_ITEM_START) || (_condition.name == MASTAdapter.ON_PLAY));
+		}
+		
+		public static function conditionIsPostRoll(cond:MASTCondition):Boolean
+		{
+			return ((cond.name == MASTAdapter.ON_ITEM_END) || (cond.name == MASTAdapter.ON_END) || (cond.name == MASTAdapter.ON_STOP));
+		}
+		
 		
 		private function listenForTraitEvent(traitType:MediaTraitType, eventClass:Object, eventType:String):void
 		{
@@ -177,7 +222,7 @@ package org.openvideoplayer.mast.managers
 		
 		private function addPropertyListener(mediaElement:MediaElement, traitType:MediaTraitType, trait:IMediaTrait, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):void
 		{
-			if (isConditionTrue(trait, propertyName, propertyValue, operator))
+			if (isConditionTrue(trait, propertyName, propertyValue, operator) && evaluateChildConditions())
 			{
 				onConditionTrue();
 			}
@@ -191,7 +236,7 @@ package org.openvideoplayer.mast.managers
 				{
 					if (mediaElement.getTrait(traitType) == trait)
 					{
-						if (isConditionTrue(trait, propertyName, propertyValue, operator))
+						if (isConditionTrue(trait, propertyName, propertyValue, operator) && evaluateChildConditions())
 						{
 							timer.stop();
 							timer.removeEventListener(TimerEvent.TIMER, onPropertyListenerTimer);
@@ -210,7 +255,7 @@ package org.openvideoplayer.mast.managers
 		
 		private function onConditionTrue(event:Event=null):void
 		{
-			dispatchEvent(new Event("conditionTrue"));
+			dispatchEvent(new Event(CONDITION_TRUE));
 		}
 		
 		private function evaluateEventCondition(event:TraitEvent):void
@@ -260,11 +305,88 @@ package org.openvideoplayer.mast.managers
 					break;
 			}
 			
-			if (conditionTrue)
+			if (conditionTrue && evaluateChildConditions())
 			{ 
-				onConditionTrue(null);			
+				onConditionTrue();			
 			}
 		}		
+		
+		/**
+		 * Evaluate child conditions for the MASTCondition
+		 * associated with this class. Child conditions are
+		 * an implicit boolean 'AND', so all of them must
+		 * evaluate to <code>true</code> in order for the parent condition
+		 * to evaluate to <code>true</code>.
+		 * 
+		 * @returns true if all child conditions evaluate to <code>true</code>
+		 */
+		private function evaluateChildConditions():Boolean
+		{
+			var evaluation:Boolean = true;
+			
+			for each (var childCondition:MASTCondition in _condition.childConditions)
+			{
+				if (childCondition.type == MASTConditionType.EVENT)
+				{
+					// Event condition types are not allowed as child conditions
+					continue;  //$$$todo: throw here?
+				}
+				
+				// If any child conditions evaluate to false, this condition is false
+				if (!evaluateChild(childCondition))
+				{
+					evaluation = false;
+					break;
+				}
+			}
+			
+			return evaluation;
+		}
+		
+		/**
+		 * A recursive function to evaluate a child condition and all of it's children.
+		 */
+		private function evaluateChild(childCond:MASTCondition):Boolean
+		{
+			var evaluation:Boolean = false;
+			var propertyName:String = _mastAdapter.lookup(childCond.name);
+			
+			if (propertyName == null)
+			{
+				throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
+			}
+
+			var result:Array = propertyName.split(/\./);
+			var traitName:String = result[0];
+			var traitProperty:String = result[1];			 
+		
+			var traitType:MediaTraitType = getTraitTypeForTraitName(traitName);
+			if (traitType == null)
+			{
+				throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
+			}
+			
+			// If the trait is null here, we are not going to wait for it, that 
+			// should have already happened. If it is not present here, it never
+			// will be.
+			var trait:IMediaTrait = _mediaElement.getTrait(traitType);
+			if (trait != null)
+			{
+				evaluation = isConditionTrue(trait, traitProperty, childCond.value, childCond.operator);
+			}
+			
+			
+			if (evaluation) 
+			{
+				// Evaluate children
+				for each (var cond:MASTCondition in childCond.childConditions)
+				{
+					evaluation = evaluateChild(cond);
+				}
+			}
+			
+            return evaluation;			
+		}
 		
 		private function isConditionTrue(trait:IMediaTrait, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):Boolean
 		{
@@ -353,5 +475,7 @@ package org.openvideoplayer.mast.managers
 		private var _mediaElement:MediaElement;
 		private var _condition:MASTCondition;
 		private var _mastAdapter:MASTAdapter;
+		
+		private static const UNKNOWN_TRAIT_OR_EVENT_ERROR:String = "Unknown trait name or event name in MAST document";
 	}
 }

@@ -42,30 +42,19 @@ package org.openvideoplayer.mast.parser
 		{
 			super();
 		}
-		
-		/**
-		 * Returns the top level MAST document object. Only valid after calling
-		 * the parse method.
-		 * 
-		 * @see #parse()
-		 */
-		public function get mastDocument():MASTDocument 
-		{
-			return _mastDocument;
-		}
-		
+				
 		/**
 		 * A synchronous method to parse the raw MAST XML data 
 		 * into a MAST object model.
 		 */
-		public function parse(rawData:String):void 
+		public function parse(rawData:String):MASTDocument 
 		{
 			var xml:XML = new XML(rawData);
+			var mastDocument:MASTDocument = new MASTDocument(xml.@version);
 
 			try 
 			{
 				var children:XMLList = xml.*;
-				_mastDocument = new MASTDocument(xml.@version);
 
 				for (var i:int = 0; i < children.length(); i++) 
 				{
@@ -77,7 +66,7 @@ package org.openvideoplayer.mast.parser
 							switch (child.localName()) 
 							{
 								case "triggers":
-									parseTriggers(child);
+									parseTriggers(child, mastDocument);
 									break;
 							}
 							break;
@@ -89,9 +78,11 @@ package org.openvideoplayer.mast.parser
 				debug("parse() - Exception occurred : " + err.message);				
 				throw err;
 			}
+			
+			return mastDocument;
 		}		
 
-		private function parseTriggers(node:XML):void 
+		private function parseTriggers(node:XML, mastDocument:MASTDocument):void 
 		{
 			var children:XMLList = node.children();
 			
@@ -108,7 +99,7 @@ package org.openvideoplayer.mast.parser
 								{
 									var trigger:MASTTrigger = new MASTTrigger(child.@id, child.@description);
 									parseChildNodes(child, trigger);									
-									_mastDocument.addTrigger(trigger);
+									mastDocument.addTrigger(trigger);
 								}
 								break;
 						}
@@ -322,9 +313,7 @@ package org.openvideoplayer.mast.parser
 				trace(">>> MASTParser." + args);
 			}
 		}
-		
-		private var _mastDocument:MASTDocument;
-		
+				
 		private const DEBUG:Boolean = true;		
 	}
 	

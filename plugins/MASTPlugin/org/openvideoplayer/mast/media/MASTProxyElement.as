@@ -26,13 +26,6 @@ package org.openvideoplayer.mast.media
 	import org.openvideoplayer.composition.SerialElement;
 	import org.openvideoplayer.events.LoadableStateChangeEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
-	import org.openvideoplayer.mast.loader.MASTDocumentProcessedEvent;
-	import org.openvideoplayer.mast.loader.MASTDocumentProcessor;
-	import org.openvideoplayer.mast.loader.MASTLoadedContext;
-	import org.openvideoplayer.mast.loader.MASTLoader;
-	import org.openvideoplayer.mast.model.*;
-	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
-	import org.openvideoplayer.mast.types.MASTConditionType;
 	import org.openvideoplayer.media.IMediaResource;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
@@ -47,6 +40,15 @@ package org.openvideoplayer.mast.media
 	import org.openvideoplayer.traits.MediaTraitType;
 	import org.openvideoplayer.traits.PlayableTrait;
 	import org.openvideoplayer.utils.URL;
+
+	import org.openvideoplayer.mast.loader.MASTDocumentProcessedEvent;
+	import org.openvideoplayer.mast.loader.MASTDocumentProcessor;
+	import org.openvideoplayer.mast.loader.MASTLoadedContext;
+	import org.openvideoplayer.mast.loader.MASTLoader;
+	import org.openvideoplayer.mast.model.*;
+	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
+	import org.openvideoplayer.mast.types.MASTConditionType;
+	import org.openvideoplayer.mast.managers.MASTConditionManager;
 
 	public class MASTProxyElement extends ProxyElement
 	{
@@ -170,12 +172,6 @@ package org.openvideoplayer.mast.media
 				// the actual load.
 				removeTrait(MediaTraitType.LOADABLE);
 				(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
-				
-				// Tell the overriden IPlayable trait about the MAST DOM
-				var playableTrait:MASTPlayableTrait = getTrait(MediaTraitType.PLAYABLE) as MASTPlayableTrait;
-				playableTrait.mastDocument = loadedContext.document;
-				playableTrait.documentProcessor = processor;
-				
 			}
 			else if (event.newState == LoadState.LOAD_FAILED)
 			{
@@ -219,7 +215,7 @@ package org.openvideoplayer.mast.media
 			// child, so that the inserted child becomes the new current child.
 			var index:int = 0;
 			
-			if ((condition.type == MASTConditionType.EVENT) && (MASTPlayableTrait.conditionIsPostRoll(condition)))
+			if ((condition.type == MASTConditionType.EVENT) && (MASTConditionManager.conditionIsPostRoll(condition)))
 			{
 				index++;
 			}
