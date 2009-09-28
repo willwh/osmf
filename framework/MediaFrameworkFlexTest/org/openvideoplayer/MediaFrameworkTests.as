@@ -49,7 +49,6 @@ package org.openvideoplayer
 	import org.openvideoplayer.vast.loader.*;
 	import org.openvideoplayer.vast.media.*;
 	import org.openvideoplayer.vast.parser.*;
-	import org.openvideoplayer.mast.loader.*;
 
 	public class MediaFrameworkTests extends TestSuite
 	{
