@@ -26,6 +26,7 @@ package org.openvideoplayer.proxies
 	
 	import org.openvideoplayer.events.PausedChangeEvent;
 	import org.openvideoplayer.events.PlayingChangeEvent;
+	import org.openvideoplayer.events.SeekingChangeEvent;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.traits.IPausable;
 	import org.openvideoplayer.traits.IPlayable;
@@ -142,6 +143,7 @@ package org.openvideoplayer.proxies
 			seekableTrait = new SeekableTrait();
 			seekableTrait.temporal = temporalTrait;
 			addTrait(MediaTraitType.SEEKABLE, seekableTrait);
+			seekableTrait.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 			
 			playableTrait = new PlayableTrait(this);
 			playableTrait.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
@@ -224,6 +226,16 @@ package org.openvideoplayer.proxies
 					playable.play();
 				}
 			}			
+		}
+		
+		private function onSeekingChange(event:SeekingChangeEvent):void
+		{
+			if (event.seeking)
+			{				
+				elapsedTime = event.time;
+				absoluteTimeAtLastPlay = flash.utils.getTimer();
+				seekableTrait.processSeekCompletion(event.time);				
+			}
 		}
 		
 		private function set duration(value:Number):void

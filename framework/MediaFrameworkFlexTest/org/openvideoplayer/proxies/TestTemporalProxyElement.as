@@ -26,6 +26,7 @@ package org.openvideoplayer.proxies
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
+	import org.openvideoplayer.events.SeekingChangeEvent;
 	import org.openvideoplayer.media.IMediaResource;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.TestMediaElement;
@@ -136,12 +137,13 @@ package org.openvideoplayer.proxies
 		{
 			events = new Vector.<Event>();
 			var mediaElement:MediaElement = new MediaElement();
-			var proxy:TemporalProxyElement = new TemporalProxyElement(NaN, mediaElement);
+			var proxy:TemporalProxyElement = new TemporalProxyElement(50, mediaElement);
 			
 			var temporal:TemporalTrait = proxy.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var pausable:PausableTrait = proxy.getTrait(MediaTraitType.PAUSABLE) as PausableTrait;
 			var playable:PlayableTrait = proxy.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			var seekable:SeekableTrait = proxy.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
+			seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, eventCatcher);
 			
 			playable.play();
 			assertTrue(pausable.paused == false);
@@ -149,6 +151,13 @@ package org.openvideoplayer.proxies
 			assertTrue(playable.playing == false);
 			playable.play();
 			assertTrue(pausable.paused == false);
+			seekable.seek(15);			
+			assertFalse(seekable.seeking);
+			assertEquals(2, events.length);
+			assertTrue(events[0] is SeekingChangeEvent);
+			assertTrue(events[1] is SeekingChangeEvent);
+			assertTrue(SeekingChangeEvent(events[1]).seeking);
+			assertFalse(SeekingChangeEvent(events[0]).seeking);		
 		}
 		
 		public function eventCatcher(event:Event):void
