@@ -18,7 +18,7 @@
 		<link>
 			<name>[source path] MASTPlugin</name>
 			<type>2</type>
-			<location>/Users/charles/Documents/dev/osmf/svn/public/osmf/trunk/plugins/MASTPlugin</location>
+			<location>/MASTPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>
