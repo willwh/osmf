@@ -25,11 +25,15 @@ package com.adobe.strobe.players
 	
 	import mx.core.UIComponent;
 	
-	import org.openvideoplayer.display.MediaPlayerSprite;
 	import org.openvideoplayer.display.ScaleMode;
 	import org.openvideoplayer.events.ViewChangeEvent;
+	import org.openvideoplayer.gateways.RegionSprite;
+	import org.openvideoplayer.layout.LayoutAttributesFacet;
+	import org.openvideoplayer.layout.LayoutUtils;
+	import org.openvideoplayer.layout.RegistrationPoint;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.MediaPlayer;
+	import org.openvideoplayer.metadata.MetadataNamespaces;
 	
 	/**
 	 * Defines a Flex wrapper class for the MediaPlayerSprite class.
@@ -41,28 +45,35 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
-			mediaPlayer.source = value;
+			mediaPlayer.source = value;					
+			_playerSprite.addElement(value);
+			scaleMode = _scaleMode;	
+			invalidateDisplayList();	
 		}
 		
 		public function get element():MediaElement
 		{
-			return mediaPlayer.source;
+			return _mediaPlayer.source;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]
 		public function get mediaPlayer():MediaPlayer
 		{
-			return _playerSprite.mediaPlayer;
+			return _mediaPlayer;
 		}
 		
 		public function set scaleMode(value:ScaleMode):void
 		{
-			_playerSprite.scaleMode = value;
+			_scaleMode = value;
+			if(element != null)
+			{
+				LayoutUtils.setLayoutAttributes(element.metadata, value, RegistrationPoint.CENTER);
+			}
 		}
 		
 		public function get scaleMode():ScaleMode
 		{
-			return _playerSprite.scaleMode;
+			return _scaleMode;
 		}
 		
 		// Overrides
@@ -71,43 +82,21 @@ package com.adobe.strobe.players
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			
-			_playerSprite = new MediaPlayerSprite();				
+			_playerSprite = new RegionSprite();				
 			addChild(_playerSprite);
-			
-			dispatchEvent(new Event("mediaPlayerChange"));
 		}
 			
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{	
 			super.updateDisplayList(w,h);
-			
-			_playerSprite.setAvailableSize(w,h);
-		}
-				
-		// Internals
-		//
-													
-		protected function onView(event:ViewChangeEvent):void
-		{
-			if (event.oldView)
+			if (element != null)
 			{
-				removeChild(event.oldView);
+				LayoutUtils.setAbsoluteLayout(element.metadata, w, h, 0, 0);
 			}
-			
-			if (event.newView)
-			{				
-				addChild(mediaPlayer.view);
-			}
-			
-			invalidateDisplayList();			
 		}
-				
-		private function redispatch(event:Event):void
-		{
-			dispatchEvent(event.clone());
-		}
-					
-		protected var _playerSprite:MediaPlayerSprite;
+			
+		private var _scaleMode:ScaleMode = ScaleMode.NONE;		
+		private var _mediaPlayer:MediaPlayer = new MediaPlayer();			
+		private var _playerSprite:RegionSprite;
 	}
 }
