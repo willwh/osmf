@@ -42,11 +42,25 @@ package org.openvideoplayer.mast.loader
 	public class MASTLoader extends LoaderBase
 	{
 		/**
+		 * Constructor.
+		 * 
+		 * @param The HTTPLoader to be used by this MASTLoader to retrieve
+		 * the MAST document.  If null, then a new one will be created on
+		 * demand.
+		 */
+		public function MASTLoader(httpLoader:HTTPLoader=null)
+		{
+			super();
+			
+			this.httpLoader = httpLoader != null ? httpLoader : new HTTPLoader();			
+		}
+		
+		/**
 		 * @private
 		 **/
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
-			return new HTTPLoader().canHandleResource(resource); 
+			return httpLoader.canHandleResource(resource);
 		}
 		
 		/**
@@ -61,9 +75,9 @@ package org.openvideoplayer.mast.loader
 		override public function load(loadable:ILoadable):void
 		{
 			super.load(loadable);
+			
+			updateLoadable(loadable, LoadState.LOADING);			
 						
-			// Using the HTTPLoader in the VAST library to load the MAST document
-			var httpLoader:HTTPLoader = new HTTPLoader();
 			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
 			
 			// Create a temporary ILoadable for this purpose, so that our main
@@ -125,5 +139,24 @@ package org.openvideoplayer.mast.loader
 			}						
 		}
 		
+		/**
+		 * Unloads the document.  
+		 * 
+		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
+		 * while unloading and to CONSTRUCTED upon completing a successful unload.</p>
+		 *
+		 * @param ILoadable ILoadable to be unloaded.
+		 * @see org.openvideoplayer.traits.LoadState
+		 */ 
+		override public function unload(loadable:ILoadable):void
+		{
+			super.unload(loadable);
+
+			// Nothing to do.
+			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
+			updateLoadable(loadable, LoadState.CONSTRUCTED);
+		}		
+
+		private var httpLoader:HTTPLoader;		
 	}
 }

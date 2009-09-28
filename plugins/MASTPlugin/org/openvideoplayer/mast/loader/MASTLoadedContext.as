@@ -31,11 +31,21 @@ package org.openvideoplayer.mast.loader
 	 **/
 	public class MASTLoadedContext implements ILoadedContext
 	{
+		/**
+		 * Constructor.
+		 * 
+		 * @param document The MASTDocument object representing
+		 * the root level of the MAST document object model.
+		 */
 		public function MASTLoadedContext(document:MASTDocument)
 		{
 			_document = document;
 		}
 
+		/**
+		 * Get the MASTDocument object that was supplied to
+		 * the constructor.
+		 */
 		public function get document():MASTDocument
 		{
 			return _document;

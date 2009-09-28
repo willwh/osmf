@@ -114,6 +114,9 @@ package org.openvideoplayer.mast.adapter
 		 */
 		public static const ON_ITEM_END:String = "OnItemEnd";
 		
+		/**
+		 * Constructor.
+		 */
 		public function MASTAdapter()
 		{
 			_map = new Dictionary();
@@ -137,6 +140,13 @@ package org.openvideoplayer.mast.adapter
 			_map[ON_ITEM_END]		= "org.openvideoplayer.events.TraitEvent.DURATION_REACHED";
 		}
 		
+		/**
+		 * Given one of the MAST property or event names, 
+		 * returns the matching OSMF trait or event respectively.
+		 * 
+		 * @param conditionName The MAST condition name which maps
+		 * to OSMF trait or event name.
+		 */
 		public function lookup(conditionName:String):String
 		{
 			return _map[conditionName];

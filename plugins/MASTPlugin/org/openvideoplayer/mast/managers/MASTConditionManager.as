@@ -49,7 +49,7 @@ package org.openvideoplayer.mast.managers
 	
 	
 	/**
-	 * Eacth MASTCondition has a MASTConditionManager which knows how to 
+	 * Each MASTCondition has a MASTConditionManager which knows how to 
 	 * listen for events and check properties on a MediaElement.
 	 */
 	public class MASTConditionManager extends EventDispatcher
@@ -61,6 +61,10 @@ package org.openvideoplayer.mast.managers
 			super();
 		}
 		
+		/**
+		 * Set the MediaElement and the MASTCondition object this
+		 * class will manage.
+		 */
 		public function setContext(mediaElement:MediaElement, condition:MASTCondition):void
 		{
 			_condition = condition;

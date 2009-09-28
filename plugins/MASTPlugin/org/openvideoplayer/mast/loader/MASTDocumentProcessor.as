@@ -41,16 +41,33 @@ package org.openvideoplayer.mast.loader
 	import org.openvideoplayer.vast.media.IVASTMediaFileResolver;
 	import org.openvideoplayer.vast.media.VASTMediaGenerator;
 	
+	/**
+	 * This class process a MAST document by working with the 
+	 * objects in the MAST object model.
+	 * 
+	 * @see org.openvideoplayer.mast.model.MASTDocument
+	 */
 	public class MASTDocumentProcessor extends EventDispatcher
 	{
 		// Supported source formats
 		private static const SOURCE_FORMAT_VAST:String = "vast";
 		
+		/**
+		 * Constructor.
+		 */
 		public function MASTDocumentProcessor()
 		{
 			super();
 		}
 		
+		/**
+		 * Processes a MAST document represented as a MASTDocument
+		 * object, the root of the MAST document object model.
+		 * 
+		 * @param document The MASTDocument object to process.
+		 * @param mediaElement The main content, usually a video, the
+		 * MASTDocument object will work with.
+		 */
 		public function processDocument(document:MASTDocument, mediaElement:MediaElement):void
 		{
 			// Set up a listener for each trigger.
