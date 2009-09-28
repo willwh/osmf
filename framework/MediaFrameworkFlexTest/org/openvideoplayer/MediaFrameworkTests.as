@@ -205,8 +205,6 @@ package org.openvideoplayer
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
 			addTestSuite(TestVASTTrackingProxyElement);
-			
-			addTestSuite(TestMASTLoader);
 		}
 	}
 }
