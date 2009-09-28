@@ -130,12 +130,14 @@ package org.openvideoplayer.net
 				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:				
 				case NetStreamCodes.NETSTREAM_FAILED:
+					netStream.pause();
 					streamStarted = false;
-					resetPlaying();
+					resetPlaying();					
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STOP: //fired when streaming connections buffer, but also for when progressive connections finish.
 					if (isProgressive) 
 					{
+						netStream.pause();
 						streamStarted = false;
 						resetPlaying();
 					}
