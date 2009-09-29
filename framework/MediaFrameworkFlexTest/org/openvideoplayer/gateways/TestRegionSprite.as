@@ -42,6 +42,10 @@ package org.openvideoplayer.gateways
 		public function testRegionElements():void
 		{
 			var parent:RegionSprite = new RegionSprite();
+			parent.backgroundColor = 0xff0000;
+			parent.backgroundAlpha = 1;
+			parent.clipChildren = true;
+			
 			var element1:DynamicMediaElement = new DynamicMediaElement();
 			var element2:DynamicMediaElement = new DynamicMediaElement();
 			
@@ -75,6 +79,10 @@ package org.openvideoplayer.gateways
 		public function testRegionSubRegions():void
 		{
 			var parent:RegionSprite = new RegionSprite();
+			parent.backgroundColor = 0xff0000;
+			parent.backgroundAlpha = 1;
+			parent.clipChildren = true;
+			
 			var sub1:RegionSprite = new RegionSprite();
 			var sub2:RegionSprite = new RegionSprite();
 			
@@ -140,6 +148,8 @@ package org.openvideoplayer.gateways
 		public function testRegionAttributes():void
 		{
 			var region:RegionSprite = new RegionSprite();
+			LayoutUtils.setAbsoluteLayout(region.metadata, 500, 400);
+			
 			assertEquals(NaN,region.backgroundColor);
 			assertEquals(NaN,region.backgroundAlpha);
 			
@@ -152,6 +162,9 @@ package org.openvideoplayer.gateways
 			assertFalse(region.clipChildren);
 			region.clipChildren = true;
 			assertTrue(region.clipChildren);
+			
+			assertEquals(500, region.width);
+			assertEquals(400, region.height);
 		}
 	}
 }
