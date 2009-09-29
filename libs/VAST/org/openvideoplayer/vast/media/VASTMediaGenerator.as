@@ -23,7 +23,6 @@ package org.openvideoplayer.vast.media
 {
 	import __AS3__.vec.Vector;
 	
-	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.net.NetLoader;
@@ -34,7 +33,6 @@ package org.openvideoplayer.vast.media
 	import org.openvideoplayer.vast.model.VASTDocument;
 	import org.openvideoplayer.vast.model.VASTInlineAd;
 	import org.openvideoplayer.vast.model.VASTMediaFile;
-	import org.openvideoplayer.vast.model.VASTUrl;
 	import org.openvideoplayer.video.VideoElement;
 	
 	/**
