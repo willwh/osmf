@@ -70,6 +70,7 @@ package org.openvideoplayer
 			addTestSuite(TestPaddingLayoutFacet);
 			addTestSuite(TestRegistrationPoint);
 			addTestSuite(TestRelativeLayoutFacet);
+			addTestSuite(TestLayoutUtils);
 			
 			addTestSuite(TestRegionSprite);
 			addTestSuite(TestHTMLGateway);

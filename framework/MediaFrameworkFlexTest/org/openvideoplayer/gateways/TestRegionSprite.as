@@ -136,5 +136,22 @@ package org.openvideoplayer.gateways
 			assertEquals(800/2 - 486/2, viewableSprite.x);
 			assertEquals(80/2 - 60/2, viewableSprite.y);
 		}
+		
+		public function testRegionAttributes():void
+		{
+			var region:RegionSprite = new RegionSprite();
+			assertEquals(NaN,region.backgroundColor);
+			assertEquals(NaN,region.backgroundAlpha);
+			
+			region.backgroundColor = 0xFF00FF;
+			assertEquals(0xFF00FF, region.backgroundColor);
+			
+			region.backgroundAlpha = 0.5;
+			assertEquals(0.5, region.backgroundAlpha);
+			
+			assertFalse(region.clipChildren);
+			region.clipChildren = true;
+			assertTrue(region.clipChildren);
+		}
 	}
 }
