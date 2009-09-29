@@ -35,6 +35,10 @@ package org.openvideoplayer.mast.loader
 	import org.openvideoplayer.traits.LoadableTrait;
 	import org.openvideoplayer.utils.HTTPLoadedContext;
 	import org.openvideoplayer.utils.HTTPLoader;
+	CONFIG::LOGGING
+	{
+	import org.openvideoplayer.logging.*;		
+	}
 	
 	/**
 	 * Loader for the MASTProxyElement.
@@ -163,6 +167,8 @@ package org.openvideoplayer.mast.loader
 		private var httpLoader:HTTPLoader;		
 		
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("MASTLoader");			
+		{	
+			private static const logger:org.openvideoplayer.logging.ILogger = org.openvideoplayer.logging.Log.getLogger("MASTLoader");		
+		}	
 	}
 }

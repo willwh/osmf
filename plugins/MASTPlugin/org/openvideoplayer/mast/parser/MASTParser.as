@@ -28,6 +28,10 @@ package org.openvideoplayer.mast.parser
 	import org.openvideoplayer.mast.model.*;
 	import org.openvideoplayer.mast.types.MASTConditionOperator;
 	import org.openvideoplayer.mast.types.MASTConditionType;
+	CONFIG::LOGGING
+	{
+	import org.openvideoplayer.logging.*;			
+	}
 	
 	/**
 	 * This class parses a MAST document into a
@@ -318,7 +322,9 @@ package org.openvideoplayer.mast.parser
 		}
 						
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("MASTParser");			
+		{
+			private static const logger:org.openvideoplayer.logging.ILogger = org.openvideoplayer.logging.Log.getLogger("MASTParser");	
+		}		
 	}
 	
 }

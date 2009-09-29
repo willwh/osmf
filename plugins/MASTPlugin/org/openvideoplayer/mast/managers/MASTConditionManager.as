@@ -38,6 +38,10 @@ package org.openvideoplayer.mast.managers
 	import org.openvideoplayer.media.IMediaTrait;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.traits.MediaTraitType;
+	CONFIG::LOGGING
+	{
+	import org.openvideoplayer.logging.*;		
+	}
 	
 	/**
 	 * Dispatched when the condition (and it's child conditions)
@@ -281,7 +285,7 @@ package org.openvideoplayer.mast.managers
 		{
 			CONFIG::LOGGING
 			{
-				lovver.debug("In evaluateEventCondition - event="+ event.toString());
+				logger.debug("In evaluateEventCondition - event="+ event.toString());
 			}
 			
 			// Now evaluate the condition and all child conditions
@@ -504,7 +508,8 @@ package org.openvideoplayer.mast.managers
 		private static const UNKOWN_OPERATOR_ERROR:String = "Unkown operator in MAST document";
 		
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("MASTConditionManager");			
-		
+		{
+			private static const logger:org.openvideoplayer.logging.ILogger = org.openvideoplayer.logging.Log.getLogger("MASTConditionManager");			
+		}
 	}
 }
