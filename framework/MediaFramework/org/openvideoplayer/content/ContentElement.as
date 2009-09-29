@@ -21,6 +21,10 @@
 *****************************************************/
 package org.openvideoplayer.content
 {
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
+	import flash.geom.Rectangle;
+	
 	import org.openvideoplayer.events.MediaError;
 	import org.openvideoplayer.events.MediaErrorCodes;
 	import org.openvideoplayer.events.MediaErrorEvent;
@@ -62,7 +66,10 @@ package org.openvideoplayer.content
 			// TODO: Add comment here on how the error can occur.
 			try
 			{
-				viewable.view = context.loader.content;
+				//Allow the loaded content to overdraw its bounds, while maintaining scale, and size with the layout system.
+				//Bug # FM-77 and FM-87
+				context.loader.content.scrollRect = new Rectangle(0,0,context.loader.contentLoaderInfo.width,  context.loader.contentLoaderInfo.height);
+				viewable.view = context.loader;
 				spatial.setDimensions(context.loader.contentLoaderInfo.width, context.loader.contentLoaderInfo.height);
 			}
 			catch (error:SecurityError)
