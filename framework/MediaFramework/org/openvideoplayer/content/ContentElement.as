@@ -66,10 +66,11 @@ package org.openvideoplayer.content
 			// TODO: Add comment here on how the error can occur.
 			try
 			{
-				//Allow the loaded content to overdraw its bounds, while maintaining scale, and size with the layout system.
-				//Bug # FM-77 and FM-87
-				context.loader.content.scrollRect = new Rectangle(0,0,context.loader.contentLoaderInfo.width,  context.loader.contentLoaderInfo.height);
-				viewable.view = context.loader;
+				//Add a container layer, to allow the loaded content to overdraw its bounds, while maintaining scale, and size with the layout system.
+				var viewContainer:Sprite = new Sprite();
+				viewContainer.addChild(context.loader);
+				context.loader.scrollRect = new Rectangle(0,0,context.loader.contentLoaderInfo.width,  context.loader.contentLoaderInfo.height);
+				viewable.view = viewContainer;
 				spatial.setDimensions(context.loader.contentLoaderInfo.width, context.loader.contentLoaderInfo.height);
 			}
 			catch (error:SecurityError)
