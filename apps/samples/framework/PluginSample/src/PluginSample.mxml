@@ -168,7 +168,7 @@
 			private function initUI():void
 			{
 				refreshResourceHandlerList();
-				
+
 				wrapper.mediaPlayer.addEventListener(
 					LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChanged);
 				
@@ -178,7 +178,7 @@
 				traceLogger.addEventListener(MouseEvent.CLICK, onDefaultLoggerSelected);
 				flexLogger.addEventListener(MouseEvent.CLICK, onFlexLoggerSelected);
 			}
-			
+
 			private function onDefaultLoggerSelected(event:MouseEvent):void
 			{
 				initLogging();
@@ -270,7 +270,13 @@
 				var model:Model = Model.getInstance();
 				model.pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 				model.pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				model.pluginManager.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				model.pluginManager.loadPlugin(pluginResource);				
+			}
+			
+			private function onMediaError(event:MediaErrorEvent):void
+			{
+					Alert.show("media error");
 			}
 			
 			private function onPluginLoaded(event:PluginLoadEvent):void

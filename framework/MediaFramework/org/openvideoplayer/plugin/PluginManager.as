@@ -136,6 +136,7 @@ package org.openvideoplayer.plugin
 					{
 						loadable.addEventListener(
 							LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+						loadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 						loadable.load();
 					}
 					else
@@ -166,6 +167,10 @@ package org.openvideoplayer.plugin
 					delete _pluginMap[identifier];
 					dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOAD_FAILED));
 				}
+			}
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				dispatchEvent(event.clone());
 			}
 		}
 
