@@ -719,11 +719,10 @@ package org.openvideoplayer.gateways
         			= gateways[identifier]
         			= new Gateway(objectId, gatewayId);
         	}
-	        
         	// Invoke "onOSMFGatewayRegistered"
-        	//if 	(	this["onOSMFGatewayRegistered"] != null
-        	//	&&	this.onOSMFGatewayRegistered.length == 1
-        	//	)
+        	if 	(	this["onOSMFGatewayRegistered"] != null
+        		&&	this.onOSMFGatewayRegistered.length == 1
+        		)
         	{
         		this.onOSMFGatewayRegistered(gateway);
         	}
