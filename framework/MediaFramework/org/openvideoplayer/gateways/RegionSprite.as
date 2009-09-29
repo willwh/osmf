@@ -22,6 +22,7 @@
 package org.openvideoplayer.gateways
 {
 	import flash.errors.IllegalOperationError;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import org.openvideoplayer.layout.DefaultLayoutRenderer;
@@ -34,7 +35,7 @@ package org.openvideoplayer.gateways
 	import org.openvideoplayer.utils.MediaFrameworkStrings;
 
 	/**
-	 * RegionSprite defines a Sprite based IRegion implementation.
+	 * RegionSprite defines a Sprite based IContainerGateway implementation.
 	 */	
 	public class RegionSprite extends LayoutContextSprite implements IContainerGateway
 	{
@@ -140,6 +141,31 @@ package org.openvideoplayer.gateways
 			return contentLayoutTargets[element] != undefined
 		}
 		
+		// Public API
+		//
+		
+		/**
+		 * Defines if the children of the region that display outside of its bounds 
+		 * will be clipped or not.
+		 * 
+		 */		
+		public function set clipChildren(value:Boolean):void
+		{
+			if (value && scrollRect == null)
+			{
+				scrollRect = new Rectangle(0, 0, width, height);
+			}
+			else if (value == false && scrollRect)
+			{
+				scrollRect = null;
+			} 
+		}
+		
+		public function get clipChildren():Boolean
+		{
+			return scrollRect != null;
+		}
+		
 		// Overrides
 		//
 		
@@ -188,6 +214,11 @@ package org.openvideoplayer.gateways
 			{
 				drawBackground();
 			}
+			
+			if (scrollRect)
+			{
+				scrollRect = new Rectangle(0, 0, width, height);
+			}
 		}
 		
 		override public function set height(value:Number):void
@@ -197,6 +228,11 @@ package org.openvideoplayer.gateways
 			if (!isNaN(backgroundColor))
 			{
 				drawBackground();
+			}
+			
+			if (scrollRect)
+			{
+				scrollRect = new Rectangle(0, 0, width, height);
 			}
 		}
 		
