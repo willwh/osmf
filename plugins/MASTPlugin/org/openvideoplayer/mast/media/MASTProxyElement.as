@@ -110,6 +110,10 @@ package org.openvideoplayer.mast.media
 			var mediaElement:MediaElement = serialElement.getChildAt(0);
 			
 			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+			if (tempResource == null)
+			{
+				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
+			}
 			
 			var facet:IFacet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
 			if (facet == null)
@@ -190,7 +194,11 @@ package org.openvideoplayer.mast.media
 				// expose the base ILoadable, which we can then use to do
 				// the actual load.
 				removeTrait(MediaTraitType.LOADABLE);
-				(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+				var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+				if (loadable)
+				{
+					loadable.load();
+				}
 			}
 			else if (event.newState == LoadState.LOAD_FAILED)
 			{
@@ -271,6 +279,8 @@ package org.openvideoplayer.mast.media
 		}
 		
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
+		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
+		
 		CONFIG::LOGGING
 		private static const logger:ILogger = Log.getLogger("MASTProxyElement");			
 		

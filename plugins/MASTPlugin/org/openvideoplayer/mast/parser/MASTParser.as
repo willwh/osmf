@@ -75,7 +75,11 @@ package org.openvideoplayer.mast.parser
 			}
 			catch (err:Error) 
 			{
-				debug("parse() - Exception occurred : " + err.message);				
+				CONFIG::LOGGING
+				{
+					logger.debug("parse() - Exception occurred : " + err.message);
+				}
+				
 				throw err;
 			}
 			
@@ -312,15 +316,7 @@ package org.openvideoplayer.mast.parser
 			}
 			return targetObj;
 		}
-		
-		private function debug(...args):void 
-		{
-			CONFIG::LOGGING
-			{
-				logger.debug(args);
-			}
-		}
-				
+						
 		CONFIG::LOGGING
 		private static const logger:ILogger = Log.getLogger("MASTParser");			
 	}
