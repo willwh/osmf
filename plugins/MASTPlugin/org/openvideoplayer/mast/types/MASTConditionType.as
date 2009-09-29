@@ -21,6 +21,10 @@
 *****************************************************/
 package org.openvideoplayer.mast.types
 {
+	/**
+	 * This class represents the valid condition types
+	 * in a MAST document.
+	 */
 	public class MASTConditionType
 	{
 		public static const EVENT:MASTConditionType = new MASTConditionType("event");
@@ -34,6 +38,9 @@ package org.openvideoplayer.mast.types
 			_type = type;
 		}
 		
+		/**
+		 * Returns the condition type as a string.
+		 */
 		public function get type():String
 		{
 			return _type;

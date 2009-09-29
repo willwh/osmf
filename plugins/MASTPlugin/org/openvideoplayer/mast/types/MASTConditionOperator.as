@@ -21,6 +21,10 @@
 *****************************************************/
 package org.openvideoplayer.mast.types
 {
+	/**
+	 * This class represents the valid operator values for a MAST
+	 * document.
+	 */
 	public class MASTConditionOperator
 	{
 		public static const EQ:MASTConditionOperator 	= new MASTConditionOperator("EQ");
@@ -39,6 +43,9 @@ package org.openvideoplayer.mast.types
 			_operator = operator;
 		}
 		
+		/**
+		 * Returns string value of the operator.
+		 */
 		public function get operator():String
 		{
 			return _operator;

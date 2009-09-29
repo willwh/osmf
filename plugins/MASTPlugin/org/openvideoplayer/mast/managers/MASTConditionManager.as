@@ -73,6 +73,18 @@ package org.openvideoplayer.mast.managers
 			
 			processCondition();
 		}
+		
+		/**
+		 * Override this method to provide a custom interval for 
+		 * the property check timer. The default is 250 milliseconds.
+		 * This is the timer interval for the time that checks 
+		 * property conditions every 'n' milliseconds. This method should
+		 * return a value in milliseconds.
+		 */
+		protected function get propertyConditionCheckInterval():int
+		{
+			return DEFAULT_PROPERTY_COND_CHECK_INTERVAL;
+		} 
 
 		private function processCondition():void
 		{
@@ -138,8 +150,11 @@ package org.openvideoplayer.mast.managers
 				throw new IllegalOperationError("Unable to map an event condition in the MAST document to a trait that dispatches that event.");
 			}
 						
-			trace("adding a listener for this event: " +eventName);
-									
+			CONFIG::LOGGING
+			{	
+				logger.debug("adding a listener for this event: " +eventName);
+			}
+			
 			listenForTraitEvent(traitType, getDefinitionByName(eventClassName), eventType)			
 		}
 		
@@ -232,7 +247,7 @@ package org.openvideoplayer.mast.managers
 			}
 			else
 			{
-				var timer:Timer = new Timer(250);
+				var timer:Timer = new Timer(propertyConditionCheckInterval);
 				timer.addEventListener(TimerEvent.TIMER, onPropertyListenerTimer);
 				timer.start();
 				
@@ -264,7 +279,10 @@ package org.openvideoplayer.mast.managers
 		
 		private function evaluateEventCondition(event:TraitEvent):void
 		{
-			trace("In evaluateEventCondition - event="+ event.toString());
+			CONFIG::LOGGING
+			{
+				lovver.debug("In evaluateEventCondition - event="+ event.toString());
+			}
 			
 			// Now evaluate the condition and all child conditions
 			var conditionTrue:Boolean = false;
@@ -333,7 +351,7 @@ package org.openvideoplayer.mast.managers
 				if (childCondition.type == MASTConditionType.EVENT)
 				{
 					// Event condition types are not allowed as child conditions
-					continue;  //$$$todo: throw here?
+					throw new IllegalOperationError(ILLEGAL_CHILD_CONDITION_ERROR);
 				}
 				
 				// If any child conditions evaluate to false, this condition is false
@@ -414,7 +432,7 @@ package org.openvideoplayer.mast.managers
 					case MASTConditionOperator.NEQ:
 						return propertyValue != property;
 					default:
-						// TODO
+						throw new IllegalOperationError(UNKOWN_OPERATOR_ERROR);
 				}
 			}
 			
@@ -480,6 +498,13 @@ package org.openvideoplayer.mast.managers
 		private var _condition:MASTCondition;
 		private var _mastAdapter:MASTAdapter;
 		
+		private static const DEFAULT_PROPERTY_COND_CHECK_INTERVAL:int = 250;
 		private static const UNKNOWN_TRAIT_OR_EVENT_ERROR:String = "Unknown trait name or event name in MAST document";
+		private static const ILLEGAL_CHILD_CONDITION_ERROR:String = "Child conditions cannot be Event conditions";
+		private static const UNKOWN_OPERATOR_ERROR:String = "Unkown operator in MAST document";
+		
+		CONFIG::LOGGING
+		private static const logger:ILogger = Log.getLogger("MASTConditionManager");			
+		
 	}
 }

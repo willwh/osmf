@@ -27,6 +27,9 @@ package
 	import org.openvideoplayer.mast.MASTPluginInfo;
 	import org.openvideoplayer.plugin.IPluginInfo;
 
+	/**
+	 * The root level object of the MAST plugin.
+	 */
 	public class MASTPlugin extends Sprite
 	{	
 		/**
@@ -41,6 +44,9 @@ package
 			_pluginInfo = new MASTPluginInfo();
 		}
 		
+		/**
+		 * Gives the player the object which implements the OSMF IPluginInfo interface.
+		 */		
 		public function get pluginInfo():IPluginInfo
 		{
 			return _pluginInfo;

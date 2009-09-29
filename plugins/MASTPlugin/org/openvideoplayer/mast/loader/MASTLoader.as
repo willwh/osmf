@@ -87,7 +87,10 @@ package org.openvideoplayer.mast.loader
 						
 			httpLoadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
 			
-			trace("MASTLoader: Downloading document at " + URLResource(httpLoadable.resource).url.rawUrl);
+			CONFIG::LOGGING
+			{
+				logger.debug("Downloading document at " + URLResource(httpLoadable.resource).url.rawUrl);
+			}
 			
 			httpLoader.load(httpLoadable);
 			
@@ -158,5 +161,8 @@ package org.openvideoplayer.mast.loader
 		}		
 
 		private var httpLoader:HTTPLoader;		
+		
+		CONFIG::LOGGING
+		private static const logger:ILogger = Log.getLogger("MASTLoader");			
 	}
 }

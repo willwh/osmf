@@ -172,34 +172,9 @@ package org.openvideoplayer.mast.parser
 										break;
 								}
 								
-								var operator:MASTConditionOperator;
 								var childOperator:String = child.@operator;
-								
-								switch (childOperator)
-								{
-									case MASTConditionOperator.EQ.operator:
-										operator = MASTConditionOperator.EQ;
-										break;
-									case MASTConditionOperator.GEQ.operator:
-										operator = MASTConditionOperator.GEQ;
-										break;
-									case MASTConditionOperator.GTR.operator:
-										operator = MASTConditionOperator.GTR;
-										break;
-									case MASTConditionOperator.LEQ.operator:
-										operator = MASTConditionOperator.LEQ;
-										break;
-									case MASTConditionOperator.LT.operator:
-										operator = MASTConditionOperator.LT;
-										break;
-									case MASTConditionOperator.MOD.operator:
-										operator = MASTConditionOperator.MOD;
-										break;
-									case MASTConditionOperator.NEQ.operator:
-										operator = MASTConditionOperator.NEQ;
-										break;
-								}
-																									
+								var operator:MASTConditionOperator = findConditionOperator(childOperator);
+																																	
 								// Look for child conditions
 								var childConds:Vector.<MASTCondition> = parseCondition(child, trigger);
 								
@@ -212,6 +187,38 @@ package org.openvideoplayer.mast.parser
 				}
 			}
 			return condObjs;
+		}
+		
+		private function findConditionOperator(operator:String):MASTConditionOperator
+		{
+			var operatorObj:MASTConditionOperator;
+			
+			switch (operator)
+			{
+				case MASTConditionOperator.EQ.operator:
+					operatorObj = MASTConditionOperator.EQ;
+					break;
+				case MASTConditionOperator.GEQ.operator:
+					operatorObj = MASTConditionOperator.GEQ;
+					break;
+				case MASTConditionOperator.GTR.operator:
+					operatorObj = MASTConditionOperator.GTR;
+					break;
+				case MASTConditionOperator.LEQ.operator:
+					operatorObj = MASTConditionOperator.LEQ;
+					break;
+				case MASTConditionOperator.LT.operator:
+					operatorObj = MASTConditionOperator.LT;
+					break;
+				case MASTConditionOperator.MOD.operator:
+					operatorObj = MASTConditionOperator.MOD;
+					break;
+				case MASTConditionOperator.NEQ.operator:
+					operatorObj = MASTConditionOperator.NEQ;
+					break;
+			}
+			
+			return operatorObj;
 		}
 		
 		private function parseSources(node:XML):MASTSource 
@@ -308,13 +315,14 @@ package org.openvideoplayer.mast.parser
 		
 		private function debug(...args):void 
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> MASTParser." + args);
+				logger.debug(args);
 			}
 		}
 				
-		private const DEBUG:Boolean = true;		
+		CONFIG::LOGGING
+		private static const logger:ILogger = Log.getLogger("MASTParser");			
 	}
 	
 }

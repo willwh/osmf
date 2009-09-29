@@ -23,9 +23,21 @@
 ******************************************************/
 package org.openvideoplayer.mast.media
 {
+	import flash.errors.IllegalOperationError;
+	
 	import org.openvideoplayer.composition.SerialElement;
 	import org.openvideoplayer.events.LoadableStateChangeEvent;
 	import org.openvideoplayer.events.TraitsChangeEvent;
+	import org.openvideoplayer.logging.ILogger;
+	import org.openvideoplayer.logging.Log;
+	import org.openvideoplayer.mast.loader.MASTDocumentProcessedEvent;
+	import org.openvideoplayer.mast.loader.MASTDocumentProcessor;
+	import org.openvideoplayer.mast.loader.MASTLoadedContext;
+	import org.openvideoplayer.mast.loader.MASTLoader;
+	import org.openvideoplayer.mast.managers.MASTConditionManager;
+	import org.openvideoplayer.mast.model.*;
+	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
+	import org.openvideoplayer.mast.types.MASTConditionType;
 	import org.openvideoplayer.media.IMediaResource;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
@@ -41,15 +53,12 @@ package org.openvideoplayer.mast.media
 	import org.openvideoplayer.traits.PlayableTrait;
 	import org.openvideoplayer.utils.URL;
 
-	import org.openvideoplayer.mast.loader.MASTDocumentProcessedEvent;
-	import org.openvideoplayer.mast.loader.MASTDocumentProcessor;
-	import org.openvideoplayer.mast.loader.MASTLoadedContext;
-	import org.openvideoplayer.mast.loader.MASTLoader;
-	import org.openvideoplayer.mast.model.*;
-	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
-	import org.openvideoplayer.mast.types.MASTConditionType;
-	import org.openvideoplayer.mast.managers.MASTConditionManager;
-
+	/**
+	 * The MASTProxyElement class is a wrapper for the media supplied.
+	 * It's purpose is to override the loadable and playable traits to 
+	 * allow the processing of a MAST document and to insert the media
+	 * elements found in the MAST payload.
+	 */
 	public class MASTProxyElement extends ProxyElement
 	{
 		public static const MAST_METADATA_NAMESPACE:URL	= new URL("http://www.akamai.com/mast");
@@ -57,13 +66,78 @@ package org.openvideoplayer.mast.media
 		
 		/**
 		 * Constructor.
+		 * 
+		 * @inheritDoc
 		 **/
 		public function MASTProxyElement(wrappedElement:MediaElement=null)
 		{
 			super(wrappedElement);
 		}
 		
-		public function removeCustomPlayableTrait():void
+		/**
+		 * @inheritDoc
+		 */
+		override public function set wrappedElement(value:MediaElement):void
+		{
+			if (value != null &&
+				!(value is SerialElement))
+			{
+				// Wrap any child in a SerialElement.
+				var serialElement:SerialElement = new SerialElement();
+				serialElement.addChild(value);
+				
+				value = serialElement;
+			}
+			
+			super.wrappedElement = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override protected function setupOverriddenTraits():void
+		{
+			super.setupOverriddenTraits();
+			
+			// Override the ILoadable trait with our own custom ILoadable,
+			// which retrieves the MAST document, parses it, and sets up
+			// the triggers in relation to our wrapped MediaElement.
+			//
+			
+			// Get the MAST url resource from the metadata of the element
+			// that is wrapped.
+			var serialElement:SerialElement = super.wrappedElement as SerialElement;
+			var mediaElement:MediaElement = serialElement.getChildAt(0);
+			
+			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+			
+			var facet:IFacet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
+			if (facet == null)
+			{
+				throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);
+			}			
+			
+			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
+			
+			var loadableTrait:LoadableTrait
+				= new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
+			
+			loadableTrait.addEventListener
+				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+				, onLoadableStateChange
+				);
+			
+			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
+			
+			// Override the IPlayable trait so we can do any necessary
+			// pre-processing, such as a payload that would cause a 
+			// pre-roll.
+			
+			var playableTrait:PlayableTrait = new MASTPlayableTrait(this);
+			addTrait(MediaTraitType.PLAYABLE, playableTrait);
+		}
+		
+		private function removeCustomPlayableTrait():void
 		{
 			var playableTrait:MASTPlayableTrait = this.getTrait(MediaTraitType.PLAYABLE) as MASTPlayableTrait;
 			
@@ -101,62 +175,7 @@ package org.openvideoplayer.mast.media
 				playable.play();
 			}
 		}
-		
-
-		override public function set wrappedElement(value:MediaElement):void
-		{
-			if (value != null &&
-				!(value is SerialElement))
-			{
-				// Wrap any child in a SerialElement.
-				var serialElement:SerialElement = new SerialElement();
-				serialElement.addChild(value);
 				
-				value = serialElement;
-			}
-			
-			super.wrappedElement = value;
-		}
-		
-		override protected function setupOverriddenTraits():void
-		{
-			super.setupOverriddenTraits();
-			
-			// Override the ILoadable trait with our own custom ILoadable,
-			// which retrieves the MAST document, parses it, and sets up
-			// the triggers in relation to our wrapped MediaElement.
-			//
-			
-			// Get the MAST url resource from the metadata of the element
-			// that is wrapped.
-			var serialElement:SerialElement = super.wrappedElement as SerialElement;
-			var mediaElement:MediaElement = serialElement.getChildAt(0);
-			
-			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
-			
-			var facet:IFacet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
-			//$$$todo: throw an exception if facet is null
-			
-			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
-			
-			var loadableTrait:LoadableTrait
-				= new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
-			
-			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
-				);
-			
-			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
-			
-			// Override the IPlayable trait so we can do any necessary
-			// pre-processing.
-			
-			var playableTrait:PlayableTrait = new MASTPlayableTrait(this);
-			addTrait(MediaTraitType.PLAYABLE, playableTrait);
-			
-		}
-		
 		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
 		{
 			if (event.newState == LoadState.LOADED)
@@ -244,8 +263,16 @@ package org.openvideoplayer.mast.media
 				}
 			}
 			
-			trace("MASTProxyElement - getInsertionIndex() about to return "+index);
+			CONFIG::LOGGING
+			{
+				logger.debug("MASTProxyElement - getInsertionIndex() about to return "+index);
+			}
 			return index;
 		}
+		
+		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
+		CONFIG::LOGGING
+		private static const logger:ILogger = Log.getLogger("MASTProxyElement");			
+		
 	}
 }

@@ -29,8 +29,19 @@ package org.openvideoplayer.mast.traits
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.traits.PlayableTrait;
 
+	/**
+	 * The purpose of this class is to provide a PlayableTrait
+	 * that can inform another class that a play request
+	 * is pending. For example if a proxy class were to 
+	 * override the PlayableTrait, it could use this class
+	 * to determine whether or not to call play() on the original
+	 * PlayableTrait when removing this trait.
+	 */
 	public class MASTPlayableTrait extends PlayableTrait
 	{
+		/**
+		 * @inheritDoc
+		 */
 		public function MASTPlayableTrait(owner:MediaElement)
 		{
 			super(owner);
@@ -38,15 +49,16 @@ package org.openvideoplayer.mast.traits
 			_playRequestPending = false;
 		}
 		
-		
+		/**
+		 * Returns true if a play request was made on this trait.
+		 */
 		public function get playRequestPending():Boolean
 		{
 			return _playRequestPending;
 		}
 		
 		/**
-		 * The purpose of this method is to allows us to wait until the MAST 
-		 * source payload has completely loaded before calling play() on the wrappedElement.
+		 * @inheritDoc
 		 */
 		override protected function processPlayingChange(newPlaying:Boolean):void
 		{

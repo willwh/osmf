@@ -26,8 +26,6 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
 	
 	import org.openvideoplayer.display.MediaPlayerSprite;
@@ -139,8 +137,18 @@ package
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			
+			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
+			
 			sprite.element = mediaElement;
 		}
+		
+   		private function onMediaError(event:MediaErrorEvent):void
+   		{
+   			var errMsg:String = "Media error : code="+event.error.errorCode+" description="+event.error.description;
+   			
+   			trace(errMsg);
+   		}
+		
 		
 		private function onStageResize(event:Event):void
 		{

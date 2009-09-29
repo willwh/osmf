@@ -108,12 +108,12 @@ package org.openvideoplayer.mast.loader
 		private function processMASTCondition(trigger:MASTTrigger, condition:MASTCondition, mediaElement:MediaElement, start:Boolean):void
 		{
 			var conditionManager:MASTConditionManager = new MASTConditionManager();
-			conditionManager.addEventListener("conditionTrue", onConditionTrue);
+			conditionManager.addEventListener(MASTConditionManager.CONDITION_TRUE, onConditionTrue);
 			conditionManager.setContext(mediaElement, condition);
 		
 			function onConditionTrue(event:Event):void
 			{
-				conditionManager.removeEventListener("conditionTrue", onConditionTrue);
+				conditionManager.removeEventListener(MASTConditionManager.CONDITION_TRUE, onConditionTrue);
 				loadSources(trigger, condition);
 			}
 		}
