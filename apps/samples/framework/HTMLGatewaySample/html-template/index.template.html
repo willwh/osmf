@@ -42,20 +42,20 @@ var requiredRevision = ${version_revision};
 
 function onOSMFGatewayRegistered(gateway)
 {
-	var osmf = document.osmf;
+	var osmf = document["osmf"];
 	osmf.trace("Gateway " + gateway.gatewayId + " added.");
-	
+		
 	if (gateway.gatewayId == "bannerGateway")
 	{
 		gateway.onElementAdd = function(element)
 		{
 			osmf.trace("Element " + element.elementId + " added.");
 			
-			// The JavaScript determines what traits apply to this
+			// From JavaScript we determine what traits apply to this
 			// element:
-			element.playable = true;
-			element.pausable = true;
-			element.temporal = true;
+			element.setPlayable(true);
+			element.setPausable(true);
+			element.setTemporal(true);
 			
 			element.load = function(url)
 			{
@@ -63,20 +63,20 @@ function onOSMFGatewayRegistered(gateway)
 				osmf.trace(this.elementId + " loading " + url);
 				bannerImage.src = url;
 				bannerImage.onclick = onBannerClick;
-				this.loadState = osmf.constants.loadState.LOADED;
+				this.setLoadState(osmf.constants.loadState.LOADED);
 				
 				// Set the duration of the element, and
 				// cater for a callback that will signal
 				// when its duration is reached. This will
 				// cause the next banner to be loaded from
 				// Flash:
-				this.duration = 5;
-				this.position = 0;
+				this.setDuration(5);
+				this.setPosition(0);
 				
 				function complete()
 				{
 					bannerImage.src = null;
-					element.position = 5; // seconds
+					element.setPosition(5); // seconds
 				}
 				
 				setTimeout(complete, 5 * 1000 /* milliseconds */);
@@ -109,13 +109,13 @@ function onBannerClick()
 	
 	if (activeBanner)
 	{
-		if (activeBanner.playing)
+		if (activeBanner.getPlaying())
 		{
-			activeBanner.paused = true;
+			activeBanner.setPaused(true);
 		}
 		else
 		{
-			activeBanner.playing = true;
+			activeBanner.setPlaying(true);
 		}
 	}
 }

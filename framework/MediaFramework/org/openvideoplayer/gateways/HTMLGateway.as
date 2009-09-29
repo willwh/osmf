@@ -203,78 +203,79 @@ package org.openvideoplayer.gateways
 			var element:MediaElement = elements[elementId];
 			if (element)
 			{
+				// All property names start with a capital, for they translate
+				// to 'getXxxx' in JavaScript.
 				switch (property)
 				{
 					// MediaElement core:
-					case "resource":
+					case "Resource":
 						if (element.resource is IURLResource)
 						{
 							result = IURLResource(element.resource).url;
 						}
 						break;
 					// ILoadable:
-					case "loadState":
+					case "LoadState":
 						if (element.hasTrait(MediaTraitType.LOADABLE))
 						{
 							result = ILoadable(element.getTrait(MediaTraitType.LOADABLE)).loadState.toString();
 						}
 						break;
 					// IPlayable:
-					case "playable":
+					case "Playable":
 						result = element.hasTrait(MediaTraitType.PLAYABLE);
 						break;
-					case "playing":
+					case "Playing":
 						if (element.hasTrait(MediaTraitType.PLAYABLE))
 						{
 							result = IPlayable(element.getTrait(MediaTraitType.PLAYABLE)).playing;
 						}
 						break;
 					// IPausable:
-					case "pausable":
+					case "Pausable":
 						result = element.hasTrait(MediaTraitType.PAUSABLE);
 						break;	
-					case "paused":
+					case "Paused":
 						if (element.hasTrait(MediaTraitType.PAUSABLE))
 						{
 							result = IPausable(element.getTrait(MediaTraitType.PAUSABLE)).paused;
 						}
 						break;
 					// ITemporal:
-					case "temporal":
+					case "Temporal":
 						result = element.hasTrait(MediaTraitType.TEMPORAL);
 						break;
-					case "duration":
+					case "Duration":
 						if (element.hasTrait(MediaTraitType.TEMPORAL))
 						{
 							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).duration;
 						}
 						break;
-					case "position":
+					case "Position":
 						if (element.hasTrait(MediaTraitType.TEMPORAL))
 						{
 							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).position;
 						}
 					// IAudible:
-					case "volume":
+					case "Volume":
 						if (element.hasTrait(MediaTraitType.AUDIBLE))
 						{
 							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).volume;
 						}
 						break;
-					case "muted":
+					case "Muted":
 						if (element.hasTrait(MediaTraitType.AUDIBLE))
 						{
 							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).muted;
 						}
 						break;
-					case "pan":
+					case "Pan":
 						if (element.hasTrait(MediaTraitType.AUDIBLE))
 						{
 							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).pan;
 						}
 						break;
 				}
-				
 			}
 			
 			return result;
@@ -294,10 +295,12 @@ package org.openvideoplayer.gateways
 					var audible:AudibleTrait = htmlElement.getTrait(MediaTraitType.AUDIBLE) as AudibleTrait;
 				}
 				
+				// All property names start with a capital, for they translate
+				// to 'setXxxx' in JavaScript.
 				switch (property)
 				{
 					// ILoadable
-					case "loadState":
+					case "LoadState":
 						var newState:LoadState = loadStateFromString(value);
 						if (htmlElement)
 						{
@@ -305,13 +308,13 @@ package org.openvideoplayer.gateways
 						}
 						break;
 					// IPlayable:
-					case "playable":
+					case "Playable":
 						if (htmlElement)
 						{
 							htmlElement.setTraitEnabled(MediaTraitType.PLAYABLE, value as Boolean);
 						}
 						break;
-					case "playing":
+					case "Playing":
 						if (playable)
 						{
 							if (value == true)
@@ -325,13 +328,13 @@ package org.openvideoplayer.gateways
 						}
 						break;
 					// IPausable:
-					case "pausable":
+					case "Pausable":
 						if (htmlElement)
 						{
 							htmlElement.setTraitEnabled(MediaTraitType.PAUSABLE, value as Boolean);
 						}
 						break;
-					case "paused":
+					case "Paused":
 						if (pausable)
 						{
 							if (value == true)
@@ -345,44 +348,44 @@ package org.openvideoplayer.gateways
 						}
 						break;
 					// ITemporal:
-					case "temporal":
+					case "Temporal":
 						if (htmlElement)
 						{
 							htmlElement.setTraitEnabled(MediaTraitType.TEMPORAL, value as Boolean);
 						}
 						break;
-					case "duration":
+					case "Duration":
 						if (temporal)
 						{
 							temporal.duration = value as Number;
 						}
 						break;
-					case "position":
+					case "Position":
 						if (temporal)
 						{
 							temporal.position = value as Number;
 						}
 						break;
 					// IAudible
-					case "audible":
+					case "Audible":
 						if (htmlElement)
 						{
 							htmlElement.setTraitEnabled(MediaTraitType.AUDIBLE, value as Boolean);
 						}
 						break;
-					case "volume":
+					case "Volume":
 						if (audible)
 						{
 							audible.volume = value as Number;
 						}
 						break;
-					case "muted":
+					case "Muted":
 						if (audible)
 						{
 							audible.muted = value as Boolean;
 						}
 						break;
-					case "pan":
+					case "Pan":
 						if (audible)
 						{
 							audible.pan = value as Number;
@@ -506,30 +509,26 @@ package org.openvideoplayer.gateways
         	<![CDATA[
         	function addGetter(element, property)
         	{
-        		element.__defineGetter__
-        			( property
-        			, function()
+        		element["get" + property]
+        			= function()
         				{ 
         					return element
 	        					.__gateway__
 	        					.__flashObject__
 	        					.getProperty(element.elementId, property);
         				}
-        			);
         	}
         	
         	function addSetter(element, property)
         	{
-        		element.__defineSetter__
-        			( property
-        			, function(value)
+        		element["set" + property]
+        			= function(value)
         				{ 
         					return element
 	        					.__gateway__
 	        					.__flashObject__
 	        					.setProperty(element.elementId, property, value);
         				}
-        			);
         	}
         	
         	function addGetSet(element, property)
@@ -600,7 +599,7 @@ package org.openvideoplayer.gateways
         			var element = new MediaElement(this, elementId);
         			this.elements[elementId] = element;
         			
-        			if	(	this.hasOwnProperty("onElementAdd")
+        			if	(	this["onElementAdd"] != null
         				&&	this.onElementAdd.length == 1
         				)
         			{
@@ -620,7 +619,7 @@ package org.openvideoplayer.gateways
         			
         			delete this.elements[elementId];
         			
-        			if	(	this.hasOwnProperty("onElementRemove")
+        			if	(	this["onElementRemove"] != null
         				&&	this.onElementRemove.length == 1
         				)
         			{
@@ -644,38 +643,38 @@ package org.openvideoplayer.gateways
         		
         		// ILoadable bridge: (all HTML elements are loadable)
         		
-        		addSetter	(this, 	"loadState");
+        		addSetter	(this, 	"LoadState");
         		addCallback	(this, 	"load", 1);					// urlResource
         		addCallback	(this, 	"unload", 0); 
         		
 				// IPlayable bridge:
 				
-				addGetSet	(this,	"playable");
-				addGetSet	(this, 	"playing");
+				addGetSet	(this,	"Playable");
+				addGetSet	(this, 	"Playing");
         		addCallback	(this, 	"onPlayingChange", 1);		// playing;
         		
         		// IPausable bridge:
         		
-        		addGetSet	(this,	"pausable");
-        		addGetSet	(this,	"paused");
+        		addGetSet	(this,	"Pausable");
+        		addGetSet	(this,	"Paused");
         		addCallback	(this,	"onPausedChange", 1);		// paused;
         		
         		// ITemporal bridge:
         		
-        		addGetSet	(this,	"temporal");
-        		addGetSet	(this,	"duration");
+        		addGetSet	(this,	"Temporal");
+        		addGetSet	(this,	"Duration");
         		addCallback (this,	"onDurationChange", 1);		// duration;
-        		addGetSet	(this,	"position");
+        		addGetSet	(this,	"Position");
         		addCallback	(this,	"onDurationReached");
         		
         		// IAudible bridge:
         		
-        		addGetSet	(this,	"audible");			
-        		addGetSet	(this,	"volume");
+        		addGetSet	(this,	"Audible");			
+        		addGetSet	(this,	"Volume");
         		addCallback	(this,	"onVolumeChange", 1);		// volume;
-        		addGetSet	(this,	"muted");
+        		addGetSet	(this,	"Muted");
         		addCallback	(this,	"onMutedChange", 1);		// muted;
-        		addGetSet	(this,	"pan");
+        		addGetSet	(this,	"Pan");
         		addCallback	(this,	"onPanChange", 1);			// pan;
         	}
         	]]>;
@@ -683,20 +682,18 @@ package org.openvideoplayer.gateways
         // Defines the logic that sets up the document.osmf object, adding a gateway:
         private static const registrationLogic_js:XML =
         	<![CDATA[
-        	
         	// Get a reference to, or otherwise construct, the document.osmf.gateways path:
-            	
-        	var osmf 
+            var osmf 
         		= document.osmf
-        		= document.osmf || new Object();
+        		= document.osmf || {};
         		
         	osmf.constants
         		= osmf.constants || new Constants();
         		
         	var gateways
         		= osmf.gateways
-        		= osmf.gateways || new Object();
-        	
+        		= osmf.gateways || {};
+        
         	// For debugging, provide a 'trace' function on: it will
         	// forward the message to Flash:
         	
@@ -706,13 +703,13 @@ package org.openvideoplayer.gateways
         		{
         			document.getElementById(objectId).invoke(null, "trace", [message]);
         		}
-        	}	
-        	
+        	}
+	        	
         	// See if the gateway with the specified name has been registered:
         	
         	var identifier = objectId + "_" + gatewayId;
         	
-        	if (gateways.identifier != null)
+        	if (gateways[identifier] != null)
         	{
         		throw "A gateway by the name of "+identifier+" has already been registered."
         	}
@@ -722,16 +719,15 @@ package org.openvideoplayer.gateways
         			= gateways[identifier]
         			= new Gateway(objectId, gatewayId);
         	}
-        	
+	        
         	// Invoke "onOSMFGatewayRegistered"
-        	
-        	if 	(	hasOwnProperty("onOSMFGatewayRegistered")
-        		&&	onOSMFGatewayRegistered.length == 1
-        		)
+        	//if 	(	this["onOSMFGatewayRegistered"] != null
+        	//	&&	this.onOSMFGatewayRegistered.length == 1
+        	//	)
         	{
-        		onOSMFGatewayRegistered(gateway);
+        		this.onOSMFGatewayRegistered(gateway);
         	}
-        	
+	        
         	]]>;
 		
 		private static const registerGateway_js:XML = new XML
