@@ -112,8 +112,8 @@ package org.openvideoplayer.layout
 			var view:DisplayObject = target.view;
 			if (view)
 			{
-				view.x = isNaN(rect.x) ? view.x : rect.x;
-				view.y = isNaN(rect.y) ? view.y : rect.y;
+				view.x = rect.x;
+				view.y = rect.y;
 				view.width = isNaN(rect.width) ? view.width : rect.width;
 				view.height = isNaN(rect.height) ? view.height : rect.height;
 			}
@@ -131,7 +131,7 @@ package org.openvideoplayer.layout
 								):Rectangle
 		{
 			var targetContext:ILayoutContext = target as ILayoutContext;
-			var rect:Rectangle = new Rectangle(NaN, NaN, target.intrinsicWidth, target.intrinsicHeight);
+			var rect:Rectangle = new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
 			
 			var attributes:LayoutAttributesFacet
 				= target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet
@@ -141,8 +141,8 @@ package org.openvideoplayer.layout
 				= target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
 				as AbsoluteLayoutFacet;
 			
-			var deltaX:Number = 0;
-			var deltaY:Number = 0;
+			var deltaX:Number;
+			var deltaY:Number;
 			
 			var toDo:int = ALL;
 			
@@ -307,11 +307,11 @@ package org.openvideoplayer.layout
 			{
 				if (!isNaN(padding.left) && !(toDo & X))
 				{
-					rect.x = padding.left + rect.x;
+					rect.x += padding.left;
 				}
 				if (!isNaN(padding.top) && !(toDo & Y))
 				{
-					rect.y = padding.top + rect.y;
+					rect.y += padding.top;
 				}
 				if (!isNaN(padding.right) && !(toDo & WIDTH))
 				{
@@ -366,45 +366,49 @@ package org.openvideoplayer.layout
 			// Apply alignment (if there's surpluss space reported:)
 			if (deltaX || deltaY)
 			{
+				deltaX ||= 0;
+				deltaY ||= 0;
+				
 				switch (attributes.alignment)
 				{
 					case RegistrationPoint.TOP_LEFT:
 						// all set.
 						break;
 					case RegistrationPoint.MIDDLE_LEFT:
-						rect.y = (rect.y ? rect.y : 0) + deltaY / 2;
+						rect.y += deltaY / 2;
 						toDo ^= Y;
 						break;
 					case RegistrationPoint.BOTTOM_LEFT:
-						rect.y = (rect.y ? rect.y : 0) + deltaY;
+						rect.y += deltaY;
 						toDo ^= Y;
 						break;
 					case RegistrationPoint.TOP_MIDDLE:
-						rect.x = (rect.x ? rect.x : 0) + deltaX / 2;
+						rect.x += deltaX / 2;
 						toDo ^= X;
 						break;
 					case RegistrationPoint.CENTER:
-						rect.x = (rect.x ? rect.x : 0) + deltaX / 2;
-						rect.y = (rect.y ? rect.y : 0) + deltaY / 2;
+						rect.x += deltaX / 2;
+						rect.y += deltaY / 2;
 						toDo ^= POSITION;
 						break;
 					case RegistrationPoint.BOTTOM_MIDDLE:
-						rect.x = (rect.x ? rect.x : 0) + deltaX / 2;
-						rect.y = (rect.y ? rect.y : 0) + deltaY;
+						rect.x += deltaX / 2;
+						rect.y += deltaY;
 						toDo ^= POSITION;
 						break;
 					case RegistrationPoint.TOP_RIGHT:
-						rect.x = (rect.x ? rect.x : 0) + deltaX;
+						rect.x += deltaX;
+						toDo ^= X;
 						break;
 					case RegistrationPoint.MIDDLE_RIGHT:
-						rect.x = (rect.x ? rect.x : 0) + deltaX;
-						rect.y = (rect.y ? rect.y : 0) + deltaY / 2;
+						rect.x += deltaX;
+						rect.y += deltaY / 2;
 						toDo ^= POSITION;
 						break;
 					case RegistrationPoint.BOTTOM_RIGHT:
-						rect.x = (rect.x ? rect.x : 0) + deltaX;
-						rect.y = (rect.y ? rect.y : 0) + deltaY;
-						toDo ^= X;
+						rect.x += deltaX;
+						rect.y += deltaY;
+						toDo ^= POSITION;
 						break; 
 				}
 			}
@@ -417,39 +421,39 @@ package org.openvideoplayer.layout
 					// all set.
 					break;
 				case RegistrationPoint.MIDDLE_LEFT:
-					rect.y = (rect.y ? rect.y : 0) - rect.height / 2;
+					rect.y -= rect.height / 2;
 					toDo ^= Y;
 					break;
 				case RegistrationPoint.BOTTOM_LEFT:
-					rect.y = (rect.y ? rect.y : 0) - rect.height;
+					rect.y -= rect.height;
 					toDo ^= Y;
 					break;
 				case RegistrationPoint.TOP_MIDDLE:
-					rect.x = (rect.x ? rect.x : 0) - rect.width / 2;
+					rect.x -= rect.width / 2;
 					toDo ^= X;
 					break;
 				case RegistrationPoint.CENTER:
-					rect.x = (rect.x ? rect.x : 0) - rect.width / 2;
-					rect.y = (rect.y ? rect.y : 0) - rect.height / 2;
+					rect.x -= rect.width / 2;
+					rect.y -= rect.height / 2;
 					toDo ^= POSITION;
 					break;
 				case RegistrationPoint.BOTTOM_MIDDLE:
-					rect.x = (rect.x ? rect.x : 0) - rect.width / 2;
-					rect.y = (rect.y ? rect.y : 0) - rect.height;
+					rect.x -= rect.width / 2;
+					rect.y -= rect.height;
 					toDo ^= POSITION;
 					break;
 				case RegistrationPoint.TOP_RIGHT:
-					rect.x = (rect.x ? rect.x : 0) - rect.width;
+					rect.x -= rect.width;
 					toDo ^= X;
 					break;
 				case RegistrationPoint.MIDDLE_RIGHT:
-					rect.x = (rect.x ? rect.x : 0) - rect.width;
-					rect.y = (rect.y ? rect.y : 0) - rect.height / 2;
+					rect.x -= rect.width;
+					rect.y -= rect.height / 2;
 					toDo ^= POSITION;
 					break;
 				case RegistrationPoint.BOTTOM_RIGHT:
-					rect.x = (rect.x ? rect.x : 0) - rect.width;
-					rect.y = (rect.y ? rect.y : 0) - rect.height;
+					rect.x -= rect.width;
+					rect.y -= rect.height;
 					toDo ^= POSITION;
 					break;
 			}
