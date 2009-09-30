@@ -61,10 +61,9 @@ function onOSMFGatewayRegistered(gateway)
 			{
 				activeBanner = this;
 				
-				bannerImage = new Image();
 				bannerImage.src = url;
-				
 				bannerImage.onclick = onBannerClick;
+				
 				this.setLoadState(osmf.constants.loadState.LOADED);
 				
 				// Set the duration of the element, and
