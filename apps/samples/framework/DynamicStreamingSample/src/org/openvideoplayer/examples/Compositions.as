@@ -1,9 +1,13 @@
 package org.openvideoplayer.examples
 {
 	import mx.collections.ArrayCollection;
+	import mx.core.Application;
 	
 	import org.openvideoplayer.composition.ParallelElement;
 	import org.openvideoplayer.composition.SerialElement;
+	import org.openvideoplayer.display.ScaleMode;
+	import org.openvideoplayer.layout.LayoutUtils;
+	import org.openvideoplayer.layout.RegistrationPoint;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
 	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -59,16 +63,33 @@ package org.openvideoplayer.examples
 		private function createParallel():MediaElement
 		{
 			var parallel:ParallelElement = new ParallelElement();
-			parallel.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn1()));			
-			parallel.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn2()));			
+			var child1:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), createDyn1());
+			var child2:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), createDyn2());
+			
+		//LayoutUtils.setRelativeLayout(child1.metadata, 70, 70, 0, 0);
+			//LayoutUtils.setLayoutAttributes(child1.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
+		//	LayoutUtils.setRelativeLayout(child2.metadata, 50, 50, 50, 0);
+			//LayoutUtils.setLayoutAttributes(child2.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
+						
+			LayoutUtils.setAbsoluteLayout(parallel.metadata, mx.core.Application.application.width, mx.core.Application.application.height);										
+			parallel.addChild(child1);			
+			parallel.addChild(child2);								
 			return parallel;
 		}
 		
 		private function createSerial():MediaElement
 		{
 			var serial:SerialElement = new SerialElement();
-			serial.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn1()));
-			serial.addChild(new VideoElement(new DynamicStreamingNetLoader(), createDyn2()));
+			var child1:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), createDyn1());
+			var child2:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), createDyn2());
+			
+			LayoutUtils.setAbsoluteLayout(serial.metadata, mx.core.Application.application.width, mx.core.Application.application.height);					
+			
+			LayoutUtils.setRelativeLayout(child1.metadata, 100, 100, 0, 0);
+			LayoutUtils.setRelativeLayout(child2.metadata, 100, 100, 0, 0);
+			
+			serial.addChild(child1);
+			serial.addChild(child2);
 			return serial;
 		}
 		

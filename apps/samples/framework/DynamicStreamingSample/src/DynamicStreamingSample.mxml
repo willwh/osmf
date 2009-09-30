@@ -239,8 +239,8 @@
 				{
 					clearDebugText();
 				}
-				wrapper.width = 640;
-				wrapper.height = 360;
+				//wrapper.width = 640;
+				//wrapper.height = 360;
 			}
 			
 			private function unload():void
@@ -343,28 +343,7 @@
 			
 			private function onDimensionChange(event:DimensionChangeEvent):void 
 			{
-				var width:int = event.newWidth;
-				var height:int = event.newHeight;
 				
-				// Scale to native or smaller
-				if (width > MAX_VIDEO_WIDTH || height > MAX_VIDEO_HEIGHT)
-				{
-					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
-					{
-						wrapper.width = MAX_VIDEO_WIDTH;
-						wrapper.height = MAX_VIDEO_WIDTH * (height/width);
-					}
-					else
-					{
-						wrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						wrapper.height = MAX_VIDEO_HEIGHT;
-					}
-				}
-				else
-				{
-					wrapper.width = event.newWidth;
-					wrapper.height = event.newHeight;			
-				}
 			}
 			
 			private function onDurationChange(event:DurationChangeEvent):void
@@ -498,12 +477,16 @@
 		</mx:HBox>	
 
 		<mx:Spacer height="5" />
-		<mx:HBox>
-			<mx:VBox id="videoContainer" paddingLeft="20">
+		<mx:HBox width="100%"
+			height="100%">
+			<mx:VBox id="videoContainer" 
+				width="100%"
+				height="100%"
+				paddingLeft="20">
 				<mx:Spacer width="10" />
-				<mx:Canvas id="wrapperContainer">
-				    <players:MediaPlayerWrapper id="wrapper" width="640" height="360"  />				
-				</mx:Canvas>
+				
+				<players:MediaPlayerWrapper id="wrapper" width="100%" height="100%"  />				
+				
 			    <mx:VBox id="controlsContainer">
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" />
 		    		<mx:HBox horizontalAlign="right" width="100%">
