@@ -43,13 +43,13 @@ var requiredRevision = ${version_revision};
 function onOSMFGatewayRegistered(gateway)
 {
 	var osmf = document["osmf"];
-//	osmf.trace("Gateway " + gateway.gatewayId + " added.");
+	osmf.trace("Gateway " + gateway.gatewayId + " added.");
 		
 	if (gateway.gatewayId == "bannerGateway")
 	{
 		gateway.onElementAdd = function(element)
 		{
-//			osmf.trace("Element " + element.elementId + " added.");
+			osmf.trace("Element " + element.elementId + " added.");
 			
 			// From JavaScript we determine what traits apply to this
 			// element:
@@ -60,8 +60,10 @@ function onOSMFGatewayRegistered(gateway)
 			element.load = function(url)
 			{
 				activeBanner = this;
-//				osmf.trace(this.elementId + " loading " + url);
+				
+				bannerImage = new Image();
 				bannerImage.src = url;
+				
 				bannerImage.onclick = onBannerClick;
 				this.setLoadState(osmf.constants.loadState.LOADED);
 				
@@ -85,19 +87,19 @@ function onOSMFGatewayRegistered(gateway)
 			element.unload = function()
 			{
 				activeBanner = null;
-//				osmf.trace(element.elementId + "unloading " + url);
+				osmf.trace(element.elementId + "unloading " + url);
 				bannerImage.src = null;
 				this.loadState = osmf.constants.CONSTRUCTED;
 			}
 			
 			element.onPlayingChange = function(playing)
 			{
-//				osmf.trace(element.elementId + " playing changed to " + playing);
+				osmf.trace(element.elementId + " playing changed to " + playing);
 			}
 			
 			element.onPausedChange = function(paused)
 			{
-//				osmf.trace(element.elementId + " paused changed to " + paused);
+				osmf.trace(element.elementId + " paused changed to " + paused);
 			}
 		}
 	}
@@ -125,7 +127,7 @@ function onBannerClick()
 
 <body scroll="no">
 <div id="bannerRegion">
-	<img id="bannerImage" src="" alt="banner" name="banner" width="468" height="60" align="middle">
+	<img id="bannerImage" src="" alt="banner" name="banner">
 </div>
 <script language="JavaScript" type="text/javascript">
 <!--

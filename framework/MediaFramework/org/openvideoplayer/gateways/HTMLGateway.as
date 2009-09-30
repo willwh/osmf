@@ -151,9 +151,9 @@ package org.openvideoplayer.gateways
 				+ gatewayIdentifier + ".";
 			
 			ExternalInterface.marshallExceptions = true;
-			ExternalInterface.addCallback("getProperty", getPropertyCallback);
-			ExternalInterface.addCallback("setProperty", setPropertyCallback);
-			ExternalInterface.addCallback("invoke", invokeCallback);
+			ExternalInterface.addCallback("osmf_getProperty", getPropertyCallback);
+			ExternalInterface.addCallback("osmf_setProperty", setPropertyCallback);
+			ExternalInterface.addCallback("osmf_invoke", invokeCallback);
 			
 			ExternalInterface.call
 				( registerGateway_js
@@ -515,7 +515,7 @@ package org.openvideoplayer.gateways
         					return element
 	        					.__gateway__
 	        					.__flashObject__
-	        					.getProperty(element.elementId, property);
+	        					.osmf_getProperty(element.elementId, property);
         				}
         	}
         	
@@ -527,7 +527,7 @@ package org.openvideoplayer.gateways
         					return element
 	        					.__gateway__
 	        					.__flashObject__
-	        					.setProperty(element.elementId, property, value);
+	        					.osmf_setProperty(element.elementId, property, value);
         				}
         	}
         	
@@ -559,7 +559,7 @@ package org.openvideoplayer.gateways
         	{
         		element[method] = function()
         		{
-        			element.gateway.__flashObject__.invoke
+        			element.gateway.__flashObject__.osmf_invoke
     					( element.elementId
     					, method
     					, arguments.length ? arguments : []
@@ -701,7 +701,9 @@ package org.openvideoplayer.gateways
         	{
         		osmf.trace = function(message)
         		{
-        			document.getElementById(objectId).invoke(null, "trace", [message]);
+        			document
+        				.getElementById(objectId)
+        				.osmf_invoke(null, "trace", [message]);
         		}
         	}
 	        	
@@ -719,6 +721,7 @@ package org.openvideoplayer.gateways
         			= gateways[identifier]
         			= new Gateway(objectId, gatewayId);
         	}
+        	
         	// Invoke "onOSMFGatewayRegistered"
         	if 	(	this["onOSMFGatewayRegistered"] != null
         		&&	this.onOSMFGatewayRegistered.length == 1
