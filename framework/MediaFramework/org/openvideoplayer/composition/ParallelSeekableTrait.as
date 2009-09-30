@@ -75,10 +75,19 @@ package org.openvideoplayer.composition
 			{
 				if (seeking)
 				{
+					var childTemporalDuration:Number
+						= childTemporal 
+							? childTemporal.duration
+							: 0;
+							 
 					// If the composite trait is currently seeking, ask the child trait to seek as well.
 					// The seek to value is the child duration if the duration is shorter than that of 
 					// the composite. Otherwise, it is the composite duration.
-					seekable.seek(seekToTime < childTemporal.duration? seekToTime : childTemporal.duration);
+					seekable.seek
+						( seekToTime < childTemporalDuration 
+							? seekToTime
+							: childTemporalDuration
+						);
 				}
 			}
 
