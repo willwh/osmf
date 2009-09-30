@@ -22,6 +22,7 @@
 package org.openvideoplayer.view
 {
 	import flash.events.MouseEvent;
+	import flash.system.Security;
 	
 	import org.openvideoplayer.events.PlayingChangeEvent;
 	import org.openvideoplayer.media.MediaFactory;
@@ -42,6 +43,8 @@ package org.openvideoplayer.view
 		override protected function childrenCreated():void
 		{
 			super.childrenCreated();
+			
+			Security.allowDomain(REMOTE_SWF);
 			
 			description.text =  "This sample app demonstrates the use of the IMediaReferrer interface to enable communication " +
 								"between one MediaElement and another MediaElement when the two pieces of media don't have any " +

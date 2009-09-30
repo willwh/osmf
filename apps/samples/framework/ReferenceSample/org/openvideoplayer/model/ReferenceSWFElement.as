@@ -22,6 +22,7 @@
 package org.openvideoplayer.model
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import org.openvideoplayer.media.IMediaReferrer;
 	import org.openvideoplayer.media.IMediaResourceHandler;
@@ -66,7 +67,7 @@ package org.openvideoplayer.model
 			if (swfRoot != null)
 			{
 				// Keep track of any user clicks on the overlay SWF.
-				swfRoot.addEventListener("click", onClick);
+				swfRoot.addEventListener(MouseEvent.CLICK, onClick);
 			}
 		}
 		
