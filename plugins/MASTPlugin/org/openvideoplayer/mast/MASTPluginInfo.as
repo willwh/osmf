@@ -108,7 +108,7 @@ package org.openvideoplayer.mast
 			}
 			
 			// Framework version 0.5.0 is the minimum this plugin supports.
-			return ((major >= 0) && (minor >= 5) && (subMinor >= 0));
+			return ((major > 0) || ((major == 0) && (minor >= 5) && (subMinor >= 0)));
 		}
 		
 		private var mediaInfos:Vector.<MediaInfo>;			

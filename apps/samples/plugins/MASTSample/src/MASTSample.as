@@ -49,9 +49,6 @@ package
 	[SWF(backgroundColor="0x333333")]
 	public class MASTSample extends Sprite
 	{
-		private var pluginManager:PluginManager;
-		private var mediaFactory:MediaFactory;
-
 		public function MASTSample()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -156,6 +153,8 @@ package
 			sprite.height = stage.stageHeight;
 		}
 		
+		private var pluginManager:PluginManager;
+		private var mediaFactory:MediaFactory;	
 		private var sprite:MediaPlayerSprite;
 
 		private static const MAST_PLUGIN_INFOCLASS:String = "org.openvideoplayer.mast.MASTPluginInfo";		
@@ -164,6 +163,7 @@ package
 		// MAST documents
 		private static const MAST_URL_POSTROLL:String 				= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemend.xml";
 		private static const MAST_URL_PREROLL:String 				= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemstart.xml";
+				
 		
 		private static const REMOTE_STREAM:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";

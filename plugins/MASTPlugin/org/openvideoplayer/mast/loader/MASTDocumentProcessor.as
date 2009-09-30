@@ -29,7 +29,6 @@ package org.openvideoplayer.mast.loader
 	import org.openvideoplayer.events.LoadableStateChangeEvent;
 	import org.openvideoplayer.mast.managers.MASTConditionManager;
 	import org.openvideoplayer.mast.model.*;
-	import org.openvideoplayer.mast.traits.MASTPlayableTrait;
 	import org.openvideoplayer.media.MediaElement;
 	import org.openvideoplayer.media.URLResource;
 	import org.openvideoplayer.traits.LoadState;
@@ -67,9 +66,14 @@ package org.openvideoplayer.mast.loader
 		 * @param document The MASTDocument object to process.
 		 * @param mediaElement The main content, usually a video, the
 		 * MASTDocument object will work with.
+		 * 
+		 * @return True if the condition causes a pending play request, 
+		 * such as a preroll ad.
 		 */
-		public function processDocument(document:MASTDocument, mediaElement:MediaElement):void
+		public function processDocument(document:MASTDocument, mediaElement:MediaElement):Boolean
 		{
+			var causesPendingPlayRequest:Boolean = false;
+			
 			// Set up a listener for each trigger.
 			for each (var trigger:MASTTrigger in document.triggers)
 			{
@@ -77,7 +81,10 @@ package org.openvideoplayer.mast.loader
 				
 				for each (condition in trigger.startConditions)
 				{
-					processMASTCondition(trigger, condition, mediaElement, true);
+					if (processMASTCondition(trigger, condition, mediaElement, true))
+					{
+						causesPendingPlayRequest = true;
+					}
 				}
 
 				for each (condition in trigger.endConditions)
@@ -85,6 +92,8 @@ package org.openvideoplayer.mast.loader
 					processMASTCondition(trigger, condition, mediaElement, false);
 				}
 			}
+			
+			return causesPendingPlayRequest;
 		}
 		
 		/**
@@ -105,17 +114,26 @@ package org.openvideoplayer.mast.loader
 			}
 		}
 		
-		private function processMASTCondition(trigger:MASTTrigger, condition:MASTCondition, mediaElement:MediaElement, start:Boolean):void
+		/**
+		 * Process a single condition object.
+		 * 
+ 		 * @return True if the condition causes a pending play request, 
+		 * such as a preroll ad.
+		 */
+		private function processMASTCondition(trigger:MASTTrigger, condition:MASTCondition, 
+												mediaElement:MediaElement, start:Boolean):Boolean
 		{
 			var conditionManager:MASTConditionManager = new MASTConditionManager();
 			conditionManager.addEventListener(MASTConditionManager.CONDITION_TRUE, onConditionTrue);
-			conditionManager.setContext(mediaElement, condition);
+			var causesPendingPlayRequest:Boolean = conditionManager.setContext(mediaElement, condition, start);
 		
 			function onConditionTrue(event:Event):void
 			{
 				conditionManager.removeEventListener(MASTConditionManager.CONDITION_TRUE, onConditionTrue);
 				loadSources(trigger, condition);
 			}
+			
+			return causesPendingPlayRequest;
 		}
 		
 		/**

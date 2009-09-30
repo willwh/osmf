@@ -188,7 +188,15 @@ package org.openvideoplayer.mast.media
 				
 				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
-				processor.processDocument(loadedContext.document, wrappedElement);
+				var mediaElement:MediaElement = (wrappedElement as SerialElement).getChildAt(0);
+				var causesPendingPlayRequest:Boolean = processor.processDocument(loadedContext.document, mediaElement);
+
+				// If there was no condition that causes a pending play request
+				// remove the custom IPlayable
+				if (!causesPendingPlayRequest)
+				{
+					removeCustomPlayableTrait();
+				}
 
 				// Our work is done, remove the custom ILoadable.  This will
 				// expose the base ILoadable, which we can then use to do

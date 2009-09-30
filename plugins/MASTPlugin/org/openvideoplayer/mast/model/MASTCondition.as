@@ -42,16 +42,16 @@ package org.openvideoplayer.mast.model
 		 * @param operator The operator to use during evaluation as defined by the constants in the MASTConditionOperator class.
 		 * @param childConditions Any child conditions present in the MAST document.
 		 */
-		public function MASTCondition(type:MASTConditionType, name:String, value:Object=null, 
+		public function MASTCondition(type:MASTConditionType, name:String, value:String=null, 
 										operator:MASTConditionOperator=null, childConditions:Vector.<MASTCondition>=null)
 		{
 			// EVENT conditions don't take most other params.
-			if (type == MASTConditionType.EVENT && (name == null))
+			if (type == MASTConditionType.EVENT && ((name == null) || (name.length == 0)))
 			{
 				throw new ArgumentError();
 			}
 			// PROPERTY conditions do take most other params.
-			else if (type == MASTConditionType.PROPERTY	&&	(value == null || operator == null))
+			else if (type == MASTConditionType.PROPERTY	&&	(((value == null) || (value.length == 0)) || operator == null))
 			{
 				throw new ArgumentError();
 			}
@@ -101,7 +101,7 @@ package org.openvideoplayer.mast.model
 		
 		private var _type:MASTConditionType;
 		private var _name:String;
-		private var _value:Object;
+		private var _value:String;
 		private var _operator:MASTConditionOperator;
 		private var _childConditions:Vector.<MASTCondition>;
 	}

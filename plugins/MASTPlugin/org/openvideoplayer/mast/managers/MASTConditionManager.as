@@ -68,14 +68,17 @@ package org.openvideoplayer.mast.managers
 		/**
 		 * Set the MediaElement and the MASTCondition object this
 		 * class will manage.
+		 * 
+		 * @return True if the condition causes a pending play request, 
+		 * such as a preroll ad.
 		 */
-		public function setContext(mediaElement:MediaElement, condition:MASTCondition):void
+		public function setContext(mediaElement:MediaElement, condition:MASTCondition, startCondition:Boolean):Boolean
 		{
 			_condition = condition;
 			_mediaElement = mediaElement;
 			_mastAdapter = new MASTAdapter();
 			
-			processCondition();
+			return processCondition(startCondition);
 		}
 		
 		/**
@@ -90,13 +93,17 @@ package org.openvideoplayer.mast.managers
 			return DEFAULT_PROPERTY_COND_CHECK_INTERVAL;
 		} 
 
-		private function processCondition():void
+		private function processCondition(startCondition:Boolean):Boolean
 		{
+			var causesPendingPlayRequest:Boolean = false;
+			
 			// If the condition causes a pending play request, such as OnItemStart,
 			// we don't need to set any event listeners, we just need to evaluate
 			// the condition and dispatch the CONDITION_TRUE event.
-			if (conditionCausesPendingPlayRequest())
+			if (startCondition && conditionCausesPendingPlayRequest())
 			{
+				causesPendingPlayRequest = true;
+				
 				if (this.evaluateChildConditions())
 				{
 					onConditionTrue();
@@ -121,6 +128,8 @@ package org.openvideoplayer.mast.managers
 					processPropertyCondition(propOrEventName);
 				}
 			}
+			
+			return causesPendingPlayRequest;
 		}
 		
 		private function processPropertyCondition(propName:String):void
@@ -228,16 +237,14 @@ package org.openvideoplayer.mast.managers
 			}
 
 			// The trait is not present, we need to wait until it's added
-			// before adding the listener.  (Ideally we would manage the
-			// add/remove listeners more cleanly, but for the prototype
-			// I'm just adding it as a closure.)
+			// before adding the listener. 
 			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
 
 			function onTraitAdd(event:TraitsChangeEvent):void
 			{
-				_mediaElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
 				if (event.traitType == traitType)
 				{
+					_mediaElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
 					listenForTraitProperty(traitType, propertyName, propertyValue, operator);
 				}
 			}
@@ -278,6 +285,11 @@ package org.openvideoplayer.mast.managers
 		
 		private function onConditionTrue(event:Event=null):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug("onConditionTrue() - dispatching: "+CONDITION_TRUE+" event for condition.name="+this._condition.name);
+			}
+
 			dispatchEvent(new Event(CONDITION_TRUE));
 		}
 		
@@ -432,9 +444,9 @@ package org.openvideoplayer.mast.managers
 					case MASTConditionOperator.MOD:
 						return Number(property) % Number(propertyValue) > 0;
 					case MASTConditionOperator.EQ:
-						return propertyValue == property;
+						return Number(propertyValue) == Number(property);
 					case MASTConditionOperator.NEQ:
-						return propertyValue != property;
+						return Number(propertyValue) != Number(property);
 					default:
 						throw new IllegalOperationError(UNKOWN_OPERATOR_ERROR);
 				}

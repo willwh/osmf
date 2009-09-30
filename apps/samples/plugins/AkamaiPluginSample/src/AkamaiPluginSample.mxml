@@ -175,9 +175,7 @@
 			private function loadMedia(url:String):void
 			{	
 				var resource:IURLResource = new URLResource(new FMSURL(url));
-
-				//$$$todo: only do this if the MAST plugin is loaded
-				
+			
 				// Assign to the resource the metadata that indicates that it should have a MAST
 				// document applied (and include the URL of that MAST document).
 				var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.akamai.com/mast"));

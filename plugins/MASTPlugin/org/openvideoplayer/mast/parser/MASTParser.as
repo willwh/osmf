@@ -185,8 +185,9 @@ package org.openvideoplayer.mast.parser
 																																	
 								// Look for child conditions
 								var childConds:Vector.<MASTCondition> = parseCondition(child, trigger);
-								
-								var condObj:MASTCondition = new MASTCondition(type, child.@name, child.@value, operator, childConds);
+								var name:String = child.@name;
+								var value:String = child.@value;
+								var condObj:MASTCondition = new MASTCondition(type, name, value, operator, childConds);
 								
 								condObjs.push(condObj);
 								break;

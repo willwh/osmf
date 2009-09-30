@@ -6,6 +6,8 @@ package org.openvideoplayer
 	import org.openvideoplayer.test.mast.adapter.TestMASTAdapter;
 	import org.openvideoplayer.test.mast.media.TestMASTProxyElement;
 	import org.openvideoplayer.test.mast.managers.TestMASTConditionManager;
+	import org.openvideoplayer.test.mast.TestMASTPluginInfo;
+	import org.openvideoplayer.test.mast.parser.TestMASTParser;
 
 	public class MASTPluginIntegrationTests extends TestSuite
 	{
@@ -16,6 +18,8 @@ package org.openvideoplayer
 			addTestSuite(TestMASTLoader);
 			addTestSuite(TestMASTAdapter);
 			addTestSuite(TestMASTProxyElement);
+			addTestSuite(TestMASTPluginInfo);
+			addTestSuite(TestMASTParser);
 			addTestSuite(TestMASTConditionManager);
 		}
 		

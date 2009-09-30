@@ -108,8 +108,9 @@ package com.akamai.osmf
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.3.0 is the minimum this plugin supports
-			return ((major >= 0) && (minor >=3) && (subMinor >= 0));
+			// Framework version 0.3.0 is the minimum this plugin supports.
+			return ((major > 0) || ((major == 0) && (minor >= 3) && (subMinor >= 0)));
+			
 		}
 		
 		private var mediaInfoObjects:Vector.<MediaInfo>;			
