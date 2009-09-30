@@ -186,7 +186,7 @@ package org.openvideoplayer.layout
 				{
 					if ((toDo & X) && !isNaN(relative.x))
 					{
-						rect.x = (availableWidth * relative.x) / 100;
+						rect.x = (availableWidth * relative.x) / 100 || 0;
 						toDo ^= X; 
 					}
 					
@@ -198,7 +198,7 @@ package org.openvideoplayer.layout
 					
 					if ((toDo & Y) && !isNaN(relative.y))
 					{
-						rect.y = (availableHeight * relative.y) / 100;
+						rect.y = (availableHeight * relative.y) / 100 || 0;
 						toDo ^= Y;
 					}
 					
