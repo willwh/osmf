@@ -19,12 +19,12 @@
 		<link>
 			<name>[source path] MediaFrameworkFlexTest</name>
 			<type>2</type>
-			<location>/MediaFrameworkFlexTest</location>
+			<location>/Users/oconnell/src/osmf-public/trunk/framework/MediaFrameworkFlexTest</location>
 		</link>
 		<link>
 			<name>[source path] MASTPlugin</name>
 			<type>2</type>
-			<location>/MASTPlugin</location>
+			<location>/Users/oconnell/src/osmf-public/trunk/plugins/MASTPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>
