@@ -1,19 +1,19 @@
-package org.openvideoplayer.examples
+package org.osmf.examples
 {
 	import mx.collections.ArrayCollection;
 	import mx.core.Application;
 	
-	import org.openvideoplayer.composition.ParallelElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.layout.LayoutUtils;
-	import org.openvideoplayer.layout.RegistrationPoint;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
-	import org.openvideoplayer.utils.FMSURL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.composition.ParallelElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.media.MediaElement;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.utils.FMSURL;
+	import org.osmf.video.VideoElement;
 	
 	public class Compositions extends ArrayCollection
 	{
