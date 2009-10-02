@@ -19,17 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.content
+package org.osmf.content
 {
-	import org.openvideoplayer.events.MediaError;
-	import org.openvideoplayer.events.MediaErrorCodes;
-	import org.openvideoplayer.loaders.TestILoader;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadableTrait;
-	import org.openvideoplayer.utils.TestConstants;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.loaders.TestILoader;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadableTrait;
+	import org.osmf.utils.TestConstants;
+	import org.osmf.utils.URL;
 	
 	public class TestContentLoaderIntegration extends TestILoader
 	{

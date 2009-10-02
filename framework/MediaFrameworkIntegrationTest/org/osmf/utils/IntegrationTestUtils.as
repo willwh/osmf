@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.utils
+package org.osmf.utils
 {
 	public class IntegrationTestUtils
 	{

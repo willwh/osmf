@@ -19,15 +19,15 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.plugin
+package org.osmf.plugin
 {
 	import flexunit.framework.TestCase;
 	
-	import org.openvideoplayer.events.PluginLoadEvent;
-	import org.openvideoplayer.media.MediaFactory;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.utils.IntegrationTestUtils;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.media.URLResource;
+	import org.osmf.utils.IntegrationTestUtils;
+	import org.osmf.utils.URL;
 
 	public class TestPluginManagerIntegration extends TestCase
 	{

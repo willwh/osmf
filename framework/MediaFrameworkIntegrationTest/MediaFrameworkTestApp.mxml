@@ -32,11 +32,11 @@
 	<mx:Script>
 		<![CDATA[
 
-			import org.openvideoplayer.*;
-			import org.openvideoplayer.utils.TestConstants;
+			import org.osmf.*;
+			import org.osmf.utils.TestConstants;
 			import flexunit.framework.TestSuite;
 			
-			import org.openvideoplayer.utils.IntegrationTestUtils;
+			import org.osmf.utils.IntegrationTestUtils;
 			
 			private function runTests():void
 			{

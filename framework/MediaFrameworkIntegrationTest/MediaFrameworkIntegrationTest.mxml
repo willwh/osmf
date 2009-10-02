@@ -31,12 +31,12 @@
 	<mx:Script>
 		<![CDATA[
 
-			import org.openvideoplayer.*;
-			import org.openvideoplayer.utils.TestConstants;
+			import org.osmf.*;
+			import org.osmf.utils.TestConstants;
 			import flexunit.framework.TestSuite;
 			import flexunit.junit.JUnitTestRunner;
 			
-			import org.openvideoplayer.utils.IntegrationTestUtils;
+			import org.osmf.utils.IntegrationTestUtils;
 			
 			private var _suite:TestSuite;
 

@@ -19,13 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.image
+package org.osmf.image
 {
-	import org.openvideoplayer.content.TestContentLoaderIntegration;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.utils.TestConstants;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.content.TestContentLoaderIntegration;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.URLResource;
+	import org.osmf.utils.TestConstants;
+	import org.osmf.utils.URL;
 	
 	public class TestImageLoaderIntegration extends TestContentLoaderIntegration
 	{

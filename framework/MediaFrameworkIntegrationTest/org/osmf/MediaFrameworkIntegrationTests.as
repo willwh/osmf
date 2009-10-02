@@ -19,21 +19,21 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer
+package org.osmf
 {
 	import flexunit.framework.TestSuite;
 	
-	import org.openvideoplayer.image.TestImageElementIntegration;
-	import org.openvideoplayer.image.TestImageLoaderIntegration;
-	import org.openvideoplayer.media.TestMediaPlayer;
-	import org.openvideoplayer.net.TestNetLoader;
-	import org.openvideoplayer.plugin.TestDynamicPluginLoaderIntegration;
-	import org.openvideoplayer.plugin.TestPluginManagerIntegration;
-	import org.openvideoplayer.swf.TestSWFElementIntegration;
-	import org.openvideoplayer.swf.TestSWFLoaderIntegration;
-	import org.openvideoplayer.utils.NetFactory;
-	import org.openvideoplayer.utils.TestHTTPLoader;
-	import org.openvideoplayer.video.TestVideoElement;
+	import org.osmf.image.TestImageElementIntegration;
+	import org.osmf.image.TestImageLoaderIntegration;
+	import org.osmf.media.TestMediaPlayer;
+	import org.osmf.net.TestNetLoader;
+	import org.osmf.plugin.TestDynamicPluginLoaderIntegration;
+	import org.osmf.plugin.TestPluginManagerIntegration;
+	import org.osmf.swf.TestSWFElementIntegration;
+	import org.osmf.swf.TestSWFLoaderIntegration;
+	import org.osmf.utils.NetFactory;
+	import org.osmf.utils.TestHTTPLoader;
+	import org.osmf.video.TestVideoElement;
 
 	public class MediaFrameworkIntegrationTests extends TestSuite
 	{

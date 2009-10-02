@@ -19,19 +19,19 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.swf
+package org.osmf.swf
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.openvideoplayer.content.TestContentLoaderIntegration;
-	import org.openvideoplayer.events.LoaderEvent;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.utils.IntegrationTestUtils;
-	import org.openvideoplayer.utils.TestConstants;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.content.TestContentLoaderIntegration;
+	import org.osmf.events.LoaderEvent;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.LoadState;
+	import org.osmf.utils.IntegrationTestUtils;
+	import org.osmf.utils.TestConstants;
+	import org.osmf.utils.URL;
 	
 	public class TestSWFLoaderIntegration extends TestContentLoaderIntegration
 	{

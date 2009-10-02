@@ -19,25 +19,25 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.swf
+package org.osmf.image
 {
-	import org.openvideoplayer.content.TestContentElementIntegration;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.utils.IntegrationTestUtils;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.content.TestContentElementIntegration;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.utils.TestConstants;
+	import org.osmf.utils.URL;
 
-	public class TestSWFElementIntegration extends TestContentElementIntegration
+	public class TestImageElementIntegration extends TestContentElementIntegration
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new SWFElement(new SWFLoader()); 
+			return new ImageElement(new ImageLoader()); 
 		}
 		
 		override protected function get resourceForMediaElement():IMediaResource
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
 		}
 	}
 }

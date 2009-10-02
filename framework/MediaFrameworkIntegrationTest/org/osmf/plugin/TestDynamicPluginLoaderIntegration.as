@@ -19,16 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.plugin
+package org.osmf.plugin
 {
-	import org.openvideoplayer.loaders.TestILoader;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.MediaFactory;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadableTrait;
-	import org.openvideoplayer.utils.IntegrationTestUtils;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.loaders.TestILoader;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadableTrait;
+	import org.osmf.utils.IntegrationTestUtils;
+	import org.osmf.utils.URL;
 	
 	public class TestDynamicPluginLoaderIntegration extends TestILoader
 	{

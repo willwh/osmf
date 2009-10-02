@@ -19,10 +19,10 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.content
+package org.osmf.content
 {
-	import org.openvideoplayer.media.TestMediaElement;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.media.TestMediaElement;
+	import org.osmf.traits.MediaTraitType;
 
 	public class TestContentElementIntegration extends TestMediaElement
 	{
