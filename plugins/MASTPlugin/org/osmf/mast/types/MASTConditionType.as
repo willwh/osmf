@@ -19,39 +19,33 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package
+package org.osmf.mast.types
 {
-	import flash.display.Sprite;
-	import flash.system.Security;
-	
-	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
-
 	/**
-	 * The root level object of the MAST plugin.
+	 * This class represents the valid condition types
+	 * in a MAST document.
 	 */
-	public class MASTPlugin extends Sprite
-	{	
+	public class MASTConditionType
+	{
+		public static const EVENT:MASTConditionType = new MASTConditionType("event");
+		public static const PROPERTY:MASTConditionType = new MASTConditionType("property");
+		
 		/**
-		 * Constructor.
+		 * @private
+		 **/
+		public function MASTConditionType(type:String)
+		{
+			_type = type;
+		}
+		
+		/**
+		 * Returns the condition type as a string.
 		 */
-		public function MASTPlugin()
+		public function get type():String
 		{
-			// Allow any SWF that loads this SWF to access objects and
-			// variables in this SWF.
-			Security.allowDomain(this.root.loaderInfo.loaderURL);
-			
-			_pluginInfo = new MASTPluginInfo();
+			return _type;
 		}
 		
-		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
-		 */		
-		public function get pluginInfo():IPluginInfo
-		{
-			return _pluginInfo;
-		}
-		
-		private var _pluginInfo:MASTPluginInfo;				
+		private var _type:String;
 	}
 }

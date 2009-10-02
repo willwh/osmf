@@ -20,37 +20,18 @@
 *  
 *****************************************************/
 
-package com.akamai.osmf.events
+package org.osmf
 {
-	import org.osmf.events.MediaError;
-
-	/**
-	 * An AkamaiMediaError encapsulates an error specific to Akamai plugins.  
-	 * Errors are represented as error codes with corresponding descriptions.  
-	 * 
-	 * <p>A list of all possible Akamai plugin-level errors can be found in the
-	 * <code>AkamaiMediaErrorCodes</code> class.</p>
-	 *
-	 * @see AkamaiMediaErrorCodes 
-	 **/
-	public class AkamaiMediaError extends MediaError
-	{
-		/**
-		 * Constructor. Takes an error code.
-		 * 
-		 * @see AkamaiMediaErrorCodes
-		 */
-		public function AkamaiMediaError(errorCode:int)
-		{
-			super(errorCode);
-		}
+	import flexunit.framework.TestSuite;
+	import org.osmf.plugin.TestBasicStreamingPlugin;
 		
-		/**
-		 * @inheritDoc
-		 */
-		override protected function getDescriptionForErrorCode(errorCode:int):String
+	public class BasicStreamingPluginIntegrationTests extends TestSuite
+	{
+		public function BasicStreamingPluginIntegrationTests(param:Object=null)
 		{
-			return AkamaiMediaErrorCodes.getDescriptionForErrorCode(errorCode);
+			super(param);
+			
+			this.addTestSuite(TestBasicStreamingPlugin);			
 		}
 	}
 }

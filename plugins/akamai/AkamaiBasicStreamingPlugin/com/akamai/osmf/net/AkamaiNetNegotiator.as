@@ -24,9 +24,9 @@ package com.akamai.osmf.net
 {
 	import flash.net.NetConnection;
 	
-	import org.openvideoplayer.net.NetNegotiator;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.utils.FMSURL;
+	import org.osmf.net.NetNegotiator;
+	import org.osmf.utils.URL;
+	import org.osmf.utils.FMSURL;
 
 	/**
 	 * The AkamaiNetNegotiator class is a custom <code>NetNegotiator</code> class serving

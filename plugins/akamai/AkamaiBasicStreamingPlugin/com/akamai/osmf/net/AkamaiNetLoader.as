@@ -25,10 +25,10 @@ package com.akamai.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.openvideoplayer.net.NetConnectionFactory;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.utils.*;
+	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetLoader;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.utils.*;
 
 	/**
 	 * The AkamaiNetLoader class provides the means for

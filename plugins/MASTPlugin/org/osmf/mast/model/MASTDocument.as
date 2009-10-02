@@ -18,40 +18,52 @@
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
+*  Contributor(s): Akamai Technologies
+* 
 *****************************************************/
-package
+package org.osmf.mast.model
 {
-	import flash.display.Sprite;
-	import flash.system.Security;
+	import __AS3__.vec.Vector;
 	
-	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
-
 	/**
-	 * The root level object of the MAST plugin.
+	 * This class represents the top level of the MAST
+	 * document object model.
 	 */
-	public class MASTPlugin extends Sprite
-	{	
+	public class MASTDocument
+	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param version The MAST document version number if
+		 * available in the document.
 		 */
-		public function MASTPlugin()
+		public function MASTDocument(version:Number)
 		{
-			// Allow any SWF that loads this SWF to access objects and
-			// variables in this SWF.
-			Security.allowDomain(this.root.loaderInfo.loaderURL);
-			
-			_pluginInfo = new MASTPluginInfo();
+			_version = version;
 		}
 		
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
-		 */		
-		public function get pluginInfo():IPluginInfo
+		 * The collection of triggers from the MAST document.
+		 */
+		public function get triggers():Vector.<MASTTrigger>
 		{
-			return _pluginInfo;
+			return _triggers;
 		}
 		
-		private var _pluginInfo:MASTPluginInfo;				
+		/**
+		 * Adds a MASTTrigger object to the collection of MAST triggers.
+		 */
+		public function addTrigger(value:MASTTrigger):void
+		{
+			if (_triggers == null)
+			{
+				_triggers = new Vector.<MASTTrigger>();
+			}
+			
+			_triggers.push(value);
+		}
+		
+		private var _triggers:Vector.<MASTTrigger>;
+		private var _version:Number;
 	}
 }

@@ -24,7 +24,7 @@ package com.akamai.osmf.net
 {
 	import flash.net.NetConnection;
 	
-	import org.openvideoplayer.utils.FMSURL;
+	import org.osmf.utils.FMSURL;
 
 	/**
 	 * The AkamaiNetConnection class extends NetConnection to provide 

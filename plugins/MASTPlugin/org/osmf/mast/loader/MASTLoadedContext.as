@@ -16,42 +16,41 @@
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
+*  Incorporated. All Rights Reserved.
+* 
+*  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-package
+package org.osmf.mast.loader
 {
-	import flash.display.Sprite;
-	import flash.system.Security;
+	import org.osmf.mast.model.MASTDocument;
+	import org.osmf.traits.ILoadedContext;
 	
-	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
-
 	/**
-	 * The root level object of the MAST plugin.
-	 */
-	public class MASTPlugin extends Sprite
-	{	
+	 * Loaded context for the MASTProxyElement.
+	 **/
+	public class MASTLoadedContext implements ILoadedContext
+	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param document The MASTDocument object representing
+		 * the root level of the MAST document object model.
 		 */
-		public function MASTPlugin()
+		public function MASTLoadedContext(document:MASTDocument)
 		{
-			// Allow any SWF that loads this SWF to access objects and
-			// variables in this SWF.
-			Security.allowDomain(this.root.loaderInfo.loaderURL);
-			
-			_pluginInfo = new MASTPluginInfo();
+			_document = document;
 		}
-		
+
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
-		 */		
-		public function get pluginInfo():IPluginInfo
+		 * Get the MASTDocument object that was supplied to
+		 * the constructor.
+		 */
+		public function get document():MASTDocument
 		{
-			return _pluginInfo;
+			return _document;
 		}
 		
-		private var _pluginInfo:MASTPluginInfo;				
+		private var _document:MASTDocument;
 	}
 }

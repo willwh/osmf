@@ -37,35 +37,35 @@
 			import flash.utils.getDefinitionByName;
 			import flash.net.getClassByAlias;
 
-			import org.openvideoplayer.plugin.PluginClassResource;
-			import org.openvideoplayer.plugin.PluginManager;
+			import org.osmf.plugin.PluginClassResource;
+			import org.osmf.plugin.PluginManager;
 			
-			import org.openvideoplayer.traits.MediaTraitType;
-			import org.openvideoplayer.traits.LoadState;
-			import org.openvideoplayer.traits.ILoadable;
-			import org.openvideoplayer.traits.MediaTraitType;			
-			import org.openvideoplayer.traits.ISpatial;
+			import org.osmf.traits.MediaTraitType;
+			import org.osmf.traits.LoadState;
+			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.MediaTraitType;			
+			import org.osmf.traits.ISpatial;
 
-			import org.openvideoplayer.events.*;
+			import org.osmf.events.*;
 
-			import org.openvideoplayer.media.MediaInfo;
-			import org.openvideoplayer.media.MediaFactory;
-			import org.openvideoplayer.media.MediaElement;
-			import org.openvideoplayer.media.IMediaResource;
-			import org.openvideoplayer.media.URLResource;			
-			import org.openvideoplayer.media.IURLResource;
+			import org.osmf.media.MediaInfo;
+			import org.osmf.media.MediaFactory;
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.IMediaResource;
+			import org.osmf.media.URLResource;			
+			import org.osmf.media.IURLResource;
 			
-			import org.openvideoplayer.net.NetLoader;
+			import org.osmf.net.NetLoader;
 			
-			import org.openvideoplayer.utils.*;
+			import org.osmf.utils.*;
 
-			import org.openvideoplayer.video.VideoElement;
+			import org.osmf.video.VideoElement;
 			
-			import org.openvideoplayer.metadata.*;
+			import org.osmf.metadata.*;
 			
 			// Our plugins (for loading as static plugins)
 			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
-			import org.openvideoplayer.mast.MASTPluginInfo;
+			import org.osmf.mast.MASTPluginInfo;
 			
 			private var pluginManager:PluginManager;
 			private var mediaFactory:MediaFactory;
@@ -78,7 +78,7 @@
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;					
 
 			private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";	
-			private static const MAST_PLUGIN_INFOCLASS:String = "org.openvideoplayer.mast.MASTPluginInfo";
+			private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";
 			
 			// We need these or getDefinitionByName will fail:
 			private static const loadTestRef:AkamaiBasicStreamingPluginInfo = null;
@@ -189,7 +189,7 @@
 					var netLoader:NetLoader = new NetLoader();
 					
 					// Add a default VideoElement
-					mediaFactory.addMediaInfo(new MediaInfo("org.openvideoplayer.video", netLoader, VideoElement, [netLoader]));
+					mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, VideoElement, [netLoader]));
 					mediaElement = mediaFactory.createMediaElement(resource);
 				}
 				

@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -14,46 +14,45 @@
 *  under the License.
 *   
 *  
-*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
-*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
-*  Technologies, Inc. All Rights Reserved. 
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
-package com.akamai.osmf
+package org.osmf.mast
 {
-	import com.akamai.osmf.net.AkamaiNetConnectionFactory;
-	import com.akamai.osmf.net.AkamaiNetLoader;
-	
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.audio.AudioElement;
+	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaInfoType;
+	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.utils.MediaFrameworkStrings;
-	import org.osmf.video.VideoElement;
-	
+
 	/**
-	 * The IPlugInfo class required by the OSMF plugin API.
-	 */
-	public class AkamaiBasicStreamingPluginInfo implements IPluginInfo
+	 * Encapsulation of a MAST plugin.
+	 **/
+	public class MASTPluginInfo implements IPluginInfo
 	{	
 		/**
-		 * Constructor. Creates custom objects required for the plugin's functionality and any <code>MediaInfo</code> objects
-		 * supported by the plugin.
+		 * Constructor.
 		 */	
-		public function AkamaiBasicStreamingPluginInfo()
+		public function MASTPluginInfo()
 		{		
-			mediaInfoObjects = new Vector.<MediaInfo>();
+			mediaInfos = new Vector.<MediaInfo>();
 			
-			var netLoader:AkamaiNetLoader = new AkamaiNetLoader(true, new AkamaiNetConnectionFactory());
-			var mediaInfo:MediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingVideoElement", netLoader, VideoElement, new Array(netLoader));
-
-			mediaInfoObjects.push(mediaInfo);
-
-			mediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingAudioElement", netLoader, AudioElement, new Array(netLoader));
-			mediaInfoObjects.push(mediaInfo);
+			var resourceHandler:IMediaResourceHandler = new NetLoader();
+			var mediaInfo:MediaInfo = new MediaInfo
+				( "org.osmf.mast.MASTPluginInfo"
+				, resourceHandler
+				, MASTProxyElement
+				, []
+				, MediaInfoType.PROXY
+				);
+			mediaInfos.push(mediaInfo);
 		}
 
 		/**
@@ -62,20 +61,20 @@ package com.akamai.osmf
 		 */
 		public function get numMediaInfos():int
 		{
-			return mediaInfoObjects.length;
+			return mediaInfos.length;
 		}
 		
 		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position.
+		 * Returns an <code>IMediaInfo</code> object at the supplied index position.
 		 */
 		public function getMediaInfoAt(index:int):IMediaInfo
 		{
-			if (index >= mediaInfoObjects.length)
+			if (index >= mediaInfos.length)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);				
 			}
 			
-			return mediaInfoObjects[index];
+			return mediaInfos[index];
 		}
 		
 		/**
@@ -85,7 +84,7 @@ package com.akamai.osmf
 		 */
 		public function isFrameworkVersionSupported(version:String):Boolean
 		{
-			if ((version == null) || (version.length < 1))
+			if (version == null || version.length < 1)
 			{
 				return false;
 			}
@@ -108,11 +107,10 @@ package com.akamai.osmf
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.3.0 is the minimum this plugin supports.
-			return ((major > 0) || ((major == 0) && (minor >= 3) && (subMinor >= 0)));
-			
+			// Framework version 0.5.0 is the minimum this plugin supports.
+			return ((major > 0) || ((major == 0) && (minor >= 5) && (subMinor >= 0)));
 		}
 		
-		private var mediaInfoObjects:Vector.<MediaInfo>;			
+		private var mediaInfos:Vector.<MediaInfo>;			
 	}
 }

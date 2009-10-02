@@ -24,10 +24,10 @@ package com.akamai.osmf.net
 {
 	import flash.events.IEventDispatcher;
 
-	import org.openvideoplayer.net.NetConnectionFactory;
-	import org.openvideoplayer.net.NetNegotiator;
-	import org.openvideoplayer.utils.FMSURL;
-	import org.openvideoplayer.media.IURLResource;
+	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetNegotiator;
+	import org.osmf.utils.FMSURL;
+	import org.osmf.media.IURLResource;
 
 	/**
 	 * The AkamaiNetConnectionFactory class extends NetConnectionFactory to

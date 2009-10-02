@@ -24,7 +24,7 @@ package {
 		
 	import flash.display.Sprite;
 	
-	import org.openvideoplayer.plugin.IPluginInfo;
+	import org.osmf.plugin.IPluginInfo;
 
 	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 

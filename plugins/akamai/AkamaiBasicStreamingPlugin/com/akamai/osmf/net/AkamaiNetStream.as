@@ -29,9 +29,9 @@ package com.akamai.osmf.net
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
-	import org.openvideoplayer.events.MediaErrorEvent;
-	import org.openvideoplayer.net.NetClient;
-	import org.openvideoplayer.traits.ILoadable;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.net.NetClient;
+	import org.osmf.traits.ILoadable;
 
 	/**
 	 * The AkamaiNetStream class extends NetStream to provide

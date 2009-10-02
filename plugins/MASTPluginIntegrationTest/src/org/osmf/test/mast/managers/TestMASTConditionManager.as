@@ -1,79 +1,49 @@
-/*****************************************************
-*  
-*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
-*  
-*****************************************************
-*  The contents of this file are subject to the Mozilla Public License
-*  Version 1.1 (the "License"); you may not use this file except in
-*  compliance with the License. You may obtain a copy of the License at
-*  http://www.mozilla.org/MPL/
-*   
-*  Software distributed under the License is distributed on an "AS IS"
-*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-*  License for the specific language governing rights and limitations
-*  under the License.
-*   
-*  
-*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
-*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
-*  Technologies, Inc. All Rights Reserved. 
-*  
-*****************************************************/
-
-package
+package org.osmf.test.mast.managers
 {
-	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.events.Event;
+	import flash.errors.*;
+	import flash.events.*;
+	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
 	
+	import flexunit.framework.TestCase;
+	
 	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
-	import org.osmf.events.*;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.PluginLoadEvent;
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
-	import org.osmf.media.URLResource;
-	import org.osmf.metadata.*;
+	import org.osmf.mast.model.*;
+	import org.osmf.media.*;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginClassResource;
 	import org.osmf.plugin.PluginManager;
-	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.URL;
+	import org.osmf.traits.*;
+	import org.osmf.utils.*;
 	import org.osmf.video.VideoElement;
 
-	[SWF(backgroundColor="0x333333")]
-	public class MASTSample extends Sprite
+	public class TestMASTConditionManager extends TestCase
 	{
-		public function MASTSample()
+		override public function setUp():void
 		{
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
+			super.setUp();
 			
+			_eventDispatcher = new EventDispatcher();
+		}
+		
+		override public function tearDown():void
+		{
+			_eventDispatcher = null;
+			_timer = null;
+		}
+
+		public function testConditionManager():void
+		{
 			mediaFactory = new MediaFactory();
 			pluginManager = new PluginManager(mediaFactory);
-			
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
-            
-  			// Create the Sprite class that holds our MediaPlayer.
+
  			sprite = new MediaPlayerSprite();
-			addChild(sprite);
-			
-			// Set the Sprite's size to match that of the stage, and
-			// prevent the content from being scaled.
-			sprite.scaleMode = ScaleMode.NONE;
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
-			
-			// Make sure we resize the Sprite when the stage dimensions
-			// change.
-			stage.addEventListener(Event.RESIZE, onStageResize);
-			
+
 			loadPlugin(MAST_PLUGIN_INFOCLASS);
 		}
 		
@@ -120,7 +90,7 @@ package
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
 			var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.akamai.com/mast"));
-			kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_PREROLL);
+			kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_TEST);
 			resource.metadata.addFacet(kvFacet);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
@@ -136,7 +106,23 @@ package
 			
 			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 			
+			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			_timer = new Timer(30000, 1);
+			_timer.addEventListener(TimerEvent.TIMER, onTimer);
+			_timer.start();
+			
 			sprite.element = mediaElement;
+		}
+		
+		private function onTimer(event:TimerEvent):void
+		{
+			_timer.removeEventListener(TimerEvent.TIMER, onTimer);
+			_eventDispatcher.dispatchEvent(new Event("testComplete"));				
+		}
+		
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is received.
 		}
 		
    		private function onMediaError(event:MediaErrorEvent):void
@@ -146,26 +132,21 @@ package
    			trace(errMsg);
    		}
 		
-		
-		private function onStageResize(event:Event):void
-		{
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
-		}
-		
-		private var pluginManager:PluginManager;
-		private var mediaFactory:MediaFactory;	
 		private var sprite:MediaPlayerSprite;
+		private var pluginManager:PluginManager;
+		private var mediaFactory:MediaFactory;
+		private var _eventDispatcher:EventDispatcher;
+		private var _timer:Timer;
+		
+		private static const ASYNC_DELAY:Number = 90000;
 
 		private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";		
 		private static const loadTestRef:MASTPluginInfo = null;
 		
-		// MAST documents
-		private static const MAST_URL_POSTROLL:String 				= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemend.xml";
-		private static const MAST_URL_PREROLL:String 				= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemstart.xml";
-				
+		private static const MAST_URL_TEST:String = "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_integration_test.xml";
 		
 		private static const REMOTE_STREAM:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
+		
 	}
 }

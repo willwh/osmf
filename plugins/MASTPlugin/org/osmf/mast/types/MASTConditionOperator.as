@@ -19,39 +19,38 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package
+package org.osmf.mast.types
 {
-	import flash.display.Sprite;
-	import flash.system.Security;
-	
-	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
-
 	/**
-	 * The root level object of the MAST plugin.
+	 * This class represents the valid operator values for a MAST
+	 * document.
 	 */
-	public class MASTPlugin extends Sprite
-	{	
+	public class MASTConditionOperator
+	{
+		public static const EQ:MASTConditionOperator 	= new MASTConditionOperator("EQ");
+		public static const NEQ:MASTConditionOperator 	= new MASTConditionOperator("NEQ");
+		public static const GTR:MASTConditionOperator 	= new MASTConditionOperator("GTR");
+		public static const GEQ:MASTConditionOperator 	= new MASTConditionOperator("GEQ");
+		public static const LT:MASTConditionOperator 	= new MASTConditionOperator("LT");
+		public static const LEQ:MASTConditionOperator 	= new MASTConditionOperator("LEQ");
+		public static const MOD:MASTConditionOperator 	= new MASTConditionOperator("MOD");
+		
 		/**
-		 * Constructor.
+		 * @private
+		 **/
+		public function MASTConditionOperator(operator:String)
+		{
+			_operator = operator;
+		}
+		
+		/**
+		 * Returns string value of the operator.
 		 */
-		public function MASTPlugin()
+		public function get operator():String
 		{
-			// Allow any SWF that loads this SWF to access objects and
-			// variables in this SWF.
-			Security.allowDomain(this.root.loaderInfo.loaderURL);
-			
-			_pluginInfo = new MASTPluginInfo();
+			return _operator;
 		}
 		
-		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
-		 */		
-		public function get pluginInfo():IPluginInfo
-		{
-			return _pluginInfo;
-		}
-		
-		private var _pluginInfo:MASTPluginInfo;				
+		private var _operator:String;
 	}
 }
