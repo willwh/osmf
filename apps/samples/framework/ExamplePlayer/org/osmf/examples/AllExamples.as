@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples
+package org.osmf.examples
 {
 	import __AS3__.vec.Vector;
 	
@@ -27,41 +27,41 @@ package org.openvideoplayer.examples
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.openvideoplayer.audio.AudioElement;
-	import org.openvideoplayer.audio.SoundLoader;
-	import org.openvideoplayer.composition.ParallelElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.examples.buffering.BufferingProxyElement;
-	import org.openvideoplayer.examples.chromeless.ChromelessPlayerElement;
-	import org.openvideoplayer.examples.loaderproxy.VideoProxyElement;
-	import org.openvideoplayer.examples.text.TextElement;
-	import org.openvideoplayer.examples.traceproxy.TraceProxyElement;
-	import org.openvideoplayer.image.ImageElement;
-	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.layout.AbsoluteLayoutFacet;
-	import org.openvideoplayer.layout.RelativeLayoutFacet;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
-	import org.openvideoplayer.proxies.TemporalProxyElement;
-	import org.openvideoplayer.swf.SWFElement;
-	import org.openvideoplayer.swf.SWFLoader;
-	import org.openvideoplayer.tracking.Beacon;
-	import org.openvideoplayer.tracking.BeaconElement;
-	import org.openvideoplayer.traits.IBufferable;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.IPausable;
-	import org.openvideoplayer.traits.IPlayable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.utils.FMSURL;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.audio.AudioElement;
+	import org.osmf.audio.SoundLoader;
+	import org.osmf.composition.ParallelElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.examples.buffering.BufferingProxyElement;
+	import org.osmf.examples.chromeless.ChromelessPlayerElement;
+	import org.osmf.examples.loaderproxy.VideoProxyElement;
+	import org.osmf.examples.text.TextElement;
+	import org.osmf.examples.traceproxy.TraceProxyElement;
+	import org.osmf.image.ImageElement;
+	import org.osmf.image.ImageLoader;
+	import org.osmf.layout.AbsoluteLayoutFacet;
+	import org.osmf.layout.RelativeLayoutFacet;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.NetLoader;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.proxies.TemporalProxyElement;
+	import org.osmf.swf.SWFElement;
+	import org.osmf.swf.SWFLoader;
+	import org.osmf.tracking.Beacon;
+	import org.osmf.tracking.BeaconElement;
+	import org.osmf.traits.IBufferable;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.IPausable;
+	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 	
 	/**
 	 * Central repository of all examples for this application.

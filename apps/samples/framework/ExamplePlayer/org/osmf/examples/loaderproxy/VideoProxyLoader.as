@@ -19,13 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.loaderproxy
+package org.osmf.examples.loaderproxy
 {
-	import org.openvideoplayer.loaders.LoaderBase;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.loaders.LoaderBase;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * Loader for the VideoProxyElement.  The load operation simply generates

@@ -19,46 +19,62 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.chromeless
+package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.traits.PausableTrait;
-	import org.openvideoplayer.traits.PlayableTrait;
+	import org.osmf.traits.AudibleTrait;
 	
-	internal class SWFPlayableTrait extends PlayableTrait
+	internal class SWFAudibleTrait extends AudibleTrait
 	{
-		public function SWFPlayableTrait(swfRoot:DisplayObject, owner:MediaElement)
+		public function SWFAudibleTrait(swfRoot:DisplayObject)
 		{
-			super(owner);
-			
 			this.swfRoot = swfRoot;
-			
+
 			// Keep in sync with the state of the SWF.
-			Object(swfRoot).videoPlayer.addEventListener("isPlayingChange", onPlayingChange);
-			onPlayingChange(null);
+			Object(swfRoot).videoPlayer.addEventListener("isMutedChange", onMutedChange);
+			Object(swfRoot).videoPlayer.addEventListener("volumeChange", onVolumeChange);
+			onMutedChange(null);
+			onVolumeChange(null);
 		}
 
-		override protected function processPlayingChange(newPlaying:Boolean):void
+		override protected function processVolumeChange(newVolume:Number):void
 		{
-			if (newPlaying && Object(swfRoot).videoPlayer.isPlaying == false)
+			Object(swfRoot).videoPlayer.setVolume(newVolume);
+		}
+
+		override protected function processMutedChange(newMuted:Boolean):void
+		{
+			if (Object(swfRoot).videoPlayer.isMuted != newMuted)
 			{
-				Object(swfRoot).videoPlayer.playVideo();
+				Object(swfRoot).videoPlayer.toggleMute();
 			}
 		}
+
+		override protected function processPanChange(newPan:Number):void
+		{
+			// No op.	
+		}
 		
-		private function onPlayingChange(event:Event):void
+		private function onMutedChange(event:Event):void
 		{
 			// Stay in sync with the state of the SWF.
-			if (Object(swfRoot).videoPlayer.isPlaying)
+			if (Object(swfRoot).videoPlayer.isMuted != muted)
 			{
-				play();
+				muted = !muted;
 			}
 		}
-		
+
+		private function onVolumeChange(event:Event):void
+		{
+			// Stay in sync with the state of the SWF.
+			if (Object(swfRoot).videoPlayer.getVolume() != volume)
+			{
+				volume = Object(swfRoot).videoPlayer.getVolume();
+			}
+		}
+
 		private var swfRoot:DisplayObject;
 	}
 }

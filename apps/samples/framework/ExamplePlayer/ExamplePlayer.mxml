@@ -24,7 +24,7 @@
 -->
 <mx:Application
 	xmlns:mx			="http://www.adobe.com/2006/mxml"
-	xmlns:view			="org.openvideoplayer.view.*"
+	xmlns:view			="org.osmf.view.*"
 	backgroundColor		="#333333"
 	frameRate			="30"
 	>

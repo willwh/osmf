@@ -19,45 +19,41 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.chromeless
+package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.openvideoplayer.traits.TemporalTrait;
+	import org.osmf.media.MediaElement;
+	import org.osmf.traits.PausableTrait;
 	
-	internal class SWFTemporalTrait extends TemporalTrait
+	internal class SWFPausableTrait extends PausableTrait
 	{
-		public function SWFTemporalTrait(swfRoot:DisplayObject)
+		public function SWFPausableTrait(swfRoot:DisplayObject, owner:MediaElement)
 		{
-			super();
+			super(owner);
 			
 			this.swfRoot = swfRoot;
 			
 			// Keep in sync with the state of the SWF.
-			Object(swfRoot).videoPlayer.addEventListener("playheadChange", onPlayheadChange);
-			Object(swfRoot).videoPlayer.addEventListener("durationChange", onDurationChange);
-			
-			onPlayheadChange(null);
-			onDurationChange(null);
+			Object(swfRoot).videoPlayer.addEventListener("isPlayingChange", onPlayingChange);
+			onPlayingChange(null);
 		}
 		
-		private function onPlayheadChange(event:Event):void
+		override protected function processPausedChange(newPaused:Boolean):void
 		{
-			// Stay in sync with the state of the SWF.
-			var newPosition:Number = Object(swfRoot).videoPlayer.playhead;
-			if (newPosition != position)
+			if (newPaused && Object(swfRoot).videoPlayer.isPlaying)
 			{
-				super.position = newPosition;
+				Object(swfRoot).videoPlayer.pauseVideo();
 			}
 		}
 		
-		private function onDurationChange(event:Event):void
+		private function onPlayingChange(event:Event):void
 		{
-			var newDuration:Number = Object(swfRoot).videoPlayer.duration;
-			if (newDuration != duration)
+			// Stay in sync with the state of the SWF.
+			if (Object(swfRoot).videoPlayer.isPlaying == false)
 			{
-				super.duration = newDuration;
+				pause();
 			}
 		}
 		

@@ -30,7 +30,7 @@
 	>
 	<mx:Script>
 		<![CDATA[
-			import org.openvideoplayer.*;
+			import org.osmf.*;
 		]]>
 	</mx:Script>
 	

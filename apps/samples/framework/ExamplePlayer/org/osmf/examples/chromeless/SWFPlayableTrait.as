@@ -19,17 +19,19 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.chromeless
+package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.traits.PausableTrait;
+	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PausableTrait;
+	import org.osmf.traits.PlayableTrait;
 	
-	internal class SWFPausableTrait extends PausableTrait
+	internal class SWFPlayableTrait extends PlayableTrait
 	{
-		public function SWFPausableTrait(swfRoot:DisplayObject, owner:MediaElement)
+		public function SWFPlayableTrait(swfRoot:DisplayObject, owner:MediaElement)
 		{
 			super(owner);
 			
@@ -39,21 +41,21 @@ package org.openvideoplayer.examples.chromeless
 			Object(swfRoot).videoPlayer.addEventListener("isPlayingChange", onPlayingChange);
 			onPlayingChange(null);
 		}
-		
-		override protected function processPausedChange(newPaused:Boolean):void
+
+		override protected function processPlayingChange(newPlaying:Boolean):void
 		{
-			if (newPaused && Object(swfRoot).videoPlayer.isPlaying)
+			if (newPlaying && Object(swfRoot).videoPlayer.isPlaying == false)
 			{
-				Object(swfRoot).videoPlayer.pauseVideo();
+				Object(swfRoot).videoPlayer.playVideo();
 			}
 		}
 		
 		private function onPlayingChange(event:Event):void
 		{
 			// Stay in sync with the state of the SWF.
-			if (Object(swfRoot).videoPlayer.isPlaying == false)
+			if (Object(swfRoot).videoPlayer.isPlaying)
 			{
-				pause();
+				play();
 			}
 		}
 		

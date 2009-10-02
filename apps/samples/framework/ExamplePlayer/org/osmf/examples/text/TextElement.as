@@ -19,16 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.text
+package org.osmf.examples.text
 {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.traits.SpatialTrait;
-	import org.openvideoplayer.traits.ViewableTrait;
+	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.SpatialTrait;
+	import org.osmf.traits.ViewableTrait;
 	
 	public class TextElement extends MediaElement
 	{

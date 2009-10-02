@@ -19,10 +19,10 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.loaderproxy
+package org.osmf.examples.loaderproxy
 {
-	import org.openvideoplayer.traits.ILoadedContext;
-	import org.openvideoplayer.utils.URL;
+	import org.osmf.traits.ILoadedContext;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * Loaded context for the VideoProxyElement.  Holds the URL that will

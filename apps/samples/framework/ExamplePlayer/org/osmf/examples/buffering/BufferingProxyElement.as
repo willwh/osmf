@@ -19,12 +19,12 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.buffering
+package org.osmf.examples.buffering
 {
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.proxies.ListenerProxyElement;
-	import org.openvideoplayer.traits.IBufferable;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.media.MediaElement;
+	import org.osmf.proxies.ListenerProxyElement;
+	import org.osmf.traits.IBufferable;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * Proxy class which sets the IBufferable.bufferTime property to

@@ -19,13 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.traceproxy
+package org.osmf.examples.traceproxy
 {
-	import org.openvideoplayer.events.*;
-	import org.openvideoplayer.media.*;
-	import org.openvideoplayer.metadata.*;
-	import org.openvideoplayer.proxies.*;
-	import org.openvideoplayer.traits.*;
+	import org.osmf.events.*;
+	import org.osmf.media.*;
+	import org.osmf.metadata.*;
+	import org.osmf.proxies.*;
+	import org.osmf.traits.*;
 	
 	/**
 	 * A ProxyElement which traces all media events to the console.  This class

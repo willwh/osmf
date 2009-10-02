@@ -19,17 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.loaderproxy
+package org.osmf.examples.loaderproxy
 {
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.loaders.ILoader;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.proxies.ProxyElement;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.LoadableTrait;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.loaders.ILoader;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.proxies.ProxyElement;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * VideoProxyElement acts as a proxy for a VideoElement, and changes the

@@ -19,62 +19,48 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.chromeless
+package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.openvideoplayer.traits.AudibleTrait;
+	import org.osmf.traits.TemporalTrait;
 	
-	internal class SWFAudibleTrait extends AudibleTrait
+	internal class SWFTemporalTrait extends TemporalTrait
 	{
-		public function SWFAudibleTrait(swfRoot:DisplayObject)
+		public function SWFTemporalTrait(swfRoot:DisplayObject)
 		{
+			super();
+			
 			this.swfRoot = swfRoot;
-
+			
 			// Keep in sync with the state of the SWF.
-			Object(swfRoot).videoPlayer.addEventListener("isMutedChange", onMutedChange);
-			Object(swfRoot).videoPlayer.addEventListener("volumeChange", onVolumeChange);
-			onMutedChange(null);
-			onVolumeChange(null);
-		}
-
-		override protected function processVolumeChange(newVolume:Number):void
-		{
-			Object(swfRoot).videoPlayer.setVolume(newVolume);
-		}
-
-		override protected function processMutedChange(newMuted:Boolean):void
-		{
-			if (Object(swfRoot).videoPlayer.isMuted != newMuted)
-			{
-				Object(swfRoot).videoPlayer.toggleMute();
-			}
-		}
-
-		override protected function processPanChange(newPan:Number):void
-		{
-			// No op.	
+			Object(swfRoot).videoPlayer.addEventListener("playheadChange", onPlayheadChange);
+			Object(swfRoot).videoPlayer.addEventListener("durationChange", onDurationChange);
+			
+			onPlayheadChange(null);
+			onDurationChange(null);
 		}
 		
-		private function onMutedChange(event:Event):void
+		private function onPlayheadChange(event:Event):void
 		{
 			// Stay in sync with the state of the SWF.
-			if (Object(swfRoot).videoPlayer.isMuted != muted)
+			var newPosition:Number = Object(swfRoot).videoPlayer.playhead;
+			if (newPosition != position)
 			{
-				muted = !muted;
+				super.position = newPosition;
 			}
 		}
-
-		private function onVolumeChange(event:Event):void
+		
+		private function onDurationChange(event:Event):void
 		{
-			// Stay in sync with the state of the SWF.
-			if (Object(swfRoot).videoPlayer.getVolume() != volume)
+			var newDuration:Number = Object(swfRoot).videoPlayer.duration;
+			if (newDuration != duration)
 			{
-				volume = Object(swfRoot).videoPlayer.getVolume();
+				super.duration = newDuration;
 			}
 		}
-
+		
 		private var swfRoot:DisplayObject;
 	}
 }

@@ -19,9 +19,9 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples
+package org.osmf.examples
 {
-	import org.openvideoplayer.media.MediaElement;
+	import org.osmf.media.MediaElement;
 	
 	/**
 	 * Encapsulation of an example MediaElement.

@@ -19,17 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.examples.chromeless
+package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.openvideoplayer.events.DimensionChangeEvent;
-	import org.openvideoplayer.media.IURLResource;
-	import org.openvideoplayer.swf.SWFElement;
-	import org.openvideoplayer.swf.SWFLoader;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.traits.SpatialTrait;
+	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.media.IURLResource;
+	import org.osmf.swf.SWFElement;
+	import org.osmf.swf.SWFLoader;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.SpatialTrait;
 	
 	/**
 	 * SWFElement which can control the SWF it wraps via a custom SWF API

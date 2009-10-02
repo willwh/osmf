@@ -25,15 +25,15 @@ package com.adobe.strobe.players
 	
 	import mx.core.UIComponent;
 	
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.events.ViewChangeEvent;
-	import org.openvideoplayer.gateways.RegionSprite;
-	import org.openvideoplayer.layout.LayoutAttributesFacet;
-	import org.openvideoplayer.layout.LayoutUtils;
-	import org.openvideoplayer.layout.RegistrationPoint;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.MediaPlayer;
-	import org.openvideoplayer.metadata.MetadataNamespaces;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.gateways.RegionSprite;
+	import org.osmf.layout.LayoutAttributesFacet;
+	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.metadata.MetadataNamespaces;
 	
 	/**
 	 * Defines a Flex wrapper class for the MediaPlayerSprite class.

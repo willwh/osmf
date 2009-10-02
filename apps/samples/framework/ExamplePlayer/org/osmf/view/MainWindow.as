@@ -19,24 +19,24 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.view
+package org.osmf.view
 {
 	import flash.events.MouseEvent;
 	
 	import mx.events.ListEvent;
 	import mx.events.SliderEvent;
 	
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.events.BufferTimeChangeEvent;
-	import org.openvideoplayer.events.DurationChangeEvent;
-	import org.openvideoplayer.events.MediaErrorEvent;
-	import org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent;
-	import org.openvideoplayer.events.MediaPlayerStateChangeEvent;
-	import org.openvideoplayer.events.MutedChangeEvent;
-	import org.openvideoplayer.events.PlayheadChangeEvent;
-	import org.openvideoplayer.examples.AllExamples;
-	import org.openvideoplayer.examples.Example;
-	import org.openvideoplayer.version.Version;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.DurationChangeEvent;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+	import org.osmf.events.MediaPlayerStateChangeEvent;
+	import org.osmf.events.MutedChangeEvent;
+	import org.osmf.events.PlayheadChangeEvent;
+	import org.osmf.examples.AllExamples;
+	import org.osmf.examples.Example;
+	import org.osmf.version.Version;
 	
 	public class MainWindow extends MainWindowLayout
 	{
