@@ -21,16 +21,16 @@
 *****************************************************/
 package 
 {
-	import org.openvideoplayer.composition.ParallelElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.gateways.HTMLGateway;
-	import org.openvideoplayer.gateways.RegionSprite;
-	import org.openvideoplayer.html.HTMLElement;
-	import org.openvideoplayer.media.MediaPlayer;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.composition.ParallelElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.gateways.HTMLGateway;
+	import org.osmf.gateways.RegionSprite;
+	import org.osmf.html.HTMLElement;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30', width='640', height='358')]
 	public class HTMLGatewaySample extends RegionSprite

@@ -32,7 +32,7 @@
 	<mx:Script>
 		<![CDATA[
 
-			import org.openvideoplayer.netmocker.*;
+			import org.osmf.netmocker.*;
 			
 			import flexunit.framework.TestSuite;
 			
