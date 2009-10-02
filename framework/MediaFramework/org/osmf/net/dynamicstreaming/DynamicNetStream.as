@@ -314,7 +314,7 @@ package org.osmf.net.dynamicstreaming
 			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.getItemAt(targetIndex).bitrate) + " kbps");
 						
 			_switchUnderway = true;	
-			dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_UNDEFINED, new SwitchingDetail(SwitchingDetailCodes.SWITCHING_UP_OTHER)));
+			dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_UNDEFINED, _detail));
 			
 			this.playStream(nso);
 			

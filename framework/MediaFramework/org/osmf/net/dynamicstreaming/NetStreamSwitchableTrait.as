@@ -62,7 +62,15 @@ package org.osmf.net.dynamicstreaming
 			validateIndex(index);
 			return _resource.getItemAt(index).bitrate;
 		}	
-				
+			
+		/**
+		 * @inheritDoc
+		 */
+		override public function get currentIndex():int
+		{
+			return _ns.renderingIndex;
+		}	
+		
 		/**
 		 * @inheritDoc
 		 */
