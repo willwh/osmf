@@ -29,7 +29,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.openvideoplayer.MediaFrameworkTests;
+			import org.osmf.MediaFrameworkTests;
 			import flexunit.framework.TestSuite;
 			import flexunit.junit.JUnitTestRunner;
 		
