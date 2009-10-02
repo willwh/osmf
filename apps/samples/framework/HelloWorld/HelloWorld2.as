@@ -25,12 +25,12 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
-	import org.openvideoplayer.display.MediaPlayerSprite;
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.display.MediaPlayerSprite;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	/**
 	 * A simple OSMF application, building on HelloWorld.as.

@@ -19,14 +19,14 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.logging.flex
+package org.osmf.logging.flex
 {
 	import mx.logging.ILogger;
 	import mx.logging.Log;
 	
-	import org.openvideoplayer.logging.ILogger;
+	import org.osmf.logging.ILogger;
 	
-	public class FlexLoggerWrapper implements org.openvideoplayer.logging.ILogger
+	public class FlexLoggerWrapper implements org.osmf.logging.ILogger
 	{
 		public function FlexLoggerWrapper(logger:mx.logging.ILogger)
 		{

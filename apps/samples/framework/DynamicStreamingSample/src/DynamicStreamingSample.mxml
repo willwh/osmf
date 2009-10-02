@@ -24,13 +24,13 @@
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
 	xmlns:players="com.adobe.strobe.players.*" applicationComplete="initApp()"
-	backgroundColor="#000000" xmlns:examples="org.openvideoplayer.examples.*">
+	backgroundColor="#000000" xmlns:examples="org.osmf.examples.*">
 
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import org.openvideoplayer.traits.IAudible;
-			import org.openvideoplayer.examples.Compositions;
+			import org.osmf.traits.IAudible;
+			import org.osmf.examples.Compositions;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;
 			import mx.events.DropdownEvent;		
@@ -38,31 +38,31 @@
 			import mx.controls.Alert;
 			import mx.core.UIComponent;
 			
-			import org.openvideoplayer.parsers.SMILParser;
-			import org.openvideoplayer.plugin.PluginClassResource;
+			import org.osmf.parsers.SMILParser;
+			import org.osmf.plugin.PluginClassResource;
 
-			import org.openvideoplayer.traits.MediaTraitType;
-			import org.openvideoplayer.traits.LoadState;
-			import org.openvideoplayer.traits.ILoadable;
-			import org.openvideoplayer.traits.MediaTraitType;			
-			import org.openvideoplayer.traits.ISpatial;
-			import org.openvideoplayer.traits.ISwitchable;
-			import org.openvideoplayer.traits.IViewable;
+			import org.osmf.traits.MediaTraitType;
+			import org.osmf.traits.LoadState;
+			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.MediaTraitType;			
+			import org.osmf.traits.ISpatial;
+			import org.osmf.traits.ISwitchable;
+			import org.osmf.traits.IViewable;
 
-			import org.openvideoplayer.events.*;
+			import org.osmf.events.*;
 
-			import org.openvideoplayer.media.MediaInfo;
-			import org.openvideoplayer.media.MediaElement;
-			import org.openvideoplayer.media.IMediaResource;
-			import org.openvideoplayer.media.URLResource;			
-			import org.openvideoplayer.media.IURLResource;
+			import org.osmf.media.MediaInfo;
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.IMediaResource;
+			import org.osmf.media.URLResource;			
+			import org.osmf.media.IURLResource;
 
-			import org.openvideoplayer.video.VideoElement;
+			import org.osmf.video.VideoElement;
 			
-			import org.openvideoplayer.utils.*;
+			import org.osmf.utils.*;
 			
-			import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingNetLoader;
-			import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
+			import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+			import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 			
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;

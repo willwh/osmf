@@ -28,23 +28,23 @@ package
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
-	import org.openvideoplayer.composition.ParallelElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.image.ImageElement;
-	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.layout.LayoutUtils;
-	import org.openvideoplayer.layout.RegistrationPoint;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.MediaPlayer;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.metadata.MetadataUtils;
-	import org.openvideoplayer.metadata.ObjectFacet;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.proxies.TemporalProxyElement;
-	import org.openvideoplayer.gateways.RegionSprite;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.composition.ParallelElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.image.ImageElement;
+	import org.osmf.image.ImageLoader;
+	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.ObjectFacet;
+	import org.osmf.net.NetLoader;
+	import org.osmf.proxies.TemporalProxyElement;
+	import org.osmf.gateways.RegionSprite;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class RegionsSample extends Sprite

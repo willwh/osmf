@@ -19,13 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.plugins.video
+package org.osmf.plugins.video
 {
-	import org.openvideoplayer.media.IMediaInfo;
-	import org.openvideoplayer.media.MediaInfo;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.plugin.IPluginInfo;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaInfo;
+	import org.osmf.net.NetLoader;
+	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoPluginInfo implements IPluginInfo
 	{
@@ -47,7 +47,7 @@ package org.openvideoplayer.plugins.video
 		public function getMediaInfoAt(index:int):IMediaInfo
 		{
 			var netLoader:NetLoader = new NetLoader();
-			return new MediaInfo("org.openvideoplayer.video.Video", netLoader, VideoElement, new Array(netLoader));
+			return new MediaInfo("org.osmf.video.Video", netLoader, VideoElement, new Array(netLoader));
 		}
 		
 		/**

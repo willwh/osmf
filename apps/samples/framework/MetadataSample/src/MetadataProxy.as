@@ -1,15 +1,15 @@
 package
 {
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.metadata.KeyValueFacet;
-	import org.openvideoplayer.metadata.ObjectIdentifier;
-	import org.openvideoplayer.net.NetStreamCodes;
-	import org.openvideoplayer.proxies.ProxyElement;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.net.NetStreamCodes;
+	import org.osmf.proxies.ProxyElement;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	public class MetadataProxy extends ProxyElement
 	{

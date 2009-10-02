@@ -21,15 +21,15 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-package org.openvideoplayer.model
+package org.osmf.model
 {
 	import mx.collections.ArrayCollection;
 	
-	import org.openvideoplayer.loaders.*;
-	import org.openvideoplayer.media.*;
-	import org.openvideoplayer.net.*;
-	import org.openvideoplayer.plugin.*;
-	import org.openvideoplayer.video.*;
+	import org.osmf.loaders.*;
+	import org.osmf.media.*;
+	import org.osmf.net.*;
+	import org.osmf.plugin.*;
+	import org.osmf.video.*;
 	
 	public class Model
 	{

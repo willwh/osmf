@@ -19,11 +19,11 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.model
+package org.osmf.model
 {
 	import __AS3__.vec.Vector;
 	
-	import org.openvideoplayer.media.*;
+	import org.osmf.media.*;
 	
 	public class AppResourceHandlerResolver implements IMediaResourceHandlerResolver
 	{

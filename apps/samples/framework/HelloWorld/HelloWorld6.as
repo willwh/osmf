@@ -23,16 +23,16 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.openvideoplayer.display.MediaElementSprite;
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.IPlayable;
-	import org.openvideoplayer.traits.MediaTraitType;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.display.MediaElementSprite;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	/**
 	 * Variation on HelloWorld, using MediaElementSprite

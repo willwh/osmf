@@ -21,8 +21,8 @@
 *****************************************************/
 package com.adobe.strobe.plugins.smil.loader
 {
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.traits.ILoadedContext;
+	import org.osmf.media.MediaElement;
+	import org.osmf.traits.ILoadedContext;
 	
 	/**
 	 * This class represents the loaded context for the <code>SMILElement</code> object. This loaded context instance is created

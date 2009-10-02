@@ -19,13 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.logging.flex
+package org.osmf.logging.flex
 {
 	import mx.logging.ILoggingTarget;
 	import mx.logging.Log;
 	
-	import org.openvideoplayer.logging.ILoggerFactory;
-	import org.openvideoplayer.logging.ILogger;
+	import org.osmf.logging.ILoggerFactory;
+	import org.osmf.logging.ILogger;
 	
 	/**
 	 * This class implements ILoggerFactory of the OSMF logging framework and it

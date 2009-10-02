@@ -31,34 +31,34 @@
 	 horizontalAlign="center">
 	 <mx:Script>
 	 	<![CDATA[
-	 		import org.openvideoplayer.layout.PaddingLayoutFacet;
-	 		import org.openvideoplayer.layout.AnchorLayoutFacet;
-	 		import org.openvideoplayer.layout.AbsoluteLayoutFacet;
-	 		import org.openvideoplayer.display.ScaleMode;
-	 		import org.openvideoplayer.layout.RelativeLayoutFacet;
-	 		import org.openvideoplayer.layout.LayoutAttributesFacet;
-	 		import org.openvideoplayer.metadata.IFacet;
-	 		import org.openvideoplayer.media.MediaElement;
-	 		import org.openvideoplayer.composition.ParallelElement;
-	 		import org.openvideoplayer.composition.SerialElement;
-	 		import org.openvideoplayer.image.ImageElement;
-	 		import org.openvideoplayer.video.VideoElement;
-	 		import org.openvideoplayer.audio.AudioElement;
-	 		import org.openvideoplayer.media.MediaInfo;
-	 		import org.openvideoplayer.composition.CompositeElement;
-	 		import org.openvideoplayer.metadata.MetadataNamespaces;
-	 		import org.openvideoplayer.metadata.MediaType;
-	 		import org.openvideoplayer.utils.MediaFrameworkStrings;
-	 		import org.openvideoplayer.metadata.ObjectIdentifier;
-	 		import org.openvideoplayer.utils.URL;
-	 		import org.openvideoplayer.media.URLResource;
-	 		import org.openvideoplayer.metadata.KeyValueFacet;
-	 		import org.openvideoplayer.image.ImageLoader;
-	 		import org.openvideoplayer.net.NetLoader;
-	 		import org.openvideoplayer.media.MediaFactory;
-	 		import org.openvideoplayer.events.MediaErrorEvent;
-	 		import org.openvideoplayer.events.MediaPlayerCapabilityChangeEvent;
-	 		import org.openvideoplayer.events.MetadataEvent;
+	 		import org.osmf.layout.PaddingLayoutFacet;
+	 		import org.osmf.layout.AnchorLayoutFacet;
+	 		import org.osmf.layout.AbsoluteLayoutFacet;
+	 		import org.osmf.display.ScaleMode;
+	 		import org.osmf.layout.RelativeLayoutFacet;
+	 		import org.osmf.layout.LayoutAttributesFacet;
+	 		import org.osmf.metadata.IFacet;
+	 		import org.osmf.media.MediaElement;
+	 		import org.osmf.composition.ParallelElement;
+	 		import org.osmf.composition.SerialElement;
+	 		import org.osmf.image.ImageElement;
+	 		import org.osmf.video.VideoElement;
+	 		import org.osmf.audio.AudioElement;
+	 		import org.osmf.media.MediaInfo;
+	 		import org.osmf.composition.CompositeElement;
+	 		import org.osmf.metadata.MetadataNamespaces;
+	 		import org.osmf.metadata.MediaType;
+	 		import org.osmf.utils.MediaFrameworkStrings;
+	 		import org.osmf.metadata.ObjectIdentifier;
+	 		import org.osmf.utils.URL;
+	 		import org.osmf.media.URLResource;
+	 		import org.osmf.metadata.KeyValueFacet;
+	 		import org.osmf.image.ImageLoader;
+	 		import org.osmf.net.NetLoader;
+	 		import org.osmf.media.MediaFactory;
+	 		import org.osmf.events.MediaErrorEvent;
+	 		import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+	 		import org.osmf.events.MetadataEvent;
 	 		
 	 		private var factory:MediaFactory;
 	 			 		

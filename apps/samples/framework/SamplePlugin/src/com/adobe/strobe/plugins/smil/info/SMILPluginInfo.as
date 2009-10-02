@@ -24,11 +24,11 @@ package com.adobe.strobe.plugins.smil.info
 	import com.adobe.strobe.plugins.smil.loader.SMILLoader;
 	import com.adobe.strobe.plugins.smil.media.SMILElement;
 	
-	import org.openvideoplayer.logging.ILogger;
-	import org.openvideoplayer.logging.Log;
-	import org.openvideoplayer.media.IMediaInfo;
-	import org.openvideoplayer.media.MediaInfo;
-	import org.openvideoplayer.plugin.IPluginInfo;
+	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Log;
+	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaInfo;
+	import org.osmf.plugin.IPluginInfo;
 	
 	public class SMILPluginInfo implements IPluginInfo
 	{

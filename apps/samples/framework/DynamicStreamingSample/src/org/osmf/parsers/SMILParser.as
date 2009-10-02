@@ -19,7 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.parsers
+package org.osmf.parsers
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -30,9 +30,9 @@ package org.openvideoplayer.parsers
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	
-	import org.openvideoplayer.utils.FMSURL;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingItem;
-	import org.openvideoplayer.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.utils.FMSURL;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	
 	[Event (name="error", type="flash.events.IOErrorEvent")]
 	[Event (name="securityError", type="flash.events.SecurityErrorEvent")]

@@ -24,15 +24,15 @@ package com.adobe.strobe.plugins.smil.media
 	import com.adobe.strobe.plugins.smil.loader.SMILLoadedContext;
 	import com.adobe.strobe.plugins.smil.loader.SMILLoader;
 	
-	import org.openvideoplayer.composition.CompositeElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.loaders.ILoader;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.IURLResource;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.LoadableTrait;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.composition.CompositeElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.loaders.ILoader;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.IURLResource;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.MediaTraitType;
 	
 	public class SMILElement extends SerialElement
 	{

@@ -19,17 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.gg
+package org.osmf.gg
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.openvideoplayer.media.IMediaInfo;
-	import org.openvideoplayer.media.IMediaResourceHandler;
-	import org.openvideoplayer.media.MediaInfo;
-	import org.openvideoplayer.media.MediaInfoType;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.plugin.IPluginInfo;
-	import org.openvideoplayer.utils.MediaFrameworkStrings;
+	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaInfoType;
+	import org.osmf.net.NetLoader;
+	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.utils.MediaFrameworkStrings;
 
 	/**
 	 * Encapsulation of a GlanceGuide plugin.
@@ -45,7 +45,7 @@ package org.openvideoplayer.gg
 			
 			var resourceHandler:IMediaResourceHandler = new NetLoader();
 			var mediaInfo:MediaInfo = new MediaInfo
-				( "org.openvideoplayer.gg.GGPluginInfo"
+				( "org.osmf.gg.GGPluginInfo"
 				, resourceHandler
 				, GGVideoProxyElement
 				, []

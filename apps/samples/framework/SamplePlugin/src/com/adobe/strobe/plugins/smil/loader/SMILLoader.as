@@ -28,14 +28,14 @@ package com.adobe.strobe.plugins.smil.loader
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import org.openvideoplayer.events.LoadableStateChangeEvent;
-	import org.openvideoplayer.loaders.LoaderBase;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.traits.ILoadable;
-	import org.openvideoplayer.traits.LoadState;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.loaders.LoaderBase;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * This class contains all the logic for loading a SMIL document, and creating a 'loaded' MediaElement that 

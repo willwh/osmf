@@ -29,8 +29,8 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.openvideoplayer.logging.flex.FlexLogWrapper;
-			import org.openvideoplayer.logging.TraceLoggerFactory;
+			import org.osmf.logging.flex.FlexLogWrapper;
+			import org.osmf.logging.TraceLoggerFactory;
 			import mx.events.ListEvent;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -41,26 +41,26 @@
 			import flash.utils.getDefinitionByName;
 			import flash.net.getClassByAlias;
 
-			import org.openvideoplayer.events.*;
-			import org.openvideoplayer.image.*;
-			import org.openvideoplayer.loaders.*;
-			import org.openvideoplayer.logging.ILogger;
-			import org.openvideoplayer.logging.Log;
-			import org.openvideoplayer.media.*;
-			import org.openvideoplayer.model.*;
-			import org.openvideoplayer.net.*;
-			import org.openvideoplayer.plugin.*;
-			import org.openvideoplayer.plugins.video.SimpleVideoPluginInfo;
-			import org.openvideoplayer.utils.*;
-			import org.openvideoplayer.traits.*;
-			import org.openvideoplayer.video.*;
+			import org.osmf.events.*;
+			import org.osmf.image.*;
+			import org.osmf.loaders.*;
+			import org.osmf.logging.ILogger;
+			import org.osmf.logging.Log;
+			import org.osmf.media.*;
+			import org.osmf.model.*;
+			import org.osmf.net.*;
+			import org.osmf.plugin.*;
+			import org.osmf.plugins.video.SimpleVideoPluginInfo;
+			import org.osmf.utils.*;
+			import org.osmf.traits.*;
+			import org.osmf.video.*;
 			
 			
 			// Steps to run this app:
 			//
 			// SCENARIO - 1 (Loading a Static Plugin)
 			//
-			// 1. Enter 'org.openvideoplayer.plugins.video.SimpleVideoPluginInfo' (without the quotes) in the top textbox 
+			// 1. Enter 'org.osmf.plugins.video.SimpleVideoPluginInfo' (without the quotes) in the top textbox 
 			// 2. Enter a URL to an FLV file (RTMP or HTTP) in the second textbox
 			// 3. Click on the button 'Load Media Resource'
 			// 4. Confirm that you get the Alert dialog "No registered MediaInfo for this resource"
@@ -72,7 +72,7 @@
 			//
 			// To start with, the MediaFactory was empty. When you clicked on 'Load Media Resource' for the video URL, the MediaFactory
 			// could not create a MediaElement that had an associated IMediaResourceHandler for the URLResource (pointing to the video).
-			// When you loaded the plugin (org.openvideoplayer.plugins.video.SimpleVideoPluginInfo - this class is compiled in with this project)
+			// When you loaded the plugin (org.osmf.plugins.video.SimpleVideoPluginInfo - this class is compiled in with this project)
 			// the MediaFactory got populated with 1 MediaInfo object that had the IMediaResourceHandler for handling videos. On the subsequent
 			// click to load the media resource, the video started playing back.
 			//
@@ -315,7 +315,7 @@
 		<mx:HBox height="60">
 			<mx:Spacer width="10" />
 
-			<!-- Replace this text with "org.openvideoplayer.plugins.video.SimpleVideoPlauginInfo" 
+			<!-- Replace this text with "org.osmf.plugins.video.SimpleVideoPlauginInfo" 
 				for the static plugin example -->
 			<mx:TextInput
 				width="500"

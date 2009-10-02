@@ -19,23 +19,23 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.view
+package org.osmf.view
 {
 	import flash.events.MouseEvent;
 	
-	import org.openvideoplayer.display.ScaleMode;
-	import org.openvideoplayer.events.PlayingChangeEvent;
-	import org.openvideoplayer.events.PluginLoadEvent;
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.MediaFactory;
-	import org.openvideoplayer.media.MediaInfo;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.plugin.PluginManager;
-	import org.openvideoplayer.utils.FMSURL;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.display.ScaleMode;
+	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaInfo;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.plugin.PluginManager;
+	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	public class MainWindow extends MainWindowLayout
 	{
@@ -90,7 +90,7 @@ package org.openvideoplayer.view
 			
 			mediaFactory.addMediaInfo
 				( new MediaInfo
-					( "org.openvideoplayer.video"
+					( "org.osmf.video"
 					, netLoader
 					, VideoElement
 					, [netLoader]

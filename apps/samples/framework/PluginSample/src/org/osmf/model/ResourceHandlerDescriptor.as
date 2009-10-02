@@ -21,9 +21,9 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-package org.openvideoplayer.model
+package org.osmf.model
 {
-	import org.openvideoplayer.media.IMediaInfo;
+	import org.osmf.media.IMediaInfo;
 	
 	public class ResourceHandlerDescriptor
 	{

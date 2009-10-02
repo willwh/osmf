@@ -19,20 +19,20 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.openvideoplayer.model
+package org.osmf.model
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import org.openvideoplayer.media.IMediaReferrer;
-	import org.openvideoplayer.media.IMediaResourceHandler;
-	import org.openvideoplayer.media.IURLResource;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.swf.SWFElement;
-	import org.openvideoplayer.swf.SWFLoader;
-	import org.openvideoplayer.traits.IPausable;
-	import org.openvideoplayer.traits.MediaTraitType;
+	import org.osmf.media.IMediaReferrer;
+	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaElement;
+	import org.osmf.net.NetLoader;
+	import org.osmf.swf.SWFElement;
+	import org.osmf.swf.SWFLoader;
+	import org.osmf.traits.IPausable;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * A SWFElement which can reference other MediaElements so that

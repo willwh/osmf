@@ -23,11 +23,11 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.openvideoplayer.media.MediaPlayer;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 
 	/**
 	 * Variation on HelloWorld, using MediaPlayer + IViewable

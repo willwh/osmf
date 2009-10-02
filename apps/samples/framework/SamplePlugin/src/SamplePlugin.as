@@ -28,7 +28,7 @@ package
 	import flash.display.Sprite;
 	import flash.system.Security;
 	
-	import org.openvideoplayer.plugin.IPluginInfo;
+	import org.osmf.plugin.IPluginInfo;
 
 	/**
 	 * This class is at the root of the plugin SWF. The property <code>pluginInfo</code> is what the Strobe

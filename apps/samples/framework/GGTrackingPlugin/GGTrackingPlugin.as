@@ -24,8 +24,8 @@ package
 	import flash.display.Sprite;
 	import flash.system.Security;
 	
-	import org.openvideoplayer.gg.GGPluginInfo;
-	import org.openvideoplayer.plugin.IPluginInfo;
+	import org.osmf.gg.GGPluginInfo;
+	import org.osmf.plugin.IPluginInfo;
 
 	/**
 	 * The GlanceGuide Tracking Plugin...

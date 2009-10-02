@@ -1,11 +1,11 @@
 package
 {
-	import org.openvideoplayer.media.IMediaResource;
-	import org.openvideoplayer.media.IMediaResourceHandler;
-	import org.openvideoplayer.metadata.KeyValueFacet;
-	import org.openvideoplayer.metadata.MetadataNamespaces;
-	import org.openvideoplayer.metadata.ObjectIdentifier;
-	import org.openvideoplayer.utils.MediaFrameworkStrings;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.utils.MediaFrameworkStrings;
 
 	public class MetadataResourceHandler implements IMediaResourceHandler
 	{

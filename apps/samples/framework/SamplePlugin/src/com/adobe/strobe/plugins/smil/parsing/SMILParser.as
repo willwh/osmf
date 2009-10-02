@@ -21,15 +21,15 @@
 *****************************************************/
 package com.adobe.strobe.plugins.smil.parsing
 {
-	import org.openvideoplayer.audio.AudioElement;
-	import org.openvideoplayer.composition.SerialElement;
-	import org.openvideoplayer.image.ImageElement;
-	import org.openvideoplayer.image.ImageLoader;
-	import org.openvideoplayer.media.MediaElement;
-	import org.openvideoplayer.media.URLResource;
-	import org.openvideoplayer.net.NetLoader;
-	import org.openvideoplayer.utils.URL;
-	import org.openvideoplayer.video.VideoElement;
+	import org.osmf.audio.AudioElement;
+	import org.osmf.composition.SerialElement;
+	import org.osmf.image.ImageElement;
+	import org.osmf.image.ImageLoader;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.utils.URL;
+	import org.osmf.video.VideoElement;
 	
 
 	// Sample SMIL document this parse can parse:
