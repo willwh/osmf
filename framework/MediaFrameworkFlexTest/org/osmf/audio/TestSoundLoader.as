@@ -21,14 +21,13 @@
 *****************************************************/
 package org.osmf.audio
 {
-	import flash.utils.Dictionary;
-	
 	import org.osmf.events.MediaError;
 	import org.osmf.loaders.TestILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
+	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadableTrait;
@@ -91,21 +90,17 @@ package org.osmf.audio
 			assertFalse(loader.canHandleResource(null));
 					
 			// Verify some valid resources based on metadata information
-			var metadata:KeyValueFacet = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), MediaType.AUDIO);
+			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.AUDIO);
 			var resource:URLResource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "audio/mpeg");			
+			metadata = new MediaTypeFacet(null, "audio/mpeg");
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "audio/mpeg");		
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.AUDIO);		
+			metadata = new MediaTypeFacet(MediaType.AUDIO, "audio/mpeg");
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
@@ -114,83 +109,62 @@ package org.osmf.audio
 			//
 			
 			
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.VIDEO);	
+			metadata = new MediaTypeFacet(MediaType.VIDEO);
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "video/x-flv");			
+			metadata = new MediaTypeFacet(null, "video/x-flv");
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 			
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "video/x-flv");		
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.VIDEO);		
+			metadata = new MediaTypeFacet(MediaType.VIDEO, "video/x-flv");
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.SWF);		
+			metadata = new MediaTypeFacet(MediaType.SWF);	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalid Mime Type");		
+			metadata = new MediaTypeFacet(null, "Invalid Mime Type");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.IMAGE);		
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalid Mime Type");		
+			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid Mime Type");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.VIDEO);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalid Mime Type");	
-			
+			metadata = new MediaTypeFacet(MediaType.VIDEO, "Invalid Mime Type");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.AUDIO);			
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalid Mime Type");	
+			metadata = new MediaTypeFacet(MediaType.AUDIO, "Invalid Mime Type");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.IMAGE);			
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE),  "video/x-flv");				
+			metadata = new MediaTypeFacet(MediaType.IMAGE,  "video/x-flv");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.IMAGE);			
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE),  "audio/mpeg");				
+			metadata = new MediaTypeFacet(MediaType.IMAGE, "audio/mpeg");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.VIDEO);			
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "audio/mpeg");			
+			metadata = new MediaTypeFacet(MediaType.VIDEO, "audio/mpeg");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();	
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),MediaType.AUDIO);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "video/x-flv");			
+			metadata = new MediaTypeFacet(MediaType.AUDIO, "video/x-flv");	
 			resource = new URLResource(new URL("http://example.com/test"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));

@@ -29,10 +29,7 @@ package org.osmf.metadata
 		private function testResourceWithData(expectedResult:int, mediaType:String, mimeType:String, supportedMedia:Vector.<String>, supportedMime:Vector.<String>):void
 		{
 			var resource:URLResource = new URLResource(new URL("test"));
-			var kvf:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DEFAULT_METADATA);
-			kvf.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), mediaType);
-			kvf.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), mimeType);
-			resource.metadata.addFacet(kvf);
+			resource.metadata.addFacet(new MediaTypeFacet(mediaType, mimeType));
 			assertEquals(expectedResult, MetadataUtils.checkMetadataMatchWithResource(resource, supportedMedia, supportedMime));
 		}
 		

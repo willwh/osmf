@@ -52,21 +52,16 @@ package org.osmf.metadata
 		public static function checkMetadataMatchWithResource(
 			resource:IMediaResource, mediaTypesSupported:Vector.<String>, mimeTypesSupported:Vector.<String>):int
 		{
-			var defaultMetadata:KeyValueFacet;
+			var facet:MediaTypeFacet;
 		
 			if (resource != null)
 			{				
-				defaultMetadata	= resource.metadata.getFacet(MetadataNamespaces.DEFAULT_METADATA) as KeyValueFacet;				
+				facet = resource.metadata.getFacet(MetadataNamespaces.MEDIATYPE_METADATA) as MediaTypeFacet;				
 			}
 			
-			var mediaType:String = null;
-			var mimeType:String = null;
-			if (defaultMetadata != null)
-			{
-				mediaType = defaultMetadata.getValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE)) as String;
-				mimeType = defaultMetadata.getValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE)) as String;
-			}
-			
+			var mediaType:String  = facet ? facet.mediaType : null;
+			var	mimeType:String  = facet ? facet.mimeType : null;
+						
 			return checkMetadataMatch(mediaType, mimeType, mediaTypesSupported, mimeTypesSupported);
 		}
 		

@@ -26,6 +26,7 @@ package org.osmf.swf
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
+	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.NullResource;
@@ -65,55 +66,43 @@ package org.osmf.swf
 			assertFalse(loader.canHandleResource(null));
 
 			// Verify some valid resources based on metadata information
-			var metadata:KeyValueFacet = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.SWF);
+			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.SWF);
 			var resource:URLResource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "application/x-shockwave-flash");
-			resource = new URLResource(new URL("http://example.com/movie"));
+			metadata = new MediaTypeFacet();
+			resource = new URLResource(new URL("http://example.com/movie.swf"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.SWF);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "application/x-shockwave-flash");		
+			metadata = new MediaTypeFacet(MediaType.SWF, "application/x-shockwave-flash");
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			// Add some invalid cases based on metadata information
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.IMAGE);			
+			metadata = new MediaTypeFacet(MediaType.IMAGE);
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalide MIME Type");		
+			metadata = new MediaTypeFacet(null,  "Invalide MIME Type");
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.SWF);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalide MIME Type");		
+			metadata = new MediaTypeFacet();
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.IMAGE);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "application/x-shockwave-flash");		
+			metadata = new MediaTypeFacet(MediaType.IMAGE, "application/x-shockwave-flash");
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
-			metadata = new KeyValueFacet();
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE),  MediaType.IMAGE);
-			metadata.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MIME_TYPE), "Invalid MIME Type");		
+			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid MIME Type");
 			resource = new URLResource(new URL("http://example.com/movie"));
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));

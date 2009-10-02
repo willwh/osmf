@@ -32,7 +32,8 @@ package org.osmf.metadata
 		 * The namespace that holds OSMF specific metadata
 		 */ 		
 		public static const DEFAULT_METADATA:URL			= new URL("http://www.openvideoplayer.org/default/1.0");
-		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.openvideoplayer.org/media/type");
+		
+		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.openvideoplayer.org/mediatype/default");
 		
 		public static const REGION_TARGET:URL				= new URL("http://www.openvideoplayer.org/region/target");
 		
