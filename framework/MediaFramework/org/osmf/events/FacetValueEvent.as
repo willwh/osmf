@@ -23,7 +23,6 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.IIdentifier;
 
 	/**
