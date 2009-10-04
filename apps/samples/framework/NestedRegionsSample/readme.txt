@@ -1,4 +1,4 @@
-Sample Application: Regions
+Sample Application: Nested Regions
 
 A. Overview
 
