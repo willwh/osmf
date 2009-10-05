@@ -45,6 +45,10 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
+			if(mediaPlayer.source != null)
+			{
+				_playerSprite.removeElement(mediaPlayer.source);
+			}	
 			mediaPlayer.source = value;					
 			_playerSprite.addElement(value);
 			scaleMode = _scaleMode;	
