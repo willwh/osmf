@@ -25,15 +25,11 @@ package com.adobe.strobe.players
 	
 	import mx.core.UIComponent;
 	
+	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.ViewChangeEvent;
-	import org.osmf.gateways.RegionSprite;
-	import org.osmf.layout.LayoutAttributesFacet;
-	import org.osmf.layout.LayoutUtils;
-	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
-	import org.osmf.metadata.MetadataNamespaces;
 	
 	/**
 	 * Defines a Flex wrapper class for the MediaPlayerSprite class.
@@ -45,35 +41,28 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
-			mediaPlayer.source = value;					
-			_playerSprite.addElement(value);
-			scaleMode = _scaleMode;	
-			invalidateDisplayList();	
+			mediaPlayer.source = value;
 		}
 		
 		public function get element():MediaElement
 		{
-			return _mediaPlayer.source;
+			return mediaPlayer.source;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]
 		public function get mediaPlayer():MediaPlayer
 		{
-			return _mediaPlayer;
+			return _playerSprite.mediaPlayer;
 		}
 		
 		public function set scaleMode(value:ScaleMode):void
 		{
-			_scaleMode = value;
-			if(element != null)
-			{
-				LayoutUtils.setLayoutAttributes(element.metadata, value, RegistrationPoint.CENTER);
-			}
+			_playerSprite.scaleMode = value;
 		}
 		
 		public function get scaleMode():ScaleMode
 		{
-			return _scaleMode;
+			return _playerSprite.scaleMode;
 		}
 		
 		// Overrides
@@ -82,21 +71,43 @@ package com.adobe.strobe.players
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			_playerSprite = new RegionSprite();				
+			
+			_playerSprite = new MediaPlayerSprite();				
 			addChild(_playerSprite);
+			
+			dispatchEvent(new Event("mediaPlayerChange"));
 		}
 			
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{	
 			super.updateDisplayList(w,h);
-			if (element != null)
-			{
-				LayoutUtils.setAbsoluteLayout(element.metadata, w, h, 0, 0);
-			}
-		}
 			
-		private var _scaleMode:ScaleMode = ScaleMode.NONE;		
-		private var _mediaPlayer:MediaPlayer = new MediaPlayer();			
-		private var _playerSprite:RegionSprite;
+			_playerSprite.setAvailableSize(w,h);
+		}
+				
+		// Internals
+		//
+													
+		protected function onView(event:ViewChangeEvent):void
+		{
+			if (event.oldView)
+			{
+				removeChild(event.oldView);
+			}
+			
+			if (event.newView)
+			{				
+				addChild(mediaPlayer.view);
+			}
+			
+			invalidateDisplayList();			
+		}
+				
+		private function redispatch(event:Event):void
+		{
+			dispatchEvent(event.clone());
+		}
+					
+		protected var _playerSprite:MediaPlayerSprite;
 	}
 }
