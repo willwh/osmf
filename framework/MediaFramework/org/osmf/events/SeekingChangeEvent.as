@@ -34,7 +34,7 @@ package org.osmf.events
 		 * of the type property of the event object for a seekingChange
 		 * event.
 		 * 
-		 * @eventType PLAYING_CHANGE  
+		 * @eventType SEEKING_CHANGE  
 		 */	
 		public static const SEEKING_CHANGE:String = "seekingChange";
 		
