@@ -201,8 +201,7 @@ package org.osmf.audio
 		
 		private function onSoundComplete(event:Event):void
 		{
-			playing = false;
-			lastStartTime = 0;
+			lastStartTime = channel.position;
 			
 			clearChannel();
 			

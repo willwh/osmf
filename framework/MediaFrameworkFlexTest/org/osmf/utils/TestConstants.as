@@ -94,5 +94,8 @@ package org.osmf.utils
 		
 		public static const STREAMING_AUDIO_FILE:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mp3:mediapm/ovp/content/test/video/nocc_small.mp3";
+
+		public static const INVALID_STREAMING_AUDIO_FILE:String
+			= "rtmp://cp67126.edgefcs.net/ondemand/fail//mp3:mediapm/ovp/content/test/video/nocc_small.mp3";
 	}
 }

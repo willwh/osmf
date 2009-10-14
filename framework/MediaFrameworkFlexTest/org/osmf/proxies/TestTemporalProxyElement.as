@@ -12,7 +12,6 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
@@ -156,8 +155,8 @@ package org.osmf.proxies
 			assertEquals(2, events.length);
 			assertTrue(events[0] is SeekingChangeEvent);
 			assertTrue(events[1] is SeekingChangeEvent);
-			assertTrue(SeekingChangeEvent(events[1]).seeking);
-			assertFalse(SeekingChangeEvent(events[0]).seeking);		
+			assertTrue(SeekingChangeEvent(events[0]).seeking);
+			assertFalse(SeekingChangeEvent(events[1]).seeking);		
 		}
 		
 		public function eventCatcher(event:Event):void

@@ -19,25 +19,26 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.audio
+package org.osmf.media
 {
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.TestMediaElement;
-	import org.osmf.media.URLResource;
-	import org.osmf.netmocker.MockNetLoader;
+	import org.osmf.audio.AudioElement;
 	import org.osmf.net.NetLoader;
+	import org.osmf.netmocker.MockNetLoader;
+	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.SimpleLoader;
+	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.utils.NetFactory;
-
-	public class TestAudioElement extends TestMediaElement
+	
+	public class TestMediaPlayerWithAudioElement extends TestMediaPlayer
 	{
+		// Overrides
+		//
+				
 		override public function setUp():void
 		{
 			netFactory = new NetFactory();
+			loader = netFactory.createNetLoader();
 
 			super.setUp();
 		}
@@ -46,36 +47,52 @@ package org.osmf.audio
 		{
 			super.tearDown();
 			
+			loader = null;
 			netFactory = null;
 		}
 
-		override protected function createMediaElement():MediaElement
+		override protected function createMediaElement(resource:IMediaResource):MediaElement
 		{
-			return new AudioElement(netFactory.createNetLoader()); 
+			if (loader is MockNetLoader)
+			{
+				// Give our mock loader an arbitrary duration.
+				MockNetLoader(loader).netStreamExpectedDuration = 1;
+			
+				if (resource == INVALID_RESOURCE)
+				{
+					MockNetLoader(loader).netConnectionExpectation = NetConnectionExpectation.INVALID_FMS_APPLICATION;
+				}
+			}
+
+			return new AudioElement(loader, resource as IURLResource);
 		}
 		
 		override protected function get loadable():Boolean
 		{
 			return true;
 		}
-
+		
 		override protected function get resourceForMediaElement():IMediaResource
 		{
+			// Use a valid URL so that the tests will pass if we use
+			// a real NetLoader rather than a MockNetLoader.
 			return new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+		}
+
+		override protected function get invalidResourceForMediaElement():IMediaResource
+		{
+			// Use an invalid URL so that the tests will fail if we use
+			// a real NetLoader rather than a MockNetLoader.
+			return INVALID_RESOURCE;
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			// Subclasses can override to specify the trait types which are
-			// expected upon initialization.
 			return [MediaTraitType.LOADABLE];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			// Subclasses can override to specify the trait types which are
-			// expected after a load.  Ignored if the MediaElement
-			// lacks the ILoadable trait.
 			return [ MediaTraitType.AUDIBLE
 				   , MediaTraitType.BUFFERABLE
 				   , MediaTraitType.LOADABLE
@@ -86,23 +103,12 @@ package org.osmf.audio
 				   ];
 		}
 		
-		public function testConstructor():void
-		{
-			new AudioElement(new NetLoader());
-			new AudioElement(new SoundLoader());
-			
-			// Loader must be a NetLoader or a SoundLoader.
-			try
-			{
-				new AudioElement(new SimpleLoader());
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-		}
+		// Internals
+		//
+
+		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_AUDIO_FILE));
 		
 		private var netFactory:NetFactory;
+		private var loader:NetLoader;
 	}
 }

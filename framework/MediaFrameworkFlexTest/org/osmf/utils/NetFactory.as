@@ -26,6 +26,8 @@ package org.osmf.utils
 	
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.netmocker.MockDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockNetConnection;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.MockNetStream;
@@ -74,6 +76,16 @@ package org.osmf.utils
 			return useMockObjects
 						? new MockNetLoader()
 						: new NetLoader();
+		}
+
+		/**
+		 * Create and return a new DynamicStreamingNetLoader.
+		 **/
+		public function createDynamicStreamingNetLoader():DynamicStreamingNetLoader
+		{
+			return useMockObjects
+						? new MockDynamicStreamingNetLoader()
+						: new DynamicStreamingNetLoader();
 		}
 		
 		/**

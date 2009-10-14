@@ -22,6 +22,7 @@
 package org.osmf.media
 {
 	import flash.display.DisplayObject;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -38,14 +39,14 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.DurationChangeEvent.DURATION_CHANGE
 	 */
-	 [Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
+	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
 	 
 	/**
 	 * Dispatched when the playhead reaches the duration for playable media.
 	 * 
 	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
 	 */	 
-	 [Event(name="durationReached", type="org.osmf.events.TraitEvent")]
+	[Event(name="durationReached", type="org.osmf.events.TraitEvent")]
 	 	 
 	 // IAudible
 
@@ -54,21 +55,21 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
 	 */	 	 
-	 [Event(name="volumeChange", type="org.osmf.events.VolumeChangeEvent")]   
+	[Event(name="volumeChange", type="org.osmf.events.VolumeChangeEvent")]   
 	 
 	/**
 	 * Dispatched when the <code>muted</code> property of the source media has changed.
 	 * 
 	 * @eventType org.osmf.events.MutedChangeEvent.MUTED_CHANGE
 	 */	 
-	 [Event(name="mutedChange", type="org.osmf.events.MutedChangeEvent")] 
+	[Event(name="mutedChange", type="org.osmf.events.MutedChangeEvent")] 
 	 
 	/**
 	 * Dispatched when the <code>pan</code> property of the source media has changed.
 	 * 
 	 * @eventType org.osmf.events.PanChangeEvent.PAN_CHANGE
 	 */	 	 
-	 [Event(name="panChange", type="org.osmf.events.PanChangeEvent")]
+	[Event(name="panChange", type="org.osmf.events.PanChangeEvent")]
 
 	 // ILoadable
  
@@ -115,7 +116,7 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */		
-	 [Event(name="dimensionChange", type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange", type="org.osmf.events.DimensionChangeEvent")]
 	 
 	 // ISeekable
 	 
@@ -124,7 +125,7 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
 	 */	 	
-	 [Event(name="seekingChange", type="org.osmf.events.SeekingChangeEvent")]
+	[Event(name="seekingChange", type="org.osmf.events.SeekingChangeEvent")]
 	 
 	/**
 	 * Dispatched when the MediaPlayer's state has changed.
@@ -158,7 +159,6 @@ package org.osmf.media
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.TraitEvent")]
 
-    
     // IBufferable
         
 	/**
@@ -175,8 +175,7 @@ package org.osmf.media
 	 */
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferTimeChangeEvent")]
 	
-	
-	// Trait availability
+	// MediaPlayerCapabilityChangeEvents
     
     /**
 	 * Dispatched when the <code>playable</code> property has changed.
@@ -212,7 +211,6 @@ package org.osmf.media
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE
 	 */
 	[Event(name="switchableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
 	
 	/**
 	 * Dispatched when the <code>temporal</code> property has changed.
@@ -277,8 +275,10 @@ package org.osmf.media
 		 * Constructor.
          * @param media Source MediaElement to be controlled by this MediaPlayer.
 		 */
-		public function MediaPlayer(media:MediaElement = null)
+		public function MediaPlayer(media:MediaElement=null)
 		{
+			super();
+			
 			_state = MediaPlayerState.CONSTRUCTED;
 			source = media;			
 			_playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);				
@@ -286,8 +286,8 @@ package org.osmf.media
 
 		/**
 		 * Source MediaElement controlled by this MediaPlayer.  Setting the source will attempt to load 
-		 * media that is loadable, that isn't loading or loaded.  It will automatically unload media when the source changes to a new
-		 * MediaElement or null.
+		 * media that is loadable, that isn't loading or loaded.  It will automatically unload media when
+		 * the source changes to a new MediaElement or null.
 		 */
 		public function set source(value:MediaElement):void
 		{
@@ -298,15 +298,15 @@ package org.osmf.media
 				{											
 					if (loadable)
 					{	 
-						var loadableTrait:ILoadable = (_source.getTrait(MediaTraitType.LOADABLE) as ILoadable);
-						loadableTrait.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadState);
-						if ( loadableTrait.loadState == LoadState.LOADED ) // Do a courtesy unload
+						var loadableTrait:ILoadable = _source.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+						if (loadableTrait.loadState == LoadState.LOADED) // Do a courtesy unload
 						{							
 							loadableTrait.unload();
 						}
-						setState(MediaPlayerState.CONSTRUCTED);						
 					}	
-					if(_source) //sometimes _source is null here due to unload nulling the source.
+					setState(MediaPlayerState.CONSTRUCTED);
+					
+					if (_source) //sometimes _source is null here due to unload nulling the source.
 					{
 						_source.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
 						_source.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
@@ -314,7 +314,7 @@ package org.osmf.media
 						for each (traitType in _source.traitTypes)
 						{
 							updateTraitListeners(traitType, false);
-						}		
+						}
 					}								
 				}	
 				_source = value;
@@ -323,13 +323,23 @@ package org.osmf.media
 					_source.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);					
 					_source.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
 					_source.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
-					for each (traitType  in _source.traitTypes )
+
+					// If the media is not LOADABLE, then the MediaPlayer's state
+					// should represent the media as already loaded (i.e. so that
+					// it's ready to go).
+					if (_source.hasTrait(MediaTraitType.LOADABLE) == false)
+					{
+						processLoadedState();
+					}
+
+					for each (traitType  in _source.traitTypes)
 					{
 						updateTraitListeners(traitType, true);
 					}
 				}
 			}
 		}
+		
         public function get source():MediaElement
         {
         	return _source;
@@ -346,10 +356,7 @@ package org.osmf.media
 		 */
 		public function set autoRewind(value:Boolean):void
 		{
-			if (_autoRewind != value)
-			{
-				_autoRewind = value;				
-			}				
+			_autoRewind = value;				
 		}
 		
         public function get autoRewind():Boolean
@@ -369,10 +376,7 @@ package org.osmf.media
 		 */
 		public function set autoPlay(value:Boolean):void
 		{
-			if (_autoPlay != value)
-			{
-				_autoPlay = value;				
-			}			
+			_autoPlay = value;				
 		}
 		
         public function get autoPlay():Boolean
@@ -433,10 +437,8 @@ package org.osmf.media
         }
         
 		/**
-         *  Provides a high level indication of the current operations of the media.
-         *  All states here are not completely disjoint (i.e. initialized + playing have some overlap).
+         *  Provides a high level indication of the current state of the media.
          */      
-       
         public function get state():MediaPlayerState
         {
         	return _state;
@@ -446,8 +448,7 @@ package org.osmf.media
 		
 		/**
 		 *  Indicates whether the media is playable.
-		 */ 		
-		
+		 */
 		public function get playable():Boolean
 		{
 			return _playable;
@@ -455,8 +456,7 @@ package org.osmf.media
 		
 		/**
 		 *  Indicates whether the media is Pausable.
-		 */		
-		
+		 */
 		public function get pausable():Boolean
 		{
 			return _pausable;
@@ -466,7 +466,6 @@ package org.osmf.media
 		 * Indicates whether the media is seekable.
 		 * Seekable media can jump to a specified time.
 		 */
-		
 		public function get seekable():Boolean
 		{
 			return _seekable;
@@ -476,7 +475,6 @@ package org.osmf.media
 		 * Indicates whether the media is temporal.
 		 * Temporal media supports a duration and a position within that duration.
 		 */	
-		
 		public function get temporal():Boolean
 		{
 			return _temporal;
@@ -484,7 +482,6 @@ package org.osmf.media
 		/**
 		 *  Indicates whether the media is audible.
 		 */		
-		
 		public function get audible():Boolean
 		{
 			return _audible;
@@ -495,7 +492,6 @@ package org.osmf.media
 		 * Viewable media is exposed by a DisplayObject.
 		 * @see flash.display.DisplayObject
 		 */		
-		
 		public function get viewable():Boolean
 		{
 			return _viewable;
@@ -507,7 +503,6 @@ package org.osmf.media
 		 * <p>For example, the intrinsic dimensions of an image are the height and width
 		 * of the image source as it is stored.</p>
 		 */	
-		
 		public function get spatial():Boolean
 		{
 			return _spatial;
@@ -518,7 +513,6 @@ package org.osmf.media
 		 * Wwitchable exposes the ability to autoswitch or manually switch
 		 * between multiple bitrate streams.
 		 */	
-		
 		public function get switchable():Boolean
 		{
 			return _switchable;
@@ -527,7 +521,6 @@ package org.osmf.media
 		/**
 		 *  Indicates whether the media is loadable.
 		 */
-		
 		public function get loadable():Boolean
 		{
 			return _loadable;
@@ -536,7 +529,6 @@ package org.osmf.media
 		/**
 		 * Indicates whether the media is capable of buffering.
 		 */
-		
 		public function get bufferable():Boolean
 		{
 			return _bufferable;
@@ -554,19 +546,18 @@ package org.osmf.media
 		 * support this property.</p>
 		 * 
          * @see org.osmf.traits.IAudible
-		 */			 
-		  
+		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).volume : NaN;	    
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : NaN;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
 	    {
 	    	if (audible)
 	    	{
-	    		IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).volume = value;	   
-	    	}	    	
+	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).volume = value;
+	    	}	    		
 	    }
 		
 		/**
@@ -578,15 +569,15 @@ package org.osmf.media
 		 */				
 	    public function get muted():Boolean
 	    {
-	    	return audible ? IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).muted : false;
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).muted : false;	    	   
 	    }
 	    
 	    public function set muted(value:Boolean):void
 	    {
 	    	if (audible)
 	    	{
-	    		IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).muted = value;	   
-	    	}		 
+	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).muted = value;
+	    	}	    				 
 	    }
 	 	 
 		/**
@@ -600,15 +591,15 @@ package org.osmf.media
 		
 	    public function get pan():Number
 	    {
-	    	return audible ? IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).pan : NaN;
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : NaN;	    		
 	    }
 	    
 	    public function set pan(value:Number):void
 	    {
 	    	if (audible)
 	    	{
-	    		IAudible(_source.getTrait(MediaTraitType.AUDIBLE)).pan = value;	   
-	    	}
+	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).pan = value;
+	    	}	    	
 		}
 	
 	    // IPausable
@@ -622,7 +613,7 @@ package org.osmf.media
 		 */	
 		public function get paused():Boolean
 	    {
-	    	return pausable ? IPausable(_source.getTrait(MediaTraitType.PAUSABLE)).paused : false;	      		    
+	    	return pausable ? (getTrait(MediaTraitType.PAUSABLE) as IPausable).paused : false;	    		    
 	    }
 	    
 		/**
@@ -645,7 +636,7 @@ package org.osmf.media
 		 */					
 	    public function get playing():Boolean
 	    {
-	    	return playable ? IPlayable(_source.getTrait(MediaTraitType.PLAYABLE)).playing : false;
+	    	return playable ? (getTrait(MediaTraitType.PLAYABLE) as IPlayable).playing : NaN;	    		
 	    }
 	    
 	    /**
@@ -656,8 +647,6 @@ package org.osmf.media
 	    {
 	    	(getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();	    	
 	    }
-	    
-		
 		
 	    // ISeekable
 		
@@ -668,18 +657,17 @@ package org.osmf.media
 		 * 
          * @see org.osmf.traits.ISeekable
 		 */			
-
 	    public function get seeking():Boolean
-	    {	    	
-	    	return seekable ? ISeekable(_source.getTrait(MediaTraitType.SEEKABLE)).seeking : false;	   	
+	    {
+	    	return seekable ? (getTrait(MediaTraitType.SEEKABLE) as ISeekable).seeking : false;
 	    }
 	    
 	    /**
-	    * Instructs the playhead to jump to the specified time.
-	    * <p>If <code>time</code> is NaN or negative, does not attempt to seek.</p>
-	    * @param time Time to seek to in seconds.
-	    * @throws IllegalOperationError if capability isn't supported
-	    */	    
+	     * Instructs the playhead to jump to the specified time.
+	     * <p>If <code>time</code> is NaN or negative, does not attempt to seek.</p>
+	     * @param time Time to seek to in seconds.
+	     * @throws IllegalOperationError if capability isn't supported
+	     */	    
 	    public function seek(time:Number):void
 	    {
 	    	(getTrait(MediaTraitType.SEEKABLE) as ISeekable).seek(time);	    				
@@ -700,8 +688,7 @@ package org.osmf.media
 		 */	
 	    public function canSeekTo(time:Number):Boolean
 	    {
-	    	var trait:ISeekable = getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-	    	return trait.canSeekTo(time);		
+	    	return (getTrait(MediaTraitType.SEEKABLE) as ISeekable).canSeekTo(time);
 	    }
 	
 	    // ISpatial
@@ -713,12 +700,10 @@ package org.osmf.media
 		 * spatial to support this property.</p>
 		 * 
          * @see org.osmf.traits.ISpatial
-         * @throws IllegalOperationError if capability isn't supported
-		 */			
-
+		 */
 	    public function get width():int
 	    {
-	    	return spatial ? ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).width : NaN;   	
+	    	return spatial ? (getTrait(MediaTraitType.SPATIAL) as ISpatial).width : 0;
 	    }
 		   
 		/**
@@ -728,11 +713,10 @@ package org.osmf.media
 		 * spatial to support this property.</p>
 		 * 
          * @see org.osmf.traits.ISpatial
-         * @throws IllegalOperationError if capability isn't supported
 		 */	
 		public function get height():int
 	    {
-	    	return spatial ? ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).height : NaN;  	
+	    	return spatial ? (getTrait(MediaTraitType.SPATIAL) as ISpatial).height : 0;
 	    }
 	    
 	    // ISwitchable
@@ -744,15 +728,15 @@ package org.osmf.media
 		 */
 		public function get autoSwitch():Boolean
 		{
-			 return switchable ? ISwitchable(_source.getTrait(MediaTraitType.SWITCHABLE)).autoSwitch : false;  
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : NaN;
 		}
 		
 		public function set autoSwitch(value:Boolean):void
 		{
-			if(switchable)
+			if (switchable)
 			{
-				(_source.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = value;
-			}			 
+				(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = value;
+			}
 		}
 		
 		/**
@@ -760,7 +744,7 @@ package org.osmf.media
 		 */
 		public function get currentStreamIndex():int
 		{
-			 return switchable ? ISwitchable(_source.getTrait(MediaTraitType.SWITCHABLE)).currentIndex : -1;  
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex : -1; 
 		}
 		
 		/**
@@ -771,7 +755,7 @@ package org.osmf.media
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
-			 return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).getBitrateForIndex(index);
+			return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).getBitrateForIndex(index);
 		}
 		
 		/**
@@ -786,16 +770,12 @@ package org.osmf.media
 		 */
 		public function get maxStreamIndex():int
 		{
-			return switchable ? ISwitchable(_source.getTrait(MediaTraitType.SWITCHABLE)).maxIndex : -1;  
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex : -1;
 		}
 		
 		public function set maxStreamIndex(value:int):void
 		{
-			if (switchable)
-			{
-				 (_source.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex = value; 
-			}
-			
+			(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex = value; 
 		}
 		
 		/**
@@ -807,7 +787,7 @@ package org.osmf.media
 		 */
 		public function get switchUnderway():Boolean
 		{
-			return switchable ? ISwitchable(_source.getTrait(MediaTraitType.SWITCHABLE)).switchUnderway : false  
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway : false;
 		}
 		
 		/**
@@ -825,23 +805,22 @@ package org.osmf.media
 		 */
 		public function switchTo(streamIndex:int):void
 		{
-			 (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchTo(streamIndex);
+			(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchTo(streamIndex);
 		}	    
 	
 	    // IViewable
+	    
 		/**
 		 * View property of the media.
 		 * This is the DisplayObject that represents the media.
 		 * <p>The source MediaElement must be
 		 * viewable to support this property.</p>
 		 * 
-		 * @returns null is the source doesn't have IViewable 
          * @see org.osmf.traits.IViewable
-         */	
-
+         */
 	    public function get view():DisplayObject
 	    {
-	    	return viewable ? IViewable(_source.getTrait(MediaTraitType.VIEWABLE)).view : null;  
+	    	return viewable ? (getTrait(MediaTraitType.VIEWABLE) as IViewable).view : null;	
 	    }
 	
         // ITemporal
@@ -851,13 +830,11 @@ package org.osmf.media
 		 * <p>The source MediaElement must be
 		 * temporal to support this property.</p>
 		 * 
-		 * @returns NaN if capability isn't supported
          * @see org.osmf.traits.ITemporal
-		 */	
-		
+		 */
 	    public function get duration():Number
 	    {
-	    	return temporal ? ITemporal(_source.getTrait(MediaTraitType.TEMPORAL)).duration : NaN;  	
+	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).duration : NaN;	    	
 	    }
 	  	  
     	/**
@@ -866,33 +843,30 @@ package org.osmf.media
 		 * <p>The source MediaElement must be
 		 * temporal to support this property.</p>
 		 * 
-		 * @returns NaN if capability isn't supported
          * @see org.osmf.traits.ITemporal
 		 */		    
 	    public function get playhead():Number
 	    {
-	    	return temporal ? ITemporal(_source.getTrait(MediaTraitType.TEMPORAL)).position : NaN;  	
+	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).position : NaN;
 	    }
 	    	    
 	    /**
 		 * Indicates whether the media is currently buffering.
 		 * 
 		 * <p>The default is <code>false</code>.</p>
-		 * @throws IllegalOperationError if capability isn't supported
 		 */		
 		public function get buffering():Boolean
 		{
-			return bufferable ? IBufferable(_source.getTrait(MediaTraitType.BUFFERABLE)).buffering : false;			    	
+			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).buffering : false;	    	
 		}
 		
 		/**
 		 * Length of the content currently in the media's
 		 * buffer, in seconds. 
-		 * @throws IllegalOperationError if capability isn't supported
 		 */		
 		public function get bufferLength():Number
 		{
-			return bufferable ? IBufferable(_source.getTrait(MediaTraitType.BUFFERABLE)).bufferLength : NaN;	 	
+			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferLength : NaN;	    	
 		}
 		
 		/**
@@ -902,30 +876,28 @@ package org.osmf.media
 		 * is forced to zero.</p>
 		 * 
 		 * <p>The default is zero.</p> 
-		 * @throws IllegalOperationError if capability isn't supported
 		 */		
 		public function get bufferTime():Number
 		{
-			return bufferable ? IBufferable(_source.getTrait(MediaTraitType.BUFFERABLE)).bufferTime : NaN;		    	
+			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime : NaN;		    	
 		}
 		
 		public function set bufferTime(value:Number):void
 		{
 			if (bufferable)
 			{
-				(_source.getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime = value;	
-			}    	
+				(getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime = value;
+			}	    	
 		}
 				
-		//Internals
+		// Internals
+		//
 	    
 	    private function getTrait(trait:MediaTraitType):IMediaTrait
 	    {
 	    	if (!source || !_source.hasTrait(trait))
 	    	{
-	    		//Using 1009, Null has no properties, because bindings will swallow this, which is desirable for
-	    		//flex media player developers.
-	    		throw new Error(MediaFrameworkStrings.TRAIT_NOT_SUPPORTED, 1009);		    		
+	    		throw new IllegalOperationError(MediaFrameworkStrings.TRAIT_NOT_SUPPORTED);		    		
 	    	}
 	    	return _source.getTrait(trait);
 	    }
@@ -973,7 +945,7 @@ package org.osmf.media
 				case MediaTraitType.PLAYABLE:						
 					changeListeners(add, _source, trait, PlayingChangeEvent.PLAYING_CHANGE, [redispatchEvent,onPlaying] );			
 					_playable = add;							
-					if (autoPlay && playable && !loadable)
+					if (autoPlay && playable && !playing)
 					{
 						play();
 					}
@@ -1013,20 +985,20 @@ package org.osmf.media
 					break;	
 				case MediaTraitType.LOADABLE:					
 					changeListeners(add, _source, trait, LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, [redispatchEvent, onLoadState]);					
+					_loadable = add;		
 					if (add)
 					{
 						var loadState:LoadState = (_source.getTrait(trait) as ILoadable).loadState;
-						if( loadState != LoadState.LOADED && 
-							loadState != LoadState.LOADING  )
+						if (loadState != LoadState.LOADED && 
+							loadState != LoadState.LOADING)
 						{
 							load();
 						}
-						else if(autoPlay && playable)
+						else if (autoPlay && playable && !playing)
 						{
 							play();	
 						}						
 					}						
-					_loadable = add;		
 					traitChangeName = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFERABLE:
@@ -1036,20 +1008,25 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
 			}					 
-			if (traitChangeName)  //Don't dispatch for traits we don't know about yet.
+			if (traitChangeName)  // Don't dispatch for traits we don't know about yet.
 			{
 				dispatchEvent(new MediaPlayerCapabilityChangeEvent(traitChangeName, add));	
 			}	
 		}
 				
-		//Add any number of listeners to the trait, using the given event name
+		// Add any number of listeners to the trait, using the given event name.
 		private function changeListeners(add:Boolean, media:MediaElement, kind:MediaTraitType, event:String, listeners:Array):void
 		{
 			for each (var item:Function in listeners)
 			{
 				if (add)
 				{
-					media.getTrait(kind).addEventListener(event, item);
+					// Make sure that the MediaPlayer gets to process the event
+					// before it gets redispatched to the client.  This will
+					// ensure that we present a consistent state to the client.
+					var priority:int = item == redispatchEvent ? 0 : 1;
+					
+					media.getTrait(kind).addEventListener(event, item, false, priority);
 				}
 				else
 				{			
@@ -1058,9 +1035,8 @@ package org.osmf.media
 			}
 		}
 		
-		// TraitEvent Listeners, will redispatch all of the ChangeEvents that correspond to trait 
+		// TraitEvent Listeners will redispatch all of the ChangeEvents that correspond to trait 
 		// properties.
-		
 		private function redispatchEvent(event:Event):void
 		{
 			dispatchEvent(event.clone());			
@@ -1072,15 +1048,15 @@ package org.osmf.media
 			{				
 				setState(MediaPlayerState.SEEKING);				
 			}
-			else if(playable && playing)
+			else if (playable && playing)
 			{
 				setState(MediaPlayerState.PLAYING);
 			}
-			else if(pausable && paused)
+			else if (pausable && paused)
 			{
 				setState(MediaPlayerState.PAUSED);
 			}	
-			else if(bufferable && buffering)
+			else if (bufferable && buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);
 			}					
@@ -1110,11 +1086,7 @@ package org.osmf.media
 		{		
 			if (event.newState == LoadState.LOADED)
 			{
-				setState(MediaPlayerState.INITIALIZED);				
-				if (autoPlay && playable)
-				{
-					play();
-				}
+				processLoadedState();
 			}
 			else if (event.newState == LoadState.CONSTRUCTED)
 			{				
@@ -1130,23 +1102,36 @@ package org.osmf.media
 			}			
 		}
 		
+		private function processLoadedState():void
+		{
+			setState(MediaPlayerState.INITIALIZED);
+			if (autoPlay && playable && !playing)
+			{
+				play();
+			}
+		}
+		
 		private function onDurationReached(event:TraitEvent):void
-		{			
+		{
 			if (loop && seekable && playable)
 			{			
 				seek(0);
-				play();				
+				play();
 			}
 			else if (autoRewind && seekable && pausable)
 			{				
 				seek(0);
-				pause();				
-			}	
+				pause();		
+			}
+			else
+			{
+				setState(MediaPlayerState.INITIALIZED);
+			}
 		}			
 								
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
-			if (temporal && playhead != lastPlayhead )
+			if (temporal && playhead != lastPlayhead)
 			{				
 				lastPlayhead = playhead;
 				dispatchEvent(new PlayheadChangeEvent(playhead));
@@ -1155,17 +1140,17 @@ package org.osmf.media
 		
 		private function onBuffering(event:BufferingChangeEvent):void
 		{
-			if(event.buffering)
+			if (event.buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);
 			}
 			else
 			{
-				if(playable && playing)
+				if (playable && playing)
 				{
 					setState(MediaPlayerState.PLAYING);					
 				}
-				else if(pausable && paused)
+				else if (pausable && paused)
 				{
 					setState(MediaPlayerState.PAUSED);
 				}
@@ -1181,7 +1166,7 @@ package org.osmf.media
 			var oldState:MediaPlayerState = _state;
 			if (oldState != newState)
 			{
-				_state = newState
+				_state = newState;
 				dispatchEvent(new MediaPlayerStateChangeEvent(newState, oldState));
 			}
 		}

@@ -19,65 +19,57 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.audio
+package org.osmf.media
 {
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.TestMediaElement;
-	import org.osmf.media.URLResource;
-	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.net.NetLoader;
+	import flash.media.SoundMixer;
+	
+	import org.osmf.audio.AudioElement;
+	import org.osmf.audio.SoundLoader;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.utils.NetFactory;
-
-	public class TestAudioElement extends TestMediaElement
+	
+	public class TestMediaPlayerWithAudioElementWithSoundLoader extends TestMediaPlayer
 	{
-		override public function setUp():void
-		{
-			netFactory = new NetFactory();
-
-			super.setUp();
-		}
-		
+		// Overrides
+		//
+				
 		override public function tearDown():void
 		{
 			super.tearDown();
 			
-			netFactory = null;
+			// Kill all sounds.
+			SoundMixer.stopAll();
 		}
 
-		override protected function createMediaElement():MediaElement
+		override protected function createMediaElement(resource:IMediaResource):MediaElement
 		{
-			return new AudioElement(netFactory.createNetLoader()); 
+			return new AudioElement(new SoundLoader(), resource as IURLResource);
 		}
 		
 		override protected function get loadable():Boolean
 		{
 			return true;
 		}
-
+		
 		override protected function get resourceForMediaElement():IMediaResource
 		{
-			return new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+		}
+
+		override protected function get invalidResourceForMediaElement():IMediaResource
+		{
+			return INVALID_RESOURCE;
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			// Subclasses can override to specify the trait types which are
-			// expected upon initialization.
 			return [MediaTraitType.LOADABLE];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			// Subclasses can override to specify the trait types which are
-			// expected after a load.  Ignored if the MediaElement
-			// lacks the ILoadable trait.
 			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.BUFFERABLE
 				   , MediaTraitType.LOADABLE
 				   , MediaTraitType.PAUSABLE
 				   , MediaTraitType.PLAYABLE
@@ -86,23 +78,9 @@ package org.osmf.audio
 				   ];
 		}
 		
-		public function testConstructor():void
-		{
-			new AudioElement(new NetLoader());
-			new AudioElement(new SoundLoader());
-			
-			// Loader must be a NetLoader or a SoundLoader.
-			try
-			{
-				new AudioElement(new SimpleLoader());
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-		}
-		
-		private var netFactory:NetFactory;
+		// Internals
+		//
+
+		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
 	}
 }

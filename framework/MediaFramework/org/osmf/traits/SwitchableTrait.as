@@ -177,8 +177,8 @@ package org.osmf.traits
 					var detail:SwitchingDetail = new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL);
 					
 					processSwitchState(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, detail);
-					_currentIndex = index;
 					processSwitchTo(index);
+					_currentIndex = index;
 					postProcessSwitchTo(detail);
 				}
 			}			

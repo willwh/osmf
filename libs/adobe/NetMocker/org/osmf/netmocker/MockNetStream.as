@@ -177,7 +177,10 @@ package org.osmf.netmocker
 
 		override public function pause():void
 		{
-			elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
+			if (playing)
+			{
+				elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
+			}
 			playing = false;
 			
 			playheadTimer.stop();
@@ -207,7 +210,7 @@ package org.osmf.netmocker
 		override public function seek(offset:Number):void
 		{
 			// Offset is in seconds.
-			if (offset >= 0 && offset < expectedDuration)
+			if (offset >= 0 && offset <= expectedDuration)
 			{
 				elapsedTime = offset;
 				if (playing)

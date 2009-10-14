@@ -55,7 +55,7 @@ package org.osmf
 		public function MediaFrameworkTests(param:Object=null)
 		{
 			super(param);
-			
+						
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 		
@@ -164,8 +164,15 @@ package org.osmf
 			// These two tests fail intermittently on the build machine.
 			//addTestSuite(TestAudioPlayableTrait);
 			//addTestSuite(TestAudioPausableTrait);
-						
+
 			addTestSuite(TestMediaPlayer);
+			addTestSuite(TestMediaPlayerWithAudioElement);
+			addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			addTestSuite(TestMediaPlayerWithVideoElement);
+			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
+			addTestSuite(TestMediaPlayerWithProxyElement);
+			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);
 			
 		 	addTestSuite(TestMediaElementSprite);
 			addTestSuite(TestScalableSprite);

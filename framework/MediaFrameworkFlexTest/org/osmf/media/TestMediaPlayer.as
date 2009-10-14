@@ -21,726 +21,1352 @@
 *****************************************************/
 package org.osmf.media
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
-	import flash.media.SoundMixer;
+	import flash.events.EventDispatcher;
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.audio.AudioElement;
-	import org.osmf.events.*;
-	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.IBufferable;
+	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+	import org.osmf.events.MediaPlayerStateChangeEvent;
+	import org.osmf.events.MutedChangeEvent;
+	import org.osmf.events.PanChangeEvent;
+	import org.osmf.events.PausedChangeEvent;
+	import org.osmf.events.PlayheadChangeEvent;
+	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.TraitEvent;
+	import org.osmf.events.VolumeChangeEvent;
 	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.ISwitchable;
-	import org.osmf.traits.ITemporal;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.utils.DynamicMediaElement;
-	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
-
+	
 	public class TestMediaPlayer extends TestCase
 	{
-		override public function tearDown():void
-		{
-			super.tearDown();			
-			/*if(mediaPlayer.playable && mediaPlayer.playing)
-			{
-				mediaPlayer.pause();					
-			}*/
-			mediaPlayer.source = null;
-			mediaPlayer = null;
-									
-			// Kill all sounds.
-			SoundMixer.stopAll();
-		}
+		// Overrides
+		//
 		
 		override public function setUp():void
 		{
-			super.setUp();
-			mediaPlayer = new MediaPlayer();			
-		}
-		
-		public function testTemporal():void
-		{
-			var duration:Number = 3;			
-			mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE,onDurationChanged);
-			mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-			mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayhead);
-			mediaPlayer.source = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
-			var temporal:TemporalTrait = (mediaPlayer.source.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait);
-			temporal.duration = duration;
-				
-			var durReached:Function = addAsync(function():void{}, 6000);				
-			
-			function onPlayhead(event:PlayheadChangeEvent):void
-			{					
-				// Ensure we are in sync								
-				assertEquals(event.newPosition, mediaPlayer.playhead, (mediaPlayer.source.getTrait(MediaTraitType.TEMPORAL) as ITemporal).position );		
-				temporal.position = duration;
-			}
-							
-			function onDurationChanged(event:DurationChangeEvent):void
-			{
-				// Give a 100 millisecond buffer, since the duration is an estimate for progressive connections
-				assertTrue(duration <= event.newDuration && event.newDuration <= duration);				
-			}
-			
-			function onDurationReached(event:Event):void
-			{
-				assertEquals(mediaPlayer.playhead, mediaPlayer.duration);
-				mediaPlayer.removeEventListener(DurationChangeEvent.DURATION_CHANGE,onDurationChanged);
-				mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-				mediaPlayer.removeEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayhead);
-				durReached(null);			
-			}					
-		}
-		
-		public function testAudible():void
-		{
-			var mock:MockNetLoader = new MockNetLoader();
-			mock.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			mock.netStreamExpectedDuration = 100;
-			mediaPlayer.source = new AudioElement(mock,	new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE)));
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE, onAudible, false, 0, true);
-			assertFalse(mediaPlayer.audible);
-						
-			var testDone:Function = addAsync(function():void{}, 3000);
-																		
-			function onPanChange(event:PanChangeEvent):void
-			{
-				assertEquals(mediaPlayer.pan, 1);
-			}
-			
-			function onVolChange(event:VolumeChangeEvent):void
-			{
-				assertEquals(mediaPlayer.volume, .1);
-			}
-			
-			function onMuteChange(event:MutedChangeEvent):void
-			{
-				assertFalse(mediaPlayer.muted);
-			}
-			
-			function onAudible(event:MediaPlayerCapabilityChangeEvent):void
-			{
-				if(mediaPlayer.audible)
-				{					
-					mediaPlayer.volume = .01;
-					mediaPlayer.play();			
-					assertEquals(mediaPlayer.volume, .01);	
-					
-					mediaPlayer.pan = -1;			 
-					assertEquals(mediaPlayer.pan, -1);	
-					
-					mediaPlayer.muted = true;
-					
-					assertEquals(mediaPlayer.volume, .01);	
-					
-					mediaPlayer.pause();
-					
-					assertEquals(mediaPlayer.volume, .01);	
-					assertEquals(mediaPlayer.pan, -1);	
-					assertTrue(mediaPlayer.muted);
-					
-					//Catch last three changes
-					mediaPlayer.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolChange, false, 0, true);
-					mediaPlayer.addEventListener(PanChangeEvent.PAN_CHANGE, onPanChange, false, 0, true);
-					mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMuteChange, false, 0, true);
-					
-					mediaPlayer.pan = 1;
-					mediaPlayer.volume = .1;
-							
-					assertEquals(mediaPlayer.volume, .1);	
-					assertEquals(mediaPlayer.pan, 1);	
-					assertTrue(mediaPlayer.muted);		
-								
-					mediaPlayer.muted = false;
-							
-					assertEquals(mediaPlayer.volume, .1);	
-					assertEquals(mediaPlayer.pan, 1);	
-					assertFalse(mediaPlayer.muted);
-					
-					testDone(null);
-				}
-			}					
-		}
-		
-		public function testPausePlay():void
-		{
-			var testCalled:Boolean = false;
+			mediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = false;
 			mediaPlayer.autoRewind = false;
-			var loader:MockNetLoader = new MockNetLoader();
-			loader.netStreamExpectedDuration = 100;
-			loader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			eventDispatcher = new EventDispatcher();
+
+			super.setUp();
+		}
+
+		override public function tearDown():void
+		{
+			super.tearDown();
 			
-			var pauseTransitions:Array = [true];
-			var playingTransitions:Array =  [false, true];
+			mediaPlayer = null;
+			eventDispatcher = null;
+		}
+		
+		// Tests
+		//
+		
+		public function testSource():void
+		{
+			var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
+			
+			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			
+			if (this.loadable)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				
+				var eventCount:int = 0;
+				
+				mediaPlayer.addEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, onTestSource
+					);
+				mediaPlayer.source = mediaElement;
+				
+				function onTestSource(event:LoadableStateChangeEvent):void
+				{
+					eventCount++;
+					
+					if (eventCount == 1)
+					{
+						assertTrue(event.newState == LoadState.LOADING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZING);
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(event.newState == LoadState.LOADED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
 						
-			mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlaying);
-			mediaPlayer.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPause);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlayablePausable);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE, onPlayablePausable);
-			
-			mediaPlayer.source = new VideoElement(loader, 	new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
-								
-			function onPlaying(event:PlayingChangeEvent):void
-			{
-				assertEquals(event.playing, playingTransitions.pop());			
-			}
-			
-			function onPause(event:PausedChangeEvent):void
-			{
-				assertEquals(event.paused, pauseTransitions.pop());			
-			}
-			
-			function onPlayablePausable(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				if (mediaPlayer.playable && mediaPlayer.pausable)
-				{					
-					doTest();
+						// Now verify that we can unload the media.
+						mediaPlayer.source = null;
+					}
+					else if (eventCount == 3)
+					{
+						assertTrue(event.newState == LoadState.UNLOADING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					}
+					else if (eventCount == 4)
+					{
+						assertTrue(event.newState == LoadState.CONSTRUCTED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else fail();
 				}
 			}
+			else
+			{
+				mediaPlayer.addEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, mustNotReceiveEvent
+					);
+						
+				mediaPlayer.source = mediaElement;
+				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				
+				// Now verify that we can unload the media.
+				mediaPlayer.source = null;
+				assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			}
+		}
+		
+		public function testSourceWithInvalidResource():void
+		{
+			var mediaElement:MediaElement = createMediaElement(invalidResourceForMediaElement);
+			
+			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			
+			if (this.loadable)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				
+				var eventCount:int = 0;
+				var errorCount:int = 0;
+				
+				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				mediaPlayer.addEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, onTestSourceWithInvalidResource
+					);
+				mediaPlayer.source = mediaElement;
+				
+				function onMediaError(event:MediaErrorEvent):void
+				{
+					errorCount++;
+				}
+				
+				function onTestSourceWithInvalidResource(event:LoadableStateChangeEvent):void
+				{
+					eventCount++;
 					
-			function doTest():void
-			{				
-				assertFalse(mediaPlayer.paused);
+					if (eventCount == 1)
+					{
+						assertTrue(event.newState == LoadState.LOADING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZING);
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(event.newState == LoadState.LOAD_FAILED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
+						
+						// TODO: Reenable once this works for dynamic streams.  Probably
+						// need to have the error event dispatched in NetLoader.
+						//assertTrue(errorCount == 1);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else fail();
+				}
+			}
+			else
+			{
+				mediaPlayer.addEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, mustNotReceiveEvent
+					);
+						
+				mediaPlayer.source = mediaElement;
+				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+			}
+		}
+		
+		public function testVolume():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestVolume, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestVolume();
+			}
+		}
+		
+		private function doTestVolume():void
+		{
+			if (traitExists(MediaTraitType.AUDIBLE))
+			{
+				assertTrue(mediaPlayer.volume == 1.0);
 				
-				mediaPlayer.pause();
+				mediaPlayer.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onTestVolume);
+				mediaPlayer.volume = 0.2;
 				
-				assertFalse(mediaPlayer.paused);
+				function onTestVolume(event:VolumeChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onTestVolume);
+					
+					assertTrue(mediaPlayer.volume == 0.2);
+					assertTrue(event.oldVolume == 1.0);
+					assertTrue(event.newVolume == 0.2);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.audible == false);
+				assertTrue(isNaN(mediaPlayer.volume));
+				
+				// Setting the volume has no effect.
+				mediaPlayer.volume = 0.5;
+				assertTrue(isNaN(mediaPlayer.volume));
+								
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testMuted():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestMuted, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestMuted();
+			}
+		}
+		
+		private function doTestMuted():void
+		{
+			if (traitExists(MediaTraitType.AUDIBLE))
+			{
+				assertTrue(mediaPlayer.muted == false);
+				
+				mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onTestMuted);
+				mediaPlayer.muted = true;
+				
+				function onTestMuted(event:MutedChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onTestMuted);
+					
+					assertTrue(mediaPlayer.muted == true);
+					assertTrue(event.muted == true);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.audible == false);
+				assertTrue(mediaPlayer.muted == false);
+				
+				// Setting muted has no effect.
+				mediaPlayer.muted = true;
+				assertTrue(mediaPlayer.muted == false);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testPan():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPan, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestPan();
+			}
+		}
+		
+		private function doTestPan():void
+		{
+			if (traitExists(MediaTraitType.AUDIBLE))
+			{
+				assertTrue(mediaPlayer.pan == 0.0);
+				
+				mediaPlayer.addEventListener(PanChangeEvent.PAN_CHANGE, onTestPan);
+				mediaPlayer.pan = 0.7;
+				
+				function onTestPan(event:PanChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(PanChangeEvent.PAN_CHANGE, onTestPan);
+					
+					assertTrue(mediaPlayer.pan == 0.7);
+					assertTrue(event.oldPan == 0.0);
+					assertTrue(event.newPan == 0.7);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.audible == false);
+				assertTrue(isNaN(mediaPlayer.pan));
+
+				// Setting pan has no effect.				
+				mediaPlayer.pan = 0.3;
+				assertTrue(isNaN(mediaPlayer.pan));
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testPlay():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPlay, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestPlay();
+			}
+		}
+		
+		private function doTestPlay():void
+		{
+			if (traitExists(MediaTraitType.PLAYABLE))
+			{
+				doTestPlayPause(false);
+			}
+			else
+			{
+				assertTrue(mediaPlayer.playable == false);
+				assertTrue(mediaPlayer.playing == false);
+				
+				try
+				{
+					mediaPlayer.play();
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testPause():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPause, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestPause();
+			}
+		}
+		
+		private function doTestPause():void
+		{
+			if (traitExists(MediaTraitType.PAUSABLE))
+			{
+				doTestPlayPause(true);
+			}
+			else
+			{
+				assertTrue(mediaPlayer.pausable == false);
+				assertTrue(mediaPlayer.paused == false);
+				
+				try
+				{
+					mediaPlayer.pause();
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		private function doTestPlayPause(pauseAfterPlay:Boolean):void
+		{
+			assertTrue(mediaPlayer.playable == true);
+			assertTrue(mediaPlayer.playing == false);
+			assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				
+			mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestPlayPause1);
+			mediaPlayer.play();
+		
+			function onTestPlayPause1(event:PlayingChangeEvent):void
+			{
+				mediaPlayer.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestPlayPause1);
+				
+				assertTrue(mediaPlayer.playing == true);
+				assertTrue(event.playing == true);
+				assertTrue(mediaPlayer.state == MediaPlayerState.PLAYING);
+				
+				if (pauseAfterPlay)
+				{
+					assertTrue(mediaPlayer.paused == false);
+					
+					mediaPlayer.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestPlayPause2);
+					mediaPlayer.pause();
+					
+					function onTestPlayPause2(event2:PausedChangeEvent):void
+					{
+						mediaPlayer.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestPlayPause2);
+						
+						assertTrue(mediaPlayer.paused == true);
+						assertTrue(mediaPlayer.playing == false);
+						assertTrue(event2.paused == true);
+						assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+				else
+				{
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+		
+		public function testSeek():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestSeek, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestSeek();
+			}
+		}
+
+		private function doTestSeek():void
+		{
+			if (traitExists(MediaTraitType.SEEKABLE))
+			{
+				assertTrue(mediaPlayer.seekable == true);
+				assertTrue(mediaPlayer.seeking == false);
+				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				
+				// For some media, triggering playback will cause the duration
+				// to get set.
+				if (isNaN(mediaPlayer.duration))
+				{
+					mediaPlayer.play();
+					mediaPlayer.pause();
+				}
+				
+				var seekTarget:Number = mediaPlayer.duration - 1;
+				
+				var canSeek:Boolean = mediaPlayer.canSeekTo(seekTarget);
+				
+				var eventCount:int = 0;
+
+				mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, canSeek ? onTestSeek : mustNotReceiveEvent);
+				mediaPlayer.seek(seekTarget);
+				
+				if (!canSeek)
+				{
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+				
+				function onTestSeek(event:SeekingChangeEvent):void
+				{
+					eventCount++;
+					
+					if (eventCount == 1)
+					{
+						assertTrue(mediaPlayer.seeking == true);
+						assertTrue(event.seeking == true);
+						assertTrue(mediaPlayer.state == MediaPlayerState.SEEKING);
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(mediaPlayer.seeking == false);
+						assertTrue(event.seeking == false);
+						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED ||
+								   mediaPlayer.state == MediaPlayerState.PAUSED);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.seekable == false);
+				assertTrue(mediaPlayer.seeking == false);
+				
+				try
+				{
+					mediaPlayer.seek(1);
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+
+				try
+				{
+					mediaPlayer.canSeekTo(1);
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testPlayheadWithChangeEvents():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPlayheadWithChangeEvents, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestPlayheadWithChangeEvents();
+			}
+		}
+		
+		public function testPlayheadWithNoChangeEvents():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPlayheadWithNoChangeEvents, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestPlayheadWithNoChangeEvents();
+			}
+		}
+		
+		private function doTestPlayheadWithChangeEvents():void
+		{
+			doTestPlayhead(true);
+		}
+
+		private function doTestPlayheadWithNoChangeEvents():void
+		{
+			doTestPlayhead(false);
+		}
+		
+		private function doTestPlayhead(enableChangeEvents:Boolean):void
+		{
+			if (traitExists(MediaTraitType.TEMPORAL))
+			{
+				assertTrue(mediaPlayer.temporal == true);
+				assertTrue(mediaPlayer.playhead == 0 || isNaN(mediaPlayer.playhead));
+				
+				assertTrue(mediaPlayer.playheadUpdateInterval == 250);
+
+				mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestPlayhead);
+				
+				if (enableChangeEvents)
+				{
+					mediaPlayer.playheadUpdateInterval = 1000;
+					assertTrue(mediaPlayer.playheadUpdateInterval == 1000);
+				}
+				else
+				{
+					mediaPlayer.playheadUpdateInterval = 0;
+					assertTrue(mediaPlayer.playheadUpdateInterval == 0);
+				}
 				
 				mediaPlayer.play();
 				
-				assertFalse(mediaPlayer.paused);
+				var playheadUpdateCount:int = 0;
 				
-				mediaPlayer.pause();
+				function onTestPlayhead(event:TraitEvent):void
+				{
+					mediaPlayer.removeEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestPlayhead);
+					
+					assertTrue(Math.abs(mediaPlayer.playhead - mediaPlayer.duration) < 1);
+					assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					
+					if (enableChangeEvents)
+					{
+						// We should get roughly 1 update per second.  Note that
+						// the timing model isn't precise, so we leave some wiggle
+						// room in our assertion.
+						assertTrue(Math.abs(playheadUpdateCount - Math.floor(mediaPlayer.duration)) <= 1);
+					}
+					else
+					{
+						assertTrue(playheadUpdateCount == 0);
+					}
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
 				
-				assertTrue(mediaPlayer.paused);
-				
-				assertTrue(pauseTransitions.length == 0);
-				assertTrue(playingTransitions.length == 0 );
-				
-				mediaPlayer.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlaying);
-				mediaPlayer.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPause);
-				mediaPlayer.removeEventListener(MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE, onPlayablePausable);
-				mediaPlayer.removeEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlayablePausable);
-				testCalled = true;
+				function onPlayheadChange(event:PlayheadChangeEvent):void
+				{
+					playheadUpdateCount++;
+				}
 			}
-			assertTrue(testCalled);
+			else
+			{
+				assertTrue(mediaPlayer.temporal == false);
+				
+				assertTrue(isNaN(mediaPlayer.duration));
+				assertTrue(isNaN(mediaPlayer.playhead));
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+
+		public function testWidthHeight():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestWidthHeight, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestWidthHeight();
+			}
+		}
+
+		private function doTestWidthHeight():void
+		{
+			if (traitExists(MediaTraitType.SPATIAL))
+			{
+				assertTrue(mediaPlayer.width == 320);
+				assertTrue(mediaPlayer.height == 240);
+				
+				mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onTestWidthHeight);
+								
+				// For some media, triggering playback will cause the true
+				// dimensions to get set.
+				mediaPlayer.play();
+				
+				function onTestWidthHeight(event:DimensionChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onTestWidthHeight);
+
+					assertTrue(mediaPlayer.width == expectedWidthAfterLoad);
+					assertTrue(mediaPlayer.height == expectedHeightAfterLoad);
+
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.spatial == false);
+				assertTrue(mediaPlayer.width == 0);
+				assertTrue(mediaPlayer.height == 0);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testView():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestView, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestView();
+			}
+		}
+
+		private function doTestView():void
+		{
+			if (traitExists(MediaTraitType.VIEWABLE))
+			{
+				assertTrue(mediaPlayer.view != null);
+
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+			else
+			{
+				assertTrue(mediaPlayer.viewable == false);
+				assertTrue(mediaPlayer.view == null);
+								
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testBufferTime():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+
+			if (loadable)
+			{
+				callAfterLoad(doTestBufferTime, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestBufferTime();
+			}
+		}
+
+		private function doTestBufferTime():void
+		{
+			if (traitExists(MediaTraitType.BUFFERABLE))
+			{
+				assertTrue(mediaPlayer.buffering == false);
+				assertTrue(mediaPlayer.bufferLength == 0);
+				assertTrue(mediaPlayer.bufferTime == 0);
+				
+				mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
+								
+				mediaPlayer.bufferTime = 10;
+				
+				function onTestBufferTime(event:BufferTimeChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
+
+					assertTrue(mediaPlayer.bufferTime == 10);
+					assertTrue(event.oldTime == 0);
+					assertTrue(event.newTime == 10);
+
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.bufferable == false);
+				assertTrue(mediaPlayer.buffering == false);
+				assertTrue(isNaN(mediaPlayer.bufferLength));
+				assertTrue(isNaN(mediaPlayer.bufferTime));
+
+				// Setting the bufferTime has no effect.			
+				mediaPlayer.bufferTime = 5;
+				assertTrue(isNaN(mediaPlayer.bufferTime));
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
 		}
 		
 		public function testSwitchable():void
 		{
-			assertFalse(mediaPlayer.switchable);
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
-			mediaPlayer.source = new DynamicMediaElement([MediaTraitType.SWITCHABLE]);
-			
-			var switchable:ISwitchable = mediaPlayer.source.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
-			switchable.autoSwitch = false;
-			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex);
-			
-			switchable.switchTo(0);
-			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex);
-			switchable.switchTo(switchable.maxIndex);
-			
-			assertEquals(switchable.autoSwitch, mediaPlayer.autoSwitch);
-			mediaPlayer.autoSwitch = true;
-			assertEquals(true, mediaPlayer.autoSwitch, switchable.autoSwitch);
-			
-			assertEquals(switchable.getBitrateForIndex(0), mediaPlayer.getBitrateForIndex(0));
-			
-			assertEquals(switchable.switchUnderway, mediaPlayer.switchUnderway);
-			
-			assertTrue(mediaPlayer.switchable);
-			
-			switchable.maxIndex = 2;
-						
-			assertEquals(switchable.maxIndex, mediaPlayer.maxStreamIndex, 2);
-			
-			mediaPlayer.maxStreamIndex = 3;
-			
-			assertEquals(switchable.maxIndex, mediaPlayer.maxStreamIndex, 3);
-			
-			switchable.autoSwitch = false;
-			mediaPlayer.switchTo(3);
-			
-			assertEquals(switchable.currentIndex, mediaPlayer.currentStreamIndex, 3);
-			
-			
-		}
-		
-		public function testViewableSpatial():void
-		{
-			var mockNL:MockNetLoader = new MockNetLoader();	
-			mockNL.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			mockNL.netStreamExpectedDuration = 20000;	
-			mediaPlayer.source = null;
-					
-			var viewCallBack:Boolean = false;
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onView, false, 0, true);
-			
-			assertFalse(mediaPlayer.viewable);			
-			assertFalse(mediaPlayer.spatial);
-			
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
-			
-			function onView(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				assertTrue(mediaPlayer.viewable);			
-				assertFalse(viewCallBack);
-				viewCallBack = true;
-				mediaPlayer.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onView);										
-			}
-			
-			assertTrue(viewCallBack);				
-		}		
-		
-		public function testSeekable():void
-		{
-			var mockLoader:MockNetLoader = new MockNetLoader();
-			mockLoader.netStreamExpectedDuration = 10;
-			mediaPlayer.source = new VideoElement(mockLoader, 	new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
-					
-			//Can seek within the medias length
-			assertTrue(mediaPlayer.canSeekTo(1));
-								
-			//Seeking-			
-			mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeeking, false, 0, true);
-						
-			var progCheck:Function = addAsync(function():void{}, 5000);		
-			
-			var seekOrder:Array = [ false, true];
-					
-			assertTrue(mediaPlayer.seekable);
-			assertTrue(mediaPlayer.canSeekTo(mediaPlayer.duration/2));				
-			mediaPlayer.seek(mediaPlayer.duration/2);
-										
-			function onSeeking(event:SeekingChangeEvent):void
-			{		
-				assertEquals(mediaPlayer.seeking, event.seeking);		
-				assertEquals(event.seeking, seekOrder.pop());		
-				if(seekOrder.length == 0)
-				{						
-					mediaPlayer.pause();					
-					progCheck(null);	
-				}	
-			}												
-		}
-	
-		public function testMediaState():void
-		{		
-			var initedCallback:Function = addAsync(function():void{},10000);
-			
-			mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onPlayerState, false, 0, true);	
-			mediaPlayer.autoPlay = false;
-						
-			assertEquals(mediaPlayer.state, MediaPlayerState.CONSTRUCTED);
-			
-			/*States the made player goes through:
-			1.) Constructed
-			2.) Initializing (after load())
-			3.) Initialized
-			4.) Playing  (after play())
-			5.) Paused  (after pause())
-			6.) Seeking (after seek())
-			7.) Buffering (after above seek())
-			8.) Paused (once the buffering completes)
-			9.) Constructed (once the media is unloaded via mediaplayer.source = null
-			*/
-			
-			var mediaPlayerStates:Array = [MediaPlayerState.CONSTRUCTED, MediaPlayerState.PAUSED, MediaPlayerState.BUFFERING, MediaPlayerState.SEEKING, MediaPlayerState.PAUSED, MediaPlayerState.PLAYING, MediaPlayerState.INITIALIZED , MediaPlayerState.INITIALIZING];
-			
-			var loader:MockNetLoader = new MockNetLoader();
-			loader.netStreamExpectedDuration = 10;
-			
-			mediaPlayer.autoPlay = true;
-			mediaPlayer.autoRewind = false;
-			mediaPlayer.source = new VideoElement(loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));		
-			
-			var seekingStateReached:Boolean = false;
-			var pauseAfterBuffer:Boolean = false;
-			
-			function onPlayerState(event:MediaPlayerStateChangeEvent):void
+			if (loadable)
 			{
-				var shouldBeState:MediaPlayerState = mediaPlayerStates.pop();
-				assertEquals(	event.newState,  shouldBeState);	
-				
-				if(event.newState == MediaPlayerState.PLAYING)
-				{
-						mediaPlayer.pause();
-				}
-				else if(event.newState == MediaPlayerState.PAUSED && event.oldState == MediaPlayerState.PLAYING)
-				{			
-					assertTrue(mediaPlayer.canSeekTo(	mediaPlayer.duration/2 ));
-					mediaPlayer.seek(mediaPlayer.duration/2);		
-				}
-				else if( event.newState == MediaPlayerState.SEEKING && event.oldState == MediaPlayerState.PAUSED)
-				{				
-					seekingStateReached = true;
-				}
-				else if(event.newState == MediaPlayerState.PAUSED && event.oldState == MediaPlayerState.BUFFERING)
-				{				
-					pauseAfterBuffer = true;
-					mediaPlayer.source = null;
-				}
-				else if(event.newState == MediaPlayerState.CONSTRUCTED && event.oldState == MediaPlayerState.PAUSED)
-				{					
-					assertTrue(pauseAfterBuffer);
-					assertTrue(seekingStateReached);
-					initedCallback(null);
-				}				
-			}			
+				callAfterLoad(doTestSwitchable, false, switchableResource);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestSwitchable();
+			}
 		}
 
-		public function testSource():void
-		{			
-			assertNull( mediaPlayer.source );
-			
-			var newSource:AudioElement =  new AudioElement(new MockNetLoader(), new URLResource(new URL("http://example.com/")));
-			
-			mediaPlayer.source = newSource;
-				
-			assertEquals(newSource, mediaPlayer.source);
-			
-			mediaPlayer.source = null;			
-			
-			assertNull( mediaPlayer.source );						
-		}
-	
-		public function testAutoPlay():void
+		private function doTestSwitchable():void
 		{
-			mediaPlayer.source = new VideoElement(new MockNetLoader(), new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlaying);
-							
-			function onPlaying(event:MediaPlayerCapabilityChangeEvent):void
-			{	
-				if(event.enabled)
+			if (traitExists(MediaTraitType.SWITCHABLE))
+			{
+				// The stream must be playing before a switch can happen.
+				mediaPlayer.play();
+				
+				assertTrue(mediaPlayer.autoSwitch == true);
+				assertTrue(mediaPlayer.currentStreamIndex == 0);
+				assertTrue(mediaPlayer.maxStreamIndex == 4);
+				assertTrue(mediaPlayer.switchUnderway == false);
+				
+				for (var i:int = 0; i <= 4; i++)
 				{
-					mediaPlayer.removeEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlaying);					
-					assertTrue(event.enabled);												
-					assertTrue(mediaPlayer.playing);	
-					
-					mediaPlayer.pause();
-					mediaPlayer.autoPlay = false;
-					
-					mediaPlayer.source =  new VideoElement(new MockNetLoader(), 	new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));		
-					assertFalse(mediaPlayer.playing);					
-									
-					mediaPlayer.autoPlay = true;
-					assertFalse(mediaPlayer.playing);  //Shouldn't affect playstate until the media is set to source.
-					
-					mediaPlayer.source =  new VideoElement(new MockNetLoader(), 	new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
-					mediaPlayer.pause();
-					
-					assertFalse(mediaPlayer.playing);
-					
-					mediaPlayer.source = null;			
-					assertFalse(mediaPlayer.playable);	
+					assertTrue(mediaPlayer.getBitrateForIndex(i) == getExpectedBitrateForIndex(i));
 				}
-			}		
+				
+				var eventCount:int = 0;
+				
+				mediaPlayer.maxStreamIndex = 2;
+				
+				mediaPlayer.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onTestSwitchable);
+				mediaPlayer.autoSwitch = false;
+				mediaPlayer.switchTo(1);
+				
+				function onTestSwitchable(event:SwitchingChangeEvent):void
+				{
+					eventCount++;
+					
+					if (eventCount == 1)
+					{
+						assertTrue(mediaPlayer.autoSwitch == false);
+						assertTrue(mediaPlayer.currentStreamIndex == 0);
+						assertTrue(mediaPlayer.maxStreamIndex == 2);
+						assertTrue(mediaPlayer.switchUnderway == true);
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(mediaPlayer.autoSwitch == false);
+						assertTrue(mediaPlayer.currentStreamIndex == 0);
+						assertTrue(mediaPlayer.maxStreamIndex == 2);
+						assertTrue(mediaPlayer.switchUnderway == true);
+					}
+					else if (eventCount == 3)
+					{
+						assertTrue(mediaPlayer.autoSwitch == false);
+						assertTrue(mediaPlayer.currentStreamIndex == 1);
+						assertTrue(mediaPlayer.maxStreamIndex == 2);
+						assertTrue(mediaPlayer.switchUnderway == false);
+
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else fail();
+				}
+			}
+			else
+			{
+				assertTrue(mediaPlayer.switchable == false);
+				assertTrue(mediaPlayer.autoSwitch == false);
+				assertTrue(mediaPlayer.currentStreamIndex == -1);
+				assertTrue(mediaPlayer.maxStreamIndex == -1);
+				assertTrue(mediaPlayer.switchUnderway == false);
+
+				// Setting autoSwitch should have no effect.
+				mediaPlayer.autoSwitch = true;
+				assertTrue(mediaPlayer.autoSwitch == false);
+								
+				try
+				{
+					mediaPlayer.switchTo(1);
+					
+					fail();
+				}
+				catch (e:IllegalOperationError)
+				{
+					// Swallow.
+				}
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
 		}
 		
 		public function testLoop():void
 		{
-			var mockNL:MockNetLoader = new MockNetLoader();
-			mockNL.netStreamExpectedDuration = 0.1;  // 1/10 second
-						
-			mediaPlayer.loop = true;
-			mediaPlayer.autoPlay = true;			
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE)));
-			mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onDuration);
-					
-			var durReached:Function = addAsync(function():void{}, 6000);
-			var loops:Number = 0;
-									
-			function onDuration(event:Event):void
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
 			{
-				if(loops > 1)
-				{
-					mediaPlayer.loop = false;
-					durReached(null);	
-				}
-				++loops;
-			}		
+				callAfterLoad(doTestLoop, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestLoop();
+			}
 		}
 		
-		public function testLoopOverRewind():void
+		public function testLoopWithAutoRewind():void
 		{
-			var mockNL:MockNetLoader = new MockNetLoader();
-			mockNL.netStreamExpectedDuration = .1;  // 1/10 second
-						
-			mediaPlayer.loop = true;
-			mediaPlayer.autoPlay = true;		
-			mediaPlayer.autoRewind = true;	
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE)));
-			mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onDuration);
-					
-			var durReached:Function = addAsync(function():void{}, 6000);
-			var loops:Number = 0;
-									
-			function onDuration(event:Event):void
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			mediaPlayer.autoRewind = true;
+			
+			if (loadable)
 			{
-				if(loops > 1)
-				{
-					mediaPlayer.loop = false;
-					durReached(null);	
-				}
-				++loops;
-			}		
+				callAfterLoad(doTestLoop, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestLoop();
+			}
 		}
-		
+
+		private function doTestLoop():void
+		{
+			if (traitExists(MediaTraitType.TEMPORAL))
+			{
+				mediaPlayer.loop = true;
+				
+				var states:Array = [];
+				
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestLoop);
+				mediaPlayer.play();
+				
+				function onTestLoop(event:TraitEvent):void
+				{
+					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestLoop);
+					
+					assertTrue(mediaPlayer.playing == true);
+					
+					var statesStr:String = states.join(" ");
+					assertTrue(statesStr == "playing seeking playing"); 
+
+					mediaPlayer.pause();
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					// Ignore any buffering state changes, they can happen
+					// intermittently.
+					if (event.newState != MediaPlayerState.BUFFERING &&
+						event.oldState != MediaPlayerState.BUFFERING)
+					{
+						states.push(event.newState.name);
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
 		
 		public function testAutoRewind():void
 		{
-			var mockNL:MockNetLoader = new MockNetLoader();
-			mockNL.netStreamExpectedDuration = .1;  // 1/10 second
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));					
-			var seekingStarted:Boolean = false;
-			var playingingStarted:Boolean = false;
-			var doneRewinding:Function = addAsync(function():void{}, 6000);
-			var donePlaying:Boolean = false;
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
-			mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeeking);
-			mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onStopped);
-								
-			function onSeeking(event:SeekingChangeEvent):void
-			{						
-				if(!event.seeking)  // done rewinding
-				{
-					assertTrue(seekingStarted);					
-					assertFalse(mediaPlayer.playing);			
-					assertTrue(donePlaying);
-					doneRewinding(null);
-				}
-				else
-				{
-					assertFalse(seekingStarted);
-					seekingStarted = true;
-				}
-			}
-			
-			function onStopped(event:PlayingChangeEvent):void
-			{				
-				if(!event.playing)
-				{
-					assertTrue(playingingStarted);
-					donePlaying = true;
-				}
-				else
-				{
-					assertFalse(seekingStarted);
-					playingingStarted = true;
-				}
-			}				
-		}
-	
-		public function testTraitAvailability():void
-		{	
-			var loadableChangedCalled:Boolean = false;
-			var seekableChangedCalled:Boolean = false;
-			var temporalChangedCalled:Boolean = false;
-			var playableChangedCalled:Boolean = false;
-			var pausableChangedCalled:Boolean = false;
-			var viewableChangedCalled:Boolean = false;
-			var spatialChangedCalled:Boolean = false;
-			var audibleChangedCalled:Boolean = false;
-						
-			mediaPlayer.autoPlay = false;
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE, loadableChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE, seekableChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE, temporalChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, playableChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE, pausableChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, viewableChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE, audibleChanged);
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, spatialChanged);	
-					
-			function loadableChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				loadableChangedCalled = true;
-			}
-			
-			function seekableChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				seekableChangedCalled = true;
-			}
-			
-			function temporalChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				temporalChangedCalled = true;
-			}
-			
-			function playableChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				playableChangedCalled = true;
-			}
-			
-			function pausableChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				pausableChangedCalled = true;
-			}
-			
-			function viewableChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				viewableChangedCalled = true;
-			}
-			
-			function audibleChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				audibleChangedCalled = true;
-			}
-			
-			function spatialChanged(event:MediaPlayerCapabilityChangeEvent):void
-			{				
-				spatialChangedCalled = true;
-			}
-			
-			assertFalse(mediaPlayer.loadable);
-			assertFalse(mediaPlayer.seekable);
-			assertFalse(mediaPlayer.playable);
-			assertFalse(mediaPlayer.pausable);
-			assertFalse(mediaPlayer.spatial);
-			assertFalse(mediaPlayer.viewable);
-			assertFalse(mediaPlayer.audible);
-			assertFalse(mediaPlayer.temporal);
-						
-			mediaPlayer.source = new VideoElement(new MockNetLoader(), new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));			
-									
-			assertTrue(loadableChangedCalled);
-			assertTrue(seekableChangedCalled);
-			assertTrue(temporalChangedCalled);
-			assertTrue(playableChangedCalled);
-			assertTrue(pausableChangedCalled);
-			assertTrue(viewableChangedCalled);
-			assertTrue(spatialChangedCalled);
-			assertTrue(audibleChangedCalled);
-						
-			seekableChangedCalled = false;
-			temporalChangedCalled = false;
-			playableChangedCalled = false;
-			pausableChangedCalled = false;
-			viewableChangedCalled = false;
-			spatialChangedCalled = false;
-			audibleChangedCalled = false;
-			
-			mediaPlayer.source = null;
-			
-			assertTrue(loadableChangedCalled);
-			assertTrue(seekableChangedCalled);
-			assertTrue(temporalChangedCalled);
-			assertTrue(playableChangedCalled);
-			assertTrue(pausableChangedCalled);
-			assertTrue(viewableChangedCalled);
-			assertTrue(spatialChangedCalled);
-			assertTrue(audibleChangedCalled);
-			
-			assertFalse(mediaPlayer.loadable);
-			assertFalse(mediaPlayer.seekable);
-			assertFalse(mediaPlayer.playable);
-			assertFalse(mediaPlayer.pausable);
-			assertFalse(mediaPlayer.spatial);
-			assertFalse(mediaPlayer.viewable);
-			assertFalse(mediaPlayer.audible);
-			assertFalse(mediaPlayer.temporal);
-		}
-	
-		public function testPlayheadInterval():void
-		{
-			var mockNL:MockNetLoader = new MockNetLoader();
-			mockNL.netStreamExpectedDuration = 10;  // 10 seconds
-			
-			mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadUpdate);
-			mediaPlayer.playheadUpdateInterval = 100;  //100 msecs update		
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));	
-						
-			var sliceSeconds:Number = mediaPlayer.playheadUpdateInterval / 1000;
-			var doneUpdating:Function = addAsync(function():void{}, 6000);
-			var secondRound:Boolean = false;
-			var finished:Boolean = false;
-			var lastUpdate:Number = 0;
-									
-			function onPlayheadUpdate(event:PlayheadChangeEvent):void
-			{				
-				assertTrue( lastUpdate  < event.newPosition);
-				lastUpdate = event.newPosition;
-				if(event.newPosition > 1  && !secondRound ) //after 1 second (10 iterations) stop testing 100msec update.
-				{
-					mediaPlayer.playheadUpdateInterval = 200;
-					sliceSeconds = mediaPlayer.playheadUpdateInterval / 1000;
-					secondRound = true;				
-				}	
-				else if(event.newPosition > 2) //after 2 second (10 iterations) stop testing 200 msec update.
-				{
-					assertFalse(finished)
-					finished = true;
-					mediaPlayer.playheadUpdateInterval = 0; //If this fires again after setting the update interval to 0 - that is an error.
-					doneUpdating(null);					
-				}				
-			}						
-		}
-	
-		public function testBufferLength():void
-		{
-			var mockNL:MockNetLoader = new MockNetLoader();
-			mockNL.netStreamExpectedDuration = 10;  // 10 seconds
-				
-			mediaPlayer.source = new VideoElement(mockNL, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));	
-			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE, onBufferable);
-			var onBufferableCallback:Function = addAsync(function():void{}, 6000);
-						
-			function onBufferable(event:MediaPlayerCapabilityChangeEvent):void
+			if (loadable)
 			{
-				if(event.enabled)
-				{
-					var buff:IBufferable = mediaPlayer.source.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-					assertEquals(mediaPlayer.bufferLength, buff.bufferLength);					
-					
-					mediaPlayer.bufferTime = 10;			
-					assertEquals(mediaPlayer.bufferTime, 10);
-					onBufferableCallback(null);
-				}
-			}						
+				callAfterLoad(doTestAutoRewind, false);
+			}
+			else
+			{
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				doTestAutoRewind();
+			}
 		}
 		
-		public function testMediaErrorEventDispatch():void
+		private function doTestAutoRewind():void
 		{
-			var mediaElement:AudioElement = new AudioElement(new MockNetLoader(), new URLResource(new URL("http://example.com/")));
+			if (traitExists(MediaTraitType.TEMPORAL))
+			{
+				mediaPlayer.autoRewind = true;
+				
+				var states:Array = [];
+				
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestAutoRewind);
+				mediaPlayer.play();
+				
+				function onTestAutoRewind(event:TraitEvent):void
+				{
+					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestAutoRewind);
+					
+					assertTrue(mediaPlayer.playing == false);
+					assertTrue(Math.floor(mediaPlayer.playhead) == 0);
+					
+					// These are all possible/permissible state sequences.
+					var statesStr:String = states.join(" ");
+					assertTrue(		statesStr == "playing seeking paused"
+								||	statesStr == "playing paused seeking"
+								||	statesStr == "playing paused seeking paused"
+								||	statesStr == "playing seeking playing paused"
+								||	statesStr == "playing seeking"
+							  ); 
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					// Ignore any buffering state changes, they can happen
+					// intermittently.
+					if (event.newState != MediaPlayerState.BUFFERING &&
+						event.oldState != MediaPlayerState.BUFFERING)
+					{
+						states.push(event.newState.name);
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testAutoPlay():void
+		{
+			if (loadable)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
+
+				var eventCount:int = 0;
+				
+				mediaPlayer.autoPlay = true;
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					eventCount++;
+					
+					if (eventCount == 1)
+					{
+						assertTrue(event.newState == MediaPlayerState.INITIALIZING);
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(event.newState == MediaPlayerState.INITIALIZED);
+					}
+					else if (eventCount == 3)
+					{
+						assertTrue(event.newState == MediaPlayerState.PLAYING);
+						
+						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else fail();
+				}
+			
+				function onLoaded(event:LoadableStateChangeEvent):void
+				{
+					if (event.newState == LoadState.LOADED)
+					{
+						if (traitExists(MediaTraitType.PLAYABLE) == false)
+						{
+							assertTrue(eventCount == 2);
+							
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+				}
+			}
+		}
+
+		public function testMediaErrorEvent():void
+		{
+			if (loadable)
+			{
+				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				
+				var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
+				
+				mediaPlayer.source = mediaElement;
+	
+				var loadableTrait:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+				assertTrue(loadableTrait);
+	
+				var testComplete:Boolean = false;
+				
+				// Make sure error events dispatched on the trait are redispatched
+				// on the MediaPlayer.
+				loadableTrait.dispatchEvent(new MediaErrorEvent(new MediaError(99)));
+				
+				function onMediaError(event:MediaErrorEvent):void
+				{
+					assertTrue(event.error.errorCode == 99);
+					assertTrue(event.error.description == "");
+					
+					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
+					
+					// The MediaElement is null, because it's derived from the target.
+					// (Arguably, this is poor modelling.  We might want to make the
+					// MediaElement more explicit, so that these events can have
+					// varying targets.)
+					assertTrue(event.media == null);
+					
+					testComplete = true;
+				}
+				
+				assertTrue(testComplete);
+			}
+		}
+		
+		public function testCapabilityEvents():void
+		{
+			if (loadable)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				
+				var eventCount:int = 0;
+				
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE	, onCapabilityChange);
+				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				
+				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
+				{
+					if (event.enabled)
+					{
+						eventCount++;
+					}
+					
+					if (eventCount == existentTraitTypesAfterLoad.length)
+					{
+						for each (var traitType:MediaTraitType in existentTraitTypesAfterLoad)
+						{
+							switch (traitType)
+							{
+								case MediaTraitType.AUDIBLE:
+									assertTrue(mediaPlayer.audible == true);
+									break;
+								case MediaTraitType.BUFFERABLE:
+									assertTrue(mediaPlayer.bufferable == true);
+									break;
+								case MediaTraitType.LOADABLE:
+									assertTrue(mediaPlayer.loadable == true);
+									break;
+								case MediaTraitType.PAUSABLE:
+									assertTrue(mediaPlayer.pausable == true);
+									break;
+								case MediaTraitType.PLAYABLE:
+									assertTrue(mediaPlayer.playable == true);
+									break;
+								case MediaTraitType.SEEKABLE:
+									assertTrue(mediaPlayer.seekable == true);
+									break;
+								case MediaTraitType.SPATIAL:
+									assertTrue(mediaPlayer.spatial == true);
+									break;
+								case MediaTraitType.SWITCHABLE:
+									assertTrue(mediaPlayer.switchable == true);
+									break;
+								case MediaTraitType.TEMPORAL:
+									assertTrue(mediaPlayer.temporal == true);
+									break;
+								case MediaTraitType.VIEWABLE:
+									assertTrue(mediaPlayer.viewable == true);
+									break;
+								default:
+									fail();
+							}
+						}
+
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+		}
+		
+		// Protected
+		//
+		
+		protected function createMediaElement(resource:IMediaResource):MediaElement
+		{
+			// Subclasses can override to specify the MediaElement subclass
+			// to use with the MediaPlayer.
+			var mediaElement:MediaElement = new MediaElement();
+			mediaElement.resource = resource;
+			return mediaElement; 
+		}
+		
+		protected function get loadable():Boolean
+		{
+			// Subclasses can override to specify that the MediaElement starts
+			// with the ILoadable trait.
+			return false;
+		}
+		
+		protected function get resourceForMediaElement():IMediaResource
+		{
+			// Subclasses can override to specify a resource that the
+			// MediaElement can work with.
+			return new URLResource(new URL("http://www.example.com"));
+		}
+
+		protected function get invalidResourceForMediaElement():IMediaResource
+		{
+			// Subclasses can override to specify a resource that the
+			// MediaElement should fail to load.
+			return new URLResource(new URL("http://www.example.com/fail"));
+		}
+
+		protected function get existentTraitTypesOnInitialization():Array
+		{
+			// Subclasses can override to specify the trait types which are
+			// expected upon initialization of the MediaElement
+			return [];
+		}
+
+		protected function get existentTraitTypesAfterLoad():Array
+		{
+			// Subclasses can override to specify the trait types which are
+			// expected after a load of the MediaElement.  Ignored if the
+			// MediaElement lacks the ILoadable trait.
+			return [];
+		}
+		
+		protected function get expectedWidthOnInitialization():Number
+		{
+			// Subclasses can override to specify the expected width of the
+			// MediaElement upon initialization.
+			return 0;
+		}
+
+		protected function get expectedHeightOnInitialization():Number
+		{
+			// Subclasses can override to specify the expected height of the
+			// MediaElement upon initialization.
+			return 0;
+		}
+
+		protected function get expectedWidthAfterLoad():Number
+		{
+			// Subclasses can override to specify the expected width of the
+			// MediaElement after it has been loaded.
+			return 0;
+		}
+
+		protected function get expectedHeightAfterLoad():Number
+		{
+			// Subclasses can override to specify the expected height of the
+			// MediaElement after it has been loaded.
+			return 0;
+		}
+		
+		protected function get switchableResource():IMediaResource
+		{
+			// Subclasses can override to specify a media resource that is
+			// switchable.
+			return null;
+		}
+		
+		protected function getExpectedBitrateForIndex(index:int):Number
+		{
+			// Subclasses can override to specify the expected bitrates for each
+			// switchable index.
+			return -1;
+		}
+		
+		// Internals
+		//
+		
+		private function traitExists(traitType:MediaTraitType):Boolean
+		{
+			var traitTypes:Array = existentTraitTypesAfterLoad;
+			for each (var type:MediaTraitType in traitTypes)
+			{
+				if (type == traitType)
+				{
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		private function callAfterLoad(func:Function, triggerTestCompleteEvent:Boolean=true, requestedResource:IMediaResource=null):void
+		{
+			assertTrue(this.loadable);
+			
+			if (triggerTestCompleteEvent)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			}
+
+			var mediaElement:MediaElement = createMediaElement(requestedResource != null ? requestedResource : resourceForMediaElement);
+			
+			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			
+			mediaPlayer.addEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, onTestCallAfterLoad
+					);
 			mediaPlayer.source = mediaElement;
-
-			mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			var loadableTrait:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadableTrait);
-
-			var testComplete:Boolean = false;
 			
-			// Make sure error events dispatched on the trait are redispatched
-			// on the MediaPlayer.
-			loadableTrait.dispatchEvent(new MediaErrorEvent(new MediaError(99)));
-			
-			function onMediaError(event:MediaErrorEvent):void
+			function onTestCallAfterLoad(event:LoadableStateChangeEvent):void
 			{
-				assertTrue(event.error.errorCode == 99);
-				assertTrue(event.error.description == "");
-				
-				assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
-				
-				// The MediaElement is null, because it's derived from the target.
-				// (Arguably, this is poor modelling.  We might want to make the
-				// MediaElement more explicit, so that these events can have
-				// varying targets.)
-				assertTrue(event.media == null);
-				
-				testComplete = true;
+				if (event.newState == LoadState.LOADED)
+				{
+					mediaPlayer.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCallAfterLoad);
+					
+					assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					
+					if (func != null)
+					{
+						func();
+					}
+
+					if (triggerTestCompleteEvent)
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
 			}
-			
-			assertTrue(testComplete);
 		}
+
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is received.
+		}
+
+		private function mustNotReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is NOT received.
+			fail();
+		}
+
+		private static const ASYNC_DELAY:Number = 8000;
 		
-		private var mediaPlayer:MediaPlayer;		
+		private var mediaPlayer:MediaPlayer;
+		private var eventDispatcher:EventDispatcher;
 	}
 }

@@ -27,6 +27,7 @@ package org.osmf.proxies
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.TraitEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPausable;
 	import org.osmf.traits.IPlayable;
@@ -138,12 +139,17 @@ package org.osmf.proxies
 			temporalTrait = new TemporalTrait();
 			temporalTrait.duration = _duration;
 			temporalTrait.position = 0;
+			temporalTrait.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
 			addTrait(MediaTraitType.TEMPORAL, temporalTrait);
 
 			seekableTrait = new SeekableTrait();
 			seekableTrait.temporal = temporalTrait;
 			addTrait(MediaTraitType.SEEKABLE, seekableTrait);
-			seekableTrait.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+			
+			// Reduce priority of our listener so that all other listeners will
+			// receive the seeking=true event before we dispatch the seeking=false
+			// event. 
+			seekableTrait.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange, false, -1);
 			
 			playableTrait = new PlayableTrait(this);
 			playableTrait.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
@@ -238,6 +244,11 @@ package org.osmf.proxies
 			}
 		}
 		
+		private function onDurationReached(event:TraitEvent):void
+		{
+			playheadTimer.stop();
+		}
+		
 		private function set duration(value:Number):void
 		{
 			// Coerce to valid value, if necessary.
@@ -250,9 +261,19 @@ package org.osmf.proxies
 			}
 		}
 		
+		private function get elapsedTime():Number
+		{
+			return _elapsedTime;
+		}
+		
+		private function set elapsedTime(value:Number):void
+		{
+			_elapsedTime = temporalTrait.position = value;
+		}
+		
 		private static const DEFAULT_PLAYHEAD_UPDATE_INTERVAL:Number = 250;
 		
-		private var elapsedTime:Number = 0; // seconds
+		private var _elapsedTime:Number = 0; // seconds
 		private var _duration:Number = 0;	// seconds
 		private var absoluteTimeAtLastPlay:Number = 0; // milliseconds
 		private var playheadTimer:Timer;

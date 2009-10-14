@@ -120,6 +120,30 @@ package org.osmf.netmocker
 
 			playheadTimer.stop();
 		}
+		
+		override public function seek(offset:Number):void
+		{
+			// Offset is in seconds.
+			if (offset >= 0 && offset <= expectedDuration)
+			{
+				elapsedTime = offset;
+				if (playing)
+				{
+					absoluteTimeAtLastPlay = flash.utils.getTimer();
+				}
+				
+				var infos:Array =
+						[ {"code":NetStreamCodes.NETSTREAM_SEEK_NOTIFY, 	"level":LEVEL_STATUS}
+						, {"code":NetStreamCodes.NETSTREAM_PLAY_START, 		"level":LEVEL_STATUS}
+						, {"code":NetStreamCodes.NETSTREAM_BUFFER_FULL,		"level":LEVEL_STATUS}
+						];
+				eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+			}
+			else
+			{
+				// TODO
+			}
+		}
 
 		override protected function switchToIndex(targetIndex:uint, firstPlay:Boolean=false):void
 		{
