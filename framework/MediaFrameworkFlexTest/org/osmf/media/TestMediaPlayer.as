@@ -1010,7 +1010,6 @@ package org.osmf.media
 					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestAutoRewind);
 					
 					assertTrue(mediaPlayer.playing == false);
-					assertTrue(Math.floor(mediaPlayer.playhead) == 0);
 					
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");

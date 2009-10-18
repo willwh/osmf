@@ -22,7 +22,9 @@
 package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.net.NetStream;
+	import flash.utils.Timer;
 	
 	import org.osmf.traits.SeekableTrait;
 	
@@ -55,31 +57,51 @@ package org.osmf.net
 		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
 		{		
 			if (newSeeking)
-			{		
-				requestedSeekTime = time;	
-				netStream.seek(time);	
-			}	
+			{
+				previousTime = netStream.time;
+				expectedTime = time;
+				
+				netStream.seek(time);
+			}
 		}
 				
 		private function onNetStatus(event:NetStatusEvent):void
 		{
+			var seekBugTimer:Timer;
+			
 			switch (event.info.code)
 			{
-				// We pass in the requested seek time, rather than
-				// the NetStream's current time, because the NetStream
-				// dispatches the NetStatusEvent *before* its own time
-				// property is updated.  (An alternative approach would
-				// be to delay the processSeekCompletion until after
-				// NetStream.time gets updated.) 
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
+					// There's a bug (FP-1705) where NetStream.time doesn't get
+					// updated until *after* the NetStream.Seek.Notify event is
+					// received.  We don't want to processSeekCompletion until
+					// NetStream's state is consistent, so we use a Timer to
+					// delay the processing until the NetStream.time property
+					// is up-to-date.
+					seekBugTimer = new Timer(100);
+					seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer);
+					seekBugTimer.start();
+					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
-					processSeekCompletion(requestedSeekTime);					
+					processSeekCompletion(previousTime);					
 					break;				
+			}
+			
+			function onSeekBugTimer(event:TimerEvent):void
+			{
+				if (netStream.time >= expectedTime)
+				{
+					seekBugTimer.stop();
+					seekBugTimer.removeEventListener(TimerEvent.TIMER, onSeekBugTimer);
+					
+					processSeekCompletion(expectedTime);
+				}
 			}
 		}
 		
-		private var requestedSeekTime:Number;
-		private var netStream:NetStream;		
+		private var netStream:NetStream;
+		private var previousTime:Number;
+		private var expectedTime:Number;
 	}
 }

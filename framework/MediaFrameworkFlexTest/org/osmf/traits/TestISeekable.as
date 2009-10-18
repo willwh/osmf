@@ -21,9 +21,8 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.utils.InterfaceTestCase;
@@ -34,13 +33,23 @@ package org.osmf.traits
 		{
 			super.setUp();
 			
+			eventDispatcher = new EventDispatcher();
 			events = new Vector.<Event>;
-			seekable = createInterfaceObject() as ISeekable;
+			_seekable = createInterfaceObject() as ISeekable;
 		}
 		
 		protected function get maxSeekValue():Number
 		{
 			return 0;
+		}
+		
+		protected function get processesSeekCompletion():Boolean
+		{
+			// Some implementations of ISeekable will signal completion 
+			// of a seek, although the default implementation doesn't.
+			// Subclasses can override this to indicate that they process
+			// completion.
+			return false;
 		}
 		
 		public function testSeeking():void
@@ -62,17 +71,38 @@ package org.osmf.traits
 		{
 			if (maxSeekValue > 0)
 			{
-				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, addAsync(onTestSeek, 1000));
-				
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+
+				var eventCount:int = 0;
+
+				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestSeek);
 				assertTrue(seekable.canSeekTo(maxSeekValue));
-				
 				seekable.seek(maxSeekValue);
+				
+				function onTestSeek(event:SeekingChangeEvent):void
+				{
+					eventCount++;
+					
+					if (eventCount == 1)
+					{
+						assertTrue(event.seeking);
+						assertTrue(event.time == maxSeekValue);
+						if (processesSeekCompletion == false)
+						{
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+					else if (eventCount == 2)
+					{
+						assertTrue(event.seeking == false);
+						assertTrue(event.time == maxSeekValue);
+						assertTrue(processesSeekCompletion == true);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					else fail();
+				}
 			}
-		}
-		
-		private function onTestSeek(event:SeekingChangeEvent):void
-		{
-			assertTrue(event.seeking);
 		}
 
 		public function testSeekInvalid():void
@@ -90,15 +120,29 @@ package org.osmf.traits
 			}
 		}
 		
-		// Utils
+		// Protected
 		//
 		
-		protected var seekable:ISeekable;
-		protected var events:Vector.<Event>;
+		protected function get seekable():ISeekable
+		{
+			return _seekable;
+		}
 		
-		protected function eventCatcher(event:Event):void
+		// Internals
+		//
+
+		private function eventCatcher(event:Event):void
 		{
 			events.push(event);
 		}
+
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder
+		}
+
+		private var _seekable:ISeekable;
+		private var events:Vector.<Event>;
+		private var eventDispatcher:EventDispatcher;
 	}
 }

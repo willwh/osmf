@@ -88,7 +88,7 @@ package org.osmf.traits
 			{
 				seekTargetTime = time;
 				
-				processSeekingChange(false,time)
+				processSeekingChange(false, time);
 				_seeking = false;
 				
 				postProcessSeekingChange(true);

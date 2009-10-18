@@ -50,6 +50,11 @@ package org.osmf.audio
 			return temporal.duration;
 		}
 		
+		override protected function get processesSeekCompletion():Boolean
+		{
+			return true;
+		}
+		
 		override public function tearDown():void
 		{
 			super.tearDown();

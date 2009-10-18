@@ -212,7 +212,7 @@ package org.osmf.netmocker
 			// Offset is in seconds.
 			if (offset >= 0 && offset <= expectedDuration)
 			{
-				elapsedTime = offset;
+				//elapsedTime = offset;
 				if (playing)
 				{
 					absoluteTimeAtLastPlay = flash.utils.getTimer();
@@ -224,6 +224,20 @@ package org.osmf.netmocker
 						, {"code":NetStreamCodes.NETSTREAM_BUFFER_FULL,		"level":LEVEL_STATUS}
 						];
 				eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+				
+				// There's a bug in NetStream (FP-1705) where NetStream.time
+				// doesn't get updated until after the NetStream.Seek.Notify
+				// event is dispatched.  We mirror this bug here.
+				var timer:Timer = new Timer(300, 1);
+				timer.addEventListener(TimerEvent.TIMER, onNetStreamSeekBugTimer);
+				timer.start();
+				
+				function onNetStreamSeekBugTimer(event:TimerEvent):void
+				{
+					timer.removeEventListener(TimerEvent.TIMER, onNetStreamSeekBugTimer);
+					
+					elapsedTime = offset;
+				}
 			}
 			else
 			{

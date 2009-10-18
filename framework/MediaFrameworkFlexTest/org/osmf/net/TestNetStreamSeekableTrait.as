@@ -27,6 +27,7 @@ package org.osmf.net
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestSeekableTrait;
 	import org.osmf.utils.NetFactory;
+	import org.osmf.utils.TestConstants;
 
 	public class TestNetStreamSeekableTrait extends TestSeekableTrait
 	{
@@ -44,6 +45,12 @@ package org.osmf.net
 			netFactory = null;
 		}
 
+		override protected function get processesSeekCompletion():Boolean
+		{
+			// NetStreamSeekableTrait processes the completion of a seek itself.
+			return true;
+		}
+
 		override protected function createInterfaceObject(... args):Object
 		{
 			var connection:NetConnection = netFactory.createNetConnection();
@@ -58,6 +65,10 @@ package org.osmf.net
 			var trait:NetStreamSeekableTrait =  new NetStreamSeekableTrait(stream);		
 			trait.temporal = new NetStreamTemporalTrait(stream);
 			NetStreamTemporalTrait(trait.temporal).duration = maxSeekValue;
+			
+			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			stream.pause();
+			
 			return trait;
 		}
 				

@@ -40,50 +40,5 @@ package org.osmf.traits
 		{
 			return 5;
 		}
-		
-		public function testSeekWithTemporal():void
-		{
-			if (seekableTraitBase.temporal.duration >= 4)
-			{
-				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE,eventCatcher);
-				
-				seekable.seek(4);
-				
-				var sce:SeekingChangeEvent;
-					
-				assertTrue(events.length == 2);
-				
-				sce = events[0] as SeekingChangeEvent;
-				assertNotNull(sce);
-				assertTrue(sce.seeking);
-				assertTrue(sce.time == 4);
-				
-				sce = events[1] as SeekingChangeEvent;
-				assertNotNull(sce);
-				assertFalse(sce.seeking);
-				assertTrue(isNaN(sce.time));
-			}
-		}
-		
-		// Utils
-		//
-		
-		protected function get seekableTraitBase():SeekableTrait
-		{
-			return seekable as SeekableTrait;
-		}
-		
-		override protected function eventCatcher(event:Event):void
-		{
-			super.eventCatcher(event);			
-			var sce:SeekingChangeEvent = event as SeekingChangeEvent;
-			if (sce && sce.seeking == true)
-			{
-				// Seeking being toggled to true, needs to be answered
-				// to by starting the seek, and then signalling its 
-				// completion like so:
-				seekableTraitBase.processSeekCompletion(NaN);	
-			}
-		}
 	}
 }

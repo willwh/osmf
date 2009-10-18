@@ -307,6 +307,10 @@ package org.osmf.netmocker
 				{
 					assertTrue(netStatusEvents[0].code == NetStreamCodes.NETSTREAM_SEEK_NOTIFY);
 					assertTrue(netStatusEvents[0].level == LEVEL_STATUS);
+
+					// Due to bug FP-1705, the time doesn't get updated until some point
+					// after the NetStream.Seek.Notify event.
+					assertTrue(netStream.time == 0);
 				}
 				else if (netStatusEvents.length == 2)
 				{
@@ -317,8 +321,6 @@ package org.osmf.netmocker
 				{
 					assertTrue(netStatusEvents[2].code == NetStreamCodes.NETSTREAM_BUFFER_FULL);
 					assertTrue(netStatusEvents[2].level == LEVEL_STATUS);
-					
-					assertTrue(netStream.time == 2);
 					
 					endAsyncTest();
 				}
