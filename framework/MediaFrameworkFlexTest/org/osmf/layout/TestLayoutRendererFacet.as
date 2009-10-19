@@ -32,7 +32,7 @@ package org.osmf.layout
 			var facet:LayoutRendererFacet = new LayoutRendererFacet(DefaultLayoutRenderer);
 			
 			assertNotNull(facet);
-			assertEquals(facet.renderer, DefaultLayoutRenderer);
+			assertEquals(facet.rendererType, DefaultLayoutRenderer);
 			assertEquals(facet.getValue(null), DefaultLayoutRenderer);
 			assertEquals(facet.getValue(new StringIdentifier("wa!")), DefaultLayoutRenderer);
 		}

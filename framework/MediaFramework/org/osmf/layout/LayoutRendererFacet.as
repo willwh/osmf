@@ -36,15 +36,15 @@ package org.osmf.layout
 		 * @param renderer The renderer type that this facet holds.
 		 * 
 		 */		
-		public function LayoutRendererFacet(renderer:Class)
+		public function LayoutRendererFacet(rendererType:Class)
 		{
-			super(MetadataNamespaces.LAYOUT_RENDERER,renderer);
+			super(MetadataNamespaces.LAYOUT_RENDERER, rendererType);
 		}
 		
 		// Public API
 		//
 		
-		public function get renderer():Class
+		public function get rendererType():Class
 		{
 			return _object as Class;
 		}
