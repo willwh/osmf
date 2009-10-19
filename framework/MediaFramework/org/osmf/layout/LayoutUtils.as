@@ -258,5 +258,45 @@ package org.osmf.layout
 			
 			return layoutAttributes;
 		}
+		
+		/**
+		 * Applies the specified renderer type to the specified metadata target.
+		 *  
+		 * @param target Metadata that will get the specified renderer set on its
+		 * layout renderer facet.
+		 * @param renderer The renderer type to set.
+		 * @return Either a newly created, or updated LayoutRendererFacet instance that
+		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * Please referer to the LayoutRendererFacet documentation for the semantics of
+		 * setting a renderer type.
+		 */	
+		public static function setLayoutRenderer(target:Metadata, renderer:Class):LayoutRendererFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var addFacet:Boolean;
+			var layoutRenderer:LayoutRendererFacet
+				= 	target.getFacet(MetadataNamespaces.LAYOUT_RENDERER)
+					as LayoutRendererFacet;
+				
+			if (layoutRenderer == null)
+			{
+				addFacet = true;
+				layoutRenderer = new LayoutRendererFacet(renderer);
+			}
+			
+			if (addFacet)
+			{
+				target.addFacet(layoutRenderer);
+			}
+			
+			return layoutRenderer;
+		}
+
 	}
 }
