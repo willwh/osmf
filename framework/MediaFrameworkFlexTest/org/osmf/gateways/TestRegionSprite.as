@@ -166,5 +166,48 @@ package org.osmf.gateways
 			assertEquals(500, region.width);
 			assertEquals(400, region.height);
 		}
+		
+		public function testNestedRegions():void
+		{
+			var root:RegionSprite = new RegionSprite();
+			var childA:RegionSprite = new RegionSprite();
+			var childA1:RegionSprite = new RegionSprite();
+			var childA1A:RegionSprite = new RegionSprite();
+			
+			root.addChildRegion(childA);
+			childA.addChildRegion(childA1);
+			childA1.addChildRegion(childA1A);
+			
+			root.layoutRenderer.validateNow();
+			
+			assertEquals(NaN, root.width);
+			assertEquals(NaN, root.height);
+			assertEquals(NaN, root.calculatedWidth);
+			assertEquals(NaN, root.calculatedHeight);
+			assertEquals(NaN, root.projectedWidth);
+			assertEquals(NaN, root.projectedHeight);
+			
+			LayoutUtils.setAbsoluteLayout(childA1A.metadata,400,50);
+			root.layoutRenderer.validateNow();
+			
+			assertEquals(NaN, root.width);
+			assertEquals(NaN, root.height);
+			assertEquals(400, root.calculatedWidth);
+			assertEquals(50, root.calculatedHeight);
+			assertEquals(NaN, root.projectedWidth);
+			assertEquals(NaN, root.projectedHeight);
+			
+			assertEquals(400, childA1A.width);
+			assertEquals(50, childA1A.height);
+			assertEquals(400, childA1A.calculatedWidth);
+			assertEquals(50, childA1A.calculatedHeight);
+			assertEquals(400, childA1A.projectedWidth);
+			assertEquals(50, childA1A.projectedHeight);
+			
+			assertEquals(400, childA1.calculatedWidth);
+			assertEquals(50, childA1.calculatedHeight);
+			
+			
+		}
 	}
 }

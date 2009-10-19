@@ -127,7 +127,7 @@ package org.osmf.composition
 			
 			if (listenedChild != null)
 			{
-				layoutTarget = new MediaElementLayoutTarget(listenedChild);
+				layoutTarget = MediaElementLayoutTarget.getInstance(listenedChild);
 				
 				listenedChild.addEventListener
 					( GatewayChangeEvent.GATEWAY_CHANGE

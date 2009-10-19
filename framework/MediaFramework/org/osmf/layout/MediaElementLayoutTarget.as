@@ -23,23 +23,20 @@ package org.osmf.layout
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.MetadataWatcher;
-	
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.MediaFrameworkStrings;
 
 	/**
 	 * Dispatched when a layout child's _view has changed.
@@ -61,19 +58,31 @@ package org.osmf.layout
 	public class MediaElementLayoutTarget extends EventDispatcher implements ILayoutTarget, ILayoutContext
 	{
 		/**
-		 * Constructor
+		 * @private
 		 * 
-		 * @param _mediaElement
+		 * Constructor. For internal use only: to obtain a MediaElementLayoutTarget instance
+		 * use the getInstance method. This ensures that there's no more than one MediaElementLayoutTarget
+		 * instance per MediaElement instance.
+		 * 
+		 * @param mediaElement
+		 * @param constructorLock
 		 */		
-		public function MediaElementLayoutTarget(mediaElement:MediaElement)
+		public function MediaElementLayoutTarget(mediaElement:MediaElement, constructorLock:Class)
 		{
-			this._mediaElement = mediaElement;
-			
-			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
-			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
-			
-			updateViewableTrait();
-			updateSpatialTrait();
+			if (constructorLock != ConstructorLock)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.ILLEGAL_CONSTRUCTOR_INVOKATION);
+			}
+			else
+			{
+				this._mediaElement = mediaElement;
+				
+				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
+				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+				
+				updateViewableTrait();
+				updateSpatialTrait();
+			}
 		}
 		
 		// ILayoutTarget
@@ -151,6 +160,9 @@ package org.osmf.layout
 						: NaN;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function updateIntrinsicDimensions():void
 		{
 			if (viewLayoutTarget)
@@ -159,6 +171,9 @@ package org.osmf.layout
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 	 	public function set calculatedWidth(value:Number):void
 	 	{
 	 		if (viewLayoutTarget)
@@ -177,6 +192,9 @@ package org.osmf.layout
 	 				: _calculatedWidth;
 	 	}
 	 	
+	 	/**
+		 * @inheritDoc
+		 */
 		public function set calculatedHeight(value:Number):void
 		{
 			_calculatedHeight = value;
@@ -192,6 +210,9 @@ package org.osmf.layout
 					: _calculatedHeight;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function set projectedWidth(value:Number):void
 	 	{
 	 		if (viewLayoutTarget)
@@ -210,6 +231,9 @@ package org.osmf.layout
 	 				: _projectedWidth;
 	 	}
 	 	
+	 	/**
+		 * @inheritDoc
+		 */
 		public function set projectedHeight(value:Number):void
 		{
 	 		_projectedHeight = value;
@@ -228,6 +252,22 @@ package org.osmf.layout
 		// Public interface
 		//
 		
+		/* Static */
+		
+		public static function getInstance(mediaElement:MediaElement):MediaElementLayoutTarget
+		{
+			var instance:MediaElementLayoutTarget = layoutTargets[mediaElement];
+			
+			if (instance == null)
+			{
+				instance
+					= layoutTargets[mediaElement]
+					= new MediaElementLayoutTarget(mediaElement, ConstructorLock);
+			}
+			
+			return instance;
+		}
+		
 		public function get mediaElement():MediaElement
 		{
 			return _mediaElement;
@@ -235,6 +275,10 @@ package org.osmf.layout
 		
 		// Internals
 		//
+		
+		/* Static */
+		
+		private static const layoutTargets:Dictionary = new Dictionary(true);
 		
 		private function onMediaElementTraitsChange(event:TraitsChangeEvent):void
 		{
@@ -332,7 +376,13 @@ package org.osmf.layout
 		
 		private var _projectedWidth:Number;
 		private var _projectedHeight:Number;
-		
-		private var _hasChildDerivedDimensions:int;
 	}
+}
+
+/**
+ * Internal class, used to prevent the MediaElementLayoutTarget constructor
+ * to run successfully on being invoked outside of this class.
+ */
+class ConstructorLock
+{
 }

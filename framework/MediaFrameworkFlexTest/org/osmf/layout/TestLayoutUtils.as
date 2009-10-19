@@ -61,6 +61,11 @@ package org.osmf.layout
 				
 			assertEquals(ScaleMode.CROP, attributes.scaleMode);
 			assertEquals(RegistrationPoint.BOTTOM_LEFT, attributes.alignment);
+			
+			var rendererFacet:LayoutRendererFacet
+				= LayoutUtils.setLayoutRenderer(metadata, DefaultLayoutRenderer);
+				
+			assertEquals(DefaultLayoutRenderer, rendererFacet.rendererType);
 		}
 		
 	}

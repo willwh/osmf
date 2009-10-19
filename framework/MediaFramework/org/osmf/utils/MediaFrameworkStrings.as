@@ -136,6 +136,10 @@ package org.osmf.utils
 		
 		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "Unable to construct ILayoutRenderer implementation";	
 		
+		// MediaElementLayoutTarget
+		
+		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "Use the static getInstance method to obtain a class instance.";
+		
 		// HTMLElement
 		
 		public static const UNSUPPORTED_TRAIT_TYPE:String				= "The specified trait type is not supported";

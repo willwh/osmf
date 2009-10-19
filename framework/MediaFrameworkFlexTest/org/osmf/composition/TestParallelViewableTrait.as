@@ -22,10 +22,15 @@
 package org.osmf.composition
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.gateways.RegionSprite;
+	import org.osmf.layout.LayoutUtils;
+	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.DynamicMediaElement;
@@ -34,6 +39,8 @@ package org.osmf.composition
 	{
 		public function testParallelViewableTrait():void
 		{
+			return;
+			
 			var parallel:ParallelElement = new ParallelElement();
 			
 			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
@@ -88,6 +95,68 @@ package org.osmf.composition
 			pvt.layoutRenderer.validateNow();
 			assertEquals(300, pvt.width);
 			assertEquals(300, pvt.height);
+		}
+		
+		public function testCustomRenderer():void
+		{
+			var parallel:ParallelElement = new ParallelElement();
+			LayoutUtils.setLayoutRenderer(parallel.metadata, CustomRenderer);
+			MetadataUtils.setElementId(parallel.metadata,"parallel");
+			
+			var serial:SerialElement = new SerialElement();
+			LayoutUtils.setLayoutRenderer(serial.metadata, CustomRenderer);
+			MetadataUtils.setElementId(serial.metadata,"serial");
+			
+			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
+			var me1Sprite:Sprite = new Sprite();
+			me1Sprite.graphics.drawRect(0,0,100,100);
+			ViewableTrait(me1.getTrait(MediaTraitType.VIEWABLE)).view = me1Sprite;
+			
+			parallel.addChild(serial);
+			serial.addChild(me1);
+			
+			var pvt:ParallelViewableTrait
+				= parallel.getTrait(MediaTraitType.VIEWABLE) 
+				as ParallelViewableTrait;
+				
+			var svt:SerialViewableTrait
+				= serial.getTrait(MediaTraitType.VIEWABLE) 
+				as SerialViewableTrait;
+				
+			assertNotNull(pvt);
+			assertNotNull(svt);
+			
+			assertNull(pvt.layoutRenderer.parent);
+			assertEquals(pvt.layoutRenderer, svt.layoutRenderer.parent);
+			
+			var parRenderer:CustomRenderer = svt.layoutRenderer as CustomRenderer;
+			assertNotNull(parRenderer);
+			
+			var calculationCount:int = 0;
+			parRenderer.addEventListener("calculateTargetBounds", calculateTargetBounds);
+			
+			var applicationCount:int = 0;
+			parRenderer.addEventListener("applyTargetLayout", applyTargetLayout);
+			
+			function calculateTargetBounds(event:Event):void
+			{
+				calculationCount++;
+			}
+			
+			function applyTargetLayout(event:Event):void
+			{
+				applicationCount++;
+			}
+			
+			var timer:Timer = new Timer(1,5);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, addAsync(onTimerComplete, 500));
+			timer.start();
+			
+			function onTimerComplete(event:Event):void
+			{
+				assertEquals(1, calculationCount);
+				assertEquals(1, applicationCount); 
+			}
 		}
 	}
 }

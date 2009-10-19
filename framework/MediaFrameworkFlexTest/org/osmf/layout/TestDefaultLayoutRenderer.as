@@ -64,7 +64,7 @@ package org.osmf.layout
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
-			layoutRenderer.addTarget(new MediaElementLayoutTarget(mediaElement));
+			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.invalidate();
 			
 			layoutRenderer.validateNow();
@@ -208,7 +208,7 @@ package org.osmf.layout
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
-			var melt:ILayoutContext = layoutRenderer.addTarget(new MediaElementLayoutTarget(mediaElement)) as ILayoutContext;
+			var melt:ILayoutContext = layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement)) as ILayoutContext;
 			layoutRenderer.invalidate();
 			
 			container.projectedWidth = 800;
@@ -302,7 +302,7 @@ package org.osmf.layout
 			assertEquals(NaN, container.calculatedWidth);
 			assertEquals(NaN, container.calculatedHeight);
 			
-			layoutRenderer.addTarget(new MediaElementLayoutTarget(mediaElement));
+			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
 			assertEquals(400, container.calculatedWidth);
@@ -344,7 +344,7 @@ package org.osmf.layout
 			assertEquals(NaN, container.calculatedWidth);
 			assertEquals(NaN, container.calculatedHeight);
 			
-			layoutRenderer.addTarget(new MediaElementLayoutTarget(mediaElement));
+			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
 			assertEquals(400, container.calculatedWidth);

@@ -93,7 +93,7 @@ package org.osmf.gateways
 			
 			if (contentLayoutTargets[element] == undefined)
 			{
-				var contentTarget:MediaElementLayoutTarget = new MediaElementLayoutTarget(element);
+				var contentTarget:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(element);
 				
 				contentLayoutTargets[element] = contentTarget;
 				contentLayoutRenderer.addTarget(contentTarget);
@@ -182,6 +182,9 @@ package org.osmf.gateways
 			return 1;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function set calculatedWidth(value:Number):void
 		{
 			content.calculatedWidth = value;
@@ -194,18 +197,27 @@ package org.osmf.gateways
 			super.calculatedHeight = value;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function set projectedWidth(value:Number):void
 		{
 			content.projectedWidth = value;
 			super.projectedWidth = value;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function set projectedHeight(value:Number):void
 		{
 			content.projectedHeight = value;
 			super.projectedHeight = value;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function set width(value:Number):void
 		{
 			super.width = content.width = value;
@@ -221,6 +233,9 @@ package org.osmf.gateways
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function set height(value:Number):void
 		{
 			super.height = content.height = value;

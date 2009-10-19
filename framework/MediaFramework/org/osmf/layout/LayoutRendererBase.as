@@ -126,6 +126,11 @@ package org.osmf.layout
 			}
 		}
 		
+		final public function get context():ILayoutContext
+		{
+			return _context;
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -293,16 +298,22 @@ package org.osmf.layout
 		 */
 		public function updateCalculatedBounds():Rectangle
 		{
-			var bounds:Rectangle;
+			var bounds:Rectangle = calculateTargetBounds(_context);
+			var counter:int = 0;
+			
+			var targetContext:ILayoutContext
+			var targetRenderer:ILayoutRenderer;
+			var targetBounds:Rectangle;
+			var unifiedTargetBounds:Rectangle;
 			
 			// Traverse, execute bottom-up:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
-				var targetContext:ILayoutContext = target as ILayoutContext;
-				var targetRenderer:ILayoutRenderer;
-				var targetBounds:Rectangle;
+				targetContext = target as ILayoutContext;
+				targetRenderer = null;
+				targetBounds = null;
 				
-				if (targetContext)
+				if (targetContext != null)
 				{
 					// Reset the last calculations:
 					targetContext.calculatedWidth = NaN;
@@ -313,7 +324,7 @@ package org.osmf.layout
 					targetRenderer = targetContext.layoutRenderer;
 				}
 						
-				if (targetRenderer) 
+				if (targetRenderer != null) 
 				{
 					// Process another node (going in, top to bottom):
 					targetBounds = targetRenderer.updateCalculatedBounds();
@@ -321,11 +332,11 @@ package org.osmf.layout
 				}
 				else
 				{
-					// Process a leaf:
+					// This is a leaf:
 					targetBounds = calculateTargetBounds(target);
 				}
 				
-				if (targetBounds)
+				if (targetBounds != null)
 				{
 					if (targetContext)
 					{
@@ -338,16 +349,32 @@ package org.osmf.layout
 					targetBounds.x ||= 0;
 					targetBounds.y ||= 0;
 				
-					bounds = bounds ? bounds.union(targetBounds) : targetBounds;
+					unifiedTargetBounds
+						= unifiedTargetBounds
+							? unifiedTargetBounds.union(targetBounds)
+							: targetBounds;
 				}
 			}
 			
-			if (parent == null)
-			{
-				_context.calculatedWidth = bounds ? bounds.width : NaN;
-				_context.calculatedHeight = bounds ? bounds.height : NaN;
-			}
+			_context.calculatedWidth
+				= (bounds && bounds.width)
+					? bounds.width
+					: unifiedTargetBounds
+						? unifiedTargetBounds.width
+						: NaN;
+						
+			_context.calculatedHeight
+				= (bounds && bounds.height)
+					? bounds.height
+					: unifiedTargetBounds
+						? unifiedTargetBounds.height
+						: NaN;
 			
+			bounds 
+				= (_context.calculatedWidth || _context.calculatedHeight)
+					? new Rectangle(0, 0, _context.calculatedWidth, _context.calculatedHeight) 
+					: null;
+					
 			return bounds;
 		}
 		
@@ -649,7 +676,12 @@ package org.osmf.layout
 			while (dirtyRenderers.length != 0)
 			{
 				var renderer:LayoutRendererBase = dirtyRenderers.shift();
-				renderer.validateNow();
+				if 	(	renderer.parent == null
+					||	dirtyRenderers.indexOf(renderer.parent) == -1
+					)
+				{
+					renderer.validateNow();
+				}
 			}
 			
 			cleaningRenderers = false;

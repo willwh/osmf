@@ -105,6 +105,7 @@ package org.osmf.layout
 		public function set layoutRenderer(value:ILayoutRenderer):void
 		{
 			_renderer = value;
+			_renderer.context = this;
 		}
 				
 		/**

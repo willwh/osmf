@@ -55,7 +55,7 @@ package org.osmf.composition
 			{
 				var child:MediaElement = this.owner.getChildAt(i);
 				
-				var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
+				var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
 				target.addEventListener
 					( GatewayChangeEvent.GATEWAY_CHANGE
 					, onLayoutTargetGatewayChange
@@ -84,7 +84,7 @@ package org.osmf.composition
 				
 				if (layoutTarget == null)
 				{
-					var target:MediaElementLayoutTarget = new MediaElementLayoutTarget(child);
+					var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
 					
 					child.addEventListener
 						( GatewayChangeEvent.GATEWAY_CHANGE

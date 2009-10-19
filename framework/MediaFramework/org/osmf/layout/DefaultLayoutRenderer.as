@@ -103,12 +103,19 @@ package org.osmf.layout
 		
 		override protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
 		{
-			return render(target, NaN, NaN, false);
+			return calculatePositionAndDimensions(target, NaN, NaN, false);
 		}
 		
 		override protected function applyTargetLayout(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			var rect:Rectangle = render(target, availableWidth, availableHeight, true);
+			var rect:Rectangle 
+				= calculatePositionAndDimensions
+					( target
+					, availableWidth
+					, availableHeight
+					, true
+					)
+					;
 			var view:DisplayObject = target.view;
 			if (view)
 			{
@@ -124,7 +131,8 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private function render	( target:ILayoutTarget
+		private function calculatePositionAndDimensions
+								( target:ILayoutTarget
 								, availableWidth:Number
 								, availableHeight:Number
 								, layoutPass:Boolean

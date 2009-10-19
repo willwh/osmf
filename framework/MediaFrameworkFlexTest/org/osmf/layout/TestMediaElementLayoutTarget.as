@@ -49,7 +49,7 @@ package org.osmf.layout
 				= SpatialTrait(me.getTrait(MediaTraitType.SPATIAL));
 			spatial.setDimensions(100,200); 
 			
-			var lt:MediaElementLayoutTarget = new MediaElementLayoutTarget(me);
+			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
 			assertEquals(lt.metadata, me.metadata);
 			assertEquals(lt.view, sprite);

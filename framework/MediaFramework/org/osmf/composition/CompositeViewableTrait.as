@@ -161,7 +161,7 @@ package org.osmf.composition
 				try
 				{
 					_layoutRenderer
-						= new layoutRendererFacet.renderer()
+						= new layoutRendererFacet.rendererType()
 						as ILayoutRenderer;
 				}
 				catch(e:*)
