@@ -167,7 +167,7 @@ package org.osmf
 
 			addTestSuite(TestMediaPlayer);
 			addTestSuite(TestMediaPlayerWithAudioElement);
-			addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
 			addTestSuite(TestMediaPlayerWithVideoElement);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
 			addTestSuite(TestMediaPlayerWithProxyElement);
