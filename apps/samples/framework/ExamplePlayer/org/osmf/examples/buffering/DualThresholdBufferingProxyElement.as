@@ -46,6 +46,7 @@ package org.osmf.examples.buffering
 		{
 			if (traitType == MediaTraitType.BUFFERABLE)
 			{
+				// As soon as we can buffer, set the initial buffer time.
 				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
 				bufferable.bufferTime = initialBufferTime;
 			}
@@ -53,10 +54,23 @@ package org.osmf.examples.buffering
 
 		override protected function processBufferingChange(buffering:Boolean):void
 		{
+			// As soon as we stop buffering, make sure our buffer time is
+			// set to the maximum.
 			if (buffering == false)
 			{
 				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
 				bufferable.bufferTime = expandedBufferTime;
+			}
+		}
+		
+		override protected function processSeekingChange(seeking:Boolean, time:Number):void
+		{
+			// Whenever we seek, reset our buffer time to the minimum so that
+			// playback starts quickly after the seek.
+			if (seeking == true)
+			{
+				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
+				bufferable.bufferTime = initialBufferTime;
 			}
 		}
 		
