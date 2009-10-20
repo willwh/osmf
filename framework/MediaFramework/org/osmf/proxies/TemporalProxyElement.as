@@ -92,7 +92,7 @@ package org.osmf.proxies
 	 	 * @param duration Duration of the TemporalProxyElement's temporal trait, in seconds.
 	 	 * @param mediaElement Element to be wrapped by this TemporalProxyElement.
 	 	 **/		
-		public function TemporalProxyElement(duration:Number=0, mediaElement:MediaElement=null)
+		public function TemporalProxyElement(duration:Number, mediaElement:MediaElement=null)
 		{
 			this.duration = duration;
 			
@@ -101,21 +101,6 @@ package org.osmf.proxies
 			playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer, false, 0, true);
 			
 			super(mediaElement != null ? mediaElement : new MediaElement());
-		}
-
-		/**
-         * @private
-		 **/
-		override public function initialize(value:Array):void
-		{
-			if (value && value.length == 1)
-			{
-				this.duration = value[0] as Number;
-			}
-			else
-			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_INITIALIZATION_ARGS);
-			}
 		}
 		
 		/**

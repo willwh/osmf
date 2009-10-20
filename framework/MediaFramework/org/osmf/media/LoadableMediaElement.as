@@ -27,6 +27,7 @@ package org.osmf.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
 	 * A base implementation of a MediaElement that has the ILoadable trait.
@@ -36,23 +37,23 @@ package org.osmf.media
 		/**
 		 * Constructor.
 		 * 
-		 * <p>A MediaElement must provide a default (empty) constructor, since
-		 * it can get created by a factory that is unaware of the specific
-		 * initialization parameters.</p>
-		 * 
 		 * @param loader Loader used to load the media.
-		 * itself.
 		 * @param resource The IMediaResource that represents the piece of
 		 * media to load into this media element.
+		 * 
+		 * @throws ArgumentError If loader is null.
 		 **/
-		public function LoadableMediaElement(loader:ILoader=null, resource:IMediaResource=null)
+		public function LoadableMediaElement(loader:ILoader, resource:IMediaResource=null)
 		{
-			super();			
-			if (loader)
-			{				
-				this.resource = resource;
-				initialize([loader]);				
-			}			
+			super();
+			
+			if (loader == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+			}
+			
+			this.loader = loader;
+			this.resource = resource;
 		}
 		
 		/**
@@ -60,55 +61,12 @@ package org.osmf.media
 		 * @inheritDoc
 		 */
 		override public function set resource(value:IMediaResource):void
-	    {    	
-	    	if (value != resource)
-	    	{
-	    		super.resource = value;
-	    		var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-	    		if (loadable != null)
-	    		{	
-	    			loadable.removeEventListener
-						( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-						, onLoadableStateChange
-						);
-					if (loadable.loadState == LoadState.LOADED)
-					{	    			   
-	    				loadable.unload();	 
-	   				}
-	    			removeTrait(MediaTraitType.LOADABLE);
-	    			
-	    			initialize([loader]);		    			    		
-		    	}			    	
-		    }
-	    }
-
-		// Overrides
-		//
-		
-		/**
-		 * @private
-		 **/
-		override public function initialize(value:Array):void
-		{
-			if (value && value.length > 0)
-			{
-				loader = value[0] as ILoader;
-				var loadableTrait:LoadableTrait
-					= new LoadableTrait(loader, resource);
-				
-				loadableTrait.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-					, onLoadableStateChange
-					);
-				
-				addTrait(MediaTraitType.LOADABLE,loadableTrait); 
-			}
-			else
-			{
-				super.initialize(value);
-			}
+	    {
+			super.resource = value;
+			
+			updateLoadable();
 		}
-				
+		
 		// Protected
 		//
 		
@@ -150,7 +108,35 @@ package org.osmf.media
 				processUnloadingState();
 			}
 		}
-		
+
+		private function updateLoadable():void
+		{
+			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			if (loadable != null)
+			{
+				// Remove (and unload) any existing loadable.
+				loadable.removeEventListener
+					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+						, onLoadableStateChange
+					);
+				if (loadable.loadState == LoadState.LOADED)
+				{	    			   
+					loadable.unload();	 
+				}
+				
+				removeTrait(MediaTraitType.LOADABLE);
+			}
+			
+			// Add a new loadable for the current resource.
+			loadable = new LoadableTrait(loader, resource);
+			loadable.addEventListener
+				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					, onLoadableStateChange
+				);
+			
+			addTrait(MediaTraitType.LOADABLE, loadable);
+		}
+
 		private var loader:ILoader;
 	}
 }

@@ -63,7 +63,7 @@ package org.osmf.proxies
 		/**
 		 * Constructor.
 		 **/
-		public function ListenerProxyElement(wrappedElement:MediaElement=null)
+		public function ListenerProxyElement(wrappedElement:MediaElement)
 		{
 			super(wrappedElement);
 		}

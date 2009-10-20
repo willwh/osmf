@@ -92,10 +92,14 @@ package org.osmf.view
 				( new MediaInfo
 					( "org.osmf.video"
 					, netLoader
-					, VideoElement
-					, [netLoader]
+					, createVideoElement
 					)
 				);
+		}
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
 		}
 		
 		private function onPluginLoaded(event:PluginLoadEvent):void

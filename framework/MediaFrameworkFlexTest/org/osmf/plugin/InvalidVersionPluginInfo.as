@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaInfo;
 	
 	public class InvalidVersionPluginInfo implements IPluginInfo
 	{
@@ -39,7 +39,7 @@ package org.osmf.plugin
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			return null;
 		}

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugins.video
 {
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
@@ -44,10 +44,10 @@ package org.osmf.plugins.video
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			var netLoader:NetLoader = new NetLoader();
-			return new MediaInfo("org.osmf.video.Video", netLoader, VideoElement, new Array(netLoader));
+			return new MediaInfo("org.osmf.video.Video", netLoader, createVideoElement);
 		}
 		
 		/**
@@ -59,6 +59,10 @@ package org.osmf.plugins.video
 		{
 			return true;
 		}
-
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
 	}
 }

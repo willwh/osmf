@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.vast.media
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
 	
 	import org.osmf.events.LoaderEvent;
@@ -48,41 +46,6 @@ package org.osmf.vast.media
 	
 	public class TestVASTTrackingProxyElement extends TestListenerProxyElement
 	{
-		public function testInitializeWithNoParams():void
-		{
-			var proxyElement:ProxyElement = new VASTTrackingProxyElement();
-			
-			try
-			{
-				// Should throw if the number of params is incorrect.
-				proxyElement.initialize([]);
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-		}
-		
-		public function testInitializeWithValidParams():void
-		{
-			var proxyElement:ProxyElement = new VASTTrackingProxyElement();
-			var mediaElement:DynamicMediaElement = new DynamicMediaElement
-				( [	MediaTraitType.PLAYABLE
-				  , MediaTraitType.PAUSABLE
-				  , MediaTraitType.AUDIBLE
-				  ]
-				, new SimpleLoader()
-				);
-			var temporal:TimerTemporalTrait = new TimerTemporalTrait(DURATION, mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable);
-			mediaElement.doAddTrait(MediaTraitType.TEMPORAL, temporal);
-			proxyElement.wrappedElement = mediaElement;
-			
-			proxyElement.initialize([createTrackingEvents(), httpLoader]);
-			
-			doTestPlayWithPause(proxyElement);
-		}
-		
 		public function testPlay():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 6000));
@@ -262,12 +225,12 @@ package org.osmf.vast.media
 		
 		override protected function createProxyElement():ProxyElement
 		{
-			return new VASTTrackingProxyElement();
+			return new VASTTrackingProxyElement(new Vector.<VASTTrackingEvent>());
 		}
 		
 		override protected function createMediaElement():MediaElement
 		{
-			return new VASTTrackingProxyElement(null, null, new MediaElement());
+			return new VASTTrackingProxyElement(new Vector.<VASTTrackingEvent>(), null, new MediaElement());
 		}
 
 		// Internals

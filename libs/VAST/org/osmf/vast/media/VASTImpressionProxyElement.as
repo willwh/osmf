@@ -51,8 +51,10 @@ package org.osmf.vast.media
 		 * @param httpLoader The HTTPLoader to use to ping the beacon.  If null,
 		 * then a default HTTPLoader will be used.
 		 * @param wrappedElement The MediaElement to wrap.
+		 * 
+		 * @throws ArgumentError If urls is null.
 		 **/
-		public function VASTImpressionProxyElement(urls:Vector.<VASTUrl>=null, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null)
+		public function VASTImpressionProxyElement(urls:Vector.<VASTUrl>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null)
 		{
 			this.urls = urls;
 			this.httpLoader = httpLoader;
@@ -61,21 +63,10 @@ package org.osmf.vast.media
 			waitForBufferingExit = false;
 			
 			super(wrappedElement);
-		}
-		
-		/**
-         * @private
-		 **/
-		override public function initialize(value:Array):void
-		{
-			if (value && value.length == 2)
+
+			if (urls == null)
 			{
-				this.urls = value[0] as Vector.<VASTUrl>;
-				this.httpLoader = value[1] as HTTPLoader;
-			}
-			else
-			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_INITIALIZATION_ARGS);
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 		}
 		

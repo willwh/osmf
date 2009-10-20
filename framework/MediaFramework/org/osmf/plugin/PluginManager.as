@@ -21,15 +21,12 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.PluginLoadEvent;
-	import org.osmf.media.IMediaFactory;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -83,11 +80,11 @@ package org.osmf.plugin
 		 *
 		 * @param mediaFactory MediaFactory with which the plugins will register its
 		 * supported MediaInfo objects. The best practice is to use a single instance of
-		 * MediaFactory cross the MediaPlayer application such that all MediaInfo can be 
+		 * MediaFactory across the MediaPlayer application such that all MediaInfo can be 
 		 * accessed from the same MediaFactory.
 		 *
 		 **/
-		public function PluginManager(mediaFactory:IMediaFactory)
+		public function PluginManager(mediaFactory:MediaFactory)
 		{
 			_mediaFactory = mediaFactory;
 			initPluginFactory();
@@ -254,7 +251,7 @@ package org.osmf.plugin
 		 * other types of MediaElement.
 		 *
 		 **/
-		public function get mediaFactory():IMediaFactory
+		public function get mediaFactory():MediaFactory
 		{
 			return _mediaFactory;
 		}
@@ -319,34 +316,44 @@ package org.osmf.plugin
 		private function initPluginFactory():void
 		{
 			_pluginFactory = new MediaFactory();
+			staticPluginLoader = new StaticPluginLoader(mediaFactory);
+			dynamicPluginLoader = new DynamicPluginLoader(mediaFactory);
 			
-			// add MediaInfo objects for the static and dynamic plugin loaders
+			// Add MediaInfo objects for the static and dynamic plugin loaders.
+			//
 			
-			// Static
-			var staticPluginLoader:StaticPluginLoader = new StaticPluginLoader(mediaFactory);
-			var staticPluginElementInitArgs:Array = new Array(staticPluginLoader);
-			
-			var staticPluginMediaInfo:MediaInfo = new MediaInfo(STATIC_PLUGIN_MEDIA_INFO_ID, 
-																new StaticPluginLoader(mediaFactory),
-																PluginElement,
-																staticPluginElementInitArgs);
+			var staticPluginMediaInfo:MediaInfo = new MediaInfo
+					( STATIC_PLUGIN_MEDIA_INFO_ID
+					, staticPluginLoader
+					, createStaticPluginElement
+					);
 			_pluginFactory.addMediaInfo(staticPluginMediaInfo);
 			
-			// Dynamic
-			var dynamicPluginLoader:DynamicPluginLoader = new DynamicPluginLoader(mediaFactory);
-			var dynamicPluginElementInitArgs:Array = new Array(dynamicPluginLoader);
-			
-			var dynamicPluginMediaInfo:MediaInfo = new MediaInfo(DYNAMIC_PLUGIN_MEDIA_INFO_ID, 
-																new DynamicPluginLoader(mediaFactory),
-																PluginElement,
-																dynamicPluginElementInitArgs);
+			var dynamicPluginMediaInfo:MediaInfo = new MediaInfo
+					( DYNAMIC_PLUGIN_MEDIA_INFO_ID
+					, dynamicPluginLoader
+					, createDynamicPluginElement
+					);
 			_pluginFactory.addMediaInfo(dynamicPluginMediaInfo);
 		}
 		
-		private var _mediaFactory:IMediaFactory;	
+		private function createStaticPluginElement():MediaElement
+		{
+			return new PluginElement(staticPluginLoader);
+		}
+
+		private function createDynamicPluginElement():MediaElement
+		{
+			return new PluginElement(dynamicPluginLoader);
+		}
+
+		private var _mediaFactory:MediaFactory;	
 		private var _pluginFactory:MediaFactory;	
 		private var _pluginMap:Dictionary;
 		private var _pluginList:Vector.<PluginEntry>;
+		
+		private var staticPluginLoader:StaticPluginLoader;
+		private var dynamicPluginLoader:DynamicPluginLoader;
 
 		private static const STATIC_PLUGIN_MEDIA_INFO_ID:String = "org.osmf.plugins.StaticPluginLoader";
 		private static const DYNAMIC_PLUGIN_MEDIA_INFO_ID:String = "org.osmf.plugins.DynamicPluginLoader";

@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.media
 {
-	import flash.errors.IllegalOperationError;
-	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.utils.DynamicMediaElement;
@@ -33,11 +31,10 @@ package org.osmf.media
 	{
 		public function testConstructor():void
 		{
-			var mediaInfo:IMediaInfo = new MediaInfo
+			var mediaInfo:MediaInfo = new MediaInfo
 										( "foo"
 										, new SampleResourceHandler(canHandleResource)
-										, DynamicMediaElement
-										, []
+										, function ():MediaElement { return null; }
 										);
 			assertTrue(mediaInfo != null);
 			
@@ -49,8 +46,7 @@ package org.osmf.media
 				mediaInfo = new MediaInfo
 								( null
 								, new SampleResourceHandler(canHandleResource)
-								, DynamicMediaElement
-								, []
+								, function ():MediaElement { return null; }
 								);
 				fail();
 			}
@@ -63,8 +59,7 @@ package org.osmf.media
 				mediaInfo = new MediaInfo
 								( "foo"
 								, null
-								, DynamicMediaElement
-								, []
+								, function ():MediaElement { return null; }
 								);
 				fail();
 			}
@@ -77,21 +72,6 @@ package org.osmf.media
 				mediaInfo = new MediaInfo
 								( "foo"
 								, new SampleResourceHandler(canHandleResource)
-								, null
-								, []
-								);
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-
-			try
-			{
-				mediaInfo = new MediaInfo
-								( "foo"
-								, new SampleResourceHandler(canHandleResource)
-								, DynamicMediaElement
 								, null
 								);
 				fail();
@@ -103,108 +83,58 @@ package org.osmf.media
 		
 		public function testGetId():void
 		{
-			var mediaInfo:IMediaInfo = createMediaInfo("anId");
+			var mediaInfo:MediaInfo = createMediaInfo("anId");
 			assertTrue(mediaInfo.id == "anId");
 		}
 		
-		public function testCanHandleResource():void
+		public function testGetResourceHandler():void
 		{
-			var mediaInfo:IMediaInfo = createMediaInfo("id");
+			var mediaInfo:MediaInfo = createMediaInfo("id");
+			var handler:IMediaResourceHandler = mediaInfo.resourceHandler;
+			assertTrue(handler != null);
 			
-			assertTrue(mediaInfo.canHandleResource(VALID_RESOURCE) == true);
-			assertTrue(mediaInfo.canHandleResource(INVALID_RESOURCE) == false);
+			assertTrue(handler.canHandleResource(VALID_RESOURCE) == true);
+			assertTrue(handler.canHandleResource(INVALID_RESOURCE) == false);
 		}
 		
-		public function testCreateMediaElement():void
+		public function testGetMediaElementCreationFunction():void
 		{
-			var mediaInfo:IMediaInfo = createMediaInfo("id");
+			var mediaInfo:MediaInfo = createMediaInfo("id");
+			var func:Function = mediaInfo.mediaElementCreationFunction;
+			assertTrue(func != null);
 			
-			// Try the simple case.
-			//
-			
-			var mediaElement:MediaElement = mediaInfo.createMediaElement();
-			assertTrue(mediaElement != null);
-			var args:Array = DynamicMediaElement(mediaElement).args;
-			assertTrue(args.length == 0);
-			
-			// Try a case with initialization arguments.
-			//
-			
-			mediaInfo = createMediaInfo("id",[String,"foo",Array]);
-			
-			mediaElement = mediaInfo.createMediaElement();
-			assertTrue(mediaElement != null);
-			args = DynamicMediaElement(mediaElement).args;
-			assertTrue(args.length == 3);
-			assertTrue(args[0] is String && args[0] == "");
-			assertTrue(args[1] is String && args[1] == "foo");
-			assertTrue(args[2] is Array);
-
-			// Try a couple of error cases.
-			//
-			
-			mediaInfo = new MediaInfo("id",
-								new SampleResourceHandler(canHandleResource),
-								IMediaInfo, // can't create an interface
-								[]);
-			assertTrue(mediaInfo != null);
-			
-			try
-			{
-				mediaElement = mediaInfo.createMediaElement();
-				
-				fail();
-			}
-			catch (e1:IllegalOperationError)
-			{
-			}
-
-			mediaInfo = new MediaInfo("id",
-								new SampleResourceHandler(canHandleResource),
-								MediaInfo, // no default constructor
-								[]);
-			assertTrue(mediaInfo != null);
-			
-			try
-			{
-				mediaElement = mediaInfo.createMediaElement();
-				
-				fail();
-			}
-			catch (e2:IllegalOperationError)
-			{
-			}
-
-			mediaInfo = new MediaInfo("id",
-								new SampleResourceHandler(canHandleResource),
-								DynamicMediaElement,
-								[MediaInfo]); // no default constructor for an arg.
-			assertTrue(mediaInfo != null);
-			
-			try
-			{
-				mediaElement = mediaInfo.createMediaElement();
-				
-				fail();
-			}
-			catch (e3:IllegalOperationError)
-			{
-			}
+			var element1:MediaElement = func.call();
+			assertTrue(element1 != null);
+			assertTrue(element1 is DynamicMediaElement);
+			var element2:MediaElement = func.call();
+			assertTrue(element2 != null);
+			assertTrue(element2 is DynamicMediaElement);
+			assertTrue(element1 != element2);
 		}
 		
-		private function createMediaInfo(id:String,args:Array=null):IMediaInfo
+		public function testGetType():void
+		{
+			var mediaInfo:MediaInfo = createMediaInfo("id");
+			assertTrue(mediaInfo.type == MediaInfoType.STANDARD);
+		}
+		
+		private function createMediaInfo(id:String):MediaInfo
 		{
 			return new MediaInfo
 					( id
 					, new SampleResourceHandler(canHandleResource)
-					, DynamicMediaElement
-					, args != null ? args : []
+					, createDynamicMediaElement
 					);
 		}
 		
 		private function canHandleResource(resource:IMediaResource):Boolean
 		{
 			return resource == VALID_RESOURCE ? true : false;
+		}
+		
+		private function createDynamicMediaElement():MediaElement
+		{
+			return new DynamicMediaElement();
 		}
 		
 		private static const VALID_RESOURCE:URLResource = new URLResource(new URL("http://www.example.com/valid"));

@@ -21,55 +21,41 @@
 *****************************************************/
 package org.osmf.media
 {
-	import flash.errors.IllegalOperationError;
-	
 	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
-	 * Default implementation of IMediaInfo.
-	 * 
-	 * <p>Each MediaElement which is represented by an instance of this
-	 * class must have a default (empty) constructor to support dynamic
-	 * instantiation.</p>  
+	 * Encapsulation of all information needed to dynamically create and
+	 * initialize a MediaElement.
 	 */
-	public class MediaInfo implements IMediaInfo
+	public class MediaInfo implements IMediaResourceHandler
 	{
 		// Public interface
 		//
 		
 		/**
 		 * Constructor.
-		 * @param id An identifier that represents this IMediaInfo.
+		 * @param id An identifier that represents this MediaInfo.
 		 * @param resourceHandler The handler that will be used to determine
 		 * whether this MediaInfo can handle a particular resource.
-		 * @param mediaElementType The class of the MediaElement.  Must have
+		 * @param mediaElementCreationFunction Function which creates a new instance
+		 * of the desired MediaElement.  The function must take no params, and
+		 * return a MediaElement.
 		 * a default (empty) constructor.
-		 * @param mediaElementInitializationArgs An array of Objects or Classes
-		 * representing the initialization arguments for the media element.
-		 * When a media element is dynamically generated, these arguments
-		 * will be passed to its initialize() method.  If an argument is a
-		 * Class, it will be converted into an instance of that class before
-		 * being passed to initialize().  If an argument is not a Class, it
-		 * will be passed to initialize() as is.  The latter approach can be
-		 * useful for allowing multiple instances of MediaInfo to share
-		 * information.
-		 * @param type The type of this MediaInfo.  If null, then defaults
-		 * to <code>MediaInfoType.STANDARD</code>.
+		 * @param type The type of this MediaInfo.  If null, the default is
+		 * <code>MediaInfoType.STANDARD</code>.
 		 * 
 		 * @throws ArgumentError If any argument (except type) is null.
 		 **/
 		public function MediaInfo
 							( id:String,
 							  resourceHandler:IMediaResourceHandler,
-							  mediaElementType:Class,
-							  mediaElementInitializationArgs:Array,
+							  mediaElementCreationFunction:Function,
 							  type:MediaInfoType=null
 							)
 		{
 			if (	id == null
 			     || resourceHandler == null
-			     || mediaElementType == null
-			     || mediaElementInitializationArgs == null
+			     || mediaElementCreationFunction == null
 			   )
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
@@ -79,36 +65,39 @@ package org.osmf.media
 			type ||= MediaInfoType.STANDARD;
 			
 			_id = id;
-			this.resourceHandler = resourceHandler;
-			this.mediaElementType = mediaElementType;
-			this.mediaElementInitializationArgs = mediaElementInitializationArgs;
+			_resourceHandler = resourceHandler;
+			_mediaElementCreationFunction = mediaElementCreationFunction;
 			_type = type;
 		}
-
-		// IMediaResourceHandler
-		//
 		
 		/**
-		 * @inheritDoc
-		 **/
-		public function canHandleResource(resource:IMediaResource):Boolean
-		{
-			return resourceHandler.canHandleResource(resource);
-		}
-
-		// IMediaInfo
-		//
-		
-		/**
-		 * @inheritDoc
+		 *  An identifier that represents this MediaInfo.
 		 **/
 		public function get id():String
 		{
 			return _id;
 		}
+		
+		/**
+		 * The handler that determines whether this MediaInfo can handle a
+		 * particular resource.
+		 **/
+		public function get resourceHandler():IMediaResourceHandler
+		{
+			return _resourceHandler;
+		}
 
 		/**
-		 * @inheritDoc
+		 * Function which creates a new instance of the desired MediaElement.
+		 * The function must take no params, and return a MediaElement.
+		 **/
+		public function get mediaElementCreationFunction():Function
+		{
+			return _mediaElementCreationFunction;
+		}
+
+		/**
+		 * The type of this MediaInfo.
 		 **/
 		public function get type():MediaInfoType
 		{
@@ -118,49 +107,17 @@ package org.osmf.media
 		/**
 		 * @inheritDoc
 		 **/
-		public function createMediaElement():MediaElement
+		public function canHandleResource(resource:IMediaResource):Boolean
 		{
-			var result:MediaElement = null;
-			
-			try
-			{
-				result = new mediaElementType();
-			}
-			catch (error:Error)
-			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_MEDIAELEMENT_CONSTRUCTOR);
-			}
-			
-			// Apply the initialization arguments.
-			var initializationObjects:Array = [];
-			for each (var argType:Object in mediaElementInitializationArgs)
-			{
-				try
-				{
-					initializationObjects.push
-											( argType is Class
-												? new argType()
-												: argType
-											);
-				}
-				catch (error:Error)
-				{
-					throw new IllegalOperationError(MediaFrameworkStrings.INVALID_MEDIAELEMENT_ARGUMENT);
-				}
-			}
-
-			result.initialize(initializationObjects);
-			
-			return result;
+			return _resourceHandler != null ? _resourceHandler.canHandleResource(resource) : false;
 		}
 		
 		// Internals
 		//
 		
 		private var _id:String;
-		private var resourceHandler:IMediaResourceHandler;
-		private var mediaElementType:Class;
-		private var mediaElementInitializationArgs:Array;
+		private var _resourceHandler:IMediaResourceHandler;
+		private var _mediaElementCreationFunction:Function;
 		private var _type:MediaInfoType;
 	}
 }

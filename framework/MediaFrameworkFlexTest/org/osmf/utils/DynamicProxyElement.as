@@ -47,7 +47,7 @@ package org.osmf.utils
 			
 			if (traitTypes != null || loader != null || resource != null)
 			{
-				initialize([traitTypes, loader, resource]);
+				initialize(traitTypes, loader, resource);
 			}
 		}
 				
@@ -65,74 +65,59 @@ package org.osmf.utils
 		{
 			blockedTraits[type] = true;
 		}
-		
-		override public function initialize(value:Array):void
-		{
-			this.args = value;
-			
-			if (value && value.length == 3)
-			{
-				var traitTypes:Array = value[0] as Array;
-				var loader:ILoader = value[1] as ILoader;
-				var resource:IMediaResource = value[2] as IMediaResource;
 
-				this.resource = resource;
-			
-				if (traitTypes != null)
-				{
-					for each (var traitType:MediaTraitType in traitTypes)
-					{
-						var trait:IMediaTrait = null;
-						
-						switch (traitType)
-						{
-							case MediaTraitType.AUDIBLE:
-								trait = new AudibleTrait();
-								break;
-							case MediaTraitType.BUFFERABLE:
-								trait = new BufferableTrait();
-								break;
-							case MediaTraitType.LOADABLE:
-								trait = new LoadableTrait(loader, resource);
-								break;
-							case MediaTraitType.PAUSABLE:
-								trait = new PausableTrait(this);
-								break;
-							case MediaTraitType.PLAYABLE:
-								trait = new PlayableTrait(this);
-								break;
-							case MediaTraitType.SEEKABLE:
-								trait = new SeekableTrait();
-								break;
-							case MediaTraitType.SPATIAL:
-								trait = new SpatialTrait();
-								break;
-							case MediaTraitType.TEMPORAL:
-								trait = new TemporalTrait();
-								break;
-							case MediaTraitType.VIEWABLE:
-								trait = new ViewableTrait();
-								break;
-							default:
-								throw new ArgumentError();
-						}
-						
-						addTrait(traitType, trait);
-					}
-				}
-			}
-			else
-			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_INITIALIZATION_ARGS);
-			}
-		}
-		
 		override protected function blocksTrait(type:MediaTraitType):Boolean
 		{
 			return blockedTraits[type] == true;
 		}
+
+		private function initialize(traitTypes:Array, loader:ILoader, resource:IMediaResource):void
+		{
+			this.resource = resource;
 		
-		public var args:Array = [];
+			if (traitTypes != null)
+			{
+				for each (var traitType:MediaTraitType in traitTypes)
+				{
+					var trait:IMediaTrait = null;
+					
+					switch (traitType)
+					{
+						case MediaTraitType.AUDIBLE:
+							trait = new AudibleTrait();
+							break;
+						case MediaTraitType.BUFFERABLE:
+							trait = new BufferableTrait();
+							break;
+						case MediaTraitType.LOADABLE:
+							trait = new LoadableTrait(loader, resource);
+							break;
+						case MediaTraitType.PAUSABLE:
+							trait = new PausableTrait(this);
+							break;
+						case MediaTraitType.PLAYABLE:
+							trait = new PlayableTrait(this);
+							break;
+						case MediaTraitType.SEEKABLE:
+							trait = new SeekableTrait();
+							break;
+						case MediaTraitType.SPATIAL:
+							trait = new SpatialTrait();
+							break;
+						case MediaTraitType.TEMPORAL:
+							trait = new TemporalTrait();
+							break;
+						case MediaTraitType.VIEWABLE:
+							trait = new ViewableTrait();
+							break;
+						default:
+							throw new ArgumentError();
+					}
+					
+					addTrait(traitType, trait);
+				}
+			}
+		}
 		
 		private var blockedTraits:Dictionary = new Dictionary();
 	}

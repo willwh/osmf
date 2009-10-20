@@ -87,13 +87,15 @@ package org.osmf.video
 	public class VideoElement extends LoadableMediaElement
 	{
 		/**
-		 * The constructor takes two optional parameters that can also be passed to the
-		 * VideoElement's internal <code>initialize()</code> method.
+		 * Constructor.
+		 * 
 		 * @param loader Loader used to load the video.
 		 * @param resource An object implementing IMediaResource that points to the video 
 		 * the VideoElement will use.
+		 * 
+		 * @throws ArgumentError If loader is null.
 		 */
-		public function VideoElement(loader:NetLoader = null, resource:IMediaResource = null)
+		public function VideoElement(loader:NetLoader, resource:IMediaResource = null)
 		{	
 			super(loader, resource);
 

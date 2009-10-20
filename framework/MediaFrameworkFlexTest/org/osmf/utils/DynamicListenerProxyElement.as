@@ -32,7 +32,7 @@ package org.osmf.utils
 	{
 		public function DynamicListenerProxyElement(changeEventQueue:Array, processTraitEvents:Boolean = false)
 		{
-			super();
+			super(null);
 			
 			this.changeEventQueue = changeEventQueue;
 			this.processTraitEvents = processTraitEvents;

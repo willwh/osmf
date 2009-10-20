@@ -30,7 +30,7 @@ package org.osmf.proxies
 		
 		override protected function createProxyElement():ProxyElement
 		{
-			return new ListenerProxyElement();
+			return new ListenerProxyElement(null);
 		}
 
 		override protected function createMediaElement():MediaElement

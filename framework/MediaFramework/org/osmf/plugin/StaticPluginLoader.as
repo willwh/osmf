@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaFactory;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
@@ -31,7 +31,7 @@ package org.osmf.plugin
 		/**
 		 * Constructor
 		 */
-		public function StaticPluginLoader(mediaFactory:IMediaFactory)
+		public function StaticPluginLoader(mediaFactory:MediaFactory)
 		{
 			super(mediaFactory);
 		}

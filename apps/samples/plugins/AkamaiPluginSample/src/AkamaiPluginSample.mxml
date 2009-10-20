@@ -29,43 +29,27 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.sliderClasses.Slider;
-			import mx.events.DropdownEvent;		
-			import mx.events.SliderEvent;
-			import mx.controls.Alert;
+			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 			
-			import flash.utils.getDefinitionByName;
-			import flash.net.getClassByAlias;
-
+			import mx.events.DropdownEvent;
+			
+			import org.osmf.events.*;
+			import org.osmf.mast.MASTPluginInfo;
+			import org.osmf.media.IMediaResource;
+			import org.osmf.media.IURLResource;
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.MediaFactory;
+			import org.osmf.media.MediaInfo;
+			import org.osmf.media.URLResource;
+			import org.osmf.metadata.*;
+			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.plugin.PluginManager;
-			
-			import org.osmf.traits.MediaTraitType;
-			import org.osmf.traits.LoadState;
 			import org.osmf.traits.ILoadable;
-			import org.osmf.traits.MediaTraitType;			
-			import org.osmf.traits.ISpatial;
-
-			import org.osmf.events.*;
-
-			import org.osmf.media.MediaInfo;
-			import org.osmf.media.MediaFactory;
-			import org.osmf.media.MediaElement;
-			import org.osmf.media.IMediaResource;
-			import org.osmf.media.URLResource;			
-			import org.osmf.media.IURLResource;
-			
-			import org.osmf.net.NetLoader;
-			
+			import org.osmf.traits.LoadState;
+			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
-
 			import org.osmf.video.VideoElement;
-			
-			import org.osmf.metadata.*;
-			
-			// Our plugins (for loading as static plugins)
-			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
-			import org.osmf.mast.MASTPluginInfo;
 			
 			private var pluginManager:PluginManager;
 			private var mediaFactory:MediaFactory;
@@ -189,7 +173,7 @@
 					var netLoader:NetLoader = new NetLoader();
 					
 					// Add a default VideoElement
-					mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, VideoElement, [netLoader]));
+					mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
 					mediaElement = mediaFactory.createMediaElement(resource);
 				}
 				
@@ -202,6 +186,10 @@
 				enablePlayerControls(true);
 			}
 			
+			private function createVideoElement():MediaElement
+			{
+				return new VideoElement(new NetLoader());
+			}
 						
 			private function unloadMedia():void
 			{

@@ -21,20 +21,14 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoPluginInfo implements IPluginInfo
 	{
-		
 		public static const MEDIA_INFO_ID:String = "org.osmf.video.Video";
-		
-		public function SimpleVideoPluginInfo()
-		{
-		}
-
 
 		/**
 		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
@@ -48,10 +42,10 @@ package org.osmf.plugin
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			var netLoader:NetLoader = new NetLoader();
-			return new MediaInfo(MEDIA_INFO_ID, netLoader, VideoElement, new Array(netLoader));
+			return new MediaInfo(MEDIA_INFO_ID, netLoader, createVideoElement);
 		}
 		
 		/**
@@ -63,6 +57,10 @@ package org.osmf.plugin
 		{
 			return true;
 		}
-
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
 	}
 }

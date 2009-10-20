@@ -22,10 +22,10 @@
 package org.osmf.media
 {
 	/**
-	 * Enumeration of different types of IMediaInfos.
+	 * Enumeration of different types of MediaInfos.
 	 * 
-	 * <p>Most IMediaInfos encapsulate media with a standard creation policy,
-	 * but in some cases an IMediaInfo needs some additional, custom setup.
+	 * <p>Most MediaInfos encapsulate media with a standard creation policy,
+	 * but in some cases a MediaInfo needs some additional, custom setup.
 	 * This class enables the distinction between these types.</p> 
 	 **/
 	public class MediaInfoType

@@ -29,9 +29,24 @@ package org.osmf.media
 	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
-	 * Default implementation of IMediaFactory.
-	 **/
-	public class MediaFactory implements IMediaFactory
+	 * A MediaFactory represents a factory class for media elements.
+	 * 
+	 * <p>The factory operation takes an IMediaResource as input and produces a MediaElement
+	 * as output.</p>
+	 * <p>The MediaFactory maintains a list of MediaInfo objects,
+	 * each of which encapsulates all the information necessary to create 
+	 * a specific MediaElement. The MediaFactory relies on
+	 * the <code>IMediaResourceHandler.canHandleResource()</code> method to find a MediaInfo
+	 * object than can handle the specified IMediaResource.</p>
+	 *
+	 * <p>The factory interface also exposes methods for querying for specific MediaInfo 
+	 * objects.</p>
+	 * @see MediaInfo
+	 * @see IMediaResource
+	 * @see IMediaResourceHandler    
+	 * @see MediaElement
+	 */	
+	public class MediaFactory
 	{
 		/**
 		 * Constructor.
@@ -52,16 +67,27 @@ package org.osmf.media
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Adds the specified MediaInfo to the factory.
+		 * After the MediaInfo has been added, for any IMediaResource
+		 * that this MediaInfo can handle, the factory will be able to create
+		 * the corresponding media element.
+		 * 
+		 * If a MediaInfo with the same ID already exists in this
+		 * factory, the new MediaInfo object replaces it.
+		 * 
+		 * @param info The MediaInfo to add.
+		 * 
+		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
+		 * has a <code>null</code> ID field.
 		 **/
-		public function addMediaInfo(info:IMediaInfo):void
+		public function addMediaInfo(info:MediaInfo):void
 		{
 			if (info == null || info.id == null)
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			var infos:Vector.<IMediaInfo> = findOrCreateInfos(info.type);
+			var infos:Vector.<MediaInfo> = findOrCreateInfos(info.type);
 			
 			// Make sure to overwrite any duplicate.
 			var existingIndex:int = getIndexOfMediaInfo(info.id, infos);
@@ -76,16 +102,23 @@ package org.osmf.media
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Removes the specified MediaInfo from the factory.
+		 * 
+		 * If no such MediaInfo exists in this factory, does nothing.
+		 * 
+		 * @param info The MediaInfo to remove.
+		 * 
+		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
+		 * has a <code>null</code> ID field.
 		 **/
-		public function removeMediaInfo(info:IMediaInfo):void
+		public function removeMediaInfo(info:MediaInfo):void
 		{
 			if (info == null || info.id == null)
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			var infos:Vector.<IMediaInfo> = allInfos[info.type];
+			var infos:Vector.<MediaInfo> = allInfos[info.type];
 			if (infos != null)
 			{
 				var existingIndex:int = infos.indexOf(info);
@@ -97,7 +130,7 @@ package org.osmf.media
 		}
 
 		/**
-		 * @inheritDoc
+		 * The number of MediaInfos managed by the factory.
 		 **/
 		public function get numMediaInfos():int
 		{
@@ -105,7 +138,7 @@ package org.osmf.media
 			
 			for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
 			{
-				var infos:Vector.<IMediaInfo> = allInfos[type];
+				var infos:Vector.<MediaInfo> = allInfos[type];
 				if (infos != null)
 				{
 					numInfos += infos.length;
@@ -116,17 +149,21 @@ package org.osmf.media
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Gets the MediaInfo at the specified index.
+		 * 
+		 * @param index The index in the list from which to retrieve the MediaInfo.
+		 * 
+		 * @return The MediaInfo at that index or <code>null</code> if there is none.
 		 **/
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
-			var result:IMediaInfo = null;
+			var result:MediaInfo = null;
 			
 			if (index >= 0)
 			{
 				for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
 				{
-					var infos:Vector.<IMediaInfo> = allInfos[type];
+					var infos:Vector.<MediaInfo> = allInfos[type];
 					if (infos != null)
 					{
 						if (index < infos.length)
@@ -147,15 +184,21 @@ package org.osmf.media
 		}
 
 		/**
-		 * @inheritDoc
+		 * Returns the MediaInfo with the specified ID or <code>null</code> if the
+		 * specified MediaInfo does not exist in this factory.
+		 * 
+		 * @param The ID of the MediaInfo to retrieve.
+		 * 
+		 * @return The MediaInfo with the specified ID or <code>null</code> if the specified
+		 * MediaInfo does not exist in this factory. 
 		 **/
-		public function getMediaInfoById(id:String):IMediaInfo
+		public function getMediaInfoById(id:String):MediaInfo
 		{
-			var result:IMediaInfo = null;
+			var result:MediaInfo = null;
 			
 			for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
 			{
-				var infos:Vector.<IMediaInfo> = allInfos[type];
+				var infos:Vector.<MediaInfo> = allInfos[type];
 				if (infos != null)
 				{
 					var existingIndex:int = getIndexOfMediaInfo(id, infos);
@@ -171,7 +214,20 @@ package org.osmf.media
 		}
 
 		/**
-		 * @inheritDoc
+		 * Returns a MediaElement that can be created based on the specified
+		 * IMediaResource.
+		 * <p>Returns <code>null</code> if the
+		 * <code>IMediaResourceHandler.canHandleResource()</code> method cannot         
+		 * find a MediaInfo object
+		 * capable of creating such a MediaElement in this factory.</p>
+		 * 
+		 * @see IMediaResourceHandler#canHandleResource()
+		 *
+		 * @param resource The IMediaResource for which a corresponding
+		 * MediaElement should be created.
+		 * 
+		 * @return The MediaElement that was created or <code>null</code> if no such
+		 * MediaElement could be created from the IMediaResource.
 		 **/
 		public function createMediaElement(resource:IMediaResource):MediaElement
 		{
@@ -226,14 +282,14 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function findOrCreateInfos(type:MediaInfoType):Vector.<IMediaInfo>
+		private function findOrCreateInfos(type:MediaInfoType):Vector.<MediaInfo>
 		{
 			if (allInfos[type] == null)
 			{
-				allInfos[type] = new Vector.<IMediaInfo>();
+				allInfos[type] = new Vector.<MediaInfo>();
 			}
 			
-			return allInfos[type] as Vector.<IMediaInfo>;
+			return allInfos[type] as Vector.<MediaInfo>;
 		}
 		
 		private function createMediaElementByResource
@@ -244,14 +300,22 @@ package org.osmf.media
 		{
 			var mediaElement:MediaElement = null;
 			
-			var infos:Vector.<IMediaInfo> = getMediaInfosByResource(resource, allInfos[mediaInfoType]);
+			var infos:Vector.<MediaInfo> = getMediaInfosByResource(resource, allInfos[mediaInfoType]);
 			
 			if (mediaInfoType == MediaInfoType.STANDARD)
 			{
-				var info:IMediaInfo = handlerResolver.resolveHandlers(resource, Vector.<IMediaResourceHandler>(infos)) as IMediaInfo;
+				var info:MediaInfo = handlerResolver.resolveHandlers(resource, Vector.<IMediaResourceHandler>(infos)) as MediaInfo;
 				if (info != null)
 				{
-					mediaElement = info.createMediaElement();
+					try
+					{
+						mediaElement = info.mediaElementCreationFunction.call();
+					}
+					catch (error:Error)
+					{
+						// Swallow, the creation function is wrongly specified.
+						// We'll just return a null MediaElement.
+					}
 				}
 			}
 			else if (mediaInfoType == MediaInfoType.PROXY)
@@ -266,8 +330,8 @@ package org.osmf.media
 				// ordering to the client through some type of resolver.
 				for (var i:int = infos.length; i > 0; i--)
 				{
-					var proxyInfo:IMediaInfo = infos[i-1] as IMediaInfo;
-					var proxyElement:ProxyElement = proxyInfo.createMediaElement() as ProxyElement;
+					var proxyInfo:MediaInfo = infos[i-1] as MediaInfo;
+					var proxyElement:ProxyElement = proxyInfo.mediaElementCreationFunction.call() as ProxyElement;
 					if (proxyElement != null)
 					{
 						proxyElement.wrappedElement = nextElementToWrap;
@@ -287,11 +351,11 @@ package org.osmf.media
 			return mediaElement;
 		}
 				
-		private static function getMediaInfosByResource(resource:IMediaResource, infos:Vector.<IMediaInfo>):Vector.<IMediaInfo>
+		private static function getMediaInfosByResource(resource:IMediaResource, infos:Vector.<MediaInfo>):Vector.<MediaInfo>
 		{
-			var results:Vector.<IMediaInfo> = new Vector.<IMediaInfo>();
+			var results:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			
-			for each (var info:IMediaInfo in infos)
+			for each (var info:MediaInfo in infos)
 			{
 				if (info.canHandleResource(resource) == true)
 				{
@@ -302,11 +366,11 @@ package org.osmf.media
 			return results;
 		}
 		
-		private static function getIndexOfMediaInfo(id:String, infos:Vector.<IMediaInfo>):int
+		private static function getIndexOfMediaInfo(id:String, infos:Vector.<MediaInfo>):int
 		{
 			for (var i:int = 0; i < infos.length; i++)
 			{
-				var info:IMediaInfo = infos[i] as IMediaInfo;
+				var info:MediaInfo = infos[i] as MediaInfo;
 				if (info.id == id)
 				{
 					return i;
@@ -342,7 +406,7 @@ package org.osmf.media
 		
 		private var allInfos:Dictionary;
 			// Keys are: MediaInfoType
-			// Values are: Vector.<IMediaInfo>
+			// Values are: Vector.<MediaInfo>
 		
 		private var createdElements:Dictionary;
 			// Keys are: MediaElement

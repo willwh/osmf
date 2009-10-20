@@ -100,7 +100,7 @@ package org.osmf.test.mast.managers
 				var netLoader:NetLoader = new NetLoader();
 				
 				// Add a default VideoElement
-				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, VideoElement, [netLoader]));
+				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			
@@ -114,6 +114,11 @@ package org.osmf.test.mast.managers
 			sprite.element = mediaElement;
 		}
 		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
+
 		private function onTimer(event:TimerEvent):void
 		{
 			_timer.removeEventListener(TimerEvent.TIMER, onTimer);

@@ -65,8 +65,10 @@ package org.osmf.image
 		 * 
 		 * @param loader Loader used to load the image.
 		 * @param resource Url that points to the image that the ImageElement will use.
+		 * 
+		 * @throws ArgumentError If loader is null.
 		 */		
-		public function ImageElement(loader:ImageLoader = null, resource:IURLResource = null)
+		public function ImageElement(loader:ImageLoader, resource:IURLResource = null)
 		{
 			super(loader, resource);		
 		}

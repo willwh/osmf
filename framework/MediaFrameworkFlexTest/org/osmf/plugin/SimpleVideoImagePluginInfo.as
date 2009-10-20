@@ -23,21 +23,15 @@ package org.osmf.plugin
 {
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoImagePluginInfo implements IPluginInfo
 	{
-		public function SimpleVideoImagePluginInfo()
-		{
-		}
-
 		public static const VIDEO_MEDIA_INFO_ID:String = "org.osmf.video.Video2";
 		public static const IMAGE_MEDIA_INFO_ID:String = "org.osmf.video.Image2";
-		
-
 
 		/**
 		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
@@ -51,9 +45,8 @@ package org.osmf.plugin
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
-			
 			var netLoader:NetLoader = new NetLoader();
 			var imageLoader:ImageLoader = new ImageLoader();
 			var mediaInfo:MediaInfo;
@@ -61,10 +54,10 @@ package org.osmf.plugin
 			switch(index)
 			{
 				case 0:
-					mediaInfo = new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, VideoElement, new Array(netLoader));
+					mediaInfo = new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, createVideoElement);
 					break;
 				case 1:
-					mediaInfo = new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, ImageElement, new Array(imageLoader));
+					mediaInfo = new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, createImageElement);
 					break;
 			}
 			return mediaInfo;
@@ -81,6 +74,14 @@ package org.osmf.plugin
 			return true;
 		}
 
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
 
+		private function createImageElement():MediaElement
+		{
+			return new ImageElement(new ImageLoader());
+		}
 	}
 }

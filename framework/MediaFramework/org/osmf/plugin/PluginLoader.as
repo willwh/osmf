@@ -27,8 +27,8 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.loaders.LoaderBase;
-	import org.osmf.media.IMediaFactory;
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaInfo;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.version.Version;
@@ -44,7 +44,7 @@ package org.osmf.plugin
 		/**
 		 * Constructor.
 		 */
-		public function PluginLoader(mediaFactory:IMediaFactory)
+		public function PluginLoader(mediaFactory:MediaFactory)
 		{
 			this.mediaFactory = mediaFactory;
 		}
@@ -58,9 +58,9 @@ package org.osmf.plugin
 			{
 				for (var i:int = 0; i < pluginInfo.numMediaInfos; i++)
 				{
-					var mediaInfo:IMediaInfo = pluginInfo.getMediaInfoAt(i);
+					var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
 					
-					var actualMediaInfo:IMediaInfo = mediaFactory.getMediaInfoById(mediaInfo.id);
+					var actualMediaInfo:MediaInfo = mediaFactory.getMediaInfoById(mediaInfo.id);
 					if (actualMediaInfo != null)
 					{
 						mediaFactory.removeMediaInfo(actualMediaInfo);
@@ -89,7 +89,7 @@ package org.osmf.plugin
 						{
 							// Range error usually comes from this method call.  But
 							// we generate an error if the returned value is null.
-							var mediaInfo:IMediaInfo = pluginInfo.getMediaInfoAt(i);
+							var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
 							if (mediaInfo == null)
 							{
 								throw new RangeError();
@@ -128,9 +128,6 @@ package org.osmf.plugin
 			}
 		}
 		
-		/**
-		 * The plugin factory that this loader uses to obtain an IPluginInfo.
-		 */		
-		private var mediaFactory:IMediaFactory;
+		private var mediaFactory:MediaFactory;
 	}
 }

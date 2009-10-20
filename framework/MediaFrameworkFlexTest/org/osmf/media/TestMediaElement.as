@@ -162,26 +162,6 @@ package org.osmf.media
 			}
 		}
 
-		public function testInitialize():void
-		{
-			var mediaElement:MediaElement = new MediaElement();
-
-			// Calling with no arguments should be a no-op.
-			mediaElement.initialize([]);
-			
-			try
-			{
-				// Calling with the incorrect number or types of arguments
-				// should trigger an exception.
-				mediaElement.initialize(["foo"]);
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-		}
-		
 		public function testGetResource():void
 		{
 			var mediaElement:MediaElement = createMediaElement();

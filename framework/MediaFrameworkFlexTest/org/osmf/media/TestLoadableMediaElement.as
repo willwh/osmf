@@ -57,6 +57,20 @@ package org.osmf.media
 			return [MediaTraitType.LOADABLE];
 		}
 		
+		public function testConstructor():void
+		{
+			try
+			{
+				var mediaElement:MediaElement = new LoadableMediaElement(null);
+				
+				fail();
+			}
+			catch (error:ArgumentError)
+			{
+				// Swallow.
+			}
+		}
+		
 		public function testSetResourceUnloadsPreviousLoadable():void
 		{
 			var mediaElement:MediaElement = createMediaElement();

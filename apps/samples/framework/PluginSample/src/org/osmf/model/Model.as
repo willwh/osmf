@@ -60,8 +60,7 @@ package org.osmf.model
 				( new MediaInfo
 					( "Standard video element"
 					, loader as IMediaResourceHandler
-					, VideoElement
-					, [NetLoader]
+					, createVideoElement
 					)
 				);
 			
@@ -100,6 +99,11 @@ package org.osmf.model
 			}
 		}
 		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
+		
 		private function updatePriority(
 			handler:ResourceHandlerDescriptor, handlers:ArrayCollection):void
 		{
@@ -120,7 +124,7 @@ package org.osmf.model
 			resourceHandlers = new ArrayCollection();
 			for (var i:int = 0; i < mediaFactory.numMediaInfos; i++)
 			{
-				var mediaInfo:IMediaInfo = mediaFactory.getMediaInfoAt(i);
+				var mediaInfo:MediaInfo = mediaFactory.getMediaInfoAt(i);
 				if (mediaInfo != null)
 				{
 					resourceHandlers.addItem(new ResourceHandlerDescriptor(mediaInfo));

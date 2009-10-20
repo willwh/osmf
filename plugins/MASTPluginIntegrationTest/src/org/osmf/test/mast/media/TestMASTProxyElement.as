@@ -4,20 +4,20 @@ package org.osmf.test.mast.media
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.image.ImageElement;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.net.NetLoader;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.video.VideoElement;
-	import org.osmf.events.LoadableStateChangeEvent;
 	
 
 	public class TestMASTProxyElement extends TestCase
@@ -70,7 +70,7 @@ package org.osmf.test.mast.media
 		
 		public function testWithMetadata():void
 		{
-			var mediaElement:VideoElement = new VideoElement();
+			var mediaElement:VideoElement = new VideoElement(new NetLoader());
 			mediaElement.resource = createResourceWithMetadata();
 
 			try
@@ -85,7 +85,7 @@ package org.osmf.test.mast.media
 		
 		public function testLoad():void
 		{
-			var mediaElement:MediaElement = new VideoElement();
+			var mediaElement:MediaElement = new VideoElement(new NetLoader());
 			mediaElement.resource = createResourceWithMetadata();
 
 			var proxyElement:MASTProxyElement = null;
@@ -111,7 +111,7 @@ package org.osmf.test.mast.media
 
 		public function testLoadFailure():void
 		{
-			var mediaElement:MediaElement = new VideoElement();
+			var mediaElement:MediaElement = new VideoElement(new NetLoader());
 			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
@@ -153,7 +153,7 @@ package org.osmf.test.mast.media
 		
 		private function doLoadAndPlay(preroll:Boolean=true):void
 		{
-			var mediaElement:MediaElement = new VideoElement();
+			var mediaElement:MediaElement = new VideoElement(new NetLoader());
 			mediaElement.resource = createResourceWithMetadata(preroll);
 
 			var proxyElement:MASTProxyElement = null;

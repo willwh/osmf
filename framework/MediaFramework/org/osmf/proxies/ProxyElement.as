@@ -88,7 +88,7 @@ package org.osmf.proxies
 		 * before any other methods on this ProxyElement are called, or an
 		 * IllegalOperationError will be thrown.
 		 **/
-		public function ProxyElement(wrappedElement:MediaElement=null)
+		public function ProxyElement(wrappedElement:MediaElement)
 		{
 			super();
 			
@@ -189,17 +189,6 @@ package org.osmf.proxies
 			}
 			
 			return trait;
-		}
-		
-		/**
-		 * Initialization method for a ProxyElement.  Note that this
-		 * method should not take the wrappedElement, as that will be
-		 * automatically set by the IMediaFactory.
-		 **/
-		override public function initialize(value:Array):void
-		{
-			// No params expected, just call through to the base to validate.
-			super.initialize(value);
 		}
 		
 		/**

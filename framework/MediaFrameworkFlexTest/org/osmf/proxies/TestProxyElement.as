@@ -116,7 +116,7 @@ package org.osmf.proxies
 		
 		protected function createProxyElement():ProxyElement
 		{
-			return new ProxyElement();
+			return new ProxyElement(null);
 		}
 		
 		// Overrides

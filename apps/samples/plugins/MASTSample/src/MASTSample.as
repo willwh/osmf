@@ -130,13 +130,18 @@ package
 				var netLoader:NetLoader = new NetLoader();
 				
 				// Add a default VideoElement
-				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, VideoElement, [netLoader]));
+				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			
 			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 			
 			sprite.element = mediaElement;
+		}
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
 		}
 		
    		private function onMediaError(event:MediaErrorEvent):void

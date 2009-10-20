@@ -76,13 +76,13 @@ package org.osmf.audio
 		 * @param resource URL that points to the audio source that the AudioElement will use.  
 		 * @see org.osmf.net.NetLoader
 		 * 
-		 * @throws ArgumentError If loader is neither a NetLoader nor a SoundLoader.
+		 * @throws ArgumentError If loader is null, or neither a NetLoader nor a SoundLoader.
 		 */ 
-		public function AudioElement(loader:ILoader=null, resource:IURLResource=null)
+		public function AudioElement(loader:ILoader, resource:IURLResource=null)
 		{
 			super(loader, resource);
 			
-			if (!(loader == null || loader is NetLoader || loader is SoundLoader))
+			if (!(loader is NetLoader || loader is SoundLoader))
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}

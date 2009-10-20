@@ -90,11 +90,11 @@ package org.osmf.loaders
 		{
 			if (newState != loadable.loadState)
 			{
-				if(newState == LoadState.LOADED && loadedContext == null)
+				if (newState == LoadState.LOADED && loadedContext == null)
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.LOADED_CONTEXT_NULL);
 				}
-				if(newState == LoadState.CONSTRUCTED && loadedContext != null)
+				if (newState == LoadState.CONSTRUCTED && loadedContext != null)
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.LOADED_CONTEXT_NOT_NULL);
 				}

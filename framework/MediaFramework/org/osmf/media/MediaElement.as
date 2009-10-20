@@ -147,60 +147,6 @@ package org.osmf.media
 		}
 		
 		/**
-         * Initializes this media element with the specified arguments.  The
-		 * arguments are of type Object.  Each media element subclass has an
-		 * implicit contract as to the number of arguments and the specific
-		 * type of each argument. 
-		 * 
-		 * <p>This method allows for the creation of a MediaElement by a
-		 * factory class.  Typically, a factory constructs an instance of
-		 * the MediaElement (using the default constructor) and then calls
-		 * this method with the parameters that would normally be passed to
-		 * the constructor.</p>
-		 * 
-		 * <p>Dynamic instantiation of this nature can be useful when the code
-		 * that creates an instance of a class has no <i>a priori</i> knowledge
-		 * of the constructor arguments and types.  For example, suppose class
-         * Foo extends MediaElement and has the following constructor:</p>
-         * <listing>
-         * public function Foo(arg1:String,arg2:Number):void
-         * {
-         *     //...
-         * }
-         * </listing>
-		 * 
-         * A factory class could create an instance of Foo like this:
-         * <listing>
-         * // This method retrieves the Class to instantiate from an
-         * // external source.  Let's assume it returns class Foo.
-         * var classType():Class = getClassFromDescriptor();
-         * 
-         * // This method retrieves the arguments from an external source.
-         * // Let's assume it returns ["some text",3.14].
-         * var args:Array = getArgsFromDescriptor();
-         * 
-         * var mediaElement:MediaElement = new classType();
-         * mediaElement.initialize(args);
-         * </listing>
-		 * @param args An array of initialization arguments.  Each implementing
-		 * class has an implicit contract as to the number of arguments
-		 * and the specific type of each argument. 
-		 * 
-		 * @throws ArgumentError The wrong number of arguments or the wrong
-		 * argument types were passed in.
-		 * 
-		 * TODO: Make this internal?
-		 **/
-		public function initialize(value:Array):void
-		{
-			// Subclasses can override to do their own initialization.
-			if (value.length > 0)
-			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_INITIALIZATION_ARGS);
-			}
-		}
-		
-		/**
 		 * The media resource that this media element operates on.
 		 **/
 		public function get resource():IMediaResource

@@ -28,8 +28,9 @@ package com.akamai.osmf
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.audio.AudioElement;
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.video.VideoElement;
@@ -46,16 +47,15 @@ package com.akamai.osmf
 		public function AkamaiBasicStreamingPluginInfo()
 		{		
 			mediaInfoObjects = new Vector.<MediaInfo>();
+			netLoader = new AkamaiNetLoader(true, new AkamaiNetConnectionFactory());
 			
-			var netLoader:AkamaiNetLoader = new AkamaiNetLoader(true, new AkamaiNetConnectionFactory());
-			var mediaInfo:MediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingVideoElement", netLoader, VideoElement, new Array(netLoader));
-
+			var mediaInfo:MediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingVideoElement", netLoader, createVideoElement);
 			mediaInfoObjects.push(mediaInfo);
 
-			mediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingAudioElement", netLoader, AudioElement, new Array(netLoader));
+			mediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingAudioElement", netLoader, createAudioElement);
 			mediaInfoObjects.push(mediaInfo);
 		}
-
+		
 		/**
 		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
 		 * to register.
@@ -68,7 +68,7 @@ package com.akamai.osmf
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position.
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			if (index >= mediaInfoObjects.length)
 			{
@@ -108,11 +108,21 @@ package com.akamai.osmf
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.3.0 is the minimum this plugin supports.
-			return ((major > 0) || ((major == 0) && (minor >= 3) && (subMinor >= 0)));
-			
+			// Framework version 0.7.0 is the minimum this plugin supports.
+			return ((major > 0) || ((major == 0) && (minor >= 7) && (subMinor >= 0)));
 		}
 		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(netLoader);
+		}
+		
+		private function createAudioElement():MediaElement
+		{
+			return new AudioElement(netLoader);
+		}
+
+		private var netLoader:NetLoader;
 		private var mediaInfoObjects:Vector.<MediaInfo>;			
 	}
 }

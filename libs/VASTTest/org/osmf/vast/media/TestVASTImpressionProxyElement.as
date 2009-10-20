@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.vast.media
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -46,41 +44,6 @@ package org.osmf.vast.media
 	
 	public class TestVASTImpressionProxyElement extends TestListenerProxyElement
 	{
-		public function testInitializeWithNoParams():void
-		{
-			var proxyElement:ProxyElement = new VASTImpressionProxyElement();
-			
-			try
-			{
-				// Should throw if the number of params is incorrect.
-				proxyElement.initialize([]);
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-		}
-		
-		public function testInitializeWithValidParams():void
-		{
-			var proxyElement:ProxyElement = new VASTImpressionProxyElement();
-			proxyElement.wrappedElement = new DynamicMediaElement
-				(   [ MediaTraitType.BUFFERABLE
-					, MediaTraitType.PLAYABLE
-					, MediaTraitType.LOADABLE
-					]
-				, 	new SimpleLoader()
-				);
-			
-			var vastURLs:Vector.<VASTUrl> = new Vector.<VASTUrl>();
-			vastURLs.push(VAST_URL1);
-			vastURLs.push(VAST_URL2);
-			proxyElement.initialize([vastURLs, httpLoader]);
-			
-			doTestPlay(proxyElement, false);
-		}
-		
 		public function testPlay():void
 		{
 			doTestPlay(createProxyElementWithWrappedElement(), false);
@@ -236,12 +199,12 @@ package org.osmf.vast.media
 		
 		override protected function createProxyElement():ProxyElement
 		{
-			return new VASTImpressionProxyElement();
+			return new VASTImpressionProxyElement(new Vector.<VASTUrl>());
 		}
 		
 		override protected function createMediaElement():MediaElement
 		{
-			return new VASTImpressionProxyElement(null, null, new MediaElement());
+			return new VASTImpressionProxyElement(new Vector.<VASTUrl>(), null, new MediaElement());
 		}
 
 		// Internals

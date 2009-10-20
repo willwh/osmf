@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaInfo;
 	
 	/**
-	 * IPluginInfo is the encapsulation of the set of IMediaInfo objects
+	 * IPluginInfo is the encapsulation of the set of MediaInfo objects
 	 * that will be available to the application after the plugin has been
 	 * successfully loaded.
 	 * Every Open Source Media Framework plugin must implement this interface
@@ -32,7 +32,7 @@ package org.osmf.plugin
 	 * to create and load the plugin's MediaElement.
 	 * <p>
 	 * From the point of view of the Open Source Media Framework,
-	 * the plugin's purpose is to expose the IMediaInfo
+	 * the plugin's purpose is to expose the MediaInfo
 	 * objects that represent the media that the plugin handles.
 	 * These MediaInfo objects could describe standard media types such as
 	 * video, audio, or image that can be represented by the built-in Open Source Media Framework
@@ -73,11 +73,11 @@ package org.osmf.plugin
 	 * 		}
 	 * 
 	 * 		// Returns the MediaInfo object at the specified index position.
-	 * 		public function getMediaInfoAt(index:int):IMediaInfo
+	 * 		public function getMediaInfoAt(index:int):MediaInfo
 	 * 		{
 	 * 			var netLoader:NetLoader = new NetLoader();
 	 * 			return new MediaInfo("org.osmf.video.Video", netLoader,
-	 * 				 VideoElement, new Array(netLoader));
+	 * 				 createVideoElement);
 	 * 		}
 	 * 
 	 * 		// Return if the plugin supports the specified version of the framework.
@@ -85,41 +85,46 @@ package org.osmf.plugin
 	 * 		{
 	 * 			return true;
 	 * 		}
+	 * 
+	 * 		private function createVideoElement():MediaElement
+	 * 		{
+	 * 			return new VideoElement(new NetLoader());
+	 * 		}
 	 * }
 	 * </listing>
 	 * @see PluginClassResource
 	 * @see PluginFactory
-	 * @see org.osmf.media.IMediaInfo
+	 * @see org.osmf.media.MediaInfo
 	 */
 	public interface IPluginInfo
 	{
 		/**
-		 * Returns the number of IMediaInfo objects that the plugin
+		 * Returns the number of MediaInfo objects that the plugin
 		 * exposes to the loading application.
 		 */
 		function get numMediaInfos():int;
 
 		/**
-		 * Used by the application to get the IMediaInfo object at the specified index.
+		 * Used by the application to get the MediaInfo object at the specified index.
 		 * <p>If the index is out of range, the implementation should throw a
 		 * RangeError.</p>
 		 * <p>	
 		 * The following code shows how an application that uses plugins
-		 * could request the IMediaInfo objects for the plugins' media.
+		 * could request the MediaInfo objects for the plugins' media.
 		 * </p>
 		 * <listing>
 		 * for (var i:int = 0; i &lt; pluginInfo.numMediaInfos; i++)
 		 * {
-		 * 	var mediaInfo:IMediaInfo = pluginInfo.getMediaInfoAt(i);
+		 * 	  var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
 		 * 
-		 * 	//process the IMediaInfo 
+		 * 	  //process the MediaInfo 
 		 * }
 		 * </listing>
-		 * @param index Zero-based index position of the requested IMediaInfo.
-		 * @return An IMediaInfo object representing media to be loaded.
+		 * @param index Zero-based index position of the requested MediaInfo.
+		 * @return A MediaInfo object representing media to be loaded.
 		 * @see RangeError
 		 */
-		function getMediaInfoAt(index:int):IMediaInfo;
+		function getMediaInfoAt(index:int):MediaInfo;
 		
 		/**
 		 * Returns <code>true</code> if the plugin supports the specified version

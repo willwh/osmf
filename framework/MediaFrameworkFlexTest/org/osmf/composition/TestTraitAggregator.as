@@ -37,7 +37,7 @@ package org.osmf.composition
 		public function testListenedChild():void
 		{			
 			var aggr:TraitAggregator = new TraitAggregator();
-			var video:VideoElement = new VideoElement();
+			var video:VideoElement = new VideoElement(new NetLoader());
 			aggr.listenedChild = video;
 			
 			assertEquals(aggr.listenedChild, video);			

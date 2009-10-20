@@ -26,10 +26,10 @@ package org.osmf.plugin
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.media.IMediaInfo;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaInfo;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
@@ -37,8 +37,8 @@ package org.osmf.plugin
 	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.URL;
 	
 	public class TestPluginLoader extends TestCase
 	{
@@ -203,8 +203,8 @@ package org.osmf.plugin
 				if (event.newState == LoadState.LOADED)
 				{
 
-					var videoMediaInfo:IMediaInfo = mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.VIDEO_MEDIA_INFO_ID);
-					var imageMediaInfo:IMediaInfo = mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.IMAGE_MEDIA_INFO_ID);
+					var videoMediaInfo:MediaInfo = mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.VIDEO_MEDIA_INFO_ID);
+					var imageMediaInfo:MediaInfo = mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.IMAGE_MEDIA_INFO_ID);
 
 					// Ensure the MediaInfo object has been registered with the media factory
 					assertTrue(videoMediaInfo != null);

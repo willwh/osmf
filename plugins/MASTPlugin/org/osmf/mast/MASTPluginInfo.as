@@ -24,8 +24,8 @@ package org.osmf.mast
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.mast.media.MASTProxyElement;
-	import org.osmf.media.IMediaInfo;
 	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
 	import org.osmf.net.NetLoader;
@@ -48,8 +48,7 @@ package org.osmf.mast
 			var mediaInfo:MediaInfo = new MediaInfo
 				( "org.osmf.mast.MASTPluginInfo"
 				, resourceHandler
-				, MASTProxyElement
-				, []
+				, createMASTProxyElement
 				, MediaInfoType.PROXY
 				);
 			mediaInfos.push(mediaInfo);
@@ -65,9 +64,9 @@ package org.osmf.mast
 		}
 		
 		/**
-		 * Returns an <code>IMediaInfo</code> object at the supplied index position.
+		 * Returns a <code>MediaInfo</code> object at the supplied index position.
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			if (index >= mediaInfos.length)
 			{
@@ -107,10 +106,15 @@ package org.osmf.mast
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.5.0 is the minimum this plugin supports.
-			return ((major > 0) || ((major == 0) && (minor >= 5) && (subMinor >= 0)));
+			// Framework version 0.7.0 is the minimum this plugin supports.
+			return ((major > 0) || ((major == 0) && (minor >= 7) && (subMinor >= 0)));
 		}
 		
+		private function createMASTProxyElement():MediaElement
+		{
+			return new MASTProxyElement();
+		}
+
 		private var mediaInfos:Vector.<MediaInfo>;			
 	}
 }

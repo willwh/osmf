@@ -25,6 +25,7 @@ package org.osmf.view
 	import flash.system.Security;
 	
 	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.URLResource;
@@ -77,8 +78,7 @@ package org.osmf.view
 				( new MediaInfo
 					( "org.osmf.video"
 					, netLoader
-					, VideoElement
-					, [netLoader]
+					, createVideoElement
 					)
 				);
 			
@@ -90,10 +90,19 @@ package org.osmf.view
 				( new MediaInfo
 					( "com.example.custom.referencing.swf"
 					, swfLoader
-					, ReferenceSWFElement
-					, [swfLoader]
+					, createReferenceSWFElement
 					)
 				);
+		}
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
+		
+		private function createReferenceSWFElement():MediaElement
+		{
+			return new ReferenceSWFElement(new SWFLoader());
 		}
 		
 		private function loadMedia():void

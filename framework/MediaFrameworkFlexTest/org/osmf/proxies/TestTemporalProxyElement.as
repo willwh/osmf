@@ -49,7 +49,6 @@ package org.osmf.proxies
 		{
 			try 
 			{
-				new TemporalProxyElement();
 				new TemporalProxyElement(NaN);
 				new TemporalProxyElement(NaN, new MediaElement());
 			}
@@ -57,55 +56,6 @@ package org.osmf.proxies
 			{
 				fail();
 			}
-		}
-		
-		override public function testInitialize():void
-		{
-			var temporalProxyElement:TemporalProxyElement = new TemporalProxyElement();
-			
-			var temporal:ITemporal = temporalProxyElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
-			assertTrue(temporal.duration == 0);
-			
-			temporalProxyElement.initialize([33]);
-			
-			assertTrue(temporal.duration == 33);
-			
-			// Try some invalid init params.
-			//
-			
-			temporalProxyElement = new TemporalProxyElement();
-			
-			// Too few params.
-			try
-			{
-				temporalProxyElement.initialize([]);
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-
-			temporalProxyElement = new TemporalProxyElement();
-			
-			// Too many params.
-			try
-			{
-				temporalProxyElement.initialize([33, 33]);
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-			}
-			
-			// If the param type is invalid, it's not strictly a failure
-			// since we can generally coerce the value to a "null" equivalent
-			// (e.g. zero).
-			temporalProxyElement.initialize([new String()]);
-			temporal = temporalProxyElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal.duration == 0);
 		}
 		
 		public function testTraits():void
@@ -169,7 +119,7 @@ package org.osmf.proxies
 		
 		override protected function createMediaElement():MediaElement
 		{
-			return new TemporalProxyElement();
+			return new TemporalProxyElement(0);
 		}
 		
 		override protected function get loadable():Boolean

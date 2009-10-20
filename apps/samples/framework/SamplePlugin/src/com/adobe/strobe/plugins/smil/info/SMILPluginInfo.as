@@ -26,7 +26,7 @@ package com.adobe.strobe.plugins.smil.info
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.media.IMediaInfo;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.plugin.IPluginInfo;
 	
@@ -52,7 +52,7 @@ package com.adobe.strobe.plugins.smil.info
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			if (logger != null && logger.debugEnabled)
 			{
@@ -60,7 +60,7 @@ package com.adobe.strobe.plugins.smil.info
 			}
 			
 			var smilLoader:SMILLoader = new SMILLoader();
-			return new MediaInfo("com.adobe.smil.SMIL", smilLoader, SMILElement, new Array(smilLoader));
+			return new MediaInfo("com.adobe.smil.SMIL", smilLoader, createSMILElement);
 		}
 		
 		/**
@@ -76,6 +76,11 @@ package com.adobe.strobe.plugins.smil.info
 			}
 			
 			return true;
+		}
+		
+		private function createSMILElement():MediaElement
+		{
+			return new SMILElement(new SMILLoader());
 		}
 		
 		// internal

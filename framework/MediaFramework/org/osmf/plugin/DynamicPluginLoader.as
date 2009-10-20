@@ -26,7 +26,7 @@ package org.osmf.plugin
 	import org.osmf.content.ContentLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaFactory;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.ILoadable;
@@ -38,7 +38,7 @@ package org.osmf.plugin
 		/**
 		 * Constructor
 		 */
-		public function DynamicPluginLoader(mediaFactory:IMediaFactory)
+		public function DynamicPluginLoader(mediaFactory:MediaFactory)
 		{
 			super(mediaFactory);
 		}

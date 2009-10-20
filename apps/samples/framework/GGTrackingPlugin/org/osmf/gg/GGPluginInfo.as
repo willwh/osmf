@@ -23,8 +23,8 @@ package org.osmf.gg
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.media.IMediaInfo;
 	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
 	import org.osmf.net.NetLoader;
@@ -47,13 +47,12 @@ package org.osmf.gg
 			var mediaInfo:MediaInfo = new MediaInfo
 				( "org.osmf.gg.GGPluginInfo"
 				, resourceHandler
-				, GGVideoProxyElement
-				, []
+				, createGGVideoProxyElement
 				, MediaInfoType.PROXY
 				);
 			mediaInfos.push(mediaInfo);
 		}
-
+		
 		/**
 		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
 		 * to register.
@@ -64,9 +63,9 @@ package org.osmf.gg
 		}
 		
 		/**
-		 * Returns an <code>IMediaInfo</code> object at the supplied index position.
+		 * Returns a <code>MediaInfo</code> object at the supplied index position.
 		 */
-		public function getMediaInfoAt(index:int):IMediaInfo
+		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			if (index >= mediaInfos.length)
 			{
@@ -106,10 +105,15 @@ package org.osmf.gg
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.5.0 is the minimum this plugin supports.
-			return ((major >= 0) && (minor >= 5) && (subMinor >= 0));
+			// Framework version 0.7.0 is the minimum this plugin supports.
+			return ((major >= 0) && (minor >= 7) && (subMinor >= 0));
 		}
-		
+
+		private function createGGVideoProxyElement():MediaElement
+		{
+			return new GGVideoProxyElement();
+		}
+
 		private var mediaInfos:Vector.<MediaInfo>;			
 	}
 }

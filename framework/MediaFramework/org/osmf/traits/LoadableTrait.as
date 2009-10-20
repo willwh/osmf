@@ -77,6 +77,11 @@ package org.osmf.traits
 			return _resource;
 		}
 		
+		public function set resource(value:IMediaResource):void
+		{
+			_resource = value;
+		}
+		
 		/**
 		 * The load state of this trait.
 		 **/
@@ -134,11 +139,11 @@ package org.osmf.traits
 		{
 			if (loader)
 			{	
-				if(_loadState == LoadState.LOADED)
+				if (_loadState == LoadState.LOADED)
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADED);
 				}
-				if(_loadState == LoadState.LOADING)
+				if (_loadState == LoadState.LOADING)
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADING);
 				}

@@ -36,15 +36,10 @@ package com.adobe.strobe.plugins.smil.media
 	
 	public class SMILElement extends SerialElement
 	{
-		public function SMILElement(loader:SMILLoader = null, resource:IURLResource = null)
+		public function SMILElement(loader:SMILLoader, resource:IURLResource = null)
 		{
 			this.loader = loader;
 			this.resource = resource;
-		}
-
-		override public function initialize(value:Array):void
-		{
-			loader = value[0] as ILoader;
 		}
 
 		override public function set resource(value:IMediaResource):void

@@ -133,11 +133,6 @@ package org.osmf.utils
 			return this.removeTrait(type);
 		}
 		
-		override public function initialize(value:Array):void
-		{
-			this.args = value;
-		}
-		
 		private function onPlayingChanged(event:PlayingChangeEvent):void
 		{
 			if (event.playing == true && pausable != null)
@@ -162,7 +157,6 @@ package org.osmf.utils
 			}
 		}
 		
-		public var args:Array = []
 		public var playable:PlayableTrait;
 		public var pausable:PausableTrait;
 		public var temporal:TemporalTrait;

@@ -48,8 +48,10 @@ package org.osmf.content
 		 * 
 		 * @param loader ContentLoader used to load the content.
 		 * @param resource Url that points to the content that the ContentElement will use.
+		 * 
+		 * @throws ArgumentError If loader is null.
 		 */		
-		public function ContentElement(loader:ContentLoader = null, resource:IURLResource = null)
+		public function ContentElement(loader:ContentLoader, resource:IURLResource = null)
 		{
 			super(loader, resource);		
 		}
@@ -66,7 +68,9 @@ package org.osmf.content
 			// TODO: Add comment here on how the error can occur.
 			try
 			{
-				//Add a container layer, to allow the loaded content to overdraw its bounds, while maintaining scale, and size with the layout system.
+				// Add a container layer, to allow the loaded content to
+				// overdraw its bounds, while maintaining scale, and size
+				// with the layout system.
 				var viewContainer:Sprite = new Sprite();
 				viewContainer.addChild(context.loader);
 				context.loader.scrollRect = new Rectangle(0,0,context.loader.contentLoaderInfo.width,  context.loader.contentLoaderInfo.height);

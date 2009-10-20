@@ -29,17 +29,16 @@ package org.osmf.utils
 
 	public class DynamicReferenceMediaElement extends DynamicMediaElement implements IMediaReferrer
 	{
-		public function DynamicReferenceMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null)
+		public function DynamicReferenceMediaElement(referenceUrlToMatch:String, traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null)
 		{
 			super(traitTypes, loader, resource);
 			
 			_references = new Array();
+			this.referenceUrlToMatch = referenceUrlToMatch;
 		}
 		
 		public function canReferenceMedia(target:MediaElement):Boolean
 		{
-			var referenceUrlToMatch:String = (args != null && args.length > 0) ? args[0] : null;
-			
 			// It can reference any DynamicMediaElement whose URL contains
 			// a predefined string.
 			return 		target is DynamicMediaElement
@@ -58,6 +57,7 @@ package org.osmf.utils
 			return _references;
 		}
 		
+		private var referenceUrlToMatch:String;
 		private var _references:Array;
 	}
 }

@@ -41,12 +41,12 @@ package org.osmf.model
 			}
 			
 			var handler:ResourceHandlerDescriptor 
-				= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[0] as IMediaInfo).id);
+				= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[0] as MediaInfo).id);
 				
 			for (var i:int = 1; i < handlers.length; i++)
 			{
 				var item:ResourceHandlerDescriptor
-					= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[i] as IMediaInfo).id);
+					= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[i] as MediaInfo).id);
 				
 				if (item.priority > handler.priority)
 				{

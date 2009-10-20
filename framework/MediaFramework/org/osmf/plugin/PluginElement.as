@@ -37,17 +37,16 @@ package org.osmf.plugin
 	{
 		/**
 		 * Constructor.
+		 * 
 		 * @param resource Resource for the plugin code. For static plugins, 
 		 * this is a PluginClassResource. 
 		 * For dynamic plugins it is a IURLResource.
 		 * @see PluginClassResource
 		 * @see org.osmf.media.IURLResource
 		 */
-		public function PluginElement(loader:PluginLoader = null, resource:IMediaResource = null)
+		public function PluginElement(loader:PluginLoader, resource:IMediaResource=null)
 		{
 			super(loader, resource);			
 		}
-		
-
 	}
 }

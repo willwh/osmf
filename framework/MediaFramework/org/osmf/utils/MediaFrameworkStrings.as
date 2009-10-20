@@ -49,12 +49,7 @@ package org.osmf.utils
 		
 		public static const NULL_WRAPPED_ELEMENT:String					= "The ProxyElement's wrappedElement must have a non-null value";
 		public static const WRAPPED_ELEMENT_SET_TWICE:String			= "Cannot set the ProxyElement's wrappedElement value twice";
-		
-		// IMediaInfo
-		
-		public static const INVALID_MEDIAELEMENT_CONSTRUCTOR:String 	= "Unable to create MediaElement implementation, the class needs a default constructor.";
-		public static const INVALID_MEDIAELEMENT_ARGUMENT:String 		= "Unable to create initialization argument for MediaElement, the argument needs a default constructor.";		
-		
+				
 		// ILoadable
 		
 		public static const MUST_SET_ILOADER_FOR_LOAD:String 			= "Must set ILoader on an ILoadable before calling ILoader.load";
