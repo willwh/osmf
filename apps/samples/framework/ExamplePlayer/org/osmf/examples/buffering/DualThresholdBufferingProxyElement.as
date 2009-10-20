@@ -28,7 +28,9 @@ package org.osmf.examples.buffering
 	
 	/**
 	 * Proxy class which sets the IBufferable.bufferTime property to
-	 * an initial value when the IBufferable trait is available.
+	 * an initial value when the IBufferable trait is available, and
+	 * an expanded value when the proxied MediaElement first exits
+	 * the buffer state.
 	 **/
 	public class DualThresholdBufferingProxyElement extends ListenerProxyElement
 	{
