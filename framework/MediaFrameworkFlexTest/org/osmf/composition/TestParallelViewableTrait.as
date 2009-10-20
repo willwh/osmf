@@ -39,8 +39,6 @@ package org.osmf.composition
 	{
 		public function testParallelViewableTrait():void
 		{
-			return;
-			
 			var parallel:ParallelElement = new ParallelElement();
 			
 			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
