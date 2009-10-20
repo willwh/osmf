@@ -33,6 +33,7 @@ package org.osmf.examples
 	import org.osmf.composition.SerialElement;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.examples.buffering.BufferingProxyElement;
+	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.text.TextElement;
@@ -117,6 +118,19 @@ package org.osmf.examples
 				  	   	}
 					)
 				);
+				
+			examples.push
+				( new Example
+					( 	"Streaming Video With Dual-Threshold Buffer"
+					, 	"Demonstrates playback of a streaming video with a dual-threshold buffer.  The buffer starts small, but increases once we've buffered enough data to enable playback.  The larger buffer reduces the chance that a rebuffer will need to occur."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM)));
+				  	   		return new DualThresholdBufferingProxyElement(2, 15, videoElement);
+				  	   	}
+				  	)
+				);
+
 
 			examples.push
 				( new Example
