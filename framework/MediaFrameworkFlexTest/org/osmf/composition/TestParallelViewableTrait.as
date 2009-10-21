@@ -146,7 +146,7 @@ package org.osmf.composition
 				applicationCount++;
 			}
 			
-			var timer:Timer = new Timer(1,5);
+			var timer:Timer = new Timer(400,1);
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, addAsync(onTimerComplete, 500));
 			timer.start();
 			
