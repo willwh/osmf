@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.media
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
@@ -98,12 +100,12 @@ package org.osmf.media
 		}
 	
 		/**
-		 * An array of MediaTraitTypes representing the trait types on this
+		 * A Vector of MediaTraitTypes representing the trait types on this
 		 * media element.
 		 **/
-		public function get traitTypes():Array
+		public function get traitTypes():Vector.<MediaTraitType>
 		{
-			// Return a copy of our types array:
+			// Return a copy of our types vector.
 			return _traitTypes.concat();
 		}
 		
@@ -308,7 +310,7 @@ package org.osmf.media
 			dispatchEvent(event.clone());
 		}
 
-		private var _traitTypes:Array = [];
+		private var _traitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
 		private var _traits:Dictionary = new Dictionary();
 		private var _resource:IMediaResource;
 		private var _gateway:IMediaGateway;

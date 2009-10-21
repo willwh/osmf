@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.proxies
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
@@ -138,9 +140,9 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function get traitTypes():Array
+		override public function get traitTypes():Vector.<MediaTraitType>
 		{
-			var results:Array = new Array();
+			var results:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
 			
 			// Only return the traits reflected by the proxy. 
 			for each (var traitType:MediaTraitType in MediaTraitType.ALL_TYPES)
@@ -313,7 +315,7 @@ package org.osmf.proxies
 		
 		private function removeOverriddenTraits():void
 		{				
-			var overriddenTraitTypes:Array = super.traitTypes;
+			var overriddenTraitTypes:Vector.<MediaTraitType> = super.traitTypes;
 			for each (var traitType:MediaTraitType in overriddenTraitTypes)
 			{
 				removeTrait(traitType);
