@@ -72,7 +72,8 @@ package org.osmf.net.dynamicstreaming
 				// Must be a "regular" stream, let the base class handle it
 				super.load(loadable);
 			}
-			else {
+			else
+			{
 				// Get the hostname from the DynamicStreamingResource and ask the base class to connect
 				var hostName:FMSURL = dsResource.hostName;
 				var tempTrait:LoadableTrait = new LoadableTrait(null, new URLResource(hostName));
