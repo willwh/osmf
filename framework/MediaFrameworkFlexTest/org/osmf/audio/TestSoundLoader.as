@@ -76,9 +76,9 @@ package org.osmf.audio
 			assertTrue(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.foo"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp31"))));

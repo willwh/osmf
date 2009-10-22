@@ -237,81 +237,90 @@ package org.osmf.utils
 			if ((_rawUrl == null) || (_rawUrl.length == 0))
 			{
 				return;
-			}	
-
-			// Handle the special case where the user is tring to connect to a dev server running on 
- 			//	the same machine as the client with a url like this: "rtmp:/sudoku/room1"
- 			var oneSlashRegExp:RegExp = /^(rtmp|rtmp[tse]|rtmp\bte\b)(:\/[^\/])/i;
- 			var oneSlashResult:Array = _rawUrl.match(oneSlashRegExp);
- 				
-			var tempUrl:String = _rawUrl;
- 				
- 			if (oneSlashResult != null)
- 			{
- 				tempUrl = _rawUrl.replace(/:\//, "://localhost/");	
- 			}
-
-			// We'll parse the url in two passes: 
-			// 1) pull out the host name which might contain '@' and ':' characters;
-			// 2) parse the host name out into user info, host, and port.
-			//
-			// This makes the regular expressions simpler and should accommodate some irregular urls that might contain
-			// '@' and ':' in the path.
+			}
 			
- 			/* 
- 			* The regular expression below performs a match on a URL string, effectively breaking it up into 
- 			* the individual properites, such as protocol, host name, port, etc.
- 			* 
- 			* Here are the individual patterns of the regular expression:
- 			* 
- 			* protocol : ^([a-z+\w\+\.\-]+:\/\/)?
- 			*	The caret (^) means start at the beginnning of the string.
- 			*	The "[a-z+\w\+\.\-]+" pattern means match the following group of characters 1 or more times: letters from a to z, followed by any letter
- 			*		from a to z, a number from 0 to 9, an underscore (-), a plus sign (+), a period (.), or a dash (-).
- 			*	The ":\/\/" pattern means match the string "://".
- 			*	The question mark '?' at the end means the entire sequence can appear once or not at all.
- 			*
- 			* path: (\/[^?#]*)
- 			*	This pattern matches a sequence starting with a slash (/) followed by any characters other than '?' or '#'.
- 			* 
- 			* query: (\?[^#]*)
- 			*	This pattern matches a sequence starting with a '?' followed by any character other than a '#'.
- 			*
- 			* fragment: (\#.*)
- 			*	This pattern matches a sequence starting with a '#' character followed by any character zero or more times.
- 			*/
-			
-			var pattern:RegExp = /^([a-z+\w\+\.\-]+:\/\/)?([^\/?#]*)?(\/[^?#]*)?(\?[^#]*)?(\#.*)?/i;		
-			var result:Array = tempUrl.match(pattern);
-			var hostName:String;
-			
-			if (result != null)
+			// Check to see if this is a relative path, meaning there is no protocol specified
+			if (_rawUrl.search(/:\//) == -1)
 			{
-				protocol = result[1];
-				hostName = result[2];
-		        path = result[3];
-		        query = result[4];
-		        fragment = result[5];
-		        
-		        /*
-		        * Now we'll parse the host name.
-		        *
-	 			* user info: ([!-~]+@)?
- 				*	This pattern matches any charater from '!' to '~' in the ascii character set occurring 1 or more times followed by '@'.
- 				*
- 				* host and port number: ([^\/?#:]*)(:[\d]*)
- 				* 	This pattern matches any sequence of characters other than '/', '?', '#', and ':', followed by an optional ':' and a 
- 				* 	digit representing the port number.
- 				*/
-		        pattern = /^([!-~]+@)?([^\/?#:]*)(:[\d]*)?/i;
-		        result = hostName.match(pattern);
-		        if (result != null)
-		        {
-					this.userInfo = result[1];
-					this.host = result[2];
-					this.port = result[3];
-		        }
-		 	}
+				path = _rawUrl;
+			}
+			else
+			{
+	
+				// Handle the special case where the user is tring to connect to a dev server running on 
+	 			//	the same machine as the client with a url like this: "rtmp:/sudoku/room1"
+	 			var oneSlashRegExp:RegExp = /^(rtmp|rtmp[tse]|rtmp\bte\b)(:\/[^\/])/i;
+	 			var oneSlashResult:Array = _rawUrl.match(oneSlashRegExp);
+	 				
+				var tempUrl:String = _rawUrl;
+	 				
+	 			if (oneSlashResult != null)
+	 			{
+	 				tempUrl = _rawUrl.replace(/:\//, "://localhost/");	
+	 			}
+	
+				// We'll parse the url in two passes: 
+				// 1) pull out the host name which might contain '@' and ':' characters;
+				// 2) parse the host name out into user info, host, and port.
+				//
+				// This makes the regular expressions simpler and should accommodate some irregular urls that might contain
+				// '@' and ':' in the path.
+				
+	 			/* 
+	 			* The regular expression below performs a match on a URL string, effectively breaking it up into 
+	 			* the individual properites, such as protocol, host name, port, etc.
+	 			* 
+	 			* Here are the individual patterns of the regular expression:
+	 			* 
+	 			* protocol : ^([a-z+\w\+\.\-]+:\/\/)?
+	 			*	The caret (^) means start at the beginnning of the string.
+	 			*	The "[a-z+\w\+\.\-]+" pattern means match the following group of characters 1 or more times: letters from a to z, followed by any letter
+	 			*		from a to z, a number from 0 to 9, an underscore (-), a plus sign (+), a period (.), or a dash (-).
+	 			*	The ":\/\/" pattern means match the string "://".
+	 			*	The question mark '?' at the end means the entire sequence can appear once or not at all.
+	 			*
+	 			* path: (\/[^?#]*)
+	 			*	This pattern matches a sequence starting with a slash (/) followed by any characters other than '?' or '#'.
+	 			* 
+	 			* query: (\?[^#]*)
+	 			*	This pattern matches a sequence starting with a '?' followed by any character other than a '#'.
+	 			*
+	 			* fragment: (\#.*)
+	 			*	This pattern matches a sequence starting with a '#' character followed by any character zero or more times.
+	 			*/
+				
+				var pattern:RegExp = /^([a-z+\w\+\.\-]+:\/\/)?([^\/?#]*)?(\/[^?#]*)?(\?[^#]*)?(\#.*)?/i;		
+				var result:Array = tempUrl.match(pattern);
+				var hostName:String;
+				
+				if (result != null)
+				{
+					protocol = result[1];
+					hostName = result[2];
+			        path = result[3];
+			        query = result[4];
+			        fragment = result[5];
+			        
+			        /*
+			        * Now we'll parse the host name.
+			        *
+		 			* user info: ([!-~]+@)?
+	 				*	This pattern matches any charater from '!' to '~' in the ascii character set occurring 1 or more times followed by '@'.
+	 				*
+	 				* host and port number: ([^\/?#:]*)(:[\d]*)
+	 				* 	This pattern matches any sequence of characters other than '/', '?', '#', and ':', followed by an optional ':' and a 
+	 				* 	digit representing the port number.
+	 				*/
+			        pattern = /^([!-~]+@)?([^\/?#:]*)(:[\d]*)?/i;
+			        result = hostName.match(pattern);
+			        if (result != null)
+			        {
+						this.userInfo = result[1];
+						this.host = result[2];
+						this.port = result[3];
+			        }
+			 	}
+			}
 		}
 		
 		private var _rawUrl:String;		// The raw URL string as it was supplied

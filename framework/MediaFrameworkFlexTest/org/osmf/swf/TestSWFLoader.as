@@ -53,9 +53,9 @@ package org.osmf.swf
 			assertTrue(loader.canHandleResource(new URLResource(new URL("assets/movie.swf"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.swf"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.swf?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource(new URL("movie.swf"))));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("movie.swf"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.foo"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie?param=.swf"))));

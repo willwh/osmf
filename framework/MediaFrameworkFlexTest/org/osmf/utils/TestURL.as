@@ -55,6 +55,42 @@ package org.osmf.utils
 			assertEquals(url.port, "");
 			assertEquals(url.path, "Users/mynamehere/Documents/media/myfile.flv");
 			
+			// Relative path test
+			url = new URL("../../../myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "../../../myfile.flv");
+			
+			// Relative path test
+			url = new URL("../myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "../myfile.flv");
+
+			// Relative path test
+			url = new URL("./myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "./myfile.flv");
+
+			// Relative path test
+			url = new URL("foo/bar/myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "foo/bar/myfile.flv");
+
+			// Relative path test
+			url = new URL("foo/myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "foo/myfile.flv");
+
+			// Relative path test
+			url = new URL("myfile.flv");
+			assertEquals(url.protocol, "");
+			assertEquals(url.host, "");
+			assertEquals(url.path, "myfile.flv");
+
 			//Test 14
 			url = new URL("http://foo.com/mymp4.mp4");
 			assertEquals(url.protocol, "http");

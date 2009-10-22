@@ -55,9 +55,9 @@ package org.osmf.image
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.jpg"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.png"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.png?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource(new URL("image.gif"))));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("image.gif"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image.foo"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image"))));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image?param=.gif"))));
