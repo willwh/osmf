@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	title="Authentication Needed"
+	layout="vertical" width="400" height="300">
+	<mx:Form>
+		<mx:FormItem label="Username:" >
+			<mx:TextInput id="username" />
+		</mx:FormItem>
+		<mx:FormItem label="Password:" >
+			<mx:TextInput id="password" />
+		</mx:FormItem>
+	</mx:Form>
+	<mx:HBox width="100%" horizontalAlign="right">
+		<mx:Button label="Authenticate" id="authenticate" />
+		<mx:Button label="Cancel" id="cancel" />
+	</mx:HBox>
+	
+</mx:TitleWindow>

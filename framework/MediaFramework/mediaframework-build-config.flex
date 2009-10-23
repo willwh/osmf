@@ -8,6 +8,11 @@
         <name>CONFIG::LOGGING</name>
         <value>false</value>
       </define>
+
+      <define>
+        <name>CONFIG::FLASH_10_1</name>
+        <value>false</value>
+      </define>
       
       <!-- Specifies the locales for internationalization. -->
       <locale>

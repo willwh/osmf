@@ -51,6 +51,12 @@ package org.osmf.net
 		 */
 		public static const NETSTREAM_BUFFER_FLUSH:String 			= "NetStream.Buffer.Flush";
 		
+		/**
+		 * This code is sent by the netstream when the DRM subsystem needs to be
+		 * updated.
+		 */ 
+		public static const NETSTREAM_DRM_UPDATE:String 			= "DRM.UpdateNeeded";
+		
 		/** 
 		 * "error"	
 		 * Flash Media Server only. An error has occurred for a reason other
@@ -265,7 +271,11 @@ package org.osmf.net
 		 * The ID3 information contained within a sound file
 		 */
 		public static const ON_ID3:String							= "onID3Data"; 
-
+		
+		/**
+		 * Called when the DRMContent data is encountered in a DRM encypyted file
+		 */ 
+		public static const ON_DRM_CONTENT_DATA:String				= "onDRMContentData";
 				
 		
 

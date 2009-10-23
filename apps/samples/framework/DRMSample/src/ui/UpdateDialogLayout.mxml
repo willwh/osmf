@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	title="DRM Update"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="vertical"
+	width="300"
+	height="200"
+	>
+	<mx:ProgressBar width="200"
+		maximum="100"
+		minimum="0"
+		id="progBar"
+		mode="manual"
+		/>
+	<mx:Button  label="Cancel"
+		id="cancel" 
+		/>
+</mx:TitleWindow>

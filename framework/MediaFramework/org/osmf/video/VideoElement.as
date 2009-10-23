@@ -25,6 +25,20 @@ package org.osmf.video
 	import flash.media.Video;
 	import flash.net.NetStream;
 	
+	CONFIG::FLASH_10_1	
+	{
+	import flash.system.SystemUpdaterType;
+	import org.osmf.drm.DRMUpdater;	
+	import flash.net.drm.DRMContentData;	
+	import flash.events.DRMStatusEvent;
+	import org.osmf.traits.IContentProtectable;
+	import org.osmf.net.NetContentProtectableTrait;
+	import flash.events.DRMErrorEvent;
+	import org.osmf.events.TraitEvent;
+	import flash.events.DRMErrorEvent;
+	import flash.events.DRMAuthenticateEvent;
+	}
+	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -51,6 +65,19 @@ package org.osmf.video
 	import org.osmf.traits.SpatialTrait;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.MediaFrameworkStrings;
+	import flash.events.Event;
+
+	import org.osmf.traits.PlayableTrait;
+	import org.osmf.traits.IPlayable;
+	import org.osmf.media.IContainerGateway;
+
+	import flash.utils.ByteArray;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.ObjectIdentifier;
+
+	
+
 	
 	/**
 	* VideoElement is a media element specifically created for video playback.
@@ -137,9 +164,48 @@ package org.osmf.video
 			
 			// Hook up our metadata listeners
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
-			
+						
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+						
+			CONFIG::FLASH_10_1	
+    		{
+    			trace('Adding ON_DRM_CONTENT_DATA');
+    			NetClient(stream.client).addHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    
+    			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
+    			if (metadataFacet != null)
+    			{    				
+    				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
+    				addProtectableTrait(metadata);
+	    			return; //don't finish load until the auth has taken place.
+	    		}			
+    		}
+			finishLoad();			
+		}
 		
+		private function addProtectableTrait(contentData:ByteArray):void
+		{
+			CONFIG::FLASH_10_1	
+    		{
+			var protectableTrait:NetContentProtectableTrait = new NetContentProtectableTrait();
+	    	protectableTrait.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuth);
+	    	addTrait(MediaTraitType.CONTENT_PROTECTABLE, protectableTrait);
+	    	stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);		
+	    	protectableTrait.metadata = contentData;
+	    	}
+		}
+				
+		private function onDRMErrorEvent(event:Event):void
+		{
+			trace('drm error');
+		}
+		
+		private function onAuth(event:Event):void
+		{
+			finishLoad();
+		}
+		
+		private function finishLoad():void
+		{
 			var viewable:ViewableTrait = new ViewableTrait();
 			viewable.view = video;
 			var seekable:SeekableTrait = new NetStreamSeekableTrait(stream);
@@ -183,7 +249,16 @@ package org.osmf.video
 	    	removeTrait(MediaTraitType.AUDIBLE);
 	    	removeTrait(MediaTraitType.BUFFERABLE);
     		removeTrait(MediaTraitType.SWITCHABLE);
+
+	    	
+	    	CONFIG::FLASH_10_1	
+    		{
+    			trace('Removing ON_DRM_CONTENT_DATA');
+    			NetClient(stream.client).removeHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    	
+    			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
+    		}
     		removeTrait(MediaTraitType.DOWNLOADABLE);
+
 	    		    		    	
 	    	// Null refs to garbage collect.	    	
 			spatial = null;
@@ -203,6 +278,21 @@ package org.osmf.video
     				
 				spatial.setDimensions(info.width, info.height);
     		}
+     	}
+     	     	
+     	private function onContentData(data:Object):void
+     	{
+     		trace('DRM - onContentData');
+     		addProtectableTrait(data as ByteArray);
+     	}
+     	
+     	//fired when the drm subsystem is updated.
+     	private function onUpdateComplete(event:Event):void
+     	{
+     		trace('DRM - onUpdateComplete');
+    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
+    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();		
+    		
      	}
      	
      	private function onNetStatusEvent(event:NetStatusEvent):void
@@ -224,15 +314,34 @@ package org.osmf.video
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
 					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
 					break;
+								
 			}
 			
+			CONFIG::FLASH_10_1	
+			{
+				switch (event.info.code)
+				{
+					case NetStreamCodes.NETSTREAM_DRM_UPDATE:
+						trace('update requested');
+						//Start DRM library update:
+		     			var drmUpdater:DRMUpdater = DRMUpdater.getInstance();
+		     			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
+		     			drmUpdater.update(flash.system.SystemUpdaterType.DRM);   
+		     			break;				
+	    		}
+			}
+						
 			if (error != null)
 			{
 				dispatchEvent(new MediaErrorEvent(error));
 			}
      	}
      	
+     	/**
+     	 * NetStream used to stream content for this video element.
+     	 */ 
      	private var stream:NetStream;
+     	
      	private var video:Video;	 
 	    private var spatial:SpatialTrait;
 	}

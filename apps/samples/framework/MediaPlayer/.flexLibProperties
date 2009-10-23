@@ -2,9 +2,6 @@
 <flexLibProperties version="1">
 <includeClasses>
 <classEntry path="com.adobe.strobe.players.MediaPlayerWrapper"/>
-
-<!-- Yes, the is a duplicate, but it needs to exist in order to deal with a bug with PropertyRegex -->
-
 <classEntry path="com.adobe.strobe.players.MediaPlayerWrapper"/>
 </includeClasses>
 <includeResources/>

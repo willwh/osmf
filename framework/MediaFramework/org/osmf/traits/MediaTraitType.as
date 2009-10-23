@@ -82,6 +82,11 @@ package org.osmf.traits
 		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
 		
 		/**
+		 * Identifies a trait that implements the ISwitchable interface.
+		 */
+		public static const CONTENT_PROTECTABLE:MediaTraitType = new MediaTraitType(IContentProtectable);
+		
+		/**
 		 * Identifies a trait that implements the IDownloadable interface.
 		 */
 		public static const DOWNLOADABLE:MediaTraitType = new MediaTraitType(IDownloadable);

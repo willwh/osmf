@@ -1,6 +1,12 @@
 <flex-config>
 
    <compiler>
+	
+	  <define>
+        <name>CONFIG::FLASH_10_1</name>
+        <value>false</value>
+      </define>
+	
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       

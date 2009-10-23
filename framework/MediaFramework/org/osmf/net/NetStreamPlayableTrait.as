@@ -122,7 +122,7 @@ package org.osmf.net
 		
 		// Needed to detect when the stream didn't play:  i.e. complete or error cases
 		private function onNetStatus(event:NetStatusEvent):void
-		{			
+		{				
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
@@ -150,7 +150,7 @@ package org.osmf.net
 			return netStream.bytesTotal != 0;
 		}
 		
-		private function doPlay(...args):void
+		protected function doPlay(...args):void
 		{
 			try
 			{

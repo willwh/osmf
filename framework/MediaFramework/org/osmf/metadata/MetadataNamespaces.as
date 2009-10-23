@@ -35,6 +35,8 @@ package org.osmf.metadata
 		
 		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.openvideoplayer.org/mediatype/default");
 		
+		public static const DRM_METADATA:URL				= new URL("http://www.openvideoplayer.org/drm/default");
+		
 		public static const REGION_TARGET:URL				= new URL("http://www.openvideoplayer.org/region/target");
 		
 		public static const LAYOUT_RENDERER:URL				= new URL("http://www.openvideoplayer.org/layout/renderer");

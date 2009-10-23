@@ -142,5 +142,9 @@ package org.osmf.utils
 		// HTMLLoadableTrait
 		
 		public static const NULL_SCRIPT_PATH:String						= "Operation requires a valid script path to be set";
+		
+		// DRM
+		
+		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
 	}
 }
