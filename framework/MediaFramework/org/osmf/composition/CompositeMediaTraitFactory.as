@@ -106,6 +106,8 @@ package org.osmf.composition
 							: new SerialSwitchableTrait(traitAggregator);		
 					break;	
 				case MediaTraitType.DOWNLOADABLE:
+					// TODO: we currently don't support IDownloadable at composite layer yet. Therefore
+					//		this returns null. However, in subsequent sprints, we will add the support.
 					break;		
 				default:
 					throw new Error("");

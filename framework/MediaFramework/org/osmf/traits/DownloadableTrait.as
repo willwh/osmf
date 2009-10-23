@@ -22,7 +22,6 @@
 package org.osmf.traits
 {
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	
 	import org.osmf.events.BytesTotalChangeEvent;
 
@@ -98,8 +97,7 @@ package org.osmf.traits
 				var oldBytesTotal:Number = _bytesTotal;
 				processBytesTotalChange(value);
 				_bytesTotal = value;
-				postProcessBytesTotalChange(oldBytesTotal);
-				dispatchEvent(new BytesTotalChangeEvent(oldBytesTotal, value));
+				postProcessBytesTotalChange(oldBytesTotal, value);
 			}
 		}
 		
@@ -186,8 +184,9 @@ package org.osmf.traits
 		 * @param oldValue Previous <code>bytesTotal</code> value.
 		 * 
 		 */		
-		protected function postProcessBytesTotalChange(oldValue:Number):void
+		protected function postProcessBytesTotalChange(oldValue:Number, newValue:Number):void
 		{
+				dispatchEvent(new BytesTotalChangeEvent(oldValue, newValue));
 		}
 
 		private var _bytesDownloaded:Number;
