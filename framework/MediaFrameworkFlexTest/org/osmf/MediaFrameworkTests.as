@@ -55,7 +55,6 @@ package org.osmf
 		public function MediaFrameworkTests(param:Object=null)
 		{
 			super(param);
-//			addTestSuite(TestVideoElement);
 						
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
@@ -156,7 +155,7 @@ package org.osmf
 	
 			addTestSuite(TestAudioElement);
 			addTestSuite(TestAudioElementWithSoundLoader);
-//			addTestSuite(TestSoundLoader);
+			addTestSuite(TestSoundLoader);
 
 			addTestSuite(TestAudioAudibleTrait);
 			addTestSuite(TestAudioSeekableTrait); 
@@ -212,8 +211,7 @@ package org.osmf
 			addTestSuite(TestDefaultVASTMediaFileResolver);
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
-			addTestSuite(TestVASTTrackingProxyElement);	
-					
+			addTestSuite(TestVASTTrackingProxyElement);		
 		}
 	}
 }

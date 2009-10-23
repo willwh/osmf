@@ -121,6 +121,11 @@ package org.osmf.traits
 			return _currentIndex;
 		}
 		
+		public function set currentIndex(value:int):void
+		{
+			_currentIndex = value;
+		}
+		
 		/**
 		 * @inheritDoc
 		 */ 

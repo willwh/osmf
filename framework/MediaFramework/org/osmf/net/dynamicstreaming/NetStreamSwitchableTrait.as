@@ -70,15 +70,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			_ns.switchTo(value);
 		}
-	
-		/**
-		 * @inheritDoc
-		 */
-        override public function get currentIndex():int
-        {
-        	return _ns.renderingIndex;        
-        } 
-		
+			
 		/**
 		 * @inheritDoc
 		 */
@@ -122,7 +114,12 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
-		{		
+		{
+			if (event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE)
+			{
+				currentIndex = _ns.renderingIndex;
+			}
+
 			processSwitchState(event.newState, event.detail);
 		}				
 						
