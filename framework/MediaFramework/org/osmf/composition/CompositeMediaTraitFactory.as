@@ -104,7 +104,9 @@ package org.osmf.composition
 						= mode == CompositionMode.PARALLEL
 							? new ParallelSwitchableTrait(traitAggregator)
 							: new SerialSwitchableTrait(traitAggregator);		
-					break;			
+					break;	
+				case MediaTraitType.DOWNLOADABLE:
+					break;		
 				default:
 					throw new Error("");
 					break;

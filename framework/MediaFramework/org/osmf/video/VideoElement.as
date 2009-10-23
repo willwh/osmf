@@ -37,6 +37,7 @@ package org.osmf.video
 	import org.osmf.net.NetStreamAudibleTrait;
 	import org.osmf.net.NetStreamBufferableTrait;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.NetStreamDownloadableTrait;
 	import org.osmf.net.NetStreamPausableTrait;
 	import org.osmf.net.NetStreamPlayableTrait;
 	import org.osmf.net.NetStreamSeekableTrait;
@@ -155,6 +156,7 @@ package org.osmf.video
 	    	addTrait(MediaTraitType.SPATIAL, spatial);
 	    	addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));
 	    	addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
+	    	addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
 	    	
 			var dynRes:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dynRes != null)
@@ -181,6 +183,7 @@ package org.osmf.video
 	    	removeTrait(MediaTraitType.AUDIBLE);
 	    	removeTrait(MediaTraitType.BUFFERABLE);
     		removeTrait(MediaTraitType.SWITCHABLE);
+    		removeTrait(MediaTraitType.DOWNLOADABLE);
 	    		    		    	
 	    	// Null refs to garbage collect.	    	
 			spatial = null;

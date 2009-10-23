@@ -82,6 +82,11 @@ package org.osmf.traits
 		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
 		
 		/**
+		 * Identifies a trait that implements the IDownloadable interface.
+		 */
+		public static const DOWNLOADABLE:MediaTraitType = new MediaTraitType(IDownloadable);
+
+		/**
 		 * Array containing all trait types in the system.  Useful for clients
 		 * who want to iterate over all traits.
 		 **/
@@ -98,6 +103,7 @@ package org.osmf.traits
 					, TEMPORAL
 					, VIEWABLE
 					, SWITCHABLE
+					, DOWNLOADABLE
 				  ]
 				);
 

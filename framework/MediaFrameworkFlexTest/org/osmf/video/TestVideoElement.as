@@ -116,6 +116,7 @@ package org.osmf.video
 				   , MediaTraitType.SPATIAL
 				   , MediaTraitType.TEMPORAL
 				   , MediaTraitType.VIEWABLE
+				   , MediaTraitType.DOWNLOADABLE
 				   ];
 		}	
 

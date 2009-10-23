@@ -25,6 +25,7 @@ package org.osmf.proxies
 	
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.DurationChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
@@ -42,6 +43,7 @@ package org.osmf.proxies
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.IAudible;
 	import org.osmf.traits.IBufferable;
+	import org.osmf.traits.IDownloadable;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.IPausable;
 	import org.osmf.traits.IPlayable;
@@ -241,6 +243,14 @@ package org.osmf.proxies
 		{
 		}
 		
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processBytesTotalChange(newValue:Number):void
+		{
+		}
+
 		// Internals
 		
 		private function onVolumeChange(event:VolumeChangeEvent):void
@@ -318,6 +328,11 @@ package org.osmf.proxies
 			processViewChange(event.oldView, event.newView);
 		}
 		
+		private function onBytesTotalChange(event:BytesTotalChangeEvent):void
+		{
+			processBytesTotalChange(event.newValue);
+		}
+
 		// Internals
 		//
 		
@@ -377,6 +392,9 @@ package org.osmf.proxies
 					{
 						processViewChange(added ? null : viewable.view, added ? viewable.view : null);
 					}
+					break;
+				case MediaTraitType.DOWNLOADABLE:
+					toggleDownloadableListeners(added);
 					break;
 			}
 		}
@@ -545,6 +563,22 @@ package org.osmf.proxies
 				else
 				{
 					viewable.removeEventListener(ViewChangeEvent.VIEW_CHANGE, onViewChange);
+				}
+			}
+		}
+		
+		private function toggleDownloadableListeners(added:Boolean):void
+		{
+			var downloadable:IDownloadable = wrappedElement.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
+			if (downloadable)
+			{
+				if (added)
+				{
+					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+				}
+				else
+				{
+					downloadable.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 			}
 		}

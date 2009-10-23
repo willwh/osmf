@@ -441,6 +441,7 @@ package org.osmf.media
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.SPATIAL);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.TEMPORAL);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.VIEWABLE);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DOWNLOADABLE);
 			
 			return inverseTraitTypes;
 		}

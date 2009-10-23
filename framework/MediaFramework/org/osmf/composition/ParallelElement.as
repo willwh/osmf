@@ -148,7 +148,10 @@ package org.osmf.composition
 						, this
 						);
 
-				addTrait(traitType, compositeTrait);
+				if (compositeTrait != null)
+				{
+					addTrait(traitType, compositeTrait);
+				}
 			}
 		}
 		/**

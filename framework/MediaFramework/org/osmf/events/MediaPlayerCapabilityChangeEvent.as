@@ -113,6 +113,14 @@ package org.osmf.events
 		 **/
 		public static const BUFFERABLE_CHANGE:String = "bufferableChange";
 						
+						
+		/**
+		 * Dispatched when a MediaPlayer's ability to download data has changed. 
+		 * 
+		 * @eventType mediaPlayerCapabilityChangeEvent
+		 **/
+		public static const DOWNLOADABLE_CHANGE:String = "downaloadableChange";
+
 		/**
 		 * Constructor.
 		 * <p>The following statement creates an event indicating that the MediaPlayer

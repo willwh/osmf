@@ -66,6 +66,7 @@ package org.osmf.audio
 				   , MediaTraitType.PLAYABLE
 				   , MediaTraitType.SEEKABLE
 				   , MediaTraitType.TEMPORAL
+				   , MediaTraitType.DOWNLOADABLE
 				   ];
 		}
 

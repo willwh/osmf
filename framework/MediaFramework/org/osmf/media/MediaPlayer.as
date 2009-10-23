@@ -175,6 +175,22 @@ package org.osmf.media
 	 */
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferTimeChangeEvent")]
 	
+	// IDownloadable
+	
+	/**
+	 * Dispatched when the data is received as a download operation progresses.
+	 *
+	 * @eventType flash.events.ProgressEvent
+	 */
+	[Event(name="bytesDownloaded",type="org.osmf.events.BytesDownloadedEvent")]
+
+	/**
+	 * Dispatched when the value of bytesTotal property has changed.
+	 *
+	 * @eventType org.osmf.events.BytesTotalChangedEvent
+	 */
+	[Event(name="bytesTotalChange",type="org.osmf.events.BytesTotalChangeEvent")]
+
 	// MediaPlayerCapabilityChangeEvents
     
     /**
@@ -282,6 +298,7 @@ package org.osmf.media
 			_state = MediaPlayerState.CONSTRUCTED;
 			source = media;			
 			_playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);				
+			_downloadTimer.addEventListener(TimerEvent.TIMER, onDownloadTimer);			
 		}
 
 		/**
@@ -436,6 +453,41 @@ package org.osmf.media
         	return _playheadUpdateInterval;
         }
         
+        /**
+		 * Interval between the dispatches of change events for the bytesDownloaded of IDownloadable 
+         * <p>The default progress is 250 milliseconds.
+         * A non-positive value disables the dispatch of the change events.</p>
+         * <p>The source MediaElement must be downloadable to support this property.</p>
+		 * 
+		 * @see org.osmf.events.#event:BytesDownloadedChangeEvent
+         * @see org.osmf.traits.IDownloadable
+		 */
+        public function set downloadUpdateInterval(milliseconds:Number):void
+        {
+        	if (_downloadUpdateInterval != milliseconds)
+        	{
+        		_downloadUpdateInterval = milliseconds;
+        		
+				if (isNaN(_downloadUpdateInterval) || _downloadUpdateInterval <= 0)
+				{
+					_downloadTimer.stop();	
+				}
+				else
+				{				
+					_downloadTimer.delay = _downloadUpdateInterval;		
+					if (downloadable)
+					{
+						_downloadTimer.start();
+					}			
+				}					
+        	}
+        }
+        
+        public function get downloadUpdateInterval():Number
+        {
+        	return _downloadUpdateInterval;
+        }
+
 		/**
          *  Provides a high level indication of the current state of the media.
          */      
@@ -534,6 +586,14 @@ package org.osmf.media
 			return _bufferable;
 		}
 				
+		/**
+		 * Indicates whether the media is downloadable.
+		 */
+
+		public function get downloadable():Boolean
+		{
+			return _downloadable;
+		}
 		
 		// Trait Based properties
 		
@@ -889,7 +949,21 @@ package org.osmf.media
 				(getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime = value;
 			}	    	
 		}
+		
+		// IDownloadable
 				
+		public function get bytesDownloaded():Number
+		{
+			var downloadable:IDownloadable = getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
+			return downloadable == null? NaN : downloadable.bytesDownloaded;
+		}
+		
+		public function get bytesTotal():Number
+		{
+			var downloadable:IDownloadable = getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
+			return downloadable == null? NaN : downloadable.bytesDownloaded;
+		}
+
 		// Internals
 		//
 	    
@@ -1007,6 +1081,11 @@ package org.osmf.media
 					_bufferable = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
+				case MediaTraitType.DOWNLOADABLE:
+					changeListeners(add, _source, trait, BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
+					_downloadable = add;
+					traitChangeName = MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE;
+					break;
 			}					 
 			if (traitChangeName)  // Don't dispatch for traits we don't know about yet.
 			{
@@ -1138,6 +1217,15 @@ package org.osmf.media
 			}
 		}	
 		
+		private function onDownloadTimer(event:TimerEvent):void
+		{
+			if (downloadable && (bytesDownloaded != lastBytesDownloaded || isNaN(lastBytesDownloaded)))
+			{				
+				lastBytesDownloaded = bytesDownloaded;
+				dispatchEvent(new BytesDownloadedEvent(bytesDownloaded, bytesTotal));
+			}
+		}
+		
 		private function onBuffering(event:BufferingChangeEvent):void
 		{
 			if (event.buffering)
@@ -1185,7 +1273,8 @@ package org.osmf.media
 					
 	    private static const DEFAULT_UPDATE_INTERVAL:Number = 250;
 	      
-	    private var lastPlayhead:Number = 0;		
+	    private var lastPlayhead:Number = 0;	
+	    private var lastBytesDownloaded:Number = NaN;	
 		private var _autoPlay:Boolean = true;
 		private var _autoRewind:Boolean = true;
 		private var _loop:Boolean = false;		
@@ -1193,6 +1282,8 @@ package org.osmf.media
 		private var _playheadTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var _source:MediaElement;
 		private var _state:MediaPlayerState;
+		private var _downloadUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
+		private var _downloadTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		
 		private var _playable:Boolean;
 		private var _pausable:Boolean;
@@ -1204,5 +1295,6 @@ package org.osmf.media
 		private var _loadable:Boolean;
 		private var _bufferable:Boolean;
 		private var _switchable:Boolean;
+		private var _downloadable:Boolean;
 	}
 }

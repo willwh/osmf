@@ -117,6 +117,7 @@ package org.osmf.audio
 				addTrait(MediaTraitType.PAUSABLE, new NetStreamPausableTrait(this, stream));
 				addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));	
 				addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
+				addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
 			}
 			else
 			{
@@ -135,6 +136,7 @@ package org.osmf.audio
 				addTrait(MediaTraitType.TEMPORAL, temporal);
 				addTrait(MediaTraitType.PAUSABLE, new AudioPausableTrait(this, soundAdapter));
 				addTrait(MediaTraitType.AUDIBLE, new AudioAudibleTrait(soundAdapter));	
+				addTrait(MediaTraitType.DOWNLOADABLE, new SoundDownloadableTrait(soundLoadedContext.sound));
 			}
 		}	
 		
@@ -149,6 +151,7 @@ package org.osmf.audio
 			removeTrait(MediaTraitType.PAUSABLE);
 			removeTrait(MediaTraitType.AUDIBLE);
 			removeTrait(MediaTraitType.BUFFERABLE);
+			removeTrait(MediaTraitType.DOWNLOADABLE);
 
 			if (soundAdapter != null)
 			{

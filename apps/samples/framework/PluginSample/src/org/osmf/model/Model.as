@@ -25,6 +25,7 @@ package org.osmf.model
 {
 	import mx.collections.ArrayCollection;
 	
+	import org.osmf.audio.*;
 	import org.osmf.loaders.*;
 	import org.osmf.media.*;
 	import org.osmf.net.*;
@@ -63,6 +64,15 @@ package org.osmf.model
 					, createVideoElement
 					)
 				);
+				
+			loader = new SoundLoader();
+			mediaFactory.addMediaInfo
+				( new MediaInfo
+					( "Standard audio element"
+					, loader as IMediaResourceHandler
+					, createAudioElement
+					)
+				);
 			
 			initResourceHandlers();
 		}
@@ -99,11 +109,6 @@ package org.osmf.model
 			}
 		}
 		
-		private function createVideoElement():MediaElement
-		{
-			return new VideoElement(new NetLoader());
-		}
-		
 		private function updatePriority(
 			handler:ResourceHandlerDescriptor, handlers:ArrayCollection):void
 		{
@@ -117,6 +122,16 @@ package org.osmf.model
 					break;
 				}
 			}
+		}
+		
+		private function createVideoElement():MediaElement
+		{
+			return new VideoElement(new NetLoader());
+		}
+		
+		private function createAudioElement():MediaElement
+		{
+			return new AudioElement(new SoundLoader());
 		}
 
 		private function initResourceHandlers():void

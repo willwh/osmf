@@ -210,7 +210,10 @@ package org.osmf.composition
 					reusableTraits[traitType] = null;
 				}
 				
-				addTrait(traitType, compositeTrait);
+				if (compositeTrait != null)
+				{
+					addTrait(traitType, compositeTrait);
+				}
 			}			
 		}
 
