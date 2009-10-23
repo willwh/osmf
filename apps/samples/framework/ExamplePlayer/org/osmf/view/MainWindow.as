@@ -28,6 +28,8 @@ package org.osmf.view
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.BytesDownloadedChangeEvent;
+	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DurationChangeEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
@@ -81,12 +83,15 @@ package org.osmf.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onCapabilityChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE, onCapabilityChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onCapabilityChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE, onCapabilityChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 
 			mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, onBytesDownloadedChange);
 
 			// Set up the MediaPlayer.
 			//
@@ -94,7 +99,7 @@ package org.osmf.view
 			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
 			mediaPlayerWrapper.mediaPlayer.autoRewind = false;
-
+			
 			// Sync the UI to the current (empty) state.
 			//
 			
@@ -221,6 +226,16 @@ package org.osmf.view
 			bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
 		}
 		
+		private function onBytesTotalChange(event:BytesTotalChangeEvent):void
+		{
+			bytesTotal.text = event.newValue.toString();
+		}
+		
+		private function onBytesDownloadedChange(event:BytesDownloadedChangeEvent):void
+		{
+			bytesDownloaded.text = event.newValue.toString();
+		}
+		
 		private function updateControls():void
 		{
 			buttonPlay.visible 			= mediaPlayerWrapper.mediaPlayer.playable;
@@ -228,6 +243,7 @@ package org.osmf.view
 			audioControls.visible 		= mediaPlayerWrapper.mediaPlayer.audible;
 			temporalControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
 			bufferable.visible			= mediaPlayerWrapper.mediaPlayer.bufferable;
+			downloadable.visible		= mediaPlayerWrapper.mediaPlayer.downloadable;
 			seekBar.enabled 			= mediaPlayerWrapper.mediaPlayer.seekable;
 			
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
@@ -248,6 +264,12 @@ package org.osmf.view
 			{
 				bufferTime.text = "";
 				bufferLength.text = "";
+			}
+			
+			if (mediaPlayerWrapper.mediaPlayer.downloadable == false)
+			{
+				bytesTotal.text = "";
+				bytesDownloaded.text = "";
 			}
 			
 			if (mediaPlayerWrapper.mediaPlayer.audible)

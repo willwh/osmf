@@ -27,40 +27,46 @@ package org.osmf.events
 	 * This event is dispatched by the MediaPlayer class when the value of 
 	 * the property "bytesDownloaded" has changed, which indicates the progress of a download operation.
 	 */
-	public class BytesDownloadedEvent extends Event
+	public class BytesDownloadedChangeEvent extends Event
 	{
-		public static const BYTES_DOWNLOADED:String = "bytesDownloaded";
+		public static const BYTES_DOWNLOADED_CHANGE:String = "bytesDownloadedChange";
 
-		public function BytesDownloadedEvent(
-			bytesDownloaded:Number, bytesTotal:Number, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function BytesDownloadedChangeEvent
+							( oldValue:Number
+							, newValue:Number
+							, bubbles:Boolean=false
+							, cancelable:Boolean=false
+							)
 		{
-			super(BYTES_DOWNLOADED, bubbles, cancelable);
+			super(BYTES_DOWNLOADED_CHANGE, bubbles, cancelable);
 			
-			_bytesDownloaded = bytesDownloaded;
-			_bytesTotal = bytesTotal;
+			_oldValue = oldValue;
+			_newValue = newValue;
 		}
 		
-		/*
-		 * The number of bytes of data that have been downloaded into the application.
-		 */
-		public function get bytesDownloaded():Number
+		public function get oldValue():Number
 		{
-			return _bytesDownloaded;
+			return _oldValue;
 		}
 		
-		/*
-		 * The total size in bytes of the datat being downloaded into the application.
-		 */
-		public function get bytesTotal():Number
+		public function get newValue():Number
 		{
-			return _bytesTotal;
+			return _newValue;
+		}
+		
+		// Overrides
+		//
+		
+		override public function clone():Event
+		{
+			return new BytesDownloadedChangeEvent(_oldValue, _newValue, bubbles, cancelable);
 		}
 		
 		//
 		// Internal
 		//
 		
-		private var _bytesDownloaded:Number;
-		private var _bytesTotal:Number;
+		private var _oldValue:Number;
+		private var _newValue:Number;
 	}
 }

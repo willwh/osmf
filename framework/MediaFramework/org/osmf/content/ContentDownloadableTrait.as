@@ -21,28 +21,49 @@
 *****************************************************/
 package org.osmf.content
 {
-	import flash.display.Loader;
+	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.traits.DownloadableTrait;
 	
-	import flexunit.framework.TestCase;
-
-	/**
-	 * Note that because ContentLoader must make network calls and cannot be
-	 * mocked (due to Flash API restrictions around LoaderInfo), we only
-	 * test a subset of the functionality here.  The rest is tested in the
-	 * integration test suite, under TestContentElementIntegration.
-	 * 
-	 * Tests which do not require network access should be added here.
-	 * 
-	 * Tests which do should be added to TestContentElementIntegration.
-	 **/
-	public class TestContentElement extends TestCase
+	internal class ContentDownloadableTrait extends DownloadableTrait
 	{
-		public function testVoid():void
+		public function ContentDownloadableTrait(contentLoader:ContentLoader)
 		{
-			var contentElement:ContentElement = new ContentElement(new ContentLoader());
-			assertNotNull(contentElement);
+			this.contentLoader = contentLoader;
 			
-			// See TestContentElementIntegration for more actual tests.
+			contentLoader.addEventListener
+				( BytesTotalChangeEvent.BYTES_TOTAL_CHANGE
+				, onContentLoaderBytesTotalChange
+				);
+			
+			super(contentLoader.bytesLoaded, contentLoader.bytesTotal);
 		}
+		
+		// Overrides
+		//
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function get bytesDownloaded():Number
+		{
+			return contentLoader.bytesLoaded;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function get bytesTotal():Number
+		{
+			return contentLoader.bytesTotal;
+		}
+		
+		// Internals
+		
+		private function onContentLoaderBytesTotalChange(event:BytesTotalChangeEvent):void
+		{
+			dispatchEvent(event.clone());	
+		}
+		
+		private var contentLoader:ContentLoader;
 	}
 }

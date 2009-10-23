@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.audio
 {
-	import flash.events.IEventDispatcher;
+	import flash.events.Event;
 	import flash.events.ProgressEvent;
 	import flash.media.Sound;
 	
@@ -32,15 +32,15 @@ package org.osmf.audio
 	 * This class extends Downloadable trait to provide access to the bytesLoaded and bytesTotal properties
 	 * of Sound.
 	 */
-	public class SoundDownloadableTrait extends DownloadableTrait
+	internal class SoundDownloadableTrait extends DownloadableTrait
 	{
-		public function SoundDownloadableTrait(sound:Sound, target:IEventDispatcher=null)
+		public function SoundDownloadableTrait(sound:Sound)
 		{
-			super(NaN, NaN, target);
+			super(NaN, NaN);
 
-			_currentBytesTotal = NaN;
 			_sound = sound;
-			_sound.addEventListener(ProgressEvent.PROGRESS, onProgress);
+			_sound.addEventListener(Event.OPEN, bytesTotalCheckingHandler);
+			_sound.addEventListener(ProgressEvent.PROGRESS, bytesTotalCheckingHandler);
 		}
 		
 		/**
@@ -63,21 +63,22 @@ package org.osmf.audio
 		// Internals
 		//
 
-		private function onProgress(event:ProgressEvent):void
+		private function bytesTotalCheckingHandler(_:Event):void
 		{
-			if (isNaN(_currentBytesTotal))
+			if (_lastBytesTotal != _sound.bytesTotal)
 			{
-				_currentBytesTotal = event.bytesTotal;
-			}
-			else if (_currentBytesTotal != event.bytesTotal)
-			{
-				var oldValue:Number = _currentBytesTotal;
-				_currentBytesTotal = event.bytesTotal;
-				dispatchEvent(new BytesTotalChangeEvent(oldValue, _currentBytesTotal));
+				var event:BytesTotalChangeEvent
+					= new BytesTotalChangeEvent
+						( _lastBytesTotal
+						, _sound.bytesTotal
+						);
+						
+				_lastBytesTotal = _sound.bytesTotal;
+				dispatchEvent(event);
 			}
 		}	
 		
-		private var _currentBytesTotal:Number;
+		private var _lastBytesTotal:Number;
 		private var _sound:Sound;
 	}
 }

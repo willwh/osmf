@@ -41,10 +41,9 @@ package org.osmf.traits
 	 */	
 	public class DownloadableTrait extends EventDispatcher implements IDownloadable
 	{
-		public function DownloadableTrait(bytesDownloaded:Number=NaN, bytesTotal:Number=NaN, target:IEventDispatcher=null)
+		public function DownloadableTrait(bytesDownloaded:Number=NaN, bytesTotal:Number=NaN)
 		{
-			super(target);
-
+			super();
 			
 			_bytesDownloaded = bytesDownloaded;
 			_bytesTotal = bytesTotal;

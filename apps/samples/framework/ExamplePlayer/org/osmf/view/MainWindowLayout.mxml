@@ -101,7 +101,7 @@
 		right					="0"
 		width					="500"
 		height					="30"
-		bottom					="140"
+		bottom					="160"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -128,7 +128,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="120"
+		bottom					="140"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -156,7 +156,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="100"
+		bottom					="120"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -172,6 +172,32 @@
 			/>
 		<mx:Label
 			id					="bufferLength"
+			/>
+
+	</mx:HBox>
+	
+	<mx:HBox
+		id						="downloadable"
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="100"
+		verticalAlign			="middle"
+		horizontalScrollPolicy	="off"
+		>
+		
+		<mx:Label
+			text				="Bytes Downloaded: "
+			/>
+		<mx:Label
+			id					="bytesDownloaded"
+			/>
+		<mx:Label
+			text				="Bytes Total: "
+			/>
+		<mx:Label
+			id					="bytesTotal"
 			/>
 
 	</mx:HBox>

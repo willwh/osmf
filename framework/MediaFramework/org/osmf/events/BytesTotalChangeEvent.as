@@ -56,6 +56,14 @@ package org.osmf.events
 			return _oldValue;
 		}
 		
+		// Overrides
+		//
+		
+		override public function clone():Event
+		{
+			return new BytesTotalChangeEvent(_oldValue, _newValue, bubbles, cancelable);
+		}
+		
 		//
 		// Internals
 		//

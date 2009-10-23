@@ -33,15 +33,18 @@ package org.osmf.content
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return 	[ MediaTraitType.LOADABLE
+					, MediaTraitType.DOWNLOADABLE
+					];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [ MediaTraitType.LOADABLE
-				   , MediaTraitType.SPATIAL
-				   , MediaTraitType.VIEWABLE
-				   ];
+			return 	[ MediaTraitType.LOADABLE
+					, MediaTraitType.DOWNLOADABLE
+					, MediaTraitType.SPATIAL
+					, MediaTraitType.VIEWABLE
+				   	];
 		}
 	}
 }

@@ -182,7 +182,7 @@ package org.osmf.media
 	 *
 	 * @eventType flash.events.ProgressEvent
 	 */
-	[Event(name="bytesDownloaded",type="org.osmf.events.BytesDownloadedEvent")]
+	[Event(name="bytesDownloadedChange",type="org.osmf.events.BytesDownloadedChangeEvent")]
 
 	/**
 	 * Dispatched when the value of bytesTotal property has changed.
@@ -1083,6 +1083,14 @@ package org.osmf.media
 					break;						
 				case MediaTraitType.DOWNLOADABLE:
 					changeListeners(add, _source, trait, BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
+					if (add && _downloadUpdateInterval > 0 && !isNaN(_downloadUpdateInterval) )
+					{
+						_downloadTimer.start();
+					}
+					else
+					{
+						_downloadTimer.stop();					
+					}
 					_downloadable = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE;
 					break;
@@ -1219,10 +1227,17 @@ package org.osmf.media
 		
 		private function onDownloadTimer(event:TimerEvent):void
 		{
-			if (downloadable && (bytesDownloaded != lastBytesDownloaded || isNaN(lastBytesDownloaded)))
-			{				
+			if (downloadable && (bytesDownloaded != lastBytesDownloaded))
+			{
+				var bytesDownloadedEvent:BytesDownloadedChangeEvent 
+					= new BytesDownloadedChangeEvent
+						( lastBytesDownloaded
+						, bytesDownloaded
+						);
+						 	
 				lastBytesDownloaded = bytesDownloaded;
-				dispatchEvent(new BytesDownloadedEvent(bytesDownloaded, bytesTotal));
+				
+				dispatchEvent(bytesDownloadedEvent);
 			}
 		}
 		

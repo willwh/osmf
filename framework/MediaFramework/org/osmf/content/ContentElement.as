@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.content
 {
-	import flash.display.DisplayObjectContainer;
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
@@ -30,6 +30,7 @@ package org.osmf.content
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SpatialTrait;
@@ -53,7 +54,23 @@ package org.osmf.content
 		 */		
 		public function ContentElement(loader:ContentLoader, resource:IURLResource = null)
 		{
-			super(loader, resource);		
+			downloadable = new ContentDownloadableTrait(loader);
+			
+			super(loader, resource);
+		}
+		
+		// Overrides
+		//
+		
+		/**
+		 *  @private 
+		 */ 
+		override protected function setupTraits():void
+		{
+			// Add a downloadable trait:
+			addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
+			
+			super.setupTraits();
 		}
 			
 		/**
@@ -61,7 +78,10 @@ package org.osmf.content
 		 */ 		
 		override protected function processLoadedState():void
 		{
-			var context:ContentLoadedContext = (getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext as ContentLoadedContext;
+			var context:ContentLoadedContext
+				=	(getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext
+				as	ContentLoadedContext;
+				
 			var viewable:ViewableTrait	= new ViewableTrait();			
 			var spatial:SpatialTrait 	= new SpatialTrait();
 			
@@ -73,13 +93,25 @@ package org.osmf.content
 				// with the layout system.
 				var viewContainer:Sprite = new Sprite();
 				viewContainer.addChild(context.loader);
-				context.loader.scrollRect = new Rectangle(0,0,context.loader.contentLoaderInfo.width,  context.loader.contentLoaderInfo.height);
+				
+				var info:LoaderInfo = context.loader.contentLoaderInfo;  
+				
+				context.loader.scrollRect = new Rectangle(0, 0, info.width, info.height);
+						
 				viewable.view = viewContainer;
-				spatial.setDimensions(context.loader.contentLoaderInfo.width, context.loader.contentLoaderInfo.height);
+				
+				spatial.setDimensions(info.width, info.height);
 			}
 			catch (error:SecurityError)
 			{
-				dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR, error.message)));
+				dispatchEvent
+					( new MediaErrorEvent
+						( new MediaError
+							( MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR
+							, error.message
+							)
+						)
+					);
 			}
 			
 			addTrait(MediaTraitType.VIEWABLE, viewable);
@@ -93,6 +125,11 @@ package org.osmf.content
 		{
 			removeTrait(MediaTraitType.SPATIAL);
 			removeTrait(MediaTraitType.VIEWABLE);	
-		}		
+		}
+		
+		// Intertnals
+		//
+		
+		private var downloadable:DownloadableTrait;
 	}
 }

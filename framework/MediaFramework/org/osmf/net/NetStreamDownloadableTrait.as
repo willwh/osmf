@@ -32,9 +32,9 @@ package org.osmf.net
 	 */
 	public class NetStreamDownloadableTrait extends DownloadableTrait
 	{
-		public function NetStreamDownloadableTrait(netStream:NetStream, target:IEventDispatcher=null)
+		public function NetStreamDownloadableTrait(netStream:NetStream)
 		{
-			super(NaN, NaN, target);
+			super(NaN, NaN);
 			
 			_netStream = netStream;
 		}

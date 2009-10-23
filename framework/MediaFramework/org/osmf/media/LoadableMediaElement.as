@@ -117,8 +117,9 @@ package org.osmf.media
 				// Remove (and unload) any existing loadable.
 				loadable.removeEventListener
 					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-						, onLoadableStateChange
+					, onLoadableStateChange
 					);
+					
 				if (loadable.loadState == LoadState.LOADED)
 				{	    			   
 					loadable.unload();	 
@@ -131,7 +132,7 @@ package org.osmf.media
 			loadable = new LoadableTrait(loader, resource);
 			loadable.addEventListener
 				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-					, onLoadableStateChange
+				, onLoadableStateChange
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadable);
