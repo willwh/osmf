@@ -70,6 +70,14 @@ package org.osmf.net.dynamicstreaming
 		{
 			_ns.switchTo(value);
 		}
+	
+		/**
+		 * @inheritDoc
+		 */
+        override public function get currentIndex():int
+        {
+        	return _ns.renderingIndex;        
+        } 
 		
 		/**
 		 * @inheritDoc
