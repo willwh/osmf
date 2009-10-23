@@ -74,6 +74,17 @@ package org.osmf.examples.buffering
 			}
 		}
 		
+		override protected function processPausedChange(paused:Boolean):void
+		{
+			// Whenever we pause, reset our buffer time to the minimum so that
+			// playback starts quickly after the unpause.
+			if (paused == true)
+			{
+				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
+				bufferable.bufferTime = initialBufferTime;
+			}
+		}
+ 		
 		private var initialBufferTime:Number;
 		private var expandedBufferTime:Number;
 	}
