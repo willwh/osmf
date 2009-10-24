@@ -1,20 +1,25 @@
 package org.osmf.drm
 {
 	import flash.errors.IllegalOperationError;
-	import flash.events.DRMAuthenticationCompleteEvent;
-	import flash.events.DRMAuthenticationErrorEvent;
-	import flash.events.DRMErrorEvent;
-	import flash.events.DRMStatusEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
-	import flash.net.drm.AuthenticationMethod;
-	import flash.net.drm.DRMContentData;
-	import flash.net.drm.DRMManager;
-	import flash.net.drm.DRMVoucher;
-	import flash.net.drm.LoadVoucherSetting;
-	import flash.system.SystemUpdaterType;
-	import flash.utils.ByteArray;
+	
+	CONFIG::FLASH_10_1
+	{
+		import flash.events.DRMAuthenticationCompleteEvent;
+		import flash.events.DRMAuthenticationErrorEvent;
+		import flash.events.DRMErrorEvent;
+		import flash.events.DRMStatusEvent;
+		import flash.net.drm.AuthenticationMethod;
+		import flash.net.drm.DRMContentData;
+		import flash.net.drm.DRMManager;
+		import flash.net.drm.DRMVoucher;
+		import flash.net.drm.LoadVoucherSetting;
+		import flash.system.SystemUpdater;
+		import flash.system.SystemUpdaterType;
+		import flash.utils.ByteArray;
+	}
 	
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.MediaErrorCodes;
@@ -42,6 +47,9 @@ package org.osmf.drm
 	 */ 
 	public class DRMServices extends EventDispatcher
 	{
+		CONFIG::FLASH_10_1
+		{
+			
 		/**
 		 * Constructs a new DRMServices adpater.
 		 */ 
@@ -72,7 +80,7 @@ package org.osmf.drm
 				{
 					metadata = value;
 				}
-				var updater:DRMUpdater = DRMUpdater.getInstance();
+				var updater:SystemUpdater = new SystemUpdater();
 				updater.addEventListener(IOErrorEvent.IO_ERROR, authError);
 				updater.addEventListener(Event.COMPLETE, onComplete);
 				updater.update(SystemUpdaterType.DRM);				
@@ -260,5 +268,6 @@ package org.osmf.drm
 		private var voucher:DRMVoucher;
 		private var drmManager:DRMManager = DRMManager.getDRMManager();
 
+		}
 	}
 }

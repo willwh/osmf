@@ -13,6 +13,8 @@ package org.osmf.net
      */
 	public class NetContentProtectableTrait extends ContentProtectableTrait
 	{
+		CONFIG::FLASH_10_1
+		{
 		/**
    		 * Constructs a NetContentProtectableTrait
    		 */ 
@@ -95,7 +97,6 @@ package org.osmf.net
 		}
 															
 		private var drmServices:DRMServices = new DRMServices();
-    	
-		
+    	}
 	}
 }
