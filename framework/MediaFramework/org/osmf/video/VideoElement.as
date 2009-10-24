@@ -317,7 +317,7 @@ package org.osmf.video
 								
 			}
 			
-			CONFIG::FLASH_10_1	
+			CONFIG::FLASH_10_1
 			{
 				switch (event.info.code)
 				{
