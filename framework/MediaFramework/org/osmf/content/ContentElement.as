@@ -54,8 +54,6 @@ package org.osmf.content
 		 */		
 		public function ContentElement(loader:ContentLoader, resource:IURLResource = null)
 		{
-			downloadable = new ContentDownloadableTrait(loader);
-			
 			super(loader, resource);
 		}
 		
@@ -68,7 +66,7 @@ package org.osmf.content
 		override protected function setupTraits():void
 		{
 			// Add a downloadable trait:
-			addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
+			addTrait(MediaTraitType.DOWNLOADABLE, new ContentDownloadableTrait(this));
 			
 			super.setupTraits();
 		}
@@ -126,10 +124,5 @@ package org.osmf.content
 			removeTrait(MediaTraitType.SPATIAL);
 			removeTrait(MediaTraitType.VIEWABLE);	
 		}
-		
-		// Intertnals
-		//
-		
-		private var downloadable:DownloadableTrait;
 	}
 }

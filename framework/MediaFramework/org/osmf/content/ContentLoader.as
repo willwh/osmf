@@ -80,16 +80,6 @@ package org.osmf.content
 			this.useCurrentSecurityDomain = useCurrentSecurityDomain;
 		}
 		
-		public function get bytesLoaded():Number
-		{
-			return _loader ? _loader.contentLoaderInfo.bytesLoaded : NaN;
-		}
-		
-		public function get bytesTotal():Number
-		{
-			return _bytesTotal;
-		}
-		
 		// Overrides
 		//
 		
@@ -108,20 +98,20 @@ package org.osmf.content
 			
 			updateLoadable(loadable, LoadState.LOADING);
 			
-			var context:LoaderContext = new LoaderContext();
+			var loader:Loader 			= new Loader();
+			var context:LoaderContext 	= new LoaderContext();
+			var urlReq:URLRequest 		= new URLRequest((loadable.resource as IURLResource).url.toString());
+			
 			context.checkPolicyFile = true;
 			if (useCurrentSecurityDomain)
 			{
 				context.securityDomain = SecurityDomain.currentDomain;
 			}
 			
-			var urlReq:URLRequest = new URLRequest((loadable.resource as IURLResource).url.toString());
-			
-			_loader = new Loader();
-			toggleLoaderListeners(_loader, true);
+			toggleLoaderListeners(loader, true);
 			try
 			{
-				_loader.load(urlReq, context);
+				loader.load(urlReq, context);
 			}
 			catch (ioError:IOError)
 			{
@@ -132,33 +122,33 @@ package org.osmf.content
 				onSecurityError(null, securityError.message);
 			}
 
-			function toggleLoaderListeners(_loader:Loader, on:Boolean):void
+			function toggleLoaderListeners(loader:Loader, on:Boolean):void
 			{
 				if (on)
 				{
-					_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadProgress);
-					_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
-					_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-					_loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
+					loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadProgress);
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
+					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 				}
 				else
 				{
-					_loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onLoadProgress);
-					_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onLoadComplete);
-					_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
-					_loader.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
+					loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onLoadProgress);
+					loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onLoadComplete);
+					loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
+					loader.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 				}
 			}
 
 			function onLoadProgress(event:Event):void
 			{
-				_loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onLoadProgress);
-				setBytesTotal(_loader.contentLoaderInfo.bytesTotal);
+				setBytesTotal(loader.contentLoaderInfo.bytesTotal);
+				loadable.dispatchEvent(event.clone());
 			}
 
 			function onLoadComplete(event:Event):void
 			{
-				toggleLoaderListeners(_loader, false);
+				toggleLoaderListeners(loader, false);
 				
 				if (LoaderInfo(event.target).contentType == SWF_MIME_TYPE &&
 					LoaderInfo(event.target).actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
@@ -166,8 +156,8 @@ package org.osmf.content
 					// The SWF's version is unsupported.  Force an unload
 					// and dispatch an error event.
 					
-					_loader.unloadAndStop();
-					_loader = null;
+					loader.unloadAndStop();
+					loader = null;
 					setBytesTotal(NaN);
 					
 					updateLoadable(loadable, LoadState.LOAD_FAILED);
@@ -179,14 +169,14 @@ package org.osmf.content
 				}
 				else
 				{
-					updateLoadable(loadable, LoadState.LOADED, new ContentLoadedContext(_loader));
+					updateLoadable(loadable, LoadState.LOADED, new ContentLoadedContext(loader));
 				}
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
-				toggleLoaderListeners(_loader, false);
-				_loader = null;
+				toggleLoaderListeners(loader, false);
+				loader = null;
 				setBytesTotal(NaN);
 				
 				updateLoadable(loadable, LoadState.LOAD_FAILED);
@@ -202,8 +192,8 @@ package org.osmf.content
 
 			function onSecurityError(securityEvent:SecurityErrorEvent, securityEventDetail:String=null):void
 			{	
-				toggleLoaderListeners(_loader, false);
-				_loader = null;
+				toggleLoaderListeners(loader, false);
+				loader = null;
 				setBytesTotal(NaN);
 				
 				updateLoadable(loadable, LoadState.LOAD_FAILED);
@@ -215,6 +205,17 @@ package org.osmf.content
 							)
 						)
 					);
+			}
+			
+			var bytesTotal:Number;
+			function setBytesTotal(value:Number):void
+			{
+				if (value != bytesTotal)
+				{ 
+					var event:BytesTotalChangeEvent = new BytesTotalChangeEvent(bytesTotal, value);
+					bytesTotal = value;
+					loadable.dispatchEvent(event);
+				}
 			}
 		}
 
@@ -242,20 +243,7 @@ package org.osmf.content
 		// Internals
 		//
 		
-		private function setBytesTotal(value:Number):void
-		{
-			if (value != _bytesTotal)
-			{ 
-				var event:BytesTotalChangeEvent = new BytesTotalChangeEvent(_bytesTotal, value);
-				_bytesTotal = value;
-				dispatchEvent(event);
-			}
-		}
-		
-		private var _loader:Loader;
 		private var useCurrentSecurityDomain:Boolean;
-		
-		private var _bytesTotal:Number;
 		
 		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
 	}

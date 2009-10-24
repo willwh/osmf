@@ -21,49 +21,72 @@
 *****************************************************/
 package org.osmf.content
 {
+	import flash.events.Event;
+	import flash.events.ProgressEvent;
+	
 	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.traits.DownloadableTrait;
+	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.MediaTraitType;
 	
 	internal class ContentDownloadableTrait extends DownloadableTrait
 	{
-		public function ContentDownloadableTrait(contentLoader:ContentLoader)
+		public function ContentDownloadableTrait(owner:ContentElement)
 		{
-			this.contentLoader = contentLoader;
+			this.owner = owner;
 			
-			contentLoader.addEventListener
-				( BytesTotalChangeEvent.BYTES_TOTAL_CHANGE
-				, onContentLoaderBytesTotalChange
-				);
+			owner.addEventListener(TraitsChangeEvent.TRAIT_ADD, onOwnerTraitsChange);
+			owner.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onOwnerTraitsChange);
 			
-			super(contentLoader.bytesLoaded, contentLoader.bytesTotal);
-		}
-		
-		// Overrides
-		//
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function get bytesDownloaded():Number
-		{
-			return contentLoader.bytesLoaded;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function get bytesTotal():Number
-		{
-			return contentLoader.bytesTotal;
+			super();
+			
+			updateLoadable(owner.getTrait(MediaTraitType.LOADABLE) as ILoadable);
 		}
 		
 		// Internals
+		//
 		
-		private function onContentLoaderBytesTotalChange(event:BytesTotalChangeEvent):void
+		private function onOwnerTraitsChange(event:TraitsChangeEvent):void
 		{
-			dispatchEvent(event.clone());	
+			if (event.traitType == MediaTraitType.LOADABLE)
+			{
+				updateLoadable(owner.getTrait(MediaTraitType.LOADABLE) as ILoadable);
+			}
 		}
 		
-		private var contentLoader:ContentLoader;
+		private function updateLoadable(value:ILoadable):void
+		{
+			if (value != loadable)
+			{
+				if (loadable)
+				{
+					loadable.removeEventListener(ProgressEvent.PROGRESS, onOwnerLoadableProgress);
+					loadable.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onOwnerLoadableTotalBytesChangeEvent);
+				}
+				
+				loadable = value;
+				
+				if (loadable)
+				{
+					loadable.addEventListener(ProgressEvent.PROGRESS, onOwnerLoadableProgress);
+					loadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onOwnerLoadableTotalBytesChangeEvent);
+				}
+			}
+		}
+		
+		private function onOwnerLoadableProgress(event:ProgressEvent):void
+		{
+			bytesTotal = event.bytesTotal;
+			bytesDownloaded = event.bytesLoaded;
+		}
+		
+		private function onOwnerLoadableTotalBytesChangeEvent(event:BytesTotalChangeEvent):void
+		{
+			bytesTotal = event.newValue;	
+		}
+		
+		private var owner:ContentElement;
+		private var loadable:ILoadable;
 	}
 }
