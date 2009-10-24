@@ -25,7 +25,7 @@ package org.osmf.video
 	import flash.media.Video;
 	import flash.net.NetStream;
 	
-	CONFIG::FLASH_10_1	
+	CONFIG::FLASH_10_1
 	{
 	import flash.system.SystemUpdaterType;
 	import org.osmf.drm.DRMUpdater;	
@@ -167,7 +167,7 @@ package org.osmf.video
 						
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 						
-			CONFIG::FLASH_10_1	
+			CONFIG::FLASH_10_1
     		{
     			trace('Adding ON_DRM_CONTENT_DATA');
     			NetClient(stream.client).addHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    
@@ -184,7 +184,7 @@ package org.osmf.video
 		
 		private function addProtectableTrait(contentData:ByteArray):void
 		{
-			CONFIG::FLASH_10_1	
+			CONFIG::FLASH_10_1
     		{
 			var protectableTrait:NetContentProtectableTrait = new NetContentProtectableTrait();
 	    	protectableTrait.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuth);
@@ -251,7 +251,7 @@ package org.osmf.video
     		removeTrait(MediaTraitType.SWITCHABLE);
 
 	    	
-	    	CONFIG::FLASH_10_1	
+	    	CONFIG::FLASH_10_1
     		{
     			trace('Removing ON_DRM_CONTENT_DATA');
     			NetClient(stream.client).removeHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    	
