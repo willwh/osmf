@@ -22,26 +22,26 @@
 package org.osmf.media
 {
 	/**
-	 * IRegion defines the interface of objects within the OSMF that
-	 * act as a gateway to one or more MediaElements.
+	 * IContainerGateway defines the interface of objects within the OSMF
+	 * that act as a gateway to one or more MediaElements.
 	 */	
 	public interface IContainerGateway extends IMediaGateway
 	{
 		/**
-		 * Adds a MediaElement instance to the region.
+		 * Adds a MediaElement instance to the gateway.
 		 * 
-		 * @param element The MediaElementInstance to add to the region.
+		 * @param element The MediaElementInstance to add to the gateway.
 		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
-		 * or already a child of the region.
+		 * or already a child of the gateway.
 		 */		
 		function addElement(element:MediaElement):MediaElement;
 		
 		
 		/**
-		 * Removes a MediaElement instance from the region.
+		 * Removes a MediaElement instance from the gateway.
 		 * 
-		 * @param element The element to remove from the region.
+		 * @param element The element to remove from the gateway.
 		 * @returns The removed MediaElement instance.
 		 * @throws IllegalOperationError if the specified element isn't
 		 * a child element, or is null.
@@ -49,10 +49,10 @@ package org.osmf.media
 		function removeElement(element:MediaElement):MediaElement;
 		
 		/**
-		 * Verifies if an element is a child of the region.
+		 * Verifies if an element is a child of the gateway.
 		 *  
 		 * @param element Element to verify.
-		 * @return True if the element if a child of the region.
+		 * @return True if the element if a child of the gateway.
 		 */		
 		function containsElement(element:MediaElement):Boolean;
 	}

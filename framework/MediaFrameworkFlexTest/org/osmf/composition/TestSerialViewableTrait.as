@@ -25,7 +25,7 @@ package org.osmf.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.RegionSprite;
+	import org.osmf.gateways.RegionSprite;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.DynamicMediaElement;

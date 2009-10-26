@@ -19,13 +19,14 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.display
+package org.osmf.gateways
 {
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.display.ScaleMode;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.layout.TesterSprite;
