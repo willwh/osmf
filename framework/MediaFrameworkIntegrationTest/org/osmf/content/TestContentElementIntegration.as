@@ -21,6 +21,9 @@
 *****************************************************/
 package org.osmf.content
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.image.ImageElement;
@@ -60,14 +63,29 @@ package org.osmf.content
 		
 		public function testDownloadableViaImage():void
 		{
-			var image:ImageElement = new ImageElement(new ImageLoader, new URLResource(new URL("assets/image.gif")));
+			var dispatcher:EventDispatcher = new EventDispatcher();
+			var count:int = 0;
+			
+			var image:ImageElement 
+				= new ImageElement
+					( new ImageLoader()
+					, new URLResource(new URL("assets/image.gif"))
+					);
 			
 			var loadable:ILoadable = image.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, addAsync(onLoadableStateChange,3000));
+			// Async methods need to be registered in the order that they will be
+			// invoked (or otherwise thing go very wrong - the wrong handlers get
+			// used, etc.):
+			var asf1:Function = addAsync(onLoadableStateChange, 3000);
+			var asf2:Function = addAsync(onBytesTotalChange, 3000);
+			var asf3:Function = addAsync(function(_:*):void {}, 7000);
+			
+			dispatcher.addEventListener(Event.COMPLETE, asf3);
+			
+			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, asf1);
 			loadable.load();
 			
-			var count:int = 0;
 			function onLoadableStateChange(event:LoadableStateChangeEvent):void
 			{
 				var downloadable:IDownloadable;
@@ -75,17 +93,17 @@ package org.osmf.content
 				count++;
 				if (count == 1)
 				{
-					assertEquals(LoadState.LOADING,event.newState);
+					assertEquals(LoadState.LOADING, event.newState);
 					downloadable = image.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
 					assertEquals(NaN, downloadable.bytesDownloaded);
 					assertEquals(NaN, downloadable.bytesTotal);
 					
-					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, addAsync(onBytesTotalChange,3000));
+					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, asf2);
 				}
 				else if (count == 2)
 				{
-					assertEquals(LoadState.LOADED,event.newState);
+					assertEquals(LoadState.LOADED, event.newState);
 					downloadable = image.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
 					assertEquals(2248, downloadable.bytesDownloaded);
@@ -93,12 +111,17 @@ package org.osmf.content
 				}
 			}
 			
+			var bytesTotalFired:Boolean;
 			function onBytesTotalChange(event:BytesTotalChangeEvent):void
 			{
 				var downloadable:IDownloadable = event.target as IDownloadable;
 				assertNotNull(downloadable);
 				assertEquals(event.oldValue, NaN);
 				assertEquals(event.newValue, 2248);
+				
+				bytesTotalFired = true;
+				
+				dispatcher.dispatchEvent(new Event(Event.COMPLETE));
 			}
 		}
 	}
