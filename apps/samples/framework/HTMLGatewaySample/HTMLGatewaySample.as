@@ -24,8 +24,8 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.RegionSprite;
-	import org.osmf.gateways.HTMLGateway;
 	import org.osmf.html.HTMLElement;
+	import org.osmf.html.HTMLGateway;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
