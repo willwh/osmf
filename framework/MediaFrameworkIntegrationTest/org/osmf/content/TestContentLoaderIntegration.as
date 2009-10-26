@@ -23,11 +23,11 @@ package org.osmf.content
 {
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.loaders.TestILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	

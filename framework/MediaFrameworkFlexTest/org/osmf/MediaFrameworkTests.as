@@ -31,7 +31,6 @@ package org.osmf
 	import org.osmf.html.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
-	import org.osmf.loaders.*;
 	import org.osmf.logging.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;

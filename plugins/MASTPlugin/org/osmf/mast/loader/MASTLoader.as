@@ -25,7 +25,6 @@ package org.osmf.mast.loader
 {
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.parser.MASTParser;
 	import org.osmf.media.IMediaResource;
@@ -33,6 +32,7 @@ package org.osmf.mast.loader
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.HTTPLoadedContext;
 	import org.osmf.utils.HTTPLoader;
 	CONFIG::LOGGING

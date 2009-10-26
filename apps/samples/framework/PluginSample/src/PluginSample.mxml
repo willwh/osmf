@@ -45,7 +45,6 @@
 
 			import org.osmf.events.*;
 			import org.osmf.image.*;
-			import org.osmf.loaders.*;
 			import org.osmf.logging.ILogger;
 			import org.osmf.logging.Log;
 			import org.osmf.media.*;

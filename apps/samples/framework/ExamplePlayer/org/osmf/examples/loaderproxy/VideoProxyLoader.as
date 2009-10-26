@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;
 	
 	/**

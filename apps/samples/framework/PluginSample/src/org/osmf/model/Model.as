@@ -26,10 +26,10 @@ package org.osmf.model
 	import mx.collections.ArrayCollection;
 	
 	import org.osmf.audio.*;
-	import org.osmf.loaders.*;
 	import org.osmf.media.*;
 	import org.osmf.net.*;
 	import org.osmf.plugin.*;
+	import org.osmf.traits.*;
 	import org.osmf.video.*;
 	
 	public class Model

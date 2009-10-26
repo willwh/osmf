@@ -22,7 +22,6 @@
 package org.osmf.examples.loaderproxy
 {
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.loaders.ILoader;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.ProxyElement;
