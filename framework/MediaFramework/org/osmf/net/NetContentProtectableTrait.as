@@ -3,7 +3,11 @@ package org.osmf.net
 	import flash.events.Event;
 	import flash.utils.ByteArray;
 	
+	CONFIG::FLASH_10_1
+	{
 	import org.osmf.drm.DRMServices;
+	}
+	
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.traits.ContentProtectableTrait;

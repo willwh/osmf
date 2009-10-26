@@ -37,6 +37,8 @@ package org.osmf.video
 	import org.osmf.events.TraitEvent;
 	import flash.events.DRMErrorEvent;
 	import flash.events.DRMAuthenticateEvent;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.ObjectIdentifier;
 	}
 	
 	import org.osmf.events.MediaError;
@@ -73,8 +75,8 @@ package org.osmf.video
 
 	import flash.utils.ByteArray;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.ObjectIdentifier;
+	
+
 
 	
 
