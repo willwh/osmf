@@ -72,6 +72,15 @@ package org.osmf.media
 		
 		/**
 		 * Subclasses can override this method to do processing when the media
+		 * element enters the LOADING state.
+		 **/
+		protected function processLoadingState():void
+		{
+			// Subclass stub
+		}
+		
+		/**
+		 * Subclasses can override this method to do processing when the media
 		 * element enters the LOADED state.
 		 **/
 		protected function processLoadedState():void
@@ -99,7 +108,11 @@ package org.osmf.media
 			// actual unload being effectuated allows listeners to still act on
 			// the media that is about to be unloaded.
 			
-			if (event.newState == LoadState.LOADED)
+			if (event.newState == LoadState.LOADING)
+			{
+				processLoadingState();
+			}
+			else if (event.newState == LoadState.LOADED)
 			{
 				processLoadedState();
 			}
