@@ -27,8 +27,8 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.display.RegionSprite;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.gateways.RegionSprite;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
