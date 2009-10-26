@@ -96,9 +96,11 @@ package org.osmf.content
 		{
 			super.load(loadable);
 			
-			updateLoadable(loadable, LoadState.LOADING);
+			var loader:Loader = new Loader();
+			var loadedContext:ContentLoadedContext = new ContentLoadedContext(loader);
 			
-			var loader:Loader 			= new Loader();
+			updateLoadable(loadable, LoadState.LOADING, loadedContext);
+			
 			var context:LoaderContext 	= new LoaderContext();
 			var urlReq:URLRequest 		= new URLRequest((loadable.resource as IURLResource).url.toString());
 			
@@ -126,26 +128,18 @@ package org.osmf.content
 			{
 				if (on)
 				{
-					loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadProgress);
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
 					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 				}
 				else
 				{
-					loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onLoadProgress);
 					loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onLoadComplete);
 					loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
 					loader.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 				}
 			}
-
-			function onLoadProgress(event:Event):void
-			{
-				setBytesTotal(loader.contentLoaderInfo.bytesTotal);
-				loadable.dispatchEvent(event.clone());
-			}
-
+		
 			function onLoadComplete(event:Event):void
 			{
 				toggleLoaderListeners(loader, false);
@@ -158,9 +152,9 @@ package org.osmf.content
 					
 					loader.unloadAndStop();
 					loader = null;
-					setBytesTotal(NaN);
+					loadedContext = null;
 					
-					updateLoadable(loadable, LoadState.LOAD_FAILED);
+					updateLoadable(loadable, LoadState.LOAD_FAILED, loadedContext);
 					loadable.dispatchEvent
 						( new MediaErrorEvent
 							( new MediaError(MediaErrorCodes.INVALID_SWF_AS_VERSION)
@@ -169,7 +163,7 @@ package org.osmf.content
 				}
 				else
 				{
-					updateLoadable(loadable, LoadState.LOADED, new ContentLoadedContext(loader));
+					updateLoadable(loadable, LoadState.LOADED, loadedContext);
 				}
 			}
 
@@ -177,9 +171,9 @@ package org.osmf.content
 			{	
 				toggleLoaderListeners(loader, false);
 				loader = null;
-				setBytesTotal(NaN);
+				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_FAILED, null);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -194,9 +188,9 @@ package org.osmf.content
 			{	
 				toggleLoaderListeners(loader, false);
 				loader = null;
-				setBytesTotal(NaN);
+				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_FAILED, loadedContext);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -205,17 +199,6 @@ package org.osmf.content
 							)
 						)
 					);
-			}
-			
-			var bytesTotal:Number;
-			function setBytesTotal(value:Number):void
-			{
-				if (value != bytesTotal)
-				{ 
-					var event:BytesTotalChangeEvent = new BytesTotalChangeEvent(bytesTotal, value);
-					bytesTotal = value;
-					loadable.dispatchEvent(event);
-				}
 			}
 		}
 

@@ -82,7 +82,7 @@ package org.osmf.swf
 					assertTrue(event.oldState == LoadState.CONSTRUCTED);
 					assertTrue(event.newState == LoadState.LOADING);
 					
-					assertTrue(event.loadedContext == null);
+					assertNotNull(event.loadedContext);
 					break;
 				case 2:
 					assertTrue(event.oldState == LoadState.LOADING);

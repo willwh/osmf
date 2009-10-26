@@ -34,7 +34,6 @@ package org.osmf.content
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
 			return 	[ MediaTraitType.LOADABLE
-					, MediaTraitType.DOWNLOADABLE
 					];
 		}
 

@@ -30,7 +30,7 @@ package org.osmf.content
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
-	import org.osmf.traits.DownloadableTrait;
+	import org.osmf.traits.IDownloadable;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SpatialTrait;
@@ -63,12 +63,15 @@ package org.osmf.content
 		/**
 		 *  @private 
 		 */ 
-		override protected function setupTraits():void
+		override protected function processLoadingState():void
 		{
-			// Add a downloadable trait:
-			addTrait(MediaTraitType.DOWNLOADABLE, new ContentDownloadableTrait(this));
+			var context:ContentLoadedContext
+				=	(getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext
+				as	ContentLoadedContext;
 			
-			super.setupTraits();
+			// Add a downloadable trait:
+			var downloadable:IDownloadable = new ContentDownloadableTrait(context)
+			addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
 		}
 			
 		/**
@@ -123,6 +126,7 @@ package org.osmf.content
 		{
 			removeTrait(MediaTraitType.SPATIAL);
 			removeTrait(MediaTraitType.VIEWABLE);	
+			removeTrait(MediaTraitType.DOWNLOADABLE);
 		}
 	}
 }

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.content
 {
-	import flash.events.Event;
+	import flash.display.Loader;
 	import flash.events.ProgressEvent;
 	
 	import org.osmf.events.BytesTotalChangeEvent;
@@ -32,61 +32,21 @@ package org.osmf.content
 	
 	internal class ContentDownloadableTrait extends DownloadableTrait
 	{
-		public function ContentDownloadableTrait(owner:ContentElement)
+		public function ContentDownloadableTrait(context:ContentLoadedContext)
 		{
-			this.owner = owner;
-			
-			owner.addEventListener(TraitsChangeEvent.TRAIT_ADD, onOwnerTraitsChange);
-			owner.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onOwnerTraitsChange);
+			context.loader.addEventListener(ProgressEvent.PROGRESS, onContextLoadableProgress);
 			
 			super();
-			
-			updateLoadable(owner.getTrait(MediaTraitType.LOADABLE) as ILoadable);
 		}
 		
 		// Internals
 		//
 		
-		private function onOwnerTraitsChange(event:TraitsChangeEvent):void
-		{
-			if (event.traitType == MediaTraitType.LOADABLE)
-			{
-				updateLoadable(owner.getTrait(MediaTraitType.LOADABLE) as ILoadable);
-			}
-		}
-		
-		private function updateLoadable(value:ILoadable):void
-		{
-			if (value != loadable)
-			{
-				if (loadable)
-				{
-					loadable.removeEventListener(ProgressEvent.PROGRESS, onOwnerLoadableProgress);
-					loadable.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onOwnerLoadableTotalBytesChangeEvent);
-				}
-				
-				loadable = value;
-				
-				if (loadable)
-				{
-					loadable.addEventListener(ProgressEvent.PROGRESS, onOwnerLoadableProgress);
-					loadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onOwnerLoadableTotalBytesChangeEvent);
-				}
-			}
-		}
-		
-		private function onOwnerLoadableProgress(event:ProgressEvent):void
+		private function onContextLoadableProgress(event:ProgressEvent):void
 		{
 			bytesTotal = event.bytesTotal;
 			bytesDownloaded = event.bytesLoaded;
 		}
 		
-		private function onOwnerLoadableTotalBytesChangeEvent(event:BytesTotalChangeEvent):void
-		{
-			bytesTotal = event.newValue;	
-		}
-		
-		private var owner:ContentElement;
-		private var loadable:ILoadable;
 	}
 }
