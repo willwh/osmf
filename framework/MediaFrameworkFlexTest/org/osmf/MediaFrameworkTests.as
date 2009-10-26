@@ -125,6 +125,7 @@ package org.osmf
 			addTestSuite(TestAudibleTrait);
 			addTestSuite(TestViewableTrait);
 			addTestSuite(TestBufferableTrait);
+			addTestSuite(TestDownloadableTrait);
 			
 			addTestSuite(TestSwitchableTrait);
 			
@@ -143,6 +144,7 @@ package org.osmf
 			addTestSuite(TestNetStreamSeekableTrait);
 			addTestSuite(TestNetStreamTemporalTrait);
 			addTestSuite(TestNetStreamSwitchableTrait);
+			addTestSuite(TestNetStreamDownloadableTrait);
 			
 			addTestSuite(TestContentLoader);
 			addTestSuite(TestContentElement);
@@ -156,6 +158,7 @@ package org.osmf
 			addTestSuite(TestAudioElement);
 			addTestSuite(TestAudioElementWithSoundLoader);
 			addTestSuite(TestSoundLoader);
+			addTestSuite(TestSoundDownloadableTrait);
 
 			addTestSuite(TestAudioAudibleTrait);
 			addTestSuite(TestAudioSeekableTrait); 

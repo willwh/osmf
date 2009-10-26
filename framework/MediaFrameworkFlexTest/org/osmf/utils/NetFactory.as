@@ -105,7 +105,7 @@ package org.osmf.utils
 		{
 			var netStream:NetStream = 
 					useMockObjects
-						? new MockNetStream(netConnection)
+						? new org.osmf.netmocker.MockNetStream(netConnection)
 						: new NetStream(netConnection);
 			netStream.client = new NetClient();
 			return netStream;
