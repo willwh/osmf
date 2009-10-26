@@ -28,7 +28,7 @@ package org.osmf
 	import org.osmf.content.*;
 	import org.osmf.display.*;
 	import org.osmf.events.*;
-	import org.osmf.gateways.*;
+	import org.osmf.html.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.loaders.*;
@@ -43,7 +43,6 @@ package org.osmf
 	import org.osmf.tracking.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
-	import org.osmf.version.*;
 	import org.osmf.video.*;
 	import org.osmf.vast.*;
 	import org.osmf.vast.loader.*;
