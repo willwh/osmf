@@ -34,7 +34,10 @@ package org.osmf.content
 	{
 		public function ContentDownloadableTrait(context:ContentLoadedContext)
 		{
-			context.loader.addEventListener(ProgressEvent.PROGRESS, onContextLoadableProgress);
+			context
+				.loader
+				.contentLoaderInfo
+				.addEventListener(ProgressEvent.PROGRESS, onContextLoadableProgress);
 			
 			super();
 		}
