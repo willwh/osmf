@@ -30,6 +30,7 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
+	import org.osmf.display.RegionSprite;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
@@ -39,10 +40,8 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.net.NetLoader;
 	import org.osmf.proxies.TemporalProxyElement;
-	import org.osmf.gateways.RegionSprite;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 

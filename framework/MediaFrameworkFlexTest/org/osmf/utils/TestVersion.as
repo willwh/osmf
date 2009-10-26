@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.version
+package org.osmf.utils
 {
 	import flexunit.framework.TestCase;
 

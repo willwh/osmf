@@ -24,12 +24,10 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.MouseEvent;
-	import flash.net.URLRequest;
-	import flash.net.navigateToURL;
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
+	import org.osmf.display.RegionSprite;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
@@ -40,7 +38,6 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.proxies.TemporalProxyElement;
-	import org.osmf.gateways.RegionSprite;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 

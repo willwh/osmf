@@ -38,7 +38,7 @@ package org.osmf.view
 	import org.osmf.events.PlayheadChangeEvent;
 	import org.osmf.examples.AllExamples;
 	import org.osmf.examples.Example;
-	import org.osmf.version.Version;
+	import org.osmf.utils.Version;
 	
 	public class MainWindow extends MainWindowLayout
 	{

@@ -23,8 +23,8 @@ package
 {
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
+	import org.osmf.display.RegionSprite;
 	import org.osmf.gateways.HTMLGateway;
-	import org.osmf.gateways.RegionSprite;
 	import org.osmf.html.HTMLElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;

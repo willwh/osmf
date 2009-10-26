@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.display
 {
 	import flash.errors.IllegalOperationError;
 	import flash.geom.Rectangle;

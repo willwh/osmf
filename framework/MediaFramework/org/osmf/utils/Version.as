@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.version
+package org.osmf.utils
 {
 	/**
 	 * Class that contains Open Source Media Framework version information. There are three fields:

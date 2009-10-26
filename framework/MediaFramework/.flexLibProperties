@@ -52,6 +52,7 @@
     <classEntry path="org.osmf.content.ContentLoader"/>
     <classEntry path="org.osmf.display.MediaElementSprite"/>
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
+    <classEntry path="org.osmf.display.RegionSprite"/>
     <classEntry path="org.osmf.display.ScalableSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.drm.DRMServices"/>
@@ -91,7 +92,6 @@
     <classEntry path="org.osmf.events.VolumeChangeEvent"/>
     <classEntry path="org.osmf.gateways.HTMLGateway"/>
     <classEntry path="org.osmf.gateways.HTMLGatewayElementProxy"/>
-    <classEntry path="org.osmf.gateways.RegionSprite"/>
     <classEntry path="org.osmf.html.HTMLElement"/>
     <classEntry path="org.osmf.html.HTMLLoadableTrait"/>
     <classEntry path="org.osmf.image.ImageElement"/>
@@ -233,7 +233,7 @@
     <classEntry path="org.osmf.utils.HTTPLoader"/>
     <classEntry path="org.osmf.utils.MediaFrameworkStrings"/>
     <classEntry path="org.osmf.utils.URL"/>
-    <classEntry path="org.osmf.version.Version"/>
+    <classEntry path="org.osmf.utils.Version"/>
     <classEntry path="org.osmf.video.VideoElement"/>
   </includeClasses>
   <includeResources/>

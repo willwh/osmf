@@ -31,7 +31,7 @@ package org.osmf.plugin
 	import org.osmf.media.MediaInfo;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
-	import org.osmf.version.Version;
+	import org.osmf.utils.Version;
 	
 	/**
 	 * The PluginLoader class implements ILoader to provide

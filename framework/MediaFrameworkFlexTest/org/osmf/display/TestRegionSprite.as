@@ -19,14 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.display
 {
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.ScaleMode;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.layout.TesterSprite;
@@ -35,7 +34,6 @@ package org.osmf.gateways
 	import org.osmf.traits.SpatialTrait;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.DynamicMediaElement;
-
 
 	public class TestRegionSprite extends TestCase
 	{

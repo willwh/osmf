@@ -28,7 +28,7 @@ package org.osmf.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.display.RegionSprite;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
