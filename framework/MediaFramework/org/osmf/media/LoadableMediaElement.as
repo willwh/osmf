@@ -22,8 +22,8 @@
 package org.osmf.media
 {
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.loaders.ILoader;
 	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;

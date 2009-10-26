@@ -22,16 +22,13 @@
 package org.osmf.audio
 {
 	import org.osmf.events.MediaError;
-	import org.osmf.loaders.TestILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadableTrait;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;

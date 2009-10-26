@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.loaders
+package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -31,8 +31,6 @@ package org.osmf.loaders
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadState;
 	import org.osmf.utils.InterfaceTestCase;
 	
 	public class TestILoader extends InterfaceTestCase

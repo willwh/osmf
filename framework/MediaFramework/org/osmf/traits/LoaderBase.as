@@ -19,16 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.loaders
+package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.LoadState;
 	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
@@ -158,6 +155,5 @@ package org.osmf.loaders
 				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLER_RESOURCE);
 			}
 		}
-		
 	}
 }

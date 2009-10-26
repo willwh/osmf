@@ -25,7 +25,6 @@ package org.osmf.net.dynamicstreaming
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.*;
-	import org.osmf.loaders.TestILoader;
 	import org.osmf.media.*;
 	import org.osmf.netmocker.*;
 	import org.osmf.traits.*;

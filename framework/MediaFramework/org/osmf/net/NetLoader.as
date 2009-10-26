@@ -32,7 +32,6 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.NetConnectionFactoryEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.metadata.MediaType;
@@ -40,6 +39,7 @@ package org.osmf.net
 	import org.osmf.metadata.MimeTypes;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 
 	/**
 	 * The NetLoader class implements ILoader to provide

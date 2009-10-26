@@ -19,10 +19,9 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.loaders
+package org.osmf.traits
 {
 	import org.osmf.media.IMediaResourceHandler;
-	import org.osmf.traits.ILoadable;
 	
 	import flash.events.IEventDispatcher;
 

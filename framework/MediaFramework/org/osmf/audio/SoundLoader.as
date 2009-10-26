@@ -24,7 +24,6 @@ package org.osmf.audio
 	import __AS3__.vec.Vector;
 	
 	import flash.errors.IOError;
-	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.media.Sound;
@@ -33,13 +32,13 @@ package org.osmf.audio
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
 
 	/**

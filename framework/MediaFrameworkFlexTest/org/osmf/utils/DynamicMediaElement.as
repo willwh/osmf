@@ -24,12 +24,12 @@ package org.osmf.utils
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
-	import org.osmf.loaders.ILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.AudibleTrait;
 	import org.osmf.traits.BufferableTrait;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PausableTrait;

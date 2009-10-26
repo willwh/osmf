@@ -111,8 +111,6 @@
     <classEntry path="org.osmf.layout.PaddingLayoutFacet"/>
     <classEntry path="org.osmf.layout.RegistrationPoint"/>
     <classEntry path="org.osmf.layout.RelativeLayoutFacet"/>
-    <classEntry path="org.osmf.loaders.ILoader"/>
-    <classEntry path="org.osmf.loaders.LoaderBase"/>
     <classEntry path="org.osmf.logging.ILogger"/>
     <classEntry path="org.osmf.logging.ILoggerFactory"/>
     <classEntry path="org.osmf.logging.Log"/>
@@ -209,6 +207,7 @@
     <classEntry path="org.osmf.traits.IDownloadable"/>
     <classEntry path="org.osmf.traits.ILoadable"/>
     <classEntry path="org.osmf.traits.ILoadedContext"/>
+    <classEntry path="org.osmf.traits.ILoader"/>
     <classEntry path="org.osmf.traits.IPausable"/>
     <classEntry path="org.osmf.traits.IPlayable"/>
     <classEntry path="org.osmf.traits.ISeekable"/>
@@ -218,6 +217,7 @@
     <classEntry path="org.osmf.traits.IViewable"/>
     <classEntry path="org.osmf.traits.LoadState"/>
     <classEntry path="org.osmf.traits.LoadableTrait"/>
+    <classEntry path="org.osmf.traits.LoaderBase"/>
     <classEntry path="org.osmf.traits.MediaTraitBase"/>
     <classEntry path="org.osmf.traits.MediaTraitType"/>
     <classEntry path="org.osmf.traits.PausableTrait"/>

@@ -31,12 +31,12 @@ package org.osmf.utils
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 
 	/**
 	 * Implementation of ILoader that can retrieve an URLResource using HTTP.

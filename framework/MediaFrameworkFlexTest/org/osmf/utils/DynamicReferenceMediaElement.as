@@ -21,11 +21,11 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.loaders.ILoader;
 	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.traits.ILoader;
 
 	public class DynamicReferenceMediaElement extends DynamicMediaElement implements IMediaReferrer
 	{

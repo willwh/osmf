@@ -26,11 +26,11 @@ package org.osmf.plugin
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.Version;
 	
 	/**

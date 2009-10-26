@@ -29,13 +29,13 @@ package org.osmf.vast.loader
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.loaders.ILoader;
-	import org.osmf.loaders.TestILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;

@@ -21,12 +21,12 @@
 *****************************************************/
 package org.osmf.events
 {
-	import org.osmf.loaders.ILoader;
+	import flash.events.Event;
+	
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoadedContext;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	
-	import flash.events.Event;
 	
 	/**
 	 * An ILoader dispatches a LoaderEvent when an ILoadable that it's loading

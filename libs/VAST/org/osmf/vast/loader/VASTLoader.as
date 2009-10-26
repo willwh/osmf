@@ -25,15 +25,14 @@ package org.osmf.vast.loader
 {
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.HTTPLoadedContext;
 	import org.osmf.utils.HTTPLoader;
 	

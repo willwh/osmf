@@ -24,7 +24,6 @@ package org.osmf.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.loaders.ILoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.utils.MediaFrameworkStrings;
 
@@ -58,7 +57,7 @@ package org.osmf.traits
 		 * to be loaded.
 		 * 
 		 */		
-		public function LoadableTrait(loader:ILoader,resource:IMediaResource)
+		public function LoadableTrait(loader:ILoader, resource:IMediaResource)
 		{			
 			this.loader = loader;			
 			_resource = resource;

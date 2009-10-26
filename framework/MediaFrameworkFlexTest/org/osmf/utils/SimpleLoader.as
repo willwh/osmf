@@ -21,11 +21,10 @@
 *****************************************************/
 package org.osmf.utils
 {
-	// Testing Label - weiz
-	import org.osmf.loaders.LoaderBase;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 	
 	/**
 	 * A SimpleLoader performs loads and unloads synchronously.

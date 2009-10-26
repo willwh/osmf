@@ -23,12 +23,12 @@ package org.osmf.audio
 {
 	import flash.net.NetStream;
 	
-	import org.osmf.loaders.ILoader;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
 	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekableTrait;
 	import org.osmf.traits.TemporalTrait;
