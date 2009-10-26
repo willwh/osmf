@@ -107,8 +107,9 @@ package org.osmf.traits
 		 * The context resulting from this ILoadable's successful <code>load()</code>
 		 * operation.
 		 * 
-         * <p>The context is <code>null</code> before this ILoadable's state is <code>LOADED</code> 
-		 * and after the ILoadable has been unloaded.</p>
+         * <p>The context is <code>null</code> before this ILoadable's state is <code>LOADING</code>
+         * or <code>LOADED</code>, depending on the loader implementation ata hand. The context is
+         * <code>null</code> after the ILoadable has been unloaded.</p>
 		 **/
 		function get loadedContext():ILoadedContext;
 		function set loadedContext(value:ILoadedContext):void;
