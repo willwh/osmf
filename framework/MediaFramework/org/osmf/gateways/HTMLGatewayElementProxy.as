@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.html
+package org.osmf.gateways
 {
 	import flash.external.ExternalInterface;
 	
