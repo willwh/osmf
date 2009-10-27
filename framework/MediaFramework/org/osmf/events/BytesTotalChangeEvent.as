@@ -27,10 +27,16 @@ package org.osmf.events
 	 * This event is dispatched by a concrete implementation of IDownloadable when the value of 
 	 * the property "bytesTotal" has changed.
 	 */
-	public class BytesTotalChangeEvent extends Event
+	public class BytesTotalChangeEvent extends TraitEvent
 	{
 		public static const BYTES_TOTAL_CHANGE:String = "bytesTotalChange";
 
+		/**
+		 * Constructor
+		 * 
+		 * @param oldValue The previous value of bytesTotal
+		 * @param newValue The current value of bytesTotal
+		 */
 		public function BytesTotalChangeEvent(
 			oldValue:Number, newValue:Number, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

@@ -31,6 +31,12 @@ package org.osmf.events
 	{
 		public static const BYTES_DOWNLOADED_CHANGE:String = "bytesDownloadedChange";
 
+		/**
+		 * Constructor
+		 *
+		 * @param oldValue The previous value of bytesDownloaded
+		 * @param newValue The current value of bytesDownloaded
+		 */
 		public function BytesDownloadedChangeEvent
 							( oldValue:Number
 							, newValue:Number
@@ -44,11 +50,17 @@ package org.osmf.events
 			_newValue = newValue;
 		}
 		
+		/**
+		 * The previous value of bytesDownloaded
+		 */
 		public function get oldValue():Number
 		{
 			return _oldValue;
 		}
 		
+		/**
+		 * The current value of bytesDownloaded
+		 */
 		public function get newValue():Number
 		{
 			return _newValue;

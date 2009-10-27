@@ -146,5 +146,10 @@ package org.osmf.utils
 		// DRM
 		
 		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
+		
+		// Downloadable
+		
+		public static const BYTES_DOWNLOADED:String						= "bytesDownloaded";
+		public static const BYTES_TOTAL:String							= "bytesTotal";
 	}
 }

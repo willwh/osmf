@@ -42,7 +42,7 @@ package org.osmf.traits
 		function get bytesDownloaded():Number;
 		
 		/**
-		 * The total size in bytes of the datat being downloaded into the application.
+		 * The total size in bytes of the data being downloaded into the application.
 		 */
 		function get bytesTotal():Number;
 		

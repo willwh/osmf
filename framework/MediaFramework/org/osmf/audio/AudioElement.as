@@ -27,6 +27,7 @@ package org.osmf.audio
 	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
+	import org.osmf.traits.IDownloadable;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.MediaTraitType;
@@ -117,7 +118,6 @@ package org.osmf.audio
 				addTrait(MediaTraitType.PAUSABLE, new NetStreamPausableTrait(this, stream));
 				addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));	
 				addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
-				addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
 			}
 			else
 			{
@@ -136,9 +136,23 @@ package org.osmf.audio
 				addTrait(MediaTraitType.TEMPORAL, temporal);
 				addTrait(MediaTraitType.PAUSABLE, new AudioPausableTrait(this, soundAdapter));
 				addTrait(MediaTraitType.AUDIBLE, new AudioAudibleTrait(soundAdapter));	
-				addTrait(MediaTraitType.DOWNLOADABLE, new SoundDownloadableTrait(soundLoadedContext.sound));
 			}
 		}	
+		
+		/**
+		 * @private
+		 */
+		override protected function processLoadingState():void
+		{
+			var context:SoundLoadedContext
+				= (getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext as SoundLoadedContext;
+				
+			if (context != null && context.sound != null)
+			{
+				var downloadable:IDownloadable = new SoundDownloadableTrait(context.sound);
+				addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
+			}
+		} 
 		
 		/**
 		 * @private 

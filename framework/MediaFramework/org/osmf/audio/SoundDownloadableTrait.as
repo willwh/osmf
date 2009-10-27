@@ -34,6 +34,11 @@ package org.osmf.audio
 	 */
 	internal class SoundDownloadableTrait extends DownloadableTrait
 	{
+		/**
+		 * Constructor
+		 * 
+		 * @param sound The Sound object from which the values for bytesDownloaed and bytesTotal will be obtained.
+		 */
 		public function SoundDownloadableTrait(sound:Sound)
 		{
 			super(NaN, NaN);

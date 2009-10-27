@@ -24,6 +24,7 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.utils.MediaFrameworkStrings;
 
 	/**
 	 * Dispatched when total size in bytes of data being downloaded into the application has changed.
@@ -40,6 +41,12 @@ package org.osmf.traits
 	 */	
 	public class DownloadableTrait extends EventDispatcher implements IDownloadable
 	{
+		/**
+		 * Constructor
+		 * 
+		 * @param bytesDownloaded the number of bytes that has been downloaded
+		 * @param bytesTotal the total number of bytes to be downloaded
+		 */
 		public function DownloadableTrait(bytesDownloaded:Number=NaN, bytesTotal:Number=NaN)
 		{
 			super();
@@ -52,15 +59,17 @@ package org.osmf.traits
 		 * Invoking this setter will result in the trait's bytesDownloaded
 		 * value changing if it differs from bytesDownloaded current value.
 		 * 
+		 * @throws ArgumentError - if value is negative or larger than bytesTotal
+		 * 
 		 * @see canProcessBytesDownloadedChange
 		 * @see processBytesDownloadedChange
 		 * @see postProcessBytesDownloadedChange
 		 */		
 		final public function set bytesDownloaded(value:Number):void
 		{
-			if (value > bytesTotal)
+			if (value > bytesTotal || value < 0)
 			{
-				throw new ArgumentError("bytesDownloaded");
+				throw new ArgumentError(MediaFrameworkStrings.BYTES_DOWNLOADED);
 			}
 			
 			if (canProcessBytesDownloadedChange(value))
@@ -76,6 +85,8 @@ package org.osmf.traits
 		 * Invoking this setter will result in the trait's bytesTotal
 		 * value changing if it differs from bytesTotal current value.
 		 * 
+		 * @throws ArgumentError - if value is negative or smaller than bytesDownloaded
+		 * 
 		 * @see canProcessBytesTotalChange
 		 * @see processBytesTotalChange
 		 * @see postProcessBytesTotalChange
@@ -87,9 +98,9 @@ package org.osmf.traits
 				return;
 			}
 			
-			if (value < _bytesDownloaded)
+			if (value < _bytesDownloaded || value < 0)
 			{
-				throw new ArgumentError("bytesTotal");
+				throw new ArgumentError(MediaFrameworkStrings.BYTES_TOTAL);
 			}
 
 			if (canProcessBytesTotalChange(value))

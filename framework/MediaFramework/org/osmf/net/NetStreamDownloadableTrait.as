@@ -32,10 +32,15 @@ package org.osmf.net
 	 */
 	public class NetStreamDownloadableTrait extends DownloadableTrait
 	{
-		// Since NetStream does not dispatch ProgressEvent, NetStreamDownloadabletrait
-		// will never be notified of the value change of bytesTotal. Therefore, 
-		// this class actually does not dispatch BytesTotalChangeEvent.
-		//
+		/**
+		 * Constructor
+		 * 
+		 * @param netStream The NetStream object to be used for the retrieval of bytesDownloaded and bytesTotal values
+		 *  
+		 * Since NetStream does not dispatch ProgressEvent, NetStreamDownloadabletrait
+		 * will never be notified of the value change of bytesTotal. Therefore, 
+		 * this class actually does not dispatch BytesTotalChangeEvent.
+		 */
 		public function NetStreamDownloadableTrait(netStream:NetStream)
 		{
 			super(NaN, NaN);

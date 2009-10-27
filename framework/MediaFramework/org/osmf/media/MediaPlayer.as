@@ -264,6 +264,13 @@ package org.osmf.media
 	[Event(name="loadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
 	/**
+	 * Dispatched when the <code>downloadable</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE
+	 */	
+	[Event(name="downaloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+		
+	/**
 	 * Dispatched when an error which impacts the operation of the media
 	 * player occurs.
 	 *
@@ -952,16 +959,22 @@ package org.osmf.media
 		
 		// IDownloadable
 				
+		/**
+		 * The number of bytes of the media that has been downloaded. When the underlying trait is absent, NaN is returned
+		 * 
+		 */		
 		public function get bytesDownloaded():Number
 		{
-			var downloadable:IDownloadable = getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-			return downloadable == null? NaN : downloadable.bytesDownloaded;
+			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesDownloaded : NaN;
 		}
 		
+		/**
+		 * The total number of bytes of the media that will be downloaded. When the underlying trait is absent, NaN is returned
+		 * 
+		 */		
 		public function get bytesTotal():Number
 		{
-			var downloadable:IDownloadable = getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-			return downloadable == null? NaN : downloadable.bytesDownloaded;
+			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesTotal : NaN;
 		}
 
 		// Internals

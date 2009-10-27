@@ -101,10 +101,10 @@ package org.osmf.audio
 		override public function load(loadable:ILoadable):void
 		{
 			super.load(loadable);
-			
-			updateLoadable(loadable, LoadState.LOADING);
-			
+						
 			var sound:Sound = new Sound();
+			var context:SoundLoadedContext = new SoundLoadedContext(sound);
+			updateLoadable(loadable, LoadState.LOADING, context);
 			toggleSoundListeners(sound, true);
 
 			var urlRequest:URLRequest = new URLRequest((loadable.resource as IURLResource).url.toString());
@@ -147,7 +147,7 @@ package org.osmf.audio
 				 
 				toggleSoundListeners(sound, false);
 
-				updateLoadable(loadable, LoadState.LOADED, new SoundLoadedContext(sound));
+				updateLoadable(loadable, LoadState.LOADED, context);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void

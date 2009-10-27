@@ -223,7 +223,14 @@ package org.osmf.video
 	    	addTrait(MediaTraitType.SPATIAL, spatial);
 	    	addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));
 	    	addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
-	    	addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
+
+			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
+			// NetStreamDownloadableTrait will only be added when it is a progressive video.
+			if (isProgressiveVideo(context))
+			{
+	    		addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
+	  		}
 	    	
 			var dynRes:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dynRes != null)
@@ -258,6 +265,7 @@ package org.osmf.video
     			NetClient(stream.client).removeHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    	
     			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
     		}
+    		
     		removeTrait(MediaTraitType.DOWNLOADABLE);
 
 	    		    		    	
@@ -268,6 +276,18 @@ package org.osmf.video
 			video = null;		
 		}
 
+		private function isProgressiveVideo(context:NetLoadedContext):Boolean
+		{
+			var protocol:String = context.resource.url.protocol;
+			
+			if (protocol == null || protocol.length <= 0)
+			{
+				return true;
+			}
+			
+			return (protocol.indexOf("rtmp") < 0);
+		}
+		
 		private function onMetaData(info:Object):void 
     	{   
     		if 	(	info.width != spatial.width
