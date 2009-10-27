@@ -27,6 +27,7 @@
 	<mx:Style source="CuePointSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.metadata.TemporalIdentifier;
 			import mx.collections.ArrayCollection;
 			import org.osmf.video.CuePoint;
 			import org.osmf.video.CuePointType;
@@ -64,7 +65,6 @@
 			[Bindable]
 			private var _cuePointsCollection:ArrayCollection;
 			
-		
 			private var videoElement:VideoElement;
 			
 			public static function timeCode(sec:Number):String 
@@ -99,7 +99,7 @@
 				}
 				
 				return typeStr;	
-			}
+			}			
 			
 			private function init():void
 			{
@@ -126,29 +126,11 @@
 				
 				// Listen for metadata to be removed so we remove an event listeners
 				videoElement.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onFacetRemove);
-				
-				
-				var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
 																
 				mediaPlayerWrapper.element = videoElement;
 				enablePlayerControls(true);
 				
 			}
-			
-			private function onLoadableStateChange(e:LoadableStateChangeEvent):void
-			{
-				switch(e.newState)
-				{
-					case LoadState.LOADED:
-						trace("media loaded");
-						var temporal:ITemporal = videoElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-						var meta:Metadata = videoElement.metadata;
-												
-						break;				
-				}
-			}
-			
 			
 			private function onCuePoint(event:TemporalFacetEvent):void
 			{
@@ -156,7 +138,7 @@
 				var ns:URL = (event.currentTarget as TemporalFacet).namespaceURL;
 								
 				// If we are getting embedded cue points, let's ignore the dynamic cue points coming from
-				// the framework, these are being dispatched from the list of cue points listed in the 
+				// the framework, these are being dispatched from the list of cue points found in the 
 				// metadata for the file.
 				if (ns == MetadataNamespaces.TEMPORAL_METADATA_EMBEDDED)
 				{
@@ -168,14 +150,17 @@
 					return;
 				}				
 
-				if (cuePoint.type == CuePointType.ACTIONSCRIPT || cuePoint.type == CuePointType.EVENT)
-				{
-					showCuePointEvent(cuePoint, ns);
-				}	
+				showCuePointEvent(cuePoint, ns);
 			}
 			
 			private function showCuePointEvent(cuePoint:CuePoint, ns:URL):void
 			{
+				// Don't show navigation cue points in the cue point event display
+				if (cuePoint.type == CuePointType.NAVIGATION)
+				{
+					return;
+				}
+				
 				var cuePointType:String = stringFromCuePointType(cuePoint.type);
 				
 				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePointType+"\", namespace: \""+ns.rawUrl+"\"";
@@ -187,7 +172,8 @@
 			private function autoScroll():void 
 			{
 				taCuePointEvents.verticalScrollPosition = taCuePointEvents.maxVerticalScrollPosition;
-			}									
+			}
+											
 			private function onDimensionChange(event:DimensionChangeEvent):void 
 			{
 				var width:int = event.newWidth;
@@ -287,7 +273,7 @@
    				
    				if (temporalFacet)
    				{
-   					trace(">> CuePoint facet removed, namespace="+temporalFacet.namespaceURL);
+   					trace(">>> Temporal facet removed, namespace="+temporalFacet.namespaceURL);
    					temporalFacet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
    				}
    			}
@@ -316,8 +302,25 @@
 			
 				var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, Number(tiCuePointTime.text), tiCuePointName.text, null);
 				_temporalFacet.addValue(cuePoint);
-				this._cuePointsCollection.addItem(cuePoint);
+				
+				updateInternalCollection(cuePoint);
+				
 				tiCuePointTime.text = tiCuePointName.text = "";
+			}
+			
+			private function updateInternalCollection(newCuePoint:CuePoint):void
+			{
+				// See if there is an existing value, if so replace it
+				for (var i:int = 0; i < _cuePointsCollection.length; i++)
+				{
+					if ((_cuePointsCollection[i] as TemporalIdentifier).time == newCuePoint.time)
+					{
+						_cuePointsCollection.removeItemAt(i);
+						break;
+					}
+				}
+				
+				_cuePointsCollection.addItem(newCuePoint);
 			}
 
 			private function onClickCuePoint(event:Event):void
@@ -334,12 +337,9 @@
 			{
 				playBtn.enabled = seekBar.enabled = enable;
 			}
-			
+						
 		]]>
 	</mx:Script>
-	
-	
-	
 	
 	<mx:VBox id="mainContainer" paddingLeft="20" paddingTop="10">
 		<mx:HBox width="100%">
@@ -361,7 +361,7 @@
 			<mx:Spacer width="10"/>
 			<mx:VBox backgroundColor="#333333" verticalGap="0">
 				<mx:Label text="Cue Points in the Media:" />
-				<mx:DataGrid id="gridCuePoints" dataProvider="{_cuePointsCollection}" height="265" width="250" click="onClickCuePoint(event)">
+				<mx:DataGrid id="gridCuePoints" dataProvider="{_cuePointsCollection}" height="265" width="250" itemClick="onClickCuePoint(event)">
 					<mx:columns>
 						<mx:DataGridColumn headerText="Time" dataField="time" textAlign="right" width="50" sortable="true" >
 							<mx:itemRenderer>
@@ -386,37 +386,24 @@
 		<mx:HBox>
 			<mx:VBox>
 				<mx:Label text="Cue Point Events:" />
-				<mx:TextArea id="taCuePointEvents" wordWrap="false" editable="false" width="480" height="120"/>
+				<mx:TextArea id="taCuePointEvents" wordWrap="false" editable="false" width="480" height="124"/>
 			</mx:VBox>
 			<mx:Spacer width="10" />
 			<mx:VBox>
 				<mx:Label text="Add a cue point:" />
-				<mx:VBox borderStyle="solid" paddingLeft="5" paddingTop="5" paddingRight="5" paddingBottom="5">
-				<!--
-					<mx:HBox>
-						<mx:Label text="Time:" />
-						<mx:TextInput id="tiCuePointTime" width="40" />
-						<mx:Label text="(seconds)"/>
-						<mx:Button label="Add" click="onClickAddCuePoint(event)"/>
-					</mx:HBox>
-					<mx:HBox>
-						<mx:Label text="Name:" />
-						<mx:TextInput id="tiCuePointName" />
-					</mx:HBox>
-				-->
-		        <mx:Form width="100%" height="100%">
-		            <mx:FormItem label="Time:">
-		            	<mx:HBox>
-						<mx:TextInput id="tiCuePointTime" width="40" />
-						<mx:Label text="(seconds)"/>		            		
-		            	</mx:HBox>
-		            </mx:FormItem>
-		            <mx:FormItem label="Name:">
-						<mx:TextInput id="tiCuePointName" />
-		            </mx:FormItem>
-					<mx:Button label="Add" click="onClickAddCuePoint(event)"/>		            
-		        </mx:Form>
-				
+				<mx:VBox borderStyle="solid" paddingLeft="2" paddingTop="2" height="124" width="250">
+			        <mx:Form width="100%" height="100%">
+			            <mx:FormItem label="Time:">
+			            	<mx:HBox>
+							<mx:TextInput id="tiCuePointTime" width="40" />
+							<mx:Label text="(seconds)"/>		            		
+			            	</mx:HBox>
+			            </mx:FormItem>
+			            <mx:FormItem label="Name:">
+							<mx:TextInput id="tiCuePointName" width="150" />
+			            </mx:FormItem>
+						<mx:Button label="Add" click="onClickAddCuePoint(event)"/>		            
+			        </mx:Form>
 				</mx:VBox>		
 			</mx:VBox>
 		</mx:HBox>
