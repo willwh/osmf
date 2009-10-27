@@ -21,9 +21,10 @@
 *****************************************************/
 package org.osmf.net
 {
-	import flash.events.IEventDispatcher;
+	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
+	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.traits.DownloadableTrait;
 
 	/**
@@ -37,15 +38,16 @@ package org.osmf.net
 		 * 
 		 * @param netStream The NetStream object to be used for the retrieval of bytesDownloaded and bytesTotal values
 		 *  
-		 * Since NetStream does not dispatch ProgressEvent, NetStreamDownloadabletrait
-		 * will never be notified of the value change of bytesTotal. Therefore, 
-		 * this class actually does not dispatch BytesTotalChangeEvent.
 		 */
 		public function NetStreamDownloadableTrait(netStream:NetStream)
 		{
 			super(NaN, NaN);
 			
 			_netStream = netStream;
+			if (isNaN(_netStream.bytesTotal) || _netStream.bytesTotal <= 0)
+			{
+				_netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			}
 		}
 		
 		/**
@@ -67,6 +69,15 @@ package org.osmf.net
 		//
 		// Internals
 		//
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (!isNaN(_netStream.bytesTotal) && _netStream.bytesTotal > 0)
+			{
+				dispatchEvent(new BytesTotalChangeEvent(0, _netStream.bytesTotal));
+				_netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			}
+		}
 		
 		private var _netStream:NetStream;	
 	}
