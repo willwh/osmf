@@ -43,11 +43,11 @@ package org.osmf
 	import org.osmf.tracking.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
-	import org.osmf.video.*;
 	import org.osmf.vast.*;
 	import org.osmf.vast.loader.*;
 	import org.osmf.vast.media.*;
 	import org.osmf.vast.parser.*;
+	import org.osmf.video.*;
 
 	public class MediaFrameworkTests extends TestSuite
 	{
@@ -57,7 +57,11 @@ package org.osmf
 						
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
-	
+
+			CONFIG::FLASH_10_1
+			{
+				addTestSuite(TestContentProtectable);
+			}
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
 			addTestSuite(TestLayoutRendererBase);
@@ -135,7 +139,7 @@ package org.osmf
 			
  			addTestSuite(TestVideoElement);
 			addTestSuite(TestNetClient);
-			
+
 			addTestSuite(TestNetStreamAudibleTrait);
 			addTestSuite(TestNetStreamBufferableTrait);
 			addTestSuite(TestNetStreamPlayableTrait);
@@ -214,9 +218,10 @@ package org.osmf
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
 			addTestSuite(TestVASTTrackingProxyElement);		
-			
+
 			addTestSuite(TestCuePoint);
 			addTestSuite(TestTemporalFacet);			
+
 		}
 	}
 }

@@ -19,13 +19,11 @@ package org.osmf.drm
 		import flash.system.SystemUpdater;
 		import flash.system.SystemUpdaterType;
 		import flash.utils.ByteArray;
-		import org.osmf.events.MediaErrorCodes;
-	
+		import org.osmf.events.MediaErrorCodes;	
 	}
-	
-	
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
+	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
 	 * Dispatched when username password  or token authentication is needed to playback.
@@ -57,11 +55,7 @@ package org.osmf.drm
 		 */ 
 		public function DRMServices()
 		{
-			var drmManager:DRMManager = DRMManager.getDRMManager();
-			drmManager.addEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
-			drmManager.addEventListener('loadVoucherComplete', authComplete);
-			drmManager.addEventListener('loadVoucherError', authError);
-			
+			drmManager = DRMManager.getDRMManager();
 		}
 		
 		/**
@@ -110,16 +104,13 @@ package org.osmf.drm
 		 */ 
 		public function authenticate(username:String, password:String):void
 		{			
-			if(drmContentData == null)
+			if (drmContentData == null)
 			{
-				throw new IllegalOperationError('Metadata not set');
+				throw new IllegalOperationError(MediaFrameworkStrings.DRM_METADATA_NOT_SET);
 			}
-			function authComplete(event:DRMAuthenticationCompleteEvent):void
-			{
-				retrieveVoucher();
-				drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
-			}
-			drmManager.addEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
+		
+			drmManager.addEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);			
+			drmManager.addEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);			
 			drmManager.authenticate(drmContentData.serverURL, drmContentData.domain, username, password);
 		}
 		
@@ -130,10 +121,11 @@ package org.osmf.drm
 		 */ 
 		public function authenticateWithToken(token:ByteArray):void
 		{
-			if(drmContentData == null)
+			if (drmContentData == null)
 			{
-				throw new IllegalOperationError('Metadata not set');
+				throw new IllegalOperationError(MediaFrameworkStrings.DRM_METADATA_NOT_SET);
 			}
+			
 			drmManager.setAuthenticationToken(drmContentData.serverURL, drmContentData.domain, token);
 			retrieveVoucher();
 		}
@@ -144,7 +136,14 @@ package org.osmf.drm
 		 */	
 		public function get startDate():Date
 		{
-			return voucher ? voucher.playbackTimeWindow.startDate : null;
+			if (voucher != null)
+			{
+				return voucher.playbackTimeWindow ? voucher.playbackTimeWindow.startDate : voucher.voucherStartDate;	
+			}
+			else
+			{
+				return null;
+			}			
 		}
 		
 		/**
@@ -153,16 +152,30 @@ package org.osmf.drm
 		 */	
 		public function get endDate():Date
 		{
-			return voucher ? voucher.playbackTimeWindow.endDate : null;
+			if (voucher != null)
+			{
+				return voucher.playbackTimeWindow ? voucher.playbackTimeWindow.endDate : voucher.voucherEndDate;	
+			}
+			else
+			{
+				return null;
+			}			
 		}
 		
 		/**
-		 * Returns the length of the playback window.  Returns null if authentication 
+		 * The length of the playback window in seconds.  Returns null if authentication 
 		 * hasn't taken place.
 		 */		
 		public function get period():int
 		{
-			return voucher ? voucher.playbackTimeWindow.period : -1;
+			if (voucher != null)
+			{
+				return voucher.playbackTimeWindow ? voucher.playbackTimeWindow.period : (voucher.voucherEndDate.time - voucher.voucherStartDate.time)/1000;	
+			}
+			else
+			{
+				return -1;
+			}		
 		}
 		
 		/**
@@ -171,74 +184,83 @@ package org.osmf.drm
 		private function retrieveVoucher():void
 		{		
 			drmManager.addEventListener("loadVoucherComplete", onVoucherLoaded);
-			drmManager.addEventListener("loadVoucherError", onVoucherError);
+			drmManager.addEventListener("loadVoucherError", onDRMError);
 			drmManager.addEventListener("drmStatus", onVoucherLoaded); //Same as "loadVoucherComplete"
 						
 			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.ALLOW_SERVER);
-							
-			function onVoucherLoaded(event:DRMStatusEvent):void
-			{							
-				if (event.isLocal)
-				{
-					verifyLocalVoucher(event.voucher);
-				}
-				else
-				{					
-					onValidVoucher(event.voucher);					
-				}
-			}
-			
-			function onVoucherError(event:DRMStatusEvent):void
-			{							
-				dispatchEvent(new AuthenticationFailedEvent(-1, event.detail));
-			}
-						
-			function verifyLocalVoucher(voucher:DRMVoucher):void
-			{
-				var now:Date = new Date();
-				if (voucher == null)
-				{
-					forceRefreshVoucher();
-				}
-				else
-				{
-					if ((voucher.voucherEndDate != null && voucher.voucherEndDate.valueOf() >= now.valueOf()) &&
-						(voucher.voucherStartDate != null && voucher.voucherStartDate.valueOf() <= now.valueOf()))
-					{
-						onValidVoucher(voucher);
-							
-					}
-					else
-					{
-						forceRefreshVoucher();
-					}
-				}
-			}
-			
-			function forceRefreshVoucher():void
-			{
-				drmManager.loadVoucher(drmContentData, LoadVoucherSetting.FORCE_REFRESH);
-			}
-			
-			function onDRMError(event:DRMErrorEvent):void
-			{
-				if (event.errorID == 3331)
-				{
-					forceRefreshVoucher();
-				}
-				else
-				{
-					dispatchEvent(new AuthenticationFailedEvent(event.errorID, event.text));
-				}
-			}
-			
-			function onValidVoucher(voucher:DRMVoucher):void
-			{
-				this.voucher = voucher;
-				dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
-			}
-			
+					
 		}
+		
+		private function onVoucherLoaded(event:DRMStatusEvent):void
+		{							
+			if (event.isLocal)
+			{
+				verifyLocalVoucher(event.voucher);
+			}
+			else
+			{					
+				onValidVoucher(event.voucher);					
+			}
+		}
+									
+		private function verifyLocalVoucher(voucher:DRMVoucher):void
+		{
+			var now:Date = new Date();
+			if (voucher == null)
+			{
+				forceRefreshVoucher();
+			}
+			else
+			{
+				if ((voucher.voucherEndDate != null && voucher.voucherEndDate.valueOf() >= now.valueOf()) &&
+					(voucher.voucherStartDate != null && voucher.voucherStartDate.valueOf() <= now.valueOf()))
+				{
+					onValidVoucher(voucher);
+						
+				}
+				else
+				{
+					forceRefreshVoucher();
+				}
+			}
+		}
+			
+		private function forceRefreshVoucher():void
+		{
+			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.FORCE_REFRESH);
+		}
+			
+		private function onDRMError(event:DRMErrorEvent):void
+		{
+			if (event.errorID == 3331)
+			{
+				forceRefreshVoucher();
+			}
+			else
+			{
+				removeEventListeners();				
+				dispatchEvent(new AuthenticationFailedEvent(event.errorID, event.text));
+			}
+		}
+		
+		private function onValidVoucher(voucher:DRMVoucher):void
+		{
+			removeEventListeners();
+			if(voucher == null)
+			{
+				throw new Error('null voucher');
+			}
+			this.voucher = voucher;
+			dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+		}
+			
+		private function removeEventListeners():void
+		{
+			drmManager.removeEventListener("loadVoucherComplete", onVoucherLoaded);
+			drmManager.removeEventListener("loadVoucherError", onDRMError);
+			drmManager.removeEventListener("drmStatus", onVoucherLoaded); //Same as "loadVoucherComplete"
+		}
+	
 		
 		private function onDRMConentData():void
 		{
@@ -255,20 +277,25 @@ package org.osmf.drm
 			}
 		}
 		
-		
-		private function authComplete(event:Event):void
+		private function authComplete(event:DRMAuthenticationCompleteEvent):void
 		{
-			dispatchEvent(new Event("authenticationComplete"));
-		}
-		
+			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
+			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
+	
+			retrieveVoucher();
+		}			
+				
 		private function authError(event:DRMAuthenticationErrorEvent):void
-		{			
+		{
+			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
+			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
+				
 			dispatchEvent(new AuthenticationFailedEvent(event.errorID, MediaErrorCodes.getDescriptionForErrorCode(event.errorID) ));
 		}
 		
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;
-		private var drmManager:DRMManager = DRMManager.getDRMManager();
+		private var drmManager:DRMManager;
 
 		}
 	}

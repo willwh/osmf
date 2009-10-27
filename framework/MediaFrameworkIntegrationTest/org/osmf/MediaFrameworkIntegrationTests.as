@@ -23,6 +23,7 @@ package org.osmf
 {
 	import flexunit.framework.TestSuite;
 	
+	import org.osmf.drm.TestDRMServices;
 	import org.osmf.image.TestImageElementIntegration;
 	import org.osmf.image.TestImageLoaderIntegration;
 	import org.osmf.media.TestMediaPlayer;
@@ -46,27 +47,33 @@ package org.osmf
 			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
-			
-			this.addTestSuite(TestMediaPlayer);
+		
+			addTestSuite(TestMediaPlayer);
 
-			this.addTestSuite(TestNetLoader);
+			addTestSuite(TestNetLoader);
 
-			this.addTestSuite(TestHTTPLoader);
+			addTestSuite(TestHTTPLoader);
 			
-			this.addTestSuite(TestVideoElement);
+			addTestSuite(TestVideoElement);
 			
 			// Tests that can't use mock objects, and are therefore only in the
 			// integration test suite:
 
-			this.addTestSuite(TestImageLoaderIntegration);
-			this.addTestSuite(TestImageElementIntegration);
+			addTestSuite(TestImageLoaderIntegration);
+			addTestSuite(TestImageElementIntegration);
 			
-			this.addTestSuite(TestSWFLoaderIntegration);
-			this.addTestSuite(TestSWFElementIntegration)
+			addTestSuite(TestSWFLoaderIntegration);
+			addTestSuite(TestSWFElementIntegration)
 			
-			this.addTestSuite(TestDynamicPluginLoaderIntegration);
+			addTestSuite(TestDynamicPluginLoaderIntegration);
 			
-			this.addTestSuite(TestPluginManagerIntegration);
+			addTestSuite(TestPluginManagerIntegration);
+			
+			CONFIG::FLASH_10_1
+			{
+				addTestSuite(TestDRMServices);
+			}
+			
 		}
 	}
 }

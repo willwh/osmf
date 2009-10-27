@@ -28,7 +28,7 @@ package org.osmf.video
 	CONFIG::FLASH_10_1
 	{
 	import flash.system.SystemUpdaterType;
-	import org.osmf.drm.DRMUpdater;	
+	import flash.system.SystemUpdater;
 	import flash.net.drm.DRMContentData;	
 	import flash.events.DRMStatusEvent;
 	import org.osmf.traits.IContentProtectable;
@@ -75,9 +75,12 @@ package org.osmf.video
 
 	import flash.utils.ByteArray;
 	import org.osmf.metadata.MetadataNamespaces;
-	
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.events.ErrorEvent;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.metadata.TemporalFacetEvent;
+
 	
 	/**
 	* VideoElement is a media element specifically created for video playback.
@@ -347,6 +350,14 @@ package org.osmf.video
     		
      	}
      	
+     	private function  onUpdateError(event:Event):void
+     	{     	    
+     		trace('DRMUpdate Error');
+     		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
+     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
+     	}
+     	
+     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
      	{
      		var error:MediaError = null;
@@ -376,9 +387,12 @@ package org.osmf.video
 					case NetStreamCodes.NETSTREAM_DRM_UPDATE:
 						trace('update requested');
 						//Start DRM library update:
-		     			var drmUpdater:DRMUpdater = DRMUpdater.getInstance();
+		     			var drmUpdater:SystemUpdater = new SystemUpdater();
 		     			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
-		     			drmUpdater.update(flash.system.SystemUpdaterType.DRM);   
+		     			drmUpdater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
+		     			drmUpdater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
+		     			drmUpdater.addEventListener(Event.CANCEL, onUpdateError);
+		     			drmUpdater.update(SystemUpdaterType.DRM);   
 		     			break;				
 	    		}
 			}
