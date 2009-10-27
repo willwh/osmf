@@ -78,7 +78,7 @@ package org.osmf.gateways
 			layoutRenderer = this.regionsLayoutRenderer; 
 		}
 		
-		// IRegion
+		// IContainerGateway
 		//
 		
 		/**
