@@ -37,7 +37,7 @@ package org.osmf.gateways
 	/**
 	 * RegionSprite defines a Sprite based IContainerGateway implementation.
 	 */	
-	public class RegionSprite extends LayoutContextSprite implements IContainerGateway
+	public class RegionGateway extends LayoutContextSprite implements IContainerGateway
 	{
 		/**
 		 * Constructor
@@ -54,7 +54,7 @@ package org.osmf.gateways
 		 * no renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
 		 */		
-		public function RegionSprite
+		public function RegionGateway
 							( metadata:Metadata=null
 							, contentLayoutRenderer:ILayoutRenderer=null
 							, regionsLayoutRenderer:ILayoutRenderer=null
@@ -263,7 +263,7 @@ package org.osmf.gateways
 		 * @param region The child region to add.
 		 * @throws IllegalOperationError if region is null, or already a sub-region.
 		 */		
-		public function addChildRegion(region:RegionSprite):void
+		public function addChildRegion(region:RegionGateway):void
 		{
 			if (region == null)
 			{
@@ -286,7 +286,7 @@ package org.osmf.gateways
 		 * @param region The region to remove.
 		 * @throws IllegalOperationErrror if region is null, or not a sub-region.
 		 */		
-		public function removeChildRegion(region:RegionSprite):void
+		public function removeChildRegion(region:RegionGateway):void
 		{
 			if (region == null)
 			{
@@ -310,7 +310,7 @@ package org.osmf.gateways
 		 * @return True if target is a sub-region of this RegionSprite.
 		 * 
 		 */		
-		public function containsRegion(region:RegionSprite):Boolean
+		public function containsRegion(region:RegionGateway):Boolean
 		{
 			return regionsLayoutRenderer.targets(region);
 		}

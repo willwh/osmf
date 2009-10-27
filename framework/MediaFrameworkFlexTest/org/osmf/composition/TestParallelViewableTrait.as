@@ -28,7 +28,7 @@ package org.osmf.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
@@ -51,7 +51,7 @@ package org.osmf.composition
 			me2Sprite.graphics.drawRect(0,0,200,200);
 			ViewableTrait(me2.getTrait(MediaTraitType.VIEWABLE)).view = me2Sprite;
 			
-			var region2:RegionSprite = new RegionSprite();
+			var region2:RegionGateway = new RegionGateway();
 			me2.gateway = region2;
 			
 			var me3:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
@@ -73,7 +73,7 @@ package org.osmf.composition
 			assertEquals(300, pvt.width);
 			assertEquals(300, pvt.height);
 			
-			var region3:RegionSprite = new RegionSprite();
+			var region3:RegionGateway = new RegionGateway();
 			
 			// Assigning me3 to a region should result in its size changing:
 			me3.gateway = region3;

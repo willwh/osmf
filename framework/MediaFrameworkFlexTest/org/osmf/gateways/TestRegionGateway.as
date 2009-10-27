@@ -36,11 +36,11 @@ package org.osmf.gateways
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
-	public class TestRegionSprite extends TestCase
+	public class TestRegionGateway extends TestCase
 	{
 		public function testRegionElements():void
 		{
-			var parent:RegionSprite = new RegionSprite();
+			var parent:RegionGateway = new RegionGateway();
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
@@ -77,13 +77,13 @@ package org.osmf.gateways
 		
 		public function testRegionSubRegions():void
 		{
-			var parent:RegionSprite = new RegionSprite();
+			var parent:RegionGateway = new RegionGateway();
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
 			
-			var sub1:RegionSprite = new RegionSprite();
-			var sub2:RegionSprite = new RegionSprite();
+			var sub1:RegionGateway = new RegionGateway();
+			var sub2:RegionGateway = new RegionGateway();
 			
 			assertNotNull(parent);
 			assertFalse(parent.containsRegion(sub1));
@@ -130,7 +130,7 @@ package org.osmf.gateways
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 
-			var region:RegionSprite = new RegionSprite();
+			var region:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
 			
 			region.addElement(mediaElement);
@@ -146,7 +146,7 @@ package org.osmf.gateways
 		
 		public function testRegionAttributes():void
 		{
-			var region:RegionSprite = new RegionSprite();
+			var region:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 500, 400);
 			
 			assertEquals(NaN,region.backgroundColor);
@@ -168,10 +168,10 @@ package org.osmf.gateways
 		
 		public function testNestedRegions():void
 		{
-			var root:RegionSprite = new RegionSprite();
-			var childA:RegionSprite = new RegionSprite();
-			var childA1:RegionSprite = new RegionSprite();
-			var childA1A:RegionSprite = new RegionSprite();
+			var root:RegionGateway = new RegionGateway();
+			var childA:RegionGateway = new RegionGateway();
+			var childA1:RegionGateway = new RegionGateway();
+			var childA1A:RegionGateway = new RegionGateway();
 			
 			root.addChildRegion(childA);
 			childA.addChildRegion(childA1);

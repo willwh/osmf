@@ -28,7 +28,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -85,20 +85,20 @@ package
 			
 			// Consruct a tree of regions:
 
-			var mainRegion:RegionSprite = new RegionSprite();
+			var mainRegion:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 800, 450);
 			mainRegion.backgroundColor = 0xFFFFFF;
 			mainRegion.backgroundAlpha = .2;
 			addChild(mainRegion);
 			
-				var bannerRegion:RegionSprite = new RegionSprite();
+				var bannerRegion:RegionGateway = new RegionGateway();
 				bannerRegion.backgroundColor = 0xFF;
 				bannerRegion.backgroundAlpha = .2;
 				LayoutUtils.setAnchorLayout(bannerRegion.metadata, 5, 5, 5, NaN);
 				LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, NaN, 60);
 				mainRegion.addChildRegion(bannerRegion);
 				
-				var skyScraperRegion:RegionSprite = new RegionSprite();
+				var skyScraperRegion:RegionGateway = new RegionGateway();
 				skyScraperRegion.backgroundColor = 0xFF00;
 				skyScraperRegion.backgroundAlpha = .2;
 				LayoutUtils.setAnchorLayout(skyScraperRegion.metadata, NaN, 5, 5, 5);

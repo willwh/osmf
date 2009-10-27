@@ -25,7 +25,7 @@ package org.osmf.composition
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.DynamicMediaElement;
@@ -62,7 +62,7 @@ package org.osmf.composition
 			assertEquals(100, svt.height);
 			
 			// Making me1 go to a region should change the dimension:
-			var region:RegionSprite = new RegionSprite();
+			var region:RegionGateway = new RegionGateway();
 			me1.gateway = region;
 			
 			// With me1 out, we should be 0x0 - our view being ignored.

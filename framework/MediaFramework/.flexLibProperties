@@ -91,7 +91,7 @@
     <classEntry path="org.osmf.events.VolumeChangeEvent"/>
     <classEntry path="org.osmf.gateways.HTMLGateway"/>
     <classEntry path="org.osmf.gateways.HTMLGatewayElementProxy"/>
-    <classEntry path="org.osmf.gateways.RegionSprite"/>
+    <classEntry path="org.osmf.gateways.RegionGateway"/>
     <classEntry path="org.osmf.html.HTMLElement"/>
     <classEntry path="org.osmf.html.HTMLLoadableTrait"/>
     <classEntry path="org.osmf.image.ImageElement"/>

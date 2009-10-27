@@ -71,7 +71,7 @@ package org.osmf
 			addTestSuite(TestRelativeLayoutFacet);
 			addTestSuite(TestLayoutUtils);
 			
-			addTestSuite(TestRegionSprite);
+			addTestSuite(TestRegionGateway);
 			addTestSuite(TestHTMLGateway);
 			addTestSuite(TestSerialViewableTrait);
 			addTestSuite(TestParallelViewableTrait);

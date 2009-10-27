@@ -31,7 +31,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -94,20 +94,20 @@ package
 			
 			// Consruct 3 regions:
 
-			var bannerRegion:RegionSprite = new RegionSprite();
+			var bannerRegion:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, 600, 70);
 			bannerRegion.backgroundColor = 0xFF0000;
 			bannerRegion.backgroundAlpha = .2;
 			addChild(bannerRegion);
 			
-			var mainRegion:RegionSprite = new RegionSprite();
+			var mainRegion:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 600, 400);
 			mainRegion.backgroundColor = 0xFFFFFF;
 			mainRegion.backgroundAlpha = .2;
 			mainRegion.y = 80;
 			addChild(mainRegion);
 			
-			var skyScraperRegion:RegionSprite = new RegionSprite();
+			var skyScraperRegion:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, 600);
 			skyScraperRegion.backgroundColor = 0xFF00;
 			skyScraperRegion.backgroundAlpha = .2;
@@ -138,7 +138,7 @@ package
 			// if we click the top banner, let's have it moved to this region, and
 			// vice-versa:
 			
-			var bottomBannerRegion:RegionSprite = new RegionSprite();
+			var bottomBannerRegion:RegionGateway = new RegionGateway();
 			LayoutUtils.setAbsoluteLayout(bottomBannerRegion.metadata, 600, 70);
 			bottomBannerRegion.backgroundColor = 0xFF;
 			bottomBannerRegion.backgroundAlpha = .2;
