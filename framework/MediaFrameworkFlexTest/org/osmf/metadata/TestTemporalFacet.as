@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
+*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
+*  Technologies, Inc. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.metadata
 {
 	import __AS3__.vec.Vector;
@@ -15,6 +36,7 @@ package org.osmf.metadata
 	import org.osmf.traits.IPausable;
 	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.ISeekable;
+	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
@@ -141,14 +163,25 @@ package org.osmf.metadata
 			var pausable:IPausable = videoElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
 			assertTrue(pausable != null);
 			
+			var temporal:ITemporal = videoElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertTrue(temporal != null);
+			
+			var positionReachedCount:int = 0;
+			
 			function onPositionReached(event:TemporalFacetEvent):void
 			{
-				trace("onPositionReached() - event.value.time = "+(event.value as TemporalIdentifier).time);
+				positionReachedCount++;
 				
 				var newEvent:TemporalFacetEvent = event.clone() as TemporalFacetEvent;
 				assertNotNull(newEvent);
 				
-				if ((event.value as TemporalIdentifier).time == 3)
+				// The time should be within .5 seconds of the playhead position
+				var timeValue:Number = (event.value as TemporalIdentifier).time;
+				var playheadPosition:Number = temporal.position;
+				trace("onPositionReached() - event.value.time = "+timeValue+", playhead position="+playheadPosition);
+				assertTrue((playheadPosition >= (timeValue - .5)) && (playheadPosition <= (timeValue + .5)));
+				
+				if (positionReachedCount == 3)
 				{
 					facet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
 					pausable.pause();

@@ -214,6 +214,9 @@ package org.osmf
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
 			addTestSuite(TestVASTTrackingProxyElement);		
+			
+			addTestSuite(TestCuePoint);
+			addTestSuite(TestTemporalFacet);			
 		}
 	}
 }

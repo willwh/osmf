@@ -47,5 +47,8 @@ package org.osmf.metadata
 		public static const LAYOUT_ATTRIBUTES: URL 			= new URL("http://www.openvideoplayer.org/layout/attributes");
 		
 		public static const ELEMENT_ID: URL 				= new URL("http://www.openvideoplayer.org/elementId");
+		
+		public static const TEMPORAL_METADATA_EMBEDDED:URL	= new URL("http://www.openvideoplayer.org/temporal/embedded");
+		public static const TEMPORAL_METADATA_DYNAMIC:URL	= new URL("http://www.openvideoplayer.org/temporal/dynamic");		
 	}
 }

@@ -76,10 +76,8 @@ package org.osmf.video
 	import flash.utils.ByteArray;
 	import org.osmf.metadata.MetadataNamespaces;
 	
-
-
-	
-
+	import org.osmf.metadata.TemporalFacet;
+	import org.osmf.metadata.TemporalFacetEvent;
 	
 	/**
 	* VideoElement is a media element specifically created for video playback.
@@ -166,6 +164,7 @@ package org.osmf.video
 			
 			// Hook up our metadata listeners
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_CUE_POINT, onCuePoint);
 						
 			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 						
@@ -280,7 +279,38 @@ package org.osmf.video
     				
 				spatial.setDimensions(info.width, info.height);
     		}
+    		
+			var cuePoints:Array = info.cuePoints;
+			
+			if (cuePoints != null && cuePoints.length > 0)
+			{
+				if (_temporalFacetDynamic == null)
+				{
+					_temporalFacetDynamic = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC, this);
+				}
+				
+				for (var i:int = 0; i < cuePoints.length; i++)
+				{
+					var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(cuePoints[i].type), cuePoints[i].time, 
+																					cuePoints[i].name, cuePoints[i].parameters);
+					_temporalFacetDynamic.addValue(cuePoint);
+				}
+				
+				metadata.addFacet(_temporalFacetDynamic);			
+			}			    		
      	}
+     	
+     	private function onCuePoint(info:Object):void
+     	{
+     		if (_temporalFacetEmbedded == null)
+     		{
+				_temporalFacetEmbedded = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_EMBEDDED, this);
+				metadata.addFacet(_temporalFacetEmbedded);
+     		}
+
+			var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(info.type), info.time, info.name, info.parameters);
+			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, cuePoint));     		
+     	}     	
      	     	
      	private function onContentData(data:Object):void
      	{
@@ -346,6 +376,8 @@ package org.osmf.video
      	
      	private var video:Video;	 
 	    private var spatial:SpatialTrait;
+		private var _temporalFacetDynamic:TemporalFacet;	// facet for cue points found in the onMetaData callback
+		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream
+		    
 	}
 }
-
