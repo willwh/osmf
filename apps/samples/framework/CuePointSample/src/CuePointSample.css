@@ -1,0 +1,61 @@
+
+global {
+	color: #ffffff;
+	fontFamily: "Verdana";
+	fontSize: 11px;
+	fontWeight: normal;
+	disabledColor: #3d3d3d;
+}
+
+.title {
+	fontSize: 20px;
+}
+
+.timeCode {
+	fontSize: 10px;
+	color: #999999;
+}
+
+.error {
+	fontSize: 10px;
+	color: #FF1111;
+}
+
+Label {
+	fontSize: 10px;
+	color: #aaaaaa;
+}
+
+ComboBox {
+	color: #333333;
+	themeColor: "haloSilver";
+}
+
+
+Button {
+	themeColor: "haloSilver";
+}
+
+TextInput {
+	color: #000000;
+}
+
+TextArea {
+	color: #111111;
+	disabledColor: #111111;
+}
+
+HSlider {
+	themeColor: "haloSilver";
+    dataTipStyleName: "dataTip";
+    dataTipOffset: 6;
+}
+
+.dataTip {
+    backgroundColor: black;
+}
+
+DataGrid {
+	color: #333333;
+	themeColor: "haloSilver";
+}
