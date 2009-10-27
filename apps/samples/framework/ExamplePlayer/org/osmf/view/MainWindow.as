@@ -255,6 +255,15 @@ package org.osmf.view
 				seekBar.maximum = 0;
 			}
 			
+			if (mediaPlayerWrapper.mediaPlayer.downloadable)
+			{
+				bytesTotal.text = "" + mediaPlayerWrapper.mediaPlayer.bytesTotal;
+			}
+			else
+			{
+				bytesTotal.text = "";
+			}
+			
 			if (mediaPlayerWrapper.mediaPlayer.bufferable)
 			{
 				bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
