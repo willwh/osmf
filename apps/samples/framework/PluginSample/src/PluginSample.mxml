@@ -29,6 +29,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.content.ContentElement;
 			import org.osmf.audio.AudioElement;
 			import org.osmf.metadata.*;
 			import org.osmf.logging.flex.FlexLogWrapper;
@@ -251,7 +252,9 @@
 				else
 				{
 					wrapper.element = mediaElement;
-					if (mediaElement is VideoElement || mediaElement is AudioElement)
+					if (mediaElement is VideoElement || 
+						mediaElement is AudioElement ||
+						mediaElement is ContentElement)
 					{
 						var downloadable:IDownloadable = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 						if (downloadable != null)

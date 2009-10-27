@@ -29,6 +29,7 @@ package org.osmf.model
 	import org.osmf.media.*;
 	import org.osmf.net.*;
 	import org.osmf.plugin.*;
+	import org.osmf.swf.*;
 	import org.osmf.traits.*;
 	import org.osmf.video.*;
 	
@@ -71,6 +72,15 @@ package org.osmf.model
 					( "Standard audio element"
 					, loader as IMediaResourceHandler
 					, createAudioElement
+					)
+				);
+				
+			loader = new SWFLoader();
+			mediaFactory.addMediaInfo
+				( new MediaInfo
+					( "Standard SWF element"
+					, loader as IMediaResourceHandler
+					, createSWFElement
 					)
 				);
 			
@@ -132,6 +142,11 @@ package org.osmf.model
 		private function createAudioElement():MediaElement
 		{
 			return new AudioElement(new SoundLoader());
+		}
+		
+		private function createSWFElement():MediaElement
+		{
+			return new SWFElement(new SWFLoader());
 		}
 
 		private function initResourceHandlers():void
