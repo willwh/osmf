@@ -32,9 +32,8 @@ package org.osmf.video
 	import flash.net.drm.DRMContentData;	
 	import flash.events.DRMStatusEvent;
 	import org.osmf.traits.IContentProtectable;
-	import org.osmf.net.NetContentProtectableTrait;
+	import org.osmf.net.NetStreamContentProtectableTrait;
 	import flash.events.DRMErrorEvent;
-	import org.osmf.net.NetContentProtectableTrait;
 	import flash.events.DRMAuthenticateEvent;
 	import org.osmf.metadata.KeyValueFacet;
 	import flash.events.DRMStatusEvent;
@@ -215,16 +214,16 @@ package org.osmf.video
 	    		}
 	  		}	
 			
-			private function createProtectableTrait():NetContentProtectableTrait
+			private function createProtectableTrait():NetStreamContentProtectableTrait
 			{				
-				var protectableTrait:NetContentProtectableTrait = new NetContentProtectableTrait();		    	
+				var protectableTrait:NetStreamContentProtectableTrait = new NetStreamContentProtectableTrait();		    	
 		    	addTrait(MediaTraitType.CONTENT_PROTECTABLE, protectableTrait);	
 		    	return protectableTrait;	    			
 			}	
 			
 			private function addProtectableTrait(contentData:ByteArray):IContentProtectable
 			{			
-	    		var trait:NetContentProtectableTrait = createProtectableTrait();
+	    		var trait:NetStreamContentProtectableTrait = createProtectableTrait();
 			   	trait.metadata = contentData;
 			   	return trait;
 			}
@@ -233,7 +232,7 @@ package org.osmf.video
 			{
 				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  //Needs authentication
 				{
-					NetContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
+					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
 				}
 				else
 				{					
