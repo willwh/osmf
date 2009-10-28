@@ -86,6 +86,7 @@ package org.osmf.video
 	import flash.events.DRMErrorEvent;
 	import org.osmf.traits.IContentProtectable;
 	import org.osmf.net.NetStreamContentProtectableTrait;
+	import org.osmf.events.AuthenticationFailedEvent;
 	
 	
 	/**
@@ -189,6 +190,7 @@ package org.osmf.video
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
     				addProtectableTrait(metadata).addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
+    				
     				return;  //Don't add traits until the "auth" has completed. 			
 	    		}
 	    		else
@@ -229,13 +231,13 @@ package org.osmf.video
 							
 			private function onDRMErrorEvent(event:DRMErrorEvent):void
 			{
-				if (event.errorID == 3330)  //Needs authentication
+				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  //Needs authentication
 				{
 					NetContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
 				}
 				else
 				{					
-					dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error playing back protected content: " + event.text , event.errorID));
+					dispatchEvent(new MediaErrorEvent(new MediaError(event.errorID)));
 				}				
 			}	
 			
