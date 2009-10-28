@@ -146,8 +146,8 @@ package org.osmf.utils
 		// DRM
 		
 		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
-
 		public static const DRM_METADATA_NOT_SET:String					= "Metadata not set on DRMServies";
+		public static const DRM_STATUS_CODE:String 						= "DRM.encryptedFLV";
 		
 		// Downloadable
 		

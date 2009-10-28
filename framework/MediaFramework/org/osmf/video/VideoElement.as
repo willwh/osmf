@@ -34,10 +34,10 @@ package org.osmf.video
 	import org.osmf.traits.IContentProtectable;
 	import org.osmf.net.NetContentProtectableTrait;
 	import flash.events.DRMErrorEvent;
-	import org.osmf.events.TraitEvent;
-	import flash.events.DRMErrorEvent;
+	import org.osmf.net.NetContentProtectableTrait;
 	import flash.events.DRMAuthenticateEvent;
 	import org.osmf.metadata.KeyValueFacet;
+	import flash.events.DRMStatusEvent;
 	import org.osmf.metadata.ObjectIdentifier;
 	}
 	
@@ -80,7 +80,13 @@ package org.osmf.video
 	import flash.events.ErrorEvent;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.metadata.TemporalFacetEvent;
-
+	
+	import org.osmf.events.TraitEvent;
+	import flash.events.StatusEvent;
+	import flash.events.DRMErrorEvent;
+	import org.osmf.traits.IContentProtectable;
+	import org.osmf.net.NetContentProtectableTrait;
+	
 	
 	/**
 	* VideoElement is a media element specifically created for video playback.
@@ -173,40 +179,79 @@ package org.osmf.video
 						
 			CONFIG::FLASH_10_1
     		{
-    			trace('Adding ON_DRM_CONTENT_DATA');
-    			NetClient(stream.client).addHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    
+    			//Listen for all errors
+    			stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
+    			
+    			    			 			
+    			//DRMContent data Sidecar
     			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
-    				addProtectableTrait(metadata);
-	    			return; //don't finish load until the auth has taken place.
+    				addProtectableTrait(metadata).addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
+    				return;  //Don't add traits until the "auth" has completed. 			
+	    		}
+	    		else
+	    		{
+	    			//Non sidecar
+    				stream.addEventListener(StatusEvent.STATUS, onContentData);
 	    		}			
     		}
 			finishLoad();			
 		}
 		
-		private function addProtectableTrait(contentData:ByteArray):void
-		{
-			CONFIG::FLASH_10_1
-    		{
-			var protectableTrait:NetContentProtectableTrait = new NetContentProtectableTrait();
-	    	protectableTrait.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuth);
-	    	addTrait(MediaTraitType.CONTENT_PROTECTABLE, protectableTrait);
-	    	stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);		
-	    	protectableTrait.metadata = contentData;
-	    	}
+		//DRM API's
+		CONFIG::FLASH_10_1
+    	{
+	    			
+			private function onContentData(event:StatusEvent):void
+			{				
+				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
+					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
+				{			
+					createProtectableTrait().addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onInlineAuth);  					
+	    		}
+	  		}	
+			
+			private function createProtectableTrait():NetContentProtectableTrait
+			{				
+				var protectableTrait:NetContentProtectableTrait = new NetContentProtectableTrait();		    	
+		    	addTrait(MediaTraitType.CONTENT_PROTECTABLE, protectableTrait);	
+		    	return protectableTrait;	    			
+			}	
+			
+			private function addProtectableTrait(contentData:ByteArray):IContentProtectable
+			{			
+	    		var trait:NetContentProtectableTrait = createProtectableTrait();
+			   	trait.metadata = contentData;
+			   	return trait;
+			}
+							
+			private function onDRMErrorEvent(event:DRMErrorEvent):void
+			{
+				if (event.errorID == 3330)  //Needs authentication
+				{
+					NetContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
+				}
+				else
+				{					
+					dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error playing back protected content: " + event.text , event.errorID));
+				}				
+			}	
+			
+			//Netstream needs to be recreated if credential based auth is needed.
+			private function onInlineAuth(event:Event):void
+			{			
+				(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
+	    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+			}
+			
+			private function onMetadataAuth(event:Event):void
+			{
+				finishLoad();	
+			}	
 		}
-				
-		private function onDRMErrorEvent(event:Event):void
-		{
-			trace('drm error');
-		}
-		
-		private function onAuth(event:Event):void
-		{
-			finishLoad();
-		}
+			
 		
 		private function finishLoad():void
 		{
@@ -263,9 +308,9 @@ package org.osmf.video
 
 	    	
 	    	CONFIG::FLASH_10_1
-    		{
-    			trace('Removing ON_DRM_CONTENT_DATA');
-    			NetClient(stream.client).removeHandler(NetStreamCodes.ON_DRM_CONTENT_DATA, onContentData);    	
+    		{    			
+    			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
+    			stream.removeEventListener(StatusEvent.STATUS, onContentData);
     			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
     		}
     		
@@ -335,29 +380,19 @@ package org.osmf.video
 			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, cuePoint));     		
      	}     	
      	     	
-     	private function onContentData(data:Object):void
-     	{
-     		trace('DRM - onContentData');
-     		addProtectableTrait(data as ByteArray);
-     	}
-     	
-     	//fired when the drm subsystem is updated.
+     	//fired when the drm subsystem is updated.  NetStream needs to be recreated.
      	private function onUpdateComplete(event:Event):void
-     	{
-     		trace('DRM - onUpdateComplete');
+     	{     		
     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();		
-    		
      	}
      	
      	private function  onUpdateError(event:Event):void
-     	{     	    
-     		trace('DRMUpdate Error');
+     	{     	
      		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
      		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
      	}
-     	
-     	
+     	     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
      	{
      		var error:MediaError = null;
@@ -385,8 +420,6 @@ package org.osmf.video
 				switch (event.info.code)
 				{
 					case NetStreamCodes.NETSTREAM_DRM_UPDATE:
-						trace('update requested');
-						//Start DRM library update:
 		     			var drmUpdater:SystemUpdater = new SystemUpdater();
 		     			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
 		     			drmUpdater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);

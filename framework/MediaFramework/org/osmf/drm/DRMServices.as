@@ -24,6 +24,7 @@ package org.osmf.drm
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.utils.MediaFrameworkStrings;
+	import flash.net.drm.DRMContentData;
 	
 	/**
 	 * Dispatched when username password  or token authentication is needed to playback.
@@ -60,7 +61,8 @@ package org.osmf.drm
 		
 		/**
 		 * The metadata property is specific to the DRM for the Flashplayer.  Once set, authentication
-		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  
+		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  metadta
+		 * forms the basis for content data.
 		 */ 
 		public function set metadata(value:ByteArray):void
 		{			
@@ -81,6 +83,16 @@ package org.osmf.drm
 				updater.addEventListener(Event.COMPLETE, onComplete);
 				updater.update(SystemUpdaterType.DRM);				
 			}
+		}
+		
+		/**
+		 * The metadata property is specific to the DRM for the Flashplayer.  Once set, authentication
+		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  
+		 */ 
+		public function set contentData(value:DRMContentData):void
+		{		
+			drmContentData = value;
+			onDRMConentData();
 		}
 					
 		/**

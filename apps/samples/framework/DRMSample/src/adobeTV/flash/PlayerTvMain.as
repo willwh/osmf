@@ -27,7 +27,6 @@
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
 	import flash.filters.DropShadowFilter;
-	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
 	import flash.system.Capabilities;
 	import flash.text.TextFormat;
@@ -570,7 +569,7 @@
 		private function createLeft():void
 		{
 			var ypos:Number = 2;
-			rwd_btn  = PlayerTvMain.buttonCreate("Rewind", "rwd",22, "rwd_icon" ,containLeft, ypos,clicked);
+			rwd_btn  = PlayerTvMain.buttonCreate("Rewind", "rwd",22, "rwd_icon" ,containLeft, ypos,onRewind);
 			play_btn  = PlayerTvMain.buttonCreate("Play", "play", 40, "play_icon", containLeft, ypos, playPauseClicked);
 			play_btn.label = "";
 			elapsed = new ElapsedTime();	
@@ -736,12 +735,14 @@
 						containVideo.removeChild(closedCapTxt);
 					}
 				break;
-				
-				case "rwd":
-					playSeek(0);
-				break;
+								
 			}
 			
+		}
+		
+		private function onRewind(event:Event):void
+		{
+			playSeek(0);
 		}
 		
 		/**

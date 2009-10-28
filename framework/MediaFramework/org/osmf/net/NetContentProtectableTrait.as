@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.net
 {
 	import flash.events.Event;
@@ -6,11 +27,13 @@ package org.osmf.net
 	CONFIG::FLASH_10_1
 	{
 	import org.osmf.drm.DRMServices;
+	import flash.net.drm.DRMContentData;
 	}
 	
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.traits.ContentProtectableTrait;
+
     
     /**
      * NetStream specific protected content trait.
@@ -37,6 +60,14 @@ package org.osmf.net
 		public function set metadata(value:ByteArray):void
 		{
 			drmServices.metadata = value;
+		}
+					
+		/**
+		 * 	DRMContentData that has been previously constructed
+		 */
+		public function set contentData(value:DRMContentData):void
+		{
+			drmServices.contentData = value;
 		}
 				
 		/**
