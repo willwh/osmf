@@ -39,6 +39,7 @@ package org.osmf.metadata
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
+	import org.osmf.composition.CompositeElement;
 	
 	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
 	[Event (name="durationReached", type="org.osmf.metadata.TemporalFacetEvent")]
@@ -456,6 +457,7 @@ package org.osmf.metadata
 			{
 				case MediaTraitType.TEMPORAL:
 					_temporal = _owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+					startTimer();
 					break;
 				case MediaTraitType.SEEKABLE:
 					_seekable = _owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
@@ -476,11 +478,23 @@ package org.osmf.metadata
 		 */
 		private function onTraitRemove(event:TraitsChangeEvent):void
 		{
+			// Remove any event listeners
+			setupTraitEventListener(event.traitType, false);
+
 			switch (event.traitType)
 			{
 				case MediaTraitType.TEMPORAL:
 					_temporal = null;
-					startTimer(false);
+					// This is a work around for FM-171. Traits are added and removed for
+					// each child in a composition element when transitioning between child
+					// elements. So don't stop the timer if the owner is a composition.
+					//
+					// $$$todo: remove this 'if' statement and the import for
+					// 'org.osmf.composition.CompositeElement' when FM-171 is fixed.
+					if (!(_owner is CompositeElement))
+					{
+						startTimer(false);
+					}
 					break;
 				case MediaTraitType.SEEKABLE:
 					_seekable = null;
@@ -492,8 +506,6 @@ package org.osmf.metadata
 					_playable = null;
 					break;
 			}
-			
-			setupTraitEventListener(event.traitType, false);
 		}
 			
 		private static const _DEFAULT_INTERVAL_:Number = 100;	// The default interval (in milliseconds) at which 

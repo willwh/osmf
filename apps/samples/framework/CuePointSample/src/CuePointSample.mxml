@@ -169,6 +169,16 @@
 				callLater(autoScroll);
 			}
 			
+			private function onClickClearEvents(event:Event):void
+			{
+				taCuePointEvents.text = "";
+			}
+			
+			private function onClickInsertMarker(event:Event):void
+			{
+				taCuePointEvents.text += "--------------------------------------------------------------------------\n";	
+			}	
+					
 			private function autoScroll():void 
 			{
 				taCuePointEvents.verticalScrollPosition = taCuePointEvents.maxVerticalScrollPosition;
@@ -387,6 +397,10 @@
 			<mx:VBox>
 				<mx:Label text="Cue Point Events:" />
 				<mx:TextArea id="taCuePointEvents" wordWrap="false" editable="false" width="480" height="124"/>
+				<mx:HBox>
+					<mx:Button label="Clear" click="onClickClearEvents(event)"/>
+					<mx:Button label="Insert Marker" click="onClickInsertMarker(event)"/>
+				</mx:HBox>
 			</mx:VBox>
 			<mx:Spacer width="10" />
 			<mx:VBox>
