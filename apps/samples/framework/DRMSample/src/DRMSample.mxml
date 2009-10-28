@@ -8,7 +8,6 @@
 		<![CDATA[
 			import ui.UpdateDialog;
 			import ui.AuthDialog;
-			import org.osmf.drm.DRMUpdater;
 			import mx.managers.PopUpManager;
 			import org.osmf.events.LoadableStateChangeEvent;
 			import org.osmf.traits.ILoadable;
@@ -37,19 +36,19 @@
 			private var connection:NetConnection = new NetConnection();
 			private var stream:NetStream;
 			private var video:Video;
-			
-			private var updater:DRMUpdater = DRMUpdater.getInstance();
+						
 			private var voucherLoader:URLLoader;
 			private var contentData:DRMContentData;
 			
 			private function init():void
 			{	
+				/*
 				updater.addEventListener(Event.OPEN, startUpdate);
 				updater.addEventListener(Event.CANCEL, finishUpdate);
 				updater.addEventListener(IOErrorEvent.IO_ERROR, finishUpdate);
 				updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, finishUpdate);
 				updater.addEventListener(Event.COMPLETE, finishUpdate);
-					
+				*/	
 				
 							
 				voucherLoader = new URLLoader();

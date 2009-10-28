@@ -3,7 +3,6 @@ package ui
 	import mx.core.UIComponent;
 	
 	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.gateways.RegionSprite;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
