@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.media
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -28,6 +30,8 @@ package org.osmf.media
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.BytesDownloadedChangeEvent;
+	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.events.MediaError;
@@ -43,9 +47,12 @@ package org.osmf.media
 	import org.osmf.events.SwitchingChangeEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.events.VolumeChangeEvent;
+	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.MockMediaElementWithDownloadableTrait;
 	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayer extends TestCase
@@ -59,6 +66,7 @@ package org.osmf.media
 			mediaPlayer.autoPlay = false;
 			mediaPlayer.autoRewind = false;
 			eventDispatcher = new EventDispatcher();
+			events = new Vector.<Event>();
 
 			super.setUp();
 		}
@@ -1209,6 +1217,52 @@ package org.osmf.media
 			}
 		}
 		
+		public function testDownloadable():void
+		{
+			var mediaElement:MockMediaElementWithDownloadableTrait 
+				= new MockMediaElementWithDownloadableTrait(new LoaderBase());
+				
+			mediaPlayer.autoPlay = false;
+			mediaPlayer.source = mediaElement;
+			
+			assertTrue(mediaPlayer.downloadable == false);
+			assertTrue(isNaN(mediaPlayer.bytesDownloaded));
+			assertTrue(isNaN(mediaPlayer.bytesTotal));
+			
+			mediaPlayer.addEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+			
+			mediaElement.prepareForTesting();
+			assertTrue(mediaPlayer.downloadable == true);
+			
+			var downloadable:DownloadableTrait = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as DownloadableTrait;
+			assertTrue(downloadable != null);
+			downloadable.bytesTotal = 100;
+			downloadable.bytesDownloaded = 10;
+			downloadable.bytesTotal = 100;
+			
+			assertTrue(mediaPlayer.bytesDownloaded == 10);
+			assertTrue(mediaPlayer.bytesTotal == 100);
+			
+			mediaPlayer.removeEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, eventCatcher);
+			mediaPlayer.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+
+			assertTrue(events.length > 0);
+			var bytesTotalChangeCount:int = 0;
+			for (var i:int; i < events.length; i++)
+			{
+				if (events[i] is BytesTotalChangeEvent)
+				{
+					bytesTotalChangeCount++;
+					assertTrue(bytesTotalChangeCount == 1);
+				}
+				else
+				{
+					assertTrue(events[i] is BytesDownloadedChangeEvent);
+				}
+			}			
+		}
+		
 		// Protected
 		//
 		
@@ -1366,10 +1420,16 @@ package org.osmf.media
 			// Placeholder to ensure an event is NOT received.
 			fail();
 		}
-
+		
+		private function eventCatcher(event:Event):void
+		{
+			events.push(event);
+		}
+		
 		private static const ASYNC_DELAY:Number = 8000;
 		
 		private var mediaPlayer:MediaPlayer;
 		private var eventDispatcher:EventDispatcher;
+		private var events:Vector.<Event>;
 	}
 }
