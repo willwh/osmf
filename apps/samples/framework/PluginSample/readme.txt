@@ -40,3 +40,10 @@ Click the “Load Media Resource” button to load and play the resource.
 Each MediaInfo object is associated with a priority value, which can be modified from the UI. The larger the value is the higher the
 priority is. The priorities are used by the AppResourceHandlerResolver (AppResourceHandlerResolver.as) to pick the MediaInfo object used
 to handle/load a resource.
+
+D. What's new?
+
+During sprint 7, the IDownloadable trait is introduced. Downloadable trait can be used with UI widgets such as progress bar or text fields to 
+report download progress. PluginSample uses two text fields bytesDownloaded and bytesTotal to show downlaod progress. Downloadable
+trait is supported by video, audio, image and SWF. However, only progressive audio and video have downloadable trait, streaming video 
+and audio don't.
