@@ -1229,10 +1229,25 @@ package org.osmf.media
 			assertTrue(isNaN(mediaPlayer.bytesDownloaded));
 			assertTrue(isNaN(mediaPlayer.bytesTotal));
 			
+			mediaPlayer.downloadUpdateInterval = 120;
+			assertTrue(mediaPlayer.downloadUpdateInterval == 120);
+			mediaPlayer.downloadUpdateInterval = 120;
+			assertTrue(mediaPlayer.downloadUpdateInterval == 120);
+			
 			mediaPlayer.addEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, eventCatcher);
 			mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			mediaElement.prepareForTesting();
+			
+			mediaPlayer.downloadUpdateInterval = NaN;
+			assertTrue(isNaN(mediaPlayer.downloadUpdateInterval));
+			
+			mediaPlayer.downloadUpdateInterval = -500;
+			assertTrue(mediaPlayer.downloadUpdateInterval == -500);
+			
+			mediaPlayer.downloadUpdateInterval = 50;
+			assertTrue(mediaPlayer.downloadUpdateInterval == 50);
+			
 			assertTrue(mediaPlayer.downloadable == true);
 			
 			var downloadable:DownloadableTrait = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as DownloadableTrait;
