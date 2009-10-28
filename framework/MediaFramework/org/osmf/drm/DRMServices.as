@@ -20,12 +20,13 @@ package org.osmf.drm
 		import flash.system.SystemUpdaterType;
 		import flash.utils.ByteArray;
 		import org.osmf.events.MediaErrorCodes;	
+		import flash.net.drm.DRMContentData;
+	
 	}
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.utils.MediaFrameworkStrings;
-	import flash.net.drm.DRMContentData;
-	
+
 	/**
 	 * Dispatched when username password  or token authentication is needed to playback.
 	 */ 

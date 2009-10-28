@@ -38,6 +38,7 @@ package org.osmf.video
 	import org.osmf.metadata.KeyValueFacet;
 	import flash.events.DRMStatusEvent;
 	import org.osmf.metadata.ObjectIdentifier;
+	import flash.events.DRMErrorEvent;
 	}
 	
 	import org.osmf.events.MediaError;
@@ -82,7 +83,7 @@ package org.osmf.video
 	
 	import org.osmf.events.TraitEvent;
 	import flash.events.StatusEvent;
-	import flash.events.DRMErrorEvent;
+	
 	import org.osmf.traits.IContentProtectable;
 	import org.osmf.net.NetStreamContentProtectableTrait;
 	import org.osmf.events.AuthenticationFailedEvent;
