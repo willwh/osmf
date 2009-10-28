@@ -85,7 +85,7 @@ package org.osmf.video
 	import flash.events.StatusEvent;
 	import flash.events.DRMErrorEvent;
 	import org.osmf.traits.IContentProtectable;
-	import org.osmf.net.NetContentProtectableTrait;
+	import org.osmf.net.NetStreamContentProtectableTrait;
 	
 	
 	/**

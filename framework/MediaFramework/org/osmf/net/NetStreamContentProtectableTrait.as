@@ -38,14 +38,14 @@ package org.osmf.net
     /**
      * NetStream specific protected content trait.
      */
-	public class NetContentProtectableTrait extends ContentProtectableTrait
+	public class NetStreamContentProtectableTrait extends ContentProtectableTrait
 	{
 		CONFIG::FLASH_10_1
 		{
 		/**
    		 * Constructs a NetContentProtectableTrait
    		 */ 
-		public function NetContentProtectableTrait()
+		public function NetStreamContentProtectableTrait()
 		{
 			super();
 			
