@@ -153,13 +153,13 @@
 <classEntry path="org.osmf.net.NetConnectionAttempt"/>
 <classEntry path="org.osmf.net.NetConnectionCodes"/>
 <classEntry path="org.osmf.net.NetConnectionFactory"/>
-<classEntry path="org.osmf.net.NetContentProtectableTrait"/>
 <classEntry path="org.osmf.net.NetLoadedContext"/>
 <classEntry path="org.osmf.net.NetLoader"/>
 <classEntry path="org.osmf.net.NetNegotiator"/>
 <classEntry path="org.osmf.net.NetStreamAudibleTrait"/>
 <classEntry path="org.osmf.net.NetStreamBufferableTrait"/>
 <classEntry path="org.osmf.net.NetStreamCodes"/>
+<classEntry path="org.osmf.net.NetStreamContentProtectableTrait"/>
 <classEntry path="org.osmf.net.NetStreamDownloadableTrait"/>
 <classEntry path="org.osmf.net.NetStreamPausableTrait"/>
 <classEntry path="org.osmf.net.NetStreamPlayableTrait"/>
