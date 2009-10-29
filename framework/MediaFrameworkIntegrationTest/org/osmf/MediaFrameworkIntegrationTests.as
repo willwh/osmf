@@ -60,9 +60,7 @@ package org.osmf
 			addTestSuite(TestNetLoader);
 
 			addTestSuite(TestHTTPLoader);
-			
-			addTestSuite(TestVideoElement);
-			
+						
 			// Tests that can't use mock objects, and are therefore only in the
 			// integration test suite:
 
