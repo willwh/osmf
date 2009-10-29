@@ -302,7 +302,7 @@ package org.osmf.media
 		{
 			super();
 			
-			_state = MediaPlayerState.CONSTRUCTED;
+			_state = MediaPlayerState.UNINITIALIZED;
 			this.element = element;			
 			_playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);				
 			_downloadTimer.addEventListener(TimerEvent.TIMER, onDownloadTimer);			
@@ -328,7 +328,7 @@ package org.osmf.media
 							loadableTrait.unload();
 						}
 					}	
-					setState(MediaPlayerState.CONSTRUCTED);
+					setState(MediaPlayerState.UNINITIALIZED);
 					
 					if (_element) //sometimes _element is null here due to unload nulling the element.
 					{
@@ -1147,7 +1147,7 @@ package org.osmf.media
 		{				
 			if (event.seeking)
 			{				
-				setState(MediaPlayerState.SEEKING);				
+				setState(MediaPlayerState.BUFFERING);				
 			}
 			else if (playable && playing)
 			{
@@ -1163,7 +1163,7 @@ package org.osmf.media
 			}					
 			else
 			{
-				setState(MediaPlayerState.INITIALIZED);
+				setState(MediaPlayerState.READY);
 			}				
 		}
 				
@@ -1191,7 +1191,7 @@ package org.osmf.media
 			}
 			else if (event.newState == LoadState.CONSTRUCTED)
 			{				
-				setState(MediaPlayerState.CONSTRUCTED);
+				setState(MediaPlayerState.UNINITIALIZED);
 			}	
 			else if (event.newState == LoadState.LOAD_FAILED)
 			{
@@ -1205,7 +1205,7 @@ package org.osmf.media
 		
 		private function processLoadedState():void
 		{
-			setState(MediaPlayerState.INITIALIZED);
+			setState(MediaPlayerState.READY);
 			if (autoPlay && playable && !playing)
 			{
 				play();
@@ -1226,7 +1226,7 @@ package org.osmf.media
 			}
 			else
 			{
-				setState(MediaPlayerState.INITIALIZED);
+				setState(MediaPlayerState.READY);
 			}
 		}			
 								
@@ -1273,7 +1273,7 @@ package org.osmf.media
 				}
 				else
 				{
-					setState(MediaPlayerState.INITIALIZED);	
+					setState(MediaPlayerState.READY);	
 				}				
 			}
 		}

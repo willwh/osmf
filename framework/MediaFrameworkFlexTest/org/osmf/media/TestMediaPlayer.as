@@ -86,7 +86,7 @@ package org.osmf.media
 		{
 			var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
 			
-			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			
 			if (this.loadable)
 			{
@@ -112,7 +112,7 @@ package org.osmf.media
 					else if (eventCount == 2)
 					{
 						assertTrue(event.newState == LoadState.LOADED);
-						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 						
 						// Now verify that we can unload the media.
 						mediaPlayer.element = null;
@@ -120,12 +120,12 @@ package org.osmf.media
 					else if (eventCount == 3)
 					{
 						assertTrue(event.newState == LoadState.UNLOADING);
-						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					}
 					else if (eventCount == 4)
 					{
 						assertTrue(event.newState == LoadState.CONSTRUCTED);
-						assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -140,11 +140,11 @@ package org.osmf.media
 					);
 						
 				mediaPlayer.element = mediaElement;
-				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
 				// Now verify that we can unload the media.
 				mediaPlayer.element = null;
-				assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+				assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			}
 		}
 		
@@ -152,7 +152,7 @@ package org.osmf.media
 		{
 			var mediaElement:MediaElement = createMediaElement(invalidResourceForMediaElement);
 			
-			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			
 			if (this.loadable)
 			{
@@ -204,7 +204,7 @@ package org.osmf.media
 					);
 						
 				mediaPlayer.element = mediaElement;
-				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 			}
 		}
 		
@@ -437,7 +437,7 @@ package org.osmf.media
 		{
 			assertTrue(mediaPlayer.playable == true);
 			assertTrue(mediaPlayer.playing == false);
-			assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+			assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
 			mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestPlayPause1);
 			mediaPlayer.play();
@@ -497,7 +497,7 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.playable == true);
 				assertTrue(mediaPlayer.playing == false);
-				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					
 				mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestStop1);
 				mediaPlayer.play();
@@ -539,7 +539,7 @@ package org.osmf.media
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == true);
 							assertTrue(event3.seeking == true);
-							assertTrue(mediaPlayer.state == MediaPlayerState.SEEKING);
+							assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 						}
 						else
 						{
@@ -551,7 +551,7 @@ package org.osmf.media
 							assertTrue(mediaPlayer.seeking == false);
 							assertTrue(event3.seeking == false);
 							
-							// Not sure whether this should be PAUSED or INITIALIZED?
+							// Not sure whether this should be PAUSED or READY?
 							assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
 	
 							eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -586,7 +586,7 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.seekable == true);
 				assertTrue(mediaPlayer.seeking == false);
-				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
 				// For some media, triggering playback will cause the duration
 				// to get set.
@@ -618,13 +618,13 @@ package org.osmf.media
 					{
 						assertTrue(mediaPlayer.seeking == true);
 						assertTrue(event.seeking == true);
-						assertTrue(mediaPlayer.state == MediaPlayerState.SEEKING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 					}
 					else if (eventCount == 2)
 					{
 						assertTrue(mediaPlayer.seeking == false);
 						assertTrue(event.seeking == false);
-						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED ||
+						assertTrue(mediaPlayer.state == MediaPlayerState.READY ||
 								   mediaPlayer.state == MediaPlayerState.PAUSED);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -735,7 +735,7 @@ package org.osmf.media
 					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestPlayhead);
 					
 					assertTrue(Math.abs(mediaPlayer.playhead - mediaPlayer.duration) < 1);
-					assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					
 					if (enableChangeEvents)
 					{
@@ -1054,7 +1054,7 @@ package org.osmf.media
 					assertTrue(mediaPlayer.playing == true);
 					
 					var statesStr:String = states.join(" ");
-					assertTrue(statesStr == "playing seeking playing"); 
+					assertTrue(statesStr == "playing"); 
 
 					mediaPlayer.pause();
 					
@@ -1114,11 +1114,8 @@ package org.osmf.media
 					
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");
-					assertTrue(		statesStr == "playing seeking paused"
-								||	statesStr == "playing paused seeking"
-								||	statesStr == "playing paused seeking paused"
-								||	statesStr == "playing seeking playing paused"
-								||	statesStr == "playing seeking"
+					assertTrue(		statesStr == "playing paused"
+								||	statesStr == "playing"
 							  ); 
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -1165,7 +1162,7 @@ package org.osmf.media
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.newState == MediaPlayerState.INITIALIZED);
+						assertTrue(event.newState == MediaPlayerState.READY);
 					}
 					else if (eventCount == 3)
 					{
@@ -1485,7 +1482,7 @@ package org.osmf.media
 
 			var mediaElement:MediaElement = createMediaElement(requestedResource != null ? requestedResource : resourceForMediaElement);
 			
-			assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
+			assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			
 			mediaPlayer.addEventListener
 					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
@@ -1499,7 +1496,7 @@ package org.osmf.media
 				{
 					mediaPlayer.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCallAfterLoad);
 					
-					assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					
 					if (func != null)
 					{

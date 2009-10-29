@@ -22,15 +22,15 @@
 package org.osmf.media
 {
 	/**
-      *  The MediaPlayerState class enumerates public constants that describe the current state of the
-      *  Media Player. 
-
-      */
+     *  The MediaPlayerState class enumerates public constants that describe the current state of the
+     *  Media Player.
+     */
     public class MediaPlayerState
     {
 		/**
-		  * Constructor.
-		  * @private
+		 * Constructor.
+		 * 
+		 * @private
 		 **/        	
 		public function MediaPlayerState(name:String)
 		{
@@ -38,10 +38,10 @@ package org.osmf.media
         }
               
 		/**
-		  * The MediaPlayer has been created but is not ready to be used.
-		  * This is the base state for a MediaPlayer.
-		  */
-		public static const CONSTRUCTED:MediaPlayerState   = new MediaPlayerState('constructed');
+		 * The MediaPlayer has been created but is not ready to be used.
+		 * This is the base state for a MediaPlayer.
+		 */
+		public static const UNINITIALIZED:MediaPlayerState   = new MediaPlayerState('uninitialized');
 
 		/**
 		 * The MediaPlayer is loading or connecting.
@@ -49,9 +49,9 @@ package org.osmf.media
 		public static const INITIALIZING:MediaPlayerState  = new MediaPlayerState('initializing');
 
 		/**
-		  * The MediaPlayer is ready to be used.
-		  */
-		public static const INITIALIZED:MediaPlayerState = new MediaPlayerState('initialized');
+		 * The MediaPlayer is ready to be used.
+		 */
+		public static const READY:MediaPlayerState = new MediaPlayerState('ready');
 
 		/**
 	     * The MediaPlayer is playing media.
@@ -59,14 +59,9 @@ package org.osmf.media
 		public static const PLAYING:MediaPlayerState = new MediaPlayerState('playing');
 
 		/**
-          * The MediaPlayer is pausing media.
-		  */
-		public static const PAUSED:MediaPlayerState = new MediaPlayerState('paused');
-
-		/**
-		 * The MediaPlayer is seeking.
+         * The MediaPlayer is pausing media.
 		 */
-		public static const SEEKING:MediaPlayerState = new MediaPlayerState('seeking');
+		public static const PAUSED:MediaPlayerState = new MediaPlayerState('paused');
 
 		/**
 		 * The MediaPlayer is buffering.
@@ -74,8 +69,8 @@ package org.osmf.media
 		public static const BUFFERING:MediaPlayerState = new MediaPlayerState('buffering');
 
 		/**
-		  * The MediaPlayer encountered an error while trying to play media.
-		  */
+		 * The MediaPlayer encountered an error while trying to play media.
+		 */
 		public static const PLAYBACK_ERROR:MediaPlayerState = new MediaPlayerState('playbackError');
 		
 		/**
