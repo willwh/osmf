@@ -57,9 +57,9 @@ package org.osmf.layout
 			assertEquals(4,anchor.bottom);
 			
 			var attributes:LayoutAttributesFacet
-				= LayoutUtils.setLayoutAttributes(metadata, ScaleMode.CROP, RegistrationPoint.BOTTOM_LEFT);
+				= LayoutUtils.setLayoutAttributes(metadata, ScaleMode.ZOOM, RegistrationPoint.BOTTOM_LEFT);
 				
-			assertEquals(ScaleMode.CROP, attributes.scaleMode);
+			assertEquals(ScaleMode.ZOOM, attributes.scaleMode);
 			assertEquals(RegistrationPoint.BOTTOM_LEFT, attributes.alignment);
 			
 			var rendererFacet:LayoutRendererFacet

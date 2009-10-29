@@ -60,9 +60,9 @@ package org.osmf.display
 			//assertEquals(displayObject.width, 200);
 			//assertEquals(displayObject.height, 300);	
 			 
-			//Crop
+			//Zoom
 			
-			sprite.scaleMode = ScaleMode.CROP;
+			sprite.scaleMode = ScaleMode.ZOOM;
 			sprite.setAvailableSize(200, 300);
 			
 			//assertEquals(displayObject.width, 360); // 360  (160 pixels wider than width, to keep aspect ratio)

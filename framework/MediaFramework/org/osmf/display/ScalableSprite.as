@@ -38,13 +38,14 @@ package org.osmf.display
 		 */
 		public function ScalableSprite()
 		{
-			super();	
+			super();
+			
 			_scaleMode = ScaleMode.LETTERBOX;
 		}
 						
 		/**
 		 * The <code>scaleMode</code> property describes different ways of laying out the media content within a this sprite.
-		 * <code>scaleMode</code> can be set to <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code> or <code>CROP</code>.
+		 * <code>scaleMode</code> can be set to <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code> or <code>ZOOM</code>.
 		 * <code>MediaElementSprite</code> uses the value to calculate the layout.
 		 * @see org.osmf.display.ScaleMode for usage examples.
 		 */ 			
@@ -160,8 +161,6 @@ package org.osmf.display
 		private var availableHeight:Number = NaN;
 		private var intrinsicWidth:Number = NaN;
 		private var intrinsicHeight:Number = NaN;				
-		private var _scaleMode:ScaleMode;		
-		
-		
+		private var _scaleMode:ScaleMode;
 	}
 }

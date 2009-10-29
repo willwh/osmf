@@ -25,7 +25,7 @@ package org.osmf.display
 	
 	/**
 	 * <code>ScaleMode</code> controls the layout of out a single piece of content within a container.
-	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>CROP</code>.
+	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>ZOOM</code>.
 	 * <code>ScalableSprite</code> uses <code>ScaleMode</code> to calculate the layout.
 	 */ 
 	public class ScaleMode
@@ -49,11 +49,11 @@ package org.osmf.display
 		public static const LETTERBOX:ScaleMode = new ScaleMode("LETTERBOX"); 
 		
 		/**
-		 * <code>CROP</code> is similar to the <code>LETTERBOX</code>, except that <code>CROP</code> stretches the content past the bounds of
-		 * the container, to remove the spacing required to maintain aspect ratio.  This has the effect of using the entire bounds
-		 * of the container, but also possibly cropping some content.
+		 * <code>ZOOM</code> is similar to <code>LETTERBOX</code>, except that <code>ZOOM</code> stretches the
+		 * content past the bounds of the container, to remove the spacing required to maintain aspect ratio.
+		 * This has the effect of using the entire bounds of the container, but also possibly cropping some content.
 		 */
-		public static const CROP:ScaleMode		= new ScaleMode("CROP");
+		public static const ZOOM:ScaleMode		= new ScaleMode("ZOOM");
 		
 		public function ScaleMode(token:String)
 		{
@@ -79,7 +79,7 @@ package org.osmf.display
 			
 			switch (this)
 			{
-				case ScaleMode.CROP:
+				case ScaleMode.ZOOM:
 				case ScaleMode.LETTERBOX:
 					
 					var availableRatio:Number
@@ -90,7 +90,7 @@ package org.osmf.display
 						= (intrinsicWidth || availableWidth)
 						/ (intrinsicHeight || availableHeight);
 					
-					if 	(	(this == ScaleMode.CROP && componentRatio < availableRatio) 
+					if 	(	(this == ScaleMode.ZOOM && componentRatio < availableRatio) 
 						||	(this == ScaleMode.LETTERBOX && componentRatio > availableRatio)
 						)
 					{
@@ -135,6 +135,5 @@ package org.osmf.display
 		}
 		
 		private var token:String;
-
 	}
 }
