@@ -23,16 +23,23 @@ package org.osmf.metadata
 {
 	import flash.events.Event;
 
+	/**
+	 * Event class used by the TemporalFacet class.
+	 */
 	public class TemporalFacetEvent extends Event
 	{
 		public static const POSITION_REACHED:String = "positionReached";
 		public static const DURATION_REACHED:String = "durationReached";
 		
+		/**
+		 * Constructor.
+		 */
 		public function TemporalFacetEvent(type:String, value:TemporalIdentifier, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 			_value = value;
 		}
+		
 		/**
 		 * Returns the TemporalIdentifier associated with the event instance.
 		 */

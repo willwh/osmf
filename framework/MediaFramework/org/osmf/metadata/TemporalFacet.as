@@ -27,6 +27,7 @@ package org.osmf.metadata
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
+	import org.osmf.composition.CompositeElement;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
@@ -39,13 +40,16 @@ package org.osmf.metadata
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
-	import org.osmf.composition.CompositeElement;
 	
 	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
 	[Event (name="durationReached", type="org.osmf.metadata.TemporalFacetEvent")]
 
 	/**
-	 * The TemporalFacet class represents temporal metadata.
+	 * The TemporalFacet class manages temporal metadata of the type
+	 * <code>TemporalIdentifier</code> associated with a <code>MediaElement</code> 
+	 * and dispatches events of type <code>TemporalFacetEvent</code> when 
+	 * the <code>ITemporal</code> position of the MediaElement matches any of the
+	 * time values in it's collection of <code>TemporalIdentifer</code> objects. 
 	 */
 	public class TemporalFacet extends EventDispatcher implements IFacet
 	{
@@ -66,13 +70,12 @@ package org.osmf.metadata
 
 			_owner = owner;	
 			_enabled = true;
-			_checkInterval = _DEFAULT_INTERVAL_;
 			
-			_intervalTimer = new Timer(_checkInterval);
-			
+			_intervalTimer = new Timer(CHECK_INTERVAL);
 			_intervalTimer.addEventListener(TimerEvent.TIMER, onIntervalTimer);
-			_tolerance = (_checkInterval*5) / 1000;
 			
+			// Check the owner media element for traits, if they are null here
+			// 	that's okay we'll manage them in the TraitsChangeEvent handlers.
 			_temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			
 			_seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
@@ -110,6 +113,9 @@ package org.osmf.metadata
 		
 		/**
 		 * Adds temporal metadata to this facet.
+		 * 
+		 * @param value A <code>TemporalIdentifier</code> instance to
+		 * be added to the class' internal collection.
 		 */
 		public function addValue(value:TemporalIdentifier):void
 		{
@@ -130,7 +136,7 @@ package org.osmf.metadata
 				
 				// A negative index value means it doesn't exist in the array and the absolute value is the
 				// index where it should be inserted.  A positive index means a value exists and in this
-				// case we will overwrite the existing cue point rather than insert a duplicate.
+				// case we'll overwrite the existing value rather than insert a duplicate.
 				if (index < 0) 
 				{
 					index *= -1;
@@ -183,9 +189,11 @@ package org.osmf.metadata
 		 * Gets the TemporalIdentifier item at the specified index in this
 		 * class' internal collection. Note this collection is sorted by time.
 		 *  
-		 * @param index The index in the collection from which to retrieve the TemporalIdentifier item.
+		 * @param index The index in the collection from which to retrieve 
+		 * the TemporalIdentifier item.
 		 * 
-		 * @return The TemporalIdentifier item at that index or <code>null</code> if there is none.
+		 * @return The TemporalIdentifier item at the specified index or 
+		 * <code>null</code> if there is none.
 		 */
 		public function getValueAt(index:int):TemporalIdentifier
 		{
@@ -224,14 +232,14 @@ package org.osmf.metadata
 		}
 						
 		/**
-		 * Perform a reset on the class' internal data.
+		 * Perform a reset on the class' internal state.
 		 */
 		private function reset(startTimer:Boolean):void 
 		{
 			_lastFiredTemporalMetadataIndex = -1;
 			_restartTimer = true;
 			_intervalTimer.reset();
-			_intervalTimer.delay = _checkInterval;
+			_intervalTimer.delay = CHECK_INTERVAL;
 			
 			if (startTimer)
 			{
@@ -398,9 +406,10 @@ package org.osmf.metadata
 			
 			var nextTime:Number = _temporalValueCollection[((index + 1) < _temporalValueCollection.length) ? (index + 1) : 
 																				(_temporalValueCollection.length - 1)].time;
+			var result:Boolean = false;																				
 		
-			if ( (_temporalValueCollection[index].time >= (now - _tolerance)) && 
-					(_temporalValueCollection[index].time <= (now + _tolerance)) && 
+			if ( (_temporalValueCollection[index].time >= (now - TOLERANCE)) && 
+					(_temporalValueCollection[index].time <= (now + TOLERANCE)) && 
 					(index != _lastFiredTemporalMetadataIndex)) 
 			{
 				_lastFiredTemporalMetadataIndex = index;
@@ -410,7 +419,7 @@ package org.osmf.metadata
 				// Adjust the timer interval if necessary
 				var thisTime:Number = _temporalValueCollection[index].time;
 				var newDelay:Number = ((nextTime - thisTime)*1000)/4;
-				newDelay = (newDelay > _checkInterval) ? newDelay : _checkInterval;
+				newDelay = (newDelay > CHECK_INTERVAL) ? newDelay : CHECK_INTERVAL;
 								
 				// If no more data, stop the timer
 				if (thisTime == nextTime) 
@@ -424,20 +433,20 @@ package org.osmf.metadata
 					_intervalTimer.delay = newDelay;
 					startTimer();
 				}
-				return true;
+				result = true;
 			}
 			
 			// If we've optimized the interval time by reseting the delay, we could miss a data point
 			//    if it happens to fall between this check and next one.
 			// See if we are going to miss a data point (meaning there is one between now and the 
 			//    next interval timer event).  If so, drop back down to the default check interval.
-			if ((_intervalTimer.delay != _checkInterval) && ((now + (_intervalTimer.delay/1000)) > nextTime)) 
+			else if ((_intervalTimer.delay != CHECK_INTERVAL) && ((now + (_intervalTimer.delay/1000)) > nextTime)) 
 			{
 				this._intervalTimer.reset();
-				this._intervalTimer.delay = _checkInterval;
+				this._intervalTimer.delay = CHECK_INTERVAL;
 				startTimer();
 			}
-			return false;				
+			return result;				
    		}		
 
 		/**
@@ -508,8 +517,10 @@ package org.osmf.metadata
 			}
 		}
 			
-		private static const _DEFAULT_INTERVAL_:Number = 100;	// The default interval (in milliseconds) at which 
-																// the class will check for cue points
+		private static const CHECK_INTERVAL:Number = 100;	// The default interval (in milliseconds) the 
+															// class will check for temporal metadata
+		private static const TOLERANCE:Number = 0.5;	// A value must be within this tolerence to trigger
+														//	a position reached event.		
 		private var _namespace:URL;				
 		private var _temporalValueCollection:Vector.<TemporalIdentifier>;
 		private var _owner:MediaElement;
@@ -517,12 +528,9 @@ package org.osmf.metadata
 		private var _seekable:ISeekable;
 		private var _pausable:IPausable;
 		private var _playable:IPlayable;
-		private var _tolerance:Number;
 		private var _lastFiredTemporalMetadataIndex:int;
 		private var _intervalTimer:Timer;
-		private var _checkInterval:Number;		
 		private var _restartTimer:Boolean;
 		private var _enabled:Boolean;
-
 	}
 }
