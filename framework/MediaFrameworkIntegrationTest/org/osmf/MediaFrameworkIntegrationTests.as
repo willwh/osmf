@@ -23,10 +23,17 @@ package org.osmf
 {
 	import flexunit.framework.TestSuite;
 	
-	import org.osmf.drm.TestDRMServices;
+	CONFIG::FLASH_10_1
+	{
+		import org.osmf.drm.TestDRMServices;
+		import org.osmf.video.TestVideoElement;
+		import org.osmf.net.TestNetContentProtectable;
+	}
+	
 	import org.osmf.image.TestImageElementIntegration;
 	import org.osmf.image.TestImageLoaderIntegration;
 	import org.osmf.media.TestMediaPlayer;
+	
 	import org.osmf.net.TestNetLoader;
 	import org.osmf.plugin.TestDynamicPluginLoaderIntegration;
 	import org.osmf.plugin.TestPluginManagerIntegration;
@@ -34,7 +41,7 @@ package org.osmf
 	import org.osmf.swf.TestSWFLoaderIntegration;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestHTTPLoader;
-	import org.osmf.video.TestVideoElement;
+	
 
 	public class MediaFrameworkIntegrationTests extends TestSuite
 	{
@@ -47,7 +54,7 @@ package org.osmf
 			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
-		
+	
 			addTestSuite(TestMediaPlayer);
 
 			addTestSuite(TestNetLoader);
@@ -72,6 +79,9 @@ package org.osmf
 			CONFIG::FLASH_10_1
 			{
 				addTestSuite(TestDRMServices);
+				addTestSuite(TestVideoElement);
+				addTestSuite(TestNetContentProtectable);
+				
 			}
 			
 		}

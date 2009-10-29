@@ -95,6 +95,12 @@ package org.osmf.drm
 			drmContentData = value;
 			onDRMConentData();
 		}
+		
+		public function get contentData():DRMContentData
+		{		
+			return drmContentData;
+		}
+
 					
 		/**
 		 * The type of authentication required to obtain a voucher for the associated content.

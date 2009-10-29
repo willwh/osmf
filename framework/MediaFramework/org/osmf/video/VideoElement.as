@@ -39,6 +39,8 @@ package org.osmf.video
 	import flash.events.DRMStatusEvent;
 	import org.osmf.metadata.ObjectIdentifier;
 	import flash.events.DRMErrorEvent;
+	import flash.events.DRMStatusEvent;
+	import org.osmf.net.NetStreamContentProtectableTrait;
 	}
 	
 	import org.osmf.events.MediaError;
@@ -85,8 +87,9 @@ package org.osmf.video
 	import flash.events.StatusEvent;
 	
 	import org.osmf.traits.IContentProtectable;
-	import org.osmf.net.NetStreamContentProtectableTrait;
+	
 	import org.osmf.events.AuthenticationFailedEvent;
+	
 	
 	
 	/**
@@ -197,6 +200,7 @@ package org.osmf.video
 	    		{
 	    			//Non sidecar
     				stream.addEventListener(StatusEvent.STATUS, onContentData);
+    				stream.addEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
 	    		}			
     		}
 			finishLoad();			
@@ -205,13 +209,20 @@ package org.osmf.video
 		//DRM API's
 		CONFIG::FLASH_10_1
     	{
+    		private function onPlaying(event:DRMStatusEvent):void
+    		{
+    			if (event.contentData != NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData)	
+    			{    			
+    				NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
+    			}
+    		}
 	    			
 			private function onContentData(event:StatusEvent):void
 			{				
 				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
 				{			
-					createProtectableTrait().addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onInlineAuth);  					
+					createProtectableTrait();			
 	    		}
 	  		}	
 			
@@ -240,13 +251,6 @@ package org.osmf.video
 					dispatchEvent(new MediaErrorEvent(new MediaError(event.errorID)));
 				}				
 			}	
-			
-			//Netstream needs to be recreated if credential based auth is needed.
-			private function onInlineAuth(event:Event):void
-			{			
-				(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
-	    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
-			}
 			
 			private function onMetadataAuth(event:Event):void
 			{
@@ -313,6 +317,7 @@ package org.osmf.video
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     			stream.removeEventListener(StatusEvent.STATUS, onContentData);
+    			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
     			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
     		}
     		

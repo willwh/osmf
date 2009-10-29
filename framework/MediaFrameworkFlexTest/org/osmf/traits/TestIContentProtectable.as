@@ -48,8 +48,7 @@ package org.osmf.traits
 		public function testAuthenticationSuccessToken():void
 		{
 			protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, eventCatcher);
-			protectable.authenticate("test","test");
-			prodAuthSuccess();
+			prodAuthSuccessToken();
 			assertEquals(events.length, 1);						
 		}   	
 		
@@ -76,6 +75,11 @@ package org.osmf.traits
 		}
 		
 		protected function prodAuthSuccess():void
+		{
+			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+		}
+		
+		protected function prodAuthSuccessToken():void
 		{
 			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
 		}

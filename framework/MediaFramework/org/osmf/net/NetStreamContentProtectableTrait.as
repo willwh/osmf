@@ -69,6 +69,15 @@ package org.osmf.net
 		{
 			drmServices.contentData = value;
 		}
+		
+		/**
+		 * 	DRMContentData that has been previously constructed
+		 */
+		public function get contentData():DRMContentData
+		{
+			return drmServices.contentData;
+		}
+				
 				
 		/**
 		 * @inheritDoc
