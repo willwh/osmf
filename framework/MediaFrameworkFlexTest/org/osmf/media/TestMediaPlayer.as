@@ -98,7 +98,7 @@ package org.osmf.media
 					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
 					, onTestSource
 					);
-				mediaPlayer.source = mediaElement;
+				mediaPlayer.element = mediaElement;
 				
 				function onTestSource(event:LoadableStateChangeEvent):void
 				{
@@ -115,7 +115,7 @@ package org.osmf.media
 						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
 						
 						// Now verify that we can unload the media.
-						mediaPlayer.source = null;
+						mediaPlayer.element = null;
 					}
 					else if (eventCount == 3)
 					{
@@ -139,11 +139,11 @@ package org.osmf.media
 					, mustNotReceiveEvent
 					);
 						
-				mediaPlayer.source = mediaElement;
+				mediaPlayer.element = mediaElement;
 				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
 				
 				// Now verify that we can unload the media.
-				mediaPlayer.source = null;
+				mediaPlayer.element = null;
 				assertTrue(mediaPlayer.state == MediaPlayerState.CONSTRUCTED);
 			}
 		}
@@ -166,7 +166,7 @@ package org.osmf.media
 					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
 					, onTestSourceWithInvalidResource
 					);
-				mediaPlayer.source = mediaElement;
+				mediaPlayer.element = mediaElement;
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -203,7 +203,7 @@ package org.osmf.media
 					, mustNotReceiveEvent
 					);
 						
-				mediaPlayer.source = mediaElement;
+				mediaPlayer.element = mediaElement;
 				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
 			}
 		}
@@ -218,7 +218,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestVolume();
 			}
 		}
@@ -266,7 +266,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestMuted();
 			}
 		}
@@ -313,7 +313,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestPan();
 			}
 		}
@@ -361,7 +361,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestPlay();
 			}
 		}
@@ -402,7 +402,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestPause();
 			}
 		}
@@ -476,6 +476,95 @@ package org.osmf.media
 			}
 		}
 		
+		public function testStop():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestStop, false);
+			}
+			else
+			{
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				doTestStop();
+			}
+		}
+		
+		private function doTestStop():void
+		{
+			if (traitExists(MediaTraitType.PAUSABLE) && traitExists(MediaTraitType.SEEKABLE))
+			{
+				assertTrue(mediaPlayer.playable == true);
+				assertTrue(mediaPlayer.playing == false);
+				assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZED);
+					
+				mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestStop1);
+				mediaPlayer.play();
+			
+				function onTestStop1(event:PlayingChangeEvent):void
+				{
+					mediaPlayer.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onTestStop1);
+					
+					assertTrue(mediaPlayer.playing == true);
+					assertTrue(event.playing == true);
+					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYING);
+
+					var hasPaused:Boolean = false;
+					var hasSeeked:Boolean = false;
+					
+					mediaPlayer.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestStop2);
+					mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestStop3);
+					mediaPlayer.stop();
+					
+					function onTestStop2(event2:PausedChangeEvent):void
+					{
+						hasPaused = true;
+						
+						assertTrue(mediaPlayer.paused == true);
+						assertTrue(mediaPlayer.playing == false);
+						assertTrue(event2.paused == true);
+						assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+					}
+					
+					function onTestStop3(event3:SeekingChangeEvent):void
+					{
+						assertTrue(hasPaused);
+						
+						if (hasSeeked == false)
+						{
+							hasSeeked = true;
+							
+							assertTrue(mediaPlayer.paused == true);
+							assertTrue(mediaPlayer.playing == false);
+							assertTrue(mediaPlayer.seeking == true);
+							assertTrue(event3.seeking == true);
+							assertTrue(mediaPlayer.state == MediaPlayerState.SEEKING);
+						}
+						else
+						{
+							mediaPlayer.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestStop2);
+							mediaPlayer.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestStop3);
+							
+							assertTrue(mediaPlayer.paused == true);
+							assertTrue(mediaPlayer.playing == false);
+							assertTrue(mediaPlayer.seeking == false);
+							assertTrue(event3.seeking == false);
+							
+							// Not sure whether this should be PAUSED or INITIALIZED?
+							assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+	
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		public function testSeek():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
@@ -486,7 +575,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestSeek();
 			}
 		}
@@ -583,7 +672,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestPlayheadWithChangeEvents();
 			}
 		}
@@ -598,7 +687,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestPlayheadWithNoChangeEvents();
 			}
 		}
@@ -689,7 +778,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestWidthHeight();
 			}
 		}
@@ -737,7 +826,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestView();
 			}
 		}
@@ -769,7 +858,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestBufferTime();
 			}
 		}
@@ -822,7 +911,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestSwitchable();
 			}
 		}
@@ -923,7 +1012,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestLoop();
 			}
 		}
@@ -940,7 +1029,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestLoop();
 			}
 		}
@@ -999,7 +1088,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				doTestAutoRewind();
 			}
 		}
@@ -1064,7 +1153,7 @@ package org.osmf.media
 				var eventCount:int = 0;
 				
 				mediaPlayer.autoPlay = true;
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				
 				function onStateChange(event:MediaPlayerStateChangeEvent):void
 				{
@@ -1112,7 +1201,7 @@ package org.osmf.media
 				
 				var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
 				
-				mediaPlayer.source = mediaElement;
+				mediaPlayer.element = mediaElement;
 	
 				var loadableTrait:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 				assertTrue(loadableTrait);
@@ -1161,7 +1250,7 @@ package org.osmf.media
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE	, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE	, onCapabilityChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.source = createMediaElement(resourceForMediaElement);
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
 				
 				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
 				{
@@ -1223,7 +1312,7 @@ package org.osmf.media
 				= new MockMediaElementWithDownloadableTrait(new LoaderBase());
 				
 			mediaPlayer.autoPlay = false;
-			mediaPlayer.source = mediaElement;
+			mediaPlayer.element = mediaElement;
 			
 			assertTrue(mediaPlayer.downloadable == false);
 			assertTrue(isNaN(mediaPlayer.bytesDownloaded));
@@ -1402,7 +1491,7 @@ package org.osmf.media
 					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
-			mediaPlayer.source = mediaElement;
+			mediaPlayer.element = mediaElement;
 			
 			function onTestCallAfterLoad(event:LoadableStateChangeEvent):void
 			{

@@ -24,7 +24,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.gateways.HTMLGateway;
-	import org.osmf.gateways.RegionSprite;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.html.HTMLElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -33,7 +33,7 @@ package
 	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30', width='640', height='358')]
-	public class HTMLGatewaySample extends RegionSprite
+	public class HTMLGatewaySample extends RegionGateway
 	{
 		public function HTMLGatewaySample()
 		{
@@ -67,7 +67,7 @@ package
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
-			mediaPlayer.source = rootElement;
+			mediaPlayer.element = rootElement;
 		}
 		
 		private function constructVideo(url:String):VideoElement

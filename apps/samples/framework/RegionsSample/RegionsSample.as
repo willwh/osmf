@@ -131,7 +131,7 @@ package
 			// automatically start its loading and playback:
 			
 			var player:MediaPlayer = new MediaPlayer();
-			player.source = rootElement;
+			player.element = rootElement;
 			
 			// Next, to make things more interesting by adding some interactivity:
 			// Let's create another region, at the bottom of the main content. Now,

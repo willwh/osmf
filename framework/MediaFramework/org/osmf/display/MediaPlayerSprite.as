@@ -45,23 +45,23 @@ package org.osmf.display
 		
  		/**
 		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  Setting the element will set
-         * as the source on the mediaPlayer, if mediaPlayer is not null.
+         * as the element on the mediaPlayer, if mediaPlayer is not null.
 		 */
 		public function set element(value:MediaElement):void
 		{
 			if(_player)
 			{
-				_player.source = value;
+				_player.element = value;
 			}
 		}
 		
 		public function get element():MediaElement
 		{			
-			return _player ? _player.source : null;
+			return _player ? _player.element : null;
 		}
 		
 		/**
-		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's source set either 
+		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's element set either 
 		 * on the MediaPlayer or on this object (see element) after this property is set.
 		 */ 
 		public function set mediaPlayer(value:MediaPlayer):void

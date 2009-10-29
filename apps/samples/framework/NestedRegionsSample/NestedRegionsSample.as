@@ -116,7 +116,7 @@ package
 			// automatically start its loading and playback:
 			
 			var player:MediaPlayer = new MediaPlayer();
-			player.source = rootElement;
+			player.element = rootElement;
 		}
 		
 		// Utilities

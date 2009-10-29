@@ -41,12 +41,12 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
-			mediaPlayer.source = value;
+			mediaPlayer.element = value;
 		}
 		
 		public function get element():MediaElement
 		{
-			return mediaPlayer.source;
+			return mediaPlayer.element;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]
