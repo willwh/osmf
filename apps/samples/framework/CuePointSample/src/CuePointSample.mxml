@@ -137,8 +137,8 @@
 				var cuePoint:CuePoint = event.value as CuePoint;
 				var ns:URL = (event.currentTarget as TemporalFacet).namespaceURL;
 				
-				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.playhead;
-				trace("cuePoint.time="+cuePoint.time+", playhead time="+this.mediaPlayerWrapper.mediaPlayer.playhead+", diff="+diff);
+				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.currentTime;
+				trace("cuePoint.time="+cuePoint.time+", currentTime time="+this.mediaPlayerWrapper.mediaPlayer.currentTime+", diff="+diff);
 								
 				// If we are getting embedded cue points, let's ignore the dynamic cue points coming from
 				// the framework, these are being dispatched from the list of cue points found in the 
