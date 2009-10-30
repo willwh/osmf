@@ -51,7 +51,7 @@ package org.osmf.drm
 	import org.osmf.events.TraitEvent;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.events.MediaErrorCodes;
-	import flash.net.drm.DRMContentData;
+	
 	import flash.utils.ByteArray;
 	import flash.events.SecurityErrorEvent;
 	import org.osmf.events.AuthenticationCompleteEvent;
