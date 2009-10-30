@@ -39,5 +39,11 @@ package org.osmf.swf
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
 		}
+		
+		override protected function get expectedBytesTotal():Number
+		{
+			// Size of resourceForMediaElement.
+			return 106078;
+		}
 	}
 }

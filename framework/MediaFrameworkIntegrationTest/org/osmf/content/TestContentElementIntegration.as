@@ -26,15 +26,12 @@ package org.osmf.content
 	
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
-	import org.osmf.media.URLResource;
 	import org.osmf.traits.IDownloadable;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 
 	public class TestContentElementIntegration extends TestMediaElement
 	{
@@ -58,32 +55,32 @@ package org.osmf.content
 				   	];
 		}
 		
+		/**
+		 * Subclasses should override to specify the total number of bytes
+		 * represented by resourceForMediaElement.
+		 **/
+		protected function get expectedBytesTotal():Number
+		{
+			return NaN;
+		}
+		
 		// Add some IDownloadable testing:
 		//
 		
-		public function testDownloadableViaImage():void
+		public function testDownloadable():void
 		{
-			var dispatcher:EventDispatcher = new EventDispatcher();
+			var eventDispatcher:EventDispatcher = new EventDispatcher();
 			var count:int = 0;
+			var bytesTotalFired:Boolean = false;
 			
-			var image:ImageElement 
-				= new ImageElement
-					( new ImageLoader()
-					, new URLResource(new URL("assets/image.gif"))
-					);
+			var element:MediaElement = createMediaElement();
+			element.resource = resourceForMediaElement;
 			
-			var loadable:ILoadable = image.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var loadable:ILoadable = element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			
-			// Async methods need to be registered in the order that they will be
-			// invoked (or otherwise thing go very wrong - the wrong handlers get
-			// used, etc.):
-			var asf1:Function = addAsync(onLoadableStateChange, 3000);
-			var asf2:Function = addAsync(onBytesTotalChange, 3000);
-			var asf3:Function = addAsync(function(_:*):void {}, 7000);
+			eventDispatcher.addEventListener(Event.COMPLETE, addAsync(mustReceiveEvent, 10000));
 			
-			dispatcher.addEventListener(Event.COMPLETE, asf3);
-			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, asf1);
+			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
 			loadable.load();
 			
 			function onLoadableStateChange(event:LoadableStateChangeEvent):void
@@ -94,34 +91,35 @@ package org.osmf.content
 				if (count == 1)
 				{
 					assertEquals(LoadState.LOADING, event.newState);
-					downloadable = image.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
+					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
 					assertEquals(NaN, downloadable.bytesDownloaded);
 					assertEquals(NaN, downloadable.bytesTotal);
 					
-					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, asf2);
+					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 				else if (count == 2)
 				{
 					assertEquals(LoadState.LOADED, event.newState);
-					downloadable = image.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
+					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
-					assertEquals(2248, downloadable.bytesDownloaded);
-					assertEquals(2248, downloadable.bytesTotal);
+					assertEquals(expectedBytesTotal, downloadable.bytesDownloaded);
+					assertEquals(expectedBytesTotal, downloadable.bytesTotal);
+					
+					assertTrue(bytesTotalFired);
+					
+					eventDispatcher.dispatchEvent(new Event(Event.COMPLETE));
 				}
 			}
 			
-			var bytesTotalFired:Boolean;
 			function onBytesTotalChange(event:BytesTotalChangeEvent):void
 			{
 				var downloadable:IDownloadable = event.target as IDownloadable;
 				assertNotNull(downloadable);
 				assertEquals(event.oldValue, NaN);
-				assertEquals(event.newValue, 2248);
+				assertEquals(event.newValue, expectedBytesTotal);
 				
 				bytesTotalFired = true;
-				
-				dispatcher.dispatchEvent(new Event(Event.COMPLETE));
 			}
 		}
 	}

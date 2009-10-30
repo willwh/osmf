@@ -39,5 +39,11 @@ package org.osmf.image
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
 		}
+		
+		override protected function get expectedBytesTotal():Number
+		{
+			// Size of resourceForMediaElement.
+			return 42803;
+		}
 	}
 }
