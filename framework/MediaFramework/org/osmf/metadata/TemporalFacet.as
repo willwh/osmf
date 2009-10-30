@@ -58,33 +58,35 @@ package org.osmf.metadata
 		 * 
 		 * @param nameSpace The namespace of the facet.
 		 * @param owner The media element this facet applies to.
+		 * 
+		 * @throws ArgumentError If owner argument is null.
 		 */
-		public function TemporalFacet(nameSpace:URL, owner:MediaElement)
+		public function TemporalFacet(namespaceURL:URL, owner:MediaElement)
 		{
-			_namespace = nameSpace;
+			_namespace = namespaceURL;
 
 			if (owner == null)
 			{
 				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
 			}
 
-			_owner = owner;	
-			_enabled = true;
+			this.owner = owner;	
+			enabled = true;
 			
-			_intervalTimer = new Timer(CHECK_INTERVAL);
-			_intervalTimer.addEventListener(TimerEvent.TIMER, onIntervalTimer);
+			intervalTimer = new Timer(CHECK_INTERVAL);
+			intervalTimer.addEventListener(TimerEvent.TIMER, onIntervalTimer);
 			
 			// Check the owner media element for traits, if they are null here
 			// 	that's okay we'll manage them in the TraitsChangeEvent handlers.
-			_temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			
-			_seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 			setupTraitEventListener(MediaTraitType.SEEKABLE);
 			
-			_playable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			playable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			setupTraitEventListener(MediaTraitType.PLAYABLE);
 			
-			_pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+			pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
 			setupTraitEventListener(MediaTraitType.PAUSABLE);
 			
 			owner.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
@@ -107,7 +109,7 @@ package org.osmf.metadata
 		 */
 		public function set enable(value:Boolean):void 
 		{
-			_enabled = value;
+			enabled = value;
 			reset(value);
 		}
 		
@@ -116,6 +118,9 @@ package org.osmf.metadata
 		 * 
 		 * @param value A <code>TemporalIdentifier</code> instance to
 		 * be added to the class' internal collection.
+		 * 
+		 * @throws ArgumentError If value is null or the time in the value 
+		 * object is less than zero.
 		 */
 		public function addValue(value:TemporalIdentifier):void
 		{
@@ -124,15 +129,15 @@ package org.osmf.metadata
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			if (this._temporalValueCollection == null)
+			if (temporalValueCollection == null)
 			{
-				this._temporalValueCollection = new Vector.<TemporalIdentifier>();
-				this._temporalValueCollection.push(value);
+				temporalValueCollection = new Vector.<TemporalIdentifier>();
+				temporalValueCollection.push(value);
 			}
 			else
 			{
 				// Find the index where we should insert this value
-				var index:int = findTemporalMetadata(0, _temporalValueCollection.length - 1, value.time);
+				var index:int = findTemporalMetadata(0, temporalValueCollection.length - 1, value.time);
 				
 				// A negative index value means it doesn't exist in the array and the absolute value is the
 				// index where it should be inserted.  A positive index means a value exists and in this
@@ -140,21 +145,21 @@ package org.osmf.metadata
 				if (index < 0) 
 				{
 					index *= -1;
-					_temporalValueCollection.splice(index, 0, value);
+					temporalValueCollection.splice(index, 0, value);
 				}
 				
 				// Make sure we don't insert a dup at index 0
-				else if ((index == 0) && (value.time != _temporalValueCollection[0].time)) 
+				else if ((index == 0) && (value.time != temporalValueCollection[0].time)) 
 				{
-					_temporalValueCollection.splice(index, 0, value);
+					temporalValueCollection.splice(index, 0, value);
 				}
 				else 
 				{
-					_temporalValueCollection[index] = value;
+					temporalValueCollection[index] = value;
 				}
 			}
 			
-			this.enable = true;
+			enable = true;
 		}
 		
 		/**
@@ -164,7 +169,7 @@ package org.osmf.metadata
 		{
 			if (identifier is TemporalIdentifier)
 			{
-				for each(var temporalMetadata:TemporalIdentifier in _temporalValueCollection)
+				for each(var temporalMetadata:TemporalIdentifier in temporalValueCollection)
 				{
 					if (temporalMetadata.equals(identifier))
 					{
@@ -182,7 +187,7 @@ package org.osmf.metadata
 		 */
 		public function get numValues():int
 		{
-			return _temporalValueCollection.length;
+			return temporalValueCollection.length;
 		}
 		
 		/**
@@ -197,9 +202,9 @@ package org.osmf.metadata
 		 */
 		public function getValueAt(index:int):TemporalIdentifier
 		{
-			if (index >= 0 && _temporalValueCollection != null && index < _temporalValueCollection.length)
+			if (index >= 0 && temporalValueCollection != null && index < temporalValueCollection.length)
 			{
-				return _temporalValueCollection[index];
+				return temporalValueCollection[index];
 			}
 			else
 			{
@@ -222,12 +227,12 @@ package org.osmf.metadata
 		{
 			if (!start)
 			{
-				_intervalTimer.stop();
+				intervalTimer.stop();
 			}
-			else if (_temporal != null && _temporalValueCollection != null && _temporalValueCollection.length > 0 
-						&& _restartTimer && _enabled && !_intervalTimer.running) 
+			else if (temporal != null && temporalValueCollection != null && temporalValueCollection.length > 0 
+						&& restartTimer && enabled && !intervalTimer.running) 
 			{
-				_intervalTimer.start();
+				intervalTimer.start();
 			}
 		}
 						
@@ -236,10 +241,10 @@ package org.osmf.metadata
 		 */
 		private function reset(startTimer:Boolean):void 
 		{
-			_lastFiredTemporalMetadataIndex = -1;
-			_restartTimer = true;
-			_intervalTimer.reset();
-			_intervalTimer.delay = CHECK_INTERVAL;
+			lastFiredTemporalMetadataIndex = -1;
+			restartTimer = true;
+			intervalTimer.reset();
+			intervalTimer.delay = CHECK_INTERVAL;
 			
 			if (startTimer)
 			{
@@ -252,12 +257,12 @@ package org.osmf.metadata
 		 * around the current ITemporal.position and dispatches a TemporalFacetEvent
 		 * if found. 
 		 */
-   		private function checkForTemporalMetadata(e:TimerEvent):void 
+   		private function checkForTemporalMetadata():void 
    		{
-			var now:Number = _temporal.position;
+			var now:Number = temporal.position;
 			
 			// Start looking one index past the last one we found
-			var index:int = findTemporalMetadata(_lastFiredTemporalMetadataIndex + 1, _temporalValueCollection.length - 1, now);
+			var index:int = findTemporalMetadata(lastFiredTemporalMetadataIndex + 1, temporalValueCollection.length - 1, now);
 			
 			// A negative index value means it doesn't exist in the collection and the absolute value is the
 			// index where it should be inserted.  Therefore, to get the closest match, we'll look at the index
@@ -269,7 +274,7 @@ package org.osmf.metadata
 			}
 			
 			// See if the value at this index is within our tolerance
-			if ( !checkTemporalMetadata(index, now) && ((index + 1) < _temporalValueCollection.length)) 
+			if ( !checkTemporalMetadata(index, now) && ((index + 1) < temporalValueCollection.length)) 
 			{
 				// Look at the next one, see if it is close enough to fire
 				checkTemporalMetadata(index+1, now);
@@ -280,36 +285,36 @@ package org.osmf.metadata
    		{
    			if (add)
    			{
-	   			if (traitType == MediaTraitType.SEEKABLE && _seekable != null)
+	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
 	   			{
-					_seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 	   			}
 	   			
-	   			else if (traitType == MediaTraitType.PAUSABLE && _pausable != null)
+	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
 	   			{
-	   				_pausable.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
+	   				pausable.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
 	   			}
 	   			
-	   			else if (traitType == MediaTraitType.PLAYABLE && _playable != null)
+	   			else if (traitType == MediaTraitType.PLAYABLE && playable != null)
 	   			{
-	   				_playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+	   				playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
 	   			}
 	   		}
 	   		else
 	   		{
-	   			if (traitType == MediaTraitType.SEEKABLE && _seekable != null)
+	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
 	   			{
-					_seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 	   			}
 	   			
-	   			else if (traitType == MediaTraitType.PAUSABLE && _pausable != null)
+	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
 	   			{
-	   				_pausable.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
+	   				pausable.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
 	   			}
 
-	   			else if (traitType == MediaTraitType.PLAYABLE && _playable != null)
+	   			else if (traitType == MediaTraitType.PLAYABLE && playable != null)
 	   			{
-	   				_playable.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+	   				playable.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
 	   			}
 	   			
 	   		}
@@ -348,11 +353,11 @@ package org.osmf.metadata
 			if (firstIndex <= lastIndex) 
 			{
 				var mid:int = (firstIndex + lastIndex) / 2;	// divide and conquer
-				if (time == _temporalValueCollection[mid].time) 
+				if (time == temporalValueCollection[mid].time) 
 				{
 					return mid;
 				}
-				else if (time < _temporalValueCollection[mid].time) 
+				else if (time < temporalValueCollection[mid].time) 
 				{
 					// search the lower part
 					return findTemporalMetadata(firstIndex, mid - 1, time);
@@ -373,7 +378,7 @@ package org.osmf.metadata
 		 */
 		private function dispatchTemporalEvents(index:int):void
 		{
-			var valueObj:TemporalIdentifier = _temporalValueCollection[index];
+			var valueObj:TemporalIdentifier = temporalValueCollection[index];
 			dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, valueObj));
 			
 			if (valueObj.duration > 0)
@@ -399,25 +404,26 @@ package org.osmf.metadata
    		 */
    		private function checkTemporalMetadata(index:int, now:Number):Boolean 
    		{ 		
-			if (!_temporalValueCollection || !_temporalValueCollection.length) 
+			if (!temporalValueCollection || !temporalValueCollection.length) 
 			{
 				return false;
 			}
 			
-			var nextTime:Number = _temporalValueCollection[((index + 1) < _temporalValueCollection.length) ? (index + 1) : 
-																				(_temporalValueCollection.length - 1)].time;
+			// Get the next time value after this one so we can decide to adjust the timer interval
+			var nextTime:Number = temporalValueCollection[((index + 1) < temporalValueCollection.length) ? (index + 1) : 
+																				(temporalValueCollection.length - 1)].time;
 			var result:Boolean = false;																				
 		
-			if ( (_temporalValueCollection[index].time >= (now - TOLERANCE)) && 
-					(_temporalValueCollection[index].time <= (now + TOLERANCE)) && 
-					(index != _lastFiredTemporalMetadataIndex)) 
+			if ( (temporalValueCollection[index].time >= (now - TOLERANCE)) && 
+					(temporalValueCollection[index].time <= (now + TOLERANCE)) && 
+					(index != lastFiredTemporalMetadataIndex)) 
 			{
-				_lastFiredTemporalMetadataIndex = index;
+				lastFiredTemporalMetadataIndex = index;
 				
 				dispatchTemporalEvents(index);
 				
 				// Adjust the timer interval if necessary
-				var thisTime:Number = _temporalValueCollection[index].time;
+				var thisTime:Number = temporalValueCollection[index].time;
 				var newDelay:Number = ((nextTime - thisTime)*1000)/4;
 				newDelay = (newDelay > CHECK_INTERVAL) ? newDelay : CHECK_INTERVAL;
 								
@@ -425,12 +431,12 @@ package org.osmf.metadata
 				if (thisTime == nextTime) 
 				{
 					startTimer(false);
-					_restartTimer = false;
+					restartTimer = false;
 				}
-				else if (newDelay != _intervalTimer.delay) 
+				else if (newDelay != intervalTimer.delay) 
 				{
-					_intervalTimer.reset();
-					_intervalTimer.delay = newDelay;
+					intervalTimer.reset();
+					intervalTimer.delay = newDelay;
 					startTimer();
 				}
 				result = true;
@@ -440,10 +446,10 @@ package org.osmf.metadata
 			//    if it happens to fall between this check and next one.
 			// See if we are going to miss a data point (meaning there is one between now and the 
 			//    next interval timer event).  If so, drop back down to the default check interval.
-			else if ((_intervalTimer.delay != CHECK_INTERVAL) && ((now + (_intervalTimer.delay/1000)) > nextTime)) 
+			else if ((intervalTimer.delay != CHECK_INTERVAL) && ((now + (intervalTimer.delay/1000)) > nextTime)) 
 			{
-				this._intervalTimer.reset();
-				this._intervalTimer.delay = CHECK_INTERVAL;
+				this.intervalTimer.reset();
+				this.intervalTimer.delay = CHECK_INTERVAL;
 				startTimer();
 			}
 			return result;				
@@ -454,7 +460,7 @@ package org.osmf.metadata
 		 */
 		private function onIntervalTimer(event:TimerEvent):void 
 		{
-			checkForTemporalMetadata(event);
+			checkForTemporalMetadata();
 		}
 		
 		/**
@@ -465,17 +471,17 @@ package org.osmf.metadata
 			switch (event.traitType)
 			{
 				case MediaTraitType.TEMPORAL:
-					_temporal = _owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+					temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 					startTimer();
 					break;
 				case MediaTraitType.SEEKABLE:
-					_seekable = _owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+					seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 					break;
 				case MediaTraitType.PAUSABLE:
-					_pausable = _owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+					pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
 					break;
 				case MediaTraitType.PLAYABLE:
-					_playable = _owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+					playable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 					break;
 			}
 			
@@ -493,44 +499,44 @@ package org.osmf.metadata
 			switch (event.traitType)
 			{
 				case MediaTraitType.TEMPORAL:
-					_temporal = null;
+					temporal = null;
 					// This is a work around for FM-171. Traits are added and removed for
 					// each child in a composition element when transitioning between child
 					// elements. So don't stop the timer if the owner is a composition.
 					//
 					// $$$todo: remove this 'if' statement and the import for
 					// 'org.osmf.composition.CompositeElement' when FM-171 is fixed.
-					if (!(_owner is CompositeElement))
+					if (!(owner is CompositeElement))
 					{
 						startTimer(false);
 					}
 					break;
 				case MediaTraitType.SEEKABLE:
-					_seekable = null;
+					seekable = null;
 					break;
 				case MediaTraitType.PAUSABLE:
-					_pausable = null;
+					pausable = null;
 					break;
 				case MediaTraitType.PLAYABLE:
-					_playable = null;
+					playable = null;
 					break;
 			}
 		}
 			
 		private static const CHECK_INTERVAL:Number = 100;	// The default interval (in milliseconds) the 
 															// class will check for temporal metadata
-		private static const TOLERANCE:Number = 0.5;	// A value must be within this tolerence to trigger
+		private static const TOLERANCE:Number = 0.25;	// A value must be within this tolerence to trigger
 														//	a position reached event.		
 		private var _namespace:URL;				
-		private var _temporalValueCollection:Vector.<TemporalIdentifier>;
-		private var _owner:MediaElement;
-		private var _temporal:ITemporal;
-		private var _seekable:ISeekable;
-		private var _pausable:IPausable;
-		private var _playable:IPlayable;
-		private var _lastFiredTemporalMetadataIndex:int;
-		private var _intervalTimer:Timer;
-		private var _restartTimer:Boolean;
-		private var _enabled:Boolean;
+		private var temporalValueCollection:Vector.<TemporalIdentifier>;
+		private var owner:MediaElement;
+		private var temporal:ITemporal;
+		private var seekable:ISeekable;
+		private var pausable:IPausable;
+		private var playable:IPlayable;
+		private var lastFiredTemporalMetadataIndex:int;
+		private var intervalTimer:Timer;
+		private var restartTimer:Boolean;
+		private var enabled:Boolean;
 	}
 }

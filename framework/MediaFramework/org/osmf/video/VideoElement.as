@@ -359,19 +359,16 @@ package org.osmf.video
 			
 			if (cuePoints != null && cuePoints.length > 0)
 			{
-				if (_temporalFacetDynamic == null)
-				{
-					_temporalFacetDynamic = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC, this);
-				}
+				var temporalFacetDynamic:TemporalFacet = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC, this);
 				
 				for (var i:int = 0; i < cuePoints.length; i++)
 				{
 					var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(cuePoints[i].type), cuePoints[i].time, 
 																					cuePoints[i].name, cuePoints[i].parameters);
-					_temporalFacetDynamic.addValue(cuePoint);
+					temporalFacetDynamic.addValue(cuePoint);
 				}
 				
-				metadata.addFacet(_temporalFacetDynamic);			
+				metadata.addFacet(temporalFacetDynamic);			
 			}			    		
      	}
      	
@@ -450,8 +447,7 @@ package org.osmf.video
      	
      	private var video:Video;	 
 	    private var spatial:SpatialTrait;
-		private var _temporalFacetDynamic:TemporalFacet;	// facet for cue points found in the onMetaData callback
-		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream
-		    
+	    
+		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream	    		    
 	}
 }

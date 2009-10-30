@@ -26,6 +26,12 @@ package org.osmf.metadata
 	 */
 	public class TemporalIdentifier implements IIdentifier
 	{
+		// This constant can be used by classes extending this
+		// class that wish to differentiate between a time value
+		// of zero and undefined. For example, a duration of zero
+		// could be interpreted a few different ways, where as
+		// undefined clearly means the duration is not defined
+		// and should be ignored.
 		public static const UNDEFINED:Number = -1;
 		
 		/**
