@@ -37,7 +37,9 @@ package org.osmf.metadata
 	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.ISeekable;
 	import org.osmf.traits.ITemporal;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
@@ -136,14 +138,29 @@ package org.osmf.metadata
 			assertNull(facet.merge(null));
 		}
 		
-		public function testEvents():void
+		public function testPositionReached():void
+		{
+			testEvents();
+		}
+		
+		public function testPositionReachedWithPause():void
+		{
+			testEvents(true);
+		}
+		
+		public function testRemovingATrait():void
+		{
+			testOnTraitRemove();
+		}
+				
+		private function testEvents(testPause:Boolean=false):void
 		{
 			var videoElement:VideoElement = createMediaElement();
 			videoElement.resource = resourceForMediaElement;
 			
 			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), videoElement);
 
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 
 			for each(var value:TemporalIdentifier in _testValues)
 			{
@@ -166,6 +183,9 @@ package org.osmf.metadata
 			var temporal:ITemporal = videoElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			assertTrue(temporal != null);
 			
+			var seekable:ISeekable = videoElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			assertTrue(seekable != null);
+			
 			var positionReachedCount:int = 0;
 			
 			function onPositionReached(event:TemporalFacetEvent):void
@@ -175,13 +195,20 @@ package org.osmf.metadata
 				var newEvent:TemporalFacetEvent = event.clone() as TemporalFacetEvent;
 				assertNotNull(newEvent);
 				
-				// The time should be within .5 seconds of the playhead position
+				// The time should be within TOLERANCE seconds of the playhead position
 				var timeValue:Number = (event.value as TemporalIdentifier).time;
 				var playheadPosition:Number = temporal.currentTime;
 				trace("onPositionReached() - event.value.time = "+timeValue+", playhead position="+playheadPosition);
-				assertTrue((playheadPosition >= (timeValue - .5)) && (playheadPosition <= (timeValue + .5)));
+				assertTrue((playheadPosition >= (timeValue - TOLERANCE)) && (playheadPosition <= (timeValue + TOLERANCE)));
 				
-				if (positionReachedCount == 3)
+				if (testPause && (positionReachedCount == (facet.numValues/2)))
+				{
+					pausable.pause();
+					playable.play();
+				}
+								
+				// This ensures we got all the "position reached" events
+				if (positionReachedCount == facet.numValues)
 				{
 					facet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
 					pausable.pause();
@@ -195,14 +222,55 @@ package org.osmf.metadata
 			}
 		}
 		
+		private function testOnTraitRemove():void
+		{
+			var mediaElement:DynamicMediaElement = createDynamicMediaElement();
+																			 			
+			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), mediaElement);
+
+			for each(var value:TemporalIdentifier in _testValues)
+			{
+				facet.addValue(value);
+			}
+						
+			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			assertTrue(loadable != null);
+			loadable.load();
+			assertTrue(loadable.loadState == LoadState.LOADED);
+			
+			var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			assertTrue(playable != null);
+			playable.play();
+			
+			var pausable:IPausable = mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+			assertTrue(pausable != null);
+			
+			var temporal:ITemporal = mediaElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertTrue(temporal != null);
+			
+			var seekable:ISeekable = mediaElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			assertTrue(seekable != null);
+						
+			// Remove the traits while playing
+			mediaElement.doRemoveTrait(MediaTraitType.SEEKABLE);
+			mediaElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			mediaElement.doRemoveTrait(MediaTraitType.PAUSABLE);
+			mediaElement.doRemoveTrait(MediaTraitType.TEMPORAL);
+		}
+
 		private function createTemporalData():void
 		{
 			_testValues = new Vector.<TemporalIdentifier>();
 			
-			_testValues.push(new TemporalIdentifier(1, 1));
+			_testValues.push(new TemporalIdentifier(3.5, 1));
+			_testValues.push(new TemporalIdentifier(1, TemporalIdentifier.UNDEFINED));
+			_testValues.push(new TemporalIdentifier(3, 0));
 			_testValues.push(new TemporalIdentifier(2, TemporalIdentifier.UNDEFINED));
+			_testValues.push(new TemporalIdentifier(2.5, 1));
+			
+			// Add a few duplicates
+			_testValues.push(new TemporalIdentifier(1, 1));
 			_testValues.push(new TemporalIdentifier(3, 1));
-			_testValues.push(new TemporalIdentifier(3, 5));
 		}
 		
 		
@@ -220,6 +288,23 @@ package org.osmf.metadata
 			return new VideoElement(loader); 
 		}
 		
+		private function createDynamicMediaElement():DynamicMediaElement
+		{
+			if (loader is MockNetLoader)
+			{
+				// Give our mock loader an arbitrary duration and size to ensure
+				// we get metadata.
+				MockNetLoader(loader).netStreamExpectedDuration = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_DURATION;
+				MockNetLoader(loader).netStreamExpectedWidth = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH;
+				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
+			}
+
+			return new DynamicMediaElement([ MediaTraitType.LOADABLE, MediaTraitType.PLAYABLE,
+											 MediaTraitType.SEEKABLE, MediaTraitType.PAUSABLE,
+											 MediaTraitType.TEMPORAL ],
+											 loader, resourceForMediaElement);
+		}
+		
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.
@@ -233,6 +318,9 @@ package org.osmf.metadata
 		}
 		
 		private static const NAMESPACE:String = "www.osmf.org.test";
+		private static const TOLERANCE:Number = .25;
+		private static const TIMEOUT:Number = 5000;
+		
 		private var _testValues:Vector.<TemporalIdentifier>;
 		
 		private var netFactory:NetFactory;
