@@ -246,11 +246,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertTrue(isNaN(mediaPlayer.volume));
+				assertEquals(0, mediaPlayer.volume);
 				
 				// Setting the volume has no effect.
 				mediaPlayer.volume = 0.5;
-				assertTrue(isNaN(mediaPlayer.volume));
+				assertEquals(0, mediaPlayer.volume);
 								
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -341,11 +341,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertTrue(isNaN(mediaPlayer.pan));
+				assertEquals(0, mediaPlayer.pan);
 
 				// Setting pan has no effect.				
 				mediaPlayer.pan = 0.3;
-				assertTrue(isNaN(mediaPlayer.pan));
+				assertEquals(0, mediaPlayer.pan);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -590,7 +590,7 @@ package org.osmf.media
 				
 				// For some media, triggering playback will cause the duration
 				// to get set.
-				if (isNaN(mediaPlayer.duration))
+				if (mediaPlayer.duration == 0)
 				{
 					mediaPlayer.play();
 					mediaPlayer.pause();
@@ -761,8 +761,8 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.temporal == false);
 				
-				assertTrue(isNaN(mediaPlayer.duration));
-				assertTrue(isNaN(mediaPlayer.currentTime));
+				assertEquals(0, mediaPlayer.duration);
+				assertEquals(0, mediaPlayer.currentTime);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -890,12 +890,12 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.bufferable == false);
 				assertTrue(mediaPlayer.buffering == false);
-				assertTrue(isNaN(mediaPlayer.bufferLength));
-				assertTrue(isNaN(mediaPlayer.bufferTime));
+				assertEquals(0, mediaPlayer.bufferLength);
+				assertEquals(0, mediaPlayer.bufferTime);
 
 				// Setting the bufferTime has no effect.			
 				mediaPlayer.bufferTime = 5;
-				assertTrue(isNaN(mediaPlayer.bufferTime));
+				assertEquals(0, mediaPlayer.bufferTime);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -979,8 +979,8 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.switchable == false);
 				assertTrue(mediaPlayer.autoSwitch == false);
-				assertTrue(mediaPlayer.currentStreamIndex == -1);
-				assertTrue(mediaPlayer.maxStreamIndex == -1);
+				assertTrue(mediaPlayer.currentStreamIndex == 0);
+				assertTrue(mediaPlayer.maxStreamIndex == 0);
 				assertTrue(mediaPlayer.switchUnderway == false);
 
 				// Setting autoSwitch should have no effect.
@@ -1312,8 +1312,8 @@ package org.osmf.media
 			mediaPlayer.element = mediaElement;
 			
 			assertTrue(mediaPlayer.downloadable == false);
-			assertTrue(isNaN(mediaPlayer.bytesDownloaded));
-			assertTrue(isNaN(mediaPlayer.bytesTotal));
+			assertEquals(0, mediaPlayer.bytesDownloaded);
+			assertEquals(0, mediaPlayer.bytesTotal);
 			
 			mediaPlayer.downloadUpdateInterval = 120;
 			assertTrue(mediaPlayer.downloadUpdateInterval == 120);

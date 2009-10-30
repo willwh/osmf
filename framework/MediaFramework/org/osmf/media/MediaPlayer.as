@@ -614,7 +614,7 @@ package org.osmf.media
 		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : NaN;	    		    
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : 0;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
@@ -654,7 +654,7 @@ package org.osmf.media
 		
 	    public function get pan():Number
 	    {
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : NaN;	    		
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : 0;	    		
 	    }
 	    
 	    public function set pan(value:Number):void
@@ -697,7 +697,7 @@ package org.osmf.media
 		 */					
 	    public function get playing():Boolean
 	    {
-	    	return playable ? (getTrait(MediaTraitType.PLAYABLE) as IPlayable).playing : NaN;	    		
+	    	return playable ? (getTrait(MediaTraitType.PLAYABLE) as IPlayable).playing : false;	    		
 	    }
 	    
 	    /**
@@ -799,7 +799,7 @@ package org.osmf.media
 		 */
 		public function get autoSwitch():Boolean
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : NaN;
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : false;
 		}
 		
 		public function set autoSwitch(value:Boolean):void
@@ -815,7 +815,7 @@ package org.osmf.media
 		 */
 		public function get currentStreamIndex():int
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex : -1; 
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex : 0; 
 		}
 		
 		/**
@@ -841,7 +841,7 @@ package org.osmf.media
 		 */
 		public function get maxStreamIndex():int
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex : -1;
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex : 0;
 		}
 		
 		public function set maxStreamIndex(value:int):void
@@ -903,7 +903,7 @@ package org.osmf.media
 		 */
 	    public function get duration():Number
 	    {
-	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).duration : NaN;	    	
+	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).duration : 0;	    	
 	    }
 	  	  
     	/**
@@ -915,7 +915,7 @@ package org.osmf.media
 		 */		    
 	    public function get currentTime():Number
 	    {
-	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).currentTime : NaN;
+	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).currentTime : 0;
 	    }
 	    	    
 	    /**
@@ -934,7 +934,7 @@ package org.osmf.media
 		 */		
 		public function get bufferLength():Number
 		{
-			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferLength : NaN;	    	
+			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferLength : 0;	    	
 		}
 		
 		/**
@@ -947,7 +947,7 @@ package org.osmf.media
 		 */		
 		public function get bufferTime():Number
 		{
-			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime : NaN;		    	
+			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime : 0;		    	
 		}
 		
 		public function set bufferTime(value:Number):void
@@ -966,7 +966,7 @@ package org.osmf.media
 		 */		
 		public function get bytesDownloaded():Number
 		{
-			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesDownloaded : NaN;
+			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesDownloaded : 0;
 		}
 		
 		/**
@@ -975,7 +975,7 @@ package org.osmf.media
 		 */		
 		public function get bytesTotal():Number
 		{
-			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesTotal : NaN;
+			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesTotal : 0;
 		}
 
 		// Internals
