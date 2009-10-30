@@ -21,10 +21,7 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
 	import flash.utils.ByteArray;
-	import org.osmf.events.TraitEvent;
 	
 	/**
 	 * Dispatched when username password  or token authentication is needed to playback.
@@ -89,7 +86,7 @@ package org.osmf.traits
 		 * 
 		 * @throws IllegalOperation error if the drmMetadata isn't set.
 		 */ 
-		public function authenticateWithToken(token:ByteArray):void
+		public function authenticateWithToken(token:Object):void
 		{							
 			if (canProcessAuthenticateWithToken(token))
 			{
@@ -135,7 +132,7 @@ package org.osmf.traits
 		/**
 		 * Overrride to allow conditional processing of authentication logic.
 		 */ 
-		protected function canProcessAuthenticateWithToken(token:ByteArray):Boolean
+		protected function canProcessAuthenticateWithToken(token:Object):Boolean
 		{							
 			return true;
 		}
@@ -151,7 +148,7 @@ package org.osmf.traits
 		/**
 		 * Overrride to provide authentication logic.
 		 */ 
-		protected function processAuthenticateWithToken(token:ByteArray):void
+		protected function processAuthenticateWithToken(token:Object):void
 		{							
 			//Overrride with DRM specific code
 		}

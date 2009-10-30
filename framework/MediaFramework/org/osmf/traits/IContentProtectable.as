@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import flash.utils.ByteArray;
 	import org.osmf.media.IMediaTrait;
 	
 	
@@ -68,9 +67,9 @@ package org.osmf.traits
 		function authenticate(username:String, password:String):void;
 		
 		/**
-		 * Authenticates a user using a byte array, which serves as a token.
+		 * Authenticates a user using an object, which serves as a token.
 		 */ 
-		function authenticateWithToken(token:ByteArray):void;
+		function authenticateWithToken(token:Object):void;
 				
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 

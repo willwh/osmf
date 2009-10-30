@@ -212,10 +212,7 @@ package org.osmf.video
     	{
     		private function onPlaying(event:DRMStatusEvent):void
     		{
-    			if (event.contentData != NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata)	
-    			{    			
-    				NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
-    			}
+    			NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
     		}
 	    			
 			private function onStatus(event:StatusEvent):void

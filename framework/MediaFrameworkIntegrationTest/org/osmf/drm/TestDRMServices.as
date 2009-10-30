@@ -1,5 +1,6 @@
 package org.osmf.drm
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.net.drm.AuthenticationMethod;
 	import flash.utils.ByteArray;
@@ -95,9 +96,29 @@ package org.osmf.drm
 									
 			}
 			
-			public function testAuthMethod():void
+			public function testAuthNullMetadata():void
 			{
-					
+				var drmServices:DRMServices = new DRMServices();
+				var authError:Boolean = false;
+				var authTokenError:Boolean = false;
+				try
+				{
+					drmServices.authenticate("test","test");
+				}
+				catch(e:IllegalOperationError)
+				{
+					authError = true;
+				}
+				try
+				{
+					drmServices.authenticateWithToken(null);
+				}
+				catch(e:Error)
+				{
+					authTokenError = true;
+				}
+				assertTrue(authError);
+				assertTrue(authTokenError);
 			}
 			
 		}	

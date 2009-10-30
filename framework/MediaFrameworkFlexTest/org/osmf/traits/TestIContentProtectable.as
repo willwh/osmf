@@ -57,6 +57,7 @@ package org.osmf.traits
 			Assert.assertNull(protectable.startDate);
 			Assert.assertNull(protectable.endDate);
 		}
+			
 							
 		protected function eventCatcher(event:Event):void
 		{

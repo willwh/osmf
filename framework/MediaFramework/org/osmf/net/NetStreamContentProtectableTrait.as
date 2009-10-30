@@ -22,7 +22,6 @@
 package org.osmf.net
 {
 	import flash.events.Event;
-	import flash.utils.ByteArray;
 	
 	CONFIG::FLASH_10_1
 	{
@@ -92,11 +91,11 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Authenticates a user using a byte array, which serves as a token.
+		 * Authenticates a user using an object, which serves as a token.
 		 * 
 		 * @throws IllegalOperation error if the drmMetadata isn't set.
 		 */ 
-		override protected function processAuthenticateWithToken(token:ByteArray):void
+		override protected function processAuthenticateWithToken(token:Object):void
 		{							
 			drmServices.authenticateWithToken(token);
 		}

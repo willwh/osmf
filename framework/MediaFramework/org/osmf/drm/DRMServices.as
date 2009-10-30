@@ -178,14 +178,14 @@ package org.osmf.drm
 		 * 
 		 * @throws IllegalOperationError if metadata not set.
 		 */ 
-		public function authenticateWithToken(token:ByteArray):void
+		public function authenticateWithToken(token:Object):void
 		{
 			if (drmContentData == null)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.DRM_METADATA_NOT_SET);
 			}
-			
-			drmManager.setAuthenticationToken(drmContentData.serverURL, drmContentData.domain, token);
+						
+			drmManager.setAuthenticationToken(drmContentData.serverURL, drmContentData.domain, token as ByteArray);
 			retrieveVoucher();
 		}
 					

@@ -109,6 +109,64 @@ package org.osmf.video
 				
 			}
 			
+			public function testAuthenticationToken():void
+			{		
+				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
+										
+				var decoder:Base64Decoder = new Base64Decoder();
+				decoder.decode(IDENT_METADATA);				
+				//Separate DRM metadata										
+				var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
+				facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+				
+				var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
+				resource.metadata.addFacet(facet);
+							
+				var elem:VideoElement = new VideoElement(new NetLoader(), resource);
+				var protectable:IContentProtectable;
+				elem.addEventListener(TraitsChangeEvent.TRAIT_ADD,  onTrait );
+				var token:Object;
+											
+				mediaPlayer.element = elem;
+				
+				function onTrait(event:TraitsChangeEvent):void
+				{
+					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
+					{
+						protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
+						protectable.addEventListener(TraitEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
+						protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+					}
+				}
+				function onAuthNeeded(event:TraitEvent):void //May or may not get fired - if previusly auth's doesn't fire.
+				{					
+					protectable.authenticate("dmo", "password");
+				}
+				function onAuthComplete(event:AuthenticationCompleteEvent):void
+				{	
+					token = event.token;					
+					var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
+					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
+					timer.start();
+				}					
+				function onFinished(event:TimerEvent):void
+				{
+					mediaPlayer.element = null;
+					mediaPlayer.element = new VideoElement(new NetLoader(), resource);
+					protectable = (mediaPlayer.element.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable)
+					protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onTokenAuth);
+					protectable.authenticateWithToken(token);
+				}
+				function onTokenAuth(event:AuthenticationCompleteEvent):void
+				{
+					testFinished(null);
+				}
+				
+						
+			}
+		
+			
+			
 		
 			public function testIdentEncrypted():void
 			{
@@ -141,7 +199,7 @@ package org.osmf.video
 				{					
 					protectable.authenticate(user, pass);
 				}
-				function onAuthComplete(event:TraitEvent):void
+				function onAuthComplete(event:AuthenticationCompleteEvent):void
 				{						
 					var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
 					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
