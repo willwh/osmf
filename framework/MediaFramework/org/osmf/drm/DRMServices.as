@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.drm
 {
 	import flash.errors.IllegalOperationError;
@@ -21,11 +42,20 @@ package org.osmf.drm
 		import flash.utils.ByteArray;
 		import org.osmf.events.MediaErrorCodes;	
 		import flash.net.drm.DRMContentData;
+		import flash.net.drm.DRMContentData;
+		import flash.events.DRMStatusEvent;
+		import flash.events.DRMErrorEvent;
 	
 	}
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.events.MediaErrorCodes;
+	import flash.net.drm.DRMContentData;
+	import flash.utils.ByteArray;
+	import flash.events.SecurityErrorEvent;
+	import org.osmf.events.AuthenticationCompleteEvent;
+
 
 	/**
 	 * Dispatched when username password  or token authentication is needed to playback.
@@ -34,11 +64,15 @@ package org.osmf.drm
 	
 	/**
 	 * Dispatched when the user is authenticated successfully
+	 * 
+	 * @eventType AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
 	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.TraitEvent')] 	
+	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
 	 
 	/**	 	
 	 * Dispatches when the authentication fails, with the reason being stored on the event.
+	 * 
+	 * @eventType AuthenticationFailedEvent.AUTHENTICATION_FAILED
 	 */
 	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 
 	
@@ -49,8 +83,8 @@ package org.osmf.drm
 	 */ 
 	public class DRMServices extends EventDispatcher
 	{
-		CONFIG::FLASH_10_1
-		{
+	CONFIG::FLASH_10_1
+	{
 			
 		/**
 		 * Constructs a new DRMServices adpater.
@@ -65,38 +99,44 @@ package org.osmf.drm
 		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  metadta
 		 * forms the basis for content data.
 		 */ 
-		public function set metadata(value:ByteArray):void
-		{			
-			try
-			{
-				drmContentData = new DRMContentData(value);
-				onDRMConentData();
-			}
-			catch (error:Error)
-			{
-				var e:Error = error;
-				function onComplete(event:Event):void
-				{
-					metadata = value;
-				}
-				var updater:SystemUpdater = new SystemUpdater();
-				updater.addEventListener(IOErrorEvent.IO_ERROR, authError);
-				updater.addEventListener(Event.COMPLETE, onComplete);
-				updater.update(SystemUpdaterType.DRM);				
-			}
-		}
-		
-		/**
-		 * The metadata property is specific to the DRM for the Flashplayer.  Once set, authentication
-		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  
-		 */ 
-		public function set contentData(value:DRMContentData):void
+		public function set drmMetadata(value:Object):void
 		{		
-			drmContentData = value;
-			onDRMConentData();
+			lastToken = null;
+			if(value is DRMContentData)
+			{
+				drmContentData = value as DRMContentData;
+				retrieveVoucher();	
+			}
+			else
+			{	
+				try
+				{
+					drmContentData = new DRMContentData(value as ByteArray);
+					retrieveVoucher();	
+				}
+				catch (error:Error)
+				{
+					var e:Error = error;
+					function onComplete(event:Event):void
+					{
+						updater.removeEventListener(IOErrorEvent.IO_ERROR, onComplete);
+						updater.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
+						updater.removeEventListener(Event.COMPLETE, onComplete);
+						if (event.type == Event.COMPLETE)
+						{
+							drmMetadata = value;
+						}	
+					}					
+					var updater:SystemUpdater = new SystemUpdater();
+					updater.addEventListener(IOErrorEvent.IO_ERROR, onComplete);
+					updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
+					updater.addEventListener(Event.COMPLETE, onComplete);
+					updater.update(SystemUpdaterType.DRM);				
+				}
+			}
 		}
-		
-		public function get contentData():DRMContentData
+			
+		public function get drmMetadata():Object
 		{		
 			return drmContentData;
 		}
@@ -182,10 +222,10 @@ package org.osmf.drm
 		}
 		
 		/**
-		 * The length of the playback window in seconds.  Returns null if authentication 
+		 * The length of the playback window in seconds.  Returns NaN if authentication 
 		 * hasn't taken place.
 		 */		
-		public function get period():int
+		public function get period():Number
 		{
 			if (voucher != null)
 			{
@@ -193,7 +233,7 @@ package org.osmf.drm
 			}
 			else
 			{
-				return -1;
+				return NaN;
 			}		
 		}
 		
@@ -201,49 +241,29 @@ package org.osmf.drm
 		 * Downloads the voucher for the metadata specified.
 		 */ 
 		private function retrieveVoucher():void
-		{		
-			drmManager.addEventListener("loadVoucherComplete", onVoucherLoaded);
-			drmManager.addEventListener("loadVoucherError", onDRMError);
-			drmManager.addEventListener("drmStatus", onVoucherLoaded); //Same as "loadVoucherComplete"
+		{				
+			drmManager.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
+			drmManager.addEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded); //Same as "loadVoucherComplete"
 						
-			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.ALLOW_SERVER);
-					
+			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.ALLOW_SERVER);					
 		}
 		
 		private function onVoucherLoaded(event:DRMStatusEvent):void
-		{							
-			if (event.isLocal)
+		{	
+			var now:Date = new Date();
+			this.voucher = event.voucher;		
+			if (voucher && (voucher.voucherEndDate != null && voucher.voucherEndDate.time >= now.time) &&
+				(voucher.voucherStartDate != null && voucher.voucherStartDate.time <= now.time))
 			{
-				verifyLocalVoucher(event.voucher);
+				removeEventListeners();				
+				dispatchEvent(new AuthenticationCompleteEvent(lastToken));			
 			}
 			else
-			{					
-				onValidVoucher(event.voucher);					
-			}
-		}
-									
-		private function verifyLocalVoucher(voucher:DRMVoucher):void
-		{
-			var now:Date = new Date();
-			if (voucher == null)
 			{
 				forceRefreshVoucher();
-			}
-			else
-			{
-				if ((voucher.voucherEndDate != null && voucher.voucherEndDate.valueOf() >= now.valueOf()) &&
-					(voucher.voucherStartDate != null && voucher.voucherStartDate.valueOf() <= now.valueOf()))
-				{
-					onValidVoucher(voucher);
-						
-				}
-				else
-				{
-					forceRefreshVoucher();
-				}
-			}
+			}		
 		}
-			
+					
 		private function forceRefreshVoucher():void
 		{
 			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.FORCE_REFRESH);
@@ -251,56 +271,32 @@ package org.osmf.drm
 			
 		private function onDRMError(event:DRMErrorEvent):void
 		{
-			if (event.errorID == 3331)
+			switch(event.errorID)
 			{
-				forceRefreshVoucher();
-			}
-			else
-			{
-				removeEventListeners();				
-				dispatchEvent(new AuthenticationFailedEvent(event.errorID, event.text));
-			}
+				case  MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
+					forceRefreshVoucher();
+					break;
+				case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
+					dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_NEEDED));
+					break;
+				default:
+					removeEventListeners();				
+					dispatchEvent(new AuthenticationFailedEvent(event.errorID, event.text));	
+					break;
+			}	
 		}
-		
-		private function onValidVoucher(voucher:DRMVoucher):void
-		{
-			removeEventListeners();
-			if(voucher == null)
-			{
-				throw new Error('null voucher');
-			}
-			this.voucher = voucher;
-			dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
-		}
-			
+					
 		private function removeEventListeners():void
 		{
-			drmManager.removeEventListener("loadVoucherComplete", onVoucherLoaded);
-			drmManager.removeEventListener("loadVoucherError", onDRMError);
-			drmManager.removeEventListener("drmStatus", onVoucherLoaded); //Same as "loadVoucherComplete"
-		}
-	
-		
-		private function onDRMConentData():void
-		{
-			if (drmContentData != null)
-			{
-				if (drmContentData.authenticationMethod == AuthenticationMethod.ANONYMOUS)
-				{
-					retrieveVoucher();	
-				}
-				else
-				{
-					dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_NEEDED));				
-				}				
-			}
+			drmManager.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
+			drmManager.removeEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded); //Same as "loadVoucherComplete"
 		}
 		
 		private function authComplete(event:DRMAuthenticationCompleteEvent):void
 		{
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
-	
+			lastToken = event.token;	
 			retrieveVoucher();
 		}			
 				
@@ -308,14 +304,15 @@ package org.osmf.drm
 		{
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
-				
+			
 			dispatchEvent(new AuthenticationFailedEvent(event.errorID, MediaErrorCodes.getDescriptionForErrorCode(event.errorID) ));
 		}
 		
+		private var lastToken:ByteArray
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;
 		private var drmManager:DRMManager;
 
-		}
+	}
 	}
 }

@@ -52,22 +52,13 @@ package org.osmf.events
 		public static const INDICES_CHANGE:String = "indicesChange";
 		
 		/**
-		 * Authentication Complete is dispatched when a user can successfully playback encrypted
-		 * content.  This event is dispatched for anonymous authentication as well as credential based.
-		 *  
-		 * @eventType AUTHENTICATION_COMPLETE 
-		 */ 
-		public static const AUTHENTICATION_COMPLETE:String = "authenticationComplete";
-		
-		/**
 		 * Authentication Needed is dispatched when a user needs to authenticate user credentials
 		 * via a call to authenticate or authenticateWithToken.
 		 *  
 		 * @eventType AUTHENTICATION_NEEDED 
 		 */ 
 		public static const AUTHENTICATION_NEEDED:String = "authenticationNeeded";
-		
-		
+			
 		
 		/**
 		 * @inheritDoc 

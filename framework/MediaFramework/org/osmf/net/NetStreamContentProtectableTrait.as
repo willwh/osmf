@@ -33,6 +33,7 @@ package org.osmf.net
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.traits.ContentProtectableTrait;
+	import org.osmf.events.AuthenticationCompleteEvent;
 
     
     /**
@@ -40,8 +41,8 @@ package org.osmf.net
      */
 	public class NetStreamContentProtectableTrait extends ContentProtectableTrait
 	{
-		CONFIG::FLASH_10_1
-		{
+	CONFIG::FLASH_10_1
+	{
 		/**
    		 * Constructs a NetContentProtectableTrait
    		 */ 
@@ -49,33 +50,25 @@ package org.osmf.net
 		{
 			super();
 			
-			drmServices.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, redispatch);
+			drmServices.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, redispatch);
 			drmServices.addEventListener(AuthenticationFailedEvent.AUTHENTICATION_FAILED, redispatch);
 			drmServices.addEventListener(TraitEvent.AUTHENTICATION_NEEDED, redispatch);						
 		}
 		
 		/**
-		 * 	metadata The FlashPlayer specific drm metadata.
+		 * 	Data used by the flash player to implement DRM specific content protection.
 		 */
-		public function set metadata(value:ByteArray):void
+		public function set drmMetadata(value:Object):void
 		{
-			drmServices.metadata = value;
-		}
-					
-		/**
-		 * 	DRMContentData that has been previously constructed
-		 */
-		public function set contentData(value:DRMContentData):void
-		{
-			drmServices.contentData = value;
+			if (value != drmServices.drmMetadata)
+			{
+				drmServices.drmMetadata = value;
+			}
 		}
 		
-		/**
-		 * 	DRMContentData that has been previously constructed
-		 */
-		public function get contentData():DRMContentData
+		public function get drmMetadata():Object
 		{
-			return drmServices.contentData;
+			return drmServices.drmMetadata;
 		}
 				
 				
@@ -127,10 +120,10 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Returns the length of the playback window.  Returns -1 if authentication 
+		 * Returns the length of the playback window.  Returns NaN if authentication 
 		 * hasn't taken place.
 		 */		
-		override public function get period():int
+		override public function get period():Number
 		{
 			return drmServices.period;
 		}
@@ -141,6 +134,6 @@ package org.osmf.net
 		}
 															
 		private var drmServices:DRMServices = new DRMServices();
-    	}
+    }
 	}
 }

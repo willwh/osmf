@@ -1,11 +1,10 @@
 package org.osmf.traits
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
 	
 	import flexunit.framework.Assert;
 	
+	import org.osmf.events.AuthenticationCompleteEvent;
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.utils.InterfaceTestCase;
@@ -40,21 +39,21 @@ package org.osmf.traits
 		
 		public function testAuthenticationSuccess():void
 		{
-			protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, eventCatcher);
+			protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, eventCatcher);
 			prodAuthSuccess();
 			assertEquals(events.length, 1);						
 		}   
 		
 		public function testAuthenticationSuccessToken():void
 		{
-			protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, eventCatcher);
+			protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, eventCatcher);
 			prodAuthSuccessToken();
 			assertEquals(events.length, 1);						
 		}   	
 		
 		public function testDates():void
 		{			
-			Assert.assertEquals(-1, protectable.period);
+			Assert.assertEquals(NaN, protectable.period);
 			Assert.assertNull(protectable.startDate);
 			Assert.assertNull(protectable.endDate);
 		}
@@ -76,12 +75,12 @@ package org.osmf.traits
 		
 		protected function prodAuthSuccess():void
 		{
-			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
 		}
 		
 		protected function prodAuthSuccessToken():void
 		{
-			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
 		}
 		
 		protected var events:Array;

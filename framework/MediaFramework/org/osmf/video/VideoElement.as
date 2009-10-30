@@ -89,6 +89,7 @@ package org.osmf.video
 	import org.osmf.traits.IContentProtectable;
 	
 	import org.osmf.events.AuthenticationFailedEvent;
+	import org.osmf.events.AuthenticationCompleteEvent;
 	
 	
 	
@@ -192,14 +193,14 @@ package org.osmf.video
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
-    				addProtectableTrait(metadata).addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
+    				addProtectableTrait(metadata).addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
     				
     				return;  //Don't add traits until the "auth" has completed. 			
 	    		}
 	    		else
 	    		{
 	    			//Non sidecar
-    				stream.addEventListener(StatusEvent.STATUS, onContentData);
+    				stream.addEventListener(StatusEvent.STATUS, onStatus);
     				stream.addEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
 	    		}			
     		}
@@ -211,13 +212,13 @@ package org.osmf.video
     	{
     		private function onPlaying(event:DRMStatusEvent):void
     		{
-    			if (event.contentData != NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData)	
+    			if (event.contentData != NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata)	
     			{    			
-    				NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
+    				NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
     			}
     		}
 	    			
-			private function onContentData(event:StatusEvent):void
+			private function onStatus(event:StatusEvent):void
 			{				
 				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
@@ -236,7 +237,7 @@ package org.osmf.video
 			private function addProtectableTrait(contentData:ByteArray):IContentProtectable
 			{			
 	    		var trait:NetStreamContentProtectableTrait = createProtectableTrait();
-			   	trait.metadata = contentData;
+			   	trait.drmMetadata = contentData;
 			   	return trait;
 			}
 							
@@ -244,7 +245,7 @@ package org.osmf.video
 			{
 				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  //Needs authentication
 				{
-					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).contentData = event.contentData;
+					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
 				}
 				else
 				{					
@@ -316,7 +317,7 @@ package org.osmf.video
 	    	CONFIG::FLASH_10_1
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
-    			stream.removeEventListener(StatusEvent.STATUS, onContentData);
+    			stream.removeEventListener(StatusEvent.STATUS, onStatus);
     			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
     			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
     		}

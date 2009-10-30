@@ -8,6 +8,7 @@ package org.osmf.video
 	
 	import mx.utils.Base64Decoder;
 	
+	import org.osmf.events.AuthenticationCompleteEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.media.IMediaResource;
@@ -36,7 +37,7 @@ package org.osmf.video
 			private static const IDENT_INLINE:String = "http://moonpie/HTTP/FLV/_DILL_2.0/Identity/Aya_dokidoki.flv";
 			
 			private var mediaPlayer:MediaPlayer = new MediaPlayer();
-					
+			
 			public function testAnonSidecar():void
 			{					
 				//Anonymous w/ metadata sidecar
@@ -94,14 +95,14 @@ package org.osmf.video
 					{
 						protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
 						protectable.addEventListener(TraitEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
-						protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+						protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
 					}
 				}
 				function onAuthNeeded(event:TraitEvent):void //May or may not get fired - if previusly auth's doesn't fire.
 				{					
 					throw new Error("Should not happen");
 				}
-				function onAuthComplete(event:TraitEvent):void
+				function onAuthComplete(event:AuthenticationCompleteEvent):void
 				{					
 					testFinished(null);
 				}	
@@ -115,6 +116,7 @@ package org.osmf.video
 				var resource:URLResource = new URLResource(new URL(IDENT_INLINE));
 				testElementCred(resource, "dmo", "password");				
 			}
+			
 			
 			private function testElementCred(resource:IMediaResource, user:String, pass:String):void
 			{
@@ -132,7 +134,7 @@ package org.osmf.video
 					{
 						protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
 						protectable.addEventListener(TraitEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
-						protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+						protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
 					}
 				}
 				function onAuthNeeded(event:TraitEvent):void //May or may not get fired - if previusly auth's doesn't fire.
@@ -150,7 +152,7 @@ package org.osmf.video
 					testFinished(null);
 				}
 			}
-							
+						
 			private function testElementAnon(resource:IMediaResource):void
 			{						
 				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
@@ -166,11 +168,11 @@ package org.osmf.video
 					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
 					{
 						protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
-						protectable.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+						protectable.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
 					}
 				}
 				
-				function onAuthComplete(event:TraitEvent):void
+				function onAuthComplete(event:AuthenticationCompleteEvent):void
 				{
 					var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
 					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
@@ -181,6 +183,6 @@ package org.osmf.video
 					testFinished(null);
 				}						
 			}		
-		
+				
 	}
 }

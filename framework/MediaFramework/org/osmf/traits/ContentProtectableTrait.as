@@ -36,9 +36,9 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the user is authenticated successfully
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.AUTHENTICATION_COMPLETE
+	 * @eventType org.osmf.events.AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
 	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.TraitEvent')] 	
+	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
 	 
 	/**	 	
 	 * Dispatches when the authentication fails, with the reason being stored on the event.
@@ -116,12 +116,12 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Returns the length of the playback window.  Returns -1 if authentication 
+		 * Returns the length of the playback window.  Returns NaN if authentication 
 		 * hasn't taken place.
 		 */		
-		public function get period():int
+		public function get period():Number
 		{
-			return -1;
+			return NaN;
 		}
 		
 		/**

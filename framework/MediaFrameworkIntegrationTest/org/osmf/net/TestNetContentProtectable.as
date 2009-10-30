@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.net
 {
+	import org.osmf.events.AuthenticationCompleteEvent;
 	import org.osmf.events.AuthenticationFailedEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.traits.TestContentProtectable;
@@ -49,12 +50,12 @@ package org.osmf.net
 		
 		override protected function prodAuthSuccess():void
 		{
-			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
 		}
 		
 		override protected function prodAuthSuccessToken():void
 		{
-			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_COMPLETE));
+			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
 		}
 		
 		
