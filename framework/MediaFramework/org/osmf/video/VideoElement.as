@@ -186,22 +186,19 @@ package org.osmf.video
     		{
     			//Listen for all errors
     			stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
-    			
-    			    			 			
+    						    			 			
     			//DRMContent data Sidecar
     			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
     				addProtectableTrait(metadata).addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
-    				
     				return;  //Don't add traits until the "auth" has completed. 			
 	    		}
 	    		else
 	    		{
 	    			//Non sidecar
     				stream.addEventListener(StatusEvent.STATUS, onStatus);
-    				stream.addEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
 	    		}			
     		}
 			finishLoad();			
@@ -210,18 +207,20 @@ package org.osmf.video
 		//DRM API's
 		CONFIG::FLASH_10_1
     	{
-    		private function onPlaying(event:DRMStatusEvent):void
-    		{
-    			NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
-    		}
-	    			
-			private function onStatus(event:StatusEvent):void
+  			private function onStatus(event:StatusEvent):void
 			{				
 				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
 				{			
-					createProtectableTrait();			
+					createProtectableTrait().addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
 	    		}
+	  		}
+	  		
+	  		//Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
+	  		private function reloadAfterAuth(event:AuthenticationCompleteEvent):void
+	  		{	  				  			
+	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).unload();	  	
+	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).load();  		  					
 	  		}	
 			
 			private function createProtectableTrait():NetStreamContentProtectableTrait
@@ -241,7 +240,7 @@ package org.osmf.video
 			private function onDRMErrorEvent(event:DRMErrorEvent):void
 			{
 				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  //Needs authentication
-				{
+				{					
 					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
 				}
 				else
@@ -315,7 +314,6 @@ package org.osmf.video
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
-    			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onPlaying);
     			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
     		}
     		
