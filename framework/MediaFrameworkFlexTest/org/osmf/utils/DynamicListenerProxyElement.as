@@ -128,6 +128,11 @@ package org.osmf.utils
 		{
 			changeEventQueue.push({"oldView":oldView, "newView":newView});
 		}
+
+		override protected function processBytesTotalChange(newValue:Number):void
+		{
+			changeEventQueue.push({"newValue":newValue});
+		}
 		
 		private var changeEventQueue:Array;
 		private var processTraitEvents:Boolean;

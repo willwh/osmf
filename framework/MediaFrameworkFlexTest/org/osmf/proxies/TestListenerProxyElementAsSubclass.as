@@ -24,21 +24,10 @@ package org.osmf.proxies
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.*;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
-	import org.osmf.traits.BufferableTrait;
-	import org.osmf.traits.IAudible;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.SwitchableTrait;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.*;
 	import org.osmf.utils.DynamicListenerProxyElement;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
@@ -85,6 +74,15 @@ package org.osmf.proxies
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["traitTypeRemoved"] == MediaTraitType.PLAYABLE);
 			
+			wrappedElement.doAddTrait(MediaTraitType.DOWNLOADABLE, new DownloadableTrait(10, 100));
+			assertTrue(events.length == 3);
+			assertTrue(events[2]["traitTypeAdded"] == MediaTraitType.DOWNLOADABLE);
+			
+			wrappedElement.doRemoveTrait(MediaTraitType.DOWNLOADABLE);
+			
+			assertTrue(events.length == 4);
+			assertTrue(events[3]["traitTypeRemoved"] == MediaTraitType.DOWNLOADABLE);
+			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
 			//
@@ -94,7 +92,7 @@ package org.osmf.proxies
 			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
 			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
 			
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 4);
 		}
 		
 		public function testProcessAudibleChanges():void
@@ -329,6 +327,34 @@ package org.osmf.proxies
 			assertTrue(events.length == 2);
 		}
 		
+		public function testProcessBytesTotalChange():void
+		{
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.DOWNLOADABLE);
+			
+			assertTrue(events.length == 0);
+			
+			// Changing properties should result in events.
+			//
+			
+			var downloadable:DownloadableTrait = proxyElement.getTrait(MediaTraitType.DOWNLOADABLE) as DownloadableTrait;
+			
+			assertTrue(events.length == 0);
+			
+			downloadable.bytesTotal = 120;
+			
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["newValue"] == 120);
+						
+			// We shouldn't get any events when we're no longer proxying the
+			// wrapped element.
+			//
+			
+			proxyElement.wrappedElement = null;
+			
+			downloadable.bytesTotal = 150;			
+			assertTrue(events.length == 1);
+		}
+
 		public function testProcessSwitchableChanges():void
 		{
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.SWITCHABLE);

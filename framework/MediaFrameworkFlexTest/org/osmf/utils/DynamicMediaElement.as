@@ -27,11 +27,12 @@ package org.osmf.utils
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.*;
 	import org.osmf.traits.AudibleTrait;
 	import org.osmf.traits.BufferableTrait;
+	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadableTrait;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PausableTrait;
 	import org.osmf.traits.PlayableTrait;
 	import org.osmf.traits.SeekableTrait;
@@ -83,6 +84,9 @@ package org.osmf.utils
 							break;
 						case MediaTraitType.VIEWABLE:
 							trait = new ViewableTrait();
+							break;
+						case MediaTraitType.DOWNLOADABLE:
+							trait = new DownloadableTrait(10, 100);
 							break;
 						default:
 							throw new ArgumentError();
