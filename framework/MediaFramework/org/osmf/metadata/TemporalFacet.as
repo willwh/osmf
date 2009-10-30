@@ -259,7 +259,7 @@ package org.osmf.metadata
 		 */
    		private function checkForTemporalMetadata():void 
    		{
-			var now:Number = temporal.position;
+			var now:Number = temporal.currentTime;
 			
 			// Start looking one index past the last one we found
 			var index:int = findTemporalMetadata(lastFiredTemporalMetadataIndex + 1, temporalValueCollection.length - 1, now);

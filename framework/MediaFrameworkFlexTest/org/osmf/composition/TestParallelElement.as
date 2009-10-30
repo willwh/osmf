@@ -412,17 +412,17 @@ package org.osmf.composition
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal1.duration = 10;
-			temporal1.position = 5;
+			temporal1.currentTime = 5;
 
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal2:TemporalTrait = mediaElement2.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal2.duration = 30;
-			temporal2.position = 10;
+			temporal2.currentTime = 10;
 
 			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal3:TemporalTrait = mediaElement3.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal3.duration = 20;
-			temporal3.position = 15;
+			temporal3.currentTime = 15;
 			
 			// Add the children, this should cause the properties to propagate
 			// to the composition.
@@ -430,98 +430,98 @@ package org.osmf.composition
 			var temporal:ITemporal = parallel.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			assertTrue(temporal != null);
 			assertTrue(temporal.duration == 10);
-			assertTrue(temporal.position == 5);
-			assertTrue(temporal1.position == 5);
+			assertTrue(temporal.currentTime == 5);
+			assertTrue(temporal1.currentTime == 5);
 			
 			temporal.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChanged);
 			
-			// The position is the max of the children of the composition.
+			// The currentTime is the max of the children of the composition.
 			parallel.addChild(mediaElement2);
 			assertTrue(temporal.duration == 30);
-			assertTrue(temporal.position == 10);
-			assertTrue(temporal1.position == 5);
-			assertTrue(temporal2.position == 10);
+			assertTrue(temporal.currentTime == 10);
+			assertTrue(temporal1.currentTime == 5);
+			assertTrue(temporal2.currentTime == 10);
 			assertTrue(durationChangedEventCount == 1);
 			
 			parallel.addChild(mediaElement3);
 			assertTrue(temporal.duration == 30);
-			assertTrue(temporal.position == 15);
-			assertTrue(temporal1.position == 5);
-			assertTrue(temporal2.position == 10);
-			assertTrue(temporal3.position == 15);
+			assertTrue(temporal.currentTime == 15);
+			assertTrue(temporal1.currentTime == 5);
+			assertTrue(temporal2.currentTime == 10);
+			assertTrue(temporal3.currentTime == 15);
 			assertTrue(durationChangedEventCount == 1);
 			
 			// Changing the duration of a child should affect the duration of
 			// the composition. 
 			temporal1.duration = 25;
 			assertTrue(temporal.duration == 30);
-			assertTrue(temporal.position == 15);
+			assertTrue(temporal.currentTime == 15);
 			assertTrue(durationChangedEventCount == 1);
 			temporal1.duration = 35;
 			assertTrue(temporal.duration == 35);
-			assertTrue(temporal.position == 15);
+			assertTrue(temporal.currentTime == 15);
 			assertTrue(durationChangedEventCount == 2);
 			
-			// Changing the duration below the position should cause the
-			// position to change too.
+			// Changing the duration below the currentTime should cause the
+			// currentTime to change too.
 			temporal1.duration = 3;
 			assertTrue(temporal.duration == 30);
-			assertTrue(temporal.position == 15);
+			assertTrue(temporal.currentTime == 15);
 			assertTrue(durationChangedEventCount == 3);
 			
 			temporal1.duration = 10;
-			temporal1.position = 5;
+			temporal1.currentTime = 5;
 			
 			// The composite trait dispatches the durationReached event
 			// when every child has reached its duration.
 			//
 			
-			assertTrue(temporal.position == 15);
-			assertTrue(temporal1.position == 5);
-			assertTrue(temporal2.position == 10);
-			assertTrue(temporal3.position == 15);
+			assertTrue(temporal.currentTime == 15);
+			assertTrue(temporal1.currentTime == 5);
+			assertTrue(temporal2.currentTime == 10);
+			assertTrue(temporal3.currentTime == 15);
 			assertTrue(durationChangedEventCount == 3);
 			
 			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
 			
-			temporal1.position = 10;
+			temporal1.currentTime = 10;
 			assertTrue(durationReachedEventCount == 0);
 			
-			temporal2.position = 25;
+			temporal2.currentTime = 25;
 			assertTrue(durationReachedEventCount == 0);
 			
-			temporal3.position = 20;
+			temporal3.currentTime = 20;
 			assertTrue(durationReachedEventCount == 0);
 
-			temporal2.position = 30;
+			temporal2.currentTime = 30;
 			assertTrue(durationReachedEventCount == 1);
 			
 			// If two children have the same (max) duration, then we should
 			// only get one event (when both have reached their duration).
 
-			temporal2.position = 25;
-			temporal3.position = 15;
+			temporal2.currentTime = 25;
+			temporal3.currentTime = 15;
 			temporal3.duration = 30;
 			
-			temporal2.position = 30;
+			temporal2.currentTime = 30;
 			assertTrue(durationReachedEventCount == 1);
 			
-			temporal3.position = 30;
+			temporal3.currentTime = 30;
 			assertTrue(durationReachedEventCount == 2);
 			
-			temporal1.position = 5;
-			temporal2.position = 10;
-			temporal3.position = 15;
+			temporal1.currentTime = 5;
+			temporal2.currentTime = 10;
+			temporal3.currentTime = 15;
 			temporal3.duration = 20;
 			
-			// Removing a child may affect duration and position.
+			// Removing a child may affect duration and currentTime.
 			parallel.removeChild(mediaElement2);
 			assertTrue(temporal.duration == 20);
-			assertTrue(temporal.position == 15);
+			assertTrue(temporal.currentTime == 15);
 
 			parallel.removeChild(mediaElement3);
 			assertTrue(temporal.duration == 10);
-			assertTrue(temporal.position == 5);
+			assertTrue(temporal.currentTime == 5);
 		}
 		
 		public function testGetTraitPlayable():void
@@ -1033,9 +1033,9 @@ package org.osmf.composition
 			var seekable2:SeekableTrait = mediaElement2.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			
 			temporal1.duration = 20;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 			temporal2.duration = 40;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 			
 			parallel.addChild(mediaElement1);
 			parallel.addChild(mediaElement2);
@@ -1054,49 +1054,49 @@ package org.osmf.composition
 			assertTrue(seekable.canSeekTo(Number.NaN) == false);
 			assertTrue(seekable.canSeekTo(-100) == false);
 			
-			var position:Number = 18;
-			seekable.seek(position);
-			seekable1.processSeekCompletion(position);
-			seekable2.processSeekCompletion(position);
+			var currentTime:Number = 18;
+			seekable.seek(currentTime);
+			seekable1.processSeekCompletion(currentTime);
+			seekable2.processSeekCompletion(currentTime);
 			assertTrue(events.length == 2);
-			assertTrue(temporal1.position == position);
-			assertTrue(temporal2.position == position);
+			assertTrue(temporal1.currentTime == currentTime);
+			assertTrue(temporal2.currentTime == currentTime);
 
-			position = 5;
-			seekable.seek(position);
+			currentTime = 5;
+			seekable.seek(currentTime);
 			
 			seekable.seek(10);
-			assertTrue(temporal1.position != 10);
-			assertTrue(temporal2.position != 10);
+			assertTrue(temporal1.currentTime != 10);
+			assertTrue(temporal2.currentTime != 10);
 			
-			seekable1.processSeekCompletion(position);
-			seekable2.processSeekCompletion(position);
+			seekable1.processSeekCompletion(currentTime);
+			seekable2.processSeekCompletion(currentTime);
 			assertTrue(events.length == 4);
-			assertTrue(temporal1.position == position);
-			assertTrue(temporal2.position == position);
+			assertTrue(temporal1.currentTime == currentTime);
+			assertTrue(temporal2.currentTime == currentTime);
 
-			position = 25;
-			seekable.seek(position);
+			currentTime = 25;
+			seekable.seek(currentTime);
 			seekable1.processSeekCompletion(temporal1.duration);
-			seekable2.processSeekCompletion(position);
+			seekable2.processSeekCompletion(currentTime);
 			assertTrue(events.length == 6);
-			assertTrue(temporal1.position == temporal1.duration);
-			assertTrue(temporal2.position == position);
+			assertTrue(temporal1.currentTime == temporal1.duration);
+			assertTrue(temporal2.currentTime == currentTime);
 			
-			var invalidPosition:Number = -100;
-			seekable.seek(invalidPosition);
-			assertTrue(temporal1.position != invalidPosition);
-			assertTrue(temporal2.position != invalidPosition);
+			var invalidCurrentTime:Number = -100;
+			seekable.seek(invalidCurrentTime);
+			assertTrue(temporal1.currentTime != invalidCurrentTime);
+			assertTrue(temporal2.currentTime != invalidCurrentTime);
 
-			invalidPosition = Number.NaN;
-			seekable.seek(invalidPosition);
-			assertTrue(temporal1.position == 0);
-			assertTrue(temporal2.position == 0);
+			invalidCurrentTime = Number.NaN;
+			seekable.seek(invalidCurrentTime);
+			assertTrue(temporal1.currentTime == 0);
+			assertTrue(temporal2.currentTime == 0);
 
-			invalidPosition = 2000;
-			seekable.seek(invalidPosition);
-			assertTrue(temporal1.position == 0);
-			assertTrue(temporal2.position == 0);
+			invalidCurrentTime = 2000;
+			seekable.seek(invalidCurrentTime);
+			assertTrue(temporal1.currentTime == 0);
+			assertTrue(temporal2.currentTime == 0);
 			
 		}
 		
@@ -1121,11 +1121,11 @@ package org.osmf.composition
 			var seekable3:SeekableTrait = mediaElement3.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 
 			temporal1.duration = 20;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 			temporal2.duration = 40;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 			temporal3.duration = 10;
-			temporal3.position = 0;
+			temporal3.currentTime = 0;
 
 			seekable1.seek(15);
 			assertTrue(seekable1.seeking == true);
@@ -1163,11 +1163,11 @@ package org.osmf.composition
 			var seekable3:SeekableTrait = mediaElement3.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 
 			temporal1.duration = 20;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 			temporal2.duration = 40;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 			temporal3.duration = 10;
-			temporal3.position = 0;
+			temporal3.currentTime = 0;
 
 			parallel.addChild(mediaElement1);
 			parallel.addChild(mediaElement2);

@@ -262,9 +262,9 @@ package org.osmf.mast.media
 				var currentChild:MediaElement = serialElement.getChildAt(index);
 				if (currentChild != null)
 				{
-					// Treat it as playing if it's playing or has a positive position.
+					// Treat it as playing if it's playing or has a positive currentTime.
 					var temporal:ITemporal = currentChild.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-					if (temporal != null &&	temporal.position > 0)
+					if (temporal != null &&	temporal.currentTime > 0)
 					{
 						index++;
 					}

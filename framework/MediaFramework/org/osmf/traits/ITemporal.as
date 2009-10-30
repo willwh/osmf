@@ -31,7 +31,7 @@ package org.osmf.traits
 	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>position</code> of the trait has changed to a value
+	 * Dispatched when the <code>currentTime</code> of the trait has changed to a value
 	 * equal to its <code>duration</code>.
 	 * 
 	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
@@ -40,7 +40,7 @@ package org.osmf.traits
 	
 	/**
 	 * ITemporal defines the trait interface for media that have a duration and
-	 * a position.
+	 * a currentTime.
 	 * 
 	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.TEMPORAL)</code> method to query
 	 * whether a media element has a trait that implements this interface. 
@@ -63,9 +63,9 @@ package org.osmf.traits
 		function get duration():Number;
 		
 		/**
-		 * The position of the associated media element's cursor 
+		 * The current time of the associated media element's cursor 
 		 * in seconds.  Must never exceed the <code>duration</code>.
 		 */		
-		function get position():Number;
+		function get currentTime():Number;
 	}
 }

@@ -53,7 +53,7 @@ package org.osmf.audio
 		public function testTemporal():void
 		{
 			assertTrue(isNaN(temporal.duration));
-			assertTrue(temporal.position == 0);
+			assertTrue(temporal.currentTime == 0);
 			
 			soundAdapter.addEventListener("playbackError", onPlaybackError);
 			soundAdapter.soundTransform.volume = 0;
@@ -65,7 +65,7 @@ package org.osmf.audio
 		private function onDurationReached(event:TraitEvent):void
 		{
 			// SoundAdapter should clear the channel, and start at 0 when done.
-			assertEquals(temporal.position, 0);			
+			assertEquals(temporal.currentTime, 0);			
 		}
 		
 		private function onPlaybackError(event:Event):void

@@ -177,7 +177,7 @@ package org.osmf.metadata
 				
 				// The time should be within .5 seconds of the playhead position
 				var timeValue:Number = (event.value as TemporalIdentifier).time;
-				var playheadPosition:Number = temporal.position;
+				var playheadPosition:Number = temporal.currentTime;
 				trace("onPositionReached() - event.value.time = "+timeValue+", playhead position="+playheadPosition);
 				assertTrue((playheadPosition >= (timeValue - .5)) && (playheadPosition <= (timeValue + .5)));
 				

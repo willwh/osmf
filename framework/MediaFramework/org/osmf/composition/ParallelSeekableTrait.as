@@ -69,7 +69,7 @@ package org.osmf.composition
 			{
 				// The first added child's properties are applied to the
 				// composite trait.
-				setSeeking(seekable.seeking, seekable.seeking? childTemporal.position : 0);
+				setSeeking(seekable.seeking, seekable.seeking ? childTemporal.currentTime : 0);
 			}
 			else
 			{

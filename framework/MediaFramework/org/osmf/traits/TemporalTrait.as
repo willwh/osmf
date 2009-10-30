@@ -32,7 +32,7 @@ package org.osmf.traits
 	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
 	
 	/**
-	 * Dispatched when the position of the trait has changed to a value
+	 * Dispatched when the currentTime of the trait has changed to a value
 	 * equal to its duration.
 	 * 
 	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
@@ -52,21 +52,21 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Invoking this setter will result in the trait's position
-		 * value changing if it differs from position's  current value.
+		 * Invoking this setter will result in the trait's currentTime
+		 * value changing if it differs from currentTime's current value.
 		 * 
-		 * @see canProcessPositionChange
-		 * @see processPositionChange
-		 * @see postProcessPositionChange
+		 * @see canProcessCurrentTimeChange
+		 * @see processCurrentTimeChange
+		 * @see postProcessCurrentTimeChange
 		 */		
-		final public function set position(value:Number):void
+		final public function set currentTime(value:Number):void
 		{
 			if (!isNaN(value))
 			{
-				// Don't ever let the position exceed the duration.
+				// Don't ever let the currentTime exceed the duration.
 				if (!isNaN(_duration))
 				{
-					value = Math.min(value,_duration);
+					value = Math.min(value, _duration);
 				}
 				else
 				{
@@ -74,16 +74,16 @@ package org.osmf.traits
 				}
 			}
 			
-			if (_position != value && canProcessPositionChange(value))
+			if (_currentTime != value && canProcessCurrentTimeChange(value))
 			{
-				processPositionChange(value);
+				processCurrentTimeChange(value);
 					
-				var oldPosition:Number = _position;
-				_position = value;
+				var oldCurrentTime:Number = _currentTime;
+				_currentTime = value;
 				
-				postProcessPositionChange(oldPosition);
+				postProcessCurrentTimeChange(oldCurrentTime);
 				
-				if (position == duration &&	position > 0)
+				if (currentTime == duration && currentTime > 0)
 				{
 					processDurationReached();
 				} 
@@ -109,13 +109,13 @@ package org.osmf.traits
 				
 				postProcessDurationChange(oldDuration);
 				
-				// Position cannot exceed duration.
-				if (	!isNaN(_position)
+				// Current time cannot exceed duration.
+				if (	!isNaN(_currentTime)
 					&&  !isNaN(_duration)
-					&& _position > _duration
+					&& _currentTime > _duration
 				   )
 				{
-					position = duration;
+					currentTime = duration;
 				}
 			}
 		}
@@ -134,16 +134,16 @@ package org.osmf.traits
 		/**
 		 * @inheritDoc
 		 */
-		public function get position():Number
+		public function get currentTime():Number
 		{
-			return _position;
+			return _currentTime;
 		}
 		
 		// Internals
 		//
 		
 		private var _duration:Number;
-		private var _position:Number;
+		private var _currentTime:Number;
 		
 		/**
 		 * Called before the <code>duration</code> property is changed.
@@ -182,39 +182,39 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Called before the <code>position</code> property is changed.
+		 * Called before the <code>currentTime</code> property is changed.
 		 * *
-		 * @param newPosition Proposed new <code>position</code> value.
+		 * @param newCurrentTime Proposed new <code>currentTime</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
 		 */		
-		protected function canProcessPositionChange(newPosition:Number):Boolean
+		protected function canProcessCurrentTimeChange(newCurrentTime:Number):Boolean
 		{
 			return true;
 		}
 
 		/**
-		 * Called immediately before the <code>position</code> property is changed.
+		 * Called immediately before the <code>currentTime</code> property is changed.
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-		 * @param newPosition New <code>position</code> value.
+		 * @param newCurrentTime New <code>currentTime</code> value.
 		 */		
-		protected function processPositionChange(newPosition:Number):void
+		protected function processCurrentTimeChange(newCurrentTime:Number):void
 		{
 		}
 		
 		/**
-		 * Called just after the <code>position</code> property has changed.
-		 * @param oldPosition Previous <code>position</code> value.
+		 * Called just after the <code>currentTime</code> property has changed.
+		 * @param oldCurrentTime Previous <code>currentTime</code> value.
 		 * 
 		 */		
-		protected function postProcessPositionChange(oldPosition:Number):void
+		protected function postProcessCurrentTimeChange(oldCurrentTime:Number):void
 		{
 		}
 		
 		/**
 		 * Called when a subclass or a media element that has the temporal trait first detects
-		 * that <code>position</code> equals <code>duration</code>.
-		 * <p>Not called when both <code>position</code> and <code>duration</code> equal zero.</p>
+		 * that <code>currentTime</code> equals <code>duration</code>.
+		 * <p>Not called when both <code>currentTime</code> and <code>duration</code> equal zero.</p>
 		 * 
 		 * <p>Dispatches the durationReached event.</p>
 		 */		
@@ -222,6 +222,5 @@ package org.osmf.traits
 		{
 			dispatchEvent(new TraitEvent(TraitEvent.DURATION_REACHED));
 		}
-		
 	}
 }

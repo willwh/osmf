@@ -76,7 +76,7 @@ package org.osmf.audio
 			sound.addEventListener(IOErrorEvent.IO_ERROR, onIOError, false, 0, true);
 		}
 		
-		public function get position():Number
+		public function get currentTime():Number
 		{			
 			return channel != null ? channel.position / 1000 : lastStartTime / 1000;
 		}

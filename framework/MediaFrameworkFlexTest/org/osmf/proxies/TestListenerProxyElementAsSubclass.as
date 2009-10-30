@@ -311,7 +311,7 @@ package org.osmf.proxies
 			assertTrue(isNaN(events[0]["oldDuration"]));
 			assertTrue(events[0]["newDuration"] == 3);
 			
-			temporal.position = 3;
+			temporal.currentTime = 3;
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["durationReached"] == true);
 			
@@ -321,7 +321,7 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			temporal.position = 2;
+			temporal.currentTime = 2;
 			temporal.duration = 2;
 			
 			assertTrue(events.length == 2);

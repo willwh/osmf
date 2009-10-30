@@ -662,57 +662,57 @@ package org.osmf.media
 			}
 		}
 		
-		public function testPlayheadWithChangeEvents():void
+		public function testCurrentTimeWithChangeEvents():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			if (loadable)
 			{
-				callAfterLoad(doTestPlayheadWithChangeEvents, false);
+				callAfterLoad(doTestCurrentTimeWithChangeEvents, false);
 			}
 			else
 			{
 				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestPlayheadWithChangeEvents();
+				doTestCurrentTimeWithChangeEvents();
 			}
 		}
 		
-		public function testPlayheadWithNoChangeEvents():void
+		public function testCurrentTimeWithNoChangeEvents():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			if (loadable)
 			{
-				callAfterLoad(doTestPlayheadWithNoChangeEvents, false);
+				callAfterLoad(doTestCurrentTimeWithNoChangeEvents, false);
 			}
 			else
 			{
 				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestPlayheadWithNoChangeEvents();
+				doTestCurrentTimeWithNoChangeEvents();
 			}
 		}
 		
-		private function doTestPlayheadWithChangeEvents():void
+		private function doTestCurrentTimeWithChangeEvents():void
 		{
-			doTestPlayhead(true);
+			doTestCurrentTime(true);
 		}
 
-		private function doTestPlayheadWithNoChangeEvents():void
+		private function doTestCurrentTimeWithNoChangeEvents():void
 		{
-			doTestPlayhead(false);
+			doTestCurrentTime(false);
 		}
 		
-		private function doTestPlayhead(enableChangeEvents:Boolean):void
+		private function doTestCurrentTime(enableChangeEvents:Boolean):void
 		{
 			if (traitExists(MediaTraitType.TEMPORAL))
 			{
 				assertTrue(mediaPlayer.temporal == true);
-				assertTrue(mediaPlayer.playhead == 0 || isNaN(mediaPlayer.playhead));
+				assertTrue(mediaPlayer.currentTime == 0 || isNaN(mediaPlayer.currentTime));
 				
 				assertTrue(mediaPlayer.playheadUpdateInterval == 250);
 
 				mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
-				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestPlayhead);
+				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
 				
 				if (enableChangeEvents)
 				{
@@ -729,12 +729,12 @@ package org.osmf.media
 				
 				var playheadUpdateCount:int = 0;
 				
-				function onTestPlayhead(event:TraitEvent):void
+				function onTestCurrentTime(event:TraitEvent):void
 				{
 					mediaPlayer.removeEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
-					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestPlayhead);
+					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
 					
-					assertTrue(Math.abs(mediaPlayer.playhead - mediaPlayer.duration) < 1);
+					assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
 					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					
 					if (enableChangeEvents)
@@ -762,7 +762,7 @@ package org.osmf.media
 				assertTrue(mediaPlayer.temporal == false);
 				
 				assertTrue(isNaN(mediaPlayer.duration));
-				assertTrue(isNaN(mediaPlayer.playhead));
+				assertTrue(isNaN(mediaPlayer.currentTime));
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}

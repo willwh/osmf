@@ -58,31 +58,31 @@ package org.osmf.traits
 			assertTrue(dce.newDuration == 20); 
 		}
 		
-		public function testPosition():void 
+		public function testCurrentTime():void 
 		{
-			assertTrue(isNaN(temporal.position));
+			assertTrue(isNaN(temporal.currentTime));
 			
-			if (canChangePosition)
+			if (canChangeCurrentTime)
 			{
-				// Position must never exceed duration.
-				temporalTraitBase.position = 10;
-				assertTrue(temporal.position == 0);
+				// Current time must never exceed duration.
+				temporalTraitBase.currentTime = 10;
+				assertTrue(temporal.currentTime == 0);
 	
 				temporalTraitBase.duration = 25;
-				temporalTraitBase.position = 10;
-				assertTrue(temporal.position == 10);
-				temporalTraitBase.position = 50;
-				assertTrue(temporal.position == 25);
+				temporalTraitBase.currentTime = 10;
+				assertTrue(temporal.currentTime == 10);
+				temporalTraitBase.currentTime = 50;
+				assertTrue(temporal.currentTime == 25);
 				temporalTraitBase.duration = 5;
-				assertTrue(temporal.position == 5);
+				assertTrue(temporal.currentTime == 5);
 				
-				// Setting the position to the duration should cause the
+				// Setting the currentTime to the duration should cause the
 				// durationReached event to fire.
 				
-				temporal.addEventListener(TraitEvent.DURATION_REACHED,eventCatcher);
+				temporal.addEventListener(TraitEvent.DURATION_REACHED, eventCatcher);
 				
 				temporalTraitBase.duration = 20;
-				temporalTraitBase.position = 20;
+				temporalTraitBase.currentTime = 20;
 				
 				var dre:TraitEvent;
 				dre = events[0] as TraitEvent;
@@ -98,9 +98,9 @@ package org.osmf.traits
 			return temporal as TemporalTrait;
 		}
 		
-		protected function get canChangePosition():Boolean
+		protected function get canChangeCurrentTime():Boolean
 		{
-			// Subclasses can override if explicit position changes are
+			// Subclasses can override if explicit currentTime changes are
 			// disallowed.
 			return true;
 		}

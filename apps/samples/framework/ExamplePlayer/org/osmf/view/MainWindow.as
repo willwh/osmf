@@ -207,7 +207,7 @@ package org.osmf.view
 			position.text = "" + Math.round(event.newPosition);
 
 			seekBar.value = 	mediaPlayerWrapper.mediaPlayer.temporal
-							? 	mediaPlayerWrapper.mediaPlayer.playhead
+							? 	mediaPlayerWrapper.mediaPlayer.currentTime
 							:	0;
 			
 			bufferLength.text = mediaPlayerWrapper.mediaPlayer.bufferable

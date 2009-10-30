@@ -123,7 +123,7 @@ package org.osmf.proxies
 			
 			temporalTrait = new TemporalTrait();
 			temporalTrait.duration = _duration;
-			temporalTrait.position = 0;
+			temporalTrait.currentTime = 0;
 			temporalTrait.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
 			addTrait(MediaTraitType.TEMPORAL, temporalTrait);
 
@@ -165,11 +165,11 @@ package org.osmf.proxies
 				playheadTimer.stop();
 				pausableTrait.resetPaused();
 				playableTrait.resetPlaying();
-				temporalTrait.position = _duration;
+				temporalTrait.currentTime = _duration;
 			}
 			else
 			{
-				temporalTrait.position = time;
+				temporalTrait.currentTime = time;
 			}
 		}
 		
@@ -253,7 +253,7 @@ package org.osmf.proxies
 		
 		private function set elapsedTime(value:Number):void
 		{
-			_elapsedTime = temporalTrait.position = value;
+			_elapsedTime = temporalTrait.currentTime = value;
 		}
 		
 		private static const DEFAULT_PLAYHEAD_UPDATE_INTERVAL:Number = 250;

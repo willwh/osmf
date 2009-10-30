@@ -123,7 +123,7 @@ package org.osmf.mast.adapter
 			
 			// Properties
 			_map[DURATION] 		= "ITemporal.duration";
-			_map[POSITION] 		= "ITemporal.position";
+			_map[POSITION] 		= "ITemporal.currentTime";
 			_map[IS_PLAYING]	= "IPlayable.playing";
 			_map[IS_PAUSED]		= "IPausable.paused";
 			_map[CONTENT_WIDTH]	= "ISpatial.width";

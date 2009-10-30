@@ -251,10 +251,10 @@ package org.osmf.gateways
 							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).duration;
 						}
 						break;
-					case "Position":
+					case "CurrentTime":
 						if (element.hasTrait(MediaTraitType.TEMPORAL))
 						{
-							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).position;
+							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).currentTime;
 						}
 					// IAudible:
 					case "Volume":
@@ -360,10 +360,10 @@ package org.osmf.gateways
 							temporal.duration = value as Number;
 						}
 						break;
-					case "Position":
+					case "CurrentTime":
 						if (temporal)
 						{
-							temporal.position = value as Number;
+							temporal.currentTime = value as Number;
 						}
 						break;
 					// IAudible
@@ -664,7 +664,7 @@ package org.osmf.gateways
         		addGetSet	(this,	"Temporal");
         		addGetSet	(this,	"Duration");
         		addCallback (this,	"onDurationChange", 1);		// duration;
-        		addGetSet	(this,	"Position");
+        		addGetSet	(this,	"CurrentTime");
         		addCallback	(this,	"onDurationReached");
         		
         		// IAudible bridge:

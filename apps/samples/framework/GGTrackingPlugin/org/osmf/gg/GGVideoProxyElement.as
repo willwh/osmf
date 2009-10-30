@@ -237,7 +237,7 @@ package org.osmf.gg
 						
 						videoType = getContentTypeFromMetadata(wrappedElement.resource.metadata);
 						
-						sendEvent(UNLOAD_VIDEO, position, videoType);
+						sendEvent(UNLOAD_VIDEO, currentTime, videoType);
 					}
 					break;
 				case LoadState.LOADED:
@@ -263,8 +263,8 @@ package org.osmf.gg
 		{
 			if (event.playing)
 			{
-				sendEvent(PLAY_VIDEO, position);
-				trace("play: " + position);
+				sendEvent(PLAY_VIDEO, currentTime);
+				trace("play: " + currentTime);
 			}
 		}
 
@@ -272,8 +272,8 @@ package org.osmf.gg
 		{
 			if (event.paused)
 			{
-				sendEvent(PAUSE_VIDEO, position);
-				trace("pause: " + position);
+				sendEvent(PAUSE_VIDEO, currentTime);
+				trace("pause: " + currentTime);
 			}
 		}
 
@@ -281,22 +281,22 @@ package org.osmf.gg
 		{
 			if (event.seeking)
 			{
-				sendEvent(SEEK, position, event.time);
+				sendEvent(SEEK, currentTime, event.time);
 			}
 		}
 		
 		private function onDurationReached(event:TraitEvent):void
 		{
-			sendEvent(STOP, position);
+			sendEvent(STOP, currentTime);
 		}
 
 		// Utility Methods
 		//
 		
-		private function get position():Number
+		private function get currentTime():Number
 		{
 			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			return temporal != null ? temporal.position : 0;
+			return temporal != null ? temporal.currentTime : 0;
 		}
 
 		private function get duration():Number

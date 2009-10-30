@@ -37,7 +37,7 @@ package org.osmf.composition
 	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
 	
 	/**
-	 * Dispatched when the position of the trait changed to a value
+	 * Dispatched when the currentTime of the trait changed to a value
 	 * that is equal to the duration of the ITemporal.
 	 * 
 	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
@@ -49,14 +49,14 @@ package org.osmf.composition
 	 * 
 	 * For parallel media elements, the composite trait represents a timeline
 	 * that encapsulates the timeline of all children.  Its duration is the
-	 * maximum of the durations of all children.  Its position is kept in sync
-	 * for all children (with the obvious caveat that a child's position will
+	 * maximum of the durations of all children.  Its currentTime is kept in sync
+	 * for all children (with the obvious caveat that a child's currentTime will
 	 * never be greater than its duration).
 	 * 
 	 * For serial elements, the composite trait represents a timeline that
 	 * encapsulates the timeline of all children.  Its duration is the sum of
-	 * the durations of all children.  Its position is the sum of the positions
-	 * of the first N fully complete children, plus the position of the next
+	 * the durations of all children.  Its currentTime is the sum of the currentTimes
+	 * of the first N fully complete children, plus the currentTime of the next
 	 * child.
 	 **/
 	internal class CompositeTemporalTrait extends CompositeMediaTraitBase implements ITemporal
@@ -88,11 +88,11 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc 
 		 */		
-		public function get position():Number
+		public function get currentTime():Number
 		{
-			updatePosition();
+			updateCurrentTime();
 			
-			return _position;
+			return _currentTime;
 		}
 		
 		// Overrides
@@ -146,7 +146,7 @@ package org.osmf.composition
 							// Assume that the child that fired the event has
 							// finished.
 							if (iterTemporal != temporal &&
-								iterTemporal.position < iterTemporal.duration)
+								iterTemporal.currentTime < iterTemporal.duration)
 							{
 								allHaveReachedDuration = false;
 							}
@@ -242,50 +242,50 @@ package org.osmf.composition
 					
 				dispatchEvent(new DurationChangeEvent(oldDuration, _duration));
 				
-				// Position cannot exceed duration.
-				if (position > duration)
+				// Current time cannot exceed duration.
+				if (currentTime > duration)
 				{
-					updatePosition();
+					updateCurrentTime();
 				}
 			}
 		}
 		
-		private function updatePosition():void
+		private function updateCurrentTime():void
 		{
-			var newPosition:Number = 0;
-			var positionCalculated:Boolean = false;
+			var newCurrentTime:Number = 0;
+			var currentTimeCalculated:Boolean = false;
 			
 			traitAggregator.forEachChildTrait
 				(
 					function(mediaTrait:IMediaTrait):void
 				  	{
-				  		var position:Number = ITemporal(mediaTrait).position;
-				  		position = isNaN(position) ? 0 : position;
+				  		var currentTime:Number = ITemporal(mediaTrait).currentTime;
+				  		currentTime = isNaN(currentTime) ? 0 : currentTime;
 				  		
 				  		if (mode == CompositionMode.PARALLEL)
 				  	 	{
-			  	 	 		// The position is the max of all child positions.
-			     	 		newPosition = Math.max(newPosition, position);
+			  	 	 		// The currentTime is the max of all child currentTimes.
+			     	 		newCurrentTime = Math.max(newCurrentTime, currentTime);
 			     	 	}
 			     	 	else // SERIAL
 			     	 	{
-							// The position is the sum of all durations up to the
-							// current child, plus the position of the current
+							// The currentTime is the sum of all durations up to the
+							// current child, plus the currentTime of the current
 							// child.
-					  	 	if (!positionCalculated)
+					  	 	if (!currentTimeCalculated)
 					  	 	{
 						  	 	if (mediaTrait == traitOfCurrentChild)
 						  	 	{
-						  	 	 	newPosition += position;
+						  	 	 	newCurrentTime += currentTime;
 						  	 	
-						  	 	 	positionCalculated = true;
+						  	 	 	currentTimeCalculated = true;
 						  	 	}
 						  	 	else
 						  	 	{
 						  	 		var duration:Number = ITemporal(mediaTrait).duration;
 						  	 		if (!isNaN(duration))
 						  	 		{
-						  	 	 		newPosition += duration;
+						  	 	 		newCurrentTime += duration;
 						  	 	 	}
 						  	 	}
 						 	}
@@ -294,18 +294,18 @@ package org.osmf.composition
 					, MediaTraitType.TEMPORAL
 				);
 
-			setPosition(newPosition);
+			setCurrentTime(newCurrentTime);
 		}
 		
-		private function setPosition(value:Number):void
+		private function setCurrentTime(value:Number):void
 		{
-			// Don't ever let the position exceed the duration.
+			// Don't ever let the currentTime exceed the duration.
 			value = Math.min(value, isNaN(duration) ? 0 : duration);
 
-			if (_position != value)
+			if (_currentTime != value)
 			{
-				var oldPosition:Number = _position;
-				_position = value;
+				var oldCurrentTime:Number = _currentTime;
+				_currentTime = value;
 			}
 		}
 
@@ -319,6 +319,6 @@ package org.osmf.composition
 		private var mode:CompositionMode;
 		private var owner:MediaElement;
 		private var _duration:Number;
-		private var _position:Number;
+		private var _currentTime:Number;
 	}
 }

@@ -29,7 +29,7 @@ package org.osmf.utils
 	import org.osmf.traits.TemporalTrait;
 	
 	/**
-	 * ITemporal which keeps its position in sync with the playing state of an
+	 * ITemporal which keeps its current time in sync with the playing state of an
 	 * IPlayable, via a Timer.  Useful for testing.
 	 **/
 	public class TimerTemporalTrait extends TemporalTrait
@@ -39,7 +39,7 @@ package org.osmf.utils
 			super();
 			
 			this.duration = duration;
-			this.position = 0;
+			this.currentTime = 0;
 			this.playable = playable;
 			
 			playheadTimer = new Timer(250);
@@ -69,7 +69,7 @@ package org.osmf.utils
 		
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
-			position += 0.25;
+			currentTime += 0.25;
 		}
 		
 		private var playable:IPlayable;

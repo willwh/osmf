@@ -50,7 +50,7 @@ package org.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		override public function get position():Number
+		override public function get currentTime():Number
 		{
 			return netStream.time;
 		}

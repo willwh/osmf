@@ -45,10 +45,10 @@ package org.osmf.examples.chromeless
 		private function onPlayheadChange(event:Event):void
 		{
 			// Stay in sync with the state of the SWF.
-			var newPosition:Number = Object(swfRoot).videoPlayer.playhead;
-			if (newPosition != position)
+			var newCurrentTime:Number = Object(swfRoot).videoPlayer.playhead;
+			if (newCurrentTime != currentTime)
 			{
-				super.position = newPosition;
+				super.currentTime = newCurrentTime;
 			}
 		}
 		

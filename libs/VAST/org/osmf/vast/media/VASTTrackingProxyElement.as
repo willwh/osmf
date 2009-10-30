@@ -195,7 +195,7 @@ package org.osmf.vast.media
 			if (temporal != null)
 			{
 				var duration:Number = temporal.duration;
-				return duration > 0 ? 100 * temporal.position / duration : 0;
+				return duration > 0 ? 100 * temporal.currentTime / duration : 0;
 			}
 			
 			return 0;

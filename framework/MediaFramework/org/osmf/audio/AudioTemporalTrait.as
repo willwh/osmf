@@ -39,9 +39,9 @@ package org.osmf.audio
 			soundAdapter.addEventListener(Event.COMPLETE, onPlaybackComplete, false, 0, true);	
 		}
 		
-		override public function get position():Number
+		override public function get currentTime():Number
 		{
-			return soundAdapter.position;
+			return soundAdapter.currentTime;
 		}		
 		
 		// Internals

@@ -44,11 +44,11 @@ package org.osmf.net
 			netFactory = null;
 		}
 		
-		override public function testPosition():void
+		override public function testCurrentTime():void
 		{
 			// TODO: Fix the mismatch between the TemporalTrait's
-			// initial position and the NetStreamTemporalTrait's
-			// initial position (one is NaN, the other is zero).
+			// initial currentTime and the NetStreamTemporalTrait's
+			// initial currentTime (one is NaN, the other is zero).
 			// The base test results in a failure.
 		}
 
@@ -65,7 +65,7 @@ package org.osmf.net
 			return new NetStreamTemporalTrait(stream);
 		}
 		
-		override protected function get canChangePosition():Boolean
+		override protected function get canChangeCurrentTime():Boolean
 		{
 			return false;
 		}

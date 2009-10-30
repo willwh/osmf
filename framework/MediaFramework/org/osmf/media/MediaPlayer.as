@@ -425,7 +425,7 @@ package org.osmf.media
         }
 
         /**
-		 * Interval between the dispatches of change events for the playhead position
+		 * Interval between the dispatches of change events for the playhead time
 		 * in milliseconds. 
          * <p>The default progress is 250 milliseconds.
          * A non-positive value disables the dispatch of the change events.</p>
@@ -531,7 +531,7 @@ package org.osmf.media
 		
 		/**
 		 * Indicates whether the media is temporal.
-		 * Temporal media supports a duration and a position within that duration.
+		 * Temporal media supports a duration and a currentT tme within that duration.
 		 */	
 		public function get temporal():Boolean
 		{
@@ -907,15 +907,15 @@ package org.osmf.media
 	    }
 	  	  
     	/**
-		 * Position of the playhead in seconds.
+		 * Current time of the playhead in seconds.
 		 * Must not exceed the duration.
 		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
          * @see org.osmf.traits.ITemporal
 		 */		    
-	    public function get playhead():Number
+	    public function get currentTime():Number
 	    {
-	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).position : NaN;
+	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).currentTime : NaN;
 	    }
 	    	    
 	    /**
@@ -1232,10 +1232,10 @@ package org.osmf.media
 								
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
-			if (temporal && playhead != lastPlayhead)
+			if (temporal && currentTime != lastCurrentTime)
 			{				
-				lastPlayhead = playhead;
-				dispatchEvent(new PlayheadChangeEvent(playhead));
+				lastCurrentTime = currentTime;
+				dispatchEvent(new PlayheadChangeEvent(currentTime));
 			}
 		}	
 		
@@ -1302,7 +1302,7 @@ package org.osmf.media
 					
 	    private static const DEFAULT_UPDATE_INTERVAL:Number = 250;
 	      
-	    private var lastPlayhead:Number = 0;	
+	    private var lastCurrentTime:Number = 0;	
 	    private var lastBytesDownloaded:Number = NaN;	
 		private var _autoPlay:Boolean = true;
 		private var _autoRewind:Boolean = true;

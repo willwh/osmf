@@ -78,7 +78,7 @@ package org.osmf.composition
 			{
 				// If this is the current child of the composition, the composite trait derives its seeking
 				// state from the current child.
-				setSeeking(seekable.seeking, seekable.seeking? childTemporal.position : 0);
+				setSeeking(seekable.seeking, seekable.seeking ? childTemporal.currentTime : 0);
 			}
 			
 			super.processAggregatedChild(child);

@@ -157,7 +157,7 @@ package org.osmf.utils
 		{
 			if (temporal != null && event.seeking == true)
 			{
-				temporal.position = event.time;
+				temporal.currentTime = event.time;
 			}
 		}
 		

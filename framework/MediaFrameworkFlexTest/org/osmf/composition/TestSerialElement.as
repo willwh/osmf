@@ -474,17 +474,17 @@ package org.osmf.composition
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal1.duration = 10;
-			temporal1.position = 5;
+			temporal1.currentTime = 5;
 
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal2:TemporalTrait = mediaElement2.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal2.duration = 30;
-			temporal2.position = 10;
+			temporal2.currentTime = 10;
 
 			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal3:TemporalTrait = mediaElement3.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal3.duration = 20;
-			temporal3.position = 15;
+			temporal3.currentTime = 15;
 			
 			// Add the first child.  This should cause its properties to
 			// propagate to the composition.
@@ -492,34 +492,34 @@ package org.osmf.composition
 			var temporal:ITemporal = serial.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			assertTrue(temporal != null);
 			assertTrue(temporal.duration == 10);
-			assertTrue(temporal.position == 5);
+			assertTrue(temporal.currentTime == 5);
 			
-			// Change temporal1's position. This should result in the temporal's position
+			// Change temporal1's currentTime. This should result in the temporal's currentTime
 			// changing too:
-			temporal1.position = 6;
-			assertEquals(6,temporal.position);
+			temporal1.currentTime = 6;
+			assertEquals(6, temporal.currentTime);
 			
 			// Change back to 5, for that's what the rest of the test expects:
-			temporal1.position = 5;
+			temporal1.currentTime = 5;
 			
 			// The composite trait's duration is the sum of all durations.  Its
-			// position is the position of the current child within the entire
+			// currentTime is the currentTime of the current child within the entire
 			// sequence.
 			
 			serial.addChild(mediaElement2);
 			assertTrue(temporal.duration == 40);
-			assertTrue(temporal.position == 5);
+			assertTrue(temporal.currentTime == 5);
 			
-			// We can change the current child by removing and readding the current one.
+			// We can change the current child by removing and re-adding the current one.
 			serial.removeChild(mediaElement1);
 			serial.addChildAt(mediaElement1, 0);
 			temporal = serial.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			assertTrue(temporal.duration == 40);
-			assertTrue(temporal.position == 20);
+			assertTrue(temporal.currentTime == 20);
 
 			serial.addChild(mediaElement3);
 			assertTrue(temporal.duration == 60);
-			assertTrue(temporal.position == 20);
+			assertTrue(temporal.currentTime == 20);
 			
 			serial.removeChild(mediaElement1);
 			serial.removeChild(mediaElement2);
@@ -528,20 +528,20 @@ package org.osmf.composition
 			
 			temporal = serial.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			assertTrue(temporal.duration == 60);
-			assertTrue(temporal.position == 55);
+			assertTrue(temporal.currentTime == 55);
 			
 			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
 			
 			// We should get a durationReached event when the current child
 			// is the last child, and it reaches its duration.
 			assertTrue(durationReachedEventCount == 0);
-			temporal1.position = 10;
+			temporal1.currentTime = 10;
 			assertTrue(durationReachedEventCount == 0);
-			temporal2.position = 30;
+			temporal2.currentTime = 30;
 			assertTrue(durationReachedEventCount == 0);
-			temporal3.position = 19;
+			temporal3.currentTime = 19;
 			assertTrue(durationReachedEventCount == 0);
-			temporal3.position = 20;
+			temporal3.currentTime = 20;
 			assertTrue(durationReachedEventCount == 1);
 			
 			// Adding a child before the current position should affect our
@@ -549,9 +549,9 @@ package org.osmf.composition
 			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal4:TemporalTrait = mediaElement4.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal4.duration = 33;
-			temporal4.position = 22;
+			temporal4.currentTime = 22;
 			serial.addChildAt(mediaElement4, 0);
-			assertTrue(temporal.position == 93);
+			assertTrue(temporal.currentTime == 93);
 			assertTrue(temporal.duration == 93);
 			
 			// Adding a child whose duration is NaN should not affect the
@@ -560,7 +560,7 @@ package org.osmf.composition
 			var temporal5:TemporalTrait = mediaElement5.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal5.duration = NaN;
 			serial.addChildAt(mediaElement5, 0);
-			assertTrue(temporal.position == 93);
+			assertTrue(temporal.currentTime == 93);
 			assertTrue(temporal.duration == 93);
 		}
 		
@@ -946,7 +946,7 @@ package org.osmf.composition
 			//    when it loads, the third child is loaded. 
 			// 3) Because the third child does have the playable trait when
 			//    it's loaded, it becomes the new current child.
-			temporal1.position = temporal1.duration;
+			temporal1.currentTime = temporal1.duration;
 			playable2 = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			assertTrue(playable2 == null);
 			playable3 = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
@@ -964,7 +964,7 @@ package org.osmf.composition
 			// When the third child reaches its duration, the next child
 			// should be playing.
 			playable3.resetPlaying();
-			temporal3.position = temporal3.duration;
+			temporal3.currentTime = temporal3.duration;
 			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			assertTrue(playable.playing == true);
 			assertTrue(playable1.playing == false);
@@ -976,7 +976,7 @@ package org.osmf.composition
 			// When the fourth child reaches its duration, we should receive
 			// the duration reached event.
 			playable4.resetPlaying();
-			temporal4.position = temporal4.duration;
+			temporal4.currentTime = temporal4.duration;
 			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			assertTrue(playable.playing == false);
 			assertTrue(playable1.playing == false);
@@ -1368,30 +1368,30 @@ package org.osmf.composition
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable1:SeekableTrait = mediaElement1.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal1.duration = 30;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
 			var temporal2:TemporalTrait = mediaElement2.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable2:SeekableTrait = mediaElement2.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal2.duration = 15;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 
 			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE]);
 			var temporal3:TemporalTrait = mediaElement3.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable3:SeekableTrait = mediaElement3.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal3.duration = 20;
-			temporal3.position = 0;
+			temporal3.currentTime = 0;
 
 			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal4:TemporalTrait = mediaElement4.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal4.duration = 10;
-			temporal4.position = 0;
+			temporal4.currentTime = 0;
 
 			var mediaElement5:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
 			var temporal5:TemporalTrait = mediaElement5.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable5:SeekableTrait = mediaElement5.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal5.duration = 40;
-			temporal5.position = 0;
+			temporal5.currentTime = 0;
 			
 			serial.addChild(mediaElement1);
 			serial.addChild(mediaElement2);
@@ -1416,7 +1416,7 @@ package org.osmf.composition
 			temporal = serial.getTrait(MediaTraitType.TEMPORAL) as CompositeTemporalTrait;
 			seekable1.processSeekCompletion(30);
 			seekable3.processSeekCompletion(5);
-			assertTrue(temporal.position == 50);
+			assertTrue(temporal.currentTime == 50);
 			
 			// Based on current implementation of SerialElement, change of current child will
 			// invalidate the current composite seekable and create a new one.
@@ -1427,16 +1427,16 @@ package org.osmf.composition
 			seekable1.processSeekCompletion(5);
 			temporal = serial.getTrait(MediaTraitType.TEMPORAL) as CompositeTemporalTrait;
 			seekable = serial.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-			assertTrue(temporal.position == 5);
+			assertTrue(temporal.currentTime == 5);
 
 			// Seek within the current child does not invalidate the current composite seekable.			
 			seekable.seek(25);
 			seekable1.processSeekCompletion(25);
-			assertTrue(temporal.position == 25);
+			assertTrue(temporal.currentTime == 25);
 
 			seekable.seek(15);
 			seekable1.processSeekCompletion(15);
-			assertTrue(temporal.position == 15);
+			assertTrue(temporal.currentTime == 15);
 		}
 		
 		protected function runUnseekableTests():void
@@ -1451,18 +1451,18 @@ package org.osmf.composition
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable1:SeekableTrait = mediaElement1.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal1.duration = 30;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL]);
 			var temporal2:TemporalTrait = mediaElement2.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			temporal2.duration = 15;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 
 			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
 			var temporal3:TemporalTrait = mediaElement3.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable3:SeekableTrait = mediaElement3.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal3.duration = 20;
-			temporal3.position = 0;
+			temporal3.currentTime = 0;
 
 			serial.addChild(mediaElement3);
 			serial.addChildAt(mediaElement1, 0);
@@ -1501,7 +1501,7 @@ package org.osmf.composition
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable1:SeekableTrait = mediaElement1.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal1.duration = 30;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 
 			seekable1.seek(10);			
 			
@@ -1523,13 +1523,13 @@ package org.osmf.composition
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable1:SeekableTrait = mediaElement1.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal1.duration = 30;
-			temporal1.position = 0;
+			temporal1.currentTime = 0;
 
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
 			var temporal2:TemporalTrait = mediaElement2.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable2:SeekableTrait = mediaElement2.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
 			temporal2.duration = 15;
-			temporal2.position = 0;
+			temporal2.currentTime = 0;
 
 			seekable2.seek(10);			
 			
