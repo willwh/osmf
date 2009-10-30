@@ -149,6 +149,7 @@ package org.osmf
 			addTestSuite(TestNetStreamSwitchableTrait);
 			addTestSuite(TestNetStreamDownloadableTrait);
 			
+			addTestSuite(TestContentDownloadableTrait);
 			addTestSuite(TestContentLoader);
 			addTestSuite(TestContentElement);
 			
