@@ -35,6 +35,11 @@ package org.osmf.layout
 			assertEquals(facet.rendererType, DefaultLayoutRenderer);
 			assertEquals(facet.getValue(null), DefaultLayoutRenderer);
 			assertEquals(facet.getValue(new StringIdentifier("wa!")), DefaultLayoutRenderer);
+			
+			assertEquals(DefaultLayoutRenderer, facet.getValue(null));
+			assertEquals(DefaultLayoutRenderer, facet.getValue(new StringIdentifier("@*#$^98367423874")));
+			
+			assertNull(facet.merge(null));
 		}
 		
 	}

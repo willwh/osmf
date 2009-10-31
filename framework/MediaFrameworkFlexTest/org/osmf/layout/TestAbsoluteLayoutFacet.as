@@ -25,6 +25,7 @@ package org.osmf.layout
 	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.StringIdentifier;
 
 	public class TestAbsoluteLayoutFacet extends TestCase
 	{
@@ -75,6 +76,11 @@ package org.osmf.layout
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(4, lastEvent.value);
 			assertEquals(facet.height, facet.getValue(AbsoluteLayoutFacet.HEIGHT), 4);
+			
+			assertEquals(undefined, facet.getValue(null));
+			assertEquals(undefined, facet.getValue(new StringIdentifier("@*#$^98367423874")));
+			
+			assertNull(facet.merge(null));
 		}
 		
 	}

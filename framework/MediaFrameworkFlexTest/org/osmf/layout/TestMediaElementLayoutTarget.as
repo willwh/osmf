@@ -38,6 +38,25 @@ package org.osmf.layout
 	{
 		public function testMediaElementLayoutTarget():void
 		{
+			assertTrue(throws(function():void{MediaElementLayoutTarget.getInstance(null);}));
+			
+			var me:MediaElement = new MediaElement();
+			var melt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
+			
+			melt.updateIntrinsicDimensions();
+			
+			assertNull(melt.view);
+			assertEquals(melt.metadata, me.metadata);
+			assertNull(melt.container);
+			assertEquals(NaN, melt.calculatedWidth);
+			assertEquals(NaN, melt.calculatedHeight);
+			assertEquals(NaN, melt.projectedWidth);
+			assertEquals(NaN, melt.projectedHeight);
+			assertEquals(0, melt.firstChildIndex);
+		}
+		
+		public function testMediaElementLayoutTargetWithViewable():void
+		{
 			var me:MediaElement = new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
 			
 			var sprite:Sprite = new Sprite();
@@ -51,11 +70,21 @@ package org.osmf.layout
 			
 			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
+			lt.updateIntrinsicDimensions();
+			
 			assertEquals(lt.metadata, me.metadata);
 			assertEquals(lt.view, sprite);
 			assertEquals(lt.intrinsicWidth, 100);
 			assertEquals(lt.intrinsicHeight, 200); 
+			assertNull(lt.container);
+			assertFalse(isNaN(lt.firstChildIndex));
 			
+			var renderer:ILayoutRenderer = new DefaultLayoutRenderer();
+			lt.layoutRenderer = renderer;
+			
+			// Without a context, the renderer cannot stick:
+			assertNull(lt.layoutRenderer);
+				
 			var lastEvent:Event;
 			var eventCounter:int = 0;
 			
@@ -86,6 +115,46 @@ package org.osmf.layout
 			assertEquals(dce.oldHeight, 200);
 			assertEquals(dce.newWidth, 300);
 			assertEquals(dce.newHeight, 400);
+		}
+		
+		public function testSingletonConstruction():void
+		{
+			var mediaElement:MediaElement = new MediaElement();
+			
+			var check:Boolean;
+			try
+			{
+				new MediaElementLayoutTarget(null,null);
+			}
+			catch(e:Error)
+			{
+				check = true;
+			}
+			
+			assertTrue(check);
+			
+			var melt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(mediaElement);
+			
+			assertNotNull(melt);
+			
+			assertEquals(melt, MediaElementLayoutTarget.getInstance(mediaElement));
+			assertEquals(melt, MediaElementLayoutTarget.getInstance(mediaElement));
+		}
+		
+		private function throws(f:Function):Boolean
+		{
+			var result:Boolean;
+			
+			try
+			{
+				f();
+			}
+			catch(e:Error)
+			{
+				result = true;
+			}
+			
+			return result;
 		}
 	}
 }

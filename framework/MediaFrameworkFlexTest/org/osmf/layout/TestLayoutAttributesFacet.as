@@ -26,6 +26,7 @@ package org.osmf.layout
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.StringIdentifier;
 
 	public class TestLayoutAttributesFacet extends TestCase
 	{
@@ -84,6 +85,11 @@ package org.osmf.layout
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(ScaleMode.LETTERBOX, lastEvent.value);
 			assertEquals(facet.scaleMode, facet.getValue(LayoutAttributesFacet.SCALE_MODE), ScaleMode.LETTERBOX);
+			
+			assertEquals(undefined, facet.getValue(null));
+			assertEquals(undefined, facet.getValue(new StringIdentifier("@*#$^98367423874")));
+			
+			assertNull(facet.merge(null));
 		}
 	}
 }
