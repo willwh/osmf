@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-	applicationComplete="{init()}"	
 	layout="absolute"
 	xmlns:players="com.adobe.strobe.players.*" 
 	xmlns:flash="adobeTV.flash.*" xmlns:ui="ui.*">
@@ -50,28 +49,11 @@
             
             private static const ANONYMOUS_ENCRYPTED_H264_RTMP:String = "rtmp://flipside.corp.adobe.com/amp/mp4:GITS_1_0";
  
+				
 			
-			
-			private function init():void
-			{		
-				
-				//Anonymous w/ metadata sidecar
-				
-				/*
-				var decoder:Base64Decoder = new Base64Decoder();
-				decoder.decode(ANONYMOUS_METADATA);				
-				//Separate DRM metadata										
-				var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-				facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
-				
-				var resource:URLResource = new URLResource(new URL(ANONYMOUS_ENCRYPTED));
-				resource.metadata.addFacet(facet);
-				
-				createElement(resource);
-						
-			*/	
-				
-				//Identity based credentials w/ metadata sidecar
+			public function identSidecar():void
+			{
+					//Identity based credentials w/ metadata sidecar
 				
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(IDENT_METADATA);				
@@ -83,17 +65,38 @@
 				resource.metadata.addFacet(facet);
 				
 				createElement(resource);
-			
-				// Anonymous Encrypted content without metadata sidecar
-				//var resource:URLResource = new URLResource(new URL(ANONYMOUS_INLINE));
-				//createElement(resource);
-			
-				// Identity Encrypted content without metadata sidecar
-				//var resource:URLResource = new URLResource(new URL(IDENT_INLINE));
-				//createElement(resource);
-							
 			}
-						
+			
+			public function identInline():void
+			{
+					// Identity Encrypted content without metadata sidecar
+				var resource:URLResource = new URLResource(new URL(IDENT_INLINE));
+				createElement(resource);		
+								
+			}
+			
+			
+			public function anonInline():void
+			{
+				// Anonymous Encrypted content without metadata sidecar
+				var resource:URLResource = new URLResource(new URL(ANONYMOUS_INLINE));
+				createElement(resource);
+			}
+			
+			public function anonSideCar():void
+			{
+				var decoder:Base64Decoder = new Base64Decoder();
+				decoder.decode(ANONYMOUS_METADATA);				
+				//Separate DRM metadata										
+				var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
+				facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+				
+				var resource:URLResource = new URLResource(new URL(ANONYMOUS_ENCRYPTED));
+				resource.metadata.addFacet(facet);
+				
+				createElement(resource);
+			}
+									
 			private function onAuthNeeded(event:TraitEvent):void
 			{
 				trace('auth needed');
@@ -167,4 +170,14 @@
 		bottom="100"		
 		id="playerContainer"
 		/>
+	<mx:VBox 
+		width="100%"
+		height="100%"
+		>
+		<mx:Button label="Anonymous Metadata" click="anonSideCar()" />
+		<mx:Button label="Anonymous Inline" click="anonInline()"  />
+		<mx:Button label="Identity Metadata" click="identSidecar()" />
+		<mx:Button label="Identity Inline" click="identInline()" />
+	</mx:VBox>	
+		
 </mx:Application>
