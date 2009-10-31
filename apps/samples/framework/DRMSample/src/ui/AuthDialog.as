@@ -7,8 +7,8 @@ package ui
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
+	import org.osmf.events.AuthenticationCompleteEvent;
 	import org.osmf.events.AuthenticationFailedEvent;
-	import org.osmf.events.TraitEvent;
 	import org.osmf.traits.IContentProtectable;
 	
 	public class AuthDialog extends AuthDialogLayout
@@ -45,7 +45,7 @@ package ui
 		
 		private function attemptAuth(event:MouseEvent):void
 		{
-			trait.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, closeDialog);
+			trait.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, closeDialog);
 			trait.addEventListener(AuthenticationFailedEvent.AUTHENTICATION_FAILED, authFailed);
 			trait.authenticate(username.text, password.text);
 		}

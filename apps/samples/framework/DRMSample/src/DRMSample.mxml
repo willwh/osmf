@@ -6,6 +6,7 @@
 	xmlns:flash="adobeTV.flash.*" xmlns:ui="ui.*">
 		<mx:Script>
 		<![CDATA[
+			import org.osmf.events.AuthenticationCompleteEvent;
 			import mx.utils.Base64Decoder;
 			import ui.AuthDialog;
 			import mx.managers.PopUpManager;
@@ -43,12 +44,20 @@
 			private static const ANONYMOUS_INLINE:String = "http://moonpie/HTTP/FLV/_DILL_2.0/Anonymous/Aya_momoiro.flv";
 			private static const IDENT_INLINE:String = "http://moonpie/HTTP/FLV/_DILL_2.0/Identity/Aya_dokidoki.flv";
 			
+			//Inline RTMP Encrypted Anonymous
+			private static const ANONYMOUS_ENCRYPTED_FLV_RTMP:String = "rtmp://flipside.corp.adobe.com/amp/Aquarium";          
+            
+            
+            private static const ANONYMOUS_ENCRYPTED_H264_RTMP:String = "rtmp://flipside.corp.adobe.com/amp/mp4:GITS_1_0";
+ 
+			
 			
 			private function init():void
 			{		
 				
 				//Anonymous w/ metadata sidecar
 				
+				/*
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(ANONYMOUS_METADATA);				
 				//Separate DRM metadata										
@@ -59,9 +68,9 @@
 				resource.metadata.addFacet(facet);
 				
 				createElement(resource);
-								
+						
+			*/	
 				
-				 /*
 				//Identity based credentials w/ metadata sidecar
 				
 				var decoder:Base64Decoder = new Base64Decoder();
@@ -74,8 +83,7 @@
 				resource.metadata.addFacet(facet);
 				
 				createElement(resource);
-				*/			
-				
+			
 				// Anonymous Encrypted content without metadata sidecar
 				//var resource:URLResource = new URLResource(new URL(ANONYMOUS_INLINE));
 				//createElement(resource);
@@ -97,7 +105,7 @@
 				PopUpManager.addPopUp(authDialog, this);
 			}
 			
-			private function onAuthenticationComplete(event:TraitEvent):void
+			private function onAuthenticationComplete(event:AuthenticationCompleteEvent):void
 			{
 				trace('auth complete');
 			}
@@ -123,7 +131,7 @@
 					var trait:ContentProtectableTrait = ContentProtectableTrait(event.media.getTrait(event.traitType));
 					trait.addEventListener(AuthenticationFailedEvent.AUTHENTICATION_FAILED, onAuthenticationError);
 					trait.addEventListener(TraitEvent.AUTHENTICATION_NEEDED, onAuthNeeded);
-					trait.addEventListener(TraitEvent.AUTHENTICATION_COMPLETE, onAuthenticationComplete);
+					trait.addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onAuthenticationComplete);
 				}
 			}
 						
