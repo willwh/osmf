@@ -252,15 +252,22 @@ package org.osmf.layout
 		 */
 		final public function invalidate():void
 		{
+			// If we're either cleaning or dirty already, then invalidation
+			// is a no-op:
 			if (cleaning == false && dirty == false)
 			{
+				// Raise the 'dirty' flag, signalling that layout need recalculation:
 				dirty = true;
+				
 				if (_parent != null)
 				{
+					// Forward further processing to our parent:
 					_parent.invalidate();
 				}
 				else
 				{
+					// Since we don't have a parent, put us in the queue
+					// to be recalculated when the next frame exits:
 					flagDirty(this, _context.container);
 				}
 			}
@@ -291,7 +298,6 @@ package org.osmf.layout
 			updateLayout();
 			
 			cleaning = false;
-			dirty = false;
 		}
 		
 		/**
@@ -384,6 +390,7 @@ package org.osmf.layout
 		 */
 		public function updateLayout():void
 		{
+			// Take care of all targets being staged correctly:
 			prepareTargets();
 			
 			// Traverse, execute top-down:
@@ -411,6 +418,8 @@ package org.osmf.layout
 			}
 			
 			_context.updateIntrinsicDimensions();
+			
+			dirty = false;
 		}
 		
 		// Subclass stubs
@@ -531,6 +540,20 @@ package org.osmf.layout
 		
 		private function invalidatingEventHandler(event:Event):void
 		{
+			CONFIG::LOGGING 
+			{
+				var targetMetadata:Metadata
+					= event.target is ILayoutTarget
+						? ILayoutTarget(event.target).metadata
+						: null;
+						
+				logger.debug
+					( "invalidated: {0} eventType: {1}, target: {2} sender ID: {3}"
+					, metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
+					, event.type, event.target
+					, targetMetadata ? targetMetadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "?" 
+					); 
+			}
 			invalidate();
 		}
 		
