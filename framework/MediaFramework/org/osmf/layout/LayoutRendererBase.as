@@ -33,6 +33,7 @@ package org.osmf.layout
 	
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -464,6 +465,7 @@ package org.osmf.layout
 		 */		
 		protected function processStagedTarget(target:ILayoutTarget):void
 		{	
+			CONFIG::LOGGING { logger.debug("staged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 		}
 		
 		/**
@@ -474,6 +476,7 @@ package org.osmf.layout
 		 */
 		protected function processUnstagedTarget(target:ILayoutTarget):void
 		{	
+			CONFIG::LOGGING { logger.debug("unstaged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 		}
 		
 		protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
@@ -569,6 +572,8 @@ package org.osmf.layout
 							// dimensions:
 							, Math.min(Math.max(0,container.numChildren-1),displayListCounter)
 							);
+							
+						CONFIG::LOGGING { logger.debug("prepareTarget: setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 					else
 					{
@@ -578,6 +583,8 @@ package org.osmf.layout
 							// dimensions:
 							, Math.min(Math.max(0,container.numChildren),displayListCounter)
 							);
+						
+						CONFIG::LOGGING { logger.debug("addChildAt: setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 					
 					// Only invoke 'processStagedTarget' if the view
@@ -591,6 +598,8 @@ package org.osmf.layout
 					else
 					{
 						staged[target] = view;
+						
+						CONFIG::LOGGING { logger.debug("prepareTarget:updated staged view, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 					
 					displayListCounter++;
@@ -611,6 +620,10 @@ package org.osmf.layout
 						delete staged[target];
 						
 						processUnstagedTarget(target);
+					}
+					else
+					{
+						CONFIG::LOGGING { logger.debug("prepareTarget: no view for, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 				}
 			}
@@ -690,5 +703,7 @@ package org.osmf.layout
 		private static var dispatcher:DisplayObject;
 		private static var cleaningRenderers:Boolean;
 		private static var dirtyRenderers:Vector.<LayoutRendererBase> = new Vector.<LayoutRendererBase>;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRendererBase");
 	}
 }

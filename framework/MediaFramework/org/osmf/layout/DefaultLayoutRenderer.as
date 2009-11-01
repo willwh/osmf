@@ -27,6 +27,7 @@ package org.osmf.layout
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.URL;
 
@@ -475,11 +476,16 @@ package org.osmf.layout
 			 	rect.height = Math.round(rect.height);
 			}
 			
-			/* DEBUG:
-			trace	( target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
-					, layoutPass ? "layout":"calculated","dimensions:",rect,"[",availableWidth,availableHeight,"]"
+			CONFIG::LOGGING
+			{
+				logger.debug
+					( "{0} {1} dimensions: {2} available: {3}, {4}"
+					, target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
+					, layoutPass ? "layout":"calculated"
+					, rect
+					, availableWidth,availableHeight
 					);
-			*/
+			}
 			
 			return rect;
 		}
@@ -508,5 +514,7 @@ package org.osmf.layout
 		private static const POSITION:int = X + Y;
 		private static const DIMENSIONS:int = WIDTH + HEIGHT;
 		private static const ALL:int = POSITION + DIMENSIONS;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultLayoutRenderer");
 	}
 }

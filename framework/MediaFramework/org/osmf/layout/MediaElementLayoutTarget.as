@@ -31,8 +31,10 @@ package org.osmf.layout
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
 	import org.osmf.traits.MediaTraitType;
@@ -256,13 +258,21 @@ package org.osmf.layout
 		
 		public static function getInstance(mediaElement:MediaElement):MediaElementLayoutTarget
 		{
-			var instance:MediaElementLayoutTarget = layoutTargets[mediaElement];
+			var instance:* = layoutTargets[mediaElement];
 			
-			if (instance == null)
+			CONFIG::LOGGING 
 			{
-				instance
-					= layoutTargets[mediaElement]
-					= new MediaElementLayoutTarget(mediaElement, ConstructorLock);
+				logger.debug
+					( "getInstance, elem.ID: {0}, instance: {1}"
+					, mediaElement.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
+					, instance
+					);
+			}
+			
+			if (instance == undefined)
+			{
+				instance = new MediaElementLayoutTarget(mediaElement, ConstructorLock);
+				layoutTargets[mediaElement] = instance;
 			}
 			
 			return instance;
@@ -376,6 +386,8 @@ package org.osmf.layout
 		
 		private var _projectedWidth:Number;
 		private var _projectedHeight:Number;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaElementLayoutTarget");
 	}
 }
 
