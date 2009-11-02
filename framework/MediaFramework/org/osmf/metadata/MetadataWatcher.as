@@ -184,6 +184,10 @@ package org.osmf.metadata
 				{
 					callback(event.facet);
 				}
+				else
+				{
+					callback(event.facet.getValue(identifier));
+				}
 			}
 		}
 		
@@ -194,12 +198,7 @@ package org.osmf.metadata
 			{
 				processWatchedFacetChange(null);
 				
-				// In case we're watching at the facet level only, then
-				// trigger the callback:
-				if (identifier == null)
-				{
-					callback(undefined);
-				}
+				callback(undefined);
 			}
 		}
 		
