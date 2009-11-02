@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.examples
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -32,10 +30,10 @@ package org.osmf.examples
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.events.LoadableStateChangeEvent;
-	import org.osmf.examples.buffering.BufferingProxyElement;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
+	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceProxyElement;
 	import org.osmf.image.ImageElement;
@@ -476,6 +474,17 @@ package org.osmf.examples
 				  	   	{
 				  	   		return new VideoProxyElement(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
 				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Unseekable ProxyElement (Streaming Video)"
+					, 	"Demonstrates the use of a custom ProxyElement to prevent the user from seeking another MediaElement, in this case a progressive VideoElement."
+					,	function():MediaElement
+				  	   	{
+				  	  		return new UnseekableProxyElement(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+				  	   	}
 				  	)
 				);
 
