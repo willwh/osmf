@@ -31,24 +31,24 @@ package org.osmf.metadata
 		/**
 		 * The namespace that holds OSMF specific metadata
 		 */ 		
-		public static const DEFAULT_METADATA:URL			= new URL("http://www.openvideoplayer.org/default/1.0");
+		public static const DEFAULT_METADATA:URL			= new URL("http://www.osmf.org/default/1.0");
 		
-		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.openvideoplayer.org/mediatype/default");
+		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.osmf.org/mediatype/default");
 		
-		public static const DRM_METADATA:URL				= new URL("http://www.openvideoplayer.org/drm/default");
+		public static const DRM_METADATA:URL				= new URL("http://www.osmf.org/drm/default");
 		
-		public static const REGION_TARGET:URL				= new URL("http://www.openvideoplayer.org/region/target");
+		public static const REGION_TARGET:URL				= new URL("http://www.osmf.org/region/target");
 		
-		public static const LAYOUT_RENDERER:URL				= new URL("http://www.openvideoplayer.org/layout/renderer");
-		public static const ABSOLUTE_LAYOUT_PARAMETERS:URL	= new URL("http://www.openvideoplayer.org/layout/absolute");
-		public static const RELATIVE_LAYOUT_PARAMETERS:URL	= new URL("http://www.openvideoplayer.org/layout/relative");
-		public static const ANCHOR_LAYOUT_PARAMETERS: URL	= new URL("http://www.openvideoplayer.org/layout/anchor");
-		public static const PADDING_LAYOUT_PARAMETERS:URL 	= new URL("http://www.openvideoplayer.org/layout/padding");
-		public static const LAYOUT_ATTRIBUTES: URL 			= new URL("http://www.openvideoplayer.org/layout/attributes");
+		public static const LAYOUT_RENDERER:URL				= new URL("http://www.osmf.org/layout/renderer");
+		public static const ABSOLUTE_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/absolute");
+		public static const RELATIVE_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/relative");
+		public static const ANCHOR_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/anchor");
+		public static const PADDING_LAYOUT_PARAMETERS:URL 	= new URL("http://www.osmf.org/layout/padding");
+		public static const LAYOUT_ATTRIBUTES:URL 			= new URL("http://www.osmf.org/layout/attributes");
 		
-		public static const ELEMENT_ID: URL 				= new URL("http://www.openvideoplayer.org/elementId");
+		public static const ELEMENT_ID:URL	 				= new URL("http://www.osmf.org/elementId");
 		
-		public static const TEMPORAL_METADATA_EMBEDDED:URL	= new URL("http://www.openvideoplayer.org/temporal/embedded");
-		public static const TEMPORAL_METADATA_DYNAMIC:URL	= new URL("http://www.openvideoplayer.org/temporal/dynamic");		
+		public static const TEMPORAL_METADATA_EMBEDDED:URL	= new URL("http://www.osmf.org/temporal/embedded");
+		public static const TEMPORAL_METADATA_DYNAMIC:URL	= new URL("http://www.osmf.org/temporal/dynamic");		
 	}
 }
