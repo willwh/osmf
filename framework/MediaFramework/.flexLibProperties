@@ -231,6 +231,7 @@
     <classEntry path="org.osmf.traits.SwitchableTrait"/>
     <classEntry path="org.osmf.traits.TemporalTrait"/>
     <classEntry path="org.osmf.traits.ViewableTrait"/>
+    <classEntry path="org.osmf.utils.BinarySearch"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>
     <classEntry path="org.osmf.utils.HTTPLoadedContext"/>
