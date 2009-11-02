@@ -24,7 +24,6 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
 
 	public class TestLayoutUtils extends TestCase
@@ -42,6 +41,7 @@ package org.osmf.layout
 			assertTrue(throws(function():void{LayoutUtils.setLayoutAttributes(null,null,null);}));
 			assertTrue(throws(function():void{LayoutUtils.setLayoutRenderer(null,null);}));
 			assertTrue(throws(function():void{LayoutUtils.setRelativeLayout(null,0,0);}));
+			assertTrue(throws(function():void{LayoutUtils.setPaddingLayout(null,0,0,0,0);}));
 			
 			var i:int;
 			var metadata:Metadata = new Metadata();
@@ -51,6 +51,7 @@ package org.osmf.layout
 			var c3:AnchorLayoutFacet;
 			var c4:LayoutAttributesFacet;
 			var c5:LayoutRendererFacet;
+			var c6:PaddingLayoutFacet;
 			
 			// Run all these test twice: once without the facet present, and once
 			// when it is:
@@ -94,6 +95,19 @@ package org.osmf.layout
 				assertEquals(4,anchor.bottom);
 				
 				assertNull(anchor.merge(null));
+				
+				var padding:PaddingLayoutFacet
+					= c6
+					= LayoutUtils.setPaddingLayout(metadata,1,2,3,4);
+					
+				if (i == 1) assertEquals(c6, padding);
+					
+				assertEquals(1,padding.left);
+				assertEquals(2,padding.top);
+				assertEquals(3,padding.right);
+				assertEquals(4,padding.bottom);
+				
+				assertNull(padding.merge(null));
 				
 				var attributes:LayoutAttributesFacet
 					= c4

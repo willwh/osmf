@@ -208,12 +208,66 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * Applies the specified scale mode (and alignment, if non null) to the specified metadata target.
+		 * Applies the specified padding layout properties to a media element's metadata:
+		 * 
+		 * @param target Metadata that will get the specified properties set on its
+		 * padding layout facet.
+		 * @param left
+		 * @param top
+		 * @param right
+		 * @param bottom
+		 * @return Either a newly created, or updated PaddingLayoutFacet instance that
+		 * contains the specified properties.
+		 * @throws IllegalOperationError on a null argument being passed for target.
+		 * 
+		 * Please referer to the PaddingLayoutFacet documentation for the semantics of
+		 * the left, top, right, and bottom parameters.
+		 */		
+		public static function setPaddingLayout
+								( target:Metadata
+								, left:Number, top:Number
+								, right:Number, bottom:Number
+								):PaddingLayoutFacet
+		{
+			if (target == null)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			var addFacet:Boolean;
+			var paddingLayout:PaddingLayoutFacet
+				= 	target.getFacet(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS)
+					as PaddingLayoutFacet;
+				
+			if (paddingLayout == null)
+			{
+				addFacet = true;
+				paddingLayout = new PaddingLayoutFacet();
+			}
+			
+			paddingLayout.left = left;
+			paddingLayout.top = top;
+			paddingLayout.right = right;
+			paddingLayout.bottom = bottom;
+			
+			if (addFacet)
+			{
+				target.addFacet(paddingLayout);
+			}
+			
+			return paddingLayout;
+		}
+		
+		/**
+		 * Applies the specified layout attributes.
 		 *  
 		 * @param target Metadata that will get the specified properties set on its
 		 * layout attributes facet.
-		 * @param scaleMode
-		 * @param alignment
+		 * @param scaleMode The scale mode to set.
+		 * @param alignment The alignment mode to set.
+		 * @param order Display stack order (highest number is on top).
+		 * @param snapToPixel If true, the renderer will round the calculated metrics to
+		 * natural numbers.
 		 * @return Either a newly created, or updated LayoutAttributesFacet instance that
 		 * contains the specified properties.
 		 * @throws IllegalOperationError on a null argument being passed for target.
@@ -221,7 +275,13 @@ package org.osmf.layout
 		 * Please referer to the LayoutAttributesFacet documentation for the semantics of
 		 * the scaleMode and alignment parameters.
 		 */		
-		public static function setLayoutAttributes(target:Metadata, scaleMode:ScaleMode, alignment:RegistrationPoint = null, order:Number = NaN):LayoutAttributesFacet
+		public static function setLayoutAttributes
+									( target:Metadata
+									, scaleMode:ScaleMode
+									, alignment:RegistrationPoint = null
+									, order:Number = NaN
+									, snapToPixel:Boolean = false
+									):LayoutAttributesFacet
 		{
 			if (target == null)
 			{
@@ -250,6 +310,7 @@ package org.osmf.layout
 				layoutAttributes.order = order;			
 			}
 			
+			layoutAttributes.snapToPixel = snapToPixel;
 			
 			if (addFacet)
 			{
