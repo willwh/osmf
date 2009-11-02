@@ -57,7 +57,7 @@ package org.osmf
 						
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
-
+			
 			CONFIG::FLASH_10_1
 			{
 				addTestSuite(TestContentProtectable);
@@ -189,7 +189,8 @@ package org.osmf
 			
 			addTestSuite(TestURL);
 			addTestSuite(TestFMSURL);
-				
+			addTestSuite(TestBinarySearch);
+			
 			addTestSuite(TestPluginManager);
 			addTestSuite(TestPluginLoadingState);
 			addTestSuite(TestPluginLoadedContext);
