@@ -54,7 +54,7 @@ package org.osmf
 			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
-	/*
+	
 			addTestSuite(TestMediaPlayer);
 
 			addTestSuite(TestNetLoader);
@@ -73,7 +73,7 @@ package org.osmf
 			addTestSuite(TestDynamicPluginLoaderIntegration);
 			
 			addTestSuite(TestPluginManagerIntegration);
-			*/
+			
 			CONFIG::FLASH_10_1
 			{
 				addTestSuite(TestDRMServices);
