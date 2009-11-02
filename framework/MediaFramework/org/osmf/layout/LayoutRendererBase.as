@@ -39,6 +39,7 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
+	import org.osmf.utils.BinarySearch;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
 	
@@ -142,41 +143,44 @@ package org.osmf.layout
 				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
 			}
 			
-			if (layoutTargets.indexOf(target) == -1)
-			{
-				// Add the target to our listing:
-				layoutTargets.push(target);	
-				
-				// Parent the added layout renderer (if available):
-				var targetContext:ILayoutContext = target as ILayoutContext;
-				if (targetContext && targetContext.layoutRenderer)
-				{
-					targetContext.layoutRenderer.parent = this;
-				}
-				
-				// Watch the facets on the target's metadata that we're interested in:
-				var watchers:Array = metaDataWatchers[target] = new Array();
-				for each (var namespaceURL:URL in usedMetadataFacets)
-				{
-					watchers.push
-						( MetadataUtils.watchFacet
-							( target.metadata
-							, namespaceURL
-							, targetMetadataChangeCallback
-							)
-						);
-				}
-				
-				// Watch the target's view and dimenions change:
-				target.addEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
-				target.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, invalidatingEventHandler);
-				
-				invalidate();
-			}
-			else
+			if (layoutTargets.indexOf(target) != -1)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
 			}
+			
+			// Get the index where the target should be inserted:
+			var index:int = Math.abs(BinarySearch.search(layoutTargets, compareTargets, target));
+			
+			// Add the target to our listing:
+			layoutTargets.splice(index, 0, target);	
+			
+			// Parent the added layout renderer (if available):
+			var targetContext:ILayoutContext = target as ILayoutContext;
+			if (targetContext && targetContext.layoutRenderer)
+			{
+				targetContext.layoutRenderer.parent = this;
+			}
+			
+			// Watch the facets on the target's metadata that we're interested in:
+			var watchers:Array = metaDataWatchers[target] = new Array();
+			for each (var namespaceURL:URL in usedMetadataFacets)
+			{
+				watchers.push
+					( MetadataUtils.watchFacet
+						( target.metadata
+						, namespaceURL
+						, targetMetadataChangeCallback
+						)
+					);
+			}
+			
+			// Watch the target's view and dimenions change:
+			target.addEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
+			target.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, invalidatingEventHandler);
+			
+			invalidate();
+			
+			processTargetAdded(target);
 			
 			return target;
 		}
@@ -228,6 +232,8 @@ package org.osmf.layout
 				}
 				
 				delete metaDataWatchers[target];
+				
+				processTargetRemoved(target);
 				
 				invalidate();
 			}
@@ -467,6 +473,26 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * Subclasses may override this method to do processing on a target
+		 * item being added.
+		 *   
+		 * @param target The target that has been added.
+		 */		
+		protected function processTargetAdded(target:ILayoutTarget):void
+		{	
+		}
+		
+		/**
+		 * Subclasses may override this method to do processing on a target
+		 * item being removed.
+		 *   
+		 * @param target The target that has been removed.
+		 */		
+		protected function processTargetRemoved(target:ILayoutTarget):void
+		{	
+		}
+		
+		/**
 		 * Subclasses may override this method should they require special
 		 * processing on the view of a target being staged.
 		 *  
@@ -498,6 +524,18 @@ package org.osmf.layout
 			var view:DisplayObject;
 			
 			return new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
+		}
+		
+		protected function updateTargetOrder(target:ILayoutTarget):void
+		{
+			var index:int = layoutTargets.indexOf(target);
+			if (index != -1)
+			{
+				layoutTargets.splice(index, 1);
+				
+				index = Math.abs(BinarySearch.search(layoutTargets, compareTargets, target));
+				layoutTargets.splice(index, 0, target);
+			}
 		}
 		
 		// Internals
@@ -573,9 +611,6 @@ package org.osmf.layout
 		
 		private function prepareTargets():void
 		{
-			// Make sure that our children are in their correct order:
-			layoutTargets.sort(compareTargets);
-		
 			// Setup a view counter:
 			var displayListCounter:int = _context.firstChildIndex;
 			

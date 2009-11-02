@@ -384,5 +384,134 @@ package org.osmf.layout
 			assertEquals(0, container2.intrinsicWidth);
 			assertEquals(0, container2.intrinsicHeight);
 		}
+		
+		public function testOrdering():void
+		{
+			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
+			var container:LayoutContextSprite = new LayoutContextSprite();
+			container.layoutRenderer = renderer;
+			
+			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			LayoutUtils.setLayoutAttributes(t1.metadata, null, null, 8);
+			
+			var t2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			LayoutUtils.setLayoutAttributes(t2.metadata, null, null, 2);
+			
+			var t3:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			LayoutUtils.setLayoutAttributes(t3.metadata, null, null, 2);
+			
+			var t4:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			
+			renderer.addTarget(t1);
+			renderer.addTarget(t2);
+			renderer.addTarget(t3);
+			renderer.addTarget(t4);
+			
+			renderer.validateNow();
+			
+			assertEquals(t4, container.getChildAt(0));
+			assertEquals(t3, container.getChildAt(1));
+			assertEquals(t2, container.getChildAt(2));
+			assertEquals(t1, container.getChildAt(3));
+			
+			LayoutUtils.setLayoutAttributes(t4.metadata, null, null, 4);
+			
+			renderer.validateNow();
+			
+			assertEquals(t3, container.getChildAt(0));
+			assertEquals(t2, container.getChildAt(1));
+			assertEquals(t4, container.getChildAt(2));
+			assertEquals(t1, container.getChildAt(3));
+		}
+		
+		public function testPaddingAndRounding():void
+		{
+			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
+			var container:LayoutContextSprite = new LayoutContextSprite();
+			container.layoutRenderer = renderer;
+			
+			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			LayoutUtils.setAbsoluteLayout(t1.metadata,100,100);
+			LayoutUtils.setPaddingLayout(t1.metadata,9.6,8.4,5.6,3.8);
+			LayoutUtils.setLayoutAttributes(t1.metadata,null,null,NaN,true);
+			t1.setIntrinsicDimensions(100,100);
+			
+			renderer.addTarget(t1);
+			renderer.validateNow();
+			
+			assertEquals(10, t1.x);
+			assertEquals(8, t1.y);
+			assertEquals(85, t1.width);
+			assertEquals(88, t1.height);
+			
+			LayoutUtils.setPaddingLayout(t1.metadata,NaN,NaN,NaN,NaN);
+			
+			renderer.validateNow();
+			
+			assertEquals(0, t1.x);
+			assertEquals(0, t1.y);
+			assertEquals(100, t1.width);
+			assertEquals(100, t1.height);
+		}
+		
+		public function testRegistrationPoint():void
+		{
+			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
+			var container:LayoutContextSprite = new LayoutContextSprite();
+			container.layoutRenderer = renderer;
+			
+			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			t1.setIntrinsicDimensions(100,100);
+			
+			renderer.addTarget(t1);
+			
+			var attributes:LayoutAttributesFacet
+				= LayoutUtils.setLayoutAttributes(t1.metadata,null,null,NaN,true);
+				
+			attributes.registrationPoint = RegistrationPoint.TOP_LEFT;
+			renderer.validateNow();
+			assertEquals(0, t1.x);
+			assertEquals(0, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.TOP_MIDDLE;
+			renderer.validateNow();
+			assertEquals(-50, t1.x);
+			assertEquals(0, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.TOP_RIGHT;
+			renderer.validateNow();
+			assertEquals(-100, t1.x);
+			assertEquals(0, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.BOTTOM_LEFT;
+			renderer.validateNow();
+			assertEquals(0, t1.x);
+			assertEquals(-100, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.BOTTOM_MIDDLE;
+			renderer.validateNow();
+			assertEquals(-50, t1.x);
+			assertEquals(-100, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.BOTTOM_RIGHT;
+			renderer.validateNow();
+			assertEquals(-100, t1.x);
+			assertEquals(-100, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.MIDDLE_LEFT;
+			renderer.validateNow();
+			assertEquals(0, t1.x);
+			assertEquals(-50, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.CENTER;
+			renderer.validateNow();
+			assertEquals(-50, t1.x);
+			assertEquals(-50, t1.y);
+			
+			attributes.registrationPoint = RegistrationPoint.MIDDLE_RIGHT;
+			renderer.validateNow();
+			assertEquals(-100, t1.x);
+			assertEquals(-50, t1.y);
+		}
 	}
 }

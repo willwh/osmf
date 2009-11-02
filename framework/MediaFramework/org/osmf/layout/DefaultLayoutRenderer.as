@@ -26,9 +26,12 @@ package org.osmf.layout
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.URL;
 
 	/**
@@ -71,11 +74,6 @@ package org.osmf.layout
 		 */
 		override protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{
-			if (x == y)
-			{
-				return 0;
-			}
-			
 			var attributesX:LayoutAttributesFacet
 				= x.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES)
 				as LayoutAttributesFacet;
@@ -101,6 +99,29 @@ package org.osmf.layout
 		
 		// Overrides
 		//
+		
+		override protected function processTargetAdded(target:ILayoutTarget):void
+		{
+			metaDataWatchers[target] = MetadataUtils.watchFacetValue
+				( target.metadata
+				, MetadataNamespaces.LAYOUT_ATTRIBUTES
+				, LayoutAttributesFacet.ORDER
+				, function(..._):void 
+					{
+						updateTargetOrder(target);
+					}
+				);
+		}
+		
+		override protected function processTargetRemoved(target:ILayoutTarget):void
+		{
+			var watcher:MetadataWatcher = metaDataWatchers[target];
+			delete metaDataWatchers[target];
+			
+			watcher.unwatch();
+			watcher = null;
+		}
+	
 		
 		override protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
 		{
@@ -314,11 +335,11 @@ package org.osmf.layout
 			
 			if (padding)
 			{
-				if (!isNaN(padding.left) && !(toDo & X))
+				if (!isNaN(padding.left))
 				{
 					rect.x += padding.left;
 				}
-				if (!isNaN(padding.top) && !(toDo & Y))
+				if (!isNaN(padding.top))
 				{
 					rect.y += padding.top;
 				}
@@ -514,6 +535,8 @@ package org.osmf.layout
 		private static const POSITION:int = X + Y;
 		private static const DIMENSIONS:int = WIDTH + HEIGHT;
 		private static const ALL:int = POSITION + DIMENSIONS;
+		
+		private var metaDataWatchers:Dictionary = new Dictionary();
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultLayoutRenderer");
 	}
