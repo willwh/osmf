@@ -2,7 +2,7 @@ Sample Application: DynamicStreamingSample
 
 A. Overview
 
-This sample application demonstrates dynamic stream switching within the OSMF framework. Its purpose is to demonstrate how the various classes in the org.openvideoplayer.net.dynamicstreaming package can be used to dynamically stream a profile of streams represented by a DynamicStreamingResource object. 
+This sample application demonstrates dynamic stream switching within the OSMF framework. Its purpose is to demonstrate how the various classes in the org.osmf.net.dynamicstreaming package can be used to dynamically stream a profile of streams represented by a DynamicStreamingResource object. 
 
 This sample application contains a SMIL parser.  It downloads a sample SMIL file containing a dynamic stream switching profile (this is the same SMIL format used by the default FMS install), and parses it into a DynamicStreamingResource object.
 

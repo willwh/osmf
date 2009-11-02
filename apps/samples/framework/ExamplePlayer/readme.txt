@@ -37,4 +37,4 @@ into a MediaPlayer for playback.  When you click on an example in the list, a de
 will appear in the upper right, and a control panel which allows interaction will appear in the lower
 right.
 
-The code for each example is in org.openvideoplayer.examples.AllExamples.as.
+The code for each example is in org.osmf.examples.AllExamples.as.

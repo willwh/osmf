@@ -33,4 +33,4 @@ C. Usage Instructions
 Click the Play button to play the video.  When you click on the SWF in the lower left corner (the orange
 rectangle), the video will pause.  This is a simple example of how one MediaElement can reference
 another MediaElement, either to listen or to control.  In a real-world scenario, the SWF (as represented
-by org.openvideoplayer.model.ReferenceSWFElement) would be loaded from a plugin.
+by org.osmf.model.ReferenceSWFElement) would be loaded from a plugin.
