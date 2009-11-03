@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -23,6 +23,9 @@ package org.osmf.utils
 {
 	import __AS3__.vec.Vector;
 	
+	/**
+	 * Utility class that generalizes binary search within sorted lists.
+	 */
 	public class BinarySearch
 	{
 		/**
@@ -31,15 +34,15 @@ package org.osmf.utils
 		 * @param list The vector to search.
 		 * @param compare The method used to compare item with items in collection:
 		 * function(item:*, listItem:*):int. Expected to return:
-		 * -1 when item < listItem,
+		 * -1 when item &lt; listItem,
 		 * 0 when item == listItem, and
-		 * 1 when item > listItem.
+		 * 1 when item &gt; listItem.
 		 * @param item The item to search for.
 		 * @param firstIndex The left hand-side bound to limit the search to.
 		 * @param lastIndex The right hand-side bound to limit the search to.
 		 * @return The index of the item searched for. If no match is found, returns
 		 * the index (1 based) where the item should be inserted as a negative number.
-		 * @throws ArgumentError
+		 * @throws ArgumentError If compare or list is <code>null</code>.
 		 * 
 		 */		
 		public static function search(list:Object, compare:Function, item: *, firstIndex:int = 0, lastIndex:int = int.MIN_VALUE):int
