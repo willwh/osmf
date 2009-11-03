@@ -59,6 +59,8 @@
 		
 			
 			private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://mediapm.edgesuite.net/osmf/swf/AkamaiBasicStreamingPlugin.swf";
+			private static const MAST_PLUGIN_URL:String = 					"http://mediapm.edgesuite.net/osmf/swf/MASTPlugin.swf";
+			
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;					
 
 			private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";	
@@ -109,6 +111,7 @@
 			[Bindable]
 			private var plugins:Array = [	{label:"Akamai Basic Streaming Plugin (Dynamic)", url:AKAMAI_BASIC_STREAMING_PLUGIN_URL},
 										  	{label:"Akamai Basic Streaming Plugin (Static)", url:AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS},
+										  	{label:"MAST plugin (Dynamic)", url:MAST_PLUGIN_URL},
 										  	{label:"MAST plugin (Static)", url:MAST_PLUGIN_INFOCLASS}
 										];
 				
@@ -146,7 +149,6 @@
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange );			
 				
 				mediaPlayerWrapper.mediaPlayer.playheadUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
@@ -177,11 +179,12 @@
 					mediaElement = mediaFactory.createMediaElement(resource);
 				}
 				
+				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
+				// when ISeekable is added
+				mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+				
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
-				
-				//var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				//loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
-				
+								
 				mediaPlayerWrapper.element = mediaElement;
 				enablePlayerControls(true);
 			}
@@ -328,12 +331,14 @@
    				}
    			}
    			
-   			private function onPlayingChange(event:PlayingChangeEvent):void
+   			private function onTraitAdd(event:TraitsChangeEvent):void
    			{
-   				if (event.playing)
+   				switch (event.traitType)
    				{
-   					seekBar.enabled = seekBar.visible = mediaPlayerWrapper.mediaPlayer.seekable;
-   				}
+   					case MediaTraitType.SEEKABLE:
+   						seekBar.enabled = seekBar.visible = true;
+   						break;
+   				}	
    			}
    			
    			private function appendInfoText(...args):void
