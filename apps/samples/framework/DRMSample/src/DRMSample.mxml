@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	applicationComplete="init()"
 	layout="absolute"
 	xmlns:players="com.adobe.strobe.players.*" 
 	xmlns:flash="adobeTV.flash.*" xmlns:ui="ui.*">
 		<mx:Script>
 		<![CDATA[
+			import org.osmf.events.BytesTotalChangeEvent;
+			import org.osmf.events.BytesDownloadedChangeEvent;
 			import org.osmf.events.AuthenticationCompleteEvent;
 			import mx.utils.Base64Decoder;
 			import ui.AuthDialog;
@@ -49,7 +52,16 @@
             
             private static const ANONYMOUS_ENCRYPTED_H264_RTMP:String = "rtmp://flipside.corp.adobe.com/amp/mp4:GITS_1_0";
  
-				
+			private function init():void
+			{
+				playerContainer.mediaPlayer.addEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, onBytes);
+			}	
+			
+			private function onBytes(event:BytesDownloadedChangeEvent):void
+			{
+				downloaded.setProgress( event.newValue, playerContainer.mediaPlayer.bytesTotal);
+			}
+			
 			
 			public function identSidecar():void
 			{
@@ -170,6 +182,7 @@
 		bottom="100"		
 		id="playerContainer"
 		/>
+		
 	<mx:VBox 
 		width="100%"
 		height="100%"
@@ -178,6 +191,7 @@
 		<mx:Button label="Anonymous Inline" click="anonInline()"  />
 		<mx:Button label="Identity Metadata" click="identSidecar()" />
 		<mx:Button label="Identity Inline" click="identInline()" />
+		<mx:ProgressBar mode="manual" id="downloaded" width="200" />
 	</mx:VBox>	
 		
 </mx:Application>
