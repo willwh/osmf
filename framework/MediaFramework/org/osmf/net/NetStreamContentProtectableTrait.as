@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -36,6 +36,8 @@ package org.osmf.net
 
     
     /**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs
      * NetStream specific protected content trait.
      */
 	public class NetStreamContentProtectableTrait extends ContentProtectableTrait

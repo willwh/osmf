@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -58,11 +58,15 @@ package org.osmf.drm
 
 
 	/**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
 	 * Dispatched when username password  or token authentication is needed to playback.
 	 */ 
 	[Event(name='authenticationNeeded', type='org.osmf.events.TraitEvent')]
 	
 	/**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
 	 * Dispatched when the user is authenticated successfully
 	 * 
 	 * @eventType AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
@@ -70,6 +74,8 @@ package org.osmf.drm
 	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
 	 
 	/**	 	
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
 	 * Dispatches when the authentication fails, with the reason being stored on the event.
 	 * 
 	 * @eventType AuthenticationFailedEvent.AUTHENTICATION_FAILED
@@ -77,6 +83,8 @@ package org.osmf.drm
 	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 
 	
 	/**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
 	 * The DRMServices class is a utility class to adapt the Flash Players DRM to the OSMF style IContentProtectable
 	 * trait API.  DRMServices handles triggering Updates to the DRMsubsystem, as well as triggering the appropriate events
 	 * when authentication is needed, complete, or failed. 
