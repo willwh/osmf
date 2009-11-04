@@ -1,4 +1,4 @@
-﻿/*****************************************************
+/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -25,8 +25,6 @@ package org.osmf.traits
 	
 	
 	/**
-	 * @private
-	 * TODO: Remove private label when DRM content / 10.1 content is exposed	
 	 * Dispatched when username password  or token authentication is needed to playback.
 	 *
 	 * @eventType org.osmf.events.TraitEvent.AUTHENTICATION_NEEDED
@@ -34,8 +32,6 @@ package org.osmf.traits
 	[Event(name='authenticationNeeded', type='org.osmf.events.TraitEvent')]
 	
 	/**
-	 * @private
-	 * TODO: Remove private label when DRM content / 10.1 content is exposed	
 	 * Dispatched when the user is authenticated successfully
 	 * 
 	 * @eventType org.osmf.events.AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
@@ -43,8 +39,6 @@ package org.osmf.traits
 	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
 	 
 	/**	 	
-	 * @private
-	 * TODO: Remove private label when DRM content / 10.1 content is exposed	
 	 * Dispatches when the authentication fails, with the reason being stored on the event.
 	 * 
 	 * @eventType org.osmf.events.AuthenticationFailedEvent.AUTHENTICATION_FAILED
@@ -52,8 +46,6 @@ package org.osmf.traits
 	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 	
 	
 	/**
-	 * @private
-	 * TODO: Remove private label when DRM content / 10.1 content is exposed	
 	 * The IContentProtectable trait is placed upon media elements that have content protection
 	 * in place. Anonymous and Credential based schemes are supported.  Infomation such as playbackTimeWindow is available
 	 * once the authentication takes place. 
