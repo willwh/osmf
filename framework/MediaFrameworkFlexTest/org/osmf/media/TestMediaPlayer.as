@@ -246,11 +246,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertEquals(0, mediaPlayer.volume);
+				assertEquals(1, mediaPlayer.volume);
 				
 				// Setting the volume has no effect.
 				mediaPlayer.volume = 0.5;
-				assertEquals(0, mediaPlayer.volume);
+				assertEquals(1, mediaPlayer.volume);
 								
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
