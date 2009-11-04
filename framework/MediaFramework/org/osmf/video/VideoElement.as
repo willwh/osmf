@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -96,9 +96,7 @@ package org.osmf.video
 	/**
 	* VideoElement is a media element specifically created for video playback.
 	* It supports both streaming and progressive formats.
-	* <p>The VideoElement has IAudible, IBufferable, IPlayable, IPausable,
-	* ISeekable, ISpatial, ITemporal, and IViewable traits.
-	* It uses a NetLoader class to load and unload its media.
+	* <p>The VideoElement uses a NetLoader class to load and unload its media.
 	* Developers requiring custom loading logic for video
 	* can pass their own loaders to the VideoElement constructor. 
 	* These loaders should subclass NetLoader.</p>
