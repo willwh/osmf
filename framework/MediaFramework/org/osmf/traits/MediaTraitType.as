@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -82,7 +82,9 @@ package org.osmf.traits
 		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
 		
 		/**
-		 * Identifies a trait that implements the ISwitchable interface.
+		 * @private
+		 * TODO: Remove private label when DRM content / 10.1 content is exposed		
+		 * Identifies a trait that implements the IContentProtectable interface.
 		 */
 		public static const CONTENT_PROTECTABLE:MediaTraitType = new MediaTraitType(IContentProtectable);
 		

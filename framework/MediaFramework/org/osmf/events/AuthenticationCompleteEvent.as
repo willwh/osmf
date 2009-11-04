@@ -1,8 +1,10 @@
-package org.osmf.events
+﻿package org.osmf.events
 {
 	import flash.events.Event;
 	
 	/**
+	 * @private
+	 * TODO: Remove private label when DRM content / 10.1 content is exposed
 	 * Dispatched by the IContentProtectableTrait to signal successful authentication
 	 * with for playing back this media.  contains a token which can be used later to speed up the 
 	 * authentication process by passing to authenticateWithToken.

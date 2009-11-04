@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -24,6 +24,8 @@ package org.osmf.events
 	import flash.events.Event;
 
 	/**
+	 * @private
+	 * TODO: Remove private label when DRM content / 10.1 content is exposed	
 	 * Authentication Failed event is fired by the IContentProtectable trait in response to a failure 
 	 * getting content decrypted.   The specific information about the failure is in the detail and error
 	 * id fields.

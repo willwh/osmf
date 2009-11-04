@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -52,6 +52,8 @@ package org.osmf.events
 		public static const INDICES_CHANGE:String = "indicesChange";
 		
 		/**
+		 * @private
+		 * TODO: Remove private label when DRM content / 10.1 content is exposed		
 		 * Authentication Needed is dispatched when a user needs to authenticate user credentials
 		 * via a call to authenticate or authenticateWithToken.
 		 *  
