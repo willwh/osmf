@@ -614,7 +614,7 @@ package org.osmf.media
 		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : 0;	    		    
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : 1;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
