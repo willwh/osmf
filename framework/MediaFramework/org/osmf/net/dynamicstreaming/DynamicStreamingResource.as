@@ -45,7 +45,7 @@ package org.osmf.net.dynamicstreaming
 		 * @param host A URL representing the host of the dynamic streaming resource.
 		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
 		 */
-		public function DynamicStreamingResource(host:URL, streamType:StreamType=null)
+		public function DynamicStreamingResource(host:URL, streamType:String=null)
 		{
 			_host = host;
 			_streamType = streamType || StreamType.ANY;
@@ -61,9 +61,9 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * The type of the stream.
+		 * The StreamType for this resource.
 		 **/
-		public function get streamType():StreamType
+		public function get streamType():String
 		{
 			return _streamType;
 		}
@@ -171,7 +171,7 @@ package org.osmf.net.dynamicstreaming
 		}
 
 		private var _host:URL;
-		private var _streamType:StreamType;
+		private var _streamType:String; // StreamType
 		private var _metadata:Metadata;
 
 		private var _streamItems:Vector.<DynamicStreamingItem>;

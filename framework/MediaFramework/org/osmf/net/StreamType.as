@@ -29,30 +29,23 @@ package org.osmf.net
 		/**
 		 * The LIVE stream type represents a live stream.
 		 **/
-		public static const LIVE:StreamType = new StreamType("live");
+		public static const LIVE:String = "live";
 
 		/**
 		 * The RECORDED stream type represents a recorded stream.
 		 **/
-		public static const RECORDED:StreamType = new StreamType("recorded");
+		public static const RECORDED:String = "recorded";
 
 		/**
 		 * The ANY stream type represents any possible stream type.
 		 **/
-		public static const ANY:StreamType = new StreamType("any");
+		public static const ANY:String = "any";
 		
 		/**
 		 * @private
-		 * 
-		 * Constructor.
-		 * 
-		 * @param type The type of the stream.
 		 */		
-		public function StreamType(type:String)
+		public function StreamType()
 		{
-			this.type = type;
 		}
-				
-		private var type:String;
 	}
 }

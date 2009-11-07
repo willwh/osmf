@@ -35,7 +35,7 @@ package org.osmf.net
 		 * @param url The URL of the resource.
 		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
 		 **/
-		public function StreamingURLResource(url:URL, streamType:StreamType=null)
+		public function StreamingURLResource(url:URL, streamType:String=null)
 		{
 			super(url);
 			
@@ -43,13 +43,13 @@ package org.osmf.net
 		}
 
 		/**
-		 * The type of the stream.
+		 * The StreamType for this resource.
 		 **/
-		public function get streamType():StreamType
+		public function get streamType():String
 		{
 			return _streamType;
 		}
 		
-		private var _streamType:StreamType;
+		private var _streamType:String; // StreamType
 	}
 }
