@@ -132,11 +132,6 @@ package org.osmf.traits
 		{
 			if (_seeking == false)
 			{
-				if (isNaN(time) || time < 0)
-				{
-					time = 0;
-				}
-				
 				if (canSeekTo(time))
 				{
 					seekTargetTime = time;
@@ -158,10 +153,15 @@ package org.osmf.traits
 		 */
 		public function canSeekTo(time:Number):Boolean
 		{
+			// Validate that the time is in range.  Note that we return true
+			// if the time is less than the duration *or* the current time.  The
+			// latter is for the case where the media has no (NaN) duration, but
+			// is still progressing.  Presumably it should be possible to seek
+			// backwards.
 			return _temporal 
 				?	(	isNaN(time) == false
-					&&	time <= _temporal.duration
-					&&	time >= 0
+					&& 	time >= 0
+					&&	(time <= _temporal.duration || time <= _temporal.currentTime)
 					)
 				: 	false;
 		}

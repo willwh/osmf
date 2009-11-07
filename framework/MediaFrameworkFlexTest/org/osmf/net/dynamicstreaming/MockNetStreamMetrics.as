@@ -127,7 +127,7 @@ package org.osmf.net.dynamicstreaming
 		
 		public function get maxIndex():int
 		{
-			return _dsResource.numItems - 1;
+			return _dsResource.streamItems.length - 1;
 		}
 		
 		public function get dynamicStreamingResource():DynamicStreamingResource

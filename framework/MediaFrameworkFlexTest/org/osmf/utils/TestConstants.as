@@ -78,6 +78,16 @@ package org.osmf.utils
 		
 		public static const CONNECT_ADDRESS_REMOTE_WITH_RTMPTE_443:String = "rtmpte://cp67126.edgefcs.net:443/ondemand";
 		
+		public static const REMOTE_DYNAMIC_STREAMING_VIDEO_HOST:String = "rtmp://cp60395.edgefcs.net/ondemand";
+		
+		public static const REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS:Array =
+		[ 
+			{stream:"mp4:videos/encoded2/Train_450kbps.mp4", bitrate:"450000"},
+			{stream:"mp4:videos/encoded2/Train_700kbps.mp4", bitrate:"700000"},
+			{stream:"mp4:videos/encoded2/Train_900kbps.mp4", bitrate:"900000"},
+			{stream:"mp4:videos/encoded2/Train_1000kbps_H.mp4", bitrate:"1000000"},
+		]
+
 		// Images
 		//
 		
@@ -93,9 +103,9 @@ package org.osmf.utils
 		public static const LOCAL_INVALID_SOUND_FILE:String = "assets/invalid.mp3";
 		
 		public static const STREAMING_AUDIO_FILE:String
-			= "rtmp://cp67126.edgefcs.net/ondemand/mp3:mediapm/ovp/content/test/video/nocc_small.mp3";
+			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 
 		public static const INVALID_STREAMING_AUDIO_FILE:String
-			= "rtmp://cp67126.edgefcs.net/ondemand/fail//mp3:mediapm/ovp/content/test/video/nocc_small.mp3";
+			= "rtmp://cp67126.edgefcsfail.net/ondemand/mp3:mediapm/ovp/content/test/video/nocc_small.mp3";
 	}
 }

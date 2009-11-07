@@ -70,7 +70,7 @@ package org.osmf.net.dynamicstreaming
 				// See if we need to switch down based on average max bandwidth
 				for (var i:int = metrics.currentIndex; i >= 0; i--) 
 				{
-					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.getItemAt(i).bitrate * _safetyMultiple)) 
+					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.streamItems[i].bitrate * _safetyMultiple)) 
 					{
 						newIndex = i;
 						break;

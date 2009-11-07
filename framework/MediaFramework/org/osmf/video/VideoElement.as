@@ -256,10 +256,13 @@ package org.osmf.video
 		
 		private function finishLoad():void
 		{
+			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
+
 			var viewable:ViewableTrait = new ViewableTrait();
 			viewable.view = video;
 			var seekable:SeekableTrait = new NetStreamSeekableTrait(stream);
-			var temporal:NetStreamTemporalTrait = new NetStreamTemporalTrait(stream); 
+			var temporal:NetStreamTemporalTrait = new NetStreamTemporalTrait(stream, context.resource.url); 
 			spatial = new SpatialTrait();
 			spatial.setDimensions(video.width, video.height);
 			seekable.temporal = temporal;
@@ -273,8 +276,6 @@ package org.osmf.video
 	    	addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));
 	    	addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
 
-			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
 			// NetStreamDownloadableTrait will only be added when it is a progressive video.
 			if (isProgressiveVideo(context))
 			{

@@ -515,6 +515,7 @@ package org.osmf.media
 					
 					mediaPlayer.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestStop2);
 					mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestStop3);
+					
 					mediaPlayer.stop();
 					
 					function onTestStop2(event2:PausedChangeEvent):void
@@ -741,8 +742,9 @@ package org.osmf.media
 					{
 						// We should get roughly 1 update per second.  Note that
 						// the timing model isn't precise, so we leave some wiggle
-						// room in our assertion.
-						assertTrue(Math.abs(playheadUpdateCount - Math.floor(mediaPlayer.duration)) <= 1);
+						// room in our assertion (and in particular give ourselves
+						// more wiggle room if the duration is longer).
+						assertTrue(Math.abs(playheadUpdateCount - Math.floor(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
 					}
 					else
 					{
@@ -767,7 +769,7 @@ package org.osmf.media
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
-
+		
 		public function testWidthHeight():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
@@ -925,10 +927,10 @@ package org.osmf.media
 				
 				assertTrue(mediaPlayer.autoSwitch == true);
 				assertTrue(mediaPlayer.currentStreamIndex == 0);
-				assertTrue(mediaPlayer.maxStreamIndex == 4);
+				assertTrue(mediaPlayer.maxStreamIndex == expectedMaxStreamIndex);
 				assertTrue(mediaPlayer.switchUnderway == false);
 				
-				for (var i:int = 0; i <= 4; i++)
+				for (var i:int = 0; i <= expectedMaxStreamIndex; i++)
 				{
 					assertTrue(mediaPlayer.getBitrateForIndex(i) == getExpectedBitrateForIndex(i));
 				}
@@ -1447,6 +1449,13 @@ package org.osmf.media
 			return null;
 		}
 		
+		protected function get expectedMaxStreamIndex():int
+		{
+			// Subclasses can override to specify the expected max stream index
+			// when switchable.
+			return -1;
+		}
+		
 		protected function getExpectedBitrateForIndex(index:int):Number
 		{
 			// Subclasses can override to specify the expected bitrates for each
@@ -1527,7 +1536,8 @@ package org.osmf.media
 			events.push(event);
 		}
 		
-		private static const ASYNC_DELAY:Number = 8000;
+		// Large delay to accommodate non-mocked unit tests.
+		private static const ASYNC_DELAY:Number = 53000;
 		
 		private var mediaPlayer:MediaPlayer;
 		private var eventDispatcher:EventDispatcher;

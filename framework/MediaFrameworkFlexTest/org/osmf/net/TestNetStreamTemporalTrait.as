@@ -27,6 +27,8 @@ package org.osmf.net
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestTemporalTrait;
 	import org.osmf.utils.NetFactory;
+	import org.osmf.utils.URL;
+	import org.osmf.utils.TestConstants;
 
 	public class TestNetStreamTemporalTrait extends TestTemporalTrait
 	{
@@ -62,7 +64,7 @@ package org.osmf.net
 			{
 				MockNetStream(stream).expectedDuration = EXPECTED_DURATION;
 			}
-			return new NetStreamTemporalTrait(stream);
+			return new NetStreamTemporalTrait(stream, new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		}
 		
 		override protected function get canChangeCurrentTime():Boolean

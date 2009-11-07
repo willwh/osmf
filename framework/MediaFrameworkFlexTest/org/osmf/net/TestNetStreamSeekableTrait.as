@@ -28,6 +28,7 @@ package org.osmf.net
 	import org.osmf.traits.TestSeekableTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
+	import org.osmf.utils.URL;
 
 	public class TestNetStreamSeekableTrait extends TestSeekableTrait
 	{
@@ -63,7 +64,7 @@ package org.osmf.net
 			}
 			
 			var trait:NetStreamSeekableTrait =  new NetStreamSeekableTrait(stream);		
-			trait.temporal = new NetStreamTemporalTrait(stream);
+			trait.temporal = new NetStreamTemporalTrait(stream, new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 			NetStreamTemporalTrait(trait.temporal).duration = maxSeekValue;
 			
 			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);

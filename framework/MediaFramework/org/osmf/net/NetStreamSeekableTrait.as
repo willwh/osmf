@@ -40,10 +40,13 @@ package org.osmf.net
 		 * Constructor.
 		 * @param netStream NetStream created for the ILoadable that belongs to the media element
 		 * that uses this trait.
+		 * 
 		 * @see NetLoader
 		 */ 		
 		public function NetStreamSeekableTrait(netStream:NetStream)
 		{
+			super();
+			
 			this.netStream = netStream;
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);		
 		}
@@ -85,7 +88,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
 					processSeekCompletion(previousTime);					
-					break;				
+					break;
 			}
 			
 			function onSeekBugTimer(event:TimerEvent):void
@@ -99,7 +102,7 @@ package org.osmf.net
 				}
 			}
 		}
-		
+				
 		private var netStream:NetStream;
 		private var previousTime:Number;
 		private var expectedTime:Number;

@@ -16,18 +16,20 @@
 *  
 *  The Initial Developer of the Original Code is Akamai Technologies, Inc.
 *  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
-*  Technologies, Inc. All Rights Reserved. 
+*  Technologies, Inc. All Rights Reserved.
+* 
+*  Contributor: Adobe Systems Inc.
 *  
 *****************************************************/
-
 package org.osmf.net.dynamicstreaming
 {
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.media.IMediaResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.FMSURL;
+	import org.osmf.net.StreamType;
 	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.URL;
 
 	/**
 	 * DynamicStreamingResource represents a dynamic streaming profile.
@@ -40,68 +42,54 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param hostURL This is the connection string for all of the streams
-		 * in the profile.
+		 * @param host A URL representing the host of the dynamic streaming resource.
+		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
 		 */
-		public function DynamicStreamingResource(hostURL:FMSURL)
+		public function DynamicStreamingResource(host:URL, streamType:StreamType=null)
 		{
-			_streamingItems = null;
+			_host = host;
+			_streamType = streamType || StreamType.ANY;
 			_initialIndex = 0;
-			_hostName = hostURL;
-			_start = START_EITHER_LIVE_OR_VOD;
-			_len = DURATION_PLAY_UNTIL_END;
-			_reset = true;			
 		}
 		
 		/**
-		 * The connection host name for the dynamic streaming profile.
+		 * A URL representing the host of the dynamic streaming resource.
 		 */
-		public function get hostName():FMSURL
+		public function get host():URL
 		{
-			return _hostName;
+			return _host;
 		}
 		
 		/**
-		 * Add a DynamicStreamItem to the collection.
-		 */
-		public function addItem(item:DynamicStreamingItem):void
+		 * The type of the stream.
+		 **/
+		public function get streamType():StreamType
 		{
-			if (_streamingItems == null)
+			return _streamType;
+		}
+		
+		/**
+		 * Vector of DynamicStreamingItems.  Each item represents a
+		 * different bitrate stream.
+		 **/
+		public function get streamItems():Vector.<DynamicStreamingItem>
+		{
+			if (_streamItems == null)
 			{
-				_streamingItems = new Vector.<DynamicStreamingItem>();
+				_streamItems = new Vector.<DynamicStreamingItem>();
 			}
 			
-			_streamingItems.push(item);
-			_streamingItems.sort(this.compare);
+			return _streamItems;
 		}
 		
-		/**
-		 * The number of items in the DynamicStreamItem collection.
-		 */
-		public function get numItems():int
+		public function set streamItems(value:Vector.<DynamicStreamingItem>):void
 		{
-			if (_streamingItems == null)
-			{
-				return 0;
-			}
+			_streamItems = value;
 			
-			return _streamingItems.length;
-		}
-
-		/**
-		 * Get the DynamicStreamItem at the specified index in the 
-		 * collection.
-		 * 
-		 * @throws RangeError If the index is out of range.
-		 */
-		public function getItemAt(index:int):DynamicStreamingItem
-		{
-			if ((_streamingItems == null) || (index >= _streamingItems.length))
+			if (value != null)
 			{
-				throw new RangeError(MediaFrameworkStrings.INVALID_PARAM);				
+				value.sort(compareStreamItems);
 			}
-
-			return _streamingItems[index];				
 		}
 		
 		/**
@@ -116,61 +104,12 @@ package org.osmf.net.dynamicstreaming
 		
 		public function set initialIndex(value:int):void
 		{
-			if ((_streamingItems == null) || (value >= _streamingItems.length))
+			if (_streamItems == null || value >= _streamItems.length)
 			{
 				throw new RangeError(MediaFrameworkStrings.INVALID_PARAM);				
 			}
 			
 			_initialIndex = value;
-		}
-		    		
-		/**
-		 * Start time for the stream. 
-		 * 
-		 * <p>
-		 * Valid values are:
-		 * <ul>
-		 * <li>DynamicStreamingResource.START_EITHER_LIVE_OR_VOD</li>
-		 * <li>DynamicStreamingResource.START_LIVE</li>
-		 * <li>DynamicStreamingResource.START_VOD</li>
-		 * <li>A positive number, plays a recorded stream beginning this many seconds in.</li>
-		 * </ul>
-		 * </p>
-		 *
-		 * @see flash.net.NetStream
-		 */
-		public function get start():Number
-		{
-			return _start;
-		}
-		
-		public function set start(value:Number):void
-		{
-			_start = value;
-		}
-		
-		/**
-		 * Duration of the playback.
-		 * 
-		 * <p>
-		 * Valid values are:
-		 * <ul>
-		 * <li>DynamicStreamingResource.DURATION_PLAY_UNTIL_END</li>
-		 * <li>DynamicStreamingResource.DURATION_PLAY_SINGLE_FRAME</li>
-		 * <li>A positive number, plays a live or recorded stream for this many seconds.</li>
-		 * </ul>
-		 * </p>
-		 *
-		 * @see flash.net.NetStream
-		 */
-		public function get len():Number
-		{
-			return _len;
-		}
-		
-		public function set len(value:Number):void
-		{
-			_len = value;
 		}
     			
 		/**
@@ -178,11 +117,32 @@ package org.osmf.net.dynamicstreaming
 		 */ 
 		public function get metadata():Metadata
 		{
-			if(!metadataCollection)
+			if (_metadata == null)
 			{
-				metadataCollection = new Metadata();
+				_metadata = new Metadata();
 			}
-			return metadataCollection;
+			return _metadata;
+		}
+
+		// Internals
+		//		
+    					
+		/**
+		 * @private
+		 * 
+		 * Returns the index associated with a stream name. The match will be tried 
+		 * both with and without a mp4: prefix. Returns -1 if no match is found.
+		 */		
+		internal function indexFromName(name:String):int 
+		{
+			for (var i:int = 0; i < _streamItems.length; i++) 
+			{
+				if (name == _streamItems[i].streamName || "mp4:" + name == _streamItems[i].streamName) 
+				{
+					return i;
+				}
+			}
+			return -1;
 		}
 		
 		/**
@@ -194,7 +154,7 @@ package org.osmf.net.dynamicstreaming
     	 * <li>a positive number, if a should appear after b in the sorted sequence</li>
     	 * </ol>
     	 */
-		private function compare(a:DynamicStreamingItem, b:DynamicStreamingItem):Number
+		private function compareStreamItems(a:DynamicStreamingItem, b:DynamicStreamingItem):Number
 		{
 			var result:Number = -1;
 			
@@ -208,80 +168,13 @@ package org.osmf.net.dynamicstreaming
 			}
 			
 			return result;
-		}		
-    					
-		/**
-		 * Returns the index associated with a stream name. The match will be tried 
-		 * both with and without a mp4: prefix. Returns -1 if no match is found.
-		 * @private
-		 */		
-		internal function indexFromName(name:String):int 
-		{
-			for (var i:int = 0; i < _streamingItems.length; i++) 
-			{
-				if (name == _streamingItems[i].streamName || "mp4:" + name == _streamingItems[i].streamName) 
-				{
-					return i;
-				}
-			}
-			return -1;
 		}
-											
-		private var metadataCollection:Metadata;
-		private var _hostName:FMSURL;
-		private var _streamingItems:Vector.<DynamicStreamingItem>;
-		private var _initialIndex:int;
-		private var _start:Number;
-		private var _len:Number;	// Duration of the playback	
-		private var _reset:Boolean;	// Whether to clear a playlist		
-		
-		/**
-		 * Valid value for the <code>start</code> property and
-		 * corresponds to the NetStream.play() start argument.
-		 * <p>
-		 * Looks for a live stream, then a recorded stream, if it 
-		 * finds neither, opens a live stream.
-		 * </p>
-		 */
-		public static const START_EITHER_LIVE_OR_VOD:int = -2;
-		
-		/**
-		 * Valid value for the <code>start</code> property and
-		 * corresponds to the NetStream.play() start argument.
-		 * <p>
-		 * Plays only a live stream.
-		 * </p>
-		 */
-		public static const START_LIVE:int = -1;
-		
-		/**
-		 * Valid value for the <code>start</code> property and
-		 * corresponds to the NetStream.play() start argument.
-		 * <p>
-		 * Plays a video on demand stream beginning 0 seconds in.
-		 * </p>
-		 */
-		public static const START_VOD:int = 0;
 
-		/**
-		 * Valid value for the <code>len</code> property and
-		 * corresponds to the NetStream.play() len argument.
-		 * 
-		 * <p>
-		 * Plays a live or recorded stream until it ends.
-		 * </p>
-		 */		
-		 public static const DURATION_PLAY_UNTIL_END:int = -1;
-		 
-		/**
-		 * Valid value for the <code>len</code> property and
-		 * corresponds to the NetStream.play() len argument.
-		 * 
-		 * <p>
-		 * Plays a single frame that is <code>start</code> seconds
-		 * from the beginning of a recorded stream.
-		 * </p>
-		 */
-		 public static const DURATION_PLAY_SINGLE_FRAME:int = 0;
+		private var _host:URL;
+		private var _streamType:StreamType;
+		private var _metadata:Metadata;
+
+		private var _streamItems:Vector.<DynamicStreamingItem>;
+		private var _initialIndex:int;
 	}
 }

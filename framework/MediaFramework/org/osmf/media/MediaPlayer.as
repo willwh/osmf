@@ -1221,8 +1221,7 @@ package org.osmf.media
 			}
 			else if (autoRewind && seekable && pausable)
 			{				
-				seek(0);
-				pause();		
+				stop();
 			}
 			else
 			{

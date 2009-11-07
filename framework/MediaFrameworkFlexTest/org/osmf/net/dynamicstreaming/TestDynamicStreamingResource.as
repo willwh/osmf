@@ -21,15 +21,13 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import __AS3__.vec.Vector;
+	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.netmocker.MockDynamicStreamingNetLoader;
-	import org.osmf.traits.LoadableTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.MediaFrameworkStrings;
-	import org.osmf.utils.URL;
 
 	public class TestDynamicStreamingResource extends TestCase
 	{
@@ -43,22 +41,11 @@ package org.osmf.net.dynamicstreaming
 			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(HOSTNAME));
 			
 			// Test hostName property
-			assertEquals(HOSTNAME, dsr.hostName);
+			assertEquals(HOSTNAME, dsr.host.rawUrl);
 			
-			assertEquals(0, dsr.numItems);
+			assertEquals(0, dsr.streamItems.length);
 			
-			// Try an index out of range, since we haven't added any items yet
-			try
-			{
-				var item:DynamicStreamingItem = dsr.getItemAt(5);
-				fail("DynamicStreamingResource.getItemAt() should have thrown a RangeError");
-			}
-			catch(e:RangeError)
-			{
-				assertEquals(e.message, MediaFrameworkStrings.INVALID_PARAM);
-			}
-			
-			// Try an index out of range for the intial index
+			// Try an index out of range for the initial index
 			try
 			{
 				dsr.initialIndex = 1;
@@ -71,32 +58,39 @@ package org.osmf.net.dynamicstreaming
 			
 			
 			// Test addItem method. 
-			dsr.addItem(new DynamicStreamingItem("stream_1", bitrates[3]));
-			dsr.addItem(new DynamicStreamingItem("stream_2", bitrates[5]));
-			dsr.addItem(new DynamicStreamingItem("stream_3", bitrates[0]));
-			dsr.addItem(new DynamicStreamingItem("stream_4", bitrates[2]));
-			dsr.addItem(new DynamicStreamingItem("stream_5", bitrates[4]));
-			dsr.addItem(new DynamicStreamingItem("stream_6", bitrates[1]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_1", bitrates[3]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_2", bitrates[5]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_3", bitrates[0]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_4", bitrates[2]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_5", bitrates[4]));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_6", bitrates[1]));
 			
-			assertEquals(bitrates.length, dsr.numItems);
+			assertEquals(bitrates.length, dsr.streamItems.length);
 			
-			// Test getItemAt method. No matter what order they were added, they should be in 
-			// ascending bitrate order when we iterate over them.
-			for (var i:int = 0; i < dsr.numItems; i++)
-			{
-				var bitrate:int = dsr.getItemAt(i).bitrate;
-				assertEquals(bitrates[i], bitrate);
-			}
+			// Test accessors. Note that the resource doesn't auto-sort the items,
+			// they remain in the original order because we have no way to hook
+			// into the push() call.
+			assertEquals(bitrates[3], dsr.streamItems[0].bitrate);
+			assertEquals(bitrates[5], dsr.streamItems[1].bitrate);
+			assertEquals(bitrates[0], dsr.streamItems[2].bitrate);
+			assertEquals(bitrates[2], dsr.streamItems[3].bitrate);
+			assertEquals(bitrates[4], dsr.streamItems[4].bitrate);
+			assertEquals(bitrates[1], dsr.streamItems[5].bitrate);
 			
-			// Try an index out of range
-			try
+			// However, if the stream items are pushed all at once, we sort them.
+			var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
+			streamItems.push(new DynamicStreamingItem("stream_1", bitrates[3]));
+			streamItems.push(new DynamicStreamingItem("stream_2", bitrates[5]));
+			streamItems.push(new DynamicStreamingItem("stream_3", bitrates[0]));
+			streamItems.push(new DynamicStreamingItem("stream_4", bitrates[2]));
+			streamItems.push(new DynamicStreamingItem("stream_5", bitrates[4]));
+			streamItems.push(new DynamicStreamingItem("stream_6", bitrates[1]));
+			dsr.streamItems = streamItems;
+			
+			for (var i:int = 0; i < dsr.streamItems.length; i++)
 			{
-				var item2:DynamicStreamingItem = dsr.getItemAt(dsr.numItems + 1);
-				fail("DynamicStreamingResource.getItemAt() should have thrown a RangeError");
-			}
-			catch(e:RangeError)
-			{
-				assertEquals(e.message, MediaFrameworkStrings.INVALID_PARAM);
+				var bitrate:int = dsr.streamItems[i].bitrate;
+				assertEquals(bitrates[i], dsr.streamItems[i].bitrate);
 			}
 			
 			// Test initialIndex property
@@ -107,7 +101,7 @@ package org.osmf.net.dynamicstreaming
 			// Try an index out of range
 			try
 			{
-				dsr.initialIndex = dsr.numItems + 1;
+				dsr.initialIndex = dsr.streamItems.length + 1;
 				fail("DynamicStreamingResource.initialIndex should have thrown a RangeError");
 			}
 			catch(e:RangeError)
@@ -115,17 +109,7 @@ package org.osmf.net.dynamicstreaming
 				assertEquals(e.message, MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			
-			// Test start properties
-			assertEquals(DynamicStreamingResource.START_EITHER_LIVE_OR_VOD, dsr.start);
-			dsr.start = DynamicStreamingResource.START_VOD;
-			assertEquals(DynamicStreamingResource.START_VOD, dsr.start);
-			
-			// Test len property
-			assertEquals(DynamicStreamingResource.DURATION_PLAY_UNTIL_END, dsr.len);
-			dsr.len = DynamicStreamingResource.DURATION_PLAY_SINGLE_FRAME;
-			assertEquals(DynamicStreamingResource.DURATION_PLAY_SINGLE_FRAME, dsr.len);
-			
+						
 			// Test Metadata property
 			var metadata:Metadata = dsr.metadata;
 			assertNotNull(metadata);

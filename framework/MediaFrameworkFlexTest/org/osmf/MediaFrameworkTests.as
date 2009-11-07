@@ -139,6 +139,8 @@ package org.osmf
 			
  			addTestSuite(TestVideoElement);
 			addTestSuite(TestNetClient);
+			addTestSuite(TestNetStreamUtils);
+			addTestSuite(TestStreamingURLResource);
 
 			addTestSuite(TestNetStreamAudibleTrait);
 			addTestSuite(TestNetStreamBufferableTrait);

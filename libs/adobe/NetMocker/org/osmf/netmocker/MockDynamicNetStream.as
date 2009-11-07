@@ -260,12 +260,20 @@ package org.osmf.netmocker
 				
 				playheadTimer.stop();
 				
+				// NetStream.Play.Stop may get dispatched numerous times during
+				// playback, and doesn't signal completion.  onPlayStatus's
+				// NetStream.Play.Stop does signal completion.  We dispatch
+				// them both here, to roughly match what NetStream does.
+				//
+				
 				infos =
 					[ {"code":NetStreamCodes.NETSTREAM_PLAY_STOP, 		"level":LEVEL_STATUS}
 					, {"code":NetStreamCodes.NETSTREAM_BUFFER_FLUSH,	"level":LEVEL_STATUS}
 					, {"code":NetStreamCodes.NETSTREAM_BUFFER_EMPTY,	"level":LEVEL_STATUS}
 					];
 				eventInterceptor.dispatchNetStatusEvents(infos);
+
+				this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_COMPLETE});
 			}
 			else
 			{

@@ -34,7 +34,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
-	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
 	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
@@ -75,7 +75,7 @@ package org.osmf.net.dynamicstreaming
 			else
 			{
 				// Get the hostname from the DynamicStreamingResource and ask the base class to connect
-				var hostName:FMSURL = dsResource.hostName;
+				var hostName:URL = dsResource.host;
 				var tempTrait:LoadableTrait = new LoadableTrait(null, new URLResource(hostName));
 				
 				tempTrait.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);

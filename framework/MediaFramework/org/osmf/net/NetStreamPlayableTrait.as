@@ -27,14 +27,14 @@ package org.osmf.net
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.traits.PlayableTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	
 	/**
 	 * The NetStreamPlayableTrait class implements an IPlayable interface that uses a NetStream.
@@ -91,38 +91,20 @@ package org.osmf.net
 				{				
 					netStream.resume();						
 				}
-				else if ((this.urlResource!= null) && urlResource.url && (urlResource.url.protocol.search(/^rtmp$|rtmp[tse]$|rtmpte$/i) != -1)) //Streaming
-				{	
-					var parsedURL:URL = urlResource.url;
-					var fms:FMSURL = parsedURL as FMSURL;
-					if (fms == null)
-					{
-						fms = new FMSURL(parsedURL.toString());
-					}
-					
-					var tempStreamName:String = fms.streamName;
-					if (parsedURL.query != null && parsedURL.query != "")
-					{
-						 tempStreamName += "?" + parsedURL.query;
-					}
-													
-					// Add optional query parameters to the stream name.
-					doPlay(tempStreamName);									
-				}
-				else if (this.dsResource != null)
+				else if (dsResource != null)
 				{
 					doPlay(dsResource);
 				}					
-				else // Progressive
+				else if (urlResource != null) 
 				{
-					doPlay(urlResource.url.toString());					
-				}	
+					doPlay(NetStreamUtils.getStreamNameFromURL(urlResource.url));
+				}
 			}
 		}
 		
-		// Needed to detect when the stream didn't play:  i.e. complete or error cases
+		// Needed to detect when the stream didn't play:  i.e. complete or error cases.
 		private function onNetStatus(event:NetStatusEvent):void
-		{				
+		{
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
@@ -134,8 +116,11 @@ package org.osmf.net
 					streamStarted = false;
 					resetPlaying();					
 					break;
-				case NetStreamCodes.NETSTREAM_PLAY_STOP: //fired when streaming connections buffer, but also for when progressive connections finish.
-					if (isProgressive) 
+				case NetStreamCodes.NETSTREAM_PLAY_STOP:
+					// Fired when streaming connections buffer, but also when
+					// progressive connections finish.  In the latter case, we
+					// halt playback.
+					if (urlResource != null && NetStreamUtils.isRTMPStream(urlResource.url) == false) 
 					{
 						netStream.pause();
 						streamStarted = false;
@@ -143,11 +128,6 @@ package org.osmf.net
 					}
 					break;
 			}
-		}
-		
-		private function get isProgressive():Boolean
-		{
-			return netStream.bytesTotal != 0;
 		}
 		
 		protected function doPlay(...args):void

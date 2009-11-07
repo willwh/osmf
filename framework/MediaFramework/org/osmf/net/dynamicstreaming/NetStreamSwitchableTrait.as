@@ -45,7 +45,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		public function NetStreamSwitchableTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
 		{
-			super(!ns.useManualSwitchMode, ns.renderingIndex, res.numItems);	
+			super(!ns.useManualSwitchMode, ns.renderingIndex, res.streamItems.length);	
 			
 			_ns = ns;
 			_resource = res;
@@ -60,7 +60,7 @@ package org.osmf.net.dynamicstreaming
 		override public function getBitrateForIndex(index:int):Number
 		{
 			validateIndex(index);
-			return _resource.getItemAt(index).bitrate;
+			return _resource.streamItems[index].bitrate;
 		}	
 				
 		/**

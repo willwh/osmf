@@ -39,7 +39,7 @@ package org.osmf.net.dynamicstreaming
 			
 			// Test with bandwidth higher than the current stream
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
-			dsResource.addItem(new DynamicStreamingItem("stream1_300kbps", 300));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			
 			metrics.avgMaxBitrate = 5000;
 			metrics.dynamicStreamingResource = dsResource;
@@ -47,9 +47,9 @@ package org.osmf.net.dynamicstreaming
 			assertEquals(-1, result);
 			
 			// Test with bandwidth lower than the current stream
-			dsResource.addItem(new DynamicStreamingItem("stream2_500kbps", 500));
-			dsResource.addItem(new DynamicStreamingItem("stream3_1000kbps", 1000));
-			dsResource.addItem(new DynamicStreamingItem("stream4_3000kpbs", 3000));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream2_500kbps", 500));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 			
 			metrics.avgMaxBitrate = 1234;
 			metrics.currentIndex = 3;

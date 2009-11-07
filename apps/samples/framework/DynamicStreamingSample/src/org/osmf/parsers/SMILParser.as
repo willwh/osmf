@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.parsers
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -30,9 +32,9 @@ package org.osmf.parsers
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
 	
-	import org.osmf.utils.FMSURL;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.utils.FMSURL;
 	
 	[Event (name="error", type="flash.events.IOErrorEvent")]
 	[Event (name="securityError", type="flash.events.SecurityErrorEvent")]
@@ -142,6 +144,8 @@ package org.osmf.parsers
 		
 		private function parseItems():void
 		{
+			var items:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
+			
 			var ns:Namespace = _xml.namespace();
 			
 			for (var i:int = 0; i < _xml.ns::body.ns::["switch"].ns::video.length(); i++)
@@ -149,8 +153,10 @@ package org.osmf.parsers
 				var streamName:String = _xml.ns::body.ns::["switch"].ns::video[i].@src;
 				var bitrate:Number = Number(_xml.ns::body.ns::["switch"].ns::video[i].@["system-bitrate"])/1000;
 				
-				_dynamicStreamingResource.addItem(new DynamicStreamingItem(streamName, bitrate));
+				items.push(new DynamicStreamingItem(streamName, bitrate));
 			}
+			
+			dynamicStreamingResource.streamItems = items;
 		}
 		
 		private var _xml:XML;

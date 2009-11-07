@@ -46,10 +46,10 @@ package org.osmf.net.dynamicstreaming
 			
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
 
-			dsResource.addItem(new DynamicStreamingItem("stream1_300kbps", 300));		
-			dsResource.addItem(new DynamicStreamingItem("stream2_500kbps", 500));
-			dsResource.addItem(new DynamicStreamingItem("stream3_1000kbps", 1000));
-			dsResource.addItem(new DynamicStreamingItem("stream4_3000kpbs", 3000));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));		
+			dsResource.streamItems.push(new DynamicStreamingItem("stream2_500kbps", 500));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 
 			metrics.dynamicStreamingResource = dsResource;
 			

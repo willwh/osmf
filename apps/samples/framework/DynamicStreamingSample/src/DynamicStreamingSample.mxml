@@ -190,7 +190,7 @@
 					var streamMsg:String = "Current streaming profile index: " + _switchable.currentIndex + " of " + _switchable.maxIndex;
 					debug(streamMsg);
 					
-					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.getItemAt(_switchable.currentIndex).bitrate + "kbps";
+					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.streamItems[_switchable.currentIndex].bitrate + "kbps";
 					debug(streamMsg);
 				}
 				

@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.composition
 {
 	import org.osmf.events.SwitchingChangeEvent;
@@ -27,10 +48,10 @@ package org.osmf.composition
 		{
 			
 			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("http://www.example.com/ondemand"));
-			dsr.addItem(new DynamicStreamingItem("stream_500kbps", 500));
-			dsr.addItem(new DynamicStreamingItem("stream_800kbps", 800));
-			dsr.addItem(new DynamicStreamingItem("stream_1000kbps", 1000));
-			dsr.addItem(new DynamicStreamingItem("stream_3000kbps", 3000));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_500kbps", 500));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_800kbps", 800));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_3000kbps", 3000));
 			
 			var netLoader:MockDynamicStreamingNetLoader = new MockDynamicStreamingNetLoader();
 								

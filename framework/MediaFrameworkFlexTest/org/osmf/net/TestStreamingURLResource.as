@@ -18,53 +18,34 @@
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
-*  Contributor(s): Akamai Technologies
-* 
 *****************************************************/
-package org.osmf.media
+package org.osmf.net
 {
-	import org.osmf.metadata.Metadata;
+	import org.osmf.media.TestURLResource;
 	import org.osmf.utils.URL;
 	
-	/**
-	 * Default implementation of IURLResource.
-	 **/
-	public class URLResource implements IURLResource
-	{		
-		// Public interface
-		//
-		
-		/**
-		 * Constructor.
-		 * 
-		 * @param url The URL of the resource.
-		 **/
-		public function URLResource(url:URL)
+	public class TestStreamingURLResource extends TestURLResource
+	{
+		override protected function createInterfaceObject(... args):Object
 		{
-			_url = (url == null) ? new URL(null) : url;	
-		}
+			var resource:StreamingURLResource = null;
 		
-		/**
-		 * Required by the IURLResource interface, returns a URL object.
-		 */
-		public function get url():URL
-		{
-			return _url;
-		}
-		
-		/**
-		 *  @inheritDoc
-		 */ 
-		public function get metadata():Metadata
-		{
-			if (!_metadata)
+			if (args.length > 0)
 			{
-				_metadata = new Metadata();
+				assertTrue(args.length == 1);
+				resource = new StreamingURLResource(args[0]);
 			}
-			return _metadata;
+			
+			return resource;
 		}
 		
-		private var _metadata:Metadata;	
-		private var _url:URL;	
+		public function testStreamType():void
+		{
+			var resource:StreamingURLResource = new StreamingURLResource(new URL("http://example.com"));
+			assertTrue(resource.streamType == StreamType.ANY);
+			
+			resource = new StreamingURLResource(new URL("http://example.com"), StreamType.LIVE);
+			assertTrue(resource.streamType == StreamType.LIVE);
+		}
 	}
 }

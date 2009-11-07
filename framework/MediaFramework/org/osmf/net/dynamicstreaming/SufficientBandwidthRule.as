@@ -51,9 +51,9 @@ package org.osmf.net.dynamicstreaming
         	if (metrics.averageMaxBandwidth != 0) 
         	{
 				// First find the preferred bitrate level we should be at by finding the highest profile that can play, given the current average max bandwidth
-				for (var i:int = metrics.dynamicStreamingResource.numItems - 1; i >= 0; i--) 
+				for (var i:int = metrics.dynamicStreamingResource.streamItems.length - 1; i >= 0; i--) 
 				{
-					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.getItemAt(i).bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
+					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.streamItems[i].bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
 					{
 						newIndex = i;
 						break;

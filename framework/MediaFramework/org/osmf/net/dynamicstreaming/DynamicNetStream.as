@@ -40,6 +40,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.StreamType;
 	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
@@ -91,7 +92,7 @@ package org.osmf.net.dynamicstreaming
 		 */ 
 		public function set resource(value:DynamicStreamingResource):void
 		{
-			_dsResource = value;			
+			_dsResource = value;
 		}
 	
 		public function get resource():DynamicStreamingResource
@@ -129,7 +130,7 @@ package org.osmf.net.dynamicstreaming
 				
 				initDSIFailedCounts();
 				
-				_isLive = (_dsResource.start == DynamicStreamingResource.START_LIVE); 
+				_isLive = (_dsResource.streamType == StreamType.LIVE); 
 				
 				_maxBufferLength = _isLive ? BUFFER_STABLE_LIVE : BUFFER_STABLE_ONDEMAND;
 				_metricsProvider.targetBufferTime = _maxBufferLength;
@@ -145,7 +146,7 @@ package org.osmf.net.dynamicstreaming
 				_streamIndex = 0;
 				_pendingTransitionsArray = new Array();
 				
-				if ((_dsResource.initialIndex >= 0) && (_dsResource.initialIndex < _dsResource.numItems))
+				if ((_dsResource.initialIndex >= 0) && (_dsResource.initialIndex < _dsResource.streamItems.length))
 				{
 					_streamIndex = _dsResource.initialIndex;
 				}
@@ -245,8 +246,8 @@ package org.osmf.net.dynamicstreaming
 		protected function setThrottleLimits(index:int):void 
 		{
 			// We set the bandwidth in both directions to 140% of the bitrate level. 
-			debug("setThrottleLimits() - Set rate limit to " + Math.round(_dsResource.getItemAt(index).bitrate*1.4) + " kbps");
-			var rate:Number = _dsResource.getItemAt(index).bitrate * 1000/8;
+			debug("setThrottleLimits() - Set rate limit to " + Math.round(_dsResource.streamItems[index].bitrate*1.4) + " kbps");
+			var rate:Number = _dsResource.streamItems[index].bitrate * 1000/8;
 			_nc.call("setBandwidthLimit",null, rate * 1.40, rate * 1.40);
 		}
 		
@@ -291,8 +292,8 @@ package org.osmf.net.dynamicstreaming
 				_checkRulesTimer.start();
 			}
 			
-			setThrottleLimits(_dsResource.numItems - 1);
-			debug("makeFirstSwitch() - Starting with stream index " + _streamIndex + " at " + Math.round(_dsResource.getItemAt(_streamIndex).bitrate) + " kbps");
+			setThrottleLimits(_dsResource.streamItems.length - 1);
+			debug("makeFirstSwitch() - Starting with stream index " + _streamIndex + " at " + Math.round(_dsResource.streamItems[_streamIndex].bitrate) + " kbps");
 			switchToIndex(_streamIndex, true);
 			_metricsProvider.currentIndex = _streamIndex;
 		}
@@ -302,23 +303,37 @@ package org.osmf.net.dynamicstreaming
 		 */
 		protected function switchToIndex(targetIndex:uint, firstPlay:Boolean=false):void 
 		{
-			
 			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
 			
-			nso.start = _dsResource.start;
-			nso.len = _dsResource.len;
-			nso.streamName = _dsResource.getItemAt(targetIndex).streamName;
+			var nsStartValue:int = -2;
+			var nsLenValue:int = -1;
+			switch (_dsResource.streamType)
+			{
+				case StreamType.ANY:
+					nsStartValue = -2;
+					break;
+				case StreamType.LIVE:
+					nsStartValue = -1;
+					break;
+				case StreamType.RECORDED:
+					nsStartValue = 0;
+					break;
+			}
+			
+			nso.start = nsStartValue;
+			nso.len = nsLenValue;
+			nso.streamName = _dsResource.streamItems[targetIndex].streamName;
 			nso.oldStreamName = _oldStreamName;
 			nso.transition = firstPlay ? NetStreamPlayTransitions.RESET : NetStreamPlayTransitions.SWITCH;
 			
-			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.getItemAt(targetIndex).bitrate) + " kbps");
+			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.streamItems[targetIndex].bitrate) + " kbps");
 						
 			_switchUnderway = true;	
 			dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_UNDEFINED, _detail));
 			
 			this.playStream(nso);
 			
-			_oldStreamName = _dsResource.getItemAt(targetIndex).streamName;
+			_oldStreamName = _dsResource.streamItems[targetIndex].streamName;
 			
 			if ((!firstPlay) && (targetIndex < _streamIndex) && (!_useManualSwitchMode)) 
 			{
@@ -378,7 +393,7 @@ package org.osmf.net.dynamicstreaming
 			if ((newIndex != -1) && (newIndex != int.MAX_VALUE)  && (newIndex != _streamIndex) &&
 					(!_switchUnderway) && isDSIAvailable(newIndex) && (newIndex <= this.maxIndex)) 
 			{
-				debug("checkRules() - Calling for switch to " + newIndex + " at " + _dsResource.getItemAt(newIndex).bitrate + " kbps, detail: " + _detail.description + " " + _detail.moreInfo);
+				debug("checkRules() - Calling for switch to " + newIndex + " at " + _dsResource.streamItems[newIndex].bitrate + " kbps, detail: " + _detail.description + " " + _detail.moreInfo);
 
 				// If this stream has failed, we don't want to try it again until 
 				// failedItemWaitPeriod has elapsed
@@ -442,7 +457,7 @@ package org.osmf.net.dynamicstreaming
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					_renderingIndex = _pendingTransitionsArray[0];
 					
-					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.getItemAt(_renderingIndex).bitrate) + " kbps");
+					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.streamItems[_renderingIndex].bitrate) + " kbps");
 					_pendingTransitionsArray.shift();
 					dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, SwitchingChangeEvent.SWITCHSTATE_REQUESTED));
 					_detail = null;
@@ -459,7 +474,7 @@ package org.osmf.net.dynamicstreaming
 			} 			
 			
 			_dsiFailedCounts = new Vector.<uint>();
-			for (var i:int = 0; i < _dsResource.numItems; i++)
+			for (var i:int = 0; i < _dsResource.streamItems.length; i++)
 			{
 				_dsiFailedCounts.push(0);
 			}
@@ -529,7 +544,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			if (_dsResource)
 			{
-				var count:int = _dsResource.numItems - 1;
+				var count:int = _dsResource.streamItems.length - 1;
 				return ((count < _maxIndexAllowed) ? count : _maxIndexAllowed);
 			}
 			return -1;
@@ -540,7 +555,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		internal function set maxIndex(value:int):void
 		{
-			if (value > _dsResource.numItems)
+			if (value > _dsResource.streamItems.length)
 			{
 				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
 			}
@@ -648,7 +663,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			return (index >= _dsiLockLevel) && (getTimer() - _dsiLastLockTime) < DSI_LOCK_INTERVAL;
 		}
-						
+				
 		private var _checkRulesTimer:Timer;
 		private var _clearFailedCountsTimer:Timer;
 		private var _switchingRules:Vector.<ISwitchingRule>;

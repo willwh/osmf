@@ -57,7 +57,7 @@ package org.osmf.composition
 			var eventTriggered:Boolean = false;
 			var rangeFired:Boolean;
 			var newChild:VideoElement = createVideoElem();
-			DynamicStreamingResource(newChild.resource).addItem(new DynamicStreamingItem("stream_4000", 4000));
+			DynamicStreamingResource(newChild.resource).streamItems.push(new DynamicStreamingItem("stream_4000", 4000));
 						
 			try
 			{
@@ -139,7 +139,7 @@ package org.osmf.composition
 		private function testRecomputation(autoSwitch:Boolean):void
 		{
 			var newChild:VideoElement = createVideoElem();
-			DynamicStreamingResource(newChild.resource).addItem(new DynamicStreamingItem("stream_4000", 4000));
+			DynamicStreamingResource(newChild.resource).streamItems.push(new DynamicStreamingItem("stream_4000", 4000));
 			parallelElem.addChild(newChild);
 			(parallelElem.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = autoSwitch;
 			var wrappingElement:ParallelElement = new ParallelElement();
@@ -162,10 +162,10 @@ package org.osmf.composition
 		private function createVideoElem():VideoElement
 		{
 			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("http://www.example.com/ondemand"));
-			dsr.addItem(new DynamicStreamingItem("stream_500kbps", 500));
-			dsr.addItem(new DynamicStreamingItem("stream_800kbps", 800));
-			dsr.addItem(new DynamicStreamingItem("stream_1000kbps", 1000));
-			dsr.addItem(new DynamicStreamingItem("stream_3000kbps", 3000));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_500kbps", 500));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_800kbps", 800));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));
+			dsr.streamItems.push(new DynamicStreamingItem("stream_3000kbps", 3000));
 			
 			var netLoader:MockDynamicStreamingNetLoader = new MockDynamicStreamingNetLoader();
 			

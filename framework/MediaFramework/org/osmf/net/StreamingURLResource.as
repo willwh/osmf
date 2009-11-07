@@ -18,53 +18,38 @@
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
-*  Contributor(s): Akamai Technologies
-* 
 *****************************************************/
-package org.osmf.media
+package org.osmf.net
 {
-	import org.osmf.metadata.Metadata;
+	import org.osmf.media.URLResource;
 	import org.osmf.utils.URL;
 	
 	/**
-	 * Default implementation of IURLResource.
+	 * A URLResource which is capable of being streamed.
 	 **/
-	public class URLResource implements IURLResource
-	{		
-		// Public interface
-		//
-		
+	public class StreamingURLResource extends URLResource
+	{
 		/**
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource.
+		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
 		 **/
-		public function URLResource(url:URL)
+		public function StreamingURLResource(url:URL, streamType:StreamType=null)
 		{
-			_url = (url == null) ? new URL(null) : url;	
+			super(url);
+			
+			_streamType = streamType || StreamType.ANY;
 		}
-		
+
 		/**
-		 * Required by the IURLResource interface, returns a URL object.
-		 */
-		public function get url():URL
+		 * The type of the stream.
+		 **/
+		public function get streamType():StreamType
 		{
-			return _url;
+			return _streamType;
 		}
 		
-		/**
-		 *  @inheritDoc
-		 */ 
-		public function get metadata():Metadata
-		{
-			if (!_metadata)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
-		
-		private var _metadata:Metadata;	
-		private var _url:URL;	
+		private var _streamType:StreamType;
 	}
 }

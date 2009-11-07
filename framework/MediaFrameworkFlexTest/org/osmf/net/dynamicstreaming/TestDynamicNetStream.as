@@ -115,13 +115,12 @@ package org.osmf.net.dynamicstreaming
 				
 		private function createDynamicStreamingElement():void
 		{	
-			_dsr = new DynamicStreamingResource(new FMSURL(TEST_HOST_NAME));
-			
-			for (var i:int = 0; i < TEST_STREAMS.length; i++)
+			_dsr = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+			for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
 			{
-				_dsr.addItem(new DynamicStreamingItem(TEST_STREAMS[i].stream, TEST_STREAMS[i].bitrate));
+				_dsr.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 			}
-			
+
 			_dsr.initialIndex = 1;
 			
 			_mediaElement = new VideoElement(_loader, _dsr);
@@ -150,6 +149,7 @@ package org.osmf.net.dynamicstreaming
 				case LoadState.LOADED:
 					var netLoadedContext:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
 					netLoadedContext.stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					netLoadedContext.stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					
 					_switchable = _mediaElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
 					_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
@@ -195,13 +195,18 @@ package org.osmf.net.dynamicstreaming
 			}
 		}
 		
+		private function onPlayStatus(event:Object):void
+		{
+			if (event["code"] == NetStreamCodes.NETSTREAM_PLAY_COMPLETE)
+			{
+				_eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
 			switch (event.info.code)
 			{
-				case NetStreamCodes.NETSTREAM_PLAY_STOP:
-					_eventDispatcher.dispatchEvent(new Event("testComplete"));				
-					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 					if (!this._testPlayFailed)
 					{
@@ -250,7 +255,7 @@ package org.osmf.net.dynamicstreaming
 				var streamMsg:String = "Current streaming profile index: " + _switchable.currentIndex + " of " + _switchable.maxIndex;
 				trace(streamMsg);
 				
-				streamMsg = "Current bitrate = " + _dsr.getItemAt(_switchable.currentIndex).bitrate + "kbps";
+				streamMsg = "Current bitrate = " + _dsr.streamItems[_switchable.currentIndex].bitrate + "kbps";
 				trace(streamMsg);
 			}
 			
@@ -263,13 +268,6 @@ package org.osmf.net.dynamicstreaming
 		
 		
 		private static const ASYNC_DELAY:Number = 90000;
-		private static const TEST_HOST_NAME:String = "rtmp://cp67126.edgefcs.net/ondemand";
-		private static const TEST_STREAMS:Array = [ 
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_408kbps.mp4", bitrate:"408000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_608kbps.mp4", bitrate:"608000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1024x522_24.0fps_908kbps.mp4", bitrate:"908000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1024x522_24.0fps_1308kbps.mp4", bitrate:"1308000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1280x720_24.0fps_1708kbps.mp4", bitrate:"1708000"} ]
 
 		private var _eventDispatcher:EventDispatcher;
 		private var _netFactory:DynamicNetFactory;

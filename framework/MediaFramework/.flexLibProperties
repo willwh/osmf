@@ -166,6 +166,9 @@
     <classEntry path="org.osmf.net.NetStreamPlayableTrait"/>
     <classEntry path="org.osmf.net.NetStreamSeekableTrait"/>
     <classEntry path="org.osmf.net.NetStreamTemporalTrait"/>
+    <classEntry path="org.osmf.net.NetStreamUtils"/>
+    <classEntry path="org.osmf.net.StreamType"/>
+    <classEntry path="org.osmf.net.StreamingURLResource"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DroppedFramesRule"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicNetStream"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingItem"/>

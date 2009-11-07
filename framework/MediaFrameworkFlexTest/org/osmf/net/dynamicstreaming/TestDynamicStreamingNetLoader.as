@@ -49,7 +49,7 @@ package org.osmf.net.dynamicstreaming
 		override public function testCanHandleResource():void
 		{
 			var dsr:DynamicStreamingResource = successfulResource as DynamicStreamingResource;
-			var host:FMSURL = dsr.hostName;
+			var host:URL = dsr.host;
 			
 			assertTrue(loader.canHandleResource(new URLResource(host)) == true);
 			assertTrue(loader.canHandleResource(failedResource) == true);
@@ -90,11 +90,11 @@ package org.osmf.net.dynamicstreaming
 		{
 			if (_dsResource == null)
 			{
-				_dsResource = new DynamicStreamingResource(new FMSURL("rtmp://myhost.com/ondemand"));
-				_dsResource.addItem(new DynamicStreamingItem("stream1_300kbps", 300));
-				_dsResource.addItem(new DynamicStreamingItem("stream2_500kbps", 500));
-				_dsResource.addItem(new DynamicStreamingItem("stream3_1000kbps", 1000));
-				_dsResource.addItem(new DynamicStreamingItem("stream4_3000kpbs", 3000));
+				_dsResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+				for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
+				{
+					_dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
+				}
 			}
 			return _dsResource as IMediaResource;
 		}

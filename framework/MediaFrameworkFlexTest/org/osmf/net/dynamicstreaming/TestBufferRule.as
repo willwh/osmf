@@ -49,7 +49,7 @@ package org.osmf.net.dynamicstreaming
 			{
 				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_BUFFER_EMPTY, "status", 5),
 																						new EventInfo(NetStreamCodes.NETSTREAM_PLAY_INSUFFICIENTBW, "status", 10) ];
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 12;
+				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 2;
 			}			
 		}
 		
@@ -67,7 +67,7 @@ package org.osmf.net.dynamicstreaming
 			_loadable =  new LoadableTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
 			_loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
 			
-			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 20000));
+			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			_loadable.load();	
 		}
@@ -90,17 +90,26 @@ package org.osmf.net.dynamicstreaming
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					
-					var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("myhost.com"));
-					dsResource.addItem(new DynamicStreamingItem("stream1_300kbps", 300));
-					dsResource.addItem(new DynamicStreamingItem("stream2_500kbps", 500));
-					dsResource.addItem(new DynamicStreamingItem("stream3_1000kbps", 1000));
-					dsResource.addItem(new DynamicStreamingItem("stream4_3000kpbs", 3000));
-							
+					var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+					for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
+					{
+						dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
+					}
+										
+					stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					stream.play(dsResource);
 					break;
 				case LoadState.LOAD_FAILED:
 					fail("Load FAILED");
 					break;				
+			}
+		}
+		
+		private function onPlayStatus(event:Object):void
+		{
+			if (event["code"] == NetStreamCodes.NETSTREAM_PLAY_COMPLETE)
+			{
+				_eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
 		
@@ -122,9 +131,6 @@ package org.osmf.net.dynamicstreaming
 					result = _bufferRule.getNewIndex();
 					assertEquals(0, result);
 					break;
-				case NetStreamCodes.NETSTREAM_PLAY_STOP:
-					_eventDispatcher.dispatchEvent(new Event("testComplete"));
-					break;
 			}
 		}
 		
@@ -133,6 +139,8 @@ package org.osmf.net.dynamicstreaming
 			// Placeholder to ensure an event is received.
 		}
 		
+		// Really long to enable non-mock testing.
+		private static const ASYNC_DELAY:int = 60000;
 		
 		private var _eventDispatcher:EventDispatcher;
 		private var _netFactory:DynamicNetFactory;

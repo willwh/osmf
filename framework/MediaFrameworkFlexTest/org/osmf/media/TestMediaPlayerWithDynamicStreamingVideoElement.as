@@ -60,8 +60,8 @@ package org.osmf.media
 				// Give our mock loader an arbitrary duration and size to ensure
 				// we get metadata.
 				MockDynamicStreamingNetLoader(loader).netStreamExpectedDuration = 1; // TODO: ???
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedWidth = 768;
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedHeight = 428;
+				MockDynamicStreamingNetLoader(loader).netStreamExpectedWidth = expectedWidthAfterLoad;
+				MockDynamicStreamingNetLoader(loader).netStreamExpectedHeight = expectedHeightAfterLoad;
 			
 				if (resource == INVALID_RESOURCE)
 				{
@@ -95,10 +95,10 @@ package org.osmf.media
 		
 		override protected function get switchableResource():IMediaResource
 		{
-			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TEST_HOST_NAME));
-			for each (var item:Object in TEST_STREAMS)
+			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+			for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
 			{
-				dsResource.addItem(new DynamicStreamingItem(item["stream"], item["bitrate"]));
+				dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 			}
 			return dsResource;
 		}
@@ -137,23 +137,27 @@ package org.osmf.media
 		
 		override protected function get expectedWidthAfterLoad():Number
 		{
-			return 768;
+			return 640;
 		}
 
 		override protected function get expectedHeightAfterLoad():Number
 		{
-			return 428;
+			return 352;
 		}
 		
+		override protected function get expectedMaxStreamIndex():int
+		{
+			return 3;
+		}
+
 		override protected function getExpectedBitrateForIndex(index:int):Number
 		{
 			switch (index)
 			{
-				case 0: return 408000;
-				case 1: return 608000;
-				case 2: return 908000;
-				case 3: return 1308000;
-				case 4: return 1708000;
+				case 0: return 450000;
+				case 1: return 700000;
+				case 2: return 900000;
+				case 3: return 1000000;
 			}
 			
 			return -1;
@@ -162,14 +166,6 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private static const TEST_HOST_NAME:String = "rtmp://cp67126.edgefcs.net/ondemand";
-		private static const TEST_STREAMS:Array = [ 
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_408kbps.mp4", bitrate:"408000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_608kbps.mp4", bitrate:"608000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1024x522_24.0fps_908kbps.mp4", bitrate:"908000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1024x522_24.0fps_1308kbps.mp4", bitrate:"1308000"},
-			{stream:"mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_1280x720_24.0fps_1708kbps.mp4", bitrate:"1708000"} ]
-
 		private static const INVALID_RESOURCE:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
 		
 		private var netFactory:NetFactory;

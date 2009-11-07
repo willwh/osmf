@@ -111,7 +111,7 @@ package org.osmf.audio
 				
 				addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, urlResource));
 				seekable = new NetStreamSeekableTrait(stream);
-				temporal = new NetStreamTemporalTrait(stream);
+				temporal = new NetStreamTemporalTrait(stream, urlResource.url);
 				seekable.temporal = temporal;
 				addTrait(MediaTraitType.SEEKABLE, seekable);
 				addTrait(MediaTraitType.TEMPORAL, temporal);
