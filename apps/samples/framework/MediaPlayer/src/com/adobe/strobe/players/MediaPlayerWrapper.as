@@ -55,12 +55,12 @@ package com.adobe.strobe.players
 			return _playerSprite.mediaPlayer;
 		}
 		
-		public function set scaleMode(value:ScaleMode):void
+		public function set scaleMode(value:String):void
 		{
 			_playerSprite.scaleMode = value;
 		}
 		
-		public function get scaleMode():ScaleMode
+		public function get scaleMode():String
 		{
 			return _playerSprite.scaleMode;
 		}

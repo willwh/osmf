@@ -21,119 +21,43 @@
 *****************************************************/
 package org.osmf.display
 {
-	import flash.geom.Point;
-	
 	/**
 	 * <code>ScaleMode</code> controls the layout of out a single piece of content within a container.
 	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>ZOOM</code>.
 	 * <code>ScalableSprite</code> uses <code>ScaleMode</code> to calculate the layout.
 	 */ 
-	public class ScaleMode
+	public final class ScaleMode
 	{				
 		/**
 		 * <code>NONE</code> implies that the media size is set to match its intrinsic size.
 		 **/
-		public static const NONE:ScaleMode 		= new ScaleMode("NONE"); 
+		public static const NONE:String 		= "none";
 		
 		/**
 		 * <code>STRETCH</code> sets the width and the height of the content to the
 		 * container width and height, possibly changing the content aspect ratio.
 		 */ 
-		public static const STRETCH:ScaleMode	= new ScaleMode("STRETCH");
+		public static const STRETCH:String		= "stretch";
 		
 		/**
 		 * <code>LETTERBOX</code> sets the width and height of the content as close to the container width and height
 		 * as possible while maintaining aspect ratio.  The content is stretched to a maximum of the container bounds, 
 		 * with spacing added inside the container to maintain the aspect ratio if necessary.
 		 */ 
-		public static const LETTERBOX:ScaleMode = new ScaleMode("LETTERBOX"); 
+		public static const LETTERBOX:String 	= "letterbox";
 		
 		/**
 		 * <code>ZOOM</code> is similar to <code>LETTERBOX</code>, except that <code>ZOOM</code> stretches the
 		 * content past the bounds of the container, to remove the spacing required to maintain aspect ratio.
 		 * This has the effect of using the entire bounds of the container, but also possibly cropping some content.
 		 */
-		public static const ZOOM:ScaleMode		= new ScaleMode("ZOOM");
-		
-		public function ScaleMode(token:String)
-		{
-			this.token = token;
-		}
-		
-		public function toString():String
-		{
-			return token;
-		}
+		public static const ZOOM:String			= "zoom";
 		
 		/**
-		 * Calculates the scaled size based on the scaling algorithm.  
-		 * The available width and height are the width and height of the container.
-		 * The intrinsic width and height are the width and height of the content.
-		 */ 
-		public function getScaledSize
-			( availableWidth:Number, availableHeight:Number
-			, intrinsicWidth:Number, intrinsicHeight:Number
-			):Point
+		 * @private
+		 **/
+		public function ScaleMode()
 		{
-			var result:Point;
-			
-			switch (this)
-			{
-				case ScaleMode.ZOOM:
-				case ScaleMode.LETTERBOX:
-					
-					var availableRatio:Number
-						= availableWidth
-						/ availableHeight;
-						
-					var componentRatio:Number 
-						= (intrinsicWidth || availableWidth)
-						/ (intrinsicHeight || availableHeight);
-					
-					if 	(	(this == ScaleMode.ZOOM && componentRatio < availableRatio) 
-						||	(this == ScaleMode.LETTERBOX && componentRatio > availableRatio)
-						)
-					{
-						result 
-							= new Point
-								( availableWidth
-								, availableWidth / componentRatio
-								);
-					}
-					else
-					{
-						result
-							= new Point
-								( availableHeight * componentRatio
-								, availableHeight
-								);
-					}
-
-					break;
-					
-				case ScaleMode.STRETCH:
-					
-					result 
-						= new Point
-							( availableWidth
-							, availableHeight
-							);
-					break;
-					
-				case ScaleMode.NONE:
-					
-					result
-						= new Point
-							( intrinsicWidth	|| availableWidth
-							, intrinsicHeight	|| availableHeight
-							);
-					
-					break;
-			}
-			
-			return result;
 		}
-		
-		private var token:String;
 	}
 }

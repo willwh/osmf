@@ -277,7 +277,7 @@ package org.osmf.layout
 		 */		
 		public static function setLayoutAttributes
 									( target:Metadata
-									, scaleMode:ScaleMode
+									, scaleMode:String
 									, alignment:RegistrationPoint = null
 									, order:Number = NaN
 									, snapToPixel:Boolean = false

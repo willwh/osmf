@@ -54,6 +54,7 @@
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScalableSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
+    <classEntry path="org.osmf.display.ScaleModeUtils"/>
     <classEntry path="org.osmf.drm.DRMServices"/>
     <classEntry path="org.osmf.events.AuthenticationCompleteEvent"/>
     <classEntry path="org.osmf.events.AuthenticationFailedEvent"/>

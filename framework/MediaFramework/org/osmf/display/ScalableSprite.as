@@ -45,16 +45,16 @@ package org.osmf.display
 						
 		/**
 		 * The <code>scaleMode</code> property describes different ways of laying out the media content within a this sprite.
-		 * <code>scaleMode</code> can be set to <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code> or <code>ZOOM</code>.
+		 * <code>scaleMode</code> can be set to <code>none</code>, <code>straetch</code>, <code>letterbox</code> or <code>zoom</code>.
 		 * <code>MediaElementSprite</code> uses the value to calculate the layout.
 		 * @see org.osmf.display.ScaleMode for usage examples.
 		 */ 			
-		public function get scaleMode():ScaleMode
+		public function get scaleMode():String
 		{
 			return _scaleMode;
 		}
 		
-		public function set scaleMode(value:ScaleMode):void
+		public function set scaleMode(value:String):void
 		{
 			if(_scaleMode != value)
 			{				
@@ -147,7 +147,7 @@ package org.osmf.display
 		{			
 			if (_view && !isNaN(availableWidth) && !isNaN(availableHeight))						
 			{
-				var size:Point = _scaleMode.getScaledSize(width, height, intrinsicWidth, intrinsicHeight);		
+				var size:Point = ScaleModeUtils.getScaledSize(_scaleMode, width, height, intrinsicWidth, intrinsicHeight);		
 							
 				_view.width = size.x;
 				_view.height = size.y;				 
@@ -161,6 +161,6 @@ package org.osmf.display
 		private var availableHeight:Number = NaN;
 		private var intrinsicWidth:Number = NaN;
 		private var intrinsicHeight:Number = NaN;				
-		private var _scaleMode:ScaleMode;
+		private var _scaleMode:String; // ScaleMode
 	}
 }

@@ -28,6 +28,7 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.display.ScaleModeUtils;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
@@ -375,8 +376,10 @@ package org.osmf.layout
 					&&	intrinsicOrCalculatedHeight
 					)
 				{
-					var size:Point = attributes.scaleMode.getScaledSize
-						( rect.width, rect.height
+					var size:Point = ScaleModeUtils.getScaledSize
+						( attributes.scaleMode
+						, rect.width
+						, rect.height
 						, intrinsicOrCalculatedWidth
 						, intrinsicOrCalculatedHeight
 						);

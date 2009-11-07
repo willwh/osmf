@@ -187,11 +187,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired scale mode to be applied to the target.
 		 */
-		public function get scaleMode():ScaleMode
+		public function get scaleMode():String
 		{
 			return _scaleMode;
 		}
-		public function set scaleMode(value:ScaleMode):void
+		public function set scaleMode(value:String):void
 		{
 			if (_scaleMode != value)
 			{
@@ -255,7 +255,7 @@ package org.osmf.layout
 		
 		private var _order:Number = NaN;
 		private var _registrationPoint:RegistrationPoint;
-		private var _scaleMode:ScaleMode;
+		private var _scaleMode:String; // ScaleMode
 		private var _alignment:RegistrationPoint;
 		private var _snapToPixel:Boolean;
 	}
