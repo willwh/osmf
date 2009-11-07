@@ -1070,7 +1070,7 @@ package org.osmf.media
 					if (event.newState != MediaPlayerState.BUFFERING &&
 						event.oldState != MediaPlayerState.BUFFERING)
 					{
-						states.push(event.newState.name);
+						states.push(event.newState);
 					}
 				}
 			}
@@ -1130,7 +1130,7 @@ package org.osmf.media
 					if (event.newState != MediaPlayerState.BUFFERING &&
 						event.oldState != MediaPlayerState.BUFFERING)
 					{
-						states.push(event.newState.name);
+						states.push(event.newState);
 					}
 				}
 			}

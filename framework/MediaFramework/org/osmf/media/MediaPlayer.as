@@ -495,9 +495,9 @@ package org.osmf.media
         }
 
 		/**
-         *  Provides a high level indication of the current state of the media.
+         *  The current state of the media.  See MediaPlayerState for available values.
          */      
-        public function get state():MediaPlayerState
+        public function get state():String
         {
         	return _state;
         }               
@@ -1277,9 +1277,9 @@ package org.osmf.media
 			}
 		}
 		
-		private function setState(newState:MediaPlayerState):void
+		private function setState(newState:String):void
 		{
-			var oldState:MediaPlayerState = _state;
+			var oldState:String = _state;
 			if (oldState != newState)
 			{
 				_state = newState;
@@ -1309,7 +1309,7 @@ package org.osmf.media
 		private var _playheadUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _playheadTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var _element:MediaElement;
-		private var _state:MediaPlayerState;
+		private var _state:String; // MediaPlayerState
 		private var _downloadUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _downloadTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		

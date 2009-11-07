@@ -177,7 +177,7 @@ package org.osmf.view
 		private function onStateChange(event:MediaPlayerStateChangeEvent):void
 		{
 			stateControls.visible = true;
-			playerState.text = event.newState.name;
+			playerState.text = event.newState;
 		}
 		
 		private function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void

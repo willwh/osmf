@@ -22,65 +22,52 @@
 package org.osmf.media
 {
 	/**
-     *  The MediaPlayerState class enumerates public constants that describe the current state of the
-     *  Media Player.
+     *  The MediaPlayerState class enumerates public constants that describe the current
+     *  state of the MediaPlayer.
      */
-    public class MediaPlayerState
+    public final class MediaPlayerState
     {
-		/**
-		 * Constructor.
-		 * 
-		 * @private
-		 **/        	
-		public function MediaPlayerState(name:String)
-		{
-			_name = name;
-        }
-              
 		/**
 		 * The MediaPlayer has been created but is not ready to be used.
 		 * This is the base state for a MediaPlayer.
 		 */
-		public static const UNINITIALIZED:MediaPlayerState   = new MediaPlayerState('uninitialized');
+		public static const UNINITIALIZED:String   = "uninitialized";
 
 		/**
 		 * The MediaPlayer is loading or connecting.
 		 */
-		public static const INITIALIZING:MediaPlayerState  = new MediaPlayerState('initializing');
+		public static const INITIALIZING:String  = "initializing";
 
 		/**
 		 * The MediaPlayer is ready to be used.
 		 */
-		public static const READY:MediaPlayerState = new MediaPlayerState('ready');
+		public static const READY:String = "ready";
 
 		/**
 	     * The MediaPlayer is playing media.
          */
-		public static const PLAYING:MediaPlayerState = new MediaPlayerState('playing');
+		public static const PLAYING:String = "playing";
 
 		/**
          * The MediaPlayer is pausing media.
 		 */
-		public static const PAUSED:MediaPlayerState = new MediaPlayerState('paused');
+		public static const PAUSED:String = "paused";
 
 		/**
 		 * The MediaPlayer is buffering.
 		 */
-		public static const BUFFERING:MediaPlayerState = new MediaPlayerState('buffering');
+		public static const BUFFERING:String = "buffering";
 
 		/**
 		 * The MediaPlayer encountered an error while trying to play media.
 		 */
-		public static const PLAYBACK_ERROR:MediaPlayerState = new MediaPlayerState('playbackError');
+		public static const PLAYBACK_ERROR:String = "playbackError";
 		
 		/**
-		 * The name value of the state.
-		 **/
-		public function get name():String
+		 * @private
+		 **/        	
+		public function MediaPlayerState()
 		{
-			return _name;
-		}
-             
-		private var _name:String;
+        }
 	} 
 }

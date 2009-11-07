@@ -22,8 +22,6 @@
 package org.osmf.events
 {
 	import flash.events.Event;
-	
-	import org.osmf.media.MediaPlayerState;
 
 	/**
 	 * A MediaPlayer dispatches this event when its state  
@@ -41,27 +39,29 @@ package org.osmf.events
 		public static const MEDIA_PLAYER_STATE_CHANGE:String = "mediaPlayerStateChange";
 
         /**
-         *   Creates a new MediaPlayerStateChange event, capturing the new and old states.
-         * 	@param newState New media player state.
+         *  Constructor.
+         * 
+         * 	@param newState New edia player state.
          * 	@param oldState	Previous media player state.
         **/          
-        public function MediaPlayerStateChangeEvent(newState:MediaPlayerState, oldState:MediaPlayerState)
+        public function MediaPlayerStateChangeEvent(newState:String, oldState:String)
         {
         	super(MEDIA_PLAYER_STATE_CHANGE);
+        	
             _newState = newState;
             _oldState = oldState;
         }
 		/**
 		 * New MediaPlayerState resulting from this change.
 		 */		
-        public function get newState():MediaPlayerState
+        public function get newState():String
         {
         	return _newState;
         }
 		/**
 		 * Old MediaPlayerState before it was changed.
 		*/		           
-        public function get oldState():MediaPlayerState
+        public function get oldState():String
         {
         	return _oldState;
         }
@@ -71,7 +71,7 @@ package org.osmf.events
         	return new MediaPlayerStateChangeEvent(_newState, _oldState);
         }
 
-		private var _newState:MediaPlayerState;
-		private var _oldState:MediaPlayerState;
+		private var _newState:String;
+		private var _oldState:String;
 	}
 }
