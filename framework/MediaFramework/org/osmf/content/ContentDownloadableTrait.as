@@ -48,7 +48,7 @@ package org.osmf.content
 		private function onContextLoadableProgress(event:ProgressEvent):void
 		{
 			bytesTotal = event.bytesTotal;
-			bytesDownloaded = event.bytesLoaded;
+			bytesLoaded = event.bytesLoaded;
 		}
 		
 	}

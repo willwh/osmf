@@ -36,7 +36,7 @@ package org.osmf.net
 		/**
 		 * Constructor
 		 * 
-		 * @param netStream The NetStream object to be used for the retrieval of bytesDownloaded and bytesTotal values
+		 * @param netStream The NetStream object to be used for the retrieval of bytesLoaded and bytesTotal values
 		 *  
 		 */
 		public function NetStreamDownloadableTrait(netStream:NetStream)
@@ -53,7 +53,7 @@ package org.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		override public function get bytesDownloaded():Number
+		override public function get bytesLoaded():Number
 		{
 			return _netStream.bytesLoaded;
 		}

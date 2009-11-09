@@ -37,7 +37,7 @@ package org.osmf.audio
 		/**
 		 * Constructor
 		 * 
-		 * @param sound The Sound object from which the values for bytesDownloaed and bytesTotal will be obtained.
+		 * @param sound The Sound object from which the values for bytesLoaded and bytesTotal will be obtained.
 		 */
 		public function SoundDownloadableTrait(sound:Sound)
 		{
@@ -51,7 +51,7 @@ package org.osmf.audio
 		/**
 		 * @inheritDoc
 		 */
-		override public function get bytesDownloaded():Number
+		override public function get bytesLoaded():Number
 		{
 			return _sound.bytesLoaded;
 		}

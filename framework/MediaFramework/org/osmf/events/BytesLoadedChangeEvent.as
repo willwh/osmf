@@ -23,35 +23,35 @@ package org.osmf.events
 {
 	import flash.events.Event;
 
-	/*
+	/**
 	 * This event is dispatched by the MediaPlayer class when the value of 
-	 * the property "bytesDownloaded" has changed, which indicates the progress of a download operation.
+	 * the property "bytesLoaded" has changed, which indicates the progress of a download operation.
 	 */
-	public class BytesDownloadedChangeEvent extends Event
+	public class BytesLoadedChangeEvent extends Event
 	{
-		public static const BYTES_DOWNLOADED_CHANGE:String = "bytesDownloadedChange";
+		public static const BYTES_LOADED_CHANGE:String = "bytesLoadedChange";
 
 		/**
 		 * Constructor
 		 *
-		 * @param oldValue The previous value of bytesDownloaded
-		 * @param newValue The current value of bytesDownloaded
+		 * @param oldValue The previous value of bytesLoaded
+		 * @param newValue The current value of bytesLoaded
 		 */
-		public function BytesDownloadedChangeEvent
+		public function BytesLoadedChangeEvent
 							( oldValue:Number
 							, newValue:Number
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
 							)
 		{
-			super(BYTES_DOWNLOADED_CHANGE, bubbles, cancelable);
+			super(BYTES_LOADED_CHANGE, bubbles, cancelable);
 			
 			_oldValue = oldValue;
 			_newValue = newValue;
 		}
 		
 		/**
-		 * The previous value of bytesDownloaded
+		 * The previous value of bytesLoaded
 		 */
 		public function get oldValue():Number
 		{
@@ -59,7 +59,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The current value of bytesDownloaded
+		 * The current value of bytesLoaded
 		 */
 		public function get newValue():Number
 		{
@@ -71,7 +71,7 @@ package org.osmf.events
 		
 		override public function clone():Event
 		{
-			return new BytesDownloadedChangeEvent(_oldValue, _newValue, bubbles, cancelable);
+			return new BytesLoadedChangeEvent(_oldValue, _newValue, bubbles, cancelable);
 		}
 		
 		//

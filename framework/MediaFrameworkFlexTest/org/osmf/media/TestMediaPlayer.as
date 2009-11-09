@@ -30,7 +30,7 @@ package org.osmf.media
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BytesDownloadedChangeEvent;
+	import org.osmf.events.BytesLoadedChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
@@ -41,7 +41,7 @@ package org.osmf.media
 	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.PanChangeEvent;
 	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.PlayheadChangeEvent;
+	import org.osmf.events.CurrentTimeChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
@@ -710,29 +710,29 @@ package org.osmf.media
 				assertTrue(mediaPlayer.temporal == true);
 				assertTrue(mediaPlayer.currentTime == 0 || isNaN(mediaPlayer.currentTime));
 				
-				assertTrue(mediaPlayer.playheadUpdateInterval == 250);
+				assertTrue(mediaPlayer.currentTimeUpdateInterval == 250);
 
-				mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+				mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
 				
 				if (enableChangeEvents)
 				{
-					mediaPlayer.playheadUpdateInterval = 1000;
-					assertTrue(mediaPlayer.playheadUpdateInterval == 1000);
+					mediaPlayer.currentTimeUpdateInterval = 1000;
+					assertTrue(mediaPlayer.currentTimeUpdateInterval == 1000);
 				}
 				else
 				{
-					mediaPlayer.playheadUpdateInterval = 0;
-					assertTrue(mediaPlayer.playheadUpdateInterval == 0);
+					mediaPlayer.currentTimeUpdateInterval = 0;
+					assertTrue(mediaPlayer.currentTimeUpdateInterval == 0);
 				}
 				
 				mediaPlayer.play();
 				
-				var playheadUpdateCount:int = 0;
+				var currentTimeUpdateCount:int = 0;
 				
 				function onTestCurrentTime(event:TraitEvent):void
 				{
-					mediaPlayer.removeEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+					mediaPlayer.removeEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
 					
 					assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
@@ -744,19 +744,19 @@ package org.osmf.media
 						// the timing model isn't precise, so we leave some wiggle
 						// room in our assertion (and in particular give ourselves
 						// more wiggle room if the duration is longer).
-						assertTrue(Math.abs(playheadUpdateCount - Math.floor(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
+						assertTrue(Math.abs(currentTimeUpdateCount - Math.floor(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
 					}
 					else
 					{
-						assertTrue(playheadUpdateCount == 0);
+						assertTrue(currentTimeUpdateCount == 0);
 					}
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 				
-				function onPlayheadChange(event:PlayheadChangeEvent):void
+				function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
 				{
-					playheadUpdateCount++;
+					currentTimeUpdateCount++;
 				}
 			}
 			else
@@ -1314,40 +1314,40 @@ package org.osmf.media
 			mediaPlayer.element = mediaElement;
 			
 			assertTrue(mediaPlayer.downloadable == false);
-			assertEquals(0, mediaPlayer.bytesDownloaded);
+			assertEquals(0, mediaPlayer.bytesLoaded);
 			assertEquals(0, mediaPlayer.bytesTotal);
 			
-			mediaPlayer.downloadUpdateInterval = 120;
-			assertTrue(mediaPlayer.downloadUpdateInterval == 120);
-			mediaPlayer.downloadUpdateInterval = 120;
-			assertTrue(mediaPlayer.downloadUpdateInterval == 120);
+			mediaPlayer.bytesLoadedUpdateInterval = 120;
+			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 120);
+			mediaPlayer.bytesLoadedUpdateInterval = 120;
+			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 120);
 			
-			mediaPlayer.addEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(BytesLoadedChangeEvent.BYTES_LOADED_CHANGE, eventCatcher);
 			mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			mediaElement.prepareForTesting();
 			
-			mediaPlayer.downloadUpdateInterval = NaN;
-			assertTrue(isNaN(mediaPlayer.downloadUpdateInterval));
+			mediaPlayer.bytesLoadedUpdateInterval = NaN;
+			assertTrue(isNaN(mediaPlayer.bytesLoadedUpdateInterval));
 			
-			mediaPlayer.downloadUpdateInterval = -500;
-			assertTrue(mediaPlayer.downloadUpdateInterval == -500);
+			mediaPlayer.bytesLoadedUpdateInterval = -500;
+			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == -500);
 			
-			mediaPlayer.downloadUpdateInterval = 50;
-			assertTrue(mediaPlayer.downloadUpdateInterval == 50);
+			mediaPlayer.bytesLoadedUpdateInterval = 50;
+			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 50);
 			
 			assertTrue(mediaPlayer.downloadable == true);
 			
 			var downloadable:DownloadableTrait = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as DownloadableTrait;
 			assertTrue(downloadable != null);
 			downloadable.bytesTotal = 100;
-			downloadable.bytesDownloaded = 10;
+			downloadable.bytesLoaded = 10;
 			downloadable.bytesTotal = 100;
 			
-			assertTrue(mediaPlayer.bytesDownloaded == 10);
+			assertTrue(mediaPlayer.bytesLoaded == 10);
 			assertTrue(mediaPlayer.bytesTotal == 100);
 			
-			mediaPlayer.removeEventListener(BytesDownloadedChangeEvent.BYTES_DOWNLOADED_CHANGE, eventCatcher);
+			mediaPlayer.removeEventListener(BytesLoadedChangeEvent.BYTES_LOADED_CHANGE, eventCatcher);
 			mediaPlayer.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 
 			assertTrue(events.length > 0);
@@ -1361,7 +1361,7 @@ package org.osmf.media
 				}
 				else
 				{
-					assertTrue(events[i] is BytesDownloadedChangeEvent);
+					assertTrue(events[i] is BytesLoadedChangeEvent);
 				}
 			}			
 		}

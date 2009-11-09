@@ -37,47 +37,46 @@ package org.osmf.traits
 	 * The DownloadableTrait class provides a base IDownloadable implementation. 
 	 * It can be used as the base class for a more specific data downloadable trait	
 	 * subclass or as is by a video or audio element.
-	 * 
 	 */	
 	public class DownloadableTrait extends EventDispatcher implements IDownloadable
 	{
 		/**
 		 * Constructor
 		 * 
-		 * @param bytesDownloaded the number of bytes that has been downloaded
+		 * @param bytesLoaded the number of bytes that have been downloaded
 		 * @param bytesTotal the total number of bytes to be downloaded
 		 */
-		public function DownloadableTrait(bytesDownloaded:Number=NaN, bytesTotal:Number=NaN)
+		public function DownloadableTrait(bytesLoaded:Number=NaN, bytesTotal:Number=NaN)
 		{
 			super();
 			
-			_bytesDownloaded = bytesDownloaded;
+			_bytesLoaded = bytesLoaded;
 			_bytesTotal = bytesTotal;
 		}
 		
 		/**
-		 * Invoking this setter will result in the trait's bytesDownloaded
-		 * value changing if it differs from bytesDownloaded current value.
+		 * Invoking this setter will result in the trait's bytesLoaded
+		 * value changing if it differs from bytesLoaded current value.
 		 * 
 		 * @throws ArgumentError - if value is negative or larger than bytesTotal
 		 * 
-		 * @see canProcessBytesDownloadedChange
-		 * @see processBytesDownloadedChange
-		 * @see postProcessBytesDownloadedChange
+		 * @see canProcessBytesLoadedChange
+		 * @see processBytesLoadedChange
+		 * @see postProcessBytesLloadedChange
 		 */		
-		final public function set bytesDownloaded(value:Number):void
+		final public function set bytesLoaded(value:Number):void
 		{
 			if (value > bytesTotal || value < 0)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.BYTES_DOWNLOADED);
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			if (canProcessBytesDownloadedChange(value))
+			if (canProcessBytesLoadedChange(value))
 			{
-				var oldBytesDownloaded:Number = _bytesDownloaded;
-				processBytesDownloadedChange(value);
-				_bytesDownloaded = value;
-				postProcessBytesDownloadedChange(oldBytesDownloaded);
+				var oldBytesLoaded:Number = _bytesLoaded;
+				processBytesLoadedChange(value);
+				_bytesLoaded = value;
+				postProcessBytesLoadedChange(oldBytesLoaded);
 			}
 		}
 		
@@ -85,7 +84,7 @@ package org.osmf.traits
 		 * Invoking this setter will result in the trait's bytesTotal
 		 * value changing if it differs from bytesTotal current value.
 		 * 
-		 * @throws ArgumentError - if value is negative or smaller than bytesDownloaded
+		 * @throws ArgumentError - if value is negative or smaller than bytesLoaded
 		 * 
 		 * @see canProcessBytesTotalChange
 		 * @see processBytesTotalChange
@@ -98,9 +97,9 @@ package org.osmf.traits
 				return;
 			}
 			
-			if (value < _bytesDownloaded || value < 0)
+			if (value < _bytesLoaded || value < 0)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.BYTES_TOTAL);
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 
 			if (canProcessBytesTotalChange(value))
@@ -115,9 +114,9 @@ package org.osmf.traits
 		/**
 		 * @inheritDoc
 		 */
-		public function get bytesDownloaded():Number
+		public function get bytesLoaded():Number
 		{
-			return _bytesDownloaded;
+			return _bytesLoaded;
 		}
 		
 		/**
@@ -133,13 +132,13 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Called before the <code>bytesDownloaded</code> property is changed.
+		 * Called before the <code>bytesLoaded</code> property is changed.
 		 *  
-		 * @param newValue Proposed new <code>bytesDownloaded</code> value.
+		 * @param newValue Proposed new <code>bytesLoaded</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
 		 */		
-		protected function canProcessBytesDownloadedChange(newValue:Number):Boolean
+		protected function canProcessBytesLoadedChange(newValue:Number):Boolean
 		{
 			return true;
 		}
@@ -157,12 +156,12 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Called immediately before the <code>bytesDownloaded</code> property is changed.
+		 * Called immediately before the <code>bytesLoaded</code> property is changed.
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 *  
-		 * @param newValue New <code>bytesDownloaded</code> value.
+		 * @param newValue New <code>bytesLoaded</code> value.
 		 */		
-		protected function processBytesDownloadedChange(newValue:Number):void
+		protected function processBytesLoadedChange(newValue:Number):void
 		{
 		}
 
@@ -177,12 +176,12 @@ package org.osmf.traits
 		}
 
 		/**
-		 * Called just after the <code>bytesDownloaded</code> property has changed.
+		 * Called just after the <code>bytesLoaded</code> property has changed.
 		 *  
-		 * @param oldValue Previous <code>bytesDownloaded</code> value.
+		 * @param oldValue Previous <code>bytesLoaded</code> value.
 		 * 
 		 */		
-		protected function postProcessBytesDownloadedChange(oldValue:Number):void
+		protected function postProcessBytesLoadedChange(oldValue:Number):void
 		{
 		}
 
@@ -197,10 +196,10 @@ package org.osmf.traits
 		 */		
 		protected function postProcessBytesTotalChange(oldValue:Number, newValue:Number):void
 		{
-				dispatchEvent(new BytesTotalChangeEvent(oldValue, newValue));
+			dispatchEvent(new BytesTotalChangeEvent(oldValue, newValue));
 		}
 
-		private var _bytesDownloaded:Number;
+		private var _bytesLoaded:Number;
 		private var _bytesTotal:Number;		
 	}
 }

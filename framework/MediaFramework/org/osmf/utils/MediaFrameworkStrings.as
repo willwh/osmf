@@ -192,10 +192,5 @@ package org.osmf.utils
 		public static const DRM_NO_ANALOG_PROTECTION_AVAIL:String		= "NoAnalogProtectionAvail	  Can't play back because connected analog device doesn't have the correct capabilities";
 		public static const DRM_NO_DIGITAL_PLAYBACK_ALLOWED:String		= "NoDigitalPlaybackAllowed	  Can't playback on digital device, should never happen in real life.";
 		public static const DRM_NO_DIGITAL_PROTECTION_AVAIL:String		= "NoDigitalProtectionAvail	  The connected digital device doesn't have the correct capabilities";
-				
-		// Downloadable
-		
-		public static const BYTES_DOWNLOADED:String						= "bytesDownloaded";
-		public static const BYTES_TOTAL:String							= "bytesTotal";
 	}
 }

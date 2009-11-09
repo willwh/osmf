@@ -45,7 +45,7 @@ package org.osmf.net
 		
 		override public function testInitialProperties():void
 		{
-			assertTrue(downloadable.bytesDownloaded == _initBytesLoaded);
+			assertTrue(downloadable.bytesLoaded == _initBytesLoaded);
 			assertTrue(downloadable.bytesTotal == _initBytesTotal);
 		}	
 		
@@ -54,7 +54,7 @@ package org.osmf.net
 			_netStream.bytesTotal = 200;
 			_netStream.bytesLoaded = 150;
 			
-			assertTrue(downloadable.bytesDownloaded == 150);
+			assertTrue(downloadable.bytesLoaded == 150);
 			assertTrue(downloadable.bytesTotal == 200);
 		}
 			

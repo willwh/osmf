@@ -93,7 +93,7 @@ package org.osmf.content
 					assertEquals(LoadState.LOADING, event.newState);
 					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
-					assertEquals(NaN, downloadable.bytesDownloaded);
+					assertEquals(NaN, downloadable.bytesLoaded);
 					assertEquals(NaN, downloadable.bytesTotal);
 					
 					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
@@ -103,7 +103,7 @@ package org.osmf.content
 					assertEquals(LoadState.LOADED, event.newState);
 					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
-					assertEquals(expectedBytesTotal, downloadable.bytesDownloaded);
+					assertEquals(expectedBytesTotal, downloadable.bytesLoaded);
 					assertEquals(expectedBytesTotal, downloadable.bytesTotal);
 					
 					assertTrue(bytesTotalFired);

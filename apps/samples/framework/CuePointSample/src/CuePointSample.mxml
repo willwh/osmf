@@ -105,10 +105,10 @@
 			{
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(PlayheadChangeEvent.PLAYHEAD_CHANGE, onPlayheadChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 				
-				mediaPlayerWrapper.mediaPlayer.playheadUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -219,12 +219,12 @@
 				lblDuration.text = timeCode(event.newDuration);
 			}
 						
-			private function onPlayheadChange(event:PlayheadChangeEvent):void
+			private function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
 			{
 				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
-					seekBar.value = event.newPosition;
-					lblPlayhead.text = timeCode(event.newPosition);
+					seekBar.value = event.newCurrentTime;
+					lblPlayhead.text = timeCode(event.newCurrentTime);
 				}
 			}
 			

@@ -61,8 +61,9 @@
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferTimeChangeEvent"/>
     <classEntry path="org.osmf.events.BufferingChangeEvent"/>
-    <classEntry path="org.osmf.events.BytesDownloadedChangeEvent"/>
+    <classEntry path="org.osmf.events.BytesLoadedChangeEvent"/>
     <classEntry path="org.osmf.events.BytesTotalChangeEvent"/>
+    <classEntry path="org.osmf.events.CurrentTimeChangeEvent"/>
     <classEntry path="org.osmf.events.DimensionChangeEvent"/>
     <classEntry path="org.osmf.events.DurationChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
@@ -82,7 +83,6 @@
     <classEntry path="org.osmf.events.NetNegotiatorEvent"/>
     <classEntry path="org.osmf.events.PanChangeEvent"/>
     <classEntry path="org.osmf.events.PausedChangeEvent"/>
-    <classEntry path="org.osmf.events.PlayheadChangeEvent"/>
     <classEntry path="org.osmf.events.PlayingChangeEvent"/>
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
     <classEntry path="org.osmf.events.SeekingChangeEvent"/>

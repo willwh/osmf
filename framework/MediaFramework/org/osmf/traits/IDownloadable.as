@@ -24,7 +24,7 @@ package org.osmf.traits
 	import org.osmf.media.IMediaTrait;
 
 	/**
-	 * Dispatched when total size in bytes of data being downloaded into the application has changed.
+	 * Dispatched when total size in bytes of data being loaded has changed.
 	 * 
 	 * @eventType org.osmf.events.BytesTotalChangeEvent
 	 */	
@@ -32,19 +32,18 @@ package org.osmf.traits
 
 	/**
 	 * IDownloadable defines the interface that can be used to access the progress
-	 * of data download operation.
+	 * of data load operations.
 	 */	
 	public interface IDownloadable extends IMediaTrait
 	{
 		/**
-		 * The number of bytes of data that have been downloaded into the application.
+		 * The number of bytes of data that have been loaded.
 		 */
-		function get bytesDownloaded():Number;
+		function get bytesLoaded():Number;
 		
 		/**
-		 * The total size in bytes of the data being downloaded into the application.
+		 * The total size in bytes of the data being loaded.
 		 */
 		function get bytesTotal():Number;
-		
 	}
 }

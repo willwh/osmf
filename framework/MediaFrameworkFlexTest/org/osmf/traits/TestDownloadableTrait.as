@@ -32,7 +32,7 @@ package org.osmf.traits
 		
 		public function testInitialProperties():void
 		{
-			assertTrue(isNaN(downloadable.bytesDownloaded));
+			assertTrue(isNaN(downloadable.bytesLoaded));
 			assertTrue(isNaN(downloadable.bytesTotal));
 		}
 		
@@ -44,9 +44,9 @@ package org.osmf.traits
 			downloadableTrait.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			downloadableTrait.bytesTotal = 100;
-			downloadableTrait.bytesDownloaded = 50;
+			downloadableTrait.bytesLoaded = 50;
 			
-			assertTrue(downloadableTrait.bytesDownloaded == 50);
+			assertTrue(downloadableTrait.bytesLoaded == 50);
 			assertTrue(downloadableTrait.bytesTotal == 100);
 			
 			assertTrue(events.length == 1);
@@ -58,11 +58,11 @@ package org.osmf.traits
 			assertTrue(downloadableTrait != null);
 			
 			downloadableTrait.bytesTotal = 100;
-			downloadableTrait.bytesDownloaded = 50;
+			downloadableTrait.bytesLoaded = 50;
 			
 			try
 			{
-				downloadableTrait.bytesDownloaded = 120;
+				downloadableTrait.bytesLoaded = 120;
 				assertTrue(false);
 			}
 			catch(error:ArgumentError)

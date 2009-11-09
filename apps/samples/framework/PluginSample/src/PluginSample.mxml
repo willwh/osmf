@@ -274,10 +274,10 @@
 				var downloadable:IDownloadable 
 					= wrapper.element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					
-				bytesLoaded.text = downloadable.bytesDownloaded.toString();
+				bytesLoaded.text = downloadable.bytesLoaded.toString();
 				bytesTotal.text = downloadable.bytesTotal.toString();
 				
-				if (downloadable.bytesDownloaded == downloadable.bytesTotal)
+				if (downloadable.bytesLoaded == downloadable.bytesTotal)
 				{
 					_timer.stop();
 				}

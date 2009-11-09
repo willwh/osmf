@@ -40,7 +40,7 @@ package org.osmf.audio
 		
 		override public function testInitialProperties():void
 		{
-			assertTrue(downloadable.bytesDownloaded == _initBytesLoaded);
+			assertTrue(downloadable.bytesLoaded == _initBytesLoaded);
 			assertTrue(downloadable.bytesTotal == _initBytesTotal);
 		}	
 
@@ -51,7 +51,7 @@ package org.osmf.audio
 			_sound.bytesTotal = 150;
 			_sound.bytesLoaded = 10;
 			
-			assertTrue(downloadable.bytesDownloaded == 10);
+			assertTrue(downloadable.bytesLoaded == 10);
 			assertTrue(downloadable.bytesTotal == 150);
 			assertTrue(events.length == 1);
 

@@ -135,13 +135,13 @@ package org.osmf.media
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
 
     /**
-	 * Dispatched when the <code>playhead</code> property of the MediaPlayer has changed.
+	 * Dispatched when the <code>currentTime</code> property of the MediaPlayer has changed.
 	 * This value is updated at the interval set by 
-	 * the MediaPlayer's <code>playheadUpdateInterval</code> property.
+	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
 	 *
-	 * @eventType org.osmf.events.PlayheadChangeEvent.PLAYHEAD_CHANGE
+	 * @eventType org.osmf.events.CurrentTimeChangeEvent.CURRENT_TIME_CHANGE
 	 **/
-    [Event(name="playheadChange",type="org.osmf.events.PlayheadChangeEvent")]  
+    [Event(name="currentTimeChange",type="org.osmf.events.CurrentTimeChangeEvent")]  
     
     // ISwitchable
     
@@ -182,7 +182,7 @@ package org.osmf.media
 	 *
 	 * @eventType flash.events.ProgressEvent
 	 */
-	[Event(name="bytesDownloadedChange",type="org.osmf.events.BytesDownloadedChangeEvent")]
+	[Event(name="bytesLoadedChange",type="org.osmf.events.BytesLoadedChangeEvent")]
 
 	/**
 	 * Dispatched when the value of bytesTotal property has changed.
@@ -268,7 +268,7 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE
 	 */	
-	[Event(name="downaloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="downloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
 	/**
 	 * Dispatched when an error which impacts the operation of the media
@@ -304,8 +304,8 @@ package org.osmf.media
 			
 			_state = MediaPlayerState.UNINITIALIZED;
 			this.element = element;			
-			_playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);				
-			_downloadTimer.addEventListener(TimerEvent.TIMER, onDownloadTimer);			
+			_currentTimeTimer.addEventListener(TimerEvent.TIMER, onCurrentTimeTimer);			
+			_bytesLoadedTimer.addEventListener(TimerEvent.TIMER, onBytesLoadedTimer);				
 		}
 
 		/**
@@ -425,73 +425,73 @@ package org.osmf.media
         }
 
         /**
-		 * Interval between the dispatches of change events for the playhead time
+		 * Interval between the dispatch of change events for the current time
 		 * in milliseconds. 
-         * <p>The default progress is 250 milliseconds.
+         * <p>The default is 250 milliseconds.
          * A non-positive value disables the dispatch of the change events.</p>
          * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
-		 * @see org.osmf.events.#event:PlayheadChangeEvent
+		 * @see org.osmf.events.#event:CurrentTimeChangeEvent
          * @see org.osmf.traits.ITemporal
 		 */
-		public function set playheadUpdateInterval(milliseconds:Number):void
+		public function set currentTimeUpdateInterval(value:Number):void
 		{
-			if (_playheadUpdateInterval != milliseconds)
+			if (_currentTimeUpdateInterval != value)
 			{
-				_playheadUpdateInterval = milliseconds;
-				if (isNaN(_playheadUpdateInterval) || _playheadUpdateInterval <= 0)
+				_currentTimeUpdateInterval = value;
+				if (isNaN(_currentTimeUpdateInterval) || _currentTimeUpdateInterval <= 0)
 				{
-					_playheadTimer.stop();	
+					_currentTimeTimer.stop();	
 				}
 				else
 				{				
-					_playheadTimer.delay = _playheadUpdateInterval;		
+					_currentTimeTimer.delay = _currentTimeUpdateInterval;		
 					if (temporal)
 					{
-						_playheadTimer.start();
+						_currentTimeTimer.start();
 					}			
 				}					
 			}			
 		}
 		
-        public function get playheadUpdateInterval():Number
+        public function get currentTimeUpdateInterval():Number
         {
-        	return _playheadUpdateInterval;
+        	return _currentTimeUpdateInterval;
         }
         
         /**
-		 * Interval between the dispatches of change events for the bytesDownloaded of IDownloadable 
-         * <p>The default progress is 250 milliseconds.
+		 * Interval between the dispatch of change events for the bytesLoaded of IDownloadable 
+         * <p>The default is 250 milliseconds.
          * A non-positive value disables the dispatch of the change events.</p>
          * <p>The MediaElement must be downloadable to support this property.</p>
 		 * 
-		 * @see org.osmf.events.#event:BytesDownloadedChangeEvent
+		 * @see org.osmf.events.#event:BytesLoadedChangeEvent
          * @see org.osmf.traits.IDownloadable
 		 */
-        public function set downloadUpdateInterval(milliseconds:Number):void
+        public function set bytesLoadedUpdateInterval(value:Number):void
         {
-        	if (_downloadUpdateInterval != milliseconds)
+        	if (_bytesLoadedUpdateInterval != value)
         	{
-        		_downloadUpdateInterval = milliseconds;
+        		_bytesLoadedUpdateInterval = value;
         		
-				if (isNaN(_downloadUpdateInterval) || _downloadUpdateInterval <= 0)
+				if (isNaN(_bytesLoadedUpdateInterval) || _bytesLoadedUpdateInterval <= 0)
 				{
-					_downloadTimer.stop();	
+					_bytesLoadedTimer.stop();	
 				}
 				else
 				{				
-					_downloadTimer.delay = _downloadUpdateInterval;		
+					_bytesLoadedTimer.delay = _bytesLoadedUpdateInterval;		
 					if (downloadable)
 					{
-						_downloadTimer.start();
+						_bytesLoadedTimer.start();
 					}			
 				}					
         	}
         }
         
-        public function get downloadUpdateInterval():Number
+        public function get bytesLoadedUpdateInterval():Number
         {
-        	return _downloadUpdateInterval;
+        	return _bytesLoadedUpdateInterval;
         }
 
 		/**
@@ -961,16 +961,16 @@ package org.osmf.media
 		// IDownloadable
 				
 		/**
-		 * The number of bytes of the media that has been downloaded. When the underlying trait is absent, NaN is returned
+		 * The number of bytes of the media that has been downloaded. When the underlying trait is absent, 0 is returned.
 		 * 
 		 */		
-		public function get bytesDownloaded():Number
+		public function get bytesLoaded():Number
 		{
-			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesDownloaded : 0;
+			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesLoaded : 0;
 		}
 		
 		/**
-		 * The total number of bytes of the media that will be downloaded. When the underlying trait is absent, NaN is returned
+		 * The total number of bytes of the media that will be downloaded. When the underlying trait is absent, 0 is returned.
 		 * 
 		 */		
 		public function get bytesTotal():Number
@@ -1019,13 +1019,13 @@ package org.osmf.media
 				case MediaTraitType.TEMPORAL:									
 					changeListeners(add, _element, trait, DurationChangeEvent.DURATION_CHANGE, [redispatchEvent]);							
 					changeListeners(add, _element, trait, TraitEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
-					if (add && _playheadUpdateInterval > 0 && !isNaN(_playheadUpdateInterval) )
+					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
 					{
-						_playheadTimer.start();
+						_currentTimeTimer.start();
 					}
 					else
 					{
-						_playheadTimer.stop();					
+						_currentTimeTimer.stop();					
 					}
 					_temporal = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
@@ -1097,19 +1097,19 @@ package org.osmf.media
 					break;						
 				case MediaTraitType.DOWNLOADABLE:
 					changeListeners(add, _element, trait, BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
-					if (add && _downloadUpdateInterval > 0 && !isNaN(_downloadUpdateInterval) )
+					if (add && _bytesLoadedUpdateInterval > 0 && !isNaN(_bytesLoadedUpdateInterval))
 					{
-						_downloadTimer.start();
+						_bytesLoadedTimer.start();
 					}
 					else
 					{
-						_downloadTimer.stop();					
+						_bytesLoadedTimer.stop();					
 					}
 					_downloadable = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE;
 					break;
 			}					 
-			if (traitChangeName)  // Don't dispatch for traits we don't know about yet.
+			if (traitChangeName)
 			{
 				dispatchEvent(new MediaPlayerCapabilityChangeEvent(traitChangeName, add));	
 			}	
@@ -1229,28 +1229,28 @@ package org.osmf.media
 			}
 		}			
 								
-		private function onPlayheadTimer(event:TimerEvent):void
+		private function onCurrentTimeTimer(event:TimerEvent):void
 		{
 			if (temporal && currentTime != lastCurrentTime)
 			{				
 				lastCurrentTime = currentTime;
-				dispatchEvent(new PlayheadChangeEvent(currentTime));
+				dispatchEvent(new CurrentTimeChangeEvent(currentTime));
 			}
 		}	
 		
-		private function onDownloadTimer(event:TimerEvent):void
+		private function onBytesLoadedTimer(event:TimerEvent):void
 		{
-			if (downloadable && (bytesDownloaded != lastBytesDownloaded))
+			if (downloadable && (bytesLoaded != lastBytesLoaded))
 			{
-				var bytesDownloadedEvent:BytesDownloadedChangeEvent 
-					= new BytesDownloadedChangeEvent
-						( lastBytesDownloaded
-						, bytesDownloaded
+				var bytesLoadedEvent:BytesLoadedChangeEvent 
+					= new BytesLoadedChangeEvent
+						( lastBytesLoaded
+						, bytesLoaded
 						);
 						 	
-				lastBytesDownloaded = bytesDownloaded;
+				lastBytesLoaded = bytesLoaded;
 				
-				dispatchEvent(bytesDownloadedEvent);
+				dispatchEvent(bytesLoadedEvent);
 			}
 		}
 		
@@ -1302,16 +1302,16 @@ package org.osmf.media
 	    private static const DEFAULT_UPDATE_INTERVAL:Number = 250;
 	      
 	    private var lastCurrentTime:Number = 0;	
-	    private var lastBytesDownloaded:Number = NaN;	
+	    private var lastBytesLoaded:Number = NaN;	
 		private var _autoPlay:Boolean = true;
 		private var _autoRewind:Boolean = true;
 		private var _loop:Boolean = false;		
-		private var _playheadUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
-		private var _playheadTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
+		private var _currentTimeUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
+		private var _currentTimeTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var _element:MediaElement;
 		private var _state:String; // MediaPlayerState
-		private var _downloadUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
-		private var _downloadTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
+		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
+		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		
 		private var _playable:Boolean;
 		private var _pausable:Boolean;
