@@ -343,7 +343,8 @@ package org.osmf.proxies
 			downloadable.bytesTotal = 120;
 			
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["newValue"] == 120);
+			assertTrue(events[0]["oldBytes"] == 100);
+			assertTrue(events[0]["newBytes"] == 120);
 						
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
