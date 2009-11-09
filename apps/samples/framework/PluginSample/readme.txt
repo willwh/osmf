@@ -44,6 +44,6 @@ to handle/load a resource.
 D. What's new?
 
 During sprint 7, the IDownloadable trait is introduced. Downloadable trait can be used with UI widgets such as progress bar or text fields to 
-report download progress. PluginSample uses two text fields bytesDownloaded and bytesTotal to show downlaod progress. Downloadable
+report download progress. PluginSample uses two text fields bytesLoaded and bytesTotal to show downlaod progress. Downloadable
 trait is supported by video, audio, image and SWF. However, only progressive audio and video have downloadable trait, streaming video 
 and audio don't.
