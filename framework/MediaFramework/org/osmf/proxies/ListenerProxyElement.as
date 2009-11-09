@@ -247,7 +247,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processBytesTotalChange(newValue:Number):void
+		protected function processBytesTotalChange(oldBytes:Number, newBytes:Number):void
 		{
 		}
 
@@ -330,7 +330,7 @@ package org.osmf.proxies
 		
 		private function onBytesTotalChange(event:BytesTotalChangeEvent):void
 		{
-			processBytesTotalChange(event.newValue);
+			processBytesTotalChange(event.oldValue, event.newValue);
 		}
 
 		// Internals

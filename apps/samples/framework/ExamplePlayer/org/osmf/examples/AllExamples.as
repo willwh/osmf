@@ -35,7 +35,7 @@ package org.osmf.examples
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.text.TextElement;
-	import org.osmf.examples.traceproxy.TraceProxyElement;
+	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.AbsoluteLayoutFacet;
@@ -109,7 +109,7 @@ package org.osmf.examples
 							var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (var i:int = 0; i < 5; i++)
 							{
-								dsResource.addItem(MBR_STREAM_ITEMS[i]);
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
 							
 				  	   		return new VideoElement(new DynamicStreamingNetLoader(), dsResource)
@@ -490,30 +490,30 @@ package org.osmf.examples
 
 			examples.push
 				( new Example
-					( 	"Tracing ProxyElement (Dynamic Streaming Video)"
-					, 	"Demonstrates the use of a custom ProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a VideoElement doing dynamic streaming.  All playback events are sent to the trace console."
+					( 	"Proxy-based Tracing (Dynamic Streaming Video)"
+					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a VideoElement doing dynamic streaming.  All playback events are sent to the trace console."
 					,	function():MediaElement
 				  	   	{
 							var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (var i:int = 0; i < 5; i++)
 							{
-								dsResource.addItem(MBR_STREAM_ITEMS[i]);
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-				  	  		return new TraceProxyElement(new VideoElement(new DynamicStreamingNetLoader(), dsResource));
+				  	  		return new TraceListenerProxyElement(new VideoElement(new DynamicStreamingNetLoader(), dsResource));
 				  	   	}
 				  	)
 				);
 
 			examples.push
 				( new Example
-					( 	"Tracing ProxyElement (SerialElement)"
-					, 	"Demonstrates the use of a custom ProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
+					( 	"Proxy-based Tracing (SerialElement)"
+					, 	"Demonstrates the use of a custom ListenerProxyElement to non-invasively listen in on the behavior of another MediaElement, in this case a SerialElement containing two VideoElements.  All playback events are sent to the trace console."
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)))); 
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
-				  	   		return new TraceProxyElement(serialElement);
+				  	   		return new TraceListenerProxyElement(serialElement);
 				  	   	}
 				  	)
 				);

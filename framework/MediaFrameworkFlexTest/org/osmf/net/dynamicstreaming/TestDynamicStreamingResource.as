@@ -57,7 +57,7 @@ package org.osmf.net.dynamicstreaming
 			}
 			
 			
-			// Test addItem method. 
+			// Test adding items. 
 			dsr.streamItems.push(new DynamicStreamingItem("stream_1", bitrates[3]));
 			dsr.streamItems.push(new DynamicStreamingItem("stream_2", bitrates[5]));
 			dsr.streamItems.push(new DynamicStreamingItem("stream_3", bitrates[0]));
