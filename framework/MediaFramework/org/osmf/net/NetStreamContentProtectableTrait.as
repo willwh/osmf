@@ -34,11 +34,12 @@ package org.osmf.net
 	import org.osmf.traits.ContentProtectableTrait;
 	import org.osmf.events.AuthenticationCompleteEvent;
 
+    [ExcludeClass]
     
     /**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs
-     * NetStream specific protected content trait.
+	 * 
+     * NetStream-specific protected content trait.
      */
 	public class NetStreamContentProtectableTrait extends ContentProtectableTrait
 	{

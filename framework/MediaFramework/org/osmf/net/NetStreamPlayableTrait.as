@@ -36,10 +36,13 @@ package org.osmf.net
 	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamPlayableTrait class implements an IPlayable interface that uses a NetStream.
 	 * This trait is used by AudioElements and VideoElements.
-	 * @private
 	 * @see flash.net.NetStream
 	 */   
 	public class NetStreamPlayableTrait extends PlayableTrait

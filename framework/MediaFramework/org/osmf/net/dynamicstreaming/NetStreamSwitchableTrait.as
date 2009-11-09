@@ -30,9 +30,12 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.traits.SwitchableTrait;
 
+	[ExcludeClass]
+	
 	/**
-	 * The NetStreamSwitchableTrait class implements an ISwitchable interface that uses a DynamicNetStream.
 	 * @private
+	 * 
+	 * The NetStreamSwitchableTrait class implements an ISwitchable interface that uses a DynamicNetStream.
 	 * @see DynamicNetStream
 	 */   
 	public class NetStreamSwitchableTrait extends SwitchableTrait

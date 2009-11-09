@@ -30,7 +30,11 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetLoadedContext;
 	import org.osmf.traits.LoadableTrait;
 
+	[ExcludeClass]
+	
     /**
+     * @private
+     * 
 	 * The DynamicStreamingNetLoadedContext contains information about the output of a load operation
 	 * performed by a DynamicStreamingNetLoader. 
 	 * 
@@ -40,21 +44,21 @@ package org.osmf.net.dynamicstreaming
 	{
 		public function DynamicStreamingNetLoadedContext(connection:NetConnection, stream:NetStream, shareable:Boolean=false, 
 															netConnectionFactory:NetConnectionFactory=null, resource:IURLResource=null,
-															hostNameLoadable:LoadableTrait=null)
+															hostLoadable:LoadableTrait=null)
 		{
 			super(connection, stream, shareable, netConnectionFactory, resource);
-			_hostNameLoadable = hostNameLoadable;
+			_hostLoadable = hostLoadable;
 		}
 
 		/**
-		 * This is the loadable object representing the host name for the 
+		 * This is the loadable object representing the host for the 
 		 * dynamic streaming profile.
 		 */
-		public function get hostNameLoadable():LoadableTrait
+		public function get hostLoadable():LoadableTrait
 		{
-			return _hostNameLoadable;
+			return _hostLoadable;
 		}
 				
-		private var _hostNameLoadable:LoadableTrait;		
+		private var _hostLoadable:LoadableTrait;		
 	}
 }

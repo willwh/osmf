@@ -26,10 +26,13 @@ package org.osmf.net
 	
 	import org.osmf.traits.BufferableTrait;
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamBufferableTrait class implements an IBufferable interface that uses a NetStream.
 	 * This trait is used by AudioElements and VideoElements.
-	 * @private
 	 * @see flash.net.NetStream
 	 */  
 	public class NetStreamBufferableTrait extends BufferableTrait

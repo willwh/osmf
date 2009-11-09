@@ -27,10 +27,14 @@ package org.osmf.net
 	import org.osmf.traits.TemporalTrait;
 	import org.osmf.utils.URL;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamTemporalTrait class implements an ITemporal interface that uses a NetStream.
 	 * This trait is used by AudioElements and VideoElements.
-	 * @private
+	 * 
 	 * @see flash.net.NetStream
 	 */ 	
 	public class NetStreamTemporalTrait extends TemporalTrait

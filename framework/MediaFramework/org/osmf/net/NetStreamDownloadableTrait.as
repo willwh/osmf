@@ -27,8 +27,12 @@ package org.osmf.net
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.traits.DownloadableTrait;
 
+	[ExcludeClass]
+	
 	/**
-	 * This class extends Downloadable trait to provide access to the bytesLoaded and bytesTotal properties
+	 * @private
+	 * 
+	 * This class extends DownloadableTrait to provide access to the bytesLoaded and bytesTotal properties
 	 * of NetStream.
 	 */
 	public class NetStreamDownloadableTrait extends DownloadableTrait

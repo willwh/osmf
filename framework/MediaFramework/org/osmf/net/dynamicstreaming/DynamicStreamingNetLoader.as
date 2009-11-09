@@ -116,7 +116,7 @@ package org.osmf.net.dynamicstreaming
 			else
 			{
 				var loadedContext:DynamicStreamingNetLoadedContext = loadable.loadedContext as DynamicStreamingNetLoadedContext;
-				var hostLoadable:ILoadable = loadedContext.hostNameLoadable;
+				var hostLoadable:ILoadable = loadedContext.hostLoadable;
 				
 				var netLoadedContext:NetLoadedContext = hostLoadable.loadedContext as NetLoadedContext;
 				if (netLoadedContext == null)

@@ -26,12 +26,15 @@ package org.osmf.net
 	
 	import org.osmf.traits.AudibleTrait;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamAudibleTrait class implements the IAudible interface that uses a NetStream.
 	 * This trait is used by AudioElements.
 	 * <p>Sets the soundTransform object on the NetStream in response to audio
 	 * property changes.</p>
-	 * @private
 	 */ 
 	public class NetStreamAudibleTrait extends AudibleTrait
 	{

@@ -25,11 +25,14 @@ package org.osmf.net
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.PausableTrait;
-	
+
+	[ExcludeClass]
+		
 	/**
+	 * @private
+	 * 
 	 * The NetStreamPausableTrait class implements an IPausable interface that uses a NetStream.
 	 * This trait is used by AudioElements and VideoElements.
-	 * @private
 	 * @see flash.net.NetStream
 	 */  
 	public class NetStreamPausableTrait extends PausableTrait

@@ -30,7 +30,11 @@ package org.osmf.net
 	import org.osmf.media.IURLResource;
 	import org.osmf.traits.ILoadedContext;
 
+	[ExcludeClass]
+	
     /**
+     * @private
+     *  
 	 * The NetLoadedContext contains information about the output of a load operation
 	 * performed by a NetLoader. 
 	 * This information is used by plugins for managing media playback 

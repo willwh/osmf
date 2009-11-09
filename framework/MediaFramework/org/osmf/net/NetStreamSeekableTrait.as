@@ -28,10 +28,13 @@ package org.osmf.net
 	
 	import org.osmf.traits.SeekableTrait;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamSeekableTrait class implements an ISeekable interface that uses a NetStream.
 	 * This trait is used by AudioElements and VideoElements.
-	 * @private
 	 * @see flash.net.NetStream
 	 */ 		
 	public class NetStreamSeekableTrait extends SeekableTrait

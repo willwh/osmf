@@ -25,7 +25,11 @@ package org.osmf.content
 	
 	import org.osmf.traits.ILoadedContext;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The ContentLoadedContext contains information about the output of the
 	 * ContentLoader's load operation.
 	 */

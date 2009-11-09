@@ -26,7 +26,6 @@ package org.osmf.net
 	
 	/**
 	 * @private
-	 * 
 	 **/
 	internal class NetStreamUtils
 	{
