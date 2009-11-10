@@ -145,19 +145,24 @@ package org.osmf.composition
 				switchable.autoSwitch = currentChild.autoSwitch;
 				if (!currentChild.autoSwitch)
 				{
+					trace('Trying to match new bitrate');
 					for (var itr:Number = 0; itr <= ISwitchable(child).maxIndex; itr++)
 					{
-						if (switchable.getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
-							itr == maxIndex)
-						{																
-							switchable.switchTo(itr);	
-							break;	
-						}
-						else if (switchable.getBitrateForIndex(itr) > getBitrateForIndex(currentIndex))							
-						{										
+						trace('current index:' + getBitrateForIndex(currentIndex));
+						trace('testing index:' + switchable.getBitrateForIndex(itr));
+						if (switchable.getBitrateForIndex(itr) > getBitrateForIndex(currentIndex))							
+						{	
+							trace('siwtching to next lowest match'	);								
 							switchable.switchTo(Math.max(itr-1, 0));	
 							break;	
-						}				 
+						}	
+						else if (switchable.getBitrateForIndex(itr) == getBitrateForIndex(currentIndex) ||
+							itr == switchable.maxIndex)
+						{		
+							trace('found exact match - or too much'	);																
+							switchable.switchTo(itr);	
+							break;	
+						}									 
 					}					
 				}
 				currentChild.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
