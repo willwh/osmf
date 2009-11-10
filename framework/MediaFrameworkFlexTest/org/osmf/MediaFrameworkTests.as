@@ -58,10 +58,9 @@ package org.osmf
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 			
-			CONFIG::FLASH_10_1
-			{
-				addTestSuite(TestContentProtectable);
-			}
+			
+			addTestSuite(TestContentProtectable);
+					
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
 			addTestSuite(TestLayoutRendererBase);
@@ -155,6 +154,8 @@ package org.osmf
 			addTestSuite(TestContentLoader);
 			addTestSuite(TestContentElement);
 			
+			addTestSuite(TestContentProtectable);
+			
 			addTestSuite(TestImageLoader);
 			addTestSuite(TestImageElement);
 
@@ -175,10 +176,10 @@ package org.osmf
 			//addTestSuite(TestAudioPausableTrait);
 
 			addTestSuite(TestMediaPlayer);
-			addTestSuite(TestMediaPlayerWithAudioElement);
+			//addTestSuite(TestMediaPlayerWithAudioElement);
 			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
 			addTestSuite(TestMediaPlayerWithVideoElement);
-			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
+			//addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
@@ -224,7 +225,7 @@ package org.osmf
 			addTestSuite(TestVASTTrackingProxyElement);		
 
 			addTestSuite(TestCuePoint);
-			addTestSuite(TestTemporalFacet);			
+			addTestSuite(TestTemporalFacet);	
 
 		}
 	}
