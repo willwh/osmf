@@ -174,12 +174,12 @@ package org.osmf.composition
 						}									
 						else if (childBitRate > desiredBitRate)
 						{
-							childIndex--;
+							childIndex--;							
 							break;
 						}				
 					}							
 					//If we made it here, the last item is the correct stream
-					mediaTrait.switchTo(Math.min(childIndex, mediaTrait.maxIndex));													
+					mediaTrait.switchTo(Math.max(0, Math.min(childIndex, mediaTrait.maxIndex)));													
 				}
 			    , MediaTraitType.SWITCHABLE);
 			    _currentIndex = index;
