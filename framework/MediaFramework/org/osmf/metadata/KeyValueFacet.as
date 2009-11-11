@@ -70,7 +70,7 @@ package org.osmf.metadata
 		public function getValue(identifier:IIdentifier):*
 		{
 			var objectIdentifier:ObjectIdentifier = identifier as ObjectIdentifier; 
-			if (identifier)
+			if (objectIdentifier)
 			{
 				return data[objectIdentifier.key];
 			}			
