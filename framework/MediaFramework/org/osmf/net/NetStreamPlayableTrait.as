@@ -32,9 +32,7 @@ package org.osmf.net
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.traits.PlayableTrait;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.MediaFrameworkStrings;
-	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -100,7 +98,32 @@ package org.osmf.net
 				}					
 				else if (urlResource != null) 
 				{
-					doPlay(NetStreamUtils.getStreamNameFromURL(urlResource.url));
+					var streamingURLResource:StreamingURLResource = urlResource as StreamingURLResource;
+					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url);
+					
+					if (streamingURLResource != null)
+					{
+						var start:Number = PLAY_START_ARG_ANY;
+						
+						switch (streamingURLResource.streamType)
+						{
+							case StreamType.ANY:
+								start = PLAY_START_ARG_ANY;
+								break;
+							case StreamType.LIVE:
+								start = PLAY_START_ARG_LIVE;
+								break;
+							case StreamType.RECORDED:
+								start = PLAY_START_ARG_RECORDED;
+								break;
+						}
+						
+						doPlay(streamName, start);
+					}
+					else
+					{
+						doPlay(streamName);					
+					}
 				}
 			}
 		}
@@ -158,6 +181,11 @@ package org.osmf.net
 		}
 		
 		private static const NETCONNECTION_FAILURE_ERROR_CODE:int = 2154;
+		
+		// Consts for the NetStream.Play() method
+		private static const PLAY_START_ARG_ANY:int = -2;
+		private static const PLAY_START_ARG_LIVE:int = -1;
+		private static const PLAY_START_ARG_RECORDED:int = 0;
 		
 		private var owner:MediaElement;
 		private var streamStarted:Boolean;
