@@ -26,7 +26,6 @@ package com.adobe.strobe.players
 	import mx.core.UIComponent;
 	
 	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -65,8 +64,16 @@ package com.adobe.strobe.players
 			return _playerSprite.scaleMode;
 		}
 		
+		
+		
 		// Overrides
 		//
+		
+		override protected function measure():void
+		{
+			measuredWidth = 640;
+			measuredHeight = 480;
+		}
 		
 		override protected function createChildren():void
 		{
