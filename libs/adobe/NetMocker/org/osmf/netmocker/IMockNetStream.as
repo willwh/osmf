@@ -34,6 +34,14 @@ package org.osmf.netmocker
 		function get expectedDuration():Number;
 		
 		/**
+		 * The expected duration of the stream when it's a subclip, in seconds.
+		 * This is different from expectedDuration when the stream being played
+		 * is a subclip.  The default is NaN.
+		 **/
+		function set expectedSubclipDuration(value:Number):void;
+		function get expectedSubclipDuration():Number;
+
+		/**
 		 * The expected width of the stream, in pixels.  Necessary so that
 		 * this mock stream class knows the dimensions to include in the
 		 * onMetaData callback.  The default is zero.

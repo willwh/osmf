@@ -37,6 +37,7 @@ package org.osmf.netmocker
 		{
 			super(connection);
 			_connection = connection;
+			
 			// Intercept all NetStatusEvents dispatched from the base class.
 			eventInterceptor = new NetStatusEventInterceptor(this);
 			
@@ -55,6 +56,19 @@ package org.osmf.netmocker
 		public function get expectedDuration():Number
 		{
 			return _expectedDuration;
+		}
+
+		/**
+		 * @inheritDoc
+		 **/
+		public function set expectedSubclipDuration(value:Number):void
+		{
+			this._expectedSubclipDuration = value;
+		}
+		
+		public function get expectedSubclipDuration():Number
+		{
+			return _expectedSubclipDuration;
 		}
 
 		/**
@@ -124,7 +138,7 @@ package org.osmf.netmocker
 		override public function seek(offset:Number):void
 		{
 			// Offset is in seconds.
-			if (offset >= 0 && offset <= expectedDuration)
+			if (offset >= 0 && offset <= normalizedExpectedDuration)
 			{
 				elapsedTime = offset;
 				if (playing)
@@ -153,7 +167,6 @@ package org.osmf.netmocker
 			}
 			else
 			{				
-				trace(new Date().toTimeString() + " -Creating new timer for switch complete");
 				var newTimer:Timer = new Timer(350, 1);
 				switchCompleteTimers.push(newTimer);
 				newTimer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSwitchCompleteMsg);
@@ -192,7 +205,6 @@ package org.osmf.netmocker
 		
 		private function sendSwitchCompleteMsg(e:TimerEvent):void
 		{
-			trace('sendSwitchCompleteMsg'  );
 			switchUnderway = false;
 			//dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE));
 			var oldtimer:Timer = switchCompleteTimers.shift();
@@ -253,9 +265,9 @@ package org.osmf.netmocker
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
 			var infos:Array;
-			if (time >= expectedDuration)
+			if (time >= normalizedExpectedDuration)
 			{
-				elapsedTime = expectedDuration;
+				elapsedTime = normalizedExpectedDuration;
 				playing = false;
 				
 				playheadTimer.stop();
@@ -306,10 +318,15 @@ package org.osmf.netmocker
 			return infos;
 		}
 
+		private function get normalizedExpectedDuration():Number
+		{
+			return isNaN(expectedSubclipDuration) ? expectedDuration : expectedSubclipDuration;
+		}
 		
 		private var _connection:NetConnection;
 		private var eventInterceptor:NetStatusEventInterceptor;
 		private var _expectedDuration:Number = 0;
+		private var _expectedSubclipDuration:Number = NaN;
 		private var _expectedWidth:Number = 0;
 		private var _expectedHeight:Number = 0;
 		private var _expectedEvents:Array = [];

@@ -37,6 +37,7 @@ package org.osmf.netmocker
 		{
 			super(connection);
 			_connection = connection;
+			
 			// Intercept all NetStatusEvents dispatched from the base class.
 			eventInterceptor = new NetStatusEventInterceptor(this);
 			
@@ -57,6 +58,21 @@ package org.osmf.netmocker
 		public function get expectedDuration():Number
 		{
 			return _expectedDuration;
+		}
+
+		/**
+		 * The expected duration of the stream when it's a subclip, in seconds.
+		 * This is different from expectedDuration when the stream being played
+		 * is a subclip.  The default is NaN.
+		 **/
+		public function set expectedSubclipDuration(value:Number):void
+		{
+			this._expectedSubclipDuration = value;
+		}
+		
+		public function get expectedSubclipDuration():Number
+		{
+			return _expectedSubclipDuration;
 		}
 
 		/**
@@ -219,7 +235,7 @@ package org.osmf.netmocker
 		override public function seek(offset:Number):void
 		{
 			// Offset is in seconds.
-			if (offset >= 0 && offset <= expectedDuration)
+			if (offset >= 0 && offset <= normalizedExpectedDuration)
 			{
 				//elapsedTime = offset;
 				if (playing)
@@ -260,9 +276,9 @@ package org.osmf.netmocker
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
 			var infos:Array;
-			if (time >= expectedDuration)
+			if (time >= normalizedExpectedDuration)
 			{
-				elapsedTime = expectedDuration;
+				elapsedTime = normalizedExpectedDuration;
 				playing = false;
 				
 				playheadTimer.stop();
@@ -316,9 +332,15 @@ package org.osmf.netmocker
 			return infos;
 		}
 		
+		private function get normalizedExpectedDuration():Number
+		{
+			return isNaN(expectedSubclipDuration) ? expectedDuration : expectedSubclipDuration;
+		}
+		
 		private var _connection:NetConnection;
 		private var eventInterceptor:NetStatusEventInterceptor;
 		private var _expectedDuration:Number = 0;
+		private var _expectedSubclipDuration:Number = NaN;
 		private var _expectedWidth:Number = 0;
 		private var _expectedHeight:Number = 0;
 		private var _expectedEvents:Array = [];

@@ -73,6 +73,19 @@ package org.osmf.netmocker
 			return _netStreamExpectedDuration;
 		}
 		
+		/**
+		 * @inheritDoc
+		 **/
+		public function set netStreamExpectedSubclipDuration(value:Number):void
+		{
+			_netStreamExpectedSubclipDuration = value;
+		}
+		
+		public function get netStreamExpectedSubclipDuration():Number
+		{
+			return _netStreamExpectedSubclipDuration;
+		}
+
 		public function set netStreamExpectedWidth(value:Number):void
 		{
 			_netStreamExpectedWidth = value;			
@@ -111,6 +124,7 @@ package org.osmf.netmocker
 			var mockNetStream:MockDynamicNetStream = new MockDynamicNetStream(connection);			
 			mockNetStream.client = new NetClient();			
 			mockNetStream.expectedDuration = _netStreamExpectedDuration;
+			mockNetStream.expectedSubclipDuration = _netStreamExpectedSubclipDuration;
 			mockNetStream.expectedWidth = _netStreamExpectedWidth;
 			mockNetStream.expectedHeight = _netStreamExpectedHeight;
 			mockNetStream.expectedEvents = _netStreamExpectedEvents;
@@ -118,6 +132,7 @@ package org.osmf.netmocker
 	    }
 	    
 	    private var _netStreamExpectedDuration:Number = 0;
+	    private var _netStreamExpectedSubclipDuration:Number = NaN;
 	    private var _netStreamExpectedWidth:Number = 0;
 	    private var _netStreamExpectedHeight:Number = 0;
 	    private var _netStreamExpectedEvents:Array = [];
