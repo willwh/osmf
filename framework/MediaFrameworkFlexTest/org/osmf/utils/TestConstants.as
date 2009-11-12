@@ -41,6 +41,9 @@ package org.osmf.utils
 		
 		public static const REMOTE_STREAMING_VIDEO:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv";
+		public static const REMOTE_STREAMING_VIDEO_EXPECTED_DURATION:Number = 35;
+		public static const REMOTE_STREAMING_VIDEO_EXPECTED_WIDTH:Number = 640;
+		public static const REMOTE_STREAMING_VIDEO_EXPECTED_HEIGHT:Number = 352;
 		
 		public static const REMOTE_STREAMING_VIDEO_RTMP:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv";

@@ -29,26 +29,32 @@ package org.osmf.metadata
 	public class MetadataNamespaces
 	{
 		/**
-		 * The namespace that holds OSMF specific metadata
+		 * The namespace that holds OSMF-specific metadata
 		 */ 		
-		public static const DEFAULT_METADATA:URL			= new URL("http://www.osmf.org/default/1.0");
+		public static const DEFAULT_METADATA:URL				= new URL("http://www.osmf.org/default/1.0");
 		
-		public static const MEDIATYPE_METADATA:URL			= new URL("http://www.osmf.org/mediatype/default");
+		public static const MEDIATYPE_METADATA:URL				= new URL("http://www.osmf.org/mediatype/default");
 		
-		public static const DRM_METADATA:URL				= new URL("http://www.osmf.org/drm/default");
+		public static const SUBCLIP_METADATA:URL				= new URL("http://www.osmf.org/subclip/1.0");
+		public static const SUBCLIP_START_KEY:String			= "startTime";
+		public static const SUBCLIP_END_KEY:String				= "endTime";
+		public static const SUBCLIP_START_ID:ObjectIdentifier	= new ObjectIdentifier(SUBCLIP_START_KEY);
+		public static const SUBCLIP_END_ID:ObjectIdentifier		= new ObjectIdentifier(SUBCLIP_END_KEY);
 		
-		public static const REGION_TARGET:URL				= new URL("http://www.osmf.org/region/target");
+		public static const DRM_METADATA:URL					= new URL("http://www.osmf.org/drm/default");
 		
-		public static const LAYOUT_RENDERER:URL				= new URL("http://www.osmf.org/layout/renderer");
-		public static const ABSOLUTE_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/absolute");
-		public static const RELATIVE_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/relative");
-		public static const ANCHOR_LAYOUT_PARAMETERS:URL	= new URL("http://www.osmf.org/layout/anchor");
-		public static const PADDING_LAYOUT_PARAMETERS:URL 	= new URL("http://www.osmf.org/layout/padding");
-		public static const LAYOUT_ATTRIBUTES:URL 			= new URL("http://www.osmf.org/layout/attributes");
+		public static const REGION_TARGET:URL					= new URL("http://www.osmf.org/region/target");
 		
-		public static const ELEMENT_ID:URL	 				= new URL("http://www.osmf.org/elementId");
+		public static const LAYOUT_RENDERER:URL					= new URL("http://www.osmf.org/layout/renderer");
+		public static const ABSOLUTE_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/absolute");
+		public static const RELATIVE_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/relative");
+		public static const ANCHOR_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/anchor");
+		public static const PADDING_LAYOUT_PARAMETERS:URL 		= new URL("http://www.osmf.org/layout/padding");
+		public static const LAYOUT_ATTRIBUTES:URL 				= new URL("http://www.osmf.org/layout/attributes");
 		
-		public static const TEMPORAL_METADATA_EMBEDDED:URL	= new URL("http://www.osmf.org/temporal/embedded");
-		public static const TEMPORAL_METADATA_DYNAMIC:URL	= new URL("http://www.osmf.org/temporal/dynamic");		
+		public static const ELEMENT_ID:URL	 					= new URL("http://www.osmf.org/elementId");
+		
+		public static const TEMPORAL_METADATA_EMBEDDED:URL		= new URL("http://www.osmf.org/temporal/embedded");
+		public static const TEMPORAL_METADATA_DYNAMIC:URL		= new URL("http://www.osmf.org/temporal/dynamic");
 	}
 }

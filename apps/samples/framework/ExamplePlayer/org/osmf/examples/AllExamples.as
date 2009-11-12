@@ -42,7 +42,9 @@ package org.osmf.examples
 	import org.osmf.layout.RelativeLayoutFacet;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -623,6 +625,109 @@ package org.osmf.examples
 				  	)
 				);
 
+			examples.push
+				( new Example
+					( 	"Streaming Video As Subclip"
+					, 	"Demonstrates playback of a subclip of a streaming video using metadata to specify the start and end times."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));
+							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 25);
+							resource.metadata.addFacet(kvFacet);
+				  	   		return new VideoElement(new NetLoader(), resource);
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Serial Composition With Subclips"
+					, 	"Demonstrates playback of a SerialElement that contains one video chopped up into several subclips, each separated by the 5 second display of an image."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var netLoader:NetLoader = new NetLoader();
+				  	   		
+							var serialElement:SerialElement = new SerialElement();
+
+				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));
+							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+							resource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+
+				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
+							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 15);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 22);
+							resource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+
+				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
+							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 22);
+							resource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+				  	   		
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Serial Composition With Dynamic Streaming Subclips"
+					, 	"Demonstrates playback of a SerialElement that contains one dynamic streaming video chopped up into several subclips, each separated by the 5 second display of an image."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var netLoader:NetLoader = new DynamicStreamingNetLoader();
+				  	   		
+							var serialElement:SerialElement = new SerialElement();
+
+							var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
+							for (var i:int = 0; i < 5; i++)
+							{
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
+							}
+							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 10);
+							dsResource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+
+							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
+							for (i = 0; i < 5; i++)
+							{
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
+							}
+							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 150);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 172);
+							dsResource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+
+							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
+							for (i = 0; i < 5; i++)
+							{
+								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
+							}
+							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 640);
+							dsResource.metadata.addFacet(kvFacet);
+				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+				  	   		
+							return new TraceListenerProxyElement(serialElement); 
+				  	   	} 
+				  	)
+				);
 			/* TODO: Uncomment this once we have the VAST library integrated
 			   with the build system.
 			examples.push

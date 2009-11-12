@@ -32,6 +32,7 @@ package org.osmf.media
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BytesLoadedChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.CurrentTimeChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.events.MediaError;
@@ -41,7 +42,6 @@ package org.osmf.media
 	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.PanChangeEvent;
 	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.CurrentTimeChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
@@ -1366,6 +1366,44 @@ package org.osmf.media
 			}			
 		}
 		
+		public function testSubclip():void
+		{
+			if (supportsSubclips)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				
+				if (loadable)
+				{
+					callAfterLoad(doTestSubclip, false);
+				}
+				else
+				{
+					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					doTestSubclip();
+				}
+			}
+		}
+
+		private function doTestSubclip():void
+		{
+			var states:Array = [];
+			
+			assertTrue(mediaPlayer.currentTime == 0);
+			
+			mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestSubclip);
+			mediaPlayer.play();
+			
+			function onTestSubclip(event:TraitEvent):void
+			{
+				mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestSubclip);
+				
+				assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
+				assertTrue(mediaPlayer.duration == expectedSubclipDuration);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		// Protected
 		//
 		
@@ -1461,6 +1499,20 @@ package org.osmf.media
 			// Subclasses can override to specify the expected bitrates for each
 			// switchable index.
 			return -1;
+		}
+		
+		protected function get supportsSubclips():Boolean
+		{
+			// Subclasses can override to indicate that they are capable of
+			// playing subclips.
+			return false;
+		}
+		
+		protected function get expectedSubclipDuration():Number
+		{
+			// Subclasses can override to specify the expected duration of
+			// the subclip.  Ignored unless supportsSubclips returns true.
+			return 0;
 		}
 		
 		// Internals

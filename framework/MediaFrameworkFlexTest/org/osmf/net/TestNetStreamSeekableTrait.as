@@ -24,6 +24,7 @@ package org.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestSeekableTrait;
 	import org.osmf.utils.NetFactory;
@@ -64,7 +65,7 @@ package org.osmf.net
 			}
 			
 			var trait:NetStreamSeekableTrait =  new NetStreamSeekableTrait(stream);		
-			trait.temporal = new NetStreamTemporalTrait(stream, new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			trait.temporal = new NetStreamTemporalTrait(stream, new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
 			NetStreamTemporalTrait(trait.temporal).duration = maxSeekValue;
 			
 			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);

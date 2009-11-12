@@ -38,8 +38,12 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.events.SwitchingChangeEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.utils.MediaFrameworkStrings;
 	
@@ -304,24 +308,11 @@ package org.osmf.net.dynamicstreaming
 		protected function switchToIndex(targetIndex:uint, firstPlay:Boolean=false):void 
 		{
 			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
-			
-			var nsStartValue:int = -2;
-			var nsLenValue:int = -1;
-			switch (_dsResource.streamType)
-			{
-				case StreamType.ANY:
-					nsStartValue = -2;
-					break;
-				case StreamType.LIVE:
-					nsStartValue = -1;
-					break;
-				case StreamType.RECORDED:
-					nsStartValue = 0;
-					break;
-			}
-			
-			nso.start = nsStartValue;
-			nso.len = nsLenValue;
+
+			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(resource);
+
+			nso.start = playArgs["start"];
+			nso.len = playArgs["len"];
 			nso.streamName = _dsResource.streamItems[targetIndex].streamName;
 			nso.oldStreamName = _oldStreamName;
 			nso.transition = firstPlay ? NetStreamPlayTransitions.RESET : NetStreamPlayTransitions.SWITCH;

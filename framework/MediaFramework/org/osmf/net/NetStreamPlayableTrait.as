@@ -28,8 +28,8 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.traits.PlayableTrait;
 	import org.osmf.utils.MediaFrameworkStrings;
@@ -65,7 +65,7 @@ package org.osmf.net
 			}
 			this.owner = owner;
 			this.netStream = netStream;
-			this.urlResource = resource as IURLResource;
+			this.urlResource = resource as URLResource;
 			this.dsResource = resource as DynamicStreamingResource;
 			
 			// Note that we add the listener with a slightly higher priority.
@@ -76,6 +76,8 @@ package org.osmf.net
 			// DURATION_REACHED event will expect that the media is no longer
 			// playing.
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 1, true);
+			
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 		}
 		
 		/**
@@ -98,32 +100,14 @@ package org.osmf.net
 				}					
 				else if (urlResource != null) 
 				{
-					var streamingURLResource:StreamingURLResource = urlResource as StreamingURLResource;
+					// Map the resource to the NetStream.play arguments.
 					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url);
+					var playArgs:Object = NetStreamUtils.getPlayArgsForResource(urlResource);
+					var startTime:Number = playArgs["start"];
+					var len:Number = playArgs["len"];
 					
-					if (streamingURLResource != null)
-					{
-						var start:Number = PLAY_START_ARG_ANY;
-						
-						switch (streamingURLResource.streamType)
-						{
-							case StreamType.ANY:
-								start = PLAY_START_ARG_ANY;
-								break;
-							case StreamType.LIVE:
-								start = PLAY_START_ARG_LIVE;
-								break;
-							case StreamType.RECORDED:
-								start = PLAY_START_ARG_RECORDED;
-								break;
-						}
-						
-						doPlay(streamName, start);
-					}
-					else
-					{
-						doPlay(streamName);					
-					}
+					// Play the clip (or the requested portion of the clip).
+					doPlay(streamName, startTime, len);
 				}
 			}
 		}
@@ -156,6 +140,18 @@ package org.osmf.net
 			}
 		}
 		
+		private function onPlayStatus(event:Object):void
+		{			
+			switch (event.code)
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
+					netStream.pause();
+					streamStarted = false;
+					resetPlaying();
+					break;
+			}
+		}
+
 		protected function doPlay(...args):void
 		{
 			try
@@ -182,15 +178,10 @@ package org.osmf.net
 		
 		private static const NETCONNECTION_FAILURE_ERROR_CODE:int = 2154;
 		
-		// Consts for the NetStream.Play() method
-		private static const PLAY_START_ARG_ANY:int = -2;
-		private static const PLAY_START_ARG_LIVE:int = -1;
-		private static const PLAY_START_ARG_RECORDED:int = 0;
-		
 		private var owner:MediaElement;
 		private var streamStarted:Boolean;
 		private var netStream:NetStream;
-		private var urlResource:IURLResource;
+		private var urlResource:URLResource;
 		private var dsResource:DynamicStreamingResource;
 	}
 }

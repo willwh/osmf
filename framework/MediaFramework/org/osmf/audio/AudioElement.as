@@ -95,7 +95,6 @@ package org.osmf.audio
 		override protected function processLoadedState():void
 		{
 			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			var urlResource:URLResource = resource as URLResource;
 
 			var seekable:SeekableTrait;
 			var temporal:TemporalTrait;
@@ -109,9 +108,9 @@ package org.osmf.audio
 				
 				var stream:NetStream = netLoadedContext.stream;
 				
-				addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, urlResource));
+				addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, resource));
 				seekable = new NetStreamSeekableTrait(stream);
-				temporal = new NetStreamTemporalTrait(stream, urlResource.url);
+				temporal = new NetStreamTemporalTrait(stream, resource);
 				seekable.temporal = temporal;
 				addTrait(MediaTraitType.SEEKABLE, seekable);
 				addTrait(MediaTraitType.TEMPORAL, temporal);

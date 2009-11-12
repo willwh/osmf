@@ -23,7 +23,13 @@ package org.osmf.net
 {
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.media.IMediaResource;
+	import org.osmf.media.URLResource;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
 	
 	public class TestNetStreamUtils extends TestCase
@@ -54,6 +60,112 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.isRTMPStream(new URL("rtmpt://example.com")) == true);
 			assertTrue(NetStreamUtils.isRTMPStream(new URL("rtmpte://example.com")) == true);
 			assertTrue(NetStreamUtils.isRTMPStream(new URL("rtmps://example.com")) == true);
+		}
+
+		public function testIsRTMPResource():void
+		{
+			assertTrue(NetStreamUtils.isRTMPResource(null) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new NullResource()) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL(""))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("http://example.com"))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmfp://example.com"))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmp"))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL(""))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("http://example.com"))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmfp://example.com"))) == false);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmp"))) == false);
+
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmp://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpe://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpt://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpte://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmps://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmp://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpe://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpt://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpte://example.com"))) == true);
+			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmps://example.com"))) == true);
+		}
+		
+		public function testGetPlayArgsForResource():void
+		{
+			// First try some negative/default cases.
+			//
+			
+			var resource:IMediaResource = null;
+			var result:Object = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new NullResource();
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new URLResource(new URL("http://example.com"));
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new StreamingURLResource(new URL("rtmp://example.com"));
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			// Now try with positive/non-default cases.
+			//
+			
+			resource = new StreamingURLResource(new URL("rtmp://example.com"), StreamType.RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new StreamingURLResource(new URL("rtmp://example.com"), StreamType.LIVE);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.LIVE);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+					   
+			resource = new StreamingURLResource(new URL("rtmp://example.com"));
+			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+			resource.metadata.addFacet(kvFacet);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new StreamingURLResource(new URL("rtmp://example.com"));
+			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			resource.metadata.addFacet(kvFacet);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == 10 &&
+					   result["len"] == 5);
+
+			resource = new StreamingURLResource(new URL("rtmp://example.com"));
+			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+			resource.metadata.addFacet(kvFacet);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == 10 &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			resource = new StreamingURLResource(new URL("rtmp://example.com"));
+			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			resource.metadata.addFacet(kvFacet);
+			result = NetStreamUtils.getPlayArgsForResource(resource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
+					   result["len"] == 15);
 		}
 	}
 }

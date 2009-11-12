@@ -24,8 +24,8 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.IMediaResource;
 	import org.osmf.traits.TemporalTrait;
-	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -41,11 +41,8 @@ package org.osmf.net
 	{
 		/**
 		 * Constructor.
-		 * @param netStream NetStream created for the media element that uses this trait.
-		 * @param streamURL The URL of the stream.
-		 * @see NetLoader
 		 */ 		
-		public function NetStreamTemporalTrait(netStream:NetStream, streamURL:URL)
+		public function NetStreamTemporalTrait(netStream:NetStream, resource:IMediaResource)
 		{
 			super();
 			
@@ -53,7 +50,7 @@ package org.osmf.net
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 0, true);
-			this.streamURL = streamURL;
+			this.resource = resource;
 		}
 		
 		/**
@@ -66,7 +63,25 @@ package org.osmf.net
 		
 		private function onMetaData(value:Object):void
 		{
-			duration = value.duration;
+			// Determine the start time and duration for the
+			// resource.
+			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(resource);
+			
+			// Ensure our start time is non-negative, we only use it for
+			// calculating the offset.
+			var subclipStartTime:Number = Math.max(0, playArgs["start"]);
+			
+			// Ensure our duration is non-negative.
+			var subclipDuration:Number = playArgs["len"];
+			if (subclipDuration == NetStreamUtils.PLAY_LEN_ARG_ALL)
+			{
+				subclipDuration = Number.MAX_VALUE;
+			}
+
+			// If startTime is unspecified, our duration is everything
+			// up to the end of the subclip (or the entire duration, if
+			// no subclip end is specified).
+			duration = Math.min(value.duration - subclipStartTime, subclipDuration);
 		}
 		
 		private function onPlayStatus(event:Object):void
@@ -82,13 +97,13 @@ package org.osmf.net
 		}
 						
 		private function onNetStatus(event:NetStatusEvent):void
-		{			
+		{
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					// For progressive,	NetStream.Play.Stop means the duration
 					// was reached.  But this isn't fired for streaming.
-					if (NetStreamUtils.isRTMPStream(streamURL) == false)
+					if (NetStreamUtils.isRTMPResource(resource) == false)
 					{
 						processDurationReached();
 					}
@@ -97,6 +112,6 @@ package org.osmf.net
 		}
 		
 		private var netStream:NetStream;
-		private var streamURL:URL;
+		private var resource:IMediaResource;
 	}
 }
