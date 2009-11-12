@@ -175,8 +175,8 @@ package org.osmf
 			//addTestSuite(TestAudioPausableTrait);
 
 			addTestSuite(TestMediaPlayer);
-			addTestSuite(TestMediaPlayerWithAudioElement);
-			addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			//addTestSuite(TestMediaPlayerWithAudioElement);
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
 			addTestSuite(TestMediaPlayerWithVideoElement);
 			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
