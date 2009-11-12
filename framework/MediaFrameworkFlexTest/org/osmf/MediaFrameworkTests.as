@@ -170,13 +170,13 @@ package org.osmf
 			addTestSuite(TestAudioSeekableTrait); 
 			addTestSuite(TestAudioTemporalTrait);
 			
-			// These two tests fail intermittently on the build machine.
+			// These three tests fail intermittently on the build machine.
 			//addTestSuite(TestAudioPlayableTrait);
 			//addTestSuite(TestAudioPausableTrait);
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
 
 			addTestSuite(TestMediaPlayer);
-			//addTestSuite(TestMediaPlayerWithAudioElement);
-			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+			addTestSuite(TestMediaPlayerWithAudioElement);
 			addTestSuite(TestMediaPlayerWithVideoElement);
 			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
