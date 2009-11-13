@@ -30,9 +30,9 @@ package org.osmf.composition
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BufferingChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.DurationChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.layout.AbsoluteLayoutFacet;
@@ -433,7 +433,7 @@ package org.osmf.composition
 			assertTrue(temporal.currentTime == 5);
 			assertTrue(temporal1.currentTime == 5);
 			
-			temporal.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChanged);
+			temporal.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChanged);
 			
 			// The currentTime is the max of the children of the composition.
 			parallel.addChild(mediaElement2);
@@ -482,7 +482,7 @@ package org.osmf.composition
 			assertTrue(temporal3.currentTime == 15);
 			assertTrue(durationChangedEventCount == 3);
 			
-			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
+			temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
 			
 			temporal1.currentTime = 10;
 			assertTrue(durationReachedEventCount == 0);
@@ -880,12 +880,12 @@ package org.osmf.composition
 		// Internals
 		//
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			durationReachedEventCount++;
 		}
 
-		private function onDurationChanged(event:TraitEvent):void
+		private function onDurationChanged(event:TimeEvent):void
 		{
 			durationChangedEventCount++;
 		}

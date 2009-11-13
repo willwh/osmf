@@ -26,17 +26,17 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the <code>duration</code> of the trait has changed.
 	 * 
-	 * @eventType org.osmf.events.DurationChangeEvent.DURATION_CHANGE
+	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
 	 */
-	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
+	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * Dispatched when the <code>currentTime</code> of the trait has changed to a value
 	 * equal to its <code>duration</code>.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
 	 */
-	[Event(name="durationReached",type="org.osmf.events.TraitEvent")]
+	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * ITemporal defines the trait interface for media that have a duration and

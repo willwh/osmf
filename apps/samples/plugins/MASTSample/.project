@@ -18,7 +18,7 @@
 		<link>
 			<name>[source path] MASTPlugin</name>
 			<type>2</type>
-			<location>/MASTPlugin</location>
+			<location>C:/MASTPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>

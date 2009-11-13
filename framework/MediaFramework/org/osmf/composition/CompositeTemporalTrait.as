@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.DurationChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPlayable;
@@ -32,17 +31,17 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the duration of the trait changed
 	 * 
-	 * @eventType org.osmf.events.DurationChangeEvent.DURATION_CHANGE
+	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
 	 */
-	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
+	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * Dispatched when the currentTime of the trait changed to a value
 	 * that is equal to the duration of the ITemporal.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
 	 */
-	[Event(name="durationReached",type="org.osmf.events.TraitEvent")]
+	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 
 	/**
 	 * Implementation of ITemporal which can be a composite media trait.
@@ -103,8 +102,8 @@ package org.osmf.composition
 		 **/
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{
-			child.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChanged, 	false, 0, true);
-			child.addEventListener(TraitEvent.DURATION_REACHED, 		onDurationReached, 	false, 0, true);
+			child.addEventListener(TimeEvent.DURATION_CHANGE,  onDurationChanged, 	false, 0, true);
+			child.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached, 	false, 0, true);
 			
 			updateDuration();
 		}
@@ -114,8 +113,8 @@ package org.osmf.composition
 		 **/
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{
-			child.removeEventListener(DurationChangeEvent.DURATION_CHANGE, 	onDurationChanged);
-			child.removeEventListener(TraitEvent.DURATION_REACHED, 			onDurationReached);
+			child.removeEventListener(TimeEvent.DURATION_CHANGE, 	onDurationChanged);
+			child.removeEventListener(TimeEvent.DURATION_REACHED, 	onDurationReached);
 			
 			updateDuration();
 		}
@@ -123,12 +122,12 @@ package org.osmf.composition
 		// Internals
 		//
 		
-		private function onDurationChanged(event:DurationChangeEvent):void
+		private function onDurationChanged(event:TimeEvent):void
 		{
 			updateDuration();
 		}
 
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			var temporal:ITemporal = event.target as ITemporal;
 			
@@ -156,7 +155,7 @@ package org.osmf.composition
 				
 				if (allHaveReachedDuration)
 				{
-					dispatchEvent(new TraitEvent(TraitEvent.DURATION_REACHED));
+					dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
 				}
 			}
 			else // SERIAL
@@ -200,7 +199,7 @@ package org.osmf.composition
 			
 			if (nextChild == null)
 			{
-				dispatchEvent(new TraitEvent(TraitEvent.DURATION_REACHED));
+				dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
 			}
 		}
 		
@@ -240,7 +239,7 @@ package org.osmf.composition
 				var oldDuration:Number = _duration;
 				_duration = value;
 					
-				dispatchEvent(new DurationChangeEvent(oldDuration, _duration));
+				dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, _duration));
 				
 				// Current time cannot exceed duration.
 				if (currentTime > duration)

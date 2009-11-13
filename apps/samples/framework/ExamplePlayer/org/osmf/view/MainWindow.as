@@ -30,8 +30,7 @@ package org.osmf.view
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BytesLoadedChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
-	import org.osmf.events.CurrentTimeChangeEvent;
-	import org.osmf.events.DurationChangeEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
@@ -86,8 +85,8 @@ package org.osmf.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE, onCapabilityChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 
-			mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
@@ -196,15 +195,15 @@ package org.osmf.view
 			updateControls();
 		}
 		
-		private function onDurationChange(event:DurationChangeEvent):void
+		private function onDurationChange(event:TimeEvent):void
 		{
-			seekBar.maximum = event.newDuration;
-			duration.text = "" + Math.round(event.newDuration);
+			seekBar.maximum = event.time;
+			duration.text = "" + Math.round(event.time);
 		}
 
-		private function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
+		private function onCurrentTimeChange(event:TimeEvent):void
 		{
-			position.text = "" + Math.round(event.newCurrentTime);
+			position.text = "" + Math.round(event.time);
 
 			seekBar.value = 	mediaPlayerWrapper.mediaPlayer.temporal
 							? 	mediaPlayerWrapper.mediaPlayer.currentTime

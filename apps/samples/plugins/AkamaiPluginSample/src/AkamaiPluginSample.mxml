@@ -146,8 +146,8 @@
 				mediaInput.text = streams[0].url;
 				
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 				
 				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
@@ -295,18 +295,18 @@
 				mediaPlayerWrapper.height = event.newHeight;
 			}
 			
-			private function onDurationChange(event:DurationChangeEvent):void
+			private function onDurationChange(event:TimeEvent):void
 			{
-				seekBar.maximum = event.newDuration;
-				lblDuration.text = timeCode(event.newDuration);
+				seekBar.maximum = event.time;
+				lblDuration.text = timeCode(event.time);
 			}
 						
-			private function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
+			private function onCurrentTimeChange(event:TimeEvent):void
 			{
 				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
-					seekBar.value = event.newCurrentTime;
-					lblPlayhead.text = timeCode(event.newCurrentTime);
+					seekBar.value = event.time;
+					lblPlayhead.text = timeCode(event.time);
 				}
 			}
 			

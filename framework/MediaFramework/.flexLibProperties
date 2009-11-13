@@ -63,9 +63,7 @@
     <classEntry path="org.osmf.events.BufferingChangeEvent"/>
     <classEntry path="org.osmf.events.BytesLoadedChangeEvent"/>
     <classEntry path="org.osmf.events.BytesTotalChangeEvent"/>
-    <classEntry path="org.osmf.events.CurrentTimeChangeEvent"/>
     <classEntry path="org.osmf.events.DimensionChangeEvent"/>
-    <classEntry path="org.osmf.events.DurationChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>
     <classEntry path="org.osmf.events.GatewayChangeEvent"/>
@@ -87,6 +85,7 @@
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
     <classEntry path="org.osmf.events.SeekingChangeEvent"/>
     <classEntry path="org.osmf.events.SwitchingChangeEvent"/>
+    <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.TraitEvent"/>
     <classEntry path="org.osmf.events.TraitsChangeEvent"/>
     <classEntry path="org.osmf.events.ViewChangeEvent"/>

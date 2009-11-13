@@ -59,7 +59,7 @@ package org.osmf.gateways
 		
 		// Temporal
 		
-		override protected function processDurationChange(oldDuration:Number, newDuration:Number):void
+		override protected function processDurationChange(newDuration:Number):void
 		{
 			ExternalInterface.call(elementScriptPath + "__onDurationChange__", newDuration);
 		}

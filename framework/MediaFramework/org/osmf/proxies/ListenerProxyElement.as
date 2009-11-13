@@ -27,7 +27,6 @@ package org.osmf.proxies
 	import org.osmf.events.BufferingChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.DurationChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.PanChangeEvent;
@@ -35,6 +34,7 @@ package org.osmf.proxies
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
@@ -52,7 +52,6 @@ package org.osmf.proxies
 	import org.osmf.traits.ISwitchable;
 	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.IViewable;
-	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -207,7 +206,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processDurationChange(oldDuration:Number, newDuration:Number):void
+		protected function processDurationChange(newDuration:Number):void
 		{
 		}
 
@@ -298,14 +297,14 @@ package org.osmf.proxies
 			processSeekingChange(event.seeking, event.time);
 		}
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			processDurationReached();
 		}
 
-		private function onDurationChange(event:DurationChangeEvent):void
+		private function onDurationChange(event:TimeEvent):void
 		{
-			processDurationChange(event.oldDuration, event.newDuration);
+			processDurationChange(event.time);
 		}
 
 		private function onDimensionChange(event:DimensionChangeEvent):void
@@ -540,13 +539,13 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-					temporal.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
+					temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 				else
 				{
-					temporal.removeEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-					temporal.removeEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
+					temporal.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 			}
 		}

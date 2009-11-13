@@ -102,8 +102,8 @@
 			private function initApp():void
 			{
 				wrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
-				wrapper.mediaPlayer.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);	
-				wrapper.mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				wrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
 				wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlayingChange);
 				
@@ -340,20 +340,20 @@
 				}
 			}
 			
-			private function onDurationChange(event:DurationChangeEvent):void
+			private function onDurationChange(event:TimeEvent):void
 			{
-				seekBar.maximum = event.newDuration;
-				lblDuration.text = timeCode(event.newDuration);
+				seekBar.maximum = event.time;
+				lblDuration.text = timeCode(event.time);
 				seekBar.enabled = seekBar.visible = wrapper.mediaPlayer.seekable;
 				
 			}
 						
-			private function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
+			private function onCurrentTimeChange(event:TimeEvent):void
 			{
 				if (wrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
-					seekBar.value = event.newCurrentTime;
-					lblPlayhead.text = timeCode(event.newCurrentTime);
+					seekBar.value = event.time;
+					lblPlayhead.text = timeCode(event.time);
 				}
 			}
 			

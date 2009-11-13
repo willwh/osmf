@@ -32,7 +32,6 @@ package org.osmf.media
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BytesLoadedChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
-	import org.osmf.events.CurrentTimeChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadableStateChangeEvent;
 	import org.osmf.events.MediaError;
@@ -45,7 +44,7 @@ package org.osmf.media
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.events.VolumeChangeEvent;
 	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoadable;
@@ -712,8 +711,8 @@ package org.osmf.media
 				
 				assertTrue(mediaPlayer.currentTimeUpdateInterval == 250);
 
-				mediaPlayer.addEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestCurrentTime);
 				
 				if (enableChangeEvents)
 				{
@@ -730,10 +729,10 @@ package org.osmf.media
 				
 				var currentTimeUpdateCount:int = 0;
 				
-				function onTestCurrentTime(event:TraitEvent):void
+				function onTestCurrentTime(event:TimeEvent):void
 				{
-					mediaPlayer.removeEventListener(CurrentTimeChangeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestCurrentTime);
+					mediaPlayer.removeEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestCurrentTime);
 					
 					assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
 					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
@@ -754,7 +753,7 @@ package org.osmf.media
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 				
-				function onCurrentTimeChange(event:CurrentTimeChangeEvent):void
+				function onCurrentTimeChange(event:TimeEvent):void
 				{
 					currentTimeUpdateCount++;
 				}
@@ -1045,13 +1044,13 @@ package org.osmf.media
 				var states:Array = [];
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestLoop);
+				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestLoop);
 				mediaPlayer.play();
 				
-				function onTestLoop(event:TraitEvent):void
+				function onTestLoop(event:TimeEvent):void
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestLoop);
+					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestLoop);
 					
 					assertTrue(mediaPlayer.playing == true);
 					
@@ -1104,13 +1103,13 @@ package org.osmf.media
 				var states:Array = [];
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestAutoRewind);
+				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
 				mediaPlayer.play();
 				
-				function onTestAutoRewind(event:TraitEvent):void
+				function onTestAutoRewind(event:TimeEvent):void
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-					mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestAutoRewind);
+					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
 					
 					assertTrue(mediaPlayer.playing == false);
 					
@@ -1390,12 +1389,12 @@ package org.osmf.media
 			
 			assertTrue(mediaPlayer.currentTime == 0);
 			
-			mediaPlayer.addEventListener(TraitEvent.DURATION_REACHED, onTestSubclip);
+			mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestSubclip);
 			mediaPlayer.play();
 			
-			function onTestSubclip(event:TraitEvent):void
+			function onTestSubclip(event:TimeEvent):void
 			{
-				mediaPlayer.removeEventListener(TraitEvent.DURATION_REACHED, onTestSubclip);
+				mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestSubclip);
 				
 				assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
 				assertTrue(mediaPlayer.duration == expectedSubclipDuration);

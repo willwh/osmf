@@ -530,7 +530,7 @@ package org.osmf.composition
 			assertTrue(temporal.duration == 60);
 			assertTrue(temporal.currentTime == 55);
 			
-			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
+			temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
 			
 			// We should get a durationReached event when the current child
 			// is the last child, and it reaches its duration.
@@ -918,7 +918,7 @@ package org.osmf.composition
 			serial.addChild(mediaElement4);
 
 			var temporal:ITemporal = serial.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
+			temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
 			
 			// Play the first child.  This should cause the composition to be
 			// playing.
@@ -1248,7 +1248,7 @@ package org.osmf.composition
 		// Internals
 		//
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			durationReachedEventCount++;
 		}

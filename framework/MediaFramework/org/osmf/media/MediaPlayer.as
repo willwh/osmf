@@ -37,16 +37,16 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>duration</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.DurationChangeEvent.DURATION_CHANGE
+	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
 	 */
-	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
+	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	 
 	/**
 	 * Dispatched when the playhead reaches the duration for playable media.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
 	 */	 
-	[Event(name="durationReached", type="org.osmf.events.TraitEvent")]
+	[Event(name="durationReached", type="org.osmf.events.TimeEvent")]
 	 	 
 	 // IAudible
 
@@ -139,9 +139,9 @@ package org.osmf.media
 	 * This value is updated at the interval set by 
 	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
 	 *
-	 * @eventType org.osmf.events.CurrentTimeChangeEvent.CURRENT_TIME_CHANGE
+	 * @eventType org.osmf.events.TimeEvent.CURRENT_TIME_CHANGE
 	 **/
-    [Event(name="currentTimeChange",type="org.osmf.events.CurrentTimeChangeEvent")]  
+    [Event(name="currentTimeChange",type="org.osmf.events.TimeEvent")]  
     
     // ISwitchable
     
@@ -430,7 +430,7 @@ package org.osmf.media
          * A non-positive value disables the dispatch of the change events.</p>
          * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
-		 * @see org.osmf.events.#event:CurrentTimeChangeEvent
+		 * @see org.osmf.events.#event:TimeEvent
          * @see org.osmf.traits.ITemporal
 		 */
 		public function set currentTimeUpdateInterval(value:Number):void
@@ -1016,8 +1016,8 @@ package org.osmf.media
 			switch (trait)
 			{
 				case MediaTraitType.TEMPORAL:									
-					changeListeners(add, _element, trait, DurationChangeEvent.DURATION_CHANGE, [redispatchEvent]);							
-					changeListeners(add, _element, trait, TraitEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
+					changeListeners(add, _element, trait, TimeEvent.DURATION_CHANGE, [redispatchEvent]);							
+					changeListeners(add, _element, trait, TimeEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
 					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
 					{
 						_currentTimeTimer.start();
@@ -1135,7 +1135,7 @@ package org.osmf.media
 			}
 		}
 		
-		// TraitEvent Listeners will redispatch all of the ChangeEvents that correspond to trait 
+		// Event Listeners will redispatch all of the ChangeEvents that correspond to trait 
 		// properties.
 		private function redispatchEvent(event:Event):void
 		{
@@ -1211,7 +1211,7 @@ package org.osmf.media
 			}
 		}
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			if (loop && seekable && playable)
 			{			
@@ -1233,7 +1233,7 @@ package org.osmf.media
 			if (temporal && currentTime != lastCurrentTime)
 			{				
 				lastCurrentTime = currentTime;
-				dispatchEvent(new CurrentTimeChangeEvent(currentTime));
+				dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));
 			}
 		}	
 		

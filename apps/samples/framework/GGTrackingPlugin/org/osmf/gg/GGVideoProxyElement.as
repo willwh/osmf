@@ -200,11 +200,11 @@ package org.osmf.gg
 			{
 				if (added)
 				{
-					temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
+					temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
 				}
 				else
 				{
-					temporal.removeEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
+					temporal.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
 				}
 			}
 		}
@@ -287,7 +287,7 @@ package org.osmf.gg
 			}
 		}
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			sendEvent(STOP, currentTime);
 		}

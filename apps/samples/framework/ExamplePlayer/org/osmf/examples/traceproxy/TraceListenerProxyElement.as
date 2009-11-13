@@ -97,9 +97,9 @@ package org.osmf.examples.traceproxy
 			trace("Duration Reached");
 		}
 
-		override protected function processDurationChange(oldDuration:Number, newDuration:Number):void
+		override protected function processDurationChange(newDuration:Number):void
 		{
-			trace("Duration Change: " + oldDuration + "->" + newDuration);
+			trace("Duration Change: -> " + newDuration);
 		}
 
 		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void

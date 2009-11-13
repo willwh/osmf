@@ -21,23 +21,22 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.DurationChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
 
 	/**
 	 * Dispatched when the duration of the trait changed.
 	 * 
-	 * @eventType org.osmf.events.DurationChangeEvent.DURATION_CHANGE
+	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
 	 */
-	[Event(name="durationChange", type="org.osmf.events.DurationChangeEvent")]
+	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * Dispatched when the currentTime of the trait has changed to a value
 	 * equal to its duration.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
 	 */
-	[Event(name="durationReached",type="org.osmf.events.TraitEvent")]
+	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * The TemporalTrait class provides a base ITemporal implementation. 
@@ -142,9 +141,6 @@ package org.osmf.traits
 		// Internals
 		//
 		
-		private var _duration:Number;
-		private var _currentTime:Number;
-		
 		/**
 		 * Called before the <code>duration</code> property is changed.
 		 *  
@@ -178,7 +174,7 @@ package org.osmf.traits
 		 */		
 		protected function postProcessDurationChange(oldDuration:Number):void
 		{
-			dispatchEvent(new DurationChangeEvent(oldDuration,_duration));
+			dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, _duration));
 		}
 		
 		/**
@@ -220,7 +216,10 @@ package org.osmf.traits
 		 */		
 		protected function processDurationReached():void
 		{
-			dispatchEvent(new TraitEvent(TraitEvent.DURATION_REACHED));
+			dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
 		}
+
+		private var _duration:Number;
+		private var _currentTime:Number;
 	}
 }

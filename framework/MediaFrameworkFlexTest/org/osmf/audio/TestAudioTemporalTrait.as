@@ -26,7 +26,7 @@ package org.osmf.audio
 	import flash.media.SoundMixer;
 	import flash.net.URLRequest;
 	
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.TestITemporal;
 	import org.osmf.utils.TestConstants;
@@ -59,10 +59,10 @@ package org.osmf.audio
 			soundAdapter.soundTransform.volume = 0;
 			soundAdapter.play();
 			
-			temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);			
+			temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);			
 		}
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			// SoundAdapter should clear the channel, and start at 0 when done.
 			assertEquals(temporal.currentTime, 0);			

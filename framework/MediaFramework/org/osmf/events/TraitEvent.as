@@ -30,20 +30,6 @@ package org.osmf.events
 	public class TraitEvent extends Event
 	{
 		/**
-		 * Dispatched when the <code>position</code>
-		 * of a trait that implements the ITemporal interface first matches
-		 * its <code>duration</code>.
-		 * <p>The TraitEvent.DURATION_REACHED constant defines the value
-		 * of the type property of the event object for a durationReached
-		 * event.</p>
-		 * 
-		 * 
-		 * @eventType DURATION_REACHED
-		 * 
-		 */		
-		public static const DURATION_REACHED:String = "durationReached";
-		
-		/**
 		 * The Switching Indices change event is triggered when the indices on a ISwitchable trait change.
 		 * Conditions for change include removal of indices, addition of indices, or bitrate change of a given index.
 		 *  

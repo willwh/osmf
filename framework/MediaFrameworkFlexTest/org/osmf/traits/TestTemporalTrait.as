@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.DurationChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.TimeEvent;
 	
 	public class TestTemporalTrait extends TestITemporal
 	{
@@ -33,7 +32,7 @@ package org.osmf.traits
 		
 		public function testDuration():void
 		{
-			temporal.addEventListener(DurationChangeEvent.DURATION_CHANGE,eventCatcher);
+			temporal.addEventListener(TimeEvent.DURATION_CHANGE,eventCatcher);
 			
 			assertTrue(isNaN(temporal.duration));
 			
@@ -45,17 +44,17 @@ package org.osmf.traits
 			
 			assertTrue(events.length == 2);
 			
-			var dce:DurationChangeEvent;
+			var dce:TimeEvent;
 			
-			dce = events[0] as DurationChangeEvent;
+			dce = events[0] as TimeEvent;
 			assertNotNull(dce);
-			assertTrue(isNaN(dce.oldDuration));
-			assertTrue(dce.newDuration == 10);
+			assertTrue(dce.type == TimeEvent.DURATION_CHANGE);
+			assertTrue(dce.time == 10);
 			
-			dce = events[1] as DurationChangeEvent;
+			dce = events[1] as TimeEvent;
 			assertNotNull(dce);
-			assertTrue(dce.oldDuration == 10);
-			assertTrue(dce.newDuration == 20); 
+			assertTrue(dce.type == TimeEvent.DURATION_CHANGE);
+			assertTrue(dce.time == 20); 
 		}
 		
 		public function testCurrentTime():void 
@@ -79,14 +78,14 @@ package org.osmf.traits
 				// Setting the currentTime to the duration should cause the
 				// durationReached event to fire.
 				
-				temporal.addEventListener(TraitEvent.DURATION_REACHED, eventCatcher);
+				temporal.addEventListener(TimeEvent.DURATION_REACHED, eventCatcher);
 				
 				temporalTraitBase.duration = 20;
 				temporalTraitBase.currentTime = 20;
 				
-				var dre:TraitEvent;
-				dre = events[0] as TraitEvent;
-				assertNotNull(dre && dre.type == TraitEvent.DURATION_REACHED);
+				var dre:TimeEvent;
+				dre = events[0] as TimeEvent;
+				assertNotNull(dre && dre.type == TimeEvent.DURATION_REACHED);
 			}
 		}
 		

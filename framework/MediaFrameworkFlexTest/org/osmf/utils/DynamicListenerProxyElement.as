@@ -104,9 +104,9 @@ package org.osmf.utils
 			changeEventQueue.push({"durationReached":true});
 		}
 
-		override protected function processDurationChange(oldDuration:Number, newDuration:Number):void
+		override protected function processDurationChange(newDuration:Number):void
 		{
-			changeEventQueue.push({"oldDuration":oldDuration, "newDuration":newDuration});
+			changeEventQueue.push({"newDuration":newDuration});
 		}
 
 		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void

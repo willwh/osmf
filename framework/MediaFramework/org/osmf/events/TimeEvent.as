@@ -24,56 +24,69 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A MediaPlayer dispatches this event
-	 * when its <code>currentTime</code> property has changed.
-	 * This value is updated at the interval set by 
-	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
-	 * @see org.osmf.players.MediaPlayer#currentTime
+	 * A TimeEvent is dispatched when properties of an ITemporal trait have changed.
 	 */	     
-	public class CurrentTimeChangeEvent extends TraitEvent
+	public class TimeEvent extends Event
 	{       	
 		/**
-		 * The CurrentTimeChangeEvent.CURRENT_TIME_CHANGE constant defines the value of the
+		 * The TimeEvent.CURRENT_TIME_CHANGE constant defines the value of the
 		 * type property of the event object for a currentTimeChange event. 
 		 */	
 		public static const CURRENT_TIME_CHANGE:String = "currentTimeChange";
-			
+		
+		/**
+		 * The TimeEvent.DURATION_CHANGE constant defines the value
+		 * of the type property of the event object for a durationChange
+		 * event.
+		 */		
+		public static const DURATION_CHANGE:String = "durationChange";
+
+		/**
+		 * The TimeEvent.DURATION_REACHED constant defines the value
+		 * of the type property of the event object for a durationReached
+		 * event.
+		 */		
+		public static const DURATION_REACHED:String = "durationReached";
+
 		/**
 		 * Constructor
 		 * 
 		 * 
-		 * @param newCurrentTime New currentTime value.
+		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
- 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+ 		 * @param time The new time for the event.  The property to which this value applies depends
+ 		 * on the event type constant. 
 		 */		
-		public function CurrentTimeChangeEvent(newCurrentTime:Number, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function TimeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, time:Number=NaN)
 		{			
-			_newCurrentTime = newCurrentTime;
+			super(type, bubbles, cancelable);
 			
-			super(CURRENT_TIME_CHANGE, bubbles, cancelable);
+			_time = time;
 		}
 			
 		/**
-		 * New value of <code>currentTime</code> resulting from this change. 
+		 * New time value resulting from this change.  For currentTimeChange events, this
+		 * corresponds to the currentTime property.  For durationChange events, this corresponds
+		 * to the duration property.  For durationReached events, this is unused.
 		 */		
-		public function get newCurrentTime():Number
+		public function get time():Number
 		{
-			return _newCurrentTime;
+			return _time;
 		}
 					
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new CurrentTimeChangeEvent(_newCurrentTime, bubbles, cancelable);
+			return new TimeEvent(type, bubbles, cancelable, time);
 		}
 			
 		// Internals
 		//
 				
-		private var _newCurrentTime:Number;		    
+		private var _time:Number;		    
 	}
 }
 		
