@@ -30,7 +30,7 @@ package org.osmf.events
 	public class MediaPlayerStateChangeEvent extends Event
 	{
 		/**
-		 * The MediaPlayerChangeEvent.MEDIA_PLAYER_STATE_CHANGE constant defines the value
+		 * The MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE constant defines the value
 		 * of the type property of the event object for a mediaPlayerStateChange
 		 * event.
 		 * 
@@ -38,40 +38,37 @@ package org.osmf.events
 		 **/		
 		public static const MEDIA_PLAYER_STATE_CHANGE:String = "mediaPlayerStateChange";
 
-        /**
-         *  Constructor.
-         * 
-         * 	@param newState New edia player state.
-         * 	@param oldState	Previous media player state.
-        **/          
-        public function MediaPlayerStateChangeEvent(newState:String, oldState:String)
+ 		/**
+		 * Constructor.
+		 * 
+		 * @param type Event type.
+ 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param state New MediaPlayerState of the MediaPlayer.
+		 **/
+        public function MediaPlayerStateChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, state:String=null)
         {
-        	super(MEDIA_PLAYER_STATE_CHANGE);
+        	super(type, bubbles, cancelable);
         	
-            _newState = newState;
-            _oldState = oldState;
+            _state = state;
         }
+        
 		/**
-		 * New MediaPlayerState resulting from this change.
+		 * New MediaPlayerState of the MediaPlayer.
 		 */		
-        public function get newState():String
+        public function get state():String
         {
-        	return _newState;
+        	return _state;
         }
-		/**
-		 * Old MediaPlayerState before it was changed.
-		*/		           
-        public function get oldState():String
-        {
-        	return _oldState;
-        }
-           
+        
+        /**
+         * @private
+         **/
         override public function clone():Event
         {
-        	return new MediaPlayerStateChangeEvent(_newState, _oldState);
+        	return new MediaPlayerStateChangeEvent(type, bubbles, cancelable, _state);
         }
 
-		private var _newState:String;
-		private var _oldState:String;
+		private var _state:String;
 	}
 }

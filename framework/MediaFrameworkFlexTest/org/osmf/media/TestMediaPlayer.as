@@ -1066,10 +1066,10 @@ package org.osmf.media
 				{
 					// Ignore any buffering state changes, they can happen
 					// intermittently.
-					if (event.newState != MediaPlayerState.BUFFERING &&
-						event.oldState != MediaPlayerState.BUFFERING)
+					if (event.state != MediaPlayerState.BUFFERING &&
+						!(states.length > 0 && event.state == states[states.length-1]))
 					{
-						states.push(event.newState);
+						states.push(event.state);
 					}
 				}
 			}
@@ -1126,10 +1126,10 @@ package org.osmf.media
 				{
 					// Ignore any buffering state changes, they can happen
 					// intermittently.
-					if (event.newState != MediaPlayerState.BUFFERING &&
-						event.oldState != MediaPlayerState.BUFFERING)
+					if (event.state != MediaPlayerState.BUFFERING &&
+						!(states.length > 0 && event.state == states[states.length-1]))
 					{
-						states.push(event.newState);
+						states.push(event.state);
 					}
 				}
 			}
@@ -1159,15 +1159,15 @@ package org.osmf.media
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.newState == MediaPlayerState.LOADING);
+						assertTrue(event.state == MediaPlayerState.LOADING);
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.newState == MediaPlayerState.READY);
+						assertTrue(event.state == MediaPlayerState.READY);
 					}
 					else if (eventCount == 3)
 					{
-						assertTrue(event.newState == MediaPlayerState.PLAYING);
+						assertTrue(event.state == MediaPlayerState.PLAYING);
 						
 						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 						

@@ -130,7 +130,7 @@ package org.osmf.media
 	/**
 	 * Dispatched when the MediaPlayer's state has changed.
 	 * 
-	 * @eventType org.osmf.events.PlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE
 	 */	
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
 
@@ -1278,11 +1278,17 @@ package org.osmf.media
 		
 		private function setState(newState:String):void
 		{
-			var oldState:String = _state;
-			if (oldState != newState)
+			if (_state != newState)
 			{
 				_state = newState;
-				dispatchEvent(new MediaPlayerStateChangeEvent(newState, oldState));
+				dispatchEvent
+					( new MediaPlayerStateChangeEvent
+						( MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE
+						, false
+						, false
+						, _state
+						)
+					);
 			}
 		}
 		
