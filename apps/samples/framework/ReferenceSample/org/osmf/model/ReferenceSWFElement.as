@@ -60,9 +60,9 @@ package org.osmf.model
 			reference = target;
 		}
 		
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
-			super.processLoadedState();
+			super.processReadyState();
 			
 			if (swfRoot != null)
 			{

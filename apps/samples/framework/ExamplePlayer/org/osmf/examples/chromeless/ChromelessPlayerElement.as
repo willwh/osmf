@@ -42,9 +42,9 @@ package org.osmf.examples.chromeless
 			super(loader, resource);		
 		}
 		
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
-			super.processLoadedState();
+			super.processReadyState();
 			
 			// Flex SWFs load differently from pure AS3 SWFs.  For the former,
 			// we need to wait until the applicationComplete event is
@@ -53,15 +53,15 @@ package org.osmf.examples.chromeless
 				&&	Object(swfRoot).application == null
 				)
 			{
-				swfRoot.addEventListener("applicationComplete", finishProcessLoadedState, false, 0, true);
+				swfRoot.addEventListener("applicationComplete", finishProcessReadyState, false, 0, true);
 			}
 			else
 			{
-				finishProcessLoadedState();
+				finishProcessReadyState();
 			}
 		}
 		
-		private function finishProcessLoadedState(event:Event=null):void
+		private function finishProcessReadyState(event:Event=null):void
 		{
 			// Flex SWFs expose their API through the root "application"
 			// property, whereas pure AS3 SWFs expose their API directly.
