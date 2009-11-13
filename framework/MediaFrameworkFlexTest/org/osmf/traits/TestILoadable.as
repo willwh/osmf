@@ -61,7 +61,7 @@ package org.osmf.traits
 		{
 			var loadable:ILoadable = createILoadable();
 			
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
 		}
 
 		public function testGetLoadedContext():void
@@ -88,30 +88,28 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(validResource);
 			
-			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestLoad);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE,onTestLoad);
 			loadable.load();
 		}
 		
 		private function onTestLoad(event:LoadEvent):void
 		{
-			assertTrue(event.loadable == currentLoadable);
-			assertTrue(event.target is ILoadable);
+			var loadable:ILoadable = event.target as ILoadable;
+			assertTrue(loadable != null);
 			
 			var reload:Boolean = false;
 			
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
-					assertTrue(event.newState == LoadState.LOADING);
+					assertTrue(event.loadState == LoadState.LOADING);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(loadable.loadedContext == null);
 					break;
 				case 1:
-					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOADED);
+					assertTrue(event.loadState == LoadState.READY);
 					
-					assertTrue(event.loadable.loadedContext != null);
+					assertTrue(loadable.loadedContext != null);
 					
 					if (doTwice)
 					{
@@ -125,18 +123,16 @@ package org.osmf.traits
 				case 2:
 					assertTrue(doTwice);
 					
-					assertTrue(event.oldState == LoadState.LOADED);
-					assertTrue(event.newState == LoadState.LOADING);
+					assertTrue(event.loadState == LoadState.LOADING);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(loadable.loadedContext == null);
 					break;
 				case 3:
 					assertTrue(doTwice);
 					
-					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOADED);
+					assertTrue(event.loadState == LoadState.READY);
 					
-					assertTrue(event.loadable.loadedContext != null);
+					assertTrue(loadable.loadedContext != null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;
@@ -149,7 +145,7 @@ package org.osmf.traits
 			if (reload)
 			{
 				// Calling load a second time should repeat the process.
-				event.loadable.load();
+				loadable.load();
 			}
 		}
 		
@@ -170,30 +166,27 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(invalidResource);
 			
-			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestLoadWithFailure);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE,onTestLoadWithFailure);
 			loadable.load();
 		}
 				
 		private function onTestLoadWithFailure(event:LoadEvent):void
 		{
-			assertTrue(event.loadable == currentLoadable);
-			assertTrue(event.target is ILoadable);
+			assertTrue(event.target == currentLoadable);
 			
 			var reload:Boolean = false;
 			
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
-					assertTrue(event.newState == LoadState.LOADING);
+					assertTrue(event.loadState == LoadState.LOADING);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					break;
 				case 1:
-					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_FAILED);
+					assertTrue(event.loadState == LoadState.LOAD_ERROR);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					
 					if (eventCount == 1 && doTwice)
 					{
@@ -207,18 +200,16 @@ package org.osmf.traits
 				case 2:
 					assertTrue(doTwice);
 					
-					assertTrue(event.oldState == LoadState.LOAD_FAILED);
-					assertTrue(event.newState == LoadState.LOADING);
+					assertTrue(event.loadState == LoadState.LOADING);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					break;
 				case 3:
 					assertTrue(doTwice);
 					
-					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_FAILED);
+					assertTrue(event.loadState == LoadState.LOAD_ERROR);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;
@@ -231,7 +222,7 @@ package org.osmf.traits
 			if (reload)
 			{
 				// Reloading should repeat the failure.
-				event.loadable.load();
+				currentLoadable.load();
 			}
 		}
 		
@@ -267,46 +258,41 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(validResource);
 			
-			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestUnload);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE,onTestUnload);
 			loadable.load();
 		}
 		
 		private function onTestUnload(event:LoadEvent):void
 		{
-			assertTrue(event.loadable == currentLoadable);
-			assertTrue(event.target is ILoadable);
+			assertTrue(event.target == currentLoadable);
 			
 			var doUnload:Boolean = false;
 			
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
-					assertTrue(event.newState == LoadState.LOADING);
+					assertTrue(event.loadState == LoadState.LOADING);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					break;
 				case 1:
-					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOADED);
+					assertTrue(event.loadState == LoadState.READY);
 					
-					assertTrue(event.loadable.loadedContext != null);
+					assertTrue(currentLoadable.loadedContext != null);
 					
 					// Now unload.
 					doUnload = true;
 					
 					break;
 				case 2:
-					assertTrue(event.oldState == LoadState.LOADED);
-					assertTrue(event.newState == LoadState.UNLOADING);
+					assertTrue(event.loadState == LoadState.UNLOADING);
 					
-					assertTrue(event.loadable.loadedContext != null);
+					assertTrue(currentLoadable.loadedContext != null);
 					break;
 				case 3:
-					assertTrue(event.oldState == LoadState.UNLOADING);
-					assertTrue(event.newState == LoadState.CONSTRUCTED);
+					assertTrue(event.loadState == LoadState.UNINITIALIZED);
 					
-					assertTrue(event.loadable.loadedContext == null);
+					assertTrue(currentLoadable.loadedContext == null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;
@@ -319,12 +305,12 @@ package org.osmf.traits
 			
 			if (doUnload)
 			{
-				event.loadable.unload();
+				currentLoadable.unload();
 				
 				if (doTwice)
 				{
 					// Unloading a second time should have no effect.
-					event.loadable.unload();
+					currentLoadable.unload();
 				}
 			}
 		}
