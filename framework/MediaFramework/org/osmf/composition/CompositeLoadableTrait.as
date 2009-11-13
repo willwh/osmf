@@ -73,12 +73,12 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 **/
-		public function get loadState():LoadState
+		public function get loadState():String
 		{
 			return _loadState;
 		}
 		
-		public function set loadState(value:LoadState):void
+		public function set loadState(value:String):void
 		{
 			// No op -- setting the loadState doesn't apply to a composite
 			// trait.
@@ -98,7 +98,7 @@ package org.osmf.composition
 					  {
 					     var loadable:ILoadable = ILoadable(mediaTrait);
 					     if (loadable.loadState != LoadState.LOADING &&
-					     	 loadable.loadState != LoadState.LOADED)
+					     	 loadable.loadState != LoadState.READY)
 					     {
 					     	loadable.load();
 					     }
@@ -112,7 +112,7 @@ package org.osmf.composition
 				var currentLoadable:ILoadable = traitOfCurrentChild;
 				if (currentLoadable != null &&
 					currentLoadable.loadState != LoadState.LOADING &&
-				    currentLoadable.loadState != LoadState.LOADED)
+				    currentLoadable.loadState != LoadState.READY)
 				{
 					currentLoadable.load();
 				}
@@ -133,7 +133,7 @@ package org.osmf.composition
 					  {
 					     var loadable:ILoadable = ILoadable(mediaTrait);
 					     if (loadable.loadState == LoadState.LOADING ||
-					     	 loadable.loadState == LoadState.LOADED)
+					     	 loadable.loadState == LoadState.READY)
 					     {
 					     	loadable.unload();
 					     }
@@ -147,7 +147,7 @@ package org.osmf.composition
 				var currentLoadable:ILoadable = traitOfCurrentChild;
 				if (currentLoadable != null &&
 					currentLoadable.loadState == LoadState.LOADING ||
-					currentLoadable.loadState == LoadState.LOADED)
+					currentLoadable.loadState == LoadState.READY)
 				{
 					currentLoadable.unload();
 				}
@@ -175,7 +175,7 @@ package org.osmf.composition
 		 **/
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{
-			child.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChanged, false, 0, true);
+			child.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChanged, false, 0, true);
 			
 			if (mode == CompositionMode.PARALLEL)
 			{
@@ -205,13 +205,13 @@ package org.osmf.composition
 		 **/
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{
-			child.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChanged);
+			child.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChanged);
 		}
 		
 		// Internals
 		//
 		
-		private function onLoadableStateChanged(event:LoadableStateChangeEvent):void
+		private function onLoadStateChanged(event:LoadableStateChangeEvent):void
 		{
 			// For parallel compositions and for the current child in a serial
 			// composition, changes from the child propagate to the composite
@@ -219,25 +219,25 @@ package org.osmf.composition
 			if (mode == CompositionMode.PARALLEL ||
 				event.target == traitOfCurrentChild)
 			{
-				syncToLoadState(event.newState);
+				syncToLoadState(event.loadState);
 			}
 		}
 		
-		private function syncToLoadState(newState:LoadState):void
+		private function syncToLoadState(newLoadState:String):void
 		{
-			// If the state to apply is LOADED or LOADING, then we load the
+			// If the state to apply is READY or LOADING, then we load the
 			// composition as a whole.  The already-loaded parts will be
 			// ignored.
-			if (newState == LoadState.LOADING ||
-				newState == LoadState.LOADED)
+			if (newLoadState == LoadState.LOADING ||
+				newLoadState == LoadState.READY)
 			{
 				load();
 			}
-			// If the state to apply is CONSTRUCTED or UNLOADING, then we
+			// If the state to apply is UNINITIALIZED or UNLOADING, then we
 			// unload the composition as a whole.  The already-unloaded parts
 			// will be ignored.
-			else if (newState == LoadState.CONSTRUCTED ||
-					 newState == LoadState.UNLOADING)
+			else if (newLoadState == LoadState.UNINITIALIZED ||
+					 newLoadState == LoadState.UNLOADING)
 			{
 				unload();
 			}
@@ -247,7 +247,7 @@ package org.osmf.composition
 
 		private function updateLoadState():void
 		{
-			var newState:LoadState;
+			var newLoadState:String;
 			
 			if (mode == CompositionMode.PARALLEL)
 			{
@@ -271,45 +271,44 @@ package org.osmf.composition
 					);
 				
 				// Convert the integer back to the composite state.
-				newState = 
+				newLoadState = 
 					   getLoadStateForInteger(loadStateInt)
-					|| LoadState.CONSTRUCTED;
+					|| LoadState.UNINITIALIZED;
 			}
 			else // SERIAL
 			{
 				var currentLoadable:ILoadable = traitOfCurrentChild;
-				newState = currentLoadable
-						 ? currentLoadable.loadState
-						 : LoadState.CONSTRUCTED;
+				newLoadState = currentLoadable
+						 	 ? currentLoadable.loadState
+						 	 : LoadState.UNINITIALIZED;
 			}
 			
 			// Ensure that the composition's load state is consistent with
 			// the new value.
-			if (_loadState != newState)
+			if (_loadState != newLoadState)
 			{
-				var oldState:LoadState = _loadState;
-				_loadState = newState;
+				_loadState = newLoadState;
 				
-				dispatchEvent(new LoadableStateChangeEvent(oldState, _loadState));
+				dispatchEvent(new LoadableStateChangeEvent(LoadableStateChangeEvent.LOAD_STATE_CHANGE, false, false, _loadState));
 			}
 		}
 		
-		private function getIntegerForLoadState(loadState:LoadState):int
+		private function getIntegerForLoadState(loadState:String):int
 		{
-			if (loadState == LoadState.CONSTRUCTED) 	return CONSTRUCTED_INT;
+			if (loadState == LoadState.UNINITIALIZED) 	return UNINITIALIZED_INT;
 			if (loadState == LoadState.LOADING)  		return LOADING_INT;
 			if (loadState == LoadState.UNLOADING)   	return UNLOADING_INT;
-			if (loadState == LoadState.LOADED)		 	return LOADED_INT;
-			/*  loadState == LoadState.LOAD_FAILED*/ 	return LOAD_FAILED_INT;
+			if (loadState == LoadState.READY)		 	return READY_INT;
+			/*  loadState == LoadState.LOAD_ERROR*/ 	return LOAD_ERROR_INT;
 		}
 		
-		private function getLoadStateForInteger(i:int):LoadState
+		private function getLoadStateForInteger(i:int):String
 		{
-			if (i == CONSTRUCTED_INT) return LoadState.CONSTRUCTED;
+			if (i == UNINITIALIZED_INT) return LoadState.UNINITIALIZED;
 			if (i == LOADING_INT)	  return LoadState.LOADING;
 			if (i == UNLOADING_INT)	  return LoadState.UNLOADING;
-			if (i == LOADED_INT)	  return LoadState.LOADED;
-			if (i == LOAD_FAILED_INT) return LoadState.LOAD_FAILED;
+			if (i == READY_INT)	  return LoadState.READY;
+			if (i == LOAD_ERROR_INT) return LoadState.LOAD_ERROR;
 			/* i out of range */	  return null;
 		}
 		
@@ -321,16 +320,16 @@ package org.osmf.composition
 		}
 		
 		// Ordered such that the lowest one takes precedence.  For example,
-		// if we have two child traits with states LOAD_FAILED and CONSTRUCTED,
-		// then the composite trait has state LOAD_FAILED.
-		private static const LOAD_FAILED_INT:int 	= 0;
+		// if we have two child traits with states LOAD_ERROR and UNINITIALIZED,
+		// then the composite trait has state LOAD_ERROR.
+		private static const LOAD_ERROR_INT:int 	= 0;
 		private static const UNLOADING_INT:int 		= 1;
 		private static const LOADING_INT:int 		= 2;
-		private static const CONSTRUCTED_INT:int 	= 3;
-		private static const LOADED_INT:int 		= 4;
+		private static const UNINITIALIZED_INT:int 	= 3;
+		private static const READY_INT:int 			= 4;
 
 		private var mode:CompositionMode;
-		private var _loadState:LoadState = LoadState.CONSTRUCTED;
+		private var _loadState:String = LoadState.UNINITIALIZED;
 		private var _loadedContext:ILoadedContext;
 	}
 }

@@ -79,14 +79,14 @@ package org.osmf.swf
 			switch (eventCount)
 			{
 				case 1:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
 					
 					assertNotNull(event.loadedContext);
 					break;
 				case 2:
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_FAILED);
+					assertTrue(event.newState == LoadState.LOAD_ERROR);
 					
 					assertTrue(event.loadedContext == null);
 					

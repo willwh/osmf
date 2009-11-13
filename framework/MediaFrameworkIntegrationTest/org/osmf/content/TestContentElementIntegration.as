@@ -80,17 +80,17 @@ package org.osmf.content
 			
 			eventDispatcher.addEventListener(Event.COMPLETE, addAsync(mustReceiveEvent, 10000));
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadable.load();
 			
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
 				var downloadable:IDownloadable;
 				
 				count++;
 				if (count == 1)
 				{
-					assertEquals(LoadState.LOADING, event.newState);
+					assertEquals(LoadState.LOADING, event.loadState);
 					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
 					assertEquals(NaN, downloadable.bytesLoaded);
@@ -100,7 +100,7 @@ package org.osmf.content
 				}
 				else if (count == 2)
 				{
-					assertEquals(LoadState.LOADED, event.newState);
+					assertEquals(LoadState.READY, event.loadState);
 					downloadable = element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
 					assertNotNull(downloadable);
 					assertEquals(expectedBytesTotal, downloadable.bytesLoaded);

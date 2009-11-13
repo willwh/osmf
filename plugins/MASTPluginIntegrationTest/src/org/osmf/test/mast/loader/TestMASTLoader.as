@@ -70,7 +70,7 @@ package org.osmf.test.mast.loader
 		
 		private function onTestLoadWithValidMASTDocument(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.newState == LoadState.READY)
 			{
 				var loadedContext:MASTLoadedContext = event.loadedContext as MASTLoadedContext;
 				assertTrue(loadedContext != null);

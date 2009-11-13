@@ -120,16 +120,16 @@ package org.osmf.video
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestGetMetadata
 					);
 			loadable.load();
 			
 			function onTestGetMetadata(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestGetMetadata);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
 					
 					// We should now have a spatial trait with video's default dimensions:
 					var spatial:ISpatial = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;

@@ -363,7 +363,7 @@ package org.osmf.composition
 											new URLResource(new URL("http://www.example.com/loadable")));
 				var loadable:ILoadable = childElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 				loadable.load();
-				assertTrue(loadable.loadState == LoadState.LOADED);
+				assertTrue(loadable.loadState == LoadState.READY);
 	
 				// Add the child.  This should cause its properties to
 				// propagate to the composition.

@@ -100,7 +100,7 @@ package org.osmf.media
 		// Private
 		//
 		
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
 			// The asymmetry between LOADED and UNLOADING (versus UNLOADED) is
 			// motivated by the fact that once a media is already unloaded, one
@@ -108,15 +108,15 @@ package org.osmf.media
 			// actual unload being effectuated allows listeners to still act on
 			// the media that is about to be unloaded.
 			
-			if (event.newState == LoadState.LOADING)
+			if (event.loadState == LoadState.LOADING)
 			{
 				processLoadingState();
 			}
-			else if (event.newState == LoadState.LOADED)
+			else if (event.loadState == LoadState.READY)
 			{
 				processLoadedState();
 			}
-			else if (event.newState == LoadState.UNLOADING)
+			else if (event.loadState == LoadState.UNLOADING)
 			{
 				processUnloadingState();
 			}
@@ -129,11 +129,11 @@ package org.osmf.media
 			{
 				// Remove (and unload) any existing loadable.
 				loadable.removeEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-					, onLoadableStateChange
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					, onLoadStateChange
 					);
 					
-				if (loadable.loadState == LoadState.LOADED)
+				if (loadable.loadState == LoadState.READY)
 				{	    			   
 					loadable.unload();	 
 				}
@@ -144,8 +144,8 @@ package org.osmf.media
 			// Add a new loadable for the current resource.
 			loadable = new LoadableTrait(loader, resource);
 			loadable.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
+				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				, onLoadStateChange
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadable);

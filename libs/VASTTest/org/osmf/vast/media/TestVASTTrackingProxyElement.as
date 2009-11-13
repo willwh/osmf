@@ -66,7 +66,7 @@ package org.osmf.vast.media
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadable.loadState == LoadState.READY)
 				{
 					eventCount++;
 					
@@ -136,7 +136,7 @@ package org.osmf.vast.media
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadable.loadState == LoadState.READY)
 				{
 					eventCount++;
 					
@@ -190,7 +190,7 @@ package org.osmf.vast.media
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadable.loadState == LoadState.READY)
 				{
 					eventCount++;
 					

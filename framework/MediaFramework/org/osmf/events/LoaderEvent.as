@@ -58,8 +58,8 @@ package org.osmf.events
 		public function LoaderEvent
 							( loader:ILoader,
 							  loadable:ILoadable,
-							  oldState:LoadState,
-							  newState:LoadState,
+							  oldState:String,
+							  newState:String,
 							  loadedContext:ILoadedContext,
 							  bubbles:Boolean=false,
 							  cancelable:Boolean=false
@@ -102,7 +102,7 @@ package org.osmf.events
 		/**
 		 * The previous state of the loadable.
 		 **/
-		public function get oldState():LoadState
+		public function get oldState():String
 		{
 			return _oldState;
 		}
@@ -110,7 +110,7 @@ package org.osmf.events
 		/**
 		 * The new state of the loadable.
 		 **/
-		public function get newState():LoadState
+		public function get newState():String
 		{
 			return _newState;
 		}
@@ -128,8 +128,8 @@ package org.osmf.events
 		
 		private var _loader:ILoader;
 		private var _loadable:ILoadable;
-		private var _oldState:LoadState;
-		private var _newState:LoadState;
+		private var _oldState:String;
+		private var _newState:String;
 		private var _loadedContext:ILoadedContext;
 	}
 }

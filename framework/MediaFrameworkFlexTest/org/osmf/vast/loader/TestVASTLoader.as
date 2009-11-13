@@ -82,7 +82,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithValidVASTDocument(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.newState == LoadState.READY)
 			{
 				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
 				assertTrue(loadedContext != null);
@@ -109,7 +109,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithDefaultMaxNumWrapperRedirects(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.newState == LoadState.READY)
 			{
 				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
 				assertTrue(loadedContext != null);
@@ -289,7 +289,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithZeroMaxNumWrapperRedirects(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.newState == LoadState.READY)
 			{
 				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
 				assertTrue(loadedContext != null);
@@ -322,7 +322,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithInvalidXMLVASTDocument(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOAD_FAILED)
+			if (event.newState == LoadState.LOAD_ERROR)
 			{
 				assertTrue(event.loadedContext == null);
 				
@@ -340,7 +340,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithInvalidVASTDocument(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOAD_FAILED)
+			if (event.newState == LoadState.LOAD_ERROR)
 			{
 				assertTrue(event.loadedContext == null);
 				
@@ -358,7 +358,7 @@ package org.osmf.vast.loader
 		
 		private function onTestLoadWithInvalidWrapperRedirect(event:LoaderEvent):void
 		{
-			if (event.newState == LoadState.LOAD_FAILED)
+			if (event.newState == LoadState.LOAD_ERROR)
 			{
 				assertTrue(event.loadedContext == null);
 				

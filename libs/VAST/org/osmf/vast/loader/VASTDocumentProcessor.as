@@ -208,17 +208,17 @@ package org.osmf.vast.loader
 					);
 					
 			var wrapperLoadable:LoadableTrait = new LoadableTrait(wrapperLoader, wrapperResource);
-			wrapperLoadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onWrapperLoadableStateChange);
+			wrapperLoadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 			wrapperLoadable.load();
 			
-			function onWrapperLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onWrapperLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onWrapperLoadableStateChange);
+					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 					
 					// Merge the wrapper's ad with the original ad.
- 					var wrapperLoadedContext:VASTLoadedContext = event.loadable.loadedContext as VASTLoadedContext;
+ 					var wrapperLoadedContext:VASTLoadedContext = wrapperLoadable.loadedContext as VASTLoadedContext;
 					var success:Boolean = mergeAds(ad, wrapperLoadedContext.vastDocument);
 						
 					CONFIG::LOGGING
@@ -230,9 +230,9 @@ package org.osmf.vast.loader
 
 					completionCallback(success);
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
-					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onWrapperLoadableStateChange);
+					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 
 					CONFIG::LOGGING
 					{

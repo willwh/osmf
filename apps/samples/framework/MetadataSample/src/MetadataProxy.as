@@ -19,12 +19,12 @@ package
 		{
 			super(video);
 			videoElement = video;	
-			(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);				
+			(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);				
 		}
 		
 		private function onLoaded(event:LoadableStateChangeEvent):void
 		{
-			if(event.newState == LoadState.LOADED)
+			if (event.loadState == LoadState.READY)
 			{
 				videoElement.client.addHandler(NetStreamCodes.ON_META_DATA, onMetadata);
 			}

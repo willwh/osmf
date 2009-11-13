@@ -100,7 +100,7 @@ package org.osmf.mast.loader
 			
 			function onHTTPLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.newState == LoadState.READY)
 				{
 					// This is a terminal state, so remove all listeners.
 					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
@@ -117,14 +117,14 @@ package org.osmf.mast.loader
 					}
 					catch(e:Error)
 					{
-						updateLoadable(loadable, LoadState.LOAD_FAILED);
+						updateLoadable(loadable, LoadState.LOAD_ERROR);
 						throw e;
 					}
 					
-					updateLoadable(loadable, LoadState.LOADED, new MASTLoadedContext(mastDocument));
+					updateLoadable(loadable, LoadState.READY, new MASTLoadedContext(mastDocument));
 					
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.newState == LoadState.LOAD_ERROR)
 				{
 					// This is a terminal state, so remove the listener.  But
 					// don't remove the error event listener, as that will be
@@ -161,7 +161,7 @@ package org.osmf.mast.loader
 
 			// Nothing to do.
 			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}		
 
 		private var httpLoader:HTTPLoader;		

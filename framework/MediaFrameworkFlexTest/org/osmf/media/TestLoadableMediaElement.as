@@ -81,23 +81,23 @@ package org.osmf.media
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestSetResourceUnloadsPreviousLoadable
 					);
 			loadable.load();
 			
 			function onTestSetResourceUnloadsPreviousLoadable(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
 					// If we set a new resource on the MediaElement, that
 					// should result in the ILoadable (which corresponds to
 					// the previous resource) being unloaded.
 					mediaElement.resource = resourceForMediaElement;
 				}
-				else if (event.newState == LoadState.CONSTRUCTED)
+				else if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadable);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadable);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}

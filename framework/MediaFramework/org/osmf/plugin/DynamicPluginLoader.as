@@ -76,7 +76,7 @@ package org.osmf.plugin
 			
 			function onSWFLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.newState == LoadState.READY)
 				{
 					// This is a terminal state, so remove all listeners.
 					swfLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onSWFLoaderStateChange);
@@ -88,7 +88,7 @@ package org.osmf.plugin
 	
 					loadFromPluginInfo(loadable, pluginInfo, loadedContext.loader);
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.newState == LoadState.LOAD_ERROR)
 				{
 					// This is a terminal state, so remove the listener.  But
 					// don't remove the error event listener, as that will be
@@ -140,18 +140,18 @@ package org.osmf.plugin
 			// ILoadable doesn't reflect any of the state changes from the
 			// unloading of the SWF.
 			var swfLoadable:LoadableTrait = new LoadableTrait(swfLoader, loadable.resource);
-			swfLoadable.loadState = LoadState.LOADED;
+			swfLoadable.loadState = LoadState.READY;
 			swfLoadable.loadedContext = new ContentLoadedContext(pluginLoadedContext.loader);
 			
 			swfLoader.unload(swfLoadable);
 			
 			function onSWFLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.CONSTRUCTED)
+				if (event.newState == LoadState.UNINITIALIZED)
 				{
 					swfLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onSWFLoaderStateChange);
 					
-					updateLoadable(loadable, LoadState.CONSTRUCTED);
+					updateLoadable(loadable, LoadState.UNINITIALIZED);
 				}
 			}
 		}

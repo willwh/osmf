@@ -54,13 +54,13 @@ package org.osmf.utils
 		
 		public static const MUST_SET_ILOADER_FOR_LOAD:String 			= "Must set ILoader on an ILoadable before calling ILoader.load";
 		public static const MUST_SET_ILOADER_FOR_UNLOAD:String 			= "Must set ILoader on an ILoadable before calling ILoader.unload";
-		public static const ILOADER_CANT_HANDLER_RESOURCE:String 		= "ILoader unable to handle the given IMediaResource";
+		public static const ILOADER_CANT_HANDLE_RESOURCE:String 		= "ILoader unable to handle the given IMediaResource";
 		public static const LOADED_CONTEXT_NULL:String 					= "LoadedContext is null for LoadState.LOADED";
 		public static const LOADED_CONTEXT_NOT_NULL:String 				= "LoadedContext is non-null for LoadState.CONSTRUCTED";
 		
 		// LoaderBase
 		
-		public static const ALREADY_LOADED:String 						= "Loader - attempt to load an already loaded object";
+		public static const ALREADY_READY:String 						= "Loader - attempt to load an already loaded object";
 		public static const ALREADY_LOADING:String 						= "Loader - attempt to load a loading object";
 		public static const ALREADY_UNLOADED:String 					= "Loader - attempt to unload an already unloaded object";
 		public static const ALREADY_UNLOADING:String 					= "Loader - attempt to unload a unloading object";

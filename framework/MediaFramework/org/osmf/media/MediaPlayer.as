@@ -323,7 +323,7 @@ package org.osmf.media
 					if (loadable)
 					{	 
 						var loadableTrait:ILoadable = _element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-						if (loadableTrait.loadState == LoadState.LOADED) // Do a courtesy unload
+						if (loadableTrait.loadState == LoadState.READY) // Do a courtesy unload
 						{							
 							loadableTrait.unload();
 						}
@@ -349,11 +349,10 @@ package org.osmf.media
 					_element.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
 
 					// If the media is not LOADABLE, then the MediaPlayer's state
-					// should represent the media as already loaded (i.e. so that
-					// it's ready to go).
+					// should represent the media as already ready.
 					if (_element.hasTrait(MediaTraitType.LOADABLE) == false)
 					{
-						processLoadedState();
+						processReadyState();
 					}
 
 					for each (traitType  in _element.traitTypes)
@@ -1072,12 +1071,12 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	
 				case MediaTraitType.LOADABLE:					
-					changeListeners(add, _element, trait, LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, [redispatchEvent, onLoadState]);					
+					changeListeners(add, _element, trait, LoadableStateChangeEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);					
 					_loadable = add;		
 					if (add)
 					{
-						var loadState:LoadState = (_element.getTrait(trait) as ILoadable).loadState;
-						if (loadState != LoadState.LOADED && 
+						var loadState:String = (_element.getTrait(trait) as ILoadable).loadState;
+						if (loadState != LoadState.READY && 
 							loadState != LoadState.LOADING)
 						{
 							load();
@@ -1185,25 +1184,25 @@ package org.osmf.media
 		
 		private function onLoadState(event:LoadableStateChangeEvent):void
 		{		
-			if (event.newState == LoadState.LOADED)
+			if (event.loadState == LoadState.READY)
 			{
-				processLoadedState();
+				processReadyState();
 			}
-			else if (event.newState == LoadState.CONSTRUCTED)
+			else if (event.loadState == LoadState.UNINITIALIZED)
 			{				
 				setState(MediaPlayerState.UNINITIALIZED);
 			}	
-			else if (event.newState == LoadState.LOAD_FAILED)
+			else if (event.loadState == LoadState.LOAD_ERROR)
 			{
 				setState(MediaPlayerState.PLAYBACK_ERROR);
 			}	
-			else if (event.newState == LoadState.LOADING)
+			else if (event.loadState == LoadState.LOADING)
 			{				
-				setState(MediaPlayerState.INITIALIZING);
+				setState(MediaPlayerState.LOADING);
 			}			
 		}
 		
-		private function processLoadedState():void
+		private function processReadyState():void
 		{
 			setState(MediaPlayerState.READY);
 			if (autoPlay && playable && !playing)

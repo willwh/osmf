@@ -52,16 +52,16 @@ package org.osmf.utils
 		{
 			super.load(loadable);
 			if (forceFail &&
-				loadable.loadState != LoadState.LOAD_FAILED &&
-				loadable.loadState != LoadState.LOADED)
+				loadable.loadState != LoadState.LOAD_ERROR &&
+				loadable.loadState != LoadState.READY)
 			{
-				updateLoadable(loadable, LoadState.LOAD_FAILED, null);
+				updateLoadable(loadable, LoadState.LOAD_ERROR, null);
 			}
 			else if (!forceFail &&
 					 loadable.loadState != LoadState.LOADING && 
-					 loadable.loadState != LoadState.LOADED)
+					 loadable.loadState != LoadState.READY)
 			{
-				updateLoadable(loadable, LoadState.LOADED, new SimpleLoadedContext());
+				updateLoadable(loadable, LoadState.READY, new SimpleLoadedContext());
 			}
 		}
 		
@@ -72,9 +72,9 @@ package org.osmf.utils
 		{
 			super.unload(loadable);
 			if (loadable.loadState == LoadState.LOADING ||
-				loadable.loadState == LoadState.LOADED)
+				loadable.loadState == LoadState.READY)
 			{
-				updateLoadable(loadable, LoadState.CONSTRUCTED);
+				updateLoadable(loadable, LoadState.UNINITIALIZED);
 			}
 		}
 	}

@@ -79,9 +79,9 @@ package org.osmf.utils
 			changeEventQueue.push({"oldBufferTime":oldTime, "newBufferTime":newTime});
 		}
 
-		override protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void
+		override protected function processLoadStateChange(loadState:String):void
 		{
-			changeEventQueue.push({"oldState":oldState, "newState":newState});
+			changeEventQueue.push({"loadState":loadState});
 		}
 		
 		override protected function processPlayingChange(playing:Boolean):void

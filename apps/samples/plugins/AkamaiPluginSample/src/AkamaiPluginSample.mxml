@@ -200,7 +200,7 @@
 				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOADABLE))
 				{
 					var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					if (loadable.loadState == LoadState.LOADED)
+					if (loadable.loadState == LoadState.READY)
 					{
 						loadable.unload();
 					}

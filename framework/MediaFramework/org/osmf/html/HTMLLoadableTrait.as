@@ -50,29 +50,26 @@ package org.osmf.html
 			return owner.resource;
 		}
 		
-		public function get loadState():LoadState
+		public function get loadState():String
 		{
 			return _loadState;
 		}
 		
-		public function set loadState(value:LoadState):void
+		public function set loadState(value:String):void
 		{
 			if (_loadState != value)
 			{
-				var event:LoadableStateChangeEvent
-					= new LoadableStateChangeEvent(_loadState, value);
-					
 				_loadState = value;
-				
-				dispatchEvent(event);
+
+				dispatchEvent(new LoadableStateChangeEvent(LoadableStateChangeEvent.LOAD_STATE_CHANGE, false, false, value));
 			}
 		}
 		
 		public function load():void
 		{
-			if (loadState == LoadState.LOADED)
+			if (loadState == LoadState.READY)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADED);
+				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_READY);
 			}
 			if (loadState == LoadState.LOADING)
 			{
@@ -80,7 +77,7 @@ package org.osmf.html
 			}
 			if (resource is IURLResource == false)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLER_RESOURCE);
+				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
 			}
 			
 			requireScriptPath;
@@ -103,8 +100,8 @@ package org.osmf.html
 					
 			if (result == false)
 			{
-				// No load method got executed. Assume that we're loaded:
-				loadState = LoadState.LOADED;
+				// No load method got executed. Assume that we're ready:
+				loadState = LoadState.READY;
 			}
 		}
 		
@@ -114,7 +111,7 @@ package org.osmf.html
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADING);
 			}
-			if (loadState == LoadState.CONSTRUCTED)
+			if (loadState == LoadState.UNINITIALIZED)
 			{
 				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADED);
 			}
@@ -130,7 +127,7 @@ package org.osmf.html
 			if (result == false)
 			{
 				// No unload method got executed. Assume that we're unloaded:
-				loadState = LoadState.CONSTRUCTED;
+				loadState = LoadState.UNINITIALIZED;
 			}
 		}
 		
@@ -146,12 +143,7 @@ package org.osmf.html
 		
 		// Internal
 		//
-		
-		private var owner:HTMLElement;
-		
-		private var _loadState:LoadState = LoadState.CONSTRUCTED;
-		private var _loadedContext:ILoadedContext;
-		
+
 		private function get requireScriptPath():*
 		{
 			if (owner.scriptPath == null)
@@ -162,5 +154,9 @@ package org.osmf.html
 			return undefined;
 		}
 		
+		private var owner:HTMLElement;
+		
+		private var _loadState:String = LoadState.UNINITIALIZED;
+		private var _loadedContext:ILoadedContext;
 	}
 }

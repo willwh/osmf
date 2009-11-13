@@ -52,14 +52,14 @@ package
 				);
 			
 			var loadable:ILoadable = sprite.element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
+			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onReady);
 			loadable.load();
 			
-			function onLoaded(event:LoadableStateChangeEvent):void
+			function onReady(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onReady);
 					
 					var playable:IPlayable = sprite.element.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 					playable.play();

@@ -127,7 +127,7 @@ package org.osmf.net.dynamicstreaming
 			_mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			
 			_loadable = _mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			_loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+			_loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
@@ -142,12 +142,12 @@ package org.osmf.net.dynamicstreaming
 			}
 		}
 		
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
-			switch (event.newState)
+			switch (event.loadState)
 			{
-				case LoadState.LOADED:
-					var netLoadedContext:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
+				case LoadState.READY:
+					var netLoadedContext:NetLoadedContext = _loadable.loadedContext as NetLoadedContext;
 					netLoadedContext.stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					netLoadedContext.stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					
@@ -186,8 +186,8 @@ package org.osmf.net.dynamicstreaming
 						fail(e.toString());
 					}
 					break;					
-				case LoadState.LOAD_FAILED:
-					fail("Load FAILED");
+				case LoadState.LOAD_ERROR:
+					fail("Load ERROR");
 					break;
 				case LoadState.UNLOADING:
 					_eventDispatcher.dispatchEvent(new Event("testComplete"));

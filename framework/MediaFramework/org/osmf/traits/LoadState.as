@@ -24,61 +24,43 @@ package org.osmf.traits
 	/**
 	 * The state of an ILoadable.
 	 */
-	public class LoadState
+	public final class LoadState
 	{
 		/**
 		 * The loadable has been constructed, but either has not yet started
 		 * loading or has been unloaded.
 		 **/
-		public static const CONSTRUCTED:LoadState	= new LoadState("constructed");
+		public static const UNINITIALIZED:String	= "uninitialized";
 		
 		/**
 		 * The loadable has begun loading.
 		 **/
-		public static const LOADING:LoadState		= new LoadState("loading");
+		public static const LOADING:String			= "loading";
 		
 		/**
 		 * The loadable has begun unloading. Dispatched before any in memory
 		 * media representations are released.
 		 **/
-		public static const UNLOADING:LoadState		= new LoadState("unloading");
+		public static const UNLOADING:String		= "unloading";
 		
 		/**
-		 * The loadable has completed loading.
+		 * The loadable is ready for playback.
 		 **/
-		public static const LOADED:LoadState		= new LoadState("loaded");
+		public static const READY:String			= "ready";
 
 		/**
-		 * The loadable has failed to complete loading.
+		 * The loadable has failed to load.
 		 **/
-		public static const LOAD_FAILED:LoadState	= new LoadState("loadFailed");
+		public static const LOAD_ERROR:String		= "loadError";
 		
 		/**
-		 * Lists all known load states
+		 * All known load states.
 		 */
-		public static const ALL_STATES:Vector.<LoadState> = new Vector.<LoadState>(5);
-		ALL_STATES[0] = CONSTRUCTED;
-		ALL_STATES[1] = LOADING;
-		ALL_STATES[2] = UNLOADING;
-		ALL_STATES[3] = LOADED;
-		ALL_STATES[4] = LOAD_FAILED;
-		
-		/**
-		 * @private
-		 **/
-		public function LoadState(name:String)
-		{
-			this.name = name;
-		}
-		
-		/**
-		 * @private
-		 **/
-		public function toString():String
-		{
-			return name;
-		}
-		
-		private var name:String;
+		public static const ALL_STATES:Vector.<String> = new Vector.<String>(5);
+			ALL_STATES[0] = UNINITIALIZED;
+			ALL_STATES[1] = LOADING;
+			ALL_STATES[2] = UNLOADING;
+			ALL_STATES[3] = READY;
+			ALL_STATES[4] = LOAD_ERROR;
 	}
 }

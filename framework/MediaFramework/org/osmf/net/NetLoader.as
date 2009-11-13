@@ -132,7 +132,7 @@ package org.osmf.net
 					startLoadingHTTP(loadable);
 					break;
 				default:
-					updateLoadable(loadable, LoadState.LOAD_FAILED);
+					updateLoadable(loadable, LoadState.LOAD_ERROR);
 					loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_URL_PROTOCOL)));
 					break;
 			}
@@ -164,7 +164,7 @@ package org.osmf.net
 			{
 				netLoadedContext.connection.close();
 			}	
-			updateLoadable(loadable, LoadState.CONSTRUCTED); 				
+			updateLoadable(loadable, LoadState.UNINITIALIZED); 				
 		}
 		
 		/**
@@ -259,7 +259,7 @@ package org.osmf.net
 		{
 			var stream:NetStream = createNetStream(connection, loadable);				
 			stream.client = new NetClient();				
-			updateLoadable(loadable, LoadState.LOADED, new NetLoadedContext(connection, stream, shareable, factory, loadable.resource as IURLResource));		
+			updateLoadable(loadable, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadable.resource as IURLResource));		
 		}	
 		
 		/**
@@ -292,7 +292,7 @@ package org.osmf.net
 		 **/
 		private function onCreationFailed(event:NetConnectionFactoryEvent):void
 		{
-			updateLoadable(event.loadable, LoadState.LOAD_FAILED);
+			updateLoadable(event.loadable, LoadState.LOAD_ERROR);
 		}
 		
 		/**

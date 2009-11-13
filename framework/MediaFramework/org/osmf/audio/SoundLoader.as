@@ -147,14 +147,14 @@ package org.osmf.audio
 				 
 				toggleSoundListeners(sound, false);
 
-				updateLoadable(loadable, LoadState.LOADED, context);
+				updateLoadable(loadable, LoadState.READY, context);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
 				toggleSoundListeners(sound, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -169,7 +169,7 @@ package org.osmf.audio
 			{	
 				toggleSoundListeners(sound, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -204,7 +204,7 @@ package org.osmf.audio
 			{
 				// Swallow, either way the Sound is now unloaded.
 			}
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}
 		
 		// Internals

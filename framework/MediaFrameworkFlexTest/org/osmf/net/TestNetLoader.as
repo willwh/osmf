@@ -269,24 +269,23 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 			var loadable3:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable3.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable3.load();
 			var loadable4:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable4.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable4.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable4.load();
 			var responses:int = 0;
 			function onMultiLoad(event:LoadableStateChangeEvent):void
 			{
-					assertTrue(event.loadable != null);
-					assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
 					
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
 					responses++;
 					if (responses == 4)
@@ -303,22 +302,27 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadableStateChangeEvent):void
 			{
-					assertTrue(event.loadable != null);
-					assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
 					
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					var context:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
-					assertTrue(context.shareable);
+					responses++;
+					if (responses == 2)
+					{
+						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						assertTrue(context1.shareable);
+						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						assertTrue(context2.shareable);
+					}
 				}
 			}
 			
@@ -329,22 +333,27 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader(false);
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadableStateChangeEvent):void
 			{
-					assertTrue(event.loadable != null);
-					assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
 					
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					var context:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
-					assertFalse(context.shareable);
+					responses++;
+					if (responses == 2)
+					{
+						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						assertFalse(context1.shareable);
+						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						assertFalse(context2.shareable);
+					}
 				}
 			}
 			
@@ -355,34 +364,34 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadableStateChangeEvent):void
 			{
-					assertTrue(event.loadable != null);
-					assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
 					
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					var context:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
-					assertTrue(context.shareable);
 					responses++;
 					if (responses == 2)
 					{
+						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						assertTrue(context1.shareable);
+						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						assertTrue(context2.shareable);
+
 						loadable1.unload();
-						
 					}
 				}
-				if (event.newState == LoadState.CONSTRUCTED)
+				if (event.loadState == LoadState.UNINITIALIZED)
 				{
 					if (responses == 2)
 					{
-						assertStrictlyEquals(event.loadable,loadable1);
 						assertTrue((loadable2.loadedContext as NetLoadedContext).connection.connected);
 					}
 				}
@@ -397,21 +406,28 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader(true,factory,negotiator);
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
+			
+			var responses:int = 0;
 
 			function onMultiLoad(event:LoadableStateChangeEvent):void
 			{
-					assertTrue(event.loadable != null);
-					assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
 					
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					var context:NetLoadedContext = event.loadable.loadedContext as NetLoadedContext;
-					assertTrue(context.shareable);
+					responses++;
+					if (responses == 2)
+					{
+						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						assertTrue(context1.shareable);
+						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						assertTrue(context2.shareable);
+					}
 				}
 			}
 			

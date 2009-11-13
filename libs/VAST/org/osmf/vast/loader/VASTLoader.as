@@ -105,7 +105,7 @@ package org.osmf.vast.loader
 			
 			function onHTTPLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.newState == LoadState.READY)
 				{
 					// This is a terminal state, so remove all listeners.
 					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
@@ -136,17 +136,17 @@ package org.osmf.vast.loader
 					{
 						toggleProcessorListeners(processor, false);
 					
-						updateLoadable(loadable, LoadState.LOADED, new VASTLoadedContext(event.vastDocument));
+						updateLoadable(loadable, LoadState.READY, new VASTLoadedContext(event.vastDocument));
 					}
 					
 					function onDocumentProcessFailed(event:VASTDocumentProcessedEvent):void
 					{
 						toggleProcessorListeners(processor, false);
 
-						updateLoadable(loadable, LoadState.LOAD_FAILED);
+						updateLoadable(loadable, LoadState.LOAD_ERROR);
 					}
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.newState == LoadState.LOAD_ERROR)
 				{
 					// This is a terminal state, so remove the listener.  But
 					// don't remove the error event listener, as that will be
@@ -183,7 +183,7 @@ package org.osmf.vast.loader
 
 			// Nothing to do.
 			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}
 		
 

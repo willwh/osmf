@@ -71,7 +71,7 @@ package org.osmf.vast.media
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadable.loadState == LoadState.READY)
 				{
 					impressionCount++;
 					
@@ -160,7 +160,7 @@ package org.osmf.vast.media
 					
 					function onImpressionLoaded(event:LoaderEvent):void
 					{
-						if (event.loadable.loadState == LoadState.LOADED)
+						if (event.loadable.loadState == LoadState.READY)
 						{
 							impressionCount++;
 							

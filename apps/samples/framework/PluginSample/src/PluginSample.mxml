@@ -172,7 +172,7 @@
 				refreshResourceHandlerList();
 
 				wrapper.mediaPlayer.addEventListener(
-					LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChanged);
+					LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				
 				resourceHandlerList.addEventListener(ListEvent.ITEM_CLICK, onItemClick);
 				update.addEventListener(MouseEvent.CLICK, onUpdateClicked);
@@ -211,9 +211,9 @@
 				resourceHandlerId.visible = update.visible = (resourceHandlers.length > 0);
 			}
 			
-			private function onLoadableStateChanged(event:LoadableStateChangeEvent):void
+			private function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOAD_FAILED)
+				if (event.loadState == LoadState.LOAD_ERROR)
 				{
 					Alert.show("Failed to load resource");
 				}

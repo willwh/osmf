@@ -72,9 +72,9 @@ package org.osmf.examples.traceproxy
 			trace("Buffer Time Change: " + oldTime + "->" + newTime);
 		}
 
-		override protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void
+		override protected function processLoadStateChange(loadState:String):void
 		{
-			trace("Loadable State Change: " + oldState.toString() + "->" + newState.toString());
+			trace("Load State Change: ->" + loadState);
 		}
 		
 		override protected function processPlayingChange(playing:Boolean):void

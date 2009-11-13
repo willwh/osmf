@@ -135,14 +135,14 @@ package org.osmf.utils
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.LOADED, new HTTPLoadedContext(loader));
+				updateLoadable(loadable, LoadState.READY, new HTTPLoadedContext(loader));
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR, 
 																				ioEvent ? ioEvent.text : ioEventDetail)));
 			}
@@ -151,7 +151,7 @@ package org.osmf.utils
 			{	
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR, 
 																			securityEvent ? securityEvent.text : securityEventDetail)));
 			}
@@ -172,7 +172,7 @@ package org.osmf.utils
 
 			// Nothing to do.
 			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}
 		
 		/**

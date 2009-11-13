@@ -48,12 +48,12 @@ package com.adobe.strobe.plugins.smil.media
 			{
 				super.resource = value;
 				_resource2 = value;
-				var loadableTrait:LoadableTrait
-					= new LoadableTrait(loader, value);
+				
+				loadableTrait = new LoadableTrait(loader, value);
 				
 				loadableTrait.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-					, onLoadableStateChange
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					, onLoadStateChange
 					);
 				
 				addTrait(MediaTraitType.LOADABLE,loadableTrait); 
@@ -95,19 +95,19 @@ package com.adobe.strobe.plugins.smil.media
 			// placeholder for performing any operations just before the unload is completed
 		}
 		
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
-			
-			if (event.newState == LoadState.LOADED)
+			if (event.loadState == LoadState.READY)
 			{
-				processLoadedState(event.loadable.loadedContext as SMILLoadedContext);
+				processLoadedState(loadableTrait.loadedContext as SMILLoadedContext);
 			}
-			else if (event.newState == LoadState.UNLOADING)
+			else if (event.loadState == LoadState.UNLOADING)
 			{
 				processUnloadingState();
 			}
 		}
 
+		private var loadableTrait:LoadableTrait
 		private var loader:ILoader;
 		private var _resource2:IMediaResource;
 	}

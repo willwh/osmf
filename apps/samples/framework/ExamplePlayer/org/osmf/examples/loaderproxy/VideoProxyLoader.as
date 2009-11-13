@@ -50,7 +50,7 @@ package org.osmf.examples.loaderproxy
 			// (we just rewrite the URL as an example).
 			var url:URL = new URL("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			updateLoadable(loadable, LoadState.LOADED, new VideoProxyLoadedContext(url));
+			updateLoadable(loadable, LoadState.READY, new VideoProxyLoadedContext(url));
 		}
 		
 		override public function unload(loadable:ILoadable):void

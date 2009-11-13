@@ -96,8 +96,8 @@ package org.osmf.composition
 			
 			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);
 			
-			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.LOADED);
-			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.LOADED);
+			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.READY);
+			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.READY);
 			
 			(video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
 			(video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
@@ -107,8 +107,8 @@ package org.osmf.composition
 			
 			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should be a no-op
 			
-			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.CONSTRUCTED);
-			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.CONSTRUCTED);			
+			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.UNINITIALIZED);
+			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.UNINITIALIZED);			
 		}
 		
 		public function testHasTrait():void

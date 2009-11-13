@@ -123,7 +123,7 @@ package org.osmf.gg
 				}
 				else
 				{
-					audible.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					audible.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
 					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 				}
 			}
@@ -136,11 +136,11 @@ package org.osmf.gg
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 			}
 		}
@@ -223,14 +223,14 @@ package org.osmf.gg
 			sendEvent(MUTE, event.muted);
 		}
 
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
 			var videoType:String;
 			
-			switch (event.newState)
+			switch (event.loadState)
 			{
-				case LoadState.CONSTRUCTED:
-					if (event.oldState == LoadState.UNLOADING)
+				case LoadState.UNINITIALIZED:
+					if (lastLoadState == LoadState.UNLOADING)
 					{
 						// The call to UNLOAD_VIDEO has two optional params.
 						//
@@ -240,7 +240,7 @@ package org.osmf.gg
 						sendEvent(UNLOAD_VIDEO, currentTime, videoType);
 					}
 					break;
-				case LoadState.LOADED:
+				case LoadState.READY:
 					// The call to LOAD_VIDEO has three required params.
 					//
 					
@@ -257,6 +257,8 @@ package org.osmf.gg
 					sendEvent(LOAD_VIDEO, url, videoType, videoInfo);
 					break;
 			}
+			
+			lastLoadState = event.loadState;
 		}
 		
 		private function onPlayingChange(event:PlayingChangeEvent):void
@@ -339,6 +341,8 @@ package org.osmf.gg
 		
 		// PM Constants
 		//
+		
+		private var lastLoadState:String;
 		
 		private static const LOAD_VIDEO:int 	= 3;
 		private static const UNLOAD_VIDEO:int 	= 4;

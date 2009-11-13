@@ -86,18 +86,18 @@ package org.osmf.tracking
 			{
 				var loadable:LoadableTrait = new LoadableTrait(httpLoader, urlResource);
 				
-				loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+				loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				loadable.load();
 	
-				function onLoadableStateChange(event:LoadableStateChangeEvent):void
+				function onLoadStateChange(event:LoadableStateChangeEvent):void
 				{
-					if (event.loadable.loadState == LoadState.LOADED)
+					if (event.loadState == LoadState.READY)
 					{
-						loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+						loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 						dispatchEvent(new BeaconEvent(BeaconEvent.PING_COMPLETE));
 					}
-					else if (event.loadable.loadState == LoadState.LOAD_FAILED)
+					else if (event.loadState == LoadState.LOAD_ERROR)
 					{
 						dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
 					}

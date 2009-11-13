@@ -78,19 +78,19 @@ package
 				= new LoadableTrait(new VASTLoader(), new URLResource(vastURL));
 						
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
+				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				, onLoadStateChange
 				);
 			loadableTrait.load();
 						
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadableTrait.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadableTrait.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Create the appropriate inline MediaElements.
-					var loadedContext:VASTLoadedContext = event.loadable.loadedContext as VASTLoadedContext;
+					var loadedContext:VASTLoadedContext = loadableTrait.loadedContext as VASTLoadedContext;
 					var generator:VASTMediaGenerator = new VASTMediaGenerator();
 					var mediaElements:Vector.<MediaElement> = generator.createMediaElements(loadedContext.vastDocument);
 					

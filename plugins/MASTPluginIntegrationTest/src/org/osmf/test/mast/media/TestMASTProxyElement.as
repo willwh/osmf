@@ -132,16 +132,16 @@ package org.osmf.test.mast.media
 			}
 			
 			var loadableTrait:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadableTrait.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+			loadableTrait.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadableTrait.load();
 			
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
 					fail();
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
 					// expected
 				}

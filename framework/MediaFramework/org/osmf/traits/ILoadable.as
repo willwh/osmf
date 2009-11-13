@@ -60,10 +60,10 @@ package org.osmf.traits
 		function get resource():IMediaResource;
 		
 		/**
-		 * The load state of this ILoadable.
+		 * The load state of this ILoadable. See LoadState for possible values.
 		 **/
-		function get loadState():LoadState;
-		function set loadState(value:LoadState):void;
+		function get loadState():String;
+		function set loadState(value:String):void;
 
 		/**
 		 * Loads this ILoadable.
@@ -71,16 +71,16 @@ package org.osmf.traits
          * Dispatches the <code>loadableStateChange</code> event with every state change.
          *
          * <p>Typical states are <code>LOADING</code> while the ILoadable is loading,
-         * <code>LOADED</code> after it has successfully completed loading, 
-         * and <code>LOAD_FAILED</code> if it fails to complete loading.</p>
+         * <code>READY</code> after it has successfully completed loading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete loading.</p>
 		 * 
-         * <p>If the LoadState is <code>LOADING</code> or <code>LOADED</code>
+         * <p>If the LoadState is <code>LOADING</code> or <code>READY</code>
          * when the method is called, throws an error.</p>
          *  
          * @see LoadState
 		 * @throws IllegalOperationError If this ILoadable is unable to load
 		 * itself or if the LoadState is <code>LOADING</code> or
-         * <code>LOADED</code>.
+         * <code>READY</code>.
 		 **/
 		function load():void;
 
@@ -89,17 +89,17 @@ package org.osmf.traits
          * Dispatches the <code>loadableStateChange</code> event with every state change.
 		 * 
          * <p>Typical states are <code>UNLOADING</code> while the ILoadable is unloading,
-         * <code>CONSTRUCTED</code> after it has successfully completed unloading, 
-         * and <code>LOAD_FAILED</code> if it fails to complete unloading.</p>
+         * <code>UNINITIALIZED</code> after it has successfully completed unloading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete unloading.</p>
 		 * 
- 		 * <p>If the ILoadable's LoadState is not <code>LOADED</code> when the
+ 		 * <p>If the ILoadable's LoadState is not <code>READY</code> when the
  		 * method is called, throws an error.</p>
 		 * 
 		 * @param loadable The ILoadable to unload.
          * @see LoadState
 		 * 
 		 * @throws IllegalOperationError If this ILoadable is unable to unload
-		 * itself, or if the LoadState is not <code>LOADED</code>.
+		 * itself, or if the LoadState is not <code>READY</code>.
 		 **/
 		function unload():void;
 		
@@ -108,7 +108,7 @@ package org.osmf.traits
 		 * operation.
 		 * 
          * <p>The context is <code>null</code> before this ILoadable's state is <code>LOADING</code>
-         * or <code>LOADED</code>, depending on the loader implementation ata hand. The context is
+         * or <code>READY</code>, depending on the loader implementation at hand. The context is
          * <code>null</code> after the ILoadable has been unloaded.</p>
 		 **/
 		function get loadedContext():ILoadedContext;

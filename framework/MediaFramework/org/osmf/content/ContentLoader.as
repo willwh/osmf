@@ -154,7 +154,7 @@ package org.osmf.content
 					loader = null;
 					loadedContext = null;
 					
-					updateLoadable(loadable, LoadState.LOAD_FAILED, loadedContext);
+					updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
 					loadable.dispatchEvent
 						( new MediaErrorEvent
 							( new MediaError(MediaErrorCodes.INVALID_SWF_AS_VERSION)
@@ -163,7 +163,7 @@ package org.osmf.content
 				}
 				else
 				{
-					updateLoadable(loadable, LoadState.LOADED, loadedContext);
+					updateLoadable(loadable, LoadState.READY, loadedContext);
 				}
 			}
 
@@ -173,7 +173,7 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED, null);
+				updateLoadable(loadable, LoadState.LOAD_ERROR, null);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -190,7 +190,7 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_FAILED, loadedContext);
+				updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
 						( new MediaError
@@ -220,7 +220,7 @@ package org.osmf.content
 			var context:ContentLoadedContext = loadable.loadedContext as ContentLoadedContext;
 			updateLoadable(loadable, LoadState.UNLOADING, context);			
 			context.loader.unloadAndStop();
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}
 		
 		// Internals

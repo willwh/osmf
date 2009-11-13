@@ -61,7 +61,7 @@ package org.osmf.traits
 		{			
 			this.loader = loader;			
 			_resource = resource;
-			_loadState = LoadState.CONSTRUCTED;
+			_loadState = LoadState.UNINITIALIZED;
 		}
 		
 		// ILoadable
@@ -84,19 +84,18 @@ package org.osmf.traits
 		/**
 		 * The load state of this trait.
 		 **/
-		public function get loadState():LoadState
+		public function get loadState():String
 		{
 			return _loadState;
 		}
 		
-		final public function set loadState(value:LoadState):void
+		final public function set loadState(value:String):void
 		{
 			if (_loadState != value)
 			{
-				var oldState:LoadState = _loadState;
 				_loadState = value;
 				
-				dispatchEvent(new LoadableStateChangeEvent(oldState, _loadState));
+				dispatchEvent(new LoadableStateChangeEvent(LoadableStateChangeEvent.LOAD_STATE_CHANGE, false, false, _loadState));
 			}
 		}
 		
@@ -138,9 +137,9 @@ package org.osmf.traits
 		{
 			if (loader)
 			{	
-				if (_loadState == LoadState.LOADED)
+				if (_loadState == LoadState.READY)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADED);
+					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_READY);
 				}
 				if (_loadState == LoadState.LOADING)
 				{
@@ -182,7 +181,7 @@ package org.osmf.traits
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADING);
 				}
-				if (_loadState == LoadState.CONSTRUCTED)
+				if (_loadState == LoadState.UNINITIALIZED)
 				{
 					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADED);
 				}
@@ -200,7 +199,7 @@ package org.osmf.traits
 		private var loader:ILoader;
 		private var _resource:IMediaResource;
 		
-		private var _loadState:LoadState;
+		private var _loadState:String;
 		private var _loadedContext:ILoadedContext;
 	}
 }

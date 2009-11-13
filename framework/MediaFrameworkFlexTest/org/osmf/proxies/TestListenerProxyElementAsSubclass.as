@@ -183,13 +183,11 @@ package org.osmf.proxies
 			
 			loadable.load();
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldState"] == LoadState.CONSTRUCTED);
-			assertTrue(events[0]["newState"] == LoadState.LOADED);
+			assertTrue(events[0]["loadState"] == LoadState.READY);
 			
 			loadable.unload();
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["oldState"] == LoadState.LOADED);
-			assertTrue(events[1]["newState"] == LoadState.CONSTRUCTED);
+			assertTrue(events[1]["loadState"] == LoadState.UNINITIALIZED);
 
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.

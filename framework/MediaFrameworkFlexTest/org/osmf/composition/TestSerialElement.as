@@ -359,7 +359,7 @@ package org.osmf.composition
 										new URLResource(new URL("http://www.example.com/loadable1")));
 			var loadable1:ILoadable = mediaElement1.getTrait(MediaTraitType.LOADABLE) as ILoadable;			
 			loadable1.load();
-			assertTrue(loadable1.loadState == LoadState.LOADED);
+			assertTrue(loadable1.loadState == LoadState.READY);
 
 			var loader2:SimpleLoader = new SimpleLoader();
 			var mediaElement2:MediaElement =
@@ -367,7 +367,7 @@ package org.osmf.composition
 										loader2,
 										new URLResource(new URL("http://www.example.com/loadable2")));
 			var loadable2:ILoadable = mediaElement2.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
 
 			var loader3:SimpleLoader = new SimpleLoader();
 			var mediaElement3:MediaElement =
@@ -376,7 +376,7 @@ package org.osmf.composition
 										new URLResource(new URL("http://www.example.com/loadable3")));
 			var loadable3:ILoadable = mediaElement3.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			loadable3.load();
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			
 			// Nothing is added yet, so our composition shouldn't have the trait yet.
 			assertTrue(serial.getTrait(MediaTraitType.LOADABLE) == null);
@@ -386,7 +386,7 @@ package org.osmf.composition
 			serial.addChild(mediaElement1);
 			var loadable:ILoadable = serial.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			assertTrue(loadable.resource != null &&
 					   loadable.resource is URLResource &&
 					   URLResource(loadable.resource).url.toString() == "http://www.example.com/loadable1");
@@ -398,7 +398,7 @@ package org.osmf.composition
 			serial.addChild(mediaElement2);
 			loadable = serial.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
 			assertTrue(loadable.resource != null &&
 					   loadable.resource is URLResource &&
 					   URLResource(loadable.resource).url.toString() == "http://www.example.com/loadable2");
@@ -407,7 +407,7 @@ package org.osmf.composition
 			serial.removeChild(mediaElement2);
 			loadable = serial.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			
 			serial.addChildAt(mediaElement1,0);
 			serial.addChildAt(mediaElement2,1);
@@ -415,49 +415,49 @@ package org.osmf.composition
 			// Changing the state of a non-current child should not affect the
 			// state of the composition.
 			loadable1 = mediaElement1.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable1.loadState == LoadState.LOADED);
+			assertTrue(loadable1.loadState == LoadState.READY);
 			loadable1.unload();
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			
 			// Calling unload() on the composition should only affect the
 			// current child.
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			loadable.unload();
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
 
 			// Calling load() on the composition should only affect the current
 			// child.
 			loadable.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			
 			// If a load fails for a non-current child, then the composition
 			// should be unaffected.
 			loader2.forceFail = true;
 			loadable2.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.LOAD_FAILED);
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.LOAD_ERROR);
+			assertTrue(loadable3.loadState == LoadState.READY);
 
 			// If a load fails for the current child, then the composition
 			// should reflect its state.
 			loadable3.unload();
 			loader3.forceFail = true;
 			loadable3.load();
-			assertTrue(loadable.loadState == LoadState.LOAD_FAILED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.LOAD_FAILED);
-			assertTrue(loadable3.loadState == LoadState.LOAD_FAILED);
+			assertTrue(loadable.loadState == LoadState.LOAD_ERROR);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.LOAD_ERROR);
+			assertTrue(loadable3.loadState == LoadState.LOAD_ERROR);
 		}
 		
 		public function testGetTraitTemporal():void
@@ -878,7 +878,7 @@ package org.osmf.composition
 			var playable2:PlayableTrait = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			assertTrue(playable2 == null);
 			var loadable2:ILoadable = mediaElement2.getTrait(MediaTraitType.LOADABLE) as ILoadable;			
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
 			
 			var loader3:SimpleLoader = new SimpleLoader();
 			var mediaElement3:MediaElement =
@@ -888,7 +888,7 @@ package org.osmf.composition
 			var playable3:PlayableTrait = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			assertTrue(playable3 == null);
 			var loadable3:ILoadable = mediaElement3.getTrait(MediaTraitType.LOADABLE) as ILoadable;			
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
 			var temporal3:TemporalTrait = null;
 			
 			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
@@ -898,12 +898,12 @@ package org.osmf.composition
 			
 			// Make sure that the third child gets the IPlayable trait when
 			// it finishes loading.
-			loadable3.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadable3.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable3.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(mediaElement3));
 					temporal3 = new TemporalTrait();
 					temporal3.duration = 1;
@@ -936,8 +936,8 @@ package org.osmf.composition
 			assertTrue(playable2 == null);
 			playable3 = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			assertTrue(playable3 == null);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
 			
 			// However, when the first child reaches its duration, the following
 			// should happen:
@@ -951,8 +951,8 @@ package org.osmf.composition
 			assertTrue(playable2 == null);
 			playable3 = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			assertTrue(playable3 != null);
-			assertTrue(loadable2.loadState == LoadState.LOADED);
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable2.loadState == LoadState.READY);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			assertTrue(playable.playing == true);
 			assertTrue(playable1.playing == false);

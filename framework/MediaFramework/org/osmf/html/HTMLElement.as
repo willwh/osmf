@@ -63,12 +63,12 @@ package org.osmf.html
 			return _scriptPath;
 		}
 		
-		public function set loadState(value:LoadState):void
+		public function set loadState(value:String):void
 		{
 			loadable.loadState = value;
 		}
 		
-		public function get loadState():LoadState
+		public function get loadState():String
 		{
 			return loadable.loadState;
 		}
@@ -132,15 +132,15 @@ package org.osmf.html
 			addTrait(MediaTraitType.LOADABLE, loadable);
 			
 			loadable.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
+				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				, onLoadStateChange
 				);
 		}
 		
 		// Private
 		//
 	
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
 			updateTraits();
 		}
@@ -149,7 +149,7 @@ package org.osmf.html
 		{
 			var type:MediaTraitType;
 			
-			if (loadable.loadState == LoadState.LOADED)
+			if (loadable.loadState == LoadState.READY)
 			{
 				// Make sure that the constructed trait objects are
 				// being reflected on being loaded:
@@ -186,9 +186,9 @@ package org.osmf.html
 		/* static */
 		
 		private static const switchableTraitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>(4);
-		switchableTraitTypes[0] = MediaTraitType.PLAYABLE;
-		switchableTraitTypes[1] = MediaTraitType.PAUSABLE;
-		switchableTraitTypes[2] = MediaTraitType.TEMPORAL;
-		switchableTraitTypes[3] = MediaTraitType.AUDIBLE;
+			switchableTraitTypes[0] = MediaTraitType.PLAYABLE;
+			switchableTraitTypes[1] = MediaTraitType.PAUSABLE;
+			switchableTraitTypes[2] = MediaTraitType.TEMPORAL;
+			switchableTraitTypes[3] = MediaTraitType.AUDIBLE;
 	}
 }

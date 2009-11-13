@@ -51,22 +51,21 @@ package org.osmf.examples.loaderproxy
 			// which simply replaces the URL.
 			//
 			
-			var loadableTrait:LoadableTrait
-				= new LoadableTrait(new VideoProxyLoader(), resource);
+			loadableTrait = new LoadableTrait(new VideoProxyLoader(), resource);
 			
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
+				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				, onLoadStateChange
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
 		}
 		
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:VideoProxyLoadedContext = event.loadable.loadedContext as VideoProxyLoadedContext
+				var loadedContext:VideoProxyLoadedContext = loadableTrait.loadedContext as VideoProxyLoadedContext
 				
 				// Replace the resource with the new URL.
 				wrappedElement.resource = new URLResource(loadedContext.url);
@@ -76,7 +75,11 @@ package org.osmf.examples.loaderproxy
 				// the actual load.
 				removeTrait(MediaTraitType.LOADABLE);
 				(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+				
+				loadableTrait = null;
 			}
 		}
+		
+		private var loadableTrait:LoadableTrait;
 	}
 }

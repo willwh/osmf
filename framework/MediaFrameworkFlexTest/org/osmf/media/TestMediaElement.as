@@ -345,16 +345,16 @@ package org.osmf.media
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
 			loadable.load();
 			
 			function onTestCallAfterLoad(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCallAfterLoad);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
 					
 					if (func != null)
 					{
@@ -381,22 +381,22 @@ package org.osmf.media
 			assertTrue(loadable != null);
 			
 			// If the MediaElement is not yet loaded, wait until it is.
-			if (loadable.loadState == LoadState.LOADED)
+			if (loadable.loadState == LoadState.READY)
 			{
 				completeCallAfterUnload(func, mediaElement);
 			}
 			else
 			{
 				loadable.addEventListener
-						( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+						( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 						, onTestCallAfterUnload
 						);
 						
 				function onTestCallAfterUnload(event:LoadableStateChangeEvent):void
 				{
-					if (event.newState == LoadState.LOADED)
+					if (event.loadState == LoadState.READY)
 					{
-						loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCallAfterUnload);
+						loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestCallAfterUnload);
 						
 						completeCallAfterUnload(func, mediaElement);
 					}
@@ -410,16 +410,16 @@ package org.osmf.media
 			assertTrue(loadable != null);
 
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestCompleteCallAfterUnload
 					);
 			loadable.unload();
 			
 			function onTestCompleteCallAfterUnload(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.CONSTRUCTED)
+				if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCompleteCallAfterUnload);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestCompleteCallAfterUnload);
 
 					func(mediaElement, existentTraitTypesOnInitialization);
 					

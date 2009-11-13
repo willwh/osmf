@@ -34,72 +34,53 @@ package org.osmf.events
 	public class LoadableStateChangeEvent extends TraitEvent
 	{
 		/**
-		 * The LoadableEvent.LOADABLE_STATE_CHANGE constant defines the value
-		 * of the type property of the event object for a loadableStateChange
+		 * The LoadEvent.LOAD_STATE_CHANGE constant defines the value
+		 * of the type property of the event object for a loadStateChange
 		 * event.
 		 * 
-		 * @eventType loadableStateChange
+		 * @eventType loadStateChange
 		 **/
-		public static const LOADABLE_STATE_CHANGE:String = "loadableStateChange";
+		public static const LOAD_STATE_CHANGE:String = "loadStateChange";
 
 		/**
 		 * Constructor.
 		 * 
-		 * @param oldState Previous state of the ILoadable.
-		 * @param newState New state of the ILoadable.
+		 * @param type Event type.
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param loadState New LoadState of the ILoadable.
 		 **/
 		public function LoadableStateChangeEvent
-							( oldState:LoadState,
-							  newState:LoadState,
+							( type:String,
 							  bubbles:Boolean=false,
-							  cancelable:Boolean=false
+							  cancelable:Boolean=false,
+							  loadState:String=null
 							)
 		{
-			super(LOADABLE_STATE_CHANGE, bubbles, cancelable);
+			super(type, bubbles, cancelable);
 			
-			_oldState = oldState;
-			_newState = newState;
+			_loadState = loadState;
 		}
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 **/
 		override public function clone():Event
 		{
-			return new LoadableStateChangeEvent(oldState, newState);
+			return new LoadableStateChangeEvent(type, bubbles, cancelable, loadState);
 		}
 
 		/**
-		 * The ILoadable to which this event applies.
+		 * New LoadState of the ILoadable.
 		 **/
-		public function get loadable():ILoadable
+		public function get loadState():String
 		{
-			return target as ILoadable;
-		}
-		
-		/**
-		 * Previous state of the ILoadable.
-		 **/
-		public function get oldState():LoadState
-		{
-			return _oldState;
-		}
-
-		/**
-		 * New state of the ILoadable.
-		 **/
-		public function get newState():LoadState
-		{
-			return _newState;
+			return _loadState;
 		}
 		
 		// Internals
 		//
 		
-		private var _oldState:LoadState;
-		private var _newState:LoadState;
+		private var _loadState:String;
 	}
 }

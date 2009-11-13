@@ -75,17 +75,17 @@ package org.osmf.net.dynamicstreaming
 			else
 			{
 				// Get the hostname from the DynamicStreamingResource and ask the base class to connect
-				var hostName:URL = dsResource.host;
-				var tempTrait:LoadableTrait = new LoadableTrait(null, new URLResource(hostName));
+				var host:URL = dsResource.host;
+				var tempTrait:LoadableTrait = new LoadableTrait(null, new URLResource(host));
 				
-				tempTrait.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+				tempTrait.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				super.load(tempTrait);
 				
-				function onLoadableStateChange(event:LoadableStateChangeEvent):void
+				function onLoadStateChange(event:LoadableStateChangeEvent):void
 				{
-					if (event.newState == LoadState.LOADED)
+					if (event.loadState == LoadState.READY)
 					{
-						tempTrait.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+						tempTrait.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 									
 						var netLoadedContext:NetLoadedContext = tempTrait.loadedContext as NetLoadedContext;
 						DynamicNetStream(netLoadedContext.stream).resource = dsResource;
@@ -94,7 +94,7 @@ package org.osmf.net.dynamicstreaming
 																						netLoadedContext.shareable, netLoadedContext.netConnectionFactory,
 																						netLoadedContext.resource, tempTrait);
 					}
-					loadable.loadState = event.newState;					
+					loadable.loadState = event.loadState;					
 				}
 			}
 		}
@@ -136,7 +136,7 @@ package org.osmf.net.dynamicstreaming
 						netLoadedContext.connection.close();
 					}			
 						
-					updateLoadable(loadable, LoadState.CONSTRUCTED);	
+					updateLoadable(loadable, LoadState.UNINITIALIZED);	
 				}
 			}			
 		}

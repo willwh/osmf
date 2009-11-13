@@ -76,9 +76,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 **/
-		override protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void
+		override protected function processLoadStateChange(loadState:String):void
 		{
-			if (newState == LoadState.LOADED)
+			if (loadState == LoadState.READY)
 			{
 				// Reset our internal flags so that we can record a new
 				// impression.

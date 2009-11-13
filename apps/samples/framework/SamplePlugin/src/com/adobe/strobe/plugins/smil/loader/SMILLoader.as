@@ -88,7 +88,7 @@ package com.adobe.strobe.plugins.smil.loader
 			}
 			catch (e:Error)
 			{
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 			}
 			
 		}
@@ -101,20 +101,20 @@ package com.adobe.strobe.plugins.smil.loader
 			var parser:SMILParser = new SMILParser();
 			var mediaElement:MediaElement = parser.parse(xml);
 
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
 					// The root element has been loaded successfully. Set *this* element as loaded as well
 					// Send the Root element's loaded context as my own loaded context 
 					var loadedContext:SMILLoadedContext = new SMILLoadedContext(mediaElement);
 					trace("Root Element Loaded Successfully");
-					updateLoadable(loadable, LoadState.LOADED, loadedContext);
+					updateLoadable(loadable, LoadState.READY, loadedContext);
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
 					trace("Root Element Loading Failed");
-					updateLoadable(loadable, LoadState.LOAD_FAILED);
+					updateLoadable(loadable, LoadState.LOAD_ERROR);
 				}
 			}
 
@@ -122,14 +122,14 @@ package com.adobe.strobe.plugins.smil.loader
 			if (mediaElement.hasTrait(MediaTraitType.LOADABLE))
 			{
 				mediaLoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				mediaLoadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+				mediaLoadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				mediaLoadable.load();
 			}
 		}
 
 		private function onURLLoadingError(event:Event):void
 		{
-			updateLoadable(loadable, LoadState.LOAD_FAILED);
+			updateLoadable(loadable, LoadState.LOAD_ERROR);
 		}
 
 

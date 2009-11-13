@@ -301,10 +301,10 @@ package org.osmf.gateways
 				{
 					// ILoadable
 					case "LoadState":
-						var newState:LoadState = loadStateFromString(value);
+						var newLoadState:String = value;
 						if (htmlElement)
 						{
-							htmlElement.loadState = newState;
+							htmlElement.loadState = newLoadState;
 						}
 						break;
 					// IPlayable:
@@ -482,26 +482,7 @@ package org.osmf.gateways
 			
 			return result;
 		}
-		
-		private static function loadStateFromString(value:String):LoadState
-		{
-			var result:LoadState;
-			
-			if (value)
-			{
-				for each (var state:LoadState in LoadState.ALL_STATES)
-				{
-					if (state.toString().toLowerCase() == value)
-					{
-						result = state;
-						break;
-					} 
-				}
-			}
-			
-			return result; 	
-		}
-		
+				
         // JavaScript API
         //
         

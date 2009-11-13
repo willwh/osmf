@@ -78,13 +78,13 @@ package org.osmf.composition
 			
 			// Second child should be loaded, but not seekable.
 			var loadable2:ILoadable = mediaElement2.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable2.loadState == LoadState.LOADED);
+			assertTrue(loadable2.loadState == LoadState.READY);
 			var seekable2:ISeekable = mediaElement2.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 			assertTrue(seekable2 == null);
 			
 			// Third child already had the trait, so it wasn't loaded.
 			var loadable3:ILoadable = mediaElement3.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
 			var seekable3:ISeekable = mediaElement3.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 			assertTrue(seekable3 != null);
 
@@ -100,12 +100,12 @@ package org.osmf.composition
 			assertTrue(traitFoundEvent.mediaElement == mediaElement3);
 			
 			// Try again with a trait that gets loaded.
-			loadable3.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
-			function onLoadableStateChange(event:LoadableStateChangeEvent):void
+			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			function onLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					loadable3.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable3.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.PAUSABLE, new PausableTrait(mediaElement3));
 				}
 			}
@@ -113,12 +113,12 @@ package org.osmf.composition
 
 			// Second child should be loaded, but not pausable.
 			loadable2 = mediaElement2.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable2.loadState == LoadState.LOADED);
+			assertTrue(loadable2.loadState == LoadState.READY);
 			assertTrue(mediaElement2.getTrait(MediaTraitType.PAUSABLE) == null);
 			
 			// Third child already didn't have the trait, but added it after loading.
 			loadable3 = mediaElement3.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			assertTrue(mediaElement3.getTrait(MediaTraitType.PAUSABLE) != null);
 
 			// Found child is the third child.

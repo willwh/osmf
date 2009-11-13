@@ -223,7 +223,7 @@ package org.osmf.composition
 										new URLResource(new URL("http://www.example.com/loadable1")));
 			var loadable1:ILoadable = mediaElement1.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			loadable1.load();
-			assertTrue(loadable1.loadState == LoadState.LOADED);
+			assertTrue(loadable1.loadState == LoadState.READY);
 
 			var loader2:SimpleLoader = new SimpleLoader();
 			var mediaElement2:MediaElement =
@@ -231,49 +231,49 @@ package org.osmf.composition
 										 loader2,
 										 new URLResource(new URL("http://www.example.com/loadable2")));
 			var loadable2:ILoadable = mediaElement2.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
 
 			// Add the first child.  This should cause its properties to
 			// propagate to the composition.
 			parallel.addChild(mediaElement1);
 			var loadable:ILoadable = parallel.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			assertTrue(loadable.loadedContext == null);
 			assertTrue(loadable.resource == null);
 
 			// Add the second child.  Should cause the added child to get loaded.
 			parallel.addChild(mediaElement2);
 			loadable = parallel.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable2.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable2.loadState == LoadState.READY);
 
 			// Calling unload() on the composition should cause all children to
 			// to unload.
 			loadable.unload();
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
 			
 			// Calling load() on the composition should cause all children to
 			// load.
 			loadable.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.LOADED);
-			assertTrue(loadable2.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.READY);
+			assertTrue(loadable2.loadState == LoadState.READY);
 			
 			// Calling unload() on a child should cause all other children to
 			// unload (and the composition to reflect this).
 			loadable1.unload();
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
 
 			// Calling load() on a child should cause all other children to
 			// load (and the composition to reflect this).
 			loadable2.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.LOADED);
-			assertTrue(loadable2.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.READY);
+			assertTrue(loadable2.loadState == LoadState.READY);
 			
 			// Adding a LOADED child to a CONSTRUCTED composition causes the
 			// child to unload.
@@ -284,45 +284,45 @@ package org.osmf.composition
 				new URLResource(new URL("http://www.example.com/loadable3")));
 			var loadable3:ILoadable = mediaElement3.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			loadable3.load();
-			assertTrue(loadable3.loadState == LoadState.LOADED);
+			assertTrue(loadable3.loadState == LoadState.READY);
 			parallel.addChild(mediaElement3);
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
 
 			// Adding a CONSTRUCTED child to a LOADED composition causes the
 			// child to load.
 			loadable.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			var mediaElement4:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOADABLE],
 				new SimpleLoader(),
 				new URLResource(new URL("http://www.example.com/loadable4")));
 			var loadable4:ILoadable = mediaElement4.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable4.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable4.loadState == LoadState.UNINITIALIZED);
 			parallel.addChild(mediaElement4);
-			assertTrue(loadable.loadState == LoadState.LOADED);
-			assertTrue(loadable1.loadState == LoadState.LOADED);
-			assertTrue(loadable2.loadState == LoadState.LOADED);
-			assertTrue(loadable3.loadState == LoadState.LOADED);
-			assertTrue(loadable4.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
+			assertTrue(loadable1.loadState == LoadState.READY);
+			assertTrue(loadable2.loadState == LoadState.READY);
+			assertTrue(loadable3.loadState == LoadState.READY);
+			assertTrue(loadable4.loadState == LoadState.READY);
 			
 			// If a load fails, then the composition should reflect the
 			// failure.
 			loadable.unload();
-			assertTrue(loadable.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable4.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable4.loadState == LoadState.UNINITIALIZED);
 			loader2.forceFail = true;
 			loadable2.load();
-			assertTrue(loadable.loadState == LoadState.LOAD_FAILED);
-			assertTrue(loadable1.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable2.loadState == LoadState.LOAD_FAILED);
-			assertTrue(loadable3.loadState == LoadState.CONSTRUCTED);
-			assertTrue(loadable4.loadState == LoadState.CONSTRUCTED);
+			assertTrue(loadable.loadState == LoadState.LOAD_ERROR);
+			assertTrue(loadable1.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable2.loadState == LoadState.LOAD_ERROR);
+			assertTrue(loadable3.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadable4.loadState == LoadState.UNINITIALIZED);
 		}
 		
 		public function testGetTraitAudible():void

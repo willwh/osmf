@@ -149,14 +149,14 @@ package org.osmf.plugin
 			assertTrue(mediaElement != null);
 			
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onElementLoadableStateChange);
+			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onElementLoadStateChange);
 			loadable.load();
 						
-			function onElementLoadableStateChange(event:LoadableStateChangeEvent):void
+			function onElementLoadStateChange(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					var loadedContext:ILoadedContext = event.loadable.loadedContext;
+					var loadedContext:ILoadedContext = loadable.loadedContext;
 					assertTrue(loadedContext != null);
 					assertTrue(loadedContext is NetLoadedContext);
 	
@@ -167,7 +167,7 @@ package org.osmf.plugin
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));			
 				}
-				else if (event.newState == LoadState.LOAD_FAILED)
+				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
 					elementLoadFailed(null);
 				}

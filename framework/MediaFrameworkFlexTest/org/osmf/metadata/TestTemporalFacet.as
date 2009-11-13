@@ -236,7 +236,7 @@ package org.osmf.metadata
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.load();
-			assertTrue(loadable.loadState == LoadState.LOADED);
+			assertTrue(loadable.loadState == LoadState.READY);
 			
 			var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 			assertTrue(playable != null);

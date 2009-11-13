@@ -37,12 +37,12 @@ package org.osmf.traits
 			var loadable:LoadableTrait = new LoadableTrait(loader,null);
 				
 			shouldThrowLoad(loader, null, MediaFrameworkStrings.NULL_PARAM);
-			loadable.loadState = LoadState.LOADED;
-			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ALREADY_LOADED);
+			loadable.loadState = LoadState.READY;
+			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ALREADY_READY);
 			loadable.loadState = LoadState.LOADING;
 			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ALREADY_LOADING);	
-			loadable.loadState = LoadState.CONSTRUCTED;		
-			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLER_RESOURCE);
+			loadable.loadState = LoadState.UNINITIALIZED;		
+			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
 						
 		}
 		
@@ -52,12 +52,12 @@ package org.osmf.traits
 			var loadable:LoadableTrait = new LoadableTrait(loader,null);
 			
 			shouldThrowUnload(loader, null, MediaFrameworkStrings.NULL_PARAM);
-			loadable.loadState = LoadState.CONSTRUCTED;
+			loadable.loadState = LoadState.UNINITIALIZED;
 			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ALREADY_UNLOADED);
 			loadable.loadState = LoadState.UNLOADING;
 			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ALREADY_UNLOADING);			
-			loadable.loadState = LoadState.LOADED;		
-			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLER_RESOURCE);						
+			loadable.loadState = LoadState.READY;		
+			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);						
 		}
 		
 		private function shouldThrowLoad(loader:ILoader, loadable:ILoadable, message:String):void

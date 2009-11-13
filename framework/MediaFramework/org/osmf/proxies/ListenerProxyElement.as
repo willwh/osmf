@@ -167,7 +167,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processLoadableStateChange(oldState:LoadState, newState:LoadState):void
+		protected function processLoadStateChange(loadState:String):void
 		{
 		}
 		
@@ -278,9 +278,9 @@ package org.osmf.proxies
 			processBufferTimeChange(event.oldTime, event.newTime);
 		}
 
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
-			processLoadableStateChange(event.oldState, event.newState);
+			processLoadStateChange(event.loadState);
 		}
 		
 		private function onPlayingChange(event:PlayingChangeEvent):void
@@ -444,11 +444,11 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 			}
 		}

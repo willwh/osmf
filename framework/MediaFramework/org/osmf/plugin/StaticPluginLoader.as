@@ -71,7 +71,7 @@ package org.osmf.plugin
 						
 			unloadFromPluginInfo(pluginInfo);
 			
-			updateLoadable(loadable, LoadState.CONSTRUCTED);
+			updateLoadable(loadable, LoadState.UNINITIALIZED);
 		}
 	}
 }

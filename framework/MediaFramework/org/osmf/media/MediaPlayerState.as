@@ -36,7 +36,7 @@ package org.osmf.media
 		/**
 		 * The MediaPlayer is loading or connecting.
 		 */
-		public static const INITIALIZING:String  = "initializing";
+		public static const LOADING:String  = "loading";
 
 		/**
 		 * The MediaPlayer is ready to be used.
@@ -62,12 +62,5 @@ package org.osmf.media
 		 * The MediaPlayer encountered an error while trying to play media.
 		 */
 		public static const PLAYBACK_ERROR:String = "playbackError";
-		
-		/**
-		 * @private
-		 **/        	
-		public function MediaPlayerState()
-		{
-        }
 	} 
 }

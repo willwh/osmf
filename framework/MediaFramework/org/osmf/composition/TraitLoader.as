@@ -69,7 +69,7 @@ package org.osmf.composition
 					break;
 				}
 				else if (loadable != null &&
-						 loadable.loadState != LoadState.LOADED)
+						 loadable.loadState != LoadState.READY)
 				{
 					// If the next MediaElement doesn't have the trait, but has
 					// the ILoadable trait and is not yet loaded, then we should
@@ -80,7 +80,7 @@ package org.osmf.composition
 					// We're not sure yet if there's a trait.
 					noSuchTrait = false;
 					
-					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					
 					// If it's already loading, then we only need to wait for
 					// the event.
@@ -90,10 +90,10 @@ package org.osmf.composition
 					}
 					break;
 					
-					function onLoadableStateChange(event:LoadableStateChangeEvent):void
+					function onLoadStateChange(event:LoadableStateChangeEvent):void
 					{
 						var loadable:ILoadable = event.target as ILoadable;
-						if (loadable.loadState == LoadState.LOADED)
+						if (loadable.loadState == LoadState.READY)
 						{
 							if (mediaElement.hasTrait(traitType))
 							{

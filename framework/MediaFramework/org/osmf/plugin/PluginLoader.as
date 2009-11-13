@@ -100,7 +100,7 @@ package org.osmf.plugin
 						
 						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 
 						
-						updateLoadable(loadable, LoadState.LOADED, loadedContext);
+						updateLoadable(loadable, LoadState.READY, loadedContext);
 					}
 					catch (error:RangeError)
 					{
@@ -111,7 +111,7 @@ package org.osmf.plugin
 				else
 				{
 					// Version not supported by plugin.
-					updateLoadable(loadable, LoadState.LOAD_FAILED);
+					updateLoadable(loadable, LoadState.LOAD_ERROR);
 					loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_PLUGIN_VERSION)));
 				}
 			}
@@ -123,7 +123,7 @@ package org.osmf.plugin
 			
 			if (invalidImplementation)
 			{
-				updateLoadable(loadable, LoadState.LOAD_FAILED);
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_PLUGIN_IMPLEMENTATION)));
 			}
 		}

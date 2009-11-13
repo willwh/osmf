@@ -300,14 +300,14 @@ package org.osmf.examples
 				  	   		function preload(mediaElement:MediaElement):void
 				  	   		{
 								var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-								loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+								loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 								loadable.load();
 								
-								function onLoadableStateChange(event:LoadableStateChangeEvent):void
+								function onLoadStateChange(event:LoadableStateChangeEvent):void
 								{
-									if (event.loadable.loadState == LoadState.LOADED)
+									if (event.loadState == LoadState.READY)
 									{
-										loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+										loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 										
 										(mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();
 										(mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable).pause();

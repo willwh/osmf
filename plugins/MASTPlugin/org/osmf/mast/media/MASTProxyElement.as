@@ -123,12 +123,11 @@ package org.osmf.mast.media
 			
 			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
 			
-			var loadableTrait:LoadableTrait
-				= new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
+			loadableTrait = new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
 			
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
-				, onLoadableStateChange
+				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				, onLoadStateChange
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
@@ -180,11 +179,11 @@ package org.osmf.mast.media
 			}
 		}
 				
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadableStateChangeEvent):void
 		{
-			if (event.newState == LoadState.LOADED)
+			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:MASTLoadedContext = event.loadable.loadedContext as MASTLoadedContext
+				var loadedContext:MASTLoadedContext = loadableTrait.loadedContext as MASTLoadedContext
 				
 				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
@@ -208,7 +207,7 @@ package org.osmf.mast.media
 					loadable.load();
 				}
 			}
-			else if (event.newState == LoadState.LOAD_FAILED)
+			else if (event.loadState == LoadState.LOAD_ERROR)
 			{
 				dispatchEvent(event.clone());
 			}
@@ -285,6 +284,8 @@ package org.osmf.mast.media
 			}
 			return index;
 		}
+		
+		private var loadableTrait:LoadableTrait;
 		
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";

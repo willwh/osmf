@@ -94,7 +94,7 @@ package org.osmf.traits
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
 					
 					// Context may be null, but is not required to be null anymore:
@@ -102,7 +102,7 @@ package org.osmf.traits
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOADED);
+					assertTrue(event.newState == LoadState.READY);
 					
 					assertTrue(event.loadedContext != null);
 					
@@ -169,7 +169,7 @@ package org.osmf.traits
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
 					
 					// Loaded context may be null, but can be non-null too:
@@ -177,7 +177,7 @@ package org.osmf.traits
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_FAILED);
+					assertTrue(event.newState == LoadState.LOAD_ERROR);
 					
 					assertTrue(event.loadedContext == null);
 					
@@ -193,7 +193,7 @@ package org.osmf.traits
 				case 2:
 					assertTrue(doTwice);
 										
-					assertTrue(event.oldState == LoadState.LOAD_FAILED);
+					assertTrue(event.oldState == LoadState.LOAD_ERROR);
 					assertTrue(event.newState == LoadState.LOADING);
 					
 					// Loaded context may be null, but can be non-null too:
@@ -203,7 +203,7 @@ package org.osmf.traits
 					assertTrue(doTwice);
 					
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_FAILED);
+					assertTrue(event.newState == LoadState.LOAD_ERROR);
 					
 					assertTrue(event.loadedContext == null);
 					
@@ -291,7 +291,7 @@ package org.osmf.traits
 			switch (eventCount)
 			{
 				case 0:
-					assertTrue(event.oldState == LoadState.CONSTRUCTED);
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
 					
 					// Loaded context may be null, but can be non-null too:
@@ -299,7 +299,7 @@ package org.osmf.traits
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOADED);
+					assertTrue(event.newState == LoadState.READY);
 					
 					assertTrue(event.loadedContext != null);
 					
@@ -308,14 +308,14 @@ package org.osmf.traits
 					
 					break;
 				case 2:
-					assertTrue(event.oldState == LoadState.LOADED);
+					assertTrue(event.oldState == LoadState.READY);
 					assertTrue(event.newState == LoadState.UNLOADING);
 					
 					assertTrue(event.loadedContext != null);
 					break;
 				case 3:
 					assertTrue(event.oldState == LoadState.UNLOADING);
-					assertTrue(event.newState == LoadState.CONSTRUCTED);
+					assertTrue(event.newState == LoadState.UNINITIALIZED);
 					
 					assertTrue(event.loadedContext == null);
 					

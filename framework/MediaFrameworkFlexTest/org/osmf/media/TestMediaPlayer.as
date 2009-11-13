@@ -95,7 +95,7 @@ package org.osmf.media
 				var eventCount:int = 0;
 				
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestSource
 					);
 				mediaPlayer.element = mediaElement;
@@ -106,12 +106,12 @@ package org.osmf.media
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.newState == LoadState.LOADING);
-						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZING);
+						assertTrue(event.loadState == LoadState.LOADING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.LOADING);
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.newState == LoadState.LOADED);
+						assertTrue(event.loadState == LoadState.READY);
 						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 						
 						// Now verify that we can unload the media.
@@ -119,12 +119,12 @@ package org.osmf.media
 					}
 					else if (eventCount == 3)
 					{
-						assertTrue(event.newState == LoadState.UNLOADING);
+						assertTrue(event.loadState == LoadState.UNLOADING);
 						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					}
 					else if (eventCount == 4)
 					{
-						assertTrue(event.newState == LoadState.CONSTRUCTED);
+						assertTrue(event.loadState == LoadState.UNINITIALIZED);
 						assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -135,7 +135,7 @@ package org.osmf.media
 			else
 			{
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, mustNotReceiveEvent
 					);
 						
@@ -163,7 +163,7 @@ package org.osmf.media
 				
 				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestSourceWithInvalidResource
 					);
 				mediaPlayer.element = mediaElement;
@@ -179,12 +179,12 @@ package org.osmf.media
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.newState == LoadState.LOADING);
-						assertTrue(mediaPlayer.state == MediaPlayerState.INITIALIZING);
+						assertTrue(event.loadState == LoadState.LOADING);
+						assertTrue(mediaPlayer.state == MediaPlayerState.LOADING);
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.newState == LoadState.LOAD_FAILED);
+						assertTrue(event.loadState == LoadState.LOAD_ERROR);
 						assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
 						
 						// TODO: Reenable once this works for dynamic streams.  Probably
@@ -199,7 +199,7 @@ package org.osmf.media
 			else
 			{
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, mustNotReceiveEvent
 					);
 						
@@ -1147,7 +1147,7 @@ package org.osmf.media
 				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
+				mediaPlayer.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
 
 				var eventCount:int = 0;
 				
@@ -1160,7 +1160,7 @@ package org.osmf.media
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.newState == MediaPlayerState.INITIALIZING);
+						assertTrue(event.newState == MediaPlayerState.LOADING);
 					}
 					else if (eventCount == 2)
 					{
@@ -1179,7 +1179,7 @@ package org.osmf.media
 			
 				function onLoaded(event:LoadableStateChangeEvent):void
 				{
-					if (event.newState == LoadState.LOADED)
+					if (event.loadState == LoadState.READY)
 					{
 						if (traitExists(MediaTraitType.PLAYABLE) == false)
 						{
@@ -1546,16 +1546,16 @@ package org.osmf.media
 			assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			
 			mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
 			mediaPlayer.element = mediaElement;
 			
 			function onTestCallAfterLoad(event:LoadableStateChangeEvent):void
 			{
-				if (event.newState == LoadState.LOADED)
+				if (event.loadState == LoadState.READY)
 				{
-					mediaPlayer.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onTestCallAfterLoad);
+					mediaPlayer.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
 					
 					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					

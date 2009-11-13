@@ -76,7 +76,7 @@ package org.osmf.tracking
 			
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.LOADED)
+				if (event.loadable.loadState == LoadState.READY)
 				{
 					pingComplete = true;
 					

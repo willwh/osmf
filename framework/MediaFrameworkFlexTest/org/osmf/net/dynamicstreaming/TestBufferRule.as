@@ -65,7 +65,7 @@ package org.osmf.net.dynamicstreaming
 		public function testGetNewIndex():void
 		{
 			_loadable =  new LoadableTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
-			_loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
+			_loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
@@ -74,11 +74,11 @@ package org.osmf.net.dynamicstreaming
 		
 		private function onLoaded(event:LoadableStateChangeEvent):void
 		{
-			switch (event.newState)
+			switch (event.loadState)
 			{
-				case LoadState.LOADED:
-					_loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoaded);
-					var loadedContext:ILoadedContext = event.loadable.loadedContext;
+				case LoadState.READY:
+					_loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
+					var loadedContext:ILoadedContext = _loadable.loadedContext;
 					assertTrue(loadedContext != null);
 					assertTrue(loadedContext is NetLoadedContext);
 					
@@ -99,8 +99,8 @@ package org.osmf.net.dynamicstreaming
 					stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					stream.play(dsResource);
 					break;
-				case LoadState.LOAD_FAILED:
-					fail("Load FAILED");
+				case LoadState.LOAD_ERROR:
+					fail("Load ERROR");
 					break;				
 			}
 		}

@@ -145,12 +145,12 @@ package org.osmf.plugin
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoadStateChange);
 			loader.load(loadable);
 			
-			function onLoadableStateChange(event:LoaderEvent):void
+			function onLoadStateChange(event:LoaderEvent):void
 			{
-				if (event.newState == LoadState.LOAD_FAILED)
+				if (event.newState == LoadState.LOAD_ERROR)
 				{
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
