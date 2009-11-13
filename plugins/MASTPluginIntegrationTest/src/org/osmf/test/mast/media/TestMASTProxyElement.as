@@ -4,7 +4,7 @@ package org.osmf.test.mast.media
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
@@ -132,10 +132,10 @@ package org.osmf.test.mast.media
 			}
 			
 			var loadableTrait:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadableTrait.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadableTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadableTrait.load();
 			
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
