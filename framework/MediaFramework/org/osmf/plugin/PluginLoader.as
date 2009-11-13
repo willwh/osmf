@@ -72,7 +72,7 @@ package org.osmf.plugin
 		/**
 		 * Loads the plugin into the ILoadable.
 		 * On success sets the LoadState of the ILOadable to LOADING, 
-		 * on failure to LOAD_FAILED.
+		 * on failure to LOAD_ERROR.
 		 * @param pluginInfo IPluginInfo instance to use for this load operation.
 		 */
 		protected function loadFromPluginInfo(loadable:ILoadable, pluginInfo:IPluginInfo, loader:Loader = null):void

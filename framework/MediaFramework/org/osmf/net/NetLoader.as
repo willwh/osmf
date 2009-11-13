@@ -104,7 +104,7 @@ package org.osmf.net
 		 * Validates the loadable to verify that this class can in fact load it. Examines the protocol
 		 * associated with the loadable's resource. If the protocol is HTTP, calls the <code>startLoadingHTTP()</code>
 		 * method. If the protocol is RTMP-based, calls the  <code>startLoadingRTMP()</code> method. If the URL protocol is invalid,
-		 * dispatches a mediaErroEvent against the loadable and updates the loadable's state to LoadState.LOAD_FAILED.
+		 * dispatches a mediaErroEvent against the loadable and updates the loadable's state to LoadState.LOAD_ERROR.
 	     *
 	     * @param loadable ILoadable trait requesting this load operation.
 	     * @see org.osmf.traits.ILoadable
