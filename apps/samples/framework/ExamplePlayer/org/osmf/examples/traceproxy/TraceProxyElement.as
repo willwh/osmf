@@ -262,13 +262,13 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					temporal.addEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-					temporal.addEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
+					temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 				else
 				{
-					temporal.removeEventListener(TraitEvent.DURATION_REACHED, onDurationReached);
-					temporal.removeEventListener(DurationChangeEvent.DURATION_CHANGE, onDurationChange);
+					temporal.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 			}
 		}
@@ -337,14 +337,14 @@ package org.osmf.examples.traceproxy
 			trace("SeekingChangeEvent: " + (event.seeking ? "seeking" : "not seeking") + " at " + event.time);
 		}
 		
-		private function onDurationReached(event:TraitEvent):void
+		private function onDurationReached(event:TimeEvent):void
 		{
 			trace("DurationReachedEvent");
 		}
 
-		private function onDurationChange(event:DurationChangeEvent):void
+		private function onDurationChange(event:TimeEvent):void
 		{
-			trace("DurationChangeEvent: " + event.oldDuration + " -> " + event.newDuration);
+			trace("DurationChangeEvent: " + event.time);
 		}
 
 		private function onDimensionChange(event:DimensionChangeEvent):void
