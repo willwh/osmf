@@ -92,7 +92,7 @@ package org.osmf.audio
 		/**
 		 *  @private 
 		 */ 
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
 			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
 

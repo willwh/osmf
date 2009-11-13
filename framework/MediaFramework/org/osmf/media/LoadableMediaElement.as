@@ -81,9 +81,9 @@ package org.osmf.media
 		
 		/**
 		 * Subclasses can override this method to do processing when the media
-		 * element enters the LOADED state.
+		 * element enters the READY state.
 		 **/
-		protected function processLoadedState():void
+		protected function processReadyState():void
 		{
 			// Subclass stub
 		}
@@ -102,7 +102,7 @@ package org.osmf.media
 		
 		private function onLoadStateChange(event:LoadEvent):void
 		{
-			// The asymmetry between LOADED and UNLOADING (versus UNLOADED) is
+			// The asymmetry between READY and UNLOADING (versus UNINITIALIZED) is
 			// motivated by the fact that once a media is already unloaded, one
 			// cannot reference it any longer. Triggering the event upfront the
 			// actual unload being effectuated allows listeners to still act on
@@ -114,7 +114,7 @@ package org.osmf.media
 			}
 			else if (event.loadState == LoadState.READY)
 			{
-				processLoadedState();
+				processReadyState();
 			}
 			else if (event.loadState == LoadState.UNLOADING)
 			{

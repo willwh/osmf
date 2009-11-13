@@ -75,7 +75,7 @@ package org.osmf.traits
          * <code>UNINITIALIZED</code> after it has successfully completed unloading, 
          * and <code>LOAD_ERROR</code> if it fails to complete unloading.</p>
          * 
-         * <p>If the ILoadable's LoadState is not <code>LOADED</code> when the method
+         * <p>If the ILoadable's LoadState is not <code>READY</code> when the method
          * is called, this method throws an error.</p>
          * 
          * @see org.osmf.traits.LoadState

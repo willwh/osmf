@@ -149,7 +149,7 @@ package org.osmf.video
 	    /**
 	     * @private
 		 **/
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
 			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);

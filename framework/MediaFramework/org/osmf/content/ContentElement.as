@@ -77,7 +77,7 @@ package org.osmf.content
 		/**
 		 *  @private 
 		 */ 		
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
 			var context:ContentLoadedContext
 				=	(getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext

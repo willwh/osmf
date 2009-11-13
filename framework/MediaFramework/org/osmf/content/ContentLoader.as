@@ -86,7 +86,7 @@ package org.osmf.content
 		/**
 		 * Loads content using a flash.display.Loader object. 
 		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
-		 * while loading and to LOADED upon completing a successful load.</p> 
+		 * while loading and to READY upon completing a successful load.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()

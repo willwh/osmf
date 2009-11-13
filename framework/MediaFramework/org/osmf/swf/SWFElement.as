@@ -79,9 +79,9 @@ package org.osmf.swf
 		/**
 		 * @private 
 		 */ 		
-		override protected function processLoadedState():void
+		override protected function processReadyState():void
 		{
-			super.processLoadedState();
+			super.processReadyState();
 			
 			var viewable:IViewable = getTrait(MediaTraitType.VIEWABLE) as IViewable;
 			_swfRoot = viewable != null ? viewable.view : null;

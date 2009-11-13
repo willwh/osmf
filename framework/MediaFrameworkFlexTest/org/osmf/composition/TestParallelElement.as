@@ -275,7 +275,7 @@ package org.osmf.composition
 			assertTrue(loadable1.loadState == LoadState.READY);
 			assertTrue(loadable2.loadState == LoadState.READY);
 			
-			// Adding a LOADED child to an UNINITIALIZED composition causes the
+			// Adding a READY child to an UNINITIALIZED composition causes the
 			// child to unload.
 			loadable.unload();
 			var mediaElement3:MediaElement =

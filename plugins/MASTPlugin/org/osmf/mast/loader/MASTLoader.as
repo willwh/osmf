@@ -70,7 +70,7 @@ package org.osmf.mast.loader
 		/**
 		 * Loads a MAST document.
 		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
-		 * while loading and to LOADED upon completing a successful load and parse of the
+		 * while loading and to READY upon completing a successful load and parse of the
 		 * MAST document.</p>
 		 * 
 		 * @see org.osmf.traits.LoadState
