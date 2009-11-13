@@ -1,6 +1,6 @@
 package
 {
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetStreamCodes;
@@ -19,10 +19,10 @@ package
 		{
 			super(video);
 			videoElement = video;	
-			(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);				
+			(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);				
 		}
 		
-		private function onLoaded(event:LoadableStateChangeEvent):void
+		private function onLoaded(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{

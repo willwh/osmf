@@ -127,7 +127,7 @@ package org.osmf.net.dynamicstreaming
 			_mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			
 			_loadable = _mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			_loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			_loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
@@ -142,7 +142,7 @@ package org.osmf.net.dynamicstreaming
 			}
 		}
 		
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			switch (event.loadState)
 			{

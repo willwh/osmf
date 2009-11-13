@@ -207,7 +207,7 @@ package org.osmf.content
 		 * Unloads content using a flash.display.Loader object.  
 		 * 
 		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
-		 * while unloading and to CONSTRUCTED upon completing a successful unload.</p>
+		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.osmf.traits.LoadState

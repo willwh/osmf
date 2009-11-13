@@ -67,7 +67,7 @@
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>
     <classEntry path="org.osmf.events.GatewayChangeEvent"/>
-    <classEntry path="org.osmf.events.LoadableStateChangeEvent"/>
+    <classEntry path="org.osmf.events.LoadEvent"/>
     <classEntry path="org.osmf.events.LoaderEvent"/>
     <classEntry path="org.osmf.events.MediaError"/>
     <classEntry path="org.osmf.events.MediaErrorCodes"/>

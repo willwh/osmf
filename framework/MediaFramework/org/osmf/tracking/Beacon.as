@@ -24,7 +24,7 @@ package org.osmf.tracking
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.BeaconEvent;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.LoadState;
@@ -86,14 +86,14 @@ package org.osmf.tracking
 			{
 				var loadable:LoadableTrait = new LoadableTrait(httpLoader, urlResource);
 				
-				loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				loadable.load();
 	
-				function onLoadStateChange(event:LoadableStateChangeEvent):void
+				function onLoadStateChange(event:LoadEvent):void
 				{
 					if (event.loadState == LoadState.READY)
 					{
-						loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 						dispatchEvent(new BeaconEvent(BeaconEvent.PING_COMPLETE));
 					}

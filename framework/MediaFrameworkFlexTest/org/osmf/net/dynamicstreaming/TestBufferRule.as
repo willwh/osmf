@@ -65,19 +65,19 @@ package org.osmf.net.dynamicstreaming
 		public function testGetNewIndex():void
 		{
 			_loadable =  new LoadableTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
-			_loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
+			_loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			_loadable.load();	
 		}
 		
-		private function onLoaded(event:LoadableStateChangeEvent):void
+		private function onLoaded(event:LoadEvent):void
 		{
 			switch (event.loadState)
 			{
 				case LoadState.READY:
-					_loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
+					_loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 					var loadedContext:ILoadedContext = _loadable.loadedContext;
 					assertTrue(loadedContext != null);
 					assertTrue(loadedContext is NetLoadedContext);

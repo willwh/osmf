@@ -48,11 +48,11 @@ package org.osmf.traits
          * Dispatches the <code>loaderStateChange</code> event with every state change.
 		 * 
          * <p>Typical states are <code>LOADING</code> while the ILoadable is loading,
-         * <code>LOADED</code> after it has successfully completed loading, 
-         * and <code>LOAD_FAILED</code> if it fails to complete loading.</p>
+         * <code>READY</code> after it has successfully completed loading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete loading.</p>
          * 
          * <p>If the ILoadable's LoadState is <code>LOADING</code> or
-         * <code>LOADED</code> when the method is called, this method throws
+         * <code>READY</code> when the method is called, this method throws
          * an error.</p>
          * 
          * @see org.osmf.traits.LoadState
@@ -63,7 +63,7 @@ package org.osmf.traits
 		 * If this loader cannot load the given ILoadable (as determined by
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
          * or if the ILoadable's LoadState is <code>LOADING</code> or
-         * <code>LOADED</code>.
+         * <code>READY</code>.
 		 **/
 		function load(loadable:ILoadable):void;
 		 
@@ -72,8 +72,8 @@ package org.osmf.traits
          * Dispatches the <code>loaderStateChange</code> event with every state change.
 		 * 
          * <p>Typical states are <code>UNLOADING</code> while the ILoadable is unloading,
-         * <code>CONSTRUCTED</code> after it has successfully completed unloading, 
-         * and <code>LOAD_FAILED</code> if it fails to complete unloading.</p>
+         * <code>UNINITIALIZED</code> after it has successfully completed unloading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete unloading.</p>
          * 
          * <p>If the ILoadable's LoadState is not <code>LOADED</code> when the method
          * is called, this method throws an error.</p>
@@ -85,7 +85,7 @@ package org.osmf.traits
 		 * @throws IllegalOperationError <code>IllegalOperationError</code>
 		 * If this loader cannot unload the specified ILoadable (as determined by
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
-         * or if the ILoadable's LoadState is not <code>LOADED</code>.
+         * or if the ILoadable's LoadState is not <code>READY</code>.
 		 **/
 		function unload(loadable:ILoadable):void;
 	}

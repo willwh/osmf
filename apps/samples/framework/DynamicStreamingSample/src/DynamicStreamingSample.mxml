@@ -122,7 +122,7 @@
 				}	
 			}
 			
-			private function onLoadStateChange(event:LoadableStateChangeEvent):void
+			private function onLoadStateChange(event:LoadEvent):void
 			{
 				debug("onLoadStateChange() - loadState="+event.loadState);
 				switch (event.loadState)
@@ -233,7 +233,7 @@
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				
 				var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 									
 				wrapper.element = mediaElement;
 				wrapper.mediaPlayer.autoPlay = true;

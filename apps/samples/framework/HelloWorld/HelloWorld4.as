@@ -23,7 +23,7 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -50,14 +50,14 @@ package
 				);
 			
 			var loadable:ILoadable = element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onReady);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
 			loadable.load();
 			
-			function onReady(event:LoadableStateChangeEvent):void
+			function onReady(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onReady);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
 					
 					var playable:IPlayable = element.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
 					playable.play();

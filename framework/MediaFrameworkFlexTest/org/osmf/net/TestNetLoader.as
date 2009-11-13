@@ -24,7 +24,7 @@ package org.osmf.net
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -269,21 +269,21 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 			var loadable3:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable3.load();
 			var loadable4:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable4.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable4.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable4.load();
 			var responses:int = 0;
-			function onMultiLoad(event:LoadableStateChangeEvent):void
+			function onMultiLoad(event:LoadEvent):void
 			{
-				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
 					
 				if (event.loadState == LoadState.READY)
 				{
@@ -302,16 +302,16 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
-			function onMultiLoad(event:LoadableStateChangeEvent):void
+			function onMultiLoad(event:LoadEvent):void
 			{
-				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
 					
 				if (event.loadState == LoadState.READY)
 				{
@@ -333,16 +333,16 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader(false);
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
-			function onMultiLoad(event:LoadableStateChangeEvent):void
+			function onMultiLoad(event:LoadEvent):void
 			{
-				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
 					
 				if (event.loadState == LoadState.READY)
 				{
@@ -364,16 +364,16 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader();
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 
 			var responses:int = 0;
-			function onMultiLoad(event:LoadableStateChangeEvent):void
+			function onMultiLoad(event:LoadEvent):void
 			{
-				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
 					
 				if (event.loadState == LoadState.READY)
 				{
@@ -406,17 +406,17 @@ package org.osmf.net
 			var netLoader:MockNetLoader = new MockNetLoader(true,factory,negotiator);
 			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable1.load();
 			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadable2.load();
 			
 			var responses:int = 0;
 
-			function onMultiLoad(event:LoadableStateChangeEvent):void
+			function onMultiLoad(event:LoadEvent):void
 			{
-				assertTrue(event.type == LoadableStateChangeEvent.LOAD_STATE_CHANGE);
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
 					
 				if (event.loadState == LoadState.READY)
 				{

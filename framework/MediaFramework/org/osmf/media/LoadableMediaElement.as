@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -100,7 +100,7 @@ package org.osmf.media
 		// Private
 		//
 		
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			// The asymmetry between LOADED and UNLOADING (versus UNLOADED) is
 			// motivated by the fact that once a media is already unloaded, one
@@ -129,7 +129,7 @@ package org.osmf.media
 			{
 				// Remove (and unload) any existing loadable.
 				loadable.removeEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onLoadStateChange
 					);
 					
@@ -144,7 +144,7 @@ package org.osmf.media
 			// Add a new loadable for the current resource.
 			loadable = new LoadableTrait(loader, resource);
 			loadable.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			

@@ -25,7 +25,7 @@ package org.osmf.content
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.BytesTotalChangeEvent;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.traits.IDownloadable;
@@ -80,10 +80,10 @@ package org.osmf.content
 			
 			eventDispatcher.addEventListener(Event.COMPLETE, addAsync(mustReceiveEvent, 10000));
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			loadable.load();
 			
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				var downloadable:IDownloadable;
 				

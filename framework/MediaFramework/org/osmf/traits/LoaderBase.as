@@ -66,7 +66,7 @@ package org.osmf.traits
 		
 		/**
 		 * If this method is overridden, the subclass must call super.unload() in order
-		 * to validate the unload.  The Loadable's loadState is set to LoadState.CONSTRUCTED.
+		 * to validate the unload.  The Loadable's loadState is set to LoadState.UNINITIALIZED.
 		 **/
 		public function unload(loadable:ILoadable):void
 		{

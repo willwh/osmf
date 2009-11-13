@@ -33,7 +33,7 @@ package org.osmf.media
 	import org.osmf.events.BytesLoadedChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
@@ -94,12 +94,12 @@ package org.osmf.media
 				var eventCount:int = 0;
 				
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestSource
 					);
 				mediaPlayer.element = mediaElement;
 				
-				function onTestSource(event:LoadableStateChangeEvent):void
+				function onTestSource(event:LoadEvent):void
 				{
 					eventCount++;
 					
@@ -134,7 +134,7 @@ package org.osmf.media
 			else
 			{
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, mustNotReceiveEvent
 					);
 						
@@ -162,7 +162,7 @@ package org.osmf.media
 				
 				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestSourceWithInvalidResource
 					);
 				mediaPlayer.element = mediaElement;
@@ -172,7 +172,7 @@ package org.osmf.media
 					errorCount++;
 				}
 				
-				function onTestSourceWithInvalidResource(event:LoadableStateChangeEvent):void
+				function onTestSourceWithInvalidResource(event:LoadEvent):void
 				{
 					eventCount++;
 					
@@ -198,7 +198,7 @@ package org.osmf.media
 			else
 			{
 				mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, mustNotReceiveEvent
 					);
 						
@@ -1146,7 +1146,7 @@ package org.osmf.media
 				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoaded);
+				mediaPlayer.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 
 				var eventCount:int = 0;
 				
@@ -1176,7 +1176,7 @@ package org.osmf.media
 					else fail();
 				}
 			
-				function onLoaded(event:LoadableStateChangeEvent):void
+				function onLoaded(event:LoadEvent):void
 				{
 					if (event.loadState == LoadState.READY)
 					{
@@ -1545,16 +1545,16 @@ package org.osmf.media
 			assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			
 			mediaPlayer.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
 			mediaPlayer.element = mediaElement;
 			
-			function onTestCallAfterLoad(event:LoadableStateChangeEvent):void
+			function onTestCallAfterLoad(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					mediaPlayer.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
+					mediaPlayer.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
 					
 					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					

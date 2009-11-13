@@ -25,7 +25,7 @@ package org.osmf.vast.loader
 	
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.media.URLResource;
@@ -208,14 +208,14 @@ package org.osmf.vast.loader
 					);
 					
 			var wrapperLoadable:LoadableTrait = new LoadableTrait(wrapperLoader, wrapperResource);
-			wrapperLoadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+			wrapperLoadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 			wrapperLoadable.load();
 			
-			function onWrapperLoadStateChange(event:LoadableStateChangeEvent):void
+			function onWrapperLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+					wrapperLoadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 					
 					// Merge the wrapper's ad with the original ad.
  					var wrapperLoadedContext:VASTLoadedContext = wrapperLoadable.loadedContext as VASTLoadedContext;
@@ -232,7 +232,7 @@ package org.osmf.vast.loader
 				}
 				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
-					wrapperLoadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+					wrapperLoadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 
 					CONFIG::LOGGING
 					{

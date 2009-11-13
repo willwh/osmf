@@ -136,7 +136,7 @@ package org.osmf.examples.traceproxy
 				}
 				else
 				{
-					audible.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					audible.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
 					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 					audible.removeEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
 				}
@@ -168,11 +168,11 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE, onLoadableStateChange);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 			}
 		}
@@ -317,9 +317,9 @@ package org.osmf.examples.traceproxy
 			trace("BufferTimeChangeEvent: " + event.oldTime + " -> " + event.newTime);
 		}
 
-		private function onLoadableStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
-			trace("LoadableStateChangeEvent: " + event.oldState.toString() + " -> " + event.newState.toString());
+			trace("LoadEvent: " + event.oldState.toString() + " -> " + event.newState.toString());
 		}
 		
 		private function onPlayingChange(event:PlayingChangeEvent):void

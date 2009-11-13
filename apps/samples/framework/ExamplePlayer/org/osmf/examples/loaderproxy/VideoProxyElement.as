@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.ProxyElement;
@@ -54,14 +54,14 @@ package org.osmf.examples.loaderproxy
 			loadableTrait = new LoadableTrait(new VideoProxyLoader(), resource);
 			
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
 		}
 		
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{

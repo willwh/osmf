@@ -29,7 +29,7 @@ package
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -78,16 +78,16 @@ package
 				= new LoadableTrait(new VASTLoader(), new URLResource(vastURL));
 						
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			loadableTrait.load();
 						
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadableTrait.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadableTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Create the appropriate inline MediaElements.
 					var loadedContext:VASTLoadedContext = loadableTrait.loadedContext as VASTLoadedContext;

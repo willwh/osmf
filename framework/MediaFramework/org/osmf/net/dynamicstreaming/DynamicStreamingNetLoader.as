@@ -26,7 +26,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoadedContext;
@@ -78,14 +78,14 @@ package org.osmf.net.dynamicstreaming
 				var host:URL = dsResource.host;
 				var tempTrait:LoadableTrait = new LoadableTrait(null, new URLResource(host));
 				
-				tempTrait.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				tempTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				super.load(tempTrait);
 				
-				function onLoadStateChange(event:LoadableStateChangeEvent):void
+				function onLoadStateChange(event:LoadEvent):void
 				{
 					if (event.loadState == LoadState.READY)
 					{
-						tempTrait.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						tempTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 									
 						var netLoadedContext:NetLoadedContext = tempTrait.loadedContext as NetLoadedContext;
 						DynamicNetStream(netLoadedContext.stream).resource = dsResource;

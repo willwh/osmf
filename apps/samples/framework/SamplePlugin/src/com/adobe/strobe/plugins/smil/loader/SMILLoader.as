@@ -28,7 +28,7 @@ package com.adobe.strobe.plugins.smil.loader
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -101,7 +101,7 @@ package com.adobe.strobe.plugins.smil.loader
 			var parser:SMILParser = new SMILParser();
 			var mediaElement:MediaElement = parser.parse(xml);
 
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
@@ -122,7 +122,7 @@ package com.adobe.strobe.plugins.smil.loader
 			if (mediaElement.hasTrait(MediaTraitType.LOADABLE))
 			{
 				mediaLoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				mediaLoadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				mediaLoadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				mediaLoadable.load();
 			}
 		}

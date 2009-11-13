@@ -24,7 +24,7 @@ package org.osmf.html
 	import flash.errors.IllegalOperationError;
 	import flash.external.ExternalInterface;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.traits.ILoadable;
@@ -61,7 +61,7 @@ package org.osmf.html
 			{
 				_loadState = value;
 
-				dispatchEvent(new LoadableStateChangeEvent(LoadableStateChangeEvent.LOAD_STATE_CHANGE, false, false, value));
+				dispatchEvent(new LoadEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, value));
 			}
 		}
 		

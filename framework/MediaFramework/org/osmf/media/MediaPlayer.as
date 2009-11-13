@@ -77,9 +77,9 @@ package org.osmf.media
 	 * Dispatched when the load state has changed.
 	 * @see LoadState
 	 *
-	 * @eventType org.osmf.events.LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
 	 **/
-	[Event(name="loadableStateChange", type="org.osmf.events.LoadableStateChangeEvent")]
+	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 
 	 // IPlayable
 	 
@@ -1071,7 +1071,7 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	
 				case MediaTraitType.LOADABLE:					
-					changeListeners(add, _element, trait, LoadableStateChangeEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);					
+					changeListeners(add, _element, trait, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);					
 					_loadable = add;		
 					if (add)
 					{
@@ -1182,7 +1182,7 @@ package org.osmf.media
 			}						
 		}
 		
-		private function onLoadState(event:LoadableStateChangeEvent):void
+		private function onLoadState(event:LoadEvent):void
 		{		
 			if (event.loadState == LoadState.READY)
 			{

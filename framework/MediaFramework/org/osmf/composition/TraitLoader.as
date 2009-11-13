@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
@@ -80,7 +80,7 @@ package org.osmf.composition
 					// We're not sure yet if there's a trait.
 					noSuchTrait = false;
 					
-					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					
 					// If it's already loading, then we only need to wait for
 					// the event.
@@ -90,7 +90,7 @@ package org.osmf.composition
 					}
 					break;
 					
-					function onLoadStateChange(event:LoadableStateChangeEvent):void
+					function onLoadStateChange(event:LoadEvent):void
 					{
 						var loadable:ILoadable = event.target as ILoadable;
 						if (loadable.loadState == LoadState.READY)

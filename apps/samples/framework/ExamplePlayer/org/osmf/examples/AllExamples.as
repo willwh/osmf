@@ -29,7 +29,7 @@ package org.osmf.examples
 	import org.osmf.audio.SoundLoader;
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
@@ -300,14 +300,14 @@ package org.osmf.examples
 				  	   		function preload(mediaElement:MediaElement):void
 				  	   		{
 								var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-								loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+								loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 								loadable.load();
 								
-								function onLoadStateChange(event:LoadableStateChangeEvent):void
+								function onLoadStateChange(event:LoadEvent):void
 								{
 									if (event.loadState == LoadState.READY)
 									{
-										loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+										loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 										
 										(mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();
 										(mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable).pause();

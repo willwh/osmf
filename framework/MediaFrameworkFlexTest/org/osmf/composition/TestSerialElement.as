@@ -898,12 +898,12 @@ package org.osmf.composition
 			
 			// Make sure that the third child gets the IPlayable trait when
 			// it finishes loading.
-			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			loadable3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable3.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable3.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(mediaElement3));
 					temporal3 = new TemporalTrait();
 					temporal3.duration = 1;

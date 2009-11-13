@@ -31,7 +31,7 @@ package org.osmf.events
 	 * A trait that implements the ILoadable interface dispatches
 	 * this event when its load state has changed. 
 	 */
-	public class LoadableStateChangeEvent extends TraitEvent
+	public class LoadEvent extends TraitEvent
 	{
 		/**
 		 * The LoadEvent.LOAD_STATE_CHANGE constant defines the value
@@ -50,7 +50,7 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param loadState New LoadState of the ILoadable.
 		 **/
-		public function LoadableStateChangeEvent
+		public function LoadEvent
 							( type:String,
 							  bubbles:Boolean=false,
 							  cancelable:Boolean=false,
@@ -67,7 +67,7 @@ package org.osmf.events
 		 **/
 		override public function clone():Event
 		{
-			return new LoadableStateChangeEvent(type, bubbles, cancelable, loadState);
+			return new LoadEvent(type, bubbles, cancelable, loadState);
 		}
 
 		/**

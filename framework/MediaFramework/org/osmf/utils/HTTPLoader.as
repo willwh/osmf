@@ -81,8 +81,8 @@ package org.osmf.utils
 		/**
 		 * Loads an URL over HTTP.
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
-		 * while loading and to LOADED upon completing a successful load of the 
+		 * <p>Updates the ILoadable's <code>loadState</code> property to LOADING
+		 * while loading and to READY upon completing a successful load of the 
 		 * URL.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
@@ -160,8 +160,8 @@ package org.osmf.utils
 		/**
 		 * Unloads the resource.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
-		 * while unloading and to CONSTRUCTED upon completing a successful unload.</p>
+		 * <p>Updates the ILoadable's <code>loadState</code> property to UNLOADING
+		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.osmf.traits.LoadState

@@ -149,10 +149,10 @@ package org.osmf.plugin
 			assertTrue(mediaElement != null);
 			
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onElementLoadStateChange);
+			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onElementLoadStateChange);
 			loadable.load();
 						
-			function onElementLoadStateChange(event:LoadableStateChangeEvent):void
+			function onElementLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{

@@ -26,7 +26,7 @@ package org.osmf.mast.media
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.composition.SerialElement;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.TraitsChangeEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
@@ -126,7 +126,7 @@ package org.osmf.mast.media
 			loadableTrait = new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
 			
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			
@@ -179,7 +179,7 @@ package org.osmf.mast.media
 			}
 		}
 				
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{

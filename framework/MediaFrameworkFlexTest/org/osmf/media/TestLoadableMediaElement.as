@@ -23,7 +23,7 @@ package org.osmf.media
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
@@ -81,12 +81,12 @@ package org.osmf.media
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestSetResourceUnloadsPreviousLoadable
 					);
 			loadable.load();
 			
-			function onTestSetResourceUnloadsPreviousLoadable(event:LoadableStateChangeEvent):void
+			function onTestSetResourceUnloadsPreviousLoadable(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
@@ -97,7 +97,7 @@ package org.osmf.media
 				}
 				else if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadable);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadable);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}

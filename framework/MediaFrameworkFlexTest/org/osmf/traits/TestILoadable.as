@@ -25,7 +25,7 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.utils.InterfaceTestCase;
 	
@@ -88,11 +88,11 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(validResource);
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE,onTestLoad);
+			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestLoad);
 			loadable.load();
 		}
 		
-		private function onTestLoad(event:LoadableStateChangeEvent):void
+		private function onTestLoad(event:LoadEvent):void
 		{
 			assertTrue(event.loadable == currentLoadable);
 			assertTrue(event.target is ILoadable);
@@ -170,11 +170,11 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(invalidResource);
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE,onTestLoadWithFailure);
+			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestLoadWithFailure);
 			loadable.load();
 		}
 				
-		private function onTestLoadWithFailure(event:LoadableStateChangeEvent):void
+		private function onTestLoadWithFailure(event:LoadEvent):void
 		{
 			assertTrue(event.loadable == currentLoadable);
 			assertTrue(event.target is ILoadable);
@@ -267,11 +267,11 @@ package org.osmf.traits
 			
 			var loadable:ILoadable = currentLoadable = createILoadable(validResource);
 			
-			loadable.addEventListener(LoadableStateChangeEvent.LOADABLE_STATE_CHANGE,onTestUnload);
+			loadable.addEventListener(LoadEvent.LOADABLE_STATE_CHANGE,onTestUnload);
 			loadable.load();
 		}
 		
-		private function onTestUnload(event:LoadableStateChangeEvent):void
+		private function onTestUnload(event:LoadEvent):void
 		{
 			assertTrue(event.loadable == currentLoadable);
 			assertTrue(event.target is ILoadable);

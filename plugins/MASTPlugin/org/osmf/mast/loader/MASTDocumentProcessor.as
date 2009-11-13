@@ -26,7 +26,7 @@ package org.osmf.mast.loader
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.mast.managers.MASTConditionManager;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.MediaElement;
@@ -148,16 +148,16 @@ package org.osmf.mast.loader
 				= new LoadableTrait(new VASTLoader(), new URLResource(new URL(source.url)));
 			
 			loadableTrait.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			loadableTrait.load();
 			
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadableTrait.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadableTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Get the appropriate inline MediaElements.
 					var loadedContext:VASTLoadedContext = loadableTrait.loadedContext as VASTLoadedContext;

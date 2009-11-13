@@ -26,7 +26,7 @@ package com.adobe.strobe.plugins.smil.media
 	
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.traits.ILoader;
@@ -52,7 +52,7 @@ package com.adobe.strobe.plugins.smil.media
 				loadableTrait = new LoadableTrait(loader, value);
 				
 				loadableTrait.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onLoadStateChange
 					);
 				
@@ -95,7 +95,7 @@ package com.adobe.strobe.plugins.smil.media
 			// placeholder for performing any operations just before the unload is completed
 		}
 		
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{

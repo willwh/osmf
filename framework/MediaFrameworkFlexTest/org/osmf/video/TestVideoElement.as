@@ -24,7 +24,7 @@ package org.osmf.video
 	import flash.events.Event;
 	
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
@@ -120,16 +120,16 @@ package org.osmf.video
 			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			assertTrue(loadable != null);
 			loadable.addEventListener
-					( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestGetMetadata
 					);
 			loadable.load();
 			
-			function onTestGetMetadata(event:LoadableStateChangeEvent):void
+			function onTestGetMetadata(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
 					
 					// We should now have a spatial trait with video's default dimensions:
 					var spatial:ISpatial = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;

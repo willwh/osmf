@@ -30,9 +30,9 @@ package org.osmf.traits
 	 * Dispatched when the trait's state has changed.
 	 * @see LoadState
 	 *
-	 * @eventType org.osmf.events.LoadableStateChangeEvent.LOADABLE_STATE_CHANGE
+	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
 	 **/
-	[Event(name="loadableStateChange", type="org.osmf.events.LoadableStateChangeEvent")]
+	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 	
 	/**
 	 * ILoadable defines the trait interface for media that must be loaded before they
@@ -68,7 +68,7 @@ package org.osmf.traits
 		/**
 		 * Loads this ILoadable.
 		 * Changes the load state of the ILoadable.
-         * Dispatches the <code>loadableStateChange</code> event with every state change.
+         * Dispatches the <code>loadStateChange</code> event with every state change.
          *
          * <p>Typical states are <code>LOADING</code> while the ILoadable is loading,
          * <code>READY</code> after it has successfully completed loading, 
@@ -86,7 +86,7 @@ package org.osmf.traits
 
 		/**
          * Unloads this ILoadable. Changes the load state of the ILoadable.
-         * Dispatches the <code>loadableStateChange</code> event with every state change.
+         * Dispatches the <code>loadStateChange</code> event with every state change.
 		 * 
          * <p>Typical states are <code>UNLOADING</code> while the ILoadable is unloading,
          * <code>UNINITIALIZED</code> after it has successfully completed unloading, 

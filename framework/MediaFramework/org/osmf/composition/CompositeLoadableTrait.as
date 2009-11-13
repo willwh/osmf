@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.ILoadable;
@@ -175,7 +175,7 @@ package org.osmf.composition
 		 **/
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{
-			child.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChanged, false, 0, true);
+			child.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 0, true);
 			
 			if (mode == CompositionMode.PARALLEL)
 			{
@@ -205,13 +205,13 @@ package org.osmf.composition
 		 **/
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{
-			child.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChanged);
+			child.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 		}
 		
 		// Internals
 		//
 		
-		private function onLoadStateChanged(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			// For parallel compositions and for the current child in a serial
 			// composition, changes from the child propagate to the composite
@@ -289,7 +289,7 @@ package org.osmf.composition
 			{
 				_loadState = newLoadState;
 				
-				dispatchEvent(new LoadableStateChangeEvent(LoadableStateChangeEvent.LOAD_STATE_CHANGE, false, false, _loadState));
+				dispatchEvent(new LoadEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, _loadState));
 			}
 		}
 		

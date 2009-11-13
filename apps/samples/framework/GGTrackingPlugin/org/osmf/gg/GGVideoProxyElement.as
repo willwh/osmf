@@ -136,11 +136,11 @@ package org.osmf.gg
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 			}
 		}
@@ -223,7 +223,7 @@ package org.osmf.gg
 			sendEvent(MUTE, event.muted);
 		}
 
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			var videoType:String;
 			

@@ -27,7 +27,7 @@ package org.osmf.proxies
 	import org.osmf.events.BufferingChangeEvent;
 	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.PanChangeEvent;
 	import org.osmf.events.PausedChangeEvent;
@@ -277,7 +277,7 @@ package org.osmf.proxies
 			processBufferTimeChange(event.oldTime, event.newTime);
 		}
 
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			processLoadStateChange(event.loadState);
 		}
@@ -443,11 +443,11 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				}
 			}
 		}

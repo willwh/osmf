@@ -26,7 +26,7 @@ package org.osmf.html
 	import flash.errors.IllegalOperationError;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.AudibleTrait;
@@ -132,7 +132,7 @@ package org.osmf.html
 			addTrait(MediaTraitType.LOADABLE, loadable);
 			
 			loadable.addEventListener
-				( LoadableStateChangeEvent.LOAD_STATE_CHANGE
+				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 		}
@@ -140,7 +140,7 @@ package org.osmf.html
 		// Private
 		//
 	
-		private function onLoadStateChange(event:LoadableStateChangeEvent):void
+		private function onLoadStateChange(event:LoadEvent):void
 		{
 			updateTraits();
 		}

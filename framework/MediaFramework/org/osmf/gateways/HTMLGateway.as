@@ -555,11 +555,11 @@ package org.osmf.gateways
         	function Constants()
         	{
         		this.loadState =
-        			{ CONSTRUCTED: "constructed"
+        			{ UNINITIALIZED: "uninitialized"
         			, LOADING: "loading"
-        			, LOADED: "loaded"
+        			, READY: "ready"
         			, UNLOADING: "unloading"
-        			, LOAD_FAILED: "loadFailed"
+        			, LOAD_ERROR: "loadError"
         			}
         	}
         	]]>;

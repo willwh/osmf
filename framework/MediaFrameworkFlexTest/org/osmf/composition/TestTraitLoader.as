@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.LoadableStateChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadable;
@@ -100,12 +100,12 @@ package org.osmf.composition
 			assertTrue(traitFoundEvent.mediaElement == mediaElement3);
 			
 			// Try again with a trait that gets loaded.
-			loadable3.addEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			function onLoadStateChange(event:LoadableStateChangeEvent):void
+			loadable3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable3.removeEventListener(LoadableStateChangeEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadable3.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.PAUSABLE, new PausableTrait(mediaElement3));
 				}
 			}
