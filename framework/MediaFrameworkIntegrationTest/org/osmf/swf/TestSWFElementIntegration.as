@@ -37,13 +37,13 @@ package org.osmf.swf
 		
 		override protected function get resourceForMediaElement():IMediaResource
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_SWF_URL));
 		}
 		
 		override protected function get expectedBytesTotal():Number
 		{
 			// Size of resourceForMediaElement.
-			return 106078;
+			return 122267;
 		}
 	}
 }
