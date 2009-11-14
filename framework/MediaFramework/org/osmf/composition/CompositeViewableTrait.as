@@ -107,7 +107,7 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 */		
-		public function get width():int
+		public function get width():Number
 		{
 			return container.intrinsicWidth;
 		}
@@ -115,7 +115,7 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 */		
-		public function get height():int
+		public function get height():Number
 		{
 			return container.intrinsicHeight;
 		}

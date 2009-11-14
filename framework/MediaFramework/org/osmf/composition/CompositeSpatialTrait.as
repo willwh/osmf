@@ -80,12 +80,12 @@ package org.osmf.composition
 		// ISpatial
 		//
 		
-		public function get width():int
+		public function get width():Number
 		{
 			return _width;
 		}
 		
-		public function get height():int
+		public function get height():Number
 		{
 			return _height;
 		}
@@ -103,8 +103,7 @@ package org.osmf.composition
 			if (event.traitType == MediaTraitType.VIEWABLE)
 			{
 				updateViewableSibling
-					( owner.getTrait(MediaTraitType.VIEWABLE)
-					as IViewable
+					( owner.getTrait(MediaTraitType.VIEWABLE) as IViewable
 					);
 			}
 		}
@@ -139,8 +138,8 @@ package org.osmf.composition
 			// Store the new value as the current value:
 			spatialSource = newSource;
 			
-			var newWidth:int = -1;
-			var newHeight:int = -1;
+			var newWidth:Number = -1;
+			var newHeight:Number = -1;
 			
 			// On pulling our dimensions from one trait, we need to listen to that
 			// trait for change:
@@ -153,7 +152,15 @@ package org.osmf.composition
 					);
 					
 				newWidth = newSource.width;
+				if (isNaN(newWidth))
+				{
+					newWidth = 0;
+				}
 				newHeight = newSource.height;
+				if (isNaN(newHeight))
+				{
+					newHeight = 0;
+				}
 			}
 			
 			updateDimensions(newWidth, newHeight);
@@ -184,14 +191,14 @@ package org.osmf.composition
 		 * Resets the dimensions that we're currently reflecting. Dispatches a change
 		 * event when appropriate.
 		 */		
-		protected function updateDimensions(newWidth:int = -1, newHeight:int = -1):void
+		protected function updateDimensions(newWidth:Number = -1, newHeight:Number = -1):void
 		{
 			if	(	newWidth != _width
 				||	newHeight != _height
 				)
 			{
-				var oldWidth:int = _width;
-				var oldHeight:int = _height;
+				var oldWidth:Number = _width;
+				var oldHeight:Number = _height;
 				
 				_width = newWidth;
 				_height = newHeight;
@@ -210,8 +217,8 @@ package org.osmf.composition
 		protected var viewableSpatialSibling:ISpatial;
 		protected var spatialSource:ISpatial;
 		
-		protected var _width:int = -1;
-		protected var _height:int = -1;
+		protected var _width:Number = -1;
+		protected var _height:Number = -1;
 		
 	}
 }

@@ -54,11 +54,11 @@ package org.osmf.traits
 		/**
 		 * Intrinsic width of the spatial media in pixels.
 		 */
-		function get width():int;
+		function get width():Number;
 		
 		/**
 		 * Intrinsic height of the spatial media in pixels.
 		 */
-		function get height():int;
+		function get height():Number;
 	}
 }

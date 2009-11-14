@@ -67,23 +67,23 @@ package org.osmf.traits
 		 * @see #postProcessDimensionsChange()
 		 * 
 		 */		
-		final public function setDimensions(width:int, height:int):void
+		final public function setDimensions(width:Number, height:Number):void
 		{
 			if	(	width != _width
 				||	height != _height
 				)
 			{
-				if (canProcessDimensionsChange(width,height))
+				if (canProcessDimensionsChange(width, height))
 				{
-					processDimensionsChange(width,height);
+					processDimensionsChange(width, height);
 					
-					var oldWidth:int = _width;
-					var oldHeight:int = _height;
+					var oldWidth:Number = _width;
+					var oldHeight:Number = _height;
 					
 					_width = width;
 					_height = height;
 					
-					postProcessDimensionsChange(oldWidth,oldHeight);
+					postProcessDimensionsChange(oldWidth, oldHeight);
 				}
 			}
 		}
@@ -94,7 +94,7 @@ package org.osmf.traits
 		/**
 		 * @inheritDoc
 		 **/
-		public function get width():int
+		public function get width():Number
 		{
 			return _width;
 		}
@@ -102,16 +102,13 @@ package org.osmf.traits
 		/**
 		 * @inheritDoc
 		 **/
-		public function get height():int
+		public function get height():Number
 		{
 			return _height;
 		}
 	
 		// Internals
 		//
-		
-		private var _width:int = 0;
-		private var _height:int = 0;
 		
 		/**
 		 * Called just before <code>setDimensions()</code> is invoked.
@@ -122,7 +119,7 @@ package org.osmf.traits
 		 * Subclasses that override this method can return <code>false</code> to abort processing. 
 		 * 
 		 */		
-		protected function canProcessDimensionsChange(newWidth:int,newHeight:int):Boolean
+		protected function canProcessDimensionsChange(newWidth:Number, newHeight:Number):Boolean
 		{
 			return true;
 		}
@@ -133,7 +130,7 @@ package org.osmf.traits
 		 * @param newWidth New <code>width</code> value.
 		 * @param newHeight New <code>height</code> value.
 		 */		
-		protected function processDimensionsChange(newWidth:int,newHeight:int):void
+		protected function processDimensionsChange(newWidth:Number, newHeight:Number):void
 		{
 		}
 		
@@ -147,9 +144,12 @@ package org.osmf.traits
 		 * @param oldHeight Previous <code>width</code> value.
 		 * 
 		 */		
-		protected function postProcessDimensionsChange(oldWidth:int,oldHeight:int):void
+		protected function postProcessDimensionsChange(oldWidth:Number, oldHeight:Number):void
 		{
-			dispatchEvent(new DimensionChangeEvent(oldWidth,oldHeight,_width,_height));
+			dispatchEvent(new DimensionChangeEvent(oldWidth, oldHeight, _width, _height));
 		}
+
+		private var _width:Number = 0;
+		private var _height:Number = 0;
 	}
 }
