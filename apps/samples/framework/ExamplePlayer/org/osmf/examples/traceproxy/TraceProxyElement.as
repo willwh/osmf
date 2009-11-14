@@ -131,14 +131,14 @@ package org.osmf.examples.traceproxy
 				if (added)
 				{
 					audible.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
-					audible.addEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
+					audible.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audible.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 				else
 				{
 					audible.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
-					audible.removeEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
+					audible.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audible.removeEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 			}
 		}
@@ -294,17 +294,17 @@ package org.osmf.examples.traceproxy
 		
 		private function onVolumeChange(event:AudioEvent):void
 		{
-			trace("VolumeChangeEvent: " + event.oldVolume + " -> " + event.newVolume);
+			trace("VolumeChangeEvent: " + event.volume);
 		}
 
-		private function onMutedChange(event:MutedChangeEvent):void
+		private function onMutedChange(event:AudioEvent):void
 		{
 			trace("MutedChangeEvent: " + (event.muted ? "muted" : "unmuted"));
 		}
 
-		private function onPanChange(event:PanChangeEvent):void
+		private function onPanChange(event:AudioEvent):void
 		{
-			trace("PanChangeEvent: " + event.oldPan + " -> " + event.newPan);
+			trace("PanChangeEvent: " + event.pan);
 		}
 		
 		private function onBufferingChange(event:BufferingChangeEvent):void

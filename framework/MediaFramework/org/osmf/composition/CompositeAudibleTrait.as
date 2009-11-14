@@ -29,7 +29,7 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the IAudible's <code>volume</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
+	 * @eventType org.osmf.events.AudioEvent.VOLUME_CHANGE
 	 */	
 	[Event(name="volumeChange",type="org.osmf.events.AudioEvent")]
 	
