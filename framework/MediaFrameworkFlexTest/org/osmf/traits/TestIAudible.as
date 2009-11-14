@@ -23,12 +23,10 @@ package org.osmf.traits
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.events.MutedChangeEvent;
-	import org.osmf.events.PanChangeEvent;
-	import org.osmf.events.VolumeChangeEvent;
-	import org.osmf.utils.InterfaceTestCase;
-	
 	import flash.events.Event;
+	
+	import org.osmf.events.AudioEvent;
+	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestIAudible extends InterfaceTestCase
 	{
@@ -42,7 +40,7 @@ package org.osmf.traits
 		
 		public function testVolume():void
 		{
-			audible.addEventListener(VolumeChangeEvent.VOLUME_CHANGE,eventCatcher);
+			audible.addEventListener(AudioEvent.VOLUME_CHANGE,eventCatcher);
 			
 			assertTrue(audible.volume == 1);
 			
@@ -58,28 +56,28 @@ package org.osmf.traits
 			// Should not trigger change:
 			audible.volume = 8054562546;
 			
-			var vce:VolumeChangeEvent;
+			var vce:AudioEvent;
 			
 			assertTrue(events.length == 3);
-			vce = events[0] as VolumeChangeEvent;
+			vce = events[0] as AudioEvent;
 			assertNotNull(vce);
-			assertTrue(vce.oldVolume == 1);
-			assertTrue(vce.newVolume == 0);
+			assertTrue(vce.type == AudioEvent.VOLUME_CHANGE);
+			assertTrue(vce.volume == 0);
 			
-			vce = events[1] as VolumeChangeEvent;
+			vce = events[1] as AudioEvent;
 			assertNotNull(vce);
-			assertTrue(vce.oldVolume == 0);
-			assertTrue(vce.newVolume == 0.5);
+			assertTrue(vce.type == AudioEvent.VOLUME_CHANGE);
+			assertTrue(vce.volume == 0.5);
 			
-			vce = events[2] as VolumeChangeEvent;
+			vce = events[2] as AudioEvent;
 			assertNotNull(vce);
-			assertTrue(vce.oldVolume == 0.5);
-			assertTrue(vce.newVolume == 1);
+			assertTrue(vce.type == AudioEvent.VOLUME_CHANGE);
+			assertTrue(vce.volume == 1);
 		}
 		
 		public function testMuted():void
 		{
-			audible.addEventListener(MutedChangeEvent.MUTED_CHANGE,eventCatcher);
+			audible.addEventListener(AudioEvent.MUTED_CHANGE,eventCatcher);
 			
 			assertFalse(audible.muted);
 			assertTrue(audible.volume == 1);
@@ -97,21 +95,23 @@ package org.osmf.traits
 			assertFalse(audible.muted);
 			assertTrue(audible.volume == 1);
 			
-			var mce:MutedChangeEvent;
+			var mce:AudioEvent;
 			
 			assertTrue(events.length == 2);
-			mce = events[0] as MutedChangeEvent;
+			mce = events[0] as AudioEvent;
 			assertNotNull(mce);
+			assertTrue(mce.type == AudioEvent.MUTED_CHANGE);
 			assertTrue(mce.muted);
 			
-			mce = events[1] as MutedChangeEvent;
+			mce = events[1] as AudioEvent;
 			assertNotNull(mce);
+			assertTrue(mce.type == AudioEvent.MUTED_CHANGE);
 			assertFalse(mce.muted);
 		}
 		
 		public function testPan():void
 		{
-			audible.addEventListener(PanChangeEvent.PAN_CHANGE,eventCatcher);
+			audible.addEventListener(AudioEvent.PAN_CHANGE,eventCatcher);
 			
 			assertTrue(audible.pan == 0);
 			
@@ -133,28 +133,28 @@ package org.osmf.traits
 			// Should not trigger changed:
 			audible.pan = 0.152;
 			
-			var pce:PanChangeEvent;
+			var pce:AudioEvent;
 			
 			assertTrue(events.length == 5);
-			pce = events[0] as PanChangeEvent;
-			assertTrue(pce.oldPan == 0);
-			assertTrue(pce.newPan == -1);
+			pce = events[0] as AudioEvent;
+			assertTrue(pce.type == AudioEvent.PAN_CHANGE);
+			assertTrue(pce.pan == -1);
 			
-			pce = events[1] as PanChangeEvent;
-			assertTrue(pce.oldPan == -1);
-			assertTrue(pce.newPan == 1);
+			pce = events[1] as AudioEvent;
+			assertTrue(pce.type == AudioEvent.PAN_CHANGE);
+			assertTrue(pce.pan == 1);
 			
-			pce = events[2] as PanChangeEvent;
-			assertTrue(pce.oldPan == 1);
-			assertTrue(pce.newPan == -1);
+			pce = events[2] as AudioEvent;
+			assertTrue(pce.type == AudioEvent.PAN_CHANGE);
+			assertTrue(pce.pan == -1);
 			
-			pce = events[3] as PanChangeEvent;
-			assertTrue(pce.oldPan == -1);
-			assertTrue(pce.newPan == 1);
+			pce = events[3] as AudioEvent;
+			assertTrue(pce.type == AudioEvent.PAN_CHANGE);
+			assertTrue(pce.pan == 1);
 			
-			pce = events[4] as PanChangeEvent;
-			assertTrue(pce.oldPan == 1);
-			assertTrue(pce.newPan == 0.152);
+			pce = events[4] as AudioEvent;
+			assertTrue(pce.type == AudioEvent.PAN_CHANGE);
+			assertTrue(pce.pan == 0.152);
 		}
 		
 		// Utils

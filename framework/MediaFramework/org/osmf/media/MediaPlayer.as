@@ -53,23 +53,23 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>volume</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
+	 * @eventType org.osmf.events.AudioEvent.VOLUME_CHANGE
 	 */	 	 
-	[Event(name="volumeChange", type="org.osmf.events.VolumeChangeEvent")]   
+	[Event(name="volumeChange", type="org.osmf.events.AudioEvent")]   
 	 
 	/**
 	 * Dispatched when the <code>muted</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.MutedChangeEvent.MUTED_CHANGE
+	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
 	 */	 
-	[Event(name="mutedChange", type="org.osmf.events.MutedChangeEvent")] 
+	[Event(name="mutedChange", type="org.osmf.events.AudioEvent")] 
 	 
 	/**
 	 * Dispatched when the <code>pan</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.PanChangeEvent.PAN_CHANGE
+	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE
 	 */	 	 
-	[Event(name="panChange", type="org.osmf.events.PanChangeEvent")]
+	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
 
 	// ILoadable
  
@@ -1039,9 +1039,9 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIBLE:					
-					changeListeners(add, _element, trait, VolumeChangeEvent.VOLUME_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _element, trait, MutedChangeEvent.MUTED_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _element, trait, PanChangeEvent.PAN_CHANGE, [redispatchEvent]);	
+					changeListeners(add, _element, trait, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);			
+					changeListeners(add, _element, trait, AudioEvent.MUTED_CHANGE, [redispatchEvent]);			
+					changeListeners(add, _element, trait, AudioEvent.PAN_CHANGE, [redispatchEvent]);	
 					_audible = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;					
 					break;

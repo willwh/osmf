@@ -47,9 +47,9 @@ package org.osmf.examples.traceproxy
 			trace("Trait Remove: " + traitType.toString());
 		}
 	
-		override protected function processVolumeChange(oldVolume:Number, newVolume:Number):void
+		override protected function processVolumeChange(newVolume:Number):void
 		{
-			trace("Volume Change: " + oldVolume + "->" + newVolume);
+			trace("Volume Change: " + newVolume);
 		}
 
 		override protected function processMutedChange(muted:Boolean):void
@@ -57,9 +57,9 @@ package org.osmf.examples.traceproxy
 			trace("Muted Change: " + muted);
 		}
 
-		override protected function processPanChange(oldPan:Number, newPan:Number):void
+		override protected function processPanChange(newPan:Number):void
 		{
-			trace("Pan Change: " + oldPan + "->" + newPan);
+			trace("Pan Change: " + newPan);
 		}
 		
 		override protected function processBufferingChange(buffering:Boolean):void

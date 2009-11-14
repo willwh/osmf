@@ -29,6 +29,7 @@ package org.osmf.media
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
@@ -36,14 +37,11 @@ package org.osmf.media
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
-	import org.osmf.events.MutedChangeEvent;
-	import org.osmf.events.PanChangeEvent;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.VolumeChangeEvent;
 	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
@@ -226,16 +224,15 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.volume == 1.0);
 				
-				mediaPlayer.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onTestVolume);
+				mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onTestVolume);
 				mediaPlayer.volume = 0.2;
 				
-				function onTestVolume(event:VolumeChangeEvent):void
+				function onTestVolume(event:AudioEvent):void
 				{
-					mediaPlayer.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onTestVolume);
+					mediaPlayer.removeEventListener(AudioEvent.VOLUME_CHANGE, onTestVolume);
 					
 					assertTrue(mediaPlayer.volume == 0.2);
-					assertTrue(event.oldVolume == 1.0);
-					assertTrue(event.newVolume == 0.2);
+					assertTrue(event.volume == 0.2);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -274,12 +271,12 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.muted == false);
 				
-				mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onTestMuted);
+				mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onTestMuted);
 				mediaPlayer.muted = true;
 				
-				function onTestMuted(event:MutedChangeEvent):void
+				function onTestMuted(event:AudioEvent):void
 				{
-					mediaPlayer.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onTestMuted);
+					mediaPlayer.removeEventListener(AudioEvent.MUTED_CHANGE, onTestMuted);
 					
 					assertTrue(mediaPlayer.muted == true);
 					assertTrue(event.muted == true);
@@ -321,16 +318,15 @@ package org.osmf.media
 			{
 				assertTrue(mediaPlayer.pan == 0.0);
 				
-				mediaPlayer.addEventListener(PanChangeEvent.PAN_CHANGE, onTestPan);
+				mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, onTestPan);
 				mediaPlayer.pan = 0.7;
 				
-				function onTestPan(event:PanChangeEvent):void
+				function onTestPan(event:AudioEvent):void
 				{
-					mediaPlayer.removeEventListener(PanChangeEvent.PAN_CHANGE, onTestPan);
+					mediaPlayer.removeEventListener(AudioEvent.PAN_CHANGE, onTestPan);
 					
 					assertTrue(mediaPlayer.pan == 0.7);
-					assertTrue(event.oldPan == 0.0);
-					assertTrue(event.newPan == 0.7);
+					assertTrue(event.pan == 0.7);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}

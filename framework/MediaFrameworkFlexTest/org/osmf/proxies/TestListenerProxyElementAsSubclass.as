@@ -108,7 +108,6 @@ package org.osmf.proxies
 			
 			audible.volume = 0.57;
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldVolume"] == 1.0);
 			assertTrue(events[0]["newVolume"] == 0.57);
 
 			audible.muted = true;
@@ -117,7 +116,6 @@ package org.osmf.proxies
 
 			audible.pan = -0.5;
 			assertTrue(events.length == 3);
-			assertTrue(events[2]["oldPan"] == 0.0);
 			assertTrue(events[2]["newPan"] == -0.5);
 
 			// We shouldn't get any events when we're no longer proxying the

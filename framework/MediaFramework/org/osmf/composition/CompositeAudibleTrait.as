@@ -21,9 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.MutedChangeEvent;
-	import org.osmf.events.PanChangeEvent;
-	import org.osmf.events.VolumeChangeEvent;
+	import org.osmf.events.AudioEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.IAudible;
 	import org.osmf.traits.MediaTraitType;
@@ -33,21 +31,21 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
 	 */	
-	[Event(name="volumeChange",type="org.osmf.events.VolumeChangeEvent")]
+	[Event(name="volumeChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
   	 * Dispatched when the IAudible's <code>muted</code> property has changed.
   	 * 
-  	 * @eventType org.osmf.events.MutedChangeEvent.MUTED_CHANGE
+  	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
 	 */	
-	[Event(name="mutedChange",type="org.osmf.events.MutedChangeEvent")]
+	[Event(name="mutedChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
  	 * Dispatched when the IAudible's <code>pan</code> property has changed.
  	 * 
- 	 * @eventType org.osmf.events.PanChangeEvent.PAN_CHANGE 
+ 	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE 
 	 */	
-	[Event(name="panChange",type="org.osmf.events.PanChangeEvent")]
+	[Event(name="panChange",type="org.osmf.events.AudioEvent")]
 
 	/**
 	 * Implementation of IAudible which can be a composite media trait.
@@ -84,13 +82,11 @@ package org.osmf.composition
 			
 			if (value != _volume)
 			{
-				var oldVolume:Number = _volume;
-				
 				_volume = value;
 				
 				applyVolumeToChildren();
 				
-				dispatchEvent(new VolumeChangeEvent(oldVolume, _volume));
+				dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, false, _volume));
 			}
 		}
 		
@@ -110,7 +106,7 @@ package org.osmf.composition
 				
 				applyMutedToChildren();
 				
-				dispatchEvent(new MutedChangeEvent(_muted));
+				dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, _muted));
 			}
 		}
 		
@@ -129,13 +125,11 @@ package org.osmf.composition
 
 			if (value != _pan)
 			{
-				var oldPan:Number = _pan;
-				
 				_pan = value;
 				
 				applyPanToChildren();
 				
-				dispatchEvent(new PanChangeEvent(oldPan, _pan));
+				dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, false, NaN, _pan));
 			}
 		}
 
@@ -155,9 +149,9 @@ package org.osmf.composition
 		 **/
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{
-			child.addEventListener(MutedChangeEvent.MUTED_CHANGE, 	onMutedChanged, 	false, 0, true);
-			child.addEventListener(PanChangeEvent.PAN_CHANGE, 		onPanChanged, 		false, 0, true);
-			child.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChanged, 	false, 0, true);
+			child.addEventListener(AudioEvent.MUTED_CHANGE,  onMutedChanged, 	false, 0, true);
+			child.addEventListener(AudioEvent.PAN_CHANGE, 	 onPanChanged, 		false, 0, true);
+			child.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChanged, 	false, 0, true);
 			
 			var audible:IAudible = child as IAudible;
 			
@@ -187,27 +181,27 @@ package org.osmf.composition
 			// All we need to do is remove the listeners.  For both parallel
 			// and serial media, unaggregated children have no bearing on
 			// the properties of the composite trait.
-			child.removeEventListener(MutedChangeEvent.MUTED_CHANGE, 	onMutedChanged);
-			child.removeEventListener(PanChangeEvent.PAN_CHANGE, 		onPanChanged);
-			child.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE,	onVolumeChanged);
+			child.removeEventListener(AudioEvent.MUTED_CHANGE, 	onMutedChanged);
+			child.removeEventListener(AudioEvent.PAN_CHANGE, 	onPanChanged);
+			child.removeEventListener(AudioEvent.VOLUME_CHANGE,	onVolumeChanged);
 		}
 		
 		// Internals
 		//
 		
-		private function onVolumeChanged(event:VolumeChangeEvent):void
+		private function onVolumeChanged(event:AudioEvent):void
 		{
 			// Changes from the child propagate to the composite trait.
 			volume = (event.target as IAudible).volume;
 		}
 
-		private function onMutedChanged(event:MutedChangeEvent):void
+		private function onMutedChanged(event:AudioEvent):void
 		{
 			// Changes from the child propagate to the composite trait.
 			muted = (event.target as IAudible).muted;
 		}
 
-		private function onPanChanged(event:PanChangeEvent):void
+		private function onPanChanged(event:AudioEvent):void
 		{
 			/// Changes from the child propagate to the composite trait.
 			pan = (event.target as IAudible).pan;

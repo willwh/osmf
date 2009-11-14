@@ -56,6 +56,7 @@
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.display.ScaleModeUtils"/>
     <classEntry path="org.osmf.drm.DRMServices"/>
+    <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.AuthenticationCompleteEvent"/>
     <classEntry path="org.osmf.events.AuthenticationFailedEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
@@ -74,10 +75,8 @@
     <classEntry path="org.osmf.events.MediaPlayerCapabilityChangeEvent"/>
     <classEntry path="org.osmf.events.MediaPlayerStateChangeEvent"/>
     <classEntry path="org.osmf.events.MetadataEvent"/>
-    <classEntry path="org.osmf.events.MutedChangeEvent"/>
     <classEntry path="org.osmf.events.NetConnectionFactoryEvent"/>
     <classEntry path="org.osmf.events.NetNegotiatorEvent"/>
-    <classEntry path="org.osmf.events.PanChangeEvent"/>
     <classEntry path="org.osmf.events.PausedChangeEvent"/>
     <classEntry path="org.osmf.events.PlayingChangeEvent"/>
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
@@ -86,7 +85,6 @@
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.TraitEvent"/>
     <classEntry path="org.osmf.events.ViewEvent"/>
-    <classEntry path="org.osmf.events.VolumeChangeEvent"/>
     <classEntry path="org.osmf.gateways.HTMLGateway"/>
     <classEntry path="org.osmf.gateways.HTMLGatewayElementProxy"/>
     <classEntry path="org.osmf.gateways.RegionGateway"/>

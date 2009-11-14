@@ -130,13 +130,13 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					audible.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
 					audible.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 					audible.addEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
 				}
 				else
 				{
-					audible.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
 					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 					audible.removeEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
 				}
@@ -292,7 +292,7 @@ package org.osmf.examples.traceproxy
 		// Event Methods
 		//
 		
-		private function onVolumeChange(event:VolumeChangeEvent):void
+		private function onVolumeChange(event:AudioEvent):void
 		{
 			trace("VolumeChangeEvent: " + event.oldVolume + " -> " + event.newVolume);
 		}

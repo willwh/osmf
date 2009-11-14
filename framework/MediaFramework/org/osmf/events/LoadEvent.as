@@ -26,7 +26,7 @@ package org.osmf.events
 	/**
 	 * A LoadEvent is dispatched when properties of an ILoadable trait have changed.
 	 */
-	public class LoadEvent extends TraitEvent
+	public class LoadEvent extends Event
 	{
 		/**
 		 * The LoadEvent.LOAD_STATE_CHANGE constant defines the value

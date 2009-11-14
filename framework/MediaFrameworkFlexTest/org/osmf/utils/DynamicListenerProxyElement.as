@@ -54,9 +54,9 @@ package org.osmf.utils
 			}
 		}
 		
-		override protected function processVolumeChange(oldVolume:Number, newVolume:Number):void
+		override protected function processVolumeChange(newVolume:Number):void
 		{
-			changeEventQueue.push({"oldVolume":oldVolume, "newVolume":newVolume});
+			changeEventQueue.push({"newVolume":newVolume});
 		}
 
 		override protected function processMutedChange(muted:Boolean):void
@@ -64,9 +64,9 @@ package org.osmf.utils
 			changeEventQueue.push({"muted":muted});
 		}
 
-		override protected function processPanChange(oldPan:Number, newPan:Number):void
+		override protected function processPanChange(newPan:Number):void
 		{
-			changeEventQueue.push({"oldPan":oldPan, "newPan":newPan});
+			changeEventQueue.push({"newPan":newPan});
 		}
 		
 		override protected function processBufferingChange(buffering:Boolean):void

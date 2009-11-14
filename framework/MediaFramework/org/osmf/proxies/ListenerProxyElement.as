@@ -23,20 +23,18 @@ package org.osmf.proxies
 {
 	import flash.display.DisplayObject;
 	
+	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.events.MutedChangeEvent;
-	import org.osmf.events.PanChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.SwitchingChangeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewEvent;
-	import org.osmf.events.VolumeChangeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.IAudible;
@@ -124,7 +122,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processVolumeChange(oldVolume:Number, newVolume:Number):void
+		protected function processVolumeChange(newVolume:Number):void
 		{
 		}
 
@@ -140,7 +138,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processPanChange(oldPan:Number, newPan:Number):void
+		protected function processPanChange(newPan:Number):void
 		{
 		}
 		
@@ -250,19 +248,19 @@ package org.osmf.proxies
 
 		// Internals
 		
-		private function onVolumeChange(event:VolumeChangeEvent):void
+		private function onVolumeChange(event:AudioEvent):void
 		{
-			processVolumeChange(event.oldVolume, event.newVolume);
+			processVolumeChange(event.volume);
 		}
 
-		private function onMutedChange(event:MutedChangeEvent):void
+		private function onMutedChange(event:AudioEvent):void
 		{
 			processMutedChange(event.muted);
 		}
 
-		private function onPanChange(event:PanChangeEvent):void
+		private function onPanChange(event:AudioEvent):void
 		{
-			processPanChange(event.oldPan, event.newPan);
+			processPanChange(event.pan);
 		}
 		
 		private function onBufferingChange(event:BufferEvent):void
@@ -403,15 +401,15 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					audible.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
-					audible.addEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
+					audible.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audible.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 				else
 				{
-					audible.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
-					audible.removeEventListener(PanChangeEvent.PAN_CHANGE, onPanChange);
+					audible.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audible.removeEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 			}
 		}

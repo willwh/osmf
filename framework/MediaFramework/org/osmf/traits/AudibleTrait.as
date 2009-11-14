@@ -21,30 +21,28 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.MutedChangeEvent;
-	import org.osmf.events.PanChangeEvent;
-	import org.osmf.events.VolumeChangeEvent;
+	import org.osmf.events.AudioEvent;
 	
 	/**
 	 * Dispatched when the trait's <code>volume</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
 	 */	
-	[Event(name="volumeChange",type="org.osmf.events.VolumeChangeEvent")]
+	[Event(name="volumeChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
   	 * Dispatched when the trait's <code>muted</code> property has changed.
   	 * 
-  	 * @eventType org.osmf.events.MutedChangeEvent.MUTED_CHANGE
+  	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
 	 */	
-	[Event(name="mutedChange",type="org.osmf.events.MutedChangeEvent")]
+	[Event(name="mutedChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
  	 * Dispatched when the trait's <code>pan</code> property has changed.
  	 * 
- 	 * @eventType org.osmf.events.PanChangeEvent.PAN_CHANGE 
+ 	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE 
 	 */	
-	[Event(name="panChange",type="org.osmf.events.PanChangeEvent")]
+	[Event(name="panChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
 	 * The AudibleTrait class provides a base IAudible implementation.
@@ -91,10 +89,9 @@ package org.osmf.traits
 				{
 					processVolumeChange(value);
 					
-					var oldVolume:Number = _volume;
 					_volume = value;
 					
-					postProcessVolumeChange(oldVolume);
+					postProcessVolumeChange();
 				}
 			}
 		}
@@ -120,7 +117,7 @@ package org.osmf.traits
 					
 					_muted = value;
 					
-					postProcessMutedChange(!_muted);
+					postProcessMutedChange();
 				}
 			}
 		}
@@ -158,10 +155,9 @@ package org.osmf.traits
 				{
 					processPanChange(value);
 					
-					var oldPan:Number = _pan;
 					_pan = value;
 					
-					postProcessPanChange(oldPan);
+					postProcessPanChange();
 				}
 			}
 		}
@@ -200,12 +196,10 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the volumeChange event.</p> 
-		 * @param oldVolume Previous <code>volume</code> value.
-		 * 
 		 */		
-		protected function postProcessVolumeChange(oldVolume:Number):void
+		protected function postProcessVolumeChange():void
 		{
-			dispatchEvent(new VolumeChangeEvent(oldVolume,_volume));
+			dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, false, _volume));
 		}
 		
 		/**
@@ -234,12 +228,10 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the mutedChange event.</p>
-		 * @param oldMuted Previous <code>muted</code> value.
-		 * 
 		 */		
-		protected function postProcessMutedChange(oldMuted:Boolean):void
+		protected function postProcessMutedChange():void
 		{
-			dispatchEvent(new MutedChangeEvent(_muted));
+			dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, _muted));
 		}
 		
 		/**
@@ -268,12 +260,10 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the panChange event.</p>
-		 * @param oldPan Previous <code>pan</code> value.
-		 * 
 		 */		
-		protected function postProcessPanChange(oldPan:Number):void
+		protected function postProcessPanChange():void
 		{
-			dispatchEvent(new PanChangeEvent(oldPan,_pan));
+			dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, false, NaN, _pan));
 		}
 	}
 }

@@ -27,12 +27,12 @@ package org.osmf.view
 	import mx.events.SliderEvent;
 	
 	import org.osmf.display.ScaleMode;
+	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
-	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.examples.AllExamples;
 	import org.osmf.examples.Example;
@@ -86,7 +86,7 @@ package org.osmf.view
 
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
@@ -213,7 +213,7 @@ package org.osmf.view
 							: "";
 		}
 		
-		private function onMutedChange(event:MutedChangeEvent):void
+		private function onMutedChange(event:AudioEvent):void
 		{
 			muteToggle.selected = event.muted;
 		}

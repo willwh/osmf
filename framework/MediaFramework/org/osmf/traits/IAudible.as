@@ -26,23 +26,23 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the audible trait's <code>volume</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE
+	 * @eventType org.osmf.events.AudioEvent.VOLUME_CHANGE
 	 */	
-	[Event(name="volumeChange",type="org.osmf.events.VolumeChangeEvent")]
+	[Event(name="volumeChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
   	 * Dispatched when the audible trait's <code>muted</code> property has changed.
   	 * 
-  	 * @eventType org.osmf.events.MutedChangeEvent.MUTED_CHANGE
+  	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
 	 */	
-	[Event(name="mutedChange",type="org.osmf.events.MutedChangeEvent")]
+	[Event(name="mutedChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
  	 * Dispatched when the audible trait's <code>pan</code> property has changed.
  	 * 
- 	 * @eventType org.osmf.events.PanChangeEvent.PAN_CHANGE 
+ 	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE 
 	 */	
-	[Event(name="panChange",type="org.osmf.events.PanChangeEvent")]
+	[Event(name="panChange",type="org.osmf.events.AudioEvent")]
 	
 	/**
 	 * IAudible defines the trait interface for media that are audible. 
