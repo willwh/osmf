@@ -24,8 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A trait that implements the ILoadable interface dispatches
-	 * this event when its load state has changed. 
+	 * A LoadEvent is dispatched when properties of an ILoadable trait have changed.
 	 */
 	public class LoadEvent extends TraitEvent
 	{

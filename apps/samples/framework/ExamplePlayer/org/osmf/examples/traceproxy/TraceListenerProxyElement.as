@@ -67,14 +67,14 @@ package org.osmf.examples.traceproxy
 			trace("Buffering Change: " + buffering);
 		}
 
-		override protected function processBufferTimeChange(oldTime:Number, newTime:Number):void
+		override protected function processBufferTimeChange(newBufferTime:Number):void
 		{
-			trace("Buffer Time Change: " + oldTime + "->" + newTime);
+			trace("Buffer Time Change: " + newBufferTime);
 		}
 
 		override protected function processLoadStateChange(loadState:String):void
 		{
-			trace("Load State Change: ->" + loadState);
+			trace("Load State Change:" + loadState);
 		}
 		
 		override protected function processPlayingChange(playing:Boolean):void
@@ -99,7 +99,7 @@ package org.osmf.examples.traceproxy
 
 		override protected function processDurationChange(newDuration:Number):void
 		{
-			trace("Duration Change: -> " + newDuration);
+			trace("Duration Change: " + newDuration);
 		}
 
 		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void

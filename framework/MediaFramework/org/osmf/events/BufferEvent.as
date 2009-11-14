@@ -24,13 +24,21 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A trait that implements the IBufferable interface dispatches
-	 * this event when its <code>bufferTime</code> property has changed.
+	 * A BufferEvent is dispatched when properties of an IBufferable trait have changed.
 	 */	
-	public class BufferTimeChangeEvent extends TraitEvent
+	public class BufferEvent extends Event
 	{
 		/**
-		 * The BufferTimeChangeEvent.BUFFERING_CHANGE constant defines the value
+		 * The BufferEvent.BUFFERING_CHANGE constant defines the value
+		 * of the type property of the event object for a bufferingChange
+		 * event.
+		 * 
+		 * @eventType BUFFERING_CHANGE
+		 **/
+		public static const BUFFERING_CHANGE:String = "bufferingChange";
+
+		/**
+		 * The BufferEvent.BUFFER_TIME_CHANGE constant defines the value
 		 * of the type property of the event object for a bufferTimeChange
 		 * event.
 		 * 
@@ -41,48 +49,48 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 * 
-		 * @param oldSize Previous buffer time.
-		 * @param newSize New buffer time.
+		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
- 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+ 		 * @param buffering Specifies whether or not the trait is currently buffering. 
+ 		 * @param time The new bufferTime for the trait. 
 		 **/
-		public function BufferTimeChangeEvent(oldTime:Number,newTime:Number,bubbles:Boolean=false, cancelable:Boolean=false)
+		public function BufferEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, buffering:Boolean=false, bufferTime:Number=NaN)
 		{
-			_oldTime = oldTime;
-			_newTime = newTime;
-			
-			super(BUFFER_TIME_CHANGE, bubbles, cancelable);
+			super(type, bubbles, cancelable);
+
+			_buffering = buffering;
+			_bufferTime = bufferTime;
+		}
+		
+		/**
+		 * New value of <code>buffering</code> resulting from this change.
+		 */
+		public function get buffering():Boolean
+		{
+			return _buffering;
 		}
 		
 		/**
 		 * New value of <code>bufferTime</code> resulting from this change.
 		 */
-		public function get newTime():Number
+		public function get bufferTime():Number
 		{
-			return _newTime;
+			return _bufferTime;
 		}
-		
-		/**
-		 * Old value of <code>bufferTime</code> before it was changed.
-		 */
-		public function get oldTime():Number
-		{
-			return _oldTime;
-		}
-		
+
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new BufferTimeChangeEvent(_oldTime,_newTime,bubbles,cancelable);
+			return new BufferEvent(type, bubbles, cancelable, _buffering, _bufferTime);
 		}  
 		
 		// Internals
 		//
 		
-		private var _oldTime:Number;
-		private var _newTime:Number;
+		private var _buffering:Boolean;
+		private var _bufferTime:Number;
 	}
 }

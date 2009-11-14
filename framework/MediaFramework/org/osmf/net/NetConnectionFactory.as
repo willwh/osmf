@@ -170,7 +170,7 @@ package org.osmf.net
 					{
 						if (event.mediaError != null)
 						{
-							loadable.dispatchEvent(new MediaErrorEvent(event.mediaError));
+							loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
 						}
 						dispatchEvent(new NetConnectionFactoryEvent(NetConnectionFactoryEvent.CREATION_FAILED,null,loadable));
 					}

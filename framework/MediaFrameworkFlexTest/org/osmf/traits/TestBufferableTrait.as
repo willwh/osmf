@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 	
 	public class TestBufferableTrait extends TestIBufferable
 	{
@@ -37,7 +37,7 @@ package org.osmf.traits
 		
 		public function testBuffering():void
 		{
-			bufferable.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE,eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE,eventCatcher);
 			
 			assertFalse(bufferable.buffering);
 			
@@ -52,13 +52,13 @@ package org.osmf.traits
 			
 			assertTrue(events.length == 2);
 			
-			var bce:BufferingChangeEvent;
+			var bce:BufferEvent;
 			
-			bce = events[0] as BufferingChangeEvent;
+			bce = events[0] as BufferEvent;
 			assertNotNull(bce);
 			assertTrue(bce.buffering);
 			
-			bce = events[1] as BufferingChangeEvent;
+			bce = events[1] as BufferEvent;
 			assertNotNull(bce);
 			assertFalse(bce.buffering);
 		}

@@ -119,7 +119,7 @@ package com.akamai.osmf.net
 			resetAllLiveTimers();
 			if (_loadable)
 			{
-				_loadable.dispatchEvent(new MediaErrorEvent(new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_SUBSCRIBE_TIMEOUT)));
+				_loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_SUBSCRIBE_TIMEOUT)));
 			}
 		}
 		
@@ -132,7 +132,7 @@ package com.akamai.osmf.net
 			resetAllLiveTimers();
 			if (_loadable)
 			{
-				_loadable.dispatchEvent(new MediaErrorEvent(new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_FCSUBSCRIBE_NO_RESPONSE)));
+				_loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_FCSUBSCRIBE_NO_RESPONSE)));
 			}
 		}
 				

@@ -27,7 +27,7 @@ package org.osmf.view
 	import mx.events.SliderEvent;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
@@ -87,7 +87,7 @@ package org.osmf.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
 
@@ -219,7 +219,7 @@ package org.osmf.view
 		}
 		
 
-		private function onBufferTimeChange(event:BufferTimeChangeEvent):void
+		private function onBufferTimeChange(event:BufferEvent):void
 		{
 			bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
 		}

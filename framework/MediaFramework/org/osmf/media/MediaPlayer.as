@@ -32,7 +32,7 @@ package org.osmf.media
 	import org.osmf.traits.*;
 	import org.osmf.utils.MediaFrameworkStrings;
 	   
-	 // ITemporal
+	// ITemporal
 	
 	/**
 	 * Dispatched when the <code>duration</code> property of the media has changed.
@@ -48,7 +48,7 @@ package org.osmf.media
 	 */	 
 	[Event(name="durationReached", type="org.osmf.events.TimeEvent")]
 	 	 
-	 // IAudible
+	// IAudible
 
 	/**
 	 * Dispatched when the <code>volume</code> property of the media has changed.
@@ -71,7 +71,7 @@ package org.osmf.media
 	 */	 	 
 	[Event(name="panChange", type="org.osmf.events.PanChangeEvent")]
 
-	 // ILoadable
+	// ILoadable
  
  	/**
 	 * Dispatched when the load state has changed.
@@ -81,7 +81,7 @@ package org.osmf.media
 	 **/
 	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 
-	 // IPlayable
+	// IPlayable
 	 
 	/**
 	 * Dispatched when the <code>playing</code> property of the media has changed.
@@ -108,7 +108,7 @@ package org.osmf.media
 	 */	 	 	 		
 	[Event(name="viewChange", type="org.osmf.events.ViewChangeEvent")]
 	
-	 // ISpatial
+	// ISpatial
 	 
 	/**
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
@@ -118,7 +118,7 @@ package org.osmf.media
 	 */		
 	[Event(name="dimensionChange", type="org.osmf.events.DimensionChangeEvent")]
 	 
-	 // ISeekable
+	// ISeekable
 	 
 	/**
 	 * Dispatched when the <code>seeking</code> property of the media has changed.
@@ -164,16 +164,16 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>buffering</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferingChangeEvent.BUFFERING_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
 	 */
-	[Event(name="bufferingChange", type="org.osmf.events.BufferingChangeEvent")]
+	[Event(name="bufferingChange", type="org.osmf.events.BufferEvent")]
 	
 	/**
 	 * Dispatched when the <code>bufferTime</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferTimeChangeEvent.BUFFER_TIME_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
 	 */
-	[Event(name="bufferTimeChange", type="org.osmf.events.BufferTimeChangeEvent")]
+	[Event(name="bufferTimeChange", type="org.osmf.events.BufferEvent")]
 	
 	// IDownloadable
 	
@@ -1089,8 +1089,8 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFERABLE:
-					changeListeners(add, _element, trait, BufferingChangeEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
-					changeListeners(add, _element, trait, BufferTimeChangeEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
+					changeListeners(add, _element, trait, BufferEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
+					changeListeners(add, _element, trait, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
 					_bufferable = add;
 					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
@@ -1256,7 +1256,7 @@ package org.osmf.media
 			}
 		}
 		
-		private function onBuffering(event:BufferingChangeEvent):void
+		private function onBuffering(event:BufferEvent):void
 		{
 			if (event.buffering)
 			{

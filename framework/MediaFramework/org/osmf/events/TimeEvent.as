@@ -51,7 +51,6 @@ package org.osmf.events
 		/**
 		 * Constructor
 		 * 
-		 * 
 		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.

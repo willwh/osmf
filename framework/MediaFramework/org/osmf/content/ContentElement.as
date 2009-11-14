@@ -107,7 +107,10 @@ package org.osmf.content
 			{
 				dispatchEvent
 					( new MediaErrorEvent
-						( new MediaError
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
 							( MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR
 							, error.message
 							)

@@ -26,7 +26,7 @@ package org.osmf.events
 	/**
 	 * A MediaElement dispatches a MediaErrorEvent when it encounters an error. 
 	 */
-	public class MediaErrorEvent extends MediaEvent
+	public class MediaErrorEvent extends Event
 	{
 		/**
 		 * The MediaErrorEvent.MEDIA_ERROR constant defines the value of the
@@ -39,11 +39,12 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 * 
-		 * @param error The error that this event encapsulates.
+		 * @param type Event type.
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param error The error that this event encapsulates.
 		 **/
-		public function MediaErrorEvent(error:MediaError, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function MediaErrorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, error:MediaError=null)
 		{
 			super(MEDIA_ERROR, bubbles, cancelable);
 			
@@ -52,11 +53,10 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 **/
 		override public function clone():Event
 		{
-			return new MediaErrorEvent(error, bubbles, cancelable);
+			return new MediaErrorEvent(type, bubbles, cancelable, error);
 		}
 		
 		/**

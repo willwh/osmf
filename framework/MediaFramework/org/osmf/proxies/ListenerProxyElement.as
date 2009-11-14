@@ -23,8 +23,7 @@ package org.osmf.proxies
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MutedChangeEvent;
@@ -157,7 +156,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processBufferTimeChange(oldTime:Number, newTime:Number):void
+		protected function processBufferTimeChange(newBufferTime:Number):void
 		{
 		}
 
@@ -266,14 +265,14 @@ package org.osmf.proxies
 			processPanChange(event.oldPan, event.newPan);
 		}
 		
-		private function onBufferingChange(event:BufferingChangeEvent):void
+		private function onBufferingChange(event:BufferEvent):void
 		{
 			processBufferingChange(event.buffering);
 		}
 
-		private function onBufferTimeChange(event:BufferTimeChangeEvent):void
+		private function onBufferTimeChange(event:BufferEvent):void
 		{
-			processBufferTimeChange(event.oldTime, event.newTime);
+			processBufferTimeChange(event.bufferTime);
 		}
 
 		private function onLoadStateChange(event:LoadEvent):void
@@ -424,13 +423,13 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					bufferable.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE, onBufferingChange);
-					bufferable.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+					bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
+					bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 				}
 				else
 				{
-					bufferable.removeEventListener(BufferingChangeEvent.BUFFERING_CHANGE, onBufferingChange);
-					bufferable.removeEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+					bufferable.removeEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
+					bufferable.removeEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 				}
 			}
 		}

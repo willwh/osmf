@@ -55,7 +55,10 @@ package org.osmf.tracking
 					{
 						dispatchEvent
 							( new MediaErrorEvent
-								( new MediaError(MediaErrorCodes.BEACON_FAILURE_ERROR, event.errorText)
+								( MediaErrorEvent.MEDIA_ERROR
+								, false
+								, false
+								, new MediaError(MediaErrorCodes.BEACON_FAILURE_ERROR, event.errorText)
 								)
 							);
 					}

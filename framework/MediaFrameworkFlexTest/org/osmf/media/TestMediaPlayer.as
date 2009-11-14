@@ -29,7 +29,7 @@ package org.osmf.media
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
@@ -870,17 +870,16 @@ package org.osmf.media
 				assertTrue(mediaPlayer.bufferLength == 0);
 				assertTrue(mediaPlayer.bufferTime == 0);
 				
-				mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
+				mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
 								
 				mediaPlayer.bufferTime = 10;
 				
-				function onTestBufferTime(event:BufferTimeChangeEvent):void
+				function onTestBufferTime(event:BufferEvent):void
 				{
-					mediaPlayer.removeEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
+					mediaPlayer.removeEventListener(BufferEvent.BUFFER_TIME_CHANGE, onTestBufferTime);
 
 					assertTrue(mediaPlayer.bufferTime == 10);
-					assertTrue(event.oldTime == 0);
-					assertTrue(event.newTime == 10);
+					assertTrue(event.bufferTime == 10);
 
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -1206,7 +1205,7 @@ package org.osmf.media
 				
 				// Make sure error events dispatched on the trait are redispatched
 				// on the MediaPlayer.
-				loadableTrait.dispatchEvent(new MediaErrorEvent(new MediaError(99)));
+				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -1215,11 +1214,7 @@ package org.osmf.media
 					
 					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
 					
-					// The MediaElement is null, because it's derived from the target.
-					// (Arguably, this is poor modelling.  We might want to make the
-					// MediaElement more explicit, so that these events can have
-					// varying targets.)
-					assertTrue(event.media == null);
+					assertTrue(event.target == mediaPlayer);
 					
 					testComplete = true;
 				}

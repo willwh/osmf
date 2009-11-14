@@ -150,7 +150,6 @@ package org.osmf.proxies
 
 			bufferable.bufferTime = 15;
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldBufferTime"] == 0.0);
 			assertTrue(events[0]["newBufferTime"] == 15.0);
 
 			bufferable.buffering = true;

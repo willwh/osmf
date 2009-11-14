@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.IBufferable;
 	import org.osmf.traits.MediaTraitType;
@@ -30,16 +29,16 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the trait's <code>buffering</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferingChangeEvent.BUFFERING_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
 	 */
-	[Event(name="bufferingChange",type="org.osmf.events.BufferingChangeEvent")]
+	[Event(name="bufferingChange",type="org.osmf.events.BufferEvent")]
 	
 	/**
 	 * Dispatched when the trait's <code>bufferTime</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferTimeChangeEvent.BUFFER_TIME_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
 	 */
-	[Event(name="bufferTimeChange",type="org.osmf.events.BufferTimeChangeEvent")]
+	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
 
 	/**
 	 * Implementation of IBufferable which can be a composite media trait.
@@ -159,7 +158,7 @@ package org.osmf.composition
 			_bufferTime = value;
 			_bufferTimeFromChildren = false;
 			_settingBufferTime = false;
-			dispatchEvent(new BufferTimeChangeEvent(oldBufferTime, _bufferTime));
+			dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));
 		}
 		
 		/**
@@ -191,8 +190,8 @@ package org.osmf.composition
 				_settingBufferTime = false;
 			}
 
-			child.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE,		onBufferingChanged,		false, 0, true);
-			child.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE,	onBufferTimeChanged,	false, 0, true);
+			child.addEventListener(BufferEvent.BUFFERING_CHANGE,	onBufferingChanged,		false, 0, true);
+			child.addEventListener(BufferEvent.BUFFER_TIME_CHANGE,	onBufferTimeChanged,	false, 0, true);
 		}
 
 		/**
@@ -206,27 +205,27 @@ package org.osmf.composition
 				onBufferTimeChanged();
 			}
 
-			child.removeEventListener(BufferingChangeEvent.BUFFERING_CHANGE,	onBufferingChanged);
-			child.removeEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE,	onBufferTimeChanged);
+			child.removeEventListener(BufferEvent.BUFFERING_CHANGE,		onBufferingChanged);
+			child.removeEventListener(BufferEvent.BUFFER_TIME_CHANGE,	onBufferTimeChanged);
 		}
 		
 		// Internals
 		//
 		
-		private function onBufferingChanged(event:BufferingChangeEvent=null):void
+		private function onBufferingChanged(event:BufferEvent=null):void
 		{
 			var newBufferingState:Boolean = checkBuffering();
 			if (newBufferingState != buffering)
 			{
 				_buffering = newBufferingState;
-				dispatchEvent(new BufferingChangeEvent(buffering));
+				dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, buffering));
 			}
 		}
 		
-		private function onBufferTimeChanged(event:BufferTimeChangeEvent=null):void
+		private function onBufferTimeChanged(event:BufferEvent=null):void
 		{
 			// The composite trait is in the middle of setting the bufferTime of each child.
-			// So it may expect some BufferTimeChangeEvents dispatched from the children. 
+			// So it may expect some bufferTimeChange events dispatched from the children. 
 			// But under the circumstance, all these events should be ignored.
 			if (_settingBufferTime)
 			{
@@ -238,7 +237,7 @@ package org.osmf.composition
 			_bufferTimeFromChildren = true;
 			if (oldBufferTime != _bufferTime)
 			{
-				dispatchEvent(new BufferTimeChangeEvent(oldBufferTime, _bufferTime));
+				dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));
 			}
 		}
 		
@@ -266,7 +265,7 @@ package org.osmf.composition
 			{
 				// In serial case, the bufferTime is taken from the current child.
 				// If the current child does not support bufferable, return zero.
-				time = traitOfCurrentChild != null? traitOfCurrentChild.bufferTime : 0;
+				time = traitOfCurrentChild != null ? traitOfCurrentChild.bufferTime : 0;
 			}
 			
 			return time;

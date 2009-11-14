@@ -133,7 +133,14 @@ package org.osmf.net
 					break;
 				default:
 					updateLoadable(loadable, LoadState.LOAD_ERROR);
-					loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_URL_PROTOCOL)));
+					loadable.dispatchEvent
+						( new MediaErrorEvent
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(MediaErrorCodes.INVALID_URL_PROTOCOL)
+							)
+						);
 					break;
 			}
 		}

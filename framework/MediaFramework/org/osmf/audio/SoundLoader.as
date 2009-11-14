@@ -157,7 +157,10 @@ package org.osmf.audio
 				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
-						( new MediaError
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
 							( MediaErrorCodes.AUDIO_IO_LOAD_ERROR
 							, ioEvent ? ioEvent.text : ioEventDetail
 							)
@@ -172,7 +175,10 @@ package org.osmf.audio
 				updateLoadable(loadable, LoadState.LOAD_ERROR);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
-						( new MediaError
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
 							( MediaErrorCodes.AUDIO_SECURITY_LOAD_ERROR
 							, securityErrorDetail
 							)

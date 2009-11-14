@@ -149,7 +149,10 @@ package org.osmf.content
 					updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
 					loadable.dispatchEvent
 						( new MediaErrorEvent
-							( new MediaError(MediaErrorCodes.INVALID_SWF_AS_VERSION)
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(MediaErrorCodes.INVALID_SWF_AS_VERSION)
 							)
 						);
 				}
@@ -168,7 +171,10 @@ package org.osmf.content
 				updateLoadable(loadable, LoadState.LOAD_ERROR, null);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
-						( new MediaError
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
 							( MediaErrorCodes.CONTENT_IO_LOAD_ERROR
 							, ioEvent ? ioEvent.text : ioEventDetail
 							)
@@ -185,7 +191,10 @@ package org.osmf.content
 				updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
 				loadable.dispatchEvent
 					( new MediaErrorEvent
-						( new MediaError
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
 							( MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR
 							, securityEvent ? securityEvent.text : securityEventDetail
 							)

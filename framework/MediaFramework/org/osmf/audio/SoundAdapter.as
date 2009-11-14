@@ -145,7 +145,10 @@ package org.osmf.audio
 					// sound channels available.
 					owner.dispatchEvent
 						( new MediaErrorEvent
-							( new MediaError(MediaErrorCodes.PLAY_FAILED_NO_SOUND_CHANNELS)
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(MediaErrorCodes.PLAY_FAILED_NO_SOUND_CHANNELS)
 							)
 						);
 				}
@@ -223,7 +226,10 @@ package org.osmf.audio
 		{
 			owner.dispatchEvent
 				( new MediaErrorEvent
-					( new MediaError(MediaErrorCodes.AUDIO_IO_LOAD_ERROR)
+					( MediaErrorEvent.MEDIA_ERROR
+					, false
+					, false
+					, new MediaError(MediaErrorCodes.AUDIO_IO_LOAD_ERROR)
 					)
 				);
 		}

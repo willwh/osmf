@@ -112,7 +112,14 @@ package org.osmf.plugin
 				{
 					// Version not supported by plugin.
 					updateLoadable(loadable, LoadState.LOAD_ERROR);
-					loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_PLUGIN_VERSION)));
+					loadable.dispatchEvent
+						( new MediaErrorEvent
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(MediaErrorCodes.INVALID_PLUGIN_VERSION)
+							)
+						);
 				}
 			}
 			else
@@ -124,7 +131,14 @@ package org.osmf.plugin
 			if (invalidImplementation)
 			{
 				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.INVALID_PLUGIN_IMPLEMENTATION)));
+				loadable.dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError(MediaErrorCodes.INVALID_PLUGIN_IMPLEMENTATION)
+						)
+					);
 			}
 		}
 		

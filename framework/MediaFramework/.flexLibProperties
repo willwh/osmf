@@ -59,8 +59,7 @@
     <classEntry path="org.osmf.events.AuthenticationCompleteEvent"/>
     <classEntry path="org.osmf.events.AuthenticationFailedEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
-    <classEntry path="org.osmf.events.BufferTimeChangeEvent"/>
-    <classEntry path="org.osmf.events.BufferingChangeEvent"/>
+    <classEntry path="org.osmf.events.BufferEvent"/>
     <classEntry path="org.osmf.events.DimensionChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>

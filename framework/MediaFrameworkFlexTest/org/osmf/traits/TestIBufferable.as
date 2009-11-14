@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.events.BufferTimeChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.utils.InterfaceTestCase;
 	
 	import flash.events.Event;
@@ -40,7 +40,7 @@ package org.osmf.traits
 		
 		public function testBufferTime():void
 		{
-			bufferable.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE,eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, eventCatcher);
 			
 			var oldTime:Number = bufferable.bufferTime;
 			
@@ -56,24 +56,24 @@ package org.osmf.traits
 			// Should not trigger an event.
 			bufferable.bufferTime = 0;
 			
-			var bsce:BufferTimeChangeEvent;
+			var bsce:BufferEvent;
 			
 			assertTrue(events.length == 3);
 			
-			bsce = events[0] as BufferTimeChangeEvent;
+			bsce = events[0] as BufferEvent;
 			assertNotNull(bsce);
-			assertTrue(bsce.oldTime == oldTime);
-			assertTrue(bsce.newTime == 5);
+			assertTrue(bsce.type == BufferEvent.BUFFER_TIME_CHANGE);
+			assertTrue(bsce.bufferTime == 5);
 			
-			bsce = events[1] as BufferTimeChangeEvent;
+			bsce = events[1] as BufferEvent;
 			assertNotNull(bsce);
-			assertTrue(bsce.oldTime == 5);
-			assertTrue(bsce.newTime == 10);
+			assertTrue(bsce.type == BufferEvent.BUFFER_TIME_CHANGE);
+			assertTrue(bsce.bufferTime == 10);
 			
-			bsce = events[2] as BufferTimeChangeEvent;
+			bsce = events[2] as BufferEvent;
 			assertNotNull(bsce);
-			assertTrue(bsce.oldTime == 10);
-			assertTrue(bsce.newTime == 0);
+			assertTrue(bsce.type == BufferEvent.BUFFER_TIME_CHANGE);
+			assertTrue(bsce.bufferTime == 0);
 		}
 		
 		// Utils

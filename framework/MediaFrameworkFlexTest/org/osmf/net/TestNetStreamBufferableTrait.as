@@ -25,7 +25,7 @@ package org.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.traits.TestBufferableTrait;
 	import org.osmf.utils.NetFactory;
 
@@ -59,10 +59,10 @@ package org.osmf.net
 			var bufferingDone:Function = addAsync(function():void{}, 3000);
 			
 			assertFalse(bufferable.buffering);			
-			bufferable.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE, bufferingChange);
+			bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, bufferingChange);
 			stream.play("http://test/myvideo.flv");				
 			
-			function bufferingChange(event:BufferingChangeEvent):void
+			function bufferingChange(event:BufferEvent):void
 			{
 				assertEquals(values.shift(), event.buffering);
 				if(values.length == 0)

@@ -143,8 +143,17 @@ package org.osmf.utils
 				toggleLoaderListeners(loader, false);
 				
 				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR, 
-																				ioEvent ? ioEvent.text : ioEventDetail)));
+				loadable.dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
+							( MediaErrorCodes.HTTP_IO_LOAD_ERROR
+							, ioEvent ? ioEvent.text : ioEventDetail
+							)
+						)
+					);
 			}
 
 			function onSecurityError(securityEvent:SecurityErrorEvent, securityEventDetail:String=null):void
@@ -152,8 +161,17 @@ package org.osmf.utils
 				toggleLoaderListeners(loader, false);
 				
 				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR, 
-																			securityEvent ? securityEvent.text : securityEventDetail)));
+				loadable.dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
+							( MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
+							, securityEvent ? securityEvent.text : securityEventDetail
+							)
+						)
+					);
 			}
 		}
 		

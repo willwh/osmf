@@ -74,9 +74,9 @@ package org.osmf.utils
 			changeEventQueue.push({"buffering":buffering});
 		}
 
-		override protected function processBufferTimeChange(oldTime:Number, newTime:Number):void
+		override protected function processBufferTimeChange(newBufferTime:Number):void
 		{
-			changeEventQueue.push({"oldBufferTime":oldTime, "newBufferTime":newTime});
+			changeEventQueue.push({"newBufferTime":newBufferTime});
 		}
 
 		override protected function processLoadStateChange(loadState:String):void

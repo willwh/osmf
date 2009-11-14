@@ -26,16 +26,16 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the trait's <code>buffering</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferingChangeEvent.BUFFERING_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
 	 */
-	[Event(name="bufferingChange",type="org.osmf.events.BufferingChangeEvent")]
+	[Event(name="bufferingChange",type="org.osmf.events.BufferEvent")]
 	
 	/**
 	 * Dispatched when the trait's <code>bufferTime</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferTimeChangeEvent.BUFFER_TIME_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
 	 */
-	[Event(name="bufferTimeChange",type="org.osmf.events.BufferTimeChangeEvent")]
+	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
 	
 	/**
 	 * IBufferable defines the trait interface for media that can use a data buffer.

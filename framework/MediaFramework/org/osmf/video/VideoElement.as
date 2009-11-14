@@ -415,7 +415,7 @@ package org.osmf.video
 						
 			if (error != null)
 			{
-				dispatchEvent(new MediaErrorEvent(error));
+				dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, error));
 			}
      	}
      	

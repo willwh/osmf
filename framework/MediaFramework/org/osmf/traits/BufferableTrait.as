@@ -21,22 +21,21 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 
 	/**
 	 * Dispatched when the trait's <code>buffering</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferingChangeEvent.BUFFERING_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
 	 */
-	[Event(name="bufferingChange",type="org.osmf.events.BufferingChangeEvent")]
+	[Event(name="bufferingChange",type="org.osmf.events.BufferEvent")]
 	
 	/**
 	 * Dispatched when the trait's <code>bufferTime</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.BufferingChangeEvent.BUFFER_TIME_CHANGE
+	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
 	 */
-	[Event(name="bufferTimeChange",type="org.osmf.events.BufferTimeChangeEvent")]
+	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
 
 	/**
 	 * The BufferableTrait class provides a base IBufferable implementation. 
@@ -192,7 +191,7 @@ package org.osmf.traits
 		 */		
 		protected function postProcessBufferingChange(oldBuffering:Boolean):void
 		{
-			dispatchEvent(new BufferingChangeEvent(_buffering));
+			dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, _buffering));
 		}
 		
 		/**
@@ -260,7 +259,7 @@ package org.osmf.traits
 		 */		
 		protected function postProcessBufferTimeChange(oldTime:Number):void
 		{
-			dispatchEvent(new BufferTimeChangeEvent(oldTime,_bufferTime));	
+			dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));	
 		}
 	}
 }

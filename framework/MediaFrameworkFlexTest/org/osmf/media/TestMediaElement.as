@@ -195,8 +195,8 @@ package org.osmf.media
 				
 				// Make sure error events dispatched on the trait are redispatched
 				// on the MediaElement.
-				loadableTrait.dispatchEvent(new MediaErrorEvent(new MediaError(99)));
-				loadableTrait.dispatchEvent(new MediaErrorEvent(new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID)));
+				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
+				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID)));
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -206,13 +206,13 @@ package org.osmf.media
 					{
 						assertTrue(event.error.errorCode == 99);
 						assertTrue(event.error.description == "");
-						assertTrue(event.media == mediaElement);
+						assertTrue(event.target == mediaElement);
 					}
 					else if (eventCtr == 2)
 					{
 						assertTrue(event.error.errorCode == MediaErrorCodes.FILE_STRUCTURE_INVALID);
 						assertTrue(event.error.description == "File has invalid structure");
-						assertTrue(event.media == mediaElement);
+						assertTrue(event.target == mediaElement);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}

@@ -27,8 +27,7 @@ package org.osmf.composition
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BufferingChangeEvent;
+	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.TimeEvent;
@@ -993,8 +992,8 @@ package org.osmf.composition
 			parallel.addChild(mediaElement2);
 
 			var bufferable:IBufferable = parallel.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-			bufferable.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE, eventCatcher);
-			bufferable.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, eventCatcher);
 
 			bufferable.bufferTime = 20;
 			assertTrue(events.length == 1);

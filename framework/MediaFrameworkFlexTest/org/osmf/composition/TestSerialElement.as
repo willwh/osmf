@@ -1335,8 +1335,8 @@ package org.osmf.composition
 			serial.addChild(mediaElement1);
 			
 			var bufferable:IBufferable = serial.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-			bufferable.addEventListener(BufferingChangeEvent.BUFFERING_CHANGE, eventCatcher);
-			bufferable.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, eventCatcher);
+			bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, eventCatcher);
 			
 			assertTrue(bufferable.bufferLength == bufferable1.bufferLength);
 			assertTrue(bufferable.buffering == bufferable1.buffering);

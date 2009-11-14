@@ -172,7 +172,14 @@ package org.osmf.net
 					?	MediaErrorCodes.PLAY_FAILED_NETCONNECTION_FAILURE
 					:	MediaErrorCodes.PLAY_FAILED;
 				
-				owner.dispatchEvent(new MediaErrorEvent(new MediaError(mediaErrorCode)));
+				owner.dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError(mediaErrorCode)
+						)
+					);
 			}
 		}
 		
