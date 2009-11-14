@@ -118,13 +118,13 @@ package org.osmf.gg
 			{
 				if (added)
 				{
-					audible.addEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
+					audible.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
 				}
 				else
 				{
-					audible.removeEventListener(VolumeChangeEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.removeEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
+					audible.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audible.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
 				}
 			}
 		}
@@ -212,13 +212,13 @@ package org.osmf.gg
 		// Tracking Methods
 		//
 		
-		private function onVolumeChange(event:VolumeChangeEvent):void
+		private function onVolumeChange(event:AudioEvent):void
 		{
 			// Volume parameters must be between 1 and 100, inclusive.
-			sendEvent(SET_VOLUME, Math.max(1, event.newVolume * 100));
+			sendEvent(SET_VOLUME, Math.max(1, event.volume * 100));
 		}
 
-		private function onMutedChange(event:MutedChangeEvent):void
+		private function onMutedChange(event:AudioEvent):void
 		{
 			sendEvent(MUTE, event.muted);
 		}

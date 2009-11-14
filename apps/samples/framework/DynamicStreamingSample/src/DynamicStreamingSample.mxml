@@ -101,7 +101,7 @@
 						
 			private function initApp():void
 			{
-				wrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
+				wrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
 				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				wrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
@@ -314,7 +314,7 @@
 				Alert.show("SMIL parser is currently busy, pleast wait and try again.");	
 			}
 			
-			private function onDimensionChange(event:DimensionChangeEvent):void 
+			private function onDimensionChange(event:DimensionEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;

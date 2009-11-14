@@ -145,7 +145,7 @@
 				urlInput.text = plugins[0].url;
 				mediaInput.text = streams[0].url;
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
@@ -289,7 +289,7 @@
 				mediaInput.text = selection.url;
 			}
 			
-			private function onDimensionChange(event:DimensionChangeEvent):void 
+			private function onDimensionChange(event:DimensionEvent):void 
 			{
 				mediaPlayerWrapper.width = event.newWidth;
 				mediaPlayerWrapper.height = event.newHeight;

@@ -316,7 +316,7 @@ package org.osmf.mast.managers
 					break;
 				case MASTAdapter.ON_MUTE:
 					{
-						var mutedChangeEvent:MutedChangeEvent = event as MutedChangeEvent;
+						var mutedChangeEvent:AudioEvent = event as AudioEvent;
 						if (mutedChangeEvent.muted)
 						{
 							conditionTrue = true;
@@ -325,11 +325,7 @@ package org.osmf.mast.managers
 					break;
 				case MASTAdapter.ON_VOLUME_CHANGE:
 					{
-						var volumeChangeEvent:VolumeChangeEvent = event as VolumeChangeEvent;
-						if (volumeChangeEvent.newVolume != volumeChangeEvent.oldVolume)
-						{
-							conditionTrue = true;
-						}
+						conditionTrue = true;
 					}
 					break;
 				case MASTAdapter.ON_SEEK:
