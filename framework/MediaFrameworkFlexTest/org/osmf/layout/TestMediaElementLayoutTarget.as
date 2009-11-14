@@ -27,7 +27,7 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.DimensionEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SpatialTrait;
@@ -95,13 +95,13 @@ package org.osmf.layout
 			}
 			
 			lt.addEventListener(DimensionEvent.DIMENSION_CHANGE, onEvent);
-			lt.addEventListener(ViewChangeEvent.VIEW_CHANGE, onEvent);
+			lt.addEventListener(ViewEvent.VIEW_CHANGE, onEvent);
 			
 			var sprite2:Sprite = new Sprite();
 			viewable.view = sprite2;
 			
 			assertEquals(1, eventCounter);
-			var vce:ViewChangeEvent = lastEvent as ViewChangeEvent;
+			var vce:ViewEvent = lastEvent as ViewEvent;
 			assertNotNull(vce);
 			assertEquals(vce.oldView, sprite);
 			assertEquals(vce.newView, sprite2);

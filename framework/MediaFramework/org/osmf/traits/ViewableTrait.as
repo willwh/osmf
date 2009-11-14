@@ -23,15 +23,15 @@ package org.osmf.traits
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 
 	/**
 	 * Dispatched when the trait's <code>view</code> property has changed.
 	 * This occurs when a different DisplayObject is assigned to represent the media.
 	 * 
-	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 
 	/**
 	 * The ViewableTrait class provides a base IViewable implementation. 
@@ -114,7 +114,7 @@ package org.osmf.traits
 		 */		
 		protected function postProcessViewChange(oldView:DisplayObject):void
 		{
-			dispatchEvent(new ViewChangeEvent(oldView,_view));
+			dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
 		}
 	}
 }

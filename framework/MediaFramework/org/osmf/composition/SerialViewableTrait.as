@@ -22,7 +22,7 @@
 package org.osmf.composition
 {
 	import org.osmf.events.GatewayChangeEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.MediaElement;
@@ -32,7 +32,7 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 	
 	/**
 	 * Implements IViewable for serial compositions

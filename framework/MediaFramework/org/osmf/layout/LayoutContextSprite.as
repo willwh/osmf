@@ -32,7 +32,7 @@ package org.osmf.layout
 	/**
 	 * Dispatched when a layout element's intrinsic width and height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	

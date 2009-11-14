@@ -30,7 +30,7 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the width and/or height of the ISpatial media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 

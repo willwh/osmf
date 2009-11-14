@@ -280,11 +280,11 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					viewable.addEventListener(ViewChangeEvent.VIEW_CHANGE, onViewChange);
+					viewable.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
 				}
 				else
 				{
-					viewable.removeEventListener(ViewChangeEvent.VIEW_CHANGE, onViewChange);
+					viewable.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
 				}
 			}
 		}
@@ -357,7 +357,7 @@ package org.osmf.examples.traceproxy
 			trace("SwitchingChangeEvent: " + event.oldState + " -> " + event.newState);
 		}	
 
-		private function onViewChange(event:ViewChangeEvent):void
+		private function onViewChange(event:ViewEvent):void
 		{
 			trace("ViewChangeEvent: " + event.oldView.toString() + " -> " + event.newView.toString());
 		}

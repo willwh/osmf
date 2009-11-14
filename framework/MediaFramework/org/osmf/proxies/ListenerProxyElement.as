@@ -35,7 +35,7 @@ package org.osmf.proxies
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.events.VolumeChangeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
@@ -320,7 +320,7 @@ package org.osmf.proxies
 			processIndicesChange();
 		}
 
-		private function onViewChange(event:ViewChangeEvent):void
+		private function onViewChange(event:ViewEvent):void
 		{
 			processViewChange(event.oldView, event.newView);
 		}
@@ -555,11 +555,11 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					viewable.addEventListener(ViewChangeEvent.VIEW_CHANGE, onViewChange);
+					viewable.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
 				}
 				else
 				{
-					viewable.removeEventListener(ViewChangeEvent.VIEW_CHANGE, onViewChange);
+					viewable.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
 				}
 			}
 		}

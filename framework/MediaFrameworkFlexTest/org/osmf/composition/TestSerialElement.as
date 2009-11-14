@@ -1059,7 +1059,7 @@ package org.osmf.composition
 			var viewable:IViewable = serial.getTrait(MediaTraitType.VIEWABLE) as IViewable;
 			assertNotNull(viewable);
 			
-			viewable.addEventListener(ViewChangeEvent.VIEW_CHANGE,onViewChanged);
+			viewable.addEventListener(ViewEvent.VIEW_CHANGE,onViewChanged);
 			
 			var view1:Sprite = new Sprite();
 			viewable1.view = view1;
@@ -1263,7 +1263,7 @@ package org.osmf.composition
 			dimensionsChangeEventCount++;
 		}
 		
-		private function onViewChanged(event:ViewChangeEvent):void
+		private function onViewChanged(event:ViewEvent):void
 		{
 			viewChangedEventCount++;
 		}

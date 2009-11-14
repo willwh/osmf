@@ -33,7 +33,7 @@ package org.osmf.composition
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.layout.AnchorLayoutFacet;
 	import org.osmf.media.MediaElement;
@@ -711,7 +711,7 @@ package org.osmf.composition
 			var viewableTrait:CompositeViewableTrait = parallel.getTrait(MediaTraitType.VIEWABLE) as CompositeViewableTrait; 
 			assertNotNull(viewableTrait);
 			
-			viewableTrait.addEventListener(ViewChangeEvent.VIEW_CHANGE,onViewChanged);
+			viewableTrait.addEventListener(ViewEvent.VIEW_CHANGE,onViewChanged);
 			
 			var view:DisplayObjectContainer = viewableTrait.view as DisplayObjectContainer;
 			assertNotNull(view);
@@ -894,7 +894,7 @@ package org.osmf.composition
 			dimensionsChangeEventCount++;
 		}
 		
-		private function onViewChanged(event:ViewChangeEvent):void
+		private function onViewChanged(event:ViewEvent):void
 		{
 			viewChangedEventCount++;
 		}

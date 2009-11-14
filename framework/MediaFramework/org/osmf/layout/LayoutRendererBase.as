@@ -32,7 +32,7 @@ package org.osmf.layout
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DimensionEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
@@ -175,7 +175,7 @@ package org.osmf.layout
 			}
 			
 			// Watch the target's view and dimenions change:
-			target.addEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
+			target.addEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
 			target.addEventListener(DimensionEvent.DIMENSION_CHANGE, invalidatingEventHandler);
 			
 			invalidate();
@@ -222,7 +222,7 @@ package org.osmf.layout
 				}
 				
 				// Un-watch the target's view and dimenions change:
-				target.removeEventListener(ViewChangeEvent.VIEW_CHANGE, invalidatingEventHandler);
+				target.removeEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
 				target.removeEventListener(DimensionEvent.DIMENSION_CHANGE, invalidatingEventHandler);
 								
 				// Remove the metadata change watchers that we added:

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -35,7 +35,7 @@ package org.osmf.traits
 		
 		public function testViewAssignment():void
 		{
-			viewable.addEventListener(ViewChangeEvent.VIEW_CHANGE,eventCatcher);
+			viewable.addEventListener(ViewEvent.VIEW_CHANGE,eventCatcher);
 
 			assertNull(viewable.view);
 			
@@ -51,16 +51,16 @@ package org.osmf.traits
 			// Should not cause a change event:
 			viewableTraitBase.view = displayObject2;
 			
-			var vce:ViewChangeEvent;
+			var vce:ViewEvent;
 			
 			assertTrue(events.length == 2);
 			
-			vce = events[0] as ViewChangeEvent;
+			vce = events[0] as ViewEvent;
 			assertNotNull(vce);
 			assertTrue(vce.oldView == null);
 			assertTrue(vce.newView == displayObject1);
 			
-			vce = events[1] as ViewChangeEvent;
+			vce = events[1] as ViewEvent;
 			assertNotNull(vce);
 			assertTrue(vce.oldView == displayObject1);
 			assertTrue(vce.newView == displayObject2);

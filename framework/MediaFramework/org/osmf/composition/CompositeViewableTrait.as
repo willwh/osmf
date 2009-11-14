@@ -25,7 +25,7 @@ package org.osmf.composition
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.DimensionEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutContext;
 	import org.osmf.layout.ILayoutRenderer;
@@ -43,14 +43,14 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the trait's view has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 	
 	/**
 	 * Dispatched when the width and/or height of the trait's view has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	

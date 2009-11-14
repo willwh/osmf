@@ -25,7 +25,7 @@ package org.osmf.display
 	
 	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
@@ -35,7 +35,7 @@ package org.osmf.display
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
 	 * source media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */		
 	 [Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 
@@ -103,7 +103,7 @@ package org.osmf.display
 					setIntrinsicSize(ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).width, ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).height);
 		 			break;
 		 		case MediaTraitType.VIEWABLE:
-		 			_source.getTrait(MediaTraitType.VIEWABLE).addEventListener(ViewChangeEvent.VIEW_CHANGE, onView);
+		 			_source.getTrait(MediaTraitType.VIEWABLE).addEventListener(ViewEvent.VIEW_CHANGE, onView);
 		 			view = (_source.getTrait(MediaTraitType.VIEWABLE) as IViewable).view;		 			
 		 			break;		 			
 		 	}
@@ -118,7 +118,7 @@ package org.osmf.display
 		 			break;
 		 		case MediaTraitType.VIEWABLE:
 		 			view = null;
-		 			_source.getTrait(MediaTraitType.VIEWABLE).removeEventListener(ViewChangeEvent.VIEW_CHANGE, onView);		 			
+		 			_source.getTrait(MediaTraitType.VIEWABLE).removeEventListener(ViewEvent.VIEW_CHANGE, onView);		 			
 		 			break;		 			
 		 	}
 		 }
@@ -129,7 +129,7 @@ package org.osmf.display
 		 	dispatchEvent(event.clone());	 	
 		 }
 		 
-		 private function onView(event:ViewChangeEvent):void
+		 private function onView(event:ViewEvent):void
 		 {
 		 	view = event.newView;
 		 }

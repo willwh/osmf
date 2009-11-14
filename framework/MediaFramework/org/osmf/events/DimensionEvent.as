@@ -29,7 +29,7 @@ package org.osmf.events
 	public class DimensionEvent extends Event
 	{
 		/**
-		 * The DimensionChangeEvent.DIMENSION_CHANGE constant defines the value
+		 * The DimensionEvent.DIMENSION_CHANGE constant defines the value
 		 * of the type property of the event object for a dimensionChange
 		 * event.
 		 * 

@@ -25,37 +25,34 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A trait that implements the IViewable interface dispatches
-	 * this event when its <code>view</code> property has changed.
-	 * 
-	 * Additionally, ILayoutTarget implementing classes are expected
-	 * to emit a DimensionChangeEvent on their dimensions changing.
+	 * A  ViewEvent is dispatched when the properties of an IViewable trait change.
 	 */	
-	public class ViewChangeEvent extends Event
+	public class ViewEvent extends Event
 	{
 		/**
-		 * The ViewChangeEvent.VIEW_CHANGE constant defines the value
+		 * The ViewEvent.VIEW_CHANGE constant defines the value
 		 * of the type property of the event object for a viewChange
 		 * event.
 		 * 
-		 * @eventType PAUSED_CHANGE 
+		 * @eventType VIEW_CHANGE 
 		 */
 		public static const VIEW_CHANGE:String = "viewChange";
 		
 		/**
 		 * Constructor.
 		 *  
-		 * @param oldView Previous view.
-		 * @param newView New view.
+		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param oldView Previous view.
+		 * @param newView New view.
 		 */		
-		public function ViewChangeEvent(oldView:DisplayObject, newView:DisplayObject, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function ViewEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldView:DisplayObject=null, newView:DisplayObject=null)
 		{
+			super(type, bubbles, cancelable);
+
 			_oldView = oldView;
 			_newView = newView;
-			
-			super(VIEW_CHANGE, bubbles, cancelable);
 		}
 		
 		/**
@@ -76,11 +73,10 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new ViewChangeEvent(_oldView,_newView,bubbles,cancelable);
+			return new ViewEvent(type, bubbles, cancelable, _oldView, _newView);
 		}
 		
 		// Internals

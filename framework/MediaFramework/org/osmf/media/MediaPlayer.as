@@ -104,9 +104,9 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>view</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	 	 	 		
-	[Event(name="viewChange", type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange", type="org.osmf.events.ViewEvent")]
 	
 	// ISpatial
 	 
@@ -114,7 +114,7 @@ package org.osmf.media
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
 	 * media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */		
 	[Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 	 
@@ -1066,7 +1066,7 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
 					break;						
 				case MediaTraitType.VIEWABLE:					
-					changeListeners(add, _element, trait, ViewChangeEvent.VIEW_CHANGE, [redispatchEvent]);											
+					changeListeners(add, _element, trait, ViewEvent.VIEW_CHANGE, [redispatchEvent]);											
 					_viewable = add;						
 					traitChangeName = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	

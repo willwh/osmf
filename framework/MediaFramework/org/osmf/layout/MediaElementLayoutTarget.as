@@ -30,7 +30,7 @@ package org.osmf.layout
 	
 	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
@@ -45,12 +45,12 @@ package org.osmf.layout
 	 * 
 	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 	
 	/**
 	 * Dispatched when a layout element's intrinsical width and height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
@@ -311,13 +311,13 @@ package org.osmf.layout
 			
 			if (oldTrait)
 			{
-				oldTrait.removeEventListener(ViewChangeEvent.VIEW_CHANGE, viewChangeEventHandler);
+				oldTrait.removeEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler);
 			}
 			
 			if (viewableTrait)
 			{
 				processViewChange(viewableTrait.view);
-				viewableTrait.addEventListener(ViewChangeEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
+				viewableTrait.addEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
 			}
 			else
 			{
@@ -326,7 +326,7 @@ package org.osmf.layout
 			
 			if 	(oldView != _view)
 			{
-				dispatchEvent(new ViewChangeEvent(oldView, _view));
+				dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
 			}
 		}
 		
@@ -356,7 +356,7 @@ package org.osmf.layout
 			}
 		}
 		
-		private function viewChangeEventHandler(event:ViewChangeEvent):void
+		private function viewChangeEventHandler(event:ViewEvent):void
 		{
 			processViewChange(event.newView);
 			

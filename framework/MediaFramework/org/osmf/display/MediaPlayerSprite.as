@@ -23,7 +23,7 @@ package org.osmf.display
 {
 	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.events.ViewChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	
@@ -68,7 +68,7 @@ package org.osmf.display
 		{
 			if (_player != null)
 			{
-				_player.removeEventListener(ViewChangeEvent.VIEW_CHANGE, onView);	
+				_player.removeEventListener(ViewEvent.VIEW_CHANGE, onView);	
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
 				_player.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
@@ -77,7 +77,7 @@ package org.osmf.display
 			_player = value;
 			if (_player != null)
 			{
-				_player.addEventListener(ViewChangeEvent.VIEW_CHANGE, onView);	
+				_player.addEventListener(ViewEvent.VIEW_CHANGE, onView);	
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
 				_player.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
@@ -97,7 +97,7 @@ package org.osmf.display
 			return _player;
 		}				
 						
-		private function onView(event:ViewChangeEvent):void
+		private function onView(event:ViewEvent):void
 		{	
 			view = event.newView;				
 		}

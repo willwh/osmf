@@ -28,9 +28,9 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the trait's view has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 
 	/**
 	 * IViewable defines the trait interface for media that expose a DisplayObject. 

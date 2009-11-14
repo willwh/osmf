@@ -32,12 +32,12 @@ package org.osmf.layout
 	 * 
 	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewChangeEvent")]
+	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 	
 	/**
 	 * Dispatched when a layout target's intrinsical width and/or height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
