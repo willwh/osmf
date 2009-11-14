@@ -24,14 +24,9 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A trait that implements the ISpatial interface dispatches
-	 * this event when its <code>width</code> and/or <code> height</code> 
-	 * properties have changed.
-	 * 
-	 * Additionally, ILayoutTarget implementing classes are expected
-	 * to emit a DimensionChangeEvent on their dimensions changing.
+	 * A DimensionEvent is dispatched when properties of an ISpatial trait have changed.
 	 */	
-	public class DimensionChangeEvent extends Event
+	public class DimensionEvent extends Event
 	{
 		/**
 		 * The DimensionChangeEvent.DIMENSION_CHANGE constant defines the value
@@ -45,32 +40,36 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 * 
+		 * @param type Event type.
+ 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param oldWidth Previous width.
 		 * @param oldHeight Previous height.
 		 * @param newWidth New width.
 		 * @param newHeight New height.
- 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
- 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 **/		
-		public function DimensionChangeEvent
-							( oldWidth:int, oldHeight:int
-							, newWidth:int, newHeight:int
+		public function DimensionEvent
+							( type:String
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
+							, oldWidth:Number=NaN
+							, oldHeight:Number=NaN
+							, newWidth:Number=NaN
+							, newHeight:Number=NaN
 							)
 		{
+			super(type, bubbles, cancelable);
+			
 			_oldWidth = oldWidth;
 			_oldHeight = oldHeight;
 			_newWidth = newWidth;
 			_newHeight = newHeight;
-			
-			super(DIMENSION_CHANGE, bubbles, cancelable);
 		}
 		
 		/**
 		 * Old value of <code>width</code> before it was changed.
 		 */		
-		public function get oldWidth():int
+		public function get oldWidth():Number
 		{
 			return _oldWidth;
 		}
@@ -78,7 +77,7 @@ package org.osmf.events
 		/**
 		 * Old value of <code>height</code> before it was changed.
 		 */
-		public function get oldHeight():int
+		public function get oldHeight():Number
 		{
 			return _oldHeight;
 		}
@@ -86,7 +85,7 @@ package org.osmf.events
 		/**
 		 * New value of <code>width</code> resulting from this change.
 		 */
-		public function get newWidth():int
+		public function get newWidth():Number
 		{
 			return _newWidth;
 		}
@@ -94,30 +93,25 @@ package org.osmf.events
 		/**
 		 * New value of <code>height</code> resulting from this change.
 		 */
-		public function get newHeight():int
+		public function get newHeight():Number
 		{
 			return _newHeight;
 		}
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new DimensionChangeEvent
-				( _oldWidth, _oldHeight
-				, _newWidth, _newHeight
-				, bubbles, cancelable
-				);
+			return new DimensionEvent(type, bubbles, cancelable, _oldWidth, _oldHeight, _newWidth, _newHeight);
 		}
 		
 		// Internals
 		//
 		
-		private var _oldWidth:int;
-		private var _oldHeight:int;
-		private var _newWidth:int;
-		private var _newHeight:int;
+		private var _oldWidth:Number;
+		private var _oldHeight:Number;
+		private var _newWidth:Number;
+		private var _newHeight:Number;
 	}
 }

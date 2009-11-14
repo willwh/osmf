@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;
@@ -33,7 +33,7 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * Base implementation of ISpatial for compositions.
@@ -130,7 +130,7 @@ package org.osmf.composition
 			if (oldSource != null)
 			{
 				oldSource.removeEventListener
-					( DimensionChangeEvent.DIMENSION_CHANGE
+					( DimensionEvent.DIMENSION_CHANGE
 					, onSpatialSourceDimensionChange
 					);
 			}
@@ -146,7 +146,7 @@ package org.osmf.composition
 			if (newSource != null)
 			{
 				newSource.addEventListener
-					( DimensionChangeEvent.DIMENSION_CHANGE
+					( DimensionEvent.DIMENSION_CHANGE
 					, onSpatialSourceDimensionChange
 					, false, 0, true
 					);
@@ -182,7 +182,7 @@ package org.osmf.composition
 		/**
 		 * Invoked on the spatialSource's dimensions changing. 
 		 */		
-		protected function onSpatialSourceDimensionChange(event:DimensionChangeEvent):void
+		protected function onSpatialSourceDimensionChange(event:DimensionEvent):void
 		{
 			updateDimensions(event.newWidth, event.newHeight);
 		}
@@ -204,8 +204,9 @@ package org.osmf.composition
 				_height = newHeight;
 				
 				dispatchEvent
-					( new DimensionChangeEvent
-						( oldWidth, oldHeight
+					( new DimensionEvent
+						( DimensionEvent.DIMENSION_CHANGE, false, false
+						, oldWidth, oldHeight
 						, _width, _height
 						)
 					);

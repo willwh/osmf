@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.display
 {
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.media.MediaElement;
@@ -70,7 +70,7 @@ package org.osmf.display
 			{
 				_player.removeEventListener(ViewChangeEvent.VIEW_CHANGE, onView);	
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensions);	
+				_player.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
 				view = null;
 			}
@@ -79,7 +79,7 @@ package org.osmf.display
 			{
 				_player.addEventListener(ViewChangeEvent.VIEW_CHANGE, onView);	
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensions);	
+				_player.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
 				if (_player.viewable)
 				{
@@ -107,7 +107,7 @@ package org.osmf.display
 			view = event.enabled ? _player.view : null;				
 		}
 				
-		private function onDimensions(event:DimensionChangeEvent):void
+		private function onDimensions(event:DimensionEvent):void
 		{
 			setIntrinsicSize(event.newWidth, event.newHeight);
 		}

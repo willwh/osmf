@@ -232,11 +232,11 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					spatial.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);
+					spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 				else
 				{
-					spatial.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);
+					spatial.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 			}
 		}
@@ -347,7 +347,7 @@ package org.osmf.examples.traceproxy
 			trace("DurationChangeEvent: " + event.time);
 		}
 
-		private function onDimensionChange(event:DimensionChangeEvent):void
+		private function onDimensionChange(event:DimensionEvent):void
 		{
 			trace("DimensionChangeEvent: " + event.oldWidth + "x" + event.oldHeight + " -> " + event.newWidth + "x" + event.newHeight);
 		}

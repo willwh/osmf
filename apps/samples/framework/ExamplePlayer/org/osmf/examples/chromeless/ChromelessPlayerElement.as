@@ -24,7 +24,7 @@ package org.osmf.examples.chromeless
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.media.IURLResource;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
@@ -85,7 +85,7 @@ package org.osmf.examples.chromeless
 				{
 					// Re-dispatch our dimensions:
 					var spatial:SpatialTrait = getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
-					spatial.dispatchEvent(new DimensionChangeEvent(0,spatial.width,0,spatial.height));
+					spatial.dispatchEvent(new DimensionEvent(DimensionEvent.DIMENSION_CHANGE, false, false, 0, spatial.width, 0, spatial.height));
 				}
 			}
 		}

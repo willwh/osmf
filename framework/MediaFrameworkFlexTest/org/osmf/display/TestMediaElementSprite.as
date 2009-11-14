@@ -25,7 +25,7 @@ package org.osmf.display
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.traits.ILoadable;
@@ -69,11 +69,11 @@ package org.osmf.display
 			view2.width = 80;
 			view2.height = 80;
 			
-			sprite.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensions);
+			sprite.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
 			
 			var dimsChanged:Boolean = false;
 			
-			function onDimensions(event:DimensionChangeEvent):void
+			function onDimensions(event:DimensionEvent):void
 			{
 				assertFalse(dimsChanged); //call only once
 				assertEquals(event.newHeight, 40);

@@ -25,7 +25,7 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.NullResource;
 
@@ -129,8 +129,9 @@ package org.osmf.layout
 			graphics.endFill();
 			
 			dispatchEvent
-				( new DimensionChangeEvent
-					( _intrinsicWidth
+				( new DimensionEvent
+					( DimensionEvent.DIMENSION_CHANGE, false, false
+					, _intrinsicWidth
 					, _intrinsicHeight
 					, _intrinsicWidth = width
 					, _intrinsicHeight = height

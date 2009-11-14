@@ -28,7 +28,7 @@ package org.osmf.layout
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.logging.ILogger;
@@ -52,7 +52,7 @@ package org.osmf.layout
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
@@ -340,19 +340,19 @@ package org.osmf.layout
 			
 			if (oldTrait)
 			{
-				oldTrait.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
+				oldTrait.removeEventListener(DimensionEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
 			}
 			
 			if (spatialTrait)
 			{
-				spatialTrait.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
+				spatialTrait.addEventListener(DimensionEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
 			}
 			
 			if 	(	oldWidth != intrinsicWidth
 				||	oldHeight != intrinsicHeight
 				)
 			{
-				dispatchEvent(new DimensionChangeEvent(oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
+				dispatchEvent(new DimensionEvent(DimensionEvent.DIMENSION_CHANGE, false, false, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
 			}
 		}
 		

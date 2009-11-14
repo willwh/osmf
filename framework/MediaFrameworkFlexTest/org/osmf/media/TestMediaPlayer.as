@@ -30,7 +30,7 @@ package org.osmf.media
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.BufferEvent;
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
@@ -789,15 +789,15 @@ package org.osmf.media
 				assertTrue(mediaPlayer.width == 320);
 				assertTrue(mediaPlayer.height == 240);
 				
-				mediaPlayer.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onTestWidthHeight);
+				mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onTestWidthHeight);
 								
 				// For some media, triggering playback will cause the true
 				// dimensions to get set.
 				mediaPlayer.play();
 				
-				function onTestWidthHeight(event:DimensionChangeEvent):void
+				function onTestWidthHeight(event:DimensionEvent):void
 				{
-					mediaPlayer.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onTestWidthHeight);
+					mediaPlayer.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onTestWidthHeight);
 
 					assertTrue(mediaPlayer.width == expectedWidthAfterLoad);
 					assertTrue(mediaPlayer.height == expectedHeightAfterLoad);

@@ -1003,7 +1003,7 @@ package org.osmf.composition
 			var spatial:ISpatial = serial.getTrait(MediaTraitType.SPATIAL) as ISpatial;
 			assertNotNull(spatial);
 			
-			spatial.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE,onDimensionChange);
+			spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE,onDimensionChange);
 			
 			assertEquals(0,spatial.width);
 			assertEquals(0,spatial.height);
@@ -1030,7 +1030,7 @@ package org.osmf.composition
 			
 			// Child removal got us a new spatial trait:
 			spatial = serial.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-			spatial.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE,onDimensionChange);
+			spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE,onDimensionChange);
 			
 			assertEquals(51,spatial.width);
 			assertEquals(52,spatial.height);
@@ -1258,7 +1258,7 @@ package org.osmf.composition
 			playingChangedEventCount++;
 		}
 		
-		private function onDimensionChange(event:DimensionChangeEvent):void
+		private function onDimensionChange(event:DimensionEvent):void
 		{
 			dimensionsChangeEventCount++;
 		}

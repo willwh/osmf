@@ -24,7 +24,7 @@ package org.osmf.proxies
 	import flash.display.DisplayObject;
 	
 	import org.osmf.events.BufferEvent;
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MutedChangeEvent;
 	import org.osmf.events.PanChangeEvent;
@@ -305,7 +305,7 @@ package org.osmf.proxies
 			processDurationChange(event.time);
 		}
 
-		private function onDimensionChange(event:DimensionChangeEvent):void
+		private function onDimensionChange(event:DimensionEvent):void
 		{
 			processDimensionChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
 		}
@@ -505,11 +505,11 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					spatial.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);
+					spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 				else
 				{
-					spatial.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);
+					spatial.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 			}
 		}

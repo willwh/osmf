@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
@@ -32,7 +32,7 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * Implementation of ISpatial for serial compositions.

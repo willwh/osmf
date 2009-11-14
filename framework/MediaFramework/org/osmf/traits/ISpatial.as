@@ -26,9 +26,9 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the ISpatial trait's width and/or height property has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	
 	/**
 	 * ISpatial defines the trait interface for media that expose intrinsic dimensions.

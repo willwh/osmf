@@ -23,7 +23,7 @@ package org.osmf.video
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -144,7 +144,7 @@ package org.osmf.video
 					assertEquals(240, viewable.view.height);
 					
 					spatial.addEventListener
-							( DimensionChangeEvent.DIMENSION_CHANGE
+							( DimensionEvent.DIMENSION_CHANGE
 							, onDimensionChange
 							);
 					
@@ -154,9 +154,9 @@ package org.osmf.video
 					assertTrue(playable != null);
 					playable.play();
 					
-					function onDimensionChange(event:DimensionChangeEvent):void
+					function onDimensionChange(event:DimensionEvent):void
 					{
-						spatial.removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensionChange);
+						spatial.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
 						
 						assertTrue(spatial.width == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
 						assertTrue(spatial.height == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);

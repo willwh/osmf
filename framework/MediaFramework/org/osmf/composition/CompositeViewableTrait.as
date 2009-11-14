@@ -24,7 +24,7 @@ package org.osmf.composition
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutContext;
@@ -52,7 +52,7 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	
 	/**
 	 * Implements IViewable and ISpatial.
@@ -77,7 +77,7 @@ package org.osmf.composition
 			// Prepare a container to hold our viewable children:
 			container = constructLayoutContext();
 			container.addEventListener
-				( DimensionChangeEvent.DIMENSION_CHANGE
+				( DimensionEvent.DIMENSION_CHANGE
 				, onContainerDimensionChange
 				);
 			
@@ -136,7 +136,7 @@ package org.osmf.composition
 			return new LayoutContextSprite(owner.metadata);
 		}
 		
-		protected function onContainerDimensionChange(event:DimensionChangeEvent):void
+		protected function onContainerDimensionChange(event:DimensionEvent):void
 		{
 			// Re-dispatch the event, this time as ISpatial.
 			dispatchEvent(event.clone());

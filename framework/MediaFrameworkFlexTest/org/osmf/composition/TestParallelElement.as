@@ -28,7 +28,7 @@ package org.osmf.composition
 	import flash.events.Event;
 	
 	import org.osmf.events.BufferEvent;
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TimeEvent;
@@ -633,7 +633,7 @@ package org.osmf.composition
 			assertTrue(spatialP.width == spatial1.width);
 			assertTrue(spatialP.height == spatial1.height);
 			
-			spatialP.addEventListener(DimensionChangeEvent.DIMENSION_CHANGE,onDimensionChange);
+			spatialP.addEventListener(DimensionEvent.DIMENSION_CHANGE,onDimensionChange);
 			
 			spatial1.setDimensions(50,50);
 			
@@ -889,7 +889,7 @@ package org.osmf.composition
 			durationChangedEventCount++;
 		}
 		
-		private function onDimensionChange(event:DimensionChangeEvent):void
+		private function onDimensionChange(event:DimensionEvent):void
 		{
 			dimensionsChangeEventCount++;
 		}

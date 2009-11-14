@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
@@ -36,7 +36,7 @@ package org.osmf.composition
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * Implementation of ISpatial for parallel compositions.
@@ -164,7 +164,7 @@ package org.osmf.composition
 		private function registerChildSpatialListener(trait:ISpatial):void
 		{
 			trait.addEventListener
-				( DimensionChangeEvent.DIMENSION_CHANGE
+				( DimensionEvent.DIMENSION_CHANGE
 				, calculateDimensions
 				, false, 0, true
 				);
@@ -173,7 +173,7 @@ package org.osmf.composition
 		private function unregisterChildSpatialListener(trait:ISpatial):void
 		{
 			trait.removeEventListener
-				( DimensionChangeEvent.DIMENSION_CHANGE
+				( DimensionEvent.DIMENSION_CHANGE
 				, calculateDimensions
 				);
 		}

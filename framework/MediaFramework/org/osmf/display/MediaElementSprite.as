@@ -23,7 +23,7 @@ package org.osmf.display
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.media.MediaElement;
@@ -37,7 +37,7 @@ package org.osmf.display
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */		
-	 [Event(name="dimensionChange", type="org.osmf.events.DimensionChangeEvent")]
+	 [Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * The MediaElementSprite class is designed to display media with IViewable and ISpatial properties.  It is based off
@@ -99,7 +99,7 @@ package org.osmf.display
 		 	switch (event.traitType)
 		 	{
 		 		case MediaTraitType.SPATIAL:
-		 			_source.getTrait(MediaTraitType.SPATIAL).addEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensions);
+		 			_source.getTrait(MediaTraitType.SPATIAL).addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
 					setIntrinsicSize(ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).width, ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).height);
 		 			break;
 		 		case MediaTraitType.VIEWABLE:
@@ -114,7 +114,7 @@ package org.osmf.display
 		 	switch (event.traitType)
 		 	{
 		 		case MediaTraitType.SPATIAL:
-		 			_source.getTrait(MediaTraitType.SPATIAL).removeEventListener(DimensionChangeEvent.DIMENSION_CHANGE, onDimensions);
+		 			_source.getTrait(MediaTraitType.SPATIAL).removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
 		 			break;
 		 		case MediaTraitType.VIEWABLE:
 		 			view = null;
@@ -123,7 +123,7 @@ package org.osmf.display
 		 	}
 		 }
 		 
-		 private function onDimensions(event:DimensionChangeEvent):void
+		 private function onDimensions(event:DimensionEvent):void
 		 {
 		 	setIntrinsicSize(event.newWidth, event.newHeight);	
 		 	dispatchEvent(event.clone());	 	

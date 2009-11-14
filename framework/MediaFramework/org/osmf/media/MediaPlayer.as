@@ -116,7 +116,7 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */		
-	[Event(name="dimensionChange", type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 	 
 	// ISeekable
 	 
@@ -1056,7 +1056,7 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
 					break;
 				case MediaTraitType.SPATIAL:	
-					changeListeners(add, _element, trait, DimensionChangeEvent.DIMENSION_CHANGE, [redispatchEvent]);								
+					changeListeners(add, _element, trait, DimensionEvent.DIMENSION_CHANGE, [redispatchEvent]);								
 					_spatial = add;						
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE;					
 					break;

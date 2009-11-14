@@ -25,7 +25,7 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataUtils;
 
@@ -34,7 +34,7 @@ package org.osmf.layout
 	 * 
 	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	
 	/**
 	 * LayoutContextSprite defines a Sprite based ILayoutContext implementation.
@@ -207,9 +207,10 @@ package org.osmf.layout
 					
 			if (newIntrinsicWidth != _intrinsicWidth)
 			{
-				var event:DimensionChangeEvent
-						= new DimensionChangeEvent
-							( _intrinsicWidth	, _intrinsicHeight
+				var event:DimensionEvent
+						= new DimensionEvent
+							( DimensionEvent.DIMENSION_CHANGE, false, false
+							, _intrinsicWidth	, _intrinsicHeight
 							, newIntrinsicWidth	, _intrinsicHeight
 							);
 							
@@ -224,9 +225,10 @@ package org.osmf.layout
 			
 			if (newIntrinsicHeight != _intrinsicHeight)
 			{
-				var event:DimensionChangeEvent
-						= new DimensionChangeEvent
-							( _intrinsicWidth	, _intrinsicHeight
+				var event:DimensionEvent
+						= new DimensionEvent
+							( DimensionEvent.DIMENSION_CHANGE, false, false
+							, _intrinsicWidth	, _intrinsicHeight
 							, _intrinsicWidth	, newIntrinsicHeight
 							);
 							

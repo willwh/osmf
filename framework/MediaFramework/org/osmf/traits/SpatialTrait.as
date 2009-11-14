@@ -21,14 +21,14 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.DimensionChangeEvent;
+	import org.osmf.events.DimensionEvent;
 
 	/**
 	 * Dispatched when the width and/or height of the spatial media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionChangeEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionChangeEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * The SpatialTrait class provides a base ISpatial implementation. 	 
@@ -146,7 +146,7 @@ package org.osmf.traits
 		 */		
 		protected function postProcessDimensionsChange(oldWidth:Number, oldHeight:Number):void
 		{
-			dispatchEvent(new DimensionChangeEvent(oldWidth, oldHeight, _width, _height));
+			dispatchEvent(new DimensionEvent(DimensionEvent.DIMENSION_CHANGE, false, false, oldWidth, oldHeight, _width, _height));
 		}
 
 		private var _width:Number = 0;
