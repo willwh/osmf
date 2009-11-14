@@ -31,7 +31,7 @@ package org.osmf.metadata
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPausable;
 	import org.osmf.traits.IPlayable;
@@ -77,7 +77,7 @@ package org.osmf.metadata
 			intervalTimer.addEventListener(TimerEvent.TIMER, onIntervalTimer);
 			
 			// Check the owner media element for traits, if they are null here
-			// 	that's okay we'll manage them in the TraitsChangeEvent handlers.
+			// 	that's okay we'll manage them in the event handlers.
 			temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 			
 			seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
@@ -89,8 +89,8 @@ package org.osmf.metadata
 			pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
 			setupTraitEventListener(MediaTraitType.PAUSABLE);
 			
-			owner.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-			owner.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+			owner.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			owner.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 		}
 		
 		/**
@@ -466,7 +466,7 @@ package org.osmf.metadata
 		/**
 		 * Called when traits are added to the owner media element.
 		 */
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
 			switch (event.traitType)
 			{
@@ -491,7 +491,7 @@ package org.osmf.metadata
 		/**
 		 * Called when traits are removed from the owner media element.
 		 */
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			// Remove any event listeners
 			setupTraitEventListener(event.traitType, false);

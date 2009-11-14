@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.traits.AudibleTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -71,8 +71,8 @@ package org.osmf.media
 		public function testAddTrait():void
 		{
 			var mediaElement:DynamicMediaElement = createMediaElement() as DynamicMediaElement;
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+			mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
 			assertTrue(traitAddEventCount == 0);
 			
@@ -137,8 +137,8 @@ package org.osmf.media
 		public function testRemoveTrait():void
 		{
 			var mediaElement:DynamicMediaElement = createMediaElement() as DynamicMediaElement;
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-			mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+			mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
 			assertTrue(traitRemoveEventCount == 0);
 			
@@ -173,12 +173,12 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
 			traitAddEventCount++;
 		}
 
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			traitRemoveEventCount++;
 		}

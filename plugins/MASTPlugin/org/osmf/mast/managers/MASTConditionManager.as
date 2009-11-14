@@ -194,7 +194,7 @@ package org.osmf.mast.managers
 			{
 				// The trait is present, add the listener.
 				trait.addEventListener(eventClass[eventType], evaluateEventCondition, false, 0, true);
-				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			}
 			else
 			{
@@ -202,27 +202,27 @@ package org.osmf.mast.managers
 				// before adding the listener.  (Ideally we would manage the
 				// add/remove listeners more cleanly, but for the prototype
 				// I'm just adding it as a closure.)
-				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+				_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			}
 
-			function onTraitAdd(event:TraitsChangeEvent):void
+			function onTraitAdd(event:MediaElementEvent):void
 			{
 				if (event.traitType == traitType)
 				{
-					_mediaElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+					_mediaElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					
 					listenForTraitEvent(traitType, eventClass, eventType);
 				}
 			}
 
-			function onTraitRemove(event:TraitsChangeEvent):void
+			function onTraitRemove(event:MediaElementEvent):void
 			{
 				if (event.traitType == traitType)
 				{
 					trait.removeEventListener(eventClass[eventType], onConditionTrue);
-					_mediaElement.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+					_mediaElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 					
-					_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+					_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				}
 			}
 		}
@@ -238,13 +238,13 @@ package org.osmf.mast.managers
 
 			// The trait is not present, we need to wait until it's added
 			// before adding the listener. 
-			_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+			_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 
-			function onTraitAdd(event:TraitsChangeEvent):void
+			function onTraitAdd(event:MediaElementEvent):void
 			{
 				if (event.traitType == traitType)
 				{
-					_mediaElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+					_mediaElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					listenForTraitProperty(traitType, propertyName, propertyValue, operator);
 				}
 			}

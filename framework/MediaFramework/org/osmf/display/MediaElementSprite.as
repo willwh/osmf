@@ -24,7 +24,7 @@ package org.osmf.display
 	import flash.events.Event;
 	
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;
@@ -61,29 +61,29 @@ package org.osmf.display
 		{
 			if (_source)
 			{
-				_source.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				_source.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);		
+				_source.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_source.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);		
 				if (_source.hasTrait(MediaTraitType.VIEWABLE)) //Take care of event listeners
 				{	
-					onTraitRemove(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_REMOVE, MediaTraitType.VIEWABLE));
+					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.VIEWABLE));
 				}
 				if (_source.hasTrait(MediaTraitType.SPATIAL))
 				{	
-					onTraitRemove(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_REMOVE, MediaTraitType.SPATIAL));
+					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.SPATIAL));
 				}
 			}
 			_source = value;	
 			if (_source)
 			{	
-				_source.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				_source.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				_source.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_source.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 				if (_source.hasTrait(MediaTraitType.VIEWABLE)) 
 				{					
-					onTraitAdd(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_ADD, MediaTraitType.VIEWABLE));
+					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.VIEWABLE));
 				}
 				if (_source.hasTrait(MediaTraitType.SPATIAL))
 				{
-					onTraitAdd(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_ADD, MediaTraitType.SPATIAL));
+					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.SPATIAL));
 				}
 			}	
 		}
@@ -94,7 +94,7 @@ package org.osmf.display
 			return _source;
 		}	
 		
-		 private function onTraitAdd(event:TraitsChangeEvent):void
+		 private function onTraitAdd(event:MediaElementEvent):void
 		 {	
 		 	switch (event.traitType)
 		 	{
@@ -109,7 +109,7 @@ package org.osmf.display
 		 	}
 		 }
 		 
-		 private function onTraitRemove(event:TraitsChangeEvent):void
+		 private function onTraitRemove(event:MediaElementEvent):void
 		 {
 		 	switch (event.traitType)
 		 	{

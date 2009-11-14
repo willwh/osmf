@@ -26,13 +26,12 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A MediaElement dispatches a TraitsChangeEvent when media traits are
-	 * added to or removed from the media element. 
+	 * A MediaElementEvent is dispatched when properties of a MediaElement have changed.
 	 */
-	public class TraitsChangeEvent extends MediaEvent
+	public class MediaElementEvent extends Event
 	{
 		/**
-		 * The MediaTraitEvent.TRAIT_ADD constant defines the value of the type
+		 * The MediaElementEvent.TRAIT_ADD constant defines the value of the type
 		 * property of the event object for a traitAdd event.
 		 * 
 		 * @eventType traitAdd
@@ -40,7 +39,7 @@ package org.osmf.events
 		public static const TRAIT_ADD:String = "traitAdd";
 		
 		/**
-		 * The MediaTraitEvent.TRAIT_REMOVE constant defines the value of the
+		 * The MediaElementEvent.TRAIT_REMOVE constant defines the value of the
 		 * type property of the event object for a traitRemove event.
 		 * 
 		 * @eventType traitRemove
@@ -50,16 +49,14 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 * 
-		 * @param type The event type of the action that triggered this
-		 * event. Valid values are "traitAdd" and "traitRemove".
-		 * @param traitType The trait class for the trait that was added or removed, 
-		 * such as <code>BUFFERABLE</code>, <code>PLAYABLE</code>, <code>SEEKABLE</code>.
- 		 * @param bubbles Specifies whether the event can bubble up the display
+		 * @param type Event type
+		 * @param bubbles Specifies whether the event can bubble up the display
  		 * list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
-		 **/
-		public function TraitsChangeEvent(type:String, traitType:MediaTraitType, bubbles:Boolean=false, cancelable:Boolean=false)
+		 * @param traitType The trait class for the trait that was added or removed,.
+ 		 **/
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:MediaTraitType=null)
 		{
 			super(type, bubbles, cancelable);
 
@@ -68,11 +65,10 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 **/
 		override public function clone():Event
 		{
-			return new TraitsChangeEvent(type, traitType);
+			return new MediaElementEvent(type, bubbles, cancelable, traitType);
 		}
 		
 		/**

@@ -29,7 +29,7 @@ package org.osmf.layout
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
@@ -79,8 +79,8 @@ package org.osmf.layout
 			{
 				this._mediaElement = mediaElement;
 				
-				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onMediaElementTraitsChange);
-				_mediaElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+				_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
+				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				
 				updateViewableTrait();
 				updateSpatialTrait();
@@ -290,7 +290,7 @@ package org.osmf.layout
 		
 		private static const layoutTargets:Dictionary = new Dictionary(true);
 		
-		private function onMediaElementTraitsChange(event:TraitsChangeEvent):void
+		private function onMediaElementTraitsChange(event:MediaElementEvent):void
 		{
 			if (event.traitType == MediaTraitType.VIEWABLE)
 			{

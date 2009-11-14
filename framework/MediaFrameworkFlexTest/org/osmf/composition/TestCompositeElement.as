@@ -25,7 +25,7 @@ package org.osmf.composition
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -401,13 +401,13 @@ package org.osmf.composition
 			}
 		}
 				
-		final protected function onTraitAddRemoveEvent(event:TraitsChangeEvent):void
+		final protected function onTraitAddRemoveEvent(event:MediaElementEvent):void
 		{
-			if (event.type == TraitsChangeEvent.TRAIT_ADD)
+			if (event.type == MediaElementEvent.TRAIT_ADD)
 			{
 				traitAddEventCount++;
 			}
-			else if (event.type == TraitsChangeEvent.TRAIT_REMOVE)
+			else if (event.type == MediaElementEvent.TRAIT_REMOVE)
 			{
 				traitRemoveEventCount++;
 			}

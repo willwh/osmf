@@ -22,7 +22,7 @@
 package org.osmf.composition
 {
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
@@ -63,13 +63,13 @@ package org.osmf.composition
 			// data the we will forward: 
 			
 			owner.addEventListener
-				( TraitsChangeEvent.TRAIT_ADD
+				( MediaElementEvent.TRAIT_ADD
 				, onOwnerAddTrait
 				, false, 0, true
 				);
 			
 			owner.addEventListener
-				( TraitsChangeEvent.TRAIT_REMOVE
+				( MediaElementEvent.TRAIT_REMOVE
 				, onOwnerRemoveTrait
 				, false, 0, true
 				);
@@ -96,7 +96,7 @@ package org.osmf.composition
 		/**
 		 * Invoked when our owner has a trait added.
 		 */		
-		private function onOwnerAddTrait(event:TraitsChangeEvent):void
+		private function onOwnerAddTrait(event:MediaElementEvent):void
 		{
 			// If owner got a viewable, then we try to pull our dimensions from
 			// there:
@@ -111,7 +111,7 @@ package org.osmf.composition
 		/**
 		 * Invoked when our owner has a trait removed. 
 		 */		
-		private function onOwnerRemoveTrait(event:TraitsChangeEvent):void
+		private function onOwnerRemoveTrait(event:MediaElementEvent):void
 		{
 			// If owner lost its viewable, then we revert to calculating our
 			// dimensions from all child' spatial traits.

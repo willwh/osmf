@@ -27,7 +27,7 @@ package org.osmf.proxies
 	import flash.events.Event;
 	
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
@@ -58,9 +58,9 @@ package org.osmf.proxies
 	 * <code>getTrait()</code> method to return <code>null</code>
 	 * for the blocked trait types.</p>
 	 * <p>A ProxyElement normally dispatches the wrapped element's
-	 * TraitsChangeEvents, unless its <code>blocksTrait()</code> method returns 
+	 * MediaElementEvents, unless its <code>blocksTrait()</code> method returns 
 	 * <code>false</code> for the trait that is the target of the
-	 * TraitsChangeEvent.</p>
+	 * MediaElementEvent.</p>
 	 * <p>ProxyElement subclasses are useful for modifying the behavior of a
 	 * MediaElement in a non-invasive way.  
 	 * An example would be adding
@@ -74,7 +74,7 @@ package org.osmf.proxies
 	 * to provide an implementation when a needed underlying trait does not exist,
 	 * or to prevent an underlying trait from being exposed at all.</p>
 	 * @see TemporalProxyElement
-	 * @see org.osmf.events.TraitsChangeEvent
+	 * @see org.osmf.events.MediaElementEvent
 	 * @see org.osmf.traits
 	 **/
 	public class ProxyElement extends MediaElement
@@ -235,10 +235,10 @@ package org.osmf.proxies
 			
 			var doDispatchEvent:Boolean = true;
 
-			// If the proxy is dispatching a TraitsChangeEvent for a trait
+			// If the proxy is dispatching a MediaElementEvent for a trait
 			// that isn't blocked but which already exists on the wrapped
 			// element, then we swallow the event.
-			var traitEvent:TraitsChangeEvent = event as TraitsChangeEvent;
+			var traitEvent:MediaElementEvent = event as MediaElementEvent;
 			if  (  traitEvent != null
 				&& blocksTrait(traitEvent.traitType) == false
 				&& wrappedElement.hasTrait(traitEvent.traitType) == true
@@ -327,14 +327,14 @@ package org.osmf.proxies
 			if (add)
 			{
 				_wrappedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				_wrappedElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				_wrappedElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			}
 			else
 			{
 				_wrappedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				_wrappedElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				_wrappedElement.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			}
 		}
 		
@@ -343,17 +343,17 @@ package org.osmf.proxies
 			dispatchEvent(event.clone());
 		}
 		
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
 			processTraitsChangeEvent(event);
 		}
 
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			processTraitsChangeEvent(event);
 		}
 		
-		private function processTraitsChangeEvent(event:TraitsChangeEvent):void
+		private function processTraitsChangeEvent(event:MediaElementEvent):void
 		{
 			// We only redispatch the event if the change is for a non-blocked,
 			// non-overridden trait.

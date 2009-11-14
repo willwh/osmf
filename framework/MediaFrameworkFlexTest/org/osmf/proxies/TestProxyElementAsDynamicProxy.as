@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.proxies
 {
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -150,8 +150,8 @@ package org.osmf.proxies
 			temporalTrait.duration = 30;
 			proxyElement.doAddTrait(MediaTraitType.TEMPORAL, temporalTrait);
 
-			proxyElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-			proxyElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
@@ -249,12 +249,12 @@ package org.osmf.proxies
 		// Internals
 		//
 		
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
 			traitAddEventCount++;
 		}
 
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			traitRemoveEventCount++;
 		}

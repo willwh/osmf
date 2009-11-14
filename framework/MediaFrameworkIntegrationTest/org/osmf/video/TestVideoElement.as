@@ -10,7 +10,7 @@ package org.osmf.video
 	
 	import org.osmf.events.AuthenticationCompleteEvent;
 	import org.osmf.events.TraitEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -84,12 +84,12 @@ package org.osmf.video
 				
 				//We never get the IContentProtectableTRait here, so we have to basicly dectect decyption by checking for  the files duration
 				var elem:VideoElement = new VideoElement(new NetLoader(), resource);
-				elem.addEventListener(TraitsChangeEvent.TRAIT_ADD,  onTrait);
+				elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);
 				
 				mediaPlayer =  new MediaPlayer();
 				mediaPlayer.element = elem;
 				
-				function onTrait(event:TraitsChangeEvent):void
+				function onTrait(event:MediaElementEvent):void
 				{
 					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
 					{
@@ -124,12 +124,12 @@ package org.osmf.video
 							
 				var elem:VideoElement = new VideoElement(new NetLoader(), resource);
 				var protectable:IContentProtectable;
-				elem.addEventListener(TraitsChangeEvent.TRAIT_ADD,  onTrait );
+				elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 				var token:Object;
 											
 				mediaPlayer.element = elem;
 				
-				function onTrait(event:TraitsChangeEvent):void
+				function onTrait(event:MediaElementEvent):void
 				{
 					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
 					{
@@ -182,11 +182,11 @@ package org.osmf.video
 				
 				var elem:VideoElement = new VideoElement(new NetLoader(), resource);
 				var protectable:IContentProtectable;
-				elem.addEventListener(TraitsChangeEvent.TRAIT_ADD,  onTrait );
+				elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 								
 				mediaPlayer.element = elem;
 				
-				function onTrait(event:TraitsChangeEvent):void
+				function onTrait(event:MediaElementEvent):void
 				{
 					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
 					{
@@ -217,11 +217,11 @@ package org.osmf.video
 						
 				var protectable:IContentProtectable;
 				var elem:VideoElement = new VideoElement(new NetLoader(), resource);
-				elem.addEventListener(TraitsChangeEvent.TRAIT_ADD,  onTrait );
+				elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 				
 				mediaPlayer.element = elem;
 				
-				function onTrait(event:TraitsChangeEvent):void
+				function onTrait(event:MediaElementEvent):void
 				{					
 					if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
 					{

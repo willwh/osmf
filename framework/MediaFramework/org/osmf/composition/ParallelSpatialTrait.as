@@ -24,7 +24,7 @@ package org.osmf.composition
 	import flash.events.Event;
 	
 	import org.osmf.events.DimensionChangeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISpatial;

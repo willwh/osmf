@@ -24,7 +24,7 @@ package org.osmf.composition
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
@@ -89,8 +89,8 @@ package org.osmf.composition
 				
 				if (_listenedChild)
 				{
-					_listenedChild.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdded);
-					_listenedChild.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemoved);
+					_listenedChild.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
+					_listenedChild.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemoved);
 					
 					// Dispatch traitUnaggregated events for all traits.
 					for (traitIndex = 0; traitIndex < _listenedChild.traitTypes.length; traitIndex++)
@@ -123,8 +123,8 @@ package org.osmf.composition
 							);			
 					}
 	
-					_listenedChild.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdded);
-					_listenedChild.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemoved);
+					_listenedChild.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
+					_listenedChild.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemoved);
 				}
 				
 				dispatchEvent
@@ -275,8 +275,8 @@ package org.osmf.composition
 		 **/			
 		public function addChildAt(child:MediaElement, index:int):void
 		{
-			child.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdded);
-			child.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemoved);
+			child.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
+			child.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemoved);
 			
 			childMediaElements.splice(index, 0, child);
 			
@@ -303,8 +303,8 @@ package org.osmf.composition
 		 **/	
 		public function removeChild(child:MediaElement):void
 		{	
-			child.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdded);
-			child.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemoved);
+			child.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
+			child.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemoved);
 
 			childMediaElements.splice(childMediaElements.indexOf(child), 1)
 			
@@ -342,7 +342,7 @@ package org.osmf.composition
 		// Internal Implementation
 		//
 		
-		private function onTraitRemoved(event:TraitsChangeEvent):void
+		private function onTraitRemoved(event:MediaElementEvent):void
 		{
 			var child:MediaElement = event.target as MediaElement;
 			
@@ -358,7 +358,7 @@ package org.osmf.composition
 				);
 		}
 		
-		private function onTraitAdded(event:TraitsChangeEvent):void
+		private function onTraitAdded(event:MediaElementEvent):void
 		{
 			var child:MediaElement = event.target as MediaElement;
 			

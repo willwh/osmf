@@ -32,7 +32,7 @@ package org.osmf.composition
 	import org.osmf.events.SeekingChangeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewChangeEvent;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.layout.AnchorLayoutFacet;
@@ -87,8 +87,8 @@ package org.osmf.composition
 		public function testGetTraitTypesDynamically():void
 		{
 			var parallel:ParallelElement = createParallelElement();
-			parallel.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
-			parallel.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
+			parallel.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
+			parallel.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
 			
 			assertTrue(parallel.traitTypes != null);
 			assertTrue(parallel.traitTypes.length == 0);

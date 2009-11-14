@@ -118,7 +118,7 @@
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
 				// when ISeekable is added
-				videoElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+				videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
 				// Listen for metadata to be added so we can add any desired event listeners on any
 				// metadata facets we care about. For example, the temporalFacet.
@@ -249,7 +249,7 @@
    				}
    			}
    			
-   			private function onTraitAdd(event:TraitsChangeEvent):void
+   			private function onTraitAdd(event:MediaElementEvent):void
    			{
    				switch (event.traitType)
    				{

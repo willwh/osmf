@@ -332,8 +332,8 @@ package org.osmf.media
 					
 					if (_element) //sometimes _element is null here due to unload nulling the element.
 					{
-						_element.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-						_element.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+						_element.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						_element.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 						_element.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
 						for each (traitType in _element.traitTypes)
 						{
@@ -344,8 +344,8 @@ package org.osmf.media
 				_element = value;
 				if (_element)
 				{
-					_element.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);					
-					_element.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+					_element.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);					
+					_element.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 					_element.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
 
 					// If the media is not LOADABLE, then the MediaPlayer's state
@@ -1000,12 +1000,12 @@ package org.osmf.media
 	    	dispatchEvent(event.clone());
 	    }
 	        
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{				
 			updateTraitListeners(event.traitType, true);				
 		}
 		
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			updateTraitListeners(event.traitType, false);						
 		}

@@ -49,8 +49,8 @@ package org.osmf.examples.traceproxy
 			if (wrappedElement != null)
 			{
 				// Clear our old listeners.
-				wrappedElement.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				wrappedElement.removeEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 
 				for each (traitType in wrappedElement.traitTypes)
 				{
@@ -63,8 +63,8 @@ package org.osmf.examples.traceproxy
 			if (value != null)
 			{
 				// Listen for traits being added and removed.
-				wrappedElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
-				wrappedElement.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitRemove);
+				wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
 				for each (traitType in wrappedElement.traitTypes)
 				{
@@ -76,12 +76,12 @@ package org.osmf.examples.traceproxy
 		// Internals
 		//
 		
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
 			processTrait(event.traitType, true);
 		}
 
-		private function onTraitRemove(event:TraitsChangeEvent):void
+		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			processTrait(event.traitType, false);
 		}

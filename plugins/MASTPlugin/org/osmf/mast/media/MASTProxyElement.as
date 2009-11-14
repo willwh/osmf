@@ -27,7 +27,7 @@ package org.osmf.mast.media
 	
 	import org.osmf.composition.SerialElement;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.mast.loader.MASTDocumentProcessedEvent;
@@ -157,7 +157,7 @@ package org.osmf.mast.media
 					if (playable == null)
 					{
 						// Trait is not present yet, we need to wait for it to be added
-						this.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+						this.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					}
 					else
 					{
@@ -168,9 +168,9 @@ package org.osmf.mast.media
 			}
 		}
 			
-		private function onTraitAdd(event:TraitsChangeEvent):void
+		private function onTraitAdd(event:MediaElementEvent):void
 		{
-			this.removeEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+			this.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			
 			if (event.traitType == MediaTraitType.PLAYABLE)
 			{

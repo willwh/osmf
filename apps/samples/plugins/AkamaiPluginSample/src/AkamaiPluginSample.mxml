@@ -181,7 +181,7 @@
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
 				// when ISeekable is added
-				mediaElement.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAdd);
+				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 								
@@ -331,7 +331,7 @@
    				}
    			}
    			
-   			private function onTraitAdd(event:TraitsChangeEvent):void
+   			private function onTraitAdd(event:MediaElementEvent):void
    			{
    				switch (event.traitType)
    				{

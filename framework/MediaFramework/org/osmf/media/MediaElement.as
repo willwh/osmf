@@ -28,7 +28,7 @@ package org.osmf.media
 	
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.TraitsChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.IDisposable;
 	import org.osmf.traits.MediaTraitType;
@@ -39,14 +39,14 @@ package org.osmf.media
 	 *
 	 * @eventType org.osmf.events.MediaTraitEvent.TRAIT_ADD
 	 **/
-	[Event(name="traitAdd",type="org.osmf.events.TraitsChangeEvent")]
+	[Event(name="traitAdd",type="org.osmf.events.MediaElementEvent")]
 	
 	/**
 	 * Dispatched when an IMediaTrait is removed from the media element.
 	 *
 	 * @eventType org.osmf.events.MediaTraitEvent.TRAIT_REMOVE
 	 **/
-	[Event(name="traitRemove",type="org.osmf.events.TraitsChangeEvent")]
+	[Event(name="traitRemove",type="org.osmf.events.MediaElementEvent")]
 
 	/**
 	 * Dispatched when an error which impacts the operation of the media
@@ -247,7 +247,7 @@ package org.osmf.media
 				result.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				
 				// Signal addition:
-				dispatchEvent(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_ADD, type));
+				dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, type));
 			}
 			else if (result != instance)
 			{
@@ -284,7 +284,7 @@ package org.osmf.media
 				}
 
 				// Signal removal is about to occur:
-				dispatchEvent(new TraitsChangeEvent(TraitsChangeEvent.TRAIT_REMOVE, type));
+				dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, type));
 				
 				_traitTypes.splice(_traitTypes.indexOf(type),1);
 				delete _traits[type];

@@ -63,8 +63,8 @@ package org.osmf.composition
 		public function testGetTraitTypesDynamically():void
 		{
 			var serial:SerialElement = createSerialElement();
-			serial.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
-			serial.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
+			serial.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
+			serial.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
 						
 			assertTrue(serial.traitTypes != null);
 			assertTrue(serial.traitTypes.length == 0);
@@ -155,8 +155,8 @@ package org.osmf.composition
 		public function testHasTraitDynamically():void
 		{
 			var serial:SerialElement = createSerialElement();
-			serial.addEventListener(TraitsChangeEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
-			serial.addEventListener(TraitsChangeEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
+			serial.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
+			serial.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
 						
 			// No traits to begin with.
 			assertHasTraits(serial,[]);

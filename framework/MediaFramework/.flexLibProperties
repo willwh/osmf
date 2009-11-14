@@ -84,7 +84,7 @@
     <classEntry path="org.osmf.events.SwitchingChangeEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.TraitEvent"/>
-    <classEntry path="org.osmf.events.TraitsChangeEvent"/>
+    <classEntry path="org.osmf.events.MediaElementEvent"/>
     <classEntry path="org.osmf.events.ViewChangeEvent"/>
     <classEntry path="org.osmf.events.VolumeChangeEvent"/>
     <classEntry path="org.osmf.gateways.HTMLGateway"/>
