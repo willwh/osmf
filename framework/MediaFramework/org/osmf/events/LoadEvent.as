@@ -21,10 +21,6 @@
 *****************************************************/
 package org.osmf.events
 {
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.MediaTraitType;
-	
 	import flash.events.Event;
 	
 	/**
@@ -43,23 +39,44 @@ package org.osmf.events
 		public static const LOAD_STATE_CHANGE:String = "loadStateChange";
 
 		/**
+		 * The LoadEvent.BYTES_LOADED_CHANGE constant defines the value
+		 * of the type property of the event object for a bytesLoadedChange
+		 * event.
+		 * 
+		 * @eventType bytesLoadedChange
+		 **/
+		public static const BYTES_LOADED_CHANGE:String = "bytesLoadedChange";
+		
+		/**
+		 * The LoadEvent.BYTES_TOTAL_CHANGE constant defines the value
+		 * of the type property of the event object for a bytesTotalChange
+		 * event.
+		 * 
+		 * @eventType bytesTotalChange
+		 **/
+		public static const BYTES_TOTAL_CHANGE:String = "bytesTotalChange";
+		
+		/**
 		 * Constructor.
 		 * 
 		 * @param type Event type.
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param loadState New LoadState of the ILoadable.
+		 * @param bytes New value of bytesLoaded or bytesTotal.
 		 **/
 		public function LoadEvent
 							( type:String,
 							  bubbles:Boolean=false,
 							  cancelable:Boolean=false,
-							  loadState:String=null
+							  loadState:String=null,
+							  bytes:Number=NaN
 							)
 		{
 			super(type, bubbles, cancelable);
 			
 			_loadState = loadState;
+			_bytes = bytes;
 		}
 		
 		/**
@@ -67,7 +84,7 @@ package org.osmf.events
 		 **/
 		override public function clone():Event
 		{
-			return new LoadEvent(type, bubbles, cancelable, loadState);
+			return new LoadEvent(type, bubbles, cancelable, loadState, bytes);
 		}
 
 		/**
@@ -77,10 +94,19 @@ package org.osmf.events
 		{
 			return _loadState;
 		}
+
+		/**
+		 * New value of bytesLoaded or bytesTotal.
+		 **/
+		public function get bytes():Number
+		{
+			return _bytes;
+		}
 		
 		// Internals
 		//
 		
 		private var _loadState:String;
+		private var _bytes:Number;
 	}
 }

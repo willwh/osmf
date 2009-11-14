@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	
 	public class TestDownloadableTrait extends TestIDownloadable
 	{
@@ -41,7 +41,7 @@ package org.osmf.traits
 			var downloadableTrait:DownloadableTrait = downloadable as DownloadableTrait;
 			assertTrue(downloadableTrait != null);
 			
-			downloadableTrait.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+			downloadableTrait.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			downloadableTrait.bytesTotal = 100;
 			downloadableTrait.bytesLoaded = 50;

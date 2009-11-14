@@ -27,13 +27,12 @@ package org.osmf.content
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
 	
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -42,13 +41,6 @@ package org.osmf.content
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
-
-	/**
-	 * Dispatched when total size in bytes of data being downloaded into the application has changed.
-	 * 
-	 * @eventType org.osmf.events.BytesTotalChangeEvent
-	 */	
-	[Event(name="bytesTotalChange",type="org.osmf.events.BytesTotalChangeEvent")]
 
 	/**
 	 * The ContentLoader class creates a flash.display.Loader object, 

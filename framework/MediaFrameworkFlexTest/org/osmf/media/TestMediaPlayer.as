@@ -30,8 +30,6 @@ package org.osmf.media
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BytesLoadedChangeEvent;
-	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
@@ -1321,8 +1319,8 @@ package org.osmf.media
 			mediaPlayer.bytesLoadedUpdateInterval = 120;
 			assertTrue(mediaPlayer.bytesLoadedUpdateInterval == 120);
 			
-			mediaPlayer.addEventListener(BytesLoadedChangeEvent.BYTES_LOADED_CHANGE, eventCatcher);
-			mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			mediaElement.prepareForTesting();
 			
@@ -1346,21 +1344,21 @@ package org.osmf.media
 			assertTrue(mediaPlayer.bytesLoaded == 10);
 			assertTrue(mediaPlayer.bytesTotal == 100);
 			
-			mediaPlayer.removeEventListener(BytesLoadedChangeEvent.BYTES_LOADED_CHANGE, eventCatcher);
-			mediaPlayer.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+			mediaPlayer.removeEventListener(LoadEvent.BYTES_LOADED_CHANGE, eventCatcher);
+			mediaPlayer.removeEventListener(LoadEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 
 			assertTrue(events.length > 0);
 			var bytesTotalChangeCount:int = 0;
 			for (var i:int; i < events.length; i++)
 			{
-				if (events[i] is BytesTotalChangeEvent)
+				if (events[i].type == LoadEvent.BYTES_TOTAL_CHANGE)
 				{
 					bytesTotalChangeCount++;
 					assertTrue(bytesTotalChangeCount == 1);
 				}
 				else
 				{
-					assertTrue(events[i] is BytesLoadedChangeEvent);
+					assertTrue(events[i].type == LoadEvent.BYTES_LOADED_CHANGE);
 				}
 			}			
 		}

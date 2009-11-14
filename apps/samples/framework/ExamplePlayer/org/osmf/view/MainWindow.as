@@ -28,13 +28,12 @@ package org.osmf.view
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.BufferTimeChangeEvent;
-	import org.osmf.events.BytesLoadedChangeEvent;
-	import org.osmf.events.BytesTotalChangeEvent;
-	import org.osmf.events.TimeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.MutedChangeEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.examples.AllExamples;
 	import org.osmf.examples.Example;
 	import org.osmf.utils.Version;
@@ -89,8 +88,8 @@ package org.osmf.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(MutedChangeEvent.MUTED_CHANGE, onMutedChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferTimeChangeEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(BytesLoadedChangeEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
 
 			// Set up the MediaPlayer.
 			//
@@ -225,14 +224,14 @@ package org.osmf.view
 			bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
 		}
 		
-		private function onBytesTotalChange(event:BytesTotalChangeEvent):void
+		private function onBytesTotalChange(event:LoadEvent):void
 		{
-			bytesTotal.text = event.newValue.toString();
+			bytesTotal.text = event.bytes.toString();
 		}
 		
-		private function onBytesLoadedChange(event:BytesLoadedChangeEvent):void
+		private function onBytesLoadedChange(event:LoadEvent):void
 		{
-			bytesLoaded.text = event.newValue.toString();
+			bytesLoaded.text = event.bytes.toString();
 		}
 		
 		private function updateControls():void

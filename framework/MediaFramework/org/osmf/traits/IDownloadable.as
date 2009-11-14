@@ -26,9 +26,9 @@ package org.osmf.traits
 	/**
 	 * Dispatched when total size in bytes of data being loaded has changed.
 	 * 
-	 * @eventType org.osmf.events.BytesTotalChangeEvent
+	 * @eventType org.osmf.events.LoadEvent
 	 */	
-	[Event(name="bytesTotalChange",type="org.osmf.events.BytesTotalChangeEvent")]
+	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
 	/**
 	 * IDownloadable defines the interface that can be used to access the progress

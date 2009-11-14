@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.audio
 {
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.TestDownloadableTrait;
 	import org.osmf.utils.MockSound;
 
@@ -46,7 +46,7 @@ package org.osmf.audio
 
 		override public function testProperties():void
 		{
-			downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, eventCatcher);
+			downloadable.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, eventCatcher);
 			
 			_sound.bytesTotal = 150;
 			_sound.bytesLoaded = 10;

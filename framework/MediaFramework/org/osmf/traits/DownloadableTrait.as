@@ -23,15 +23,15 @@ package org.osmf.traits
 {
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.utils.MediaFrameworkStrings;
 
 	/**
-	 * Dispatched when total size in bytes of data being downloaded into the application has changed.
+	 * Dispatched when total size in bytes of data being downloaded has changed.
 	 * 
-	 * @eventType org.osmf.events.BytesTotalChangeEvent
+	 * @eventType org.osmf.events.LoadEvent
 	 */	
-	[Event(name="bytesTotalChange",type="org.osmf.events.BytesTotalChangeEvent")]
+	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
 	/**
 	 * The DownloadableTrait class provides a base IDownloadable implementation. 
@@ -104,10 +104,9 @@ package org.osmf.traits
 
 			if (canProcessBytesTotalChange(value))
 			{
-				var oldBytesTotal:Number = _bytesTotal;
 				processBytesTotalChange(value);
 				_bytesTotal = value;
-				postProcessBytesTotalChange(oldBytesTotal, value);
+				postProcessBytesTotalChange( value);
 			}
 		}
 		
@@ -187,16 +186,16 @@ package org.osmf.traits
 
 		/**
 		 * Called just after the <code>bytesTotal</code> property has changed.
-		 * Dispatches the BytesTotalChangeEvent event.
+		 * Dispatches the bytesTotalChange event.
 		 * <p>Subclasses that override should call this method to
-		 * dispatch the BytesTotalChangeEvent event.</p>
+		 * dispatch the bytesTotalChange event.</p>
 		 *  
-		 * @param oldValue Previous <code>bytesTotal</code> value.
+		 * @param newValue New <code>bytesTotal</code> value.
 		 * 
 		 */		
-		protected function postProcessBytesTotalChange(oldValue:Number, newValue:Number):void
+		protected function postProcessBytesTotalChange(newValue:Number):void
 		{
-			dispatchEvent(new BytesTotalChangeEvent(oldValue, newValue));
+			dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, newValue));
 		}
 
 		private var _bytesLoaded:Number;

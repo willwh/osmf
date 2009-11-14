@@ -24,7 +24,6 @@ package org.osmf.content
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -96,7 +95,7 @@ package org.osmf.content
 					assertEquals(NaN, downloadable.bytesLoaded);
 					assertEquals(NaN, downloadable.bytesTotal);
 					
-					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+					downloadable.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 				else if (count == 2)
 				{
@@ -112,12 +111,11 @@ package org.osmf.content
 				}
 			}
 			
-			function onBytesTotalChange(event:BytesTotalChangeEvent):void
+			function onBytesTotalChange(event:LoadEvent):void
 			{
 				var downloadable:IDownloadable = event.target as IDownloadable;
 				assertNotNull(downloadable);
-				assertEquals(event.oldValue, NaN);
-				assertEquals(event.newValue, expectedBytesTotal);
+				assertEquals(event.bytes, expectedBytesTotal);
 				
 				bytesTotalFired = true;
 			}

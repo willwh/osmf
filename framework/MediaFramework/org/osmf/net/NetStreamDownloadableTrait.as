@@ -24,7 +24,7 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.DownloadableTrait;
 
 	[ExcludeClass]
@@ -78,7 +78,15 @@ package org.osmf.net
 		{
 			if (!isNaN(_netStream.bytesTotal) && _netStream.bytesTotal > 0)
 			{
-				dispatchEvent(new BytesTotalChangeEvent(0, _netStream.bytesTotal));
+				dispatchEvent
+					( new LoadEvent
+						( LoadEvent.BYTES_TOTAL_CHANGE
+						, false
+						, false
+						, null
+						, _netStream.bytesTotal
+						)
+					);
 				_netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			}
 		}

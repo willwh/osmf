@@ -180,16 +180,16 @@ package org.osmf.media
 	/**
 	 * Dispatched when the data is received as a download operation progresses.
 	 *
-	 * @eventType flash.events.ProgressEvent
+	 * @eventType org.osmf.events.LoadEvent
 	 */
-	[Event(name="bytesLoadedChange",type="org.osmf.events.BytesLoadedChangeEvent")]
+	[Event(name="bytesLoadedChange",type="org.osmf.events.LoadEvent")]
 
 	/**
 	 * Dispatched when the value of bytesTotal property has changed.
 	 *
-	 * @eventType org.osmf.events.BytesTotalChangedEvent
+	 * @eventType org.osmf.events.LoadEvent
 	 */
-	[Event(name="bytesTotalChange",type="org.osmf.events.BytesTotalChangeEvent")]
+	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
 	// MediaPlayerCapabilityChangeEvents
     
@@ -464,7 +464,7 @@ package org.osmf.media
          * A non-positive value disables the dispatch of the change events.</p>
          * <p>The MediaElement must be downloadable to support this property.</p>
 		 * 
-		 * @see org.osmf.events.#event:BytesLoadedChangeEvent
+		 * @see org.osmf.events.#event:LoadEvent
          * @see org.osmf.traits.IDownloadable
 		 */
         public function set bytesLoadedUpdateInterval(value:Number):void
@@ -1095,7 +1095,7 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
 				case MediaTraitType.DOWNLOADABLE:
-					changeListeners(add, _element, trait, BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
+					changeListeners(add, _element, trait, LoadEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
 					if (add && _bytesLoadedUpdateInterval > 0 && !isNaN(_bytesLoadedUpdateInterval))
 					{
 						_bytesLoadedTimer.start();
@@ -1241,9 +1241,12 @@ package org.osmf.media
 		{
 			if (downloadable && (bytesLoaded != lastBytesLoaded))
 			{
-				var bytesLoadedEvent:BytesLoadedChangeEvent 
-					= new BytesLoadedChangeEvent
-						( lastBytesLoaded
+				var bytesLoadedEvent:LoadEvent 
+					= new LoadEvent
+						( LoadEvent.BYTES_LOADED_CHANGE
+						, false
+						, false
+						, null
 						, bytesLoaded
 						);
 						 	

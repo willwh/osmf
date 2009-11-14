@@ -61,8 +61,6 @@
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferTimeChangeEvent"/>
     <classEntry path="org.osmf.events.BufferingChangeEvent"/>
-    <classEntry path="org.osmf.events.BytesLoadedChangeEvent"/>
-    <classEntry path="org.osmf.events.BytesTotalChangeEvent"/>
     <classEntry path="org.osmf.events.DimensionChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>

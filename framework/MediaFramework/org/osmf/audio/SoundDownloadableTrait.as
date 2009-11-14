@@ -25,7 +25,7 @@ package org.osmf.audio
 	import flash.events.ProgressEvent;
 	import flash.media.Sound;
 	
-	import org.osmf.events.BytesTotalChangeEvent;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.DownloadableTrait;
 
 	/**
@@ -72,9 +72,12 @@ package org.osmf.audio
 		{
 			if (_lastBytesTotal != _sound.bytesTotal)
 			{
-				var event:BytesTotalChangeEvent
-					= new BytesTotalChangeEvent
-						( _lastBytesTotal
+				var event:LoadEvent
+					= new LoadEvent
+						( LoadEvent.BYTES_TOTAL_CHANGE
+						, false
+						, false
+						, null
 						, _sound.bytesTotal
 						);
 						

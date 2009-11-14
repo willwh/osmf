@@ -122,9 +122,9 @@ package org.osmf.examples.traceproxy
 			trace("View Change: " + (oldView != null ? oldView.toString() : "null") + "->" + (newView != null ? newView.toString() : "null"));
 		}
 		
-		override protected function processBytesTotalChange(oldBytes:Number, newBytes:Number):void
+		override protected function processBytesTotalChange(newBytes:Number):void
 		{
-			trace("Bytes Total Change: " + oldBytes + "->" + newBytes);
+			trace("Bytes Total Change: " + newBytes);
 		}
 	}
 }

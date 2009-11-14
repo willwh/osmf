@@ -25,7 +25,6 @@ package org.osmf.proxies
 	
 	import org.osmf.events.BufferTimeChangeEvent;
 	import org.osmf.events.BufferingChangeEvent;
-	import org.osmf.events.BytesTotalChangeEvent;
 	import org.osmf.events.DimensionChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MutedChangeEvent;
@@ -246,7 +245,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processBytesTotalChange(oldBytes:Number, newBytes:Number):void
+		protected function processBytesTotalChange(newBytes:Number):void
 		{
 		}
 
@@ -327,9 +326,9 @@ package org.osmf.proxies
 			processViewChange(event.oldView, event.newView);
 		}
 		
-		private function onBytesTotalChange(event:BytesTotalChangeEvent):void
+		private function onBytesTotalChange(event:LoadEvent):void
 		{
-			processBytesTotalChange(event.oldValue, event.newValue);
+			processBytesTotalChange(event.bytes);
 		}
 
 		// Internals
@@ -573,11 +572,11 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					downloadable.addEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+					downloadable.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 				else
 				{
-					downloadable.removeEventListener(BytesTotalChangeEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+					downloadable.removeEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 			}
 		}
