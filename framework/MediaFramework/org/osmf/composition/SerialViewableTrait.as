@@ -30,7 +30,7 @@ package org.osmf.composition
 	/**
 	 * Dispatched when the trait's view has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewChangeEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	
 	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
 	

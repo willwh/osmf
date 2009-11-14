@@ -47,7 +47,7 @@ package org.osmf.traits
 		
 		/**
 		 * Defines the trait's view. If the view is different from the one
-		 * that is currently set, a ViewChangeEvent will be dispatched.
+		 * that is currently set, a viewChange event will be dispatched.
 		 * 
 		 * @see canProcessViewChange
 		 * @see processViewChange
