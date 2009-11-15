@@ -33,7 +33,6 @@ package org.osmf.proxies
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.TraitEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;

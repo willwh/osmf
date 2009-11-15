@@ -30,7 +30,7 @@ package org.osmf.events
 	 * with for playing back this media.  contains a token which can be used later to speed up the 
 	 * authentication process by passing to authenticateWithToken.
 	 */ 
-	public class AuthenticationCompleteEvent extends TraitEvent
+	public class AuthenticationCompleteEvent extends Event
 	{
 		/**
 		 * Authentication Complete is dispatched when a user can successfully playback encrypted

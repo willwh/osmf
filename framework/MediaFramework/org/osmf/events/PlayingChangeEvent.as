@@ -27,7 +27,7 @@ package org.osmf.events
 	 * A trait that implements the IPlayable interface dispatches
 	 * this event when its <code>playing</code> property has changed.
 	 */	
-	public class PlayingChangeEvent extends TraitEvent
+	public class PlayingChangeEvent extends Event
 	{
 		/**
 		 * The PlayingChangeEvent.PLAYING_CHANGE constant defines the value

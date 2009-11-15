@@ -71,7 +71,6 @@
     <classEntry path="org.osmf.events.MediaError"/>
     <classEntry path="org.osmf.events.MediaErrorCodes"/>
     <classEntry path="org.osmf.events.MediaErrorEvent"/>
-    <classEntry path="org.osmf.events.MediaEvent"/>
     <classEntry path="org.osmf.events.MediaPlayerCapabilityChangeEvent"/>
     <classEntry path="org.osmf.events.MediaPlayerStateChangeEvent"/>
     <classEntry path="org.osmf.events.MetadataEvent"/>

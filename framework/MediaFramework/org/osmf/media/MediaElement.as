@@ -37,14 +37,14 @@ package org.osmf.media
 	/**
 	 * Dispatched when an IMediaTrait is added to the media element.
 	 *
-	 * @eventType org.osmf.events.MediaTraitEvent.TRAIT_ADD
+	 * @eventType org.osmf.events.MediaElementEvent.TRAIT_ADD
 	 **/
 	[Event(name="traitAdd",type="org.osmf.events.MediaElementEvent")]
 	
 	/**
 	 * Dispatched when an IMediaTrait is removed from the media element.
 	 *
-	 * @eventType org.osmf.events.MediaTraitEvent.TRAIT_REMOVE
+	 * @eventType org.osmf.events.MediaElementEvent.TRAIT_REMOVE
 	 **/
 	[Event(name="traitRemove",type="org.osmf.events.MediaElementEvent")]
 
@@ -219,7 +219,7 @@ package org.osmf.media
 		
 		/**
 		 * Adds a new media trait to this media element.  If successful,
-		 * dispatches a MediaTraitEvent.
+		 * dispatches a MediaElementEvent.
 		 * 
          * @param type The type of media trait to add.
 		 * @param trait The media trait to add.
@@ -257,7 +257,7 @@ package org.osmf.media
 		
 		/**
 		 * Removes a media trait from this media element.  If successful,
-		 * dispatches a MediaTraitEvent.
+		 * dispatches a MediaElementEvent.
 		 * 
          * @param type The Class of the media trait to remove.
 		 * 

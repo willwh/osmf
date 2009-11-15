@@ -27,7 +27,7 @@ package org.osmf.events
 	 * A trait that implements the IPausable interface dispatches
 	 * this event when its <code>paused</code> property has changed.
 	 */	
-	public class PausedChangeEvent extends TraitEvent
+	public class PausedChangeEvent extends Event
 	{
 		/**
 		 * The PausedChangeEvent.PAUSED_CHANGE constant defines the value

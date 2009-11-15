@@ -293,7 +293,7 @@ package org.osmf.mast.managers
 			dispatchEvent(new Event(CONDITION_TRUE));
 		}
 		
-		private function evaluateEventCondition(event:TraitEvent):void
+		private function evaluateEventCondition(event:Event):void
 		{
 			CONFIG::LOGGING
 			{
@@ -490,14 +490,13 @@ package org.osmf.mast.managers
 				case "PausedChangeEvent":
 					traitType = MediaTraitType.PAUSABLE;
 					break;
-				case "MutedChangeEvent":
-				case "VolumeChangeEvent":
+				case "AudioEvent":
 					traitType = MediaTraitType.AUDIBLE;
 					break;
 				case "SeekEvent":
 					traitType = MediaTraitType.SEEKABLE;
 					break;
-				case "TraitEvent":
+				case "TimeEvent":
 					traitType = MediaTraitType.TEMPORAL;
 					break;
 			}
