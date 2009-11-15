@@ -148,7 +148,7 @@
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				
 				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
@@ -310,12 +310,9 @@
 				}
 			}
 			
-			private function onSeekingChange(event:SeekingChangeEvent):void
+			private function onSeekingChange(event:SeekEvent):void
 			{
-				if (!event.seeking)
-				{
-					waitForSeek = false;
-				}
+				waitForSeek = false;
 			}
 
    			private function toggleDragging(state:Boolean):void

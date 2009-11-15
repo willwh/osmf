@@ -21,14 +21,21 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 
 	/**
-	 * Dispatched when this trait's <code>seeking</code> property changes.
+	 * Dispatched when this trait begins a seek operation.
 	 * 
-	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
+	 * @eventType org.osmf.events.SeekEvent.SEEK_BEGIN
 	 */
-	[Event(name="seekingChange",type="org.osmf.events.SeekingChangeEvent")]
+	[Event(name="seekBegin",type="org.osmf.events.SeekEvent")]
+
+	/**
+	 * Dispatched when this trait ends a seek operation.
+	 * 
+	 * @eventType org.osmf.events.SeekEvent.SEEK_END
+	 */
+	[Event(name="seekEnd",type="org.osmf.events.SeekEvent")]
 
 	/**
 	 * The SeekableTrait class provides a base ISeekable implementation.
@@ -138,7 +145,7 @@ package org.osmf.traits
 					
 					if (canProcessSeekingChange(true))
 					{
-						processSeekingChange(true,time)
+						processSeekingChange(true, time);
 						
 						_seeking = true;
 						
@@ -188,11 +195,9 @@ package org.osmf.traits
 		/**
          * Called immediately before the <code>seeking</code> property is changed.
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-         * @param newSeeking New <code>seeking</code> value.
-         * @param time New <code>time</code> value representing the time that the playhead seeks to
-         * when <code>newSeeking</code> is <code>true</code>.
+         * @param time New <code>time</code> value representing the time that the playhead seeks to.
 		 */		
-		protected function processSeekingChange(newSeeking:Boolean,time:Number):void
+		protected function processSeekingChange(newSeeking:Boolean, time:Number):void
 		{
 		}
 		
@@ -201,15 +206,18 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * 
 		 * <p>Subclasses that override should call this method to
-		 * dispatch the seekingChange event.</p>
-		 * @param oldSeeking Previous <code>seeking</code> value.
-		 * 
+		 * dispatch the change event.</p>
 		 */		
 		protected function postProcessSeekingChange(oldSeeking:Boolean):void
 		{
-			dispatchEvent(new SeekingChangeEvent(_seeking,seekTargetTime));
+			dispatchEvent
+				( new SeekEvent
+					( seeking ? SeekEvent.SEEK_BEGIN : SeekEvent.SEEK_END
+					, false
+					, false
+					, seekTargetTime
+					)
+				);
 		}
-		
-		
 	}
 }

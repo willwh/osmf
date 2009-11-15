@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	
 	public class TestSeekableTrait extends TestISeekable
 	{

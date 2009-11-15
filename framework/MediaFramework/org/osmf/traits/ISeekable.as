@@ -24,11 +24,18 @@ package org.osmf.traits
 	import org.osmf.media.IMediaTrait;
 
 	/**
-	 * Dispatched when this trait's <code>seeking</code> property changes.
+	 * Dispatched when this trait begins a seek operation.
 	 * 
-	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
+	 * @eventType org.osmf.events.SeekEvent.SEEK_BEGIN
 	 */
-	[Event(name="seekingChange",type="org.osmf.events.SeekingChangeEvent")]
+	[Event(name="seekBegin",type="org.osmf.events.SeekEvent")]
+
+	/**
+	 * Dispatched when this trait ends a seek operation.
+	 * 
+	 * @eventType org.osmf.events.SeekEvent.SEEK_END
+	 */
+	[Event(name="seekEnd",type="org.osmf.events.SeekEvent")]
 	
 	/**
 	 * ISeekable defines the trait interface for media that can be instructed to jump to a 

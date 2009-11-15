@@ -24,43 +24,40 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A trait that implements the ISeekable interface dispatches
-	 * this event when its <code>seeking</code> property has changed.
+	 * A SeekEvent is dispatched when the properties of an ISeekable trait change.
 	 */	
-	public class SeekingChangeEvent extends TraitEvent
+	public class SeekEvent extends Event
 	{
 		/**
-		 * The SeekingChangeEvent.SEEKING_CHANGE constant defines the value
-		 * of the type property of the event object for a seekingChange
+		 * The SeekEvent.SEEK_BEGIN constant defines the value
+		 * of the type property of the event object for a seekBegin
 		 * event.
 		 * 
-		 * @eventType SEEKING_CHANGE  
+		 * @eventType SEEK_BEGIN  
 		 */	
-		public static const SEEKING_CHANGE:String = "seekingChange";
+		public static const SEEK_BEGIN:String = "seekBegin";
+
+		/**
+		 * The SeekEvent.SEEK_END constant defines the value
+		 * of the type property of the event object for a seekEnd
+		 * event.
+		 * 
+		 * @eventType SEEK_END  
+		 */	
+		public static const SEEK_END:String = "seekEnd";
 		
 		/**
 		 * 
-		 * @param seeking New seeking value.
-		 * @param time The seek's target time, in seconds. If <code>seeking</code> is 
-		 * <code>false</code>, the <code>time</code> parameter is
-		 * the position that the playhead reached as a result of the prior seeking action.
+		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param time The seek's target time, in seconds.
 		 */	
-		public function SeekingChangeEvent(seeking:Boolean, time:Number, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function SeekEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, time:Number=NaN)
 		{
-			_seeking = seeking;
+			super(type, bubbles, cancelable);
+
 			_time = time;
-			
-			super(SEEKING_CHANGE, bubbles, cancelable);
-		}
-		
-		/**
-		 * New <code>seeking</code> value resulting from this change.
-		 */		
-		public function get seeking():Boolean
-		{
-			return _seeking;
 		}
 		
 		/**
@@ -73,18 +70,15 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new SeekingChangeEvent(_seeking,_time,bubbles,cancelable);
+			return new SeekEvent(type, bubbles, cancelable, _time);
 		}
 		
 		// Internals
 		//
 		
-		private var _seeking:Boolean;
 		private var _time:Number;
-		
 	}
 }

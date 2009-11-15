@@ -216,11 +216,11 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				}
 				else
 				{
-					seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				}
 			}
 		}
@@ -332,7 +332,7 @@ package org.osmf.examples.traceproxy
 			trace("PausedChangeEvent: " + (event.paused ? "paused" : "not paused"));
 		}
 
-		private function onSeekingChange(event:SeekingChangeEvent):void
+		private function onSeekingChange(event:SeekEvent):void
 		{
 			trace("SeekingChangeEvent: " + (event.seeking ? "seeking" : "not seeking") + " at " + event.time);
 		}

@@ -24,7 +24,7 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestISeekable extends InterfaceTestCase
@@ -75,17 +75,18 @@ package org.osmf.traits
 
 				var eventCount:int = 0;
 
-				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestSeek);
+				seekable.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeek);
+				seekable.addEventListener(SeekEvent.SEEK_END, onTestSeek);
 				assertTrue(seekable.canSeekTo(maxSeekValue));
 				seekable.seek(maxSeekValue);
 				
-				function onTestSeek(event:SeekingChangeEvent):void
+				function onTestSeek(event:SeekEvent):void
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.seeking);
+						assertTrue(event.type == SeekEvent.SEEK_BEGIN);
 						assertTrue(event.time == maxSeekValue);
 						if (processesSeekCompletion == false)
 						{
@@ -94,7 +95,7 @@ package org.osmf.traits
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.seeking == false);
+						assertTrue(event.type == SeekEvent.SEEK_END);
 						assertTrue(event.time == maxSeekValue);
 						assertTrue(processesSeekCompletion == true);
 						
@@ -109,7 +110,8 @@ package org.osmf.traits
 		{
 			if (maxSeekValue > 0)
 			{
-				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, eventCatcher);
+				seekable.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
+				seekable.addEventListener(SeekEvent.SEEK_END, eventCatcher);
 			
 				assertFalse(seekable.canSeekTo(maxSeekValue + 1));
 				

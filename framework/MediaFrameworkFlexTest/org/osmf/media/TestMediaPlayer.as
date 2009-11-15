@@ -39,7 +39,7 @@ package org.osmf.media
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.traits.DownloadableTrait;
@@ -507,7 +507,8 @@ package org.osmf.media
 					var hasSeeked:Boolean = false;
 					
 					mediaPlayer.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestStop2);
-					mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestStop3);
+					mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
+					mediaPlayer.addEventListener(SeekEvent.SEEK_END, onTestStop3);
 					
 					mediaPlayer.stop();
 					
@@ -521,7 +522,7 @@ package org.osmf.media
 						assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
 					}
 					
-					function onTestStop3(event3:SeekingChangeEvent):void
+					function onTestStop3(event3:SeekEvent):void
 					{
 						assertTrue(hasPaused);
 						
@@ -532,18 +533,19 @@ package org.osmf.media
 							assertTrue(mediaPlayer.paused == true);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == true);
-							assertTrue(event3.seeking == true);
+							assertTrue(event3.type == SeekEvent.SEEK_BEGIN);
 							assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 						}
 						else
 						{
 							mediaPlayer.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onTestStop2);
-							mediaPlayer.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onTestStop3);
+							mediaPlayer.removeEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
+							mediaPlayer.removeEventListener(SeekEvent.SEEK_END, onTestStop3);
 							
 							assertTrue(mediaPlayer.paused == true);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == false);
-							assertTrue(event3.seeking == false);
+							assertTrue(event3.type == SeekEvent.SEEK_END);
 							
 							// Not sure whether this should be PAUSED or READY?
 							assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
@@ -596,7 +598,8 @@ package org.osmf.media
 				
 				var eventCount:int = 0;
 
-				mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, canSeek ? onTestSeek : mustNotReceiveEvent);
+				mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, canSeek ? onTestSeek : mustNotReceiveEvent);
+				mediaPlayer.addEventListener(SeekEvent.SEEK_END, canSeek ? onTestSeek : mustNotReceiveEvent);
 				mediaPlayer.seek(seekTarget);
 				
 				if (!canSeek)
@@ -604,20 +607,20 @@ package org.osmf.media
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 				
-				function onTestSeek(event:SeekingChangeEvent):void
+				function onTestSeek(event:SeekEvent):void
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
 						assertTrue(mediaPlayer.seeking == true);
-						assertTrue(event.seeking == true);
+						assertTrue(event.type == SeekEvent.SEEK_BEGIN);
 						assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 					}
 					else if (eventCount == 2)
 					{
 						assertTrue(mediaPlayer.seeking == false);
-						assertTrue(event.seeking == false);
+						assertTrue(event.type == SeekEvent.SEEK_END);
 						assertTrue(mediaPlayer.state == MediaPlayerState.READY ||
 								   mediaPlayer.state == MediaPlayerState.PAUSED);
 						

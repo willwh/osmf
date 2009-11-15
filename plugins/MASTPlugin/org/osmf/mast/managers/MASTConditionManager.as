@@ -330,8 +330,8 @@ package org.osmf.mast.managers
 					break;
 				case MASTAdapter.ON_SEEK:
 					{
-						var seekingChangeEvent:SeekingChangeEvent = event as SeekingChangeEvent;
-						if (seekingChangeEvent.seeking)
+						var seekingChangeEvent:SeekEvent = event as SeekEvent;
+						if (seekingChangeEvent.type == SeekEvent.SEEK_BEGIN)
 						{
 							conditionTrue = true;
 						}
@@ -494,7 +494,7 @@ package org.osmf.mast.managers
 				case "VolumeChangeEvent":
 					traitType = MediaTraitType.AUDIBLE;
 					break;
-				case "SeekingChangeEvent":
+				case "SeekEvent":
 					traitType = MediaTraitType.SEEKABLE;
 					break;
 				case "TraitEvent":

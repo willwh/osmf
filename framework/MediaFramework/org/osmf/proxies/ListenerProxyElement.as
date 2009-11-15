@@ -30,7 +30,7 @@ package org.osmf.proxies
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitEvent;
@@ -288,9 +288,9 @@ package org.osmf.proxies
 			processPausedChange(event.paused);
 		}
 
-		private function onSeekingChange(event:SeekingChangeEvent):void
+		private function onSeekingChange(event:SeekEvent):void
 		{
-			processSeekingChange(event.seeking, event.time);
+			processSeekingChange(event.type == SeekEvent.SEEK_BEGIN, event.time);
 		}
 		
 		private function onDurationReached(event:TimeEvent):void
@@ -487,11 +487,13 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 				else
 				{
-					seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 			}
 		}

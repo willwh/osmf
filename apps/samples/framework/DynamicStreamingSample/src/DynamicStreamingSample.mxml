@@ -104,7 +104,8 @@
 				wrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
 				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				wrapper.mediaPlayer.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlayingChange);
 				
 				wrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
@@ -357,9 +358,9 @@
 				}
 			}
 			
-			private function onSeekingChange(event:SeekingChangeEvent):void
+			private function onSeekingChange(event:SeekEvent):void
 			{
-				if (!event.seeking)
+				if (event.type == SeekEvent.SEEK_END)
 				{
 					waitForSeek = false;
 					updateSwitchingControls();

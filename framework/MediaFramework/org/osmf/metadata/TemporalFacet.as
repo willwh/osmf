@@ -30,7 +30,7 @@ package org.osmf.metadata
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPausable;
@@ -287,7 +287,8 @@ package org.osmf.metadata
    			{
 	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
 	   			{
-					seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 	   			}
 	   			
 	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
@@ -304,7 +305,8 @@ package org.osmf.metadata
 	   		{
 	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
 	   			{
-					seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
 	   			}
 	   			
 	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
@@ -320,9 +322,9 @@ package org.osmf.metadata
 	   		}
    		}
    		
-   		private function onSeekingChange(event:SeekingChangeEvent):void
+   		private function onSeekingChange(event:SeekEvent):void
    		{
-   			if (event.seeking)
+   			if (event.type == SeekEvent.SEEK_BEGIN)
    			{
    				reset(true);
    			}

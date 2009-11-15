@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISeekable;
@@ -31,11 +31,18 @@ package org.osmf.composition
 	import org.osmf.traits.MediaTraitType;
 
 	/**
-	 * Dispatched when this trait's <code>seeking</code> property changes.
+	 * Dispatched when this trait begins a seek operation.
 	 * 
-	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
+	 * @eventType org.osmf.events.SeekEvent.SEEK_BEGIN
 	 */
-	[Event(name="seekingChange",type="org.osmf.events.SeekingChangeEvent")]
+	[Event(name="seekBegin",type="org.osmf.events.SeekEvent")]
+
+	/**
+	 * Dispatched when this trait ends a seek operation.
+	 * 
+	 * @eventType org.osmf.events.SeekEvent.SEEK_END
+	 */
+	[Event(name="seekEnd",type="org.osmf.events.SeekEvent")]
 
 	/**
 	 * Implementation of ISeekable which can be a composite media trait.
@@ -188,7 +195,7 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 **/
-		override protected function onSeekingChanged(event:SeekingChangeEvent):void
+		override protected function onSeekingChanged(event:SeekEvent):void
 		{
 			if (detached)
 			{

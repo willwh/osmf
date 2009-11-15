@@ -25,7 +25,7 @@ package org.osmf.proxies
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -92,7 +92,8 @@ package org.osmf.proxies
 			var pausable:PausableTrait = proxy.getTrait(MediaTraitType.PAUSABLE) as PausableTrait;
 			var playable:PlayableTrait = proxy.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
 			var seekable:SeekableTrait = proxy.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
-			seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, eventCatcher);
+			seekable.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
+			seekable.addEventListener(SeekEvent.SEEK_END, eventCatcher);
 			
 			playable.play();
 			assertTrue(pausable.paused == false);
@@ -103,10 +104,10 @@ package org.osmf.proxies
 			seekable.seek(15);			
 			assertFalse(seekable.seeking);
 			assertEquals(2, events.length);
-			assertTrue(events[0] is SeekingChangeEvent);
-			assertTrue(events[1] is SeekingChangeEvent);
-			assertTrue(SeekingChangeEvent(events[0]).seeking);
-			assertFalse(SeekingChangeEvent(events[1]).seeking);		
+			assertTrue(events[0] is SeekEvent);
+			assertTrue(events[1] is SeekEvent);
+			assertTrue(SeekEvent(events[0]).type == SeekEvent.SEEK_BEGIN);
+			assertTrue(SeekEvent(events[1]).type == SeekEvent.SEEK_END);		
 		}
 		
 		public function eventCatcher(event:Event):void

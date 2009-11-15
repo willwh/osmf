@@ -29,7 +29,7 @@ package org.osmf.composition
 	
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DimensionEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.MediaElementEvent;
@@ -1045,7 +1045,8 @@ package org.osmf.composition
 			assertTrue(seekable != null);
 			assertTrue(seekable.seeking == false);
 			
-			seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, eventCatcher);
+			seekable.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
+			seekable.addEventListener(SeekEvent.SEEK_END, eventCatcher);
 			
 			assertTrue(seekable.canSeekTo(10) == true);
 			assertTrue(seekable.canSeekTo(25) == true);

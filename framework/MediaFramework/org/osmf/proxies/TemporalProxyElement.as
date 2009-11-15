@@ -26,7 +26,7 @@ package org.osmf.proxies
 	
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPausable;
@@ -133,7 +133,8 @@ package org.osmf.proxies
 			// Reduce priority of our listener so that all other listeners will
 			// receive the seeking=true event before we dispatch the seeking=false
 			// event. 
-			seekableTrait.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange, false, -1);
+			seekableTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange, false, -1);
+			seekableTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange, false, -1);
 			
 			playableTrait = new PlayableTrait(this);
 			playableTrait.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
@@ -218,9 +219,9 @@ package org.osmf.proxies
 			}			
 		}
 		
-		private function onSeekingChange(event:SeekingChangeEvent):void
+		private function onSeekingChange(event:SeekEvent):void
 		{
-			if (event.seeking)
+			if (event.type == SeekEvent.SEEK_BEGIN)
 			{				
 				elapsedTime = event.time;
 				absoluteTimeAtLastPlay = flash.utils.getTimer();

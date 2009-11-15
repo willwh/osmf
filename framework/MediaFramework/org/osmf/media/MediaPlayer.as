@@ -125,7 +125,7 @@ package org.osmf.media
 	 * 
 	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
 	 */	 	
-	[Event(name="seekingChange", type="org.osmf.events.SeekingChangeEvent")]
+	[Event(name="seekingChange", type="org.osmf.events.SeekEvent")]
 	 
 	/**
 	 * Dispatched when the MediaPlayer's state has changed.
@@ -1051,7 +1051,8 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE;	
 					break;
 				case MediaTraitType.SEEKABLE:														
-					changeListeners(add, _element, trait, SeekingChangeEvent.SEEKING_CHANGE, [redispatchEvent, onSeeking]);
+					changeListeners(add, _element, trait, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
+					changeListeners(add, _element, trait, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
 					_seekable = add;					
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
 					break;
@@ -1142,9 +1143,9 @@ package org.osmf.media
 			dispatchEvent(event.clone());			
 		}	
 				
-		private function onSeeking(event:SeekingChangeEvent):void
+		private function onSeeking(event:SeekEvent):void
 		{				
-			if (event.seeking)
+			if (event.type == SeekEvent.SEEK_BEGIN)
 			{				
 				setState(MediaPlayerState.BUFFERING);				
 			}

@@ -184,11 +184,13 @@ package org.osmf.gg
 			{
 				if (added)
 				{
-					seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 				else
 				{
-					seekable.removeEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekable.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 			}
 		}
@@ -279,9 +281,9 @@ package org.osmf.gg
 			}
 		}
 
-		private function onSeekingChange(event:SeekingChangeEvent):void
+		private function onSeekingChange(event:SeekEvent):void
 		{
-			if (event.seeking)
+			if (event.type == SeekEvent.SEEK_BEGIN)
 			{
 				sendEvent(SEEK, currentTime, event.time);
 			}

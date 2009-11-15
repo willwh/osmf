@@ -23,7 +23,7 @@ package org.osmf.utils
 {
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
@@ -102,7 +102,8 @@ package org.osmf.utils
 			if (seekable != null && temporal != null)
 			{
 				seekable.temporal = temporal;
-				seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, onSeekingChanged);
+				seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChanged);
+				seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChanged);
 			}
 		}
 		
@@ -153,9 +154,9 @@ package org.osmf.utils
 			}
 		}
 		
-		private function onSeekingChanged(event:SeekingChangeEvent):void
+		private function onSeekingChanged(event:SeekEvent):void
 		{
-			if (temporal != null && event.seeking == true)
+			if (temporal != null && event.type == SeekEvent.SEEK_BEGIN)
 			{
 				temporal.currentTime = event.time;
 			}

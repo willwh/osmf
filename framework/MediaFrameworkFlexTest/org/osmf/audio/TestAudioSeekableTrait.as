@@ -26,7 +26,7 @@ package org.osmf.audio
 	import flash.media.SoundMixer;
 	import flash.net.URLRequest;
 	
-	import org.osmf.events.SeekingChangeEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.TestSeekableTrait;
@@ -75,7 +75,8 @@ package org.osmf.audio
 			
 			soundAdapter.addEventListener("downloadComplete", onDownloadComplete);
 			
-			seekable.addEventListener(SeekingChangeEvent.SEEKING_CHANGE, addAsync(onTestSeekable, 3000));
+			seekable.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeekable1);
+			seekable.addEventListener(SeekEvent.SEEK_END, addAsync(onTestSeekable2, 3000));
 		}
 		
 		private function onDownloadComplete(event:Event):void
@@ -86,10 +87,15 @@ package org.osmf.audio
 				
 			seekable.seek(3);
 		}
-		
-		private function onTestSeekable(event:SeekingChangeEvent):void
+
+		private function onTestSeekable1(event:SeekEvent):void
 		{
-			assertTrue(event.seeking);
+			assertTrue(event.type == SeekEvent.SEEK_BEGIN);
+		}
+		
+		private function onTestSeekable2(event:SeekEvent):void
+		{
+			assertTrue(event.type == SeekEvent.SEEK_END);
 		}
 		
 		private var soundAdapter:SoundAdapter;
