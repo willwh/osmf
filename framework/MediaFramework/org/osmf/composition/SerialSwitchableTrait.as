@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.ISwitchable;
@@ -32,16 +32,16 @@ package org.osmf.composition
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchingChangeEvent.SWITCHING_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.TraitEvent")]
+	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * The Composite Serial switchable trait will aggregate switchable traits, acting as a single
@@ -160,13 +160,13 @@ package org.osmf.composition
 						}									 
 					}					
 				}
-				currentChild.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
-				currentChild.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);										
+				currentChild.removeEventListener(SwitchEvent.SWITCHING_CHANGE,  redispatchEvent);	
+				currentChild.removeEventListener(SwitchEvent.INDICES_CHANGE, redispatchEvent);										
 			}	
 										
 			currentChild = switchable;
-			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
-			child.addEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);					
+			child.addEventListener(SwitchEvent.SWITCHING_CHANGE,  redispatchEvent);	
+			child.addEventListener(SwitchEvent.INDICES_CHANGE, redispatchEvent);					
 		}
 			
 		/**
@@ -174,8 +174,8 @@ package org.osmf.composition
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{				
-			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE,  redispatchEvent);	
-			child.removeEventListener(TraitEvent.INDICES_CHANGE, redispatchEvent);	
+			child.removeEventListener(SwitchEvent.SWITCHING_CHANGE,  redispatchEvent);	
+			child.removeEventListener(SwitchEvent.INDICES_CHANGE, redispatchEvent);	
 		}
 		
 		private function redispatchEvent(event:Event):void

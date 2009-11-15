@@ -1,6 +1,6 @@
 package org.osmf.composition
 {
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
@@ -53,7 +53,7 @@ package org.osmf.composition
 		
 		public function testIndexChangeEvent():void
 		{
-			switchable.addEventListener(TraitEvent.INDICES_CHANGE, onIndexChange);
+			switchable.addEventListener(SwitchEvent.INDICES_CHANGE, onIndexChange);
 			var eventTriggered:Boolean = false;
 			var rangeFired:Boolean;
 			var newChild:VideoElement = createVideoElem();
@@ -79,7 +79,7 @@ package org.osmf.composition
 			assertEquals(switchable.getBitrateForIndex(3), 3000);						
 			
 						
-			function onIndexChange(event:TraitEvent):void
+			function onIndexChange(event:SwitchEvent):void
 			{
 				eventTriggered = true;
 			}		
@@ -148,12 +148,12 @@ package org.osmf.composition
 			(wrappingElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = autoSwitch;
 			var parentSwitchable:ISwitchable = (wrappingElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable);
 			
-			function onIndexChange(event:TraitEvent):void
+			function onIndexChange(event:SwitchEvent):void
 			{
 				eventTriggered = true;
 			}				
 					
-			parentSwitchable.addEventListener(TraitEvent.INDICES_CHANGE, onIndexChange);
+			parentSwitchable.addEventListener(SwitchEvent.INDICES_CHANGE, onIndexChange);
 			
 			parallelElem.removeChild(newChild);
 			assertTrue(eventTriggered);

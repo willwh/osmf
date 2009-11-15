@@ -26,7 +26,7 @@ package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
@@ -35,18 +35,16 @@ package org.osmf.traits
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchingChangeEvent.SWITCHING_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * Dispatched when the number of indices or associated bitrates have changed.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.TraitEvent")]
-
-		
+	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 		
 	/**
 	 * The SwitchableTrait class provides a base ISwitchable implementation.
@@ -64,7 +62,8 @@ package org.osmf.traits
 		 */ 
 		public function SwitchableTrait(autoSwitch:Boolean=true, currentIndex:int=0, numIndices:int=1)
 		{
-			super();	
+			super();
+			
 			_autoSwitch = autoSwitch;
 			_currentIndex = currentIndex;		
 			this.numIndices = numIndices;
@@ -85,7 +84,7 @@ package org.osmf.traits
 				_numIndices = value;
 				maxIndex = _numIndices - 1;
 				
-				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+				dispatchEvent(new SwitchEvent(SwitchEvent.INDICES_CHANGE));
 			}			
 		}
 		
@@ -163,7 +162,7 @@ package org.osmf.traits
 		 */
 		public function get switchUnderway():Boolean
 		{			
-			return (switchState == SwitchingChangeEvent.SWITCHSTATE_REQUESTED);
+			return (switchState == SwitchEvent.SWITCHSTATE_REQUESTED);
 		}
 		
 		/**
@@ -181,7 +180,7 @@ package org.osmf.traits
 				{
 					var detail:SwitchingDetail = new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL);
 					
-					processSwitchState(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, detail);
+					processSwitchState(SwitchEvent.SWITCHSTATE_REQUESTED, detail);
 					processSwitchTo(index);
 					_currentIndex = index;
 					postProcessSwitchTo(detail);
@@ -202,7 +201,7 @@ package org.osmf.traits
 		 */ 
 		protected function processAutoSwitchChange(value:Boolean):void
 		{			
-			// autoswitching is processed here
+			// Auto-switching is processed here.
 		}
 				
 		/**
@@ -230,7 +229,7 @@ package org.osmf.traits
 		 */ 
 		protected function processSwitchTo(value:int):void
 		{			
-			// switchTo is processed here
+			// switchTo is processed here.
 		}
 		
 		/**
@@ -238,7 +237,7 @@ package org.osmf.traits
 		 */ 
 		protected function postProcessSwitchTo(detail:SwitchingDetail = null):void
 		{
-			processSwitchState(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, detail);
+			processSwitchState(SwitchEvent.SWITCHSTATE_COMPLETE, detail);
 		}
 		
 		/**
@@ -248,7 +247,7 @@ package org.osmf.traits
 		{			
 			var oldState:int = switchState;
 			switchState = newState;
-			dispatchEvent(new SwitchingChangeEvent(newState, oldState, detail));
+			dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, newState, oldState, detail));
 		}
 		
 		/**
@@ -269,7 +268,7 @@ package org.osmf.traits
 		 */ 
 		protected function processMaxIndexChange(value:int):void
 		{			
-			// MaxIndex is proccessed here
+			// MaxIndex is proccessed here.
 		}
 					
 		/**
@@ -294,8 +293,8 @@ package org.osmf.traits
 		
 		/**
 		 * Tracks the current switching state of this trait.  
-		 * See SwitchingChangeEvent for all possible states.
+		 * See SwitchEvent for all possible states.
 		 */ 
-		private var switchState:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
+		private var switchState:int = SwitchEvent.SWITCHSTATE_UNDEFINED;
 	}
 }

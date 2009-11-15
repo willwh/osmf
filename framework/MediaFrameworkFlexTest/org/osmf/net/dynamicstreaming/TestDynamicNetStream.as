@@ -152,7 +152,7 @@ package org.osmf.net.dynamicstreaming
 					netLoadedContext.stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					
 					_switchable = _mediaElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
-					_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+					_switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 					if (_startInManualMode)
 					{
 						_switchable.autoSwitch = false;
@@ -218,25 +218,25 @@ package org.osmf.net.dynamicstreaming
 			}	
 		}
 		
-		private function onSwitchingChange(event:SwitchingChangeEvent):void
+		private function onSwitchingChange(event:SwitchEvent):void
 		{
 			var msg:String = "Switching change "
 			var showCurrentIndex:Boolean = false;
 			
 			switch(event.newState)
 			{
-				case SwitchingChangeEvent.SWITCHSTATE_COMPLETE:
+				case SwitchEvent.SWITCHSTATE_COMPLETE:
 					msg += "COMPLETE";
 					showCurrentIndex = true;
 					break;
-				case SwitchingChangeEvent.SWITCHSTATE_FAILED:
+				case SwitchEvent.SWITCHSTATE_FAILED:
 					if (!this._testPlayFailed)
 					{
 						msg += "FAILED";
 						fail(msg);
 					}
 					break;
-				case SwitchingChangeEvent.SWITCHSTATE_REQUESTED:
+				case SwitchEvent.SWITCHSTATE_REQUESTED:
 					msg += "REQUESTED";
 					break;
 

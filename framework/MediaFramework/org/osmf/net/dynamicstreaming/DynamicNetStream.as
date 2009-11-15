@@ -35,7 +35,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.metadata.KeyValueFacet;
@@ -50,9 +50,9 @@ package org.osmf.net.dynamicstreaming
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchingChangeEvent
+	 * @eventType org.osmf.events.SwitchEvent
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * DynamicNetStream extends NetStream to provide dynamic
@@ -320,7 +320,7 @@ package org.osmf.net.dynamicstreaming
 			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.streamItems[targetIndex].bitrate) + " kbps");
 						
 			_switchUnderway = true;	
-			dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_UNDEFINED, _detail));
+			dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, SwitchEvent.SWITCHSTATE_REQUESTED, SwitchEvent.SWITCHSTATE_UNDEFINED, _detail));
 			
 			this.playStream(nso);
 			
@@ -450,7 +450,7 @@ package org.osmf.net.dynamicstreaming
 					
 					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.streamItems[_renderingIndex].bitrate) + " kbps");
 					_pendingTransitionsArray.shift();
-					dispatchEvent(new SwitchingChangeEvent(SwitchingChangeEvent.SWITCHSTATE_COMPLETE, SwitchingChangeEvent.SWITCHSTATE_REQUESTED));
+					dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, SwitchEvent.SWITCHSTATE_COMPLETE, SwitchEvent.SWITCHSTATE_REQUESTED));
 					_detail = null;
 					break;
 			}

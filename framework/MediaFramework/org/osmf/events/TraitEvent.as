@@ -30,14 +30,6 @@ package org.osmf.events
 	public class TraitEvent extends Event
 	{
 		/**
-		 * The Switching Indices change event is triggered when the indices on a ISwitchable trait change.
-		 * Conditions for change include removal of indices, addition of indices, or bitrate change of a given index.
-		 *  
-		 * @eventType INDICES_CHANGE 
-		 */ 
-		public static const INDICES_CHANGE:String = "indicesChange";
-		
-		/**
 		 * @private
 		 * TODO: Remove private label when DRM content / 10.1 content is exposed		
 		 * Authentication Needed is dispatched when a user needs to authenticate user credentials

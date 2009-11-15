@@ -81,7 +81,7 @@
     <classEntry path="org.osmf.events.PlayingChangeEvent"/>
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
     <classEntry path="org.osmf.events.SeekingChangeEvent"/>
-    <classEntry path="org.osmf.events.SwitchingChangeEvent"/>
+    <classEntry path="org.osmf.events.SwitchEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.TraitEvent"/>
     <classEntry path="org.osmf.events.ViewEvent"/>

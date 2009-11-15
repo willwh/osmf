@@ -19,7 +19,6 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.events
 {
 	import flash.events.Event;
@@ -30,10 +29,10 @@ package org.osmf.events
 	 * A trait that implements the ISwitchable interface dispatches
 	 * this event when a switching change has occurred.
 	 */		
-	public class SwitchingChangeEvent extends TraitEvent
+	public class SwitchEvent extends Event
 	{
 		/**
-		 * The SwitchingChangeEvent.SWITCHING_CHANGE constant defines the value
+		 * The SwitchEvent.SWITCHING_CHANGE constant defines the value
 		 * of the type property of the event object for a switchingChange
 		 * event.
 		 * 
@@ -41,6 +40,15 @@ package org.osmf.events
 		 */		
 		public static const SWITCHING_CHANGE:String = "switchingChange";
 		
+		/**
+		 * The SwitchEvent.INDICES_CHANGE constant defines the value
+		 * of the type property of the event object for an indicesChange
+		 * event.
+		 * 
+		 * @eventType INDICES_CHANGE 
+		 */ 
+		public static const INDICES_CHANGE:String = "indicesChange";
+
 		/**
 		 * This means a switch request was made but is not
 		 * complete and has not failed.
@@ -64,23 +72,24 @@ package org.osmf.events
 		/**
 		 * Constructor
 		 * 
+		 * @param type Event type.
+		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param newState The new switching state, should be one of the contants defined in this class.
 		 * @param oldState The previous switching state, should be one of the contents defined in this class.
 		 * @param switchingDetail A SwitchingDetail object containing the details for the switching change.
-		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
- 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
- 		 * 
 		 */		
-		public function SwitchingChangeEvent(newState:int, oldState:int=SWITCHSTATE_UNDEFINED, switchingDetail:SwitchingDetail=null, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function SwitchEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, newState:int=SWITCHSTATE_UNDEFINED, oldState:int=SWITCHSTATE_UNDEFINED, switchingDetail:SwitchingDetail=null)
 		{
-			super(SWITCHING_CHANGE, bubbles, cancelable);
+			super(type, bubbles, cancelable);
+			
 			_newState = newState;
 			_oldState = oldState;
 			_detail = switchingDetail;
 		}
 		
 		/**
-		 * The new switching state as specified in the constructor.
+		 * The new switching state.
 		 */
 		public function get newState():int
 		{
@@ -88,7 +97,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The previous switching state as specified in the constructor.
+		 * The previous switching state.
 		 */
 		public function get oldState():int
 		{
@@ -96,7 +105,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The SwitchingDetail specified in the constructor.
+		 * The SwitchingDetail containing the details for this change.
 		 */
 		public function get detail():SwitchingDetail
 		{
@@ -105,13 +114,11 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new SwitchingChangeEvent(_newState, _oldState, _detail);
+			return new SwitchEvent(type, bubbles, cancelable, _newState, _oldState, _detail);
 		}
-		
 		
 		private var _detail:SwitchingDetail;
 		private var _newState:int;

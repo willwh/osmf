@@ -25,8 +25,7 @@ package org.osmf.composition
 	
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.SwitchingChangeEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISwitchable;
@@ -36,16 +35,16 @@ package org.osmf.composition
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchingChangeEvent.SWITCHING_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.TraitEvent")]
+	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * CompositeSwitchableTrait brings mutiple bitrate switchable traits together into one
@@ -208,11 +207,11 @@ package org.osmf.composition
 						
 			if (mergeChildRates(childTrait))
 			{
-				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+				dispatchEvent(new SwitchEvent(SwitchEvent.INDICES_CHANGE));
 			}
 			
-			child.addEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
-			child.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);
+			child.addEventListener(SwitchEvent.INDICES_CHANGE, recomputeIndices);
+			child.addEventListener(SwitchEvent.SWITCHING_CHANGE, childSwitchingChange);
 			_maxIndex = bitRates.length-1; 			
 			
 		}
@@ -222,8 +221,8 @@ package org.osmf.composition
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{	
-			child.removeEventListener(TraitEvent.INDICES_CHANGE, recomputeIndices);
-			child.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, childSwitchingChange);		
+			child.removeEventListener(SwitchEvent.INDICES_CHANGE, recomputeIndices);
+			child.removeEventListener(SwitchEvent.SWITCHING_CHANGE, childSwitchingChange);		
 			recomputeIndices();	
 		}
 		
@@ -295,7 +294,7 @@ package org.osmf.composition
 		/**
 		 * Rebuilds the bitrate table and switches to the appropriate bit rate.
 		 */ 
-		private function recomputeIndices(event:TraitEvent = null):void
+		private function recomputeIndices(event:SwitchEvent = null):void
 		{			
 			var oldBitRate:Number = bitRates[currentIndex];
 			if (rebuildBitRateTable()) //Update current index, and dispatch event if indices changed.
@@ -316,7 +315,7 @@ package org.osmf.composition
 					}	
 					_currentIndex = newBIndex;					
 				}
-				dispatchEvent(new TraitEvent(TraitEvent.INDICES_CHANGE));
+				dispatchEvent(new SwitchEvent(SwitchEvent.INDICES_CHANGE));
 			}								
 		}
 				
@@ -324,27 +323,24 @@ package org.osmf.composition
 		 * Handle the child switchable changing.  If collapse multiple events
 		 * into a single event when switching muple children simultaneously.   
 		 */ 
-		private function childSwitchingChange(event:SwitchingChangeEvent):void
+		private function childSwitchingChange(event:SwitchEvent):void
 		{			
 			if (event.newState != _state)
 			{					
-				if (event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE && switchUnderway)
+				if (event.newState == SwitchEvent.SWITCHSTATE_COMPLETE && switchUnderway)
 				{
 					return; //NO-OP if we have pending switches.				
 				}			
 				var oldState:int = 	_state;											
 				_state = event.newState;	
-				dispatchEvent(new SwitchingChangeEvent(event.newState, oldState, event.detail));			
+				dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, event.newState, oldState, event.detail));			
 			}
 		}
 				
-		private var _state:int = SwitchingChangeEvent.SWITCHSTATE_UNDEFINED;
+		private var _state:int = SwitchEvent.SWITCHSTATE_UNDEFINED;
 		private var _autoSwitch:Boolean = false;
 		private var _maxIndex:int = int.MAX_VALUE;
 		private var _currentIndex:int = 0;
 		private var bitRates:Vector.<Number> = new Vector.<Number>;
-		
-		
-		
 	}
 }

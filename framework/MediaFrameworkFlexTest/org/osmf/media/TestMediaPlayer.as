@@ -40,7 +40,7 @@ package org.osmf.media
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.traits.DownloadableTrait;
 	import org.osmf.traits.ILoadable;
@@ -931,11 +931,11 @@ package org.osmf.media
 				
 				mediaPlayer.maxStreamIndex = 2;
 				
-				mediaPlayer.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onTestSwitchable);
+				mediaPlayer.addEventListener(SwitchEvent.SWITCHING_CHANGE, onTestSwitchable);
 				mediaPlayer.autoSwitch = false;
 				mediaPlayer.switchTo(1);
 				
-				function onTestSwitchable(event:SwitchingChangeEvent):void
+				function onTestSwitchable(event:SwitchEvent):void
 				{
 					eventCount++;
 					

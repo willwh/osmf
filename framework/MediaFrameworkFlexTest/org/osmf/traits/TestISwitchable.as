@@ -24,7 +24,7 @@ package org.osmf.traits
 	import flash.events.*;
 	import flash.errors.*;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.utils.InterfaceTestCase;
 	
 	public class TestISwitchable extends InterfaceTestCase
@@ -39,7 +39,7 @@ package org.osmf.traits
 		override public function tearDown():void
 		{
 			super.tearDown();
-			switchable.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+			switchable.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable = null;
 			_eventDispatcher = null;						
 		}
@@ -49,7 +49,7 @@ package org.osmf.traits
 			assertFalse(switchable.switchUnderway);
 			assertTrue(switchable.autoSwitch);
 			
-			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+			switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 			
 			switchable.autoSwitch = false;
 			switchable.switchTo(0);
@@ -64,7 +64,7 @@ package org.osmf.traits
 			assertFalse(switchable.switchUnderway);
 			assertTrue(switchable.autoSwitch);
 			
-			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+			switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable.autoSwitch = false;
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
@@ -77,7 +77,7 @@ package org.osmf.traits
 			assertFalse(switchable.switchUnderway);
 			assertTrue(switchable.autoSwitch);
 			
-			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+			switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 			switchable.autoSwitch = false;
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));			
@@ -153,21 +153,21 @@ package org.osmf.traits
 			
 		}
 
-		protected function onSwitchingChange(event:SwitchingChangeEvent):void
+		protected function onSwitchingChange(event:SwitchEvent):void
 		{
 			switch (event.newState)
 			{
-				case SwitchingChangeEvent.SWITCHSTATE_COMPLETE:
+				case SwitchEvent.SWITCHSTATE_COMPLETE:
 					assertFalse(switchable.switchUnderway);
-					assertEquals(SwitchingChangeEvent.SWITCHSTATE_REQUESTED, event.oldState);
+					assertEquals(SwitchEvent.SWITCHSTATE_REQUESTED, event.oldState);
 					_eventDispatcher.dispatchEvent(new Event("testComplete"));									
 					break;
-				case SwitchingChangeEvent.SWITCHSTATE_REQUESTED:
+				case SwitchEvent.SWITCHSTATE_REQUESTED:
 					assertTrue(switchable.switchUnderway);
 					assertTrue(event.detail.detailCode > 0);
 					assertTrue(event.detail.description.length > 0);
 					break;
-				case SwitchingChangeEvent.SWITCHSTATE_FAILED:
+				case SwitchEvent.SWITCHSTATE_FAILED:
 					fail("Error switching streams");
 					_eventDispatcher.dispatchEvent(new Event("testComplete"));									
 					break;

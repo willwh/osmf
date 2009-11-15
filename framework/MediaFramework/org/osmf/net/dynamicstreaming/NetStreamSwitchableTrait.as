@@ -26,7 +26,7 @@ package org.osmf.net.dynamicstreaming
 {
 	import flash.events.NetStatusEvent;
 	
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.traits.SwitchableTrait;
 
@@ -54,7 +54,7 @@ package org.osmf.net.dynamicstreaming
 			_resource = res;
 									
 			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			_ns.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
+			_ns.addEventListener(SwitchEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
 		}
 		
 		/**
@@ -111,14 +111,14 @@ package org.osmf.net.dynamicstreaming
 			switch (event.info.code) 
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
-					processSwitchState(SwitchingChangeEvent.SWITCHSTATE_FAILED);					
+					processSwitchState(SwitchEvent.SWITCHSTATE_FAILED);					
 					break;
 			}			
 		}
 		
-		private function onNetStreamSwitchingChange(event:SwitchingChangeEvent):void
+		private function onNetStreamSwitchingChange(event:SwitchEvent):void
 		{
-			if (event.newState == SwitchingChangeEvent.SWITCHSTATE_COMPLETE)
+			if (event.newState == SwitchEvent.SWITCHSTATE_COMPLETE)
 			{
 				currentIndex = _ns.renderingIndex;
 			}

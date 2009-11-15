@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
@@ -84,10 +84,10 @@ package org.osmf.composition
 			var switchable:ISwitchable = createInterfaceObject() as ISwitchable;
 			var asynchTrigger:Function = addAsync(function():void {}, 3000)
 			
-			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onState);
+			switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onState);
 			switchable.autoSwitch = false;
 			
-			var stateQueue:Array = [SwitchingChangeEvent.SWITCHSTATE_REQUESTED,SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
+			var stateQueue:Array = [SwitchEvent.SWITCHSTATE_REQUESTED,SwitchEvent.SWITCHSTATE_REQUESTED, SwitchEvent.SWITCHSTATE_COMPLETE];
 			
 			switchable.switchTo(2);
 						
@@ -95,13 +95,13 @@ package org.osmf.composition
 			var secondChild:MediaElement = serialElem.getChildAt(1);
 			var secondSwitch:ISwitchable;
 						
-			function onState(event:SwitchingChangeEvent):void
+			function onState(event:SwitchEvent):void
 			{						
 				assertEquals(stateQueue.shift(), event.newState);
 				assertFalse(switchable.autoSwitch);
 				if(stateQueue.length == 0)
 				{	
-					switchable.removeEventListener(	SwitchingChangeEvent.SWITCHING_CHANGE, onState);			
+					switchable.removeEventListener(	SwitchEvent.SWITCHING_CHANGE, onState);			
 					asynchTrigger(null);
 				}
 			}			
@@ -148,19 +148,19 @@ package org.osmf.composition
 			var asynchTrigger:Function = addAsync(function():void {}, 10000);
 			var switchable:ISwitchable = createInterfaceObject(1) as ISwitchable;
 			
-			switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onState);
+			switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onState);
 			switchable.autoSwitch = false;
 			
-			var stateQueue:Array = [ SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_REQUESTED, SwitchingChangeEvent.SWITCHSTATE_COMPLETE];
+			var stateQueue:Array = [ SwitchEvent.SWITCHSTATE_REQUESTED, SwitchEvent.SWITCHSTATE_REQUESTED, SwitchEvent.SWITCHSTATE_COMPLETE];
 			switchable.switchTo(2);
 			
-			function onState(event:SwitchingChangeEvent):void
+			function onState(event:SwitchEvent):void
 			{				
 				assertEquals(stateQueue.shift(), event.newState);
 				assertFalse(switchable.autoSwitch);
 				if(stateQueue.length == 0)
 				{	
-					switchable.removeEventListener(	SwitchingChangeEvent.SWITCHING_CHANGE, onState);			
+					switchable.removeEventListener(	SwitchEvent.SWITCHING_CHANGE, onState);			
 					asynchTrigger(null);
 				}
 			}	

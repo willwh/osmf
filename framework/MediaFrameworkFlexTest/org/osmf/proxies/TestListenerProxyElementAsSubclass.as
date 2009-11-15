@@ -364,11 +364,11 @@ package org.osmf.proxies
 			
 			switchable.switchTo(3);
 			assertTrue(events.length == 2);
-			assertTrue(events[0]["oldState"] == SwitchingChangeEvent.SWITCHSTATE_UNDEFINED);
-			assertTrue(events[0]["newState"] == SwitchingChangeEvent.SWITCHSTATE_REQUESTED);
+			assertTrue(events[0]["oldState"] == SwitchEvent.SWITCHSTATE_UNDEFINED);
+			assertTrue(events[0]["newState"] == SwitchEvent.SWITCHSTATE_REQUESTED);
 			assertTrue((events[0]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
-			assertTrue(events[1]["oldState"] == SwitchingChangeEvent.SWITCHSTATE_REQUESTED);
-			assertTrue(events[1]["newState"] == SwitchingChangeEvent.SWITCHSTATE_COMPLETE);
+			assertTrue(events[1]["oldState"] == SwitchEvent.SWITCHSTATE_REQUESTED);
+			assertTrue(events[1]["newState"] == SwitchEvent.SWITCHSTATE_COMPLETE);
 			assertTrue((events[1]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
 			
 			switchable.numIndices = 7;

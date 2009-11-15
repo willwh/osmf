@@ -133,7 +133,7 @@
 
 						if (_switchable != null)
 						{
-							_switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+							_switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
 						
 						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;		
@@ -151,21 +151,21 @@
 				}
 			}
 			
-			private function onSwitchingChange(event:SwitchingChangeEvent):void
+			private function onSwitchingChange(event:SwitchEvent):void
 			{
 				var msg:String = "Switching change "
 				var showCurrentIndex:Boolean = false;
 				
 				switch(event.newState)
 				{
-					case SwitchingChangeEvent.SWITCHSTATE_COMPLETE:
+					case SwitchEvent.SWITCHSTATE_COMPLETE:
 						msg += "COMPLETE";
 						showCurrentIndex = true;
 						break;
-					case SwitchingChangeEvent.SWITCHSTATE_FAILED:
+					case SwitchEvent.SWITCHSTATE_FAILED:
 						msg += "FAILED";
 						break;
-					case SwitchingChangeEvent.SWITCHSTATE_REQUESTED:
+					case SwitchEvent.SWITCHSTATE_REQUESTED:
 						msg += "REQUESTED";
 						break;
 

@@ -247,11 +247,11 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 				}
 				else
 				{
-					switchable.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 				}
 			}
 		}
@@ -352,7 +352,7 @@ package org.osmf.examples.traceproxy
 			trace("DimensionChangeEvent: " + event.oldWidth + "x" + event.oldHeight + " -> " + event.newWidth + "x" + event.newHeight);
 		}
 		
-		private function onSwitchingChange(event:SwitchingChangeEvent):void
+		private function onSwitchingChange(event:SwitchEvent):void
 		{
 			trace("SwitchingChangeEvent: " + event.oldState + " -> " + event.newState);
 		}	

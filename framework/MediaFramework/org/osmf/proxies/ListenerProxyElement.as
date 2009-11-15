@@ -31,7 +31,7 @@ package org.osmf.proxies
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekingChangeEvent;
-	import org.osmf.events.SwitchingChangeEvent;
+	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.TraitEvent;
 	import org.osmf.events.ViewEvent;
@@ -308,12 +308,12 @@ package org.osmf.proxies
 			processDimensionChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
 		}
 		
-		private function onSwitchingChange(event:SwitchingChangeEvent):void
+		private function onSwitchingChange(event:SwitchEvent):void
 		{
 			processSwitchingChange(event.oldState, event.newState, event.detail);
 		}
 		
-		private function onIndicesChange(event:TraitEvent):void
+		private function onIndicesChange(event:SwitchEvent):void
 		{
 			processIndicesChange();
 		}
@@ -518,13 +518,13 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					switchable.addEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
-					switchable.addEventListener(TraitEvent.INDICES_CHANGE, onIndicesChange);
+					switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.addEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
 				}
 				else
 				{
-					switchable.removeEventListener(SwitchingChangeEvent.SWITCHING_CHANGE, onSwitchingChange);
-					switchable.removeEventListener(TraitEvent.INDICES_CHANGE, onIndicesChange);
+					switchable.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					switchable.removeEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
 				}
 			}
 		}

@@ -148,16 +148,16 @@ package org.osmf.media
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchingChangeEvent.SWITCHING_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchingChangeEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
-	 * @eventType org.osmf.events.TraitEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.TraitEvent")]
+	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 
     // IBufferable
         
@@ -1061,7 +1061,7 @@ package org.osmf.media
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE;					
 					break;
 				case MediaTraitType.SWITCHABLE:	
-					changeListeners(add, _element, trait, SwitchingChangeEvent.SWITCHING_CHANGE, [redispatchEvent]);								
+					changeListeners(add, _element, trait, SwitchEvent.SWITCHING_CHANGE, [redispatchEvent]);								
 					_switchable = add;						
 					traitChangeName = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
 					break;						
