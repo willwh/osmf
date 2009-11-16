@@ -179,7 +179,13 @@ package org.osmf.media
 					containerGateway.removeElement(this);	
 				}
 				
-				var event:GatewayChangeEvent = new GatewayChangeEvent(_gateway, value);
+				var event:GatewayChangeEvent = new GatewayChangeEvent
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, false
+					, false
+					, _gateway
+					, value
+					);
 					
 				_gateway = value;
 				containerGateway = _gateway as IContainerGateway;

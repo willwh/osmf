@@ -136,7 +136,10 @@ package org.osmf.composition
 					
 				onTargetGatewayChange
 					( new GatewayChangeEvent
-						( null
+						( GatewayChangeEvent.GATEWAY_CHANGE
+						, false
+						, false
+						, null
 						, layoutTarget.mediaElement.gateway
 						)
 					);
