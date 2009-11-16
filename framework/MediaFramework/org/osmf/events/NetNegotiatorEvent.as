@@ -56,21 +56,28 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 *  
+		 * @param type Event type.
+ 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+ 		 * @param netConnection NetConnection to which this event refers.
+ 		 * @param mediaError A MediaError associated with this event.
 		 **/
-		public function NetNegotiatorEvent(	type:String,
-											netConnection:NetConnection =null,
-											mediaError:MediaError = null,
-											bubbles:Boolean = false,
-											cancelable:Boolean = false
-											)
+		public function NetNegotiatorEvent
+			( type:String
+			, bubbles:Boolean=false
+			, cancelable:Boolean=false
+			, netConnection:NetConnection=null
+			, mediaError:MediaError=null
+			)
 		{
+			super(type, bubbles, cancelable);
+
 			_netConnection = netConnection;
 			_mediaError = mediaError;
-			super(type, bubbles, cancelable);
 		}
 		
 		/**
-		 * NetConnection to which this event refers
+		 * NetConnection to which this event refers.
 		 */
 		public function get netConnection():NetConnection
 		{
@@ -78,7 +85,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * A MediaError associated with this event
+		 * A MediaError associated with this event.
 		 */
 		public function get mediaError():MediaError
 		{
@@ -87,11 +94,10 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new NetNegotiatorEvent(type,_netConnection, _mediaError, bubbles,cancelable);
+			return new NetNegotiatorEvent(type, bubbles, cancelable, _netConnection, _mediaError);
 		}  
 		
 		private var _netConnection:NetConnection;

@@ -56,35 +56,43 @@ package org.osmf.events
 		/**
 		 * Constructor.
 		 * 
+		 * @param type Event type.
+ 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+ 		 * @param netConnection NetConnection to which this event refers.
+ 		 * @param loadable ILoadable to which this event refers.
+ 		 * @param shareable Specifies if this NetConnection may be shared between ILoadables.
 		 **/
-		public function NetConnectionFactoryEvent(	type:String,
-													netConnection:NetConnection = null,
-													loadable:ILoadable = null,
-													shareable:Boolean = false,
-													bubbles:Boolean = false,
-													cancelable:Boolean = false
-													)
+		public function NetConnectionFactoryEvent
+			( type:String
+			, bubbles:Boolean=false
+			, cancelable:Boolean=false
+			, netConnection:NetConnection=null
+			, loadable:ILoadable=null
+			, shareable:Boolean=false
+			)
 		{
+			super(type, bubbles, cancelable);
+
 			_netConnection = netConnection;
 			_loadable = loadable;
 			_shareable = shareable;
-			super(type, bubbles, cancelable);
 		}
 		
 		/**
-		 * ILoadable to which this event refers
+		 * NetConnection to which this event refers.
+		 */
+		public function get netConnection():NetConnection
+		{
+			return _netConnection;
+		}
+
+		/**
+		 * ILoadable to which this event refers.
 		 */
 		public function get loadable():ILoadable
 		{
 			return _loadable;
-		}
-		
-		/**
-		 * NetConnection to which this event refers
-		 */
-		public function get netConnection():NetConnection
-		{
-			return _netConnection
 		}
 		
 		/**
@@ -97,11 +105,10 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 */
 		override public function clone():Event
 		{
-			return new NetConnectionFactoryEvent(type,_netConnection,_loadable,bubbles,cancelable);
+			return new NetConnectionFactoryEvent(type, bubbles, cancelable, _netConnection, _loadable, shareable);
 		}  
 		
 		private var _netConnection:NetConnection;
