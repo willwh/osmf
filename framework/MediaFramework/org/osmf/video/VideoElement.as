@@ -156,8 +156,11 @@ package org.osmf.video
 			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
 			stream = context.stream;			
-						
+			
+			// Set the video's dimensions so that it doesn't appear at the wrong size.
+			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
 			video = new Video();
+			video.width = video.height = 0;
 			video.attachNetStream(stream);
 			
 			// Hook up our metadata listeners
