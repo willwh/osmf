@@ -32,28 +32,43 @@ package org.osmf.events
 	public class MetadataEvent extends Event
 	{
 		/**
-		 * Dispatched when a value is added to a IFacet.
-		 */ 
+		 * The MetadataEvent.FACET_ADD constant defines the value of the
+		 * type property of the event object for a facetAdd event.
+		 * 
+		 * @eventType facetAdd 
+		 */	
 		public static const FACET_ADD:String = "facetAdd";
 		
 		/**
-		 * Dispatched when a value is removed from a IFacet.
-		 */ 
+		 * The MetadataEvent.FACET_REMOVE constant defines the value of the
+		 * type property of the event object for a facetRemove event.
+		 * 
+		 * @eventType facetRemove 
+		 */	
 		public static const FACET_REMOVE:String = "facetRemove";
 					
 		/**
-		 * Constructs a new metadata event.  
-		 * @param facet the facet that is changing.
+		 * Constructor.
+		 * 
+		 * @param type Event type.
+ 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 * @param facet The metadata facet associated with this event.
 		 */ 				
-		public function MetadataEvent(facet:IFacet, type:String, 
-		                              bubbles:Boolean=false, cancelable:Boolean=false)
+		public function MetadataEvent
+			( type:String
+			, bubbles:Boolean=false
+			, cancelable:Boolean=false
+			, facet:IFacet=null
+			)
 		{
 			super(type, bubbles, cancelable);
+			
 			_facet = facet;			
 		}
 		
 		/**
-		 *  @returns The metadata IFacet associated with this event. 
+		 * The metadata facet associated with this event. 
 		 */ 
 		public function get facet():IFacet
 		{
@@ -65,7 +80,7 @@ package org.osmf.events
 		 */ 
 		override public function clone():Event
 		{
-			return new MetadataEvent(_facet, type, bubbles, cancelable);
+			return new MetadataEvent(type, bubbles, cancelable, _facet);
 		}
 		
 		private var _facet:IFacet;		

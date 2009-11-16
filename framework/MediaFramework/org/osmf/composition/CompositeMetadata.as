@@ -47,9 +47,9 @@ package org.osmf.composition
 		{
 			_childrenMetadata.push(value);
 			var namespaces:Vector.<String> = value.namespaceURLs;
-			for each ( var space:String in namespaces)
+			for each (var space:String in namespaces)
 			{				
-				onFacetAdded(new MetadataEvent(value.getFacet(new URL(space)),MetadataEvent.FACET_ADD));										
+				onFacetAdded(new MetadataEvent(MetadataEvent.FACET_ADD, false, false, value.getFacet(new URL(space))));										
 			}
 			value.addEventListener(MetadataEvent.FACET_ADD, onFacetAdded);
 			value.addEventListener(MetadataEvent.FACET_REMOVE, onFacetRemoved);
@@ -64,7 +64,7 @@ package org.osmf.composition
 			var namespaces:Vector.<String> = value.namespaceURLs;			
 			for each (var space:String in namespaces)
 			{			
-				onFacetRemoved(new MetadataEvent(value.getFacet(new URL(space)),MetadataEvent.FACET_REMOVE));										
+				onFacetRemoved(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, value.getFacet(new URL(space))));										
 			}
 			value.removeEventListener(MetadataEvent.FACET_ADD, onFacetAdded);
 			value.removeEventListener(MetadataEvent.FACET_REMOVE, onFacetRemoved);			
@@ -114,7 +114,7 @@ package org.osmf.composition
 				signalRemove(oldFacet);
 			}
 			ownFacets[value.namespaceURL.rawUrl]  = value;
-			//Recompute the merged facet.		
+			// Recompute the merged facet.		
 			remergeAll(value.namespaceURL);	
 			
 			signalAdd(value);
@@ -136,11 +136,12 @@ package org.osmf.composition
 				throw new IllegalOperationError(MediaFrameworkStrings.NAMESPACE_MUST_NOT_BE_EMPTY);
 				return;
 			}
-			if(ownFacets[value.namespaceURL.rawUrl] != undefined)
+			if (ownFacets[value.namespaceURL.rawUrl] != undefined)
 			{
 				delete ownFacets[value.namespaceURL.rawUrl];
 				
-				signalRemove(_mergedFacets[value.namespaceURL.rawUrl]);				
+				signalRemove(_mergedFacets[value.namespaceURL.rawUrl]);
+						
 				//Recompute the merged facet.
 				remergeAll(value.namespaceURL);			
 									
@@ -163,7 +164,7 @@ package org.osmf.composition
 			{
 				signalRemove(_mergedFacets[event.facet.namespaceURL.rawUrl]);
 				var merged:IFacet = _mergedFacets[event.facet.namespaceURL.rawUrl].merge(event.facet);
-				if(merged != null)
+				if (merged != null)
 				{
 					_mergedFacets[event.facet.namespaceURL.rawUrl] = merged;
 					signalAdd(_mergedFacets[event.facet.namespaceURL.rawUrl]);	
@@ -202,17 +203,17 @@ package org.osmf.composition
 				else
 				{
 					var childFacet:IFacet = data.getFacet(namespaceURL);
-					if(childFacet)
+					if (childFacet)
 					{
 						var merged:IFacet = startFacet.merge(childFacet);
-						if(merged != null)
+						if (merged != null)
 						{
 							startFacet = merged;
 						}
 					}
 				}				
 			}	
-			if(startFacet != undefined)
+			if (startFacet != undefined)
 			{
 				_mergedFacets[namespaceURL.rawUrl] = startFacet;		
 			}
@@ -224,17 +225,16 @@ package org.osmf.composition
 		
 		private function signalRemove(facet:IFacet):void
 		{
-			dispatchEvent(new MetadataEvent(facet, MetadataEvent.FACET_REMOVE));
+			dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, facet));
 		}
 		
 		private function signalAdd(facet:IFacet):void
 		{
-			dispatchEvent(new MetadataEvent(facet, MetadataEvent.FACET_ADD));
+			dispatchEvent(new MetadataEvent(MetadataEvent.FACET_ADD, false, false, facet));
 		}
 				
 		private var _childrenMetadata:Vector.<Metadata> = new Vector.<Metadata>();
 		private var ownFacets:Dictionary = new Dictionary();			
 		private var _mergedFacets:Dictionary = new Dictionary();				
-				
 	}
 }

@@ -84,11 +84,11 @@ package org.osmf.metadata
 			}	
 			var oldFacet:IFacet = _list[data.namespaceURL.rawUrl];			
 			_list[data.namespaceURL.rawUrl] = data;
-			if(oldFacet)
+			if (oldFacet)
 			{
-				dispatchEvent(new MetadataEvent(oldFacet, MetadataEvent.FACET_REMOVE));		
+				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, oldFacet));		
 			}	
-			dispatchEvent(new MetadataEvent(data, MetadataEvent.FACET_ADD));							
+			dispatchEvent(new MetadataEvent(MetadataEvent.FACET_ADD, false, false, data));							
 		}
 		
 		/**
@@ -115,7 +115,7 @@ package org.osmf.metadata
 			if (_list[data.namespaceURL.rawUrl])
 			{			
 				delete _list[data.namespaceURL.rawUrl];	
-				dispatchEvent(new MetadataEvent(data, MetadataEvent.FACET_REMOVE));	
+				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, data));	
 				return data;					
 			}				
 			return null;
@@ -130,7 +130,7 @@ package org.osmf.metadata
 		public function get namespaceURLs():Vector.<String>
 		{
 			var spaces:Vector.<String> = new Vector.<String>;
-			for ( var ns:String in _list)
+			for (var ns:String in _list)
 			{
 				spaces.push(ns);
 			}			
