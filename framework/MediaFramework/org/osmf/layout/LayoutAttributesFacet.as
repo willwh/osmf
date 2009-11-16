@@ -151,7 +151,7 @@ package org.osmf.layout
 			if (_order != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(ORDER, value, _order);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, ORDER, value, _order);
 					
 				_order = value;
 						
@@ -174,7 +174,7 @@ package org.osmf.layout
 			if (_registrationPoint != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(REGISTRATION_POINT, value, _registrationPoint);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, REGISTRATION_POINT, value, _registrationPoint);
 					
 				_registrationPoint = value;
 						
@@ -196,7 +196,7 @@ package org.osmf.layout
 			if (_scaleMode != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(SCALE_MODE, value, _scaleMode);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, SCALE_MODE, value, _scaleMode);
 					
 				_scaleMode = value;
 						
@@ -219,7 +219,7 @@ package org.osmf.layout
 			if (_alignment != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(ALIGNMENT, value, _alignment);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, ALIGNMENT, value, _alignment);
 					
 				_alignment = value;
 						
@@ -242,7 +242,7 @@ package org.osmf.layout
 			if (_snapToPixel != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(SNAP_TO_PIXEL, value, _snapToPixel);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, SNAP_TO_PIXEL, value, _snapToPixel);
 					
 				_snapToPixel = value;
 						

@@ -31,7 +31,6 @@ package org.osmf.events
 	 */ 
 	public class FacetValueEvent extends Event
 	{
-		
 		/**
 		 * Dispatched when a value is added to a IFacet.
 		 */ 
@@ -45,9 +44,10 @@ package org.osmf.events
 		/**
 		 * Constructs a new FacetValueEvent, which signals changes to a Facets values.
 		 */ 
-		public function FacetValueEvent(identifier:IIdentifier, value:*, type:String)
+		public function FacetValueEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null)
 		{		
-			super(type);
+			super(type, bubbles, cancelable);
+			
 			_identifier = identifier;			
 			_value = value;
 		}	
@@ -72,15 +72,14 @@ package org.osmf.events
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */ 
 		override public function clone():Event
 		{
-			return new FacetValueEvent(_identifier, _value, type);
+			return new FacetValueEvent(type, bubbles, cancelable, _identifier, _value);
 		}
 				
 		private var _identifier:IIdentifier;			
 		private var _value:*;
-		
 	}
 }

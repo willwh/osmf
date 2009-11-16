@@ -42,9 +42,9 @@ package org.osmf.metadata
      /**
 	 * Signals that all of the IFacets's values have changed.
 	 * 
-	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
+	 * @eventType org.osmf.events.FacetValueChangeEvent.VALUE_CHANGE
 	 */
-     [Event(name='facetValueChange', type='org.osmf.events.FacetChangeEvent')]
+     [Event(name='facetValueChange', type='org.osmf.events.FacetValueChangeEvent')]
 	
 	/**
 	 * The interface for all concrete classes that hold metadata relating to Open Source Media Framework media. 

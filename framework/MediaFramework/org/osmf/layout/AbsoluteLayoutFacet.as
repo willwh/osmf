@@ -136,7 +136,7 @@ package org.osmf.layout
 			if (_x != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(X, value, _x);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, X, value, _x);
 				
 				_x = value;
 						
@@ -159,7 +159,7 @@ package org.osmf.layout
 			if (_y != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(Y, value, _y);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, Y, value, _y);
 					
 				_y = value;
 						
@@ -182,7 +182,7 @@ package org.osmf.layout
 			if (_width != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(WIDTH, value, _width);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, WIDTH, value, _width);
 					
 				_width = value;
 						
@@ -205,7 +205,7 @@ package org.osmf.layout
 			if (_height != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(HEIGHT, value, _height);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, HEIGHT, value, _height);
 					
 				 _height = value;
 						

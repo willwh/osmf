@@ -21,7 +21,8 @@
 *****************************************************/
 package org.osmf.events
 {
-	import org.osmf.metadata.IFacet;
+	import flash.events.Event;
+	
 	import org.osmf.metadata.IIdentifier;
 
 	/**
@@ -36,21 +37,29 @@ package org.osmf.events
 		 */ 
 		public static const VALUE_CHANGE:String = "facetValueChange";
 		
-		public function FacetValueChangeEvent(identifier:IIdentifier, value:*, oldValue:*)
+		public function FacetValueChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null, oldValue:*=null)
 		{
-			super(identifier, value, VALUE_CHANGE);
+			super(type, bubbles, cancelable, identifier, value);
+			
 			_oldValue = oldValue;
 		}
 		
 		/**
-		 * @returns the value of the 
+		 * The previous value.
 		 */ 
 		public function get oldValue():*
 		{
 			return _oldValue;
 		}
 		
+		/**
+		 * @private
+		 */ 
+		override public function clone():Event
+		{
+			return new FacetValueChangeEvent(type, bubbles, cancelable, identifier, value, _oldValue);
+		}
+
 		private var _oldValue:*;
-		
 	}
 }

@@ -118,8 +118,22 @@ package org.osmf.metadata
 			{				
 				var event:Event
 					= oldValue === undefined
-						? new FacetValueEvent(key,value,FacetValueEvent.VALUE_ADD)
-						: new FacetValueChangeEvent(key,value,oldValue);
+						? new FacetValueEvent
+							( FacetValueEvent.VALUE_ADD
+							, false
+							, false
+							, key
+							, value
+							)
+						: new FacetValueChangeEvent
+							( FacetValueChangeEvent.VALUE_CHANGE
+							, false
+							, false
+							, key
+							, value
+							, oldValue
+							)
+						;
 						
 				dispatchEvent(event);
 			}
@@ -141,9 +155,11 @@ package org.osmf.metadata
 								
 				dispatchEvent
 					( new FacetValueEvent
-						( key
+						( FacetValueEvent.VALUE_REMOVE
+						, false
+						, false
+						, key
 						, value
-						, FacetValueEvent.VALUE_REMOVE
 						)
 					);
 			}

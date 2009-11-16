@@ -52,7 +52,14 @@ package org.osmf.metadata
 			if (value != _object)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(null, value, _object);
+					= new FacetValueChangeEvent
+						( FacetValueChangeEvent.VALUE_CHANGE
+						, false
+						, false
+						, null
+						, value
+						, _object
+						);
 					
 				_object = value;
 				
