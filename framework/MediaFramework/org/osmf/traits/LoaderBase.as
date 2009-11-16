@@ -101,7 +101,18 @@ package org.osmf.traits
 				loadable.loadedContext = loadedContext;
 				loadable.loadState = newState;
 				
-				dispatchEvent(new LoaderEvent(type, false, false, this, loadable, oldState, newState, loadedContext));
+				dispatchEvent
+					( new LoaderEvent
+						( LoaderEvent.LOADABLE_STATE_CHANGE
+						, false
+						, false
+						, this
+						, loadable
+						, oldState
+						, newState
+						, loadedContext
+						)
+					);
 			}
 		}
 		

@@ -29,135 +29,125 @@ package org.osmf.events
 	public class MediaPlayerCapabilityChangeEvent extends Event
 	{
 		/**
-		 * The MediaPlayerCapabilityChangeEvent constants define the types of 
-		 * changes that occur in a MediaPlayer's capabilities.
+		 * The MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a playableChange
+		 * event.
 		 * 
-		 * @eventType mediaStateChange
-		 **/
-			
-			
-		/**
-		 * Dispatched when a MediaPlayer's ability to play media has changed. 
-		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/	
+		 * @eventType playableChange 
+		 */	
 		public static const PLAYABLE_CHANGE:String = "playableChange";
 
 		/**
-		 * Dispatched when a MediaPlayer's ability to pause media has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a pausableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
-		public static const PAUSABLE_CHANGE:String = "PausableChange";
+		 * @eventType pausableChange 
+		 */	
+		public static const PAUSABLE_CHANGE:String = "pausableChange";
 		
 		/**
-		 * Dispatched when a MediaPlayer's ability to seek has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a seekableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType seekableChange 
+		 */	
 		public static const SEEKABLE_CHANGE:String = "seekableChange";
 	
 		/**
-		 * Dispatched when a MediaPlayer's ability to support media with
-		 * a duration and a position
-		 * relative to that duration has changed.
+		 * The MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE constant defines
+		 * the value of the type property of the event object for a temporalChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType temporalChange 
+		 */	
 		public static const TEMPORAL_CHANGE:String = "temporalChange";
 	
 		/**
-		 * Dispatched when a MediaPlayer's ability to support sound has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE constant defines
+		 * the value of the type property of the event object for a audibleChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType audibleChange 
+		 */	
 		public static const AUDIBLE_CHANGE:String = "audibleChange";
 	
 		/**
-		 * Dispatched when a MediaPlayer's ability to expose its media as a DisplayObject
-		 * has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a viewableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 * @see flash.display.DisplayObject
-		 **/
+		 * @eventType viewableChange 
+		 */	
 		public static const VIEWABLE_CHANGE:String = "viewableChange";
 	
 		/**
-		 * Dispatched when a MediaPlayer's ability to switchbetween multiple bitrate
-		 * streams changes.
+		 * The MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a switchableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 * @see flash.display.DisplayObject
-		 **/
+		 * @eventType switchableChange 
+		 */	
 		public static const SWITCHABLE_CHANGE:String = "switchableChange";
 	
 		/**
-		 * Dispatched when a MediaPlayer's ability to expose the intrinsic dimensions of
-		 * its media has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE constant defines
+		 * the value of the type property of the event object for a spatialChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType spatialChange 
+		 */	
 		public static const SPATIAL_CHANGE:String = "spatialChange";
 		
 		/**
-		 * Dispatched when a MediaPlayer's ability to load media has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a loadableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType loadableChange 
+		 */	
 		public static const LOADABLE_CHANGE:String = "loadableChange";
 		
 		/**
-		 * Dispatched when a MediaPlayer's ability to buffer media has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a bufferableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
+		 * @eventType bufferableChange 
+		 */	
 		public static const BUFFERABLE_CHANGE:String = "bufferableChange";
 						
-						
 		/**
-		 * Dispatched when a MediaPlayer's ability to download data has changed. 
+		 * The MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE constant defines
+		 * the value of the type property of the event object for a downloadableChange
+		 * event.
 		 * 
-		 * @eventType mediaPlayerCapabilityChangeEvent
-		 **/
-		public static const DOWNLOADABLE_CHANGE:String = "downaloadableChange";
+		 * @eventType downloadableChange 
+		 */	
+		public static const DOWNLOADABLE_CHANGE:String = "downloadableChange";
 
 		/**
 		 * Constructor.
-		 * <p>The following statement creates an event indicating that the MediaPlayer
-		 * no longer has the ability to buffer media.</p>
-		 * <listing>
-		 * event = new (MediaPlayerCapabilityChangeEvent("bufferableChange", false));
-		 * </listing>
-		 * <p>
-		 * The next statement creates an event indicating that
-		 * the MediaPlayer has acquired the ability to play media.
-		 * </p>
-		 * <listing>
-		 * event = new (mediaPlayerCapabilityChangeEvent("playableChange", true));
-		 * </listing>
-		 * @param type Event name representing the capability that has changed.
+		 * 
+		 * @param type Event type.
+		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param enabled Indicates whether the MediaPlayer has a particular capability
 		 * as a result of the change described in the <code>type</code> parameter.
 		 * Value of <code>true</code> means the player has the capability as a
-		 * result of the change, 
-		 * <code>false</code> means it does not.
+		 * result of the change, <code>false</code> means it does not.
 		 **/
 		public function MediaPlayerCapabilityChangeEvent
-							( type:String, 
-							  enabled:Boolean							  
+							( type:String
+							, bubbles:Boolean=false
+							, cancelable:Boolean=false
+							, enabled:Boolean=false				  
 							)
 		{
-			super(type);
+			super(type, bubbles, cancelable);
+			
 			_enabled = enabled;
-		}
-		
-		/**
-		 * @private
-		 * @inheritDoc
-		 **/
-		override public function clone():Event
-		{
-			return new MediaPlayerCapabilityChangeEvent(type, _enabled);
 		}
 		
 		/**
@@ -167,6 +157,14 @@ package org.osmf.events
 		public function get enabled():Boolean
 		{
 			return _enabled;
+		}
+
+		/**
+		 * @private
+		 **/
+		override public function clone():Event
+		{
+			return new MediaPlayerCapabilityChangeEvent(type, bubbles, cancelable, _enabled);
 		}
 		
 		// Internals

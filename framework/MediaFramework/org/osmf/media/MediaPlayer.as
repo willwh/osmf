@@ -1012,7 +1012,7 @@ package org.osmf.media
 		
 		private function updateTraitListeners(trait:MediaTraitType, add:Boolean):void
 		{		
-			var traitChangeName:String;	
+			var eventType:String;	
 			switch (trait)
 			{
 				case MediaTraitType.TEMPORAL:									
@@ -1027,7 +1027,7 @@ package org.osmf.media
 						_currentTimeTimer.stop();					
 					}
 					_temporal = add;
-					traitChangeName = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
 					break;
 				case MediaTraitType.PLAYABLE:						
 					changeListeners(add, _element, trait, PlayingChangeEvent.PLAYING_CHANGE, [redispatchEvent,onPlaying] );			
@@ -1036,40 +1036,40 @@ package org.osmf.media
 					{
 						play();
 					}
-					traitChangeName = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
+					eventType = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIBLE:					
 					changeListeners(add, _element, trait, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);			
 					changeListeners(add, _element, trait, AudioEvent.MUTED_CHANGE, [redispatchEvent]);			
 					changeListeners(add, _element, trait, AudioEvent.PAN_CHANGE, [redispatchEvent]);	
 					_audible = add;
-					traitChangeName = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;					
+					eventType = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;					
 					break;
 				case MediaTraitType.PAUSABLE:											
 					changeListeners(add, _element, trait, PausedChangeEvent.PAUSED_CHANGE, [redispatchEvent, onPaused]);						
 					_pausable = add;		
-					traitChangeName = MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE;	
+					eventType = MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE;	
 					break;
 				case MediaTraitType.SEEKABLE:														
 					changeListeners(add, _element, trait, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
 					changeListeners(add, _element, trait, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
 					_seekable = add;					
-					traitChangeName = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
+					eventType = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
 					break;
 				case MediaTraitType.SPATIAL:	
 					changeListeners(add, _element, trait, DimensionEvent.DIMENSION_CHANGE, [redispatchEvent]);								
 					_spatial = add;						
-					traitChangeName = MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE;					
+					eventType = MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE;					
 					break;
 				case MediaTraitType.SWITCHABLE:	
 					changeListeners(add, _element, trait, SwitchEvent.SWITCHING_CHANGE, [redispatchEvent]);								
 					_switchable = add;						
-					traitChangeName = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
+					eventType = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
 					break;						
 				case MediaTraitType.VIEWABLE:					
 					changeListeners(add, _element, trait, ViewEvent.VIEW_CHANGE, [redispatchEvent]);											
 					_viewable = add;						
-					traitChangeName = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
+					eventType = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	
 				case MediaTraitType.LOADABLE:					
 					changeListeners(add, _element, trait, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);					
@@ -1087,13 +1087,13 @@ package org.osmf.media
 							play();	
 						}						
 					}						
-					traitChangeName = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
+					eventType = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFERABLE:
 					changeListeners(add, _element, trait, BufferEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
 					changeListeners(add, _element, trait, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
 					_bufferable = add;
-					traitChangeName = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
+					eventType = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
 					break;						
 				case MediaTraitType.DOWNLOADABLE:
 					changeListeners(add, _element, trait, LoadEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);
@@ -1106,12 +1106,19 @@ package org.osmf.media
 						_bytesLoadedTimer.stop();					
 					}
 					_downloadable = add;
-					traitChangeName = MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE;
+					eventType = MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE;
 					break;
 			}					 
-			if (traitChangeName)
+			if (eventType)
 			{
-				dispatchEvent(new MediaPlayerCapabilityChangeEvent(traitChangeName, add));	
+				dispatchEvent
+					( new MediaPlayerCapabilityChangeEvent
+						( eventType
+						, false
+						, false
+						, add
+						)
+					);	
 			}	
 		}
 				
