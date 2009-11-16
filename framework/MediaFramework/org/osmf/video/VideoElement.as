@@ -31,7 +31,7 @@ package org.osmf.video
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
-	import org.osmf.events.AuthenticationCompleteEvent;
+	import org.osmf.events.ContentProtectionEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -64,6 +64,7 @@ package org.osmf.video
 	import org.osmf.traits.SpatialTrait;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.MediaFrameworkStrings;
+
 	
 	CONFIG::FLASH_10_1
 	{
@@ -73,6 +74,7 @@ package org.osmf.video
 	import flash.net.drm.DRMContentData;	
 	import flash.system.SystemUpdaterType;
 	import flash.system.SystemUpdater;
+	
 	import org.osmf.net.NetStreamContentProtectableTrait;
 	}
 	
@@ -174,7 +176,7 @@ package org.osmf.video
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
-    				addProtectableTrait(metadata).addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
+    				addProtectableTrait(metadata).addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
     				return;  //Don't add traits until the "auth" has completed. 			
 	    		}
 	    		else
@@ -186,20 +188,20 @@ package org.osmf.video
 			finishLoad();			
 		}
 		
-		// DRM API's
+		// DRM APIs
 		CONFIG::FLASH_10_1
     	{
   			private function onStatus(event:StatusEvent):void
-			{				
+			{
 				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
 				{			
-					createProtectableTrait().addEventListener(AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
+					createProtectableTrait().addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
 	    		}
 	  		}
 	  		
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
-	  		private function reloadAfterAuth(event:AuthenticationCompleteEvent):void
+	  		private function reloadAfterAuth(event:ContentProtectionEvent):void
 	  		{	  				  			
 	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).unload();	  	
 	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).load();  		  					
@@ -291,7 +293,6 @@ package org.osmf.video
 	    	removeTrait(MediaTraitType.AUDIBLE);
 	    	removeTrait(MediaTraitType.BUFFERABLE);
     		removeTrait(MediaTraitType.SWITCHABLE);
-
 	    	
 	    	CONFIG::FLASH_10_1
     		{    			
@@ -301,7 +302,6 @@ package org.osmf.video
     		}
     		
     		removeTrait(MediaTraitType.DOWNLOADABLE);
-
 	    		    		    	
 	    	// Null refs to garbage collect.	    	
 			spatial = null;
@@ -363,14 +363,14 @@ package org.osmf.video
 			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, cuePoint));     		
      	}     	
      	     	
-     	// Fired when the drm subsystem is updated.  NetStream needs to be recreated.
+     	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.
      	private function onUpdateComplete(event:Event):void
      	{     		
     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();		
      	}
      	
-     	private function  onUpdateError(event:Event):void
+     	private function onUpdateError(event:Event):void
      	{     	
      		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
      		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
@@ -394,8 +394,7 @@ package org.osmf.video
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
 					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
-					break;
-								
+					break;	
 			}
 			
 			CONFIG::FLASH_10_1

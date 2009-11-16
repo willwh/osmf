@@ -21,9 +21,7 @@
 *****************************************************/
 package org.osmf.net
 {
-	import org.osmf.events.AuthenticationCompleteEvent;
-	import org.osmf.events.AuthenticationFailedEvent;
-	import org.osmf.events.TraitEvent;
+	import org.osmf.events.ContentProtectionEvent;
 	import org.osmf.traits.TestContentProtectable;
 
 	public class TestNetContentProtectable extends TestContentProtectable
@@ -40,24 +38,22 @@ package org.osmf.net
 		
 		override protected function prodAuthNeeded():void
 		{
-			protectable.dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_NEEDED));
+			protectable.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_NEEDED));
 		}
 		
 		override protected function prodAuthFailed():void
 		{
-			protectable.dispatchEvent(new AuthenticationFailedEvent(45, "Error"));
+			protectable.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(45, "Error")));
 		}
 		
 		override protected function prodAuthSuccess():void
 		{
-			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
+			protectable.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_COMPLETE));
 		}
 		
 		override protected function prodAuthSuccessToken():void
 		{
-			protectable.dispatchEvent(new AuthenticationCompleteEvent(null));
+			protectable.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_COMPLETE));
 		}
-		
-		
 	}
 }

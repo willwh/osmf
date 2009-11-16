@@ -23,54 +23,65 @@ package org.osmf.traits
 {
 	import org.osmf.media.IMediaTrait;
 	
-	
 	/**
-	 * Dispatched when username password  or token authentication is needed to playback.
+	 * Dispatched when either anonymous or credential-based authentication is needed in order
+	 * to playback the media.
 	 *
-	 * @eventType org.osmf.events.TraitEvent.AUTHENTICATION_NEEDED
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
  	 */ 
-	[Event(name='authenticationNeeded', type='org.osmf.events.TraitEvent')]
+	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
 	
 	/**
-	 * Dispatched when the user is authenticated successfully
+	 * Dispatched when an authentication attempt succeeds.
 	 * 
-	 * @eventType org.osmf.events.AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
 	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
+	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
 	/**	 	
-	 * Dispatches when the authentication fails, with the reason being stored on the event.
+	 * Dispatches when an authentication attempt fails.
 	 * 
-	 * @eventType org.osmf.events.AuthenticationFailedEvent.AUTHENTICATION_FAILED
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
 	 */
-	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 	
+	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
 	
 	/**
-	 * The IContentProtectable trait is placed upon media elements that have content protection
-	 * in place. Anonymous and Credential based schemes are supported.  Infomation such as playbackTimeWindow is available
-	 * once the authentication takes place. 
+	 * IContentProtectable defines the trait interface for media which can be protected by
+	 * digital rights management (DRM) technology.  Both anonymous and credential-based
+	 * authentication are supported.
+	 * 
+	 * The workflow for media which is IContentProtectable is that the media undergoes
+	 * some type of authentication, after which it is valid (i.e. able to be played)
+	 * for a specific time window. 
 	 */ 	
 	public interface IContentProtectable extends IMediaTrait
 	{
 		/**
-		 * The type of authentication required to obtain a voucher for the associated content.
-		 * The supported types of authentication are:			
-		 * AuthenticationMethod.ANONYMOUS — anyone can obtain a voucher.
-		 * AuthenticationMethod.USERNAME_AND_PASSWORD — the user must supply a valid username and password of an account that is authorized to view the associated content.
-		 * The AuthenticationMethod class provides string constants to use with the authenticationMethod property.
+		 * The required method of authentication.  Possible values are "anonymous"
+		 * and "usernameAndPassword".
 		 */ 
 		function get authenticationMethod():String;
 		
 		/**
-		 * Authenticates a user using a username and password.
+		 * Authenticates the media.  Can be used for both anonymous and credential-based
+		 * authentication.  If the media has already been authenticated, this is a no-op.
+		 * 
+		 * @param username The username.  Should be null for anonymous authentication.
+		 * @param password The password.  Should be null for anonymous authentication.
+		 * 
+		 * @throws IllegalOperationError If the media is not initialized yet.
 		 */ 
 		function authenticate(username:String, password:String):void;
 		
 		/**
-		 * Authenticates a user using an object, which serves as a token.
+		 * Authenticates the media using an object which serves as a token.  Can be used
+		 * for both anonymous and credential-based authentication.  If the media has
+		 * already been authenticated, this is a no-op.
+		 * 
+		 * @param token The token to use for authentication.
 		 */ 
 		function authenticateWithToken(token:Object):void;
-				
+						
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 
 		 * hasn't taken place.
@@ -84,10 +95,14 @@ package org.osmf.traits
 		function get endDate():Date;
 		
 		/**
-		 * Returns the length of the playback window.  Returns NaN if authentication 
-		 * hasn't taken place.
+		 * Returns the length of the playback window, in seconds.  Returns NaN if
+		 * authentication hasn't taken place.
+		 * 
+		 * Note that this property will generally be the difference between startDate
+		 * and endDate, but is included as a property because there may be times where
+		 * the duration is known up front, but the start or end dates are not (e.g. a
+		 * one week rental).
 		 */		
 		function get period():Number;
-				
 	}
 }

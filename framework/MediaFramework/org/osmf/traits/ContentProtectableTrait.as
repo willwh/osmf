@@ -21,42 +21,62 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import flash.utils.ByteArray;
+	import org.osmf.events.ContentProtectionEvent;
+	import org.osmf.events.MediaError;
 	
 	/**
-	 * Dispatched when username password  or token authentication is needed to playback.
+	 * Dispatched when either anonymous or credential-based authentication is needed in order
+	 * to playback the media.
 	 *
-	 * @eventType org.osmf.events.TraitEvent.AUTHENTICATION_NEEDED
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
  	 */ 
-	[Event(name='authenticationNeeded', type='org.osmf.events.TraitEvent')]
+	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
 	
 	/**
-	 * Dispatched when the user is authenticated successfully
+	 * Dispatched when an authentication attempt succeeds.
 	 * 
-	 * @eventType org.osmf.events.AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
 	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
+	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
 	/**	 	
-	 * Dispatches when the authentication fails, with the reason being stored on the event.
+	 * Dispatches when an authentication attempt fails.
 	 * 
-	 * @eventType org.osmf.events.AuthenticationFailedEvent.AUTHENTICATION_FAILED
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
 	 */
-	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 	
+	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
 	
 	/**
-	 * The default implementation of IContentProtectble.
-	 */ 
+	 * The ContentProtectableTrait class provides a base IContentProtectable
+	 * implementation.  It can be used as the base class for a more specific
+	 * ContentProtectableTrait subclass or as is by a media element that listens
+	 * for and handles its change events.
+	 */	
 	public class ContentProtectableTrait extends MediaTraitBase implements IContentProtectable 
 	{
-				
 		/**
-		 * Constructs a ContentProtectableTrait without The raw metadata describes the location of the voucher server, along 
-		 * with other information about the license.
+		 * Constructor.
 		 */ 
 		public function ContentProtectableTrait()
 		{
-			
+			super();
+		}
+		
+		/**
+		 * Must be called by the implementing media on completing authentication.  Dispatches
+		 * the change event.
+		 */		
+		final public function processAuthenticateCompletion(success:Boolean, token:Object, error:MediaError):void
+		{
+			dispatchEvent
+				( new ContentProtectionEvent
+					( success ? ContentProtectionEvent.AUTHENTICATION_COMPLETE : ContentProtectionEvent.AUTHENTICATION_FAILED
+					, false
+					, false
+					, token
+					, error
+					)
+				);
 		}
 		
 		/**
@@ -64,95 +84,106 @@ package org.osmf.traits
 		 */ 		
 		public function get authenticationMethod():String
 		{
-			return null;
+			return _authenticationMethod;
 		}
 		
 		/**
 		 * @inheritDoc
-		 * 
-		 * Authenticates a user in order to retrieve a voucher for a protected piece of content.
-		 * @throws IllegalOperation error if the drmMetadata isn't set.
 		 */ 
 		public function authenticate(username:String, password:String):void
-		{							
-			if (canProcessAuthenticate(username,password))
+		{
+			if (canProcessAuthenticate())
 			{
-				processAuthenticate(username,password);
+				processAuthenticate(username, password);
 			}
 		}
 		
 		/**
-		 * Authenticates a user using a byte array, which serves as a token.
-		 * 
-		 * @throws IllegalOperation error if the drmMetadata isn't set.
+		 * @inheritDoc
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{							
-			if (canProcessAuthenticateWithToken(token))
+			if (canProcessAuthenticateWithToken())
 			{
 				processAuthenticateWithToken(token);
 			}
 		}
-		
+
 		/**
-		 * Returns the start date for the playback window.  Returns null if authentication 
-		 * hasn't taken place.
+		 * @inheritDoc
 		 */	
 		public function get startDate():Date
 		{
-			return null;
+			return _startDate;
 		}
 		
 		/**
-		 * Returns the end date for the playback window.  Returns null if authentication 
-		 * hasn't taken place.
+		 * @inheritDoc
 		 */	
 		public function get endDate():Date
 		{
-			return null;
+			return _endDate;
 		}
 		
 		/**
-		 * Returns the length of the playback window.  Returns NaN if authentication 
-		 * hasn't taken place.
+		 * @inheritDoc
 		 */		
 		public function get period():Number
 		{
-			return NaN;
+			return _period;
 		}
 		
 		/**
-		 * Overrride to allow conditional processing of authentication logic.
-		 */ 
-		protected function canProcessAuthenticate(username:String, password:String):Boolean
+		 * Called before the <code>processAuthenticate</code> method is called.
+		 *  
+		 * @return Returns <code>true</code> by default. Subclasses that override 
+		 * this method can return <code>false</code> to abort processing.
+		 */		
+		protected function canProcessAuthenticate():Boolean
 		{							
 			return true;
 		}
 		
 		/**
-		 * Overrride to allow conditional processing of authentication logic.
-		 */ 
-		protected function canProcessAuthenticateWithToken(token:Object):Boolean
+		 * Called before the <code>processAuthenticateWithToken</code> method is called.
+		 * 
+		 * @return Returns <code>true</code> by default. Subclasses that override 
+		 * this method can return <code>false</code> to abort processing.
+		 */		
+		protected function canProcessAuthenticateWithToken():Boolean
 		{							
 			return true;
 		}
 		
 		/**
-		 * Overrride to provide authentication logic.
-		 */ 
+		 * Called immediately before the <code>authenticationState</code> property is changed
+		 * in response to a call to authenticate.
+		 * 
+		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 *
+		 * @param username The username for the authentication request.
+		 * @param password The password for the authentication request.
+		 */		
 		protected function processAuthenticate(username:String, password:String):void
 		{							
-			//Overrride with DRM specific code
 		}
 		
 		/**
-		 * Overrride to provide authentication logic.
-		 */ 
+		 * Called immediately before the <code>authenticationState</code> property is changed
+		 * in response to a call to authenticateWithToken.
+		 * 
+		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 *
+		 * @param username The username for the authentication request.
+		 * @param password The password for the authentication request.
+		 */		
 		protected function processAuthenticateWithToken(token:Object):void
 		{							
-			//Overrride with DRM specific code
 		}
-
 		
+		private var _authenticationMethod:String;
+		private var _startDate:Date;
+		private var _endDate:Date;
+		private var _period:Number;
 	}
 }

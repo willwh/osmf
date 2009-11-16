@@ -27,7 +27,6 @@ package org.osmf.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.SwitchEvent;
-	import org.osmf.events.TraitEvent;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.utils.MediaFrameworkStrings;

@@ -25,7 +25,9 @@ package org.osmf.drm
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
-	
+	import flash.events.SecurityErrorEvent;
+	import flash.utils.ByteArray;
+
 	CONFIG::FLASH_10_1
 	{
 		import flash.events.DRMAuthenticationCompleteEvent;
@@ -39,63 +41,59 @@ package org.osmf.drm
 		import flash.net.drm.LoadVoucherSetting;
 		import flash.system.SystemUpdater;
 		import flash.system.SystemUpdaterType;
-		import flash.utils.ByteArray;
-		import org.osmf.events.MediaErrorCodes;	
-		import flash.net.drm.DRMContentData;
-		import flash.net.drm.DRMContentData;
-		import flash.events.DRMStatusEvent;
-		import flash.events.DRMErrorEvent;
-	
 	}
-	import org.osmf.events.AuthenticationFailedEvent;
-	import org.osmf.events.TraitEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+		
+	import org.osmf.events.ContentProtectionEvent;
+	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	
-	import flash.utils.ByteArray;
-	import flash.events.SecurityErrorEvent;
-	import org.osmf.events.AuthenticationCompleteEvent;
-
-
-	/**
-	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
-	 * Dispatched when username password  or token authentication is needed to playback.
-	 */ 
-	[Event(name='authenticationNeeded', type='org.osmf.events.TraitEvent')]
+	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
-	 * Dispatched when the user is authenticated successfully
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
 	 * 
-	 * @eventType AuthenticationCompleteEvent.AUTHENTICATION_COMPLETE
+	 * Dispatched when either anonymous or credential-based authentication is needed in order
+	 * to playback the media.
+	 *
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
+ 	 */ 
+	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
+	
+	/**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
+	 * 
+	 * Dispatched when an authentication attempt succeeds.
+	 * 
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
 	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.AuthenticationCompleteEvent')] 	
+	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
-	/**	 	
-	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
-	 * Dispatches when the authentication fails, with the reason being stored on the event.
-	 * 
-	 * @eventType AuthenticationFailedEvent.AUTHENTICATION_FAILED
-	 */
-	[Event(name='authenticationFailed', type='org.osmf.events.AuthenticationFailedEvent')] 	 
-	
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs	
-	 * The DRMServices class is a utility class to adapt the Flash Players DRM to the OSMF style IContentProtectable
-	 * trait API.  DRMServices handles triggering Updates to the DRMsubsystem, as well as triggering the appropriate events
-	 * when authentication is needed, complete, or failed. 
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
+	 * 
+	 * Dispatches when an authentication attempt fails.
+	 * 
+	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
+	 */
+	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
+
+	/**
+	 * @private
+	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
+	 * 
+	 * The DRMServices class is a utility class to adapt the Flash Player's DRM to the
+	 * OSMF-style IContentProtectable trait API.  DRMServices handles triggering updates to
+	 * the DRM subsystem, as well as triggering the appropriate events when authentication
+	 * is needed, complete, or failed.
 	 */ 
 	public class DRMServices extends EventDispatcher
 	{
 	CONFIG::FLASH_10_1
 	{
-			
 		/**
-		 * Constructs a new DRMServices adpater.
+		 * Constructor.
 		 */ 
 		public function DRMServices()
 		{
@@ -103,14 +101,14 @@ package org.osmf.drm
 		}
 		
 		/**
-		 * The metadata property is specific to the DRM for the Flashplayer.  Once set, authentication
-		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  metadta
+		 * The metadata property is specific to the DRM for the Flash Player.  Once set, authentication
+		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  Metadata
 		 * forms the basis for content data.
 		 */ 
 		public function set drmMetadata(value:Object):void
 		{		
 			lastToken = null;
-			if(value is DRMContentData)
+			if (value is DRMContentData)
 			{
 				drmContentData = value as DRMContentData;
 				retrieveVoucher();	
@@ -148,16 +146,12 @@ package org.osmf.drm
 		{		
 			return drmContentData;
 		}
-
 					
 		/**
-		 * The type of authentication required to obtain a voucher for the associated content.
-		 * The supported types of authentication are:			
-		 * AuthenticationMethod.ANONYMOUS — anyone can obtain a voucher.
-		 * AuthenticationMethod.USERNAME_AND_PASSWORD — the user must supply a valid username and password of an account that is authorized to view the associated content.
-		 * The AuthenticationMethod class provides string constants to use with the authenticationMethod property.
+		 * The required method of authentication.  Possible values are "anonymous"
+		 * and "usernameAndPassword".
 		 * 
-		 * returns null if metadata hasn't been set.
+		 * Returns null if metadata hasn't been set.
 		 */ 
 		public function get authenticationMethod():String
 		{			
@@ -165,9 +159,13 @@ package org.osmf.drm
 		}
 		
 		/**
-		 * Authenticates a user using a username and password.
+		 * Authenticates the media.  Can be used for both anonymous and credential-based
+		 * authentication.
 		 * 
-		 * @throws IllegalOperationError if metadata not set.
+		 * @param username The username.  Should be null for anonymous authentication.
+		 * @param password The password.  Should be null for anonymous authentication.
+		 * 
+		 * @throws IllegalOperationError If the metadata hasn't been set.
 		 */ 
 		public function authenticate(username:String, password:String):void
 		{			
@@ -182,9 +180,12 @@ package org.osmf.drm
 		}
 		
 		/**
-		 * Authenticates a user using a byte array, which serves as a token.
+		 * Authenticates the media using an object which serves as a token.  Can be used
+		 * for both anonymous and credential-based authentication.
 		 * 
-		 * @throws IllegalOperationError if metadata not set.
+		 * @param token The token to use for authentication.
+		 * 
+		 * @throws IllegalOperationError If the metadata hasn't been set.
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{
@@ -230,8 +231,13 @@ package org.osmf.drm
 		}
 		
 		/**
-		 * The length of the playback window in seconds.  Returns NaN if authentication 
-		 * hasn't taken place.
+		 * Returns the length of the playback window, in seconds.  Returns NaN if
+		 * authentication hasn't taken place.
+		 * 
+		 * Note that this property will generally be the difference between startDate
+		 * and endDate, but is included as a property because there may be times where
+		 * the duration is known up front, but the start or end dates are not (e.g. a
+		 * one week rental).
 		 */		
 		public function get period():Number
 		{
@@ -245,13 +251,16 @@ package org.osmf.drm
 			}		
 		}
 		
+		// Internals
+		//
+		
 		/**
 		 * Downloads the voucher for the metadata specified.
 		 */ 
 		private function retrieveVoucher():void
 		{				
 			drmManager.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
-			drmManager.addEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded); //Same as "loadVoucherComplete"
+			drmManager.addEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded);
 						
 			drmManager.loadVoucher(drmContentData, LoadVoucherSetting.ALLOW_SERVER);					
 		}
@@ -260,11 +269,16 @@ package org.osmf.drm
 		{	
 			var now:Date = new Date();
 			this.voucher = event.voucher;		
-			if (voucher && (voucher.voucherEndDate != null && voucher.voucherEndDate.time >= now.time) &&
-				(voucher.voucherStartDate != null && voucher.voucherStartDate.time <= now.time))
+			if (	voucher
+				 && voucher.voucherEndDate != null
+				 && voucher.voucherEndDate.time >= now.time
+				 && voucher.voucherStartDate != null
+				 && voucher.voucherStartDate.time <= now.time
+			    )
 			{
-				removeEventListeners();				
-				dispatchEvent(new AuthenticationCompleteEvent(lastToken));			
+				removeEventListeners();
+				
+				dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_COMPLETE, false, false, lastToken));			
 			}
 			else
 			{
@@ -281,15 +295,16 @@ package org.osmf.drm
 		{
 			switch(event.errorID)
 			{
-				case  MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
+				case MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
 					forceRefreshVoucher();
 					break;
 				case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
-					dispatchEvent(new TraitEvent(TraitEvent.AUTHENTICATION_NEEDED));
+					dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_NEEDED));
 					break;
 				default:
-					removeEventListeners();				
-					dispatchEvent(new AuthenticationFailedEvent(event.errorID, event.text));	
+					removeEventListeners();
+							
+					dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(event.errorID, event.text)));	
 					break;
 			}	
 		}
@@ -297,14 +312,14 @@ package org.osmf.drm
 		private function removeEventListeners():void
 		{
 			drmManager.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
-			drmManager.removeEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded); //Same as "loadVoucherComplete"
+			drmManager.removeEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded);
 		}
 		
 		private function authComplete(event:DRMAuthenticationCompleteEvent):void
 		{
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
-			lastToken = event.token;	
+			lastToken = event.token;
 			retrieveVoucher();
 		}			
 				
@@ -313,14 +328,24 @@ package org.osmf.drm
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
 			
-			dispatchEvent(new AuthenticationFailedEvent(event.errorID, MediaErrorCodes.getDescriptionForErrorCode(event.errorID) ));
+			dispatchEvent
+				( new ContentProtectionEvent
+					( ContentProtectionEvent.AUTHENTICATION_FAILED
+					, false
+					, false
+					, null
+					, new MediaError
+						( event.errorID
+						, MediaErrorCodes.getDescriptionForErrorCode(event.errorID)
+						)
+					)
+				);
 		}
 		
 		private var lastToken:ByteArray
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;
 		private var drmManager:DRMManager;
-
 	}
 	}
 }

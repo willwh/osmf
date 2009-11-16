@@ -24,7 +24,6 @@ package org.osmf.composition
 	import flash.events.Event;
 	
 	import org.osmf.events.SwitchEvent;
-	import org.osmf.events.TraitEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.ISwitchable;
 	import org.osmf.traits.MediaTraitType;
