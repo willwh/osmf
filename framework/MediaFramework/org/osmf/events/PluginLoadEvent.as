@@ -31,11 +31,39 @@ package org.osmf.events
 	 */
 	public class PluginLoadEvent extends Event
 	{
+		/**
+		 * The PluginLoadEvent.PLUGIN_LOADED constant defines the value of the
+		 * type property of the event object for a pluginLoaded event.
+		 * 
+		 * @eventType pluginLoaded
+		 */	
 		public static const PLUGIN_LOADED:String		= "pluginLoaded";
+		
+		/**
+		 * The PluginLoadEvent.PLUGIN_LOAD_FAILED constant defines the value of the
+		 * type property of the event object for a pluginLoadFailed event.
+		 * 
+		 * @eventType pluginLoadFailed
+		 */	
 		public static const PLUGIN_LOAD_FAILED:String	= "pluginLoadFailed";
+
+		/**
+		 * The PluginLoadEvent.PLUGIN_UNLOADED constant defines the value of the
+		 * type property of the event object for a pluginUnloaded event.
+		 * 
+		 * @eventType pluginUnloaded
+		 */	
 		public static const PLUGIN_UNLOADED:String		= "pluginUnloaded";
 		
-		public function PluginLoadEvent(type:String, resource:IMediaResource=null, bubbles:Boolean=false, cancelable:Boolean=false)
+		/**
+		 * Constructor.
+		 * 
+		 * @param type The type of the event.
+		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+ 		 * @param resource The resource representing the plugin.
+		 **/
+		public function PluginLoadEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:IMediaResource=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -43,24 +71,19 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Get the resource that represents the plugin.
-		 * 
-		 * @return Returns the media resource that represents the plugin.
+		 * The resource representing the plugin.
 		 */ 
 		public function get resource():IMediaResource
 		{
 			return _resource;
 		}
 		
-		// Overrides
-		//
-		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function clone():Event
 		{
-			return new PluginLoadEvent(type, resource, bubbles, cancelable);
+			return new PluginLoadEvent(type, bubbles, cancelable, _resource);
 		}
 		
 		// Internals

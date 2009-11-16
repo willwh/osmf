@@ -116,8 +116,14 @@ package org.osmf.plugin
 			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
 			if (pluginEntry != null)
 			{
-				dispatchEvent(
-					new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOADED, resource));
+				dispatchEvent
+					( new PluginLoadEvent
+						( PluginLoadEvent.PLUGIN_LOADED
+						, false
+						, false
+						, resource
+						)
+					);
 			}
 			else
 			{
@@ -138,8 +144,7 @@ package org.osmf.plugin
 					}
 					else
 					{
-						dispatchEvent(
-							new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOAD_FAILED));
+						dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOAD_FAILED));
 					}
 				}
 				else
@@ -155,8 +160,14 @@ package org.osmf.plugin
 					pluginEntry.state = PluginLoadingState.LOADED;
 					_pluginList.push(pluginEntry);
 					
-					dispatchEvent(
-						new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOADED, resource));
+					dispatchEvent
+						( new PluginLoadEvent
+							( PluginLoadEvent.PLUGIN_LOADED
+							, false
+							, false
+							, resource
+							)
+						);
 				}
 				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
