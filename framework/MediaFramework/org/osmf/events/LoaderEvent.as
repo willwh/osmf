@@ -26,7 +26,6 @@ package org.osmf.events
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.ILoader;
-	import org.osmf.traits.LoadState;
 	
 	/**
 	 * An ILoader dispatches a LoaderEvent when an ILoadable that it's loading
@@ -36,51 +35,42 @@ package org.osmf.events
 	{
 		/**
 		 * The LoaderEvent.STATE_CHANGE constant defines the value of the type
-		 * property of the event object for a loaderStateChange event.
+		 * property of the event object for a loadableStateChange event.
 		 * 
-		 * @eventType loaderStateChange
+		 * @eventType LOADABLE_STATE_CHANGE
 		 **/
 		public static const LOADABLE_STATE_CHANGE:String = "loadableStateChange";
 		
 		/**
 		 * Constructor.
 		 * 
+		 * @param type Event type.
+		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
 		 * @param loader The loader for this event.
 		 * @param loadable The loadable for this event.
 		 * @param oldState The previous state of the loadable.
 		 * @param newState The new state of the loadable.
 		 * @param loadedContext The loaded context (if any) of the loadable.
- 		 * @param bubbles Specifies whether the event can bubble up the display
- 		 * list hierarchy.
- 		 * @param cancelable Specifies whether the behavior associated with the
- 		 * event can be prevented.
 		 **/
 		public function LoaderEvent
-							( loader:ILoader,
-							  loadable:ILoadable,
-							  oldState:String,
-							  newState:String,
-							  loadedContext:ILoadedContext,
-							  bubbles:Boolean=false,
-							  cancelable:Boolean=false
+							( type:String
+							, bubbles:Boolean=false
+							, cancelable:Boolean=false
+							, loader:ILoader=null
+							, loadable:ILoadable=null
+							, oldState:String=null
+							, newState:String=null
+							, loadedContext:ILoadedContext=null
 							)
 		{			
-			super(LOADABLE_STATE_CHANGE, bubbles, cancelable);
+			super(type, bubbles, cancelable);
 			
 			_loader = loader;
 			_loadable = loadable;
 			_oldState = oldState;
 			_newState = newState;
 			_loadedContext = loadedContext;
-		}
-		
-		/**
-		 * @private
-		 * @inheritDoc
-		 **/
-		override public function clone():Event
-		{
-			return new LoaderEvent(loader, loadable, oldState, newState, loadedContext);
 		}
 		
 		/**
@@ -121,6 +111,14 @@ package org.osmf.events
 		public function get loadedContext():ILoadedContext
 		{
 			return _loadedContext;
+		}
+
+		/**
+		 * @private
+		 **/
+		override public function clone():Event
+		{
+			return new LoaderEvent(type, bubbles, cancelable, loader, loadable, oldState, newState, loadedContext);
 		}
 		
 		// Internals
