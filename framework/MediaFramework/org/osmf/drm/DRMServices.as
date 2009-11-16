@@ -120,6 +120,10 @@ package org.osmf.drm
 					drmContentData = new DRMContentData(value as ByteArray);
 					retrieveVoucher();	
 				}
+				catch (argError:ArgumentError)  //DRM Contentdata is invalid
+				{				
+					dispatchEvent(new AuthenticationFailedEvent(argError.errorID, "DRMContentData invalid"));
+				}
 				catch (error:Error)
 				{
 					var e:Error = error;
@@ -130,7 +134,7 @@ package org.osmf.drm
 						updater.removeEventListener(Event.COMPLETE, onComplete);
 						if (event.type == Event.COMPLETE)
 						{
-							drmMetadata = value;
+								drmMetadata = value;
 						}	
 					}					
 					var updater:SystemUpdater = new SystemUpdater();
