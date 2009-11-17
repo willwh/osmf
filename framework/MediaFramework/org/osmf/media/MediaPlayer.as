@@ -45,6 +45,11 @@ package org.osmf.media
 	 * Dispatched when the playhead reaches the duration for playable media.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="durationReached", type="org.osmf.events.TimeEvent")]
 	 	 
@@ -54,6 +59,11 @@ package org.osmf.media
 	 * Dispatched when the <code>volume</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.AudioEvent.VOLUME_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 	 
 	[Event(name="volumeChange", type="org.osmf.events.AudioEvent")]   
 	 
@@ -61,6 +71,11 @@ package org.osmf.media
 	 * Dispatched when the <code>muted</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="mutedChange", type="org.osmf.events.AudioEvent")] 
 	 
@@ -68,6 +83,11 @@ package org.osmf.media
 	 * Dispatched when the <code>pan</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 	 
 	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
 
@@ -87,6 +107,11 @@ package org.osmf.media
 	 * Dispatched when the <code>playing</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayingChangeEvent.PLAYING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 	 	 		
 	[Event(name="playingChange", type="org.osmf.events.PlayingChangeEvent")]
 	
@@ -96,6 +121,11 @@ package org.osmf.media
 	 * Dispatched when the <code>paused</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.PausedChangeEvent.PAUSED_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 		
 	[Event(name="pausedChange", type="org.osmf.events.PausedChangeEvent")]
 	
@@ -105,6 +135,11 @@ package org.osmf.media
 	 * Dispatched when the <code>view</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 	 	 		
 	[Event(name="viewChange", type="org.osmf.events.ViewEvent")]
 	
@@ -115,6 +150,11 @@ package org.osmf.media
 	 * media has changed.
 	 * 
 	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */		
 	[Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 	 
@@ -124,6 +164,11 @@ package org.osmf.media
 	 * Dispatched when the <code>seeking</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 	
 	[Event(name="seekingChange", type="org.osmf.events.SeekEvent")]
 	 
@@ -131,6 +176,11 @@ package org.osmf.media
 	 * Dispatched when the MediaPlayer's state has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
 
@@ -149,6 +199,11 @@ package org.osmf.media
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
@@ -156,6 +211,11 @@ package org.osmf.media
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 
@@ -165,6 +225,11 @@ package org.osmf.media
 	 * Dispatched when the <code>buffering</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferingChange", type="org.osmf.events.BufferEvent")]
 	
@@ -172,6 +237,11 @@ package org.osmf.media
 	 * Dispatched when the <code>bufferTime</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferEvent")]
 	
@@ -181,6 +251,11 @@ package org.osmf.media
 	 * Dispatched when the data is received as a download operation progresses.
 	 *
 	 * @eventType org.osmf.events.LoadEvent
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bytesLoadedChange",type="org.osmf.events.LoadEvent")]
 
@@ -188,6 +263,11 @@ package org.osmf.media
 	 * Dispatched when the value of bytesTotal property has changed.
 	 *
 	 * @eventType org.osmf.events.LoadEvent
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
@@ -197,6 +277,11 @@ package org.osmf.media
 	 * Dispatched when the <code>playable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */    
 	[Event(name="playableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -204,6 +289,11 @@ package org.osmf.media
 	 * Dispatched when the <code>bufferable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */    
 	[Event(name="bufferableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
@@ -211,6 +301,11 @@ package org.osmf.media
 	 * Dispatched when the <code>Pausable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.Pausable_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="pausableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -218,6 +313,11 @@ package org.osmf.media
 	 * Dispatched when the <code>seekable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="seekableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -225,6 +325,11 @@ package org.osmf.media
 	 * Dispatched when the <code>switchable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -232,6 +337,11 @@ package org.osmf.media
 	 * Dispatched when the <code>temporal</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="temporalChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -239,6 +349,11 @@ package org.osmf.media
 	 * Dispatched when the <code>audible</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="audibleChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -246,6 +361,11 @@ package org.osmf.media
 	 * Dispatched when the <code>viewable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="viewableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -253,6 +373,11 @@ package org.osmf.media
 	 * Dispatched when the <code>spatial</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="spatialChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
@@ -260,6 +385,11 @@ package org.osmf.media
 	 * Dispatched when the <code>loadable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="loadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
@@ -267,6 +397,11 @@ package org.osmf.media
 	 * Dispatched when the <code>downloadable</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="downloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
@@ -291,12 +426,22 @@ package org.osmf.media
 	 * type-specific  players. 
 	 * Such a subclass can expose a simpler API targeted to support
 	 * its particular media type.</p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaPlayer extends EventDispatcher
 	{
 		/**
 		 * Constructor.
          * @param element Source MediaElement to be controlled by this MediaPlayer.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function MediaPlayer(element:MediaElement=null)
 		{
@@ -312,6 +457,11 @@ package org.osmf.media
 		 * Source MediaElement controlled by this MediaPlayer.  Setting the element will attempt to load 
 		 * media that is loadable, that isn't loading or loaded.  It will automatically unload media when
 		 * the element changes to a new MediaElement or null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set element(value:MediaElement):void
 		{
@@ -376,6 +526,11 @@ package org.osmf.media
 		 * <p>The <code>autoRewind</code> property is ignored if the <code>loop</code> property 
 		 * is set to <code>true</code>.</p>
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set autoRewind(value:Boolean):void
 		{
@@ -395,6 +550,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
          * @see org.osmf.traits.IPlayable
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set autoPlay(value:Boolean):void
 		{
@@ -412,6 +572,11 @@ package org.osmf.media
          * so if <code>loop</code> is set to <code>true</code>, the <code>autoRewind</code> property
          * is ignored.
          * <p>The default is <code>false</code>.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set loop(value:Boolean):void
 		{
@@ -432,6 +597,11 @@ package org.osmf.media
 		 * 
 		 * @see org.osmf.events.#event:TimeEvent
          * @see org.osmf.traits.ITemporal
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set currentTimeUpdateInterval(value:Number):void
 		{
@@ -466,6 +636,11 @@ package org.osmf.media
 		 * 
 		 * @see org.osmf.events.#event:LoadEvent
          * @see org.osmf.traits.IDownloadable
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
         public function set bytesLoadedUpdateInterval(value:Number):void
         {
@@ -495,6 +670,11 @@ package org.osmf.media
 
 		/**
          *  The current state of the media.  See MediaPlayerState for available values.
+         *  
+         *  @langversion 3.0
+         *  @playerversion Flash 10
+         *  @playerversion AIR 1.0
+         *  @productversion OSMF 1.0
          */      
         public function get state():String
         {
@@ -505,6 +685,11 @@ package org.osmf.media
 		
 		/**
 		 *  Indicates whether the media is playable.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get playable():Boolean
 		{
@@ -513,6 +698,11 @@ package org.osmf.media
 		
 		/**
 		 *  Indicates whether the media is Pausable.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get pausable():Boolean
 		{
@@ -522,6 +712,11 @@ package org.osmf.media
 		/**
 		 * Indicates whether the media is seekable.
 		 * Seekable media can jump to a specified time.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get seekable():Boolean
 		{
@@ -531,6 +726,11 @@ package org.osmf.media
 		/**
 		 * Indicates whether the media is temporal.
 		 * Temporal media supports a duration and a currentT tme within that duration.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get temporal():Boolean
 		{
@@ -538,6 +738,11 @@ package org.osmf.media
 		}
 		/**
 		 *  Indicates whether the media is audible.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get audible():Boolean
 		{
@@ -548,6 +753,11 @@ package org.osmf.media
 		 * Indicates whether the media is viewable.
 		 * Viewable media is exposed by a DisplayObject.
 		 * @see flash.display.DisplayObject
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get viewable():Boolean
 		{
@@ -559,6 +769,11 @@ package org.osmf.media
 		 * Spatial exposes the intrinsic dimensions of the media.
 		 * <p>For example, the intrinsic dimensions of an image are the height and width
 		 * of the image as it is stored.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get spatial():Boolean
 		{
@@ -569,6 +784,11 @@ package org.osmf.media
 		 * Indicates whether the media is switchable.
 		 * Wwitchable exposes the ability to autoswitch or manually switch
 		 * between multiple bitrate streams.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get switchable():Boolean
 		{
@@ -577,6 +797,11 @@ package org.osmf.media
 				
 		/**
 		 *  Indicates whether the media is loadable.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get loadable():Boolean
 		{
@@ -585,6 +810,11 @@ package org.osmf.media
 		
 		/**
 		 * Indicates whether the media is capable of buffering.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bufferable():Boolean
 		{
@@ -593,6 +823,11 @@ package org.osmf.media
 				
 		/**
 		 * Indicates whether the media is downloadable.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 
 		public function get downloadable():Boolean
@@ -611,6 +846,11 @@ package org.osmf.media
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 	    public function get volume():Number
 	    {	
@@ -634,6 +874,11 @@ package org.osmf.media
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */				
 	    public function get muted():Boolean
 	    {
@@ -658,6 +903,11 @@ package org.osmf.media
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */					
 		
 	    public function get pan():Number
@@ -683,6 +933,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be pausable to support this property.</p>
 		 * 
          * @see org.osmf.traits.IPausable
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get paused():Boolean
 	    {
@@ -692,6 +947,11 @@ package org.osmf.media
 		/**
 	    * Pauses the media, if it is not already paused.
 	    * @throws IllegalOperationError if capability isn't supported
+	    *  
+	    *  @langversion 3.0
+	    *  @playerversion Flash 10
+	    *  @playerversion AIR 1.0
+	    *  @productversion OSMF 1.0
 	    */
 	    public function pause():void
 	    {
@@ -705,6 +965,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
          * @see org.osmf.traits.IPlayable
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */					
 	    public function get playing():Boolean
 	    {
@@ -714,6 +979,11 @@ package org.osmf.media
 	    /**
 	    * Plays the media, if it is not already playing.
 	    * @throws IllegalOperationError if capability isn't supported
+	    *  
+	    *  @langversion 3.0
+	    *  @playerversion Flash 10
+	    *  @playerversion AIR 1.0
+	    *  @productversion OSMF 1.0
 	    */
 	    public function play():void
 	    {
@@ -727,6 +997,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be seekable to support this property.</p>
 		 * 
          * @see org.osmf.traits.ISeekable
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */			
 	    public function get seeking():Boolean
 	    {
@@ -738,6 +1013,11 @@ package org.osmf.media
 	     * <p>If <code>time</code> is NaN or negative, does not attempt to seek.</p>
 	     * @param time Time to seek to in seconds.
 	     * @throws IllegalOperationError if capability isn't supported
+	     *  
+	     *  @langversion 3.0
+	     *  @playerversion Flash 10
+	     *  @playerversion AIR 1.0
+	     *  @productversion OSMF 1.0
 	     */	    
 	    public function seek(time:Number):void
 	    {
@@ -756,6 +1036,11 @@ package org.osmf.media
 		 * @return Returns <code>true</code> if the media can seek to the specified time.
 		 * @throws IllegalOperationError if capability isn't supported
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 	    public function canSeekTo(time:Number):Boolean
 	    {
@@ -783,6 +1068,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
          * @see org.osmf.traits.ISpatial
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 	    public function get width():int
 	    {
@@ -795,6 +1085,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
          * @see org.osmf.traits.ISpatial
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get height():int
 	    {
@@ -809,6 +1104,12 @@ package org.osmf.media
 		 * method can be used to manually switch to a specific stream.
 		 * 
 		 * <p>The default is true.</p>
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 *		 
 		 */
 		public function get autoSwitch():Boolean
 		{
@@ -825,6 +1126,11 @@ package org.osmf.media
 		
 		/**
 		 * The index of the stream currently rendering. Uses a zero-based index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get currentStreamIndex():int
 		{
@@ -836,6 +1142,11 @@ package org.osmf.media
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the highest index available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
@@ -851,6 +1162,11 @@ package org.osmf.media
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the highest index available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get maxStreamIndex():int
 		{
@@ -868,6 +1184,11 @@ package org.osmf.media
 		 * requested and the switch has not yet been acknowledged and no switch failure 
 		 * has occurred.  Once the switch request has been acknowledged or a 
 		 * failure occurs, the property will return <code>false</code>.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get switchUnderway():Boolean
 		{
@@ -886,6 +1207,11 @@ package org.osmf.media
 		 * @throws IllegalOperationError If the stream is not in manual switch mode.
 		 * 
 		 * @see maxIndex
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function switchTo(streamIndex:int):void
 		{
@@ -900,6 +1226,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be viewable to support this property.</p>
 		 * 
          * @see org.osmf.traits.IViewable
+         *  
+         *  @langversion 3.0
+         *  @playerversion Flash 10
+         *  @playerversion AIR 1.0
+         *  @productversion OSMF 1.0
          */
 	    public function get view():DisplayObject
 	    {
@@ -913,6 +1244,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
          * @see org.osmf.traits.ITemporal
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 	    public function get duration():Number
 	    {
@@ -925,6 +1261,11 @@ package org.osmf.media
 		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
          * @see org.osmf.traits.ITemporal
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		    
 	    public function get currentTime():Number
 	    {
@@ -935,6 +1276,11 @@ package org.osmf.media
 		 * Indicates whether the media is currently buffering.
 		 * 
 		 * <p>The default is <code>false</code>.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get buffering():Boolean
 		{
@@ -944,6 +1290,11 @@ package org.osmf.media
 		/**
 		 * Length of the content currently in the media's
 		 * buffer, in seconds. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get bufferLength():Number
 		{
@@ -957,6 +1308,11 @@ package org.osmf.media
 		 * is forced to zero.</p>
 		 * 
 		 * <p>The default is zero.</p> 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get bufferTime():Number
 		{
@@ -976,6 +1332,11 @@ package org.osmf.media
 		/**
 		 * The number of bytes of the media that has been downloaded. When the underlying trait is absent, 0 is returned.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get bytesLoaded():Number
 		{
@@ -985,6 +1346,11 @@ package org.osmf.media
 		/**
 		 * The total number of bytes of the media that will be downloaded. When the underlying trait is absent, 0 is returned.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get bytesTotal():Number
 		{
