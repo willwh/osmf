@@ -27,11 +27,21 @@ package org.osmf.vast.model
 	
 	/**
 	 * This class represents a Video tag in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTVideo
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTVideo()
 		{
@@ -42,6 +52,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The duration of the video expressed in XML time format, hh:mm:ss.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get duration():String 
 		{
@@ -55,6 +70,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The Ad ID for the video creative.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get adID():String 
 		{
@@ -68,6 +88,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The actions to take upon the video being clicked.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get videoClick():VASTVideoClick 
 		{
@@ -81,6 +106,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * A Vector of VASTMediaFile objects.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get mediaFiles():Vector.<VASTMediaFile> 
 		{
@@ -89,6 +119,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * Adds an item to the Vector of VASTMediaFile objects.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addMediaFile(mediaFile:VASTMediaFile):void 
 		{

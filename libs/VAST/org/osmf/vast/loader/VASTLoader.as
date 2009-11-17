@@ -80,6 +80,11 @@ package org.osmf.vast.loader
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()
 		 * @param ILoadable ILoadable to be loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadable:ILoadable):void
 		{
@@ -176,6 +181,11 @@ package org.osmf.vast.loader
 		 *
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.osmf.traits.LoadState
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadable:ILoadable):void
 		{

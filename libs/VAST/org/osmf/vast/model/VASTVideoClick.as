@@ -27,11 +27,21 @@ package org.osmf.vast.model
 	
 	/**
 	 * An action to take upon the video being clicked.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTVideoClick
 	{	
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function VASTVideoClick()
 		{
@@ -43,6 +53,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * URL to open as destination page when a user clicks on the video.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get clickThrough():VASTUrl 
 		{
@@ -57,6 +72,11 @@ package org.osmf.vast.model
 		/**
 		 * A Vector of VASTUrl objects to request for tracking
 		 * purposes when a user clicks on the video.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get clickTrackings():Vector.<VASTUrl> 
 		{
@@ -71,6 +91,11 @@ package org.osmf.vast.model
 		/**
 		 * A Vector of VASTUrl objects to request on custom
 		 * events such as hotspotted video.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get customClicks():Vector.<VASTUrl> 
 		{

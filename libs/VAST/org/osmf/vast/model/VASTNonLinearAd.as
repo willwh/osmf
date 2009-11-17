@@ -25,11 +25,21 @@ package org.osmf.vast.model
 {
 	/**
 	 * This class represents a NonLinear tag in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTNonLinearAd extends VASTAdBase
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTNonLinearAd()
 		{
@@ -38,6 +48,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * Whether or not it is acceptable to scale the image.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get scalable():Boolean 
 		{
@@ -52,6 +67,11 @@ package org.osmf.vast.model
 		/**
 		 * Whether or not the ad must have its aspect ratio maintained when
 		 * scaled.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get maintainAspectRatio():Boolean 
 		{
@@ -66,6 +86,11 @@ package org.osmf.vast.model
 		/**
 		 * Framework, if any, used for communication from ad to Video Player,
 		 * such as "FlashVars".
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get apiFramework():String 
 		{

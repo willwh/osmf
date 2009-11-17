@@ -25,6 +25,11 @@ package org.osmf.vast.model
 {
 	/**
 	 * This class represents a Tracking element in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTTrackingEvent
 	{		
@@ -32,6 +37,11 @@ package org.osmf.vast.model
 		 * Constructor.
 		 * 
 		 * @param type The type of the event to track.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTTrackingEvent(type:VASTTrackingEventType) 
 		{
@@ -42,6 +52,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The type of the event to track.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get type():VASTTrackingEventType 
 		{
@@ -55,6 +70,11 @@ package org.osmf.vast.model
 		/**
 		 * URL(s) to track this event during play back. There could be zero or
 		 * many for this event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get urls():Vector.<VASTUrl> 
 		{

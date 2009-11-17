@@ -25,6 +25,11 @@ package org.osmf.vast.model
 {
 	/**
 	 * This class represents a URL in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTUrl
 	{
@@ -42,6 +47,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get url():String 
 		{
@@ -50,6 +60,11 @@ package org.osmf.vast.model
 
 		/**
 		 * An optional id associated with the URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get id():String 
 		{

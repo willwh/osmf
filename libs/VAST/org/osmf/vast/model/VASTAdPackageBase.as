@@ -44,6 +44,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Indicates source ad server.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get adSystem():String 
 		{
@@ -58,6 +63,11 @@ package org.osmf.vast.model
 		/**
 		 * An optional error URL so the various ad servers can be informed
 		 * if the ad did not play for any reason.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get errorURL():String 
 		{
@@ -72,6 +82,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URLs to track impression.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get impressions():Vector.<VASTUrl> 
 		{
@@ -80,6 +95,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Adds the given VASTUrl to this ad package as an impression.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addImpression(value:VASTUrl):void 
 		{
@@ -88,6 +108,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Tracking events associated with this ad package.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get trackingEvents():Vector.<VASTTrackingEvent> 
 		{
@@ -114,6 +139,11 @@ package org.osmf.vast.model
 		/**
 		 * Extension elements in the VAST document allow for customization or
 		 * for ad server specific features (e.g. geo data, unique identifiers).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get extensions():Vector.<XML> 
 		{
@@ -122,6 +152,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * Adds the given VASTTrackingEvent to this ad package.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addTrackingEvent(value:VASTTrackingEvent):void 
 		{
@@ -130,6 +165,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Adds the given extension XML to this ad package.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addExtension(value:XML):void 
 		{

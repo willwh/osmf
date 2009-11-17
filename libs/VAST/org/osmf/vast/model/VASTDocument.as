@@ -28,6 +28,11 @@ package org.osmf.vast.model
 	/**
 	 * This class represents the top level object of the VAST document object
 	 * model.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTDocument
 	{
@@ -43,6 +48,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * Adds the given VASTAd to the document.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function addAd(ad:VASTAd):void
 		{
@@ -51,6 +61,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The collection of VASTAds in the document.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get ads():Vector.<VASTAd>
 		{

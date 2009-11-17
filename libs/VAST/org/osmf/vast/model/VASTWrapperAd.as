@@ -29,6 +29,11 @@ package org.osmf.vast.model
 	 * This class represents a Wrapper Ad which is another 
 	 * VAST document that points to another VAST document from
 	 * a different server.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTWrapperAd extends VASTAdPackageBase
 	{
@@ -45,6 +50,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The ad tag URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get vastAdTagURL():String 
 		{
@@ -58,6 +68,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The actions to take upon the video being clicked.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get videoClick():VASTVideoClick
 		{
@@ -71,6 +86,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URLs to track Companion impressions if desired by Secondary Ad Server
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get companionImpressions():Vector.<VASTUrl>
 		{
@@ -84,6 +104,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URL of ad tag of Companion ad, if served or tracked separately
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get companionAdTag():VASTUrl
 		{
@@ -97,6 +122,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URLs to track NonLinear impressions if desired by Secondary Ad Server
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get nonLinearImpressions():Vector.<VASTUrl>
 		{
@@ -110,6 +140,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URL of ad tag of NonLinear ad, if served or tracked separately
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get nonLinearAdTag():VASTUrl
 		{

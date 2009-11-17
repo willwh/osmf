@@ -30,11 +30,21 @@ package org.osmf.vast.media
 	 * DefaultVASTMediaFileResolver implements IVASTMediaFileResolver. It provides
 	 * a default implementation to pick a VASTMediaFile object out of all those
 	 * available in a VAST document. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class DefaultVASTMediaFileResolver implements IVASTMediaFileResolver
 	{
 		/**
 		 * By default, return the first one with a supported MIME type.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function resolveMediaFiles(mediaFiles:Vector.<VASTMediaFile>):VASTMediaFile
 		{	

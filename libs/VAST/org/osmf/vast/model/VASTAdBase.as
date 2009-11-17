@@ -25,11 +25,21 @@ package org.osmf.vast.model
 {
 	/**
 	 * Base class for describing an ad.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTAdBase
 	{		
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTAdBase()
 		{
@@ -41,6 +51,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The URL of the ad.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get url():String 
 		{
@@ -55,6 +70,11 @@ package org.osmf.vast.model
 		/**
 		 * Wraps block of code (generally script or IFrame) if the ad is not
 		 * a URL or URI.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get code():String 
 		{
@@ -68,6 +88,11 @@ package org.osmf.vast.model
 
 		/**
 		 * URL to open as a destination page when user clicks on the ad.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get clickThroughURL():String 
 		{
@@ -81,6 +106,11 @@ package org.osmf.vast.model
 				
 		/**
 		 * Data to be passed into the ad.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get adParameters():String 
 		{
@@ -94,6 +124,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The ad's identifier.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get id():String 
 		{
@@ -107,6 +142,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The width of the ad in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get width():int 
 		{
@@ -120,6 +160,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The height of the ad in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get height():int 
 		{
@@ -133,6 +178,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The width of the ad in pixels when it is in its expanded state.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get expandedWidth():int 
 		{
@@ -146,6 +196,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The height of the ad in pixels when it is in its expanded state.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get expandedHeight():int 
 		{
@@ -159,6 +214,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * Defines whether the ad is an ad tag or a link to a static image.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get resourceType():VASTResourceType 
 		{
@@ -173,6 +233,11 @@ package org.osmf.vast.model
 		/**
 		 * The MIME type of the file to be returned.  If omitted then any type
 		 * could be delivered.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get creativeType():String 
 		{

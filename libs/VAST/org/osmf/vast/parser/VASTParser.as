@@ -45,11 +45,21 @@ package org.osmf.vast.parser
 
 	/**
 	 * This class parses a VAST 1.0 document into a VAST object model.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTParser
 	{		
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTParser()
 		{
@@ -72,6 +82,11 @@ package org.osmf.vast.parser
 		 * 
 		 * @returns The parsed document, or null if any error was encountered
 		 * during the parse. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function parse(xml:XML, useStrictMode:Boolean=true):VASTDocument 
 		{

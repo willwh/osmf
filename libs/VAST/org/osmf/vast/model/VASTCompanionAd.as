@@ -28,11 +28,21 @@ package org.osmf.vast.model
 	 * is commonly text, display ads, rich media, or skins that wrap around the
 	 * video experience. These ads come in a number of sizes and shapes and
 	 * typically run alongside or surrounding the media player.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTCompanionAd extends VASTAdBase
 	{		
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTCompanionAd()
 		{
@@ -42,6 +52,11 @@ package org.osmf.vast.model
 		/**
 		 * Alt text to be displayed when the companion ad is rendered in an
 		 * HTML environment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get altText():String 
 		{

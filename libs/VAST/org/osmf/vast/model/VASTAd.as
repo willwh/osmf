@@ -28,6 +28,11 @@ package org.osmf.vast.model
 	
 	/**
 	 * This class represents the second-level element in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTAd
 	{		
@@ -36,6 +41,11 @@ package org.osmf.vast.model
 		 * 
 		 * @param id The id attribute (on the Ad element) from the 
 		 * VAST document.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTAd(id:String) 
 		{
@@ -45,6 +55,11 @@ package org.osmf.vast.model
 		/**
 		 * The value of the id attribute on the Ad element from the 
 		 * VAST document.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get id():String 
 		{
@@ -54,6 +69,11 @@ package org.osmf.vast.model
 		/**
 		 * The value of the InLine element from the VAST document represented
 		 * by a VASTAdInline object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get inlineAd():VASTInlineAd 
 		{
@@ -68,6 +88,11 @@ package org.osmf.vast.model
 		/**
 		 * The value of the Wrapper element from the VAST document represented
 		 * by a VASTAdWrapper object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get wrapperAd():VASTWrapperAd 
 		{

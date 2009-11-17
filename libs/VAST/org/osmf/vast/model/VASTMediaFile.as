@@ -25,6 +25,11 @@ package org.osmf.vast.model
 {
 	/**
 	 * Class representing a MediaFile element in a VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class VASTMediaFile
 	{
@@ -42,6 +47,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */			
 		public function VASTMediaFile()
 		{
@@ -52,6 +62,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The URL of the media file.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get url():String 
 		{
@@ -65,6 +80,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The media file's identifier.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get id():String 
 		{
@@ -78,6 +98,11 @@ package org.osmf.vast.model
 
 		/**
 		 * Method of delivery for the media file, usually "streaming" or "progressive".
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get delivery():String 
 		{
@@ -91,6 +116,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The bitrate of the encoded media file in kilobits per second.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bitrate():Number 
 		{
@@ -104,6 +134,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The width of the media in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get width():int 
 		{
@@ -117,6 +152,11 @@ package org.osmf.vast.model
 		
 		/**
 		 * The height of the media in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get height():int 
 		{
@@ -130,6 +170,11 @@ package org.osmf.vast.model
 
 		/**
 		 * The MIME type of the media file.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get type():String 
 		{

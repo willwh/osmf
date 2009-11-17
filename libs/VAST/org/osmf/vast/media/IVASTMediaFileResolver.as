@@ -31,11 +31,21 @@ package org.osmf.vast.media
 	 * When multiple media files are found in a VAST document, an arbitration is needed to 
 	 * pick the most suitable VASTMediaFile. This class encapsulates the details of how to 
 	 * pick the right VASTMediaFile out all those available from the VAST document.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public interface IVASTMediaFileResolver
 	{
 		/**
 		 * Return the VASTMediaFile to use, from the input list.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function resolveMediaFiles(mediaFiles:Vector.<VASTMediaFile>):VASTMediaFile;		
 	}
