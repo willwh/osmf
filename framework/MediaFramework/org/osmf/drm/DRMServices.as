@@ -120,9 +120,16 @@ package org.osmf.drm
 					drmContentData = new DRMContentData(value as ByteArray);
 					retrieveVoucher();	
 				}
-				catch (argError:ArgumentError)  //DRM Contentdata is invalid
+				catch (argError:ArgumentError)  // DRM ContentData is invalid
 				{				
-					dispatchEvent(new AuthenticationFailedEvent(argError.errorID, "DRMContentData invalid"));
+					dispatchEvent
+						( new ContentProtectionEvent
+							( ContentProtectionEvent.AUTHENTICATION_FAILED
+							, false
+							, false
+							, new MediaError(argError.errorID, "DRMContentData invalid")
+							)
+						);
 				}
 				catch (error:Error)
 				{
