@@ -217,12 +217,41 @@ package org.osmf.media
 				doTestVolume();
 			}
 		}
-		
+
 		private function doTestVolume():void
+		{
+			doTestVolumeCommon(1);
+		}
+
+		public function testVolumeWithPreset():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			// Assign a volume up front.  This value will take precedence over
+			// any volume inherited from the MediaElement.
+			mediaPlayer.volume = 0.33;
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestVolumeWithPreset, false);
+			}
+			else
+			{
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				doTestVolumeWithPreset();
+			}
+		}
+		
+		private function doTestVolumeWithPreset():void
+		{
+			doTestVolumeCommon(0.33);
+		}
+		
+		private function doTestVolumeCommon(expectedVolume:Number):void
 		{
 			if (traitExists(MediaTraitType.AUDIBLE))
 			{
-				assertTrue(mediaPlayer.volume == 1.0);
+				assertTrue(mediaPlayer.volume == expectedVolume);
 				
 				mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onTestVolume);
 				mediaPlayer.volume = 0.2;
@@ -240,11 +269,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertEquals(1, mediaPlayer.volume);
+				assertTrue(mediaPlayer.volume == expectedVolume);
 				
-				// Setting the volume has no effect.
+				// Setting the volume should apply, even when the MediaPlayer isn't audible.
 				mediaPlayer.volume = 0.5;
-				assertEquals(1, mediaPlayer.volume);
+				assertTrue(mediaPlayer.volume == 0.5);
 								
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -267,19 +296,48 @@ package org.osmf.media
 		
 		private function doTestMuted():void
 		{
+			doTestMutedCommon(false);
+		}
+
+		public function testMutedWithPreset():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			// Assign a muted value up front.  This value will take precedence over
+			// any muted value inherited from the MediaElement.
+			mediaPlayer.muted = true;
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestMutedWithPreset, false);
+			}
+			else
+			{
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				doTestMutedWithPreset();
+			}
+		}
+		
+		private function doTestMutedWithPreset():void
+		{
+			doTestMutedCommon(true);
+		}
+		
+		private function doTestMutedCommon(expectedMuted:Boolean):void
+		{
 			if (traitExists(MediaTraitType.AUDIBLE))
 			{
-				assertTrue(mediaPlayer.muted == false);
+				assertTrue(mediaPlayer.muted == expectedMuted);
 				
 				mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onTestMuted);
-				mediaPlayer.muted = true;
+				mediaPlayer.muted = !expectedMuted;
 				
 				function onTestMuted(event:AudioEvent):void
 				{
 					mediaPlayer.removeEventListener(AudioEvent.MUTED_CHANGE, onTestMuted);
 					
-					assertTrue(mediaPlayer.muted == true);
-					assertTrue(event.muted == true);
+					assertTrue(mediaPlayer.muted == !expectedMuted);
+					assertTrue(event.muted == !expectedMuted);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -287,11 +345,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertTrue(mediaPlayer.muted == false);
+				assertTrue(mediaPlayer.muted == expectedMuted);
 				
-				// Setting muted has no effect.
-				mediaPlayer.muted = true;
-				assertTrue(mediaPlayer.muted == false);
+				// Setting muted should apply, even when the MediaPlayer isn't audible.
+				mediaPlayer.muted = !expectedMuted;
+				assertTrue(mediaPlayer.muted == !expectedMuted);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -300,7 +358,7 @@ package org.osmf.media
 		public function testPan():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
-			
+
 			if (loadable)
 			{
 				callAfterLoad(doTestPan, false);
@@ -314,9 +372,38 @@ package org.osmf.media
 		
 		private function doTestPan():void
 		{
+			doTestPanCommon(0);
+		}
+
+		public function testPanWithPreset():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+
+			// Assign a pan value up front.  This value will take precedence
+			// over any pan value inherited from the MediaElement.
+			mediaPlayer.pan = -0.5;
+			
+			if (loadable)
+			{
+				callAfterLoad(doTestPanWithPreset, false);
+			}
+			else
+			{
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				doTestPanWithPreset();
+			}
+		}
+		
+		private function doTestPanWithPreset():void
+		{
+			doTestPanCommon(-0.5);
+		}
+		
+		private function doTestPanCommon(expectedPan:Number):void
+		{
 			if (traitExists(MediaTraitType.AUDIBLE))
 			{
-				assertTrue(mediaPlayer.pan == 0.0);
+				assertTrue(mediaPlayer.pan == expectedPan);
 				
 				mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, onTestPan);
 				mediaPlayer.pan = 0.7;
@@ -334,11 +421,11 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.audible == false);
-				assertEquals(0, mediaPlayer.pan);
+				assertTrue(mediaPlayer.pan == expectedPan);
 
-				// Setting pan has no effect.				
+				// Setting pan should apply, even when the MediaPlayer isn't audible.
 				mediaPlayer.pan = 0.3;
-				assertEquals(0, mediaPlayer.pan);
+				assertTrue(mediaPlayer.pan == 0.3);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -785,8 +872,8 @@ package org.osmf.media
 		{
 			if (traitExists(MediaTraitType.SPATIAL))
 			{
-				assertTrue(mediaPlayer.width == 320);
-				assertTrue(mediaPlayer.height == 240);
+				assertTrue(mediaPlayer.width == 0);
+				assertTrue(mediaPlayer.height == 0);
 				
 				mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onTestWidthHeight);
 								
@@ -975,14 +1062,14 @@ package org.osmf.media
 			else
 			{
 				assertTrue(mediaPlayer.switchable == false);
-				assertTrue(mediaPlayer.autoSwitch == false);
+				assertTrue(mediaPlayer.autoSwitch == true);
 				assertTrue(mediaPlayer.currentStreamIndex == 0);
 				assertTrue(mediaPlayer.maxStreamIndex == 0);
 				assertTrue(mediaPlayer.switchUnderway == false);
 
 				// Setting autoSwitch should have no effect.
-				mediaPlayer.autoSwitch = true;
-				assertTrue(mediaPlayer.autoSwitch == false);
+				mediaPlayer.autoSwitch = false;
+				assertTrue(mediaPlayer.autoSwitch == true);
 								
 				try
 				{

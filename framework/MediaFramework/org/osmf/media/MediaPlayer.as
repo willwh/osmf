@@ -607,13 +607,14 @@ package org.osmf.media
 		/**
 		 * Volume of the media.
 		 * Ranges from 0 (silent) to 1 (full volume). 
-		 * <p>The MediaElement must be audible to support this property.</p>
+		 * <p>If the MediaElement is not audible, then the volume will be set to
+		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
 		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : 1;	    		    
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : mediaPlayerVolume;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
@@ -621,18 +622,22 @@ package org.osmf.media
 	    	if (audible)
 	    	{
 	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).volume = value;
-	    	}	    		
+	    	}
+
+    		mediaPlayerVolume = value;
+    		mediaPlayerVolumeSet = true;
 	    }
 		
 		/**
 		 * Indicates whether the media is currently muted.
-		 * <p>The MediaElement must be audible to support this property.</p>
+		 * <p>If the MediaElement is not audible, then the muted state will be set to
+		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
 		 */				
 	    public function get muted():Boolean
 	    {
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).muted : false;	    	   
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).muted : mediaPlayerMuted;	    	   
 	    }
 	    
 	    public function set muted(value:Boolean):void
@@ -640,20 +645,24 @@ package org.osmf.media
 	    	if (audible)
 	    	{
 	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).muted = value;
-	    	}	    				 
+	    	}
+
+    		mediaPlayerMuted = value;
+    		mediaPlayerMutedSet = true;
 	    }
 	 	 
 		/**
 		 * Pan property of the media.
 		 * Ranges from -1 (full pan left) to 1 (full pan right).
-		 * <p>The MediaElement must be audible to support this property.</p>
+		 * <p>If the MediaElement is not audible, then the pan property will be set to
+		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
          * @see org.osmf.traits.IAudible
 		 */					
 		
 	    public function get pan():Number
 	    {
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : 0;	    		
+	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : mediaPlayerPan;	    		
 	    }
 	    
 	    public function set pan(value:Number):void
@@ -661,7 +670,10 @@ package org.osmf.media
 	    	if (audible)
 	    	{
 	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).pan = value;
-	    	}	    	
+	    	}
+
+    		mediaPlayerPan = value;
+    		mediaPlayerPanSet = true;
 		}
 	
 	    // IPausable
@@ -793,12 +805,14 @@ package org.osmf.media
 	    
 	    /**
 		 * Defines whether or not the ISwitchable trait should be in manual 
-		 * or autoswitch mode. If in manual mode the <code>switchTo</code>
+		 * or auto-switch mode. If in manual mode the <code>switchTo</code>
 		 * method can be used to manually switch to a specific stream.
+		 * 
+		 * <p>The default is true.</p>
 		 */
 		public function get autoSwitch():Boolean
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : false;
+			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : true;
 		}
 		
 		public function set autoSwitch(value:Boolean):void
@@ -1039,11 +1053,30 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIBLE:					
-					changeListeners(add, _element, trait, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _element, trait, AudioEvent.MUTED_CHANGE, [redispatchEvent]);			
-					changeListeners(add, _element, trait, AudioEvent.PAN_CHANGE, [redispatchEvent]);	
+					changeListeners(add, _element, trait, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);		
+					changeListeners(add, _element, trait, AudioEvent.MUTED_CHANGE, [redispatchEvent]);
+					changeListeners(add, _element, trait, AudioEvent.PAN_CHANGE, [redispatchEvent]);
 					_audible = add;
-					eventType = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;					
+					if (audible)
+					{
+						// When IAudible is added, we should tell it to reflect any
+						// explicitly-specified MediaPlayer-level audible properties.
+						// Note that we don't do so if the current MediaPlayer-level
+						// audible properties are implicit (i.e. not set by the client).
+						if (mediaPlayerVolumeSet)
+						{
+							volume = mediaPlayerVolume;
+						}
+						if (mediaPlayerMutedSet)
+						{
+							muted = mediaPlayerMuted;
+						}
+						if (mediaPlayerPanSet)
+						{
+							pan = mediaPlayerPan;
+						}
+					}
+					eventType = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;		
 					break;
 				case MediaTraitType.PAUSABLE:											
 					changeListeners(add, _element, trait, PausedChangeEvent.PAUSED_CHANGE, [redispatchEvent, onPaused]);						
@@ -1328,6 +1361,16 @@ package org.osmf.media
 		private var _state:String; // MediaPlayerState
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
+		
+		// Properties of the MediaPlayer, as opposed to properties that apply
+		// to a specific MediaElement.  We use xxxSet Booleans to distinguish
+		// between explicit properties and implicit properties.
+		private var mediaPlayerVolume:Number = 1;
+		private var mediaPlayerVolumeSet:Boolean = false;
+		private var mediaPlayerMuted:Boolean = false;
+		private var mediaPlayerMutedSet:Boolean = false;
+		private var mediaPlayerPan:Number = 0;
+		private var mediaPlayerPanSet:Boolean = false;
 		
 		private var _playable:Boolean;
 		private var _pausable:Boolean;
