@@ -232,7 +232,14 @@ package org.osmf.video
 				}
 				else
 				{					
-					dispatchEvent(new MediaErrorEvent(new MediaError(event.errorID)));
+					dispatchEvent
+						( new MediaErrorEvent
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(event.errorID)
+							)
+						);
 				}				
 			}	
 			
