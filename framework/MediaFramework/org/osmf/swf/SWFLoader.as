@@ -54,6 +54,11 @@ package org.osmf.swf
 		 * with different versions.  Therefore, it is mandatory to have the
 		 * loaded SWF and loading SWF live in the same security domain if the
 		 * types need to be merged.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SWFLoader(useCurrentSecurityDomain:Boolean=false)
 		{
@@ -64,6 +69,11 @@ package org.osmf.swf
 		 * Indicates whether this SWFLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for IURLResources with SWF extensions.
 		 * @param resource Resource proposed to be loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{

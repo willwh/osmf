@@ -34,6 +34,11 @@ package org.osmf.traits
 	 * Dispatched when the trait's <code>bufferTime</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
 	
@@ -51,6 +56,11 @@ package org.osmf.traits
 	 * 
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface IBufferable extends IMediaTrait
 	{
@@ -58,12 +68,22 @@ package org.osmf.traits
 		 * Indicates whether the media is currently buffering.
 		 * 
 		 * <p>The default is <code>false</code>.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get buffering():Boolean;
 		
 		/**
 		 * The length of the content currently in the media's
 		 * buffer in seconds. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get bufferLength():Number;
 		
@@ -74,6 +94,11 @@ package org.osmf.traits
 		 * is forced to zero.</p>
 		 * 
 		 * <p>The default is zero.</p> 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get bufferTime():Number;
 		function set bufferTime(value:Number):void;

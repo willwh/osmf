@@ -39,17 +39,32 @@ package org.osmf.composition
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 	
 	/**
 	 * The Composite Serial switchable trait will aggregate switchable traits, acting as a single
 	 * switchable trait.  This trait will match settinngs between child traits when switching between children.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	internal class SerialSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable, IReusable
 	{
 		/**
 		 * Constructs a Composite Serial switchable trait.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SerialSwitchableTrait(traitAggregator:TraitAggregator)
 		{
@@ -58,6 +73,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 	
 		public function get autoSwitch():Boolean
 		{
@@ -66,6 +86,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set autoSwitch(value:Boolean):void
 		{
@@ -74,6 +99,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get currentIndex():int
 		{
@@ -82,6 +112,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
@@ -90,6 +125,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get maxIndex():int
 		{
@@ -98,6 +138,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set maxIndex(value:int):void
 		{			
@@ -106,6 +151,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get switchUnderway():Boolean
 		{
@@ -114,6 +164,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function switchTo(index:int):void
 		{	
@@ -135,6 +190,11 @@ package org.osmf.composition
 		 * Adds the child as the current listened child.  Sets the autoswitch, property to 
 		 * carry over from the previous child.  If autoswitch is false, attempts to match the bitrate
 		 * for the next media element.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{		
@@ -170,6 +230,11 @@ package org.osmf.composition
 			
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{				

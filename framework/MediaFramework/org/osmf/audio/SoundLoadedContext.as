@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -35,6 +35,11 @@ package org.osmf.audio
 		 *  Constructor.
 		 * 	@param sound A new Sound object that has been
 		 * 	successfully loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SoundLoadedContext(sound:Sound)
 		{
@@ -43,6 +48,11 @@ package org.osmf.audio
 
 		/**
 		 * The Sound to be used by a AudioElement.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get sound():Sound
 		{

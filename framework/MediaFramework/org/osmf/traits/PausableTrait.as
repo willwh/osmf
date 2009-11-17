@@ -38,6 +38,11 @@ package org.osmf.traits
 	 * subclass or as is by a media element that listens for and handles
 	 * its change events.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class PausableTrait extends MediaTraitBase implements IPausable
 	{
@@ -52,6 +57,11 @@ package org.osmf.traits
 		 * PlayableTrait, and vice-versa.
 		 * 
 		 * @throws ArgumentError If owner is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function PausableTrait(owner:MediaElement)
 		{
@@ -72,6 +82,11 @@ package org.osmf.traits
 		 * @see #canProcessPausedChange()
 		 * @see #processPausedChange()
 		 * @see #postProcessPausedChange()
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function resetPaused():void
 		{
@@ -90,6 +105,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get paused():Boolean
 		{
@@ -98,6 +118,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function pause():void
 		{
@@ -134,6 +159,11 @@ package org.osmf.traits
 		 * @return Returns <code>false</code> to abort the change
 		 * or <code>true</code> to proceed with processing. The default is <code>true</code>.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessPausedChange(newPaused:Boolean):Boolean
 		{
@@ -146,6 +176,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media being paused or reset.</p>
 		 * 
 		 * @param newPaused New <code>paused</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processPausedChange(newPaused:Boolean):void
 		{
@@ -158,6 +193,11 @@ package org.osmf.traits
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the pausedChanged event.</p>
 		 * @param oldPaused Previous <code>paused</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessPausedChange(oldPaused:Boolean):void
 		{

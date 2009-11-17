@@ -45,6 +45,11 @@ package org.osmf.net
 	{
 		/**
    		 * Constructs a NetContentProtectableTrait
+   		 *  
+   		 *  @langversion 3.0
+   		 *  @playerversion Flash 10
+   		 *  @playerversion AIR 1.0
+   		 *  @productversion OSMF 1.0
    		 */ 
 		public function NetStreamContentProtectableTrait()
 		{
@@ -57,6 +62,11 @@ package org.osmf.net
 		
 		/**
 		 * Data used by the flash player to implement DRM specific content protection.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set drmMetadata(value:Object):void
 		{

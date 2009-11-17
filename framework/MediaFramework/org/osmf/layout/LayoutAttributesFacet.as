@@ -42,31 +42,61 @@ package org.osmf.layout
 	 * Defines a metadata facet that holds a number of layout related attributes.
 	 * 
 	 * The default layout renderer adheres specific semantics to each attribute.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class LayoutAttributesFacet extends EventDispatcher implements IFacet
 	{
 		/**
 		 * Intentifier for the facet's order property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const ORDER:StringIdentifier = new StringIdentifier("order");
 		
 		/**
 		 * Intentifier for the facet's registrationPoint property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const REGISTRATION_POINT:StringIdentifier = new StringIdentifier("registrationPoint");
 		
 		/**
 		 * Intentifier for the facet's order property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const SCALE_MODE:StringIdentifier = new StringIdentifier("scaleMode");
 		
 		/**
 		 * Intentifier for the facet's alignment property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const ALIGNMENT:StringIdentifier = new StringIdentifier("alignment");
 		
 		/**
 		 * Intentifier for the facet's snapToPixel property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const SNAP_TO_PIXEL:StringIdentifier = new StringIdentifier("snapToPixel");
 		
@@ -82,6 +112,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get namespaceURL():URL
 		{
@@ -90,6 +125,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function getValue(identifier:IIdentifier):*
 		{
@@ -127,6 +167,11 @@ package org.osmf.layout
 		 * This facet does not merge.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function merge(childFacet:IFacet):IFacet
 		{
@@ -141,6 +186,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired position of the target in the display list
 		 * of its context.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get order():Number
 		{
@@ -164,6 +214,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired position of the target in the display list
 		 * of its context.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get registrationPoint():RegistrationPoint
 		{
@@ -186,6 +241,11 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines the desired scale mode to be applied to the target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get scaleMode():String
 		{
@@ -209,6 +269,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired alignment mode to be applied to the target when
 		 * scaling of the target leaves a blank space.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get alignment():RegistrationPoint
 		{
@@ -232,6 +297,11 @@ package org.osmf.layout
 		 * 
 		 * If set to true, the target's calculated position and size will
 		 * be rounded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get snapToPixel():Boolean
 		{

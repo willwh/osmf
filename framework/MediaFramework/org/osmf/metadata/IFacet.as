@@ -36,6 +36,11 @@ package org.osmf.metadata
 	 * Signals that all of the IFacets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_REMOVE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
      [Event(name='facetValueRemove', type='org.osmf.events.FacetEvent')]
 	
@@ -43,6 +48,11 @@ package org.osmf.metadata
 	 * Signals that all of the IFacets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetValueChangeEvent.VALUE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
      [Event(name='facetValueChange', type='org.osmf.events.FacetValueChangeEvent')]
 	
@@ -53,11 +63,21 @@ package org.osmf.metadata
 	 * These classes are stored on all IMediaResources as initial information relating to the media.  
 	 * They are also stored on the MediaElement for per element, possibly dynamic metadata.
 	 * Example of metadata content include: title, size, language, and subject.  
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */  
 	public interface IFacet extends IEventDispatcher
 	{		
 		/**
 		 * The namespace that corresponds to the schema for this metadata.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function get namespaceURL():URL;	
 		
@@ -65,6 +85,11 @@ package org.osmf.metadata
 		 * Method returning the value that belongs to the passed identifier.
 		 * 
 		 * Returns 'undefined' if the facet fails to resolve the identifier.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 
 		function getValue(identifier:IIdentifier):*;
@@ -72,6 +97,11 @@ package org.osmf.metadata
 		/**
 		 * Merge takes a number of child facets, and merge them into a single facet that includes this facet.  This should return a new facet.  This is used to bubble up
 		 * metadata in compositions. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function merge(childFacet:IFacet):IFacet;
 		

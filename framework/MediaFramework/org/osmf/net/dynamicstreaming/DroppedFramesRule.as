@@ -29,6 +29,11 @@ package org.osmf.net.dynamicstreaming
 	 * Switching rule for frame drop detection. Monitors frame drops using the data 
 	 * provided by the INetStreamMetrics object provided to the constructor and
 	 * recommends switching down if necessary.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class DroppedFramesRule extends SwitchingRuleBase
 	{
@@ -46,6 +51,11 @@ package org.osmf.net.dynamicstreaming
 		 * The default is 20 frames per second.
 		 * @param dropPanic The number of frame drops that need to occur to cause a switch to the lowest bitrate.
 		 * The default is 24 frames per second.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function DroppedFramesRule(nsMetrics:INetStreamMetrics, dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
 										dropPanic:int=PANIC_FRAMEDROP_FPS)
@@ -59,6 +69,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

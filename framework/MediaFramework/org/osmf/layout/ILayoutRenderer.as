@@ -33,6 +33,11 @@ package org.osmf.layout
 	{
 		/**
 		 * Defines the renderer that this renderer is a child of.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function set parent(value:ILayoutRenderer):void;
 		function get parent():ILayoutRenderer;
@@ -44,6 +49,11 @@ package org.osmf.layout
 		 * display list.
 		 * 
 		 * @param value The context to assign.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function set context(value:ILayoutContext):void;
 		
@@ -57,6 +67,11 @@ package org.osmf.layout
 		 * @throws IllegalOperationError when the specified target is null, or 
 		 * already a target of the renderer.
 		 * @returns The added target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function addTarget(target:ILayoutTarget):ILayoutTarget;
 		
@@ -68,6 +83,11 @@ package org.osmf.layout
 		 * @throws IllegalOperationErrror when the specified target is null, or
 		 * not a target of the renderer.
 		 * @returns The removed target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function removeTarget(target:ILayoutTarget):ILayoutTarget;
 		
@@ -76,6 +96,11 @@ package org.osmf.layout
 		 * layout renderer.
 		 *  
 		 * @return True if the specified target is a target of this renderer.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function targets(target:ILayoutTarget):Boolean
 		
@@ -83,6 +108,11 @@ package org.osmf.layout
 		 * Method that will mark the renderer's last rendering pass invalid. At
 		 * the descretion of the implementing instance, the renderer may either
 		 * directly re-render, or do so at a later time.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function invalidate():void;
 		
@@ -91,6 +121,11 @@ package org.osmf.layout
 		 * of all of the renderer's assigned targets. The implementing class
 		 * may still skip recalculation if the renderer has not been invalidated
 		 * since the last rendering pass. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function validateNow():void;
 		

@@ -30,12 +30,22 @@ package org.osmf.net.dynamicstreaming
 	
 	/**
 	 * Switching rule for Buffer detection.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class InsufficientBufferRule extends SwitchingRuleBase
 	{
 		/**
 		 * The default value used to detect a panic when the 
 		 * buffer length falls below this amount.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private const PANIC_BUFFER_LEVEL:int = 2;
 		
@@ -47,6 +57,11 @@ package org.osmf.net.dynamicstreaming
 		 * @param panicBufferLevel A Tunable parameter for this rule. The "panic" buffer level 
 		 * in seconds. This rule watches for the buffer length to fall below this level. The default
 		 * value is 2 seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function InsufficientBufferRule(nsMetrics:INetStreamMetrics, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
 		{
@@ -59,6 +74,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

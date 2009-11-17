@@ -38,6 +38,11 @@ package org.osmf.traits
 	 * subclass or as is by a media element that listens for and handles
 	 * its change events.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 
 	public class PlayableTrait extends MediaTraitBase implements IPlayable
@@ -53,6 +58,11 @@ package org.osmf.traits
 		 * PausableTrait (if any), and vice-versa.
 		 * 
 		 * @throws ArgumentError If owner is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function PlayableTrait(owner:MediaElement)
 		{
@@ -74,6 +84,11 @@ package org.osmf.traits
 		 * @see #canProcessPlayingChange()
 		 * @see #processPlayingChange()
 		 * @see #postProcessPlayingChange()
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function resetPlaying():void
 		{
@@ -92,6 +107,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get playing():Boolean
 		{
@@ -100,6 +120,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function play():void
 		{
@@ -134,6 +159,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. Subclasses that override this method
 		 * can return <code>false</code> to abort the change. 
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessPlayingChange(newPlaying:Boolean):Boolean
 		{
@@ -145,6 +175,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p> 
 		 *
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function processPlayingChange(newPlaying:Boolean):void
 		{
@@ -158,6 +193,11 @@ package org.osmf.traits
 		 *  
 		 * @param oldPlaying Previous value of <code>playing</code>.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessPlayingChange(oldPlaying:Boolean):void
 		{

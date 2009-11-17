@@ -35,6 +35,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType VIEW_CHANGE 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const VIEW_CHANGE:String = "viewChange";
 		
@@ -46,6 +51,11 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param oldView Previous view.
 		 * @param newView New view.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function ViewEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldView:DisplayObject=null, newView:DisplayObject=null)
 		{
@@ -57,6 +67,11 @@ package org.osmf.events
 		
 		/**
 		 * Old value of <code>view</code> before it was changed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get oldView():DisplayObject
 		{
@@ -65,6 +80,11 @@ package org.osmf.events
 		
 		/**
 		 * New value of <code>view</code> resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get newView():DisplayObject
 		{

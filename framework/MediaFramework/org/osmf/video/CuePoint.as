@@ -25,6 +25,11 @@ package org.osmf.video
 	
 	/**
 	 * The CuePoint class represents a cue point in a media element.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class CuePoint extends TemporalIdentifier
 	{
@@ -36,6 +41,11 @@ package org.osmf.video
 		 * @param name The name of the cue point.
 		 * @param parameters Custom name/value data for the cue point.
 		 * @param duration The duration value for the cue point in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function CuePoint(type:CuePointType, time:Number, name:String, parameters:Array, 
 									duration:Number=TemporalIdentifier.UNDEFINED)
@@ -49,6 +59,11 @@ package org.osmf.video
 		/**
 		 * The type of cue point. Returns one of the constant
 		 * values defined in CuePointType.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get type():CuePointType
 		{
@@ -57,6 +72,11 @@ package org.osmf.video
 				
 		/**
 		 * The name of the cue point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get name():String
 		{
@@ -65,6 +85,11 @@ package org.osmf.video
 			
 		/**
 		 * The parameters of the cue point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get parameters():Array
 		{

@@ -23,6 +23,11 @@ package org.osmf.metadata
 {
 	/**
 	 * Base class for temporal metadata.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class TemporalIdentifier implements IIdentifier
 	{
@@ -39,6 +44,11 @@ package org.osmf.metadata
 		 * 
 		 * @param time Time in seconds.
 		 * @param duration The duration in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function TemporalIdentifier(time:Number, duration:Number):void
 		{
@@ -48,6 +58,11 @@ package org.osmf.metadata
 		
 		/**
 		 * The time in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get time():Number
 		{
@@ -56,6 +71,11 @@ package org.osmf.metadata
 		
 		/**
 		 * The duration in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get duration():Number
 		{
@@ -65,6 +85,11 @@ package org.osmf.metadata
 		/**
 		 * Compares the parameter's time property with this object's time property. Returns true
 		 * if they are equal.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function equals(value:IIdentifier):Boolean
 		{

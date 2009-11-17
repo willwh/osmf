@@ -42,6 +42,11 @@ package org.osmf.plugin
 		 * The resource that's passed in needs to be of type <code>ClassResource</code>
 		 * for static plugins. If the class reference points to a <code>Class</code>
 		 * that can be successfully instantiated and implements IPluginInfo, 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 	    override public function canHandleResource(resource:IMediaResource):Boolean
 	    {

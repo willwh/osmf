@@ -28,21 +28,41 @@ package org.osmf.metadata
 	{	
 		/**
 		 * Video media
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const VIDEO:String	= "Video";
 		
 		/**
 		 * Audio media
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const AUDIO:String	= "Audio";
 		
 		/**
 		 * Image media
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const IMAGE:String	= "Image";
 		
 		/**
 		 * SWF format media
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const SWF:String		= "SWF";
 				

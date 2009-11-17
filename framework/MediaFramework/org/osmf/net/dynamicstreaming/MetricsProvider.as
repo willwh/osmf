@@ -38,6 +38,11 @@ package org.osmf.net.dynamicstreaming
 	 * makes use of the metrics offered by netstream.info, but more importantly it calculates running averages, which we feel
 	 * are more robust metrics on which to make switching decisions. It's goal is to be the one-stop shop for all the info you
 	 * need about the health of the stream.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class MetricsProvider extends EventDispatcher implements INetStreamMetrics
 	{		
@@ -49,6 +54,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * @param ns The NetStream instance the class will monitor.
 		 * @see #dynamicStreamingResource
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function MetricsProvider(ns:NetStream)
 		{
@@ -73,6 +83,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * The update interval at which metrics and averages are recalculated
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get updateInterval():Number 
 		{
@@ -86,6 +101,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * The NetStream object supplied to the constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get netStream():NetStream
 		{
@@ -94,6 +114,11 @@ package org.osmf.net.dynamicstreaming
 				
 		/**
 		 * The current stream item index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get currentIndex():int
 		{
@@ -107,6 +132,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the maximum index value 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get maxIndex():int 
 		{
@@ -115,6 +145,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the DynamicStreamingResource which the class is referencing
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get dynamicStreamingResource():DynamicStreamingResource
 		{
@@ -128,6 +163,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns true if the target buffer has been reached by the stream
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get reachedTargetBufferFull():Boolean
 		{
@@ -136,6 +176,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the current bufferlength of the NetStream
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bufferLength():Number
 		{
@@ -144,6 +189,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the current bufferTime of the NetStream
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bufferTime():Number
 		{
@@ -153,6 +203,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Returns the target buffer time for the stream. This target is the buffer level at which the 
 		 * stream is considered stable. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get targetBufferTime():Number
 		{
@@ -170,6 +225,11 @@ package org.osmf.net.dynamicstreaming
 		 * content and then dump it quickly to the client. The client sees this as an oscillating series of maxBytesPerSecond measurements, where
 		 * the peak roughly corresponds to the true estimate of max bandwidth available. Setting this parameter to true will cause this class
 		 * to optimize its estimate for averageMaxBandwidth. It should only be set true for live streams and should always be false for on demand streams. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get optimizeForLivebandwidthEstimate ():Boolean
 		{
@@ -183,6 +243,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the expected frame rate for this NetStream. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get expectedFPS():Number
 		{
@@ -191,6 +256,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the frame drop rate calculated over the last interval.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get droppedFPS():Number
 		{
@@ -199,6 +269,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the average frame-drop rate
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get averageDroppedFPS():Number
 		{
@@ -208,6 +283,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the last maximum bandwidth measurement, in kbps
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get maxBandwidth():Number
 		{
@@ -216,6 +296,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns the average max bandwidth value, in kbps
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get averageMaxBandwidth():Number
 		{
@@ -224,6 +309,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Returns a reference to the info property of the monitored NetStream
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get info():NetStreamInfo 
 		{
@@ -233,6 +323,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Enables this metrics engine.  The background processes will only resume on the next
 		 * netStream.Play.Start event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function enable(): void 
 		{
@@ -242,6 +337,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Disables this metrics engine. The background averaging processes
 		 * are stopped. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function disable(): void 
 		{

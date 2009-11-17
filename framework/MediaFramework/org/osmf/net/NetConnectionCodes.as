@@ -31,6 +31,11 @@ package org.osmf.net
 	{
 		/**
 		 * "error"	Packet encoded in an unidentified format.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CALL_BADVERSION:String = "NetConnection.Call.BadVersion";  		
 		
@@ -44,36 +49,71 @@ package org.osmf.net
 		 * Either the AMF URL is not in the same domain as the file containing the code calling the NetConnection.call() method, 
 		 * or the AMF server does not have a policy file that trusts the domain of the the
 		 * file containing the code calling the NetConnection.call() method.		
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CALL_PROHIBITED:String = "NetConnection.Call.Prohibited"; 	
 		
 		/** 
 		 * "status"	The connection was closed successfully.	
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_CLOSED:String = "NetConnection.Connect.Closed"; 	
 		
 		/**			
 		 * "error"	The connection attempt failed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_FAILED:String = "NetConnection.Connect.Failed"		
 		
 		/**
 		 * "status"	The connection attempt succeeded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_SUCCESS:String = "NetConnection.Connect.Success";		
 		
 		/**
 		 * "error"	The connection attempt did not have permission to access the application.			
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_REJECTED:String = "NetConnection.Connect.Rejected";		
 		
 		/**
 		 * 	"error"	The specified application is shutting down.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_APPSHUTDOWN:String = "NetConnection.Connect.AppShutdown";
 		
 		/** 
 		 * "error"	The application name specified during connect is invalid.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_INVALIDAPP:String = "NetConnection.Connect.InvalidApp";	
 	}

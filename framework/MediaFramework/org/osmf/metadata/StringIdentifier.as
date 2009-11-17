@@ -32,6 +32,11 @@ package org.osmf.metadata
 		 * Constructor
 		 * 
 		 * @param string The string value that this identifier wraps.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function StringIdentifier(string:String)
 		{
@@ -51,6 +56,11 @@ package org.osmf.metadata
 		 * that wraps a string value that is equal to its own.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function equals(value:IIdentifier):Boolean
 		{
@@ -63,6 +73,11 @@ package org.osmf.metadata
 		
 		/**
 		 * The string value that this identifier wraps.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get string():String
 		{

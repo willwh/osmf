@@ -75,6 +75,11 @@ package org.osmf.net
 		 * @param factory the NetConnectionFactory instance to use for managing NetConnections. Since the NetConnectionFactory
 		 * facilitates connection sharing, this is an easy way of enabling global sharing, by creating a single NetConnectionFactory
 		 * instance within the player and then handing it to all NetLoader instances. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function NetLoader(allowConnectionSharing:Boolean = true, factory:NetConnectionFactory = null)
 		{
@@ -94,6 +99,11 @@ package org.osmf.net
 		 * and will not be retro-actively applied to previously loaded, or loading operations that are underway.
 		 * 
 		 * @param value true if the NetConnectionFactory can share an existing NetConnection
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set allowConnectionSharing(value:Boolean):void
 		{

@@ -47,11 +47,21 @@ package org.osmf.traits
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
 	 * @see flash.display.DisplayObject
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface IViewable extends IMediaTrait
 	{
 		/**
 		 * DisplayObject representing the viewable media element.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get view():DisplayObject;
 	}

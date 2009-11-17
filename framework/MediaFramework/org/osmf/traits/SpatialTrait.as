@@ -45,6 +45,11 @@ package org.osmf.traits
 	 * or when the active child in a serial composition changes.</p>
 	 * 
 	 * @ see org.osmf.composition.SerialElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class SpatialTrait extends MediaTraitBase implements ISpatial
 	{
@@ -66,6 +71,11 @@ package org.osmf.traits
 		 * @see #processDimensionsChange()
 		 * @see #postProcessDimensionsChange()
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function setDimensions(width:Number, height:Number):void
 		{
@@ -118,6 +128,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. 
 		 * Subclasses that override this method can return <code>false</code> to abort processing. 
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessDimensionsChange(newWidth:Number, newHeight:Number):Boolean
 		{
@@ -129,6 +144,11 @@ package org.osmf.traits
 		 * Subclasses implement this method to communicate the change to the media.
 		 * @param newWidth New <code>width</code> value.
 		 * @param newHeight New <code>height</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processDimensionsChange(newWidth:Number, newHeight:Number):void
 		{
@@ -143,6 +163,11 @@ package org.osmf.traits
 		 * @param oldWidth Previous <code>width</code> value.
 		 * @param oldHeight Previous <code>width</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessDimensionsChange(oldWidth:Number, oldHeight:Number):void
 		{

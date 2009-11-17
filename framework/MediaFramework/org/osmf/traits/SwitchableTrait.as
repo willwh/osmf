@@ -42,6 +42,11 @@ package org.osmf.traits
 	 * Dispatched when the number of indices or associated bitrates have changed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 		
@@ -49,6 +54,11 @@ package org.osmf.traits
 	 * The SwitchableTrait class provides a base ISwitchable implementation.
 	 * It can be used as the base class for a more specific Switchable trait
 	 * subclass.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class SwitchableTrait extends MediaTraitBase implements ISwitchable
 	{
@@ -58,6 +68,11 @@ package org.osmf.traits
 		 * @param autoSwitch the initial autoSwitch state for the trait.
 		 * @param currentIndex the start index for the swichable trait.
 		 * @param numIndices the maximum value allow to be set on maxIndex 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SwitchableTrait(autoSwitch:Boolean=true, currentIndex:int=0, numIndices:int=1)
 		{
@@ -89,6 +104,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get autoSwitch():Boolean
 		{			
@@ -98,6 +118,11 @@ package org.osmf.traits
 		/**
 		 * @inheritDoc
 		 * This property defaults to true.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set autoSwitch(value:Boolean):void
 		{
@@ -113,6 +138,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get currentIndex():int
 		{
@@ -126,6 +156,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
@@ -138,6 +173,11 @@ package org.osmf.traits
 			
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get maxIndex():int
 		{
@@ -158,6 +198,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get switchUnderway():Boolean
 		{			
@@ -166,6 +211,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public function switchTo(index:int):void
 		{
@@ -189,6 +239,11 @@ package org.osmf.traits
 		
 		/**
 		 * Returns if this trait can change autoSwitch mode.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function canProcessAutoSwitchChange(value:Boolean):Boolean
 		{
@@ -197,6 +252,11 @@ package org.osmf.traits
 		
 		/**
 		 * Does the actual processing of changes to the autoSwitch property
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function processAutoSwitchChange(value:Boolean):void
 		{			
@@ -205,6 +265,11 @@ package org.osmf.traits
 				
 		/**
 		 * Returns if this trait can switch to the specified stream index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function canProcessSwitchTo(index:int):Boolean
 		{
@@ -214,6 +279,11 @@ package org.osmf.traits
 		
 		/**
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function validateIndex(index:int):void
 		{
@@ -225,6 +295,11 @@ package org.osmf.traits
 		
 		/**
 		 * Does the actual switching of indices.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function processSwitchTo(value:int):void
 		{			
@@ -233,6 +308,11 @@ package org.osmf.traits
 		
 		/**
 		 * Fires the SwitchState complete event
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function postProcessSwitchTo(detail:SwitchingDetail = null):void
 		{
@@ -241,6 +321,11 @@ package org.osmf.traits
 		
 		/**
 		 * Does the acutal switching of indices.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function processSwitchState(newState:int, detail:SwitchingDetail = null):void
 		{			
@@ -251,6 +336,11 @@ package org.osmf.traits
 		
 		/**
 		 * Returns if this trait can change the max index to specified value
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function canProcessMaxIndexChange(value:int):Boolean
 		{
@@ -264,6 +354,11 @@ package org.osmf.traits
 		
 		/**
 		 * Does the setting of the max index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		protected function processMaxIndexChange(value:int):void
 		{			
@@ -272,27 +367,52 @@ package org.osmf.traits
 					
 		/**
 		 * Backing variable for autoSwitch
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 	
 		private var _autoSwitch:Boolean;
 		
 		/**
 		 * Backing variable for currentIndex
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private var _currentIndex:int = 0;
 	
 		/**
 		 * Backing variable for maxIndex
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private var _maxIndex:int = 0;
 		
 		/**
 		 * tracks the number of possible indices
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private var _numIndices:int;
 		
 		/**
 		 * Tracks the current switching state of this trait.  
 		 * See SwitchEvent for all possible states.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private var switchState:int = SwitchEvent.SWITCHSTATE_UNDEFINED;
 	}

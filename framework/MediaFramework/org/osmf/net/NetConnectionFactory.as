@@ -70,6 +70,11 @@ package org.osmf.net
 		/**
 		 * Constructor
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function NetConnectionFactory(target:IEventDispatcher=null)
 		{
@@ -90,6 +95,11 @@ package org.osmf.net
 		 * @see org.osmf.events.MediaErrorEvent;
 		 * @see org.osmf.events.MediaError
 		 * @see NetNegotiator
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function create(loadable:ILoadable,allowNetConnectionSharing:Boolean):void
 		{
@@ -215,6 +225,11 @@ package org.osmf.net
 		 * are only physically closed after the last sharer has requested a close().
 		 * 
 		 * @param resource the IURLresource originally used to establish the NetConenction
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function closeNetConnectionByResource(resource:IURLResource):void
 		{
@@ -230,6 +245,11 @@ package org.osmf.net
 		
 		/**
 		 * Override this method to allow the use of a custom NetNegotiator
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function createNetNegotiator():NetNegotiator
 		{
@@ -241,6 +261,11 @@ package org.osmf.net
 		 * 
 		 * @param resource a IURLResource
 		 * @return a String hash that uniquely identifies the NetConnection
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function extractKey(resource:IURLResource):String
 		{
@@ -259,6 +284,11 @@ import org.osmf.traits.ILoadable;
 /**
  * Utility class for structuring shared connection data.
  *
+ *  
+ *  @langversion 3.0
+ *  @playerversion Flash 10
+ *  @playerversion AIR 1.0
+ *  @productversion OSMF 1.0
  */
 class SharedConnection
 {
@@ -269,6 +299,11 @@ class SharedConnection
 /**
  * Utility class for structuring pending connection data.
  *
+ *  
+ *  @langversion 3.0
+ *  @playerversion Flash 10
+ *  @playerversion AIR 1.0
+ *  @productversion OSMF 1.0
  */
 class PendingConnection
 {

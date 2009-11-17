@@ -31,6 +31,11 @@ package org.osmf.events
 		/**
 		 * The TimeEvent.CURRENT_TIME_CHANGE constant defines the value of the
 		 * type property of the event object for a currentTimeChange event. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const CURRENT_TIME_CHANGE:String = "currentTimeChange";
 		
@@ -38,6 +43,11 @@ package org.osmf.events
 		 * The TimeEvent.DURATION_CHANGE constant defines the value
 		 * of the type property of the event object for a durationChange
 		 * event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static const DURATION_CHANGE:String = "durationChange";
 
@@ -45,6 +55,11 @@ package org.osmf.events
 		 * The TimeEvent.DURATION_REACHED constant defines the value
 		 * of the type property of the event object for a durationReached
 		 * event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static const DURATION_REACHED:String = "durationReached";
 
@@ -56,6 +71,11 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param time The new time for the event.  The property to which this value applies depends
  		 * on the event type constant. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function TimeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, time:Number=NaN)
 		{			
@@ -68,6 +88,11 @@ package org.osmf.events
 		 * New time value resulting from this change.  For currentTimeChange events, this
 		 * corresponds to the currentTime property.  For durationChange events, this corresponds
 		 * to the duration property.  For durationReached events, this is unused.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get time():Number
 		{

@@ -34,6 +34,11 @@ package org.osmf.logging
 		 * 
 		 * @param factory Reference to the logger factory
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static function set loggerFactory(factory:ILoggerFactory):void
 		{
@@ -45,6 +50,11 @@ package org.osmf.logging
 		 * should use this property to access the logger factory.
 		 * 
 		 * @return the loggerFactory
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static function get loggerFactory():ILoggerFactory
 		{
@@ -57,6 +67,11 @@ package org.osmf.logging
 		 * 
 		 * @param name The name that identifies a particular logger
 		 * @return the logger identified by the name
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static function getLogger(name:String):ILogger
 		{

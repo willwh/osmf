@@ -51,6 +51,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the AbsoluteLayoutFacet documentation for the semantics of
 		 * the x, y, width, and height parameters.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setAbsoluteLayout
 								( target:Metadata
@@ -111,6 +116,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the RelativeLayoutFacet documentation for the semantics of
 		 * the x, y, width, and height parameters.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setRelativeLayout
 								( target:Metadata
@@ -171,6 +181,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the AnchorLayoutFacet documentation for the semantics of
 		 * the left, top, right, and bottom parameters.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setAnchorLayout
 								( target:Metadata
@@ -222,6 +237,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the PaddingLayoutFacet documentation for the semantics of
 		 * the left, top, right, and bottom parameters.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setPaddingLayout
 								( target:Metadata
@@ -274,6 +294,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the LayoutAttributesFacet documentation for the semantics of
 		 * the scaleMode and alignment parameters.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setLayoutAttributes
 									( target:Metadata
@@ -332,6 +357,11 @@ package org.osmf.layout
 		 * 
 		 * Please referer to the LayoutRendererFacet documentation for the semantics of
 		 * setting a renderer type.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static function setLayoutRenderer(target:Metadata, renderer:Class):LayoutRendererFacet
 		{

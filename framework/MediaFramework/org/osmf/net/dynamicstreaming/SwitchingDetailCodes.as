@@ -29,6 +29,11 @@ package org.osmf.net.dynamicstreaming
 	 * as well as a means for retrieving a description for a particular switching detail
 	 * code.  Switching detail codes are used to describe a switch up or switch down
 	 * called for by a switching rule.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	public final class SwitchingDetailCodes
 	{

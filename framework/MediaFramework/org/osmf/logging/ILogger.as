@@ -63,51 +63,101 @@ package org.osmf.logging
 	{
 		/**
 		 * Logs a message with a "debug" level.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function debug(message:String, ... params):void;
 		
 		/**
 		 * Logs a message with a "info" level.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function info(message:String, ... params):void;
 		
 		/**
 		 * Logs a message with a "warn" level.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function warn(message:String, ... params):void;
 		
 		/**
 		 * Logs a message with a "error" level.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function error(message:String, ... params):void;
 		
 		/**
 		 * Logs a message with a "fatal" level.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function fatal(message:String, ... params):void;
 
 		/**
 		 * Is debug logging currently enabled?
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get debugEnabled():Boolean;
 		
 		/**
 		 * Is info logging currently enabled?
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get infoEnabled():Boolean;
 		
 		/**
 		 * Is warn logging currently enabled?
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get warnEnabled():Boolean;
 		
 		/**
 		 * Is error logging currently enabled?
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get errorEnabled():Boolean;
 		
 		/**
 		 * Is fatal logging currently enabled?
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get fatalEnabled():Boolean;
 	}

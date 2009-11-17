@@ -33,12 +33,22 @@ package org.osmf.net.dynamicstreaming
 	 * to available bandwidth, the class uses a "safety multiple", the stream bitrate
 	 * is mulitplied by this number. The default is 1.15, but can be overriden in the
 	 * class constructor.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class InsufficientBandwidthRule extends SwitchingRuleBase
 	{
 		/**
 		 * When comparing stream bitrates to available bandwidth, the stream bitrate
 		 * is mulitplied by this number:
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		private const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
 		
@@ -48,6 +58,11 @@ package org.osmf.net.dynamicstreaming
 		 * @param nsMetrics A metrics provider which implements the INetStreamMetrics interface
 		 * @param safteyMultiple A multiplier that is used when the stream bitrate is compared against available
 		 * bandwidth. The stream bitrate is multiplied by this amount. The default is 1.15.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function InsufficientBandwidthRule(nsMetrics:INetStreamMetrics, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
 		{
@@ -58,6 +73,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int
 		{

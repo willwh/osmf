@@ -31,6 +31,11 @@ package org.osmf.metadata
 	{
 		/**
 		 * Determines if this IIdentifier is equal to the value parameter.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function equals(value:IIdentifier):Boolean;
 	}

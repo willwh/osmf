@@ -42,6 +42,11 @@ package org.osmf.net
 		 * 
 		 * @param netStream The NetStream object to be used for the retrieval of bytesLoaded and bytesTotal values
 		 *  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function NetStreamDownloadableTrait(netStream:NetStream)
 		{
@@ -56,6 +61,11 @@ package org.osmf.net
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesLoaded():Number
 		{
@@ -64,6 +74,11 @@ package org.osmf.net
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesTotal():Number
 		{

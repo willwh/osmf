@@ -90,6 +90,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function set context(value:ILayoutContext):void
 		{
@@ -135,6 +140,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function addTarget(target:ILayoutTarget):ILayoutTarget
 		{
@@ -187,6 +197,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function removeTarget(target:ILayoutTarget):ILayoutTarget
 		{
@@ -247,6 +262,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function targets(target:ILayoutTarget):Boolean
 		{
@@ -255,6 +275,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function invalidate():void
 		{
@@ -281,6 +306,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function validateNow():void
 		{
@@ -308,6 +338,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function updateCalculatedBounds():Rectangle
 		{
@@ -393,6 +428,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function updateLayout():void
 		{
@@ -441,6 +481,11 @@ package org.osmf.layout
 		 * 
 		 * @return The list of URL namespaces that identify the metadata facets
 		 * that the renderer uses on its calculations. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function get usedMetadataFacets():Vector.<URL>
 		{
@@ -453,6 +498,11 @@ package org.osmf.layout
 		 * 
 		 * @returns -1 if x comes before y, 0 if equal, and 1 if x comes
 		 * after y.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{
@@ -467,6 +517,11 @@ package org.osmf.layout
 		 * @param oldContext The old context.
 		 * @param newContext The new context.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
 		{	
@@ -477,6 +532,11 @@ package org.osmf.layout
 		 * item being added.
 		 *   
 		 * @param target The target that has been added.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processTargetAdded(target:ILayoutTarget):void
 		{	
@@ -487,6 +547,11 @@ package org.osmf.layout
 		 * item being removed.
 		 *   
 		 * @param target The target that has been removed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processTargetRemoved(target:ILayoutTarget):void
 		{	
@@ -497,6 +562,11 @@ package org.osmf.layout
 		 * processing on the view of a target being staged.
 		 *  
 		 * @param target The target that is being staged
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processStagedTarget(target:ILayoutTarget):void
 		{	
@@ -508,6 +578,11 @@ package org.osmf.layout
 		 * processing on the view of a target being unstaged.
 		 *  
 		 * @param target The target that has been unstaged
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function processUnstagedTarget(target:ILayoutTarget):void
 		{	

@@ -39,6 +39,11 @@ package org.osmf.plugin
 		 * <p>The default constructor must be able to instantiate the class
 		 * referenced by <code>pluginInfoRef</code>.</p>
 		 * @param pluginInfoRef Reference to a Class that implements IPluginInfo.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function PluginClassResource(pluginInfoRef:Class)
 		{
@@ -49,6 +54,11 @@ package org.osmf.plugin
 		 * Reference to the Class that implements <code>IPluginInfo</code> for this static plugin.
 		 * This class must have a default constructor with no parameters
 		 * This class is required to enable the successful loading of the static plugin.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get pluginInfoRef():Class
 		{
@@ -57,6 +67,11 @@ package org.osmf.plugin
 		
 		/**
 		 *  inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
 		{

@@ -31,6 +31,11 @@ package org.osmf.traits
 		 * The function is called by the framework to signal that the trait will be
 		 * de-commissioned soon and it is time to clean up, such as releasing any 
 		 * resources.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function dispose():void;
 	}

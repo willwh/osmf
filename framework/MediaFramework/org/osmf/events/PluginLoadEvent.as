@@ -36,6 +36,11 @@ package org.osmf.events
 		 * type property of the event object for a pluginLoaded event.
 		 * 
 		 * @eventType pluginLoaded
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const PLUGIN_LOADED:String		= "pluginLoaded";
 		
@@ -44,6 +49,11 @@ package org.osmf.events
 		 * type property of the event object for a pluginLoadFailed event.
 		 * 
 		 * @eventType pluginLoadFailed
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const PLUGIN_LOAD_FAILED:String	= "pluginLoadFailed";
 
@@ -52,6 +62,11 @@ package org.osmf.events
 		 * type property of the event object for a pluginUnloaded event.
 		 * 
 		 * @eventType pluginUnloaded
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const PLUGIN_UNLOADED:String		= "pluginUnloaded";
 		
@@ -72,6 +87,11 @@ package org.osmf.events
 		
 		/**
 		 * The resource representing the plugin.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get resource():IMediaResource
 		{

@@ -25,6 +25,11 @@ package org.osmf.net.dynamicstreaming
 	/**
 	 * The SwitchingDetail class contains the details for why a switch was called for by
 	 * a switching rule.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class SwitchingDetail
 	{
@@ -47,6 +52,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * <p>Framework detail codes are defined in <code>SwitchingDetailCodes</code>.
 		 * </p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get detailCode():int
 		{
@@ -58,6 +68,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * <p>Framework detail codes are defined in <code>SwitchingDetailCodes</code>.
 		 * </p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get description():String
 		{
@@ -68,6 +83,11 @@ package org.osmf.net.dynamicstreaming
 		 * The option "more info" string contains additional information a 
 		 * switching rule might want to provide about a switch, such as
 		 * the number of dropped frames, current bandwidth, etc.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get moreInfo():String
 		{
@@ -81,6 +101,11 @@ package org.osmf.net.dynamicstreaming
 		 * @param detailCode The detail code for this switching detail.
 		 *
 		 * @return A description of the detail with the specified detail code.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function getDescriptionForDetailCode(errorCode:int):String
 		{
@@ -92,6 +117,11 @@ package org.osmf.net.dynamicstreaming
 		 * very frequently, such as twice per second, it is more efficient for a switching
 		 * rule to re-use the same SwitchingDetail object by using this method rather 
 		 * than creating a new one each time.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		internal function update(detailCode:int, moreInfo:String=null):void
 		{

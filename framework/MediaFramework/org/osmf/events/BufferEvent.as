@@ -65,6 +65,11 @@ package org.osmf.events
 		
 		/**
 		 * New value of <code>buffering</code> resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get buffering():Boolean
 		{
@@ -73,6 +78,11 @@ package org.osmf.events
 		
 		/**
 		 * New value of <code>bufferTime</code> resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bufferTime():Number
 		{

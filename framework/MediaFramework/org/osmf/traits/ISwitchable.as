@@ -28,6 +28,11 @@ package org.osmf.traits
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
@@ -35,6 +40,11 @@ package org.osmf.traits
 	 * Dispatched when the number of indices or associated bitrates have changed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 
@@ -53,6 +63,11 @@ package org.osmf.traits
 	 * 
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public interface ISwitchable extends IMediaTrait
 	{
@@ -60,12 +75,22 @@ package org.osmf.traits
 		 * Defines whether or not the ISwitchable trait should be in manual 
 		 * or autoswitch mode. If in manual mode the <code>switchTo</code>
 		 * method can be used to manually switch to a specific stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get autoSwitch():Boolean;
 		function set autoSwitch(value:Boolean):void;
 		
 		/**
 		 * The index of the item currently rendering. Uses a zero-based index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get currentIndex():int;
 		
@@ -74,6 +99,11 @@ package org.osmf.traits
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the highest index available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function getBitrateForIndex(index:int):Number
 		
@@ -86,6 +116,11 @@ package org.osmf.traits
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the highest index available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get maxIndex():int;
 		function set maxIndex(value:int):void;
@@ -96,6 +131,11 @@ package org.osmf.traits
 		 * requested and the switch has not yet been acknowledged and no switch failure 
 		 * has occurred.  Once the switch request has been acknowledged or a 
 		 * failure occurs, the property will return <code>false</code>.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get switchUnderway():Boolean;
 		
@@ -111,6 +151,11 @@ package org.osmf.traits
 		 * @throws IllegalOperationError If the stream is not in manual switch mode.
 		 * 
 		 * @see maxIndex
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function switchTo(index:int):void;
 		

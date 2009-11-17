@@ -29,6 +29,11 @@ package org.osmf.net.dynamicstreaming
 	
 	/**
 	 * The only switching rule that switches up, all the others switch down.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class SufficientBandwidthRule extends SwitchingRuleBase
 	{
@@ -41,6 +46,11 @@ package org.osmf.net.dynamicstreaming
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
         override public function getNewIndex():int 
         {

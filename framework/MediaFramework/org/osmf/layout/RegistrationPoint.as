@@ -29,46 +29,91 @@ package org.osmf.layout
 	{
 		/**
 		 * Defines the top left registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP_LEFT:RegistrationPoint = new RegistrationPoint("topLeft");
 		
 		/**
 		 * Defines the top-middle registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP_MIDDLE:RegistrationPoint = new RegistrationPoint("topMiddle");
 		
 		/**
 		 * Defines the top-right registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP_RIGHT:RegistrationPoint = new RegistrationPoint("topRight");
 		
 		/**
 		 * Defines the middle-left registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const MIDDLE_LEFT:RegistrationPoint = new RegistrationPoint("middleLeft");
 		
 		/**
 		 * Defines the center registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CENTER:RegistrationPoint = new RegistrationPoint("center");
 		
 		/**
 		 * Defines the middle-right registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const MIDDLE_RIGHT:RegistrationPoint = new RegistrationPoint("middleRight");
 		
 		/**
 		 * Defines the bottom-left registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM_LEFT:RegistrationPoint = new RegistrationPoint("bottomLeft");
 		
 		/**
 		 * Defines the bottom-middle registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM_MIDDLE:RegistrationPoint = new RegistrationPoint("bottomMiddle");
 		
 		/**
 		 * Defines the bottom-right registration point.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM_RIGHT:RegistrationPoint = new RegistrationPoint("bottomRight");
 		
@@ -84,6 +129,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function toString():String
 		{

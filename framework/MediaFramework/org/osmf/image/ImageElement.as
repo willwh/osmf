@@ -67,6 +67,11 @@ package org.osmf.image
 		 * @param resource Url that points to the image that the ImageElement will use.
 		 * 
 		 * @throws ArgumentError If loader is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function ImageElement(loader:ImageLoader, resource:IURLResource = null)
 		{

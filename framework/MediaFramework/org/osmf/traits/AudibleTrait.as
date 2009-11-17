@@ -34,6 +34,11 @@ package org.osmf.traits
   	 * Dispatched when the trait's <code>muted</code> property has changed.
   	 * 
   	 * @eventType org.osmf.events.AudioEvent.MUTED_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mutedChange",type="org.osmf.events.AudioEvent")]
 	
@@ -41,6 +46,11 @@ package org.osmf.traits
  	 * Dispatched when the trait's <code>pan</code> property has changed.
  	 * 
  	 * @eventType org.osmf.events.AudioEvent.PAN_CHANGE 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="panChange",type="org.osmf.events.AudioEvent")]
 	
@@ -50,6 +60,11 @@ package org.osmf.traits
 	 * subclass or as is by a media element that listens for and handles
 	 * its change events.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class AudibleTrait extends MediaTraitBase implements IAudible
 	{
@@ -58,6 +73,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get volume():Number
 		{
@@ -66,6 +86,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set volume(value:Number):void
 		{
@@ -98,6 +123,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get muted():Boolean
 		{
@@ -106,6 +136,11 @@ package org.osmf.traits
 		
 		/**
 		 * Indicates whether the AudibleTrait is muted or sounding.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function set muted(value:Boolean):void
 		{
@@ -124,6 +159,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get pan():Number
 		{
@@ -132,6 +172,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function set pan(value:Number):void
 		{
@@ -175,6 +220,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. Subclasses that override this method
 		 * can return <code>false</code> to abort the change.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessVolumeChange(newVolume:Number):Boolean
 		{
@@ -186,6 +236,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 * @param newVolume New <code>volume</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function processVolumeChange(newVolume:Number):void
 		{
@@ -196,6 +251,11 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the volumeChange event.</p> 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessVolumeChange():void
 		{
@@ -208,6 +268,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. Subclasses that override this method
 		 * can return <code>false</code> to abort the change.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessMutedChange(newMuted:Boolean):Boolean
 		{
@@ -218,6 +283,11 @@ package org.osmf.traits
 		 * Called immediately before the <code>muted</code> value is toggled. 
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 * @param newMuted New <code>muted</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processMutedChange(newMuted:Boolean):void
 		{
@@ -228,6 +298,11 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the mutedChange event.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessMutedChange():void
 		{
@@ -240,6 +315,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. Subclasses that override this method
 		 * can return <code>false</code> in order to abort the change.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessPanChange(newPan:Number):Boolean
 		{
@@ -250,6 +330,11 @@ package org.osmf.traits
 		 * Called immediately before the <code>pan</code> value is changed.
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 * @param newPan New <code>pan</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processPanChange(newPan:Number):void
 		{	
@@ -260,6 +345,11 @@ package org.osmf.traits
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method 
 		 * to dispatch the panChange event.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessPanChange():void
 		{

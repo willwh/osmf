@@ -48,6 +48,11 @@ package org.osmf.metadata
 		 * identifier parameter description) changing. The callback function is expected
 		 * to take one argument, which will be set to the new value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function MetadataWatcher(metadata:Metadata, nameSpace:URL, identifier:IIdentifier, callback:Function)
 		{
@@ -64,6 +69,11 @@ package org.osmf.metadata
 		
 		/**
 		 * Starts watching the target facet (value)
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function watch():void
 		{
@@ -96,6 +106,11 @@ package org.osmf.metadata
 		
 		/**
 		 * Stops watching the target facet (value)
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function unwatch():void
 		{

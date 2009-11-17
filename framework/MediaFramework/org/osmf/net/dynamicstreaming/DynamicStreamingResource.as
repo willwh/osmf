@@ -36,6 +36,11 @@ package org.osmf.net.dynamicstreaming
 	 * This class provides an object representation of a dynamic streaming
 	 * profile without any knowledge or assumption of any file format, 
 	 * such as SMIL, Media RSS, etc.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class DynamicStreamingResource implements IMediaResource
 	{
@@ -44,6 +49,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * @param host A URL representing the host of the dynamic streaming resource.
 		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function DynamicStreamingResource(host:URL, streamType:String=null)
 		{
@@ -54,6 +64,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * A URL representing the host of the dynamic streaming resource.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get host():URL
 		{
@@ -96,6 +111,11 @@ package org.osmf.net.dynamicstreaming
 		 * The preferred starting index.
 		 * 
 		 * @throws RangeError If the index is out of range.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get initialIndex():int
 		{
@@ -114,6 +134,11 @@ package org.osmf.net.dynamicstreaming
     			
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
 		{
@@ -153,6 +178,11 @@ package org.osmf.net.dynamicstreaming
     	 * <li>0, if a equals b</li>
     	 * <li>a positive number, if a should appear after b in the sorted sequence</li>
     	 * </ol>
+    	 *  
+    	 *  @langversion 3.0
+    	 *  @playerversion Flash 10
+    	 *  @playerversion AIR 1.0
+    	 *  @productversion OSMF 1.0
     	 */
 		private function compareStreamItems(a:DynamicStreamingItem, b:DynamicStreamingItem):Number
 		{

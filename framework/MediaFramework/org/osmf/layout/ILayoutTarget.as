@@ -38,18 +38,33 @@ package org.osmf.layout
 	 * Dispatched when a layout target's intrinsical width and/or height changed.
 	 * 
 	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * ILayoutTarget defines the interface to the objects that an ILayoutRenderer
 	 * implementing instance will be capable of laying out. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface ILayoutTarget extends IEventDispatcher
 	{
 		/**
 		 * A reference to the metadata that is to be used by the ILayoutRenderer
 		 * on determining its size and position.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get metadata():Metadata;
 	 
@@ -58,6 +73,11 @@ package org.osmf.layout
 		 * ILayoutRenderer may use this reference to effect its calculated
 		 * values onto the target, as well as correctly parenting the target on
 		 * its context's display object container.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get view():DisplayObject;
 		
@@ -66,6 +86,11 @@ package org.osmf.layout
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
 	 	 * would be 1024 pixels. An ILayoutRenderer may use this value to
 	 	 * for example keep ratio on scaling the element.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.0
+	 	 *  @productversion OSMF 1.0
 	 	 */	 	
 	 	function get intrinsicWidth():Number;
 	 	
@@ -74,6 +99,11 @@ package org.osmf.layout
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
 	 	 * would be 768 pixels. An ILayoutRenderer may use this value to
 	 	 * for example keep ratio on scaling the element.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.0
+	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get intrinsicHeight():Number;
 	 	

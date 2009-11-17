@@ -76,6 +76,11 @@ package org.osmf.net
 		 * and NetStreamCodes class.
 		 * @param handler Handler to add.
 		 * @see NetStreamCodes
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function addHandler(name:String,handler:Function):void
 		{			
@@ -101,6 +106,11 @@ package org.osmf.net
 		 * @return Returns <code>true</code> if the specified handler was found and
 		 * successfully removed. 
 		 * @see NetStreamCodes
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function removeHandler(name:String,handler:Function):Boolean
 		{

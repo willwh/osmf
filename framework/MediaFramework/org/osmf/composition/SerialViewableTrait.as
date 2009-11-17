@@ -40,11 +40,21 @@ package org.osmf.composition
 	 * The viewable characteristics of a serial composition are identical to the viewable
 	 * characteristics of the active child of that serial composition.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	internal class SerialViewableTrait extends CompositeViewableTrait implements IReusable
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function SerialViewableTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
@@ -76,6 +86,11 @@ package org.osmf.composition
 		
 		/**
 		 * Invoked on the serial's active child changing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		private function onListenedChildChange(event:TraitAggregatorEvent):void
 		{

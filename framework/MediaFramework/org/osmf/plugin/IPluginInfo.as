@@ -101,6 +101,11 @@ package org.osmf.plugin
 		/**
 		 * Returns the number of MediaInfo objects that the plugin
 		 * exposes to the loading application.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get numMediaInfos():int;
 
@@ -123,6 +128,11 @@ package org.osmf.plugin
 		 * @param index Zero-based index position of the requested MediaInfo.
 		 * @return A MediaInfo object representing media to be loaded.
 		 * @see RangeError
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function getMediaInfoAt(index:int):MediaInfo;
 		
@@ -133,6 +143,11 @@ package org.osmf.plugin
 		 * of the framework, in which case the loading application does not load the plugin.
 		 * @param version Version string of the Open Source Media Framework version.
 		 * @return Returns <code>true</code> if the version is supported.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function isFrameworkVersionSupported(version:String):Boolean;
 	}

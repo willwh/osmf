@@ -46,26 +46,51 @@ package org.osmf.layout
 	 * 
 	 * Please note that the default layout renderer gives precendence to absolute
 	 * layout values. Relative values come next, and anchor values last.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class RelativeLayoutFacet extends EventDispatcher implements IFacet
 	{
 		/**
 		 * Identifier for the facet's x property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const X:StringIdentifier = new StringIdentifier("x");
 		
 		/**
 		 * Identifier for the facet's y property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const Y:StringIdentifier = new StringIdentifier("y");
 		
 		/**
 		 * Identifier for the facet's width property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const WIDTH:StringIdentifier = new StringIdentifier("width");
 		
 		/**
 		 * Identifier for the facet's height property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const HEIGHT:StringIdentifier = new StringIdentifier("height");
 		
@@ -74,6 +99,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get namespaceURL():URL
 		{
@@ -82,6 +112,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function getValue(identifier:IIdentifier):*
 		{
@@ -115,6 +150,11 @@ package org.osmf.layout
 		 * This facet does not merge.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function merge(childFacet:IFacet):IFacet
 		{
@@ -129,6 +169,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired horizontal offset of a target expressed as
 		 * a percentage of its context's width.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get x():Number
 		{
@@ -152,6 +197,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired vertical offset of a target expressed as
 		 * a percentage of its context's height.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get y():Number
 		{
@@ -175,6 +225,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired width of a target expressed as
 		 * a percentage of its context's width.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get width():Number
 		{
@@ -198,6 +253,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the desired height of a target expressed as
 		 * a percentage of its context's height.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get height():Number
 		{

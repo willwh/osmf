@@ -51,6 +51,11 @@ package org.osmf.composition
 	 * Dispatched when the width and/or height of the trait's view has changed.
 	 * 
 	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
 	
@@ -67,6 +72,11 @@ package org.osmf.composition
 	 * The viewable and/or spatial characteristics of a composite changing, influence
 	 * the containers characteristics - hence the trait needs to watch these traits on
 	 * its children.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	internal class CompositeViewableTrait extends CompositeMediaTraitBase implements IViewable, ISpatial
 	{
@@ -106,6 +116,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get width():Number
 		{
@@ -114,6 +129,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get height():Number
 		{

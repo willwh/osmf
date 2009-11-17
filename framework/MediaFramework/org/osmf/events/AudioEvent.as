@@ -34,6 +34,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType VOLUME_CHANGE 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const VOLUME_CHANGE:String = "volumeChange";
 		
@@ -43,6 +48,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType MUTED_CHANGE
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const MUTED_CHANGE:String = "mutedChange";
 
@@ -52,6 +62,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType PAN_CHANGE 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const PAN_CHANGE:String = "panChange";
 
@@ -65,6 +80,11 @@ package org.osmf.events
  		 * @param time The new bufferTime for the trait. 
 		 * @param oldVolume Previous volume.
 		 * @param newVolume New volume.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function AudioEvent(type:String, bubbles:Boolean, cancelable:Boolean, muted:Boolean=false, volume:Number=NaN, pan:Number=NaN)
 		{
@@ -77,6 +97,11 @@ package org.osmf.events
 		
 		/**
 		 * New <code>muted</code> value resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get muted():Boolean
 		{
@@ -85,6 +110,11 @@ package org.osmf.events
 
 		/**
 		 * New <code>volume</code> value resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get volume():Number
 		{
@@ -93,6 +123,11 @@ package org.osmf.events
 		
 		/**
 		 * New <code>pan</code> value resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get pan():Number
 		{

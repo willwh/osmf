@@ -38,6 +38,11 @@ package org.osmf.plugin
 		
 		/**
 		 * Returns the <code>IPluginInfo</code> reference
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get pluginInfo():IPluginInfo
 		{
@@ -46,6 +51,11 @@ package org.osmf.plugin
 	
 		/**
 		 * Returns the <code>Loader</code> used to load the plugin
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get loader():Loader
 		{

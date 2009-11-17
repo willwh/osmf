@@ -43,6 +43,11 @@ package org.osmf.composition
 	 * Dispatched when the number of indicies or associated bitrates have changed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
 	
@@ -51,11 +56,21 @@ package org.osmf.composition
 	 * trait that is an aggregation of the different bitrates of the chid traits.
 	 * If a child doesn't have the same bitrate as an another, the closest match will be chosen
 	 * when switching between bitrates.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	internal class ParallelSwitchableTrait extends CompositeMediaTraitBase implements ISwitchable
 	{
 		/**
 		 * Construcs a CompositeSwitchableTrait
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function ParallelSwitchableTrait(traitAggregator:TraitAggregator)
 		{
@@ -64,6 +79,11 @@ package org.osmf.composition
 			
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 	
 		public function get autoSwitch():Boolean
 		{
@@ -72,6 +92,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set autoSwitch(value:Boolean):void
 		{
@@ -90,6 +115,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get currentIndex():int
 		{
@@ -98,6 +128,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
@@ -110,6 +145,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get maxIndex():int
 		{
@@ -118,6 +158,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set maxIndex(value:int):void
 		{		
@@ -130,6 +175,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get switchUnderway():Boolean
 		{				
@@ -148,6 +198,11 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function switchTo(index:int):void
 		{
@@ -191,6 +246,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processAggregatedChild(child:IMediaTrait):void
 		{			
@@ -218,6 +278,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
 		{	
@@ -231,6 +296,11 @@ package org.osmf.composition
 		 * updates the max index based on the children's max indices.
 		 * 
 		 * @returns if there were changes to the bitrate table.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function rebuildBitRateTable():Boolean
 		{
@@ -257,6 +327,11 @@ package org.osmf.composition
 		 * soted order.
 		 * 
 		 * @returns if the indices changed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function mergeChildRates(child:ISwitchable):Boolean
 		{	
@@ -293,6 +368,11 @@ package org.osmf.composition
 		
 		/**
 		 * Rebuilds the bitrate table and switches to the appropriate bit rate.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function recomputeIndices(event:SwitchEvent = null):void
 		{			
@@ -322,6 +402,11 @@ package org.osmf.composition
 		/**
 		 * Handle the child switchable changing.  If collapse multiple events
 		 * into a single event when switching muple children simultaneously.   
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function childSwitchingChange(event:SwitchEvent):void
 		{			

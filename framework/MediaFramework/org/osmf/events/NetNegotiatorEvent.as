@@ -39,6 +39,11 @@ package org.osmf.events
 		 * the class has succeeded in negotiating a connected NetConnection.
 		 * 
 		 * @eventType CONNECTED
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const CONNECTED:String = "connected";
 		
@@ -50,6 +55,11 @@ package org.osmf.events
 		 * NetConnectionFactory and dispatched as a mewdiaErrorEvent against the appropriate ILoadable.
 		 * 
 		 * @eventType CONNECTION_FAILED
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const CONNECTION_FAILED:String = "connectionfailed";
 
@@ -78,6 +88,11 @@ package org.osmf.events
 		
 		/**
 		 * NetConnection to which this event refers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get netConnection():NetConnection
 		{
@@ -86,6 +101,11 @@ package org.osmf.events
 		
 		/**
 		 * A MediaError associated with this event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get mediaError():MediaError
 		{

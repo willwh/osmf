@@ -36,6 +36,11 @@ package org.osmf.utils
 		/**
 		 * The constructor takes a URI/URL string and begins parsing it. The URI/URL can also 
 		 * be set via the <code>url</code> property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function URL(url:String) 
 		{
@@ -56,6 +61,11 @@ package org.osmf.utils
 		
 		/**
 		 * The raw URI/URL string used by this class.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get rawUrl():String
 		{
@@ -67,6 +77,11 @@ package org.osmf.utils
 		 * <p>
 		 * The protocol string is converted to lower case and the trailing <code>"://"</code> 
 		 * string, if it exists, is stripped off.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get protocol():String
 		{
@@ -89,6 +104,11 @@ package org.osmf.utils
 		 * <p>
 		 * This property contains a string formatted as "username:password".
 		 * </p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get userInfo():String
 		{
@@ -109,6 +129,11 @@ package org.osmf.utils
 		 * <p> 
 		 * For example, in this URL: <code>"http://hostname.com:80/foo/bar/index.html?a=1&#38;b=2"</code>
 		 * host would be <code>"hostname.com"</code></p>									
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get host():String
 		{
@@ -125,6 +150,11 @@ package org.osmf.utils
 		 * <p> 
 		 * For example, in this URL: <code>"http://hostname.com:80/foo/bar/index.html?a=1&#38;b=2"</code>
 		 * port would be <code>"80"</code></p>									
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get port():String
 		{
@@ -144,6 +174,11 @@ package org.osmf.utils
 		 * <p> 
 		 * For example, in this URL: <code>"http://host.com:80/foo/bar/index.html?a=1&#38;b=2"</code>
 		 * path would be <code>"foo/bar/index.html"</code></p>									
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get path():String
 		{
@@ -166,6 +201,11 @@ package org.osmf.utils
 		 * query would be <code>"param1=abcdef&#38;param2=ghijkl"</code></p>
 		 * 									
 		 * @see #getParamValue()
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get query():String
 		{
@@ -185,6 +225,11 @@ package org.osmf.utils
 		 * <p>
 		 * For example, in this URL:<code>"http://host.com/foo/bar/index.html?p1=123&#38;p2=456#xyz"</code>,
 		 * the fragment is <code>"xyz"</code></p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get fragment():String
 		{
@@ -201,6 +246,11 @@ package org.osmf.utils
 		
 		/**
 		 * Returns the entire URL string.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function toString():String
 		{
@@ -213,6 +263,11 @@ package org.osmf.utils
 		 * <p>
 		 * For example, if the URL constructor were handed this value:<code>"http://host.com/foo/bar/index.html?param1=123&#38;param2=456"</code>,
 		 * calling <code>getParamValue("param1")</code> would return <code>"123"</code></p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function getParamValue(param:String):String
 		{
@@ -231,6 +286,11 @@ package org.osmf.utils
 				
 		/**
 		 * Parses the url into properties.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function parseUrl():void
 		{

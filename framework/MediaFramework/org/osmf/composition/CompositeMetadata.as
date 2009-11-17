@@ -42,6 +42,11 @@ package org.osmf.composition
 		/**
 		 * Merges the metadata into this composite collection.  Any changes to the 
 		 * child metadata will be reflected in this metadata, until it is removed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function addChildMetadata(value:Metadata):void
 		{
@@ -57,6 +62,11 @@ package org.osmf.composition
 		
 		/**
 		 * Unmerges the child metadata from this composite collection.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function removeChildMetadata(value:Metadata):void
 		{
@@ -72,6 +82,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		override public function getFacet(nameSpace:URL):IFacet
 		{
@@ -80,6 +95,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function get namespaceURLs():Vector.<String>
 		{
@@ -94,6 +114,11 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 * Adds the facet to this composite element, but not any of it's children.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 	
 		override public function addFacet(value:IFacet):void
 		{	
@@ -123,6 +148,11 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 * Remove's the facet to this composite element, but not any of it's children.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		override public function removeFacet(value:IFacet):IFacet
 		{	

@@ -43,6 +43,11 @@ package org.osmf.tracking
 	 * Dispatched when the Beacon's HTTP request has failed.
 	 * 
 	 * @eventType org.osmf.events.BeaconEvent.PING_FAILED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="pingFailed",type="org.osmf.events.BeaconEvent")]
 

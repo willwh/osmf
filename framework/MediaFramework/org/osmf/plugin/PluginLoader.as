@@ -43,6 +43,11 @@ package org.osmf.plugin
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function PluginLoader(mediaFactory:MediaFactory)
 		{
@@ -74,6 +79,11 @@ package org.osmf.plugin
 		 * On success sets the LoadState of the ILOadable to LOADING, 
 		 * on failure to LOAD_ERROR.
 		 * @param pluginInfo IPluginInfo instance to use for this load operation.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function loadFromPluginInfo(loadable:ILoadable, pluginInfo:IPluginInfo, loader:Loader = null):void
 		{

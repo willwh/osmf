@@ -35,6 +35,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType PAUSED_CHANGE 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const PAUSED_CHANGE:String = "pausedChange";
 		
@@ -44,6 +49,11 @@ package org.osmf.events
 		 * @param paused New paused value.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function PausedChangeEvent(paused:Boolean, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
@@ -54,6 +64,11 @@ package org.osmf.events
 		
 		/**
 		 * New value of <code>paused</code> resulting from this change.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get paused():Boolean
 		{

@@ -54,6 +54,11 @@ package org.osmf.net
 		 *  For a progressive connection the URL should be a fully qualified path to a resource.  
 		 *  For streaming rtmp:// connections, the stream name is parsed from the URL.
 		 * 	@see NetLoader
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function NetStreamPlayableTrait(owner:MediaElement, netStream:NetStream, resource:IMediaResource)
 		{

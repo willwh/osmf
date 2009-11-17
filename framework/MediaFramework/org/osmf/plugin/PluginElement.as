@@ -43,6 +43,11 @@ package org.osmf.plugin
 		 * For dynamic plugins it is a IURLResource.
 		 * @see PluginClassResource
 		 * @see org.osmf.media.IURLResource
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function PluginElement(loader:PluginLoader, resource:IMediaResource=null)
 		{

@@ -46,26 +46,51 @@ package org.osmf.layout
 	 * 
 	 * Please note that the default layout renderer gives precendence to absolute
 	 * layout values. Relative values come next, and anchor values last.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class AnchorLayoutFacet extends EventDispatcher implements IFacet
 	{
 		/**
 		 * Identifier for the facet's left property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const LEFT:StringIdentifier = new StringIdentifier("left");
 		
 		/**
 		 * Identifier for the facet's top property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP:StringIdentifier = new StringIdentifier("top");
 		
 		/**
 		 * Identifier for the facet's right property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
 		
 		/**
 		 * Identifier for the facet's bottom property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM:StringIdentifier = new StringIdentifier("bottom");
 		
@@ -74,6 +99,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get namespaceURL():URL
 		{
@@ -82,6 +112,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function getValue(identifier:IIdentifier):*
 		{
@@ -115,6 +150,11 @@ package org.osmf.layout
 		 * This facet does not merge.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function merge(childFacet:IFacet):IFacet
 		{
@@ -128,6 +168,11 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines the desired horizontal offset of the target in pixels. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get left():Number
 		{
@@ -150,6 +195,11 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines the desired vertical offset of the target in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get top():Number
 		{
@@ -174,6 +224,11 @@ package org.osmf.layout
 		 * Defines how many pixels should be present between the right-hand 
 		 * side border of the target's bounding box, and the right-hand side
 		 * border of its context.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get right():Number
 		{
@@ -198,6 +253,11 @@ package org.osmf.layout
 		 * Defines how many pixels should be present between the bottom
 		 * side border of the target's bounding box, and the bottom side
 		 * border of its context.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bottom():Number
 		{

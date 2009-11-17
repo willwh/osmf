@@ -44,6 +44,11 @@ package org.osmf.utils
 		 * such as <code>rtmp://host/app/foo/bar/stream</code>. In this case there is no instance name and the stream would 
 		 * be 'foo/bar/stream'.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function FMSURL(url:String, useInstance:Boolean=false)
 		{
@@ -60,6 +65,11 @@ package org.osmf.utils
 		
 		/**
 		 * Whether a named instance is being used within the URI
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get useInstance():Boolean
 		{
@@ -68,6 +78,11 @@ package org.osmf.utils
 				
 		/**
 		 * The FMS application name.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get appName():String
 		{
@@ -76,6 +91,11 @@ package org.osmf.utils
 		
 		/** 
 		 * The FMS instance name.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get instanceName():String
 		{
@@ -84,6 +104,11 @@ package org.osmf.utils
 		
 		/**
 		 * The FMS stream name.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get streamName():String
 		{
@@ -93,6 +118,11 @@ package org.osmf.utils
 		/**
 		 * The type of streaming media.  Corresponds to one of the public constants defined in this class, such as MP4_STREAM, or the blank stream for 
 		 * flv media streams.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get streamType():String
 		{
@@ -103,6 +133,11 @@ package org.osmf.utils
 		 * The vector of edges.
 		 * 
 		 * @see FMSHost
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get edges():Vector.<FMSHost>
 		{
@@ -113,6 +148,11 @@ package org.osmf.utils
 		 * The vector of origins.
 		 * 
 		 * @see FMSHost
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get origins():Vector.<FMSHost>
 		{
@@ -125,6 +165,11 @@ package org.osmf.utils
 		 * <p> 
 		 * For example, in this URL: <code>"http://host.com:80/foo/bar/index.html?a=1&#38;b=2"</code>
 		 * path would be <code>"foo/bar/index.html"</code></p>		
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function parsePath():void
 		{
@@ -201,6 +246,11 @@ package org.osmf.utils
 		 * Parse the query string for origin/edge info.
 		 * A sample FMS URI with origin/edge info in the query string might look like this:
 		 * "rtmp://edge1/?rtmp://edge2/?rtmp://origin/app/inst/mp4:foldera/folder/b/myfile.mp4"
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function parseQuery():void
 		{

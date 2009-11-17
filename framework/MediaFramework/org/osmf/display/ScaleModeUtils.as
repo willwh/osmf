@@ -32,6 +32,11 @@ package org.osmf.display
 		 * Calculates the scaled size based on the scaling algorithm.  
 		 * The available width and height are the width and height of the container.
 		 * The intrinsic width and height are the width and height of the content.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static function getScaledSize
 			( scaleMode:String

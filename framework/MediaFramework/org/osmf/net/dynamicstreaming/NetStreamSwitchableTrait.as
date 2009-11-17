@@ -45,6 +45,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * @param ns The DynamicNetStream object the class will work with.
 		 * @param res The DynamicStreamingResource the class will use.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function NetStreamSwitchableTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
 		{
@@ -59,6 +64,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
@@ -68,6 +78,11 @@ package org.osmf.net.dynamicstreaming
 				
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override protected function processSwitchTo(value:int):void
 		{
@@ -76,6 +91,11 @@ package org.osmf.net.dynamicstreaming
 			
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override protected function processAutoSwitchChange(value:Boolean):void
 		{
@@ -84,6 +104,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processMaxIndexChange(value:int):void
 		{
@@ -95,6 +120,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function postProcessSwitchTo(detail:SwitchingDetail=null):void
 		{

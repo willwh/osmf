@@ -35,6 +35,11 @@ package org.osmf.traits
 	 * equal to its duration.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 	
@@ -44,6 +49,11 @@ package org.osmf.traits
 	 * subclass or as is by a media element that listens for and handles
 	 * its change events.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class TemporalTrait extends MediaTraitBase implements ITemporal
 	{
@@ -57,6 +67,11 @@ package org.osmf.traits
 		 * @see canProcessCurrentTimeChange
 		 * @see processCurrentTimeChange
 		 * @see postProcessCurrentTimeChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set currentTime(value:Number):void
 		{
@@ -96,6 +111,11 @@ package org.osmf.traits
 		 * @see canProcessDurationChange
 		 * @see processDurationChange
 		 * @see postProcessDurationChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set duration(value:Number):void
 		{
@@ -124,6 +144,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get duration():Number
 		{
@@ -132,6 +157,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get currentTime():Number
 		{
@@ -147,6 +177,11 @@ package org.osmf.traits
 		 * @param newDuration Proposed new <code>duration</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessDurationChange(newDuration:Number):Boolean
 		{
@@ -158,6 +193,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 *  
 		 * @param newDuration New <code>duration</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processDurationChange(newDuration:Number):void
 		{
@@ -171,6 +211,11 @@ package org.osmf.traits
 		 *  
 		 * @param oldDuration Previous <code>duration</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessDurationChange(oldDuration:Number):void
 		{
@@ -183,6 +228,11 @@ package org.osmf.traits
 		 * @param newCurrentTime Proposed new <code>currentTime</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessCurrentTimeChange(newCurrentTime:Number):Boolean
 		{
@@ -193,6 +243,11 @@ package org.osmf.traits
 		 * Called immediately before the <code>currentTime</code> property is changed.
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 * @param newCurrentTime New <code>currentTime</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processCurrentTimeChange(newCurrentTime:Number):void
 		{
@@ -202,6 +257,11 @@ package org.osmf.traits
 		 * Called just after the <code>currentTime</code> property has changed.
 		 * @param oldCurrentTime Previous <code>currentTime</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessCurrentTimeChange(oldCurrentTime:Number):void
 		{
@@ -213,6 +273,11 @@ package org.osmf.traits
 		 * <p>Not called when both <code>currentTime</code> and <code>duration</code> equal zero.</p>
 		 * 
 		 * <p>Dispatches the durationReached event.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processDurationReached():void
 		{

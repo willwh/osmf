@@ -36,6 +36,11 @@ package org.osmf.display
 		/**
 		 * <code>STRETCH</code> sets the width and the height of the content to the
 		 * container width and height, possibly changing the content aspect ratio.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static const STRETCH:String		= "stretch";
 		
@@ -43,6 +48,11 @@ package org.osmf.display
 		 * <code>LETTERBOX</code> sets the width and height of the content as close to the container width and height
 		 * as possible while maintaining aspect ratio.  The content is stretched to a maximum of the container bounds, 
 		 * with spacing added inside the container to maintain the aspect ratio if necessary.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public static const LETTERBOX:String 	= "letterbox";
 		
@@ -50,6 +60,11 @@ package org.osmf.display
 		 * <code>ZOOM</code> is similar to <code>LETTERBOX</code>, except that <code>ZOOM</code> stretches the
 		 * content past the bounds of the container, to remove the spacing required to maintain aspect ratio.
 		 * This has the effect of using the entire bounds of the container, but also possibly cropping some content.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const ZOOM:String			= "zoom";
 		

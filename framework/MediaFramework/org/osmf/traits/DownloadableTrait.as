@@ -37,6 +37,11 @@ package org.osmf.traits
 	 * The DownloadableTrait class provides a base IDownloadable implementation. 
 	 * It can be used as the base class for a more specific data downloadable trait	
 	 * subclass or as is by a video or audio element.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class DownloadableTrait extends EventDispatcher implements IDownloadable
 	{
@@ -45,6 +50,11 @@ package org.osmf.traits
 		 * 
 		 * @param bytesLoaded the number of bytes that have been downloaded
 		 * @param bytesTotal the total number of bytes to be downloaded
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function DownloadableTrait(bytesLoaded:Number=NaN, bytesTotal:Number=NaN)
 		{
@@ -63,6 +73,11 @@ package org.osmf.traits
 		 * @see canProcessBytesLoadedChange
 		 * @see processBytesLoadedChange
 		 * @see postProcessBytesLloadedChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set bytesLoaded(value:Number):void
 		{
@@ -89,6 +104,11 @@ package org.osmf.traits
 		 * @see canProcessBytesTotalChange
 		 * @see processBytesTotalChange
 		 * @see postProcessBytesTotalChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set bytesTotal(value:Number):void
 		{
@@ -112,6 +132,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bytesLoaded():Number
 		{
@@ -120,6 +145,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bytesTotal():Number
 		{
@@ -136,6 +166,11 @@ package org.osmf.traits
 		 * @param newValue Proposed new <code>bytesLoaded</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBytesLoadedChange(newValue:Number):Boolean
 		{
@@ -148,6 +183,11 @@ package org.osmf.traits
 		 * @param newValue Proposed new <code>bytesTotal</code> value.
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBytesTotalChange(newValue:Number):Boolean
 		{
@@ -159,6 +199,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 *  
 		 * @param newValue New <code>bytesLoaded</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBytesLoadedChange(newValue:Number):void
 		{
@@ -169,6 +214,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 *  
 		 * @param newValue New <code>bytesTotal</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBytesTotalChange(newValue:Number):void
 		{
@@ -179,6 +229,11 @@ package org.osmf.traits
 		 *  
 		 * @param oldValue Previous <code>bytesLoaded</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBytesLoadedChange(oldValue:Number):void
 		{
@@ -192,6 +247,11 @@ package org.osmf.traits
 		 *  
 		 * @param newValue New <code>bytesTotal</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBytesTotalChange(newValue:Number):void
 		{

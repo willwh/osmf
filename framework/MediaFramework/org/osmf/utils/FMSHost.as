@@ -35,6 +35,11 @@ package org.osmf.utils
 		 * 
 		 * @param host The host name to be stored in this class.
 		 * @param port The port number as string to be stored in this class.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function FMSHost(host:String, port:String="1935")
 		{
@@ -44,6 +49,11 @@ package org.osmf.utils
 		
 		/**
 		 * The host name.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get host():String
 		{
@@ -57,6 +67,11 @@ package org.osmf.utils
 		
 		/**
 		 * The port number as a string.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get port():String
 		{

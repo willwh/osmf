@@ -25,6 +25,11 @@ package org.osmf.metadata
 
 	/**
 	 * Event class used by the TemporalFacet class.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class TemporalFacetEvent extends Event
 	{
@@ -33,6 +38,11 @@ package org.osmf.metadata
 		
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function TemporalFacetEvent(type:String, value:TemporalIdentifier, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
@@ -42,6 +52,11 @@ package org.osmf.metadata
 		
 		/**
 		 * Returns the TemporalIdentifier associated with the event instance.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get value():TemporalIdentifier
 		{

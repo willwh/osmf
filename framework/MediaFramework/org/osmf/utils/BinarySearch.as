@@ -44,6 +44,11 @@ package org.osmf.utils
 		 * the index (1 based) where the item should be inserted as a negative number.
 		 * @throws ArgumentError If compare or list is <code>null</code>.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function search(list:Object, compare:Function, item: *, firstIndex:int = 0, lastIndex:int = int.MIN_VALUE):int
 		{

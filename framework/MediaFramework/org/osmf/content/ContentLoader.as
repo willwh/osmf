@@ -64,6 +64,11 @@ package org.osmf.content
 		 * with different versions.  Therefore, it is mandatory to have the
 		 * loaded SWF and loading SWF live in the same security domain if the
 		 * types need to be merged.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function ContentLoader(useCurrentSecurityDomain:Boolean=false)
 		{
@@ -83,6 +88,11 @@ package org.osmf.content
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()
 		 * @param ILoadable ILoadable to be loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadable:ILoadable):void
 		{
@@ -213,6 +223,11 @@ package org.osmf.content
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#unload()
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadable:ILoadable):void
 		{

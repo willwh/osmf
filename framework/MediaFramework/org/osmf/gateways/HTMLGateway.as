@@ -44,6 +44,11 @@ package org.osmf.gateways
 
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addElement(child:MediaElement):MediaElement
 		{
@@ -88,6 +93,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function removeElement(child:MediaElement):MediaElement
 		{
@@ -116,6 +126,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function containsElement(child:MediaElement):Boolean
 		{
@@ -138,6 +153,11 @@ package org.osmf.gateways
 		 * 
 		 * @param gatewayIdentifier The identifier that will be used for this gateway
 		 * in JavaScript. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function initialize(gatewayIdentifier:String):void
 		{

@@ -53,6 +53,11 @@ package org.osmf.gateways
 		 * the child RegionSprite instances that get added to this region. If
 		 * no renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function RegionGateway
 							( metadata:Metadata=null
@@ -83,6 +88,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function addElement(element:MediaElement):MediaElement
 		{
@@ -108,6 +118,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function removeElement(element:MediaElement):MediaElement
 		{
@@ -135,6 +150,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function containsElement(element:MediaElement):Boolean
 		{
@@ -148,6 +168,11 @@ package org.osmf.gateways
 		 * Defines if the children of the region that display outside of its bounds 
 		 * will be clipped or not.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function set clipChildren(value:Boolean):void
 		{
@@ -174,6 +199,11 @@ package org.osmf.gateways
 		 * that holds sub-regions.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get firstChildIndex():uint
 		{
@@ -184,6 +214,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function set calculatedWidth(value:Number):void
 		{
@@ -199,6 +234,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function set projectedWidth(value:Number):void
 		{
@@ -208,6 +248,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function set projectedHeight(value:Number):void
 		{
@@ -217,6 +262,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function set width(value:Number):void
 		{
@@ -235,6 +285,11 @@ package org.osmf.gateways
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function set height(value:Number):void
 		{
@@ -262,6 +317,11 @@ package org.osmf.gateways
 		 *  
 		 * @param region The child region to add.
 		 * @throws IllegalOperationError if region is null, or already a sub-region.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function addChildRegion(region:RegionGateway):void
 		{
@@ -285,6 +345,11 @@ package org.osmf.gateways
 		 *  
 		 * @param region The region to remove.
 		 * @throws IllegalOperationErrror if region is null, or not a sub-region.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function removeChildRegion(region:RegionGateway):void
 		{
@@ -309,6 +374,11 @@ package org.osmf.gateways
 		 * @param region Region to verify.
 		 * @return True if target is a sub-region of this RegionSprite.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function containsRegion(region:RegionGateway):Boolean
 		{
@@ -323,6 +393,11 @@ package org.osmf.gateways
 		/**
 		 * Defines the region's background color. By default, this value
 		 * is set to NaN, which results in no background being drawn.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function set backgroundColor(value:Number):void
 		{
@@ -343,6 +418,11 @@ package org.osmf.gateways
 		 * 
 		 * Note that a region will not have a background drawn unless its
 		 * backgroundColor property is set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set backgroundAlpha(value:Number):void
 		{
@@ -379,6 +459,11 @@ package org.osmf.gateways
 		/**
 		 * Dictionary of MediaElementLayoutTarget instances, index by the
 		 * media elements that they wrap: 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		private var contentLayoutTargets:Dictionary = new Dictionary();
 		private var content:LayoutContextSprite;

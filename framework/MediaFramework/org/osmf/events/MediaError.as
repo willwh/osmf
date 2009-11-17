@@ -66,6 +66,11 @@ package org.osmf.events
 		 * The description for the error.
 		 * 
 		 * <p>Framework error descriptions are defined in <code>MediaErrorCodes</code>.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get description():String
 		{

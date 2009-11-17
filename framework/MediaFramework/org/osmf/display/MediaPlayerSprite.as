@@ -63,6 +63,11 @@ package org.osmf.display
 		/**
 		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's element set either 
 		 * on the MediaPlayer or on this object (see element) after this property is set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set mediaPlayer(value:MediaPlayer):void
 		{
@@ -120,6 +125,11 @@ package org.osmf.display
 		/**
 		 * The player class that exposes most of the MediaElement's interface, such as the viewable and dimensional 
 		 * properties.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private var _player:MediaPlayer ;
 	}

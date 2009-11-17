@@ -69,6 +69,11 @@ package org.osmf.events
 		/**
 		 * The unique identifier for this key in the facet's
 		 * collection.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get identifier():IIdentifier
 		{
@@ -79,6 +84,11 @@ package org.osmf.events
 		 * For add events, the new value that has been added to the facet.
 		 * For remove event, the value removed from the facet.
 		 * For change events, the new value replacing the old value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get value():*
 		{

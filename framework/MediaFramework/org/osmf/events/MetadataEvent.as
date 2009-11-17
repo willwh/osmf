@@ -36,6 +36,11 @@ package org.osmf.events
 		 * type property of the event object for a facetAdd event.
 		 * 
 		 * @eventType facetAdd 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const FACET_ADD:String = "facetAdd";
 		
@@ -44,6 +49,11 @@ package org.osmf.events
 		 * type property of the event object for a facetRemove event.
 		 * 
 		 * @eventType facetRemove 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const FACET_REMOVE:String = "facetRemove";
 					
@@ -54,6 +64,11 @@ package org.osmf.events
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param facet The metadata facet associated with this event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 				
 		public function MetadataEvent
 			( type:String
@@ -69,6 +84,11 @@ package org.osmf.events
 		
 		/**
 		 * The metadata facet associated with this event. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get facet():IFacet
 		{

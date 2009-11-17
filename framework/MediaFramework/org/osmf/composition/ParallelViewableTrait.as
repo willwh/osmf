@@ -43,6 +43,11 @@ package org.osmf.composition
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function ParallelViewableTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
@@ -72,6 +77,11 @@ package org.osmf.composition
 		
 		/**
 		 * Invoked when a new viewable trait becomes available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processAggregatedChild(trait:IMediaTrait):void
 		{
@@ -100,6 +110,11 @@ package org.osmf.composition
 		
 		/**
 		 * Invoked when a viewable trait is lost.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processUnaggregatedChild(trait:IMediaTrait):void
 		{

@@ -33,61 +33,121 @@ package org.osmf.traits
 	{
 		/**
 		 * Identifies a trait that implements the IAudible interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static const AUDIBLE:MediaTraitType = new MediaTraitType(IAudible);
 		
 		/**
 		 * Identifies a trait that implements the IBufferable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BUFFERABLE:MediaTraitType = new MediaTraitType(IBufferable);
 		
 		/**
 		 * Identifies a trait that implements the ILoadable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const LOADABLE:MediaTraitType = new MediaTraitType(ILoadable);
 		
 		/**
 		 * Identifies a trait that implements the IPausable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const PAUSABLE:MediaTraitType = new MediaTraitType(IPausable);
 		
 		/**
 		 * Identifies a trait that implements the IPlayable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const PLAYABLE:MediaTraitType = new MediaTraitType(IPlayable);
 		
 		/**
 		 * Identifies a trait that implements the ISeekable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const SEEKABLE:MediaTraitType = new MediaTraitType(ISeekable);
 		
 		/**
 		 * Identifies a trait that implements the ISpatial interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const SPATIAL:MediaTraitType = new MediaTraitType(ISpatial);
 		
 		/**
 		 * Identifies a trait that implements the ITemporal interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TEMPORAL:MediaTraitType = new MediaTraitType(ITemporal);
 		
 		/**
 		 * Identifies a trait that implements the IViewable interface. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const VIEWABLE:MediaTraitType = new MediaTraitType(IViewable); 
 		
 		/**
 		 * Identifies a trait that implements the ISwitchable interface.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
 		
 		/**
 		 * Identifies a trait that implements the ISwitchable interface.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CONTENT_PROTECTABLE:MediaTraitType = new MediaTraitType(IContentProtectable);
 		
 		/**
 		 * Identifies a trait that implements the IDownloadable interface.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const DOWNLOADABLE:MediaTraitType = new MediaTraitType(IDownloadable);
 
@@ -117,6 +177,11 @@ package org.osmf.traits
 		 * 
 		 * @param traitInterface Specifies the trait interface class that this
 		 * identifier implements.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		 
 		public function MediaTraitType(traitInterface:Class)
 		{
@@ -125,6 +190,11 @@ package org.osmf.traits
 
 		/**
 		 * The Class that implements the trait.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get traitInterface():Class
 		{
@@ -133,6 +203,11 @@ package org.osmf.traits
 
 		/**
 		 * Returns the string representation of the MediaTraitType.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function toString():String
 		{

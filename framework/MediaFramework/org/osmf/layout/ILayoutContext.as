@@ -38,17 +38,32 @@ package org.osmf.layout
 		 * Defines the DisplayObjectContainer instance that an ILayoutRenderer class
 		 * may use to to stage and unstage their targets, as well as to manage the
 		 * z-ordering of their targets.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get container():DisplayObjectContainer;
 		
 		/**
 		 * Defines the index that the ILayoutRenderer class should use on staging
 		 * its first target onto the container. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get firstChildIndex():uint;
 	
 		/**
 		 * Defines the layout renderer that manages this target's children (if any).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get layoutRenderer():ILayoutRenderer;
 		function set layoutRenderer(value:ILayoutRenderer):void;
@@ -56,29 +71,54 @@ package org.osmf.layout
 		/**
 		 * Method invoked by an ILayoutRenderer class to inform the context that it
 		 * should recalculate its intrinsicWidth and intrinsicHeight fields:
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function updateIntrinsicDimensions():void
 		
 		/**
 		 * Defines the context's last calculated width.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get calculatedWidth():Number;
 	 	function set calculatedWidth(value:Number):void;
 	 	
 	 	/**
 	 	 * Defines the context's last calculated height.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.0
+	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get calculatedHeight():Number;
 	 	function set calculatedHeight(value:Number):void;
 	 	
 	 	/**
 	 	 * Defines the context's last projected width.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.0
+	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get projectedWidth():Number;
 	 	function set projectedWidth(value:Number):void;
 	 	
 	 	/**
 	 	 * Defines the context's last projected height.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.0
+	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get projectedHeight():Number;
 	 	function set projectedHeight(value:Number):void;

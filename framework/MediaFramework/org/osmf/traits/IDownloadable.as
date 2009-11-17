@@ -33,16 +33,31 @@ package org.osmf.traits
 	/**
 	 * IDownloadable defines the interface that can be used to access the progress
 	 * of data load operations.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface IDownloadable extends IMediaTrait
 	{
 		/**
 		 * The number of bytes of data that have been loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get bytesLoaded():Number;
 		
 		/**
 		 * The total size in bytes of the data being loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get bytesTotal():Number;
 	}

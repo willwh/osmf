@@ -43,6 +43,11 @@ package org.osmf.composition
 	 * If the owning element does not contain a viewable trait that implements ISpatial,
 	 * then the serial composite spatial trait will forward the active child's spatial
 	 * trait.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	internal class SerialSpatialTrait extends CompositeSpatialTrait
 	{
@@ -115,6 +120,11 @@ package org.osmf.composition
 		
 		/**
 		 * Invoked on the serial's current child changing. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		private function onCurrentChildChange(event:TraitAggregatorEvent):void
 		{

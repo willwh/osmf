@@ -47,6 +47,11 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param oldValue Old IGateway reference.
 		 * @param newValue New IGateway reference.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function GatewayChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaGateway=null, newValue:IMediaGateway=null)
 		{
@@ -58,6 +63,11 @@ package org.osmf.events
 		
 		/**
 		 * Defines the old gateway reference.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get oldValue():IMediaGateway
 		{
@@ -66,6 +76,11 @@ package org.osmf.events
 		
 		/**
 		 * Defines the new gateway reference.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get newValue():IMediaGateway
 		{

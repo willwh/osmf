@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -78,6 +78,11 @@ package org.osmf.audio
 		 * @see org.osmf.net.NetLoader
 		 * 
 		 * @throws ArgumentError If loader is null, or neither a NetLoader nor a SoundLoader.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function AudioElement(loader:ILoader, resource:IURLResource=null)
 		{

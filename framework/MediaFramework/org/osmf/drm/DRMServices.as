@@ -50,43 +50,63 @@ package org.osmf.drm
 	
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
-	 * 
+	 * TODO: Remove private tag when DRM content / 10.1 content is public.
+	 *
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
 	 * to playback the media.
 	 *
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
  	 */ 
 	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
 	
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
-	 * 
+	 * TODO: Remove private tag when DRM content / 10.1 content is public.
+	 *
 	 * Dispatched when an authentication attempt succeeds.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
-	 * 
+	 * TODO: Remove private tag when DRM content / 10.1 content is public.
+	 *
 	 * Dispatches when an authentication attempt fails.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
 
 	/**
 	 * @private
-	 * TODO: Remove @private label when we turn on 10.1 Flash support in the build & docs.
-	 * 
+	 * TODO: Remove private tag when DRM content / 10.1 content is public.
+	 *
 	 * The DRMServices class is a utility class to adapt the Flash Player's DRM to the
 	 * OSMF-style IContentProtectable trait API.  DRMServices handles triggering updates to
 	 * the DRM subsystem, as well as triggering the appropriate events when authentication
 	 * is needed, complete, or failed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class DRMServices extends EventDispatcher
 	{
@@ -94,6 +114,11 @@ package org.osmf.drm
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function DRMServices()
 		{
@@ -104,6 +129,11 @@ package org.osmf.drm
 		 * The metadata property is specific to the DRM for the Flash Player.  Once set, authentication
 		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  Metadata
 		 * forms the basis for content data.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set drmMetadata(value:Object):void
 		{		
@@ -163,6 +193,11 @@ package org.osmf.drm
 		 * and "usernameAndPassword".
 		 * 
 		 * Returns null if metadata hasn't been set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get authenticationMethod():String
 		{			
@@ -177,6 +212,11 @@ package org.osmf.drm
 		 * @param password The password.  Should be null for anonymous authentication.
 		 * 
 		 * @throws IllegalOperationError If the metadata hasn't been set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticate(username:String, password:String):void
 		{			
@@ -197,6 +237,11 @@ package org.osmf.drm
 		 * @param token The token to use for authentication.
 		 * 
 		 * @throws IllegalOperationError If the metadata hasn't been set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{
@@ -212,6 +257,11 @@ package org.osmf.drm
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 
 		 * hasn't taken place.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get startDate():Date
 		{
@@ -228,6 +278,11 @@ package org.osmf.drm
 		/**
 		 * Returns the end date for the playback window.  Returns null if authentication 
 		 * hasn't taken place.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get endDate():Date
 		{
@@ -249,6 +304,11 @@ package org.osmf.drm
 		 * and endDate, but is included as a property because there may be times where
 		 * the duration is known up front, but the start or end dates are not (e.g. a
 		 * one week rental).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get period():Number
 		{
@@ -267,6 +327,11 @@ package org.osmf.drm
 		
 		/**
 		 * Downloads the voucher for the metadata specified.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function retrieveVoucher():void
 		{				

@@ -47,26 +47,51 @@ package org.osmf.layout
 	 * On applying padding, the default layout renderer consumes part of the width
 	 * and height of its target. As such, padding does not affect the size of a
 	 * target.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class PaddingLayoutFacet extends EventDispatcher implements IFacet
 	{
 		/**
 		 * Identifier for the facet's left property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const LEFT:StringIdentifier = new StringIdentifier("left");
 		
 		/**
 		 * Identifier for the facet's top property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP:StringIdentifier = new StringIdentifier("top");
 		
 		/**
 		 * Identifier for the facet's right property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
 		
 		/**
 		 * Identifier for the facet's bottom property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM:StringIdentifier = new StringIdentifier("bottom");
 		
@@ -75,6 +100,11 @@ package org.osmf.layout
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get namespaceURL():URL
 		{
@@ -113,6 +143,11 @@ package org.osmf.layout
 		 * This facet does not merge.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function merge(childFacet:IFacet):IFacet
 		{
@@ -127,6 +162,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's left-hand side.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */					
 		public function get left():Number
 		{
@@ -150,6 +190,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's top side.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get top():Number
 		{
@@ -173,6 +218,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's right-hand side.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get right():Number
 		{
@@ -197,6 +247,11 @@ package org.osmf.layout
 		 * 
 		 * Defines the thickness of the blank space that is to be placed
 		 * at the target's bottom side.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get bottom():Number
 		{

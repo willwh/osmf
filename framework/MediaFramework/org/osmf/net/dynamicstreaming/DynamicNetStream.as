@@ -51,6 +51,11 @@ package org.osmf.net.dynamicstreaming
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
 	 * @eventType org.osmf.events.SwitchEvent
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
 	
@@ -62,6 +67,11 @@ package org.osmf.net.dynamicstreaming
 	 * <p>
 	 * Note this class can also play a standard non-dynamic stream.
 	 * </p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class DynamicNetStream extends NetStream
 	{
@@ -69,6 +79,11 @@ package org.osmf.net.dynamicstreaming
 		 * Constructor.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function DynamicNetStream(connection:NetConnection)
 		{
@@ -93,6 +108,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * The stream resources to use for this netstream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set resource(value:DynamicStreamingResource):void
 		{
@@ -112,6 +132,11 @@ package org.osmf.net.dynamicstreaming
 		 * 
 		 * @see DynamicStreamingResource
 		 * @throws IllegalOperationError If args is <code>null</code>. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		override public function play(...args):void
 		{
@@ -176,6 +201,11 @@ package org.osmf.net.dynamicstreaming
 		 * Override this method to provide your own switching rules. Switching
 		 * rule classes must extend SwitchingRuleBase and take an 
 		 * INetStreamMetrics object in the class constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function addSwitchingRules():void
 		{
@@ -188,6 +218,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Override this method to set your own initial stream index.
 		 * The default is zero.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function chooseDefaultInitialIndex():uint 
 		{
@@ -206,6 +241,11 @@ package org.osmf.net.dynamicstreaming
 		 * this period elapses. This provides a better user experience by preventing
 		 * a situation where the switch up is attempted but then fails almost 
 		 * immediately.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function get failedItemWaitPeriod():int
 		{
@@ -220,6 +260,11 @@ package org.osmf.net.dynamicstreaming
 		 * When a stream item reaches the maximum allowed failures a timer 
 		 * is started and when this interval expires, all failed counts are 
 		 * reset to zero.The default is 5 minutes.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function get clearFailedCountsInterval():int
 		{
@@ -234,6 +279,11 @@ package org.osmf.net.dynamicstreaming
 		 * expired. The default is 3.
 		 * 
 		 * @see #clearFailedCountsInterval
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function get allowedFailuresPerItem():int
 		{
@@ -246,6 +296,11 @@ package org.osmf.net.dynamicstreaming
 		 * server to client, or both. Default behavior for this
 		 * method is to set the bandwidth in both directions to 
 		 * 140% of the highest bitrate level. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function setThrottleLimits(index:int):void 
 		{
@@ -257,6 +312,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * If DEBUG is true, traces out debug messages.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function debug(...args):void
 		{
@@ -275,6 +335,11 @@ package org.osmf.net.dynamicstreaming
 		 * rules. Developers can override the default set of switching
 		 * rules or add to them by overridding the <code>addSwitchingRules</code>
 		 * method.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function addSwitchingRule(rule:ISwitchingRule):void
 		{
@@ -288,6 +353,11 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Begins playing the stream for the first time by initiating
 		 * the first switch.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function makeFirstSwitch():void
 		{
@@ -304,6 +374,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Switches to the specified index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function switchToIndex(targetIndex:uint, firstPlay:Boolean=false):void 
 		{
@@ -349,6 +424,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Calls the base class implementation to play the stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function playStream(nso:NetStreamPlayOptions):void
 		{
@@ -360,6 +440,11 @@ package org.osmf.net.dynamicstreaming
 		 * recommending no change.  If a switching rule returns a number greater than
 		 * -1 it is recommending a switch to that index. This method uses the lesser of 
 		 * all the recommended indices that are greater than -1.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		private function checkRules(e:TimerEvent):void 
 		{
@@ -622,6 +707,11 @@ package org.osmf.net.dynamicstreaming
 		 * provides metrics to the switching rules. This class
 		 * creates a metrics class by default but it can be overridden by a class
 		 * extending this class. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function get metricsProvider():INetStreamMetrics
 		{

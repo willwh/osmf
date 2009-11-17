@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -58,6 +58,11 @@ package org.osmf.audio
 	{
 		/**
 		 * Constructs a new SoundLoader.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SoundLoader()
 		{
@@ -69,6 +74,11 @@ package org.osmf.audio
 		 * Returns <code>true</code> for IURLResources with MP3 extensions or media/mime
 		 * types that match MP3.
 		 * @param resource Resource proposed to be loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
@@ -97,6 +107,11 @@ package org.osmf.audio
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @param ILoadable ILoadable to be loaded.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadable:ILoadable):void
 		{
@@ -195,6 +210,11 @@ package org.osmf.audio
 		 *
 		 * @param ILoadable ILoadable to be unloaded.
 		 * @see org.osmf.traits.LoadState
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadable:ILoadable):void
 		{

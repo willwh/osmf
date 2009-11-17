@@ -28,6 +28,11 @@ package org.osmf.events
 	 * TODO: Remove private tag when DRM content / 10.1 content is public.
 	 * 
 	 * A ContentProtectionEvent is dispatched when an IContentProtectable trait's properties change.
+	 *
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0	 
 	 */ 
 	public class ContentProtectionEvent extends Event
 	{

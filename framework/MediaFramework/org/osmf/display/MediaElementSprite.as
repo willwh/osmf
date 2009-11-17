@@ -43,11 +43,21 @@ package org.osmf.display
 	 * The MediaElementSprite class is designed to display media with IViewable and ISpatial properties.  It is based off
 	 * of flash.display.Sprite to be both compatible with Flash and Flex workflows.   The IViewable and ISpatial events
 	 * are adapted through this UI wrapper class. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaElementSprite extends ScalableSprite
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function MediaElementSprite()
 		{
@@ -56,6 +66,11 @@ package org.osmf.display
 							
 		/**
 		 * Source MediaElement controlled by this MediaElementSprite.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function set element(value:MediaElement):void
 		{

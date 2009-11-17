@@ -41,6 +41,11 @@ package org.osmf.events
 		 * the class has succeeded in establishing a connected NetConnection.
 		 * 
 		 * @eventType CREATED 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const CREATED:String = "created";
 		
@@ -50,6 +55,11 @@ package org.osmf.events
 		 * the class has failed at establishing a connected NetConnection.
 		 * 
 		 * @eventType CREATION_FAILED
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public static const CREATION_FAILED:String = "creationfailed";
 
@@ -81,6 +91,11 @@ package org.osmf.events
 		
 		/**
 		 * NetConnection to which this event refers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get netConnection():NetConnection
 		{
@@ -89,6 +104,11 @@ package org.osmf.events
 
 		/**
 		 * ILoadable to which this event refers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get loadable():ILoadable
 		{
@@ -97,6 +117,11 @@ package org.osmf.events
 		
 		/**
 		 * Specifies if this NetConnection may be shared between ILoadables.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get shareable():Boolean
 		{

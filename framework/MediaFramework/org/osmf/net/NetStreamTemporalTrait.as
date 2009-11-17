@@ -41,6 +41,11 @@ package org.osmf.net
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public function NetStreamTemporalTrait(netStream:NetStream, resource:IMediaResource)
 		{
@@ -55,6 +60,11 @@ package org.osmf.net
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get currentTime():Number
 		{

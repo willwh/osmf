@@ -40,6 +40,11 @@ package org.osmf.composition
 	 * that is equal to the duration of the ITemporal.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 
@@ -78,6 +83,11 @@ package org.osmf.composition
 
 		/**
 		 * @inheritDoc 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get duration():Number
 		{
@@ -86,6 +96,11 @@ package org.osmf.composition
 		
 		/**
 		 * @inheritDoc 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get currentTime():Number
 		{

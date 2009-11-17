@@ -1,4 +1,4 @@
-/*****************************************************
+*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -34,6 +34,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType SEEK_BEGIN  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const SEEK_BEGIN:String = "seekBegin";
 
@@ -43,6 +48,11 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType SEEK_END  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const SEEK_END:String = "seekEnd";
 		
@@ -52,6 +62,11 @@ package org.osmf.events
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param time The seek's target time, in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function SeekEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, time:Number=NaN)
 		{
@@ -62,6 +77,11 @@ package org.osmf.events
 		
 		/**
 		 * The seek's target time in seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get time():Number
 		{

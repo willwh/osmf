@@ -44,6 +44,11 @@ package org.osmf.net.dynamicstreaming
 	 * DynamicStreamingResource it will call the base class
 	 * implementation for both <code>load</code> and <code>unload</code>
 	 * methods.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class DynamicStreamingNetLoader extends NetLoader
 	{
@@ -51,6 +56,11 @@ package org.osmf.net.dynamicstreaming
 		 * Constructor.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function DynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, factory:NetConnectionFactory=null)
 		{
@@ -62,6 +72,11 @@ package org.osmf.net.dynamicstreaming
 		 * If the <code>loadable</code> argument is not a DynamicStreamingResource, the
 		 * base class implementation will be called so that this class can handle regular,
 		 * non-dynamic streaming resources.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function load(loadable:ILoadable):void
 		{
@@ -104,6 +119,11 @@ package org.osmf.net.dynamicstreaming
 		 * If the <code>loadable</code> argument is not a DynamicStreamingResource, the
 		 * base class implementation will be called so that this class can handle regular,
 		 * non-dynamic streaming resources.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function unload(loadable:ILoadable):void
 		{
@@ -143,6 +163,11 @@ package org.osmf.net.dynamicstreaming
 		
 		/**
 		 * Overridden to allow the creation of a DynamicNetStream object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override protected function createNetStream(connection:NetConnection,loadable:ILoadable):NetStream
 		{			

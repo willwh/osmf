@@ -38,6 +38,11 @@ package org.osmf.audio
 		 * Constructor
 		 * 
 		 * @param sound The Sound object from which the values for bytesLoaded and bytesTotal will be obtained.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function SoundDownloadableTrait(sound:Sound)
 		{
@@ -50,6 +55,11 @@ package org.osmf.audio
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesLoaded():Number
 		{
@@ -58,6 +68,11 @@ package org.osmf.audio
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesTotal():Number
 		{

@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -46,6 +46,11 @@ package org.osmf.audio
 	 * Dispatched when download of the Sound completes.
 	 * 
 	 * @eventType downloadComplete
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
     [Event(name="downloadComplete", type="flash.events.Event")]
     
@@ -53,6 +58,11 @@ package org.osmf.audio
 	 * Dispatched periodically as the download of the Sound progresses.
 	 * 
 	 * @eventType flash.events.ProgressEvent.PROGRESS
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
     [Event(name="progress", type="flash.events.ProgressEvent")]
             

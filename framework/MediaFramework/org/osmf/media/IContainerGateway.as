@@ -34,6 +34,11 @@ package org.osmf.media
 		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
 		 * or already a child of the gateway.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function addElement(element:MediaElement):MediaElement;
 		
@@ -45,6 +50,11 @@ package org.osmf.media
 		 * @returns The removed MediaElement instance.
 		 * @throws IllegalOperationError if the specified element isn't
 		 * a child element, or is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function removeElement(element:MediaElement):MediaElement;
 		
@@ -53,6 +63,11 @@ package org.osmf.media
 		 *  
 		 * @param element Element to verify.
 		 * @return True if the element if a child of the gateway.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function containsElement(element:MediaElement):Boolean;
 	}

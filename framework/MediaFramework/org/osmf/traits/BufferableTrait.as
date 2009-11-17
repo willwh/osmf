@@ -34,6 +34,11 @@ package org.osmf.traits
 	 * Dispatched when the trait's <code>bufferTime</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFER_TIME_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
 
@@ -42,6 +47,11 @@ package org.osmf.traits
 	 * It can be used as the base class for a more specific bufferable trait
 	 * subclass or as is by a media element that listens for and handles
 	 * its change events.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class BufferableTrait extends MediaTraitBase implements IBufferable
 	{
@@ -57,6 +67,11 @@ package org.osmf.traits
 		 * @see canProcessBufferLengthChange
 		 * @see processBufferLengthChange
 		 * @see postProcessBufferLengthChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set bufferLength(value:Number):void
 		{
@@ -82,6 +97,11 @@ package org.osmf.traits
 		 * @see #canProcessBufferingChange()
 		 * @see #processBufferingChange()
 		 * @see #postProcessBufferingChange()
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function set buffering(value:Boolean):void
 		{
@@ -165,6 +185,11 @@ package org.osmf.traits
 		 * Subclasses that override this method can return <code>false</code> to
 		 * abort processing.
 		 *
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferingChange(newBuffering:Boolean):Boolean
 		{
@@ -176,6 +201,11 @@ package org.osmf.traits
 		 * <p>Subclasses implement this method to communicate the change to the media.</p>
 		 *
 		 * @param newBuffering New <code>buffering</code> value. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferingChange(newBuffering:Boolean):void
 		{
@@ -188,6 +218,11 @@ package org.osmf.traits
 		 * to dispatch the bufferingChange event.</p> 
 		 * @param oldBuffering Previous <code>buffering</code> value.
 		 *
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBufferingChange(oldBuffering:Boolean):void
 		{
@@ -200,6 +235,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. 
 		 * Subclasses that override this method can return <code>false</code> to
 		 * abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferLengthChange(newSize:Number):Boolean
 		{
@@ -210,6 +250,11 @@ package org.osmf.traits
 		 * Called immediately before the <code>bufferLength</code> value is changed. 
 		 * Subclasses implement this method to communicate the change to the media.
 		 * @param newSize New <code>bufferLength</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferLengthChange(newSize:Number):void
 		{
@@ -219,6 +264,11 @@ package org.osmf.traits
 		 * Called just after the <code>bufferLength</code> value has changed.
 		 * @param oldSize Previous  <code>bufferLength</code> value.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBufferLengthChange(oldSize:Number):void
 		{	
@@ -231,6 +281,11 @@ package org.osmf.traits
 		 * @return Returns <code>true</code> by default. 
 		 * Subclasses that override this method can return <code>false</code> to
 		 * abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferTimeChange(newTime:Number):Boolean
 		{
@@ -242,6 +297,11 @@ package org.osmf.traits
 		 * Subclasses implement this method to communicate the change to the media. 
 		 *
 		 * @param newTime New <code>bufferTime</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferTimeChange(newTime:Number):void
 		{
@@ -255,6 +315,16 @@ package org.osmf.traits
 		 *  
 		 * @param oldTime Previous <code>bufferTime</code> value.
 		 * 
+
+		 *  
+
+		 *  @langversion 3.0
+
+		 *  @playerversion Flash 10
+
+		 *  @playerversion AIR 1.0
+
+		 *  @productversion OSMF 1.0
 
 		 */		
 		protected function postProcessBufferTimeChange(oldTime:Number):void

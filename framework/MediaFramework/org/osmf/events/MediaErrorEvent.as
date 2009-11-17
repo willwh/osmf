@@ -33,6 +33,11 @@ package org.osmf.events
 		 * type property of the event object for a mediaError event.
 		 * 
 		 * @eventType MEDIA_ERROR 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public static const MEDIA_ERROR:String = "mediaError";
 

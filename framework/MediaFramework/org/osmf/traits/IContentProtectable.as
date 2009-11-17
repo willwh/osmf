@@ -35,6 +35,11 @@ package org.osmf.traits
 	 * Dispatched when an authentication attempt succeeds.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
@@ -42,6 +47,11 @@ package org.osmf.traits
 	 * Dispatches when an authentication attempt fails.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
 	
@@ -53,12 +63,22 @@ package org.osmf.traits
 	 * The workflow for media which is IContentProtectable is that the media undergoes
 	 * some type of authentication, after which it is valid (i.e. able to be played)
 	 * for a specific time window. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 	
 	public interface IContentProtectable extends IMediaTrait
 	{
 		/**
 		 * The required method of authentication.  Possible values are "anonymous"
 		 * and "usernameAndPassword".
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function get authenticationMethod():String;
 		
@@ -70,6 +90,11 @@ package org.osmf.traits
 		 * @param password The password.  Should be null for anonymous authentication.
 		 * 
 		 * @throws IllegalOperationError If the media is not initialized yet.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function authenticate(username:String, password:String):void;
 		
@@ -79,18 +104,33 @@ package org.osmf.traits
 		 * already been authenticated, this is a no-op.
 		 * 
 		 * @param token The token to use for authentication.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		function authenticateWithToken(token:Object):void;
 						
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 
 		 * hasn't taken place.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		function get startDate():Date;
 		
 		/**
 		 * Returns the end date for the playback window.  Returns null if authentication 
 		 * hasn't taken place.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		function get endDate():Date;
 		
@@ -102,6 +142,11 @@ package org.osmf.traits
 		 * and endDate, but is included as a property because there may be times where
 		 * the duration is known up front, but the start or end dates are not (e.g. a
 		 * one week rental).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get period():Number;
 	}

@@ -26,6 +26,11 @@ package org.osmf.net.dynamicstreaming
 
 	/**
 	 * ISwitchingRule defines the interface that all switching rules must implement.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public interface ISwitchingRule
 	{
@@ -35,12 +40,22 @@ package org.osmf.net.dynamicstreaming
 		 * to act on this. This index will range in value from -1 to n-1,where n is the number of bitrate items available.
 		 * A value of -1 means that this rule does not suggest a switch away from the current item. A
 		 * value from 0 to n-1 indicates that the caller should switch to that index immediately.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
         function getNewIndex():int;
 		
 		/**
 		 * Returns the SwitchingDetail object which contains the detail for why the rule is suggesting 
 		 * the new index.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		function get detail():SwitchingDetail;		
 	}

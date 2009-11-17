@@ -45,6 +45,11 @@ package org.osmf.plugin
 
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 	    override public function canHandleResource(resource:IMediaResource):Boolean
 	    {
@@ -53,6 +58,11 @@ package org.osmf.plugin
 
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function load(loadable:ILoadable):void
 		{
@@ -115,6 +125,11 @@ package org.osmf.plugin
 
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function unload(loadable:ILoadable):void
 		{

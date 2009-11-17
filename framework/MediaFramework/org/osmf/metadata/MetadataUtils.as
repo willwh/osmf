@@ -148,6 +148,11 @@ package org.osmf.metadata
 		 * @param callback The method to invoke upon the value changing. 
 		 * @return The resulting change watcher.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function watchFacetValue
 								( metadata:Metadata
@@ -187,6 +192,11 @@ package org.osmf.metadata
 		 * @param callback The method to invoke upon the value changing.
 		 * @return The resulting change watcher.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function watchFacet
 								( metadata:Metadata
@@ -217,6 +227,11 @@ package org.osmf.metadata
 		 * @param id The id to set.
 		 * @return The constructed ObjectFacet that holds the id.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public static function setElementId(target:Metadata, id:String):ObjectFacet
 		{

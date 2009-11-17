@@ -74,6 +74,11 @@ package org.osmf.net
 		/**
 		 * Constructor
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function NetNegotiator(target:IEventDispatcher=null):void
 		{
@@ -104,6 +109,11 @@ package org.osmf.net
 		 * 
 		 * @param url the URL to be loaded
 		 * @returns a Vector of NetConnectionAttempt objects. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function buildPortProtocolSequence(url:URL):Vector.<NetConnectionAttempt>  {
 			var portProtocols:Vector.<NetConnectionAttempt> = new Vector.<NetConnectionAttempt>;
@@ -144,6 +154,11 @@ package org.osmf.net
 		 * @param url the URL to be loaded
 		 * @param protocol the protocol as a String
 		 * @param port the port as a String
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		protected function buildConnectionAddress(url:URL, protocol:String, port:String):String
 		{

@@ -35,6 +35,11 @@ package org.osmf.traits
 	 * equal to its <code>duration</code>.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
 	
@@ -53,18 +58,33 @@ package org.osmf.traits
 	 * 
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface ITemporal extends IMediaTrait
 	{
 		/**
 		 * The duration of the associated media element in
 		 * seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get duration():Number;
 		
 		/**
 		 * The current time of the associated media element's cursor 
 		 * in seconds.  Must never exceed the <code>duration</code>.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		function get currentTime():Number;
 	}

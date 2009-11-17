@@ -85,6 +85,11 @@ package org.osmf.media
      * the multiple resources used in the media composition.</p>
      * @see IMediaTrait
      * @see IMediaResource
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaElement extends EventDispatcher
 	{
@@ -163,6 +168,11 @@ package org.osmf.media
 		
 		/**
 		 * The gateway that this element uses.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public function get gateway():IMediaGateway
 		{
@@ -201,6 +211,11 @@ package org.osmf.media
 		
 		/**
 		 * @returns The metadata container associated with this MediaElement
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
 		{
@@ -216,6 +231,11 @@ package org.osmf.media
 		
 		/**
 		 * Creates metadata		
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		 protected function createMetadata():Metadata
 		 {

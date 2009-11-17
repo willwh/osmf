@@ -36,6 +36,11 @@ package org.osmf.traits
 	 * Dispatched when an authentication attempt succeeds.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
 	 
@@ -43,6 +48,11 @@ package org.osmf.traits
 	 * Dispatches when an authentication attempt fails.
 	 * 
 	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
 	
@@ -51,11 +61,21 @@ package org.osmf.traits
 	 * implementation.  It can be used as the base class for a more specific
 	 * ContentProtectableTrait subclass or as is by a media element that listens
 	 * for and handles its change events.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class ContentProtectableTrait extends MediaTraitBase implements IContentProtectable 
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function ContentProtectableTrait()
 		{
@@ -65,6 +85,11 @@ package org.osmf.traits
 		/**
 		 * Must be called by the implementing media on completing authentication.  Dispatches
 		 * the change event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final public function processAuthenticateCompletion(success:Boolean, token:Object, error:MediaError):void
 		{
@@ -81,6 +106,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public function get authenticationMethod():String
 		{
@@ -89,6 +119,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticate(username:String, password:String):void
 		{
@@ -100,6 +135,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{							
@@ -111,6 +151,11 @@ package org.osmf.traits
 
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get startDate():Date
 		{
@@ -119,6 +164,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get endDate():Date
 		{
@@ -127,6 +177,11 @@ package org.osmf.traits
 		
 		/**
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get period():Number
 		{
@@ -138,6 +193,11 @@ package org.osmf.traits
 		 *  
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessAuthenticate():Boolean
 		{							
@@ -149,6 +209,11 @@ package org.osmf.traits
 		 * 
 		 * @return Returns <code>true</code> by default. Subclasses that override 
 		 * this method can return <code>false</code> to abort processing.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessAuthenticateWithToken():Boolean
 		{							
@@ -163,6 +228,11 @@ package org.osmf.traits
 		 *
 		 * @param username The username for the authentication request.
 		 * @param password The password for the authentication request.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processAuthenticate(username:String, password:String):void
 		{							
@@ -176,6 +246,11 @@ package org.osmf.traits
 		 *
 		 * @param username The username for the authentication request.
 		 * @param password The password for the authentication request.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function processAuthenticateWithToken(token:Object):void
 		{							
