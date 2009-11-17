@@ -45,6 +45,11 @@ package org.osmf.net
 		 * that uses this trait.
 		 * 
 		 * @see NetLoader
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public function NetStreamSeekableTrait(netStream:NetStream)
 		{

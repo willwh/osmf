@@ -142,6 +142,11 @@ package org.osmf.video
        	/**
        	 * The NetClient used by this VideoElement's NetStream.  Available after the 
        	 * element has been loaded.
+       	 *  
+       	 *  @langversion 3.0
+       	 *  @playerversion Flash 10
+       	 *  @playerversion AIR 1.0
+       	 *  @productversion OSMF 1.0
        	 */ 
        	public function get client():NetClient
        	{

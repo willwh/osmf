@@ -34,6 +34,11 @@ package org.osmf.traits
 	 * Dispatched when this trait ends a seek operation.
 	 * 
 	 * @eventType org.osmf.events.SeekEvent.SEEK_END
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="seekEnd",type="org.osmf.events.SeekEvent")]
 	
@@ -52,11 +57,21 @@ package org.osmf.traits
 	 * 
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface ISeekable extends IMediaTrait
 	{
 		/**
 		 * Indicates whether the media is currently seeking.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */				
 		function get seeking():Boolean;
 
@@ -70,6 +85,11 @@ package org.osmf.traits
 		 * @param time The time to seek to in seconds. Coerced to zero if
 		 * the value is non numerical or negative.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */				
 		function seek(time:Number):void;
 
@@ -84,6 +104,11 @@ package org.osmf.traits
 		 * @param time Time to seek to in seconds.
 		 * @return Returns <code>true</code> if the media can seek to the specified time.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */				
 		function canSeekTo(time:Number):Boolean;
 	}
