@@ -1,4 +1,4 @@
-﻿/*****************************************************
+/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -73,8 +73,7 @@ package org.osmf.video
 	import flash.events.DRMStatusEvent;
 	import flash.net.drm.DRMContentData;	
 	import flash.system.SystemUpdaterType;
-	import flash.system.SystemUpdater;
-	
+	import flash.system.SystemUpdater;	
 	import org.osmf.net.NetStreamContentProtectableTrait;
 	}
 	
@@ -142,7 +141,7 @@ package org.osmf.video
        	/**
        	 * The NetClient used by this VideoElement's NetStream.  Available after the 
        	 * element has been loaded.
-       	 *  
+	 	 *  
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
        	 *  @playerversion AIR 1.0
@@ -161,11 +160,8 @@ package org.osmf.video
 			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
 			stream = context.stream;			
-			
-			// Set the video's dimensions so that it doesn't appear at the wrong size.
-			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
+						
 			video = new Video();
-			video.width = video.height = 0;
 			video.attachNetStream(stream);
 			
 			// Hook up our metadata listeners
@@ -235,16 +231,10 @@ package org.osmf.video
 				{					
 					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
 				}
-				else
-				{					
-					dispatchEvent
-						( new MediaErrorEvent
-							( MediaErrorEvent.MEDIA_ERROR
-							, false
-							, false
-							, new MediaError(event.errorID)
-							)
-						);
+				else //Inline DRM - Errors need to be forwarded
+				{				
+					var trait:NetStreamContentProtectableTrait = NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE));
+					trait.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(event.errorID)));	
 				}				
 			}	
 			
@@ -394,7 +384,6 @@ package org.osmf.video
      	private function onNetStatusEvent(event:NetStatusEvent):void
      	{
      		var error:MediaError = null;
-     		
  			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
