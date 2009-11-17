@@ -131,17 +131,17 @@ package org.osmf.video
 				{
 					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
 					
-					// We should now have a spatial trait with video's default dimensions:
+					// We should now have a spatial trait with the default dimensions:
 					var spatial:ISpatial = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
 					assertTrue(spatial != null);
-					assertTrue(spatial.width == 320);
-					assertTrue(spatial.height == 240);
+					assertTrue(spatial.width == 0);
+					assertTrue(spatial.height == 0);
 					
 					// See if the view matches the reported size:
 					var viewable:IViewable = mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
 					assertNotNull(viewable);
-					assertEquals(320, viewable.view.width);
-					assertEquals(240, viewable.view.height);
+					assertEquals(0, viewable.view.width);
+					assertEquals(0, viewable.view.height);
 					
 					spatial.addEventListener
 							( DimensionEvent.DIMENSION_CHANGE
