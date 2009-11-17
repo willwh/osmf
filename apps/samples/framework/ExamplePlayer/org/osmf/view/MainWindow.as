@@ -67,6 +67,7 @@ package org.osmf.view
 			muteToggle.addEventListener(MouseEvent.CLICK, onToggleMuteClick);
 			
 			seekBar.addEventListener(SliderEvent.CHANGE, onSeek);
+			seekBar.addEventListener(SliderEvent.THUMB_DRAG, onSeek);
 			
 			// Add MediaPlayer event handlers.
 			//

@@ -106,6 +106,46 @@ package org.osmf.traits
 			}
 		}
 
+		public function testSeekConsecutively():void
+		{
+			if (maxSeekValue > 0.1 && processesSeekCompletion)
+			{
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+
+				var beginEventCount:int = 0;
+				var endEventCount:int = 0;
+
+				seekable.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeekConsecutively);
+				seekable.addEventListener(SeekEvent.SEEK_END, onTestSeekConsecutively);
+				assertTrue(seekable.canSeekTo(maxSeekValue));
+				
+				// Consecutive seeks should result in either two BEGIN/END event
+				// pairs, or a two BEGINs and one END.
+				seekable.seek(maxSeekValue-0.1);
+				seekable.seek(maxSeekValue);
+				
+				function onTestSeekConsecutively(event:SeekEvent):void
+				{
+					if (event.type == SeekEvent.SEEK_BEGIN)
+					{
+						beginEventCount++;
+					}
+
+					if (event.type == SeekEvent.SEEK_END)
+					{
+						endEventCount++;
+					}
+					
+					if (beginEventCount == 2 && endEventCount > 0)
+					{
+						assertTrue(event.time == maxSeekValue);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+		}
+		
 		public function testSeekInvalid():void
 		{
 			if (maxSeekValue > 0)

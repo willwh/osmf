@@ -119,14 +119,13 @@ package org.osmf.traits
 		 * If <code>time</code> is non numerical or negative, does not attempt to seek. 
 		 * 
 		 * <p>If the seeking attempt sets the <code>seeking</code> property to <code>true</code>,
-		 * dispatches a seekingChange event unless
-		 * the trait is already seeking.
+		 * dispatches a seekingChange event.
 		 * It is the responsibility of the media element that
 		 * owns this trait to handle this event. </p>
 		 *
 		 * <p>It is important to invoke the <code>processSeekCompletion()</code> method
 		 * when the seek completes, whether successfully or unsuccessfully. 
-		 * Otherwise future seek operations will be blocked.</p>
+		 * Otherwise future seek operations may be blocked.</p>
 		 * @param time Time to seek to in seconds.
 		 * @see #processSeekCompletion()
 		 * @see #canProcessSeekingChange()
@@ -137,20 +136,17 @@ package org.osmf.traits
 		 */
 		final public function seek(time:Number):void
 		{
-			if (_seeking == false)
+			if (canSeekTo(time))
 			{
-				if (canSeekTo(time))
+				seekTargetTime = time;
+				
+				if (canProcessSeekingChange(true))
 				{
-					seekTargetTime = time;
+					processSeekingChange(true, time);
 					
-					if (canProcessSeekingChange(true))
-					{
-						processSeekingChange(true, time);
-						
-						_seeking = true;
-						
-						postProcessSeekingChange(false);
-					}
+					_seeking = true;
+					
+					postProcessSeekingChange(false);
 				}
 			}
 		}
@@ -175,10 +171,6 @@ package org.osmf.traits
 		
 		// Internals
 		//
-		
-		private var _temporal:ITemporal;
-		private var _seeking:Boolean;
-		private var seekTargetTime:Number;
 		
 		/**
 		 * Called before the <code>seeking</code> property is changed. 
@@ -219,5 +211,9 @@ package org.osmf.traits
 					)
 				);
 		}
+
+		private var _temporal:ITemporal;
+		private var _seeking:Boolean;
+		private var seekTargetTime:Number;
 	}
 }

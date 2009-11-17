@@ -64,8 +64,7 @@ package org.osmf.traits
 		 * Instructs the ISeekable to jump to the specified <code>time</code> (in
 		 * seconds).
 		 * 
-		 * If a seek is attempted, dispatches a seekingChange event, unless
-		 * the trait is already in a seeking state.
+		 * If a seek is attempted, dispatches a seekingChange event.
 		 * If <code>time</code> is non numerical or negative, does not attempt to seek. 
 		 *  
 		 * @param time The time to seek to in seconds. Coerced to zero if

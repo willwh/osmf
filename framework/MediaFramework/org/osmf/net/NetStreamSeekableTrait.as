@@ -51,7 +51,10 @@ package org.osmf.net
 			super();
 			
 			this.netStream = netStream;
-			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);		
+			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			
+			seekBugTimer = new Timer(100);
+			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);		
 		}
 
 		/**
@@ -61,7 +64,7 @@ package org.osmf.net
 		 * @param time Time to seek to, in seconds.
 		 */						
 		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
-		{		
+		{
 			if (newSeeking)
 			{
 				previousTime = netStream.time;
@@ -73,8 +76,6 @@ package org.osmf.net
 				
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			var seekBugTimer:Timer;
-			
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
@@ -84,8 +85,6 @@ package org.osmf.net
 					// NetStream's state is consistent, so we use a Timer to
 					// delay the processing until the NetStream.time property
 					// is up-to-date.
-					seekBugTimer = new Timer(100);
-					seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer);
 					seekBugTimer.start();
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
@@ -93,21 +92,21 @@ package org.osmf.net
 					processSeekCompletion(previousTime);					
 					break;
 			}
-			
-			function onSeekBugTimer(event:TimerEvent):void
+		}
+		
+		private function onSeekBugTimer(event:TimerEvent):void
+		{
+			if (netStream.time >= expectedTime)
 			{
-				if (netStream.time >= expectedTime)
-				{
-					seekBugTimer.stop();
-					seekBugTimer.removeEventListener(TimerEvent.TIMER, onSeekBugTimer);
-					
-					processSeekCompletion(expectedTime);
-				}
+				seekBugTimer.stop();
+				
+				processSeekCompletion(expectedTime);
 			}
 		}
-				
+		
+		private var seekBugTimer:Timer;
 		private var netStream:NetStream;
-		private var previousTime:Number;
 		private var expectedTime:Number;
+		private var previousTime:Number;
 	}
 }
