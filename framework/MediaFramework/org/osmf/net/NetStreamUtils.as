@@ -25,7 +25,6 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
@@ -113,6 +112,29 @@ package org.osmf.net
 		}
 		
 		/**
+		 * Returns the stream type of the given resource.
+		 * 
+		 * @returns One of the stream types defined in org.osmf.net.StreamType
+		 */
+		public static function getStreamType(resource:IMediaResource):String
+		{
+			var streamType:String = null;
+			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
+			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+
+			if (streamingURLResource != null)
+			{
+				streamType = streamingURLResource.streamType;
+			}
+			else if (dsResource != null)
+			{
+				streamType = dsResource.streamType;
+			}
+
+			return streamType;
+		}
+		
+		/**
 		 * Returns the value of the "start" and "len" arguments for
 		 * NetStream.play, based on the specified resource.  Checks for
 		 * live vs. recorded, subclips, etc.  The results are returned
@@ -125,18 +147,7 @@ package org.osmf.net
 			var lenArg:int = PLAY_LEN_ARG_ALL;
 			
 			// Check for live vs. recorded.
-			var streamType:String = null;
-			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-			if (streamingURLResource != null)
-			{
-				streamType = streamingURLResource.streamType;
-			}
-			else if (dsResource != null)
-			{
-				streamType = dsResource.streamType;
-			}
-			switch (streamType)
+			switch (getStreamType(resource))
 			{
 				case StreamType.ANY:
 					startArg = PLAY_START_ARG_ANY;

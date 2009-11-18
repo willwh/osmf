@@ -54,6 +54,8 @@ package org.osmf.video
 	import org.osmf.net.NetStreamPlayableTrait;
 	import org.osmf.net.NetStreamSeekableTrait;
 	import org.osmf.net.NetStreamTemporalTrait;
+	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.StreamType;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamSwitchableTrait;
@@ -267,7 +269,11 @@ package org.osmf.video
 			addTrait(MediaTraitType.PAUSABLE,  new NetStreamPausableTrait(this, stream));
 			addTrait(MediaTraitType.VIEWABLE, viewable);
 			addTrait(MediaTraitType.TEMPORAL, temporal);
-	    	addTrait(MediaTraitType.SEEKABLE, seekable);
+			
+			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
+			{
+	    		addTrait(MediaTraitType.SEEKABLE, seekable);
+	  		}
 	    	addTrait(MediaTraitType.SPATIAL, spatial);
 	    	addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));
 	    	addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
