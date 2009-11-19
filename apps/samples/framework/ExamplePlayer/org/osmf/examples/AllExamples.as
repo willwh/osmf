@@ -293,20 +293,6 @@ package org.osmf.examples
 
 			examples.push
 				( new Example
-					( 	"Poster Frame"
-					, 	"Demonstrates..."
-				  	,  	function():MediaElement
-				  	   	{
-							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new PosterFrameElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE))));
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
-							return serialElement; 
-				  	   	} 
-				  	)
-				);
-
-			examples.push
-				( new Example
 					( 	"Serial Composition (Preloaded)"
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling a quicker transition from one to the other."
 				  	,  	function():MediaElement
@@ -398,6 +384,20 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		return new VideoElement(new NetLoader(), new URLResource(new URL(LOCAL_PROGRESSIVE)));
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Poster Frame"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new PosterFrameElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE2))));
+							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							return serialElement; 
 				  	   	} 
 				  	)
 				);
@@ -788,6 +788,7 @@ package org.osmf.examples
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
 		private static const REMOTE_IMAGE:String 				= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
+		private static const REMOTE_IMAGE2:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE1:String 	= "http://mediapm.edgesuite.net/osmf/image/flash_player_50x50.gif";
 		private static const REMOTE_SLIDESHOW_IMAGE2:String 	= "http://mediapm.edgesuite.net/osmf/image/flash_cs3_48x45.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE3:String 	= "http://mediapm.edgesuite.net/osmf/image/flex_48x45.gif";
