@@ -34,6 +34,7 @@ package org.osmf.examples
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.posterframe.PosterFrameElement;
+	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
@@ -397,6 +398,22 @@ package org.osmf.examples
 							var serialElement:SerialElement = new SerialElement();
 							serialElement.addChild(new PosterFrameElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE2))));
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"RTMP Poster Frame"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame prior to playback.  Note that we use a subclass of ImageElement which adds the IPlayable trait to ensure that we can play through the image."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var netLoader:NetLoader = new NetLoader();
+				  	   		
+							var serialElement:SerialElement = new SerialElement();
+				  	   		serialElement.addChild(new RTMPPosterFrameElement(netLoader, new URLResource(new FMSURL(REMOTE_STREAM)), 5));
+							serialElement.addChild(new VideoElement(netLoader, new URLResource(new FMSURL(REMOTE_STREAM))));
 							return serialElement; 
 				  	   	} 
 				  	)
