@@ -156,6 +156,30 @@ package org.osmf.netmocker
 		{
 			return _netStreamExpectedEvents;
 		}
+		
+		/**
+		 * An array of expected cue points. Necessary so that this
+		 * mock stream class can call the in-stream callback
+		 * onCuePoint with the data you expect.
+		 * 
+		 * Each value in the array should be an object
+		 * with the following properties:
+		 * <ul>
+		 * <li>type - should be "event", "navigation"</li>
+		 * <li>time - the time in seconds of the cue point</li>
+		 * <li>name - the name of the cue point (can be any string)</li>
+		 * <li>parameters - optional array of key/value pairs</li>
+		 */
+		public function set netStreamExpectedCuePoints(value:Array):void
+		{
+			_netStreamExpectedCuePoints = value;
+		} 
+		
+		public function get netStreamExpectedCuePoints():Array
+		{
+			return _netStreamExpectedCuePoints;
+		}
+		
 			    
 	    /**
 	     * @inheritDoc
@@ -169,6 +193,7 @@ package org.osmf.netmocker
 			mockNetStream.expectedHeight = _netStreamExpectedHeight;
 			mockNetStream.expectedEvents = _netStreamExpectedEvents;
 			mockNetStream.expectedSubclipDuration = _netStreamExpectedSubclipDuration;
+			mockNetStream.expectedCuePoints = _netStreamExpectedCuePoints;
 			return mockNetStream;
 	    }
 	    
@@ -177,6 +202,7 @@ package org.osmf.netmocker
 	    private var _netStreamExpectedWidth:Number = 0;
 	    private var _netStreamExpectedHeight:Number = 0;
 	    private var _netStreamExpectedEvents:Array = [];
+	    private var _netStreamExpectedCuePoints:Array = [];
 
 		private var negotiator:MockNetNegotiator;   
 	}

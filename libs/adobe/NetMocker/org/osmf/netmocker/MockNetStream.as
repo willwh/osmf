@@ -91,6 +91,29 @@ package org.osmf.netmocker
 		}
 
 		/**
+		 * The expected array of cue points. Necessary so that this
+		 * mock stream class can call the in-stream callback
+		 * onCuePoint with the data you expect.
+		 * 
+		 * Each value in the array should be an object
+		 * with the following properties:
+		 * <ul>
+		 * <li>type - should be "event", "navigation"</li>
+		 * <li>time - the time in seconds of the cue point</li>
+		 * <li>name - the name of the cue point (can be any string)</li>
+		 * <li>parameters - optional array of key/value pairs</li>
+		 */
+		 public function set expectedCuePoints(value:Array):void
+		 {
+		 	this._expectedCuePoints = value;
+		 }
+		 
+		 public function get expectedCuePoints():Array
+		 {
+		 	return this._expectedCuePoints;
+		 }
+		 
+		/**
 		 * The expected height of the stream, in pixels.  Necessary so that
 		 * this mock stream class knows the dimensions to include in the
 		 * onMetaData callback.  The default is zero.
@@ -170,6 +193,7 @@ package org.osmf.netmocker
 					// and that's OK.
 				}
 			}
+						
 			// The flash player sets the bufferTime to a 0.1 minimum for VOD (http://).
 			if (arguments != null && arguments.length > 0 && arguments[0].toString().substr(0,4) == "http")
 			{
@@ -237,6 +261,9 @@ package org.osmf.netmocker
 			// Offset is in seconds.
 			if (offset >= 0 && offset <= normalizedExpectedDuration)
 			{
+				// Reset the fake cue point logic
+				this.lastFiredCuePointTime = -1;
+				
 				//elapsedTime = offset;
 				if (playing)
 				{
@@ -308,6 +335,28 @@ package org.osmf.netmocker
 				{
 					eventInterceptor.dispatchNetStatusEvents(infos);
 				}
+				
+				// Call in-stream onCuePoint if we passed an expected cue point.
+				if (expectedCuePoints.length > 0)
+				{
+					for each (var info:Object in expectedCuePoints)
+					{
+						if ((time >= info.time) && (info.time > this.lastFiredCuePointTime))
+						{
+							trace(">>> calling onCuePoint : time="+time+", info.time="+info.time);
+
+							// This will throw a Reference error if onCuePoint is not
+							// implemented on the client object. No reason to eat that
+							// exception here because this is an error. It means the caller
+							// added expected cue points on a media element with no 
+							// possible way of detecting them.
+							this.client.onCuePoint(info);
+							this.lastFiredCuePointTime = info.time;
+							break;
+						}
+					}
+				}
+				
 			}
 		}
 		
@@ -344,6 +393,9 @@ package org.osmf.netmocker
 		private var _expectedWidth:Number = 0;
 		private var _expectedHeight:Number = 0;
 		private var _expectedEvents:Array = [];
+		
+		private var _expectedCuePoints:Array = [];
+		private var lastFiredCuePointTime:int = -1;
 		
 		private var playheadTimer:Timer;
 		

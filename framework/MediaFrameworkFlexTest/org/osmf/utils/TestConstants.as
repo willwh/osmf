@@ -90,6 +90,9 @@ package org.osmf.utils
 			{stream:"mp4:videos/encoded2/Train_900kbps.mp4", bitrate:"900000"},
 			{stream:"mp4:videos/encoded2/Train_1000kbps_H.mp4", bitrate:"1000000"},
 		]
+		
+		public static const REMOTE_STREAMING_VIDEO_LIVE:String
+			= "rtmp://cp34973.live.edgefcs.net/live/Flash_live_bm_500K@9319";
 
 		// Images
 		//
