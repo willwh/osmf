@@ -143,13 +143,13 @@ package org.osmf.composition
 					var childTemporal:ITemporal = traitAggregator.getChildAt(index).getTrait(MediaTraitType.TEMPORAL) as ITemporal;
 					if (childTemporal == null || isNaN(childTemporal.duration))
 					{
-						// if the child has no ITemporal (such as an image element) or the duration is undefined, ignore it.
+						// If the child has no ITemporal (such as an image element) or the duration is undefined, ignore it.
 						continue;
 					}
 					if (childSeekable == null)
 					{
 						// This is the condition where ITemporal is not null and duration is well defined while 
-						// ISeekable is absernt, cannot seek.
+						// ISeekable is absent, cannot seek.
 						seekToOp.canSeekTo = false;
 						break;
 					}
@@ -171,6 +171,12 @@ package org.osmf.composition
 						break;
 					}
 				}
+			}
+			
+			// If no seek operations were prepared, then we can't actually seek.
+			if (seekToOp.childSeekOperations.length == 0)
+			{
+				seekToOp.canSeekTo = false;
 			}
 			
 			return seekToOp;

@@ -1023,6 +1023,18 @@ package org.osmf.composition
 			assertTrue(parallel.getTrait(MediaTraitType.TEMPORAL) == null);
 			assertTrue(parallel.getTrait(MediaTraitType.SEEKABLE) == null);
 
+			// Adding a seekable with a duration-less temporal should prevent seeking.
+			var mediaElement0:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
+			var seekable0:SeekableTrait = mediaElement0.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
+			var temporal0:TemporalTrait = mediaElement0.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
+			parallel.addChild(mediaElement0);
+			temporal0.duration = NaN;
+			
+			var seekable:ISeekable = parallel.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			assertTrue(seekable.canSeekTo(0) == false);
+			
+			parallel.removeChild(mediaElement0);
+
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE]);
 			var temporal1:TemporalTrait = mediaElement1.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
 			var seekable1:SeekableTrait = mediaElement1.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
@@ -1040,7 +1052,7 @@ package org.osmf.composition
 			parallel.addChild(mediaElement2);
 			
 			var temporal:CompositeTemporalTrait = parallel.getTrait(MediaTraitType.TEMPORAL) as CompositeTemporalTrait;
-			var seekable:ISeekable = parallel.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+			seekable = parallel.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 			assertTrue(temporal != null);
 			assertTrue(seekable != null);
 			assertTrue(seekable.seeking == false);
