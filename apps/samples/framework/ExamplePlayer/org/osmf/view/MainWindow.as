@@ -97,7 +97,7 @@ package org.osmf.view
 			
 			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
-			mediaPlayerWrapper.mediaPlayer.autoRewind = false;
+			mediaPlayerWrapper.mediaPlayer.autoRewind = true;
 			
 			// Sync the UI to the current (empty) state.
 			//

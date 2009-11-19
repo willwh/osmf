@@ -33,6 +33,7 @@ package org.osmf.examples
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
+	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
@@ -44,7 +45,6 @@ package org.osmf.examples
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -285,6 +285,20 @@ package org.osmf.examples
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
+							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							return serialElement; 
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Poster Frame"
+					, 	"Demonstrates..."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new PosterFrameElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE))));
 							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
 							return serialElement; 
 				  	   	} 
