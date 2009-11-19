@@ -31,6 +31,9 @@ package org.osmf.net
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.traits.IPausable;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PausableTrait;
 	import org.osmf.traits.PlayableTrait;
 	import org.osmf.utils.MediaFrameworkStrings;
 	
@@ -137,9 +140,12 @@ package org.osmf.net
 					// halt playback.
 					if (urlResource != null && NetStreamUtils.isRTMPStream(urlResource.url) == false) 
 					{
-						netStream.pause();
-						streamStarted = false;
-						resetPlaying();
+						//Explicitly pause to prevent the stream from restarting on seek();
+						var pausable:IPausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+						if (pausable != null)
+						{
+							pausable.pause();
+						}		
 					}
 					break;
 			}
@@ -149,10 +155,15 @@ package org.osmf.net
 		{			
 			switch (event.code)
 			{
+				//Fired when streaming connections finish.  Doesn't fire for
+				//Progressive connections.  
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
-					netStream.pause();
-					streamStarted = false;
-					resetPlaying();
+					//Explicitly pause to prevent the stream from restarting on seek();
+					var pausable:IPausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
+					if (pausable != null)
+					{
+						pausable.pause();
+					}				
 					break;
 			}
 		}
