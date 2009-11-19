@@ -41,6 +41,7 @@ package org.osmf.proxies
 		public function LoadableProxyElement(loader:MediaElementLoader)
 		{
 			super(null);
+			
 			this.loader = loader;			
 			
 		}

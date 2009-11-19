@@ -29,36 +29,56 @@ package org.osmf.net
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import org.osmf.audio.AudioElement;
+	import org.osmf.audio.SoundLoader;
+	import org.osmf.image.ImageElement;
+	import org.osmf.image.ImageLoader;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaInfo;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.proxies.MediaElementLoadedContext;
 	import org.osmf.proxies.MediaElementLoader;
+	import org.osmf.swf.SWFElement;
+	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.video.VideoElement;
 	
 	/**
-	 * The ManifestLoader will load the Flash Media Manifest format
+	 * The FMMLoader will load the Flash Media Manifest format
 	 * files, generate a NetLoaded context corresponding to the resources
 	 * specified in the fmm file.
 	 */ 
-	public class ManifestLoader extends MediaElementLoader
+	public class FMMLoader extends MediaElementLoader
 	{
 			
 		//MimeType
-		public static const MANIFEST_MIME:String = "application/fmm+xml";
+		public static const FMM_MIME_TYPE:String = "application/fmm+xml";
 			
 		/**
-		 * Generate a new ManifestLoader.  
+		 * Generate a new FMMLoader.  
 		 * @param netLoader The factory that is used to create MediaElements based on the 
-		 * media specified in the manifest file. 
+		 * media specified in the manifest file. a default factory is created for the base OSMF media
+		 * types, Video, Audio, Image, and SWF.
 		 */ 	
-		public function ManifestLoader(factory:MediaFactory)
+		public function FMMLoader(factory:MediaFactory = null)
 		{
 			this.factory = factory;					
+			if(factory == null)
+			{
+				factory = new MediaFactory();
+				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaType.VIDEO));
+				factory.addMediaInfo(new MediaInfo("VideoDynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())}, MediaType.VIDEO));
+				factory.addMediaInfo(new MediaInfo("Audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())}, MediaType.AUDIO));
+				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaType.AUDIO));
+				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaType.IMAGE));
+				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaType.SWF));
+			}			
 		}
 
 		/**
@@ -66,7 +86,7 @@ package org.osmf.net
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
-			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>([MediaType.MANIFEST]), new Vector.<String>([MANIFEST_MIME]));
+			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), new Vector.<String>([FMM_MIME_TYPE]));
 			
 			if (supported == MetadataUtils.METADATA_MATCH_FOUND)
 			{
