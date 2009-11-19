@@ -1134,12 +1134,16 @@ package org.osmf.media
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestLoop);
-					
-					assertTrue(mediaPlayer.playing == true);
-					
 					var statesStr:String = states.join(" ");
-					assertTrue(statesStr == "playing"); 
-
+					if (mediaPlayer.paused)
+					{
+						assertTrue(mediaPlayer.playing == false);
+						assertTrue(statesStr == "playing paused"); 
+					}
+					else
+					{
+						assertTrue(statesStr == "playing"); 
+					}
 					mediaPlayer.pause();
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -1194,7 +1198,10 @@ package org.osmf.media
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
 					
-					assertTrue(mediaPlayer.playing == false);
+					if(mediaPlayer.paused)
+					{
+						assertTrue(mediaPlayer.playing == false);
+					}
 					
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");

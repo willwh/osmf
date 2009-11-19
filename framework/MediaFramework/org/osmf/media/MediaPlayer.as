@@ -1621,13 +1621,18 @@ package org.osmf.media
 		private function onDurationReached(event:TimeEvent):void
 		{
 			if (loop && seekable && playable)
-			{			
-				seek(0);
-				play();
+			{	
+				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
+				function onSeekEnd(event:SeekEvent):void
+				{
+					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
+					play();	
+				}
+				seek(0); //If we don't wait for the seekend, everything breaks for looping.									
 			}
-			else if (autoRewind && seekable && pausable)
-			{				
-				stop();
+			else if (autoRewind && seekable && !loop)
+			{	
+				seek(0);			
 			}
 			else
 			{
