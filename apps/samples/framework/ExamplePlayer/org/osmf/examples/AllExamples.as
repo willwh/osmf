@@ -41,6 +41,7 @@ package org.osmf.examples
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.AbsoluteLayoutFacet;
+	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RelativeLayoutFacet;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -759,6 +760,54 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
+				
+			examples.push
+				( new Example
+					( 	"IDownloadable Parallel"
+					, 	"Demonstrates the compositional IDownloadable trait in a Parallel Composition ."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
+							var resource2:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE2));
+							
+							var parallel:ParallelElement = new ParallelElement();
+							
+							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
+							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
+							
+							LayoutUtils.setAbsoluteLayout(video1.metadata, 320, 240, 0,0);
+							LayoutUtils.setAbsoluteLayout(video2.metadata, 320, 240, 300,0);
+														
+							parallel.addChild(video1);
+							parallel.addChild(video2);
+														
+				  	   		return parallel; 
+				  	   	}
+				  	)
+				);	
+				
+			examples.push
+				( new Example
+					( 	"IDownloadable Serial"
+					, 	"Demonstrates the compositional IDownloadable trait in a Serial Composition."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
+							var resource2:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE2));
+							
+							var serial:SerialElement = new SerialElement();
+							
+							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
+							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
+														
+							serial.addChild(video1);
+							serial.addChild(video2);
+																	
+				  	   		return serial; 
+				  	   	}
+				  	)
+				);		
+				
 			/* TODO: Uncomment this once we have the VAST library integrated
 			   with the build system.
 			examples.push
@@ -801,6 +850,7 @@ package org.osmf.examples
 		}
 
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
+		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
