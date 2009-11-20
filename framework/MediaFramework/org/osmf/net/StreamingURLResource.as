@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -25,7 +25,12 @@ package org.osmf.net
 	import org.osmf.utils.URL;
 	
 	/**
-	 * A URLResource which is capable of being streamed.
+	 * A URLResource which is capable of being streamed. StreamingURLResource adds a streamType property. 
+	 * This property allows player code to specify whether the resource being streamed is live or recorded.
+	 * 
+	 * It is possible for live and recorded streams to have identical URLs.
+	 * This subclass was added to support this unusual case. 
+	 * When necessary, the streamType property should be used to disambiguate live and recorded streams.
 	 **/
 	public class StreamingURLResource extends URLResource
 	{
@@ -43,7 +48,30 @@ package org.osmf.net
 		}
 
 		/**
-		 * The StreamType for this resource.
+         * <p>The StreamType for this resource. The default value is <code>StreamType.ANY</code>.
+		 * The StreamType class enumerates the valid stream types.</p>
+		 * <p/>
+         * <p>This property may return the following string values:</p> 
+		 * <table class="innertable" width="640">
+		 *   <tr>
+		 *     <th>String value</th>
+		 *     <th>Description</th>
+		 *   </tr>
+		 *   <tr>
+		 * 	<td><code>StreamType.ANY</code></td>
+		 * 	<td>The StreamingURLResource represents a any possible stream type.</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	<td><code>StreamType.LIVE</code></td>
+		 * 	<td>The StreamingURLResource represents a live stream.</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	<td><code>StreamType.RECORDED</code></td>
+		 * 	<td>The StreamingURLResource represents a recorded stream.</td>
+		 *   </tr>
+		 * </table>
+		 * 
+		 * @see StreamType
 		 **/
 		public function get streamType():String
 		{

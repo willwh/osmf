@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -22,7 +22,11 @@
 package org.osmf.net
 {
 	/**
-	 * Enumeration of stream types.
+	 * The StreamType class is an enumeration of constant values that you can use to set the streamType property of the StreamingURLResource class.
+	 * This property allows the player to specify whether the resource should be streamed from the live or recorded connection. 
+	 * By default any available connection will be used.
+	 *
+	 * @see StreamingURLResource
 	 **/
 	public final class StreamType
 	{
