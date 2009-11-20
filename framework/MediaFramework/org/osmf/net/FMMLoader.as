@@ -37,8 +37,8 @@ package org.osmf.net
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaInfoType;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.proxies.MediaElementLoadedContext;
@@ -72,12 +72,12 @@ package org.osmf.net
 			if(factory == null)
 			{
 				factory = new MediaFactory();
-				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())})); //, MediaType.VIDEO));
-				factory.addMediaInfo(new MediaInfo("VideoDynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())})); //, MediaType.VIDEO));
-				factory.addMediaInfo(new MediaInfo("Audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())})); //, MediaType.AUDIO));
-				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())})); //, MediaType.AUDIO));
-				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())})); //, MediaType.IMAGE));
-				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())})); //, MediaType.SWF));
+				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("VideoDynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("Audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaInfoType.STANDARD));
 			}			
 		}
 

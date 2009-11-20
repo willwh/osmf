@@ -40,10 +40,8 @@ package org.osmf.proxies
 		 */ 
 		public function LoadableProxyElement(loader:MediaElementLoader)
 		{
-			super(null);
-			
+			super(null);			
 			this.loader = loader;			
-			
 		}
 		
 		/**
