@@ -106,41 +106,41 @@ package org.osmf.utils
 															
 			// Simple prog download test		
 			fmsURL = new FMSURL("rtmp://testserver/myapp/myfile.flv");
-			assertEquals(fmsURL.streamType, "");
+			assertEquals(fmsURL.fileFormat, "");
 			assertEquals(fmsURL.host, "testserver");
 			assertEquals(fmsURL.streamName, "myfile.flv");
 			assertEquals(fmsURL.appName, "myapp");
 			
 			// Another simple test
 			fmsURL = new FMSURL("rtmp://testserver/myapp/myfile2.flv2");
-			assertEquals(fmsURL.streamType, "");
+			assertEquals(fmsURL.fileFormat, "");
 			assertEquals(fmsURL.streamName, "myfile2.flv2");
 			assertEquals(fmsURL.appName, "myapp");
 			
 			// A stream with the mp4 prefix and an extension	
 			fmsURL = new FMSURL("rtmp://testserver/myapp/mp4:myfile2.flv2");
-			assertEquals(fmsURL.streamType, FMSURL.MP4_STREAM);
+			assertEquals(fmsURL.fileFormat, FMSURL.MP4_STREAM);
 			assertEquals(fmsURL.host, "testserver");
 			assertEquals(fmsURL.streamName, "mp4:myfile2.flv2");
 			assertEquals(fmsURL.appName, "myapp");
 			
 			// Another one with a prefix and an extension
 			fmsURL = new FMSURL("rtmp://testserver/myapp/mp3:myfile2.flv");
-			assertEquals(fmsURL.streamType, FMSURL.MP3_STREAM);
+			assertEquals(fmsURL.fileFormat, FMSURL.MP3_STREAM);
 			assertEquals(fmsURL.host, "testserver");
 			assertEquals(fmsURL.streamName, "mp3:myfile2.flv");
 			assertEquals(fmsURL.appName, "myapp");
 			
 			// Another one with a strange extension
 			fmsURL = new FMSURL("rtmp://testserver/myapp/myfile2.flv2.flv");
-			assertEquals(fmsURL.streamType, "");
+			assertEquals(fmsURL.fileFormat, "");
 			assertEquals(fmsURL.host, "testserver");
 			assertEquals(fmsURL.streamName, "myfile2.flv2.flv");
 			assertEquals(fmsURL.appName, "myapp");
 			
 			//	
 			fmsURL = new FMSURL("rtmp://testserver/myapp/myfile6.flv?param=myparam.flv");
-			assertEquals(fmsURL.streamType, "");
+			assertEquals(fmsURL.fileFormat, "");
 			assertEquals(fmsURL.host, "testserver");			
 			assertEquals(fmsURL.streamName, "myfile6.flv");
 			assertEquals(fmsURL.appName, "myapp");
@@ -148,7 +148,7 @@ package org.osmf.utils
 			
 			//
 			fmsURL = new FMSURL("rtmp://testserver/myapp/myfile7.flv2?param=myparam.flv2");
-			assertEquals(fmsURL.streamType, "");
+			assertEquals(fmsURL.fileFormat, "");
 			assertEquals(fmsURL.host, "testserver");						
 			assertEquals(fmsURL.streamName , "myfile7.flv2");
 			assertEquals(fmsURL.appName, "myapp");
@@ -312,7 +312,7 @@ package org.osmf.utils
 			assertEquals(fmsURL.path, "");
 			assertEquals(fmsURL.port, "443");
 			assertEquals(fmsURL.streamName, "qsstreamname");
-			assertEquals(fmsURL.streamType.toLowerCase(), FMSURL.MP4_STREAM);
+			assertEquals(fmsURL.fileFormat.toLowerCase(), FMSURL.MP4_STREAM);
 			assertEquals(fmsURL.edges.length, 1);
 			assertEquals(fmsURL.edges[0].host, "myedge2");
 			assertEquals(fmsURL.origins.length, 1);

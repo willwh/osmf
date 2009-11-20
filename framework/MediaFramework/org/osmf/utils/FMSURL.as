@@ -57,7 +57,7 @@ package org.osmf.utils
 			_appName = "";
 			_instanceName = "";
 			_streamName = "";
-			_streamType = "";
+			_fileFormat = "";
 			
 			parsePath();
 			parseQuery();
@@ -116,17 +116,18 @@ package org.osmf.utils
 		}
 		
 		/**
-		 * The type of streaming media.  Corresponds to one of the public constants defined in this class, such as MP4_STREAM, or the blank stream for 
-		 * flv media streams.
+		 * The file format of the streaming media.  Corresponds to one of the 
+		 * public constants defined in this class, such as MP4_STREAM, 
+		 * or the blank stream for flv media streams.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function get streamType():String
+		public function get fileFormat():String
 		{
-			return _streamType;
+			return _fileFormat;
 		}
 		
 		/**
@@ -178,7 +179,7 @@ package org.osmf.utils
 				// Check the query string for a stream name since the path is empty
 				_streamName = getParamValue(QUERY_STRING_STREAM);
 				// Check the query string for stream type since the path is empty
-				_streamType = getParamValue(QUERY_STRING_STREAMTYPE);
+				_fileFormat = getParamValue(QUERY_STRING_STREAMTYPE);
 				return;
 			}
 
@@ -223,21 +224,21 @@ package org.osmf.utils
 	 			
 	 			if (_streamName.search(/^mp4:/i) > -1)
 	 			{
-	 				_streamType = MP4_STREAM;
+	 				_fileFormat = MP4_STREAM;
 	 			}
 	 			else if (_streamName.search(/^mp3:/i) > -1)
 	 			{
-	 				_streamType = MP3_STREAM;
+	 				_fileFormat = MP3_STREAM;
 	 			}
 	 			else if (_streamName.search(/^id3:/i) > -1)
 	 			{
-	 				_streamType = ID3_STREAM;
+	 				_fileFormat = ID3_STREAM;
 	 			}
 	 			
 	 			// If no stream type found check the query string
-	 			if (_streamType == null || _streamType == "")
+	 			if (_fileFormat == null || _fileFormat == "")
 	 			{
-	 				_streamType = getParamValue(QUERY_STRING_STREAMTYPE);
+	 				_fileFormat = getParamValue(QUERY_STRING_STREAMTYPE);
 	 			}					 		
  			}		
 		}
@@ -369,7 +370,7 @@ package org.osmf.utils
 		private var _appName:String;
 		private var _instanceName:String;
 		private var _streamName:String;
-		private var _streamType:String;
+		private var _fileFormat:String;
 		private var _origins:Vector.<FMSHost>;
 		private var _edges:Vector.<FMSHost>;
 		
