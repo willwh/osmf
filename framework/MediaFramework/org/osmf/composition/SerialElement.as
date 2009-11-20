@@ -25,6 +25,7 @@ package org.osmf.composition
 	
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.CompositeMetadata;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	
@@ -129,6 +130,17 @@ package org.osmf.composition
 		
 		// Overrides
 		//
+		
+		/**
+		 * @private
+		 **/
+		override protected function createMetadata():Metadata
+		{
+			var result:Metadata = super.createMetadata();
+			CompositeMetadata(result).mode = CompositionMode.SERIAL;
+			
+			return result;
+		}
 			
 		/**
 		 * @private
@@ -245,14 +257,10 @@ package org.osmf.composition
 				
 		private function onListenedChildChanged(event:TraitAggregatorEvent):void
 		{
-			if (event.oldListenedChild != null)
-			{
-				compositeMetadata.removeChildMetadata(event.oldListenedChild.metadata);
-			}
-			if (event.newListenedChild != null)
-			{
-				compositeMetadata.addChildMetadata(event.newListenedChild.metadata);
-			}
+			compositeMetadata.activeChild
+				= event.newListenedChild 
+					? event.newListenedChild.metadata
+					: null;
 					
 			// Update the index of the current child.
 			updateListenedChildIndex();

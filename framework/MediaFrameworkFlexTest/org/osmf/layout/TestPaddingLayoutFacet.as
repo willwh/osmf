@@ -80,7 +80,7 @@ package org.osmf.layout
 			assertEquals(undefined, facet.getValue(null));
 			assertEquals(undefined, facet.getValue(new StringIdentifier("@*#$^98367423874")));
 			
-			assertNull(facet.merge(null));
+			assertNull(facet.synthesizer);
 		}
 	}
 }

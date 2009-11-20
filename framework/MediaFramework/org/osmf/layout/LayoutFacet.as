@@ -19,64 +19,73 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.composition
+package org.osmf.layout
 {
+	import flash.events.EventDispatcher;
+	
+	import org.osmf.metadata.FacetSynthesizer;
+	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.IIdentifier;
+	import org.osmf.utils.URL;
+
 	/**
-	 * Enumeration of different modes for composite media elements.
-	 **/
-	public final class CompositionMode
+	 * Base class for the default renderer's layout facets.
+	 */	
+	public class LayoutFacet extends EventDispatcher implements IFacet
 	{
 		/**
-		 * The PARALLEL composition mode represents media compositions whose
-		 * elements are presented in parallel.
-		 * 
+		 * Constructor
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
-		 */	
-		public static const PARALLEL:CompositionMode = new CompositionMode("parallel");
-
-		/**
-		 * The SERIAL composition mode represents media compositions whose
-		 * elements are presented serially.
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const SERIAL:CompositionMode = new CompositionMode("serial");
+		 */
+		public function LayoutFacet()
+		{
+			super(null);
+		}
 		
-		// Public interface
+		// IFacet
 		//
 		
 		/**
-		 * Constructor
-		 * 
-		 * @param token The token that identifies the composition mode.
-		 * 
+		 * @inheritDoc
+		  *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
-		 */		
-		public function CompositionMode(token:String)
+		 */	
+		public function get namespaceURL():URL
 		{
-			this.token = token;
+			return null;
 		}
 		
 		/**
 		 * @inheritDoc
-		 */
-		public function toString():String
+		  *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */	
+		public function getValue(identifier:IIdentifier):*
 		{
-			return token;
+			return null;
 		}
 		
-		// Internals
-		//
-		
-		private var token:String;
+		/**
+		 * @inheritDoc
+		  *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get synthesizer():FacetSynthesizer
+		{
+			return null;
+		}		
 	}
 }

@@ -68,7 +68,7 @@ package org.osmf.layout
 				assertEquals(3,absolute.x);
 				assertEquals(4,absolute.y);
 				
-				assertNull(absolute.merge(null));
+				assertNull(absolute.synthesizer);
 				
 				var relative:RelativeLayoutFacet
 					= c2
@@ -81,7 +81,7 @@ package org.osmf.layout
 				assertEquals(3,relative.x);
 				assertEquals(4,relative.y);
 				
-				assertNull(relative.merge(null));
+				assertNull(relative.synthesizer);
 				
 				var anchor:AnchorLayoutFacet
 					= c3
@@ -94,7 +94,7 @@ package org.osmf.layout
 				assertEquals(3,anchor.right);
 				assertEquals(4,anchor.bottom);
 				
-				assertNull(anchor.merge(null));
+				assertNull(anchor.synthesizer);
 				
 				var padding:PaddingLayoutFacet
 					= c6
@@ -107,7 +107,7 @@ package org.osmf.layout
 				assertEquals(3,padding.right);
 				assertEquals(4,padding.bottom);
 				
-				assertNull(padding.merge(null));
+				assertNull(padding.synthesizer);
 				
 				var attributes:LayoutAttributesFacet
 					= c4
@@ -124,7 +124,7 @@ package org.osmf.layout
 				assertEquals(RegistrationPoint.BOTTOM_LEFT, attributes.alignment); 
 				assertEquals(10, attributes.order);
 				
-				assertNull(attributes.merge(null));
+				assertNull(attributes.synthesizer);
 				
 				var rendererFacet:LayoutRendererFacet
 					= c5
@@ -134,7 +134,7 @@ package org.osmf.layout
 					
 				assertEquals(DefaultLayoutRenderer, rendererFacet.rendererType);
 				
-				assertNull(rendererFacet.merge(null));
+				assertNull(rendererFacet.synthesizer);
 			}
 		}
 		

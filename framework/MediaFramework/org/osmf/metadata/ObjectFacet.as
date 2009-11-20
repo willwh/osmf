@@ -119,7 +119,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function merge(childFacet:IFacet):IFacet
+		public function get synthesizer():FacetSynthesizer
 		{
 			return null;
 		}

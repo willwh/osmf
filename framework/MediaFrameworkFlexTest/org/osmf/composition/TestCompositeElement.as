@@ -151,16 +151,22 @@ package org.osmf.composition
 			composite.addChild(mediaElement1);
 			assertTrue(composite.numChildren == 1);
 			
-			// It's possible to add the same child twice.
-			composite.addChild(mediaElement1);
-			assertTrue(composite.numChildren == 2);
+			// It's *not* possible to add the same child twice.
+			try
+			{
+				composite.addChild(mediaElement1);
+				fail();
+			}
+			catch(_:*)
+			{
+			}
+			assertEquals(1, composite.numChildren);
 			
 			// Adding a new child should place it at the end of the list.
 			composite.addChild(mediaElement2);
-			assertTrue(composite.numChildren == 3);
+			assertTrue(composite.numChildren == 2);
 			assertTrue(composite.getChildAt(0) == mediaElement1);
-			assertTrue(composite.getChildAt(1) == mediaElement1);
-			assertTrue(composite.getChildAt(2) == mediaElement2);
+			assertTrue(composite.getChildAt(1) == mediaElement2);
 			
 			// Adding a null child should throw an error.
 			try
@@ -185,18 +191,21 @@ package org.osmf.composition
 			composite.addChildAt(mediaElement1, 0);
 			assertTrue(composite.numChildren == 1);
 			
-			// It's possible to add the same child twice.
-			composite.addChildAt(mediaElement1, 1);
-			assertTrue(composite.numChildren == 2);
-			assertTrue(composite.getChildAt(0) == mediaElement1);
-			assertTrue(composite.getChildAt(1) == mediaElement1);
+			// It's *not* possible to add the same child twice.
+			try
+			{
+				composite.addChild(mediaElement1);
+				fail();
+			}
+			catch(_:*)
+			{
+			}
 			
 			// We can add at any index.
 			composite.addChildAt(mediaElement2, 1);
-			assertTrue(composite.numChildren == 3);
+			assertTrue(composite.numChildren == 2);
 			assertTrue(composite.getChildAt(0) == mediaElement1);
 			assertTrue(composite.getChildAt(1) == mediaElement2);
-			assertTrue(composite.getChildAt(2) == mediaElement1);
 			
 			// Adding a null child should throw an error.
 			try
@@ -238,19 +247,16 @@ package org.osmf.composition
 			var mediaElement2:MediaElement = new MediaElement();
 			
 			composite.addChild(mediaElement1);
-			composite.addChild(mediaElement1);
 			composite.addChild(mediaElement2);
 			
 			var result:MediaElement = composite.removeChild(mediaElement1);
 			assertTrue(result == mediaElement1);
-			assertTrue(composite.numChildren == 2);
-			assertTrue(composite.getChildAt(0) == mediaElement1);
-			assertTrue(composite.getChildAt(1) == mediaElement2);
-
+			assertTrue(composite.numChildren == 1);
+			assertTrue(composite.getChildAt(0) == mediaElement2);
+			
 			result = composite.removeChild(mediaElement2);
 			assertTrue(result == mediaElement2);
-			assertTrue(composite.numChildren == 1);
-			assertTrue(composite.getChildAt(0) == mediaElement1);
+			assertTrue(composite.numChildren == 0);
 			
 			// Removing a child that's not in the composition should throw
 			// an error.
@@ -282,19 +288,16 @@ package org.osmf.composition
 			var mediaElement2:MediaElement = new MediaElement();
 			
 			composite.addChild(mediaElement1);
-			composite.addChild(mediaElement1);
 			composite.addChild(mediaElement2);
 			
 			var result:MediaElement = composite.removeChildAt(1);
-			assertTrue(result == mediaElement1);
-			assertTrue(composite.numChildren == 2);
-			assertTrue(composite.getChildAt(0) == mediaElement1);
-			assertTrue(composite.getChildAt(1) == mediaElement2);
-
-			result = composite.removeChildAt(1);
 			assertTrue(result == mediaElement2);
 			assertTrue(composite.numChildren == 1);
 			assertTrue(composite.getChildAt(0) == mediaElement1);
+			
+			result = composite.removeChildAt(0);
+			assertTrue(result == mediaElement1);
+			assertTrue(composite.numChildren == 0);
 			
 			// Removing a child with a negative index should throw an error.
 			try
@@ -305,7 +308,7 @@ package org.osmf.composition
 			catch (e:RangeError)
 			{
 			}
-			assertTrue(composite.numChildren == 1);
+			assertTrue(composite.numChildren == 0);
 
 			// Removing a child with too large an index should throw an error.
 			try

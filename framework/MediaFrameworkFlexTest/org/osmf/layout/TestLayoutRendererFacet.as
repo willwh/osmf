@@ -39,7 +39,7 @@ package org.osmf.layout
 			assertEquals(DefaultLayoutRenderer, facet.getValue(null));
 			assertEquals(DefaultLayoutRenderer, facet.getValue(new StringIdentifier("@*#$^98367423874")));
 			
-			assertNull(facet.merge(null));
+			assertNull(facet.synthesizer);
 		}
 		
 	}

@@ -271,7 +271,7 @@ import org.osmf.metadata.Metadata
 import org.osmf.utils.URL;
 import flash.events.EventDispatcher;
 import org.osmf.metadata.IIdentifier;
-	
+import org.osmf.metadata.FacetSynthesizer;
 
 internal class CustomFacet extends EventDispatcher implements IFacet
 {
@@ -292,9 +292,9 @@ internal class CustomFacet extends EventDispatcher implements IFacet
 		return undefined;
 	}
 	
-	public function merge(childFacet:IFacet):IFacet
+	public function get synthesizer():FacetSynthesizer
 	{
-		return this;
+		return null;
 	}
 	
 	private var _ns:URL;

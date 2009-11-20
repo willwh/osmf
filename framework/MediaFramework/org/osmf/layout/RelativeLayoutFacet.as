@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import flash.events.EventDispatcher;
-	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.IIdentifier;
@@ -52,7 +50,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
 	 */
-	public class RelativeLayoutFacet extends EventDispatcher implements IFacet
+	public class RelativeLayoutFacet extends LayoutFacet
 	{
 		/**
 		 * Identifier for the facet's x property.
@@ -105,7 +103,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function get namespaceURL():URL
+		override public function get namespaceURL():URL
 		{
 			return MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS;
 		}
@@ -118,7 +116,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function getValue(identifier:IIdentifier):*
+		override public function getValue(identifier:IIdentifier):*
 		{
 			if (identifier == null)
 			{
@@ -144,21 +142,6 @@ package org.osmf.layout
 			{
 				return undefined;
 			}
-		}
-		
-		/**
-		 * This facet does not merge.
-		 * 
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public function merge(childFacet:IFacet):IFacet
-		{
-			return null;
 		}
 		
 		// Public interface

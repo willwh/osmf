@@ -23,10 +23,13 @@ package org.osmf.composition
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.errors.IllegalOperationError;
+	
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.CompositeMetadata;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.MediaFrameworkStrings;
@@ -114,7 +117,10 @@ package org.osmf.composition
 		 * 
 		 * @param child The child to add.
 		 * 
-		 * @throws ArgumentError If child is <code>null</code>.
+		 * @throws ArgumentError If child is <code>null</code>. 
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than the length of the list.
+		 * @throws IllegalOperation If the child is already a child.
 		 **/
 		public function addChild(child:MediaElement):void
 		{
@@ -132,6 +138,7 @@ package org.osmf.composition
 		 * @throws ArgumentError If child is <code>null</code>. 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the length of the list.
+		 * @throws IllegalOperation If the child is already a child.
 		 **/
 		public function addChildAt(child:MediaElement,index:Number):void
 		{
@@ -142,6 +149,10 @@ package org.osmf.composition
 			if (index < 0 || index > numChildren)
 			{
 				throw new RangeError(MediaFrameworkStrings.INVALID_PARAM);
+			}
+			if (children.indexOf(child) != -1)
+			{
+				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LISTED);
 			}
 			
 			children.splice(index, 0, child);
@@ -224,6 +235,8 @@ package org.osmf.composition
 		{
 			child.addEventListener(MediaErrorEvent.MEDIA_ERROR, onChildError);
 			
+			compositeMetadata.addChild(child.metadata);
+			
 			if (traitAggregator)
 			{
 				// The Trait Aggregator needs to keep track of the traits for the
@@ -248,6 +261,8 @@ package org.osmf.composition
 				// for this child, it has been removed.
 				traitAggregator.removeChild(child);
 			}
+			
+			compositeMetadata.removeChild(child.metadata);
 		}
 		
 		/**
@@ -272,7 +287,7 @@ package org.osmf.composition
 		{
 		}
 		
-		protected override function createMetadata():Metadata
+		override protected function createMetadata():Metadata
 		{
 			return new CompositeMetadata();
 		}

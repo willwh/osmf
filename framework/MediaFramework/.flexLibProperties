@@ -18,7 +18,6 @@
     <classEntry path="org.osmf.composition.CompositeLoadableTrait"/>
     <classEntry path="org.osmf.composition.CompositeMediaTraitBase"/>
     <classEntry path="org.osmf.composition.CompositeMediaTraitFactory"/>
-    <classEntry path="org.osmf.composition.CompositeMetadata"/>
     <classEntry path="org.osmf.composition.CompositePausableTrait"/>
     <classEntry path="org.osmf.composition.CompositePlayableTrait"/>
     <classEntry path="org.osmf.composition.CompositeSeekOperationInfo"/>
@@ -59,6 +58,7 @@
     <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferEvent"/>
+    <classEntry path="org.osmf.events.CompositeMetadataEvent"/>
     <classEntry path="org.osmf.events.ContentProtectionEvent"/>
     <classEntry path="org.osmf.events.DimensionEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
@@ -97,6 +97,7 @@
     <classEntry path="org.osmf.layout.ILayoutTarget"/>
     <classEntry path="org.osmf.layout.LayoutAttributesFacet"/>
     <classEntry path="org.osmf.layout.LayoutContextSprite"/>
+    <classEntry path="org.osmf.layout.LayoutFacet"/>
     <classEntry path="org.osmf.layout.LayoutRendererBase"/>
     <classEntry path="org.osmf.layout.LayoutRendererFacet"/>
     <classEntry path="org.osmf.layout.LayoutUtils"/>
@@ -126,6 +127,9 @@
     <classEntry path="org.osmf.media.MediaPlayer"/>
     <classEntry path="org.osmf.media.MediaPlayerState"/>
     <classEntry path="org.osmf.media.URLResource"/>
+    <classEntry path="org.osmf.metadata.CompositeMetadata"/>
+    <classEntry path="org.osmf.metadata.FacetGroup"/>
+    <classEntry path="org.osmf.metadata.FacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.IFacet"/>
     <classEntry path="org.osmf.metadata.IIdentifier"/>
     <classEntry path="org.osmf.metadata.KeyValueFacet"/>
@@ -142,6 +146,10 @@
     <classEntry path="org.osmf.metadata.TemporalFacet"/>
     <classEntry path="org.osmf.metadata.TemporalFacetEvent"/>
     <classEntry path="org.osmf.metadata.TemporalIdentifier"/>
+    <classEntry path="org.osmf.net.FMMLoader"/>
+    <classEntry path="org.osmf.net.Manifest"/>
+    <classEntry path="org.osmf.net.ManifestParser"/>
+    <classEntry path="org.osmf.net.Media"/>
     <classEntry path="org.osmf.net.NetClient"/>
     <classEntry path="org.osmf.net.NetConnectionAttempt"/>
     <classEntry path="org.osmf.net.NetConnectionCodes"/>
@@ -188,6 +196,9 @@
     <classEntry path="org.osmf.plugin.PluginManager"/>
     <classEntry path="org.osmf.plugin.StaticPluginLoader"/>
     <classEntry path="org.osmf.proxies.ListenerProxyElement"/>
+    <classEntry path="org.osmf.proxies.LoadableProxyElement"/>
+    <classEntry path="org.osmf.proxies.MediaElementLoadedContext"/>
+    <classEntry path="org.osmf.proxies.MediaElementLoader"/>
     <classEntry path="org.osmf.proxies.ProxyElement"/>
     <classEntry path="org.osmf.proxies.TemporalProxyElement"/>
     <classEntry path="org.osmf.swf.SWFElement"/>
@@ -226,6 +237,7 @@
     <classEntry path="org.osmf.traits.SwitchableTrait"/>
     <classEntry path="org.osmf.traits.TemporalTrait"/>
     <classEntry path="org.osmf.traits.ViewableTrait"/>
+    <classEntry path="org.osmf.utils.Base64Decoder"/>
     <classEntry path="org.osmf.utils.BinarySearch"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>

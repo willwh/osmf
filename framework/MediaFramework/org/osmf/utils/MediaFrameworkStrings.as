@@ -39,6 +39,7 @@ package org.osmf.utils
 		public static const INVALID_PARAM:String 						= "Invalid param passed to method";
 		public static const NULL_PARAM:String 							= "Null param passed to method";
 		public static const FUNCTION_MUST_BE_OVERRIDDEN:String			= "This function must be overridden";
+		public static const ALREADY_LISTED:String						= "The item is already listed";
 				
 		// MediaElement
 		
@@ -83,6 +84,8 @@ package org.osmf.utils
 		public static const METADATA_KEY_MEDIA_TYPE:String				= "media type";
 		public static const METADATA_KEY_MIME_TYPE:String				= "MIME type";
 		public static const NAMESPACE_MUST_NOT_BE_EMPTY:String			= "The namespace string must not be empty";
+		public static const NAMESPACE_MUST_BE_UNIQUE:String				= "The namespace string must be unique";
+		public static const NAMESPACE_MUST_EQUAL_GROUP_NS:String		= "The namespace string must be equal to the group namespace";		
 		
 		// MediaErrorCodes
 		

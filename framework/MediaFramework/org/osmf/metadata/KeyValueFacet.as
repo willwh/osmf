@@ -92,33 +92,16 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Merges child key value facets with this key value facet.  Merge is used in the
-		 * compositing of Metadata.  Merge conflicts are resolved, by the parent
-		 * (this) winning in all cases.  When there is a child conflict,
-		 * the latter child key in the list is chosen.  Meaning, if two keys conflict in the 
-		 * children Facets, the facet closer to the end of the childrenFacets Vector is chosen.
-		 * Returns a new facet, with all merged values.
-		 *  
+		 * @inheritDoc
+		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function merge(childFacet:IFacet):IFacet
+		public function get synthesizer():FacetSynthesizer
 		{
-			var merged:KeyValueFacet = new KeyValueFacet(namespaceURL);
-			var key:ObjectIdentifier;
-			var currentKeys:Vector.<ObjectIdentifier> = KeyValueFacet(childFacet).keys;
-			for each (key in currentKeys) //Child facets.
-			{
-				merged.addValue(key, childFacet.getValue(key));
-			}				
-			for (var keyStr:String in data) //Add data from our own dictionary
-			{
-				merged.addValue(new ObjectIdentifier(keyStr), data[keyStr]);
-			}	
-			
-			return merged;
+			return null;
 		} 
 		
 		/**

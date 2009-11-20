@@ -95,15 +95,19 @@ package org.osmf.metadata
 		function getValue(identifier:IIdentifier):*;
 		
 		/**
-		 * Merge takes a number of child facets, and merge them into a single facet that includes this facet.  This should return a new facet.  This is used to bubble up
-		 * metadata in compositions. 
+		 * Defines the facet synthesizer that will be used by default to
+		 * synthesize a new value based on a group of facets that share
+		 * the namespace that this facet is registered under.
+		 * 
+		 * Note that facet synthesizers that get set on the facet's parent
+		 * take precedence over the one that is defined here.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
-		 */ 
-		function merge(childFacet:IFacet):IFacet;
+		 */		
+		function get synthesizer():FacetSynthesizer;
 		
 	}
 }

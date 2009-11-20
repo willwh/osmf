@@ -23,6 +23,8 @@ package org.osmf.composition
 {
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.CompositeMetadata;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -117,18 +119,15 @@ package org.osmf.composition
 		
 		// Overrides
 		//
-		override protected function processAddedChild(child:MediaElement, index:int):void
+		
+		override protected function createMetadata():Metadata
 		{
-			super.processAddedChild(child,index);			
-			compositeMetadata.addChildMetadata(child.metadata);
+			var result:Metadata = super.createMetadata();
+			CompositeMetadata(result).mode = CompositionMode.PARALLEL;
+			
+			return result;
 		}
 		
-		override protected function processRemovedChild(child:MediaElement):void
-		{
-			super.processRemovedChild(child);
-			compositeMetadata.removeChildMetadata(child.metadata);
-		}
-
 		/**
 		 * @private
 		 **/			

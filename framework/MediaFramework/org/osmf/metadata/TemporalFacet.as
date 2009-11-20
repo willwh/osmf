@@ -28,10 +28,10 @@ package org.osmf.metadata
 	import flash.utils.Timer;
 	
 	import org.osmf.composition.CompositeElement;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.IPausable;
 	import org.osmf.traits.IPlayable;
@@ -211,7 +211,6 @@ package org.osmf.metadata
 			return null;
 		}
 		
-		
 		/**
 		 * The number of TemporalIdentifer values in this class' collection.
 		 *  
@@ -255,7 +254,7 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 */
-		public function merge(childFacet:IFacet):IFacet
+		public function get synthesizer():FacetSynthesizer
 		{
 			return null;
 		}
