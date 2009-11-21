@@ -31,6 +31,8 @@ package org.osmf.net
 	
 	import org.osmf.audio.AudioElement;
 	import org.osmf.audio.SoundLoader;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.media.IMediaResource;
@@ -67,8 +69,7 @@ package org.osmf.net
 		 * types, Video, Audio, Image, and SWF.
 		 */ 	
 		public function FMMLoader(factory:MediaFactory = null)
-		{
-			this.factory = factory;					
+		{							
 			if(factory == null)
 			{
 				factory = new MediaFactory();
@@ -78,7 +79,8 @@ package org.osmf.net
 				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaInfoType.STANDARD));
-			}			
+			}
+			this.factory = factory;				
 		}
 
 		/**
@@ -95,7 +97,7 @@ package org.osmf.net
 			else if(resource is URLResource)
 			{
 				var url:URLResource = URLResource(resource);
-				var extension:String = url.url.path.substr(url.url.path.length-4,3);
+				var extension:String = url.url.path.substr(url.url.path.length-3,3);
 				return extension == "fmm";
 			}		
 			else
@@ -129,6 +131,7 @@ package org.osmf.net
 				catch(parseError:Error)
 				{					
 					updateLoadable(loadable, LoadState.LOAD_ERROR);
+					loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 					return;
 				}
 				

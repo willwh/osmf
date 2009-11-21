@@ -50,23 +50,14 @@ package org.osmf.proxies
 			// Most operations will fail until the wrappedElement is set.
 			try
 			{
-				proxyElement.resource = new URLResource(null);
-				
-				fail();
+				proxyElement.resource = new URLResource(null);			
 			}
 			catch (error:IllegalOperationError)
 			{
+				fail();
 			}
 			
-			try
-			{
-				proxyElement.hasTrait(MediaTraitType.TEMPORAL);
-
-				fail();
-			}
-			catch (error:IllegalOperationError)
-			{
-			}
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
 			
 			var wrappedElement:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
@@ -100,15 +91,7 @@ package org.osmf.proxies
 			
 			assertTrue(proxyElement.wrappedElement == null);
 
-			try
-			{
-				proxyElement.hasTrait(MediaTraitType.TEMPORAL);
-
-				fail();
-			}
-			catch (error:IllegalOperationError)
-			{
-			}
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
 		}
 		
 		// Protected

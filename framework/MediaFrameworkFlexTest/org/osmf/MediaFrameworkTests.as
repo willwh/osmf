@@ -115,7 +115,9 @@ package org.osmf
 			addTestSuite(TestTemporalProxyElement);
 			addTestSuite(TestListenerProxyElement);
 			addTestSuite(TestListenerProxyElementAsSubclass);
-			
+			addTestSuite(TestLoadableProxyElement);
+			addTestSuite(TestMediaElementLoadedContext);
+							
 			addTestSuite(TestBeacon);
 			addTestSuite(TestBeaconElement);
 			

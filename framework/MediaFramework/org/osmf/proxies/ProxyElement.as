@@ -183,11 +183,9 @@ package org.osmf.proxies
 			
 			// Don't return the trait if it's blocked.
 			if (blocksTrait(type) == false)
-			{
-				validateWrappedElement();
-				
+			{				
 				// Give precedence to a trait on the proxy.
-				trait = super.getTrait(type) ||	wrappedElement.getTrait(type);
+				trait = super.getTrait(type) ||	(wrappedElement != null ? wrappedElement.getTrait(type) : null);
 			}
 			
 			return trait;
@@ -197,42 +195,39 @@ package org.osmf.proxies
 		 * @private
 		 **/
 		override public function get resource():IMediaResource
-		{
-			validateWrappedElement();
-			
-			return wrappedElement.resource;
+		{		
+			return wrappedElement ? wrappedElement.resource : null;
 		}
+		
 		/**
 		 * @private
 		 **/		
 		override public function set resource(value:IMediaResource):void
-		{
-			validateWrappedElement();
-			
-			wrappedElement.resource = value;
+		{	
+			if (wrappedElement != null)
+			{
+				wrappedElement.resource = value;
+			}
 		}
 		
 		override public function get gateway():IMediaGateway
 		{
-			validateWrappedElement();
-			
-			return wrappedElement.gateway;
+			return wrappedElement ? wrappedElement.gateway : null;
 		}
 		
 		override public function set gateway(value:IMediaGateway):void
-		{
-			validateWrappedElement();
-			
-			wrappedElement.gateway = value;
+		{	
+			if (wrappedElement != null)
+			{		
+				wrappedElement.gateway = value;
+			}
 		}
 		
 		/**
 		 * @private
 		 **/
 		override public function dispatchEvent(event:Event):Boolean
-		{
-			validateWrappedElement();
-			
+		{			
 			var doDispatchEvent:Boolean = true;
 
 			// If the proxy is dispatching a MediaElementEvent for a trait
@@ -241,6 +236,7 @@ package org.osmf.proxies
 			var traitEvent:MediaElementEvent = event as MediaElementEvent;
 			if  (  traitEvent != null
 				&& blocksTrait(traitEvent.traitType) == false
+				&& wrappedElement != null
 				&& wrappedElement.hasTrait(traitEvent.traitType) == true
 				)
 			{
@@ -364,14 +360,6 @@ package org.osmf.proxies
 			}
 		}
 		
-		private function validateWrappedElement():void
-		{
-			if (_wrappedElement == null)
-			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_WRAPPED_ELEMENT);
-			}
-		}
-
 		private var _wrappedElement:MediaElement;
 	}
 }

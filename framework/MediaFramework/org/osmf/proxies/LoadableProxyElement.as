@@ -22,6 +22,8 @@
 package org.osmf.proxies
 {
 	import org.osmf.events.LoadEvent;
+	import org.osmf.media.IMediaResource;
+	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
@@ -39,41 +41,49 @@ package org.osmf.proxies
 		 * Creates a new LoadableProxyElement.  The Loader needs to return a MediaElementLoadedContext.
 		 */ 
 		public function LoadableProxyElement(loader:MediaElementLoader)
-		{
-			super(null);			
+		{	
+			super(null);		
 			this.loader = loader;			
 		}
-		
-		/**
-		 * @inheritDoc
-		 */ 
-		override protected function setupOverriddenTraits():void
-		{
-			loadable = new LoadableTrait(loader, resource);
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderChange);
-			addTrait(MediaTraitType.LOADABLE, loadable);
-		}
-		
-		private function onLoaderChange(event:LoadEvent):void
+	
+		private function onLoaderStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{
 				removeTrait(MediaTraitType.LOADABLE); // Remove the temporary loadable trait.
 				var context:MediaElementLoadedContext = loadable.loadedContext as MediaElementLoadedContext;
 				wrappedElement = context.element;
+				if (wrappedElement.hasTrait(MediaTraitType.LOADABLE))
+				{
+					(wrappedElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+				}
 			}
 		}
 		
-		// Only block traits if we haven't loaded the media element yet.
+		// Overriding is neccessary because there is a null wrappedElement.
 		/**
-		 * @inheritDoc
+		 * @private
 		 */ 
-		override protected function blocksTrait(type:MediaTraitType):Boolean
+		override public function set resource(value:IMediaResource):void 
 		{
-			return wrappedElement == null;
+			if (_resource != value && value != null)
+			{
+				_resource = value;
+				loadable = new LoadableTrait(loader, resource);
+				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
+				super.addTrait(MediaTraitType.LOADABLE, loadable);			
+			}						
 		}
 		
-		
+		/**
+		 * @private
+		 **/
+		override public function get resource():IMediaResource
+		{
+			return _resource;
+		}
+	
+		private var _resource:IMediaResource;
 		private var loadable:LoadableTrait;
 		private var loader:ILoader;
 	}
