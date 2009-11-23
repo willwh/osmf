@@ -91,20 +91,20 @@ package org.osmf.content
 			var viewable:ViewableTrait	= new ViewableTrait();			
 			var spatial:SpatialTrait 	= new SpatialTrait();
 			
-			// TODO: Add comment here on how the error can occur.
 			try
 			{
-				// Add a container layer, to allow the loaded content to
+				// Add a scroll rect, to allow the loaded content to
 				// overdraw its bounds, while maintaining scale, and size
 				// with the layout system.
-				var viewContainer:Sprite = new Sprite();
-				viewContainer.addChild(context.loader);
-				
+				//
+				// Note that it's critical that the IViewable's view be set to
+				// the Loader's content property (and not to a container Sprite,
+				// as was the case with a previous fix), since player-to-SWF
+				// communication is based on the player's ability to reference
+				// the SWF's API.
 				var info:LoaderInfo = context.loader.contentLoaderInfo;  
-				
-				context.loader.scrollRect = new Rectangle(0, 0, info.width, info.height);
-						
-				viewable.view = viewContainer;
+				context.loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
+				viewable.view = context.loader.content;	
 				
 				spatial.setDimensions(info.width, info.height);
 			}
