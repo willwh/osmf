@@ -15,7 +15,7 @@ the URL of the MAST document being set as metadata on the media element's resour
 
 B. Installation Instructions (Flex Builder)
 
-1. Unzip/copy the CuePointSample project into your Flex Builder workspace folder. 
+1. Unzip/copy the AkamaiPluginSample project into your Flex Builder workspace folder. 
 2. In Flex Builder, go to the File menu and select "Import".
 3. Browse to your Flex Builder workspace folder.
 4. Click "Finish". This will import the project.
