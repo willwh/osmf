@@ -93,7 +93,6 @@ package org.osmf.plugin
 	 * }
 	 * </listing>
 	 * @see PluginClassResource
-	 * @see PluginFactory
 	 * @see org.osmf.media.MediaInfo
 	 */
 	public interface IPluginInfo
