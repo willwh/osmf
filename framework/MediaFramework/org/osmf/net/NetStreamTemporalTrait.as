@@ -79,10 +79,10 @@ package org.osmf.net
 			
 			// Ensure our start time is non-negative, we only use it for
 			// calculating the offset.
-			var subclipStartTime:Number = Math.max(0, playArgs["start"]);
+			var subclipStartTime:Number = Math.max(0, playArgs.start);
 			
 			// Ensure our duration is non-negative.
-			var subclipDuration:Number = playArgs["len"];
+			var subclipDuration:Number = playArgs.len;
 			if (subclipDuration == NetStreamUtils.PLAY_LEN_ARG_ALL)
 			{
 				subclipDuration = Number.MAX_VALUE;

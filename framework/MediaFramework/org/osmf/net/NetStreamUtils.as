@@ -77,21 +77,26 @@ package org.osmf.net
 		 **/
 		public static function isRTMPResource(resource:IMediaResource):Boolean
 		{
-			if (resource == null) return false;
+			var result:Boolean = false;
 			
-			var urlResource:URLResource = resource as URLResource;
-			if (urlResource != null)
+			if (resource != null)
 			{
-				return NetStreamUtils.isRTMPStream(urlResource.url);
-			}
-
-			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-			if (dsResource != null)
-			{
-				return NetStreamUtils.isRTMPStream(dsResource.host);
+				var urlResource:URLResource = resource as URLResource;
+				if (urlResource != null)
+				{
+					result = NetStreamUtils.isRTMPStream(urlResource.url);
+				}
+				else
+				{
+					var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+					if (dsResource != null)
+					{
+						result = NetStreamUtils.isRTMPStream(dsResource.host);
+					}
+				}
 			}
 			
-			return false;
+			return result;
 		}
 
 		/**
@@ -99,16 +104,18 @@ package org.osmf.net
 		 **/
 		public static function isRTMPStream(url:URL):Boolean
 		{
-			if (url == null) return false;
+			var result:Boolean = false;
 			
-			var protocol:String = url.protocol;
-			
-			if (protocol == null || protocol.length <= 0)
-			{
-				return false;
+			if (url != null)
+			{			
+				var protocol:String = url.protocol;
+				if (protocol != null && protocol.length > 0)
+				{
+					result = (protocol.search(/^rtmp$|rtmp[tse]$|rtmpte$/i) != -1);
+				}
 			}
 			
-			return (protocol.search(/^rtmp$|rtmp[tse]$|rtmpte$/i) != -1);
+			return result;
 		}
 		
 		/**
@@ -182,7 +189,7 @@ package org.osmf.net
 				}
 			}
 			
-			return {"start":startArg, "len":lenArg};
+			return {start:startArg, len:lenArg};
 		}
 		
 		// Consts for the NetStream.play() method

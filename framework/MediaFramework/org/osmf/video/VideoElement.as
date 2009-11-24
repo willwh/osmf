@@ -329,14 +329,7 @@ package org.osmf.video
 
 		private function isProgressiveVideo(context:NetLoadedContext):Boolean
 		{
-			var protocol:String = context.resource.url.protocol;
-			
-			if (protocol == null || protocol.length <= 0)
-			{
-				return true;
-			}
-			
-			return (protocol.indexOf("rtmp") < 0);
+			return NetStreamUtils.isRTMPStream(context.resource.url) == false;
 		}
 		
 		private function onMetaData(info:Object):void 

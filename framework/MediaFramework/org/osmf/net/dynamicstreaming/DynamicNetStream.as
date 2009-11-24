@@ -386,8 +386,8 @@ package org.osmf.net.dynamicstreaming
 
 			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(resource);
 
-			nso.start = playArgs["start"];
-			nso.len = playArgs["len"];
+			nso.start = playArgs.start;
+			nso.len = playArgs.len;
 			nso.streamName = _dsResource.streamItems[targetIndex].streamName;
 			nso.oldStreamName = _oldStreamName;
 			nso.transition = firstPlay ? NetStreamPlayTransitions.RESET : NetStreamPlayTransitions.SWITCH;

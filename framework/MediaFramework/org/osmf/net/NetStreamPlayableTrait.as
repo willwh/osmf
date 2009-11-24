@@ -111,8 +111,8 @@ package org.osmf.net
 					// Map the resource to the NetStream.play arguments.
 					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url);
 					var playArgs:Object = NetStreamUtils.getPlayArgsForResource(urlResource);
-					var startTime:Number = playArgs["start"];
-					var len:Number = playArgs["len"];
+					var startTime:Number = playArgs.start;
+					var len:Number = playArgs.len;
 					
 					// Play the clip (or the requested portion of the clip).
 					doPlay(streamName, startTime, len);

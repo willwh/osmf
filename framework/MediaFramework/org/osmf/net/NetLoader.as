@@ -222,7 +222,7 @@ package org.osmf.net
 			{
 				return res.url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1;
 			}
-			if (res.url.protocol.search(/rtmp$|rtmp[tse]$|rtmpte$/i) != -1)
+			if (NetStreamUtils.isRTMPStream(res.url))
 			{
 				return true;
 			}
