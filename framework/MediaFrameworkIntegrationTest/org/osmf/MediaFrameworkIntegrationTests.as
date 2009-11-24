@@ -41,6 +41,7 @@ package org.osmf
 	import org.osmf.swf.TestSWFLoaderIntegration;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestHTTPLoader;
+	import org.osmf.net.TestManifestLoader;
 	
 
 	public class MediaFrameworkIntegrationTests extends TestSuite
@@ -73,6 +74,8 @@ package org.osmf
 			addTestSuite(TestDynamicPluginLoaderIntegration);
 			
 			addTestSuite(TestPluginManagerIntegration);
+			
+			addTestSuite(TestManifestLoader);
 			
 			CONFIG::FLASH_10_1
 			{

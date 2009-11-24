@@ -28,6 +28,7 @@ package org.osmf.net
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
@@ -154,7 +155,7 @@ package org.osmf.net
 				var resource:URLResource = new URLResource(new URL(value.media[0].url));
 				if (value.mimeType != null)
 				{
-					resource.metadata.addFacet(new MediaTypeFacet(null, value.mimeType));			
+					resource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
 				}
 				if (Media(value.media[0]).drmMetadata != null)
 				{
@@ -170,7 +171,7 @@ package org.osmf.net
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
 				if (value.mimeType != null)
 				{
-					dynResource.metadata.addFacet(new MediaTypeFacet(null, value.mimeType));			
+					dynResource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
 				}
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								

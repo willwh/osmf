@@ -53,7 +53,7 @@ package org.osmf.proxies
 				removeTrait(MediaTraitType.LOADABLE); // Remove the temporary loadable trait.
 				var context:MediaElementLoadedContext = loadable.loadedContext as MediaElementLoadedContext;
 				wrappedElement = context.element;
-				if (wrappedElement.hasTrait(MediaTraitType.LOADABLE))
+				if (wrappedElement && wrappedElement.hasTrait(MediaTraitType.LOADABLE))
 				{
 					(wrappedElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
 				}
