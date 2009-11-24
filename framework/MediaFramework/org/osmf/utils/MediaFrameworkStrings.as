@@ -195,5 +195,9 @@ package org.osmf.utils
 		public static const DRM_NO_ANALOG_PROTECTION_AVAIL:String		= "NoAnalogProtectionAvail	  Can't play back because connected analog device doesn't have the correct capabilities";
 		public static const DRM_NO_DIGITAL_PLAYBACK_ALLOWED:String		= "NoDigitalPlaybackAllowed	  Can't playback on digital device, should never happen in real life.";
 		public static const DRM_NO_DIGITAL_PROTECTION_AVAIL:String		= "NoDigitalProtectionAvail	  The connected digital device doesn't have the correct capabilities";
+		
+		//Flash Media Manifest Errors
+		public static const F4M_PARSE_NO_ID:String						= "Missing id tag from manifest";
+			
 	}
 }

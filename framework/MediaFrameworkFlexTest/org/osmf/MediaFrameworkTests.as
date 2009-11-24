@@ -142,6 +142,10 @@ package org.osmf
 			addTestSuite(TestNetStreamUtils);
 			addTestSuite(TestStreamingURLResource);
 
+			addTestSuite(TestManifestParser);
+			addTestSuite(TestFMMLoader);
+			
+
 			addTestSuite(TestNetStreamAudibleTrait);
 			addTestSuite(TestNetStreamBufferableTrait);
 			addTestSuite(TestNetStreamPlayableTrait);

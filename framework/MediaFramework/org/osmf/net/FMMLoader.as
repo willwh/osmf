@@ -23,6 +23,7 @@ package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
@@ -60,7 +61,7 @@ package org.osmf.net
 	{
 			
 		//MimeType
-		public static const FMM_MIME_TYPE:String = "application/fmm+xml";
+		public static const F4M_MIME_TYPE:String = "application/f4m+xml";
 			
 		/**
 		 * Generate a new FMMLoader.  
@@ -79,7 +80,7 @@ package org.osmf.net
 				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaInfoType.STANDARD));
-			}
+			}			
 			this.factory = factory;				
 		}
 
@@ -88,7 +89,9 @@ package org.osmf.net
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
-			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), new Vector.<String>([FMM_MIME_TYPE]));
+			var suportedMimeTypes:Vector.<String> = new Vector.<String>();
+			suportedMimeTypes.push(F4M_MIME_TYPE);
+			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), suportedMimeTypes);
 			
 			if (supported == MetadataUtils.METADATA_MATCH_FOUND)
 			{
@@ -98,7 +101,7 @@ package org.osmf.net
 			{
 				var url:URLResource = URLResource(resource);
 				var extension:String = url.url.path.substr(url.url.path.length-3,3);
-				return extension == "fmm";
+				return extension == "f4m";
 			}		
 			else
 			{
@@ -118,10 +121,12 @@ package org.osmf.net
 			loader.addEventListener(Event.COMPLETE, onComplete);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-			function onError(event:Event):void
-			{			
-				updateLoadable(loadable, LoadState.LOAD_ERROR); 
-			}
+						
+			function onError(erEvent:ErrorEvent):void
+			{				
+				updateLoadable(loadable, LoadState.LOAD_ERROR); 				
+				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(erEvent['errorID'], erEvent.text)));
+			}			
 			function onComplete(event:Event):void
 			{			
 				try
@@ -155,6 +160,6 @@ package org.osmf.net
 		
 		
 		private var factory:MediaFactory;
-
+		
 	}
 }

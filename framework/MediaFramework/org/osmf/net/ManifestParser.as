@@ -27,17 +27,21 @@ package org.osmf.net
 	
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaTypeFacet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.Base64Decoder;
 	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.MediaFrameworkStrings;
 	import org.osmf.utils.URL;
 	
 	internal class ManifestParser
 	{		
 	
-		namespace xmlns = "http://www.adobe.com/fmm/1.0";
+		namespace xmlns = "http://ns.adobe.com/f4m/1.0";
 		/**
 		 * Parses a Manifest Object from a XML string.
 		 * 
@@ -52,6 +56,10 @@ package org.osmf.net
 			if (root.xmlns::id.length() > 0)
 			{
 				manifest.id = root.xmlns::id.text();
+			}
+			else
+			{
+				throw new ArgumentError(MediaFrameworkStrings.F4M_PARSE_NO_ID);
 			}
 			
 			if (root.xmlns::duration.length() > 0)
@@ -75,7 +83,7 @@ package org.osmf.net
 			{
 				manifest.media.push(parseMedia(media));
 			}	
-				
+								
 			//DRM Metadata	
 			
 			for each (var data:XML in root.xmlns::drmMetadata)
@@ -104,7 +112,7 @@ package org.osmf.net
 			
 			if (value.attribute('height').length() > 0)
 			{
-				media.height = value.@drmMetadataId;
+				media.height = value.@height;
 			}
 			
 			if (value.attribute('width').length() > 0)
@@ -117,7 +125,12 @@ package org.osmf.net
 		
 		private static function parseDRMMetadata(value:XML, allMedia:Vector.<Media>):void
 		{
-			var id:String = value.@id;
+			
+			var id:String = null;
+			if (value.attribute("id").length() > 0)
+			{
+				id = value.@id;
+			}
 			var metadata:String = value.text();
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(metadata);
@@ -135,12 +148,19 @@ package org.osmf.net
 				
 		public static function createResource(value:Manifest):IMediaResource
 		{			
+			var drmFacet:KeyValueFacet;
 			if(value.media.length == 1)  //Single Stream Resource
 			{				
 				var resource:URLResource = new URLResource(new URL(value.media[0].url));
-				if(value.mimeType != null)
+				if (value.mimeType != null)
 				{
 					resource.metadata.addFacet(new MediaTypeFacet(null, value.mimeType));			
+				}
+				if (Media(value.media[0]).drmMetadata != null)
+				{
+					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
+					drmFacet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
+					resource.metadata.addFacet(drmFacet);
 				}
 				return resource;
 			}	
@@ -148,14 +168,26 @@ package org.osmf.net
 			{
 				var baseURL:FMSURL = new FMSURL(value.media[0].url);
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
-				dynResource.metadata.addFacet(new MediaTypeFacet(null, value.mimeType));			
+				if (value.mimeType != null)
+				{
+					dynResource.metadata.addFacet(new MediaTypeFacet(null, value.mimeType));			
+				}
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
-				
+								
 				for each (var media:Media in value.media)
 				{
 					var url:FMSURL = new FMSURL(media.url);
 					var item:DynamicStreamingItem = new DynamicStreamingItem(url.streamName, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
+					if (media.drmMetadata != null)
+					{
+						if (dynResource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) == null)
+						{
+							drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
+							dynResource.metadata.addFacet(drmFacet);
+						}						
+						drmFacet.addValue(new ObjectIdentifier(item), media.drmMetadata);	
+					}
 				}
 				return dynResource;
 			}
