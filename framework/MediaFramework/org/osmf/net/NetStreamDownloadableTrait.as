@@ -51,9 +51,8 @@ package org.osmf.net
 		public function NetStreamDownloadableTrait(netStream:NetStream)
 		{
 			super(NaN, NaN);
-			
 			_netStream = netStream;
-			if (isNaN(_netStream.bytesTotal) || _netStream.bytesTotal <= 0)
+			if (_netStream.bytesTotal <= 0 || _netStream.bytesTotal == uint.MAX_VALUE)
 			{
 				_netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			}
@@ -91,7 +90,7 @@ package org.osmf.net
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			if (!isNaN(_netStream.bytesTotal) && _netStream.bytesTotal > 0)
+			if (_netStream.bytesTotal > 0)
 			{
 				dispatchEvent
 					( new LoadEvent

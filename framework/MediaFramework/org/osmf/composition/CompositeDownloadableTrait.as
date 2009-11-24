@@ -48,8 +48,8 @@ package org.osmf.composition
 					{			
 						if (!emptyUnitSeen)
 						{	
-							emptyUnitSeen = emptyUnitSeen || trait.bytesTotal <= 0; 		
-							computedLoaded += trait.bytesTotal;						
+							emptyUnitSeen = emptyUnitSeen || trait.bytesLoaded <= 0; 		
+							computedLoaded += trait.bytesLoaded;						
 						}
 					},
 					MediaTraitType.DOWNLOADABLE);
@@ -59,7 +59,7 @@ package org.osmf.composition
 				traitAggregator.forEachChildTrait(
 					function (trait:IDownloadable):void
 					{											
-						computedLoaded += trait.bytesTotal;						
+						computedLoaded += trait.bytesLoaded;						
 					},
 					MediaTraitType.DOWNLOADABLE);
 			}
