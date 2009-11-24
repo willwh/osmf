@@ -31,6 +31,11 @@ package org.osmf.net
 	 * It is possible for live and recorded streams to have identical URLs.
 	 * This subclass was added to support this unusual case. 
 	 * When necessary, the streamType property should be used to disambiguate live and recorded streams.
+	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 **/
 	public class StreamingURLResource extends URLResource
 	{
@@ -39,6 +44,11 @@ package org.osmf.net
 		 * 
 		 * @param url The URL of the resource.
 		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 **/
 		public function StreamingURLResource(url:URL, streamType:String=null)
 		{
@@ -72,6 +82,11 @@ package org.osmf.net
 		 * </table>
 		 * 
 		 * @see StreamType
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 **/
 		public function get streamType():String
 		{

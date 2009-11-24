@@ -27,21 +27,45 @@ package org.osmf.net
 	 * By default any available connection will be used.
 	 *
 	 * @see StreamingURLResource
+	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
+	 * 
 	 **/
 	public final class StreamType
 	{
 		/**
 		 * The LIVE stream type represents a live stream.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 * 
 		 **/
 		public static const LIVE:String = "live";
 
 		/**
 		 * The RECORDED stream type represents a recorded stream.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 * 
 		 **/
 		public static const RECORDED:String = "recorded";
 
 		/**
 		 * The ANY stream type represents any possible stream type.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 * 
 		 **/
 		public static const ANY:String = "any";
 		

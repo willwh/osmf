@@ -270,6 +270,7 @@ package org.osmf.video
 			addTrait(MediaTraitType.VIEWABLE, viewable);
 			addTrait(MediaTraitType.TEMPORAL, temporal);
 			
+			// Do not add the seekable trait to live streams
 			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
 	    		addTrait(MediaTraitType.SEEKABLE, seekable);
