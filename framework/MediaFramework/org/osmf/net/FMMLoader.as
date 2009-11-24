@@ -122,10 +122,10 @@ package org.osmf.net
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 						
-			function onError(erEvent:ErrorEvent):void
+			function onError(event:ErrorEvent):void
 			{				
 				updateLoadable(loadable, LoadState.LOAD_ERROR); 				
-				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(erEvent['errorID'], erEvent.text)));
+				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
 			}			
 			function onComplete(event:Event):void
 			{			
