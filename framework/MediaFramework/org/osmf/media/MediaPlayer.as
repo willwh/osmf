@@ -859,13 +859,24 @@ package org.osmf.media
 	    
 	    public function set volume(value:Number):void
 	    {
+	    	var doDispatchEvent:Boolean = false;
+	    	
 	    	if (audible)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).volume = value;
 	    	}
+	    	else if (value != mediaPlayerVolume)
+	    	{
+	    		doDispatchEvent = true;
+	    	}
 
     		mediaPlayerVolume = value;
     		mediaPlayerVolumeSet = true;
+
+     		if (doDispatchEvent)
+    		{
+    			dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, false, value));
+    		}
 	    }
 		
 		/**
@@ -887,13 +898,24 @@ package org.osmf.media
 	    
 	    public function set muted(value:Boolean):void
 	    {
+	    	var doDispatchEvent:Boolean = false;
+	    	
 	    	if (audible)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).muted = value;
 	    	}
+	    	else if (value != mediaPlayerMuted)
+	    	{
+	    		doDispatchEvent = true;
+	    	}
 
     		mediaPlayerMuted = value;
     		mediaPlayerMutedSet = true;
+    		
+    		if (doDispatchEvent)
+    		{
+    			dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, value));
+    		}
 	    }
 	 	 
 		/**
@@ -917,13 +939,24 @@ package org.osmf.media
 	    
 	    public function set pan(value:Number):void
 	    {
+	    	var doDispatchEvent:Boolean = false;
+	    	
 	    	if (audible)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).pan = value;
 	    	}
+	    	else if (value != mediaPlayerPan)
+	    	{
+	    		doDispatchEvent = true;
+	    	}
 
     		mediaPlayerPan = value;
     		mediaPlayerPanSet = true;
+    		
+    		if (doDispatchEvent)
+    		{
+    			dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, false, NaN, value));
+    		}
 		}
 	
 	    // IPausable
@@ -1583,7 +1616,6 @@ package org.osmf.media
 				
 		private function onPlaying(event:PlayingChangeEvent):void
 		{			
-			//trace('onPlaying');	
 			if (event.playing)
 			{				
 				setState(MediaPlayerState.PLAYING);				
@@ -1592,7 +1624,6 @@ package org.osmf.media
 		
 		private function onPaused(event:PausedChangeEvent):void
 		{		
-			//trace('onPaused');	
 			if (event.paused)
 			{				
 				setState(MediaPlayerState.PAUSED);				
@@ -1630,7 +1661,6 @@ package org.osmf.media
 		
 		private function onDurationReached(event:TimeEvent):void
 		{
-			//trace('onDuration');
 			if (loop && seekable && playable)
 			{	
 				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
@@ -1639,7 +1669,7 @@ package org.osmf.media
 					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
 					play();	
 				}
-				seek(0); //If we don't wait for the seekend, everything breaks for looping.									
+				seek(0); //If we don't wait for the seek end, everything breaks for looping.									
 			}
 			else if (autoRewind && seekable && !loop)
 			{	
@@ -1687,10 +1717,6 @@ package org.osmf.media
 		
 		private function onBuffering(event:BufferEvent):void
 		{
-			//trace('Buffering' + event.buffering);
-			//trace('playable && playing' + (playable && playing) );
-			//trace('pausable && paused' + (pausable && paused) );
-			
 			if (event.buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);

@@ -229,16 +229,24 @@ package org.osmf.media
 			
 			// Assign a volume up front.  This value will take precedence over
 			// any volume inherited from the MediaElement.
+			mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
 			mediaPlayer.volume = 0.33;
-			
-			if (loadable)
+
+			function onVolumeChange(event:AudioEvent):void
 			{
-				callAfterLoad(doTestVolumeWithPreset, false);
-			}
-			else
-			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestVolumeWithPreset();
+				mediaPlayer.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+				
+				assertTrue(event.volume == 0.33);
+
+				if (loadable)
+				{
+					callAfterLoad(doTestVolumeWithPreset, false);
+				}
+				else
+				{
+					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					doTestVolumeWithPreset();
+				}
 			}
 		}
 		
@@ -305,16 +313,24 @@ package org.osmf.media
 			
 			// Assign a muted value up front.  This value will take precedence over
 			// any muted value inherited from the MediaElement.
+			mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
 			mediaPlayer.muted = true;
 			
-			if (loadable)
+			function onMutedChange(event:AudioEvent):void
 			{
-				callAfterLoad(doTestMutedWithPreset, false);
-			}
-			else
-			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestMutedWithPreset();
+				mediaPlayer.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+				
+				assertTrue(event.muted == true);
+				
+				if (loadable)
+				{
+					callAfterLoad(doTestMutedWithPreset, false);
+				}
+				else
+				{
+					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					doTestMutedWithPreset();
+				}
 			}
 		}
 		
@@ -381,16 +397,24 @@ package org.osmf.media
 
 			// Assign a pan value up front.  This value will take precedence
 			// over any pan value inherited from the MediaElement.
+			mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 			mediaPlayer.pan = -0.5;
-			
-			if (loadable)
+
+			function onPanChange(event:AudioEvent):void
 			{
-				callAfterLoad(doTestPanWithPreset, false);
-			}
-			else
-			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestPanWithPreset();
+				mediaPlayer.removeEventListener(AudioEvent.PAN_CHANGE, onPanChange);
+				
+				assertTrue(event.pan == -0.5);
+					
+				if (loadable)
+				{
+					callAfterLoad(doTestPanWithPreset, false);
+				}
+				else
+				{
+					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					doTestPanWithPreset();
+				}
 			}
 		}
 		
@@ -1198,11 +1222,18 @@ package org.osmf.media
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
 					
-					if(mediaPlayer.paused)
+					if (mediaPlayer.paused)
 					{
 						assertTrue(mediaPlayer.playing == false);
 					}
-								
+					
+					// These are all possible/permissible state sequences.
+					var statesStr:String = states.join(" ");
+					assertTrue(		statesStr == "playing paused"
+								||	statesStr == "playing"
+								||	statesStr == "playing ready"
+							  ); 
+
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 				
