@@ -77,7 +77,7 @@ package org.osmf.utils
 		
 		// MediaPlayer
 		
-		public static const TRAIT_NOT_SUPPORTED:String 					= "MediaPlayer - attempt to use a trait not on the media";		
+		public static const TRAIT_NOT_SUPPORTED:String 					= "MediaPlayer - method called on null media or media that isn't *trait*";		
 		
 		// Metadata
 		

@@ -854,14 +854,14 @@ package org.osmf.media
 		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).volume : mediaPlayerVolume;	    		    
+	    	return audible ? IAudible(getTraitOrThrow(MediaTraitType.AUDIBLE)).volume : mediaPlayerVolume;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
 	    {
 	    	if (audible)
 	    	{
-	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).volume = value;
+	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).volume = value;
 	    	}
 
     		mediaPlayerVolume = value;
@@ -882,14 +882,14 @@ package org.osmf.media
 		 */				
 	    public function get muted():Boolean
 	    {
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).muted : mediaPlayerMuted;	    	   
+	    	return audible ? IAudible(getTraitOrThrow(MediaTraitType.AUDIBLE)).muted : mediaPlayerMuted;	    	   
 	    }
 	    
 	    public function set muted(value:Boolean):void
 	    {
 	    	if (audible)
 	    	{
-	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).muted = value;
+	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).muted = value;
 	    	}
 
     		mediaPlayerMuted = value;
@@ -912,14 +912,14 @@ package org.osmf.media
 		
 	    public function get pan():Number
 	    {
-	    	return audible ? IAudible(getTrait(MediaTraitType.AUDIBLE)).pan : mediaPlayerPan;	    		
+	    	return audible ? IAudible(getTraitOrThrow(MediaTraitType.AUDIBLE)).pan : mediaPlayerPan;	    		
 	    }
 	    
 	    public function set pan(value:Number):void
 	    {
 	    	if (audible)
 	    	{
-	    		(getTrait(MediaTraitType.AUDIBLE) as IAudible).pan = value;
+	    		(getTraitOrThrow(MediaTraitType.AUDIBLE) as IAudible).pan = value;
 	    	}
 
     		mediaPlayerPan = value;
@@ -941,7 +941,7 @@ package org.osmf.media
 		 */	
 		public function get paused():Boolean
 	    {
-	    	return pausable ? (getTrait(MediaTraitType.PAUSABLE) as IPausable).paused : false;	    		    
+	    	return pausable ? (getTraitOrThrow(MediaTraitType.PAUSABLE) as IPausable).paused : false;	    		    
 	    }
 	    
 		/**
@@ -955,7 +955,7 @@ package org.osmf.media
 	    */
 	    public function pause():void
 	    {
-	    	(getTrait(MediaTraitType.PAUSABLE) as IPausable).pause();	    		
+	    	(getTraitOrThrow(MediaTraitType.PAUSABLE) as IPausable).pause();	    		
 	    }
 	
 	    // IPlayable
@@ -973,7 +973,7 @@ package org.osmf.media
 		 */					
 	    public function get playing():Boolean
 	    {
-	    	return playable ? (getTrait(MediaTraitType.PLAYABLE) as IPlayable).playing : false;	    		
+	    	return playable ? (getTraitOrThrow(MediaTraitType.PLAYABLE) as IPlayable).playing : false;	    		
 	    }
 	    
 	    /**
@@ -987,7 +987,7 @@ package org.osmf.media
 	    */
 	    public function play():void
 	    {
-	    	(getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();	    	
+	    	(getTraitOrThrow(MediaTraitType.PLAYABLE) as IPlayable).play();	    	
 	    }
 		
 	    // ISeekable
@@ -1005,7 +1005,7 @@ package org.osmf.media
 		 */			
 	    public function get seeking():Boolean
 	    {
-	    	return seekable ? (getTrait(MediaTraitType.SEEKABLE) as ISeekable).seeking : false;
+	    	return seekable ? (getTraitOrThrow(MediaTraitType.SEEKABLE) as ISeekable).seeking : false;
 	    }
 	    
 	    /**
@@ -1021,7 +1021,7 @@ package org.osmf.media
 	     */	    
 	    public function seek(time:Number):void
 	    {
-	    	(getTrait(MediaTraitType.SEEKABLE) as ISeekable).seek(time);	    				
+	    	(getTraitOrThrow(MediaTraitType.SEEKABLE) as ISeekable).seek(time);	    				
 	    }
 	    
 		/**
@@ -1044,7 +1044,7 @@ package org.osmf.media
 		 */	
 	    public function canSeekTo(time:Number):Boolean
 	    {
-	    	return (getTrait(MediaTraitType.SEEKABLE) as ISeekable).canSeekTo(time);
+	    	return (getTraitOrThrow(MediaTraitType.SEEKABLE) as ISeekable).canSeekTo(time);
 	    }
 	    
 	    /**
@@ -1076,7 +1076,7 @@ package org.osmf.media
 		 */
 	    public function get width():int
 	    {
-	    	return spatial ? (getTrait(MediaTraitType.SPATIAL) as ISpatial).width : 0;
+	    	return spatial ? (getTraitOrThrow(MediaTraitType.SPATIAL) as ISpatial).width : 0;
 	    }
 		   
 		/**
@@ -1093,7 +1093,7 @@ package org.osmf.media
 		 */	
 		public function get height():int
 	    {
-	    	return spatial ? (getTrait(MediaTraitType.SPATIAL) as ISpatial).height : 0;
+	    	return spatial ? (getTraitOrThrow(MediaTraitType.SPATIAL) as ISpatial).height : 0;
 	    }
 	    
 	    // ISwitchable
@@ -1113,14 +1113,14 @@ package org.osmf.media
 		 */
 		public function get autoSwitch():Boolean
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : true;
+			return switchable ? (getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch : true;
 		}
 		
 		public function set autoSwitch(value:Boolean):void
 		{
 			if (switchable)
 			{
-				(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = value;
+				(getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).autoSwitch = value;
 			}
 		}
 		
@@ -1134,7 +1134,7 @@ package org.osmf.media
 		 */
 		public function get currentStreamIndex():int
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex : 0; 
+			return switchable ? (getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).currentIndex : 0; 
 		}
 		
 		/**
@@ -1150,7 +1150,7 @@ package org.osmf.media
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
-			return (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).getBitrateForIndex(index);
+			return (getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).getBitrateForIndex(index);
 		}
 		
 		/**
@@ -1170,12 +1170,12 @@ package org.osmf.media
 		 */
 		public function get maxStreamIndex():int
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex : 0;
+			return switchable ? (getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex : 0;
 		}
 		
 		public function set maxStreamIndex(value:int):void
 		{
-			(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex = value; 
+			(getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).maxIndex = value; 
 		}
 		
 		/**
@@ -1192,7 +1192,7 @@ package org.osmf.media
 		 */
 		public function get switchUnderway():Boolean
 		{
-			return switchable ? (getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway : false;
+			return switchable ? (getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).switchUnderway : false;
 		}
 		
 		/**
@@ -1215,7 +1215,7 @@ package org.osmf.media
 		 */
 		public function switchTo(streamIndex:int):void
 		{
-			(getTrait(MediaTraitType.SWITCHABLE) as ISwitchable).switchTo(streamIndex);
+			(getTraitOrThrow(MediaTraitType.SWITCHABLE) as ISwitchable).switchTo(streamIndex);
 		}	    
 	
 	    // IViewable
@@ -1234,7 +1234,7 @@ package org.osmf.media
          */
 	    public function get view():DisplayObject
 	    {
-	    	return viewable ? (getTrait(MediaTraitType.VIEWABLE) as IViewable).view : null;	
+	    	return viewable ? (getTraitOrThrow(MediaTraitType.VIEWABLE) as IViewable).view : null;	
 	    }
 	
         // ITemporal
@@ -1252,7 +1252,7 @@ package org.osmf.media
 		 */
 	    public function get duration():Number
 	    {
-	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).duration : 0;	    	
+	    	return temporal ? (getTraitOrThrow(MediaTraitType.TEMPORAL) as ITemporal).duration : 0;	    	
 	    }
 	  	  
     	/**
@@ -1269,7 +1269,7 @@ package org.osmf.media
 		 */		    
 	    public function get currentTime():Number
 	    {
-	    	return temporal ? (getTrait(MediaTraitType.TEMPORAL) as ITemporal).currentTime : 0;
+	    	return temporal ? (getTraitOrThrow(MediaTraitType.TEMPORAL) as ITemporal).currentTime : 0;
 	    }
 	    	    
 	    /**
@@ -1284,7 +1284,7 @@ package org.osmf.media
 		 */		
 		public function get buffering():Boolean
 		{
-			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).buffering : false;	    	
+			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFERABLE) as IBufferable).buffering : false;	    	
 		}
 		
 		/**
@@ -1298,7 +1298,7 @@ package org.osmf.media
 		 */		
 		public function get bufferLength():Number
 		{
-			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferLength : 0;	    	
+			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFERABLE) as IBufferable).bufferLength : 0;	    	
 		}
 		
 		/**
@@ -1316,14 +1316,14 @@ package org.osmf.media
 		 */		
 		public function get bufferTime():Number
 		{
-			return bufferable ? (getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime : 0;		    	
+			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime : 0;		    	
 		}
 		
 		public function set bufferTime(value:Number):void
 		{
 			if (bufferable)
 			{
-				(getTrait(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime = value;
+				(getTraitOrThrow(MediaTraitType.BUFFERABLE) as IBufferable).bufferTime = value;
 			}	    	
 		}
 		
@@ -1340,7 +1340,7 @@ package org.osmf.media
 		 */		
 		public function get bytesLoaded():Number
 		{
-			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesLoaded : 0;
+			return downloadable? (getTraitOrThrow(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesLoaded : 0;
 		}
 		
 		/**
@@ -1354,20 +1354,28 @@ package org.osmf.media
 		 */		
 		public function get bytesTotal():Number
 		{
-			return downloadable? (getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesTotal : 0;
+			return downloadable? (getTraitOrThrow(MediaTraitType.DOWNLOADABLE) as IDownloadable).bytesTotal : 0;
 		}
 
 		// Internals
 		//
-	    
-	    private function getTrait(trait:MediaTraitType):IMediaTrait
+	       
+	    //Throws an error if the trait isn't available
+	    private function getTraitOrThrow(trait:MediaTraitType):IMediaTrait
 	    {
 	    	if (!_element || !_element.hasTrait(trait))
 	    	{
-	    		throw new IllegalOperationError(MediaFrameworkStrings.TRAIT_NOT_SUPPORTED);		    		
+	    		var error:String = MediaFrameworkStrings.TRAIT_NOT_SUPPORTED;
+	    		var traitName:String = trait.toString().replace("[class I", "");
+	    		traitName = traitName.replace("]", "").toLowerCase();	
+	    				
+	    		error = error.replace('*trait*', traitName);
+	    			    		
+	    		throw new IllegalOperationError(error);		    		
 	    	}
 	    	return _element.getTrait(trait);
 	    }
+	    
 	    
 	    private function onMediaError(event:MediaErrorEvent):void
 	    {
