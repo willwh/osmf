@@ -23,12 +23,13 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.GatewayChangeEvent;
-	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.IDisposable;
 	import org.osmf.traits.MediaTraitType;
@@ -100,7 +101,8 @@ package org.osmf.media
 		 * Constructor.
 		 **/
 		public function MediaElement()
-		{			
+		{	
+			setupTraitResolvers();		
 			setupTraits();
 		}
 	
@@ -131,7 +133,7 @@ package org.osmf.media
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			return _traits[type] != null;
+			return traits[type] != null;
 		}
 		
 		/**
@@ -150,7 +152,7 @@ package org.osmf.media
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 
-			return _traits[type];
+			return traits[type];
 		}
 		
 		/**
@@ -241,7 +243,6 @@ package org.osmf.media
 		 {
 		 	return new Metadata();
 		 }
-		 
 		
 		/**
 		 * Adds a new media trait to this media element.  If successful,
@@ -255,29 +256,23 @@ package org.osmf.media
 		 * or if a different instance of the specific trait class has already
 		 * been added.
 		 **/
-		protected function addTrait(type:MediaTraitType, instance:IMediaTrait):void
+		final protected function addTrait(type:MediaTraitType, instance:IMediaTrait):void
 		{
 			if (type == null || instance == null || !(instance is type.traitInterface))
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			var result:IMediaTrait = _traits[type];
-			
-			if (result == null)
+			// If there's a trait resolver for this type, then add the trait
+			// to the resolver:
+			var traitResolver:MediaTraitResolver = traitResolvers[type];
+			if (traitResolver != null)
 			{
-				_traits[type] = result = instance;
-				_traitTypes.push(type);
-				
-				// Listen for errors:
-				result.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				
-				// Signal addition:
-				dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, type));
+				traitResolver.addTrait(instance);		
 			}
-			else if (result != instance)
+			else
 			{
-				throw new ArgumentError(MediaFrameworkStrings.TRAIT_INSTANCE_ALREADY_ADDED);
+				setLocalTrait(type, instance);
 			}
 		}
 		
@@ -291,32 +286,97 @@ package org.osmf.media
          * @return The removed trait or <code>null</code> if no trait was
          * removed.
 		 **/
-		protected function removeTrait(type:MediaTraitType):IMediaTrait
+		final protected function removeTrait(type:MediaTraitType):IMediaTrait
 		{
 			if (type == null)
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 
-			var result:IMediaTrait = _traits[type];
-			
-			if (result != null)
+			var trait:IMediaTrait = traits[type];
+			var traitResolver:MediaTraitResolver = traitResolvers[type];
+			if (traitResolver != null)
 			{
-				// Stop listening for errors:
-				result.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				if (result is IDisposable)
-				{
-					(result as IDisposable).dispose();
-				}
-
-				// Signal removal is about to occur:
-				dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, type));
-				
-				_traitTypes.splice(_traitTypes.indexOf(type),1);
-				delete _traits[type];
+				return traitResolver.removeTrait(trait);		
+			}
+			else
+			{
+				return setLocalTrait(type, null);
+			}
+		}
+		
+		/**
+		 * Adds a trait resolver object for a given trait type.
+		 * 
+		 * Only one resolver can be set per trait type.
+		 * 
+		 * @param type The trait type to add a resolver for.
+		 * @param instance The resolver object to add.
+		 * 
+		 * @throws ArgumentError If type is null, or if instance is null.
+		 * @throws ArgumentError If a resolver has already been added for type.
+		 */		
+		final protected function addTraitResolver(instance:MediaTraitResolver):void
+		{
+			if (instance == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			return result;
+			if (traitResolvers[instance.type] == null)
+			{
+				traitResolvers[instance.type] = instance;
+				instance.addEventListener(Event.CHANGE, onTraitResolverChange); 
+			}
+			else
+			{
+				throw new ArgumentError(MediaFrameworkStrings.TRAIT_RESOLVER_ALREADY_ADDED);
+			}
+		}
+		
+		/**
+		 * Removes a trait resolver object for a given trait type.
+		 * 
+		 * @param type The trait type who's resolver to remove.
+		 * 
+		 * @throws ArgumentError If type is null, or if no resolver has been added for type.
+		 */		
+		final protected function removeTraitResolver(type:MediaTraitType):MediaTraitResolver
+		{
+			if (type == null || traitResolvers[type] == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+			}
+			
+			var instance:MediaTraitResolver = traitResolvers[type];
+			instance.removeEventListener(Event.CHANGE, onTraitResolverChange);
+			delete traitResolvers[type];
+			
+			return instance;
+		}
+		
+		/**
+		 * Defines the trait resolver that's set for the specified trait type.
+		 * 
+		 * @param type The trait type who's resolver object shoukd be returned.
+		 * @return The requested resolver object, or null if none is set for the specified type.
+		 * 
+		 */		
+		final protected function getTraitResolver(type:MediaTraitType):MediaTraitResolver
+		{
+			return traitResolvers[type];
+		}
+		
+		// Subclass stubs
+		//
+		
+		/**
+		 * Sets up the trait resolvers for the media elements. Occurs during
+		 * construction. Subclasses should override this method and call
+		 * addTraitResolver for each trait they wish to add a resolver for.
+		 */		
+		protected function setupTraitResolvers():void
+		{	
 		}
 		
 		/**
@@ -335,9 +395,65 @@ package org.osmf.media
 		{
 			dispatchEvent(event.clone());
 		}
+		
+		private function setLocalTrait(type:MediaTraitType, instance:IMediaTrait):IMediaTrait
+		{
+			var result:IMediaTrait = traits[type];
+			if (instance == null)
+			{
+				// We're processing a trait removal:
+				if (result != null)
+				{
+					// Stop listening for errors:
+					result.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+					if (result is IDisposable)
+					{
+						(result as IDisposable).dispose();
+					}
+	
+					// Signal removal is about to occur:
+					dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, type));
+					
+					_traitTypes.splice(_traitTypes.indexOf(type),1);
+					delete traits[type];
+				}
+			}
+			else
+			{
+				// We're processing a trait addition:
+				if (result == null)
+				{
+					traits[type] = result = instance;
+					_traitTypes.push(type);
+					
+					// Listen for errors:
+					result.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+					
+					// Signal addition:
+					dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, type));
+				}
+				else if (result != instance)
+				{
+					throw new ArgumentError(MediaFrameworkStrings.TRAIT_INSTANCE_ALREADY_ADDED);
+				}
+			}
+			
+			return result;
+		}
+		
+		private function onTraitResolverChange(event:Event):void
+		{
+			var resolver:MediaTraitResolver = event.target as MediaTraitResolver;
+			if (resolver && traits[resolver.type] != resolver.resolvedTrait)
+			{
+				setLocalTrait(resolver.type, resolver.resolvedTrait);
+			}
+		}
+		
+		private var traits:Dictionary = new Dictionary();
+		private var traitResolvers:Dictionary = new Dictionary();
 
 		private var _traitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
-		private var _traits:Dictionary = new Dictionary();
 		private var _resource:IMediaResource;
 		private var _gateway:IMediaGateway;
 		private var _metadata:Metadata;
