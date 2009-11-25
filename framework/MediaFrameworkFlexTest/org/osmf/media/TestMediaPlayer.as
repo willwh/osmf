@@ -1202,13 +1202,7 @@ package org.osmf.media
 					{
 						assertTrue(mediaPlayer.playing == false);
 					}
-					
-					// These are all possible/permissible state sequences.
-					var statesStr:String = states.join(" ");
-					assertTrue(		statesStr == "playing paused"
-								||	statesStr == "playing"
-							  ); 
-					
+								
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 				

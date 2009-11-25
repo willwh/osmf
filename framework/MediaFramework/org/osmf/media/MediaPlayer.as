@@ -1583,6 +1583,7 @@ package org.osmf.media
 				
 		private function onPlaying(event:PlayingChangeEvent):void
 		{			
+			//trace('onPlaying');	
 			if (event.playing)
 			{				
 				setState(MediaPlayerState.PLAYING);				
@@ -1590,7 +1591,8 @@ package org.osmf.media
 		}
 		
 		private function onPaused(event:PausedChangeEvent):void
-		{			
+		{		
+			//trace('onPaused');	
 			if (event.paused)
 			{				
 				setState(MediaPlayerState.PAUSED);				
@@ -1628,6 +1630,7 @@ package org.osmf.media
 		
 		private function onDurationReached(event:TimeEvent):void
 		{
+			//trace('onDuration');
 			if (loop && seekable && playable)
 			{	
 				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
@@ -1640,10 +1643,16 @@ package org.osmf.media
 			}
 			else if (autoRewind && seekable && !loop)
 			{	
-				seek(0);			
+				addEventListener(SeekEvent.SEEK_END, onSeekEndRewind);
+				seek(0);					
+				function onSeekEndRewind(event:SeekEvent):void
+				{
+					removeEventListener(SeekEvent.SEEK_END, onSeekEndRewind);
+					setState(MediaPlayerState.READY);	
+				}					
 			}
 			else
-			{
+			{				
 				setState(MediaPlayerState.READY);
 			}
 		}			
@@ -1678,6 +1687,10 @@ package org.osmf.media
 		
 		private function onBuffering(event:BufferEvent):void
 		{
+			//trace('Buffering' + event.buffering);
+			//trace('playable && playing' + (playable && playing) );
+			//trace('pausable && paused' + (pausable && paused) );
+			
 			if (event.buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);
@@ -1688,7 +1701,7 @@ package org.osmf.media
 				{
 					setState(MediaPlayerState.PLAYING);					
 				}
-				else if (pausable && paused)
+				else if (pausable && paused ) //Finishes buffering and pausing after duration reached is dispatched
 				{
 					setState(MediaPlayerState.PAUSED);
 				}
