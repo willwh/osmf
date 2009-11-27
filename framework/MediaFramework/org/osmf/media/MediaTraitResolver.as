@@ -42,9 +42,13 @@ package org.osmf.media
 		 * Constructor
 		 *  
 		 * @param type The type of traits that this resolver will be resolving.
-		 * 
 		 * @throws ArgumentError If type is null.
-		 */		
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaTraitResolver(type:MediaTraitType)
 		{
 			if (type == null)
@@ -57,15 +61,27 @@ package org.osmf.media
 		
 		/**
 		 * Defines the media trait type that the resolver handles.
-		 */		
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		final public function get type():MediaTraitType
 		{
 			return _type;
 		}
 		
 		/**
-		 * Method for use by subclasses to set the resolved trait.
+		 * Method for use by subclasses to set the resolved trait. Triggers
+		 * a change event if the set value differs from the current value.
+		 * 
 		 * @param value The trait instance to set as the resolved trait.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final protected function setResolvedTrait(value:IMediaTrait):void
 		{
@@ -85,6 +101,11 @@ package org.osmf.media
 		/**
 		 * Defines the trait instance that currently represents the group of traits as
 		 * a whole.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		final public function get resolvedTrait():IMediaTrait
 		{
@@ -93,13 +114,19 @@ package org.osmf.media
 		
 		/**
 		 * Adds a trait instance to the resolver. Whether the specified instance gets
-		 * added is at the discretion of the implementing resolver. If the method
-		 * returns false, then the instance was not added.
+		 * added is at the discretion of the implementing resolver.
+		 * 
+		 * Invokes processAddTrait, that subclasses are expected to override.
 		 * 
 		 * @param instance The instance to add.
 		 * @throws ArgumentError If the passed trait is null, or if the trait's type
 		 * does not match the resolver's trait type.
-		 */		
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */	
 		final public function addTrait(instance:IMediaTrait):void
 		{	
 			if (instance == null)
@@ -116,14 +143,20 @@ package org.osmf.media
 		 
 		 /**
 		 * Removes a trait instance from the resolver. Whether the specified instance gets
-		 * removed is at the discretion of the implementing resolver. If the method
-		 * returns false, then the instance was not removed.
+		 * removed is at the discretion of the implementing resolver.
+		 * 
+		 * Invokes processRemoveTrait, that subclasses are expected to override.
 		 * 
 		 * @param instance The instance to remove.
 		 * @return The instance that was removed. Null if no matching instance was found.
 		 * @throws ArgumentError If the passed trait is null, or if the trait's type
 		 * does not match the resolver's trait type.
-		 */	
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		final public function removeTrait(instance:IMediaTrait):IMediaTrait
 		{
 			if (instance == null)
@@ -141,10 +174,35 @@ package org.osmf.media
 		// Subclass stubs
 		//
 		
+		/**
+		 * Stub method that is invoked from addTrait. Subclasses should place their
+		 * instance adding logic in an override to this method.
+		 * 
+		 * @param instance The trait instance to add. On invocation of this method,
+		 * instance has been checked for not being null, or of the wrong trait type.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */		
 		protected function processAddTrait(instance:IMediaTrait):void
 		{	
 		}
 		
+		/**
+		 * Stub method that is invoked from removeTrait. Subclasses should place their
+		 * instance removing logic in an override to this method.
+		 * 
+		 * @param instance The trait instance to add. On invocation of this method,
+		 * instance has been checked for not being null, or of the wrong trait type.
+		 * @return The instance that got removed, or null if no instance got removed. 
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */		
 		protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait
 		{
 			return null;

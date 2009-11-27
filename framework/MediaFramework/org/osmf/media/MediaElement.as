@@ -99,7 +99,12 @@ package org.osmf.media
 		
 		/**
 		 * Constructor.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaElement()
 		{	
 			setupTraitResolvers();		
@@ -109,7 +114,12 @@ package org.osmf.media
 		/**
 		 * A Vector of MediaTraitTypes representing the trait types on this
 		 * media element.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function get traitTypes():Vector.<MediaTraitType>
 		{
 			// Return a copy of our types vector.
@@ -125,7 +135,12 @@ package org.osmf.media
 		 * @throws ArgumentError If the parameter is <code>null</code>.
 		 * @return <code>true</code> if this media element has a media
 		 * trait of the specified class, <code>false</code> otherwise.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function hasTrait(type:MediaTraitType):Boolean
 		{
 			if (type == null)
@@ -144,7 +159,12 @@ package org.osmf.media
          * @throws ArgumentError If the parameter is <code>null</code>.
          * @return The retrieved trait or <code>null</code> if no such trait exists on this
 		 * media element.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function getTrait(type:MediaTraitType):IMediaTrait
 		{
 			if (type == null)
@@ -157,7 +177,12 @@ package org.osmf.media
 		
 		/**
 		 * The media resource that this media element operates on.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		public function get resource():IMediaResource
 		{
 			return _resource;
@@ -285,7 +310,12 @@ package org.osmf.media
          * @throws ArgumentError If the parameter is <code>null</code>.
          * @return The removed trait or <code>null</code> if no trait was
          * removed.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		final protected function removeTrait(type:MediaTraitType):IMediaTrait
 		{
 			if (type == null)
@@ -315,6 +345,11 @@ package org.osmf.media
 		 * 
 		 * @throws ArgumentError If type is null, or if instance is null.
 		 * @throws ArgumentError If a resolver has already been added for type.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final protected function addTraitResolver(type:MediaTraitType, instance:MediaTraitResolver):void
 		{
@@ -358,6 +393,11 @@ package org.osmf.media
 		 * @param type The trait type who's resolver to remove.
 		 * 
 		 * @throws ArgumentError If type is null, or if no resolver has been added for type.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final protected function removeTraitResolver(type:MediaTraitType):MediaTraitResolver
 		{
@@ -390,6 +430,10 @@ package org.osmf.media
 		 * @param type The trait type who's resolver object shoukd be returned.
 		 * @return The requested resolver object, or null if none is set for the specified type.
 		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		final protected function getTraitResolver(type:MediaTraitType):MediaTraitResolver
 		{
@@ -403,6 +447,11 @@ package org.osmf.media
 		 * Sets up the trait resolvers for the media elements. Occurs during
 		 * construction. Subclasses should override this method and call
 		 * addTraitResolver for each trait they wish to add a resolver for.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function setupTraitResolvers():void
 		{	
@@ -412,7 +461,12 @@ package org.osmf.media
 		 * Sets up the traits for this media element.  Occurs during
 		 * construction.  Subclasses should override this method and call
 		 * addTrait for each trait of their own.
-		 **/
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
 		protected function setupTraits():void
 		{
 		}		

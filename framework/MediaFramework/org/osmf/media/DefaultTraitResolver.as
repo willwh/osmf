@@ -47,6 +47,11 @@ package org.osmf.media
 		 * 
 		 * @throws ArgumentError If defaultTrait is null, or if its type does
 		 * not match the specified type.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function DefaultTraitResolver(type:MediaTraitType, defaultTrait:IMediaTrait)
 		{
@@ -75,6 +80,11 @@ package org.osmf.media
 		 * Only a single trait can be added to this resolver. Attempting to
 		 * add a second will fail. To change the trait, remove the previously
 		 * added one first.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processAddTrait(instance:IMediaTrait):void
 		{
@@ -93,6 +103,11 @@ package org.osmf.media
 		
 		/**
 		 * @inheritDoc
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait 
 		{
