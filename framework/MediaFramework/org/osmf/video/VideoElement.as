@@ -35,6 +35,7 @@ package org.osmf.video
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
@@ -64,6 +65,7 @@ package org.osmf.video
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekableTrait;
 	import org.osmf.traits.SpatialTrait;
+	import org.osmf.traits.TemporalTrait;
 	import org.osmf.traits.ViewableTrait;
 	import org.osmf.utils.MediaFrameworkStrings;
 
@@ -152,8 +154,49 @@ package org.osmf.video
        	public function get client():NetClient
        	{
        		return stream.client as NetClient;
-       	}           
-       	     
+       	}
+       	
+       	/**
+       	 * Defines the duration that the element's temporal trait will expose when the
+       	 * element's content is unloaded.
+       	 * 
+       	 * @param value
+       	 * 
+       	 *  @langversion 3.0
+       	 *  @playerversion Flash 10
+       	 *  @playerversion AIR 1.0
+       	 *  @productversion OSMF 1.0
+       	 */       	
+       	public function set defaultDuration(value:Number):void
+		{
+			defaultTemporalTrait.duration = value;
+		}
+		
+		public function get defaultDuration():Number
+		{
+			return defaultTemporalTrait.duration;
+		}
+		
+       	// Overrides
+       	//
+       	
+       	/**
+	     * @private
+		 **/
+       	override protected function setupTraitResolvers():void
+       	{
+       		defaultTemporalTrait = new TemporalTrait();
+       		addTraitResolver
+       			( MediaTraitType.TEMPORAL
+       			, new DefaultTraitResolver
+       				( MediaTraitType.TEMPORAL
+       				, defaultTemporalTrait
+       				)
+       			);
+       		
+       		super.setupTraitResolvers();
+       	}
+       	
 	    /**
 	     * @private
 		 **/
@@ -162,7 +205,6 @@ package org.osmf.video
 			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
 			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
 			stream = context.stream;			
-						
 				
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
@@ -434,6 +476,7 @@ package org.osmf.video
      	
       	private var video:Video;	 
 	    private var spatial:SpatialTrait;
+	    private var defaultTemporalTrait:TemporalTrait;
 	    
 		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream	    		    
 	}

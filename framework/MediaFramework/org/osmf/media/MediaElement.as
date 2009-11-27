@@ -316,17 +316,32 @@ package org.osmf.media
 		 * @throws ArgumentError If type is null, or if instance is null.
 		 * @throws ArgumentError If a resolver has already been added for type.
 		 */		
-		final protected function addTraitResolver(instance:MediaTraitResolver):void
+		final protected function addTraitResolver(type:MediaTraitType, instance:MediaTraitResolver):void
 		{
-			if (instance == null)
+			if (instance == null || instance.type != type)
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
-			if (traitResolvers[instance.type] == null)
+			if (traitResolvers[type] == null)
 			{
-				traitResolvers[instance.type] = instance;
-				instance.addEventListener(Event.CHANGE, onTraitResolverChange); 
+				// Add the resolver to the trait resolvers dictionary:
+				traitResolvers[type] = instance;
+				
+				// If there is a trait instance set for the added resolver's type,
+				// then add this trait to the resolver:
+				var currentlySetTrait:IMediaTrait = traits[type];
+				if (currentlySetTrait)
+				{
+					instance.addTrait(currentlySetTrait);
+				}
+				
+				// Run the resolved trait change routine: this will make sure that
+				// the local trait gets updated to reflect the resolved trait:
+				processResolvedTraitChange(type, instance.resolvedTrait);
+				
+				// Listen for the resolved trait changing:
+				instance.addEventListener(Event.CHANGE, onTraitResolverChange);
 			}
 			else
 			{
@@ -348,8 +363,11 @@ package org.osmf.media
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
 			
+			// Stop listening for the resolver's resolved trait value changing:
 			var instance:MediaTraitResolver = traitResolvers[type];
 			instance.removeEventListener(Event.CHANGE, onTraitResolverChange);
+			
+			// Remove the resolver from the trait resolvers dictionary:
 			delete traitResolvers[type];
 			
 			return instance;
@@ -444,10 +462,15 @@ package org.osmf.media
 		private function onTraitResolverChange(event:Event):void
 		{
 			var resolver:MediaTraitResolver = event.target as MediaTraitResolver;
-			if (resolver && traits[resolver.type] != resolver.resolvedTrait)
+			processResolvedTraitChange(resolver.type, resolver.resolvedTrait);
+		}
+		
+		private function processResolvedTraitChange(type:MediaTraitType, resolvedTrait:IMediaTrait):void
+		{
+			if (resolvedTrait != traits[type])
 			{
-				setLocalTrait(resolver.type, resolver.resolvedTrait);
-			}
+				setLocalTrait(type, resolvedTrait);
+			} 
 		}
 		
 		private var traits:Dictionary = new Dictionary();
