@@ -46,6 +46,7 @@ package org.osmf.utils
 		public static const TRAIT_INSTANCE_ALREADY_ADDED:String 		= "An instance of this trait class has already been added to this MediaElement";
 		public static const INVALID_INITIALIZATION_ARGS:String			= "Invalid initialization arguments to MediaElement";
 		public static const TRAIT_RESOLVER_ALREADY_ADDED:String 		= "A trait resolver for the specified trait type has already been added to this MediaElement";
+		public static const TRAIT_TYPE_MISMATCH:String					= "The specified trait instance is of an unexpectted type";
 				
 		// ProxyElement
 		

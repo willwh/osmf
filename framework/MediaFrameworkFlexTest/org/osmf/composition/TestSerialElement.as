@@ -60,6 +60,25 @@ package org.osmf.composition
 		// Tests
 		//
 
+		public function testDefaultDuration():void
+		{
+			var element:SerialElement = new SerialElement();
+			assertEquals(NaN, element.defaultDuration);
+			
+			element.defaultDuration = 100;
+			assertEquals(100, element.defaultDuration);
+			
+			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNotNull(temporal);
+			assertEquals(temporal.duration, 100);
+			
+			element.defaultDuration = NaN;
+			assertEquals(NaN, element.defaultDuration);
+			
+			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNull(temporal);
+		}
+
 		public function testGetTraitTypesDynamically():void
 		{
 			var serial:SerialElement = createSerialElement();

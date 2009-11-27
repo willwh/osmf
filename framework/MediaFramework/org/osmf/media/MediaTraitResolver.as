@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.media
 {
-	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
@@ -98,11 +97,21 @@ package org.osmf.media
 		 * returns false, then the instance was not added.
 		 * 
 		 * @param instance The instance to add.
-		 * @return True if the instance was added, false if it was not.
+		 * @throws ArgumentError If the passed trait is null, or if the trait's type
+		 * does not match the resolver's trait type.
 		 */		
-		public function addTrait(instance:IMediaTrait):void
+		final public function addTrait(instance:IMediaTrait):void
 		{	
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
+			if (instance == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			if (instance is type.traitInterface == false)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+			}
+			
+			processAddTrait(instance);
 		}
 		 
 		 /**
@@ -111,11 +120,34 @@ package org.osmf.media
 		 * returns false, then the instance was not removed.
 		 * 
 		 * @param instance The instance to remove.
-		 * @return True if the instance was removed, false if it was not.
+		 * @return The instance that was removed. Null if no matching instance was found.
+		 * @throws ArgumentError If the passed trait is null, or if the trait's type
+		 * does not match the resolver's trait type.
 		 */	
-		public function removeTrait(instance:IMediaTrait):IMediaTrait
+		final public function removeTrait(instance:IMediaTrait):IMediaTrait
 		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);	
+			if (instance == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			if (instance is type.traitInterface == false)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+			}
+			
+			return processRemoveTrait(instance);
+		}
+		
+		// Subclass stubs
+		//
+		
+		protected function processAddTrait(instance:IMediaTrait):void
+		{	
+		}
+		
+		protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait
+		{
+			return null;
 		}
 		
 		private var _type:MediaTraitType;

@@ -325,6 +325,9 @@ package org.osmf.media
 			
 			if (traitResolvers[type] == null)
 			{
+				// Store the currently set local trait:
+				unresolvedTraits[type] = traits[type];
+				
 				// Add the resolver to the trait resolvers dictionary:
 				traitResolvers[type] = instance;
 				
@@ -369,6 +372,14 @@ package org.osmf.media
 			
 			// Remove the resolver from the trait resolvers dictionary:
 			delete traitResolvers[type];
+			
+			// Reset the unresolved trait to be the current local trait:
+			var unresolvedTrait:IMediaTrait = unresolvedTraits[type];
+			if (unresolvedTrait != traits[type])
+			{
+				setLocalTrait(type, unresolvedTrait);
+			}
+			delete unresolvedTraits[type];
 			
 			return instance;
 		}
@@ -475,6 +486,7 @@ package org.osmf.media
 		
 		private var traits:Dictionary = new Dictionary();
 		private var traitResolvers:Dictionary = new Dictionary();
+		private var unresolvedTraits:Dictionary = new Dictionary();
 
 		private var _traitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
 		private var _resource:IMediaResource;

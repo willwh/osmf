@@ -112,6 +112,8 @@ package org.osmf
 			addTestSuite(TestMediaFactory);
 			addTestSuite(TestMediaInfo);
 			addTestSuite(TestURLResource);
+			addTestSuite(TestMediaTraitResolver);
+			addTestSuite(TestDefaultTraitResolver);
 			
 			addTestSuite(TestProxyElement);
 			addTestSuite(TestProxyElementAsDynamicProxy);

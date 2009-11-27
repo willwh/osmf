@@ -47,6 +47,7 @@ package org.osmf.video
 	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.ISeekable;
 	import org.osmf.traits.ISpatial;
+	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.IViewable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
@@ -77,6 +78,25 @@ package org.osmf.video
 		//	Tests
 		//
 		////////////////////////////////////////////////////////
+		
+		public function testDefaultDuration():void
+		{
+			var element:VideoElement = new VideoElement(new NetLoader());
+			assertEquals(NaN, element.defaultDuration);
+			
+			element.defaultDuration = 100;
+			assertEquals(100, element.defaultDuration);
+			
+			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNotNull(temporal);
+			assertEquals(temporal.duration, 100);
+			
+			element.defaultDuration = NaN;
+			assertEquals(NaN, element.defaultDuration);
+			
+			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNull(temporal);
+		}
 		
 		public function testGetClient():void
 		{

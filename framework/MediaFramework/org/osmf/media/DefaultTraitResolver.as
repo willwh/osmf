@@ -22,6 +22,7 @@
 package org.osmf.media
 {
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.MediaFrameworkStrings;
 	
 	/**
 	 * Defines a trait resolver that tracks two traits: a default trait
@@ -44,10 +45,22 @@ package org.osmf.media
 		 * @param defaultTrait The default trait to resolve to for as long
 		 * as no other trait has been added to the resolver.
 		 * 
+		 * @throws ArgumentError If defaultTrait is null, or if its type does
+		 * not match the specified type.
 		 */		
 		public function DefaultTraitResolver(type:MediaTraitType, defaultTrait:IMediaTrait)
 		{
 			super(type);
+			
+			if (defaultTrait == null)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+			}
+			
+			if (defaultTrait is type.traitInterface == false)
+			{
+				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+			}
 			
 			this.defaultTrait = defaultTrait;
 			setResolvedTrait(defaultTrait);
@@ -63,7 +76,7 @@ package org.osmf.media
 		 * add a second will fail. To change the trait, remove the previously
 		 * added one first.
 		 */		
-		override public function addTrait(instance:IMediaTrait):void
+		override protected function processAddTrait(instance:IMediaTrait):void
 		{
 			if (trait == null)
 			{
@@ -81,7 +94,7 @@ package org.osmf.media
 		/**
 		 * @inheritDoc
 		 */		
-		override public function removeTrait(instance:IMediaTrait):IMediaTrait 
+		override protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait 
 		{
 			var result:IMediaTrait;
 			

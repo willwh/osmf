@@ -25,13 +25,13 @@ package org.osmf.audio
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.net.NetLoader;
+	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.utils.NetFactory;
 
 	public class TestAudioElement extends TestMediaElement
 	{
@@ -101,6 +101,25 @@ package org.osmf.audio
 			catch (error:ArgumentError)
 			{
 			}
+		}
+		
+		public function testDefaultDuration():void
+		{
+			var element:AudioElement = createMediaElement() as AudioElement;
+			assertEquals(NaN, element.defaultDuration);
+			
+			element.defaultDuration = 100;
+			assertEquals(100, element.defaultDuration);
+			
+			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNotNull(temporal);
+			assertEquals(temporal.duration, 100);
+			
+			element.defaultDuration = NaN;
+			assertEquals(NaN, element.defaultDuration);
+			
+			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			assertNull(temporal);
 		}
 		
 		private var netFactory:NetFactory;
