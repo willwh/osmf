@@ -806,6 +806,30 @@ package org.osmf.examples
 				  	   		return serial; 
 				  	   	}
 				  	)
+				);	
+				
+			examples.push
+				( new Example
+					( 	"DefaultDuration Serial"
+					, 	"Demonstrates the Video.defaultDuration feature on VideoElementm, in a Serial Composition."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
+							var resource2:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE2));
+							
+							var serial:SerialElement = new SerialElement();
+							
+							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
+							video1.defaultDuration = 32;
+							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
+							video2.defaultDuration = 27;
+														
+							serial.addChild(video1);
+							serial.addChild(video2);
+																	
+				  	   		return serial; 
+				  	   	}
+				  	)
 				);		
 				
 			/* TODO: Uncomment this once we have the VAST library integrated

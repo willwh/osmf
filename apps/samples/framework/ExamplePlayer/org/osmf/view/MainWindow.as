@@ -248,6 +248,7 @@ package org.osmf.view
 			
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
 			{
+				trace(mediaPlayerWrapper.mediaPlayer.duration);
 				seekBar.maximum = mediaPlayerWrapper.mediaPlayer.duration;
 			}
 			else
