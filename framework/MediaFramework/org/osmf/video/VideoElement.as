@@ -160,7 +160,9 @@ package org.osmf.video
        	 * Defines the duration that the element's temporal trait will expose when the
        	 * element's content is unloaded.
        	 * 
-       	 * @param value
+       	 * Setting this property to a positive value results in the element becoming
+       	 * temporal. Any other value will remove the element's temporality, unless the
+       	 * loaded content is exposing a duration. 
        	 * 
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
@@ -169,12 +171,37 @@ package org.osmf.video
        	 */       	
        	public function set defaultDuration(value:Number):void
 		{
-			defaultTemporalTrait.duration = value;
+			if (isNaN(value) || value < 0)
+			{
+				if (defaultTemporalTrait != null)
+				// Remove the default trait if the default duration
+				// gets set to not a number:
+				removeTraitResolver(MediaTraitType.TEMPORAL);
+				defaultTemporalTrait = null;
+			}
+			else 
+			{
+				if (defaultTemporalTrait == null)
+				{		
+					// Add the default trait if when default duration
+					// gets set:
+					defaultTemporalTrait = new TemporalTrait();
+		       		addTraitResolver
+		       			( MediaTraitType.TEMPORAL
+		       			, new DefaultTraitResolver
+		       				( MediaTraitType.TEMPORAL
+		       				, defaultTemporalTrait
+		       				)
+		       			);
+		  		}
+		  		
+		  		defaultTemporalTrait.duration = value; 
+			}	
 		}
 		
 		public function get defaultDuration():Number
 		{
-			return defaultTemporalTrait.duration;
+			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
 		}
 		
        	// Overrides
@@ -185,14 +212,7 @@ package org.osmf.video
 		 **/
        	override protected function setupTraitResolvers():void
        	{
-       		defaultTemporalTrait = new TemporalTrait();
-       		addTraitResolver
-       			( MediaTraitType.TEMPORAL
-       			, new DefaultTraitResolver
-       				( MediaTraitType.TEMPORAL
-       				, defaultTemporalTrait
-       				)
-       			);
+       		
        		
        		super.setupTraitResolvers();
        	}
