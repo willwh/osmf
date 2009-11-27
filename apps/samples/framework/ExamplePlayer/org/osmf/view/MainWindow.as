@@ -242,13 +242,11 @@ package org.osmf.view
 			audioControls.visible 		= mediaPlayerWrapper.mediaPlayer.audible;
 			temporalControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
 			bufferable.visible			= mediaPlayerWrapper.mediaPlayer.bufferable;
-			trace('mediaPlayerWrapper.mediaPlayer.downloadable' + mediaPlayerWrapper.mediaPlayer.downloadable);
 			downloadable.visible		= mediaPlayerWrapper.mediaPlayer.downloadable;
 			seekBar.enabled 			= mediaPlayerWrapper.mediaPlayer.seekable;
 			
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
 			{
-				trace(mediaPlayerWrapper.mediaPlayer.duration);
 				seekBar.maximum = mediaPlayerWrapper.mediaPlayer.duration;
 			}
 			else
