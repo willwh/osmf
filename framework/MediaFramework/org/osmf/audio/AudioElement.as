@@ -23,9 +23,9 @@ package org.osmf.audio
 {
 	import flash.net.NetStream;
 	
+	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
-	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
 	import org.osmf.traits.IDownloadable;
 	import org.osmf.traits.ILoadable;
@@ -92,6 +92,54 @@ package org.osmf.audio
 			{
 				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
 			}
+		}
+		
+		/**
+       	 * Defines the duration that the element's temporal trait will expose when the
+       	 * element's content is unloaded.
+       	 * 
+       	 * Setting this property to a positive value results in the element becoming
+       	 * temporal. Any other value will remove the element's temporality, unless the
+       	 * loaded content is exposing a duration. 
+       	 * 
+       	 *  @langversion 3.0
+       	 *  @playerversion Flash 10
+       	 *  @playerversion AIR 1.0
+       	 *  @productversion OSMF 1.0
+       	 */       	
+       	public function set defaultDuration(value:Number):void
+		{
+			if (isNaN(value) || value < 0)
+			{
+				if (defaultTemporalTrait != null)
+				// Remove the default trait if the default duration
+				// gets set to not a number:
+				removeTraitResolver(MediaTraitType.TEMPORAL);
+				defaultTemporalTrait = null;
+			}
+			else 
+			{
+				if (defaultTemporalTrait == null)
+				{		
+					// Add the default trait if when default duration
+					// gets set:
+					defaultTemporalTrait = new TemporalTrait();
+		       		addTraitResolver
+		       			( MediaTraitType.TEMPORAL
+		       			, new DefaultTraitResolver
+		       				( MediaTraitType.TEMPORAL
+		       				, defaultTemporalTrait
+		       				)
+		       			);
+		  		}
+		  		
+		  		defaultTemporalTrait.duration = value; 
+			}	
+		}
+		
+		public function get defaultDuration():Number
+		{
+			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
 		}
 		
 		/**
@@ -180,5 +228,6 @@ package org.osmf.audio
 		}	
 					
 		private var soundAdapter:SoundAdapter;
+		private var defaultTemporalTrait:TemporalTrait;
 	}
 }

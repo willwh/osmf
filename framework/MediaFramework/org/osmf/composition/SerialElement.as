@@ -23,11 +23,13 @@ package org.osmf.composition
 {
 	import flash.utils.Dictionary;
 	
+	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.CompositeMetadata;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TemporalTrait;
 	
 	/**
 	 * A SerialElement is a media composition whose elements are presented
@@ -126,6 +128,54 @@ package org.osmf.composition
 				);
 				
 			reusableTraits = new Dictionary();
+		}
+		
+		/**
+       	 * Defines the duration that the element's temporal trait will expose when the
+       	 * element's content is unloaded.
+       	 * 
+       	 * Setting this property to a positive value results in the element becoming
+       	 * temporal. Any other value will remove the element's temporality, unless the
+       	 * loaded content is exposing a duration. 
+       	 * 
+       	 *  @langversion 3.0
+       	 *  @playerversion Flash 10
+       	 *  @playerversion AIR 1.0
+       	 *  @productversion OSMF 1.0
+       	 */       	
+       	public function set defaultDuration(value:Number):void
+		{
+			if (isNaN(value) || value < 0)
+			{
+				if (defaultTemporalTrait != null)
+				// Remove the default trait if the default duration
+				// gets set to not a number:
+				removeTraitResolver(MediaTraitType.TEMPORAL);
+				defaultTemporalTrait = null;
+			}
+			else 
+			{
+				if (defaultTemporalTrait == null)
+				{		
+					// Add the default trait if when default duration
+					// gets set:
+					defaultTemporalTrait = new TemporalTrait();
+		       		addTraitResolver
+		       			( MediaTraitType.TEMPORAL
+		       			, new DefaultTraitResolver
+		       				( MediaTraitType.TEMPORAL
+		       				, defaultTemporalTrait
+		       				)
+		       			);
+		  		}
+		  		
+		  		defaultTemporalTrait.duration = value; 
+			}	
+		}
+		
+		public function get defaultDuration():Number
+		{
+			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
 		}
 		
 		// Overrides
@@ -251,7 +301,6 @@ package org.osmf.composition
 			}
 		}
 		
-	
 		// Internals
 		//
 				
@@ -273,5 +322,6 @@ package org.osmf.composition
 		
 		private var listenedChildIndex:int = -1;
 		private var reusableTraits:Dictionary;
+		private var defaultTemporalTrait:TemporalTrait;
 	}
 }

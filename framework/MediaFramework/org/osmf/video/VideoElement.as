@@ -207,16 +207,6 @@ package org.osmf.video
        	// Overrides
        	//
        	
-       	/**
-	     * @private
-		 **/
-       	override protected function setupTraitResolvers():void
-       	{
-       		
-       		
-       		super.setupTraitResolvers();
-       	}
-       	
 	    /**
 	     * @private
 		 **/
