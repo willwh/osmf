@@ -1278,10 +1278,6 @@ package org.osmf.media
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.state == MediaPlayerState.READY);
-					}
-					else if (eventCount == 3)
-					{
 						assertTrue(event.state == MediaPlayerState.PLAYING);
 						
 						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);

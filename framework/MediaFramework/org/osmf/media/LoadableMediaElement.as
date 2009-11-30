@@ -145,7 +145,7 @@ package org.osmf.media
 			loadable = new LoadableTrait(loader, resource);
 			loadable.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
-				, onLoadStateChange
+				, onLoadStateChange, false, 10 //Using a higher priority event listener in order to process load state changes before clients.
 				);
 			
 			addTrait(MediaTraitType.LOADABLE, loadable);
