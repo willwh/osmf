@@ -14,7 +14,7 @@ package org.osmf.net
 
 		public function testDynamicVideoLoad():void
 		{
-			var loader:FMMLoader = new FMMLoader();			
+			var loader:F4MLoader = new F4MLoader();			
 			var res1:URLResource = new URLResource(new URL('http://flipside/testing/oconnell/manifest/httpProgressive.f4m'));
 						
 			var finished:Function = addAsync(function():void{}, 3000);
@@ -40,7 +40,7 @@ package org.osmf.net
 		{
 			var finished:Function = addAsync(function():void{}, 3000);
 			
-			var loader:FMMLoader = new FMMLoader();			
+			var loader:F4MLoader = new F4MLoader();			
 			var res1:URLResource = new URLResource(new URL('http://flipside/testing/oconnell/manifest/dynamic_Streaming.f4m'));
 			var proxy:LoadableProxyElement = new LoadableProxyElement(loader);
 			proxy.resource = res1;

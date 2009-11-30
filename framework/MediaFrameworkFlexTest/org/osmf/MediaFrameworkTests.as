@@ -148,7 +148,7 @@ package org.osmf
 			addTestSuite(TestStreamingURLResource);
 
 			addTestSuite(TestManifestParser);
-			addTestSuite(TestFMMLoader);
+			addTestSuite(TestF4MLoader);
 			
 
 			addTestSuite(TestNetStreamAudibleTrait);

@@ -57,19 +57,19 @@ package org.osmf.net
 	 * files, generate a NetLoaded context corresponding to the resources
 	 * specified in the fmm file.
 	 */ 
-	public class FMMLoader extends MediaElementLoader
+	public class F4MLoader extends MediaElementLoader
 	{
 			
 		//MimeType
 		public static const F4M_MIME_TYPE:String = "application/f4m+xml";
-			
+					
 		/**
 		 * Generate a new FMMLoader.  
 		 * @param netLoader The factory that is used to create MediaElements based on the 
 		 * media specified in the manifest file. a default factory is created for the base OSMF media
 		 * types, Video, Audio, Image, and SWF.
 		 */ 	
-		public function FMMLoader(factory:MediaFactory = null)
+		public function F4MLoader(factory:MediaFactory = null)
 		{							
 			if(factory == null)
 			{
@@ -101,7 +101,7 @@ package org.osmf.net
 			{
 				var url:URLResource = URLResource(resource);
 				var extension:String = url.url.path.substr(url.url.path.length-3,3);
-				return extension == "f4m";
+				return extension == F4M_EXTENSION;
 			}		
 			else
 			{
@@ -158,6 +158,8 @@ package org.osmf.net
 			super.unload(loadable);						
 		}
 		
+		
+		private static const F4M_EXTENSION:String = "f4m";
 		
 		private var factory:MediaFactory;
 		

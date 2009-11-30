@@ -9,27 +9,27 @@ package org.osmf.net
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.utils.URL;
 
-	public class TestFMMLoader extends TestCase
+	public class TestF4MLoader extends TestCase
 	{
 		public function testConstructorParams():void
 		{
 			//Test that both constructors work...
-			var loader:FMMLoader = new FMMLoader(null);
-			var loader2:FMMLoader = new FMMLoader(new MediaFactory());		
+			var loader:F4MLoader = new F4MLoader(null);
+			var loader2:F4MLoader = new F4MLoader(new MediaFactory());		
 			assertTrue(true);	
 		}
 		
 		public function testCanHandle():void
 		{		
-			var loader:FMMLoader = new FMMLoader();
+			var loader:F4MLoader = new F4MLoader();
 			
 			var res1:URLResource = new URLResource(new URL('http://example.com/manifest.f4m'));
 			
 			var res2:URLResource = new URLResource(new URL('http://example.com/manifest.f4m'));
-			res2.metadata.addFacet(new MediaTypeFacet(null, FMMLoader.F4M_MIME_TYPE));
+			res2.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
 			
 			var res3:URLResource = new URLResource(new URL('http://example.com/manifest.blah'));
-			res3.metadata.addFacet(new MediaTypeFacet(null, FMMLoader.F4M_MIME_TYPE));
+			res3.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
 			
 			var res4:URLResource = new URLResource(new URL('http://example.com/manifest.blah'));
 			
@@ -46,7 +46,7 @@ package org.osmf.net
 		
 		public function testUnloadFail():void
 		{
-			var loader:FMMLoader = new FMMLoader();
+			var loader:F4MLoader = new F4MLoader();
 			var loadable:LoadableTrait = new LoadableTrait(loader, new URLResource(new URL("http://example.com/notValid")));
 			var errorThrown:Boolean = false;
 			try
@@ -63,7 +63,7 @@ package org.osmf.net
 		public function testLoadFail():void
 		{
 			
-			var loader:FMMLoader = new FMMLoader();
+			var loader:F4MLoader = new F4MLoader();
 			var loadable:LoadableTrait = new LoadableTrait(loader, new URLResource(new URL("http://example.com/notValid.f4m")));
 			loadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 3000));
 			
