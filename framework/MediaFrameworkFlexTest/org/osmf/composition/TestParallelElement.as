@@ -840,6 +840,11 @@ package org.osmf.composition
    
 			pausable1.pause();
 			assertTrue(pausable1.paused == true);
+			assertTrue(pausable2.paused == false);
+			assertTrue(pausable.paused == false);
+			
+			pausable2.pause();
+			assertTrue(pausable1.paused == true);
 			assertTrue(pausable2.paused == true);
 			assertTrue(pausable.paused == true);
 

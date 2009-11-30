@@ -65,7 +65,7 @@ package org.osmf.vast.media
 			playable.play();
 
 			function onLoaderStateChange(event:LoaderEvent):void
-			{
+			{				
 				if (event.loadable.loadState == LoadState.READY)
 				{
 					eventCount++;
@@ -108,7 +108,10 @@ package org.osmf.vast.media
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
-					else fail();
+					else 
+					{
+						fail();
+					}
 				}
 			}
 		}

@@ -24,6 +24,7 @@ package org.osmf.composition
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.traits.IPausable;
+	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
 
 	/**
@@ -145,11 +146,28 @@ package org.osmf.composition
 			{
 				if (pausable.paused)
 				{
-					// If a child has been paused, then the composition should
-					// be paused too.
-					pause();
+					var hasPlayingChild:Boolean = false;
 					
-					setPaused(true);
+					traitAggregator.forEachChildTrait
+						(
+							function(mediaTrait:IMediaTrait):void
+							{
+								if (!IPausable(mediaTrait).paused)
+								{
+									hasPlayingChild = true;
+								}
+							}
+							, MediaTraitType.PAUSABLE
+						);
+												
+					if (!hasPlayingChild)
+					{ 
+						// If all children have been paused, then the composition should
+						// be paused too.
+						pause();
+						
+						setPaused(true);
+					}
 				}
 				else
 				{
