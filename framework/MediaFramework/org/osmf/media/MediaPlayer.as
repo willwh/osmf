@@ -1689,8 +1689,10 @@ package org.osmf.media
 								
 		private function onCurrentTimeTimer(event:TimerEvent):void
 		{
-			if (temporal && currentTime != lastCurrentTime)
-			{				
+			if (temporal && 
+				currentTime != lastCurrentTime && 
+			 	(!seekable || !seeking) )
+			{					
 				lastCurrentTime = currentTime;
 				dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));
 			}
