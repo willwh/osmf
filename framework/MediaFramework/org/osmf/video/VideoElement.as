@@ -205,6 +205,48 @@ package org.osmf.video
 			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
 		}
 		
+		/**
+		 * Specifies whether the video should be smoothed (interpolated) when it is scaled. 
+		 * For smoothing to work, the runtime must be in high-quality mode (the default). 
+		 * The default value is false (no smoothing).  For video playback using Flash Player
+		 * 9.0.115.0 and later versions, set this property to true to take advantage of mipmapping image optimization.
+		 * 
+		 * @see flash.media.Video
+		**/
+		public function set smoothing(value:Boolean):void
+		{
+			_smoothing = value;
+			if (video != null)
+			{
+				video.smoothing = value;
+			}
+		}
+
+		public function get smoothing():Boolean
+		{
+			return _smoothing;			
+		}
+		
+		/**
+		 * Indicates the type of filter applied to decoded video as part of post-processing. The default value is 0, which lets the video compressor apply a deblocking filter as needed.
+		 * see flash.media.Video for more information on deblocking modes.
+		 * 
+		 * @see flash.media.Video
+		 */ 
+		public function set deblocking(value:int):void
+		{
+			_deblocking = value;
+			if (video != null)
+			{
+				video.deblocking = value;
+			}
+		}
+
+		public function get deblocking():int
+		{
+			return _deblocking;			
+		}
+		
        	// Overrides
        	//
        	
@@ -220,6 +262,9 @@ package org.osmf.video
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
 			video = new Video();
+			video.smoothing = _smoothing;
+			video.deblocking = _deblocking;
+			
 			video.width = video.height = 0;
 
 			video.attachNetStream(stream);
@@ -492,6 +537,8 @@ package org.osmf.video
 	    private var spatial:SpatialTrait;
 	    private var defaultTemporalTrait:TemporalTrait;
 	    
-		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream	    		    
+		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream	   
+		private var _smoothing:Boolean;
+		private var _deblocking:int; 		    
 	}
 }
