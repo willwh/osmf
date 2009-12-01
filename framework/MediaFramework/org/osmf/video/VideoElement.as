@@ -62,6 +62,7 @@ package org.osmf.video
 	import org.osmf.net.dynamicstreaming.NetStreamSwitchableTrait;
 	import org.osmf.traits.IContentProtectable;
 	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekableTrait;
 	import org.osmf.traits.SpatialTrait;
@@ -265,8 +266,11 @@ package org.osmf.video
 	  		
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
 	  		private function reloadAfterAuth(event:ContentProtectionEvent):void
-	  		{	  				  			
-	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).unload();	  	
+	  		{	
+	  			if (ILoadable(getTrait(MediaTraitType.LOADABLE)).loadState == LoadState.READY)
+	  			{				  			
+	  				ILoadable(getTrait(MediaTraitType.LOADABLE)).unload();	  	
+	  			}
 	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).load();  		  					
 	  		}	
 			
