@@ -23,6 +23,9 @@ package org.osmf.composition
 	 **/
 	public class CompositeDownloadableTrait extends CompositeMediaTraitBase implements IDownloadable
 	{
+		/**
+		 * Contructs a CompositeDownloadable trait.
+		 */ 
 		public function CompositeDownloadableTrait(mode:CompositionMode, traitAggregator:TraitAggregator)
 		{
 			super(MediaTraitType.DOWNLOADABLE, traitAggregator);
@@ -34,7 +37,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get bytesLoaded():Number
@@ -71,56 +74,52 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get bytesTotal():Number
 		{
 			var computedTotal:Number = 0;
-			if (mode == CompositionMode.SERIAL)
-			{
-				traitAggregator.forEachChildTrait(
-					function (trait:IDownloadable):void
-					{						
-						computedTotal += trait.bytesTotal;						
-					},
-					MediaTraitType.DOWNLOADABLE);
-			}
-			else // Parallel
-			{						
-				traitAggregator.forEachChildTrait(
-					function (trait:IDownloadable):void
-					{											
-						computedTotal += trait.bytesTotal;						
-					},
-					MediaTraitType.DOWNLOADABLE);
-			}
+								
+			traitAggregator.forEachChildTrait(
+				function (trait:IDownloadable):void
+				{											
+					computedTotal += trait.bytesTotal;						
+				},
+				MediaTraitType.DOWNLOADABLE);
+		
 			return computedTotal;
 		}
 		
-		
+		/**
+		 * @inheritDoc
+		 */ 		
 		override protected function processAggregatedChild(trait:IMediaTrait):void
 		{
 			var downloadable:IDownloadable = trait as IDownloadable;
-			downloadable.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoaded);
 			downloadable.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotal);	
+			if (downloadable.bytesTotal > 0)
+			{
+				dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
+			}
 		}
-					
+		
+		/**
+		 * @inheritDoc
+		 */ 				
 		override protected function processUnaggregatedChild(trait:IMediaTrait):void
 		{
 			var downloadable:IDownloadable = trait as IDownloadable;
-			downloadable.removeEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoaded);
 			downloadable.removeEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotal);
+			if (downloadable.bytesTotal > 0)
+			{
+				dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
+			}
 		}
 		
 		private function onBytesTotal(event:LoadEvent):void
 		{
 			dispatchEvent(new LoadEvent(event.type, false, false, event.loadState, bytesTotal));
-		}
-		
-		private function onBytesLoaded(event:LoadEvent):void
-		{
-			dispatchEvent(new LoadEvent(event.type, false, false, event.loadState, bytesLoaded));
 		}	
 		
 		private var mode:CompositionMode;
