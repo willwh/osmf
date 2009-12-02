@@ -248,10 +248,12 @@ package org.osmf.view
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
 			{
 				seekBar.maximum = mediaPlayerWrapper.mediaPlayer.duration;
+				duration.text = "" + mediaPlayerWrapper.mediaPlayer.duration;
 			}
 			else
 			{
 				seekBar.maximum = 0;
+				duration.text = "0";
 			}
 			
 			if (mediaPlayerWrapper.mediaPlayer.downloadable)
