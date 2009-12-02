@@ -56,7 +56,6 @@
 			import org.osmf.metadata.MetadataNamespaces;
 			import org.osmf.metadata.ObjectIdentifier;
 			import org.osmf.net.NetLoader;
-			import org.osmf.utils.MediaFrameworkStrings;
 			import org.osmf.utils.URL;
 			import org.osmf.video.VideoElement;
 	 		
@@ -100,7 +99,7 @@
 	 			var resource0:URLResource = new URLResource(new URL(sampleURLCollection[0]));
 	 			var resource1:URLResource = new URLResource(new URL(sampleURLCollection[1]));
 	 			var resource2:URLResource = new URLResource(new URL(sampleURLCollection[2]));	
-	 			resourceData.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), MediaType.VIDEO);
+	 			resourceData.addValue(new ObjectIdentifier(MetadataNamespaces.METADATA_KEY_MEDIA_TYPE), MediaType.VIDEO);
 	 			resource0.metadata.addFacet(resourceData);
 	 			resource1.metadata.addFacet(resourceData);
 	 			resource2.metadata.addFacet(resourceData);
@@ -167,7 +166,7 @@
 	 		{	
 	 			facetProvider.removeAll();
 	 			var resourceData:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DEFAULT_METADATA); 
-	 			resourceData.addValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE), typeCombo.selectedItem);	
+	 			resourceData.addValue(new ObjectIdentifier(MetadataNamespaces.METADATA_KEY_MEDIA_TYPE), typeCombo.selectedItem);	
 	 			var url:URL =  new URL(mediaURL.text);
 	 				 			
 	 			var resource:URLResource = new URLResource(	url );
