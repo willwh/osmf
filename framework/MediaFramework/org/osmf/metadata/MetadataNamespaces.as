@@ -37,6 +37,7 @@ package org.osmf.metadata
 		 *  @productversion OSMF 1.0
 		 */ 		
 		public static const DEFAULT_METADATA:URL				= new URL("http://www.osmf.org/default/1.0");
+		public static const METADATA_KEY_MEDIA_TYPE:String		= "mediaType";
 		
 		public static const MEDIATYPE_METADATA:URL				= new URL("http://www.osmf.org/mediatype/default");
 		

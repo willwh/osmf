@@ -5,7 +5,6 @@ package
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.utils.MediaFrameworkStrings;
 
 	public class MetadataResourceHandler implements IMediaResourceHandler
 	{
@@ -17,7 +16,7 @@ package
 		public function canHandleResource(resource:IMediaResource):Boolean
 		{
 			var metadata:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DEFAULT_METADATA) as KeyValueFacet;
-			return (metadata.getValue(new ObjectIdentifier(MediaFrameworkStrings.METADATA_KEY_MEDIA_TYPE)) == type);	
+			return (metadata.getValue(new ObjectIdentifier(MetadataNamespaces.METADATA_KEY_MEDIA_TYPE)) == type);	
 		}
 		
 		private var type:String;

@@ -157,7 +157,7 @@ package org.osmf.net
 		
 		/**
 	     * Unloads the media after validating the unload operation against the loadable. Examines the NetLoadedContext
-	     * object associated with the loadable. If the object is null, throws a MediaFrameworkStrings.NULL_PARAM error.
+	     * object associated with the loadable. If the object is null, throws a OSMFStrings.NULL_PARAM error.
 	     * Closes the NetStream defines within the NetLoadedContext object. 
 	     * If the shareable property of the object is true, calls the NetConnectionFactory to close() the NetConnection
 	     * otherwise closes the NetConnection directly. Dispatches the loaderStateChange event with every state change.
