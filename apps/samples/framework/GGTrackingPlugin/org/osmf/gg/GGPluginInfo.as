@@ -29,7 +29,6 @@ package org.osmf.gg
 	import org.osmf.media.MediaInfoType;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
-	import org.osmf.utils.MediaFrameworkStrings;
 
 	/**
 	 * Encapsulation of a GlanceGuide plugin.
