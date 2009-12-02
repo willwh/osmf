@@ -28,7 +28,7 @@ package org.osmf.metadata
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -94,12 +94,12 @@ package org.osmf.metadata
 		{
 			if (data == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 				return;
 			}
 			if (data.namespaceURL == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NAMESPACE_MUST_NOT_BE_EMPTY);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				return;
 			}	
 			var oldFacet:IFacet = _list[data.namespaceURL.rawUrl];			
@@ -129,12 +129,12 @@ package org.osmf.metadata
 		{		
 			if (data == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 				return;
 			}
 			if (data.namespaceURL == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NAMESPACE_MUST_NOT_BE_EMPTY);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				return;
 			}	
 			if (_list[data.namespaceURL.rawUrl])

@@ -35,7 +35,7 @@ package org.osmf.net
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PausableTrait;
 	import org.osmf.traits.PlayableTrait;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	[ExcludeClass]
 	
@@ -69,7 +69,7 @@ package org.osmf.net
 			
 			if (netStream == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_NETSTREAM);					
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_NETSTREAM));					
 			}
 			this.owner = owner;
 			this.netStream = netStream;

@@ -30,7 +30,7 @@ package org.osmf.metadata
 	import org.osmf.composition.CompositionMode;
 	import org.osmf.events.CompositeMetadataEvent;
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	/**
@@ -334,12 +334,12 @@ package org.osmf.metadata
 		{
 			if (synthesizer == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (getFacetSynthesizer(synthesizer.namespaceURL) != null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NAMESPACE_MUST_BE_UNIQUE);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_BE_UNIQUE));
 			}
 			
 			facetSynthesizers[synthesizer.namespaceURL.rawUrl] = synthesizer;
@@ -359,7 +359,7 @@ package org.osmf.metadata
 		{
 			if (synthesizer == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (getFacetSynthesizer(synthesizer.namespaceURL) != null)
@@ -427,7 +427,7 @@ package org.osmf.metadata
 		{
 			if (namespaceURL == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			return childFacetGroups[namespaceURL];

@@ -32,7 +32,7 @@ package org.osmf.drm
 	
 	import org.osmf.events.ContentProtectionEvent;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	public class TestDRMServices extends TestCase
 	{	
@@ -67,7 +67,7 @@ package org.osmf.drm
 				}										
 				function onAuthError(event:ContentProtectionEvent):void
 				{
-					Assert.assertEquals(event.detail, MediaFrameworkStrings.DRM_AUTHENTICATION_FAILED)
+					Assert.assertEquals(event.detail, OSMFStrings.DRM_AUTHENTICATION_FAILED)
 					Assert.assertEquals(MediaErrorCodes.DRM_AUTHENTICATION_FAILED, event.errorID);
 					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED,  onAuthNeeded );
 					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE,  onAuthComp);

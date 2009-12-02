@@ -31,7 +31,7 @@ package org.osmf.html
 	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	internal class HTMLLoadableTrait extends MediaTraitBase implements ILoadable
 	{
@@ -69,15 +69,15 @@ package org.osmf.html
 		{
 			if (loadState == LoadState.READY)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_READY);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_READY));
 			}
 			if (loadState == LoadState.LOADING)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADING);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));
 			}
 			if (resource is IURLResource == false)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
 			
 			requireScriptPath;
@@ -109,11 +109,11 @@ package org.osmf.html
 		{
 			if (loadState == LoadState.UNLOADING)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADING);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));
 			}
 			if (loadState == LoadState.UNINITIALIZED)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADED);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 			}
 			
 			requireScriptPath;
@@ -148,7 +148,7 @@ package org.osmf.html
 		{
 			if (owner.scriptPath == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_SCRIPT_PATH);	
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_SCRIPT_PATH));	
 			}
 			
 			return undefined;

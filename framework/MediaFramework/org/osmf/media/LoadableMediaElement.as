@@ -27,7 +27,7 @@ package org.osmf.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * A base implementation of a MediaElement that has the ILoadable trait.
@@ -49,7 +49,7 @@ package org.osmf.media
 			
 			if (loader == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			this.loader = loader;

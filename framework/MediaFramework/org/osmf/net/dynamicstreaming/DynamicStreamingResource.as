@@ -28,7 +28,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.media.IMediaResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.StreamType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	/**
@@ -126,7 +126,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			if (_streamItems == null || value >= _streamItems.length)
 			{
-				throw new RangeError(MediaFrameworkStrings.INVALID_PARAM);				
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
 			}
 			
 			_initialIndex = value;

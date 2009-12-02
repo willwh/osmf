@@ -38,7 +38,7 @@ package org.osmf.layout
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when a layout child's _view has changed.
@@ -83,7 +83,7 @@ package org.osmf.layout
 		{
 			if (constructorLock != ConstructorLock)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ILLEGAL_CONSTRUCTOR_INVOKATION);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILLEGAL_CONSTRUCTOR_INVOKATION));
 			}
 			else
 			{

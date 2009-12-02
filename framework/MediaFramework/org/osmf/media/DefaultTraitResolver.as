@@ -22,7 +22,7 @@
 package org.osmf.media
 {
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Defines a trait resolver that tracks two traits: a default trait
@@ -59,12 +59,12 @@ package org.osmf.media
 			
 			if (defaultTrait == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (defaultTrait is type.traitInterface == false)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
 			
 			this.defaultTrait = defaultTrait;

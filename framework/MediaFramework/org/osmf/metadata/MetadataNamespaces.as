@@ -47,6 +47,7 @@ package org.osmf.metadata
 		public static const SUBCLIP_END_ID:ObjectIdentifier		= new ObjectIdentifier(SUBCLIP_END_KEY);
 		
 		public static const DRM_METADATA:URL					= new URL("http://www.osmf.org/drm/default");
+		public static const DRM_CONTENT_METADATA_KEY:String		= "DRMContentMetadata";
 		
 		public static const REGION_TARGET:URL					= new URL("http://www.osmf.org/region/target");
 		

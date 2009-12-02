@@ -32,7 +32,7 @@ package org.osmf.gateways
 	import org.osmf.media.IContainerGateway;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * RegionSprite defines a Sprite based IContainerGateway implementation.
@@ -98,7 +98,7 @@ package org.osmf.gateways
 		{
 			if (element == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (contentLayoutTargets[element] == undefined)
@@ -110,7 +110,7 @@ package org.osmf.gateways
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return element;
@@ -128,7 +128,7 @@ package org.osmf.gateways
 		{
 			if (element == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var result:MediaElement;
@@ -142,7 +142,7 @@ package org.osmf.gateways
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return result;
@@ -327,7 +327,7 @@ package org.osmf.gateways
 		{
 			if (region == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (regionsLayoutRenderer.targets(region) == false)
@@ -336,7 +336,7 @@ package org.osmf.gateways
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		
@@ -355,7 +355,7 @@ package org.osmf.gateways
 		{
 			if (region == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (regionsLayoutRenderer.targets(region))
@@ -364,7 +364,7 @@ package org.osmf.gateways
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		

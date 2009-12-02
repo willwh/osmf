@@ -30,7 +30,7 @@ package org.osmf.composition
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.ISwitchable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
@@ -138,7 +138,7 @@ package org.osmf.composition
 		{
 			if (index >= bitRates.length || index < 0)
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			return bitRates[index];
 		}
@@ -168,7 +168,7 @@ package org.osmf.composition
 		{		
 			if (value >= bitRates.length || value < 0)
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}	
 			_maxIndex = value;
 		}
@@ -208,7 +208,7 @@ package org.osmf.composition
 		{
 			if ((index < 0) || (index > maxIndex))
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 					
 			if (!_autoSwitch)
@@ -240,7 +240,7 @@ package org.osmf.composition
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE));
 			}						
 		}
 		

@@ -26,7 +26,7 @@ package org.osmf.metadata
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.media.IMediaResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	/**
@@ -167,7 +167,7 @@ package org.osmf.metadata
 				|| callback == null
 				)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var watcher:MetadataWatcher 
@@ -209,7 +209,7 @@ package org.osmf.metadata
 				|| callback == null
 				)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var watcher:MetadataWatcher 
@@ -237,7 +237,7 @@ package org.osmf.metadata
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var idFacet:ObjectFacet = new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id);

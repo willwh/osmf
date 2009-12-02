@@ -26,7 +26,7 @@ package org.osmf.traits
 	
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Dispatched when the state of an ILoadable being loaded or unloaded by
@@ -89,11 +89,11 @@ package org.osmf.traits
 			{
 				if (newState == LoadState.READY && loadedContext == null)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.LOADED_CONTEXT_NULL);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NULL));
 				}
 				if (newState == LoadState.UNINITIALIZED && loadedContext != null)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.LOADED_CONTEXT_NOT_NULL);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NOT_NULL));
 				}
 				
 				var oldState:String = loadable.loadState;
@@ -125,19 +125,19 @@ package org.osmf.traits
 		{
 			if (loadable == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			if (loadable.loadState == LoadState.READY)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_READY);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_READY));
 			}
 			if (loadable.loadState == LoadState.LOADING)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADING);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));
 			}
 			if (canHandleResource(loadable.resource) == false)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
 		}
 
@@ -151,19 +151,19 @@ package org.osmf.traits
 		{
 			if (loadable == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			if (loadable.loadState == LoadState.UNLOADING)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADING);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));
 			}
 			if (loadable.loadState == LoadState.UNINITIALIZED)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADED);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 			}
 			if (canHandleResource(loadable.resource) == false)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
 		}
 	}

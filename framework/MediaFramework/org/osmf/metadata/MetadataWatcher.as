@@ -27,7 +27,7 @@ package org.osmf.metadata
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.events.FacetValueEvent;
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -58,7 +58,7 @@ package org.osmf.metadata
 		{
 			if (metadata == null || nameSpace == null || callback == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 
 			this.metadata = metadata;

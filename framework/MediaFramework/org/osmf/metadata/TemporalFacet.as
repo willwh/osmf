@@ -38,7 +38,7 @@ package org.osmf.metadata
 	import org.osmf.traits.ISeekable;
 	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
@@ -77,7 +77,7 @@ package org.osmf.metadata
 
 			if (owner == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 
 			this.owner = owner;	
@@ -151,7 +151,7 @@ package org.osmf.metadata
 		{
 			if (value == null ||value.time < 0)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			if (temporalValueCollection == null)

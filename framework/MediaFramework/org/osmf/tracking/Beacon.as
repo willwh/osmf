@@ -29,7 +29,7 @@ package org.osmf.tracking
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.utils.HTTPLoader;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -70,7 +70,7 @@ package org.osmf.tracking
 		{
 			if (url == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			this.url = url;

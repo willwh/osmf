@@ -36,7 +36,7 @@ package org.osmf.net
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.Base64Decoder;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	internal class ManifestParser
@@ -60,7 +60,7 @@ package org.osmf.net
 			}
 			else
 			{
-				throw new ArgumentError(MediaFrameworkStrings.F4M_PARSE_NO_ID);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_NO_ID));
 			}
 			
 			if (root.xmlns::duration.length() > 0)
@@ -160,7 +160,7 @@ package org.osmf.net
 				if (Media(value.media[0]).drmMetadata != null)
 				{
 					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-					drmFacet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
+					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
 					resource.metadata.addFacet(drmFacet);
 				}
 				return resource;

@@ -22,7 +22,7 @@
 
 package org.osmf.net.dynamicstreaming
 {
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * The SwitchingDetailCodes class provides static constants for switching detail codes,
@@ -40,7 +40,7 @@ package org.osmf.net.dynamicstreaming
 		public static const SWITCHING_UP_BANDWIDTH_SUFFICIENT:int			= 1;
 		public static const SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT:int		= 2;
 		public static const SWITCHING_DOWN_BUFFER_INSUFFICIENT:int			= 3;
-		public static const SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE:int		= 4;
+		public static const SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE:int		= 4;
 		public static const SWITCHING_DOWN_OTHER:int						= 5;
 		public static const SWITCHING_UP_OTHER:int							= 6;
 		public static const SWITCHING_MANUAL:int							= 7;
@@ -61,7 +61,7 @@ package org.osmf.net.dynamicstreaming
 			{
 				if (detailMap[i].code == detailCode)
 				{
-					description = detailMap[i].description;
+					description = OSMFStrings.getString(detailMap[i].description);
 					break;
 				}
 			}
@@ -71,13 +71,13 @@ package org.osmf.net.dynamicstreaming
 		
 		private static const detailMap:Array = 
 		[
-			{code:SWITCHING_UP_BANDWIDTH_SUFFICIENT,		description:MediaFrameworkStrings.SWITCHING_UP_BANDWIDTH_SUFFICIENT},
-			{code:SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT,	description:MediaFrameworkStrings.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT},
-			{code:SWITCHING_DOWN_BUFFER_INSUFFICIENT,		description:MediaFrameworkStrings.SWITCHING_DOWN_BUFFER_INSUFFICIENT},
-			{code:SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE,	description:MediaFrameworkStrings.SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE},
-			{code:SWITCHING_DOWN_OTHER,						description:MediaFrameworkStrings.SWITCHING_DOWN_OTHER},
-			{code:SWITCHING_UP_OTHER,						description:MediaFrameworkStrings.SWITCHING_UP_OTHER},
-			{code:SWITCHING_MANUAL,							description:MediaFrameworkStrings.SWITCHING_MANUAL}
+			{code:SWITCHING_UP_BANDWIDTH_SUFFICIENT,		description:OSMFStrings.SWITCHING_UP_BANDWIDTH_SUFFICIENT},
+			{code:SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT,	description:OSMFStrings.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT},
+			{code:SWITCHING_DOWN_BUFFER_INSUFFICIENT,		description:OSMFStrings.SWITCHING_DOWN_BUFFER_INSUFFICIENT},
+			{code:SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE,	description:OSMFStrings.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE},
+			{code:SWITCHING_DOWN_OTHER,						description:OSMFStrings.SWITCHING_DOWN_OTHER},
+			{code:SWITCHING_UP_OTHER,						description:OSMFStrings.SWITCHING_UP_OTHER},
+			{code:SWITCHING_MANUAL,							description:OSMFStrings.SWITCHING_MANUAL}
 		];
 	}
 }

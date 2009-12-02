@@ -11,7 +11,7 @@ package org.osmf.net
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	public class TestManifestParser extends TestCase
 	{
@@ -64,7 +64,7 @@ package org.osmf.net
 			catch(error:ArgumentError)
 			{
 				errorSeen = true;
-				assertEquals(MediaFrameworkStrings.F4M_PARSE_NO_ID, error.message);
+				assertEquals(OSMFStrings.getString(OSMFStrings.F4M_PARSE_NO_ID), error.message);
 			}
 			assertTrue(errorSeen);
 		}
@@ -125,7 +125,7 @@ package org.osmf.net
 			var facet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
 			
-			assertEquals("Some Sample Data", facet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY)));
+			assertEquals("Some Sample Data", facet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)));
 					
 		}
 		

@@ -24,7 +24,7 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when total size in bytes of data being downloaded has changed.
@@ -83,7 +83,7 @@ package org.osmf.traits
 		{
 			if (value > bytesTotal || value < 0)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			if (canProcessBytesLoadedChange(value))
@@ -119,7 +119,7 @@ package org.osmf.traits
 			
 			if (value < _bytesLoaded || value < 0)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
 			if (canProcessBytesTotalChange(value))

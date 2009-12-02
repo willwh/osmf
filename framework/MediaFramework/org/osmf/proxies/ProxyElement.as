@@ -34,7 +34,7 @@ package org.osmf.proxies
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * A ProxyElement acts as a wrapper for another MediaElement.
@@ -163,7 +163,7 @@ package org.osmf.proxies
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return getTrait(type) != null;
@@ -176,7 +176,7 @@ package org.osmf.proxies
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
 			var trait:IMediaTrait = null;

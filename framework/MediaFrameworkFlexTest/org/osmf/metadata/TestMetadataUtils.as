@@ -26,7 +26,7 @@ package org.osmf.metadata
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	public class TestMetadataUtils extends TestCase

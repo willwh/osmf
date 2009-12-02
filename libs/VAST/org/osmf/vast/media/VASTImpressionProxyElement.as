@@ -30,7 +30,7 @@ package org.osmf.vast.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.HTTPLoader;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTUrl;
 	
@@ -66,7 +66,7 @@ package org.osmf.vast.media
 
 			if (urls == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.INVALID_PARAM);
 			}
 		}
 		

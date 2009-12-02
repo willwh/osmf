@@ -27,7 +27,7 @@ package org.osmf.net.dynamicstreaming
 	
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	public class TestDynamicStreamingResource extends TestCase
 	{
@@ -53,7 +53,7 @@ package org.osmf.net.dynamicstreaming
 			}
 			catch(e:RangeError)
 			{
-				assertEquals(e.message, MediaFrameworkStrings.INVALID_PARAM);
+				assertEquals(e.message, OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			
@@ -106,7 +106,7 @@ package org.osmf.net.dynamicstreaming
 			}
 			catch(e:RangeError)
 			{
-				assertEquals(e.message, MediaFrameworkStrings.INVALID_PARAM);
+				assertEquals(e.message, OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 						

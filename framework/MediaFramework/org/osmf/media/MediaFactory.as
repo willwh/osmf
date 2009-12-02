@@ -26,7 +26,7 @@ package org.osmf.media
 	import flash.utils.Dictionary;
 	
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * A MediaFactory represents a factory class for media elements.
@@ -84,7 +84,7 @@ package org.osmf.media
 		{
 			if (info == null || info.id == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			var infos:Vector.<MediaInfo> = findOrCreateInfos(info.type);
@@ -115,7 +115,7 @@ package org.osmf.media
 		{
 			if (info == null || info.id == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			var infos:Vector.<MediaInfo> = allInfos[info.type];

@@ -29,7 +29,7 @@ package org.osmf.composition
 	import org.osmf.traits.ISeekable;
 	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when this trait begins a seek operation.
@@ -184,7 +184,7 @@ package org.osmf.composition
   		 **/
 		protected function onSeekingChanged(event:SeekEvent):void
 		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
 		
 		/**
@@ -196,7 +196,7 @@ package org.osmf.composition
 		 **/
 		protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
 		
 		/**
@@ -208,7 +208,7 @@ package org.osmf.composition
 		 **/
 		protected function prepareSeekOperationInfo(time:Number):CompositeSeekOperationInfo
 		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
 		
 		/**
@@ -218,7 +218,7 @@ package org.osmf.composition
 		 **/
 		protected function checkSeeking():Boolean
 		{
-			throw new IllegalOperationError(MediaFrameworkStrings.FUNCTION_MUST_BE_OVERRIDDEN);
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
 
 		/**

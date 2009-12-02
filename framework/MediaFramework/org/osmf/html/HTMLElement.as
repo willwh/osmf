@@ -35,7 +35,7 @@ package org.osmf.html
 	import org.osmf.traits.PausableTrait;
 	import org.osmf.traits.PlayableTrait;
 	import org.osmf.traits.TemporalTrait;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Represents a media element who's characteristics are governed by
@@ -80,7 +80,7 @@ package org.osmf.html
 		{
 			if (switchableTraitTypes.indexOf(type) == -1)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.UNSUPPORTED_TRAIT_TYPE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.UNSUPPORTED_TRAIT_TYPE));
 			}
 			
 			var trait:IMediaTrait = switchableTraits[type];

@@ -33,7 +33,7 @@ package org.osmf.vast.media
 	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.HTTPLoader;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTTrackingEvent;
 	import org.osmf.vast.model.VASTTrackingEventType;
@@ -68,7 +68,7 @@ package org.osmf.vast.media
 
 			if (events == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.INVALID_PARAM);
 			}
 		}
 		

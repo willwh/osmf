@@ -29,7 +29,7 @@ package org.osmf.traits
 	import org.osmf.events.SwitchEvent;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
@@ -166,7 +166,7 @@ package org.osmf.traits
 		{
 			if (index > (numIndices-1) || index < 0)
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			return -1;
 		}
@@ -221,7 +221,7 @@ package org.osmf.traits
 		{
 			if (autoSwitch)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE));
 			}
 			else if (index != currentIndex)
 			{
@@ -289,7 +289,7 @@ package org.osmf.traits
 		{
 			if (index < 0 || index > maxIndex)
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 		}
 		
@@ -346,7 +346,7 @@ package org.osmf.traits
 		{
 			if (value < 0 || value >= numIndices)
 			{				
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			
 			return true;

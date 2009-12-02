@@ -32,7 +32,7 @@ package com.akamai.osmf
 	import org.osmf.media.MediaInfo;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.video.VideoElement;
 	
 	/**
@@ -72,7 +72,7 @@ package com.akamai.osmf
 		{
 			if (index >= mediaInfoObjects.length)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);				
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
 			}
 			
 			return mediaInfoObjects[index];

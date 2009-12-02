@@ -68,7 +68,7 @@ package org.osmf.video
 	import org.osmf.traits.SpatialTrait;
 	import org.osmf.traits.TemporalTrait;
 	import org.osmf.traits.ViewableTrait;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	
 	CONFIG::FLASH_10_1
@@ -138,7 +138,7 @@ package org.osmf.video
 				
 				if (urlResource == null && dsResource == null) 
 				{
-					throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 				}
 			}
 		}
@@ -284,7 +284,7 @@ package org.osmf.video
     			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
     			if (metadataFacet != null)
     			{    				
-    				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY));
+    				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
     				addProtectableTrait(metadata).addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
     				return;  //Don't add traits until the "auth" has completed. 			
 	    		}
@@ -302,7 +302,7 @@ package org.osmf.video
     	{
   			private function onStatus(event:StatusEvent):void
 			{
-				if (event.code == MediaFrameworkStrings.DRM_STATUS_CODE 
+				if (event.code == DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
 				{			
 					createProtectableTrait().addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
@@ -527,6 +527,8 @@ package org.osmf.video
 				dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, error));
 			}
      	}
+     	
+     	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
      	
      	/**
      	 * NetStream used to stream content for this video element.

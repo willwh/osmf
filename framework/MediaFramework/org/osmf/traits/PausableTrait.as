@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	import org.osmf.events.PausedChangeEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when the trait's paused property has changed.
@@ -67,7 +67,7 @@ package org.osmf.traits
 		{
 			if (owner == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			this.owner = owner;

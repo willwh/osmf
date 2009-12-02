@@ -11,7 +11,7 @@ package org.osmf.composition
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TestISwitchable;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.video.VideoElement;
 	
 	public class TestParallelSwitchableTrait extends TestISwitchable
@@ -65,7 +65,7 @@ package org.osmf.composition
 			}
 			catch(error:RangeError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				rangeFired = true;
 			}
 										
@@ -113,7 +113,7 @@ package org.osmf.composition
 			}
 			catch(error:RangeError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				rangeFired = true;
 			}
 			assertTrue(rangeFired);
@@ -124,7 +124,7 @@ package org.osmf.composition
 			}
 			catch(error:RangeError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				rangeFired = true;
 			}
 			assertTrue(rangeFired);

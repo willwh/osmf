@@ -25,7 +25,7 @@ package org.osmf.traits
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when the state of the ILoadable has changed.
@@ -144,11 +144,11 @@ package org.osmf.traits
 			{	
 				if (_loadState == LoadState.READY)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_READY);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_READY));
 				}
 				if (_loadState == LoadState.LOADING)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_LOADING);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));
 				}
 				else
 				{
@@ -157,7 +157,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.MUST_SET_ILOADER_FOR_LOAD);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_ILOADER_FOR_LOAD));
 			}
 		}
 		
@@ -184,17 +184,17 @@ package org.osmf.traits
 			{	
 				if (_loadState == LoadState.UNLOADING)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADING);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));
 				}
 				if (_loadState == LoadState.UNINITIALIZED)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.ALREADY_UNLOADED);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 				}
 				loader.unload(this);
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.MUST_SET_ILOADER_FOR_UNLOAD);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_ILOADER_FOR_UNLOAD));
 			}
 		}
 		

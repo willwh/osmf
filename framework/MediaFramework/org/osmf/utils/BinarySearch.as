@@ -56,7 +56,7 @@ package org.osmf.utils
 				||	compare == null
 				)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var result:int = -firstIndex;

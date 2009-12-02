@@ -33,7 +33,7 @@ package org.osmf.audio
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekableTrait;
 	import org.osmf.traits.TemporalTrait;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
    /** 
 	 * AudioElement is a media element specifically created for audio playback.
@@ -90,7 +90,7 @@ package org.osmf.audio
 			
 			if (!(loader is NetLoader || loader is SoundLoader))
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		

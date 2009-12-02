@@ -46,7 +46,7 @@ package org.osmf.drm
 	import org.osmf.events.ContentProtectionEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * @private
@@ -222,7 +222,7 @@ package org.osmf.drm
 		{			
 			if (drmContentData == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.DRM_METADATA_NOT_SET);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DRM_METADATA_NOT_SET));
 			}
 		
 			drmManager.addEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);			
@@ -247,7 +247,7 @@ package org.osmf.drm
 		{
 			if (drmContentData == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.DRM_METADATA_NOT_SET);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DRM_METADATA_NOT_SET));
 			}
 						
 			drmManager.setAuthenticationToken(drmContentData.serverURL, drmContentData.domain, token as ByteArray);

@@ -35,7 +35,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadableTrait;
 	import org.osmf.utils.URL;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * DynamicStreamingNetLoader extends NetLoader to provide
@@ -141,7 +141,7 @@ package org.osmf.net.dynamicstreaming
 				var netLoadedContext:NetLoadedContext = hostLoadable.loadedContext as NetLoadedContext;
 				if (netLoadedContext == null)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 				}
 				else
 				{

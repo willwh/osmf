@@ -106,7 +106,7 @@ package org.osmf.net.dynamicstreaming
         	 		debug(".getNewIndex() - Frame drop rule locking at index level: " + metrics.currentIndex);
         	 	}
         	 	
-        	 	updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_FRAMEDROP_UNACCETPABLE, moreDetail);
+        	 	updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE, moreDetail);
 			}
         	
         	if (newIndex != -1)

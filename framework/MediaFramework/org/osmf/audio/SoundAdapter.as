@@ -33,7 +33,7 @@ package org.osmf.audio
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
     
 	/**
 	 * Dispatched when playback of the Sound completes.

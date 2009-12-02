@@ -33,7 +33,7 @@ package org.osmf.media
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.IDisposable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when an IMediaTrait is added to the media element.
@@ -145,7 +145,7 @@ package org.osmf.media
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return traits[type] != null;
@@ -169,7 +169,7 @@ package org.osmf.media
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
 			return traits[type];
@@ -285,7 +285,7 @@ package org.osmf.media
 		{
 			if (type == null || instance == null || !(instance is type.traitInterface))
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			// If there's a trait resolver for this type, then add the trait
@@ -320,7 +320,7 @@ package org.osmf.media
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
 			var trait:IMediaTrait = traits[type];
@@ -355,7 +355,7 @@ package org.osmf.media
 		{
 			if (instance == null || instance.type != type)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			if (traitResolvers[type] == null)
@@ -383,7 +383,7 @@ package org.osmf.media
 			}
 			else
 			{
-				throw new ArgumentError(MediaFrameworkStrings.TRAIT_RESOLVER_ALREADY_ADDED);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_RESOLVER_ALREADY_ADDED));
 			}
 		}
 		
@@ -403,7 +403,7 @@ package org.osmf.media
 		{
 			if (type == null || traitResolvers[type] == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			// Stop listening for the resolver's resolved trait value changing:
@@ -517,7 +517,7 @@ package org.osmf.media
 				}
 				else if (result != instance)
 				{
-					throw new ArgumentError(MediaFrameworkStrings.TRAIT_INSTANCE_ALREADY_ADDED);
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_INSTANCE_ALREADY_ADDED));
 				}
 			}
 			

@@ -35,7 +35,7 @@ package org.osmf.plugin
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Dispatched when the PluginManager has successfully loaded a plugin.
@@ -109,7 +109,7 @@ package org.osmf.plugin
 			if ((resource == null) || 
 				(!(resource is URLResource) && !(resource is PluginClassResource)))
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			var identifier:String = getPluginIdentifier(resource);
@@ -149,7 +149,7 @@ package org.osmf.plugin
 				}
 				else
 				{
-					throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 				}
 			}
 			
@@ -196,7 +196,7 @@ package org.osmf.plugin
 			if ((resource == null) || 
 				(!(resource is URLResource) && !(resource is PluginClassResource)))
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			var identifier:String = getPluginIdentifier(resource);

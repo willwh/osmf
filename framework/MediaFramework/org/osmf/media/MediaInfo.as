@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Encapsulation of all information needed to dynamically create and
@@ -58,7 +58,7 @@ package org.osmf.media
 			     || mediaElementCreationFunction == null
 			   )
 			{
-				throw new ArgumentError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			// Make sure our type field has a valid value. 

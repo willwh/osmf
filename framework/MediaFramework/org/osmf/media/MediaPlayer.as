@@ -30,7 +30,7 @@ package org.osmf.media
 	
 	import org.osmf.events.*;
 	import org.osmf.traits.*;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	   
 	// ITemporal
 	
@@ -1398,7 +1398,7 @@ package org.osmf.media
 	    {
 	    	if (!_element || !_element.hasTrait(trait))
 	    	{
-	    		var error:String = MediaFrameworkStrings.TRAIT_NOT_SUPPORTED;
+	    		var error:String = OSMFStrings.getString(OSMFStrings.TRAIT_NOT_SUPPORTED);
 	    		var traitName:String = trait.toString().replace("[class I", "");
 	    		traitName = traitName.replace("]", "").toLowerCase();	
 	    				

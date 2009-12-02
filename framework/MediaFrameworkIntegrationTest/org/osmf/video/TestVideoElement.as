@@ -40,7 +40,7 @@ package org.osmf.video
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.IContentProtectable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	public class TestVideoElement extends TestCase
@@ -65,7 +65,7 @@ package org.osmf.video
 			decoder.decode(ANONYMOUS_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(ANONYMOUS_ENCRYPTED));
 			resource.metadata.addFacet(facet);
@@ -86,7 +86,7 @@ package org.osmf.video
 			decoder.decode(IDENT_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
 			resource.metadata.addFacet(facet);
@@ -136,7 +136,7 @@ package org.osmf.video
 			decoder.decode(IDENT_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(MediaFrameworkStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
 			resource.metadata.addFacet(facet);

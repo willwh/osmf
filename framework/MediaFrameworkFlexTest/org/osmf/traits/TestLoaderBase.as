@@ -26,7 +26,7 @@ package org.osmf.traits
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	public class TestLoaderBase extends TestCase
@@ -36,13 +36,13 @@ package org.osmf.traits
 			var loader:LoaderBase = new LoaderBase();
 			var loadable:LoadableTrait = new LoadableTrait(loader,null);
 				
-			shouldThrowLoad(loader, null, MediaFrameworkStrings.NULL_PARAM);
+			shouldThrowLoad(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			loadable.loadState = LoadState.READY;
-			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ALREADY_READY);
+			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_READY));
 			loadable.loadState = LoadState.LOADING;
-			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ALREADY_LOADING);	
+			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));	
 			loadable.loadState = LoadState.UNINITIALIZED;		
-			shouldThrowLoad(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);
+			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 						
 		}
 		
@@ -51,13 +51,13 @@ package org.osmf.traits
 			var loader:LoaderBase = new LoaderBase();
 			var loadable:LoadableTrait = new LoadableTrait(loader,null);
 			
-			shouldThrowUnload(loader, null, MediaFrameworkStrings.NULL_PARAM);
+			shouldThrowUnload(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			loadable.loadState = LoadState.UNINITIALIZED;
-			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ALREADY_UNLOADED);
+			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 			loadable.loadState = LoadState.UNLOADING;
-			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ALREADY_UNLOADING);			
+			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));			
 			loadable.loadState = LoadState.READY;		
-			shouldThrowUnload(loader, loadable, MediaFrameworkStrings.ILOADER_CANT_HANDLE_RESOURCE);						
+			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));						
 		}
 		
 		private function shouldThrowLoad(loader:ILoader, loadable:ILoadable, message:String):void

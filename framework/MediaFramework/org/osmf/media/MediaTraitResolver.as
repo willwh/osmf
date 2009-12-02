@@ -25,7 +25,7 @@ package org.osmf.media
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Dispatched when the resolver's resolvedTrait property changed.
@@ -53,7 +53,7 @@ package org.osmf.media
 		{
 			if (type == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			_type = type;
@@ -131,11 +131,11 @@ package org.osmf.media
 		{	
 			if (instance == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			if (instance is type.traitInterface == false)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
 			
 			processAddTrait(instance);
@@ -161,11 +161,11 @@ package org.osmf.media
 		{
 			if (instance == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			if (instance is type.traitInterface == false)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.TRAIT_TYPE_MISMATCH);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
 			
 			return processRemoveTrait(instance);

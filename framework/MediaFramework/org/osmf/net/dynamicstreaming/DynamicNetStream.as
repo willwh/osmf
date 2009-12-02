@@ -45,7 +45,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
@@ -142,7 +142,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			if ((args == null) || (args.length == 0))
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);				
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
 			}
 			
 			_dsResource = args[0] as DynamicStreamingResource;
@@ -633,7 +633,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			if (value > _dsResource.streamItems.length)
 			{
-				throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			_maxIndexAllowed = value;
 		}
@@ -659,7 +659,7 @@ package org.osmf.net.dynamicstreaming
 			{
 				if ((index < 0) || (index > maxIndex))
 				{
-					throw new RangeError(MediaFrameworkStrings.STREAMSWITCH_INVALID_INDEX);
+					throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				}
 				else
 				{
@@ -681,7 +681,7 @@ package org.osmf.net.dynamicstreaming
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE));
 			}
 		}
 				

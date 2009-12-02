@@ -40,7 +40,7 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.BinarySearch;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -150,12 +150,12 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (layoutTargets.indexOf(target) != -1)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			// Get the index where the target should be inserted:
@@ -207,7 +207,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var removedTarget:ILayoutTarget;
@@ -254,7 +254,7 @@ package org.osmf.layout
 			}
 			else
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.INVALID_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return removedTarget;
@@ -789,7 +789,7 @@ package org.osmf.layout
 			
 			if (displayObject == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			dirtyRenderers.push(renderer);

@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when the trait's <code>playing</code> property has changed.
@@ -68,7 +68,7 @@ package org.osmf.traits
 		{
 			if (owner == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			this.owner = owner;

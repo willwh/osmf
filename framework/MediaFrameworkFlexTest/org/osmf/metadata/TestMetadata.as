@@ -28,7 +28,7 @@ package org.osmf.metadata
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	public class TestMetadata extends TestCase
@@ -63,7 +63,7 @@ package org.osmf.metadata
 			}
 			catch(error:IllegalOperationError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.NULL_PARAM);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 				nullThrown = true;
 			}
 			
@@ -73,7 +73,7 @@ package org.osmf.metadata
 			}
 			catch(error:IllegalOperationError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.NAMESPACE_MUST_NOT_BE_EMPTY);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				nsThrown = true;
 			}			
 			assertTrue(nullThrown);
@@ -117,7 +117,7 @@ package org.osmf.metadata
 			}
 			catch(error:IllegalOperationError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.NULL_PARAM);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 				nullThrown = true;
 			}
 			
@@ -127,7 +127,7 @@ package org.osmf.metadata
 			}
 			catch(error:IllegalOperationError)
 			{
-				assertEquals(error.message, MediaFrameworkStrings.NAMESPACE_MUST_NOT_BE_EMPTY);
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				nsThrown = true;
 			}	
 			

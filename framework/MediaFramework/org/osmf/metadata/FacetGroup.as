@@ -27,7 +27,7 @@ package org.osmf.metadata
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -95,12 +95,12 @@ package org.osmf.metadata
 		{
 			if (metadata == null || facet == null)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NULL_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			if (facet.namespaceURL.rawUrl != _namespaceURL.rawUrl)
 			{
-				throw new ArgumentError(MediaFrameworkStrings.NAMESPACE_MUST_EQUAL_GROUP_NS);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_EQUAL_GROUP_NS));
 			}
 			
 			facets.push({metadata:metadata, facet:facet});

@@ -26,7 +26,7 @@ package org.osmf.layout
 	import org.osmf.display.ScaleMode;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Static utility functions used with Layouts.
@@ -66,7 +66,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;
@@ -131,7 +131,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;
@@ -195,7 +195,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;
@@ -251,7 +251,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;
@@ -310,7 +310,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;
@@ -367,7 +367,7 @@ package org.osmf.layout
 		{
 			if (target == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var addFacet:Boolean;

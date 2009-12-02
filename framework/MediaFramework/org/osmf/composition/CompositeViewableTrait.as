@@ -38,7 +38,7 @@ package org.osmf.composition
 	import org.osmf.traits.ISpatial;
 	import org.osmf.traits.IViewable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when the trait's view has changed.
@@ -186,7 +186,7 @@ package org.osmf.composition
 				}
 				catch(e:*)
 				{
-					throw new IllegalOperationError(MediaFrameworkStrings.INVALID_LAYOUTRENDERER_CONSTRUCTOR);
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_LAYOUTRENDERER_CONSTRUCTOR));
 				}
 			}
 			

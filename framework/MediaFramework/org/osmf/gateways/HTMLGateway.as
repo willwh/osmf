@@ -31,7 +31,7 @@ package org.osmf.gateways
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.*;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * HTMLGateway is an IContainerGateway implementing class that uses the ExternalConnection
@@ -56,7 +56,7 @@ package org.osmf.gateways
 			
 			if (child == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var result:MediaElement;
@@ -105,7 +105,7 @@ package org.osmf.gateways
 			
 			if (child == null)
 			{
-				throw new IllegalOperationError(MediaFrameworkStrings.NULL_PARAM);
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			var elementId:String = getElementId(child);

@@ -28,7 +28,7 @@ package org.osmf.image
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.utils.MediaFrameworkStrings;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
 	
