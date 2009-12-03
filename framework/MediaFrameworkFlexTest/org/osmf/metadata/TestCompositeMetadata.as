@@ -43,7 +43,7 @@ package org.osmf.metadata
 			assertEquals(metadata, cm.activeChild);
 			
 			assertNull(cm.getFacetSynthesizer(null));
-			assertNull(cm.getFacetSynthesizer(new URL()));
+			assertNull(cm.getFacetSynthesizer(new URL(null)));
 			
 			assertEquals(cm.numChildren, 0);
 			
