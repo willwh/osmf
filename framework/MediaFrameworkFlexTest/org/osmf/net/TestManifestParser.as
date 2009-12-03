@@ -51,23 +51,6 @@ package org.osmf.net
 			assertEquals(manifest.streamType, "recorded");
 				
 		}
-				
-		public function testParseErrors():void
-		{
-			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
-							</manifest>;
-			var errorSeen:Boolean = false;
-			try
-			{
-				var manifest:Manifest = ManifestParser.parse(test);
-			}
-			catch(error:ArgumentError)
-			{
-				errorSeen = true;
-				assertEquals(OSMFStrings.getString(OSMFStrings.F4M_PARSE_NO_ID), error.message);
-			}
-			//assertTrue(errorSeen);
-		}
 		
 		public function testMediaParser():void
 		{
