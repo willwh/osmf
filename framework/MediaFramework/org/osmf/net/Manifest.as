@@ -35,6 +35,15 @@ package org.osmf.net
 		public var id:String;
 		
 		/**
+		 * The <baseURL> element contains the base URL for all relative (HTTP-based) URLs 
+		 * in the manifest. It is optional. When specified, its value is prepended to all 
+		 * relative URLs (i.e. those URLs that don't begin with "http://" or "https://" 
+		 * within the manifest file. (Such URLs may include <media> URLs, <bootstrapInfo> 
+		 * URLs, and <drmMetadata> URLs.) 
+		 */ 
+		public var baseURL:String;
+				
+		/**
 		 * The <duration> element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.
@@ -49,12 +58,31 @@ package org.osmf.net
 		public var mimeType:String;
 		
 		/**
-		 * The <streamType> element is a string representing the way in which the media is streamed. 
+		 * The <streamType> element is a string representing the way in which the media is streamed.
 		 * Valid values include "live", "recorded", and "any". It is assumed that all representations 
-		 * of the media have the same stream type, hence its placement under the document root.
+		 * of the media have the same stream type, hence its placement under the document root. 
+		 * It is optional.
 		 */
 		public var streamType:String;
-	
+			
+		/**
+		 * Indicates the means by which content is delivered to the player.  Valid values include 
+		 * "streaming" and "progressive". It is optional. If unspecified, then the delivery 
+		 * type is inferred from the media protocol. For media with an RTMP protocol, 
+		 * the default deliveryType is "streaming". For media with an HTTP protocol, the default 
+		 * deliveryType is also "streaming". In the latter case, the <bootstrapInfo> field must be 
+		 * present.
+		 */ 
+		public var deliveryType:String;
+		
+		/**
+		 * Represents the date/time at which the media was first (or will first be) made available. 
+		 * It is assumed that all representations of the media have the same start time, hence its 
+		 * placement under the document root. The start time must conform to the "date-time" production 
+		 * in RFC3339. It is optional.
+		 */ 
+		public var startTime:Date;
+			
 		/**
 		 * The set of different bitrate streams associated with this media.
 		 */ 

@@ -3,6 +3,7 @@ package org.osmf.net
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.LoadableProxyElement;
@@ -24,7 +25,14 @@ package org.osmf.net
 			var player:MediaPlayer = new MediaPlayer();
 			player.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			player.autoPlay = false;
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
+			
 			player.element = proxy;
+			
+			function onLoadedError(event:MediaErrorEvent):void
+			{
+				assertTrue(false);
+			}
 			
 			function onLoaded(event:LoadEvent):void
 			{
@@ -47,7 +55,45 @@ package org.osmf.net
 			var player:MediaPlayer = new MediaPlayer();
 			player.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			player.autoPlay = false;
+			
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
+			
 			player.element = proxy;
+			
+			function onLoadedError(event:MediaErrorEvent):void
+			{
+				assertTrue(false);
+			}
+			
+			function onLoaded(event:LoadEvent):void
+			{
+				if(event.loadState == LoadState.READY)
+				{
+					player.element = null;
+					finished(null);
+				}
+			}	
+		}
+		
+		public function testSingleExternalLoads():void
+		{
+			var finished:Function = addAsync(function():void{}, 5000);
+			
+			var loader:F4MLoader = new F4MLoader();			
+			var res1:URLResource = new URLResource(new URL('http://flipside/testing/oconnell/manifest/externals.f4m'));
+			var proxy:LoadableProxyElement = new LoadableProxyElement(loader);
+			proxy.resource = res1;
+			var player:MediaPlayer = new MediaPlayer();
+			player.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
+			player.autoPlay = false;
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
+			
+			player.element = proxy;
+			
+			function onLoadedError(event:MediaErrorEvent):void
+			{
+				assertTrue(false);
+			}
 			
 			function onLoaded(event:LoadEvent):void
 			{

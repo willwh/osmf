@@ -35,6 +35,7 @@ package org.osmf.net
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.Base64Decoder;
+	import org.osmf.utils.DateUtil;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
@@ -58,14 +59,15 @@ package org.osmf.net
 			{
 				manifest.id = root.xmlns::id.text();
 			}
-			else
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_NO_ID));
-			}
 			
 			if (root.xmlns::duration.length() > 0)
 			{			
 				manifest.duration = root.xmlns::duration.text();
+			}	
+			
+			if (root.xmlns::startTime.length() > 0)
+			{			
+				manifest.startTime = DateUtil.parseW3CDTF(root.xmlns::startTime.text());
 			}	
 			
 			if (root.xmlns::mimeType.length() > 0)
@@ -76,6 +78,16 @@ package org.osmf.net
 			if (root.xmlns::streamType.length() > 0)
 			{			
 				manifest.streamType = root.xmlns::streamType.text();
+			}
+			
+			if (root.xmlns::deliveryType.length() > 0)
+			{			
+				manifest.deliveryType = root.xmlns::deliveryType.text();
+			}
+			
+			if (root.xmlns::baseURL.length() > 0)
+			{			
+				manifest.baseURL = root.xmlns::baseURL.text();
 			}
 			
 			//Media	
@@ -111,6 +123,11 @@ package org.osmf.net
 				media.drmMetadataId = value.@drmMetadataId;
 			}
 			
+			if (value.attribute('bootstrapInfoId').length() > 0)
+			{
+				media.bootstrapInfoId = value.@bootstrapInfoId;
+			}
+			
 			if (value.attribute('height').length() > 0)
 			{
 				media.height = value.@height;
@@ -121,6 +138,13 @@ package org.osmf.net
 				media.width = value.@width;
 			}
 			
+			if (value.xmlns::moov.length() > 0)
+			{		
+				var decoder:Base64Decoder = new Base64Decoder();
+				decoder.decode(value.xmlns::moov.text());
+				media.moov = decoder.drain();	
+			}
+			
 			return media;
 		}
 		
@@ -128,23 +152,84 @@ package org.osmf.net
 		{
 			
 			var id:String = null;
+			var url:String = null;
+			var data:ByteArray;
+			var media:Media;	
+			
 			if (value.attribute("id").length() > 0)
 			{
 				id = value.@id;
 			}
-			var metadata:String = value.text();
-			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(metadata);
-			var data:ByteArray = decoder.drain();
-			var media:Media;
-					
+			
+			if (value.attribute("url").length() > 0)
+			{
+				url = value.@url;
+			}
+			else
+			{			
+				var metadata:String = value.text();
+				var decoder:Base64Decoder = new Base64Decoder();
+				decoder.decode(metadata);
+				data = decoder.drain();
+			}
+								
 			for each (media in allMedia)
 			{
 				if (media.drmMetadataId == id)
 				{
-					media.drmMetadata = data;
+					if (url != null)
+					{
+						media.drmMetadataURL = url;
+					}
+					else
+					{
+						media.drmMetadata = data;
+					}					
 				}						
-			}							
+			}	
+									
+		}		
+		
+		private static function parseBootStrapInfo(value:XML, allMedia:Vector.<Media>):void
+		{			
+			var id:String = null;
+			var profile:String = value.@profile;
+			var url:String = null;
+			var data:ByteArray;
+			var media:Media;	
+			
+			if (value.attribute("id").length() > 0)
+			{
+				id = value.@id;
+			}
+				
+			if (value.attribute("url").length() > 0)
+			{
+				url = value.@url;
+			}
+			else
+			{			
+				var metadata:String = value.text();
+				var decoder:Base64Decoder = new Base64Decoder();
+				decoder.decode(metadata);
+				data = decoder.drain();
+			}
+								
+			for each (media in allMedia)
+			{
+				if (media.bootstrapInfoURL == id)
+				{
+					media.bootstrapProfile = profile; 
+					if (url != null)
+					{
+						media.bootstrapInfoURL = url;
+					}
+					else
+					{
+						media.bootstrapInfo = data;
+					}					
+				}						
+			}								
 		}		
 				
 		public static function createResource(value:Manifest):IMediaResource

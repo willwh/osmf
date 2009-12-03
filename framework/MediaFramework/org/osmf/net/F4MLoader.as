@@ -131,7 +131,7 @@ package org.osmf.net
 			{			
 				try
 				{
-					var manifest:Manifest = ManifestParser.parse(loader.data);
+					var manifest:Manifest = ManifestParser.parse(event.target.data);
 				}
 				catch(parseError:Error)
 				{					
@@ -140,15 +140,73 @@ package org.osmf.net
 					return;
 				}
 				
-				var netResource:IMediaResource = ManifestParser.createResource(manifest);
-					
-				var loadedElem:MediaElement = factory.createMediaElement(netResource);
+				//Load externals
 				
-				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);
-														
-				updateLoadable(loadable, LoadState.READY, context);										
-			}			
+				var unfinishedLoads:Number = 0;
+				
+				for each (var item:Media in manifest.media)
+				{
+					var request:URLRequest;
+					var loader:URLLoader;
+					
+					//Bootstrap
+					
+					if (item.bootstrapInfoURL != null)
+					{										
+						loader = new URLLoader();
+						unfinishedLoads++;
+						loader.addEventListener(Event.COMPLETE, onLoadComplete);
+						loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+						loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+					
+						function onLoadComplete(event:Event):void
+						{
+							unfinishedLoads--;
+							item.bootstrapInfo = URLLoader(event.target).data;
+							if (unfinishedLoads == 0)
+							{
+								finishLoad(manifest, loadable)
+							}
+						}
+						loader.load(new URLRequest(item.bootstrapInfoURL));
+					}
+					
+					//DRM Metadata
+					
+					if (item.drmMetadataURL != null)
+					{												
+						loader = new URLLoader();
+						unfinishedLoads++;
+						loader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
+						loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+						loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+					
+						function onDRMLoadComplete(event:Event):void
+						{
+							unfinishedLoads--;
+							item.drmMetadata = URLLoader(event.target).data;
+							if (unfinishedLoads == 0)
+							{
+								finishLoad(manifest, loadable)
+							}
+						}
+						loader.load(new URLRequest(item.bootstrapInfoURL));
+					}					
+				}	
+				if (unfinishedLoads == 0) // No external resources
+				{
+					finishLoad(manifest, loadable);
+				}														
+			}		
 		} 
+		
+		private function finishLoad(manifest:Manifest, loadable:ILoadable):void
+		{
+			var netResource:IMediaResource = ManifestParser.createResource(manifest);						
+			var loadedElem:MediaElement = factory.createMediaElement(netResource);								
+			var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
+			updateLoadable(loadable, LoadState.READY, context);		
+		}
 		
 		/**
 		 * ineritDoc
@@ -157,6 +215,7 @@ package org.osmf.net
 		{
 			super.unload(loadable);						
 		}
+		
 		
 		
 		private static const F4M_EXTENSION:String = "f4m";
