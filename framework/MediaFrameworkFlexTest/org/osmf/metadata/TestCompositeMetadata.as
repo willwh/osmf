@@ -84,12 +84,9 @@ package org.osmf.metadata
 				,	[ CompositeMetadataEvent.FACET_GROUP_ADD
 					, CompositeMetadataEvent.CHILD_FACET_ADD
 					]
-				,	function():void 
-					{
-						metadata.addFacet(facet);	
-					} 
-				);
-				
+				,	metadata.addFacet
+				,	facet
+				);	
 			
 			var md2:Metadata = new Metadata();
 			md2.addFacet(facet);
@@ -98,10 +95,8 @@ package org.osmf.metadata
 				, 	[ CompositeMetadataEvent.CHILD_ADD
 					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
 				  	]
-				, 	function():void 
-					{
-						cm.addChild(md2);	
-					} 
+				, 	cm.addChild
+				,	md2
 				);
 				
 			assertDispatches
@@ -109,10 +104,8 @@ package org.osmf.metadata
 				, 	[ CompositeMetadataEvent.CHILD_FACET_REMOVE
 					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
 				  	]
-				, 	function():void 
-					{
-						md2.removeFacet(facet);
-					} 
+				, 	md2.removeFacet
+				,	facet
 				);
 				
 			assertDispatches
@@ -121,22 +114,41 @@ package org.osmf.metadata
 					, CompositeMetadataEvent.FACET_GROUP_CHANGE
 					, CompositeMetadataEvent.FACET_GROUP_REMOVE
 				  	]
-				, 	function():void 
-					{
-						metadata.removeFacet(facet);
-					} 
+				, 	metadata.removeFacet
+				,	facet 
 				);
 			
 			assertDispatches
 				( 	cm
 				, 	[ CompositeMetadataEvent.CHILD_REMOVE
 				  	]
-				, 	function():void 
-					{
-						cm.removeChild(metadata);
-					} 
+				, 	cm.removeChild
+				,	metadata
 				);
 		}
+	
+		public function testCompositeMetadataEvent():void
+		{
+			var child:Metadata = new Metadata();
+			var facet:IFacet = new ObjectFacet(new URL(""), "test");
+			var facetGroup:FacetGroup = new FacetGroup(new URL(""));
+			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer(new URL(""));
+			var e:CompositeMetadataEvent
+				= new CompositeMetadataEvent
+					( CompositeMetadataEvent.CHILD_ADD
+					, false, false
+					, child, facet, facetGroup, facetSynthesizer
+					);
+					
+			assertNotNull(e);
+			assertEquals(child, e.child);
+			assertEquals(facet, e.facet);
+			assertEquals(facetGroup, e.facetGroup);
+			assertEquals(facetSynthesizer, e.facetSynthesizer);
+		}
+	
+		// Utils
+		//
 	
 		private function assertThrows(f:Function, ...arguments):void
 		{
