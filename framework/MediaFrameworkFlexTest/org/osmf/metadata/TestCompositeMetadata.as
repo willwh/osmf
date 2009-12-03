@@ -21,9 +21,14 @@
 *****************************************************/
 package org.osmf.metadata
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.utils.Dictionary;
+	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.composition.CompositionMode;
+	import org.osmf.events.CompositeMetadataEvent;
 	import org.osmf.utils.URL;
 
 	public class TestCompositeMetadata extends TestCase
@@ -47,21 +52,21 @@ package org.osmf.metadata
 			
 			assertEquals(cm.numChildren, 0);
 			
-			assertThrows(function():void{cm.childAt(0)});
-			assertThrows(function():void{cm.addChild(null)});
-			cm.addChild(metadata);
+			assertThrows(cm.childAt, 0);
+			assertThrows(cm.addChild, 0);
+			assertDispatches(cm, [CompositeMetadataEvent.CHILD_ADD], cm.addChild, metadata);
 			assertEquals(1, cm.numChildren);
 			assertEquals(metadata, cm.childAt(0));
-			assertThrows(function():void{cm.addChild(metadata)});
-			cm.removeChild(metadata);
+			assertThrows(cm.addChild, metadata);
+			assertDispatches(cm, [CompositeMetadataEvent.CHILD_REMOVE], cm.removeChild, metadata);
 			assertEquals(0, cm.numChildren);
-			assertThrows(function():void{cm.removeChild(metadata)});
-			assertThrows(function():void{cm.removeChild(null)});
+			assertThrows(cm.removeChild, metadata);
+			assertThrows(cm.removeChild, null);
 			
 			assertEquals(0, cm.getFacetGroupNamespaceURLs().length);
 			assertNull(cm.getFacetSynthesizer(null));
-			assertThrows(function():void{cm.removeFacetSynthesizer(null)});
-			assertThrows(function():void{cm.addFacetSynthesizer(null)});
+			assertThrows(cm.removeFacetSynthesizer, null);
+			assertThrows(cm.addFacetSynthesizer, null);
 			
 			var url:URL = new URL("myURL");
 			var synth:AFacetSynthesizer = new AFacetSynthesizer(url);
@@ -71,17 +76,107 @@ package org.osmf.metadata
 			cm.removeFacetSynthesizer(synth);
 			assertNull(null, cm.getFacetSynthesizer(url));
 			cm.addFacetSynthesizer(synth);
+			
+			var facet:IFacet = new ObjectFacet(url,"test");
+			cm.addChild(metadata);
+			assertDispatches
+				(	cm
+				,	[ CompositeMetadataEvent.FACET_GROUP_ADD
+					, CompositeMetadataEvent.CHILD_FACET_ADD
+					]
+				,	function():void 
+					{
+						metadata.addFacet(facet);	
+					} 
+				);
+				
+			
+			var md2:Metadata = new Metadata();
+			md2.addFacet(facet);
+			assertDispatches
+				( 	cm
+				, 	[ CompositeMetadataEvent.CHILD_ADD
+					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
+				  	]
+				, 	function():void 
+					{
+						cm.addChild(md2);	
+					} 
+				);
+				
+			assertDispatches
+				( 	cm
+				, 	[ CompositeMetadataEvent.CHILD_FACET_REMOVE
+					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
+				  	]
+				, 	function():void 
+					{
+						md2.removeFacet(facet);
+					} 
+				);
+				
+			assertDispatches
+				( 	cm
+				, 	[ CompositeMetadataEvent.CHILD_FACET_REMOVE
+					, CompositeMetadataEvent.FACET_GROUP_CHANGE
+					, CompositeMetadataEvent.FACET_GROUP_REMOVE
+				  	]
+				, 	function():void 
+					{
+						metadata.removeFacet(facet);
+					} 
+				);
+			
+			assertDispatches
+				( 	cm
+				, 	[ CompositeMetadataEvent.CHILD_REMOVE
+				  	]
+				, 	function():void 
+					{
+						cm.removeChild(metadata);
+					} 
+				);
 		}
 	
-		private function assertThrows(f:Function):void
+		private function assertThrows(f:Function, ...arguments):void
 		{
 			try
 			{
-				f();
+				f.apply(null,arguments);
 				fail();
 			}
 			catch(e:Error)
 			{	
+			}
+		}
+		
+		private function assertDispatches(dispatcher:EventDispatcher, types:Array, f:Function, ...arguments):void
+		{
+			var dispatched:Dictionary = new Dictionary();
+			function handler(event:Event):void
+			{
+				dispatched[event.type] = true;
+			}
+			
+			var type:String;
+			for each (type in types)
+			{
+				dispatcher.addEventListener(type, handler);
+			}
+			
+			f.apply(null, arguments);
+			
+			for each (type in types)
+			{
+				dispatcher.removeEventListener(type, handler);
+			}
+			
+			for each (type in types)
+			{
+				if (dispatched[type] != true)
+				{
+					fail("Event of type " + type + " was not fired.");
+				}
 			}
 		}
 	}

@@ -612,9 +612,6 @@ package org.osmf.metadata
 						, _mode
 						, _activeChild
 						);
-				
-				// Add or overwrite the synthesized value:
-				addFacet(synthesizedFacet);
 			}
 			
 			if (synthesizedFacet == null)
@@ -624,6 +621,10 @@ package org.osmf.metadata
 				{
 					removeFacet(currentFacet);
 				}
+			}
+			else
+			{
+				addFacet(synthesizedFacet);
 			}
 		}
 		
