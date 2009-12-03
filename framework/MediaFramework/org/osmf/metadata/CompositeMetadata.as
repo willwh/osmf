@@ -124,6 +124,7 @@ package org.osmf.metadata
 		 * @param child The child to add.
 		 * @throws IllegalOperationError Thrown if the specified child is
 		 * already a child.
+		 * @throws ArgumentError if the specified child is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -132,6 +133,11 @@ package org.osmf.metadata
 		 */		
 		public function addChild(child:Metadata):void
 		{
+			if (child == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			
 			var childIndex:int = children.indexOf(child);
 			if (childIndex != -1)
 			{
@@ -181,6 +187,7 @@ package org.osmf.metadata
 		 * @param child The child to remove.
 		 * @throws IllegalOperationError Thrown if the specified child is
 		 * not a child.
+		 * @throws ArgumentError if the specified child is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -189,6 +196,11 @@ package org.osmf.metadata
 		 */		
 		public function removeChild(child:Metadata):void
 		{
+			if (child == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			
 			var childIndex:int = children.indexOf(child);
 			if (childIndex == -1)
 			{
@@ -349,6 +361,7 @@ package org.osmf.metadata
 		 * Removes a facet synthesizer.
 		 * 
 		 * @param synthesizer The facet synthesizer to remove.
+		 * @throws ArgumentError If synthesizer is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -383,12 +396,16 @@ package org.osmf.metadata
 		{
 			var result:FacetSynthesizer;
 			
-			for (var rawUrl:String in facetSynthesizers)
+			if (namespaceURL)
 			{
-				if (rawUrl == namespaceURL.toString())
+				var namespaceString:String = namespaceURL.toString();
+				for (var rawUrl:String in facetSynthesizers)
 				{
-					result = facetSynthesizers[rawUrl];
-					break;
+					if (rawUrl == namespaceString)
+					{
+						result = facetSynthesizers[rawUrl];
+						break;
+					}
 				}
 			}
 			
