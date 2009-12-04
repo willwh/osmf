@@ -88,6 +88,7 @@ package org.osmf
 			addTestSuite(TestKeyValueFacet);
 			addTestSuite(TestObjectIdentifier);
 			addTestSuite(TestMetadataUtils);
+			addTestSuite(TestFacetGroup);
 			addTestSuite(TestCompositeMetadata);
 			
 			addTestSuite(TestLoaderBase);

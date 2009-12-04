@@ -32,7 +32,7 @@ package org.osmf.metadata
 	
 	/**
 	 * Dispatched when the facet group changes as a result of either
-	 * a value being added, removed, or changing on a facet, or when
+	 * a value being added, removed, or changed on a facet, or when
 	 * a facet is begin added to, or removed from the group.
 	 */	
 	[Event(name="change", type="flash.events.Event")]
@@ -115,24 +115,27 @@ package org.osmf.metadata
 		 * @param metadata The metadata instance that the facet is to be tracked
 		 * in relation to. This relation is tracked because one facet may be the
 		 * child of multiple metadata instances.
-		 * @param facet The facet to add.
+		 * @param facet The facet to remove.
+		 * @returns The remove facet, or null if the specified item wasn't listed.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
-		public function removeFacet(metadata:Metadata, facet:IFacet):void
+		public function removeFacet(metadata:Metadata, facet:IFacet):IFacet
 		{
+			var result:IFacet;
 			var index:int = indexOf(metadata, facet);
 			
 			if (index != -1)
 			{
-				facets.splice(index,1);
+				result = facets.splice(index,1)[0].facet;
 				facet.removeEventListener(FacetValueChangeEvent.VALUE_CHANGE, changeDispatchingEventHandler);
+				dispatchEvent(new Event(Event.CHANGE));
 			}
 			
-			dispatchEvent(new Event(Event.CHANGE));
+			return result;
 		}
 	
 		/**
@@ -159,7 +162,7 @@ package org.osmf.metadata
 		{
 			if (index >= facets.length)
 			{
-				throw new RangeError();	
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));	
 			}
 			
 			return facets[index].metadata;
@@ -181,7 +184,7 @@ package org.osmf.metadata
 		{
 			if (index >= facets.length)
 			{
-				throw new RangeError();	
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));	
 			}
 			
 			return facets[index].facet;
