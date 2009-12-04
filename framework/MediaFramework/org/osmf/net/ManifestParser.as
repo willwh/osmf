@@ -92,16 +92,32 @@ package org.osmf.net
 			
 			//Media	
 			
+			var bitrateSeen:Boolean = false;
+			
 			for each (var media:XML in root.xmlns::media)
 			{
-				manifest.media.push(parseMedia(media));
+				var newMedia:Media = parseMedia(media);
+				manifest.media.push(newMedia);
+				bitrateSeen ||= !isNaN(newMedia.bitrate);
 			}	
+			
+			if (manifest.media.length > 1 && !bitrateSeen)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
+			}
 								
 			//DRM Metadata	
 			
 			for each (var data:XML in root.xmlns::drmMetadata)
 			{
 				parseDRMMetadata(data, manifest.media);
+			}	
+			
+			//Bootstrap	
+			
+			for each (var info:XML in root.xmlns::bootstrapInfo)
+			{
+				parseBootStrapInfo(info, manifest.media);
 			}	
 						
 			return manifest;
@@ -111,7 +127,14 @@ package org.osmf.net
 		{
 			var media:Media = new Media();
 			
-			media.url = value.@url;
+			if (value.attribute('url').length() > 0)
+			{
+				media.url = value.@url;
+			}
+			else  //Raise parse error
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
+			}
 			
 			if (value.attribute('bitrate').length() > 0)
 			{
@@ -192,11 +215,20 @@ package org.osmf.net
 		
 		private static function parseBootStrapInfo(value:XML, allMedia:Vector.<Media>):void
 		{			
-			var id:String = null;
-			var profile:String = value.@profile;
+			var id:String = null;								
 			var url:String = null;
 			var data:ByteArray;
 			var media:Media;	
+			var profile:String;
+			
+			if (value.attribute('profile').length() > 0)
+			{
+				profile = value.@profile;
+			}
+			else  //Raise parse error
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_PROFILE_MISSING));
+			}
 			
 			if (value.attribute("id").length() > 0)
 			{
@@ -232,32 +264,61 @@ package org.osmf.net
 			}								
 		}		
 				
-		public static function createResource(value:Manifest):IMediaResource
+		public static function createResource(value:Manifest, manifestLocation:URL):IMediaResource
 		{			
 			var drmFacet:KeyValueFacet;
+			var resource:IMediaResource;
+			var protocol:String
+						
 			if(value.media.length == 1)  //Single Stream Resource
-			{				
-				var resource:URLResource = new URLResource(new URL(value.media[0].url));
-				if (value.mimeType != null)
+			{									
+				protocol =  value.media[0].url.substr(0,7);
+				
+				if (protocol == "http://" || protocol == "rtmp://")
 				{
-					resource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
+					resource = new URLResource(new FMSURL(value.media[0].url));
+				}				
+				else if (value.baseURL != null)	//Relative to Base URL					
+				{
+					resource = new URLResource(new FMSURL(value.baseURL + value.media[0].url));
 				}
+				else //Relative to f4m file  (no absolute or base urls).
+				{					
+					var cleanedPath:String = "/" + manifestLocation.path;
+					cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/",0)+1);
+					var base:String = manifestLocation.protocol + "://" +  manifestLocation.host + ((manifestLocation.port != "") ? (":" + manifestLocation.port) : "") +   cleanedPath; //don't include the last slash
+					resource = new URLResource(new URL(base + value.media[0].url));
+				}
+				
 				if (Media(value.media[0]).drmMetadata != null)
 				{
 					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
 					resource.metadata.addFacet(drmFacet);
-				}
-				return resource;
+				}					
 			}	
 			else //Dynamic Streaming
 			{
-				var baseURL:FMSURL = new FMSURL(value.media[0].url);
-				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
-				if (value.mimeType != null)
+				var baseURL:FMSURL;
+				protocol = value.media[0].url.substr(0,7);
+				
+				if (protocol == "rtmp://")
 				{
-					dynResource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
+					baseURL = new FMSURL(value.media[0].url);
+					baseURL = new FMSURL(baseURL.rawUrl.substr(0, baseURL.rawUrl.length -  baseURL.streamName.length));		 //Remove the stream name.			
 				}
+				else if (value.baseURL != null)
+				{
+					baseURL = new FMSURL(value.baseURL);
+				}
+				else //Relative to f4m file  (no absolute or base urls).
+				{
+					//This is a parse error, we need an rtmp url
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
+				}				
+				
+				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
+				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								
 				for each (var media:Media in value.media)
@@ -275,10 +336,15 @@ package org.osmf.net
 						drmFacet.addValue(new ObjectIdentifier(item), media.drmMetadata);	
 					}
 				}
-				return dynResource;
+				resource = dynResource;
 			}
 			
-			return null;
+			if (value.mimeType != null)
+			{
+				resource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
+			}
+			
+			return resource;
 		}
 
 

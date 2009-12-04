@@ -97,7 +97,7 @@ package org.osmf.net
 			{
 				return true;
 			}
-			else if(resource is URLResource)
+			else if (resource is URLResource)
 			{
 				var url:URLResource = URLResource(resource);
 				var extension:String = url.url.path.substr(url.url.path.length-3,3);
@@ -137,7 +137,6 @@ package org.osmf.net
 				{					
 					updateLoadable(loadable, LoadState.LOAD_ERROR);
 					loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
-					return;
 				}
 				
 				//Load externals
@@ -202,8 +201,22 @@ package org.osmf.net
 		
 		private function finishLoad(manifest:Manifest, loadable:ILoadable):void
 		{
-			var netResource:IMediaResource = ManifestParser.createResource(manifest);						
-			var loadedElem:MediaElement = factory.createMediaElement(netResource);								
+			var netResource:IMediaResource = ManifestParser.createResource(manifest, URLResource(loadable.resource).url);	
+			
+			try
+			{
+				var loadedElem:MediaElement = factory.createMediaElement(netResource);	
+			}
+			catch(parseError:Error)
+			{					
+				updateLoadable(loadable, LoadState.LOAD_ERROR);
+				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
+			}			
+			
+			if (loadedElem.hasOwnProperty("defaultDuration"))
+			{
+				loadedElem["defaultDuration"] = manifest.duration;	
+			}									
 			var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
 			updateLoadable(loadable, LoadState.READY, context);		
 		}

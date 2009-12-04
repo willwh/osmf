@@ -80,7 +80,7 @@ package org.osmf.net
 		/**
 		 * The bitrate of the media in kilobits per second.
 		 */ 
-		public var bitrate:Number;
+		public var bitrate:Number = NaN;
 		
 		/**
 		 * Represents the Movie Box, or "moov" atom, for one representation of 

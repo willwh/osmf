@@ -11,7 +11,7 @@ package org.osmf.net
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.URL;
 
 	public class TestManifestParser extends TestCase
 	{
@@ -29,18 +29,100 @@ package org.osmf.net
 			assertEquals(manifest.streamType, null);	
 			assertEquals(manifest.mimeType, null);					
 		}
+		
+		public function testNoURL():void
+		{
+			var errorSeen:Boolean = false;
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<startTime>2009-11-29T21:53:12-08:00</startTime>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
+								<deliveryType>streaming</deliveryType>
+								<media  bitrate="408" width="640" height="480"/>
+								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
+								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
+							</manifest>;
+			try
+			{
+				var manifest:Manifest = ManifestParser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
+		
+		public function testNoProfile():void
+		{
+			var errorSeen:Boolean = false;
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<startTime>2009-11-29T21:53:12-08:00</startTime>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
+								<deliveryType>streaming</deliveryType>
+								<bootstrapInfo url="/mybootstrapinfo"/>
+								<media url="http://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
+								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
+								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
+							</manifest>;
+			try
+			{
+				var manifest:Manifest = ManifestParser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+			
+		}
+		
+		public function testNoBitrate():void
+		{
+			var errorSeen:Boolean = false;
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<startTime>2009-11-29T21:53:12-08:00</startTime>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
+								<deliveryType>streaming</deliveryType>
+								<media url="rtmp://example.com/myvideo/low"  width="640" height="480"/>
+								<media url="rtmp://example.com/myvideo/medium"  width="800" height="600"/>
+								<media url="rtmp://example.com/myvideo/high"  width="1920" height="1080"/>
+							</manifest>;
+			try
+			{
+				var manifest:Manifest = ManifestParser.parse(test);			
+			}
+			catch(error:ArgumentError)
+			{
+				errorSeen = true;
+			}
+			assertTrue(errorSeen);
+		}
 						
 		public function testTopLevelTags():void
 		{
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
+								<startTime>2009-11-29T21:53:12-08:00</startTime>
 								<duration>253</duration>
 								<mimeType>video/x-flv</mimeType>
 								<streamType>recorded</streamType>
 								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
-								<media url="http://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
-								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
-								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
+								<deliveryType>streaming</deliveryType>
+								<media url="rtmp://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
+								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
+								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
 							</manifest>;
 			
 			var manifest:Manifest = ManifestParser.parse(test);
@@ -49,7 +131,9 @@ package org.osmf.net
 			assertEquals(manifest.mimeType, "video/x-flv");		
 			assertEquals(manifest.media.length, 3);
 			assertEquals(manifest.streamType, "recorded");
-				
+			assertEquals(manifest.deliveryType, "streaming");
+			assertEquals(1259560392000, manifest.startTime.time);
+							
 		}
 		
 		public function testMediaParser():void
@@ -59,6 +143,7 @@ package org.osmf.net
 								<duration>253</duration>
 								<mimeType>video/x-flv</mimeType>
 								<streamType>recorded</streamType>
+								<bootstrapInfo profile="named" >U2FtcGxlIEJvb3RzdHJhcCAx</bootstrapInfo>
 								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
 								<media url="http://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
 								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
@@ -75,6 +160,14 @@ package org.osmf.net
 			assertEquals("Some Sample Data", Media(manifest.media[0]).drmMetadata);
 			assertEquals("Some Sample Data", Media(manifest.media[1]).drmMetadata);
 			assertEquals("Some Sample Data", Media(manifest.media[2]).drmMetadata);
+			
+			assertEquals("Sample Bootstrap 1", Media(manifest.media[0]).bootstrapInfo);
+			assertEquals("Sample Bootstrap 1", Media(manifest.media[1]).bootstrapInfo);
+			assertEquals("Sample Bootstrap 1", Media(manifest.media[2]).bootstrapInfo);
+			
+			assertEquals("named", Media(manifest.media[0]).bootstrapProfile);
+			assertEquals("named", Media(manifest.media[1]).bootstrapProfile);
+			assertEquals("named", Media(manifest.media[2]).bootstrapProfile);
 			
 			assertEquals(480, Media(manifest.media[0]).height);
 			assertEquals(600, Media(manifest.media[1]).height);
@@ -100,7 +193,7 @@ package org.osmf.net
 								<media url="http://example.com/myvideo/low.mp4" bitrate="408" width="640" height="480"/>
 							</manifest>
 			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest);
+			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource)
 			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url.rawUrl)
@@ -120,13 +213,13 @@ package org.osmf.net
 								<mimeType>video/x-flv</mimeType>
 								<streamType>recorded</streamType>
 								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
-								<media url="http://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
-								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
-								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
+								<media url="rtmp://example.com/myvideo/low" bitrate="408" width="640" height="480"/>
+								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600"/>
+								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
 							</manifest>
 							
 			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest);
+			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
@@ -150,6 +243,10 @@ package org.osmf.net
 			//Some Sample Data 2 == U29tZSBTYW1wbGUgRGF0YSAy
 			//Some Sample Data 3 == U29tZSBTYW1wbGUgRGF0YSAz
 			
+			//Sample Bootstrap 1 == U2FtcGxlIEJvb3RzdHJhcCAx
+			//Sample Bootstrap 2 == U2FtcGxlIEJvb3RzdHJhcCAy
+			//Sample Bootstrap 3 == U2FtcGxlIEJvb3RzdHJhcCAz
+			
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
 								<duration>253</duration>
@@ -158,13 +255,16 @@ package org.osmf.net
 								<drmMetadata id='1'>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
 								<drmMetadata id='2'>U29tZSBTYW1wbGUgRGF0YSAy</drmMetadata>
 								<drmMetadata id='3'>U29tZSBTYW1wbGUgRGF0YSAz</drmMetadata>
-								<media url="http://example.com/myvideo/low"  bitrate="408" width="640" height="480" drmMetadataId='1'/>
-								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600" drmMetadataId='2'/>
-								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmMetadataId='3'/>
+								<bootstrapInfo profile="named" id='1'>U2FtcGxlIEJvb3RzdHJhcCAx==</bootstrapInfo>
+								<bootstrapInfo profile="named" id='2'>U2FtcGxlIEJvb3RzdHJhcCAy==</bootstrapInfo>
+								<bootstrapInfo profile="named" id='3'>U2FtcGxlIEJvb3RzdHJhcCAz==</bootstrapInfo>
+								<media url="rtmp://example.com/myvideo/low"  bitrate="408" width="640" height="480" drmMetadataId='1'/>
+								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600" drmMetadataId='2'/>
+								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmMetadataId='3'/>
 							</manifest>
 							
 			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest);
+			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 								
@@ -183,5 +283,79 @@ package org.osmf.net
 			assertEquals(drmForKey[keys[2].key.streamName], facet.getValue(keys[2]));					
 		}
 		
+		public function testBaseURL():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+							<id>myvideo</id>
+							<duration>253</duration>
+							<mimeType>video/x-flv</mimeType>
+							<streamType>recorded</streamType>
+							<baseURL>rtmp://newbase.com/myserver</baseURL>
+							<media url="rtmp://example.com/myvideo/low"  bitrate="408" width="640" height="480" />
+							<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600" />
+							<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" />
+						</manifest>
+							
+			var manifest:Manifest = ManifestParser.parse(test);
+			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			
+			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			
+			assertEquals(dynResource.streamItems.length, 3);
+			
+			assertEquals(dynResource.host.rawUrl, "rtmp://example.com/myvideo/");
+			
+			assertEquals(dynResource.streamItems[0].streamName, "low");
+			assertEquals(dynResource.streamItems[1].streamName, "medium");
+			assertEquals(dynResource.streamItems[2].streamName, "high");			
+		}
+		
+		public function testRelativeURL():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+							<id>myvideo</id>
+							<duration>253</duration>
+							<mimeType>video/x-flv</mimeType>
+							<streamType>recorded</streamType>
+							<media url="myvideo/low.flv"  bitrate="408" width="640" height="480" />
+						</manifest>
+							
+			var manifest:Manifest = ManifestParser.parse(test);
+			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			
+			assertTrue(resource is URLResource);
+			
+			var urlResource:URLResource = resource as URLResource;
+				
+			assertEquals(urlResource.url.rawUrl, "http://example.com/myvideo/low.flv");
+						
+		}
+		
+		public function testNoURLDynStreaming():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+							<id>myvideo</id>
+							<duration>253</duration>
+							<mimeType>video/x-flv</mimeType>
+							<streamType>recorded</streamType>
+							<media url="low.flv"  bitrate="408" width="640" height="480" />
+							<media url="medium.flv" bitrate="908" width="800" height="600" />
+							<media url="high.flv" bitrate="1708" width="1920" height="1080" />
+						</manifest>
+							
+			var manifest:Manifest = ManifestParser.parse(test);
+			var errorSeen:Boolean = false;
+			try
+			{
+				var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			}
+			catch(error:Error)
+			{
+				errorSeen = true;
+			}			
+			assertTrue(errorSeen);
+			
+		}
+			
 	}
 }

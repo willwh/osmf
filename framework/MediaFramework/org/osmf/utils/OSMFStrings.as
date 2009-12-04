@@ -177,7 +177,11 @@ package org.osmf.utils
 		public static const DRM_CONTENT_NOT_YET_VALID:String			= "drmContentNotYetValid";
 		
 		// Flash Media Manifest Errors
-		public static const F4M_PARSE_NO_ID:String						= "f4mParseNoId";
+		public static const F4M_PARSE_PROFILE_MISSING:String			= "f4mProfileMissing";
+		public static const F4M_PARSE_MEDIA_URL_MISSING:String			= "f4mMediaURLMissing";
+		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
+		
+		
 		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
@@ -261,7 +265,10 @@ package org.osmf.utils
 			resourceDict[HTTP_SECURITY_LOAD_ERROR]					= "Security error when loading URL over HTTP";
 			resourceDict[BEACON_FAILURE_ERROR]						= "Beacon failed to successfully ping its HTTP URL";
 			
-			resourceDict[F4M_PARSE_NO_ID]							= "Missing id tag from manifest";
+			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
+			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
+			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
+		
 
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}

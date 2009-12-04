@@ -41,21 +41,21 @@ package org.osmf.net
 		 * within the manifest file. (Such URLs may include <media> URLs, <bootstrapInfo> 
 		 * URLs, and <drmMetadata> URLs.) 
 		 */ 
-		public var baseURL:String;
+		public var baseURL:String = null;
 				
 		/**
 		 * The <duration> element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.
 		 */ 
-		public var duration:Number;
+		public var duration:Number = NaN;
 		
 		/**
 		 * The <mimeType> element represents the MIME type of the media file. It is assumed 
 		 * that all representations of the media have the same MIME type, hence its 
 		 * placement under the document root. It is optional.
 		 */ 
-		public var mimeType:String;
+		public var mimeType:String = null;
 		
 		/**
 		 * The <streamType> element is a string representing the way in which the media is streamed.
@@ -63,7 +63,7 @@ package org.osmf.net
 		 * of the media have the same stream type, hence its placement under the document root. 
 		 * It is optional.
 		 */
-		public var streamType:String;
+		public var streamType:String = null;
 			
 		/**
 		 * Indicates the means by which content is delivered to the player.  Valid values include 
@@ -73,7 +73,7 @@ package org.osmf.net
 		 * deliveryType is also "streaming". In the latter case, the <bootstrapInfo> field must be 
 		 * present.
 		 */ 
-		public var deliveryType:String;
+		public var deliveryType:String = null;
 		
 		/**
 		 * Represents the date/time at which the media was first (or will first be) made available. 
