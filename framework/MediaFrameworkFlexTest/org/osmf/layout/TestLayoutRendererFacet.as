@@ -23,6 +23,7 @@ package org.osmf.layout
 {
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.StringIdentifier;
 
 	public class TestLayoutRendererFacet extends TestCase
@@ -39,7 +40,7 @@ package org.osmf.layout
 			assertEquals(DefaultLayoutRenderer, facet.getValue(null));
 			assertEquals(DefaultLayoutRenderer, facet.getValue(new StringIdentifier("@*#$^98367423874")));
 			
-			assertNull(facet.synthesizer);
+			assertTrue(facet.synthesizer is NullFacetSynthesizer);
 		}
 		
 	}

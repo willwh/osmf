@@ -29,7 +29,6 @@ package org.osmf.composition
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.CompositeMetadata;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
@@ -292,6 +291,9 @@ package org.osmf.composition
 			return new CompositeMetadata();
 		}
 		
+		/**
+		 * @private
+		 */		
 		protected function get compositeMetadata():CompositeMetadata
 		{
 			return CompositeMetadata(metadata);
@@ -322,7 +324,6 @@ package org.osmf.composition
 		// Internals
 		//
 		
-
 		private function setupTraitAggregator():void
 		{
 			_traitAggregator = new TraitAggregator();

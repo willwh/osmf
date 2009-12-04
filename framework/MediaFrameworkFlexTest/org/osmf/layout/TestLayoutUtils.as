@@ -25,6 +25,7 @@ package org.osmf.layout
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.NullFacetSynthesizer;
 
 	public class TestLayoutUtils extends TestCase
 	{
@@ -68,7 +69,7 @@ package org.osmf.layout
 				assertEquals(3,absolute.x);
 				assertEquals(4,absolute.y);
 				
-				assertNull(absolute.synthesizer);
+				assertTrue(absolute.synthesizer is NullFacetSynthesizer);
 				
 				var relative:RelativeLayoutFacet
 					= c2
@@ -81,7 +82,7 @@ package org.osmf.layout
 				assertEquals(3,relative.x);
 				assertEquals(4,relative.y);
 				
-				assertNull(relative.synthesizer);
+				assertTrue(relative.synthesizer is NullFacetSynthesizer);
 				
 				var anchor:AnchorLayoutFacet
 					= c3
@@ -94,7 +95,7 @@ package org.osmf.layout
 				assertEquals(3,anchor.right);
 				assertEquals(4,anchor.bottom);
 				
-				assertNull(anchor.synthesizer);
+				assertTrue(anchor.synthesizer is NullFacetSynthesizer);
 				
 				var padding:PaddingLayoutFacet
 					= c6
@@ -107,7 +108,7 @@ package org.osmf.layout
 				assertEquals(3,padding.right);
 				assertEquals(4,padding.bottom);
 				
-				assertNull(padding.synthesizer);
+				assertTrue(padding.synthesizer is NullFacetSynthesizer);
 				
 				var attributes:LayoutAttributesFacet
 					= c4
@@ -124,7 +125,7 @@ package org.osmf.layout
 				assertEquals(RegistrationPoint.BOTTOM_LEFT, attributes.alignment); 
 				assertEquals(10, attributes.order);
 				
-				assertNull(attributes.synthesizer);
+				assertTrue(attributes.synthesizer is NullFacetSynthesizer);
 				
 				var rendererFacet:LayoutRendererFacet
 					= c5
@@ -134,7 +135,7 @@ package org.osmf.layout
 					
 				assertEquals(DefaultLayoutRenderer, rendererFacet.rendererType);
 				
-				assertNull(rendererFacet.synthesizer);
+				assertTrue(rendererFacet.synthesizer is NullFacetSynthesizer);
 			}
 		}
 		

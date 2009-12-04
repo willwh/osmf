@@ -43,10 +43,14 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ObjectFacet(namespaceURL:URL, value:Object)
+		public function ObjectFacet(namespaceURL:URL, value:Object, synthesizer:Class = null)
 		{
 			_namespaceURL = namespaceURL;
 			_object = value;
+			
+			// If no synthesizer is specified, then use the default one:
+			synthesizer ||= FacetSynthesizer;
+			_synthesizer = new synthesizer(namespaceURL);
 		}
 		
 		/**
@@ -121,7 +125,7 @@ package org.osmf.metadata
 		 */
 		public function get synthesizer():FacetSynthesizer
 		{
-			return null;
+			return _synthesizer;
 		}
 		
 		// Overrides
@@ -145,5 +149,7 @@ package org.osmf.metadata
 		
 		protected var _namespaceURL:URL;
 		protected var _object:Object;
+		
+		private var _synthesizer:FacetSynthesizer;
 	}
 }

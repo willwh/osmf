@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import flash.errors.IllegalOperationError;
-	
 	import org.osmf.composition.CompositionMode;
 	import org.osmf.utils.URL;
 	
@@ -66,7 +64,14 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Synthesizes a facet value from the passed arguments:
+		 * Synthesizes a facet value from the passed arguments.
+		 * 
+		 * If the specified mode is SERIAL, then active metadata's facet of the synthesizer's
+		 * type will be returned as the synthesized facet.
+		 * 
+		 * If the specified mode is PARALLEL, then the synthesized facet value will be null,
+		 * unless the facet group contains a single child, in which case the single child is
+		 * what is return as the synthesized facet.
 		 * 
 		 * @param targetMetadata The metadata instance that will have the synthesized value appended.
 		 * @param facetGroup The collection of facets the synthesized value should be based on.
@@ -87,7 +92,25 @@ package org.osmf.metadata
 							, activeMetadata:Metadata
 							):IFacet
 		{	
-			throw new IllegalOperationError();
+			var result:IFacet;
+			
+			if (mode == CompositionMode.SERIAL && activeMetadata)
+			{
+				// Return the currently active facet:
+				result = activeMetadata.getFacet(_namespaceURL);
+			}
+			else // mode is PARALLLEL
+			{
+				// If the facet group contains a single facet, then
+				// return that as the synthesized facet. Otherwise
+				// return null:
+				result
+					= (facetGroup && facetGroup.length == 1)
+						? facetGroup.getFacetAt(0)
+						: null;
+			}
+			
+			return result;
 		}
 
 		// Internals

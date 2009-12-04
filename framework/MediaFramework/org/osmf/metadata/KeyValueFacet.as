@@ -48,7 +48,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function KeyValueFacet(ns:URL = null)		
+		public function KeyValueFacet(ns:URL = null, synthesizer:Class = null)		
 		{			
 			data = new Dictionary();			
 			if (ns == null)
@@ -56,6 +56,9 @@ package org.osmf.metadata
 				ns = MetadataNamespaces.DEFAULT_METADATA;
 			}			
 			_namespaceURL = ns;
+			
+			synthesizer ||= FacetSynthesizer;
+			_synthesizer = new synthesizer(ns);
 		}
 		
 		// IFacet
@@ -101,7 +104,7 @@ package org.osmf.metadata
 		 */
 		public function get synthesizer():FacetSynthesizer
 		{
-			return null;
+			return _synthesizer;
 		} 
 		
 		/**
@@ -199,6 +202,8 @@ package org.osmf.metadata
 				
 		private var data:Dictionary;
 		private var _namespaceURL:URL;
+		
+		private var _synthesizer:FacetSynthesizer;
 
 	}
 }

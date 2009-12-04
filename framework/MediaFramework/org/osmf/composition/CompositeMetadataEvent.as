@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.events
+package org.osmf.composition
 {
 	import flash.events.Event;
 	
@@ -32,7 +32,7 @@ package org.osmf.events
 	 * Defines the event class that CompositeMetadata uses on signaling
 	 * various event.
 	 */	
-	public class CompositeMetadataEvent extends Event
+	internal class CompositeMetadataEvent extends Event
 	{
 		public static const CHILD_ADD:String = "childAdd";
 		public static const CHILD_REMOVE:String = "childRemove";
@@ -66,7 +66,7 @@ package org.osmf.events
 							, child:Metadata = null
 							, facet:IFacet = null
 							, facetGroup:FacetGroup = null
-							, facetSynthesizer:FacetSynthesizer = null
+							, suggestedFacetSynthesizer:FacetSynthesizer = null
 							)
 		{
 			super(type, bubbles, cancelable);
@@ -74,7 +74,8 @@ package org.osmf.events
 			_child = child;
 			_facet = facet;
 			_facetGroup = facetGroup;
-			this.facetSynthesizer = facetSynthesizer;
+			
+			suggestFacetSynthesizer(suggestedFacetSynthesizer);
 		}
 		
 		/**
@@ -119,6 +120,19 @@ package org.osmf.events
 		/**
 		 * @private
 		 * 
+		 * Method for hanlder functions to suggest a facet synthesizer to
+		 * the dispatching composite metadata instance.
+		 * 
+		 * @param value The suggested facet synthesizer.
+		 */		
+		public function suggestFacetSynthesizer(value:FacetSynthesizer):void
+		{
+			_suggestedFacetSynthesizer = value;
+		}
+		
+		/**
+		 * @private
+		 * 
 		 * Defines the facetSynthesizer that is to be used for synthesis. This
 		 * value can be set by listeners that wish to suggest a synthesizer. 
 		 * 
@@ -127,14 +141,20 @@ package org.osmf.events
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
-		public var facetSynthesizer:FacetSynthesizer;
+		public function get suggestedFacetSynthesizer():FacetSynthesizer
+		{
+			return _suggestedFacetSynthesizer;
+		}
 		
 		// Overrides
 		//
 		
 		override public function clone():Event
 		{
-			return new CompositeMetadataEvent(type, bubbles, cancelable, _child, _facet, _facetGroup, facetSynthesizer);
+			return new CompositeMetadataEvent
+				( type , bubbles, cancelable
+				, _child, _facet, _facetGroup, _suggestedFacetSynthesizer
+				);
 		}
 		
 		// Internal
@@ -143,5 +163,6 @@ package org.osmf.events
 		private var _child:Metadata;
 		private var _facet:IFacet;
 		private var _facetGroup:FacetGroup;
+		private var _suggestedFacetSynthesizer:FacetSynthesizer;
 	}
 }

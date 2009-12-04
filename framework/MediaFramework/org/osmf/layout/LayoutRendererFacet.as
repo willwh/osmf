@@ -22,6 +22,7 @@
 package org.osmf.layout
 {
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.ObjectFacet;
 
 	/**
@@ -43,7 +44,7 @@ package org.osmf.layout
 		 */		
 		public function LayoutRendererFacet(rendererType:Class)
 		{
-			super(MetadataNamespaces.LAYOUT_RENDERER, rendererType);
+			super(MetadataNamespaces.LAYOUT_RENDERER, rendererType, NullFacetSynthesizer);
 		}
 		
 		// Public API

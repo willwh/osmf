@@ -25,6 +25,7 @@ package org.osmf.layout
 	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.StringIdentifier;
 
 	public class TestPaddingLayoutFacet extends TestCase
@@ -80,7 +81,7 @@ package org.osmf.layout
 			assertEquals(undefined, facet.getValue(null));
 			assertEquals(undefined, facet.getValue(new StringIdentifier("@*#$^98367423874")));
 			
-			assertNull(facet.synthesizer);
+			assertTrue(facet.synthesizer is NullFacetSynthesizer);
 		}
 	}
 }

@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.metadata
+package org.osmf.composition
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -27,8 +27,11 @@ package org.osmf.metadata
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.composition.CompositionMode;
-	import org.osmf.events.CompositeMetadataEvent;
+	import org.osmf.metadata.FacetGroup;
+	import org.osmf.metadata.FacetSynthesizer;
+	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.utils.URL;
 
 	public class TestCompositeMetadata extends TestCase
@@ -52,11 +55,11 @@ package org.osmf.metadata
 			
 			assertEquals(cm.numChildren, 0);
 			
-			assertThrows(cm.childAt, 0);
+			assertThrows(cm.getChildAt, 0);
 			assertThrows(cm.addChild, 0);
 			assertDispatches(cm, [CompositeMetadataEvent.CHILD_ADD], cm.addChild, metadata);
 			assertEquals(1, cm.numChildren);
-			assertEquals(metadata, cm.childAt(0));
+			assertEquals(metadata, cm.getChildAt(0));
 			assertThrows(cm.addChild, metadata);
 			assertDispatches(cm, [CompositeMetadataEvent.CHILD_REMOVE], cm.removeChild, metadata);
 			assertEquals(0, cm.numChildren);
@@ -144,7 +147,7 @@ package org.osmf.metadata
 			assertEquals(child, e.child);
 			assertEquals(facet, e.facet);
 			assertEquals(facetGroup, e.facetGroup);
-			assertEquals(facetSynthesizer, e.facetSynthesizer);
+			assertEquals(facetSynthesizer, e.suggestedFacetSynthesizer);
 		}
 	
 		// Utils

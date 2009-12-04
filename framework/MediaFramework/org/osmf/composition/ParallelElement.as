@@ -23,7 +23,6 @@ package org.osmf.composition
 {
 	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.CompositeMetadata;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	

@@ -26,6 +26,7 @@ package org.osmf.layout
 	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.utils.URL;
 
 	/**
@@ -44,6 +45,8 @@ package org.osmf.layout
 		public function LayoutFacet()
 		{
 			super(null);
+			
+			_synthesizer = new NullFacetSynthesizer(namespaceURL);
 		}
 		
 		// IFacet
@@ -85,7 +88,12 @@ package org.osmf.layout
 		 */	
 		public function get synthesizer():FacetSynthesizer
 		{
-			return null;
-		}		
+			return _synthesizer;
+		}
+		
+		// Internals
+		//
+		
+		private var _synthesizer:NullFacetSynthesizer;
 	}
 }
