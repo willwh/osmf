@@ -22,14 +22,11 @@
 package org.osmf.metadata
 {
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.utils.Dictionary;
 	
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.utils.URL;
 
-	public class TestFacetGroup extends TestCase
+	public class TestFacetGroup extends TestCaseEx
 	{
 		public function testFacetGroup():void
 		{
@@ -77,58 +74,6 @@ package org.osmf.metadata
 			assertEquals(facet, fg.getFacetAt(0));
 			assertEquals(metadata2, fg.getMetadataAt(0));
 			assertEquals(0, fg.indexOf(metadata2, facet));	
-		}
-		
-		// Utils
-		//
-	
-		private function assertThrows(f:Function, ...arguments):*
-		{
-			var result:*;
-			
-			try
-			{
-				result = f.apply(null,arguments);
-				fail();
-			}
-			catch(e:Error)
-			{	
-			}
-			
-			return result;
-		}
-		
-		private function assertDispatches(dispatcher:EventDispatcher, types:Array, f:Function, ...arguments):*
-		{
-			var result:*;
-			var dispatched:Dictionary = new Dictionary();
-			function handler(event:Event):void
-			{
-				dispatched[event.type] = true;
-			}
-			
-			var type:String;
-			for each (type in types)
-			{
-				dispatcher.addEventListener(type, handler);
-			}
-			
-			result = f.apply(null, arguments);
-			
-			for each (type in types)
-			{
-				dispatcher.removeEventListener(type, handler);
-			}
-			
-			for each (type in types)
-			{
-				if (dispatched[type] != true)
-				{
-					fail("Event of type " + type + " was not fired.");
-				}
-			}
-			
-			return result;
 		}
 	}
 }

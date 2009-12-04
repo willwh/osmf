@@ -21,12 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.utils.Dictionary;
-	
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.IFacet;
@@ -34,7 +29,7 @@ package org.osmf.composition
 	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.utils.URL;
 
-	public class TestCompositeMetadata extends TestCase
+	public class TestCompositeMetadata extends TestCaseEx
 	{
 		public function testCompositeMetadataBase():void
 		{
@@ -148,51 +143,6 @@ package org.osmf.composition
 			assertEquals(facet, e.facet);
 			assertEquals(facetGroup, e.facetGroup);
 			assertEquals(facetSynthesizer, e.suggestedFacetSynthesizer);
-		}
-	
-		// Utils
-		//
-	
-		private function assertThrows(f:Function, ...arguments):void
-		{
-			try
-			{
-				f.apply(null,arguments);
-				fail();
-			}
-			catch(e:Error)
-			{	
-			}
-		}
-		
-		private function assertDispatches(dispatcher:EventDispatcher, types:Array, f:Function, ...arguments):void
-		{
-			var dispatched:Dictionary = new Dictionary();
-			function handler(event:Event):void
-			{
-				dispatched[event.type] = true;
-			}
-			
-			var type:String;
-			for each (type in types)
-			{
-				dispatcher.addEventListener(type, handler);
-			}
-			
-			f.apply(null, arguments);
-			
-			for each (type in types)
-			{
-				dispatcher.removeEventListener(type, handler);
-			}
-			
-			for each (type in types)
-			{
-				if (dispatched[type] != true)
-				{
-					fail("Event of type " + type + " was not fired.");
-				}
-			}
 		}
 	}
 }
