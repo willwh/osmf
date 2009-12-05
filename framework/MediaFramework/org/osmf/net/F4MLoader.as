@@ -74,8 +74,8 @@ package org.osmf.net
 			if(factory == null)
 			{
 				factory = new MediaFactory();
-				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("VideoDynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("Audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
 				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));

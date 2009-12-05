@@ -47,10 +47,12 @@ package org.osmf.examples
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.F4MLoader;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
@@ -830,7 +832,34 @@ package org.osmf.examples
 				  	   		return serial; 
 				  	   	}
 				  	)
-				);		
+				);
+				
+			examples.push
+				( new Example
+					( 	"Flash Media Manifest Progressive"
+					, 	"Demonstrates the use of the flash media manifest parser for a progressive video."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
+				  	   		elem.resource = new URLResource(new URL(REMOTE_MANIFEST));																
+				  	   		return elem; 
+				  	   	}
+				  	)
+				);	
+						
+			examples.push
+				( new Example
+					( 	"Flash Media Manifest Dynamic Streaming"
+					, 	"Demonstrates the use of the flash media manifest parser for a progressive video."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
+				  	   		elem.resource = new URLResource(new URL(REMOTE_MBR_MANIFEST));																
+				  	   		return elem; 
+				  	   	}
+				  	)
+				);	
+									
 				
 			/* TODO: Uncomment this once we have the VAST library integrated
 			   with the build system.
@@ -892,6 +921,9 @@ package org.osmf.examples
 		private static const CHROMELESS_SWF_AS3:String			= "http://mediapm.edgesuite.net/osmf/swf/ChromelessPlayer.swf";
 		private static const CHROMELESS_SWF_FLEX:String			= "http://mediapm.edgesuite.net/osmf/swf/ChromelessFlexPlayer.swf";
 		private static const BEACON_URL:String					= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
+		private static const REMOTE_MANIFEST:String				= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m";
+		//private static const REMOTE_MBR_MANIFEST:String			= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m";
+		private static const REMOTE_MBR_MANIFEST:String			= "http://flipside/testing/oconnell/manifest/dynamic_Streaming.f4m";
 		
 		private static const MBR_STREAM_ITEMS:Array =
 			[ new DynamicStreamingItem("mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_408kbps.mp4", 408, 768, 428)

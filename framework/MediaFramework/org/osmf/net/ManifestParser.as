@@ -322,9 +322,8 @@ package org.osmf.net
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								
 				for each (var media:Media in value.media)
-				{
-					var url:FMSURL = new FMSURL(media.url);
-					var item:DynamicStreamingItem = new DynamicStreamingItem(url.streamName, media.bitrate, media.width, media.height);
+				{					
+					var item:DynamicStreamingItem = new DynamicStreamingItem(media.url, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
 					if (media.drmMetadata != null)
 					{
