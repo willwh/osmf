@@ -148,7 +148,6 @@ package org.osmf.composition
 			else
 			{
 				children.push(child);
-				childrenLength++;
 				
 				child.addEventListener
 					( MetadataEvent.FACET_ADD
@@ -215,7 +214,6 @@ package org.osmf.composition
 			else
 			{
 				children.splice(childIndex,1);
-				childrenLength--;
 				
 				child.removeEventListener
 					( MetadataEvent.FACET_ADD
@@ -264,7 +262,7 @@ package org.osmf.composition
 		 */		
 		public function get numChildren():int
 		{
-			return childrenLength;
+			return children.length;
 		}
 		
 		/**
@@ -282,7 +280,7 @@ package org.osmf.composition
 		 */		
 		public function getChildAt(index:int):Metadata
 		{
-			if (index >= childrenLength || index < 0)
+			if (index >= children.length || index < 0)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));	
 			}
@@ -663,14 +661,11 @@ package org.osmf.composition
 			}
 		}
 		
+		private var children:Vector.<Metadata>;
+		private var childFacetGroups:Dictionary; 
+		private var facetSynthesizers:Dictionary;
+		
 		private var _mode:CompositionMode;
 		private var _activeChild:Metadata;
-		
-		private var children:Vector.<Metadata>;
-		private var childrenLength:uint = 0;
-		
-		private var childFacetGroups:Dictionary; 
-		
-		private var facetSynthesizers:Dictionary;
 	}
 }
