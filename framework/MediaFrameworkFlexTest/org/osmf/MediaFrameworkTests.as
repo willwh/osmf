@@ -57,7 +57,7 @@ package org.osmf
 						
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
-		/*
+		
 			addTestSuite(TestOSMFStrings);
 			
 			addTestSuite(TestParallelDownloadableTrait);
@@ -149,11 +149,11 @@ package org.osmf
 			addTestSuite(TestNetClient);
 			addTestSuite(TestNetStreamUtils);
 			addTestSuite(TestStreamingURLResource);
-*/
+
 			addTestSuite(TestManifestParser);
 			addTestSuite(TestF4MLoader);
 		
-/*
+
 			addTestSuite(TestNetStreamAudibleTrait);
 			addTestSuite(TestNetStreamBufferableTrait);
 			addTestSuite(TestNetStreamPlayableTrait);
@@ -241,7 +241,7 @@ package org.osmf
 
 			addTestSuite(TestCuePoint);
 			addTestSuite(TestTemporalFacet);
-			*/
+			
 		}
 	}
 }
