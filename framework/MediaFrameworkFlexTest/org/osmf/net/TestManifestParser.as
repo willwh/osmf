@@ -303,7 +303,7 @@ package org.osmf.net
 			
 			assertEquals(dynResource.streamItems.length, 3);
 			
-			assertEquals(dynResource.host.rawUrl, "rtmp://example.com/myvideo/");
+			assertEquals(dynResource.host.rawUrl, "rtmp://newbase.com/myserver");
 			
 			assertEquals(dynResource.streamItems[0].streamName, "low");
 			assertEquals(dynResource.streamItems[1].streamName, "medium");

@@ -119,7 +119,9 @@ package org.osmf.net
 			{
 				parseBootStrapInfo(info, manifest.media);
 			}	
-						
+			
+			generateRTMPBaseURL(manifest);
+									
 			return manifest;
 		}
 		
@@ -263,6 +265,29 @@ package org.osmf.net
 				}						
 			}								
 		}		
+		
+		/**
+		 * @private
+		 * Ensures that an RTMP based Manifest has the same server for all
+		 * streaming items, and extracts the base URL from the streaming items
+		 * if not specified. 
+		 */ 
+		private static function generateRTMPBaseURL(manifest:Manifest):void
+		{
+			if (manifest.baseURL == null)
+			{						
+				for each(var media:Media in manifest.media)
+				{
+					 if (media.url.substr(0,4) == "rtmp")
+					 {
+					 	var url:FMSURL = new FMSURL(media.url);
+					 	var port:String = url.port != "" ? ":" + url.port : ""; 	
+					 	manifest.baseURL = "rtmp://" + url.host + port + "/" + url.appName + "/" + (url.useInstance ?  url.instanceName : "");
+					 	break; 
+					 }
+				}
+			}
+		}
 				
 		public static function createResource(value:Manifest, manifestLocation:URL):IMediaResource
 		{			
@@ -297,33 +322,24 @@ package org.osmf.net
 					resource.metadata.addFacet(drmFacet);
 				}					
 			}	
-			else //Dynamic Streaming
-			{
-				var baseURL:FMSURL;
-				protocol = value.media[0].url.substr(0,7);
-				
-				if (protocol == "rtmp://")
-				{
-					baseURL = new FMSURL(value.media[0].url);
-					baseURL = new FMSURL(baseURL.rawUrl.substr(0, baseURL.rawUrl.length -  baseURL.streamName.length));		 //Remove the stream name.			
-				}
-				else if (value.baseURL != null)
-				{
-					baseURL = new FMSURL(value.baseURL);
-				}
-				else //Relative to f4m file  (no absolute or base urls).
-				{
+			else if(value.baseURL.substr(0,4) == "rtmp")//Dynamic Streaming
+			{	
+				if (value.baseURL == null || value.baseURL == "")
+				{	
 					//This is a parse error, we need an rtmp url
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
-				}				
-				
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
+				}							
+				var baseURL:FMSURL = new FMSURL(value.baseURL);
+								
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								
 				for each (var media:Media in value.media)
 				{					
-					var item:DynamicStreamingItem = new DynamicStreamingItem(media.url, media.bitrate, media.width, media.height);
+					var url:FMSURL = new FMSURL(media.url);
+					var stream:String = (url.fileFormat ? url.fileFormat + ":" : "") + url.streamName
+					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
 					if (media.drmMetadata != null)
 					{
