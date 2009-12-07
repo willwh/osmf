@@ -336,9 +336,15 @@ package org.osmf.net
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								
 				for each (var media:Media in value.media)
-				{					
-					var url:FMSURL = new FMSURL(media.url);
-					var stream:String = (url.fileFormat ? url.fileFormat + ":" : "") + url.streamName
+				{		
+					var stream:String = media.url;
+								
+					if (stream.substr(0,4) == "rtmp")
+					{
+						var url:FMSURL = new FMSURL(stream);
+						stream = (url.fileFormat ? url.fileFormat + ":" : "") + url.streamName
+					}
+					
 					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
 					if (media.drmMetadata != null)
