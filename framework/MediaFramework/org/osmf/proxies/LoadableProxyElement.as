@@ -23,6 +23,7 @@ package org.osmf.proxies
 {
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -82,7 +83,20 @@ package org.osmf.proxies
 		{
 			return _resource;
 		}
-	
+		
+		/**
+		 * Retruns the MediaElements metadata, if the media element hasn't been created yet this
+		 * will return null.
+		 **/
+		override public function get metadata():Metadata
+		{
+			if (wrappedElement != null)
+			{
+				return wrappedElement.metadata;
+			}
+			return null;
+		}
+		
 		private var _resource:IMediaResource;
 		private var loadable:LoadableTrait;
 		private var loader:ILoader;
