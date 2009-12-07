@@ -321,14 +321,10 @@ package org.osmf.net
 					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
 					resource.metadata.addFacet(drmFacet);
 				}					
-			}	
-			else if(value.baseURL.substr(0,4) == "rtmp")//Dynamic Streaming
+			}				
+			else if(value.baseURL && value.baseURL.substr(0,4) == "rtmp")//Dynamic Streaming
 			{	
-				if (value.baseURL == null || value.baseURL == "")
-				{	
-					//This is a parse error, we need an rtmp url
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
-				}							
+									
 				var baseURL:FMSURL = new FMSURL(value.baseURL);
 								
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
@@ -359,6 +355,11 @@ package org.osmf.net
 				}
 				resource = dynResource;
 			}
+			else if (value.baseURL == null || value.baseURL == "")
+			{	
+				//This is a parse error, we need an rtmp url
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
+			}	
 			
 			if (value.mimeType != null)
 			{
