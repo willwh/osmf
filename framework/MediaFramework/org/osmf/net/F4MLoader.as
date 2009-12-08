@@ -70,16 +70,17 @@ package org.osmf.net
 		 * types, Video, Audio, Image, and SWF.
 		 */ 	
 		public function F4MLoader(factory:MediaFactory = null)
-		{							
+		{		
+			suportedMimeTypes.push(F4M_MIME_TYPE);				
 			if(factory == null)
 			{
 				factory = new MediaFactory();
-				factory.addMediaInfo(new MediaInfo("VideoDynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())}, MediaInfoType.STANDARD));
-				factory.addMediaInfo(new MediaInfo("Video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaInfoType.STANDARD));
-				factory.addMediaInfo(new MediaInfo("Audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())}, MediaInfoType.STANDARD));
-				factory.addMediaInfo(new MediaInfo("AudioStreaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
-				factory.addMediaInfo(new MediaInfo("Image", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));
-				factory.addMediaInfo(new MediaInfo("SWF", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.video.dynamicStreaming", new DynamicStreamingNetLoader(), function():MediaElement{return new VideoElement(new DynamicStreamingNetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.video", new NetLoader(), function():MediaElement{return new VideoElement(new NetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.audio", new SoundLoader(), function():MediaElement{return new AudioElement(new SoundLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.audio.streaming", new NetLoader(), function():MediaElement{return new AudioElement(new NetLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.imagee", new ImageLoader(), function():MediaElement{return new ImageElement(new ImageLoader())}, MediaInfoType.STANDARD));
+				factory.addMediaInfo(new MediaInfo("org.osmf.swf", new SWFLoader(), function():MediaElement{return new SWFElement(new SWFLoader())}, MediaInfoType.STANDARD));
 			}			
 			this.factory = factory;				
 		}
@@ -88,9 +89,7 @@ package org.osmf.net
 		 * ineritDoc
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
-		{
-			var suportedMimeTypes:Vector.<String> = new Vector.<String>();
-			suportedMimeTypes.push(F4M_MIME_TYPE);
+		{	
 			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), suportedMimeTypes);
 			
 			if (supported == MetadataUtils.METADATA_MATCH_FOUND)
@@ -148,28 +147,6 @@ package org.osmf.net
 					var request:URLRequest;
 					var loader:URLLoader;
 					
-					//Bootstrap
-					
-					if (item.bootstrapInfoURL != null)
-					{										
-						loader = new URLLoader();
-						unfinishedLoads++;
-						loader.addEventListener(Event.COMPLETE, onLoadComplete);
-						loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-						loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-					
-						function onLoadComplete(event:Event):void
-						{
-							unfinishedLoads--;
-							item.bootstrapInfo = URLLoader(event.target).data;
-							if (unfinishedLoads == 0)
-							{
-								finishLoad(manifest, loadable)
-							}
-						}
-						loader.load(new URLRequest(item.bootstrapInfoURL));
-					}
-					
 					//DRM Metadata
 					
 					if (item.drmMetadataURL != null)
@@ -213,7 +190,7 @@ package org.osmf.net
 				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 			}			
 			
-			if (loadedElem.hasOwnProperty("defaultDuration"))
+			if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
 			{
 				loadedElem["defaultDuration"] = manifest.duration;	
 			}									
@@ -228,12 +205,10 @@ package org.osmf.net
 		{
 			super.unload(loadable);						
 		}
-		
-		
-		
+				
 		private static const F4M_EXTENSION:String = "f4m";
 		
-		private var factory:MediaFactory;
-		
+		private var suportedMimeTypes:Vector.<String> = new Vector.<String>();		
+		private var factory:MediaFactory;		
 	}
 }

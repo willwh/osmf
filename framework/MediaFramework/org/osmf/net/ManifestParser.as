@@ -120,6 +120,7 @@ package org.osmf.net
 				parseBootStrapInfo(info, manifest.media);
 			}	
 			
+			//Required if base URL is omitted from Manifest
 			generateRTMPBaseURL(manifest);
 									
 			return manifest;
@@ -311,7 +312,7 @@ package org.osmf.net
 				{					
 					var cleanedPath:String = "/" + manifestLocation.path;
 					cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/",0)+1);
-					var base:String = manifestLocation.protocol + "://" +  manifestLocation.host + ((manifestLocation.port != "") ? (":" + manifestLocation.port) : "") +   cleanedPath; //don't include the last slash
+					var base:String = manifestLocation.protocol + "://" +  manifestLocation.host + (manifestLocation.port != "" ? ":" + manifestLocation.port : "") + cleanedPath;
 					resource = new URLResource(new URL(base + value.media[0].url));
 				}
 				
