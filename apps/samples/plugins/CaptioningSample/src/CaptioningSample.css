@@ -80,7 +80,7 @@ ToolTip {
 	paddingTop: 5;
 	alpha: 0;
 	background-color: #000000;
-	background-alpha: 0.66;
+	background-alpha: 0.33;
 	textAlign: "center";
 	fontSize: 14px;
 }

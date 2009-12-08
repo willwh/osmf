@@ -38,6 +38,85 @@ package org.osmf.captioning.parsers
 	 * the file by returning a <code>CaptioningDocument</code> object
 	 * from the <code>parse</code> method.
 	 * 
+	 * A subset of the W3C Timed Text Authoring Format 1.0 - Distribution
+	 * Format Exchange Profile (DFXP) is supported by this parser.
+	 * 
+	 * The subset supported by this class is specified here:
+	 * <ul>
+	 *	<li> <strong>tt</strong> tag</li>
+	 * 		<ul>
+	 * 			<li> All attributes of the tt tag are ignored.</li>
+	 * 			<li> <strong>head</strong> tag</li>
+	 * 			<ul>
+	 * 				<li> head tag is not required.</li>
+	 * 				<li> <strong>metadata</strong> tag is supported. The title, 
+	 * description, and copyright attribute values are available via properties 
+	 * of this class.</li>
+	 * 				<li> <strong>layout</strong> tag and any child tags are ignored.</li>
+	 * 				<li> <strong>styling</strong> tag is supported.</li>
+	 * 				<ul>
+	 * 					<li> <strong>style</strong> tags are supported.</li>
+	 * 					<ul>
+	 * 						<li> Each style tag must have a unique ID and the 
+	 * following attributes are supported:</li>
+	 * 						<ul>
+	 * 							<li>tts:fontFamily</li>
+	 * 							<li>tts:fontSize</li>
+	 * 							<ul>
+	 * 								<li> Support for only one value. If two values 
+	 * are present only the first is used.</li>
+	 * 								<li> Units are ignored, pixels are assumed.</li>
+	 * 								<li> Percentages are not supported (e.g. 50%).</li>
+	 * 								<li> Increment/decrement is not supported (e.g. +5).</li>
+	 * 							</ul>
+	 * 							<li>tts:fontStyle</li>
+	 * 							<li>tts:fontWeight</li>
+	 * 							<li>tts:textAlign</li>
+	 * 							<li>tts:wrapOption</li>
+	 * 							<li>tts:backgroundColor</li>
+	 * 							<li>tts:color</li>
+	 * 						</ul>
+	 * 					</ul>
+	 * 				</ul>
+	 * 			</ul>
+	 * 			<li> <strong>body</strong> tag</li>
+	 * 			<ul>
+	 * 				<li> body tag is required.</li>
+	 * 				<li> Only one body tag is supported.</li>
+	 * 				<li> All attributes of the body tag are ignored.</li>
+	 * 				<li> <strong>div</strong> tag</li>
+	 * 				<ul>
+	 * 					<li> Supported but not required.</li>
+	 * 					<li> Support for one div tag only.</li>
+	 * 					<li> All attributes of the div tag are ignored.</li>
+	 * 					<li> <strong>p</strong> tag</li>
+	 * 					<ul>
+	 * 						<li> Support for one or many.</li>
+	 * 						<li> p tags contain the caption text and optionally any styles.</li>
+	 * 						<li> Support for the attributes begin, dur, and end only. All other attributes are ignored.</li> 
+	 * 						<ul>
+	 * 							<li> If begin is absent, zero is assumed.</li> 
+	 * 							<li> If both dur and end are present, dur will be ignored.</li>
+	 * 							<li> The following time values are supported:</li>
+	 * 						</ul>
+	 * 						<ul>
+	 * 							<li> full clock format in "hours:minutes:seconds:fraction" (e.g. 00:03:00:00).</li>
+	 * 							<li> offset time (e.g. 10s for ten seconds or 1m for one minute).</li>
+	 * 							<li> offset times without units (e.g. 10) are assumed to be seconds.</li>
+	 * 						</ul>
+	 * 						<li> styles can be 'inline', using a span tag, or referenced with a style ID</li>
+	 * 						<li> <strong>span</strong> tags are supported.</li>
+	 * 						<ul>
+	 * 							<li> suppport for style attributes only, all other attributes are ignored.</li>
+	 * 							<li> nested span tags are not supported.</li>
+	 * 						</ul>
+	 * 						<li> The <strong>br</strong> tag is supported.</li>
+	 * 				</ul>
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</li>
+	 * </ul>
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.0
@@ -110,6 +189,8 @@ package org.osmf.captioning.parsers
 			
 			var xml:XML = new XML(xmlStr);
 			
+			rootNamespace = xml.namespace();
+			
 			XML.ignoreWhitespace = saveXMLIgnoreWhitespace;
 			XML.prettyPrinting = saveXMLPrettyPrinting;
 			
@@ -124,13 +205,7 @@ package org.osmf.captioning.parsers
 			}
 			catch (err:Error) 
 			{
-				CONFIG::LOGGING
-				{
-					if (logger != null)
-					{					
-						logger.debug("Unhandled exception in DFXPParser : "+err.message);
-					}
-				}
+				debugLog("Unhandled exception in DFXPParser : "+err.message);
 				throw err;
 			}
 			
@@ -150,8 +225,8 @@ package org.osmf.captioning.parsers
 			catch (err:Error) 
 			{
 				// Catch only this one: "Error #1080: Illegal value for namespace." This
-				// just means the document is missing some metadata tags, not a reason to
-				// bail.
+				// means the document is missing some of the metadata tags we tried to
+				// access, not a fatal error.
 				if (err.errorID != 1080) 
 				{
 					throw err;
@@ -179,8 +254,7 @@ package org.osmf.captioning.parsers
 		 */
 		private function createStyleObject(styleNode:XML):CaptionStyle 
 		{
-			var id:String = styleNode.@id;
-			
+			var id:String = styleNode.@*::id;
 			var styleObj:CaptionStyle = new CaptionStyle(id);
 			
 			var colorValue:Object;
@@ -261,17 +335,17 @@ package org.osmf.captioning.parsers
 				}
 				else 
 				{
-					// Finally check for named color values
+					// Check for named color values
 					colorValue = namedColorMap[colorStr.toLowerCase()]; 
 					if (colorValue == null)
 					{
-						CONFIG::LOGGING
+						// Finally, just take what we got
+						colorValue = parseInt(colorStr);
+						if (isNaN(int(colorValue)))
 						{
-							if (logger != null)
-							{					
-								logger.debug("Invalid DFXP document: named color value "+colorStr+" not supported.");
-							}
-						}
+							colorValue = null;
+							debugLog("Invalid DFXP document: invalid color value of " + colorStr);
+						} 
 					}
 				}
 			}
@@ -296,14 +370,7 @@ package org.osmf.captioning.parsers
 			if (perResult) 
 			{
 				// Percentages not supported
-				CONFIG::LOGGING
-				{
-					if (logger != null)
-					{					
-						logger.debug("Invalid DFXP document: percentages are not supported for font size.");
-					}
-				}
-				
+				debugLog("Invalid DFXP document: percentages are not supported for font size.");
 				returnValue = "";	
 			}
 			else
@@ -315,13 +382,7 @@ package org.osmf.captioning.parsers
 				if (incResult) 
 				{
 					// Increment not supported
-					CONFIG::LOGGING
-					{
-						if (logger != null)
-						{						
-							logger.debug("Invalid DFXP document: increment values are not supported for font size.");
-						}
-					}
+					debugLog("Invalid DFXP document: increment values are not supported for font size.");
 					returnValue = "";
 				}
 				else
@@ -411,27 +472,31 @@ package org.osmf.captioning.parsers
 			var body:XMLList = xml..ns::body;
 			if (body.length() <= 0) 
 			{
-				CONFIG::LOGGING
+				debugLog("Invalid DFXP document: <body> tag is required.");
+			}
+			else
+			{
+				// Support for one <div> tag only, but it is not required
+				var div:XMLList = xml..ns::div;
+				
+				// Support for 1 to many <p> tags, these tags contain the timing info, they can appear in any order
+				var p:XMLList = div.length() ? div.children() : (body.length() ? body.children() : new XMLList());
+				
+				// Captions should be in <p> tags
+				for (var i:uint = 0; i < p.length(); i++) 
 				{
-					if (logger != null)
-					{					
-						logger.debug("Invalid DFXP document: <body> tag is required.");
+					var pNode:XML = p[i];
+					
+					// According the W3C, foreign namespaces should be ignored for p tags
+					if (rootNamespace == pNode.namespace())
+					{
+						parsePTag(doc, pNode, i);
+					}
+					else
+					{
+						debugLog("Ignoring this tag, foreign namespaces not supported: \""+pNode+"\"");
 					}
 				}
-				return;
-			}
-			
-			// Support for one <div> tag only, but it is not required
-			var div:XMLList = xml..ns::div;
-			
-			// Support for 1 to many <p> tags, these tags contain the timing info, they can appear in any order
-			var p:XMLList = div.length() ? div.children() : (body.length() ? body.children() : new XMLList());
-			
-			// Captions should be in <p> tags
-			for (var i:uint = 0; i < p.length(); i++) 
-			{
-				var pNode:XML = p[i];
-				parsePTag(doc, pNode, i);
 			}			
 		}
 		
@@ -470,7 +535,6 @@ package org.osmf.captioning.parsers
 
 			// Create the caption text, we don't support nested span tags
 			var text:String = new String("<p>");
-			var startTagLen:uint = text.length;
 			
 			var children:XMLList = pNode.children();
 			for (var i:uint = 0; i < children.length(); i++) 
@@ -488,14 +552,14 @@ package org.osmf.captioning.parsers
 							case "metadata":
 								break;	// We don't support these in <p> tags
 							case "span":
-								var styleStartIndex:uint = text.length - startTagLen;
+								var styleStartIndex:uint = calcClearTextLength(text);
 								var spanText:String;
 								
 								var stylesList:Array = new Array();
 
 								text += parseSpanTag(doc, child, stylesList);
 												
-								var styleEndIndex:uint = text.length - startTagLen;
+								var styleEndIndex:uint = calcClearTextLength(text);
 								
 								for each (var styleObject:CaptionStyle in stylesList) 
 								{
@@ -559,9 +623,23 @@ package org.osmf.captioning.parsers
 				}
 			}
 			else {
-				var attributes:XMLList = node.@tts::*;
+
+				try
+				{				
+					var attributes:XMLList = node.@tts::*;
+				}
+				catch (err:Error) 
+				{
+					// Catch only this one: "Error #1080: Illegal value for namespace." This
+					// means the document is missing the xmlns:tts declartion in the tt tag, 
+					// not a fatal error.
+					if (err.errorID != 1080) 
+					{
+						throw err;
+					}
+				}
 				
-				for (i = 0; i < attributes.length(); i++) 
+				for (i = 0; (attributes != null) && (i < attributes.length()); i++) 
 				{
 					var attrib:XML = attributes[i];
 					var localName:String = attrib.localName();
@@ -583,7 +661,11 @@ package org.osmf.captioning.parsers
 		{
 			// Look for style attribute
 			var styleObj:CaptionStyle = parseStyleAttrib(doc, spanNode);
-			styles.push(styleObj);
+			
+			if (styleObj != null)
+			{
+				styles.push(styleObj);
+			}
 			
 			var ccText:String = new String();
 			var children:XMLList = spanNode.children();
@@ -673,9 +755,31 @@ package org.osmf.captioning.parsers
 			return _time;
 		}
 		
+		/**
+		 * Utility method to calculate the length
+		 * of a string non-inclusive of any HTML tags.
+		 */
+		private function calcClearTextLength(txt:String):int
+		{
+			var clrTxt:String = txt.replace(/<(.|\n)*?>/g, "");
+			return clrTxt.length;
+		}
+		
+		private function debugLog(msg:String):void
+		{
+			CONFIG::LOGGING
+			{
+				if (logger != null)
+				{					
+					logger.debug(msg);
+				}
+			}
+		}
+		
 		private var ns:Namespace;
 		private var ttm:Namespace;
 		private var tts:Namespace;
+		private var rootNamespace:Namespace;
 		private var namedColorMap:Dictionary;
 		
 		CONFIG::LOGGING
