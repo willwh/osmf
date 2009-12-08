@@ -35,7 +35,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function StringIdentifier(string:String)
@@ -59,7 +59,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function equals(value:IIdentifier):Boolean
@@ -76,7 +76,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get string():String

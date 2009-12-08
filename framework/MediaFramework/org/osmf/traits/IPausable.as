@@ -47,7 +47,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public interface IPausable extends IMediaTrait
@@ -57,7 +57,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get paused():Boolean;
@@ -67,7 +67,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function pause():void;

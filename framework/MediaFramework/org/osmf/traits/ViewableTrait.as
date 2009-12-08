@@ -42,7 +42,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class ViewableTrait extends MediaTraitBase implements IViewable
@@ -60,7 +60,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function set view(value:DisplayObject):void
@@ -84,7 +84,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get view():DisplayObject
@@ -106,7 +106,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessViewChange(newView:DisplayObject):Boolean
@@ -121,7 +121,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processViewChange(newView:DisplayObject):void
@@ -139,7 +139,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessViewChange(oldView:DisplayObject):void

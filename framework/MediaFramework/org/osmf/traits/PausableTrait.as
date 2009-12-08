@@ -41,7 +41,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class PausableTrait extends MediaTraitBase implements IPausable
@@ -60,7 +60,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function PausableTrait(owner:MediaElement)
@@ -85,7 +85,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function resetPaused():void
@@ -108,7 +108,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get paused():Boolean
@@ -121,7 +121,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function pause():void
@@ -162,7 +162,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessPausedChange(newPaused:Boolean):Boolean
@@ -179,7 +179,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processPausedChange(newPaused:Boolean):void
@@ -196,7 +196,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessPausedChange(oldPaused:Boolean):void

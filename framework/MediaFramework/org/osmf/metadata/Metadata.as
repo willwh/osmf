@@ -45,7 +45,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="facetRemove",type="org.osmf.events.MetadataEvent")]
@@ -55,7 +55,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
 	public class Metadata extends EventDispatcher
@@ -69,7 +69,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function getFacet(nameSpace:URL):IFacet
@@ -87,7 +87,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function addFacet(data:IFacet):void
@@ -122,7 +122,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function removeFacet(data:IFacet):IFacet
@@ -154,7 +154,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get namespaceURLs():Vector.<String>

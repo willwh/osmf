@@ -37,7 +37,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferTimeChange",type="org.osmf.events.BufferEvent")]
@@ -50,7 +50,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class BufferableTrait extends MediaTraitBase implements IBufferable
@@ -70,7 +70,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function set bufferLength(value:Number):void
@@ -100,7 +100,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function set buffering(value:Boolean):void
@@ -188,7 +188,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferingChange(newBuffering:Boolean):Boolean
@@ -204,7 +204,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferingChange(newBuffering:Boolean):void
@@ -221,7 +221,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBufferingChange(oldBuffering:Boolean):void
@@ -238,7 +238,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferLengthChange(newSize:Number):Boolean
@@ -253,7 +253,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferLengthChange(newSize:Number):void
@@ -267,7 +267,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBufferLengthChange(oldSize:Number):void
@@ -284,7 +284,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessBufferTimeChange(newTime:Number):Boolean
@@ -300,7 +300,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processBufferTimeChange(newTime:Number):void
@@ -317,7 +317,7 @@ package org.osmf.traits
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessBufferTimeChange(oldTime:Number):void

@@ -48,7 +48,7 @@ package org.osmf.traits
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class SpatialTrait extends MediaTraitBase implements ISpatial
@@ -74,7 +74,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final public function setDimensions(width:Number, height:Number):void
@@ -131,7 +131,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function canProcessDimensionsChange(newWidth:Number, newHeight:Number):Boolean
@@ -147,7 +147,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processDimensionsChange(newWidth:Number, newHeight:Number):void
@@ -166,7 +166,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function postProcessDimensionsChange(oldWidth:Number, oldHeight:Number):void

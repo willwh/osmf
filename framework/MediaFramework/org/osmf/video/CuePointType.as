@@ -26,7 +26,7 @@ package org.osmf.video
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class CuePointType
@@ -36,7 +36,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NAVIGATION:CuePointType		= new CuePointType("navigation");
@@ -46,7 +46,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const EVENT:CuePointType			= new CuePointType("event");
@@ -56,7 +56,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ACTIONSCRIPT:CuePointType	= new CuePointType("actionscript");
@@ -79,7 +79,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static function fromString(typeName:String):CuePointType

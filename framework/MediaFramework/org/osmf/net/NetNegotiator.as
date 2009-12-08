@@ -77,7 +77,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function NetNegotiator(target:IEventDispatcher=null):void
@@ -112,7 +112,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		protected function buildPortProtocolSequence(url:URL):Vector.<NetConnectionAttempt>  {
@@ -157,7 +157,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		protected function buildConnectionAddress(url:URL, protocol:String, port:String):String

@@ -38,7 +38,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaTraitResolver extends EventDispatcher
@@ -51,7 +51,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function MediaTraitResolver(type:MediaTraitType)
@@ -69,7 +69,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function get type():MediaTraitType
@@ -85,7 +85,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final protected function setResolvedTrait(value:IMediaTrait):void
@@ -109,7 +109,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function get resolvedTrait():IMediaTrait
@@ -129,7 +129,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		final public function addTrait(instance:IMediaTrait):void
@@ -159,7 +159,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function removeTrait(instance:IMediaTrait):IMediaTrait
@@ -188,7 +188,7 @@ package org.osmf.media
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processAddTrait(instance:IMediaTrait):void
@@ -205,7 +205,7 @@ package org.osmf.media
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait

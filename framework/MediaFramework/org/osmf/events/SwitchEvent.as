@@ -31,7 +31,7 @@ package org.osmf.events
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */		
 	public class SwitchEvent extends Event
@@ -45,7 +45,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public static const SWITCHING_CHANGE:String = "switchingChange";
@@ -59,7 +59,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const INDICES_CHANGE:String = "indicesChange";
@@ -70,7 +70,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SWITCHSTATE_REQUESTED:int	= 1;
@@ -81,7 +81,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SWITCHSTATE_COMPLETE:int	= 2;
@@ -91,7 +91,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SWITCHSTATE_FAILED:int		= 3;
@@ -111,7 +111,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function SwitchEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, newState:int=SWITCHSTATE_UNDEFINED, oldState:int=SWITCHSTATE_UNDEFINED, switchingDetail:SwitchingDetail=null)
@@ -128,7 +128,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get newState():int
@@ -141,7 +141,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get oldState():int
@@ -154,7 +154,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get detail():SwitchingDetail

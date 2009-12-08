@@ -29,7 +29,7 @@ package org.osmf.utils
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class Base64Decoder
@@ -45,7 +45,7 @@ package org.osmf.utils
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.0
+	     *  @playerversion AIR 1.5
 	     *  @productversion OSMF 1.0
 	     */
 	    public function Base64Decoder()
@@ -70,7 +70,7 @@ package org.osmf.utils
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.0
+	     *  @playerversion AIR 1.5
 	     *  @productversion OSMF 1.0
 	     */
 	    public function decode(encoded:String):void
@@ -135,7 +135,7 @@ package org.osmf.utils
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.0
+	     *  @playerversion AIR 1.5
 	     *  @productversion OSMF 1.0
 	     */
 	    public function reset():void
@@ -154,7 +154,7 @@ package org.osmf.utils
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.0
+	     *  @playerversion AIR 1.5
 	     *  @productversion OSMF 1.0
 	     */
 	    public function toByteArray():ByteArray

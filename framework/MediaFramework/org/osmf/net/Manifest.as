@@ -33,7 +33,7 @@ package org.osmf.net
 		 * The id element represents a unique identifier for the media. It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public var id:String;
@@ -46,7 +46,7 @@ package org.osmf.net
 		 * URLs, and <drmMetadata> URLs.) 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var baseURL:String = null;
@@ -57,7 +57,7 @@ package org.osmf.net
 		 * hence its placement under the document root. It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var duration:Number = NaN;
@@ -68,7 +68,7 @@ package org.osmf.net
 		 * placement under the document root. It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var mimeType:String = null;
@@ -80,7 +80,7 @@ package org.osmf.net
 		 * It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public var streamType:String = null;
@@ -94,7 +94,7 @@ package org.osmf.net
 		 * present.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var deliveryType:String = null;
@@ -106,7 +106,7 @@ package org.osmf.net
 		 * in RFC3339. It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var startTime:Date;
@@ -115,7 +115,7 @@ package org.osmf.net
 		 * The set of different bitrate streams associated with this media.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var media:Vector.<Media> = new Vector.<Media>();

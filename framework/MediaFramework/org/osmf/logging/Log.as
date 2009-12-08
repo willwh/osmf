@@ -37,7 +37,7 @@ package org.osmf.logging
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static function set loggerFactory(factory:ILoggerFactory):void
@@ -53,7 +53,7 @@ package org.osmf.logging
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static function get loggerFactory():ILoggerFactory
@@ -70,7 +70,7 @@ package org.osmf.logging
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static function getLogger(name:String):ILogger

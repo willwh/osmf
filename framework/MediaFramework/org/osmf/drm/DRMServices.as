@@ -59,7 +59,7 @@ package org.osmf.drm
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
  	 */ 
 	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
@@ -74,7 +74,7 @@ package org.osmf.drm
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
 	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
@@ -89,7 +89,7 @@ package org.osmf.drm
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
@@ -105,7 +105,7 @@ package org.osmf.drm
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
 	public class DRMServices extends EventDispatcher
@@ -117,7 +117,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function DRMServices()
@@ -132,7 +132,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function set drmMetadata(value:Object):void
@@ -196,7 +196,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get authenticationMethod():String
@@ -215,7 +215,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticate(username:String, password:String):void
@@ -240,7 +240,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function authenticateWithToken(token:Object):void
@@ -260,7 +260,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get startDate():Date
@@ -281,7 +281,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get endDate():Date
@@ -307,7 +307,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get period():Number
@@ -330,7 +330,7 @@ package org.osmf.drm
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		private function retrieveVoucher():void

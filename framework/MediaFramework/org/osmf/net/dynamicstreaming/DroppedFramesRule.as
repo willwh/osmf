@@ -32,7 +32,7 @@ package org.osmf.net.dynamicstreaming
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class DroppedFramesRule extends SwitchingRuleBase
@@ -54,7 +54,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function DroppedFramesRule(nsMetrics:INetStreamMetrics, dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
@@ -72,7 +72,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int

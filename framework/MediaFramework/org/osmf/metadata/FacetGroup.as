@@ -43,7 +43,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class FacetGroup extends EventDispatcher
@@ -59,7 +59,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function FacetGroup(nameSpace:URL)
@@ -75,7 +75,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get namespaceURL():URL
@@ -93,7 +93,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function addFacet(metadata:Metadata, facet:IFacet):void
@@ -125,7 +125,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function removeFacet(metadata:Metadata, facet:IFacet):IFacet
@@ -148,7 +148,7 @@ package org.osmf.metadata
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get length():int
@@ -165,7 +165,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function getMetadataAt(index:uint):Metadata
@@ -187,7 +187,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function getFacetAt(index:int):IFacet
@@ -209,7 +209,7 @@ package org.osmf.metadata
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
 		public function indexOf(metadata:Metadata, facet:IFacet):int

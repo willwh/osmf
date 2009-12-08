@@ -48,7 +48,7 @@ package org.osmf.layout
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class PaddingLayoutFacet extends LayoutFacet
@@ -58,7 +58,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const LEFT:StringIdentifier = new StringIdentifier("left");
@@ -68,7 +68,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const TOP:StringIdentifier = new StringIdentifier("top");
@@ -78,7 +78,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
@@ -88,7 +88,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const BOTTOM:StringIdentifier = new StringIdentifier("bottom");
@@ -101,7 +101,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		override public function get namespaceURL():URL
@@ -148,7 +148,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */					
 		public function get left():Number
@@ -176,7 +176,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get top():Number
@@ -204,7 +204,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get right():Number
@@ -233,7 +233,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get bottom():Number

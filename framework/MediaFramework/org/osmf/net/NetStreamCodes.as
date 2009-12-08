@@ -39,7 +39,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_BUFFER_EMPTY:String	  		= "NetStream.Buffer.Empty";
@@ -50,7 +50,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_BUFFER_FULL:String 			= "NetStream.Buffer.Full";
@@ -61,7 +61,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_BUFFER_FLUSH:String 			= "NetStream.Buffer.Flush";
@@ -72,7 +72,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_DRM_UPDATE:String 			= "DRM.UpdateNeeded";
@@ -84,7 +84,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_FAILED:String 				= "NetStream.Failed"; 
@@ -95,7 +95,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PUBLISH_START:String			= "NetStream.Publish.Start"; 
@@ -106,7 +106,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PUBLISH_BADNAME:String		= "NetStream.Publish.BadName";
@@ -127,7 +127,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_START:String				= "NetStream.Play.Start";
@@ -138,7 +138,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_STOP:String				= "NetStream.Play.Stop";
@@ -148,7 +148,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_FAILED:String			= "NetStream.Play.Failed";
@@ -159,7 +159,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_STREAMNOTFOUND:String	= "NetStream.Play.StreamNotFound";
@@ -170,7 +170,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_RESET:String				= "NetStream.Play.Reset";
@@ -181,7 +181,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_PUBLISHNOTIFY:String		= "NetStream.Play.PublishNotify"; 
@@ -192,7 +192,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_UNPUBLISHNOTIFY:String	= "NetStream.Play.UnpublishNotify";
@@ -203,7 +203,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_INSUFFICIENTBW:String	= "NetStream.Play.InsufficientBW";
@@ -214,7 +214,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_FILESTRUCTUREINVALID:String= "NetStream.Play.FileStructureInvalid"; 
@@ -225,7 +225,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:String= "NetStream.Play.NoSupportedTrackFound";		
@@ -240,7 +240,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PLAY_TRANSITION:String		= "NetStream.Play.Transition"; 
@@ -251,7 +251,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PAUSE_NOTIFY:String			= "NetStream.Pause.Notify"; 
@@ -262,7 +262,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_UNPAUSE_NOTIFY:String			= "NetStream.Unpause.Notify";
@@ -273,7 +273,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_RECORD_START:String			= "NetStream.Record.Start";
@@ -284,7 +284,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_RECORD_NOACCESS:String		= "NetStream.Record.NoAccess";
@@ -295,7 +295,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_RECORD_STOP:String			= "NetStream.Record.Stop";
@@ -306,7 +306,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_RECORD_FAILED:String			= "NetStream.Record.Failed";
@@ -317,7 +317,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_SEEK_FAILED:String			= "NetStream.Seek.Failed";
@@ -331,7 +331,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_SEEK_INVALIDTIME:String		= "NetStream.Seek.InvalidTime";
@@ -342,7 +342,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_SEEK_NOTIFY:String			= "NetStream.Seek.Notify"; 
@@ -355,7 +355,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_COMPLETE:String			= "NetStream.Play.Complete"; 
@@ -366,7 +366,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_TRANSITION_COMPLETE:String = "NetStream.Play.TransitionComplete"; 
@@ -377,7 +377,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_SWITCH:String			= "NetStream.Play.Switch"; 
@@ -390,7 +390,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ON_META_DATA:String						= "onMetaData";
@@ -400,7 +400,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const ON_CUE_POINT:String						= "onCuePoint";
@@ -411,7 +411,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const ON_IMAGE_DATA:String					= "onImageData";
@@ -421,7 +421,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ON_PLAY_STATUS:String					= "onPlayStatus";
@@ -431,7 +431,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const ON_TEXT_DATA:String						= "onTextData";
@@ -442,7 +442,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ON_XMP_DATA:String						= "onXMPData";	
@@ -452,7 +452,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ON_ID3:String							= "onID3Data"; 
@@ -462,7 +462,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const ON_DRM_CONTENT_DATA:String				= "onDRMContentData";

@@ -81,7 +81,7 @@ package org.osmf.audio
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function AudioElement(loader:ILoader, resource:IURLResource=null)
@@ -104,7 +104,7 @@ package org.osmf.audio
        	 * 
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
-       	 *  @playerversion AIR 1.0
+       	 *  @playerversion AIR 1.5
        	 *  @productversion OSMF 1.0
        	 */       	
        	public function set defaultDuration(value:Number):void

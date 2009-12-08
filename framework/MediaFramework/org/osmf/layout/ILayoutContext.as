@@ -41,7 +41,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get container():DisplayObjectContainer;
@@ -52,7 +52,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get firstChildIndex():uint;
@@ -62,7 +62,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		function get layoutRenderer():ILayoutRenderer;
@@ -74,7 +74,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function updateIntrinsicDimensions():void
@@ -84,7 +84,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		function get calculatedWidth():Number;
@@ -95,7 +95,7 @@ package org.osmf.layout
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
-	 	 *  @playerversion AIR 1.0
+	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get calculatedHeight():Number;
@@ -106,7 +106,7 @@ package org.osmf.layout
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
-	 	 *  @playerversion AIR 1.0
+	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get projectedWidth():Number;
@@ -117,7 +117,7 @@ package org.osmf.layout
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
-	 	 *  @playerversion AIR 1.0
+	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get projectedHeight():Number;

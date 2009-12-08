@@ -45,7 +45,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childRemove", type="org.osmf.events.CompositeMetadataEvent")]
@@ -55,7 +55,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childFacetAdd", type="org.osmf.events.CompositeMetadataEvent")]
@@ -65,7 +65,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childFacetRemove", type="org.osmf.events.CompositeMetadataEvent")]
@@ -75,7 +75,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupAdd", type="org.osmf.event.CompositeMetadataEvent")]
@@ -85,7 +85,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupRemove", type="org.osmf.event.CompositeMetadataEvent")]
@@ -95,7 +95,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupChange", type="org.osmf.event.CompositeMetadataEvent")]
@@ -129,7 +129,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	internal class CompositeMetadata extends Metadata
@@ -142,7 +142,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function CompositeMetadata()
@@ -165,7 +165,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function addChild(child:Metadata):void
@@ -231,7 +231,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function removeChild(child:Metadata):void
@@ -292,7 +292,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get numChildren():int
@@ -310,7 +310,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function getChildAt(index:int):Metadata
@@ -329,7 +329,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function set mode(value:CompositionMode):void
@@ -353,7 +353,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set activeChild(value:Metadata):void
@@ -382,7 +382,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function addFacetSynthesizer(synthesizer:FacetSynthesizer):void
@@ -408,7 +408,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function removeFacetSynthesizer(synthesizer:FacetSynthesizer):void
@@ -432,7 +432,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function getFacetSynthesizer(namespaceURL:URL):FacetSynthesizer
@@ -461,7 +461,7 @@ package org.osmf.composition
 		 * @return The collected namespaces.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function getFacetGroupNamespaceURLs():Vector.<String>
@@ -484,7 +484,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function getFacetGroup(namespaceURL:String):FacetGroup

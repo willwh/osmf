@@ -71,7 +71,7 @@ package org.osmf.net
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 	
 		public function F4MLoader(factory:MediaFactory = null)
@@ -95,7 +95,7 @@ package org.osmf.net
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
@@ -123,7 +123,7 @@ package org.osmf.net
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override public function load(loadable:ILoadable):void
@@ -218,7 +218,7 @@ package org.osmf.net
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override public function unload(loadable:ILoadable):void

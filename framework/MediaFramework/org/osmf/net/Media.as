@@ -32,7 +32,7 @@ package org.osmf.net
 		 * Information about the drm used with the media.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var drmMetadata:ByteArray;
@@ -41,7 +41,7 @@ package org.osmf.net
 		 * The URL that points to the drmMetadata.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
  		public var drmMetadataURL:String;
@@ -50,7 +50,7 @@ package org.osmf.net
 		 * The Identifier used to associate with the DRMMetadata.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public var drmMetadataId:String;
@@ -62,7 +62,7 @@ package org.osmf.net
 		 * to the bootstrap profile. It is optional.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapInfo:ByteArray;
@@ -71,7 +71,7 @@ package org.osmf.net
 		 * The URL that points to the bootstrap info.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapInfoURL:String;
@@ -83,7 +83,7 @@ package org.osmf.net
 		 * the field is extensible). It is required.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapProfile:String;
@@ -95,7 +95,7 @@ package org.osmf.net
 		 * only to those <media> elements that use the same ID in their bootstrapInfoId property.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
 		public var bootstrapInfoId:String;
@@ -104,7 +104,7 @@ package org.osmf.net
 		 * Location of the media.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
 		public var url:String;
@@ -113,7 +113,7 @@ package org.osmf.net
 		 * The bitrate of the media in kilobits per second.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var bitrate:Number = NaN;
@@ -123,7 +123,7 @@ package org.osmf.net
 		 * the piece of media. It is an optional child element of <media>.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public var moov:ByteArray;
@@ -132,7 +132,7 @@ package org.osmf.net
 		 * Width of the resource in pixels.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var width:Number;
@@ -141,7 +141,7 @@ package org.osmf.net
 		 * Height of the resource in pixels.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var height:Number;

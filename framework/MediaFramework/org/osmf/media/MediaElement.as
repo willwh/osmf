@@ -89,7 +89,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class MediaElement extends EventDispatcher
@@ -102,7 +102,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function MediaElement()
@@ -117,7 +117,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get traitTypes():Vector.<MediaTraitType>
@@ -138,7 +138,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function hasTrait(type:MediaTraitType):Boolean
@@ -162,7 +162,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function getTrait(type:MediaTraitType):IMediaTrait
@@ -180,7 +180,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get resource():IMediaResource
@@ -198,7 +198,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get gateway():IMediaGateway
@@ -241,7 +241,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
@@ -261,7 +261,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		 protected function createMetadata():Metadata
@@ -313,7 +313,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final protected function removeTrait(type:MediaTraitType):IMediaTrait
@@ -348,7 +348,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final protected function addTraitResolver(type:MediaTraitType, instance:MediaTraitResolver):void
@@ -396,7 +396,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final protected function removeTraitResolver(type:MediaTraitType):MediaTraitResolver
@@ -432,7 +432,7 @@ package org.osmf.media
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final protected function getTraitResolver(type:MediaTraitType):MediaTraitResolver
@@ -450,7 +450,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function setupTraitResolvers():void
@@ -464,7 +464,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		protected function setupTraits():void
