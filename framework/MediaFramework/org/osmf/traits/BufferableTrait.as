@@ -315,17 +315,10 @@ package org.osmf.traits
 		 *  
 		 * @param oldTime Previous <code>bufferTime</code> value.
 		 * 
-
-		 *  
-
 		 *  @langversion 3.0
-
 		 *  @playerversion Flash 10
-
 		 *  @playerversion AIR 1.0
-
 		 *  @productversion OSMF 1.0
-
 		 */		
 		protected function postProcessBufferTimeChange(oldTime:Number):void
 		{

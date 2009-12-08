@@ -68,6 +68,11 @@ package org.osmf.net
 		 * @param netLoader The factory that is used to create MediaElements based on the 
 		 * media specified in the manifest file. a default factory is created for the base OSMF media
 		 * types, Video, Audio, Image, and SWF.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 	
 		public function F4MLoader(factory:MediaFactory = null)
 		{		
@@ -87,6 +92,11 @@ package org.osmf.net
 
 		/**
 		 * ineritDoc
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{	
@@ -110,6 +120,11 @@ package org.osmf.net
 		
 		/**
 		 * ineritDoc
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function load(loadable:ILoadable):void
 		{
@@ -200,6 +215,11 @@ package org.osmf.net
 		
 		/**
 		 * ineritDoc
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		override public function unload(loadable:ILoadable):void
 		{

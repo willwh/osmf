@@ -284,7 +284,6 @@ import org.osmf.traits.ILoadable;
 /**
  * Utility class for structuring shared connection data.
  *
- *  
  *  @langversion 3.0
  *  @playerversion Flash 10
  *  @playerversion AIR 1.0
@@ -298,7 +297,6 @@ class SharedConnection
 
 /**
  * Utility class for structuring pending connection data.
- *
  *  
  *  @langversion 3.0
  *  @playerversion Flash 10

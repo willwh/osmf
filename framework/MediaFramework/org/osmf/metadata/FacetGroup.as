@@ -40,6 +40,11 @@ package org.osmf.metadata
 	/**
 	 * Defines a group of facets that share one and the same name
 	 * space.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class FacetGroup extends EventDispatcher
 	{
@@ -140,6 +145,11 @@ package org.osmf.metadata
 	
 		/**
 		 * Defines the number of facets that are in the group.
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get length():int
 		{

@@ -35,6 +35,11 @@ package org.osmf.media
 	/**
 	 * Abstract base class for objects that keep a list of traits of similar type, capable
 	 * of pointing out a so called "active" trait, that currently represents the group.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaTraitResolver extends EventDispatcher
 	{

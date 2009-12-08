@@ -31,6 +31,10 @@ package org.osmf.net
 	{			
 		/**
 		 * The id element represents a unique identifier for the media. It is optional.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public var id:String;
 		
@@ -40,6 +44,10 @@ package org.osmf.net
 		 * relative URLs (i.e. those URLs that don't begin with "http://" or "https://" 
 		 * within the manifest file. (Such URLs may include <media> URLs, <bootstrapInfo> 
 		 * URLs, and <drmMetadata> URLs.) 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var baseURL:String = null;
 				
@@ -47,6 +55,10 @@ package org.osmf.net
 		 * The <duration> element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var duration:Number = NaN;
 		
@@ -54,6 +66,10 @@ package org.osmf.net
 		 * The <mimeType> element represents the MIME type of the media file. It is assumed 
 		 * that all representations of the media have the same MIME type, hence its 
 		 * placement under the document root. It is optional.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var mimeType:String = null;
 		
@@ -62,6 +78,10 @@ package org.osmf.net
 		 * Valid values include "live", "recorded", and "any". It is assumed that all representations 
 		 * of the media have the same stream type, hence its placement under the document root. 
 		 * It is optional.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */
 		public var streamType:String = null;
 			
@@ -72,6 +92,10 @@ package org.osmf.net
 		 * the default deliveryType is "streaming". For media with an HTTP protocol, the default 
 		 * deliveryType is also "streaming". In the latter case, the <bootstrapInfo> field must be 
 		 * present.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var deliveryType:String = null;
 		
@@ -80,11 +104,19 @@ package org.osmf.net
 		 * It is assumed that all representations of the media have the same start time, hence its 
 		 * placement under the document root. The start time must conform to the "date-time" production 
 		 * in RFC3339. It is optional.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var startTime:Date;
 			
 		/**
 		 * The set of different bitrate streams associated with this media.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var media:Vector.<Media> = new Vector.<Media>();
 	}

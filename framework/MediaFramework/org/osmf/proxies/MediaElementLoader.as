@@ -7,11 +7,20 @@ package org.osmf.proxies
 	/**
 	 * The Base class for Chained loaders that are used by the 
 	 * LoadableProxyElement.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.0
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class MediaElementLoader extends LoaderBase
 	{
 		/**
 		 * Creates a new MediaElementLoader
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function MediaElementLoader()
 		{
@@ -21,6 +30,10 @@ package org.osmf.proxies
 		/**
 		 * @inheritDoc
 		 * @throws Error if the LoadedContext is not a MediaElementLoadedContext
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function updateLoadable(loadable:ILoadable, newState:String, loadedContext:ILoadedContext=null):void
 		{

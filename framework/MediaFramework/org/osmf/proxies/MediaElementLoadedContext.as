@@ -33,6 +33,10 @@ package org.osmf.proxies
 	{
 		/**
 		 * Created a new element context.
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function MediaElementLoadedContext(element:MediaElement)
 		{
@@ -41,6 +45,10 @@ package org.osmf.proxies
 		
 		/**
 		 * The Associated MediaElement
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get element():MediaElement
 		{

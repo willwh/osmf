@@ -1142,7 +1142,6 @@ package org.osmf.media
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
-		 *		 
 		 */
 		public function get autoSwitch():Boolean
 		{

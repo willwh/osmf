@@ -232,6 +232,10 @@ package org.osmf.video
 		 * see flash.media.Video for more information on deblocking modes.
 		 * 
 		 * @see flash.media.Video
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set deblocking(value:int):void
 		{

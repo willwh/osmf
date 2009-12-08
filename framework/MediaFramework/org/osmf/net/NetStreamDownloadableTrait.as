@@ -42,7 +42,6 @@ package org.osmf.net
 		 * 
 		 * @param netStream The NetStream object to be used for the retrieval of bytesLoaded and bytesTotal values
 		 *  
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
