@@ -194,11 +194,11 @@ package org.osmf
 			
 			addTestSuite(TestAudioAudioTrait);
 			addTestSuite(TestAudioSeekTrait); 
-			addTestSuite(TestAudioTimeTrait);
 			addTestSuite(TestSoundLoadTrait);
 			
-			// This test fails intermittently on the build machine.
+			// These tests fail intermittently on the build machine.
 			//addTestSuite(TestAudioPlayTrait);
+			//addTestSuite(TestAudioTimeTrait);
 
 			// Images & SWFs
 			//
