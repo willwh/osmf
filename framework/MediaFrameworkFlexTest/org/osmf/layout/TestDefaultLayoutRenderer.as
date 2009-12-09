@@ -28,8 +28,7 @@ package org.osmf.layout
 	import org.osmf.display.ScaleMode;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestDefaultLayoutRenderer extends TestCase
@@ -38,15 +37,13 @@ package org.osmf.layout
 		{
 			// Child
 			
-			var mediaElement:DynamicMediaElement
-				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
-			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
-			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
-			var viewableSprite:Sprite = new TesterSprite();
-			viewable.view = viewableSprite;
+			var viewSprite:Sprite = new TesterSprite();
+			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
 
 			var mediaElementRelative:RelativeLayoutFacet = new RelativeLayoutFacet();
 			mediaElementRelative.x = 10;
@@ -69,10 +66,10 @@ package org.osmf.layout
 			
 			layoutRenderer.validateNow();
 			
-			assertEquals(0, viewableSprite.x);
-			assertEquals(0, viewableSprite.y);
-			assertEquals(NaN, viewableSprite.width);
-			assertEquals(NaN, viewableSprite.height);
+			assertEquals(0, viewSprite.x);
+			assertEquals(0, viewSprite.y);
+			assertEquals(NaN, viewSprite.width);
+			assertEquals(NaN, viewSprite.height);
 			
 			container.projectedWidth = 300;
 			container.projectedHeight = 200;
@@ -86,16 +83,16 @@ package org.osmf.layout
 			assertEquals(NaN, container.calculatedWidth);
 			assertEquals(NaN, container.calculatedHeight);
 			
-			assertEquals(30, viewableSprite.x);
-			assertEquals(20, viewableSprite.y);
-			assertEquals(240, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(30, viewSprite.x);
+			assertEquals(20, viewSprite.y);
+			assertEquals(240, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 			
 			mediaElementRelative.x = 5;
 			
 			layoutRenderer.validateNow();
 			
-			assertEquals(15, viewableSprite.x);
+			assertEquals(15, viewSprite.x);
 			
 			var mediaElementAbsolute:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
 			mediaElement.metadata.addFacet(mediaElementAbsolute);
@@ -103,42 +100,42 @@ package org.osmf.layout
 			mediaElementAbsolute.x = 50;
 			layoutRenderer.validateNow();
 			
-			assertEquals(50, viewableSprite.x);
-			assertEquals(20, viewableSprite.y);
-			assertEquals(240, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(50, viewSprite.x);
+			assertEquals(20, viewSprite.y);
+			assertEquals(240, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 			
 			mediaElementAbsolute.y = 1;
 			layoutRenderer.validateNow();
 			
-			assertEquals(50, viewableSprite.x);
-			assertEquals(1, viewableSprite.y);
-			assertEquals(240, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(50, viewSprite.x);
+			assertEquals(1, viewSprite.y);
+			assertEquals(240, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 			
 			mediaElementAbsolute.width = 100;
 			layoutRenderer.validateNow();
 			
-			assertEquals(50, viewableSprite.x);
-			assertEquals(1, viewableSprite.y);
-			assertEquals(100, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(50, viewSprite.x);
+			assertEquals(1, viewSprite.y);
+			assertEquals(100, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 			
 			mediaElementAbsolute.height = 51;
 			layoutRenderer.validateNow();
 			
-			assertEquals(50, viewableSprite.x);
-			assertEquals(1, viewableSprite.y);
-			assertEquals(100, viewableSprite.width);
-			assertEquals(51, viewableSprite.height);
+			assertEquals(50, viewSprite.x);
+			assertEquals(1, viewSprite.y);
+			assertEquals(100, viewSprite.width);
+			assertEquals(51, viewSprite.height);
 			
 			mediaElement.metadata.removeFacet(mediaElementAbsolute);
 			layoutRenderer.validateNow();
 			
-			assertEquals(15, viewableSprite.x);
-			assertEquals(20, viewableSprite.y);
-			assertEquals(240, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(15, viewSprite.x);
+			assertEquals(20, viewSprite.y);
+			assertEquals(240, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 			
 			var mediaElementAnchor:AnchorLayoutFacet = new AnchorLayoutFacet();
 			mediaElementAnchor.left = 60;
@@ -149,10 +146,10 @@ package org.osmf.layout
 			mediaElement.metadata.addFacet(mediaElementAnchor);
 			layoutRenderer.validateNow();
 			
-			assertEquals(60, viewableSprite.x);
-			assertEquals(15, viewableSprite.y);
-			assertEquals(240, viewableSprite.width);
-			assertEquals(160, viewableSprite.height);
+			assertEquals(60, viewSprite.x);
+			assertEquals(15, viewSprite.y);
+			assertEquals(240, viewSprite.width);
+			assertEquals(160, viewSprite.height);
 		
 			mediaElementAnchor.right = 10;
 			mediaElementAnchor.bottom = 10;
@@ -160,8 +157,8 @@ package org.osmf.layout
 			mediaElementRelative.height = NaN;
 			layoutRenderer.validateNow();
 			
-			assertEquals(230, viewableSprite.width);
-			assertEquals(175, viewableSprite.height);
+			assertEquals(230, viewSprite.width);
+			assertEquals(175, viewSprite.height);
 			
 			var padding:PaddingLayoutFacet = new PaddingLayoutFacet();
 			padding.left = 1;
@@ -172,26 +169,23 @@ package org.osmf.layout
 			mediaElement.metadata.addFacet(padding);
 			layoutRenderer.validateNow();
 			
-			assertEquals(61, viewableSprite.x);
-			assertEquals(17, viewableSprite.y);
-			assertEquals(226, viewableSprite.width);
-			assertEquals(169, viewableSprite.height);
+			assertEquals(61, viewSprite.x);
+			assertEquals(17, viewSprite.y);
+			assertEquals(226, viewSprite.width);
+			assertEquals(169, viewSprite.height);
 		}
 		
-		public function testSingleChild_ScaleAndAlignment():void
+		public function testSingleChildScaleAndAlignment():void
 		{
 			// Child
 			
-			var mediaElement:DynamicMediaElement
-				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
-			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
-			spatial.setDimensions(50,50);
-			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
-			var viewableSprite:Sprite = new TesterSprite();
-			viewable.view = viewableSprite;
+			var viewSprite:Sprite = new TesterSprite();
+			var viewTrait:ViewTrait = new ViewTrait(viewSprite, 50, 50);
+			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
 
 			LayoutUtils.setRelativeLayout(mediaElement.metadata, 80, 80 /* width, height */, 10, 10 /* x,y */);
 			var meAttr:LayoutAttributesFacet
@@ -277,15 +271,13 @@ package org.osmf.layout
 		public function testBottomUp():void
 		{
 			// Element with given dimenions: 400x800
-			var mediaElement:DynamicMediaElement
-				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
-			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
-			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
-			var viewableSprite:Sprite = new TesterSprite();
-			viewable.view = viewableSprite;
+			var viewSprite:Sprite = new TesterSprite();
+			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
 			
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			
@@ -316,19 +308,17 @@ package org.osmf.layout
 			assertEquals(0, container.intrinsicHeight);
 		}
 	
-		public function testBottomUp_2_levels():void
+		public function testBottomUpTwoLevels():void
 		{
 			// Element with given dimenions: 400x800
-			var mediaElement:DynamicMediaElement
-				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
-			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
-			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
-			var viewableSprite:Sprite = new TesterSprite();
-			viewable.view = viewableSprite;
-			
+			var viewSprite:Sprite = new TesterSprite();
+			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			
 			// Container without any dimenion settings: should bubble up from child element:

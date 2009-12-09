@@ -35,9 +35,9 @@
 			import org.osmf.metadata.Metadata;
 			import org.osmf.metadata.TemporalFacet;
 			import org.osmf.metadata.MetadataNamespaces;
-			import org.osmf.traits.ITemporal;
+			import org.osmf.traits.TimeTrait;
 			import org.osmf.net.NetLoadedContext;
-			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
 			import org.osmf.video.VideoElement;
@@ -103,7 +103,7 @@
 			
 			private function init():void
 			{
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
@@ -187,7 +187,7 @@
 				taCuePointEvents.verticalScrollPosition = taCuePointEvents.maxVerticalScrollPosition;
 			}
 											
-			private function onDimensionChange(event:DimensionEvent):void 
+			private function onDimensionChange(event:ViewEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
@@ -250,7 +250,7 @@
    			{
    				switch (event.traitType)
    				{
-   					case MediaTraitType.SEEKABLE:
+   					case MediaTraitType.SEEK:
    						seekBar.enabled = seekBar.visible = true;
    						break;
    				}	
@@ -290,7 +290,7 @@
    									
 			private function onClickPlayBtn():void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.pausable)
+				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
 					mediaPlayerWrapper.mediaPlayer.pause();

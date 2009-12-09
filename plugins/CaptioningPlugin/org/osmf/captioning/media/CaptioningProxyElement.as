@@ -36,9 +36,8 @@ package org.osmf.captioning.media
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 
@@ -96,7 +95,7 @@ package org.osmf.captioning.media
 		{
 			super.setupOverriddenTraits();
 			
-			// Override the ILoadable trait with our own custom ILoadable,
+			// Override the LoadTrait with our own custom LoadTrait,
 			// which retrieves the Timed Text document, parses it, and sets up
 			// the object model representing the caption data.
 			
@@ -126,10 +125,10 @@ package org.osmf.captioning.media
 				else
 				{		
 					var timedTextURL:String = facet.getValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
-					loadableTrait = new LoadableTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
+					loadTrait = new LoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
 					
-					loadableTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					addTrait(MediaTraitType.LOADABLE, loadableTrait);
+					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					addTrait(MediaTraitType.LOAD, loadTrait);
 				}
 			} 
 		}
@@ -138,7 +137,7 @@ package org.osmf.captioning.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:CaptioningLoadedContext = loadableTrait.loadedContext as CaptioningLoadedContext
+				var loadedContext:CaptioningLoadedContext = loadTrait.loadedContext as CaptioningLoadedContext
 				var document:CaptioningDocument = loadedContext.document;
 				var mediaElement:MediaElement = super.wrappedElement;
 				
@@ -170,19 +169,19 @@ package org.osmf.captioning.media
 		
 		private function cleanUp():void
 		{
-			// Our work is done, remove the custom ILoadable.  This will
-			// expose the base ILoadable, which we can then use to do
+			// Our work is done, remove the custom LoadTrait.  This will
+			// expose the base LoadTrait, which we can then use to do
 			// the actual load.
-			removeTrait(MediaTraitType.LOADABLE);
+			removeTrait(MediaTraitType.LOAD);
 			
-			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			if (loadable != null)
+			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+			if (loadTrait != null)
 			{
-				loadable.load();
+				loadTrait.load();
 			}
 		}
 		
-		private var loadableTrait:LoadableTrait;
+		private var loadTrait:LoadTrait;
 		private var _continueLoadOnFailure:Boolean;
 				
 		private static const ERROR_MISSING_CAPTION_METADATA:String = "Media Element is missing Captioning metadata";

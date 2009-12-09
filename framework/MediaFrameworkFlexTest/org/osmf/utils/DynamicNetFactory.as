@@ -24,6 +24,7 @@ package org.osmf.utils
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -37,9 +38,11 @@ package org.osmf.utils
 			super(useMockObjects);
 		}
 		
-		override public function createNetLoader():NetLoader
+		override public function createNetLoader(allowConnectionSharing:Boolean = true, factory:NetConnectionFactory = null):NetLoader
 		{
-			return useMockObjects ? new MockDynamicStreamingNetLoader() : new DynamicStreamingNetLoader();
+			return useMockObjects
+				? new MockDynamicStreamingNetLoader(allowConnectionSharing, factory)
+				: new DynamicStreamingNetLoader(allowConnectionSharing, factory);
 		}
 		
 		override public function createNetStream(netConnection:NetConnection):NetStream

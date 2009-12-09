@@ -25,8 +25,7 @@ package org.osmf.utils
 	
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.MediaTraitBase;
 		
 	public class DynamicListenerProxyElement extends ListenerProxyElement
 	{
@@ -38,7 +37,7 @@ package org.osmf.utils
 			this.processTraitEvents = processTraitEvents;
 		}
 		
-		override protected function processTraitAdd(traitType:MediaTraitType):void
+		override protected function processTraitAdd(traitType:String):void
 		{
 			if (processTraitEvents)
 			{
@@ -46,7 +45,7 @@ package org.osmf.utils
 			}
 		}
 
-		override protected function processTraitRemove(traitType:MediaTraitType):void
+		override protected function processTraitRemove(traitType:String):void
 		{
 			if (processTraitEvents)
 			{
@@ -84,14 +83,19 @@ package org.osmf.utils
 			changeEventQueue.push({"loadState":loadState});
 		}
 		
-		override protected function processPlayingChange(playing:Boolean):void
+		override protected function processBytesTotalChange(newBytes:Number):void
 		{
-			changeEventQueue.push({"playing":playing});
+			changeEventQueue.push({"bytesTotal":newBytes});
 		}
 
-		override protected function processPausedChange(paused:Boolean):void
+		override protected function processCanPauseChange(canPause:Boolean):void
 		{
-			changeEventQueue.push({"paused":paused});
+			changeEventQueue.push({"canPause":canPause});
+		}
+
+		override protected function processPlayStateChange(playState:String):void
+		{
+			changeEventQueue.push({"playState":playState});
 		}
 
 		override protected function processSeekingChange(seeking:Boolean, time:Number):void
@@ -129,11 +133,6 @@ package org.osmf.utils
 			changeEventQueue.push({"oldView":oldView, "newView":newView});
 		}
 
-		override protected function processBytesTotalChange(newBytes:Number):void
-		{
-			changeEventQueue.push({"newBytes":newBytes});
-		}
-		
 		private var changeEventQueue:Array;
 		private var processTraitEvents:Boolean;
 	}

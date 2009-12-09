@@ -56,20 +56,20 @@ package org.osmf.net.dynamicstreaming
 		override public function tearDown():void
 		{
 			super.tearDown();
-			_loader.unload(_loadable);
+			_loader.unload(_loadTrait);
 			_loader = null;
-			_loadable = null;
+			_loadTrait = null;
 			_eventDispatcher = null;	
 		}
 		
 		public function testGetNewIndex():void
 		{
-			_loadable =  new LoadableTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
-			_loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
+			_loadTrait =  new LoadTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
+			_loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
-			_loadable.load();	
+			_loadTrait.load();	
 		}
 		
 		private function onLoaded(event:LoadEvent):void
@@ -77,8 +77,8 @@ package org.osmf.net.dynamicstreaming
 			switch (event.loadState)
 			{
 				case LoadState.READY:
-					_loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
-					var loadedContext:ILoadedContext = _loadable.loadedContext;
+					_loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
+					var loadedContext:ILoadedContext = _loadTrait.loadedContext;
 					assertTrue(loadedContext != null);
 					assertTrue(loadedContext is NetLoadedContext);
 					
@@ -145,7 +145,7 @@ package org.osmf.net.dynamicstreaming
 		private var _eventDispatcher:EventDispatcher;
 		private var _netFactory:DynamicNetFactory;
 		private var _loader:NetLoader;
-		private var _loadable:ILoadable;
+		private var _loadTrait:LoadTrait;
 		private var _bufferRule:InsufficientBufferRule;	
 	}
 }

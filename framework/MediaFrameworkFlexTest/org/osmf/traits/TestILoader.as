@@ -79,15 +79,15 @@ package org.osmf.traits
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 						
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoad);
-			loader.load(createILoadable(successfulResource));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoad);
+			loader.load(createLoadTrait(loader, successfulResource));
 		}
 		
 		private function onTestLoad(event:LoaderEvent):void
 		{
 			assertTrue(event.loader == loader);
-			assertTrue(event.loadable != null);
-			assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
 			
 			var reload:Boolean = false;
 			
@@ -96,9 +96,6 @@ package org.osmf.traits
 				case 0:
 					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
-					
-					// Context may be null, but is not required to be null anymore:
-					// assertTrue(event.loadedContext == null);
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
@@ -126,7 +123,7 @@ package org.osmf.traits
 				// Calling load a second time should throw an exception.
 				try
 				{
-					event.loader.load(event.loadable);
+					event.loader.load(event.loadTrait);
 					
 					fail();
 				}
@@ -150,19 +147,19 @@ package org.osmf.traits
 		
 		private function doTestLoadWithFailure():void
 		{
-			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE,onTestLoadWithFailure);
-			var loadable:ILoadable = createILoadable(failedResource);
-			loadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError); 
-			loader.load(loadable);
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithFailure);
+			var loadTrait:LoadTrait = createLoadTrait(loader, failedResource);
+			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError); 
+			loader.load(loadTrait);
 		}
 		
 		private function onTestLoadWithFailure(event:LoaderEvent):void
 		{
 			assertTrue(event.loader == loader);
-			assertTrue(event.loadable != null);
-			assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
 			
 			var reload:Boolean = false;
 			
@@ -171,9 +168,6 @@ package org.osmf.traits
 				case 0:
 					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
-					
-					// Loaded context may be null, but can be non-null too:
-					// assertTrue(event.loadedContext == null);
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
@@ -195,9 +189,6 @@ package org.osmf.traits
 										
 					assertTrue(event.oldState == LoadState.LOAD_ERROR);
 					assertTrue(event.newState == LoadState.LOADING);
-					
-					// Loaded context may be null, but can be non-null too:
-					// assertTrue(event.loadedContext == null);
 					break;
 				case 3:
 					assertTrue(doTwice);
@@ -218,7 +209,7 @@ package org.osmf.traits
 			if (reload)
 			{
 				// Reloading should repeat the failure.
-				event.loader.load(event.loadable);
+				event.loader.load(event.loadTrait);
 			}
 		}
 		
@@ -252,7 +243,7 @@ package org.osmf.traits
 		{
 			try
 			{
-				loader.load(createILoadable(unhandledResource));
+				loader.load(createLoadTrait(loader, unhandledResource));
 				
 				fail();
 			}
@@ -274,17 +265,17 @@ package org.osmf.traits
 		
 		private function doTestUnload():void
 		{
-			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE,onTestUnload);
-			loader.load(createILoadable(successfulResource));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE,onTestUnload);
+			loader.load(createLoadTrait(loader, successfulResource));
 		}
 		
 		private function onTestUnload(event:LoaderEvent):void
 		{
 			assertTrue(event.loader == loader);
-			assertTrue(event.loadable != null);
-			assertTrue(event.type == LoaderEvent.LOADABLE_STATE_CHANGE);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
 			
 			var doUnload:Boolean = false;
 			
@@ -293,9 +284,6 @@ package org.osmf.traits
 				case 0:
 					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
-					
-					// Loaded context may be null, but can be non-null too:
-					// assertTrue(event.loadedContext == null);
 					break;
 				case 1:
 					assertTrue(event.oldState == LoadState.LOADING);
@@ -330,7 +318,7 @@ package org.osmf.traits
 			
 			if (doUnload)
 			{
-				event.loader.unload(event.loadable);
+				event.loader.unload(event.loadTrait);
 				
 				if (doTwice)
 				{
@@ -338,7 +326,7 @@ package org.osmf.traits
 					// (but the first unload will complete).
 					try
 					{
-						event.loader.unload(event.loadable);
+						event.loader.unload(event.loadTrait);
 						
 						fail();
 					}
@@ -353,7 +341,7 @@ package org.osmf.traits
 		{
 			try
 			{
-				loader.unload(createILoadable(unhandledResource));
+				loader.unload(createLoadTrait(loader, unhandledResource));
 				
 				fail();
 			}
@@ -364,7 +352,7 @@ package org.osmf.traits
 		
 		//---------------------------------------------------------------------
 		
-		final protected function createILoader():ILoader
+		protected final function createILoader():ILoader
 		{
 			return createInterfaceObject() as ILoader; 
 		}
@@ -374,14 +362,14 @@ package org.osmf.traits
 			_loader = value;
 		}
 		
-		final protected function get loader():ILoader
+		protected final function get loader():ILoader
 		{
 			return _loader;
 		}
 		
-		protected function createILoadable(resource:IMediaResource=null):ILoadable
+		protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
-			throw new Error("Subclass must override createILoadable!");
+			return new LoadTrait(loader, resource);
 		}
 		
 		protected function get successfulResource():IMediaResource

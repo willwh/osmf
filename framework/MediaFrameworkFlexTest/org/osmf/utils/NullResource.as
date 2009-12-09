@@ -28,7 +28,7 @@ package org.osmf.utils
 	{
 		public function get metadata():Metadata
 		{
-			if(_metadata == null)
+			if (_metadata == null)
 			{
 				_metadata = new Metadata();
 			}

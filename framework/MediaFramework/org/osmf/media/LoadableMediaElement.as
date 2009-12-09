@@ -22,15 +22,14 @@
 package org.osmf.media
 {
 	import org.osmf.events.LoadEvent;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * A base implementation of a MediaElement that has the ILoadable trait.
+	 * A base implementation of a MediaElement that has a LoadTrait.
 	 **/
 	public class LoadableMediaElement extends MediaElement
 	{
@@ -64,13 +63,23 @@ package org.osmf.media
 	    {
 			super.resource = value;
 			
-			updateLoadable();
+			updateLoadTrait();
 		}
 		
 		// Protected
 		//
 		
 		/**
+		 * Subclasses can override this method to return a custom LoadTrait
+		 * subclass.
+		 **/
+		protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		{
+			return new LoadTrait(loader, resource);
+		}
+		
+		/**
+		 * 
 		 * Subclasses can override this method to do processing when the media
 		 * element enters the LOADING state.
 		 **/
@@ -122,33 +131,33 @@ package org.osmf.media
 			}
 		}
 
-		private function updateLoadable():void
+		private function updateLoadTrait():void
 		{
-			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			if (loadable != null)
+			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+			if (loadTrait != null)
 			{
-				// Remove (and unload) any existing loadable.
-				loadable.removeEventListener
+				// Remove (and unload) any existing LoadTrait.
+				loadTrait.removeEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onLoadStateChange
 					);
 					
-				if (loadable.loadState == LoadState.READY)
+				if (loadTrait.loadState == LoadState.READY)
 				{	    			   
-					loadable.unload();	 
+					loadTrait.unload();	 
 				}
 				
-				removeTrait(MediaTraitType.LOADABLE);
+				removeTrait(MediaTraitType.LOAD);
 			}
 			
-			// Add a new loadable for the current resource.
-			loadable = new LoadableTrait(loader, resource);
-			loadable.addEventListener
+			// Add a new LoadTrait for the current resource.
+			loadTrait = createLoadTrait(loader, resource);
+			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
-				, onLoadStateChange, false, 10 //Using a higher priority event listener in order to process load state changes before clients.
+				, onLoadStateChange, false, 10 // Using a higher priority event listener in order to process load state changes before clients.
 				);
 			
-			addTrait(MediaTraitType.LOADABLE, loadable);
+			addTrait(MediaTraitType.LOAD, loadTrait);
 		}
 
 		private var loader:ILoader;

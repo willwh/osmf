@@ -27,8 +27,7 @@ package org.osmf.examples.text
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	public class TextElement extends MediaElement
 	{
@@ -73,22 +72,18 @@ package org.osmf.examples.text
             {
             	textField.text = text;
 
-				if (viewable == null)
+				if (viewTrait == null)
 				{
-  					viewable = new ViewableTrait();
-					viewable.view = textField;
-					spatial = new SpatialTrait();
+  					viewTrait = new TextViewTrait(textField);
 			
-					addTrait(MediaTraitType.VIEWABLE, viewable);
-					addTrait(MediaTraitType.SPATIAL, spatial);
+					addTrait(MediaTraitType.VIEW, viewTrait);
 				}
 				
-				spatial.setDimensions(textField.width, textField.height);
+				viewTrait.setDimensions(textField.width, textField.height);
             }
 		}
 		
-		private var viewable:ViewableTrait;
-		private var spatial:SpatialTrait;
+		private var viewTrait:TextViewTrait;
 		private var _text:String;
 	}
 }

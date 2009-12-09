@@ -31,7 +31,8 @@ package org.osmf.model
 	import org.osmf.net.NetLoader;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
-	import org.osmf.traits.IPausable;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -76,10 +77,10 @@ package org.osmf.model
 			// Any time the user clicks on the overlay SWF, we pause the reference.
 			if (reference != null)
 			{
-				var pausable:IPausable = reference.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-				if (pausable != null && pausable.paused == false)
+				var playTrait:PlayTrait = reference.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				if (playTrait != null && playTrait.playState == PlayState.PLAYING)
 				{
-					pausable.pause();
+					playTrait.pause();
 				}
 			}
 		}

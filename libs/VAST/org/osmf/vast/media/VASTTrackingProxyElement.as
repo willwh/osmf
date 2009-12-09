@@ -30,8 +30,9 @@ package org.osmf.vast.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ListenerProxyElement;
 	import org.osmf.tracking.Beacon;
-	import org.osmf.traits.ITemporal;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
@@ -68,7 +69,7 @@ package org.osmf.vast.media
 
 			if (events == null)
 			{
-				throw new ArgumentError(OSMFStrings.INVALID_PARAM);
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		
@@ -89,9 +90,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 **/
-		override protected function processPlayingChange(playing:Boolean):void
+		override protected function processPlayStateChange(playState:String):void
 		{
-			if (playing)
+			if (playState == PlayState.PLAYING)
 			{
 				playheadTimer.start();
 				if (startReached == false)
@@ -101,21 +102,13 @@ package org.osmf.vast.media
 					fireEventOfType(VASTTrackingEventType.START);
 				}
 			}
+			else if (playState == PlayState.PAUSED)
+			{
+				fireEventOfType(VASTTrackingEventType.PAUSE);
+			}
 			else
 			{
 				playheadTimer.stop();
-			}
-		}
-
-		
-		/**
-		 * @private
-		 **/
-		override protected function processPausedChange(paused:Boolean):void
-		{
-			if (paused)
-			{
-				fireEventOfType(VASTTrackingEventType.PAUSE);
 			}
 		}
 		
@@ -191,11 +184,11 @@ package org.osmf.vast.media
 		
 		private function get percentPlayback():Number
 		{
-			var temporal:ITemporal = getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			if (temporal != null)
+			var timeTrait:TimeTrait = getTrait(MediaTraitType.TIME) as TimeTrait;
+			if (timeTrait != null)
 			{
-				var duration:Number = temporal.duration;
-				return duration > 0 ? 100 * temporal.currentTime / duration : 0;
+				var duration:Number = timeTrait.duration;
+				return duration > 0 ? 100 * timeTrait.currentTime / duration : 0;
 			}
 			
 			return 0;

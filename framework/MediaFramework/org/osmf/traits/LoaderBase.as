@@ -29,7 +29,7 @@ package org.osmf.traits
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Dispatched when the state of an ILoadable being loaded or unloaded by
+	 * Dispatched when the state of an LoadTrait being loaded or unloaded by
 	 * the ILoader has changed.
 	 *
 	 * @eventType org.osmf.events.LoaderEvent.STATE_CHANGE
@@ -59,33 +59,33 @@ package org.osmf.traits
 		 * If this method is overridden, the subclass must call super.load() in order
 		 * to validate the load.
 		 **/
-		public function load(loadable:ILoadable):void
+		public function load(loadTrait:LoadTrait):void
 		{
-			validateLoad(loadable);
+			validateLoad(loadTrait);
 		}
 		
 		/**
 		 * If this method is overridden, the subclass must call super.unload() in order
-		 * to validate the unload.  The Loadable's loadState is set to LoadState.UNINITIALIZED.
+		 * to validate the unload.  The LoadTrait's loadState is set to LoadState.UNINITIALIZED.
 		 **/
-		public function unload(loadable:ILoadable):void
+		public function unload(loadTrait:LoadTrait):void
 		{
-			validateUnload(loadable);		
+			validateUnload(loadTrait);		
 		}
 				
 		// Protected
 		
 		/**
-		 * Updates the given loadable with the given info, dispatching the
+		 * Updates the given LoadTrait with the given info, dispatching the
 		 * appropriate events.
 		 * 
-		 * @param loadable The loadable to update.
-		 * @param newState The new LoadState of the loadable.
-		 * @param loadedContext The loaded context (if any) of the loadable.
+		 * @param loadTrait The LoadTrait to update.
+		 * @param newState The new LoadState of the LoadTrait.
+		 * @param loadedContext The loaded context (if any) of the LoadTrait.
 		 **/
-		protected function updateLoadable(loadable:ILoadable, newState:String, loadedContext:ILoadedContext=null):void
+		protected function updateLoadTrait(loadTrait:LoadTrait, newState:String, loadedContext:ILoadedContext=null):void
 		{
-			if (newState != loadable.loadState)
+			if (newState != loadTrait.loadState)
 			{
 				if (newState == LoadState.READY && loadedContext == null)
 				{
@@ -96,18 +96,15 @@ package org.osmf.traits
 					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NOT_NULL));
 				}
 				
-				var oldState:String = loadable.loadState;
-				
-				loadable.loadedContext = loadedContext;
-				loadable.loadState = newState;
+				var oldState:String = loadTrait.loadState;
 				
 				dispatchEvent
 					( new LoaderEvent
-						( LoaderEvent.LOADABLE_STATE_CHANGE
+						( LoaderEvent.LOAD_STATE_CHANGE
 						, false
 						, false
 						, this
-						, loadable
+						, loadTrait
 						, oldState
 						, newState
 						, loadedContext
@@ -117,25 +114,23 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Validates that the given ILoadable can be loaded.  Subclasses
-		 * should call this method as the first step in their
-		 * <code>load</code> implementation.
+		 * Validates that the given LoadTrait can be loaded.
 		 **/
-		private function validateLoad(loadable:ILoadable):void
+		private function validateLoad(loadTrait:LoadTrait):void
 		{
-			if (loadable == null)
+			if (loadTrait == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			if (loadable.loadState == LoadState.READY)
+			if (loadTrait.loadState == LoadState.READY)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_READY));
 			}
-			if (loadable.loadState == LoadState.LOADING)
+			if (loadTrait.loadState == LoadState.LOADING)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));
 			}
-			if (canHandleResource(loadable.resource) == false)
+			if (canHandleResource(loadTrait.resource) == false)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
@@ -143,25 +138,23 @@ package org.osmf.traits
 
 		
 		/**
-		 * Validates that the given ILoadable can be unloaded.  Subclasses
-		 * should call this method as the first step in their
-		 * <code>unload</code> implementation.
+		 * Validates that the given LoadTrait can be unloaded.
 		 **/
-		private function validateUnload(loadable:ILoadable):void
+		private function validateUnload(loadTrait:LoadTrait):void
 		{
-			if (loadable == null)
+			if (loadTrait == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			if (loadable.loadState == LoadState.UNLOADING)
+			if (loadTrait.loadState == LoadState.UNLOADING)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));
 			}
-			if (loadable.loadState == LoadState.UNINITIALIZED)
+			if (loadTrait.loadState == LoadState.UNINITIALIZED)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 			}
-			if (canHandleResource(loadable.resource) == false)
+			if (canHandleResource(loadTrait.resource) == false)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}

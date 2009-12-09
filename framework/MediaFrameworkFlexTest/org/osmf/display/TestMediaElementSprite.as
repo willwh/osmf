@@ -25,13 +25,12 @@ package org.osmf.display
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.DimensionEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IViewable;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 	import org.osmf.utils.URL;
@@ -45,11 +44,11 @@ package org.osmf.display
 			var element2:VideoElement = new VideoElement(new MockNetLoader(), new URLResource(new URL("http://example.com/")));
 			
 			sprite.element = element;
-			(element.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();	
-			(element2.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();	
+			(element.getTrait(MediaTraitType.LOAD) as LoadTrait).load();	
+			(element2.getTrait(MediaTraitType.LOAD) as LoadTrait).load();	
 						
-			var view:DisplayObject = (element.getTrait(MediaTraitType.VIEWABLE) as IViewable).view;
-			var view2:DisplayObject = (element2.getTrait(MediaTraitType.VIEWABLE) as IViewable).view;
+			var view:DisplayObject = (element.getTrait(MediaTraitType.VIEW) as ViewTrait).view;
+			var view2:DisplayObject = (element2.getTrait(MediaTraitType.VIEW) as ViewTrait).view;
 			
 			var w:Number = 300;
 			var h:Number = 225;
@@ -65,15 +64,15 @@ package org.osmf.display
 			assertEquals(w, view.width);
 			assertEquals(h, view.height);	
 			
-			//Make sure the width and height are differrent than the available.
+			// Make sure the width and height are differrent than the available.
 			view2.width = 80;
 			view2.height = 80;
 			
-			sprite.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
+			sprite.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
 			
 			var dimsChanged:Boolean = false;
 			
-			function onDimensions(event:DimensionEvent):void
+			function onDimensions(event:ViewEvent):void
 			{
 				assertFalse(dimsChanged); //call only once
 				assertEquals(event.newHeight, 40);
@@ -84,22 +83,9 @@ package org.osmf.display
 			sprite.element = element2;
 			assertEquals(sprite.element, element2);
 			
-			//These don't take since the video class throws out the changes to width and height.			
+			// These don't take since the video class throws out the changes to width and height.			
 			assertEquals(w, view2.width);
 			assertEquals(h, view2.height);
-			
-			(element2.getTrait(MediaTraitType.SPATIAL) as SpatialTrait).setDimensions( 40, 40);
-			
-			assertTrue(dimsChanged);			
-				
-			sprite.element = null;
-			
-			//Ensure we don't fire again.	
-			(element2.getTrait(MediaTraitType.SPATIAL) as SpatialTrait).setDimensions( 40, 40);		
 		}
-		
-		
-		
-		
 	}
 }

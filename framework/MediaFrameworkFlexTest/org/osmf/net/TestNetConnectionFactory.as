@@ -31,8 +31,7 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
 	import org.osmf.netmocker.MockNetNegotiator;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.TestConstants;
 
@@ -63,14 +62,14 @@ package org.osmf.net
 		{
 			var factory:NetConnectionFactory = createNetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadable:ILoadable = new LoadableTrait(null, SUCCESSFUL_RESOURCE);
-			factory.create(loadable,sharing);
+			var loadTrait:LoadTrait = new LoadTrait(null, SUCCESSFUL_RESOURCE);
+			factory.create(loadTrait,sharing);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATED);
 				assertStrictlyEquals(event.shareable,sharing);
 				assertTrue(event.netConnection.connected);
-				assertStrictlyEquals(event.loadable,loadable);
+				assertStrictlyEquals(event.loadTrait,loadTrait);
 			}
 		}
 		
@@ -78,14 +77,14 @@ package org.osmf.net
 		{
 			var factory:NetConnectionFactory = createNetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadable:ILoadable = new LoadableTrait(null, SUCCESSFUL_RESOURCE);
-			factory.create(loadable,sharing);
+			var loadTrait:LoadTrait = new LoadTrait(null, SUCCESSFUL_RESOURCE);
+			factory.create(loadTrait,sharing);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATED);
 				assertStrictlyEquals(event.shareable,sharing);
 				assertTrue(event.netConnection.connected);
-				assertStrictlyEquals(event.loadable,loadable);
+				assertStrictlyEquals(event.loadTrait,loadTrait);
 				var nc:NetConnection = event.netConnection;
 				factory.closeNetConnectionByResource(SUCCESSFUL_RESOURCE);
 				assertFalse(nc.connected);

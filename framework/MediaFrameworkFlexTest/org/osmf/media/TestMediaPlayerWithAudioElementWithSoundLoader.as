@@ -47,7 +47,7 @@ package org.osmf.media
 			return new AudioElement(new SoundLoader(), resource as IURLResource);
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -64,17 +64,16 @@ package org.osmf.media
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.LOADABLE
-				   , MediaTraitType.PAUSABLE
-				   , MediaTraitType.PLAYABLE
-				   , MediaTraitType.SEEKABLE
-				   , MediaTraitType.TEMPORAL
+			return [ MediaTraitType.AUDIO
+				   , MediaTraitType.LOAD
+				   , MediaTraitType.PLAY
+				   , MediaTraitType.SEEK
+				   , MediaTraitType.TIME
 				   ];
 		}
 		

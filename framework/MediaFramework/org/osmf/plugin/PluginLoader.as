@@ -28,7 +28,7 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.Version;
@@ -75,8 +75,8 @@ package org.osmf.plugin
 		}
 
 		/**
-		 * Loads the plugin into the ILoadable.
-		 * On success sets the LoadState of the ILOadable to LOADING, 
+		 * Loads the plugin into the LoadTrait.
+		 * On success sets the LoadState of the LoadTrait to LOADING, 
 		 * on failure to LOAD_ERROR.
 		 * @param pluginInfo IPluginInfo instance to use for this load operation.
 		 *  
@@ -85,7 +85,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		protected function loadFromPluginInfo(loadable:ILoadable, pluginInfo:IPluginInfo, loader:Loader = null):void
+		protected function loadFromPluginInfo(loadTrait:LoadTrait, pluginInfo:IPluginInfo, loader:Loader = null):void
 		{
 			var invalidImplementation:Boolean = false;
 			
@@ -110,7 +110,7 @@ package org.osmf.plugin
 						
 						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 
 						
-						updateLoadable(loadable, LoadState.READY, loadedContext);
+						updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
 					}
 					catch (error:RangeError)
 					{
@@ -121,8 +121,8 @@ package org.osmf.plugin
 				else
 				{
 					// Version not supported by plugin.
-					updateLoadable(loadable, LoadState.LOAD_ERROR);
-					loadable.dispatchEvent
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+					loadTrait.dispatchEvent
 						( new MediaErrorEvent
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
@@ -140,8 +140,8 @@ package org.osmf.plugin
 			
 			if (invalidImplementation)
 			{
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false

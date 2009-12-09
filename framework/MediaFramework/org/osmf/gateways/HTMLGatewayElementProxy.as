@@ -25,7 +25,7 @@ package org.osmf.gateways
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.traits.LoadState;
+	import org.osmf.traits.PlayState;
 
 	/**
 	 * Utility class deriving from ListenerProxyElement, that captures events and
@@ -45,16 +45,17 @@ package org.osmf.gateways
 		
 		// Playable
 		
-		override protected function processPlayingChange(playing:Boolean):void
+		override protected function processPlayStateChange(playState:String):void
 		{
-			ExternalInterface.call(elementScriptPath + "__onPlayingChange__", playing);
-		}
-		
-		// Pausable
-		
-		override protected function processPausedChange(paused:Boolean):void
-		{
-			ExternalInterface.call(elementScriptPath + "__onPausedChange__", paused);
+			// TODO: Integrate playState changes into JS API.
+			if (playState == PlayState.PLAYING)
+			{
+				ExternalInterface.call(elementScriptPath + "__onPlayingChange__", true);
+			}
+			else if (playState == PlayState.PAUSED)
+			{
+				ExternalInterface.call(elementScriptPath + "__onPausedChange__", true);
+			}
 		}
 		
 		// Temporal

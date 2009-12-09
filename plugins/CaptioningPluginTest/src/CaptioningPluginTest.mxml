@@ -29,11 +29,11 @@
 		<![CDATA[
 			import org.osmf.media.MediaPlayerState;
 			import org.osmf.events.MediaPlayerStateChangeEvent;
-			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.LoadTrait;
 			import mx.controls.Alert;
 
 			import org.osmf.events.MediaElementEvent;
-			import org.osmf.events.DimensionEvent;
+			import org.osmf.events.ViewEvent;
 			import org.osmf.media.MediaInfo;
 			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.metadata.ObjectIdentifier;
@@ -150,7 +150,7 @@
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekEnd);
@@ -241,7 +241,7 @@
 				}
 			}
 			
-			private function onDimensionChange(event:DimensionEvent):void 
+			private function onDimensionChange(event:ViewEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
@@ -309,7 +309,7 @@
    			{
    				switch (event.traitType)
    				{
-   					case MediaTraitType.SEEKABLE:
+   					case MediaTraitType.SEEK:
    						seekBar.enabled = seekBar.visible = true;
    						break;
    				}	
@@ -449,7 +449,7 @@
    									
 			private function onClickPlayBtn(event:Event):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.pausable)
+				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
 					mediaPlayerWrapper.mediaPlayer.pause();
@@ -503,12 +503,12 @@
 			private function unloadMedia():void
 			{
 				var mediaElement:MediaElement = mediaPlayerWrapper.element;
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOADABLE))
+				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
 				{
-					var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					if (loadable.loadState == LoadState.READY)
+					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+					if (loadTrait.loadState == LoadState.READY)
 					{
-						loadable.unload();
+						loadTrait.unload();
 					}
 				}
 				

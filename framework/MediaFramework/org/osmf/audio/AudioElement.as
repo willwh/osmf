@@ -24,15 +24,15 @@ package org.osmf.audio
 	import flash.net.NetStream;
 	
 	import org.osmf.media.DefaultTraitResolver;
+	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.net.*;
-	import org.osmf.traits.IDownloadable;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.ModifiableTimeTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
    /** 
@@ -41,8 +41,6 @@ package org.osmf.audio
 	 * <p>AudioElement can load and present any MP3 or AAC file.
 	 * It supports MP3 files over HTTP, as well as audio-only streams from
 	 * Flash Media Server.</p>
-     * <p>The AudioElement has IAudible, IBufferable, ILoadable, IPausable, IPlayable, ISeekable,
-     * and ITemporal traits.</p>
 	 * <p>The basic steps for creating and using an AudioElement are:
 	 * <ol>
 	 * <li>Create a new IURLResource pointing to the URL of the audio stream or file
@@ -52,13 +50,13 @@ package org.osmf.audio
 	 * <li>Create the new AudioElement, 
 	 * passing the ILoader and IURLResource
 	 * as parameters.</li>
-	 * <li>Get the AudioElement's ILoadable trait using the 
-	 * <code>MediaElement.getTrait(LOADABLE)</code> method.</li>
-	 * <li>Load the audio using the ILoadable's <code>load()</code> method.</li>
+	 * <li>Get the AudioElement's LoadTrait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
+	 * <li>Load the audio using the LoadTrait's <code>load()</code> method.</li>
 	 * <li>Control the media using the AudioElement's traits, and handle its trait
 	 * change events.</li>
-	 * <li>When done with the AudioElement, unload the audio using the  
-	 * using the ILoadable's <code>unload()</code> method.</li>
+	 * <li>When done with the AudioElement, unload the audio
+	 * using the LoadTrait's <code>unload()</code> method.</li>
 	 * </ol>
 	 * </p>
 	 * 
@@ -95,11 +93,11 @@ package org.osmf.audio
 		}
 		
 		/**
-       	 * Defines the duration that the element's temporal trait will expose when the
+       	 * Defines the duration that the element's TimeTrait will expose when the
        	 * element's content is unloaded.
        	 * 
        	 * Setting this property to a positive value results in the element becoming
-       	 * temporal. Any other value will remove the element's temporality, unless the
+       	 * temporal. Any other value will remove the element's TimeTrait, unless the
        	 * loaded content is exposing a duration. 
        	 * 
        	 *  @langversion 3.0
@@ -111,49 +109,61 @@ package org.osmf.audio
 		{
 			if (isNaN(value) || value < 0)
 			{
-				if (defaultTemporalTrait != null)
-				// Remove the default trait if the default duration
-				// gets set to not a number:
-				removeTraitResolver(MediaTraitType.TEMPORAL);
-				defaultTemporalTrait = null;
+				if (defaultTimeTrait != null)
+				{
+					// Remove the default trait if the default duration
+					// gets set to not a number:
+					removeTraitResolver(MediaTraitType.TIME);
+					defaultTimeTrait = null;
+				}
 			}
 			else 
 			{
-				if (defaultTemporalTrait == null)
+				if (defaultTimeTrait == null)
 				{		
 					// Add the default trait if when default duration
 					// gets set:
-					defaultTemporalTrait = new TemporalTrait();
+					defaultTimeTrait = new ModifiableTimeTrait();
 		       		addTraitResolver
-		       			( MediaTraitType.TEMPORAL
+		       			( MediaTraitType.TIME
 		       			, new DefaultTraitResolver
-		       				( MediaTraitType.TEMPORAL
-		       				, defaultTemporalTrait
+		       				( MediaTraitType.TIME
+		       				, defaultTimeTrait
 		       				)
 		       			);
 		  		}
 		  		
-		  		defaultTemporalTrait.duration = value; 
+		  		defaultTimeTrait.duration = value; 
 			}	
 		}
 		
 		public function get defaultDuration():Number
 		{
-			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
+			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
 		}
 		
 		/**
-		 *  @private 
+		 * @private
+		 **/
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		{
+			return 	loader is NetLoader
+				  ? new NetStreamLoadTrait(loader, resource)
+				  : new SoundLoadTrait(loader, resource);
+		}
+
+		
+		/**
+		 * @private 
 		 */ 
 		override protected function processReadyState():void
 		{
-			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
 
-			var seekable:SeekableTrait;
-			var temporal:TemporalTrait;
+			var timeTrait:TimeTrait;
 			
 			// Different paths for streaming vs. progressive.
-			var netLoadedContext:NetLoadedContext = loadable.loadedContext as NetLoadedContext;
+			var netLoadedContext:NetLoadedContext = loadTrait.loadedContext as NetLoadedContext;
 			if (netLoadedContext)
 			{
 				// Streaming Audio
@@ -161,63 +171,40 @@ package org.osmf.audio
 				
 				var stream:NetStream = netLoadedContext.stream;
 				
-				addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, resource));
-				seekable = new NetStreamSeekableTrait(stream);
-				temporal = new NetStreamTemporalTrait(stream, resource);
-				seekable.temporal = temporal;
-				addTrait(MediaTraitType.SEEKABLE, seekable);
-				addTrait(MediaTraitType.TEMPORAL, temporal);
-				addTrait(MediaTraitType.PAUSABLE, new NetStreamPausableTrait(this, stream));
-				addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));	
-				addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
+				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
+				timeTrait = new NetStreamTimeTrait(stream, resource);
+				addTrait(MediaTraitType.TIME, timeTrait);
+				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
+				addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));	
+				addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
 			}
 			else
 			{
 				// Progressive Audio
 				//
 				
-				var soundLoadedContext:SoundLoadedContext = loadable.loadedContext as SoundLoadedContext;
+				var soundLoadedContext:SoundLoadedContext = loadTrait.loadedContext as SoundLoadedContext;
 
 				soundAdapter = new SoundAdapter(this, soundLoadedContext.sound);
 				
-				addTrait(MediaTraitType.PLAYABLE, new AudioPlayableTrait(this, soundAdapter));
-				seekable = new AudioSeekableTrait(soundAdapter);				
-				temporal = new AudioTemporalTrait(soundAdapter);
-				seekable.temporal = temporal;
-				addTrait(MediaTraitType.SEEKABLE, seekable);
-				addTrait(MediaTraitType.TEMPORAL, temporal);
-				addTrait(MediaTraitType.PAUSABLE, new AudioPausableTrait(this, soundAdapter));
-				addTrait(MediaTraitType.AUDIBLE, new AudioAudibleTrait(soundAdapter));	
+				addTrait(MediaTraitType.PLAY, new AudioPlayTrait(soundAdapter));
+				timeTrait = new AudioTimeTrait(soundAdapter);
+				addTrait(MediaTraitType.TIME, timeTrait);
+				addTrait(MediaTraitType.SEEK, new AudioSeekTrait(timeTrait, soundAdapter));
+				addTrait(MediaTraitType.AUDIO, new AudioAudioTrait(soundAdapter));	
 			}
 		}	
-		
-		/**
-		 * @private
-		 */
-		override protected function processLoadingState():void
-		{
-			var context:SoundLoadedContext
-				= (getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext as SoundLoadedContext;
 				
-			if (context != null && context.sound != null)
-			{
-				var downloadable:IDownloadable = new SoundDownloadableTrait(context.sound);
-				addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
-			}
-		} 
-		
 		/**
 		 * @private 
 		 */ 
 		override protected function processUnloadingState():void
 		{
-			removeTrait(MediaTraitType.PLAYABLE);
-			removeTrait(MediaTraitType.SEEKABLE);
-			removeTrait(MediaTraitType.TEMPORAL);
-			removeTrait(MediaTraitType.PAUSABLE);
-			removeTrait(MediaTraitType.AUDIBLE);
-			removeTrait(MediaTraitType.BUFFERABLE);
-			removeTrait(MediaTraitType.DOWNLOADABLE);
+			removeTrait(MediaTraitType.PLAY);
+			removeTrait(MediaTraitType.SEEK);
+			removeTrait(MediaTraitType.TIME);
+			removeTrait(MediaTraitType.AUDIO);
+			removeTrait(MediaTraitType.BUFFER);
 
 			if (soundAdapter != null)
 			{
@@ -228,6 +215,6 @@ package org.osmf.audio
 		}	
 					
 		private var soundAdapter:SoundAdapter;
-		private var defaultTemporalTrait:TemporalTrait;
+		private var defaultTimeTrait:ModifiableTimeTrait;
 	}
 }

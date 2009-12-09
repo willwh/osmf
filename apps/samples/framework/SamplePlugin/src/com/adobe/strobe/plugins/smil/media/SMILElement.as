@@ -31,7 +31,7 @@ package com.adobe.strobe.plugins.smil.media
 	import org.osmf.media.IURLResource;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	public class SMILElement extends SerialElement
@@ -49,14 +49,14 @@ package com.adobe.strobe.plugins.smil.media
 				super.resource = value;
 				_resource2 = value;
 				
-				loadableTrait = new LoadableTrait(loader, value);
+				loadTrait = new LoadTrait(loader, value);
 				
-				loadableTrait.addEventListener
+				loadTrait.addEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onLoadStateChange
 					);
 				
-				addTrait(MediaTraitType.LOADABLE,loadableTrait); 
+				addTrait(MediaTraitType.LOAD, loadTrait); 
 			}
 		}
 		
@@ -99,7 +99,7 @@ package com.adobe.strobe.plugins.smil.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				processLoadedState(loadableTrait.loadedContext as SMILLoadedContext);
+				processLoadedState(loadTrait.loadedContext as SMILLoadedContext);
 			}
 			else if (event.loadState == LoadState.UNLOADING)
 			{
@@ -107,7 +107,7 @@ package com.adobe.strobe.plugins.smil.media
 			}
 		}
 
-		private var loadableTrait:LoadableTrait
+		private var loadTrait:LoadTrait;
 		private var loader:ILoader;
 		private var _resource2:IMediaResource;
 	}

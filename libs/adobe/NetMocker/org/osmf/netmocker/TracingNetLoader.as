@@ -29,7 +29,7 @@ package org.osmf.netmocker
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetNegotiator;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * A NetLoader which outputs all NetStatusEvents to the console.
@@ -53,7 +53,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadable:ILoadable):NetStream
+	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 	    {
 			var ns:NetStream = new NetStream(connection);
 			ns.client = new NetClient();

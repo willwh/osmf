@@ -25,29 +25,24 @@ package org.osmf.proxies
 	
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
-	import org.osmf.traits.IAudible;
-	import org.osmf.traits.IBufferable;
-	import org.osmf.traits.IDownloadable;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ISeekable;
-	import org.osmf.traits.ISpatial;
-	import org.osmf.traits.ISwitchable;
-	import org.osmf.traits.ITemporal;
-	import org.osmf.traits.IViewable;
+	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.DynamicStreamTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	/**
 	 * A ProxyElement which listens to all events from its wrapped MediaElement,
@@ -69,7 +64,7 @@ package org.osmf.proxies
 		 **/
 		override public function set wrappedElement(value:MediaElement):void
 		{
-			var traitType:MediaTraitType;
+			var traitType:String;
 			
 			if (wrappedElement != null)
 			{
@@ -105,7 +100,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processTraitAdd(traitType:MediaTraitType):void
+		protected function processTraitAdd(traitType:String):void
 		{
 		}
 
@@ -113,7 +108,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processTraitRemove(traitType:MediaTraitType):void
+		protected function processTraitRemove(traitType:String):void
 		{
 		}
 	
@@ -169,7 +164,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processPlayingChange(playing:Boolean):void
+		protected function processBytesTotalChange(newBytes:Number):void
 		{
 		}
 
@@ -177,7 +172,15 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processPausedChange(paused:Boolean):void
+		protected function processCanPauseChange(canPause:Boolean):void
+		{
+		}
+
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processPlayStateChange(playState:String):void
 		{
 		}
 
@@ -237,14 +240,6 @@ package org.osmf.proxies
 		{
 		}
 		
-		/**
-		 * Subclasses can override to perform custom processing in response to
-		 * this change.
-		 **/
-		protected function processBytesTotalChange(newBytes:Number):void
-		{
-		}
-
 		// Internals
 		
 		private function onVolumeChange(event:AudioEvent):void
@@ -277,14 +272,19 @@ package org.osmf.proxies
 			processLoadStateChange(event.loadState);
 		}
 		
-		private function onPlayingChange(event:PlayingChangeEvent):void
+		private function onBytesTotalChange(event:LoadEvent):void
 		{
-			processPlayingChange(event.playing);
+			processBytesTotalChange(event.bytes);
+		}
+		
+		private function onCanPauseChange(event:PlayEvent):void
+		{
+			processCanPauseChange(event.canPause);
 		}
 
-		private function onPausedChange(event:PausedChangeEvent):void
+		private function onPlayStateChange(event:PlayEvent):void
 		{
-			processPausedChange(event.paused);
+			processPlayStateChange(event.playState);
 		}
 
 		private function onSeekingChange(event:SeekEvent):void
@@ -302,11 +302,6 @@ package org.osmf.proxies
 			processDurationChange(event.time);
 		}
 
-		private function onDimensionChange(event:DimensionEvent):void
-		{
-			processDimensionChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
-		}
-		
 		private function onSwitchingChange(event:SwitchEvent):void
 		{
 			processSwitchingChange(event.oldState, event.newState, event.detail);
@@ -321,10 +316,10 @@ package org.osmf.proxies
 		{
 			processViewChange(event.oldView, event.newView);
 		}
-		
-		private function onBytesTotalChange(event:LoadEvent):void
+
+		private function onDimensionChange(event:ViewEvent):void
 		{
-			processBytesTotalChange(event.bytes);
+			processDimensionChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
 		}
 
 		// Internals
@@ -344,237 +339,187 @@ package org.osmf.proxies
 			processTraitRemove(event.traitType);
 		}
 		
-		private function processTrait(traitType:MediaTraitType, added:Boolean):void
+		private function processTrait(traitType:String, added:Boolean):void
 		{
 			switch (traitType)
 			{
-				case MediaTraitType.AUDIBLE:
-					toggleAudibleListeners(added);
+				case MediaTraitType.AUDIO:
+					toggleAudioTraitListeners(added);
 					break;
-				case MediaTraitType.BUFFERABLE:
-					toggleBufferableListeners(added);
+				case MediaTraitType.BUFFER:
+					toggleBufferTraitListeners(added);
 					break;
-				case MediaTraitType.LOADABLE:
-					toggleLoadableListeners(added);
+				case MediaTraitType.LOAD:
+					toggleLoadTraitListeners(added);
 					break;
-				case MediaTraitType.PAUSABLE:
-					togglePausableListeners(added);
+				case MediaTraitType.PLAY:
+					togglePlayTraitListeners(added);
 					break;
-				case MediaTraitType.PLAYABLE:
-					togglePlayableListeners(added);
+				case MediaTraitType.SEEK:
+					toggleSeekTraitListeners(added);
 					break;
-				case MediaTraitType.SEEKABLE:
-					toggleSeekableListeners(added);
+				case MediaTraitType.DYNAMIC_STREAM:
+					toggleDynamicStreamTraitListeners(added);
 					break;
-				case MediaTraitType.SPATIAL:
-					toggleSpatialListeners(added);
+				case MediaTraitType.TIME:
+					toggleTimeTraitListeners(added);
 					break;
-				case MediaTraitType.SWITCHABLE:
-					toggleSwitchableListeners(added);
-					break;
-				case MediaTraitType.TEMPORAL:
-					toggleTemporalListeners(added);
-					break;
-				case MediaTraitType.VIEWABLE:
-					toggleViewableListeners(added);
+				case MediaTraitType.VIEW:
+					toggleViewTraitListeners(added);
 					
-					// IViewable is the one trait where the change event is
+					// ViewTrait is the one trait where the change event is
 					// merged with the trait addition/removal event.  So we
 					// forcibly signal a view change event.
-					var viewable:IViewable = wrappedElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-					if (viewable != null && viewable.view != null)
+					var viewTrait:ViewTrait = wrappedElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
+					if (viewTrait != null && viewTrait.view != null)
 					{
-						processViewChange(added ? null : viewable.view, added ? viewable.view : null);
+						processViewChange(added ? null : viewTrait.view, added ? viewTrait.view : null);
 					}
 					break;
-				case MediaTraitType.DOWNLOADABLE:
-					toggleDownloadableListeners(added);
-					break;
 			}
 		}
 		
-		private function toggleAudibleListeners(added:Boolean):void
+		private function toggleAudioTraitListeners(added:Boolean):void
 		{
-			var audible:IAudible = wrappedElement.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			if (audible)
+			var audioTrait:AudioTrait = wrappedElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
+			if (audioTrait)
 			{
 				if (added)
 				{
-					audible.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
-					audible.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
+					audioTrait.addEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audioTrait.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audioTrait.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 				else
 				{
-					audible.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
-					audible.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
-					audible.removeEventListener(AudioEvent.PAN_CHANGE, onPanChange);
+					audioTrait.removeEventListener(AudioEvent.VOLUME_CHANGE, onVolumeChange);
+					audioTrait.removeEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+					audioTrait.removeEventListener(AudioEvent.PAN_CHANGE, onPanChange);
 				}
 			}
 		}
 
-		private function toggleBufferableListeners(added:Boolean):void
+		private function toggleBufferTraitListeners(added:Boolean):void
 		{
-			var bufferable:IBufferable = wrappedElement.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-			if (bufferable)
+			var bufferTrait:BufferTrait = wrappedElement.getTrait(MediaTraitType.BUFFER) as BufferTrait;
+			if (bufferTrait)
 			{
 				if (added)
 				{
-					bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
-					bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+					bufferTrait.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
+					bufferTrait.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 				}
 				else
 				{
-					bufferable.removeEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
-					bufferable.removeEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+					bufferTrait.removeEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
+					bufferTrait.removeEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 				}
 			}
 		}
 		
-		private function toggleLoadableListeners(added:Boolean):void
+		private function toggleLoadTraitListeners(added:Boolean):void
 		{
-			var loadable:ILoadable = wrappedElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			if (loadable)
+			var loadTrait:LoadTrait = wrappedElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			if (loadTrait)
 			{
 				if (added)
 				{
-					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 				else
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.removeEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 				}
 			}
 		}
 
-		private function togglePausableListeners(added:Boolean):void
+		private function togglePlayTraitListeners(added:Boolean):void
 		{
-			var pausable:IPausable = wrappedElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			if (pausable)
+			var playTrait:PlayTrait = wrappedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			if (playTrait)
 			{
 				if (added)
 				{
-					pausable.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
+					playTrait.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, onCanPauseChange);
+					playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 				}
 				else
 				{
-					pausable.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
-				}
-			}
-		}
-	
-		private function togglePlayableListeners(added:Boolean):void
-		{
-			var playable:IPlayable = wrappedElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			if (playable)
-			{
-				if (added)
-				{
-					playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
-				}
-				else
-				{
-					playable.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+					playTrait.removeEventListener(PlayEvent.CAN_PAUSE_CHANGE, onCanPauseChange);
+					playTrait.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 				}
 			}
 		}
 		
-		private function toggleSeekableListeners(added:Boolean):void
+		private function toggleSeekTraitListeners(added:Boolean):void
 		{
-			var seekable:ISeekable = wrappedElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-			if (seekable)
+			var seekTrait:SeekTrait = wrappedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			if (seekTrait)
 			{
 				if (added)
 				{
-					seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 				else
 				{
-					seekable.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekable.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
-				}
-			}
-		}
-
-		private function toggleSpatialListeners(added:Boolean):void
-		{
-			var spatial:ISpatial = wrappedElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-			if (spatial)
-			{
-				if (added)
-				{
-					spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
-				}
-				else
-				{
-					spatial.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
-				}
-			}
-		}
-		private function toggleSwitchableListeners(added:Boolean):void
-		{
-			var switchable:ISwitchable = wrappedElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
-			if (switchable)
-			{
-				if (added)
-				{
-					switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
-					switchable.addEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
-				}
-				else
-				{
-					switchable.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
-					switchable.removeEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
-				}
-			}
-		}
-		private function toggleTemporalListeners(added:Boolean):void
-		{
-			var temporal:ITemporal = wrappedElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			if (temporal)
-			{
-				if (added)
-				{
-					temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
-					temporal.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
-				}
-				else
-				{
-					temporal.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
-					temporal.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+					seekTrait.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekTrait.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
 				}
 			}
 		}
 		
-		private function toggleViewableListeners(added:Boolean):void
+		private function toggleDynamicStreamTraitListeners(added:Boolean):void
 		{
-			var viewable:IViewable = wrappedElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-			if (viewable)
+			var dynamicStreamTrait:DynamicStreamTrait = wrappedElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			if (dynamicStreamTrait)
 			{
 				if (added)
 				{
-					viewable.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
+					dynamicStreamTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					dynamicStreamTrait.addEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
 				}
 				else
 				{
-					viewable.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
+					dynamicStreamTrait.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					dynamicStreamTrait.removeEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
+				}
+			}
+		}
+		private function toggleTimeTraitListeners(added:Boolean):void
+		{
+			var timeTrait:TimeTrait = wrappedElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			if (timeTrait)
+			{
+				if (added)
+				{
+					timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					timeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+				}
+				else
+				{
+					timeTrait.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 			}
 		}
 		
-		private function toggleDownloadableListeners(added:Boolean):void
+		private function toggleViewTraitListeners(added:Boolean):void
 		{
-			var downloadable:IDownloadable = wrappedElement.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-			if (downloadable)
+			var viewTrait:ViewTrait = wrappedElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
+			if (viewTrait)
 			{
 				if (added)
 				{
-					downloadable.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+					viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
+					viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 				else
 				{
-					downloadable.removeEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+					viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
+					viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
 				}
 			}
 		}

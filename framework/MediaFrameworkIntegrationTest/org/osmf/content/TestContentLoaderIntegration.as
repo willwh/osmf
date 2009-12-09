@@ -25,17 +25,17 @@ package org.osmf.content
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
 	public class TestContentLoaderIntegration extends TestILoader
 	{
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
-			return new LoadableTrait(loader, resource);
+			return new LoadTrait(loader, resource);
 		}
 		
 		override protected function get unhandledResource():IMediaResource

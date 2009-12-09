@@ -34,11 +34,11 @@ package org.osmf.image
 	 * The ImageLoader class creates a flash.display.Loader object, 
 	 * which it uses to load and unload an image.
 	 * <p>The image is loaded from the URL provided by the
-	 * <code>resource</code> property of the ILoadable that is passed
+	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the ImageLoader's <code>load()</code> method.</p>
 	 *
 	 * @see ImageElement
-	 * @see org.osmf.traits.ILoadable
+	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.display.Loader
 	 */ 
 	public class ImageLoader extends ContentLoader

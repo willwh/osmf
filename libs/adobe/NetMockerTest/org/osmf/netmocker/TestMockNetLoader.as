@@ -23,8 +23,8 @@ package org.osmf.netmocker
 {
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;
@@ -60,7 +60,7 @@ package org.osmf.netmocker
 			return netLoader;
 		}
 		
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
 			if (resource == successfulResource)
 			{
@@ -74,7 +74,7 @@ package org.osmf.netmocker
 			{
 				netLoader.netConnectionExpectation = NetConnectionExpectation.REJECTED_CONNECTION;
 			}
-			return new LoadableTrait(netLoader, resource);
+			return new LoadTrait(netLoader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource

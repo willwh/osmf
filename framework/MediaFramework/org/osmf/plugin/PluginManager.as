@@ -32,8 +32,8 @@ package org.osmf.plugin
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -134,13 +134,13 @@ package org.osmf.plugin
 					pluginEntry = new PluginEntry(pluginElement, PluginLoadingState.LOADING);
 					_pluginMap[identifier] = pluginEntry;
 					
-					var loadable:ILoadable = pluginElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					if (loadable != null)
+					var loadTrait:LoadTrait = pluginElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+					if (loadTrait != null)
 					{
-						loadable.addEventListener(
+						loadTrait.addEventListener(
 							LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-						loadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-						loadable.load();
+						loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+						loadTrait.load();
 					}
 					else
 					{
@@ -201,14 +201,13 @@ package org.osmf.plugin
 			
 			var identifier:String = getPluginIdentifier(resource);
 			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
-			var loadable:ILoadable;
 			if (pluginEntry != null)
 			{
-				loadable = pluginEntry.pluginElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				if (loadable != null)
+				var loadTrait:LoadTrait = pluginEntry.pluginElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				if (loadTrait != null)
 				{
-					loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					loadable.unload();
+					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.unload();
 				}
 			}
 			else
@@ -220,7 +219,7 @@ package org.osmf.plugin
 			{
 				if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					// When the loadable's state is back to UNINITIALIZED, the unload process 
+					// When the LoadTrait's state is back to UNINITIALIZED, the unload process 
 					// is finished.
 					removePluginEntry(pluginEntry);
 					delete _pluginMap[identifier];

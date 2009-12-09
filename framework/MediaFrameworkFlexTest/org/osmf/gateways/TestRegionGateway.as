@@ -32,8 +32,7 @@ package org.osmf.gateways
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestRegionGateway extends TestCase
@@ -112,21 +111,17 @@ package org.osmf.gateways
 			assertTrue(error is IllegalOperationError);
 		}
 		
-		public function testRegion_ScaleAndAlign():void
+		public function testRegionScaleAndAlign():void
 		{
 			// Child
 			
-			var mediaElement:DynamicMediaElement
-				= new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
+			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 			
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
-			var spatial:SpatialTrait = SpatialTrait(mediaElement.getTrait(MediaTraitType.SPATIAL));
-			spatial.setDimensions(486,60);
-			
-			var viewable:ViewableTrait = ViewableTrait(mediaElement.getTrait(MediaTraitType.VIEWABLE));
-			var viewableSprite:Sprite = new TesterSprite();
-			viewable.view = viewableSprite;
+			var viewSprite:Sprite = new TesterSprite();
+			var viewTrait:ViewTrait = new ViewTrait(viewSprite, 486, 60);
+			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 
@@ -137,11 +132,11 @@ package org.osmf.gateways
 			
 			region.validateContentNow();
 			
-			assertEquals(486, viewableSprite.width);
-			assertEquals(60, viewableSprite.height);
+			assertEquals(486, viewSprite.width);
+			assertEquals(60, viewSprite.height);
 			
-			assertEquals(800/2 - 486/2, viewableSprite.x);
-			assertEquals(80/2 - 60/2, viewableSprite.y);
+			assertEquals(800/2 - 486/2, viewSprite.x);
+			assertEquals(80/2 - 60/2, viewSprite.y);
 		}
 		
 		public function testRegionAttributes():void

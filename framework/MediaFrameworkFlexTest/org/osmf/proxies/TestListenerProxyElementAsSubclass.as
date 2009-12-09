@@ -28,8 +28,12 @@ package org.osmf.proxies
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.traits.*;
+	import org.osmf.utils.DynamicBufferTrait;
 	import org.osmf.utils.DynamicListenerProxyElement;
+	import org.osmf.utils.DynamicLoadTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicTimeTrait;
+	import org.osmf.utils.DynamicViewTrait;
 	import org.osmf.utils.SimpleLoader;
 	
 	public class TestListenerProxyElementAsSubclass extends TestListenerProxyElement
@@ -64,24 +68,24 @@ package org.osmf.proxies
 			
 			assertTrue(events.length == 0);
 						
-			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
+			wrappedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
 			
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["traitTypeAdded"] == MediaTraitType.PLAYABLE);
+			assertTrue(events[0]["traitTypeAdded"] == MediaTraitType.PLAY);
 			
-			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			wrappedElement.doRemoveTrait(MediaTraitType.PLAY);
 			
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["traitTypeRemoved"] == MediaTraitType.PLAYABLE);
+			assertTrue(events[1]["traitTypeRemoved"] == MediaTraitType.PLAY);
 			
-			wrappedElement.doAddTrait(MediaTraitType.DOWNLOADABLE, new DownloadableTrait(10, 100));
+			wrappedElement.doAddTrait(MediaTraitType.LOAD, new LoadTrait(null, null));
 			assertTrue(events.length == 3);
-			assertTrue(events[2]["traitTypeAdded"] == MediaTraitType.DOWNLOADABLE);
+			assertTrue(events[2]["traitTypeAdded"] == MediaTraitType.LOAD);
 			
-			wrappedElement.doRemoveTrait(MediaTraitType.DOWNLOADABLE);
+			wrappedElement.doRemoveTrait(MediaTraitType.LOAD);
 			
 			assertTrue(events.length == 4);
-			assertTrue(events[3]["traitTypeRemoved"] == MediaTraitType.DOWNLOADABLE);
+			assertTrue(events[3]["traitTypeRemoved"] == MediaTraitType.LOAD);
 			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -89,22 +93,22 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
-			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			wrappedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+			wrappedElement.doRemoveTrait(MediaTraitType.PLAY);
 			
 			assertTrue(events.length == 4);
 		}
 		
-		public function testProcessAudibleChanges():void
+		public function testProcessAudioTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.AUDIBLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.AUDIO);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var audible:IAudible = proxyElement.getTrait(MediaTraitType.AUDIBLE) as IAudible;
+			var audible:AudioTrait = proxyElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
 			
 			audible.volume = 0.57;
 			assertTrue(events.length == 1);
@@ -131,26 +135,26 @@ package org.osmf.proxies
 			assertTrue(events.length == 3);
 		}
 
-		public function testProcessBufferableChanges():void
+		public function testProcessBufferTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.BUFFERABLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.BUFFER);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var bufferable:BufferableTrait = proxyElement.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
+			var bufferTrait:DynamicBufferTrait = proxyElement.getTrait(MediaTraitType.BUFFER) as DynamicBufferTrait;
 			
 			// No event for bufferLength changes.
-			bufferable.bufferLength = 5;
+			bufferTrait.bufferLength = 5;
 			assertTrue(events.length == 0);
 
-			bufferable.bufferTime = 15;
+			bufferTrait.bufferTime = 15;
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["newBufferTime"] == 15.0);
 
-			bufferable.buffering = true;
+			bufferTrait.buffering = true;
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["buffering"] == true);
 
@@ -160,31 +164,41 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			bufferable.bufferLength = 1;
-			bufferable.bufferTime = 1;
-			bufferable.buffering = false;
+			bufferTrait.bufferLength = 1;
+			bufferTrait.bufferTime = 1;
+			bufferTrait.buffering = false;
 			
 			assertTrue(events.length == 2);
 		}
 		
-		public function testProcessLoadableChanges():void
+		public function testProcessLoadTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.LOADABLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.LOAD);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var loadable:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var loadTrait:DynamicLoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as DynamicLoadTrait;
 			
-			loadable.load();
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["loadState"] == LoadState.READY);
-			
-			loadable.unload();
+			loadTrait.load();
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["loadState"] == LoadState.UNINITIALIZED);
+			assertTrue(events[0]["loadState"] == LoadState.LOADING);
+			assertTrue(events[1]["loadState"] == LoadState.READY);
+			
+			loadTrait.unload();
+			assertTrue(events.length == 4);
+			assertTrue(events[2]["loadState"] == LoadState.UNLOADING);
+			assertTrue(events[3]["loadState"] == LoadState.UNINITIALIZED);
+			
+			loadTrait.bytesTotal = 88;
+			assertTrue(events.length == 5);
+			assertTrue(events[4]["bytesTotal"] == 88);
+
+			// No events for bytesLoaded.
+			loadTrait.bytesLoaded = 35;
+			assertTrue(events.length == 5);
 
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -192,29 +206,35 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			loadable.load();
+			loadTrait.load();
+			loadTrait.bytesLoaded = 40;
+			loadTrait.bytesTotal = 400;
 			
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 5);
 		}
-
-		public function testProcessPausableChanges():void
+		
+		public function testProcessPlayTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PAUSABLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAY);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var pausable:PausableTrait = proxyElement.getTrait(MediaTraitType.PAUSABLE) as PausableTrait;
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			
-			pausable.pause();
+			playTrait.play();
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["paused"] == true);
+			assertTrue(events[0]["playState"] == PlayState.PLAYING);
 			
-			pausable.resetPaused();
+			playTrait.pause();
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["paused"] == false);
+			assertTrue(events[1]["playState"] == PlayState.PAUSED);
+
+			playTrait.stop();
+			assertTrue(events.length == 3);
+			assertTrue(events[2]["playState"] == PlayState.STOPPED);
 
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -222,57 +242,25 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			pausable.pause();
+			playTrait.play();
+			playTrait.pause();
+			playTrait.stop();
 			
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 3);
 		}
 		
-		public function testProcessPlayableChanges():void
+		public function testProcessSeekTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAYABLE);
+			var proxyElement:DynamicListenerProxyElement = createProxyWithTrait(null) as DynamicListenerProxyElement;
+			var seekTrait:SeekTrait = new SeekTrait(new TimeTrait(3));
+			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.SEEK, seekTrait);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var playable:PlayableTrait = proxyElement.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			
-			playable.play();
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["playing"] == true);
-			
-			playable.resetPlaying();
-			assertTrue(events.length == 2);
-			assertTrue(events[1]["playing"] == false);
-
-			// We shouldn't get any events when we're no longer proxying the
-			// wrapped element.
-			//
-			
-			proxyElement.wrappedElement = null;
-			
-			playable.play();
-			
-			assertTrue(events.length == 2);
-		}
-		
-		public function testProcessSeekingChanges():void
-		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.SEEKABLE);
-			
-			assertTrue(events.length == 0);
-			
-			// Changing properties should result in events.
-			//
-			
-			var seekable:SeekableTrait = proxyElement.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
-			seekable.temporal = new TemporalTrait();
-			TemporalTrait(seekable.temporal).duration = 3;
-			
-			assertTrue(events.length == 0);
-			
-			seekable.seek(1);
+			seekTrait.seek(1);
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["seeking"] == true);
 			assertTrue(events[0]["time"] == 1);
@@ -283,30 +271,30 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			seekable.seek(0);
+			seekTrait.seek(0);
 			
 			assertTrue(events.length == 1);
 		}
 		
-		public function testProcessTemporalChanges():void
+		public function testProcessTimeTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.TEMPORAL);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.TIME);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var temporal:TemporalTrait = proxyElement.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
+			var timeTrait:DynamicTimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
 			
 			assertTrue(events.length == 0);
 			
-			temporal.duration = 3;
+			timeTrait.duration = 3;
 			assertTrue(events.length == 1);
 			assertTrue(isNaN(events[0]["oldDuration"]));
 			assertTrue(events[0]["newDuration"] == 3);
 			
-			temporal.currentTime = 3;
+			timeTrait.currentTime = 3;
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["durationReached"] == true);
 			
@@ -316,53 +304,25 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			temporal.currentTime = 2;
-			temporal.duration = 2;
+			timeTrait.currentTime = 2;
+			timeTrait.duration = 2;
 			
 			assertTrue(events.length == 2);
 		}
-		
-		public function testProcessBytesTotalChange():void
-		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.DOWNLOADABLE);
-			
-			assertTrue(events.length == 0);
-			
-			// Changing properties should result in events.
-			//
-			
-			var downloadable:DownloadableTrait = proxyElement.getTrait(MediaTraitType.DOWNLOADABLE) as DownloadableTrait;
-			
-			assertTrue(events.length == 0);
-			
-			downloadable.bytesTotal = 120;
-			
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["newBytes"] == 120);
-						
-			// We shouldn't get any events when we're no longer proxying the
-			// wrapped element.
-			//
-			
-			proxyElement.wrappedElement = null;
-			
-			downloadable.bytesTotal = 150;			
-			assertTrue(events.length == 1);
-		}
 
-		public function testProcessSwitchableChanges():void
+		public function testProcessDynamicStreamTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.SWITCHABLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.DYNAMIC_STREAM);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var switchable:SwitchableTrait = proxyElement.getTrait(MediaTraitType.SWITCHABLE) as SwitchableTrait;
-			switchable.autoSwitch = false;
+			var dsTrait:DynamicStreamTrait = proxyElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			dsTrait.autoSwitch = false;
 			
-			switchable.switchTo(3);
+			dsTrait.switchTo(3);
 			assertTrue(events.length == 2);
 			assertTrue(events[0]["oldState"] == SwitchEvent.SWITCHSTATE_UNDEFINED);
 			assertTrue(events[0]["newState"] == SwitchEvent.SWITCHSTATE_REQUESTED);
@@ -371,109 +331,81 @@ package org.osmf.proxies
 			assertTrue(events[1]["newState"] == SwitchEvent.SWITCHSTATE_COMPLETE);
 			assertTrue((events[1]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
 			
-			switchable.numIndices = 7;
-			
-			assertTrue(events.length == 3);
-			assertTrue(events[2]["indicesChange"] == true);
-			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
 			//
 			
 			proxyElement.wrappedElement = null;
 			
-			switchable.switchTo(1);
-			switchable.numIndices = 3;
+			dsTrait.switchTo(1);
 			
-			assertTrue(events.length == 3);
+			assertTrue(events.length == 2);
 		}
-		
-		public function testProcessSpatialChanges():void
+				
+		public function testProcessViewTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.SPATIAL);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.VIEW);
 			
 			assertTrue(events.length == 0);
 			
 			// Changing properties should result in events.
 			//
 			
-			var spatial:SpatialTrait = proxyElement.getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
-						
-			spatial.setDimensions(20, 10);
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldWidth"] == 0);
-			assertTrue(events[0]["newWidth"] == 20);
-			assertTrue(events[0]["oldHeight"] == 0);
-			assertTrue(events[0]["newHeight"] == 10);
-			
-			// We shouldn't get any events when we're no longer proxying the
-			// wrapped element.
-			//
-			
-			proxyElement.wrappedElement = null;
-			
-			spatial.setDimensions(0, 0);
-			
-			assertTrue(events.length == 1);
-		}
-		
-		public function testProcessViewableChanges():void
-		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.VIEWABLE);
-			
-			assertTrue(events.length == 0);
-			
-			// Changing properties should result in events.
-			//
-			
-			var viewable:ViewableTrait = proxyElement.getTrait(MediaTraitType.VIEWABLE) as ViewableTrait;
+			var viewTrait:DynamicViewTrait = proxyElement.getTrait(MediaTraitType.VIEW) as DynamicViewTrait;
 			
 			var aView:DisplayObject = new Sprite();
 						
-			viewable.view = aView; 
+			viewTrait.view = aView; 
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["oldView"] == null);
 			assertTrue(events[0]["newView"] == aView);
 			
-			viewable.view = null; 
+			viewTrait.view = null; 
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["oldView"] == aView);
 			assertTrue(events[1]["newView"] == null);
 			
+			viewTrait.setDimensions(20, 10);
+			assertTrue(events.length == 3);
+			assertTrue(events[2]["oldWidth"] == 0);
+			assertTrue(events[2]["newWidth"] == 20);
+			assertTrue(events[2]["oldHeight"] == 0);
+			assertTrue(events[2]["newHeight"] == 10);
+
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
 			//
 			
 			proxyElement.wrappedElement = null;
 			
-			viewable.view = aView;
+			viewTrait.view = aView;
+			viewTrait.setDimensions(0, 0);
 			
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 3);
 		}
 		
-		public function testProcessViewableChangesOnAddViewable():void
+		public function testProcessViewTraitChangesOnAddViewTrait():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAYABLE);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAY);
 			
-			var viewable:ViewableTrait = new ViewableTrait();
 			var aView:DisplayObject = new Sprite();
-			viewable.view = aView;
+			var viewTrait:ViewTrait = new ViewTrait(aView);
 			
 			assertTrue(events.length == 0);
 			
-			// VIEWABLE is the one trait where adding the trait to the
+			// VIEW is the one trait where adding the trait to the
 			// MediaElement can trigger a ListenerProxyElement event.
-			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.VIEWABLE, viewable);
+			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.VIEW, viewTrait);
 			
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["oldView"] == null);
 			assertTrue(events[0]["newView"] == aView);
 		}
 		
-		private function createProxyWithTrait(traitType:MediaTraitType):ProxyElement
+		private function createProxyWithTrait(traitType:String):ProxyElement
 		{
 			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events);
-			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([traitType], new SimpleLoader());
+			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([traitType], new SimpleLoader(), null, true);
 			proxyElement.wrappedElement = wrappedElement;
 			return proxyElement;
 		}

@@ -234,65 +234,67 @@ package org.osmf.gateways
 							result = IURLResource(element.resource).url;
 						}
 						break;
-					// ILoadable:
+					// LoadTrait:
 					case "LoadState":
-						if (element.hasTrait(MediaTraitType.LOADABLE))
+						if (element.hasTrait(MediaTraitType.LOAD))
 						{
-							result = ILoadable(element.getTrait(MediaTraitType.LOADABLE)).loadState.toString();
+							result = LoadTrait(element.getTrait(MediaTraitType.LOAD)).loadState;
 						}
 						break;
-					// IPlayable:
+					// PlayTrait:
 					case "Playable":
-						result = element.hasTrait(MediaTraitType.PLAYABLE);
+						result = element.hasTrait(MediaTraitType.PLAY);
 						break;
 					case "Playing":
-						if (element.hasTrait(MediaTraitType.PLAYABLE))
+						if (element.hasTrait(MediaTraitType.PLAY))
 						{
-							result = IPlayable(element.getTrait(MediaTraitType.PLAYABLE)).playing;
+							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).playState == PlayState.PLAYING;
 						}
 						break;
-					// IPausable:
 					case "Pausable":
-						result = element.hasTrait(MediaTraitType.PAUSABLE);
+						if (element.hasTrait(MediaTraitType.PLAY))
+						{
+							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).canPause;
+						}
 						break;	
 					case "Paused":
-						if (element.hasTrait(MediaTraitType.PAUSABLE))
+						if (element.hasTrait(MediaTraitType.PLAY))
 						{
-							result = IPausable(element.getTrait(MediaTraitType.PAUSABLE)).paused;
+							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).playState == PlayState.PAUSED;
 						}
 						break;
-					// ITemporal:
+					// TimeTrait:
 					case "Temporal":
-						result = element.hasTrait(MediaTraitType.TEMPORAL);
+						result = element.hasTrait(MediaTraitType.TIME);
 						break;
 					case "Duration":
-						if (element.hasTrait(MediaTraitType.TEMPORAL))
+						if (element.hasTrait(MediaTraitType.TIME))
 						{
-							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).duration;
+							result = TimeTrait(element.getTrait(MediaTraitType.TIME)).duration;
 						}
 						break;
 					case "CurrentTime":
-						if (element.hasTrait(MediaTraitType.TEMPORAL))
+						if (element.hasTrait(MediaTraitType.TIME))
 						{
-							result = ITemporal(element.getTrait(MediaTraitType.TEMPORAL)).currentTime;
+							result = TimeTrait(element.getTrait(MediaTraitType.TIME)).currentTime;
 						}
-					// IAudible:
+					// AudioTrait:
 					case "Volume":
-						if (element.hasTrait(MediaTraitType.AUDIBLE))
+						if (element.hasTrait(MediaTraitType.AUDIO))
 						{
-							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).volume;
+							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).volume;
 						}
 						break;
 					case "Muted":
-						if (element.hasTrait(MediaTraitType.AUDIBLE))
+						if (element.hasTrait(MediaTraitType.AUDIO))
 						{
-							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).muted;
+							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).muted;
 						}
 						break;
 					case "Pan":
-						if (element.hasTrait(MediaTraitType.AUDIBLE))
+						if (element.hasTrait(MediaTraitType.AUDIO))
 						{
-							result = IAudible(element.getTrait(MediaTraitType.AUDIBLE)).pan;
+							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).pan;
 						}
 						break;
 				}
@@ -309,17 +311,16 @@ package org.osmf.gateways
 				var htmlElement:HTMLElement = elementAsHTMLElement(element);
 				if (htmlElement)
 				{
-					var playable:PlayableTrait = htmlElement.getSwitchableTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-					var pausable:PausableTrait = htmlElement.getSwitchableTrait(MediaTraitType.PAUSABLE) as PausableTrait;
-					var temporal:TemporalTrait = htmlElement.getSwitchableTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
-					var audible:AudibleTrait = htmlElement.getTrait(MediaTraitType.AUDIBLE) as AudibleTrait;
+					var playable:PlayTrait = htmlElement.getSwitchableTrait(MediaTraitType.PLAY) as PlayTrait;
+					var temporal:TimeTrait = htmlElement.getSwitchableTrait(MediaTraitType.TIME) as TimeTrait;
+					var audible:AudioTrait = htmlElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
 				}
 				
 				// All property names start with a capital, for they translate
 				// to 'setXxxx' in JavaScript.
 				switch (property)
 				{
-					// ILoadable
+					// LoadTrait
 					case "LoadState":
 						var newLoadState:String = value;
 						if (htmlElement)
@@ -327,11 +328,11 @@ package org.osmf.gateways
 							htmlElement.loadState = newLoadState;
 						}
 						break;
-					// IPlayable:
+					// PlayTrait:
 					case "Playable":
 						if (htmlElement)
 						{
-							htmlElement.setTraitEnabled(MediaTraitType.PLAYABLE, value as Boolean);
+							htmlElement.setTraitEnabled(MediaTraitType.PLAY, value as Boolean);
 						}
 						break;
 					case "Playing":
@@ -343,54 +344,59 @@ package org.osmf.gateways
 							}
 							else
 							{
-								playable.resetPlaying();
+								playable.stop();
 							}
 						}
 						break;
-					// IPausable:
 					case "Pausable":
 						if (htmlElement)
 						{
-							htmlElement.setTraitEnabled(MediaTraitType.PAUSABLE, value as Boolean);
+							// TODO: How do we handle this?
+							//htmlElement.setTraitEnabled(MediaTraitType.PAUSABLE, value as Boolean);
 						}
 						break;
 					case "Paused":
-						if (pausable)
+						if (playable)
 						{
 							if (value == true)
 							{
-								pausable.pause();
+								playable.pause();
 							}
 							else
 							{
-								pausable.resetPaused();
+								playable.stop();
 							}
 						}
 						break;
-					// ITemporal:
+					// Timerait:
 					case "Temporal":
 						if (htmlElement)
 						{
-							htmlElement.setTraitEnabled(MediaTraitType.TEMPORAL, value as Boolean);
+							htmlElement.setTraitEnabled(MediaTraitType.TIME, value as Boolean);
 						}
 						break;
 					case "Duration":
 						if (temporal)
 						{
-							temporal.duration = value as Number;
+							// TODO: Fix here and below.  It seems inappropriate for HTMLGateway
+							// to set properties on a trait.  Would it be possible for HTMLGateway
+							// to expose these property callbacks in such a way that an HTMLTemporalTrait
+							// could listen for the change and set the duration on itself?
+							//temporal.duration = value as Number;
 						}
 						break;
 					case "CurrentTime":
 						if (temporal)
 						{
-							temporal.currentTime = value as Number;
+							// TODO: Fix (see previous comment).
+							//temporal.currentTime = value as Number;
 						}
 						break;
-					// IAudible
+					// AudioTrait
 					case "Audible":
 						if (htmlElement)
 						{
-							htmlElement.setTraitEnabled(MediaTraitType.AUDIBLE, value as Boolean);
+							htmlElement.setTraitEnabled(MediaTraitType.AUDIO, value as Boolean);
 						}
 						break;
 					case "Volume":
@@ -411,7 +417,7 @@ package org.osmf.gateways
 							audible.pan = value as Number;
 						}
 						break;
-					// If the property is unknow, throw an exception:
+					// If the property is unknown, throw an exception:
 					default:
 						throw new IllegalOperationError
 							( "Property '"
@@ -642,25 +648,25 @@ package org.osmf.gateways
         		
         		addGetter(this, "resource");
         		
-        		// ILoadable bridge: (all HTML elements are loadable)
+        		// LoadTrait bridge: (all HTML elements are loadable)
         		
         		addSetter	(this, 	"LoadState");
         		addCallback	(this, 	"load", 1);					// urlResource
         		addCallback	(this, 	"unload", 0); 
         		
-				// IPlayable bridge:
+				// PlayTrait bridge:
 				
 				addGetSet	(this,	"Playable");
 				addGetSet	(this, 	"Playing");
         		addCallback	(this, 	"onPlayingChange", 1);		// playing;
         		
-        		// IPausable bridge:
+        		// IPausable (???) bridge:
         		
         		addGetSet	(this,	"Pausable");
         		addGetSet	(this,	"Paused");
         		addCallback	(this,	"onPausedChange", 1);		// paused;
         		
-        		// ITemporal bridge:
+        		// TimeTrait bridge:
         		
         		addGetSet	(this,	"Temporal");
         		addGetSet	(this,	"Duration");
@@ -668,7 +674,7 @@ package org.osmf.gateways
         		addGetSet	(this,	"CurrentTime");
         		addCallback	(this,	"onDurationReached");
         		
-        		// IAudible bridge:
+        		// AudioTrait bridge:
         		
         		addGetSet	(this,	"Audible");			
         		addGetSet	(this,	"Volume");

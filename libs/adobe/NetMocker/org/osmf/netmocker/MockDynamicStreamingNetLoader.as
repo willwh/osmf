@@ -25,23 +25,20 @@ package org.osmf.netmocker
 	import flash.net.NetStream;
 	
 	import org.osmf.net.NetClient;
+	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	
 
 	public class MockDynamicStreamingNetLoader extends DynamicStreamingNetLoader implements IMockNetLoader
 	{
-		public function MockDynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, netConnectionFactory:DefaultNetConnectionFactory= null, mockNetNegotiator:MockNetNegotiator = null)
+		public function MockDynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, netConnectionFactory:NetConnectionFactory= null, mockNetNegotiator:MockNetNegotiator = null)
 		{
+			negotiator = mockNetNegotiator || new MockNetNegotiator();
+			
 			if (netConnectionFactory == null)
 			{
-				negotiator = new MockNetNegotiator();
 				netConnectionFactory = new DefaultNetConnectionFactory(negotiator);
-			}
-			else
-			{
-				negotiator = mockNetNegotiator;
 			}
 			
 			super(allowConnectionSharing, netConnectionFactory);
@@ -119,7 +116,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadable:ILoadable):NetStream
+	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 	    {
 			var mockNetStream:MockDynamicNetStream = new MockDynamicNetStream(connection);			
 			mockNetStream.client = new NetClient();			

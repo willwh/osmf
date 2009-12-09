@@ -42,7 +42,7 @@ package org.osmf.examples.posterframe
 		 **/
 		override protected function setupTraits():void
 		{
-			addTrait(MediaTraitType.PLAYABLE, new PosterFramePlayableTrait(this));
+			addTrait(MediaTraitType.PLAY, new PosterFramePlayTrait());
 		}
 	}
 }

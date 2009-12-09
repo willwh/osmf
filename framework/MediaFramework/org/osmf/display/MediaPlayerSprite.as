@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.display
 {
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
@@ -73,25 +72,20 @@ package org.osmf.display
 		{
 			if (_player != null)
 			{
-				_player.removeEventListener(ViewEvent.VIEW_CHANGE, onView);	
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
-				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
+				_player.removeEventListener(ViewEvent.VIEW_CHANGE, onView);	
+				_player.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);	
 				view = null;
 			}
 			_player = value;
 			if (_player != null)
 			{
-				_player.addEventListener(ViewEvent.VIEW_CHANGE, onView);	
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);	
-				_player.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE, onSpatial);	
+				_player.addEventListener(ViewEvent.VIEW_CHANGE, onView);	
+				_player.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);	
 				if (_player.viewable)
 				{
 					view = _player.view;		
-				}
-				if (_player.spatial)
-				{
 					setIntrinsicSize(_player.width, _player.height);
 				}
 			}
@@ -112,16 +106,11 @@ package org.osmf.display
 			view = event.enabled ? _player.view : null;				
 		}
 				
-		private function onDimensions(event:DimensionEvent):void
+		private function onDimensions(event:ViewEvent):void
 		{
 			setIntrinsicSize(event.newWidth, event.newHeight);
 		}
 		
-		private function onSpatial(event:MediaPlayerCapabilityChangeEvent):void
-		{
-			setIntrinsicSize(_player.width, _player.height);
-		}
-				
 		/**
 		 * The player class that exposes most of the MediaElement's interface, such as the viewable and dimensional 
 		 * properties.
@@ -131,6 +120,6 @@ package org.osmf.display
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		private var _player:MediaPlayer ;
+		private var _player:MediaPlayer;
 	}
 }

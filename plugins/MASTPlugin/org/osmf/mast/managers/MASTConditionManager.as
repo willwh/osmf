@@ -35,9 +35,10 @@ package org.osmf.mast.managers
 	import org.osmf.mast.model.MASTCondition;
 	import org.osmf.mast.types.MASTConditionOperator;
 	import org.osmf.mast.types.MASTConditionType;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
 	CONFIG::LOGGING
 	{
 	import org.osmf.logging.*;		
@@ -138,7 +139,7 @@ package org.osmf.mast.managers
 			var traitName:String = result[0];
 			var traitProperty:String = result[1];			 
 			
-			var traitType:MediaTraitType = getTraitTypeForTraitName(traitName);
+			var traitType:String = getTraitTypeForTraitName(traitName);
 			if (traitType == null)
 			{
 				throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
@@ -157,7 +158,7 @@ package org.osmf.mast.managers
 			// Remove the trailing . from the event class name
 			eventClassName = eventClassName.replace(/\.$/, "");
 			
-			var traitType:MediaTraitType = getTraitTypeForEventName(eventClassName);
+			var traitType:String = getTraitTypeForEventName(eventClassName);
 			if (traitType == null)
 			{
 				throw new IllegalOperationError("Unable to map an event condition in the MAST document to a trait that dispatches that event.");
@@ -187,9 +188,9 @@ package org.osmf.mast.managers
 		}
 		
 		
-		private function listenForTraitEvent(traitType:MediaTraitType, eventClass:Object, eventType:String):void
+		private function listenForTraitEvent(traitType:String, eventClass:Object, eventType:String):void
 		{
-			var trait:IMediaTrait = _mediaElement.getTrait(traitType);
+			var trait:MediaTraitBase = _mediaElement.getTrait(traitType);
 			if (trait != null)
 			{
 				// The trait is present, add the listener.
@@ -227,9 +228,9 @@ package org.osmf.mast.managers
 			}
 		}
 				
-		private function listenForTraitProperty(traitType:MediaTraitType, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):void
+		private function listenForTraitProperty(traitType:String, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):void
 		{
-			var trait:IMediaTrait = _mediaElement.getTrait(traitType);
+			var trait:MediaTraitBase = _mediaElement.getTrait(traitType);
 			if (trait != null)
 			{
 				// The trait is present, add the listener.
@@ -250,7 +251,7 @@ package org.osmf.mast.managers
 			}
 		}
 		
-		private function addPropertyListener(mediaElement:MediaElement, traitType:MediaTraitType, trait:IMediaTrait, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):void
+		private function addPropertyListener(mediaElement:MediaElement, traitType:String, trait:MediaTraitBase, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):void
 		{
 			if (isConditionTrue(trait, propertyName, propertyValue, operator) && evaluateChildConditions())
 			{
@@ -307,8 +308,8 @@ package org.osmf.mast.managers
 			{
 				case MASTAdapter.ON_PAUSE:
 					{
-						var pausedChangeEvent:PausedChangeEvent = event as PausedChangeEvent;
-						if (pausedChangeEvent.paused)
+						var playEvent:PlayEvent = event as PlayEvent;
+						if (playEvent.playState == PlayState.PAUSED)
 						{
 							conditionTrue = true;
 						}
@@ -394,7 +395,7 @@ package org.osmf.mast.managers
 			var traitName:String = result[0];
 			var traitProperty:String = result[1];			 
 		
-			var traitType:MediaTraitType = getTraitTypeForTraitName(traitName);
+			var traitType:String = getTraitTypeForTraitName(traitName);
 			if (traitType == null)
 			{
 				throw new IllegalOperationError(UNKNOWN_TRAIT_OR_EVENT_ERROR);
@@ -403,7 +404,7 @@ package org.osmf.mast.managers
 			// If the trait is null here, we are not going to wait for it, that 
 			// should have already happened. If it is not present here, it never
 			// will be.
-			var trait:IMediaTrait = _mediaElement.getTrait(traitType);
+			var trait:MediaTraitBase = _mediaElement.getTrait(traitType);
 			if (trait != null)
 			{
 				evaluation = isConditionTrue(trait, traitProperty, childCond.value, childCond.operator);
@@ -422,7 +423,7 @@ package org.osmf.mast.managers
             return evaluation;			
 		}
 		
-		private function isConditionTrue(trait:IMediaTrait, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):Boolean
+		private function isConditionTrue(trait:MediaTraitBase, propertyName:String, propertyValue:Object, operator:MASTConditionOperator):Boolean
 		{
 			var property:* = trait[propertyName];
 			if (property != undefined)
@@ -451,32 +452,29 @@ package org.osmf.mast.managers
 			return false;
 		}
 		
-		private function getTraitTypeForTraitName(traitName:String):MediaTraitType
+		private function getTraitTypeForTraitName(traitName:String):String
 		{
-			var traitType:MediaTraitType = null;
+			var traitType:String = null;
 			
 			switch (traitName)
 			{
-				case "ITemporal":
-					traitType = MediaTraitType.TEMPORAL;
+				case "TimeTrait":
+					traitType = MediaTraitType.TIME;
 					break;
-				case "IPlayable":
-					traitType = MediaTraitType.PLAYABLE;
+				case "PlayTrait":
+					traitType = MediaTraitType.PLAY;
 					break;
-				case "IPausable":
-					traitType = MediaTraitType.PAUSABLE;
-					break;
-				case "ISpatial":
-					traitType = MediaTraitType.SPATIAL;
+				case "ViewTrait":
+					traitType = MediaTraitType.VIEW;
 					break;
 			}
 			
 			return traitType;
 		}
 		
-		private function getTraitTypeForEventName(eventName:String):MediaTraitType
+		private function getTraitTypeForEventName(eventName:String):String
 		{
-			var traitType:MediaTraitType = null;
+			var traitType:String = null;
 			
 			// Get the event class name without the package name
 			var result:Array = eventName.match(/^(.*\.)(.*)$/);
@@ -484,20 +482,17 @@ package org.osmf.mast.managers
 						
 			switch (eventClassName)
 			{
-				case "PlayingChangeEvent":
-					traitType = MediaTraitType.PLAYABLE;
-					break;
-				case "PausedChangeEvent":
-					traitType = MediaTraitType.PAUSABLE;
+				case "PlayEvent":
+					traitType = MediaTraitType.PLAY;
 					break;
 				case "AudioEvent":
-					traitType = MediaTraitType.AUDIBLE;
+					traitType = MediaTraitType.AUDIO;
 					break;
 				case "SeekEvent":
-					traitType = MediaTraitType.SEEKABLE;
+					traitType = MediaTraitType.SEEK;
 					break;
 				case "TimeEvent":
-					traitType = MediaTraitType.TEMPORAL;
+					traitType = MediaTraitType.TIME;
 					break;
 			}
 			

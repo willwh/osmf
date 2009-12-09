@@ -9,12 +9,12 @@ package org.osmf.composition
 	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.ISwitchable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TestISwitchable;
+	import org.osmf.traits.TestDynamicStreamTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.video.VideoElement;
 	
-	public class TestParallelSwitchableTrait extends TestISwitchable
+	public class TestParallelSwitchableTrait extends TestDynamicStreamTrait
 	{	
 		override protected function createInterfaceObject(... args):Object
 		{			

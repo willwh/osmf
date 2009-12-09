@@ -123,7 +123,7 @@
 
 	
 	<mx:HBox
-		id						="temporalControls" 
+		id						="timeTraitControls" 
 		color					="white"
 		right					="0"
 		width					="500"
@@ -151,7 +151,7 @@
 	</mx:HBox>
 	
 	<mx:HBox
-		id						="bufferable"
+		id						="bufferTraitControls"
 		color					="white"
 		right					="0"
 		width					="500"
@@ -177,7 +177,7 @@
 	</mx:HBox>
 	
 	<mx:HBox
-		id						="downloadable"
+		id						="loadTraitControls"
 		color					="white"
 		right					="0"
 		width					="500"
@@ -203,7 +203,7 @@
 	</mx:HBox>
 	
 	<mx:HBox
-		id						="audioControls" 
+		id						="audioTraitControls" 
 		right					="0"
 		width					="500"
 		height					="20"

@@ -23,51 +23,80 @@ package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
 	
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.SimpleResource;
 	import org.osmf.utils.URL;
 	
-	public class TestLoaderBase extends TestCase
+	// TODO:
+	// - Merge ILoader and LoaderBase
+	// - Modify merged class to make load/unload methods final, and use process/postProcess metaphor.
+	// - Modify TestLoaderBase to include logic from TestILoader, but to match the pattern for base
+	//   trait classes.
+	public class TestLoaderBase extends TestILoader
 	{
-		public function testLoad():void
+		override protected function createInterfaceObject(... args):Object
+		{
+			return new LoaderBase();
+		}
+
+		/**
+		 * Subclasses can override to specify their own resource.
+		 **/
+		override protected function get successfulResource():IMediaResource
+		{
+			return new SimpleResource(SimpleResource.SUCCESSFUL);
+		}
+
+		override protected function get failedResource():IMediaResource
+		{
+			return new SimpleResource(SimpleResource.FAILED);
+		}
+
+		override protected function get unhandledResource():IMediaResource
+		{
+			return new SimpleResource(SimpleResource.UNHANDLED);
+		}
+
+		/*
+		public function testLoadValidation():void
 		{
 			var loader:LoaderBase = new LoaderBase();
-			var loadable:LoadableTrait = new LoadableTrait(loader,null);
+			var loadTrait:LoadTrait = createLoadTrait(loader, null);
 				
 			shouldThrowLoad(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			loadable.loadState = LoadState.READY;
-			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_READY));
-			loadable.loadState = LoadState.LOADING;
-			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));	
-			loadable.loadState = LoadState.UNINITIALIZED;		
-			shouldThrowLoad(loader, loadable, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
+			loadTrait.loadState = LoadState.READY;
+			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_READY));
+			loadTrait.loadState = LoadState.LOADING;
+			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));	
+			loadTrait.loadState = LoadState.UNINITIALIZED;		
+			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 						
 		}
 		
-		public function testUnload():void
+		public function testUnloadValidation():void
 		{
 			var loader:LoaderBase = new LoaderBase();
-			var loadable:LoadableTrait = new LoadableTrait(loader,null);
+			var loadTrait:LoadTrait = createLoadTrait(loader, null);
 			
 			shouldThrowUnload(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			loadable.loadState = LoadState.UNINITIALIZED;
-			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
-			loadable.loadState = LoadState.UNLOADING;
-			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));			
-			loadable.loadState = LoadState.READY;		
-			shouldThrowUnload(loader, loadable, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));						
+			loadTrait.loadState = LoadState.UNINITIALIZED;
+			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
+			loadTrait.loadState = LoadState.UNLOADING;
+			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));			
+			loadTrait.loadState = LoadState.READY;		
+			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));						
 		}
 		
-		private function shouldThrowLoad(loader:ILoader, loadable:ILoadable, message:String):void
+		private function shouldThrowLoad(loader:ILoader, loadTrait:LoadTrait, message:String):void
 		{
 			var caught:Boolean = false;
 			try
 			{
-				loader.load(loadable);
+				loader.load(loadTrait);
 			}
-			catch(error:IllegalOperationError)
+			catch (error:IllegalOperationError)
 			{
 				assertEquals(error.message, message);
 				caught = true;
@@ -75,27 +104,28 @@ package org.osmf.traits
 			assertTrue(caught);
 		}
 		
-		private function shouldThrowUnload(loader:ILoader, loadable:ILoadable, message:String):void
+		private function shouldThrowUnload(loader:ILoader, loadTrait:LoadTrait, message:String):void
 		{
 			var caught:Boolean = false;
 			try
 			{
-				loader.unload(loadable);
+				loader.unload(loadTrait);
 			}
-			catch(error:IllegalOperationError)
+			catch (error:IllegalOperationError)
 			{
 				assertEquals(error.message, message);
 				caught = true;
 			}
 			assertTrue(caught);
 		}
-				
-		public function testCanHandleResource():void
+		
+		override public function testCanHandleResource():void
 		{
+			super.testCanHandleResource();
+			
 			var loader:LoaderBase = new LoaderBase();
 			assertFalse(loader.canHandleResource(null));
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://test.com"))));
-		}
-
+		}*/
 	}
 }

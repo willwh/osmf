@@ -78,7 +78,7 @@ package org.osmf.utils
 		public static const TRAIT_RESOLVER_ALREADY_ADDED:String 		= "traitResolverAlreadyAdded";
 		public static const TRAIT_TYPE_MISMATCH:String					= "traitTypeMismatch";
 								
-		// ILoadable
+		// LoadTrait
 		
 		public static const MUST_SET_ILOADER_FOR_LOAD:String 			= "mustSetILoaderForLoad"
 		public static const MUST_SET_ILOADER_FOR_UNLOAD:String 			= "mustSetILoaderForUnload";
@@ -150,7 +150,7 @@ package org.osmf.utils
 		public static const SWITCHING_UP_OTHER:String					= "switchingUpOther";
 		public static const SWITCHING_MANUAL:String						= "switchingManual";
 				
-		// CompositeViewableTrait
+		// CompositeViewTrait
 		
 		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "invalidLayoutRendererConstructor";	
 		
@@ -162,7 +162,7 @@ package org.osmf.utils
 		
 		public static const UNSUPPORTED_TRAIT_TYPE:String				= "unsupportedTraitType";
 		
-		// HTMLLoadableTrait
+		// HTMLLoadTrait
 		
 		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
 		
@@ -177,11 +177,10 @@ package org.osmf.utils
 		public static const DRM_CONTENT_NOT_YET_VALID:String			= "drmContentNotYetValid";
 		
 		// Flash Media Manifest Errors
+		
 		public static const F4M_PARSE_PROFILE_MISSING:String			= "f4mProfileMissing";
 		public static const F4M_PARSE_MEDIA_URL_MISSING:String			= "f4mMediaURLMissing";
 		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
-		
-		
 		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
@@ -195,8 +194,8 @@ package org.osmf.utils
 			resourceDict[TRAIT_RESOLVER_ALREADY_ADDED]				= "A trait resolver for the specified trait type has already been added to this MediaElement";
 			resourceDict[TRAIT_TYPE_MISMATCH]						= "The specified trait instance is of an unexpectted type";
 			
-			resourceDict[MUST_SET_ILOADER_FOR_LOAD] 				= "Must set ILoader on an ILoadable before calling ILoader.load";
-			resourceDict[MUST_SET_ILOADER_FOR_UNLOAD] 				= "Must set ILoader on an ILoadable before calling ILoader.unload";
+			resourceDict[MUST_SET_ILOADER_FOR_LOAD] 				= "Must set ILoader on a LoadTrait before calling ILoader.load";
+			resourceDict[MUST_SET_ILOADER_FOR_UNLOAD] 				= "Must set ILoader on a LoadTrait before calling ILoader.unload";
 			resourceDict[ILOADER_CANT_HANDLE_RESOURCE]				= "ILoader unable to handle the given IMediaResource";
 			resourceDict[LOADED_CONTEXT_NULL] 						= "LoadedContext is null for LoadState.READY";
 			resourceDict[LOADED_CONTEXT_NOT_NULL] 					= "LoadedContext is non-null for LoadState.UNINITIALIZED";

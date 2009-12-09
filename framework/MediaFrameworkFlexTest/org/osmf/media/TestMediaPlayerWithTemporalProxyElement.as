@@ -37,7 +37,7 @@ package org.osmf.media
 			return new TemporalProxyElement(1);
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}
@@ -54,12 +54,18 @@ package org.osmf.media
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+			return	[ MediaTraitType.TIME
+					, MediaTraitType.SEEK
+					, MediaTraitType.PLAY
+					];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+			return	[ MediaTraitType.TIME
+					, MediaTraitType.SEEK
+					, MediaTraitType.PLAY
+					];
 		}
 	}
 }

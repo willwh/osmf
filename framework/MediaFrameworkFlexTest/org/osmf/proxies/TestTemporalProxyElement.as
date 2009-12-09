@@ -30,12 +30,11 @@ package org.osmf.proxies
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.URL;
 
 	public class TestTemporalProxyElement extends TestMediaElement
@@ -63,23 +62,19 @@ package org.osmf.proxies
 			var mediaElement:MediaElement = new MediaElement();
 			var proxy:TemporalProxyElement = new TemporalProxyElement(NaN, mediaElement);
 			
-			assertTrue(mediaElement.getTrait(MediaTraitType.TEMPORAL) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.TEMPORAL) != null);
+			assertTrue(mediaElement.getTrait(MediaTraitType.TIME) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.TIME) != null);
+						
+			assertTrue(mediaElement.getTrait(MediaTraitType.PLAY) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.PLAY) != null);
 			
-			assertTrue(mediaElement.getTrait(MediaTraitType.PAUSABLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.PAUSABLE) != null);
+			assertTrue(mediaElement.getTrait(MediaTraitType.SEEK) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.SEEK) != null);
 			
-			assertTrue(mediaElement.getTrait(MediaTraitType.PLAYABLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.PLAYABLE) != null);
-			
-			assertTrue(mediaElement.getTrait(MediaTraitType.SEEKABLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.SEEKABLE) != null);
-			
-			assertTrue(proxy.getTrait(MediaTraitType.AUDIBLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.BUFFERABLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.LOADABLE) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.SPATIAL) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.VIEWABLE) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.AUDIO) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.BUFFER) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.LOAD) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.VIEW) == null);
 		}
 		
 		public function testEvents():void
@@ -88,21 +83,20 @@ package org.osmf.proxies
 			var mediaElement:MediaElement = new MediaElement();
 			var proxy:TemporalProxyElement = new TemporalProxyElement(50, mediaElement);
 			
-			var temporal:TemporalTrait = proxy.getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
-			var pausable:PausableTrait = proxy.getTrait(MediaTraitType.PAUSABLE) as PausableTrait;
-			var playable:PlayableTrait = proxy.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			var seekable:SeekableTrait = proxy.getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
-			seekable.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
-			seekable.addEventListener(SeekEvent.SEEK_END, eventCatcher);
+			var timeTrait:TimeTrait = proxy.getTrait(MediaTraitType.TIME) as TimeTrait;
+			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var seekTrait:SeekTrait = proxy.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
+			seekTrait.addEventListener(SeekEvent.SEEK_END, eventCatcher);
 			
-			playable.play();
-			assertTrue(pausable.paused == false);
-			pausable.pause();
-			assertTrue(playable.playing == false);
-			playable.play();
-			assertTrue(pausable.paused == false);
-			seekable.seek(15);			
-			assertFalse(seekable.seeking);
+			playTrait.play();
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			playTrait.pause();
+			assertTrue(playTrait.playState == PlayState.PAUSED);
+			playTrait.play();
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			seekTrait.seek(15);			
+			assertFalse(seekTrait.seeking);
 			assertEquals(2, events.length);
 			assertTrue(events[0] is SeekEvent);
 			assertTrue(events[1] is SeekEvent);
@@ -123,7 +117,7 @@ package org.osmf.proxies
 			return new TemporalProxyElement(0);
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}
@@ -135,12 +129,12 @@ package org.osmf.proxies
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+			return [MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.TEMPORAL, MediaTraitType.SEEKABLE, MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE];
+			return [MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.PLAY];
 		}
 
 		private var events:Vector.<Event>;

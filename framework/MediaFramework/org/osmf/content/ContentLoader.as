@@ -32,22 +32,22 @@ package org.osmf.content
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
 	
-	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IURLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
+
 
 	/**
 	 * The ContentLoader class creates a flash.display.Loader object, 
 	 * which it uses to load and unload content.
 	 *
 	 * @see ContentElement
-	 * @see org.osmf.traits.ILoadable
+	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.display.Loader
 	 */ 
 	public class ContentLoader extends LoaderBase
@@ -82,29 +82,29 @@ package org.osmf.content
 		
 		/**
 		 * Loads content using a flash.display.Loader object. 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()
-		 * @param ILoadable ILoadable to be loaded.
+		 * @param loadTrait LoadTrait to be loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
+			super.load(loadTrait);
 			
 			var loader:Loader = new Loader();
 			var loadedContext:ContentLoadedContext = new ContentLoadedContext(loader);
 			
-			updateLoadable(loadable, LoadState.LOADING, loadedContext);
+			updateLoadTrait(loadTrait, LoadState.LOADING, loadedContext);
 			
 			var context:LoaderContext 	= new LoaderContext();
-			var urlReq:URLRequest 		= new URLRequest((loadable.resource as IURLResource).url.toString());
+			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as IURLResource).url.toString());
 			
 			context.checkPolicyFile = true;
 			if (useCurrentSecurityDomain)
@@ -156,8 +156,8 @@ package org.osmf.content
 					loader = null;
 					loadedContext = null;
 					
-					updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
-					loadable.dispatchEvent
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, loadedContext);
+					loadTrait.dispatchEvent
 						( new MediaErrorEvent
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
@@ -168,7 +168,7 @@ package org.osmf.content
 				}
 				else
 				{
-					updateLoadable(loadable, LoadState.READY, loadedContext);
+					updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
 				}
 			}
 
@@ -178,8 +178,8 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR, null);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, null);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -198,8 +198,8 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR, loadedContext);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, loadedContext);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -217,10 +217,10 @@ package org.osmf.content
 		/**
 		 * Unloads content using a flash.display.Loader object.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
 		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
-		 * @param ILoadable ILoadable to be unloaded.
+		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#unload()
 		 *  
@@ -229,14 +229,14 @@ package org.osmf.content
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 
-			var context:ContentLoadedContext = loadable.loadedContext as ContentLoadedContext;
-			updateLoadable(loadable, LoadState.UNLOADING, context);			
+			var context:ContentLoadedContext = loadTrait.loadedContext as ContentLoadedContext;
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);			
 			context.loader.unloadAndStop();
-			updateLoadable(loadable, LoadState.UNINITIALIZED);
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		// Internals

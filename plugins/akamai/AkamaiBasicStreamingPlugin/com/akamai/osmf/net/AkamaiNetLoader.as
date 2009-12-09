@@ -27,7 +27,7 @@ package com.akamai.osmf.net
 	
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.*;
 
 	/**
@@ -50,9 +50,9 @@ package com.akamai.osmf.net
 		/**
 		 * @inheritDoc
 		**/
-		override protected function createNetStream(connection:NetConnection, loadable:ILoadable):NetStream
+		override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 		{
-			var ns:AkamaiNetStream =  new AkamaiNetStream(connection, loadable);
+			var ns:AkamaiNetStream =  new AkamaiNetStream(connection, loadTrait);
 			
 			return ns;
 		}

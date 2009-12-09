@@ -61,6 +61,20 @@ package org.osmf.netmocker
 		}
 
 		/**
+		 * The expected total number of bytes of the stream.  Applies to progressive
+		 * media only.  The default is 0.
+		 **/
+		public function set expectedBytesTotal(value:uint):void
+		{
+			this._expectedBytesTotal = value;
+		}
+		
+		public function get expectedBytesTotal():uint
+		{
+			return _expectedBytesTotal;
+		}
+
+		/**
 		 * The expected duration of the stream when it's a subclip, in seconds.
 		 * This is different from expectedDuration when the stream being played
 		 * is a subclip.  The default is NaN.
@@ -144,9 +158,15 @@ package org.osmf.netmocker
 		// Overrides
 		//
 		
+		override public function get bytesLoaded():uint
+		{
+			return _bytesLoaded;
+		}
+
 		override public function get bytesTotal():uint
 		{
-			return _bytesTotal;
+			// The bytesTotal value doesn't "register" until playback begins.
+			return (playing || elapsedTime > 0) ? _expectedBytesTotal : 0;
 		}
 		
 		override public function get time():Number
@@ -200,15 +220,12 @@ package org.osmf.netmocker
 				isProgressive = true;
 				
 				bufferTime = bufferTime < .1 ? .1 : bufferTime;
-				
-				// We need more than zero, if this is progressive.
-				_bytesTotal = 100;
 			}
 			else
 			{
 				isProgressive = false;
 				
-				_bytesTotal = 0;
+				_expectedBytesTotal = 0;
 			}
 			
 			absoluteTimeAtLastPlay = flash.utils.getTimer();
@@ -356,8 +373,9 @@ package org.osmf.netmocker
 						}
 					}
 				}
-				
 			}
+			
+			_bytesLoaded = Math.min(_expectedBytesTotal, _bytesLoaded + _expectedBytesTotal / 4);
 		}
 		
 		private function getInfosForPosition(position:Number):Array
@@ -389,6 +407,7 @@ package org.osmf.netmocker
 		private var _connection:NetConnection;
 		private var eventInterceptor:NetStatusEventInterceptor;
 		private var _expectedDuration:Number = 0;
+		private var _expectedBytesTotal:uint = 0;
 		private var _expectedSubclipDuration:Number = NaN;
 		private var _expectedWidth:Number = 0;
 		private var _expectedHeight:Number = 0;
@@ -405,7 +424,7 @@ package org.osmf.netmocker
 		private var absoluteTimeAtLastPlay:Number = 0; // milliseconds
 		
 		private var isProgressive:Boolean;
-		private var _bytesTotal:uint = 0;
+		private var _bytesLoaded:uint = 0;
 		
 		private static const TIMER_DELAY:int = 100;
 		

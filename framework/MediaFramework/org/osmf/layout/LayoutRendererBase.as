@@ -31,7 +31,6 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.IFacet;
@@ -121,7 +120,7 @@ package org.osmf.layout
 							);
 					
 					_context.addEventListener
-						( DimensionEvent.DIMENSION_CHANGE
+						( ViewEvent.DIMENSION_CHANGE
 						, invalidatingEventHandler
 						, false, 0, true
 						);
@@ -186,7 +185,7 @@ package org.osmf.layout
 			
 			// Watch the target's view and dimenions change:
 			target.addEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
-			target.addEventListener(DimensionEvent.DIMENSION_CHANGE, invalidatingEventHandler);
+			target.addEventListener(ViewEvent.DIMENSION_CHANGE, invalidatingEventHandler);
 			
 			invalidate();
 			
@@ -238,7 +237,7 @@ package org.osmf.layout
 				
 				// Un-watch the target's view and dimenions change:
 				target.removeEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
-				target.removeEventListener(DimensionEvent.DIMENSION_CHANGE, invalidatingEventHandler);
+				target.removeEventListener(ViewEvent.DIMENSION_CHANGE, invalidatingEventHandler);
 								
 				// Remove the metadata change watchers that we added:
 				for each (var watcher:MetadataWatcher in metaDataWatchers[target])
@@ -632,7 +631,7 @@ package org.osmf.layout
 			if (_context)
 			{
 				_context.removeEventListener
-					( DimensionEvent.DIMENSION_CHANGE
+					( ViewEvent.DIMENSION_CHANGE
 					, invalidatingEventHandler
 					);
 						

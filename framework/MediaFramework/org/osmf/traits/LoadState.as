@@ -22,34 +22,34 @@
 package org.osmf.traits
 {
 	/**
-	 * The state of an ILoadable.
+	 * The state of a LoadTrait.
 	 */
 	public final class LoadState
 	{
 		/**
-		 * The loadable has been constructed, but either has not yet started
+		 * The LoadTrait has been constructed, but either has not yet started
 		 * loading or has been unloaded.
 		 **/
 		public static const UNINITIALIZED:String	= "uninitialized";
 		
 		/**
-		 * The loadable has begun loading.
+		 * The LoadTrait has begun loading.
 		 **/
 		public static const LOADING:String			= "loading";
 		
 		/**
-		 * The loadable has begun unloading. Dispatched before any in memory
+		 * The LoadTrait has begun unloading. Dispatched before any in memory
 		 * media representations are released.
 		 **/
 		public static const UNLOADING:String		= "unloading";
 		
 		/**
-		 * The loadable is ready for playback.
+		 * The LoadTrait is ready for playback.
 		 **/
 		public static const READY:String			= "ready";
 
 		/**
-		 * The loadable has failed to load.
+		 * The LoadTrait has failed to load.
 		 **/
 		public static const LOAD_ERROR:String		= "loadError";
 		

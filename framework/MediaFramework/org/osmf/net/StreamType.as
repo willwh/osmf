@@ -68,12 +68,5 @@ package org.osmf.net
 		 * 
 		 **/
 		public static const ANY:String = "any";
-		
-		/**
-		 * @private
-		 */		
-		public function StreamType()
-		{
-		}
 	}
 }

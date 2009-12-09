@@ -59,7 +59,7 @@ package org.osmf.media
 			return new BeaconElement(new Beacon(PING_URL, httpLoader));
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}
@@ -76,12 +76,12 @@ package org.osmf.media
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.PLAYABLE];
+			return [MediaTraitType.PLAY];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.PLAYABLE];
+			return [MediaTraitType.PLAY];
 		}
 		
 		private static const PING_URL:URL = new URL("http://example.com");

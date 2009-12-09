@@ -27,9 +27,9 @@ package org.osmf.composition
 	
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -267,22 +267,22 @@ package org.osmf.composition
 		/**
 		 * @private
 		 * 
-		 * Invoked when the specified trait of the specified type is aggregated
+		 * Invoked when the specified trait of the specified MediaTraitType is aggregated
 		 * by the TraitAggregator used by this CompositeElement.  Subclasses
 		 * can override to do custom processing.
 		 **/
-		protected function processAggregatedTrait(traitType:MediaTraitType, trait:IMediaTrait):void
+		protected function processAggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 		}
 
 		/**
 		 * @private
 		 * 
-		 * Invoked when the specified trait of the specified type is
+		 * Invoked when the specified trait of the specified MediaTraitType is
 		 * unaggregated by the TraitAggregator used by this CompositeElement.
 		 * Subclasses can override to do custom processing.
 		 **/
-		protected function processUnaggregatedTrait(traitType:MediaTraitType, trait:IMediaTrait):void
+		protected function processUnaggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 		}
 		
@@ -293,7 +293,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 */		
+		 **/
 		protected function get compositeMetadata():CompositeMetadata
 		{
 			return CompositeMetadata(metadata);

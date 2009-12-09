@@ -25,7 +25,6 @@ package org.osmf.net
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.IMediaResource;
@@ -33,12 +32,13 @@ package org.osmf.net
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
+	import org.osmf.netmocker.IMockNetLoader;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.MockNetNegotiator;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NetFactory;
@@ -50,7 +50,7 @@ package org.osmf.net
 	{
 		override public function setUp():void
 		{
-			netFactory = new NetFactory();
+			netFactory = createNetFactory();
 			eventDispatcher = new EventDispatcher();
 
 			super.setUp();
@@ -266,20 +266,25 @@ package org.osmf.net
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			var netLoader:MockNetLoader = new MockNetLoader();
-			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable1.load();
-			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable2.load();
-			var loadable3:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable3.load();
-			var loadable4:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable4.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable4.load();
+			var netLoader:NetLoader = netFactory.createNetLoader();
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+			
+			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
+			var loadTrait3:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait3.load();
+			var loadTrait4:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait4.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait4.load();
 			var responses:int = 0;
 			function onMultiLoad(event:LoadEvent):void
 			{
@@ -299,14 +304,19 @@ package org.osmf.net
 		
 		private function doTestConnectionSharing():void
 		{
-			var netLoader:MockNetLoader = new MockNetLoader();
-			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable1.load();
-			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable2.load();
+			var netLoader:NetLoader = netFactory.createNetLoader();
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+
+			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadEvent):void
@@ -318,9 +328,9 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
 						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
 						assertTrue(context2.shareable);
 					}
 				}
@@ -330,14 +340,19 @@ package org.osmf.net
 		
 		private function doTestAllowConnectionSharing():void
 		{
-			var netLoader:MockNetLoader = new MockNetLoader(false);
-			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable1.load();
-			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable2.load();
+			var netLoader:NetLoader = netFactory.createNetLoader(false);
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+
+			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadEvent):void
@@ -349,9 +364,9 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
 						assertFalse(context1.shareable);
-						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
 						assertFalse(context2.shareable);
 					}
 				}
@@ -361,14 +376,19 @@ package org.osmf.net
 		
 		private function doTestUnloadWithSharedConnections():void
 		{
-			var netLoader:MockNetLoader = new MockNetLoader();
-			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable1.load();
-			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable2.load();
+			var netLoader:NetLoader = netFactory.createNetLoader();
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+
+			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
 
 			var responses:int = 0;
 			function onMultiLoad(event:LoadEvent):void
@@ -380,19 +400,19 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
 						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
 						assertTrue(context2.shareable);
 
-						loadable1.unload();
+						loadTrait1.unload();
 					}
 				}
 				if (event.loadState == LoadState.UNINITIALIZED)
 				{
 					if (responses == 2)
 					{
-						assertTrue((loadable2.loadedContext as NetLoadedContext).connection.connected);
+						assertTrue((loadTrait2.loadedContext as NetLoadedContext).connection.connected);
 					}
 				}
 			}
@@ -401,16 +421,22 @@ package org.osmf.net
 		
 		private function doTestNetConnectionFactoryArgument():void
 		{
-			var negotiator:MockNetNegotiator = new MockNetNegotiator();
-			var factory:DefaultNetConnectionFactory = new DefaultNetConnectionFactory(negotiator);
-			var netLoader:MockNetLoader = new MockNetLoader(true,factory,negotiator);
-			netLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			var loadable1:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable1.load();
-			var loadable2:LoadableTrait = new LoadableTrait(netLoader, successfulResource);
-			loadable2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
-			loadable2.load();
+			var negotiator:NetNegotiator = new MockNetNegotiator();
+			var factory:NetConnectionFactory = new DefaultNetConnectionFactory(negotiator);
+			var netLoader:NetLoader = netFactory.createNetLoader(true, factory);
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+
+			
+			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
 			
 			var responses:int = 0;
 
@@ -423,9 +449,9 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadable1.loadedContext as NetLoadedContext;
+						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
 						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadable2.loadedContext as NetLoadedContext;
+						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
 						assertTrue(context2.shareable);
 					}
 				}
@@ -440,7 +466,7 @@ package org.osmf.net
 			return netFactory.createNetLoader();
 		}
 		
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
 			var mockLoader:MockNetLoader = loader as MockNetLoader;
 			if (mockLoader)
@@ -458,7 +484,7 @@ package org.osmf.net
 					mockLoader.netConnectionExpectation = NetConnectionExpectation.REJECTED_CONNECTION;
 				}
 			}
-			return new LoadableTrait(loader, resource);
+			return new LoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource
@@ -489,12 +515,18 @@ package org.osmf.net
 					   error.errorCode == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
 		}
 		
+		protected function createNetFactory():NetFactory
+		{
+			return new NetFactory();
+		}
+		
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.
 		}
 		
-		private var netFactory:NetFactory;
+		protected var netFactory:NetFactory;
+		
 		private var eventDispatcher:EventDispatcher;
 		
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));

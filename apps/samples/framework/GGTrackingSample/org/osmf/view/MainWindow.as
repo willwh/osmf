@@ -24,7 +24,7 @@ package org.osmf.view
 	import flash.events.MouseEvent;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.events.PluginLoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
@@ -47,7 +47,7 @@ package org.osmf.view
 			super.childrenCreated();
 			
 			buttonPlayPause.addEventListener(MouseEvent.CLICK, onPlayPauseClick);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 			updateButtonText();
 			
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
@@ -136,7 +136,7 @@ package org.osmf.view
 			}
 		}
 		
-		private function onPlayingChange(event:PlayingChangeEvent):void
+		private function onPlayStateChange(event:PlayEvent):void
 		{
 			updateButtonText();
 		}

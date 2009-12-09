@@ -69,8 +69,8 @@ package org.osmf.swf
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 						
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadAVM1SWF);
-			loader.load(createILoadable(new URLResource(new URL(IntegrationTestUtils.REMOTE_AVM1_SWF_FILE))));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadAVM1SWF);
+			loader.load(createLoadTrait(loader, new URLResource(new URL(IntegrationTestUtils.REMOTE_AVM1_SWF_FILE))));
 		}
 		
 		private function onTestLoadAVM1SWF(event:LoaderEvent):void

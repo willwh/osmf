@@ -33,9 +33,9 @@ package org.osmf
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
+	import org.osmf.manifest.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
-	import org.osmf.manifest.*;
 	import org.osmf.net.*;
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.plugin.*;
@@ -55,16 +55,184 @@ package org.osmf
 		public function MediaFrameworkTests(param:Object=null)
 		{
 			super(param);
-						
+			
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
-		
-			addTestSuite(TestOSMFStrings);
 			
+			// Utils
+			//
+
+			addTestSuite(TestBinarySearch);
+			addTestSuite(TestOSMFStrings);
+			addTestSuite(TestVersion);		
+			addTestSuite(TestURL);
+			addTestSuite(TestFMSURL);
+			addTestSuite(TestHTTPLoader);
+
+			// Logging
+			//
+			
+			addTestSuite(TestLog);
+			addTestSuite(TestTraceLogger);
+			addTestSuite(TestTraceLoggerFactory);
+
+			// Traits
+			//
+			
+			addTestSuite(TestAudioTrait);
+			addTestSuite(TestBufferTrait);
+			addTestSuite(TestBufferTraitAsSubclass);
+			addTestSuite(TestContentProtectionTrait);
+			addTestSuite(TestDynamicStreamTrait);
+			addTestSuite(TestLoadTrait);
+			//addTestSuite(TestLoaderBase);
+			addTestSuite(TestLoadTraitAsSubclass);
+			addTestSuite(TestPlayTrait);
+			addTestSuite(TestPlayTraitAsSubclass);
+			addTestSuite(TestSeekTrait);
+			addTestSuite(TestSeekTraitAsSubclass);
+			addTestSuite(TestTimeTrait);
+			addTestSuite(TestTimeTraitAsSubclass);
+			addTestSuite(TestViewTrait);
+			addTestSuite(TestViewTraitAsSubclass);
+
+			// Events
+			//
+			
+			addTestSuite(TestMediaError);
+			addTestSuite(TestMediaErrorAsSubclass);
+			
+			// Core Media
+			//
+			
+			addTestSuite(TestURLResource);
+			addTestSuite(TestMediaElement);
+			addTestSuite(TestMediaElementAsSubclass);
+			addTestSuite(TestLoadableMediaElement);
+			addTestSuite(TestMediaTraitResolver);
+			addTestSuite(TestDefaultTraitResolver);
+			addTestSuite(TestMediaInfo);
+			addTestSuite(TestMediaFactory);
+			
+			// MediaPlayer
+			//
+
+			addTestSuite(TestMediaPlayer);
+			addTestSuite(TestMediaPlayerWithAudioElement);
+			addTestSuite(TestMediaPlayerWithVideoElement);
+			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
+			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
+			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
+			addTestSuite(TestMediaPlayerWithProxyElement);
+			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);
+			
+			// This test fails intermittently on the build machine.
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
+
+			// Metadata
+			//
+
+			addTestSuite(TestMetadata);
+			addTestSuite(TestObjectIdentifier);
+			addTestSuite(TestMediaType);
+			addTestSuite(TestKeyValueFacet);
+			addTestSuite(TestFacetGroup);
+			addTestSuite(TestMetadataUtils);
+			addTestSuite(TestCompositeMetadata);
+			addTestSuite(TestTemporalFacet);
+
+			// NetStream
+			//
+			
+			
+			addTestSuite(TestNetLoadedContext);
+			addTestSuite(TestNetNegotiator);
+			addTestSuite(TestNetConnectionFactory);
+			addTestSuite(TestNetLoader);
+ 			addTestSuite(TestNetClient);
+			addTestSuite(TestNetStreamUtils);
+			addTestSuite(TestStreamingURLResource);
+
+			addTestSuite(TestNetStreamAudioTrait);
+			addTestSuite(TestNetStreamBufferTrait);
+			addTestSuite(TestNetStreamLoadTrait);
+			addTestSuite(TestNetStreamPlayTrait);
+			addTestSuite(TestNetStreamSeekTrait);
+			addTestSuite(TestNetStreamTimeTrait);
+			addTestSuite(TestNetStreamViewTrait);
+			
+			addTestSuite(TestManifestParser);
+			addTestSuite(TestF4MLoader);		
+
+			// Dynamic Streaming
+			//
+			
+			addTestSuite(TestBandwidthRule);
+			addTestSuite(TestBufferRule);
+			addTestSuite(TestFrameDropRule);
+			addTestSuite(TestSwitchUpRule);
+			addTestSuite(TestDynamicStreamingItem);
+			addTestSuite(TestDynamicStreamingResource);
+			
+			addTestSuite(TestDynamicStreamingNetLoader);
+			addTestSuite(TestDynamicNetStream);
+			addTestSuite(TestNetStreamDynamicStreamTrait);
+			
+			// Video
+			//
+			
+			addTestSuite(TestVideoElement);
+			addTestSuite(TestCuePoint);
+			
+			// Audio
+			//
+			
+			addTestSuite(TestAudioElement);
+			addTestSuite(TestAudioElementWithSoundLoader);
+			addTestSuite(TestSoundLoader);
+			
+			addTestSuite(TestAudioAudioTrait);
+			addTestSuite(TestAudioSeekTrait); 
+			addTestSuite(TestAudioTimeTrait);
+			addTestSuite(TestSoundLoadTrait);
+			
+			// This test fails intermittently on the build machine.
+			//addTestSuite(TestAudioPlayTrait);
+
+			// Images & SWFs
+			//
+			
+			addTestSuite(TestContentLoader);
+			addTestSuite(TestContentElement);
+			
+			addTestSuite(TestImageLoader);
+			addTestSuite(TestImageElement);
+
+			addTestSuite(TestSWFLoader);
+			addTestSuite(TestSWFElement);
+			
+			// Composition
+			
+			/*
 			addTestSuite(TestParallelDownloadableTrait);
 			addTestSuite(TestSerialDownloadableTrait);
-						
-			addTestSuite(TestContentProtectable);
+			addTestSuite(TestCompositeElement);
+			addTestSuite(TestParallelElement);
+			addTestSuite(TestSerialElement);
+			addTestSuite(TestTraitAggregator);
+			addTestSuite(TestTraitLoader);
+			
+			addTestSuite(TestCompositeViewableTrait);
+			addTestSuite(TestCompositeAudibleTrait);
+			addTestSuite(TestSerialViewableTrait);
+			addTestSuite(TestParallelViewableTrait);
+			addTestSuite(TestParallelSwitchableTrait);
+			addTestSuite(TestSerialSwitchableTrait);
+			*/
+			
+			// Layout
+			//
 					
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
@@ -78,46 +246,30 @@ package org.osmf
 			addTestSuite(TestRegistrationPoint);
 			addTestSuite(TestRelativeLayoutFacet);
 			addTestSuite(TestLayoutUtils);
+
+		 	addTestSuite(TestMediaElementSprite);
+			addTestSuite(TestScalableSprite);
+			addTestSuite(TestMediaPlayerSprite);
+			
+			// Gateways
+			//
 			
 			addTestSuite(TestRegionGateway);
 			addTestSuite(TestHTMLGateway);
-			addTestSuite(TestSerialViewableTrait);
-			addTestSuite(TestParallelViewableTrait);
-						
-			addTestSuite(TestMetadata);
-			addTestSuite(TestMediaType);
-			addTestSuite(TestKeyValueFacet);
-			addTestSuite(TestObjectIdentifier);
-			addTestSuite(TestMetadataUtils);
-			addTestSuite(TestFacetGroup);
-			addTestSuite(TestCompositeMetadata);
-			
-			addTestSuite(TestLoaderBase);
+	
+			// Plugins
+			//
 			
 			addTestSuite(TestPluginElement);
 			addTestSuite(TestStaticPluginLoader);
 			addTestSuite(TestDynamicPluginLoader);
+			addTestSuite(TestPluginManager);
+			addTestSuite(TestPluginLoadingState);
+			addTestSuite(TestPluginLoadedContext);
 
-			addTestSuite(TestCompositeElement);
-			addTestSuite(TestParallelElement);
-			addTestSuite(TestSerialElement);
-			addTestSuite(TestTraitAggregator);
-			addTestSuite(TestTraitLoader);
+			// Proxies
+			//
 			
-			addTestSuite(TestCompositeViewableTrait);
-			addTestSuite(TestCompositeAudibleTrait);
-			
-			addTestSuite(TestMediaError);
-			addTestSuite(TestMediaErrorAsSubclass);
-		
-			addTestSuite(TestMediaElement);
-			addTestSuite(TestMediaElementAsSubclass);
-			addTestSuite(TestLoadableMediaElement);
-			addTestSuite(TestMediaFactory);
-			addTestSuite(TestMediaInfo);
-			addTestSuite(TestURLResource);
-			addTestSuite(TestMediaTraitResolver);
-			addTestSuite(TestDefaultTraitResolver);
 			
 			addTestSuite(TestProxyElement);
 			addTestSuite(TestProxyElementAsDynamicProxy);
@@ -126,123 +278,22 @@ package org.osmf
 			addTestSuite(TestListenerProxyElementAsSubclass);
 			addTestSuite(TestLoadableProxyElement);
 			addTestSuite(TestMediaElementLoadedContext);
-							
+			
+			// Tracking
+			//
+			
 			addTestSuite(TestBeacon);
 			addTestSuite(TestBeaconElement);
+									
+			// VAST
+			//
 			
-			addTestSuite(TestPlayableTrait);
-			addTestSuite(TestPausableTrait);
-			addTestSuite(TestTemporalTrait);
-			addTestSuite(TestSeekableTrait);
-			addTestSuite(TestAudibleTrait);
-			addTestSuite(TestViewableTrait);
-			addTestSuite(TestBufferableTrait);
-			addTestSuite(TestDownloadableTrait);
-			
-			addTestSuite(TestSwitchableTrait);
-			
-			addTestSuite(TestNetLoader);
-			addTestSuite(TestNetLoadedContext);
-			addTestSuite(TestNetConnectionFactory);
-			addTestSuite(TestNetNegotiator);
-			
- 			addTestSuite(TestVideoElement);
-			addTestSuite(TestNetClient);
-			addTestSuite(TestNetStreamUtils);
-			addTestSuite(TestStreamingURLResource);
-
-			addTestSuite(TestManifestParser);
-			addTestSuite(TestF4MLoader);
-		
-
-			addTestSuite(TestNetStreamAudibleTrait);
-			addTestSuite(TestNetStreamBufferableTrait);
-			addTestSuite(TestNetStreamPlayableTrait);
-			addTestSuite(TestNetStreamPausableTrait);
-			addTestSuite(TestNetStreamSeekableTrait);
-			addTestSuite(TestNetStreamTemporalTrait);
-			addTestSuite(TestNetStreamSwitchableTrait);
-			addTestSuite(TestNetStreamDownloadableTrait);
-			
-			addTestSuite(TestContentDownloadableTrait);
-			addTestSuite(TestContentLoader);
-			addTestSuite(TestContentElement);
-			
-			addTestSuite(TestContentProtectable);
-			
-			addTestSuite(TestImageLoader);
-			addTestSuite(TestImageElement);
-
-			addTestSuite(TestSWFLoader);
-			addTestSuite(TestSWFElement);
-	
-			addTestSuite(TestAudioElement);
-			addTestSuite(TestAudioElementWithSoundLoader);
-			addTestSuite(TestSoundLoader);
-			addTestSuite(TestSoundDownloadableTrait);
-
-			addTestSuite(TestAudioAudibleTrait);
-			addTestSuite(TestAudioSeekableTrait); 
-			addTestSuite(TestAudioTemporalTrait);
-			
-			// These three tests fail intermittently on the build machine.
-			//addTestSuite(TestAudioPlayableTrait);
-			//addTestSuite(TestAudioPausableTrait);
-			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
-
-			addTestSuite(TestMediaPlayer);
-			addTestSuite(TestMediaPlayerWithAudioElement);
-			addTestSuite(TestMediaPlayerWithVideoElement);
-			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
-			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
-			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
-			addTestSuite(TestMediaPlayerWithProxyElement);
-			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);
-			
-		 	addTestSuite(TestMediaElementSprite);
-			addTestSuite(TestScalableSprite);
-			addTestSuite(TestMediaPlayerSprite);
-
-			addTestSuite(TestVersion);		
-			
-			addTestSuite(TestURL);
-			addTestSuite(TestFMSURL);
-			addTestSuite(TestBinarySearch);
-			
-			addTestSuite(TestPluginManager);
-			addTestSuite(TestPluginLoadingState);
-			addTestSuite(TestPluginLoadedContext);
-			
-			addTestSuite(TestBandwidthRule);
-			addTestSuite(TestBufferRule);
-			addTestSuite(TestFrameDropRule);
-			addTestSuite(TestSwitchUpRule);
-			addTestSuite(TestDynamicStreamingItem);
-			addTestSuite(TestDynamicStreamingResource);
-			
-			addTestSuite(TestDynamicStreamingNetLoader);
-			addTestSuite(TestDynamicNetStream);
-			addTestSuite(TestParallelSwitchableTrait);
-			addTestSuite(TestSerialSwitchableTrait);
-
-			addTestSuite(TestLog);
-			addTestSuite(TestTraceLogger);
-			addTestSuite(TestTraceLoggerFactory);
-			
-			addTestSuite(TestHTTPLoader);
-
 			addTestSuite(TestVASTLoader);
-		
 			addTestSuite(TestVASTParser);
 			addTestSuite(TestDefaultVASTMediaFileResolver);
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
 			addTestSuite(TestVASTTrackingProxyElement);		
-
-			addTestSuite(TestCuePoint);
-			addTestSuite(TestTemporalFacet);
-			
 		}
 	}
 }

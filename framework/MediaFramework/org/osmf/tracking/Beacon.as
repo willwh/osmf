@@ -26,7 +26,7 @@ package org.osmf.tracking
 	import org.osmf.events.BeaconEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
@@ -89,21 +89,23 @@ package org.osmf.tracking
 			// we treat this as a ping failure.
 			if (httpLoader.canHandleResource(urlResource))
 			{
-				var loadable:LoadableTrait = new LoadableTrait(httpLoader, urlResource);
+				var loadTrait:LoadTrait = new LoadTrait(httpLoader, urlResource);
 				
-				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-				loadable.load();
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				loadTrait.load();
 	
 				function onLoadStateChange(event:LoadEvent):void
 				{
 					if (event.loadState == LoadState.READY)
 					{
-						loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 						dispatchEvent(new BeaconEvent(BeaconEvent.PING_COMPLETE));
 					}
 					else if (event.loadState == LoadState.LOAD_ERROR)
 					{
+						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						
 						dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
 					}
 				}

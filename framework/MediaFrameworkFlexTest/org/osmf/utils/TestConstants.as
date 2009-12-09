@@ -38,6 +38,7 @@ package org.osmf.utils
 		public static const REMOTE_PROGRESSIVE_VIDEO_EXPECTED_DURATION:Number = 30;
 		public static const REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH:Number = 640;
 		public static const REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT:Number = 352;
+		public static const REMOTE_PROGRESSIVE_VIDEO_EXPECTED_BYTES:Number = 12345;
 		
 		public static const REMOTE_STREAMING_VIDEO:String
 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short.flv";
@@ -106,6 +107,7 @@ package org.osmf.utils
 		//
 		
 		public static const LOCAL_SOUND_FILE:String = "assets/sound.mp3";
+		public static const LOCAL_SOUND_FILE_EXPECTED_BYTES:Number = 30439;
 		public static const LOCAL_INVALID_SOUND_FILE:String = "assets/invalid.mp3";
 		
 		public static const STREAMING_AUDIO_FILE:String

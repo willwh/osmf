@@ -127,7 +127,7 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-		 * Specifies whether or not the NetConnection may be shared between ILoadable instances
+		 * Specifies whether or not the NetConnection may be shared between LoadTrait instances
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

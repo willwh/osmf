@@ -24,8 +24,8 @@ package org.osmf.plugin
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.URL;
@@ -51,9 +51,9 @@ package org.osmf.plugin
 			return new DynamicPluginLoader(mediaFactory);
 		}
 		
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
-			return new LoadableTrait(loader, resource);
+			return new LoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource

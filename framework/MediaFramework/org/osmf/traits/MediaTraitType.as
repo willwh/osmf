@@ -32,191 +32,111 @@ package org.osmf.traits
 	public final class MediaTraitType
 	{
 		/**
-		 * Identifies a trait that implements the IAudible interface. 
+		 * Identifies an instance of an AudioTrait. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		public static const AUDIBLE:MediaTraitType = new MediaTraitType(IAudible);
+		public static const AUDIO:String = "audio";
 		
 		/**
-		 * Identifies a trait that implements the IBufferable interface. 
+		 * Identifies an instance of a BufferTrait. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BUFFERABLE:MediaTraitType = new MediaTraitType(IBufferable);
+		public static const BUFFER:String = "buffer";
 		
 		/**
-		 * Identifies a trait that implements the ILoadable interface. 
+		 * Identifies an instance of a ContentProtectionTrait. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public static const LOADABLE:MediaTraitType = new MediaTraitType(ILoadable);
-		
-		/**
-		 * Identifies a trait that implements the IPausable interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const PAUSABLE:MediaTraitType = new MediaTraitType(IPausable);
-		
-		/**
-		 * Identifies a trait that implements the IPlayable interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const PLAYABLE:MediaTraitType = new MediaTraitType(IPlayable);
-		
-		/**
-		 * Identifies a trait that implements the ISeekable interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SEEKABLE:MediaTraitType = new MediaTraitType(ISeekable);
-		
-		/**
-		 * Identifies a trait that implements the ISpatial interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SPATIAL:MediaTraitType = new MediaTraitType(ISpatial);
-		
-		/**
-		 * Identifies a trait that implements the ITemporal interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const TEMPORAL:MediaTraitType = new MediaTraitType(ITemporal);
-		
-		/**
-		 * Identifies a trait that implements the IViewable interface. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const VIEWABLE:MediaTraitType = new MediaTraitType(IViewable); 
-		
-		/**
-		 * Identifies a trait that implements the ISwitchable interface.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
-		
-		/**
-		 * Identifies a trait that implements the ISwitchable interface.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const CONTENT_PROTECTABLE:MediaTraitType = new MediaTraitType(IContentProtectable);
-		
-		/**
-		 * Identifies a trait that implements the IDownloadable interface.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public static const DOWNLOADABLE:MediaTraitType = new MediaTraitType(IDownloadable);
+		public static const CONTENT_PROTECTION:String = "contentProtection";
 
+		/**
+		 * Identifies an instance of a DynamicStreamTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const DYNAMIC_STREAM:String = "dynamicStream";
+
+		/**
+		 * Identifies an instance of a LoadTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const LOAD:String = "load";
+				
+		/**
+		 * Identifies an instance of a PlayTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const PLAY:String = "play";
+		
+		/**
+		 * Identifies an instance of a SeekTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const SEEK:String = "seek";
+		
+		/**
+		 * Identifies an instance of a TimeTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const TIME:String = "time";
+		
+		/**
+		 * Identifies an instance of a ViewTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
+		 */
+		public static const VIEW:String = "view";
+				
 		/**
 		 * Array containing all trait types in the system.  Useful for clients
 		 * who want to iterate over all traits.
 		 **/
-		public static const ALL_TYPES:Vector.<MediaTraitType> = 
-			Vector.<MediaTraitType>
-				( 
-				  [   AUDIBLE
-					, BUFFERABLE
-					, LOADABLE
-					, PAUSABLE
-					, PLAYABLE
-					, SEEKABLE
-					, SPATIAL
-					, TEMPORAL
-					, VIEWABLE
-					, SWITCHABLE
-					, DOWNLOADABLE
-				  ]
-				);
-
-		/**
-		 * Constructor
-		 * 
-		 * @param traitInterface Specifies the trait interface class that this
-		 * identifier implements.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */		 
-		public function MediaTraitType(traitInterface:Class)
-		{
-			_traitInterface = traitInterface;	
-		}
-
-		/**
-		 * The Class that implements the trait.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */		
-		public function get traitInterface():Class
-		{
-			return _traitInterface;
-		}
-
-		/**
-		 * Returns the string representation of the MediaTraitType.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */
-		public function toString():String
-		{
-			return traitInterface.toString();
-		}
-
-		// Internals
-		//
-		
-		private var _traitInterface:Class;
+		public static const ALL_TYPES:Vector.<String> = Vector.<String>
+			( 
+			  [   AUDIO
+				, BUFFER
+				, CONTENT_PROTECTION
+				, DYNAMIC_STREAM
+				, LOAD
+				, PLAY
+				, SEEK
+				, TIME
+				, VIEW
+			  ]
+			);
 	}
 }

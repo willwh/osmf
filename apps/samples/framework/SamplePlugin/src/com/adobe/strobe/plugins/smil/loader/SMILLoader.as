@@ -32,8 +32,8 @@ package com.adobe.strobe.plugins.smil.loader
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 	
@@ -73,13 +73,13 @@ package com.adobe.strobe.plugins.smil.loader
 			
 		}
 
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
-			this.loadable = loadable;
-			updateLoadable(loadable, LoadState.LOADING);
+			super.load(loadTrait);
+			this.loadTrait = loadTrait;
+			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
-			var smilResource:URLResource = loadable.resource as URLResource;
+			var smilResource:URLResource = loadTrait.resource as URLResource;
 			urlRequest = new URLRequest(smilResource.url.rawUrl);
 
 			try
@@ -88,7 +88,7 @@ package com.adobe.strobe.plugins.smil.loader
 			}
 			catch (e:Error)
 			{
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 			}
 			
 		}
@@ -108,33 +108,31 @@ package com.adobe.strobe.plugins.smil.loader
 					// The root element has been loaded successfully. Set *this* element as loaded as well
 					// Send the Root element's loaded context as my own loaded context 
 					var loadedContext:SMILLoadedContext = new SMILLoadedContext(mediaElement);
-					trace("Root Element Loaded Successfully");
-					updateLoadable(loadable, LoadState.READY, loadedContext);
+					updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
 				}
 				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
-					trace("Root Element Loading Failed");
-					updateLoadable(loadable, LoadState.LOAD_ERROR);
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 				}
 			}
 
 
-			if (mediaElement.hasTrait(MediaTraitType.LOADABLE))
+			if (mediaElement.hasTrait(MediaTraitType.LOAD))
 			{
-				mediaLoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				mediaLoadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-				mediaLoadable.load();
+				mediaLoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				mediaLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				mediaLoadTrait.load();
 			}
 		}
 
 		private function onURLLoadingError(event:Event):void
 		{
-			updateLoadable(loadable, LoadState.LOAD_ERROR);
+			updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 		}
 
 
-		private var loadable:ILoadable;
-		private var mediaLoadable:ILoadable;
+		private var loadTrait:LoadTrait;
+		private var mediaLoadTrait:LoadTrait;
 		private var urlRequest:URLRequest;
 		private var urlLoader:URLLoader;
 	}

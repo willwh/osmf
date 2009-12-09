@@ -22,8 +22,8 @@
 package org.osmf.examples.loaderproxy
 {
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;
 	
@@ -41,21 +41,22 @@ package org.osmf.examples.loaderproxy
 			// Always true for simplicity.
 			return true;
 		}
-		override public function load(loadable:ILoadable):void
+		
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
+			super.load(loadTrait);
 			
 			// Here's a new URL, this will replace the previous URL.
 			// Note that this class could do other preflight activities
 			// (we just rewrite the URL as an example).
 			var url:URL = new URL("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			updateLoadable(loadable, LoadState.READY, new VideoProxyLoadedContext(url));
+			updateLoadTrait(loadTrait, LoadState.READY, new VideoProxyLoadedContext(url));
 		}
 		
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 		}
 	}
 }

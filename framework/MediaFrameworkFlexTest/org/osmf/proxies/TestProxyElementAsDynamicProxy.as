@@ -23,12 +23,12 @@ package org.osmf.proxies
 {
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicProxyElement;
 	import org.osmf.utils.SimpleLoader;
@@ -38,29 +38,28 @@ package org.osmf.proxies
 		public function testBlockedTraits():void
 		{
 			var wrappedElement:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			var proxyElement:DynamicProxyElement = new DynamicProxyElement(wrappedElement);
-			proxyElement.doBlockTrait(MediaTraitType.PAUSABLE);
-			proxyElement.doBlockTrait(MediaTraitType.LOADABLE);
+			proxyElement.doBlockTrait(MediaTraitType.PLAY);
+			proxyElement.doBlockTrait(MediaTraitType.LOAD);
 			
-			// The proxy blocks LOADABLE.
+			// The proxy blocks LOAD.
 			//
 			
-			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAYABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.PAUSABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.LOADABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAY));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.LOAD));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
 
-			assertTrue(wrappedElement.hasTrait(MediaTraitType.LOADABLE));
-			assertTrue(wrappedElement.getTrait(MediaTraitType.LOADABLE) != null);
+			assertTrue(wrappedElement.hasTrait(MediaTraitType.LOAD));
+			assertTrue(wrappedElement.getTrait(MediaTraitType.LOAD) != null);
 
-			// TEMPORAL, LOADABLE
+			// TIME, LOAD
 			assertTrue(wrappedElement.traitTypes.length == 2);
 			
-			// TEMPORAL
+			// TIME
 			assertTrue(proxyElement.traitTypes.length == 1);
 						
 			// If we now replace the wrapped element, then the traits of the
@@ -69,38 +68,37 @@ package org.osmf.proxies
 			//
 			
 			var wrappedElement2:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.PLAYABLE, MediaTraitType.PAUSABLE, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			proxyElement.wrappedElement = wrappedElement2;
 
-			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAYABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.PAUSABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.LOADABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAY));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.SEEK));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.LOAD));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 		}
 		
 		public function testOverriddenTraits():void
 		{
 			var wrappedElement:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
-			var overriddenTemporal:TemporalTrait = new TemporalTrait();
+			var overriddenTimeTrait:TimeTrait = new TimeTrait();
 			var proxyElement:DynamicProxyElement = new DynamicProxyElement(wrappedElement);
 			
-			// Override PAUSABLE and TEMPORAL.
-			proxyElement.doAddTrait(MediaTraitType.PAUSABLE, new PausableTrait(proxyElement));
-			proxyElement.doAddTrait(MediaTraitType.TEMPORAL, overriddenTemporal);
+			// Override PLAY and TIME.
+			proxyElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+			proxyElement.doAddTrait(MediaTraitType.TIME, overriddenTimeTrait);
 			
-			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAYABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.PAUSABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.LOADABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.LOAD));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
 			
-			assertTrue(proxyElement.getTrait(MediaTraitType.TEMPORAL) == overriddenTemporal);
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == overriddenTimeTrait);
 
 			// If we now replace the wrapped element, then the proxy should no
 			// longer have the same overridden traits.  (Why?  Changing the
@@ -115,40 +113,38 @@ package org.osmf.proxies
 			//
 			
 			var wrappedElement2:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			proxyElement.wrappedElement = wrappedElement2;
 
-			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAYABLE));
-			assertFalse(proxyElement.hasTrait(MediaTraitType.PAUSABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.LOADABLE));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.LOAD));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
 			
-			// The temporal trait should now come from the wrapped element,
+			// The TimeTrait should now come from the wrapped element,
 			// not the proxy.
-			assertTrue(proxyElement.getTrait(MediaTraitType.TEMPORAL) != overriddenTemporal);
-			assertTrue(proxyElement.getTrait(MediaTraitType.TEMPORAL) == wrappedElement2.getTrait(MediaTraitType.TEMPORAL));
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) != overriddenTimeTrait);
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == wrappedElement2.getTrait(MediaTraitType.TIME));
 		}
 		
 		public function testDispatchEvent():void
 		{
-			// Wrap up a temporal element, but override the temporal trait
-			// and block the pausable trait.
+			// Wrap up a temporal element, but override the TimeTrait
+			// and block the PlayTrait.
 			//
 			
 			var wrappedElement:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			var proxyElement:DynamicProxyElement = new DynamicProxyElement(wrappedElement);
-			proxyElement.doBlockTrait(MediaTraitType.PAUSABLE);
+			proxyElement.doBlockTrait(MediaTraitType.PLAY);
 
-			var temporalTrait:TemporalTrait = new TemporalTrait();
-			temporalTrait.duration = 30;
-			proxyElement.doAddTrait(MediaTraitType.TEMPORAL, temporalTrait);
+			var timeTrait:TimeTrait = new TimeTrait(30);
+			proxyElement.doAddTrait(MediaTraitType.TIME, timeTrait);
 
 			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
@@ -156,57 +152,57 @@ package org.osmf.proxies
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
 			
-			// If the temporal trait is added or removed on the wrapped
+			// If the TimeTrait is added or removed on the wrapped
 			// element, we shouldn't get any events.
-			wrappedElement.doRemoveTrait(MediaTraitType.TEMPORAL);
+			wrappedElement.doRemoveTrait(MediaTraitType.TIME);
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
-			wrappedElement.doAddTrait(MediaTraitType.TEMPORAL, new TemporalTrait());
+			wrappedElement.doAddTrait(MediaTraitType.TIME, new TimeTrait());
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
 			
 			// Similarly, if we add or remove a trait to the wrapped element
 			// which the proxy blocks, then we shouldn't get any events.
-			wrappedElement.doAddTrait(MediaTraitType.PAUSABLE, new PausableTrait(wrappedElement));
+			wrappedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
-			wrappedElement.doRemoveTrait(MediaTraitType.PAUSABLE);
+			wrappedElement.doRemoveTrait(MediaTraitType.PLAY);
 			assertTrue(traitAddEventCount == 0);
 			assertTrue(traitRemoveEventCount == 0);
 
 			// But if our proxy doesn't have an override for a trait or
 			// block a trait, then we should get events.
-			wrappedElement.doAddTrait(MediaTraitType.PLAYABLE, new PlayableTrait(wrappedElement));
+			wrappedElement.doAddTrait(MediaTraitType.SEEK, new SeekTrait(timeTrait));
 			assertTrue(traitAddEventCount == 1);
 			assertTrue(traitRemoveEventCount == 0);
-			wrappedElement.doRemoveTrait(MediaTraitType.PLAYABLE);
+			wrappedElement.doRemoveTrait(MediaTraitType.SEEK);
 			assertTrue(traitAddEventCount == 1);
 			assertTrue(traitRemoveEventCount == 1);
 			
 			// If we add or remove a trait to the proxy which the wrapped
 			// element already has, we should get no events.
-			proxyElement.doAddTrait(MediaTraitType.LOADABLE, new LoadableTrait(null,null));
+			proxyElement.doAddTrait(MediaTraitType.LOAD, new LoadTrait(null,null));
 			assertTrue(traitAddEventCount == 1);
 			assertTrue(traitRemoveEventCount == 1);
-			proxyElement.doRemoveTrait(MediaTraitType.LOADABLE);
+			proxyElement.doRemoveTrait(MediaTraitType.LOAD);
 			assertTrue(traitAddEventCount == 1);
 			assertTrue(traitRemoveEventCount == 1);
 
 			// But if we add or remove a trait to the proxy which the wrapped
 			// element doesn't have, then we should get events.
-			proxyElement.doAddTrait(MediaTraitType.SEEKABLE, new SeekableTrait());
+			proxyElement.doAddTrait(MediaTraitType.BUFFER, new BufferTrait());
 			assertTrue(traitAddEventCount == 2);
 			assertTrue(traitRemoveEventCount == 1);
-			proxyElement.doRemoveTrait(MediaTraitType.SEEKABLE);
+			proxyElement.doRemoveTrait(MediaTraitType.BUFFER);
 			assertTrue(traitAddEventCount == 2);
 			assertTrue(traitRemoveEventCount == 2);
 			
 			// Last, if we add or remove a trait to the proxy which the proxy
 			// also blocks, then we should get events. 
-			proxyElement.doAddTrait(MediaTraitType.PAUSABLE, new PausableTrait(proxyElement));
+			proxyElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
 			assertTrue(traitAddEventCount == 3);
 			assertTrue(traitRemoveEventCount == 2);
-			proxyElement.doRemoveTrait(MediaTraitType.PAUSABLE);
+			proxyElement.doRemoveTrait(MediaTraitType.PLAY);
 			assertTrue(traitAddEventCount == 3);
 			assertTrue(traitRemoveEventCount == 3);
 		}
@@ -231,7 +227,7 @@ package org.osmf.proxies
 			traitAddEventCount = traitRemoveEventCount = 0;
 		}
 
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -263,21 +259,19 @@ package org.osmf.proxies
 		private var traitRemoveEventCount:int;
 		
 		private static const WRAPPED_TRAITS:Array =
-					[ MediaTraitType.AUDIBLE
-					, MediaTraitType.BUFFERABLE
-					, MediaTraitType.LOADABLE
-					, MediaTraitType.PAUSABLE
-					, MediaTraitType.SPATIAL
-				    , MediaTraitType.VIEWABLE
+					[ MediaTraitType.AUDIO
+					, MediaTraitType.BUFFER
+					, MediaTraitType.LOAD
+					, MediaTraitType.PLAY
+				    , MediaTraitType.VIEW
 				    ];
 
 		private static const REFLECTED_TRAITS:Array =
-					[ MediaTraitType.AUDIBLE
-					, MediaTraitType.BUFFERABLE
-					, MediaTraitType.LOADABLE
-					, MediaTraitType.PAUSABLE
-					, MediaTraitType.SPATIAL
-				    , MediaTraitType.VIEWABLE
+					[ MediaTraitType.AUDIO
+					, MediaTraitType.BUFFER
+					, MediaTraitType.LOAD
+					, MediaTraitType.PLAY
+				    , MediaTraitType.VIEW
 				    ];
 	}
 }

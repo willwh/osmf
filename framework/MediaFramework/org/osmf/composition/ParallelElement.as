@@ -21,9 +21,8 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.media.IMediaTrait;
-	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -130,11 +129,11 @@ package org.osmf.composition
 		/**
 		 * @private
 		 **/			
-		override protected function processAggregatedTrait(traitType:MediaTraitType, trait:IMediaTrait):void
+		override protected function processAggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processAggregatedTrait(traitType, trait);
 			
-			var compositeTrait:IMediaTrait = getTrait(traitType);
+			var compositeTrait:MediaTraitBase = getTrait(traitType);
 
 			// Create the composite trait if it doesn't exist yet.
 			if (compositeTrait == null)
@@ -155,7 +154,7 @@ package org.osmf.composition
 		/**
 		 * @private
 		 **/	
-		override protected function processUnaggregatedTrait(traitType:MediaTraitType, trait:IMediaTrait):void
+		override protected function processUnaggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processUnaggregatedTrait(traitType, trait);
 			

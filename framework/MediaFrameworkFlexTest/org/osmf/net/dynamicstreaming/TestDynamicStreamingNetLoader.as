@@ -26,23 +26,25 @@ package org.osmf.net.dynamicstreaming
 	
 	import org.osmf.events.*;
 	import org.osmf.media.*;
+	import org.osmf.net.*;
 	import org.osmf.netmocker.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 
-	public class TestDynamicStreamingNetLoader extends TestILoader
+	public class TestDynamicStreamingNetLoader extends TestNetLoader
 	{
 		override public function setUp():void
 		{
-			netFactory = new DynamicNetFactory();
 			eventDispatcher = new EventDispatcher();
+			
 			super.setUp();
+			
 		}		
 		
 		override public function tearDown():void
 		{
 			super.tearDown();
-			netFactory = null;
+			
 			eventDispatcher = null;
 		}
 		
@@ -59,13 +61,12 @@ package org.osmf.net.dynamicstreaming
 				
 		//---------------------------------------------------------------------
 		
-				
 		override protected function createInterfaceObject(... args):Object
 		{
 			return netFactory.createNetLoader();
 		}
 		
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
 			var mockLoader:MockDynamicStreamingNetLoader = loader as MockDynamicStreamingNetLoader;
 			if (mockLoader)
@@ -83,7 +84,7 @@ package org.osmf.net.dynamicstreaming
 					mockLoader.netConnectionExpectation = NetConnectionExpectation.REJECTED_CONNECTION;
 				}
 			}
-			return new LoadableTrait(loader, resource);
+			return new NetStreamLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource
@@ -122,12 +123,16 @@ package org.osmf.net.dynamicstreaming
 					   error.errorCode == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
 		}
 		
+		override protected function createNetFactory():NetFactory
+		{
+			return new DynamicNetFactory();
+		}
+
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.
 		}
 		
-		private var netFactory:NetFactory;
 		private var eventDispatcher:EventDispatcher;
 		private var _dsResource:DynamicStreamingResource;		
 		

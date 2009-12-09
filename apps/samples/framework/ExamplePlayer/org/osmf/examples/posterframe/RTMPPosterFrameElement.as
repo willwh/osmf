@@ -25,7 +25,7 @@ package org.osmf.examples.posterframe
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.video.VideoElement;
 
@@ -54,23 +54,23 @@ package org.osmf.examples.posterframe
 		{
 			super.processReadyState();
 
-			// First, remove the temporal and playable traits.  Doing so
+			// First, remove the time and play traits.  Doing so
 			// will ensure that our "play" call to display the poster
 			// frame won't cause this MediaElement to complete (and therefore
 			// trigger the playback of the next child, when in a SerialElement).
-			removeTrait(MediaTraitType.TEMPORAL);
-			var playable:IPlayable = removeTrait(MediaTraitType.PLAYABLE) as IPlayable;
+			removeTrait(MediaTraitType.TIME);
+			var playTrait:PlayTrait = removeTrait(MediaTraitType.PLAY) as PlayTrait;
 			
 			// Calling play() on our removed trait will cause the poster frame
-			// to be displayed.  But because this playable trait is detached, no
+			// to be displayed.  But because this play trait is detached, no
 			// events are dispatched to the client.  From a traits perspective,
 			// this is functionally equivalent to an ImageElement, where there's
-			// an IViewable but no IPlayable.
-			playable.play();
+			// a ViewTrait but no PlayTrait.
+			playTrait.play();
 			
 			// Last, to ensure that the user can complete playback of this item,
-			// we add a dummy IPlayable trait.
-			addTrait(MediaTraitType.PLAYABLE, new PosterFramePlayableTrait(this));
+			// we add a dummy PlayTrait trait.
+			addTrait(MediaTraitType.PLAY, new PosterFramePlayTrait());
 		}
 	}
 }

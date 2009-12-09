@@ -47,30 +47,28 @@ package org.osmf.video
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetLoadedContext;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.NetStreamAudibleTrait;
-	import org.osmf.net.NetStreamBufferableTrait;
+	import org.osmf.net.NetStreamAudioTrait;
+	import org.osmf.net.NetStreamBufferTrait;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.NetStreamDownloadableTrait;
-	import org.osmf.net.NetStreamPausableTrait;
-	import org.osmf.net.NetStreamPlayableTrait;
-	import org.osmf.net.NetStreamSeekableTrait;
-	import org.osmf.net.NetStreamTemporalTrait;
+	import org.osmf.net.NetStreamLoadTrait;
+	import org.osmf.net.NetStreamPlayTrait;
+	import org.osmf.net.NetStreamSeekTrait;
+	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.NetStreamViewTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.dynamicstreaming.NetStreamSwitchableTrait;
-	import org.osmf.traits.IContentProtectable;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ModifiableTimeTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.OSMFStrings;
 
-	
 	CONFIG::FLASH_10_1
 	{
 	import flash.events.DRMAuthenticateEvent;
@@ -97,13 +95,13 @@ package org.osmf.video
 	* <li>Create the new VideoElement, 
 	* passing the NetLoader and IURLResource
 	* as parameters.</li>
-	* <li>Get the VideoElement's ILoadable trait using the 
-	* <code>MediaElement.getTrait(LOADABLE)</code> method.</li>
-	* <li>Load the video using the ILoadable's <code>load()</code> method.</li>
+	* <li>Get the VideoElement's LoadTrait using the 
+	* <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
+	* <li>Load the video using the LoadTrait's <code>load()</code> method.</li>
 	* <li>Control the media using the VideoElement's traits and handle its trait
 	* change events.</li>
 	* <li>When done with the VideoElement, unload the video using the  
-	* using the ILoadable's <code>unload()</code> method.</li>
+	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
 	* 
@@ -158,11 +156,11 @@ package org.osmf.video
        	}
        	
        	/**
-       	 * Defines the duration that the element's temporal trait will expose when the
+       	 * Defines the duration that the element's TimeTrait will expose when the
        	 * element's content is unloaded.
        	 * 
        	 * Setting this property to a positive value results in the element becoming
-       	 * temporal. Any other value will remove the element's temporality, unless the
+       	 * temporal. Any other value will remove the element's TimeTrait, unless the
        	 * loaded content is exposing a duration. 
        	 * 
        	 *  @langversion 3.0
@@ -174,35 +172,37 @@ package org.osmf.video
 		{
 			if (isNaN(value) || value < 0)
 			{
-				if (defaultTemporalTrait != null)
-				// Remove the default trait if the default duration
-				// gets set to not a number:
-				removeTraitResolver(MediaTraitType.TEMPORAL);
-				defaultTemporalTrait = null;
+				if (defaultTimeTrait != null)
+				{
+					// Remove the default trait if the default duration
+					// gets set to not a number:
+					removeTraitResolver(MediaTraitType.TIME);
+					defaultTimeTrait = null;
+				}
 			}
 			else 
 			{
-				if (defaultTemporalTrait == null)
+				if (defaultTimeTrait == null)
 				{		
 					// Add the default trait if when default duration
 					// gets set:
-					defaultTemporalTrait = new TemporalTrait();
+					defaultTimeTrait = new ModifiableTimeTrait();
 		       		addTraitResolver
-		       			( MediaTraitType.TEMPORAL
+		       			( MediaTraitType.TIME
 		       			, new DefaultTraitResolver
-		       				( MediaTraitType.TEMPORAL
-		       				, defaultTemporalTrait
+		       				( MediaTraitType.TIME
+		       				, defaultTimeTrait
 		       				)
 		       			);
 		  		}
 		  		
-		  		defaultTemporalTrait.duration = value; 
+		  		defaultTimeTrait.duration = value; 
 			}	
 		}
 		
 		public function get defaultDuration():Number
 		{
-			return defaultTemporalTrait ? defaultTemporalTrait.duration : NaN;
+			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
 		}
 		
 		/**
@@ -250,21 +250,28 @@ package org.osmf.video
        	// Overrides
        	//
        	
+      	/**
+		 * @private
+		 **/
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		{
+			return new NetStreamLoadTrait(loader, resource);
+		}
+       	
 	    /**
 	     * @private
 		 **/
 		override protected function processReadyState():void
 		{
-			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
-			stream = context.stream;			
+			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var context:NetLoadedContext = NetLoadedContext(loadTrait.loadedContext);
+			stream = context.stream;
 				
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
 			video = new Video();
 			video.smoothing = _smoothing;
 			video.deblocking = _deblocking;
-			
 			video.width = video.height = 0;
 
 			video.attachNetStream(stream);
@@ -303,45 +310,46 @@ package org.osmf.video
   			private function onStatus(event:StatusEvent):void
 			{
 				if (event.code == DRM_STATUS_CODE 
-					&& getTrait(MediaTraitType.CONTENT_PROTECTABLE) == null)
+					&& getTrait(MediaTraitType.CONTENT_PROTECTION) == null)
 				{			
-					createProtectableTrait().addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
+					createProtectionTrait().addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
 	    		}
 	  		}
 	  		
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
 	  		private function reloadAfterAuth(event:ContentProtectionEvent):void
-	  		{	
-	  			if (ILoadable(getTrait(MediaTraitType.LOADABLE)).loadState == LoadState.READY)
+	  		{
+	  			if (LoadTrait(getTrait(MediaTraitType.LOAD)).loadState == LoadState.READY)
 	  			{				  			
-	  				ILoadable(getTrait(MediaTraitType.LOADABLE)).unload();	  	
+	  				LoadTrait(getTrait(MediaTraitType.LOAD)).unload();	  	
 	  			}
-	  			ILoadable(getTrait(MediaTraitType.LOADABLE)).load();  		  					
+
+	  			LoadTrait(getTrait(MediaTraitType.LOAD)).load();  		  					
 	  		}	
 			
-			private function createProtectableTrait():NetStreamContentProtectableTrait
+			private function createProtectionTrait():NetStreamContentProtectableTrait
 			{				
-				var protectableTrait:NetStreamContentProtectableTrait = new NetStreamContentProtectableTrait();		    	
-		    	addTrait(MediaTraitType.CONTENT_PROTECTABLE, protectableTrait);	
-		    	return protectableTrait;	    			
+				var protectionTrait:NetStreamContentProtectionTrait = new NetStreamContentProtectionTrait();		    	
+		    	addTrait(MediaTraitType.CONTENT_PROTECTION, protectionTrait);	
+		    	return protectionTrait;	    			
 			}	
 			
-			private function addProtectableTrait(contentData:ByteArray):IContentProtectable
+			private function addProtectableTrait(contentData:ByteArray):NetStreamContentProtectionTrait
 			{			
-	    		var trait:NetStreamContentProtectableTrait = createProtectableTrait();
+	    		var trait:NetStreamContentProtectionTrait = createProtectionTrait();
 			   	trait.drmMetadata = contentData;
 			   	return trait;
 			}
 							
 			private function onDRMErrorEvent(event:DRMErrorEvent):void
 			{
-				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  //Needs authentication
+				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  // Needs authentication
 				{					
-					NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE)).drmMetadata = event.contentData;
+					NetStreamContentProtectionTrait(getTrait(MediaTraitType.CONTENT_PROTECTION)).drmMetadata = event.contentData;
 				}
-				else //Inline DRM - Errors need to be forwarded
+				else // Inline DRM - Errors need to be forwarded
 				{				
-					var trait:NetStreamContentProtectableTrait = NetStreamContentProtectableTrait(getTrait(MediaTraitType.CONTENT_PROTECTABLE));
+					var trait:NetStreamContentProtectionTrait = NetStreamContentProtectionTrait(getTrait(MediaTraitType.CONTENT_PROTECTION));
 					trait.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(event.errorID)));	
 				}				
 			}	
@@ -355,41 +363,26 @@ package org.osmf.video
 		
 		private function finishLoad():void
 		{
-			var loadableTrait:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			var context:NetLoadedContext = NetLoadedContext(loadableTrait.loadedContext);
+			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var context:NetLoadedContext = NetLoadedContext(loadTrait.loadedContext);
 
-			var viewable:ViewableTrait = new ViewableTrait();
-			viewable.view = video;
-			var seekable:SeekableTrait = new NetStreamSeekableTrait(stream);
-			var temporal:NetStreamTemporalTrait = new NetStreamTemporalTrait(stream, resource); 
-			spatial = new SpatialTrait();
-			spatial.setDimensions(video.width, video.height);
-			seekable.temporal = temporal;
-					
-			addTrait(MediaTraitType.PLAYABLE, new NetStreamPlayableTrait(this, stream, resource));
-			addTrait(MediaTraitType.PAUSABLE,  new NetStreamPausableTrait(this, stream));
-			addTrait(MediaTraitType.VIEWABLE, viewable);
-			addTrait(MediaTraitType.TEMPORAL, temporal);
+	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
+	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
+			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
+			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, resource);
+			addTrait(MediaTraitType.TIME, timeTrait);
+			viewTrait = new NetStreamViewTrait(stream, video, video.width, video.height);
+			addTrait(MediaTraitType.VIEW, viewTrait);
 			
-			// Do not add the seekable trait to live streams
 			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
-	    		addTrait(MediaTraitType.SEEKABLE, seekable);
-	  		}
-	    	addTrait(MediaTraitType.SPATIAL, spatial);
-	    	addTrait(MediaTraitType.AUDIBLE, new NetStreamAudibleTrait(stream));
-	    	addTrait(MediaTraitType.BUFFERABLE, new NetStreamBufferableTrait(stream));
-
-			// NetStreamDownloadableTrait will only be added when it is a progressive video.
-			if (isProgressiveVideo(context))
-			{
-	    		addTrait(MediaTraitType.DOWNLOADABLE, new NetStreamDownloadableTrait(stream));
+	    		addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
 	  		}
 	    	
 			var dynRes:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dynRes != null)
 			{
-				addTrait(MediaTraitType.SWITCHABLE, new NetStreamSwitchableTrait(stream as DynamicNetStream, dynRes));
+				addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dynRes));
 			}	    	
 		}
 		
@@ -402,49 +395,30 @@ package org.osmf.video
 			
 			stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent)
 			
-			removeTrait(MediaTraitType.PLAYABLE);
-			removeTrait(MediaTraitType.PAUSABLE);
-			removeTrait(MediaTraitType.VIEWABLE);
-			removeTrait(MediaTraitType.TEMPORAL);
-	    	removeTrait(MediaTraitType.SEEKABLE);
-	    	removeTrait(MediaTraitType.SPATIAL);
-	    	removeTrait(MediaTraitType.AUDIBLE);
-	    	removeTrait(MediaTraitType.BUFFERABLE);
-    		removeTrait(MediaTraitType.SWITCHABLE);
+	    	removeTrait(MediaTraitType.AUDIO);
+	    	removeTrait(MediaTraitType.BUFFER);
+			removeTrait(MediaTraitType.PLAY);
+			removeTrait(MediaTraitType.TIME);
+			removeTrait(MediaTraitType.VIEW);
+	    	removeTrait(MediaTraitType.SEEK);
+    		removeTrait(MediaTraitType.DYNAMIC_STREAM);
 	    	
 	    	CONFIG::FLASH_10_1
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
-    			removeTrait(MediaTraitType.CONTENT_PROTECTABLE);    					
+    			removeTrait(MediaTraitType.CONTENT_PROTECTION);    					
     		}
     		
-    		removeTrait(MediaTraitType.DOWNLOADABLE);
-	    		    		    	
 	    	// Null refs to garbage collect.	    	
-			spatial = null;
 			video.attachNetStream(null);
 			stream = null;
-			video = null;		
+			video = null;
+			viewTrait = null;
 		}
 
-		private function isProgressiveVideo(context:NetLoadedContext):Boolean
-		{
-			return NetStreamUtils.isRTMPStream(context.resource.url) == false;
-		}
-		
 		private function onMetaData(info:Object):void 
     	{   
-    		if 	(	info.width != spatial.width
-    			||	info.height != spatial.height
-    			)
-    		{	
-    			video.width = info.width;
-    			video.height = info.height;
-    				
-				spatial.setDimensions(info.width, info.height);
-    		}
-    		
 			var cuePoints:Array = info.cuePoints;
 			
 			if (cuePoints != null && cuePoints.length > 0)
@@ -477,14 +451,14 @@ package org.osmf.video
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.
      	private function onUpdateComplete(event:Event):void
      	{     		
-    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
-    		(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();		
+    		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
+    		(getTrait(MediaTraitType.LOAD) as LoadTrait).load();		
      	}
      	
      	private function onUpdateError(event:Event):void
      	{     	
      		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
-     		(getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
+     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
      	}
      	     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
@@ -530,17 +504,14 @@ package org.osmf.video
      	
      	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
      	
-     	/**
-     	 * NetStream used to stream content for this video element.
-     	 */ 
-     	private var stream:NetStream;
+     	private var viewTrait:ViewTrait;
+     	private var defaultTimeTrait:ModifiableTimeTrait;
      	
-      	private var video:Video;	 
-	    private var spatial:SpatialTrait;
-	    private var defaultTemporalTrait:TemporalTrait;
-	    
-		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream	   
+     	private var stream:NetStream;
+      	private var video:Video;
+      	
+		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream
 		private var _smoothing:Boolean;
-		private var _deblocking:int; 		    
+		private var _deblocking:int;
 	}
 }

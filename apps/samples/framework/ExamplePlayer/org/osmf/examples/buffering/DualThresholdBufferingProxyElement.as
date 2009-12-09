@@ -23,8 +23,9 @@ package org.osmf.examples.buffering
 {
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.traits.IBufferable;
+	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
 	
 	/**
 	 * Proxy class which sets the IBufferable.bufferTime property to
@@ -42,13 +43,13 @@ package org.osmf.examples.buffering
 			this.expandedBufferTime = expandedBufferTime;
 		}
 
-		override protected function processTraitAdd(traitType:MediaTraitType):void
+		override protected function processTraitAdd(traitType:String):void
 		{
-			if (traitType == MediaTraitType.BUFFERABLE)
+			if (traitType == MediaTraitType.BUFFER)
 			{
 				// As soon as we can buffer, set the initial buffer time.
-				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				bufferable.bufferTime = initialBufferTime;
+				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				bufferTrait.bufferTime = initialBufferTime;
 			}
 		}
 
@@ -58,8 +59,8 @@ package org.osmf.examples.buffering
 			// set to the maximum.
 			if (buffering == false)
 			{
-				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				bufferable.bufferTime = expandedBufferTime;
+				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				bufferTrait.bufferTime = expandedBufferTime;
 			}
 		}
 		
@@ -69,19 +70,19 @@ package org.osmf.examples.buffering
 			// playback starts quickly after the seek.
 			if (seeking == true)
 			{
-				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				bufferable.bufferTime = initialBufferTime;
+				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				bufferTrait.bufferTime = initialBufferTime;
 			}
 		}
 		
-		override protected function processPausedChange(paused:Boolean):void
+		override protected function processPlayStateChange(playState:String):void
 		{
 			// Whenever we pause, reset our buffer time to the minimum so that
 			// playback starts quickly after the unpause.
-			if (paused == true)
+			if (playState == PlayState.PAUSED)
 			{
-				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				bufferable.bufferTime = initialBufferTime;
+				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				bufferTrait.bufferTime = initialBufferTime;
 			}
 		}
  		

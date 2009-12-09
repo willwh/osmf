@@ -41,11 +41,10 @@
 
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
-			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;			
-			import org.osmf.traits.ISpatial;
-			import org.osmf.traits.ISwitchable;
-			import org.osmf.traits.IViewable;
+			import org.osmf.traits.DynamicStreamTrait;
+			import org.osmf.traits.ViewTrait;
 
 			import org.osmf.events.*;
 
@@ -89,7 +88,7 @@
 			private var _smilFileLoadState:String = "Not Loaded";
 			
 			[Bindable]
-			private var _switchable:ISwitchable;
+			private var _switchable:DynamicStreamTrait;
 			
 			[Bindable]
 			private var _isAutoSwitchable:Boolean = true;
@@ -97,11 +96,11 @@
 			[Bindable]
 			private var _autoswitchBtnLabel:String = "Manual";
 			
-			private var _viewable:IViewable;
+			private var _viewTrait:ViewTrait;
 						
 			private function initApp():void
 			{
-				wrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
+				wrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
 				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
@@ -130,14 +129,14 @@
 				{
 					case LoadState.READY:
 						_smilFileLoadState = "Ready";
-						_switchable = wrapper.element.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
+						_switchable = wrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 
 						if (_switchable != null)
 						{
 							_switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
 						
-						_viewable = wrapper.element.getTrait(MediaTraitType.VIEWABLE) as IViewable;		
+						_viewTrait = wrapper.element.getTrait(MediaTraitType.VIEW) as ViewTrait;		
 						updateSwitchingControls();
 						break;					
 					case LoadState.LOAD_ERROR:
@@ -233,8 +232,8 @@
 				var mediaElement:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), res);
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				
-				var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 									
 				wrapper.element = mediaElement;
 				wrapper.mediaPlayer.autoPlay = true;
@@ -259,12 +258,12 @@
 			private function unload():void
 			{
 				var mediaElement:MediaElement = wrapper.element;
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOADABLE))
+				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
 				{
-					var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					if (loadable.loadState == LoadState.READY)
+					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+					if (loadTrait.loadState == LoadState.READY)
 					{
-						loadable.unload();
+						loadTrait.unload();
 					}
 				}
 				clear(false);
@@ -315,7 +314,7 @@
 				Alert.show("SMIL parser is currently busy, pleast wait and try again.");	
 			}
 			
-			private function onDimensionChange(event:DimensionEvent):void 
+			private function onDimensionChange(event:ViewEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
@@ -440,7 +439,7 @@
 			
 			private function onClickPlayBtn():void
 			{
-				if (wrapper.mediaPlayer.playing && wrapper.mediaPlayer.pausable)
+				if (wrapper.mediaPlayer.playing && wrapper.mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
 					wrapper.mediaPlayer.pause();

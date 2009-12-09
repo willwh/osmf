@@ -33,11 +33,10 @@ package org.osmf.swf
 	 * The SWFLoader class creates a flash.display.Loader object, 
 	 * which it uses to load and unload a SWF.
 	 * <p>The SWF is loaded from the URL provided by the
-	 * <code>resource</code> property of the ILoadable that is passed
+	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the SWFLoader's <code>load()</code> method.</p>
 	 *
 	 * @see SWFElement
-	 * @see org.osmf.traits.ILoadable
 	 * @see flash.display.Loader
 	 */ 
 	public class SWFLoader extends ContentLoader

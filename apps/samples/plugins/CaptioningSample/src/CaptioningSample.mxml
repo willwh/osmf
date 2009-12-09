@@ -30,7 +30,7 @@
 			import mx.controls.Alert;
 
 			import org.osmf.events.MediaElementEvent;
-			import org.osmf.events.DimensionEvent;
+			import org.osmf.events.ViewEvent;
 			import org.osmf.media.MediaInfo;
 			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.metadata.ObjectIdentifier;
@@ -92,7 +92,7 @@
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekEnd);
@@ -210,7 +210,7 @@
    				Alert.show("Media Load Error : "+event.error.errorCode+" - "+event.error.description);
    			}
 			
-			private function onDimensionChange(event:DimensionEvent):void 
+			private function onDimensionChange(event:ViewEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
@@ -278,7 +278,7 @@
    			{
    				switch (event.traitType)
    				{
-   					case MediaTraitType.SEEKABLE:
+   					case MediaTraitType.SEEK:
    						seekBar.enabled = seekBar.visible = true;
    						break;
    				}	
@@ -395,7 +395,7 @@
    									
 			private function onClickPlayBtn(event:Event):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.pausable)
+				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
 					mediaPlayerWrapper.mediaPlayer.pause();

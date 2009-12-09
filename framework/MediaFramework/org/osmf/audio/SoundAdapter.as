@@ -33,7 +33,6 @@ package org.osmf.audio
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.utils.OSMFStrings;
     
 	/**
 	 * Dispatched when playback of the Sound completes.
@@ -172,6 +171,17 @@ package org.osmf.audio
 			if (channel != null)
 			{
 				lastStartTime = channel.position;
+				
+				clearChannel();
+				playing = false;
+			}
+		}
+		
+		public function stop():void
+		{
+			if (channel != null)
+			{
+				lastStartTime = 0;
 				
 				clearChannel();
 				playing = false;

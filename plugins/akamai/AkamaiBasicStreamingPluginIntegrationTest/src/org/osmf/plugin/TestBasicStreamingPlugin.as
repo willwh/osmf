@@ -148,22 +148,22 @@ package org.osmf.plugin
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(urlResource);
 			assertTrue(mediaElement != null);
 			
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onElementLoadStateChange);
-			loadable.load();
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onElementLoadStateChange);
+			loadTrait.load();
 						
 			function onElementLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					var loadedContext:ILoadedContext = loadable.loadedContext;
+					var loadedContext:ILoadedContext = loadTrait.loadedContext;
 					assertTrue(loadedContext != null);
 					assertTrue(loadedContext is NetLoadedContext);
 	
-					var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
-					assertTrue(playable != null);
-					playable.play();
+					assertTrue(playTrait != null);
+					playTrait.play();
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));			
 				}

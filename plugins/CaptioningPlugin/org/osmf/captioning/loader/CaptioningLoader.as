@@ -28,9 +28,8 @@ package org.osmf.captioning.loader
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.HTTPLoadedContext;
 	import org.osmf.utils.HTTPLoader;
@@ -79,49 +78,49 @@ package org.osmf.captioning.loader
 
 		/**
 		 * Loads a Timed Text document.
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load and parse of the
 		 * Timed Text document.</p>
 		 * 
 		 * @see org.osmf.traits.LoadState
-		 * @param loadable The ILoadable to be loaded.
+		 * @param loadTrait The LoadTrait to be loaded.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
-			updateLoadable(loadable, LoadState.LOADING);			
+			super.load(loadTrait);
+			updateLoadTrait(loadTrait, LoadState.LOADING);			
 						
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 			
-			// Create a temporary ILoadable for this purpose, so that our main
-			// ILoadable doesn't reflect any of the state changes from the
+			// Create a temporary LoadTrait for this purpose, so that our main
+			// LoadTrait doesn't reflect any of the state changes from the
 			// loading of the URL, and so that we can catch any errors.
-			var httpLoadable:LoadableTrait = new LoadableTrait(httpLoader, loadable.resource);
+			var httpLoadTrait:LoadTrait = new LoadTrait(httpLoader, loadTrait.resource);
 						
-			httpLoadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 			
 			CONFIG::LOGGING
 			{
 				if (logger != null)
 				{
-					logger.debug("Downloading document at " + URLResource(httpLoadable.resource).url.rawUrl);
+					logger.debug("Downloading document at " + URLResource(httpLoadTrait.resource).url.rawUrl);
 				}
 			}
 			
-			httpLoader.load(httpLoadable);
+			httpLoader.load(httpLoadTrait);
 
 			function onHTTPLoaderStateChange(event:LoaderEvent):void
 			{
 				if (event.newState == LoadState.READY)
 				{
 					// This is a terminal state, so remove all listeners.
-					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
-					httpLoadable.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
+					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 
 					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
 					
@@ -141,10 +140,10 @@ package org.osmf.captioning.loader
 								logger.debug("Error parsing captioning document: " + e.errorID + "-" + e.message);
 							}
 						}
-						updateLoadable(loadable, LoadState.LOAD_ERROR);
+						updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					}
 					
-					updateLoadable(loadable, LoadState.READY, new CaptioningLoadedContext(captioningDocument));
+					updateLoadTrait(loadTrait, LoadState.READY, new CaptioningLoadedContext(captioningDocument));
 					
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)
@@ -153,7 +152,7 @@ package org.osmf.captioning.loader
 					// don't remove the error event listener, as that will be
 					// removed when the error event for this failure is
 					// dispatched.
-					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onHTTPLoaderStateChange);
+					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					
 					CONFIG::LOGGING
 					{
@@ -163,27 +162,27 @@ package org.osmf.captioning.loader
 						}
 					}
 					
-					updateLoadable(loadable, event.newState);
+					updateLoadTrait(loadTrait, event.newState);
 				}
 			}
 			
-			function onLoadableError(event:MediaErrorEvent):void
+			function onLoadError(event:MediaErrorEvent):void
 			{
 				// Only remove this listener, as there will be a corresponding
 				// event for the load failure.
-				httpLoadable.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadableError);
+				httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 				
-				loadable.dispatchEvent(event.clone());
+				loadTrait.dispatchEvent(event.clone());
 			}						
 		}
 		
 		/**
 		 * Unloads the document.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
 		 * while unloading and to CONSTRUCTED upon completing a successful unload.</p>
 		 *
-		 * @param ILoadable ILoadable to be unloaded.
+		 * @param LoadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 * 
 		 *  @langversion 3.0
@@ -191,13 +190,13 @@ package org.osmf.captioning.loader
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 
 			// Nothing to do.
-			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
-			updateLoadable(loadable, LoadState.UNINITIALIZED);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		/**

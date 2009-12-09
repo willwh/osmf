@@ -25,7 +25,7 @@ package org.osmf.net.dynamicstreaming
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;
@@ -42,7 +42,7 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
 	 */
-	public class DynamicStreamingResource implements IMediaResource
+	public class DynamicStreamingResource extends URLResource
 	{
 		/**
 		 * Constructor.
@@ -57,7 +57,8 @@ package org.osmf.net.dynamicstreaming
 		 */
 		public function DynamicStreamingResource(host:URL, streamType:String=null)
 		{
-			_host = host;
+			super(host);
+			
 			_streamType = streamType || StreamType.ANY;
 			_initialIndex = 0;
 		}
@@ -72,7 +73,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		public function get host():URL
 		{
-			return _host;
+			return url;
 		}
 		
 		/**
@@ -132,23 +133,6 @@ package org.osmf.net.dynamicstreaming
 			_initialIndex = value;
 		}
     			
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get metadata():Metadata
-		{
-			if (_metadata == null)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
-
 		// Internals
 		//		
     					
@@ -200,7 +184,6 @@ package org.osmf.net.dynamicstreaming
 			return result;
 		}
 
-		private var _host:URL;
 		private var _streamType:String; // StreamType
 		private var _metadata:Metadata;
 

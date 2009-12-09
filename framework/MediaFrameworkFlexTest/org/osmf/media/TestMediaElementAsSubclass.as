@@ -22,7 +22,7 @@
 package org.osmf.media
 {
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.traits.AudibleTrait;
+	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.NullResource;
@@ -45,7 +45,7 @@ package org.osmf.media
 			return new DynamicMediaElement(); 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}
@@ -76,9 +76,9 @@ package org.osmf.media
 			
 			assertTrue(traitAddEventCount == 0);
 			
-			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIBLE) == false);
-			mediaElement.doAddTrait(MediaTraitType.AUDIBLE, new AudibleTrait());
-			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIBLE) == true);
+			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIO) == false);
+			mediaElement.doAddTrait(MediaTraitType.AUDIO, new AudioTrait());
+			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIO) == true);
 			
 			assertTrue(traitAddEventCount == 1);
 			
@@ -88,7 +88,7 @@ package org.osmf.media
 			// Duplicate trait.
 			try
 			{
-				mediaElement.doAddTrait(MediaTraitType.AUDIBLE, new AudibleTrait());
+				mediaElement.doAddTrait(MediaTraitType.AUDIO, new AudioTrait());
 				
 				fail();
 			}
@@ -100,7 +100,7 @@ package org.osmf.media
 			// Null trait type:
 			try
 			{
-				mediaElement.doAddTrait(null, new AudibleTrait());
+				mediaElement.doAddTrait(null, new AudioTrait());
 				
 				fail();
 			}
@@ -112,7 +112,7 @@ package org.osmf.media
 			// Null trait:
 			try
 			{
-				mediaElement.doAddTrait(MediaTraitType.AUDIBLE, null);
+				mediaElement.doAddTrait(MediaTraitType.AUDIO, null);
 				
 				fail();
 			}
@@ -124,7 +124,7 @@ package org.osmf.media
 			// Mismatched trait and trait type:
 			try
 			{
-				mediaElement.doAddTrait(MediaTraitType.LOADABLE, new AudibleTrait());
+				mediaElement.doAddTrait(MediaTraitType.LOAD, new AudioTrait());
 				
 				fail();
 			}
@@ -142,19 +142,19 @@ package org.osmf.media
 			
 			assertTrue(traitRemoveEventCount == 0);
 			
-			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIBLE) == false);
-			mediaElement.doAddTrait(MediaTraitType.AUDIBLE, new AudibleTrait());
-			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIBLE) == true);
+			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIO) == false);
+			mediaElement.doAddTrait(MediaTraitType.AUDIO, new AudioTrait());
+			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIO) == true);
 			
 			assertTrue(traitRemoveEventCount == 0);
 			
-			mediaElement.doRemoveTrait(MediaTraitType.AUDIBLE);
-			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIBLE) == false);
+			mediaElement.doRemoveTrait(MediaTraitType.AUDIO);
+			assertTrue(mediaElement.hasTrait(MediaTraitType.AUDIO) == false);
 			
 			assertTrue(traitRemoveEventCount == 1);
 			
 			// Removing a non-existent trait is a no-op.
-			mediaElement.doRemoveTrait(MediaTraitType.AUDIBLE);
+			mediaElement.doRemoveTrait(MediaTraitType.AUDIO);
 			assertTrue(traitRemoveEventCount == 1);
 			
 			// A null trait type is an error case.

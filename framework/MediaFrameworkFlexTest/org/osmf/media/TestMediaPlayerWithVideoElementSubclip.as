@@ -75,7 +75,7 @@ package org.osmf.media
 			return videoElement; 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -106,20 +106,18 @@ package org.osmf.media
 
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.BUFFERABLE
-				   , MediaTraitType.LOADABLE
-				   , MediaTraitType.PAUSABLE
-				   , MediaTraitType.PLAYABLE
-				   , MediaTraitType.SEEKABLE
-				   , MediaTraitType.SPATIAL
-				   , MediaTraitType.TEMPORAL
-				   , MediaTraitType.VIEWABLE
+			return [ MediaTraitType.AUDIO
+				   , MediaTraitType.BUFFER
+				   , MediaTraitType.LOAD
+				   , MediaTraitType.PLAY
+				   , MediaTraitType.SEEK
+				   , MediaTraitType.TIME
+				   , MediaTraitType.VIEW
 				   ];
 		}
 		

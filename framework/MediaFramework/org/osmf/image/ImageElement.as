@@ -28,8 +28,7 @@ package org.osmf.image
 	 * ImageElement is a media element specifically created for
 	 * presenting still images.
 	 * It can load and present any PNG, GIF, or JPG image.
-	 * <p>The ImageElement has the ILoadable, ISpatial and IViewable traits.
-	 * It uses an ImageLoader class to load and unload its media.
+	 * <p>The ImageElement uses an ImageLoader class to load and unload its media.
 	 * Developers requiring custom loading logic for images
 	 * can pass their own loaders to the ImageElement constructor. 
 	 * These loaders should subclass ImageLoader.</p>
@@ -39,16 +38,16 @@ package org.osmf.image
 	 * <li>Create a new ImageLoader.</li>
 	 * <li>Create the new ImageElement, passing the ImageLoader and IURLResource
 	 * as parameters.</li>
-	 * <li>Get the ImageElement's ILoadable trait using the 
-	 * <code>MediaElement.getTrait(LOADABLE)</code> method.</li>
-	 * <li>Load the image using the ILoadable's <code>load()</code> method.</li>
-	 * <li>Get the ImageElement's IViewable trait using the 
-	 * <code>MediaElement.getTrait(VIEWABLE)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the ImageElement's IViewable trait
+	 * <li>Get the ImageElement's LoadTrait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
+	 * <li>Load the image using the LoadTrait's <code>load()</code> method.</li>
+	 * <li>Get the ImageElement's ViewTrait trait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.VIEW)</code> method.</li>
+	 * <li>Add the DisplayObject that represents the ImageElement's ViewTrait trait
 	 * to the display list. This DisplayObjects is in the <code>view</code>
-	 * property of the IViewable.</li>
+	 * property of the ViewTrait.</li>
 	 * <li>When done with the ImageElement, unload the image using the
-	 *  ILoadable's <code>unload()</code> method.</li>
+	 * LoadTrait's <code>unload()</code> method.</li>
 	 * </ol>
 	 * </p>
 	 * 

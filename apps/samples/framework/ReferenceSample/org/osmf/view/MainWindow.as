@@ -24,7 +24,7 @@ package org.osmf.view
 	import flash.events.MouseEvent;
 	import flash.system.Security;
 	
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
@@ -54,7 +54,7 @@ package org.osmf.view
 								"when the video is playing, the SWF will cause the video to pause.";
 			
 			buttonPlayPause.addEventListener(MouseEvent.CLICK, onPlayPauseClick);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 			updateButtonText();
 			
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
@@ -137,7 +137,7 @@ package org.osmf.view
 			}
 		}
 		
-		private function onPlayingChange(event:PlayingChangeEvent):void
+		private function onPlayStateChange(event:PlayEvent):void
 		{
 			updateButtonText();
 		}

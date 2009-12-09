@@ -31,7 +31,7 @@ package com.akamai.osmf.net
 	
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.net.NetClient;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 
 	/**
 	 * The AkamaiNetStream class extends NetStream to provide
@@ -47,12 +47,12 @@ package com.akamai.osmf.net
  		 * @param loadable the ILoadable instance requesting this NetStream. Custom media 
  		 * errors are dispatched on this object.
  		 */
-		public function AkamaiNetStream(connection:NetConnection, loadable:ILoadable)
+		public function AkamaiNetStream(connection:NetConnection, loadTrait:LoadTrait)
 		{
 			super(connection);
 			_nc = connection as AkamaiNetConnection;
 			_liveStreamMasterTimeout = LIVE_STREAM_MASTER_TIMOUT;
-			_loadable = loadable;	
+			_loadTrait = loadTrait;	
 		}
 		
 		/**
@@ -117,9 +117,9 @@ package com.akamai.osmf.net
 		private function liveStreamTimeout(e:TimerEvent):void 
 		{
 			resetAllLiveTimers();
-			if (_loadable)
+			if (_loadTrait)
 			{
-				_loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_SUBSCRIBE_TIMEOUT)));
+				_loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_SUBSCRIBE_TIMEOUT)));
 			}
 		}
 		
@@ -130,9 +130,9 @@ package com.akamai.osmf.net
 		private function liveFCSubscribeTimeout(e:TimerEvent):void 
 		{
 			resetAllLiveTimers();
-			if (_loadable)
+			if (_loadTrait)
 			{
-				_loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_FCSUBSCRIBE_NO_RESPONSE)));
+				_loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new AkamaiMediaError(AkamaiMediaErrorCodes.LIVE_FCSUBSCRIBE_NO_RESPONSE)));
 			}
 		}
 				
@@ -180,7 +180,7 @@ package com.akamai.osmf.net
 		private var _liveStreamRetryTimer:Timer;
 		private var _liveFCSubscribeTimer:Timer;		
 		private var _liveStreamMasterTimeout:uint;
-		private var _loadable:ILoadable;
+		private var _loadTrait:LoadTrait;
 			
 		private const LIVE_RETRY_INTERVAL:Number = 30000;	// 30 seconds
 		private const LIVE_ONFCSUBSCRIBE_TIMEOUT:Number = 300000;	// 5 minutes

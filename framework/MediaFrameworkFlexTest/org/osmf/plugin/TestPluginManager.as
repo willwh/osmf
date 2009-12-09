@@ -231,7 +231,12 @@ package org.osmf.plugin
 		public function testUnloadPluginWithInvalidParameters():void
 		{
 			assertTrue(doUnloadPluginWithInvalidParameter(null));
-			assertTrue(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
+			
+			// Unlike with load, the unload of an invalid resource should *not*
+			// trigger an exception.  To do so would involve determining whether
+			// the resource truly is a plugin resource or not (which probably
+			// means loading it).
+			assertFalse(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
 		}
 		
 		private function doUnloadPluginWithInvalidParameter(resource:IMediaResource):Boolean

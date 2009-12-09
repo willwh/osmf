@@ -26,8 +26,8 @@ package org.osmf.audio
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.TestConstants;
@@ -54,7 +54,7 @@ package org.osmf.audio
 			return new AudioElement(netFactory.createNetLoader()); 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -68,21 +68,20 @@ package org.osmf.audio
 		{
 			// Subclasses can override to specify the trait types which are
 			// expected upon initialization.
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
 			// Subclasses can override to specify the trait types which are
 			// expected after a load.  Ignored if the MediaElement
-			// lacks the ILoadable trait.
-			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.BUFFERABLE
-				   , MediaTraitType.LOADABLE
-				   , MediaTraitType.PAUSABLE
-				   , MediaTraitType.PLAYABLE
-				   , MediaTraitType.SEEKABLE
-				   , MediaTraitType.TEMPORAL
+			// lacks the LoadTrait.
+			return [ MediaTraitType.AUDIO
+				   , MediaTraitType.BUFFER
+				   , MediaTraitType.LOAD
+				   , MediaTraitType.PLAY
+				   , MediaTraitType.SEEK
+				   , MediaTraitType.TIME
 				   ];
 		}
 		
@@ -111,15 +110,15 @@ package org.osmf.audio
 			element.defaultDuration = 100;
 			assertEquals(100, element.defaultDuration);
 			
-			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNotNull(temporal);
-			assertEquals(temporal.duration, 100);
+			var timeTrait:TimeTrait = element.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertNotNull(timeTrait);
+			assertEquals(timeTrait.duration, 100);
 			
 			element.defaultDuration = NaN;
 			assertEquals(NaN, element.defaultDuration);
 			
-			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNull(temporal);
+			timeTrait = element.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertNull(timeTrait);
 		}
 		
 		private var netFactory:NetFactory;

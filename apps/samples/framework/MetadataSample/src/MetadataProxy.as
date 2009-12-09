@@ -5,7 +5,7 @@ package
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
@@ -19,7 +19,7 @@ package
 		{
 			super(video);
 			videoElement = video;	
-			(videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);				
+			(videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait).addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);				
 		}
 		
 		private function onLoaded(event:LoadEvent):void

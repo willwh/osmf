@@ -34,7 +34,7 @@ package org.osmf.plugin
 			return new PluginElement(new StaticPluginLoader(new MediaFactory())); 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -46,12 +46,12 @@ package org.osmf.plugin
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}	
 
 		public function testPluginElementConstruction():void
@@ -59,7 +59,6 @@ package org.osmf.plugin
 			var pluginElement:MediaElement = new PluginElement(new StaticPluginLoader(new MediaFactory()), new PluginClassResource(null));
 			assertTrue(pluginElement.resource != null);	
 			assertTrue(pluginElement.resource is PluginClassResource);
-			
 		}
 	}
 }

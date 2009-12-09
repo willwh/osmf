@@ -179,9 +179,6 @@
 
 				traceLogger.addEventListener(MouseEvent.CLICK, onDefaultLoggerSelected);
 				flexLogger.addEventListener(MouseEvent.CLICK, onFlexLoggerSelected);
-				
-				_timer = new Timer(250); 
-				_timer.addEventListener(TimerEvent.TIMER, onTimer);
 			}
 
 			private function onDefaultLoggerSelected(event:MouseEvent):void
@@ -252,50 +249,6 @@
 				else
 				{
 					wrapper.element = mediaElement;
-					if (mediaElement is VideoElement || 
-						mediaElement is AudioElement ||
-						mediaElement is ContentElement)
-					{
-						var downloadable:IDownloadable = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-						if (downloadable != null)
-						{
-							_timer.start();
-						}
-						else
-						{
-							mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-						}
-					}
-				}
-			}
-			
-			private function onTimer(event:TimerEvent):void
-			{
-				var downloadable:IDownloadable 
-					= wrapper.element.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-					
-				bytesLoaded.text = downloadable.bytesLoaded.toString();
-				bytesTotal.text = downloadable.bytesTotal.toString();
-				
-				if (downloadable.bytesLoaded == downloadable.bytesTotal)
-				{
-					_timer.stop();
-				}
-			}
-			
-			private function onTraitAdd(event:MediaElementEvent):void
-			{
-				if (event.traitType == MediaTraitType.DOWNLOADABLE)
-				{
-					var mediaElement:MediaElement = event.target as MediaElement;
-					if (mediaElement != null)
-					{
-						var downloadable:IDownloadable = mediaElement.getTrait(MediaTraitType.DOWNLOADABLE) as IDownloadable;
-						if (downloadable != null)
-						{
-							_timer.start();
-						}
-					}
 				}
 			}
 			
@@ -328,7 +281,7 @@
 			
 			private function onMediaError(event:MediaErrorEvent):void
 			{
-					Alert.show("media error");
+				Alert.show("media error");
 			}
 			
 			private function onPluginLoaded(event:PluginLoadEvent):void
@@ -355,9 +308,7 @@
 			}
 			
 			private var pluginElement:MediaElement;
-			private var loadable:ILoadable;
 			private var _logger:ILogger;
-			private var _timer:Timer;
 		]]>
 	</mx:Script>
 
@@ -403,10 +354,6 @@
 				
 			<mx:Button label="Pause" click="{wrapper.mediaPlayer.pause()}"
 				enabled="{wrapper.mediaPlayer.playable}"  />
-				
-			<mx:Label id="bytesLoaded"/>
-			<mx:Label text="/"/>
-			<mx:Label id="bytesTotal"/>
 			
 		</mx:HBox>	
 		

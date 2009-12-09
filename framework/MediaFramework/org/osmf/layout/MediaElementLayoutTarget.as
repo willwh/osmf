@@ -28,20 +28,18 @@ package org.osmf.layout
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.traits.ISpatial;
-	import org.osmf.traits.IViewable;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Dispatched when a layout child's _view has changed.
+	 * Dispatched when a layout child's view has changed.
 	 * 
 	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
 	 */	
@@ -50,14 +48,14 @@ package org.osmf.layout
 	/**
 	 * Dispatched when a layout element's intrinsical width and height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.DIMENSION_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
+	[Event(name="dimensionChange",type="org.osmf.events.ViewEvent")]
 
 	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
@@ -93,7 +91,6 @@ package org.osmf.layout
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				
 				updateViewableTrait();
-				updateSpatialTrait();
 			}
 		}
 		
@@ -185,8 +182,8 @@ package org.osmf.layout
 		{
 			return viewLayoutTarget
 					? viewLayoutTarget.intrinsicWidth
-				 	: spatialTrait 
-				 		? spatialTrait.width
+				 	: viewableTrait 
+				 		? viewableTrait.mediaWidth
 				 		: NaN;
 		}
 		
@@ -202,8 +199,8 @@ package org.osmf.layout
 		{
 			return viewLayoutTarget
 					? viewLayoutTarget.intrinsicHeight
-					: spatialTrait
-						? spatialTrait.height
+					: viewableTrait
+						? viewableTrait.mediaHeight
 						: NaN;
 		}
 		
@@ -242,6 +239,7 @@ package org.osmf.layout
 	 			_calculatedWidth = value;
 	 		}
 	 	}
+	 	
 	 	public function get calculatedWidth():Number
 	 	{
 	 		return viewLayoutTarget
@@ -362,67 +360,48 @@ package org.osmf.layout
 		
 		private function onMediaElementTraitsChange(event:MediaElementEvent):void
 		{
-			if (event.traitType == MediaTraitType.VIEWABLE)
+			if (event.traitType == MediaTraitType.VIEW)
 			{
 				updateViewableTrait();
-			}
-			else if (event.traitType == MediaTraitType.SPATIAL)
-			{
-				updateSpatialTrait();
 			}
 		}
 		
 		private function updateViewableTrait():void
 		{
-			var oldTrait:IViewable = viewableTrait;
+			var oldTrait:ViewTrait = viewableTrait;
 			var oldView:DisplayObject = _view;
+			var oldWidth:Number = intrinsicWidth;
+			var oldHeight:Number = intrinsicHeight;
 			
-			viewableTrait = _mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
+			viewableTrait = _mediaElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
 			
 			if (oldTrait)
 			{
 				oldTrait.removeEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler);
+				oldTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
 			}
 			
 			if (viewableTrait)
 			{
 				processViewChange(viewableTrait.view);
 				viewableTrait.addEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
+				viewableTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
 			}
 			else
 			{
 				processViewChange(null);
 			}
 			
-			if 	(oldView != _view)
+			if (oldView != _view)
 			{
 				dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
 			}
-		}
-		
-		private function updateSpatialTrait():void
-		{
-			var oldTrait:ISpatial = spatialTrait;
-			var oldWidth:Number = intrinsicWidth;
-			var oldHeight:Number = intrinsicHeight;
-			
-			spatialTrait = _mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-			
-			if (oldTrait)
-			{
-				oldTrait.removeEventListener(DimensionEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
-			}
-			
-			if (spatialTrait)
-			{
-				spatialTrait.addEventListener(DimensionEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
-			}
-			
+
 			if 	(	oldWidth != intrinsicWidth
 				||	oldHeight != intrinsicHeight
 				)
 			{
-				dispatchEvent(new DimensionEvent(DimensionEvent.DIMENSION_CHANGE, false, false, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
+				dispatchEvent(new ViewEvent(ViewEvent.DIMENSION_CHANGE, false, false, null, null, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
 			}
 		}
 		
@@ -448,8 +427,7 @@ package org.osmf.layout
 		private var _view:DisplayObject;
 		private var viewLayoutTarget:ILayoutContext;
 		
-		private var viewableTrait:IViewable;
-		private var spatialTrait:ISpatial;
+		private var viewableTrait:ViewTrait;
 		
 		private var _calculatedWidth:Number;
 		private var _calculatedHeight:Number;

@@ -25,14 +25,13 @@ package org.osmf.swf
 	
 	import org.osmf.content.ContentElement;
 	import org.osmf.media.IURLResource;
-	import org.osmf.traits.IViewable;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * SWFElement is a media element specifically created for
 	 * presenting SWFs.
-	 * <p>The SWFElement has the ILoadable, ISpatial and IViewable traits.
-	 * It uses a SWFLoader class to load and unload its media.
+	 * <p>The SWFElement uses a SWFLoader class to load and unload its media.
 	 * Developers requiring custom loading logic for SWFs
 	 * can pass their own loaders to the SWFElement constructor. 
 	 * These loaders should subclass SWFLoader.</p>
@@ -42,16 +41,16 @@ package org.osmf.swf
 	 * <li>Create a new SWFLoader.</li>
 	 * <li>Create the new SWFElement, passing the SWFLoader and IURLResource
 	 * as parameters.</li>
-	 * <li>Get the SWFElement's ILoadable trait using the 
-	 * <code>MediaElement.getTrait(LOADABLE)</code> method.</li>
-	 * <li>Load the SWF using the ILoadable's <code>load()</code> method.</li>
-	 * <li>Get the SWFElement's IViewable trait using the 
-	 * <code>MediaElement.getTrait(VIEWABLE)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the SWFElement's IViewable trait
+	 * <li>Get the SWFElement's LoadTrait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
+	 * <li>Load the SWF using the LoadTrait's <code>load()</code> method.</li>
+	 * <li>Get the SWFElement's ViewTrait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.VIEW)</code> method.</li>
+	 * <li>Add the DisplayObject that represents the SWFElement's ViewTrait
 	 * to the display list. This DisplayObject is in the <code>view</code>
-	 * property of the IViewable.</li>
+	 * property of the ViewTrait.</li>
 	 * <li>When done with the SWFElement, unload the SWF using the
-	 *  ILoadable's <code>unload()</code> method.</li>
+	 * LoadTrait's <code>unload()</code> method.</li>
 	 * </ol>
 	 * </p>
 	 * 
@@ -88,8 +87,8 @@ package org.osmf.swf
 		{
 			super.processReadyState();
 			
-			var viewable:IViewable = getTrait(MediaTraitType.VIEWABLE) as IViewable;
-			_swfRoot = viewable != null ? viewable.view : null;
+			var viewTrait:ViewTrait = getTrait(MediaTraitType.VIEW) as ViewTrait;
+			_swfRoot = viewTrait != null ? viewTrait.view : null;
 		}
 		
 		/**

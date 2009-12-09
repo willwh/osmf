@@ -21,15 +21,11 @@
 *****************************************************/
 package org.osmf.display
 {
-	import flash.events.Event;
-	
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.ISpatial;
-	import org.osmf.traits.IViewable;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.ViewTrait;
 
     /**
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
@@ -78,13 +74,9 @@ package org.osmf.display
 			{
 				_source.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_source.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);		
-				if (_source.hasTrait(MediaTraitType.VIEWABLE)) //Take care of event listeners
+				if (_source.hasTrait(MediaTraitType.VIEW)) //Take care of event listeners
 				{	
-					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.VIEWABLE));
-				}
-				if (_source.hasTrait(MediaTraitType.SPATIAL))
-				{	
-					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.SPATIAL));
+					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.VIEW));
 				}
 			}
 			_source = value;	
@@ -92,13 +84,9 @@ package org.osmf.display
 			{	
 				_source.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_source.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				if (_source.hasTrait(MediaTraitType.VIEWABLE)) 
+				if (_source.hasTrait(MediaTraitType.VIEW)) 
 				{					
-					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.VIEWABLE));
-				}
-				if (_source.hasTrait(MediaTraitType.SPATIAL))
-				{
-					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.SPATIAL));
+					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.VIEW));
 				}
 			}	
 		}
@@ -109,17 +97,18 @@ package org.osmf.display
 			return _source;
 		}	
 		
-		 private function onTraitAdd(event:MediaElementEvent):void
-		 {	
+		private function onTraitAdd(event:MediaElementEvent):void
+		{	
 		 	switch (event.traitType)
 		 	{
-		 		case MediaTraitType.SPATIAL:
-		 			_source.getTrait(MediaTraitType.SPATIAL).addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
-					setIntrinsicSize(ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).width, ISpatial(_source.getTrait(MediaTraitType.SPATIAL)).height);
-		 			break;
-		 		case MediaTraitType.VIEWABLE:
-		 			_source.getTrait(MediaTraitType.VIEWABLE).addEventListener(ViewEvent.VIEW_CHANGE, onView);
-		 			view = (_source.getTrait(MediaTraitType.VIEWABLE) as IViewable).view;		 			
+		 		case MediaTraitType.VIEW:
+		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
+		 		
+		 			viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onView);
+		 			viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
+		 			
+		 			view = viewTrait.view;
+		 			setIntrinsicSize(viewTrait.mediaWidth, viewTrait.mediaHeight);		 			
 		 			break;		 			
 		 	}
 		 }
@@ -128,17 +117,18 @@ package org.osmf.display
 		 {
 		 	switch (event.traitType)
 		 	{
-		 		case MediaTraitType.SPATIAL:
-		 			_source.getTrait(MediaTraitType.SPATIAL).removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensions);
-		 			break;
-		 		case MediaTraitType.VIEWABLE:
+		 		case MediaTraitType.VIEW:
+		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
+		 			
+		 			viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
+		 			viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onView);		 			
+
 		 			view = null;
-		 			_source.getTrait(MediaTraitType.VIEWABLE).removeEventListener(ViewEvent.VIEW_CHANGE, onView);		 			
 		 			break;		 			
 		 	}
 		 }
 		 
-		 private function onDimensions(event:DimensionEvent):void
+		 private function onDimensions(event:ViewEvent):void
 		 {
 		 	setIntrinsicSize(event.newWidth, event.newHeight);	
 		 	dispatchEvent(event.clone());	 	

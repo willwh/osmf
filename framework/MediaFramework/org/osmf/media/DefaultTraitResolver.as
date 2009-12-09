@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -42,6 +43,7 @@ package org.osmf.media
 		/**
 		 * Constructor.
 		 * 
+		 * @param type The MediaTraitType for the trait to resolve.
 		 * @param defaultTrait The default trait to resolve to for as long
 		 * as no other trait has been added to the resolver.
 		 * 
@@ -53,7 +55,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DefaultTraitResolver(type:MediaTraitType, defaultTrait:IMediaTrait)
+		public function DefaultTraitResolver(type:String, defaultTrait:MediaTraitBase)
 		{
 			super(type);
 			
@@ -62,7 +64,7 @@ package org.osmf.media
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (defaultTrait is type.traitInterface == false)
+			if (defaultTrait.traitType != type)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
@@ -86,7 +88,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		override protected function processAddTrait(instance:IMediaTrait):void
+		override protected function processAddTrait(instance:MediaTraitBase):void
 		{
 			if (trait == null)
 			{
@@ -109,14 +111,14 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		override protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait 
+		override protected function processRemoveTrait(instance:MediaTraitBase):MediaTraitBase 
 		{
-			var result:IMediaTrait;
+			var result:MediaTraitBase;
 			
 			if (instance && instance == trait)
 			{
 				result = trait;
-				trait == null;
+				trait = null;
 				
 				setResolvedTrait(defaultTrait);
 			}
@@ -127,8 +129,8 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private var defaultTrait:IMediaTrait;
-		private var trait:IMediaTrait;
+		private var defaultTrait:MediaTraitBase;
+		private var trait:MediaTraitBase;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultTraitResolver");
 	}

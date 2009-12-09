@@ -36,7 +36,7 @@ package org.osmf.net
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.events.NetNegotiatorEvent;
 	import org.osmf.media.IURLResource;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.FMSURL;
 
 	/**
@@ -57,8 +57,8 @@ package org.osmf.net
 	
 	/**
 	 * The NetConnectionFactory class is used to generate connected NetConnection instances
-	 * and to manage sharing of these instances between multiple ILoadables. This class is stateless. 
-	 * Multiple parallel create() requests may be made. Concurrent requests to the same URL by disparate ILoadables
+	 * and to manage sharing of these instances between multiple LoadTraits. This class is stateless. 
+	 * Multiple parallel create() requests may be made. Concurrent requests to the same URL by disparate LoadTraits
 	 * are handled efficiently with only a single NetNegotiation instance being used. A hash of the resource URL is used as a key
 	 * to determine which NetConnections may be shared. 
 	 * 
@@ -87,9 +87,9 @@ package org.osmf.net
 		 * and not pending is a new connection sequence initiated via a new NetNegotiator instance.
 		 * <p/>
 		 * If this method receives a CONNECTION_FAILED event back from a NetNegotiator, it will dispatch the appropriate 
-		 * MediaErrorEvent against the associated ILoadable.
+		 * MediaErrorEvent against the associated LoadTrait.
 		 * 
-		 * @param loadable the ILoadable that requires the NetConnection
+		 * @param loadTrait the LoadTrait that requires the NetConnection
 		 * @param allowNetConnectionSharing Boolean specifying whether the NetConnection may be shared or not
 		 * 
 		 * @see org.osmf.events.MediaErrorEvent;
@@ -101,9 +101,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function create(loadable:ILoadable,allowNetConnectionSharing:Boolean):void
+		public function create(loadTrait:LoadTrait,allowNetConnectionSharing:Boolean):void
 		{
-			var urlResource:IURLResource = loadable.resource as IURLResource;
+			var urlResource:IURLResource = loadTrait.resource as IURLResource;
 			var key:String = extractKey(urlResource);
 			
 			// The first time this method is called, we create our dictionaries.
@@ -125,7 +125,7 @@ package org.osmf.net
 						, false
 						, false
 						, sharedConnection.netConnection
-						, loadable
+						, loadTrait
 						, true
 						)
 					);
@@ -133,16 +133,16 @@ package org.osmf.net
 			// Check to see if there is already a connection attempt pending on this resource.
 			else if (connectionsUnderway != null)
 			{
-				// Add this loadable to the vector of loadables to be notified once the
+				// Add this LoadTrait to the vector of LoadTraits to be notified once the
 				// connection has either succeeded or failed.
-				connectionsUnderway.push(new PendingConnection(loadable,allowNetConnectionSharing));
+				connectionsUnderway.push(new PendingConnection(loadTrait, allowNetConnectionSharing));
 			}
 			// If no connection is shareable or pending, then initiate a new connection attempt.
 			else
 			{
 				// Add this connection to the list of pending connections
 				var pendingConnections:Vector.<PendingConnection> = new Vector.<PendingConnection>();
-				pendingConnections.push(new PendingConnection(loadable,allowNetConnectionSharing));
+				pendingConnections.push(new PendingConnection(loadTrait, allowNetConnectionSharing));
 				pendingDictionary[key] = pendingConnections;
 				
 				// Create a new NetNegotiator to perform the connection attempts
@@ -157,9 +157,9 @@ package org.osmf.net
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
 					
-					// Dispatch an event for each pending loadable.
+					// Dispatch an event for each pending LoadTrait.
 					var pendingConnections:Vector.<PendingConnection> = pendingDictionary[key];
-					for (var i:Number=0; i< pendingConnections.length; i++)
+					for (var i:Number=0; i < pendingConnections.length; i++)
 					{
 						var pendingConnection:PendingConnection = pendingConnections[i] as PendingConnection;
 						if (pendingConnection.shareable)
@@ -183,7 +183,7 @@ package org.osmf.net
 								, false
 								, false
 								, event.netConnection
-								, pendingConnection.loadable
+								, pendingConnection.loadTrait
 								, pendingConnection.shareable
 								)
 							);
@@ -197,13 +197,13 @@ package org.osmf.net
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
 					
-					// Dispatch an event for each pending loadable.
+					// Dispatch an event for each pending LoadTrait.
 					var pendingConnections:Vector.<PendingConnection> = pendingDictionary[key];
-					for (var i:Number=0; i< pendingConnections.length; i++)
+					for (var i:Number=0; i < pendingConnections.length; i++)
 					{
 						if (event.mediaError != null)
 						{
-							loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
+							loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
 						}
 						dispatchEvent
 							( new NetConnectionFactoryEvent
@@ -211,7 +211,7 @@ package org.osmf.net
 								, false
 								, false
 								, null
-								, loadable
+								, loadTrait
 								)
 							);
 					}
@@ -279,7 +279,7 @@ package org.osmf.net
 }
 
 import flash.net.NetConnection;
-import org.osmf.traits.ILoadable;
+import org.osmf.traits.LoadTrait;
 
 /**
  * Utility class for structuring shared connection data.
@@ -307,15 +307,15 @@ class SharedConnection
  */
 class PendingConnection
 {
-	public function PendingConnection(loadable:ILoadable,shareable:Boolean)
+	public function PendingConnection(loadTrait:LoadTrait,shareable:Boolean)
 	{
-		_loadable = loadable;
+		_loadTrait = loadTrait;
 		_shareable = shareable;
 	}
 	
-	public function get loadable():ILoadable
+	public function get loadTrait():LoadTrait
 	{
-		return _loadable;
+		return _loadTrait;
 	}
 	
 	public function get shareable():Boolean
@@ -323,6 +323,6 @@ class PendingConnection
 		return _shareable;
 	}
 	
-	private var _loadable:ILoadable;
+	private var _loadTrait:LoadTrait;
 	private var _shareable:Boolean;	
 }

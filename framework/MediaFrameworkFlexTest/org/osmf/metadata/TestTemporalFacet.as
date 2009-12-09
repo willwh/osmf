@@ -28,17 +28,17 @@ package org.osmf.metadata
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ISeekable;
-	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
@@ -167,26 +167,24 @@ package org.osmf.metadata
 				facet.addValue(value);
 			}
 			
+			var positionReachedCount:int = 0;
+
 			facet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
 			
-			var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.load();
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
 			
-			var playable:IPlayable = videoElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			playable.play();
-			
-			var pausable:IPausable = videoElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			assertTrue(pausable != null);
-			
-			var temporal:ITemporal = videoElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
-			
-			var seekable:ISeekable = videoElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-			assertTrue(seekable != null);
-			
-			var positionReachedCount:int = 0;
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					assertTrue(playTrait != null);
+					playTrait.play();
+				}
+			}
 			
 			function onPositionReached(event:TemporalFacetEvent):void
 			{
@@ -195,29 +193,37 @@ package org.osmf.metadata
 				var newEvent:TemporalFacetEvent = event.clone() as TemporalFacetEvent;
 				assertNotNull(newEvent);
 				
+				var timeTrait:TimeTrait = videoElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+				assertTrue(timeTrait != null);
+				
+				var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				assertTrue(playTrait != null);
+				
 				// The time should be within TOLERANCE seconds of the playhead position
 				var timeValue:Number = (event.value as TemporalIdentifier).time;
-				var playheadPosition:Number = temporal.currentTime;
-				trace("onPositionReached() - event.value.time = "+timeValue+", playhead position="+playheadPosition);
+				var playheadPosition:Number = timeTrait.currentTime;
 				assertTrue((playheadPosition >= (timeValue - TOLERANCE)) && (playheadPosition <= (timeValue + TOLERANCE)));
 				
 				if (testPause && (positionReachedCount == (facet.numValues/2)))
 				{
-					pausable.pause();
-					playable.play();
+					playTrait.pause();
+					playTrait.play();
 				}
 								
 				// This ensures we got all the "position reached" events
 				if (positionReachedCount == facet.numValues)
 				{
 					facet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
-					pausable.pause();
+					playTrait.pause();
 					
-					var seekable:ISeekable = videoElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-					seekable.seek(5);
+					var seekTrait:SeekTrait = videoElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+					seekTrait.seek(5);
 	
 					facet.enable = false;
-					eventDispatcher.dispatchEvent(new Event("testComplete"));
+					if (eventDispatcher != null)
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
 				}
 			}
 		}
@@ -233,29 +239,25 @@ package org.osmf.metadata
 				facet.addValue(value);
 			}
 						
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.load();
-			assertTrue(loadable.loadState == LoadState.READY);
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.load();
+			assertTrue(loadTrait.loadState == LoadState.READY);
 			
-			var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			playable.play();
+			var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.play();
 			
-			var pausable:IPausable = mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			assertTrue(pausable != null);
+			var timeTrait:TimeTrait = mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
 			
-			var temporal:ITemporal = mediaElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
-			
-			var seekable:ISeekable = mediaElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-			assertTrue(seekable != null);
+			var seekTrait:SeekTrait = mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			assertTrue(seekTrait != null);
 						
 			// Remove the traits while playing
-			mediaElement.doRemoveTrait(MediaTraitType.SEEKABLE);
-			mediaElement.doRemoveTrait(MediaTraitType.PLAYABLE);
-			mediaElement.doRemoveTrait(MediaTraitType.PAUSABLE);
-			mediaElement.doRemoveTrait(MediaTraitType.TEMPORAL);
+			mediaElement.doRemoveTrait(MediaTraitType.SEEK);
+			mediaElement.doRemoveTrait(MediaTraitType.PLAY);
+			mediaElement.doRemoveTrait(MediaTraitType.TIME);
 		}
 
 		private function createTemporalData():void
@@ -299,9 +301,8 @@ package org.osmf.metadata
 				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
 			}
 
-			return new DynamicMediaElement([ MediaTraitType.LOADABLE, MediaTraitType.PLAYABLE,
-											 MediaTraitType.SEEKABLE, MediaTraitType.PAUSABLE,
-											 MediaTraitType.TEMPORAL ],
+			return new DynamicMediaElement([ MediaTraitType.LOAD, MediaTraitType.PLAY,
+											 MediaTraitType.SEEK, MediaTraitType.TIME ],
 											 loader, resourceForMediaElement);
 		}
 		

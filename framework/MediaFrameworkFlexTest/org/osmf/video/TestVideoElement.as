@@ -23,11 +23,11 @@ package org.osmf.video
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MetadataEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -35,22 +35,19 @@ package org.osmf.video
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.metadata.TemporalFacetEvent;
-	import org.osmf.metadata.TemporalIdentifier;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.netmocker.EventInfo;
 	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ISeekable;
-	import org.osmf.traits.ISpatial;
-	import org.osmf.traits.ITemporal;
-	import org.osmf.traits.IViewable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
@@ -87,15 +84,15 @@ package org.osmf.video
 			element.defaultDuration = 100;
 			assertEquals(100, element.defaultDuration);
 			
-			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNotNull(temporal);
-			assertEquals(temporal.duration, 100);
+			var timeTrait:TimeTrait = element.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertNotNull(timeTrait);
+			assertEquals(timeTrait.duration, 100);
 			
 			element.defaultDuration = NaN;
 			assertEquals(NaN, element.defaultDuration);
 			
-			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNull(temporal);
+			timeTrait = element.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertNull(timeTrait);
 		}
 		
 		public function testGetClient():void
@@ -105,16 +102,16 @@ package org.osmf.video
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			loadable.load();
+			var loadTrait:LoadTrait= videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					assertNotNull(videoElement.client);
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -129,22 +126,22 @@ package org.osmf.video
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			loadable.load();
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					
-					var seekable:ISeekable = videoElement.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-					assertNull(seekable);
+					var seekTrait:SeekTrait = videoElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+					assertNull(seekTrait);
 					
-					var pausable:IPausable = videoElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-					assertNotNull(pausable);
+					var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					assertNotNull(playTrait);
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 			}
@@ -172,19 +169,19 @@ package org.osmf.video
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			loadable.load();
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 					
-					var playable:IPlayable = videoElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-					playable.play();
+					var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					playTrait.play();
 				}
 			}
 
@@ -192,7 +189,6 @@ package org.osmf.video
 			{
 				if (event.facet is TemporalFacet)
 				{
-					trace(">>> got the TemporalFacet");
 					videoElement.metadata.removeEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
 					event.facet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
 				}
@@ -200,7 +196,6 @@ package org.osmf.video
 			
 			function onPositionReached(event:TemporalFacetEvent):void
 			{
-				trace("!!! onPositionReached time="+(event.value as TemporalIdentifier).time+", cuePointCount="+cuePointCount);
 				if (testCuePoints)
 				{
 					if (++cuePointCount >= testCuePoints.length)
@@ -219,52 +214,50 @@ package org.osmf.video
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestGetMetadata
 					);
-			loadable.load();
+			loadTrait.load();
 			
 			function onTestGetMetadata(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
 					
-					// We should now have a spatial trait with the default dimensions:
-					var spatial:ISpatial = mediaElement.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-					assertTrue(spatial != null);
-					assertTrue(spatial.width == 0);
-					assertTrue(spatial.height == 0);
+					// We should now have a view trait with the default dimensions:
+					var viewTrait:ViewTrait = mediaElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
+					assertTrue(viewTrait != null);
+					assertTrue(viewTrait.mediaWidth == 0);
+					assertTrue(viewTrait.mediaHeight == 0);
 					
 					// See if the view matches the reported size:
-					var viewable:IViewable = mediaElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-					assertNotNull(viewable);
-					assertEquals(0, viewable.view.width);
-					assertEquals(0, viewable.view.height);
+					assertEquals(0, viewTrait.view.width);
+					assertEquals(0, viewTrait.view.height);
 					
-					spatial.addEventListener
-							( DimensionEvent.DIMENSION_CHANGE
+					viewTrait.addEventListener
+							( ViewEvent.DIMENSION_CHANGE
 							, onDimensionChange
 							);
 					
 					// Playing the media should result in our receiving the
 					// metadata, which should impact our dimensions.
-					var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-					assertTrue(playable != null);
-					playable.play();
+					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					assertTrue(playTrait != null);
+					playTrait.play();
 					
-					function onDimensionChange(event:DimensionEvent):void
+					function onDimensionChange(event:ViewEvent):void
 					{
-						spatial.removeEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);
+						viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
 						
-						assertTrue(spatial.width == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
-						assertTrue(spatial.height == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
+						assertTrue(viewTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
+						assertTrue(viewTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
 						
-						assertEquals(spatial.width, viewable.view.width);
-						assertEquals(spatial.height, viewable.view.height);
+						assertEquals(viewTrait.mediaWidth, viewTrait.view.width);
+						assertEquals(viewTrait.mediaHeight, viewTrait.view.height);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -317,7 +310,7 @@ package org.osmf.video
 			return new VideoElement(loader); 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -331,21 +324,18 @@ package org.osmf.video
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.BUFFERABLE
-				   , MediaTraitType.LOADABLE
-				   , MediaTraitType.PAUSABLE
-				   , MediaTraitType.PLAYABLE
-				   , MediaTraitType.SEEKABLE
-				   , MediaTraitType.SPATIAL
-				   , MediaTraitType.TEMPORAL
-				   , MediaTraitType.VIEWABLE
-				   , MediaTraitType.DOWNLOADABLE
+			return [ MediaTraitType.AUDIO
+				   , MediaTraitType.BUFFER
+				   , MediaTraitType.LOAD
+				   , MediaTraitType.PLAY
+				   , MediaTraitType.SEEK
+				   , MediaTraitType.TIME
+				   , MediaTraitType.VIEW
 				   ];
 		}	
 

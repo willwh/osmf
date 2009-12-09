@@ -34,8 +34,8 @@ package org.osmf.utils
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 
 	/**
@@ -81,26 +81,26 @@ package org.osmf.utils
 		/**
 		 * Loads an URL over HTTP.
 		 * 
-		 * <p>Updates the ILoadable's <code>loadState</code> property to LOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load of the 
 		 * URL.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()
-		 * @param ILoadable ILoadable to be loaded.
+		 * @param loadTrait LoadTrait to be loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
+			super.load(loadTrait);
 			
-			updateLoadable(loadable, LoadState.LOADING);
+			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
-			var urlResource:URLResource = loadable.resource as URLResource;
+			var urlResource:URLResource = loadTrait.resource as URLResource;
 
 			var urlReq:URLRequest = new URLRequest(urlResource.url.toString());
 			var loader:URLLoader = createURLLoader();
@@ -140,15 +140,15 @@ package org.osmf.utils
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.READY, new HTTPLoadedContext(loader));
+				updateLoadTrait(loadTrait, LoadState.READY, new HTTPLoadedContext(loader));
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -165,8 +165,8 @@ package org.osmf.utils
 			{	
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -183,10 +183,10 @@ package org.osmf.utils
 		/**
 		 * Unloads the resource.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadState</code> property to UNLOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
 		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
-		 * @param ILoadable ILoadable to be unloaded.
+		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 *  
 		 *  @langversion 3.0
@@ -194,13 +194,13 @@ package org.osmf.utils
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 
 			// Nothing to do.
-			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);			
-			updateLoadable(loadable, LoadState.UNINITIALIZED);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		/**

@@ -38,7 +38,7 @@ package org.osmf.audio
 			return new AudioElement(new SoundLoader());
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -52,21 +52,19 @@ package org.osmf.audio
 		{
 			// Subclasses can override to specify the trait types which are
 			// expected upon initialization.
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
 			// Subclasses can override to specify the trait types which are
 			// expected after a load.  Ignored if the MediaElement
-			// lacks the ILoadable trait.
-			return [ MediaTraitType.AUDIBLE
-				   , MediaTraitType.LOADABLE
-				   , MediaTraitType.PAUSABLE
-				   , MediaTraitType.PLAYABLE
-				   , MediaTraitType.SEEKABLE
-				   , MediaTraitType.TEMPORAL
-				   , MediaTraitType.DOWNLOADABLE
+			// lacks the LoadTrait.
+			return [ MediaTraitType.AUDIO
+				   , MediaTraitType.LOAD
+				   , MediaTraitType.PLAY
+				   , MediaTraitType.SEEK
+				   , MediaTraitType.TIME
 				   ];
 		}
 

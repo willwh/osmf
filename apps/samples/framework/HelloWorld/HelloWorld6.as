@@ -27,9 +27,9 @@ package
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
@@ -51,18 +51,18 @@ package
 				, new URLResource(new URL(REMOTE_PROGRESSIVE))
 				);
 			
-			var loadable:ILoadable = sprite.element.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
-			loadable.load();
+			var loadTrait:LoadTrait = sprite.element.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
+			loadTrait.load();
 			
 			function onReady(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
 					
-					var playable:IPlayable = sprite.element.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-					playable.play();
+					var playTrait:PlayTrait = sprite.element.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					playTrait.play();
 				}
 			}
 		}

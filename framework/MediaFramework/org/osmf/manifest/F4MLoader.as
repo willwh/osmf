@@ -40,7 +40,7 @@ package org.osmf.manifest
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.proxies.MediaElementLoadedContext;
 	import org.osmf.proxies.MediaElementLoader;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	
 	/**
@@ -101,20 +101,20 @@ package org.osmf.manifest
 		/**
 		 * @ineritDoc
 		 */
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
-			updateLoadable(loadable, LoadState.LOADING);
+			super.load(loadTrait);
+			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
-			var loader:URLLoader = new URLLoader(new URLRequest(URLResource(loadable.resource).url.rawUrl));
+			var loader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
 			loader.addEventListener(Event.COMPLETE, onComplete);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 						
 			function onError(event:ErrorEvent):void
 			{				
-				updateLoadable(loadable, LoadState.LOAD_ERROR); 				
-				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR); 				
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
 			}			
 			function onComplete(event:Event):void
 			{			
@@ -122,10 +122,10 @@ package org.osmf.manifest
 				{					
 					var manifest:Manifest = parser.parse(event.target.data);
 				}
-				catch(parseError:Error)
+				catch (parseError:Error)
 				{					
-					updateLoadable(loadable, LoadState.LOAD_ERROR);
-					loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 				}
 				
 				//Load externals
@@ -153,7 +153,7 @@ package org.osmf.manifest
 							item.drmMetadata = URLLoader(event.target).data;
 							if (unfinishedLoads == 0)
 							{
-								finishLoad(manifest, loadable)
+								finishLoad(manifest, loadTrait)
 							}
 						}
 						loader.load(new URLRequest(item.drmMetadataURL.rawUrl));
@@ -161,23 +161,23 @@ package org.osmf.manifest
 				}	
 				if (unfinishedLoads == 0) // No external resources
 				{
-					finishLoad(manifest, loadable);
+					finishLoad(manifest, loadTrait);
 				}														
 			}		
 		} 
 		
-		private function finishLoad(manifest:Manifest, loadable:ILoadable):void
+		private function finishLoad(manifest:Manifest, loadTrait:LoadTrait):void
 		{
-			var netResource:IMediaResource = parser.createResource(manifest, URLResource(loadable.resource).url);	
+			var netResource:IMediaResource = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
 			
 			try
 			{
 				var loadedElem:MediaElement = factory.createMediaElement(netResource);	
 			}
-			catch(parseError:Error)
+			catch (parseError:Error)
 			{					
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 			}			
 			
 			if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
@@ -185,16 +185,16 @@ package org.osmf.manifest
 				loadedElem["defaultDuration"] = manifest.duration;	
 			}									
 			var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
-			updateLoadable(loadable, LoadState.READY, context);		
+			updateLoadTrait(loadTrait, LoadState.READY, context);		
 		}
 		
 		/**
 		 * @ineritDoc
 		 */
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);	
-			updateLoadable(loadable, LoadState.UNINITIALIZED, null);					
+			super.unload(loadTrait);	
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 				
 		private static const F4M_EXTENSION:String = "f4m";

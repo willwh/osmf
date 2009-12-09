@@ -28,18 +28,16 @@ package org.osmf.vast.media
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.proxies.TestListenerProxyElement;
-	import org.osmf.traits.AudibleTrait;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ITemporal;
+	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.TimerTemporalTrait;
+	import org.osmf.utils.TimerTimeTrait;
 	import org.osmf.vast.model.VASTTrackingEvent;
 	import org.osmf.vast.model.VASTTrackingEventType;
 	import org.osmf.vast.model.VASTUrl;
@@ -52,59 +50,59 @@ package org.osmf.vast.media
 
 			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
 			
-			var temporal:ITemporal = proxyElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
+			var timeTrait:TimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
 			
 			// Listen for the events being fired.
 			var eventCount:int = 0;
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 
 			// Playback should cause the events to begin firing.
-			var playable:PlayableTrait = proxyElement.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			assertTrue(playable != null);
-			playable.play();
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.play();
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{				
-				if (event.loadable.loadState == LoadState.READY)
+				if (event.loadTrait.loadState == LoadState.READY)
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
 						// START Event #1
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == START_EVENT_URL1);
-						assertTrue(temporal.currentTime == 0);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL1);
+						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 2)
 					{
 						// START Event #2
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == START_EVENT_URL2);
-						assertTrue(temporal.currentTime == 0);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL2);
+						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 3)
 					{
 						// FIRST_QUARTILE Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == FIRST_QUARTILE_EVENT_URL);
-						assertTrue(temporal.currentTime == DURATION * 0.25);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == FIRST_QUARTILE_EVENT_URL);
+						assertTrue(timeTrait.currentTime == DURATION * 0.25);
 					}
 					else if (eventCount == 4)
 					{
 						// MIDPOINT Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == MIDPOINT_EVENT_URL);
-						assertTrue(temporal.currentTime == DURATION * 0.5);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == MIDPOINT_EVENT_URL);
+						assertTrue(timeTrait.currentTime == DURATION * 0.5);
 					}
 					else if (eventCount == 5)
 					{
 						// THIRD_QUARTILE Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == THIRD_QUARTILE_EVENT_URL);
-						assertTrue(temporal.currentTime == DURATION * 0.75);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == THIRD_QUARTILE_EVENT_URL);
+						assertTrue(timeTrait.currentTime == DURATION * 0.75);
 					}
 					else if (eventCount == 6)
 					{
 						// COMPLETE Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == COMPLETE_EVENT_URL);
-						assertTrue(temporal.currentTime == DURATION);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == COMPLETE_EVENT_URL);
+						assertTrue(timeTrait.currentTime == DURATION);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -125,46 +123,44 @@ package org.osmf.vast.media
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 2000));
 			
-			var temporal:ITemporal = proxyElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
+			var timeTrait:TimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
 			
 			// Listen for the events being fired.
 			var eventCount:int = 0;
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 
 			// Playback should cause the events to begin firing.
-			var playable:PlayableTrait = proxyElement.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			assertTrue(playable != null);
-			playable.play();
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.play();
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.READY)
+				if (event.loadTrait.loadState == LoadState.READY)
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
 						// START Event #1
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == START_EVENT_URL1);
-						assertTrue(temporal.currentTime == 0);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL1);
+						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 2)
 					{
 						// START Event #2
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == START_EVENT_URL2);
-						assertTrue(temporal.currentTime == 0);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL2);
+						assertTrue(timeTrait.currentTime == 0);
 						
 						// Pausing should fire the PAUSE event, and no other event.
-						var pausable:PausableTrait = proxyElement.getTrait(MediaTraitType.PAUSABLE) as PausableTrait;
-						assertTrue(pausable != null);
-						pausable.pause();
+						playTrait.pause();
 					}
 					else if (eventCount == 3)
 					{
 						// PAUSE Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == PAUSE_EVENT_URL);
-						assertTrue(temporal.currentTime < DURATION * 0.25);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == PAUSE_EVENT_URL);
+						assertTrue(timeTrait.currentTime < DURATION * 0.25);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -179,28 +175,28 @@ package org.osmf.vast.media
 
 			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
 						
-			var temporal:ITemporal = proxyElement.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertTrue(temporal != null);
+			var timeTrait:TimeTrait = proxyElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
 			
 			// Listen for the events being fired.
 			var eventCount:int = 0;
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 
 			// Muting should cause an event to fire.
-			var audible:AudibleTrait = proxyElement.getTrait(MediaTraitType.AUDIBLE) as AudibleTrait;
-			assertTrue(audible!= null);
-			audible.muted  = true;
+			var audioTrait:AudioTrait = proxyElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
+			assertTrue(audioTrait!= null);
+			audioTrait.muted  = true;
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.READY)
+				if (event.loadTrait.loadState == LoadState.READY)
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
 						// MUTE Event
-						assertTrue(URLResource(event.loadable.resource).url.rawUrl == MUTE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == MUTE_EVENT_URL);
 
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -266,14 +262,13 @@ package org.osmf.vast.media
 		private function createProxyElementWithWrappedElement():ProxyElement
 		{
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement
-				( [	MediaTraitType.PLAYABLE
-				  , MediaTraitType.PAUSABLE
-				  , MediaTraitType.AUDIBLE
+				( [	MediaTraitType.PLAY
+				  , MediaTraitType.AUDIO
 				  ]
 				, new SimpleLoader()
 				);
-			var temporal:TimerTemporalTrait = new TimerTemporalTrait(DURATION, mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable);
-			mediaElement.doAddTrait(MediaTraitType.TEMPORAL, temporal);
+			var timerTrait:TimerTimeTrait = new TimerTimeTrait(DURATION, mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait);
+			mediaElement.doAddTrait(MediaTraitType.TIME, timerTrait);
 			var proxyElement:ProxyElement = new VASTTrackingProxyElement
 				( createTrackingEvents()
 				, httpLoader

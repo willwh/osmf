@@ -57,31 +57,31 @@ package org.osmf.proxies
 				fail();
 			}
 			
-			assertFalse(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 			
 			var wrappedElement:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.TEMPORAL, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			proxyElement.wrappedElement = wrappedElement;
 			
-			assertTrue(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
-			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAYABLE) == false);
+			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY) == false);
 			
 			// Setting a new wrapped element is possible.  Doing so should
 			// cause the proxy's traits to change.
 			//
 			
 			var wrappedElement2:DynamicMediaElement
-				= new DynamicMediaElement( [MediaTraitType.PLAYABLE, MediaTraitType.LOADABLE]
+				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 			
 			proxyElement.wrappedElement = wrappedElement2;
 			
-			assertTrue(proxyElement.hasTrait(MediaTraitType.TEMPORAL) == false);
-			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAYABLE));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME) == false);
+			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
 			
 			// Clearing the wrapped element is also possible.  This should
 			// clear out the traits, and make many operations invalid.
@@ -91,7 +91,7 @@ package org.osmf.proxies
 			
 			assertTrue(proxyElement.wrappedElement == null);
 
-			assertFalse(proxyElement.hasTrait(MediaTraitType.TEMPORAL));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 		}
 		
 		// Protected
@@ -110,7 +110,7 @@ package org.osmf.proxies
 			return new ProxyElement(new MediaElement());
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}

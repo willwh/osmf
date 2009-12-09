@@ -98,6 +98,7 @@ package org.osmf.view
 			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
 			mediaPlayerWrapper.mediaPlayer.autoRewind = true;
+			mediaPlayerWrapper.mediaPlayer.loop = true;
 			
 			// Sync the UI to the current (empty) state.
 			//
@@ -217,8 +218,9 @@ package org.osmf.view
 		private function onMutedChange(event:AudioEvent):void
 		{
 			muteToggle.selected = event.muted;
+			
+			mediaPlayerWrapper.mediaPlayer.seek(46);
 		}
-		
 
 		private function onBufferTimeChange(event:BufferEvent):void
 		{
@@ -238,11 +240,11 @@ package org.osmf.view
 		private function updateControls():void
 		{
 			buttonPlay.visible 			= mediaPlayerWrapper.mediaPlayer.playable;
-			buttonPause.visible 		= mediaPlayerWrapper.mediaPlayer.pausable;
-			audioControls.visible 		= mediaPlayerWrapper.mediaPlayer.audible;
-			temporalControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
-			bufferable.visible			= mediaPlayerWrapper.mediaPlayer.bufferable;
-			downloadable.visible		= mediaPlayerWrapper.mediaPlayer.downloadable;
+			buttonPause.visible 		= mediaPlayerWrapper.mediaPlayer.playable;
+			audioTraitControls.visible 	= mediaPlayerWrapper.mediaPlayer.audible;
+			timeTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
+			bufferTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.bufferable;
+			loadTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.loadable;
 			seekBar.enabled 			= mediaPlayerWrapper.mediaPlayer.seekable;
 			
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
@@ -256,7 +258,7 @@ package org.osmf.view
 				duration.text = "0";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.downloadable)
+			if (mediaPlayerWrapper.mediaPlayer.loadable)
 			{
 				bytesTotal.text = "" + mediaPlayerWrapper.mediaPlayer.bytesTotal;
 			}
@@ -276,7 +278,7 @@ package org.osmf.view
 				bufferLength.text = "";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.downloadable == false)
+			if (mediaPlayerWrapper.mediaPlayer.loadable == false)
 			{
 				bytesTotal.text = "";
 				bytesLoaded.text = "";

@@ -21,20 +21,20 @@
 *****************************************************/
 package org.osmf.content
 {
+	import flash.display.DisplayObject;
 	import flash.display.LoaderInfo;
-	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.LoadableMediaElement;
-	import org.osmf.traits.IDownloadable;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	/**
 	 * ContentElement is a media element that can present the content loaded
@@ -66,30 +66,25 @@ package org.osmf.content
 		//
 		
 		/**
-		 *  @private 
-		 */ 
-		override protected function processLoadingState():void
+		 * @private 
+		 */ 		
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
-			var context:ContentLoadedContext
-				=	(getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext
-				as	ContentLoadedContext;
-			
-			// Add a downloadable trait:
-			var downloadable:IDownloadable = new ContentDownloadableTrait(context)
-			addTrait(MediaTraitType.DOWNLOADABLE, downloadable);
+			return new ContentLoadTrait(loader, resource);
 		}
-			
+		
 		/**
-		 *  @private 
+		 * @private 
 		 */ 		
 		override protected function processReadyState():void
 		{
 			var context:ContentLoadedContext
-				=	(getTrait(MediaTraitType.LOADABLE) as ILoadable).loadedContext
+				=	(getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext
 				as	ContentLoadedContext;
 				
-			var viewable:ViewableTrait	= new ViewableTrait();			
-			var spatial:SpatialTrait 	= new SpatialTrait();
+			var view:DisplayObject = null;
+			var mediaWidth:Number = 0;
+			var mediaHeight:Number = 0;
 			
 			try
 			{
@@ -97,16 +92,17 @@ package org.osmf.content
 				// overdraw its bounds, while maintaining scale, and size
 				// with the layout system.
 				//
-				// Note that it's critical that the IViewable's view be set to
+				// Note that it's critical that the ViewTrait's view be set to
 				// the Loader's content property (and not to a container Sprite,
 				// as was the case with a previous fix), since player-to-SWF
 				// communication is based on the player's ability to reference
 				// the SWF's API.
 				var info:LoaderInfo = context.loader.contentLoaderInfo;  
 				context.loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
-				viewable.view = context.loader.content;	
 				
-				spatial.setDimensions(info.width, info.height);
+				view = context.loader.content;	
+				mediaWidth = info.width;
+				mediaHeight = info.height;
 			}
 			catch (error:SecurityError)
 			{
@@ -123,8 +119,7 @@ package org.osmf.content
 					);
 			}
 			
-			addTrait(MediaTraitType.VIEWABLE, viewable);
-			addTrait(MediaTraitType.SPATIAL, spatial);
+			addTrait(MediaTraitType.VIEW, new ViewTrait(view, mediaWidth, mediaHeight));
 		}
 		
 		/**
@@ -132,9 +127,7 @@ package org.osmf.content
 		 */ 
 		override protected function processUnloadingState():void
 		{
-			removeTrait(MediaTraitType.SPATIAL);
-			removeTrait(MediaTraitType.VIEWABLE);	
-			removeTrait(MediaTraitType.DOWNLOADABLE);
+			removeTrait(MediaTraitType.VIEW);	
 		}
 	}
 }

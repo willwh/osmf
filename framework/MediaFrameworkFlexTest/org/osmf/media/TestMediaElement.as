@@ -30,7 +30,7 @@ package org.osmf.media
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
@@ -60,7 +60,7 @@ package org.osmf.media
 
 		public function testGetTraitTypesAfterLoad():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				callAfterLoad(verifyGetTraitTypes);
 			}
@@ -68,7 +68,7 @@ package org.osmf.media
 
 		public function testGetTraitTypesAfterUnload():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				// Load the media without calling a verify function.
 				var mediaElement:MediaElement = callAfterLoad(null, false);
@@ -102,7 +102,7 @@ package org.osmf.media
 		
 		public function testHasTraitAfterLoad():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				callAfterLoad(verifyHasTrait);
 			}
@@ -110,7 +110,7 @@ package org.osmf.media
 
 		public function testHasTraitAfterUnload():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				// Load the media without calling a verify function.
 				var mediaElement:MediaElement = callAfterLoad(null, false);
@@ -144,7 +144,7 @@ package org.osmf.media
 		
 		public function testGetTraitAfterLoad():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				callAfterLoad(verifyGetTrait);
 			}
@@ -152,7 +152,7 @@ package org.osmf.media
 
 		public function testGetTraitAfterUnload():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				// Load the media without calling a verify function.
 				var mediaElement:MediaElement = callAfterLoad(null, false);
@@ -182,12 +182,12 @@ package org.osmf.media
 		
 		public function testMediaErrorEventDispatch():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				var mediaElement:MediaElement = createMediaElement();
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				var loadableTrait:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				assertTrue(loadableTrait);
+				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				assertTrue(loadTrait);
 				
 				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 				
@@ -195,8 +195,8 @@ package org.osmf.media
 				
 				// Make sure error events dispatched on the trait are redispatched
 				// on the MediaElement.
-				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
-				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID)));
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID)));
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -231,10 +231,10 @@ package org.osmf.media
 			return new MediaElement(); 
 		}
 		
-		protected function get loadable():Boolean
+		protected function get hasLoadTrait():Boolean
 		{
 			// Subclasses can override to specify that they start with the
-			// ILoadable trait.
+			// LoadTrait.
 			return false;
 		}
 		
@@ -256,7 +256,7 @@ package org.osmf.media
 		{
 			// Subclasses can override to specify the trait types which are
 			// expected after a load.  Ignored if the MediaElement
-			// lacks the ILoadable trait.
+			// lacks the LoadTrait.
 			return [];
 		}
 		
@@ -285,7 +285,7 @@ package org.osmf.media
 			assertTrue(mediaElement.traitTypes.length == expectedTraitTypes.length);
 
 			// Verify all expected traits are in traitTypes.
-			for each (var traitType:MediaTraitType in expectedTraitTypes)
+			for each (var traitType:String in expectedTraitTypes)
 			{
 				assertTrue(mediaElement.traitTypes.indexOf(traitType) >= 0);
 			}
@@ -301,7 +301,7 @@ package org.osmf.media
 		private function verifyHasTrait(mediaElement:MediaElement, expectedTraitTypes:Array):void
 		{
 			// Verify hasTrait returns true for all expected traits.
-			for each (var traitType:MediaTraitType in expectedTraitTypes)
+			for each (var traitType:String in expectedTraitTypes)
 			{
 				assertTrue(mediaElement.hasTrait(traitType) == true);
 			}
@@ -317,7 +317,7 @@ package org.osmf.media
 		private function verifyGetTrait(mediaElement:MediaElement, expectedTraitTypes:Array):void
 		{
 			// Verify getTrait returns a result for all expected traits.
-			for each (var traitType:MediaTraitType in expectedTraitTypes)
+			for each (var traitType:String in expectedTraitTypes)
 			{
 				assertTrue(mediaElement.getTrait(traitType) != null);
 			}
@@ -332,7 +332,7 @@ package org.osmf.media
 
 		private function callAfterLoad(func:Function, triggerTestCompleteEvent:Boolean=true):MediaElement
 		{
-			assertTrue(this.loadable);
+			assertTrue(hasLoadTrait);
 			
 			if (triggerTestCompleteEvent)
 			{
@@ -342,19 +342,19 @@ package org.osmf.media
 			var mediaElement:MediaElement = createMediaElement();
 			mediaElement.resource = resourceForMediaElement;
 
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
-			loadable.load();
+			loadTrait.load();
 			
 			function onTestCallAfterLoad(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCallAfterLoad);
 					
 					if (func != null)
 					{
@@ -373,21 +373,21 @@ package org.osmf.media
 		
 		private function callAfterUnload(func:Function, mediaElement:MediaElement):void
 		{
-			assertTrue(this.loadable);
+			assertTrue(hasLoadTrait);
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
 			
 			// If the MediaElement is not yet loaded, wait until it is.
-			if (loadable.loadState == LoadState.READY)
+			if (loadTrait.loadState == LoadState.READY)
 			{
 				completeCallAfterUnload(func, mediaElement);
 			}
 			else
 			{
-				loadable.addEventListener
+				loadTrait.addEventListener
 						( LoadEvent.LOAD_STATE_CHANGE
 						, onTestCallAfterUnload
 						);
@@ -396,7 +396,7 @@ package org.osmf.media
 				{
 					if (event.loadState == LoadState.READY)
 					{
-						loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCallAfterUnload);
+						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCallAfterUnload);
 						
 						completeCallAfterUnload(func, mediaElement);
 					}
@@ -406,20 +406,20 @@ package org.osmf.media
 		
 		private function completeCallAfterUnload(func:Function, mediaElement:MediaElement):void
 		{
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
 
-			loadable.addEventListener
+			loadTrait.addEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestCompleteCallAfterUnload
 					);
-			loadable.unload();
+			loadTrait.unload();
 			
 			function onTestCompleteCallAfterUnload(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCompleteCallAfterUnload);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestCompleteCallAfterUnload);
 
 					func(mediaElement, existentTraitTypesOnInitialization);
 					
@@ -432,21 +432,20 @@ package org.osmf.media
 		{
 			var inverseTraitTypes:Array = [];
 			
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.AUDIBLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.BUFFERABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.LOADABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.PAUSABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.PLAYABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.SEEKABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.SPATIAL);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.TEMPORAL);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.VIEWABLE);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DOWNLOADABLE);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.AUDIO);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.BUFFER);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.CONTENT_PROTECTION);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DYNAMIC_STREAM);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.LOAD);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.PLAY);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.SEEK);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.TIME);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.VIEW);
 			
 			return inverseTraitTypes;
 		}
 		
-		private function addIfNotPresent(traitTypes:Array, results:Array, traitType:MediaTraitType):void
+		private function addIfNotPresent(traitTypes:Array, results:Array, traitType:String):void
 		{
 			if (traitTypes.indexOf(traitType) == -1)
 			{

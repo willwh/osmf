@@ -126,12 +126,12 @@ package org.osmf.net.dynamicstreaming
 			_mediaElement = new VideoElement(_loader, _dsr);
 			_mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			
-			_loadable = _mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			_loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			_loadTrait = _mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			_loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
-			_loadable.load();
+			_loadTrait.load();
 		}
 		
 		private function onMediaError(e:MediaErrorEvent):void
@@ -147,25 +147,25 @@ package org.osmf.net.dynamicstreaming
 			switch (event.loadState)
 			{
 				case LoadState.READY:
-					var netLoadedContext:NetLoadedContext = _loadable.loadedContext as NetLoadedContext;
+					var netLoadedContext:NetLoadedContext = _loadTrait.loadedContext as NetLoadedContext;
 					netLoadedContext.stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					netLoadedContext.stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					
-					_switchable = _mediaElement.getTrait(MediaTraitType.SWITCHABLE) as ISwitchable;
-					_switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					_dsTrait = _mediaElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+					_dsTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
 					if (_startInManualMode)
 					{
-						_switchable.autoSwitch = false;
+						_dsTrait.autoSwitch = false;
 					}
 					
-					_playable = _mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+					_playTrait = _mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					
 					try
 					{
 						if (_testUnload)
 						{
-							assertNotNull(_loadable);
-							_loadable.unload();	
+							assertNotNull(_loadTrait);
+							_loadTrait.unload();	
 						}
 						else if (_callPlay2)
 						{
@@ -173,7 +173,7 @@ package org.osmf.net.dynamicstreaming
 						}
 						else
 						{
-							_playable.play();
+							_playTrait.play();
 						}
 					}
 					catch (error:IllegalOperationError)
@@ -247,18 +247,6 @@ package org.osmf.net.dynamicstreaming
 			{
 				msg += ", " + event.detail.description + ". " + event.detail.moreInfo;
 			}
-			
-			trace(msg);
-			
-			if (showCurrentIndex)
-			{
-				var streamMsg:String = "Current streaming profile index: " + _switchable.currentIndex + " of " + _switchable.maxIndex;
-				trace(streamMsg);
-				
-				streamMsg = "Current bitrate = " + _dsr.streamItems[_switchable.currentIndex].bitrate + "kbps";
-				trace(streamMsg);
-			}
-			
 		}
 			
 		private function mustReceiveEvent(event:Event):void
@@ -272,10 +260,10 @@ package org.osmf.net.dynamicstreaming
 		private var _eventDispatcher:EventDispatcher;
 		private var _netFactory:DynamicNetFactory;
 		private var _loader:NetLoader;
-		private var _switchable:ISwitchable;
-		private var _playable:IPlayable;
+		private var _dsTrait:DynamicStreamTrait;
+		private var _playTrait:PlayTrait
 		private var _mediaElement:VideoElement;
-		private var _loadable:ILoadable;
+		private var _loadTrait:LoadTrait;
 		private var _dsr:DynamicStreamingResource;
 		private var _testUnload:Boolean;
 		private var _startInManualMode:Boolean;

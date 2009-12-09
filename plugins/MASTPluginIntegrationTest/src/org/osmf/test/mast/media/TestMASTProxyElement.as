@@ -12,8 +12,8 @@ package org.osmf.test.mast.media
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.FMSURL;
@@ -99,8 +99,8 @@ package org.osmf.test.mast.media
 				fail();
 			}
 			
-			var loadableTrait:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadableTrait.load();
+			var loadTrait:LoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.load();
 		}
 					
 		public function testLoadAndPlay():void
@@ -131,9 +131,9 @@ package org.osmf.test.mast.media
 				fail();
 			}
 			
-			var loadableTrait:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadableTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			loadableTrait.load();
+			var loadTrait:LoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
@@ -167,11 +167,11 @@ package org.osmf.test.mast.media
 				fail();
 			}
 			
-			var loadableTrait:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			loadableTrait.load();
+			var loadTrait:LoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.load();
 			
-			var playableTrait:IPlayable = proxyElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			playableTrait.play();
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			playTrait.play();
 		}
 
 		private function createResourceWithMetadata(preroll:Boolean=true):IURLResource

@@ -32,18 +32,19 @@ package org.osmf.media
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.IDisposable;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Dispatched when an IMediaTrait is added to the media element.
+	 * Dispatched when a trait is added to the media element.
 	 *
 	 * @eventType org.osmf.events.MediaElementEvent.TRAIT_ADD
 	 **/
 	[Event(name="traitAdd",type="org.osmf.events.MediaElementEvent")]
 	
 	/**
-	 * Dispatched when an IMediaTrait is removed from the media element.
+	 * Dispatched when a trait is removed from the media element.
 	 *
 	 * @eventType org.osmf.events.MediaElementEvent.TRAIT_REMOVE
 	 **/
@@ -84,7 +85,7 @@ package org.osmf.media
      * If the media element represents a complex media composition, 
      * the media resource URL might be a document that references
      * the multiple resources used in the media composition.</p>
-     * @see IMediaTrait
+     * @see MediaTraitBase
      * @see IMediaResource
 	 *  
 	 *  @langversion 3.0
@@ -112,7 +113,7 @@ package org.osmf.media
 		}
 	
 		/**
-		 * A Vector of MediaTraitTypes representing the trait types on this
+		 * A Vector of MediaTraitType values representing the trait types on this
 		 * media element.
 		 *
 		 *  @langversion 3.0
@@ -120,7 +121,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function get traitTypes():Vector.<MediaTraitType>
+		public function get traitTypes():Vector.<String>
 		{
 			// Return a copy of our types vector.
 			return _traitTypes.concat();
@@ -130,7 +131,7 @@ package org.osmf.media
 		 * Determines whether this media element has a media trait of the
 		 * specified type.
 		 * 
-         * @param type The Class of the media trait to check for.
+         * @param type The MediaTraitType for the media trait to check for.
 		 * 
 		 * @throws ArgumentError If the parameter is <code>null</code>.
 		 * @return <code>true</code> if this media element has a media
@@ -141,7 +142,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function hasTrait(type:MediaTraitType):Boolean
+		public function hasTrait(type:String):Boolean
 		{
 			if (type == null)
 			{
@@ -154,7 +155,7 @@ package org.osmf.media
 		/**
 		 * Returns the media trait of the specified type.
 		 * 
-         * @param type The Class of the media trait to return.
+         * @param type The MediaTraitType for the media trait to return.
 		 * 
          * @throws ArgumentError If the parameter is <code>null</code>.
          * @return The retrieved trait or <code>null</code> if no such trait exists on this
@@ -165,7 +166,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function getTrait(type:MediaTraitType):IMediaTrait
+		public function getTrait(type:String):MediaTraitBase
 		{
 			if (type == null)
 			{
@@ -273,7 +274,7 @@ package org.osmf.media
 		 * Adds a new media trait to this media element.  If successful,
 		 * dispatches a MediaElementEvent.
 		 * 
-         * @param type The type of media trait to add.
+         * @param type The MediaTraitType for the media trait to add.
 		 * @param trait The media trait to add.
 		 * 
          * @throws ArgumentError If either parameter is <code>null</code>, or
@@ -281,9 +282,9 @@ package org.osmf.media
 		 * or if a different instance of the specific trait class has already
 		 * been added.
 		 **/
-		final protected function addTrait(type:MediaTraitType, instance:IMediaTrait):void
+		final protected function addTrait(type:String, instance:MediaTraitBase):void
 		{
-			if (type == null || instance == null || !(instance is type.traitInterface))
+			if (type == null || instance == null || type != instance.traitType)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
@@ -305,7 +306,7 @@ package org.osmf.media
 		 * Removes a media trait from this media element.  If successful,
 		 * dispatches a MediaElementEvent.
 		 * 
-         * @param type The Class of the media trait to remove.
+         * @param type The MediaTraitType for the media trait to remove.
 		 * 
          * @throws ArgumentError If the parameter is <code>null</code>.
          * @return The removed trait or <code>null</code> if no trait was
@@ -316,14 +317,14 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		final protected function removeTrait(type:MediaTraitType):IMediaTrait
+		final protected function removeTrait(type:String):MediaTraitBase
 		{
 			if (type == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
-			var trait:IMediaTrait = traits[type];
+			var trait:MediaTraitBase = traits[type];
 			var traitResolver:MediaTraitResolver = traitResolvers[type];
 			if (traitResolver != null)
 			{
@@ -340,7 +341,7 @@ package org.osmf.media
 		 * 
 		 * Only one resolver can be set per trait type.
 		 * 
-		 * @param type The trait type to add a resolver for.
+		 * @param type The MediaTraitType for the media trait to add a resolver for.
 		 * @param instance The resolver object to add.
 		 * 
 		 * @throws ArgumentError If type is null, or if instance is null.
@@ -351,7 +352,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		final protected function addTraitResolver(type:MediaTraitType, instance:MediaTraitResolver):void
+		final protected function addTraitResolver(type:String, instance:MediaTraitResolver):void
 		{
 			if (instance == null || instance.type != type)
 			{
@@ -368,7 +369,7 @@ package org.osmf.media
 				
 				// If there is a trait instance set for the added resolver's type,
 				// then add this trait to the resolver:
-				var currentlySetTrait:IMediaTrait = traits[type];
+				var currentlySetTrait:MediaTraitBase = traits[type];
 				if (currentlySetTrait)
 				{
 					instance.addTrait(currentlySetTrait);
@@ -390,7 +391,7 @@ package org.osmf.media
 		/**
 		 * Removes a trait resolver object for a given trait type.
 		 * 
-		 * @param type The trait type who's resolver to remove.
+		 * @param type The MediaTraitType for the resolver to remove.
 		 * 
 		 * @throws ArgumentError If type is null, or if no resolver has been added for type.
 		 *
@@ -399,7 +400,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		final protected function removeTraitResolver(type:MediaTraitType):MediaTraitResolver
+		final protected function removeTraitResolver(type:String):MediaTraitResolver
 		{
 			if (type == null || traitResolvers[type] == null)
 			{
@@ -414,7 +415,7 @@ package org.osmf.media
 			delete traitResolvers[type];
 			
 			// Reset the unresolved trait to be the current local trait:
-			var unresolvedTrait:IMediaTrait = unresolvedTraits[type];
+			var unresolvedTrait:MediaTraitBase = unresolvedTraits[type];
 			if (unresolvedTrait != traits[type])
 			{
 				setLocalTrait(type, unresolvedTrait);
@@ -427,7 +428,7 @@ package org.osmf.media
 		/**
 		 * Defines the trait resolver that's set for the specified trait type.
 		 * 
-		 * @param type The trait type who's resolver object shoukd be returned.
+		 * @param type The MediaTraitType for the resolver object which should be returned.
 		 * @return The requested resolver object, or null if none is set for the specified type.
 		 * 
 		 *  @langversion 3.0
@@ -435,7 +436,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		final protected function getTraitResolver(type:MediaTraitType):MediaTraitResolver
+		final protected function getTraitResolver(type:String):MediaTraitResolver
 		{
 			return traitResolvers[type];
 		}
@@ -479,9 +480,9 @@ package org.osmf.media
 			dispatchEvent(event.clone());
 		}
 		
-		private function setLocalTrait(type:MediaTraitType, instance:IMediaTrait):IMediaTrait
+		private function setLocalTrait(type:String, instance:MediaTraitBase):MediaTraitBase
 		{
-			var result:IMediaTrait = traits[type];
+			var result:MediaTraitBase = traits[type];
 			if (instance == null)
 			{
 				// We're processing a trait removal:
@@ -530,7 +531,7 @@ package org.osmf.media
 			processResolvedTraitChange(resolver.type, resolver.resolvedTrait);
 		}
 		
-		private function processResolvedTraitChange(type:MediaTraitType, resolvedTrait:IMediaTrait):void
+		private function processResolvedTraitChange(type:String, resolvedTrait:MediaTraitBase):void
 		{
 			if (resolvedTrait != traits[type])
 			{
@@ -542,7 +543,7 @@ package org.osmf.media
 		private var traitResolvers:Dictionary = new Dictionary();
 		private var unresolvedTraits:Dictionary = new Dictionary();
 
-		private var _traitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
+		private var _traitTypes:Vector.<String> = new Vector.<String>();
 		private var _resource:IMediaResource;
 		private var _gateway:IMediaGateway;
 		private var _metadata:Metadata;

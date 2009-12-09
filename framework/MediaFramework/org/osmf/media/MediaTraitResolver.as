@@ -24,6 +24,7 @@ package org.osmf.media
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -41,7 +42,7 @@ package org.osmf.media
 		/**
 		 * Constructor
 		 *  
-		 * @param type The type of traits that this resolver will be resolving.
+		 * @param type The MediaTraitType for traits that this resolver will be resolving.
 		 * @throws ArgumentError If type is null.
 		 *
 		 *  @langversion 3.0
@@ -49,7 +50,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function MediaTraitResolver(type:MediaTraitType)
+		public function MediaTraitResolver(type:String)
 		{
 			if (type == null)
 			{
@@ -60,14 +61,14 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Defines the media trait type that the resolver handles.
+		 * Defines the MediaTraitType that the resolver handles.
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		final public function get type():MediaTraitType
+		final public function get type():String
 		{
 			return _type;
 		}
@@ -83,7 +84,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		final protected function setResolvedTrait(value:IMediaTrait):void
+		final protected function setResolvedTrait(value:MediaTraitBase):void
 		{
 			if (value != _resolvedTrait)
 			{
@@ -107,7 +108,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		final public function get resolvedTrait():IMediaTrait
+		final public function get resolvedTrait():MediaTraitBase
 		{
 			return _resolvedTrait;	
 		}
@@ -127,13 +128,13 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
-		final public function addTrait(instance:IMediaTrait):void
+		final public function addTrait(instance:MediaTraitBase):void
 		{	
 			if (instance == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			if (instance is type.traitInterface == false)
+			if (instance.traitType != type)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
@@ -157,13 +158,13 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		final public function removeTrait(instance:IMediaTrait):IMediaTrait
+		final public function removeTrait(instance:MediaTraitBase):MediaTraitBase
 		{
 			if (instance == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			if (instance is type.traitInterface == false)
+			if (instance.traitType != type)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
 			}
@@ -186,7 +187,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processAddTrait(instance:IMediaTrait):void
+		protected function processAddTrait(instance:MediaTraitBase):void
 		{	
 		}
 		
@@ -203,12 +204,12 @@ package org.osmf.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processRemoveTrait(instance:IMediaTrait):IMediaTrait
+		protected function processRemoveTrait(instance:MediaTraitBase):MediaTraitBase
 		{
 			return null;
 		}
 		
-		private var _type:MediaTraitType;
-		private var _resolvedTrait:IMediaTrait;
+		private var _type:String;
+		private var _resolvedTrait:MediaTraitBase;
 	}
 }

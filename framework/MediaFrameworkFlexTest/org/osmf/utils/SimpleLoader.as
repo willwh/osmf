@@ -22,8 +22,8 @@
 package org.osmf.utils
 {
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	
 	/**
@@ -35,46 +35,56 @@ package org.osmf.utils
 		 * Indicates that the load operation should be forced to
 		 * fail.
 		 **/
-		public var forceFail:Boolean = false;
+		public function forceFail(loadTrait:LoadTrait):Boolean
+		{
+			return loadTrait.resource is SimpleResource &&
+				   SimpleResource(loadTrait.resource).type == SimpleResource.FAILED;
+		}
 		
 		/**
 		 * @inheritDoc
 		 **/
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{
+			var simpleResource:SimpleResource = resource as SimpleResource;
+			if (simpleResource != null)
+			{
+				return simpleResource.type != SimpleResource.UNHANDLED;
+			}
+			
 			return true; 
 		}
 		
 		/**
 		 * @inheritDoc
 		 **/
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
-			if (forceFail &&
-				loadable.loadState != LoadState.LOAD_ERROR &&
-				loadable.loadState != LoadState.READY)
+			super.load(loadTrait);
+
+			updateLoadTrait(loadTrait, LoadState.LOADING);
+			
+			if (forceFail(loadTrait))
 			{
-				updateLoadable(loadable, LoadState.LOAD_ERROR, null);
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 			}
-			else if (!forceFail &&
-					 loadable.loadState != LoadState.LOADING && 
-					 loadable.loadState != LoadState.READY)
+			else
 			{
-				updateLoadable(loadable, LoadState.READY, new SimpleLoadedContext());
+				updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
 			}
 		}
 		
 		/**
 		 * @inheritDoc
 		 **/
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
-			if (loadable.loadState == LoadState.LOADING ||
-				loadable.loadState == LoadState.READY)
+			super.unload(loadTrait);
+			if (loadTrait.loadState == LoadState.LOADING ||
+				loadTrait.loadState == LoadState.READY)
 			{
-				updateLoadable(loadable, LoadState.UNINITIALIZED);
+				updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
+				updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 			}
 		}
 	}

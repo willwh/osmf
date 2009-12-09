@@ -30,7 +30,7 @@ package org.osmf.vast.loader
 	import org.osmf.logging.Log;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTAd;
@@ -207,18 +207,18 @@ package org.osmf.vast.loader
 					( new URL(ad.wrapperAd.vastAdTagURL)
 					);
 					
-			var wrapperLoadable:LoadableTrait = new LoadableTrait(wrapperLoader, wrapperResource);
-			wrapperLoadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
-			wrapperLoadable.load();
+			var wrapperLoadTrait:LoadTrait = new LoadTrait(wrapperLoader, wrapperResource);
+			wrapperLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+			wrapperLoadTrait.load();
 			
 			function onWrapperLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					wrapperLoadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+					wrapperLoadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 					
 					// Merge the wrapper's ad with the original ad.
- 					var wrapperLoadedContext:VASTLoadedContext = wrapperLoadable.loadedContext as VASTLoadedContext;
+ 					var wrapperLoadedContext:VASTLoadedContext = wrapperLoadTrait.loadedContext as VASTLoadedContext;
 					var success:Boolean = mergeAds(ad, wrapperLoadedContext.vastDocument);
 						
 					CONFIG::LOGGING
@@ -232,7 +232,7 @@ package org.osmf.vast.loader
 				}
 				else if (event.loadState == LoadState.LOAD_ERROR)
 				{
-					wrapperLoadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
+					wrapperLoadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 
 					CONFIG::LOGGING
 					{

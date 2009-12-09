@@ -33,7 +33,7 @@ package org.osmf.media
 			return new ProxyElement(new MediaElement());
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}

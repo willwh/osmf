@@ -26,17 +26,17 @@ package org.osmf.traits
 	import flash.events.IEventDispatcher;
 
 	/**
-	 * Dispatched when the state of an ILoadable being loaded or unloaded by
+	 * Dispatched when the state of a LoadTrait being loaded or unloaded by
 	 * the ILoader has changed.
 	 *
 	 * @eventType org.osmf.loader.events.LoaderEvent.STATE_CHANGE
 	 **/
-	[Event(name="loadableStateChange", type="org.osmf.events.LoaderEvent")]
+	[Event(name="loadStateChange", type="org.osmf.events.LoaderEvent")]
 
 	/**
-	 * An ILoader is an object that is capable of loading and unloading an ILoadable.
+	 * An ILoader is an object that is capable of loading and unloading a LoadTrait.
 	 * 
-	 * <p>A MediaElement that has the ILoadable trait uses an ILoader to perform the
+	 * <p>A MediaElement that has the LoadTrait uses an ILoader to perform the
 	 * actual load operation.
 	 * This decoupling of the loading and unloading from the media allows a 
 	 * MediaElement to use different loaders for different circumstances.</p>
@@ -44,49 +44,49 @@ package org.osmf.traits
 	public interface ILoader extends IMediaResourceHandler, IEventDispatcher 
 	{
 		/**
-         * Loads the specified ILoadable. Changes the load state of the ILoadable.
+         * Loads the specified LoadTrait. Changes the load state of the LoadTrait.
          * Dispatches the <code>loaderStateChange</code> event with every state change.
 		 * 
-         * <p>Typical states are <code>LOADING</code> while the ILoadable is loading,
+         * <p>Typical states are <code>LOADING</code> while the LoadTrait is loading,
          * <code>READY</code> after it has successfully completed loading, 
          * and <code>LOAD_ERROR</code> if it fails to complete loading.</p>
          * 
-         * <p>If the ILoadable's LoadState is <code>LOADING</code> or
+         * <p>If the LoadTrait's LoadState is <code>LOADING</code> or
          * <code>READY</code> when the method is called, this method throws
          * an error.</p>
          * 
          * @see org.osmf.traits.LoadState
 		 * 
-		 * @param loadable The ILoadable to load.
+		 * @param loadTrait The LoadTrait to load.
 		 * 
 		 * @throws IllegalOperationError <code>IllegalOperationError</code>
-		 * If this loader cannot load the given ILoadable (as determined by
+		 * If this loader cannot load the given LoadTrait (as determined by
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
-         * or if the ILoadable's LoadState is <code>LOADING</code> or
+         * or if the LoadTrait's LoadState is <code>LOADING</code> or
          * <code>READY</code>.
 		 **/
-		function load(loadable:ILoadable):void;
+		function load(loadTrait:LoadTrait):void;
 		 
 		/**
-         * Unloads the specified ILoadable. Changes the load state of the ILoadable.
+         * Unloads the specified LoadTrait. Changes the load state of the LoadTrait.
          * Dispatches the <code>loaderStateChange</code> event with every state change.
 		 * 
-         * <p>Typical states are <code>UNLOADING</code> while the ILoadable is unloading,
+         * <p>Typical states are <code>UNLOADING</code> while the LoadTrait is unloading,
          * <code>UNINITIALIZED</code> after it has successfully completed unloading, 
          * and <code>LOAD_ERROR</code> if it fails to complete unloading.</p>
          * 
-         * <p>If the ILoadable's LoadState is not <code>READY</code> when the method
+         * <p>If the LoadTrait's LoadState is not <code>READY</code> when the method
          * is called, this method throws an error.</p>
          * 
          * @see org.osmf.traits.LoadState
 		 * 
-		 * @param loadable The ILoadable to unload.
+		 * @param loadTrait The LoadTrait to unload.
 		 * 
 		 * @throws IllegalOperationError <code>IllegalOperationError</code>
-		 * If this loader cannot unload the specified ILoadable (as determined by
+		 * If this loader cannot unload the specified LoadTrait (as determined by
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
-         * or if the ILoadable's LoadState is not <code>READY</code>.
+         * or if the LoadTrait's LoadState is not <code>READY</code>.
 		 **/
-		function unload(loadable:ILoadable):void;
+		function unload(loadTrait:LoadTrait):void;
 	}
 }

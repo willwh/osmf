@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A LoadEvent is dispatched when properties of an ILoadable trait have changed.
+	 * A LoadEvent is dispatched when properties of a LoadTrait have changed.
 	 */
 	public class LoadEvent extends Event
 	{
@@ -61,7 +61,7 @@ package org.osmf.events
 		 * @param type Event type.
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param loadState New LoadState of the ILoadable.
+		 * @param loadState New LoadState of the LoadTrait.
 		 * @param bytes New value of bytesLoaded or bytesTotal.
 		 **/
 		public function LoadEvent
@@ -87,7 +87,7 @@ package org.osmf.events
 		}
 
 		/**
-		 * New LoadState of the ILoadable.
+		 * New LoadState of the LoadTrait.
 		 **/
 		public function get loadState():String
 		{

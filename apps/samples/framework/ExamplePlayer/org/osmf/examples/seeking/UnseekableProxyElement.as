@@ -36,10 +36,10 @@ package org.osmf.examples.seeking
 			super(wrappedElement);
 		}
 		
-		override protected function blocksTrait(type:MediaTraitType):Boolean
+		override protected function blocksTrait(type:String):Boolean
 		{
 			// Prevent seeking.
-			return type == MediaTraitType.SEEKABLE;
+			return type == MediaTraitType.SEEK;
 		}
 	}
 }

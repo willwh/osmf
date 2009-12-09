@@ -25,9 +25,8 @@ package org.osmf.examples.loaderproxy
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -47,39 +46,39 @@ package org.osmf.examples.loaderproxy
 		{
 			super.setupOverriddenTraits();
 			
-			// Override the ILoadable trait with our own custom loadable,
+			// Override the LoadTrait trait with our own custom trait,
 			// which simply replaces the URL.
 			//
 			
-			loadableTrait = new LoadableTrait(new VideoProxyLoader(), resource);
+			loadTrait = new LoadTrait(new VideoProxyLoader(), resource);
 			
-			loadableTrait.addEventListener
+			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			
-			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
+			addTrait(MediaTraitType.LOAD, loadTrait); 
 		}
 		
 		private function onLoadStateChange(event:LoadEvent):void
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:VideoProxyLoadedContext = loadableTrait.loadedContext as VideoProxyLoadedContext
+				var loadedContext:VideoProxyLoadedContext = loadTrait.loadedContext as VideoProxyLoadedContext
 				
 				// Replace the resource with the new URL.
 				wrappedElement.resource = new URLResource(loadedContext.url);
 				
-				// Our work is done, remove the custom ILoadable.  This will
-				// expose the base ILoadable, which we can then use to do
+				// Our work is done, remove the custom LoadTrait.  This will
+				// expose the base LoadTrait, which we can then use to do
 				// the actual load.
-				removeTrait(MediaTraitType.LOADABLE);
-				(getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+				removeTrait(MediaTraitType.LOAD);
+				(getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 				
-				loadableTrait = null;
+				loadTrait = null;
 			}
 		}
 		
-		private var loadableTrait:LoadableTrait;
+		private var loadTrait:LoadTrait;
 	}
 }

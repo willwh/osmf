@@ -24,8 +24,8 @@ package org.osmf.media
 	import flash.events.Event;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.SimpleLoader;
@@ -37,7 +37,7 @@ package org.osmf.media
 			return new LoadableMediaElement(new SimpleLoader()); 
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return true;
 		}
@@ -49,12 +49,12 @@ package org.osmf.media
 		
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.LOADABLE];
+			return [MediaTraitType.LOAD];
 		}
 		
 		public function testConstructor():void
@@ -71,33 +71,33 @@ package org.osmf.media
 			}
 		}
 		
-		public function testSetResourceUnloadsPreviousLoadable():void
+		public function testSetResourceUnloadsPreviousLoadTrait():void
 		{
 			var mediaElement:MediaElement = createMediaElement();
 			mediaElement.resource = resourceForMediaElement;
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
-			var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-			assertTrue(loadable != null);
-			loadable.addEventListener
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait != null);
+			loadTrait.addEventListener
 					( LoadEvent.LOAD_STATE_CHANGE
-					, onTestSetResourceUnloadsPreviousLoadable
+					, onTestSetResourceUnloadsPreviousLoadTrait
 					);
-			loadable.load();
+			loadTrait.load();
 			
-			function onTestSetResourceUnloadsPreviousLoadable(event:LoadEvent):void
+			function onTestSetResourceUnloadsPreviousLoadTrait(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
 				{
 					// If we set a new resource on the MediaElement, that
-					// should result in the ILoadable (which corresponds to
+					// should result in the LoadTrait (which corresponds to
 					// the previous resource) being unloaded.
 					mediaElement.resource = resourceForMediaElement;
 				}
 				else if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadable);
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestSetResourceUnloadsPreviousLoadTrait);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}

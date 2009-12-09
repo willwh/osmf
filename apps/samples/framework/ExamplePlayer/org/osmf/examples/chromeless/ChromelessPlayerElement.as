@@ -24,12 +24,12 @@ package org.osmf.examples.chromeless
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.osmf.events.DimensionEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.media.IURLResource;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	/**
 	 * SWFElement which can control the SWF it wraps via a custom SWF API
@@ -69,40 +69,42 @@ package org.osmf.examples.chromeless
 			
 			// Make sure the SWF has the expected API object.
 			var isValidSWF:Boolean = theSwfRoot.hasOwnProperty("videoPlayer");
-			
-			theSwfRoot.addEventListener("click",onClick);
-			
 			if (isValidSWF)
 			{
-				addTrait(MediaTraitType.PLAYABLE, new SWFPlayableTrait(theSwfRoot, this));
-				addTrait(MediaTraitType.PAUSABLE, new SWFPausableTrait(theSwfRoot, this));
-				addTrait(MediaTraitType.AUDIBLE, new SWFAudibleTrait(theSwfRoot));
-				addTrait(MediaTraitType.TEMPORAL, new SWFTemporalTrait(theSwfRoot));
+				addTrait(MediaTraitType.PLAY, new SWFPlayTrait(theSwfRoot));
+				addTrait(MediaTraitType.AUDIO, new SWFAudioTrait(theSwfRoot));
+				addTrait(MediaTraitType.TIME, new SWFTimeTrait(theSwfRoot));
 				
 				if	(	swfRoot.hasOwnProperty("application")
 					&&	Object(swfRoot).application != null
 					)
 				{
 					// Re-dispatch our dimensions:
-					var spatial:SpatialTrait = getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
-					spatial.dispatchEvent(new DimensionEvent(DimensionEvent.DIMENSION_CHANGE, false, false, 0, spatial.width, 0, spatial.height));
+					var viewTrait:ViewTrait= getTrait(MediaTraitType.VIEW) as ViewTrait;
+					viewTrait.dispatchEvent
+						( new ViewEvent
+							( ViewEvent.DIMENSION_CHANGE
+							, false
+							, false
+							, null
+							, null
+							, 0
+							, 0
+							, viewTrait.mediaWidth
+							, viewTrait.mediaHeight
+							)
+						);
 				}
 			}
-		}
-		
-		private function onClick(event:Event):void
-		{
-			trace("click");
 		}
 		
 		override protected function processUnloadingState():void
 		{
 			super.processUnloadingState();
 			
-			removeTrait(MediaTraitType.PLAYABLE);
-			removeTrait(MediaTraitType.PAUSABLE);
-			removeTrait(MediaTraitType.AUDIBLE);
-			removeTrait(MediaTraitType.TEMPORAL);
+			removeTrait(MediaTraitType.PLAY);
+			removeTrait(MediaTraitType.AUDIO);
+			removeTrait(MediaTraitType.TIME);
 		}
 	}
 }

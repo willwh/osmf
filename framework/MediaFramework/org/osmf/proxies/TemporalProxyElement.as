@@ -24,18 +24,13 @@ package org.osmf.proxies
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 
 	/**
 	 * A TemporalProxyElement wraps a MediaElement to give it temporal capabilities.
@@ -88,12 +83,12 @@ package org.osmf.proxies
 	{
 		/**
 	 	 * Constructor.
-	 	 * @param duration Duration of the TemporalProxyElement's temporal trait, in seconds.
+	 	 * @param duration Duration of the TemporalProxyElement's TimeTrait, in seconds.
 	 	 * @param mediaElement Element to be wrapped by this TemporalProxyElement.
 	 	 **/		
 		public function TemporalProxyElement(duration:Number, mediaElement:MediaElement=null)
 		{
-			this.duration = duration;
+			_duration = duration;
 			
 			// Prepare the position timer.
 			playheadTimer = new Timer(DEFAULT_PLAYHEAD_UPDATE_INTERVAL);
@@ -103,13 +98,12 @@ package org.osmf.proxies
 		}
 		
 		/**
-	 	 * Sets up the temporal proxy's TemporalTrait,
-	 	 * SeekableTrait, PlayableTrait and PausableTrait.
+	 	 * Sets up the temporal proxy's TimeTrait, SeekTrait, and PlayTrait.
 	 	 * The proxy's traits will override the same traits in the wrapped element.
 	 	 * <p>This gives the application access to the trait properties in the wrapped
 	 	 * element that did not exist before it was wrapped.</p>
 	 	 * <p>For example, the TemporalProxyElement in the following line wraps an ImageElement.
-	 	 * The <code>duration</code> property of the TemporalProxyElement's TemporalTrait allows
+	 	 * The <code>duration</code> property of the TemporalProxyElement's TimeTrait allows
 	 	 * the application to specify the duration that the image is displayed, in this case 20 seconds.</p>
 	 	 * <listing>
 	 	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
@@ -120,29 +114,22 @@ package org.osmf.proxies
 		{
 			super.setupOverriddenTraits();
 			
-			temporalTrait = new TemporalTrait();
-			temporalTrait.duration = _duration;
-			temporalTrait.currentTime = 0;
-			temporalTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
-			addTrait(MediaTraitType.TEMPORAL, temporalTrait);
+			timeTrait = new TemporalProxyTimeTrait(_duration);
+			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			addTrait(MediaTraitType.TIME, timeTrait);
 
-			seekableTrait = new SeekableTrait();
-			seekableTrait.temporal = temporalTrait;
-			addTrait(MediaTraitType.SEEKABLE, seekableTrait);
+			seekTrait = new TemporalProxySeekTrait(timeTrait);
+			addTrait(MediaTraitType.SEEK, seekTrait);
 			
 			// Reduce priority of our listener so that all other listeners will
 			// receive the seeking=true event before we dispatch the seeking=false
 			// event. 
-			seekableTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange, false, -1);
-			seekableTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange, false, -1);
+			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange, false, -1);
+			seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange, false, -1);
 			
-			playableTrait = new PlayableTrait(this);
-			playableTrait.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
-			addTrait(MediaTraitType.PLAYABLE, playableTrait);
-			
-			pausableTrait = new PausableTrait(this);
-			pausableTrait.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
-			addTrait(MediaTraitType.PAUSABLE, pausableTrait);
+			playTrait = new PlayTrait();
+			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+			addTrait(MediaTraitType.PLAY, playTrait);
 		}
 		
 		// Internals
@@ -151,7 +138,7 @@ package org.osmf.proxies
 		private function get time():Number
 		{
 			// Return value is in seconds.
-			return playableTrait.playing
+			return playTrait.playState == PlayState.PLAYING
 						? (elapsedTime + (flash.utils.getTimer() - absoluteTimeAtLastPlay))/1000
 						: elapsedTime;
 		}
@@ -163,59 +150,31 @@ package org.osmf.proxies
 				elapsedTime = _duration;
 				
 				playheadTimer.stop();
-				pausableTrait.resetPaused();
-				playableTrait.resetPlaying();
-				temporalTrait.currentTime = _duration;
+				playTrait.stop();
+				timeTrait.currentTime = _duration;
 			}
 			else
 			{
-				temporalTrait.currentTime = time;
+				timeTrait.currentTime = time;
 			}
 		}
 		
-		private function onPlayingChange(event:PlayingChangeEvent):void
+		private function onPlayStateChange(event:PlayEvent):void
 		{
-			if (event.playing)
+			if (event.playState == PlayState.PLAYING)
 			{
 				absoluteTimeAtLastPlay = flash.utils.getTimer();
 				playheadTimer.start();
-				
-				var playable:IPlayable = wrappedElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-				if (playable != null)
-				{
-					playable.play();
-				}
 			}
-			else
-			{
-				var pausable:IPausable = wrappedElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-				if (pausable != null)
-				{
-					pausable.pause();
-				}
-			}			
-		}
-
-		private function onPausedChange(event:PausedChangeEvent):void
-		{
-			if (event.paused)
+			else if (event.playState == PlayState.PAUSED)
 			{
 				elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
 				playheadTimer.stop();
-				
-				var pausable:IPausable = wrappedElement.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-				if (pausable != null)
-				{
-					pausable.pause();
-				}
 			}
 			else
 			{
-				var playable:IPlayable = wrappedElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-				if (playable != null)
-				{
-					playable.play();
-				}
+				elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
+				playheadTimer.stop();
 			}			
 		}
 		
@@ -225,7 +184,6 @@ package org.osmf.proxies
 			{				
 				elapsedTime = event.time;
 				absoluteTimeAtLastPlay = flash.utils.getTimer();
-				seekableTrait.processSeekCompletion(event.time);				
 			}
 		}
 		
@@ -233,19 +191,7 @@ package org.osmf.proxies
 		{
 			playheadTimer.stop();
 		}
-		
-		private function set duration(value:Number):void
-		{
-			// Coerce to valid value, if necessary.
-			_duration = isNaN(value) ? 0 : Math.max(0, value);
-			
-			// Update our temporal trait, if it exists.
-			if (temporalTrait != null)
-			{
-				temporalTrait.duration = _duration;
-			}
-		}
-		
+				
 		private function get elapsedTime():Number
 		{
 			return _elapsedTime;
@@ -253,7 +199,7 @@ package org.osmf.proxies
 		
 		private function set elapsedTime(value:Number):void
 		{
-			_elapsedTime = temporalTrait.currentTime = value;
+			_elapsedTime = timeTrait.currentTime = value;
 		}
 		
 		private static const DEFAULT_PLAYHEAD_UPDATE_INTERVAL:Number = 250;
@@ -263,9 +209,8 @@ package org.osmf.proxies
 		private var absoluteTimeAtLastPlay:Number = 0; // milliseconds
 		private var playheadTimer:Timer;
 		
-		private var temporalTrait:TemporalTrait;
-		private var seekableTrait:SeekableTrait;
-		private var playableTrait:PlayableTrait;
-		private var pausableTrait:PausableTrait;
+		private var timeTrait:TemporalProxyTimeTrait;
+		private var seekTrait:TemporalProxySeekTrait;
+		private var playTrait:PlayTrait;
 	}
 }

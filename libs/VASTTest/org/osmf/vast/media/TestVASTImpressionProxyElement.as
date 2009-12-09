@@ -29,12 +29,12 @@ package org.osmf.vast.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.proxies.TestListenerProxyElement;
-	import org.osmf.traits.BufferableTrait;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PlayableTrait;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.utils.DynamicBufferTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
@@ -62,37 +62,37 @@ package org.osmf.vast.media
 			var done:Boolean = false;
 			
 			// Listen for the pings.
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 
 			// Playback should cause the impression to fire.
-			var playable:PlayableTrait = proxyElement.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			assertTrue(playable != null);
-			playable.play();
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.play();
 
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.READY)
+				if (event.loadTrait.loadState == LoadState.READY)
 				{
 					impressionCount++;
 					
-					assertTrue(playable.playing == true);
+					assertTrue(playTrait.playState == PlayState.PLAYING);
 					
 					if (impressionCount == 2)
 					{
 						if (reload)
 						{
 							// Playing again should not trigger another impression.
-							playable.resetPlaying();
-							playable.play();
+							playTrait.stop()
+							playTrait.play();
 							
 							assertTrue(!done);
 							
 							// But if we reload first, then play, it should.
-							var loadable:ILoadable = proxyElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-							assertTrue(loadable != null);
-							loadable.load();
-							playable.resetPlaying();
-							playable.play();
+							var loadTrait:LoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+							assertTrue(loadTrait != null);
+							loadTrait.load();
+							playTrait.stop()
+							playTrait.play();
 						}
 						else
 						{
@@ -125,20 +125,20 @@ package org.osmf.vast.media
 			var impressionCount:int = 0;
 			
 			// We'll fail if we receive any pings.
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, dontCall);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, dontCall);
 
 			var proxyElement:ProxyElement = createProxyElementWithWrappedElement();
 			
 			// Enter the buffering state.
-			var bufferable:BufferableTrait = proxyElement.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable != null);
-			bufferable.buffering = true;
+			var bufferTrait:DynamicBufferTrait = proxyElement.getTrait(MediaTraitType.BUFFER) as DynamicBufferTrait;
+			assertTrue(bufferTrait != null);
+			bufferTrait.buffering = true;
 			
 			// Playback should not cause the impression to fire because
 			// we're buffering.
-			var playable:IPlayable = proxyElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			playable.play();
+			var playTrait:PlayTrait = proxyElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.play();
 			
 			// Wait a second to verify that no pings are received.
 			var timer:Timer = new Timer(1000, 1);
@@ -151,20 +151,20 @@ package org.osmf.vast.media
 				
 				if (exitBuffering)
 				{
-					httpLoader.removeEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, dontCall);
-					httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onImpressionLoaded);
+					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, dontCall);
+					httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onImpressionLoaded);
 					
 					var impressionCount:int = 0;
 					
-					bufferable.buffering = false;
+					bufferTrait.buffering = false;
 					
 					function onImpressionLoaded(event:LoaderEvent):void
 					{
-						if (event.loadable.loadState == LoadState.READY)
+						if (event.loadTrait.loadState == LoadState.READY)
 						{
 							impressionCount++;
 							
-							assertTrue(playable.playing == true);
+							assertTrue(playTrait.playState == PlayState.PLAYING);
 							
 							if (impressionCount == 2)
 							{
@@ -237,11 +237,13 @@ package org.osmf.vast.media
 				( vastURLs
 				, httpLoader
 				, new DynamicMediaElement
-					( [	MediaTraitType.BUFFERABLE
-					  , MediaTraitType.PLAYABLE
-					  ,	MediaTraitType.LOADABLE
+					( [	MediaTraitType.BUFFER
+					  , MediaTraitType.PLAY
+					  ,	MediaTraitType.LOAD
 					  ]
 					, new SimpleLoader()
+					, null
+					, true
 					)
 				);
 			return proxyElement;

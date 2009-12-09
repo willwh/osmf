@@ -37,8 +37,8 @@ package org.osmf.net
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MimeTypes;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 
 	/**
@@ -46,13 +46,13 @@ package org.osmf.net
 	 * loading support to the AudioElement and VideoElement classes.
 	 * <p>Supports both streaming and progressive media resources.
 	 * If the resource URL is RTMP, connects to an RTMP server by invoking a NetConnectionFactory. 
-	 * NetConnections may be shared between ILoadable instances.
+	 * NetConnections may be shared between LoadTrait instances.
 	 * If the resource URL is HTTP, performs a <code>connect(null)</code>
 	 * for progressive downloads.</p>
 	 * 
 	 * @param allowConnectionSharing if true, the NetLoader will allow sharing. Note that this param implies
-	 * that an already existing NetConnection may be used to satisfy this ILoadable, as well as whether a
-	 * new NetConnection established by this loader can be shared with future ILoadables. 
+	 * that an already existing NetConnection may be used to satisfy this LoadTrait, as well as whether a
+	 * new NetConnection established by this loader can be shared with future LoadTraits. 
 	 * 
 	 * @param factory the NetConnectionFactory instance to use for managing NetConnections. Since the NetConnectionFactory
 	 * facilitates connection sharing, this is an easy way of enabling global sharing, by creating a single NetConnectionFactory
@@ -111,39 +111,39 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Validates the loadable to verify that this class can in fact load it. Examines the protocol
-		 * associated with the loadable's resource. If the protocol is HTTP, calls the <code>startLoadingHTTP()</code>
+		 * Validates the LoadTrait to verify that this class can in fact load it. Examines the protocol
+		 * associated with the LoadTrait's resource. If the protocol is HTTP, calls the <code>startLoadingHTTP()</code>
 		 * method. If the protocol is RTMP-based, calls the  <code>startLoadingRTMP()</code> method. If the URL protocol is invalid,
-		 * dispatches a mediaErroEvent against the loadable and updates the loadable's state to LoadState.LOAD_ERROR.
+		 * dispatches a mediaErroEvent against the LoadTrait and updates the LoadTrait's state to LoadState.LOAD_ERROR.
 	     *
-	     * @param loadable ILoadable trait requesting this load operation.
-	     * @see org.osmf.traits.ILoadable
+	     * @param loadTrait LoadTrait requesting this load operation.
+	     * @see org.osmf.traits.LoadTrait
 	     * @see org.osmf.traits.LoadState
 	     * @see org.osmf.events.MediaErrorEvent
 		 * @inheritDoc
 		**/
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{	
-			super.load(loadable);
-			updateLoadable(loadable, LoadState.LOADING);
-			switch ((loadable.resource as IURLResource).url.protocol)
+			super.load(loadTrait);
+			updateLoadTrait(loadTrait, LoadState.LOADING);
+			switch ((loadTrait.resource as IURLResource).url.protocol)
 			{
 				case PROTOCOL_RTMP:
 				case PROTOCOL_RTMPS:
 				case PROTOCOL_RTMPT:
 				case PROTOCOL_RTMPE:
 				case PROTOCOL_RTMPTE:
-					startLoadingRTMP(loadable);
+					startLoadingRTMP(loadTrait);
 					break;
 				case PROTOCOL_HTTP:
 				case PROTOCOL_HTTPS:
 				case PROTOCOL_FILE:
 				case PROTOCOL_EMPTY: 
-					startLoadingHTTP(loadable);
+					startLoadingHTTP(loadTrait);
 					break;
 				default:
-					updateLoadable(loadable, LoadState.LOAD_ERROR);
-					loadable.dispatchEvent
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+					loadTrait.dispatchEvent
 						( new MediaErrorEvent
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
@@ -156,22 +156,23 @@ package org.osmf.net
 		}
 		
 		/**
-	     * Unloads the media after validating the unload operation against the loadable. Examines the NetLoadedContext
-	     * object associated with the loadable. If the object is null, throws a OSMFStrings.NULL_PARAM error.
+	     * Unloads the media after validating the unload operation against the LoadTrait. Examines the NetLoadedContext
+	     * object associated with the LoadTrait. If the object is null, throws a OSMFStrings.NULL_PARAM error.
 	     * Closes the NetStream defines within the NetLoadedContext object. 
 	     * If the shareable property of the object is true, calls the NetConnectionFactory to close() the NetConnection
 	     * otherwise closes the NetConnection directly. Dispatches the loaderStateChange event with every state change.
 	     * 
 	     * @throws IllegalOperationError if the parameter is <code>null</code>.
-	     * @param ILoadable ILoadable to be unloaded.
+	     * @param loadTrait LoadTrait to be unloaded.
 	     * @see org.osmf.loaders.LoaderBase#event:loaderStateChange	
 		**/
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable); /// <- loadable.loadedContext gets set to null here
-			var netLoadedContext:NetLoadedContext = loadable.loadedContext as NetLoadedContext;			
+			super.unload(loadTrait);
 			
-			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext); 			
+			var netLoadedContext:NetLoadedContext = loadTrait.loadedContext as NetLoadedContext;			
+			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext); 			
 			netLoadedContext.stream.close();
 			if (netLoadedContext.shareable)
 			{
@@ -181,7 +182,7 @@ package org.osmf.net
 			{
 				netLoadedContext.connection.close();
 			}	
-			updateLoadable(loadable, LoadState.UNINITIALIZED); 				
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
 		
 		/**
@@ -242,12 +243,12 @@ package org.osmf.net
 		 * The factory function for creating a NetStream.  Allows third party plugins to create custom net streams.
 		 * 
 		 * @param connection the NetConnnection to associate with the new NetStream.
-		 * @param loadable the ILoadable instance requesting this NetStream. Developers of custom NetStreams can use this 
-		 * loadable reference to dispatch custom media errors against the loadable.
+		 * @param loadTrait The LoadTrait instance requesting this NetStream. Developers of custom NetStreams can use this 
+		 * LoadTrait reference to dispatch custom media errors against the LoadTrait.
 		 * 
 		 *  @return a new NetStream associated with the NetConnection.
 		**/
-		protected function createNetStream(connection:NetConnection,loadable:ILoadable):NetStream
+		protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 		{
 			return new NetStream(connection);
 		}
@@ -272,11 +273,11 @@ package org.osmf.net
 		 *
 		 *  @private
 		**/
-		private function finishLoading(connection:NetConnection, loadable:ILoadable, shareable:Boolean = false, factory:NetConnectionFactory = null):void
+		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, shareable:Boolean = false, factory:NetConnectionFactory = null):void
 		{
-			var stream:NetStream = createNetStream(connection, loadable);				
+			var stream:NetStream = createNetStream(connection, loadTrait);				
 			stream.client = new NetClient();				
-			updateLoadable(loadable, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadable.resource as IURLResource));		
+			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadTrait.resource as IURLResource));		
 		}	
 		
 		/**
@@ -284,11 +285,11 @@ package org.osmf.net
 		 * 
 		 * @private
 		 **/
-		private function startLoadingRTMP(loadable:ILoadable):void
+		private function startLoadingRTMP(loadTrait:LoadTrait):void
 		{
 			var factory:NetConnectionFactory  = createNetConnectionFactory();
 
-			factory.create(loadable,_allowConnectionSharing);
+			factory.create(loadTrait, _allowConnectionSharing);
 		}
 		
 		/**
@@ -298,7 +299,7 @@ package org.osmf.net
 		 **/
 		private function onCreated(event:NetConnectionFactoryEvent):void
 		{
-			finishLoading(event.netConnection,event.loadable, event.shareable, event.currentTarget as NetConnectionFactory);
+			finishLoading(event.netConnection, event.loadTrait, event.shareable, event.currentTarget as NetConnectionFactory);
 		}
 		
 		/**
@@ -309,7 +310,7 @@ package org.osmf.net
 		 **/
 		private function onCreationFailed(event:NetConnectionFactoryEvent):void
 		{
-			updateLoadable(event.loadable, LoadState.LOAD_ERROR);
+			updateLoadTrait(event.loadTrait, LoadState.LOAD_ERROR);
 		}
 		
 		/**
@@ -318,12 +319,12 @@ package org.osmf.net
 		 * @private
 		 * 
 		 **/
-		private function startLoadingHTTP(loadable:ILoadable):void
+		private function startLoadingHTTP(loadTrait:LoadTrait):void
 		{
 			var connection:NetConnection = new NetConnection();
 			connection.client = new NetClient();
 			connection.connect(null);
-			finishLoading(connection,loadable);
+			finishLoading(connection, loadTrait);
 		}
 		
 		/**

@@ -6,7 +6,7 @@ package org.osmf.manifest
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.URL;
 
 	public class TestF4MLoader extends TestCase
@@ -49,11 +49,11 @@ package org.osmf.manifest
 		public function testUnloadFail():void
 		{
 			var loader:F4MLoader = new F4MLoader();
-			var loadable:LoadableTrait = new LoadableTrait(loader, new URLResource(new URL("http://example.com/notValid")));
+			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource(new URL("http://example.com/notValid")));
 			var errorThrown:Boolean = false;
 			try
 			{
-				loader.unload(loadable);
+				loader.unload(loadTrait);
 			}
 			catch(error:Error)
 			{
@@ -66,13 +66,13 @@ package org.osmf.manifest
 		{
 			
 			var loader:F4MLoader = new F4MLoader();
-			var loadable:LoadableTrait = new LoadableTrait(loader, new URLResource(new URL("http://example.com/notValid.f4m")));
-			loadable.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 3000));
+			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource(new URL("http://example.com/notValid.f4m")));
+			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 3000));
 			
 			var errorThrown:Boolean = false;
 			var errorThrownLoader:Boolean = false;
 			
-			loader.load(loadable);
+			loader.load(loadTrait);
 					
 			function onError(event:MediaErrorEvent):void
 			{

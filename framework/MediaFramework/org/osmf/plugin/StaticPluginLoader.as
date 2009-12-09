@@ -23,7 +23,7 @@ package org.osmf.plugin
 {
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	
 	internal class StaticPluginLoader extends PluginLoader
@@ -53,30 +53,30 @@ package org.osmf.plugin
 	    	return (resource is PluginClassResource);
 	    }
 	    
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
+			super.load(loadTrait);
 
-			updateLoadable(loadable, LoadState.LOADING);
+			updateLoadTrait(loadTrait, LoadState.LOADING);
 
-			var classResource:PluginClassResource = loadable.resource as PluginClassResource; 	
+			var classResource:PluginClassResource = loadTrait.resource as PluginClassResource; 	
 			var pluginInfo:IPluginInfo = new classResource.pluginInfoRef();
 			
-			loadFromPluginInfo(loadable, pluginInfo);
+			loadFromPluginInfo(loadTrait, pluginInfo);
 		}
 		
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 			
-			var pluginLoadedContext:PluginLoadedContext = loadable.loadedContext as PluginLoadedContext;
+			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
 			var pluginInfo:IPluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
 
-			updateLoadable(loadable, LoadState.UNLOADING, loadable.loadedContext);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
 						
 			unloadFromPluginInfo(pluginInfo);
 			
-			updateLoadable(loadable, LoadState.UNINITIALIZED);
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 	}
 }

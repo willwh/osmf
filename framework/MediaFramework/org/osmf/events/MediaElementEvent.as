@@ -54,9 +54,9 @@ package org.osmf.events
  		 * list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
-		 * @param traitType The trait class for the trait that was added or removed,.
+		 * @param traitType The MediaTraitType for the trait that was added or removed,.
  		 **/
-		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:MediaTraitType=null)
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null)
 		{
 			super(type, bubbles, cancelable);
 
@@ -72,9 +72,9 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The trait class for this event.
+		 * The MediaTraitType for this event.
 		 **/
-		public function get traitType():MediaTraitType
+		public function get traitType():String
 		{
 			return _traitType;
 		}
@@ -82,6 +82,6 @@ package org.osmf.events
 		// Internals
 		//
 		
-		private var _traitType:MediaTraitType;
+		private var _traitType:String;
 	}
 }

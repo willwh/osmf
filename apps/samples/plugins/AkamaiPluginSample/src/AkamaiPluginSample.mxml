@@ -29,6 +29,7 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.traits.LoadTrait;
 			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 			
 			import mx.events.DropdownEvent;
@@ -45,7 +46,7 @@
 			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.plugin.PluginManager;
-			import org.osmf.traits.ILoadable;
+			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.LoadState;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
@@ -145,7 +146,7 @@
 				urlInput.text = plugins[0].url;
 				mediaInput.text = streams[0].url;
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DimensionEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
@@ -197,12 +198,12 @@
 			private function unloadMedia():void
 			{
 				var mediaElement:MediaElement = mediaPlayerWrapper.element;
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOADABLE))
+				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
 				{
-					var loadable:ILoadable = mediaElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-					if (loadable.loadState == LoadState.READY)
+					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+					if (loadTrait.loadState == LoadState.READY)
 					{
-						loadable.unload();
+						loadTrait.unload();
 					}
 				}
 				
@@ -289,7 +290,7 @@
 				mediaInput.text = selection.url;
 			}
 			
-			private function onDimensionChange(event:DimensionEvent):void 
+			private function onDimensionChange(event:ViewEvent):void 
 			{
 				mediaPlayerWrapper.width = event.newWidth;
 				mediaPlayerWrapper.height = event.newHeight;
@@ -332,7 +333,7 @@
    			{
    				switch (event.traitType)
    				{
-   					case MediaTraitType.SEEKABLE:
+   					case MediaTraitType.SEEK:
    						seekBar.enabled = seekBar.visible = true;
    						break;
    				}	
@@ -382,7 +383,7 @@
 
 			private function onClickPlayBtn():void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.pausable)
+				if (mediaPlayerWrapper.mediaPlayer.playing)
 				{
 					playBtn.label = "Play";
 					mediaPlayerWrapper.mediaPlayer.pause();

@@ -77,8 +77,9 @@ package org.osmf.composition
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
-	 */	
-	internal class CompositeViewableTrait extends CompositeMediaTraitBase implements IViewable, ISpatial
+	 */
+	// TODO: Figure out how to correctly refactor this to be independent of ISpatial.
+	internal class CompositeViewableTrait extends CompositeMediaTraitBase implements IViewable
 	{
 		public function CompositeViewableTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{

@@ -43,11 +43,11 @@ package org.osmf.examples
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RelativeLayoutFacet;
+	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.manifest.*;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
@@ -58,12 +58,11 @@ package org.osmf.examples
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.tracking.Beacon;
 	import org.osmf.tracking.BeaconElement;
-	import org.osmf.traits.IBufferable;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
+	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
@@ -153,17 +152,17 @@ package org.osmf.examples
 				  	   		function onTimer(event:TimerEvent):void
 				  	   		{
 				  	   			// Only adjust the buffer while we're playing.
-				  	   			var playable:IPlayable = videoElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-				  	   			var bufferable:IBufferable = videoElement.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				  	   			if (bufferable && !bufferable.buffering && playable && playable.playing)
+				  	   			var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				  	   			var bufferTrait:BufferTrait = videoElement.getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				  	   			if (bufferTrait && !bufferTrait.buffering && playTrait && playTrait.playing)
 				  	   			{
 				  	   				if (timer.currentCount <= 10)
 				  	   				{
-				  	   					bufferable.bufferTime += 1.0;
+				  	   					bufferTrait.bufferTime += 1.0;
 				  	   				}
 				  	   				else
 				  	   				{
-				  	   					bufferable.bufferTime -= 1.0;
+				  	   					bufferTrait.bufferTime -= 1.0;
 				  	   				}
 				  	   			}
 				  	   		}
@@ -303,18 +302,19 @@ package org.osmf.examples
 				  	   	{
 				  	   		function preload(mediaElement:MediaElement):void
 				  	   		{
-								var loadable:ILoadable = videoElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-								loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-								loadable.load();
+								var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+								loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+								loadTrait.load();
 								
 								function onLoadStateChange(event:LoadEvent):void
 								{
 									if (event.loadState == LoadState.READY)
 									{
-										loadable.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+										loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 										
-										(mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable).play();
-										(mediaElement.getTrait(MediaTraitType.PAUSABLE) as IPausable).pause();
+										var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+										playTrait.play();
+										playTrait.pause();
 									}
 								}
 				  	   		}

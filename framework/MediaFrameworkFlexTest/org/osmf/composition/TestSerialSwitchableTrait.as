@@ -30,11 +30,11 @@ package org.osmf.composition
 	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.ISwitchable;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TestISwitchable;
+	import org.osmf.traits.TestDynamicStreamTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.video.VideoElement;
 
-	public class TestSerialSwitchableTrait extends TestISwitchable
+	public class TestSerialSwitchableTrait extends TestDynamicStreamTrait
 	{		
 		override public function testGetBitrateForIndex():void
 		{

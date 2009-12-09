@@ -21,12 +21,13 @@
 *****************************************************/
 package org.osmf.media
 {
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.TimeTrait;
 
 	public class TestDefaultTraitResolver extends MediaTraitResolverBaseTestCase
 	{
-		override public function constructResolver(type:MediaTraitType, traitOfType:IMediaTrait):MediaTraitResolver
+		override public function constructResolver(type:String, traitOfType:MediaTraitBase):MediaTraitResolver
 		{
 			return new DefaultTraitResolver(type, traitOfType);
 		}
@@ -39,7 +40,7 @@ package org.osmf.media
 			
 			try
 			{
-				resolver = new DefaultTraitResolver(MediaTraitType.AUDIBLE, new TemporalTrait());
+				resolver = new DefaultTraitResolver(MediaTraitType.AUDIO, new TimeTrait());
 				fail();
 			}
 			catch(_:*)
@@ -48,7 +49,7 @@ package org.osmf.media
 			
 			try
 			{
-				resolver = new DefaultTraitResolver(MediaTraitType.TEMPORAL, null);
+				resolver = new DefaultTraitResolver(MediaTraitType.TIME, null);
 				fail();
 			}
 			catch(_:*)
@@ -59,13 +60,13 @@ package org.osmf.media
 			
 			// Resolved trait tests:
 			
-			var t1:TemporalTrait = new TemporalTrait();
-			resolver = new DefaultTraitResolver(MediaTraitType.TEMPORAL, t1);
+			var t1:TimeTrait = new TimeTrait();
+			resolver = new DefaultTraitResolver(MediaTraitType.TIME, t1);
 			
-			assertEquals(MediaTraitType.TEMPORAL, resolver.type);
+			assertEquals(MediaTraitType.TIME, resolver.type);
 			assertEquals(t1, resolver.resolvedTrait);
 
-			var t2:TemporalTrait = new TemporalTrait();
+			var t2:TimeTrait = new TimeTrait();
 			resolver.addTrait(t2);
 			assertEquals(t2, resolver.resolvedTrait);
 			

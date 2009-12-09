@@ -26,8 +26,7 @@ package org.osmf.display
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaPlayerSprite extends TestCase
@@ -36,53 +35,36 @@ package org.osmf.display
 		{
 			var player:MediaPlayerSprite = new MediaPlayerSprite();
 			var element:DynamicMediaElement = new DynamicMediaElement();
-			var viewableTrait:ViewableTrait = new ViewableTrait();
-			var spatialTrait:SpatialTrait = new SpatialTrait();
-			spatialTrait.setDimensions(150,150);
-			viewableTrait.view = new Sprite();
+			var viewTrait:ViewTrait = new ViewTrait(new Sprite(), 150, 150);
 						
-			Sprite(viewableTrait.view).graphics.beginFill(0);
-			Sprite(viewableTrait.view).graphics.drawRect(0,0,100,100);
+			Sprite(viewTrait.view).graphics.beginFill(0);
+			Sprite(viewTrait.view).graphics.drawRect(0,0,150,150);
 			
 			player.element = element;
 			
-			element.doAddTrait(MediaTraitType.VIEWABLE, viewableTrait);
-			element.doAddTrait(MediaTraitType.SPATIAL, spatialTrait);
+			element.doAddTrait(MediaTraitType.VIEW, viewTrait);
 			
 			player.scaleMode = ScaleMode.NONE;
 			
 			player.setAvailableSize(300, 300);
 			
-			assertEquals( viewableTrait.view.width, viewableTrait.view.height, 150);
+			assertEquals( viewTrait.view.width, viewTrait.view.height, 150);
 			
 			player.scaleMode = ScaleMode.STRETCH;
 			
-			assertEquals( viewableTrait.view.width, viewableTrait.view.height, 300);
+			assertEquals( viewTrait.view.width, viewTrait.view.height, 300);
 						
 			player.setAvailableSize(500, 500);
 			
-			assertEquals( viewableTrait.view.width, viewableTrait.view.height, 500);
+			assertEquals( viewTrait.view.width, viewTrait.view.height, 500);
 			
 			player.scaleMode = ScaleMode.NONE;
-			
-			player.setAvailableSize(800, 800);
-			spatialTrait.setDimensions(500,500);
-			assertEquals( viewableTrait.view.width, viewableTrait.view.height, 500);
-			
-			var newDisplay:Sprite = new Sprite();
-			newDisplay.graphics.beginFill(0);
-			newDisplay.graphics.drawRect(0,0,100,100);
-			viewableTrait.view = newDisplay;
-			assertEquals( newDisplay, viewableTrait.view, player.view, player.mediaPlayer.view);
-			
-			//Sanity checks
+						
+			// Sanity checks
 			player.element = null;
 			player.setAvailableSize(0,0);
 			assertNull(player.element);
 			assertEquals(player.width, player.height, 0);
 		}
-		
-		
-		
 	}
 }

@@ -36,7 +36,7 @@ package org.osmf.mast.media
 	import org.osmf.mast.loader.MASTLoader;
 	import org.osmf.mast.managers.MASTConditionManager;
 	import org.osmf.mast.model.*;
-	import org.osmf.mast.traits.MASTPlayableTrait;
+	import org.osmf.mast.traits.MASTPlayTrait;
 	import org.osmf.mast.types.MASTConditionType;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
@@ -44,13 +44,12 @@ package org.osmf.mast.media
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.ILoadable;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ITemporal;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PlayableTrait;
+	import org.osmf.traits.PlayState;
 	import org.osmf.utils.URL;
 
 	/**
@@ -123,45 +122,45 @@ package org.osmf.mast.media
 			
 			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
 			
-			loadableTrait = new LoadableTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
+			loadTrait = new LoadTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
 			
-			loadableTrait.addEventListener
+			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
 			
-			addTrait(MediaTraitType.LOADABLE, loadableTrait); 
+			addTrait(MediaTraitType.LOAD, loadTrait); 
 			
-			// Override the IPlayable trait so we can do any necessary
+			// Override the PlayTrait so we can do any necessary
 			// pre-processing, such as a payload that would cause a 
 			// pre-roll.
 			
-			var playableTrait:PlayableTrait = new MASTPlayableTrait(this);
-			addTrait(MediaTraitType.PLAYABLE, playableTrait);
+			var playTrait:PlayTrait = new MASTPlayTrait();
+			addTrait(MediaTraitType.PLAY, playTrait);
 		}
 		
-		private function removeCustomPlayableTrait():void
+		private function removeCustomPlayTrait():void
 		{
-			var playableTrait:MASTPlayableTrait = this.getTrait(MediaTraitType.PLAYABLE) as MASTPlayableTrait;
+			var playTrait:MASTPlayTrait = this.getTrait(MediaTraitType.PLAY) as MASTPlayTrait;
 			
-			if (playableTrait)
+			if (playTrait)
 			{
-				removeTrait(MediaTraitType.PLAYABLE);
+				removeTrait(MediaTraitType.PLAY);
 				
-				if (playableTrait.playRequestPending)
+				if (playTrait.playRequestPending)
 				{
 					// Call play on the original trait
 				
-					var playable:IPlayable = this.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+					playTrait = this.getTrait(MediaTraitType.PLAY) as MASTPlayTrait;
 					
-					if (playable == null)
+					if (playTrait == null)
 					{
 						// Trait is not present yet, we need to wait for it to be added
 						this.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					}
 					else
 					{
-						playable.play();
+						playTrait.play();
 					}
 					
 				}	
@@ -172,10 +171,10 @@ package org.osmf.mast.media
 		{
 			this.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			
-			if (event.traitType == MediaTraitType.PLAYABLE)
+			if (event.traitType == MediaTraitType.PLAY)
 			{
-				var playable:IPlayable = this.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-				playable.play();
+				var playTrait:PlayTrait = this.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				playTrait.play();
 			}
 		}
 				
@@ -183,7 +182,7 @@ package org.osmf.mast.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:MASTLoadedContext = loadableTrait.loadedContext as MASTLoadedContext
+				var loadedContext:MASTLoadedContext = loadTrait.loadedContext as MASTLoadedContext
 				
 				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
@@ -194,17 +193,17 @@ package org.osmf.mast.media
 				// remove the custom IPlayable
 				if (!causesPendingPlayRequest)
 				{
-					removeCustomPlayableTrait();
+					removeCustomPlayTrait();
 				}
 
 				// Our work is done, remove the custom ILoadable.  This will
 				// expose the base ILoadable, which we can then use to do
 				// the actual load.
-				removeTrait(MediaTraitType.LOADABLE);
-				var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				if (loadable)
+				removeTrait(MediaTraitType.LOAD);
+				var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+				if (loadTrait)
 				{
-					loadable.load();
+					loadTrait.load();
 				}
 			}
 			else if (event.loadState == LoadState.LOAD_ERROR)
@@ -239,8 +238,8 @@ package org.osmf.mast.media
 				}
 			}
 			
-			// Now we can remove the custom IPlayable trait
-			this.removeCustomPlayableTrait();
+			// Now we can remove the custom PlayTrait
+			this.removeCustomPlayTrait();
 		}
 		
 		private function getInsertionIndex(serialElement:SerialElement, condition:MASTCondition):int
@@ -262,15 +261,15 @@ package org.osmf.mast.media
 				if (currentChild != null)
 				{
 					// Treat it as playing if it's playing or has a positive currentTime.
-					var temporal:ITemporal = currentChild.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-					if (temporal != null &&	temporal.currentTime > 0)
+					var timeTrait:TimeTrait = currentChild.getTrait(MediaTraitType.TIME) as TimeTrait;
+					if (timeTrait != null && timeTrait.currentTime > 0)
 					{
 						index++;
 					}
 					else
 					{
-						var playable:IPlayable = currentChild.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-						if (playable != null &&	playable.playing)
+						var playTrait:PlayTrait = currentChild.getTrait(MediaTraitType.PLAY) as PlayTrait;
+						if (playTrait != null && playTrait.playState == PlayState.PLAYING)
 						{
 							index++;
 						}
@@ -285,7 +284,7 @@ package org.osmf.mast.media
 			return index;
 		}
 		
-		private var loadableTrait:LoadableTrait;
+		private var loadTrait:LoadTrait;
 		
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";

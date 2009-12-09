@@ -65,7 +65,7 @@ package org.osmf.composition
 			
 			// If a sibling viewable is available, than if that sibling is
 			// also implementing ISpatial, then that will be the spatial
-			// data the we will forward: 
+			// data that we will forward: 
 			
 			owner.addEventListener
 				( MediaElementEvent.TRAIT_ADD

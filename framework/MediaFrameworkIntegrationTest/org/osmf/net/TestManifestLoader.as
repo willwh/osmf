@@ -4,6 +4,7 @@ package org.osmf.net
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.LoadableProxyElement;
@@ -16,7 +17,7 @@ package org.osmf.net
 		public function testDynamicVideoLoad():void
 		{
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource(new URL('http://flipside/testing/oconnell/manifest/httpProgressive.f4m'));
+			var res1:URLResource = new URLResource(new URL('http://flipside.corp.adobe.com/testing/oconnell/manifest/progressive.f4m'));
 						
 			var finished:Function = addAsync(function():void{}, 3000);
 						

@@ -26,12 +26,10 @@ package org.osmf.layout
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.DimensionEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaElementLayoutTarget extends TestCase
@@ -55,19 +53,14 @@ package org.osmf.layout
 			assertEquals(0, melt.firstChildIndex);
 		}
 		
-		public function testMediaElementLayoutTargetWithViewable():void
+		public function testMediaElementLayoutTargetWithViewTrait():void
 		{
-			var me:MediaElement = new DynamicMediaElement([MediaTraitType.VIEWABLE, MediaTraitType.SPATIAL]);
-			
+			var me:DynamicMediaElement = new DynamicMediaElement();
+				
 			var sprite:Sprite = new Sprite();
-			var viewable:ViewableTrait
-				= ViewableTrait(me.getTrait(MediaTraitType.VIEWABLE));
-			viewable.view = sprite;
-			
-			var spatial:SpatialTrait
-				= SpatialTrait(me.getTrait(MediaTraitType.SPATIAL));
-			spatial.setDimensions(100,200); 
-			
+			var viewTrait:DynamicViewTrait = new DynamicViewTrait(sprite, 100, 200);
+			me.doAddTrait(MediaTraitType.VIEW, viewTrait);
+
 			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
 			lt.updateIntrinsicDimensions();
@@ -94,11 +87,11 @@ package org.osmf.layout
 				eventCounter++;
 			}
 			
-			lt.addEventListener(DimensionEvent.DIMENSION_CHANGE, onEvent);
+			lt.addEventListener(ViewEvent.DIMENSION_CHANGE, onEvent);
 			lt.addEventListener(ViewEvent.VIEW_CHANGE, onEvent);
 			
 			var sprite2:Sprite = new Sprite();
-			viewable.view = sprite2;
+			viewTrait.view = sprite2;
 			
 			assertEquals(1, eventCounter);
 			var vce:ViewEvent = lastEvent as ViewEvent;
@@ -106,10 +99,10 @@ package org.osmf.layout
 			assertEquals(vce.oldView, sprite);
 			assertEquals(vce.newView, sprite2);
 			
-			spatial.setDimensions(300,400);
+			viewTrait.setDimensions(300,400);
 			
 			assertEquals(2, eventCounter);
-			var dce:DimensionEvent = lastEvent as DimensionEvent;
+			var dce:ViewEvent = lastEvent as ViewEvent;
 			assertNotNull(dce);
 			assertEquals(dce.oldWidth, 100);
 			assertEquals(dce.oldHeight, 200);
@@ -156,5 +149,27 @@ package org.osmf.layout
 			
 			return result;
 		}
+	}
+}
+
+import flash.display.DisplayObject;
+
+import org.osmf.traits.ViewTrait;
+
+class DynamicViewTrait extends ViewTrait
+{
+	public function DynamicViewTrait(view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+	{
+		super(view, mediaWidth, mediaHeight);
+	}
+	
+	public function set view(value:DisplayObject):void
+	{
+		setView(value);
+	}
+
+	public function setDimensions(width:Number, height:Number):void
+	{
+		setMediaDimensions(width, height);
 	}
 }

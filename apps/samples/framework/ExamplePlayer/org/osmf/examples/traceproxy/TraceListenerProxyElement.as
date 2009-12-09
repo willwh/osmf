@@ -37,14 +37,14 @@ package org.osmf.examples.traceproxy
 			super(wrappedElement);
 		}
 
-		override protected function processTraitAdd(traitType:MediaTraitType):void
+		override protected function processTraitAdd(traitType:String):void
 		{
-			trace("Trait Add: " + traitType.toString());
+			trace("Trait Add: " + traitType);
 		}
 	
-		override protected function processTraitRemove(traitType:MediaTraitType):void
+		override protected function processTraitRemove(traitType:String):void
 		{
-			trace("Trait Remove: " + traitType.toString());
+			trace("Trait Remove: " + traitType);
 		}
 	
 		override protected function processVolumeChange(newVolume:Number):void
@@ -77,14 +77,9 @@ package org.osmf.examples.traceproxy
 			trace("Load State Change:" + loadState);
 		}
 		
-		override protected function processPlayingChange(playing:Boolean):void
+		override protected function processPlayStateChange(playState:String):void
 		{
-			trace("Playing Change: " + playing);
-		}
-
-		override protected function processPausedChange(paused:Boolean):void
-		{
-			trace("Paused Change: " + paused);
+			trace("Play State Change: " + playState);
 		}
 
 		override protected function processSeekingChange(seeking:Boolean, time:Number):void

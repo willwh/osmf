@@ -27,8 +27,9 @@ package org.osmf.netmocker
 	import flash.net.NetStream;
 	
 	import org.osmf.net.NetClient;
+	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * A NetLoader which replaces the NetConnection and NetStream with mock
@@ -41,19 +42,16 @@ package org.osmf.netmocker
 		 * 
 		 * @param allowConnectionSharing true if the NetLoader can invoke a NetConnectionFactory which
 		 * re-uses (shares) an existing NetConnection. 
-		 * @param netConnectionFactory the netConneciton factory instance to be used
+		 * @param netConnectionFactory the netConnection factory instance to be used
 		 * @param mockNetNegotiator the mock NetNegotiator to be used
 		 */
-		public function MockNetLoader(allowConnectionSharing:Boolean=true,netConnectionFactory:DefaultNetConnectionFactory= null,mockNetNegotiator:MockNetNegotiator = null)
+		public function MockNetLoader(allowConnectionSharing:Boolean=true,netConnectionFactory:NetConnectionFactory= null,mockNetNegotiator:MockNetNegotiator = null)
 		{
+			negotiator = mockNetNegotiator || new MockNetNegotiator();
+			
 			if (netConnectionFactory == null)
 			{
-				negotiator = new MockNetNegotiator();
 				netConnectionFactory = new DefaultNetConnectionFactory(negotiator);
-			}
-			else
-			{
-				negotiator = mockNetNegotiator;
 			}
 			
 			super(allowConnectionSharing, netConnectionFactory);
@@ -88,6 +86,23 @@ package org.osmf.netmocker
 		public function get netStreamExpectedDuration():Number
 		{
 			return _netStreamExpectedDuration;
+		}
+
+		/**
+		 * The expected total number of bytes of any mock NetStreams generated
+		 * by this loader.
+		 * 
+		 * The expected bytesTotal will map to the bytesTotal property of
+		 * the mock NetStream.
+		 **/
+		public function set netStreamExpectedBytesTotal(value:Number):void
+		{
+			_netStreamExpectedBytesTotal = value;
+		}
+		
+		public function get netStreamExpectedBytesTotal():Number
+		{
+			return _netStreamExpectedBytesTotal;
 		}
 
 		/**
@@ -184,11 +199,12 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadable:ILoadable):NetStream
+	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 	    {
 			var mockNetStream:MockNetStream = new MockNetStream(connection);
 			mockNetStream.client = new NetClient();
 			mockNetStream.expectedDuration = _netStreamExpectedDuration;
+			mockNetStream.expectedBytesTotal = _netStreamExpectedBytesTotal;
 			mockNetStream.expectedWidth = _netStreamExpectedWidth;
 			mockNetStream.expectedHeight = _netStreamExpectedHeight;
 			mockNetStream.expectedEvents = _netStreamExpectedEvents;
@@ -198,6 +214,7 @@ package org.osmf.netmocker
 	    }
 	    
 	    private var _netStreamExpectedDuration:Number = 0;
+	    private var _netStreamExpectedBytesTotal:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
 	    private var _netStreamExpectedWidth:Number = 0;
 	    private var _netStreamExpectedHeight:Number = 0;

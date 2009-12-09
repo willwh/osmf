@@ -25,7 +25,7 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.DimensionEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataUtils;
 
@@ -252,9 +252,10 @@ package org.osmf.layout
 					
 			if (newIntrinsicWidth != _intrinsicWidth)
 			{
-				var event:DimensionEvent
-						= new DimensionEvent
-							( DimensionEvent.DIMENSION_CHANGE, false, false
+				var event:ViewEvent
+						= new ViewEvent
+							( ViewEvent.DIMENSION_CHANGE, false, false
+							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, newIntrinsicWidth	, _intrinsicHeight
 							);
@@ -270,9 +271,10 @@ package org.osmf.layout
 			
 			if (newIntrinsicHeight != _intrinsicHeight)
 			{
-				var event:DimensionEvent
-						= new DimensionEvent
-							( DimensionEvent.DIMENSION_CHANGE, false, false
+				var event:ViewEvent
+						= new ViewEvent
+							( ViewEvent.DIMENSION_CHANGE, false, false
+							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, _intrinsicWidth	, newIntrinsicHeight
 							);

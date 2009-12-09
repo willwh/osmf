@@ -23,16 +23,15 @@ package org.osmf.proxies
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	
-	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -140,12 +139,12 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function get traitTypes():Vector.<MediaTraitType>
+		override public function get traitTypes():Vector.<String>
 		{
-			var results:Vector.<MediaTraitType> = new Vector.<MediaTraitType>();
+			var results:Vector.<String> = new Vector.<String>();
 			
 			// Only return the traits reflected by the proxy. 
-			for each (var traitType:MediaTraitType in MediaTraitType.ALL_TYPES)
+			for each (var traitType:String in MediaTraitType.ALL_TYPES)
 			{
 				if (hasTrait(traitType))
 				{
@@ -159,7 +158,7 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function hasTrait(type:MediaTraitType):Boolean
+		override public function hasTrait(type:String):Boolean
 		{
 			if (type == null)
 			{
@@ -172,14 +171,14 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function getTrait(type:MediaTraitType):IMediaTrait
+		override public function getTrait(type:String):MediaTraitBase
 		{
 			if (type == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 
-			var trait:IMediaTrait = null;
+			var trait:MediaTraitBase = null;
 			
 			// Don't return the trait if it's blocked.
 			if (blocksTrait(type) == false)
@@ -297,11 +296,11 @@ package org.osmf.proxies
 		 * 
 		 * Subclasses override this to selectively block access to the
 		 * traits of the wrapped element on a per-type basis.
-		 * @param type Trait type to block or not block
+		 * @param type MediaTraitType to block or not block
 		 * @return Returns <code>true</code> to block the trait of the specified type, 
 		 * <code>false</code> not to block
 		 **/ 
-		protected function blocksTrait(type:MediaTraitType):Boolean
+		protected function blocksTrait(traitType:String):Boolean
 		{
 			return false;
 		}
@@ -311,8 +310,8 @@ package org.osmf.proxies
 		
 		private function removeOverriddenTraits():void
 		{				
-			var overriddenTraitTypes:Vector.<MediaTraitType> = super.traitTypes;
-			for each (var traitType:MediaTraitType in overriddenTraitTypes)
+			var overriddenTraitTypes:Vector.<String> = super.traitTypes;
+			for each (var traitType:String in overriddenTraitTypes)
 			{
 				removeTrait(traitType);
 			}

@@ -24,10 +24,9 @@ package org.osmf.proxies
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 
 	/**
@@ -51,12 +50,12 @@ package org.osmf.proxies
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				removeTrait(MediaTraitType.LOADABLE); // Remove the temporary loadable trait.
-				var context:MediaElementLoadedContext = loadable.loadedContext as MediaElementLoadedContext;
+				removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
+				var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
 				wrappedElement = context.element;
-				if (wrappedElement && wrappedElement.hasTrait(MediaTraitType.LOADABLE))
+				if (wrappedElement && wrappedElement.hasTrait(MediaTraitType.LOAD))
 				{
-					(wrappedElement.getTrait(MediaTraitType.LOADABLE) as ILoadable).load();
+					(wrappedElement.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 				}
 			}
 		}
@@ -70,9 +69,9 @@ package org.osmf.proxies
 			if (_resource != value && value != null)
 			{
 				_resource = value;
-				loadable = new LoadableTrait(loader, resource);
-				loadable.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
-				super.addTrait(MediaTraitType.LOADABLE, loadable);			
+				loadTrait = new LoadTrait(loader, resource);
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
+				super.addTrait(MediaTraitType.LOAD, loadTrait);			
 			}						
 		}
 		
@@ -85,7 +84,7 @@ package org.osmf.proxies
 		}
 		
 		/**
-		 * Retruns the MediaElements metadata, if the media element hasn't been created yet this
+		 * Returns the MediaElement's metadata, if the media element hasn't been created yet this
 		 * will return null.
 		 **/
 		override public function get metadata():Metadata
@@ -96,9 +95,9 @@ package org.osmf.proxies
 			}
 			return null;
 		}
-		
+
 		private var _resource:IMediaResource;
-		private var loadable:LoadableTrait;
+		private var loadTrait:LoadTrait;
 		private var loader:ILoader;
 	}
 }

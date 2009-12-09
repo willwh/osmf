@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	/**
 	 * An ILoadedContext is a marker interface for the context loaded into an
-	 * ILoadable.  Different ILoadables will have different types of loaded
+	 * LoadTrait.  Different LoadTraits will have different types of loaded
 	 * contexts.  
 	 **/
 	public interface ILoadedContext

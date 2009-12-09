@@ -21,9 +21,9 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.traits.TestIAudible;
+	import org.osmf.traits.TestAudioTrait;
 	
-	public class TestCompositeAudibleTrait extends TestIAudible
+	public class TestCompositeAudibleTrait extends TestAudioTrait
 	{
 		override protected function createInterfaceObject(... args):Object
 		{

@@ -27,7 +27,7 @@ package org.osmf.events
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * A NetConnectionFactory dispatches this event when it has either succeeded or failed at
@@ -70,22 +70,22 @@ package org.osmf.events
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param netConnection NetConnection to which this event refers.
- 		 * @param loadable ILoadable to which this event refers.
- 		 * @param shareable Specifies if this NetConnection may be shared between ILoadables.
+ 		 * @param loadTrait LoadTrait to which this event refers.
+ 		 * @param shareable Specifies if this NetConnection may be shared between LoadTraits.
 		 **/
 		public function NetConnectionFactoryEvent
 			( type:String
 			, bubbles:Boolean=false
 			, cancelable:Boolean=false
 			, netConnection:NetConnection=null
-			, loadable:ILoadable=null
+			, loadTrait:LoadTrait=null
 			, shareable:Boolean=false
 			)
 		{
 			super(type, bubbles, cancelable);
 
 			_netConnection = netConnection;
-			_loadable = loadable;
+			_loadTrait = loadTrait;
 			_shareable = shareable;
 		}
 		
@@ -103,20 +103,20 @@ package org.osmf.events
 		}
 
 		/**
-		 * ILoadable to which this event refers.
+		 * LoadTrait to which this event refers.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function get loadable():ILoadable
+		public function get loadTrait():LoadTrait
 		{
-			return _loadable;
+			return _loadTrait;
 		}
 		
 		/**
-		 * Specifies if this NetConnection may be shared between ILoadables.
+		 * Specifies if this NetConnection may be shared between LoadTraits.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -133,11 +133,11 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new NetConnectionFactoryEvent(type, bubbles, cancelable, _netConnection, _loadable, shareable);
+			return new NetConnectionFactoryEvent(type, bubbles, cancelable, _netConnection, _loadTrait, shareable);
 		}  
 		
 		private var _netConnection:NetConnection;
-		private var _loadable:ILoadable;
+		private var _loadTrait:LoadTrait;
 		private var _shareable:Boolean;
 	}
 }

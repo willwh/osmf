@@ -36,8 +36,8 @@ package org.osmf.audio
 	import org.osmf.media.IURLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
 
@@ -47,11 +47,11 @@ package org.osmf.audio
 	 * <p>Creates a flash.media.Sound object, which it uses to load and
 	 * unload the audio file.</p>
 	 * <p>The audio file is loaded from the URL provided by the
-	 * <code>resource</code> property of the ILoadable that is passed
+	 * <code>resource</code> property of the LoadTrait that is passed
 	 * to the SoundLoader's <code>load()</code> method.</p>
 	 *
 	 * @see AudioElement
-	 * @see org.osmf.traits.ILoadable
+	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.media.Sound
 	 */ 
 	public class SoundLoader extends LoaderBase
@@ -102,27 +102,27 @@ package org.osmf.audio
 		
 		/**
 		 * Loads the Sound object.. 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
+		 * <p>Updates the LoadTrait's <code>loadedState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
-		 * @param ILoadable ILoadable to be loaded.
+		 * @param loadTrait LoadTrait to be loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function load(loadable:ILoadable):void
+		override public function load(loadTrait:LoadTrait):void
 		{
-			super.load(loadable);
+			super.load(loadTrait);
 						
 			var sound:Sound = new Sound();
 			var context:SoundLoadedContext = new SoundLoadedContext(sound);
-			updateLoadable(loadable, LoadState.LOADING, context);
+			updateLoadTrait(loadTrait, LoadState.LOADING, context);
 			toggleSoundListeners(sound, true);
 
-			var urlRequest:URLRequest = new URLRequest((loadable.resource as IURLResource).url.toString());
+			var urlRequest:URLRequest = new URLRequest((loadTrait.resource as IURLResource).url.toString());
 			
 			try
 			{
@@ -162,15 +162,15 @@ package org.osmf.audio
 				 
 				toggleSoundListeners(sound, false);
 
-				updateLoadable(loadable, LoadState.READY, context);
+				updateLoadTrait(loadTrait, LoadState.READY, context);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
 				toggleSoundListeners(sound, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -187,8 +187,8 @@ package org.osmf.audio
 			{	
 				toggleSoundListeners(sound, false);
 				
-				updateLoadable(loadable, LoadState.LOAD_ERROR);
-				loadable.dispatchEvent
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
@@ -205,10 +205,10 @@ package org.osmf.audio
 		/**
 		 * Unloads the Sound object.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
 		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
-		 * @param ILoadable ILoadable to be unloaded.
+		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 *  
 		 *  @langversion 3.0
@@ -216,12 +216,12 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function unload(loadable:ILoadable):void
+		override public function unload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadable);
+			super.unload(loadTrait);
 
-			var context:SoundLoadedContext = loadable.loadedContext as SoundLoadedContext;
-			updateLoadable(loadable, LoadState.UNLOADING, context);
+			var context:SoundLoadedContext = loadTrait.loadedContext as SoundLoadedContext;
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
 			try
 			{			
 				context.sound.close();
@@ -230,14 +230,13 @@ package org.osmf.audio
 			{
 				// Swallow, either way the Sound is now unloaded.
 			}
-			updateLoadable(loadable, LoadState.UNINITIALIZED);
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		// Internals
 		//
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["audio/mpeg"]);
-			
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.AUDIO]);
 	}
 }

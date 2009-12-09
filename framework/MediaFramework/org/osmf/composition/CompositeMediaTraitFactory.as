@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -45,25 +45,25 @@ package org.osmf.composition
 		 * @return The composite trait of the specified type.
 		 **/
 		public function createTrait
-							( traitType:MediaTraitType
+							( traitType:String
 							, traitAggregator:TraitAggregator
 							, mode:CompositionMode
 							, owner:MediaElement
-							):IMediaTrait
+							):MediaTraitBase
 		{
-			var compositeTrait:IMediaTrait = null;
+			var compositeTrait:MediaTraitBase = null;
 			
 			switch (traitType)
 			{
-				case MediaTraitType.AUDIBLE:
+				case MediaTraitType.AUDIO:
 					// No distinction between modes for IAudible. 
-					compositeTrait = new CompositeAudibleTrait(traitAggregator);
+					compositeTrait = new CompositeAudioTrait(traitAggregator);
 					break;
 					
-				case MediaTraitType.BUFFERABLE:
-					compositeTrait = new CompositeBufferableTrait(traitAggregator, mode);
+				case MediaTraitType.BUFFER:
+					compositeTrait = new CompositeBufferTrait(traitAggregator, mode);
 					break;
-
+				/*
 				case MediaTraitType.LOADABLE:
 					compositeTrait = new CompositeLoadableTrait(traitAggregator, mode);
 					break;
@@ -107,7 +107,8 @@ package org.osmf.composition
 					break;	
 				case MediaTraitType.DOWNLOADABLE:
 					compositeTrait = new CompositeDownloadableTrait(mode, traitAggregator);
-					break;		
+					break;
+				*/	
 				default:
 					throw new Error("");
 					break;

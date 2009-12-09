@@ -30,9 +30,9 @@ package org.osmf.plugin
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.URL;
 	
@@ -59,9 +59,9 @@ package org.osmf.plugin
 			return new StaticPluginLoader(mediaFactory);
 		}
 
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
-			return new LoadableTrait(loader, resource);
+			return new LoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource
@@ -89,11 +89,11 @@ package org.osmf.plugin
 
 		public function testLoadOfPlugin():void
 		{
-			var loadable:ILoadable = createILoadable(new PluginClassResource(SimpleVideoPluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoPluginInfo));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
-			loader.load(loadable);
+			loader.load(loadTrait);
 
 			// Ensure the MediaInfo object has been registered with the media factory.
 			assertTrue(mediaFactory.getMediaInfoById(SimpleVideoPluginInfo.MEDIA_INFO_ID) != null);
@@ -102,11 +102,11 @@ package org.osmf.plugin
 
 		public function testLoadOfPluginWithMultipleMediaInfos():void
 		{
-			var loadable:ILoadable = createILoadable(new PluginClassResource(SimpleVideoImagePluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoImagePluginInfo));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
-			loader.load(loadable);
+			loader.load(loadTrait);
 
 			// Ensure the MediaInfo object has been registered with the media factory.
 			assertTrue(mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.IMAGE_MEDIA_INFO_ID) != null);
@@ -116,14 +116,14 @@ package org.osmf.plugin
 
 		public function testUnloadOfPlugin():void
 		{
-			var loadable:ILoadable = createILoadable(new PluginClassResource(SimpleVideoPluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoPluginInfo));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
-			loader.load(loadable);
+			loader.load(loadTrait);
 			assertTrue(mediaFactory.numMediaInfos > 0);
 			
-			loader.unload(loadable);
+			loader.unload(loadTrait);
 			assertTrue(mediaFactory.numMediaInfos == 0);
 		}
 		
@@ -139,14 +139,14 @@ package org.osmf.plugin
 		
 		private function doTestLoadOfInvalidPlugin(pluginResource:PluginClassResource):void
 		{
-			var loadable:ILoadable = createILoadable(pluginResource);
+			var loadTrait:LoadTrait = createLoadTrait(loader, pluginResource);
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoadStateChange);
-			loader.load(loadable);
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loader.load(loadTrait);
 			
 			function onLoadStateChange(event:LoaderEvent):void
 			{

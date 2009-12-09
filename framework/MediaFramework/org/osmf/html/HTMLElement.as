@@ -27,14 +27,13 @@ package org.osmf.html
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.AudibleTrait;
+	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.TemporalTrait;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -65,41 +64,38 @@ package org.osmf.html
 		
 		public function set loadState(value:String):void
 		{
-			loadable.loadState = value;
+			loadTrait.loadState = value;
 		}
 		
 		public function get loadState():String
 		{
-			return loadable.loadState;
+			return loadTrait.loadState;
 		}
 		
 		/**
 		 * @private
 		 */		
-		public function setTraitEnabled(type:MediaTraitType, enabled:Boolean):void
+		public function setTraitEnabled(type:String, enabled:Boolean):void
 		{
 			if (switchableTraitTypes.indexOf(type) == -1)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.UNSUPPORTED_TRAIT_TYPE));
 			}
 			
-			var trait:IMediaTrait = switchableTraits[type];
+			var trait:MediaTraitBase = switchableTraits[type];
 			if (trait == null && enabled == true)
 			{
 				// Instantiate the correct trait implementation:
 				switch(type)
 				{
-					case MediaTraitType.PLAYABLE:
-						trait = new PlayableTrait(this);
+					case MediaTraitType.PLAY:
+						trait = new PlayTrait();
 						break;
-					case MediaTraitType.PAUSABLE:
-						trait = new PausableTrait(this);
+					case MediaTraitType.TIME:
+						trait = new TimeTrait();
 						break;
-					case MediaTraitType.TEMPORAL:
-						trait = new TemporalTrait();
-						break;
-					case MediaTraitType.AUDIBLE:
-						trait = new AudibleTrait();
+					case MediaTraitType.AUDIO:
+						trait = new AudioTrait();
 						break;
 				}
 				switchableTraits[type] = trait;
@@ -116,7 +112,7 @@ package org.osmf.html
 		/**
 	 	 * @private
 	 	 */
-	 	public function getSwitchableTrait(type:MediaTraitType):IMediaTrait
+	 	public function getSwitchableTrait(type:String):MediaTraitBase
 	 	{
 	 		return switchableTraits[type];
 	 	}
@@ -128,10 +124,10 @@ package org.osmf.html
 		{
 			super.setupTraits();
 			
-			loadable = new HTMLLoadableTrait(this);
-			addTrait(MediaTraitType.LOADABLE, loadable);
+			loadTrait = new HTMLLoadTrait(this);
+			addTrait(MediaTraitType.LOAD, loadTrait);
 			
-			loadable.addEventListener
+			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
 				);
@@ -147,16 +143,16 @@ package org.osmf.html
 	
 		private function updateTraits():void
 		{
-			var type:MediaTraitType;
+			var type:String;
 			
-			if (loadable.loadState == LoadState.READY)
+			if (loadTrait.loadState == LoadState.READY)
 			{
 				// Make sure that the constructed trait objects are
 				// being reflected on being loaded:
 				for (var typeObject:Object in switchableTraits)
 				{
-					type = MediaTraitType(typeObject);
-					var trait:IMediaTrait = switchableTraits[type]; 
+					type = String(typeObject);
+					var trait:MediaTraitBase = switchableTraits[type]; 
 					if (hasTrait(type) == false)
 					{
 						addTrait(type, trait);
@@ -166,10 +162,10 @@ package org.osmf.html
 			else
 			{
 				// Don't expose any traits if not loaded (except for the 
-				// loadable trait):
+				// LoadTrait):
 				for each (type in traitTypes)
 				{
-					if (type != MediaTraitType.LOADABLE)
+					if (type != MediaTraitType.LOAD)
 					{
 						removeTrait(type);
 					}
@@ -177,7 +173,7 @@ package org.osmf.html
 			}
 		}
 	
-		private var loadable:HTMLLoadableTrait;
+		private var loadTrait:HTMLLoadTrait;
 		
 		private var switchableTraits:Dictionary = new Dictionary();
 		
@@ -185,10 +181,9 @@ package org.osmf.html
 		
 		/* static */
 		
-		private static const switchableTraitTypes:Vector.<MediaTraitType> = new Vector.<MediaTraitType>(4);
-			switchableTraitTypes[0] = MediaTraitType.PLAYABLE;
-			switchableTraitTypes[1] = MediaTraitType.PAUSABLE;
-			switchableTraitTypes[2] = MediaTraitType.TEMPORAL;
-			switchableTraitTypes[3] = MediaTraitType.AUDIBLE;
+		private static const switchableTraitTypes:Vector.<String> = new Vector.<String>(3);
+			switchableTraitTypes[0] = MediaTraitType.PLAY;
+			switchableTraitTypes[1] = MediaTraitType.TIME;
+			switchableTraitTypes[2] = MediaTraitType.AUDIO;
 	}
 }

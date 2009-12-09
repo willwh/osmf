@@ -24,20 +24,18 @@ package org.osmf.utils
 	import flash.utils.Dictionary;
 	
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.AudibleTrait;
-	import org.osmf.traits.BufferableTrait;
+	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.ILoader;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	public class DynamicProxyElement extends ProxyElement
 	{
@@ -51,22 +49,22 @@ package org.osmf.utils
 			}
 		}
 				
-		public function doAddTrait(type:MediaTraitType,instance:IMediaTrait):void
+		public function doAddTrait(type:String, instance:MediaTraitBase):void
 		{
 			this.addTrait(type,instance);
 		}
 
-		public function doRemoveTrait(type:MediaTraitType):IMediaTrait
+		public function doRemoveTrait(type:String):MediaTraitBase
 		{
 			return this.removeTrait(type);
 		}
 		
-		public function doBlockTrait(type:MediaTraitType):void
+		public function doBlockTrait(type:String):void
 		{
 			blockedTraits[type] = true;
 		}
 
-		override protected function blocksTrait(type:MediaTraitType):Boolean
+		override protected function blocksTrait(type:String):Boolean
 		{
 			return blockedTraits[type] == true;
 		}
@@ -77,38 +75,32 @@ package org.osmf.utils
 		
 			if (traitTypes != null)
 			{
-				for each (var traitType:MediaTraitType in traitTypes)
+				for each (var traitType:String in traitTypes)
 				{
-					var trait:IMediaTrait = null;
+					var trait:MediaTraitBase = null;
 					
 					switch (traitType)
 					{
-						case MediaTraitType.AUDIBLE:
-							trait = new AudibleTrait();
+						case MediaTraitType.AUDIO:
+							trait = new AudioTrait();
 							break;
-						case MediaTraitType.BUFFERABLE:
-							trait = new BufferableTrait();
+						case MediaTraitType.BUFFER:
+							trait = new BufferTrait();
 							break;
-						case MediaTraitType.LOADABLE:
-							trait = new LoadableTrait(loader, resource);
+						case MediaTraitType.LOAD:
+							trait = new LoadTrait(loader, resource);
 							break;
-						case MediaTraitType.PAUSABLE:
-							trait = new PausableTrait(this);
+						case MediaTraitType.PLAY:
+							trait = new PlayTrait();
 							break;
-						case MediaTraitType.PLAYABLE:
-							trait = new PlayableTrait(this);
+						case MediaTraitType.SEEK:
+							trait = new SeekTrait(null);
 							break;
-						case MediaTraitType.SEEKABLE:
-							trait = new SeekableTrait();
+						case MediaTraitType.TIME:
+							trait = new TimeTrait();
 							break;
-						case MediaTraitType.SPATIAL:
-							trait = new SpatialTrait();
-							break;
-						case MediaTraitType.TEMPORAL:
-							trait = new TemporalTrait();
-							break;
-						case MediaTraitType.VIEWABLE:
-							trait = new ViewableTrait();
+						case MediaTraitType.VIEW:
+							trait = new ViewTrait(null);
 							break;
 						default:
 							throw new ArgumentError();

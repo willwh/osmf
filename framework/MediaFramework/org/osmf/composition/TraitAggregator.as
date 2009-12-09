@@ -25,8 +25,8 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 
 	/**
@@ -95,7 +95,7 @@ package org.osmf.composition
 					// Dispatch traitUnaggregated events for all traits.
 					for (traitIndex = 0; traitIndex < _listenedChild.traitTypes.length; traitIndex++)
 					{				
-						var removingTraitType:MediaTraitType = _listenedChild.traitTypes[traitIndex];
+						var removingTraitType:String = _listenedChild.traitTypes[traitIndex];
 						dispatchEvent
 							( new TraitAggregatorEvent
 								( TraitAggregatorEvent.TRAIT_UNAGGREGATED
@@ -113,7 +113,7 @@ package org.osmf.composition
 					// Dispatch traitAggregated events for all traits.
 					for (traitIndex = 0; traitIndex < _listenedChild.traitTypes.length; traitIndex++)
 					{				
-						var addingTraitType:MediaTraitType = _listenedChild.traitTypes[traitIndex];
+						var addingTraitType:String = _listenedChild.traitTypes[traitIndex];
 						dispatchEvent
 							( new TraitAggregatorEvent
 								( TraitAggregatorEvent.TRAIT_AGGREGATED
@@ -148,7 +148,7 @@ package org.osmf.composition
 		 * Returns the next child after child which has the given trait.  If child is null,
 		 * returns the first child with the given trait.
 		 **/ 
-		public function getNextChildWithTrait(child:MediaElement, traitType:MediaTraitType):MediaElement
+		public function getNextChildWithTrait(child:MediaElement, traitType:String):MediaElement
 		{
 			var nextChild:MediaElement = null;
 			
@@ -178,11 +178,11 @@ package org.osmf.composition
          *  	function myMethod(trait:IMediaTrait):void
 		 *  Invokes on all traits of type traitType on all children.
 		 **/
-		public function forEachChildTrait(method:Function, traitType:MediaTraitType):void
+		public function forEachChildTrait(method:Function, traitType:String):void
 		{
 			for each (var mediaElement:MediaElement in childMediaElements)
 			{
-				var trait:IMediaTrait = mediaElement.getTrait(traitType);
+				var trait:MediaTraitBase = mediaElement.getTrait(traitType);
 				if (trait != null)
 				{
 					method(trait);
@@ -194,11 +194,11 @@ package org.osmf.composition
          *  Calls the method named by method, and applies the arguments in args to each trait of children.
 		 *  Invokes on all traits of type traitType on all children.
 		 **/
-		public function invokeOnEachChildTrait(method:String, args:Array, traitType:MediaTraitType):void	
+		public function invokeOnEachChildTrait(method:String, args:Array, traitType:String):void	
 		{			
 			for each (var mediaElement:MediaElement in childMediaElements)
 			{
-				var trait:IMediaTrait = mediaElement.getTrait(traitType);
+				var trait:MediaTraitBase = mediaElement.getTrait(traitType);
 				if (trait != null)
 				{
 					var f:Function = trait[method];
@@ -210,7 +210,7 @@ package org.osmf.composition
 		/**
 		 *	Returns true any children within this collection have the specified trait.
 		 **/
-		public function hasTrait(traitType:MediaTraitType):Boolean
+		public function hasTrait(traitType:String):Boolean
 		{
 			return getNumTraits(traitType) > 0;
 		}
@@ -218,7 +218,7 @@ package org.osmf.composition
 		/**
 		 * Returns the number of children within this collection that have the specified trait.
 		 **/
-		public function getNumTraits(traitType:MediaTraitType):int
+		public function getNumTraits(traitType:String):int
 		{
 			var numTraits:int = 0;
 			
@@ -280,7 +280,7 @@ package org.osmf.composition
 			
 			childMediaElements.splice(index, 0, child);
 			
-			for each( var traitType:MediaTraitType in child.traitTypes)
+			for each (var traitType:String in child.traitTypes)
 			{				
 				if (!childrenTraits[traitType])
 				{					
@@ -310,7 +310,7 @@ package org.osmf.composition
 			
 			for (var traitIndex:Number = 0; traitIndex < child.traitTypes.length; ++traitIndex)
 			{
-				var removingTraitType:MediaTraitType = child.traitTypes[traitIndex];
+				var removingTraitType:String = child.traitTypes[traitIndex];
 				
 				var children:Array = childrenTraits[removingTraitType]; 
 				children.splice(children.indexOf(child),1);
@@ -362,7 +362,7 @@ package org.osmf.composition
 		{
 			var child:MediaElement = event.target as MediaElement;
 			
-			var trait:IMediaTrait = child.getTrait(event.traitType);
+			var trait:MediaTraitBase = child.getTrait(event.traitType);
 			if (!childrenTraits[event.traitType])
 			{
 				childrenTraits[event.traitType] = new Array();
@@ -382,7 +382,7 @@ package org.osmf.composition
 		 * Dictionary of Arrays of type MediaElement, indexed by traitType.
 		 * To access, do something like this:  
 		 * 		var mediaElements:Array = childrenTraits[traitType];
-		 * 		var trait:IMediaTrait = mediaElements[0].getTrait(traitType);
+		 * 		var trait:MediaTraitBase = mediaElements[0].getTrait(traitType);
 		 **/
 		private var childrenTraits:Dictionary;
 		

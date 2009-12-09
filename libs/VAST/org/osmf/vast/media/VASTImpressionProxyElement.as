@@ -26,9 +26,10 @@ package org.osmf.vast.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ListenerProxyElement;
 	import org.osmf.tracking.Beacon;
-	import org.osmf.traits.IBufferable;
+	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
@@ -90,15 +91,15 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 **/
-		override protected function processPlayingChange(playing:Boolean):void
+		override protected function processPlayStateChange(playState:String):void
 		{
-			if (playing && !impressionsRecorded)
+			if (playState == PlayState.PLAYING && !impressionsRecorded)
 			{
 				// Only record the impressions if we're not buffering.
-				var bufferable:IBufferable = getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-				if (	bufferable == null
-					||  ( 	bufferable.buffering == false 
-						&& 	bufferable.bufferLength >= bufferable.bufferTime
+				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
+				if (	bufferTrait == null
+					||  ( 	bufferTrait.buffering == false 
+						&& 	bufferTrait.bufferLength >= bufferTrait.bufferTime
 						)
 				   )
 				{

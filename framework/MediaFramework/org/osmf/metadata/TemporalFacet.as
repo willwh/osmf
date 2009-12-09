@@ -25,20 +25,18 @@ package org.osmf.metadata
 	
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
-	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.IPausable;
-	import org.osmf.traits.IPlayable;
-	import org.osmf.traits.ISeekable;
-	import org.osmf.traits.ITemporal;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -89,16 +87,13 @@ package org.osmf.metadata
 			
 			// Check the owner media element for traits, if they are null here
 			// 	that's okay we'll manage them in the event handlers.
-			temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+			timeTrait = owner.getTrait(MediaTraitType.TIME) as TimeTrait;
 			
-			seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
-			setupTraitEventListener(MediaTraitType.SEEKABLE);
+			seekTrait = owner.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			setupTraitEventListener(MediaTraitType.SEEK);
 			
-			playable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			setupTraitEventListener(MediaTraitType.PLAYABLE);
-			
-			pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			setupTraitEventListener(MediaTraitType.PAUSABLE);
+			playTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			setupTraitEventListener(MediaTraitType.PLAY);
 			
 			owner.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			owner.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
@@ -153,7 +148,7 @@ package org.osmf.metadata
 		 */
 		public function addValue(value:TemporalIdentifier):void
 		{
-			if (value == null ||value.time < 0)
+			if (value == null || value.time < 0)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
@@ -203,7 +198,7 @@ package org.osmf.metadata
 		{
 			if (identifier is TemporalIdentifier)
 			{
-				for each(var temporalMetadata:TemporalIdentifier in temporalValueCollection)
+				for each (var temporalMetadata:TemporalIdentifier in temporalValueCollection)
 				{
 					if (temporalMetadata.equals(identifier))
 					{
@@ -277,15 +272,15 @@ package org.osmf.metadata
 			{
 				intervalTimer.stop();
 			}
-			else if (temporal != null && temporalValueCollection != null && temporalValueCollection.length > 0 
-						&& restartTimer && enabled && !intervalTimer.running) 
+			else if (	timeTrait != null
+					 && temporalValueCollection != null
+					 && temporalValueCollection.length > 0 
+					 && restartTimer
+					 && enabled
+					 && !intervalTimer.running
+					) 
 			{
-				// If there is a pausable trait and the media is paused, there is no reason to 
-				// start the timer
-				if (pausable && !pausable.paused)
-				{
-					intervalTimer.start();
-				}
+				intervalTimer.start();
 			}
 		}
 						
@@ -322,7 +317,7 @@ package org.osmf.metadata
 		 */
    		private function checkForTemporalMetadata():void 
    		{
-			var now:Number = temporal.currentTime;
+			var now:Number = timeTrait.currentTime;
 			
 			// Start looking one index past the last one we found
 			var index:int = findTemporalMetadata(lastFiredTemporalMetadataIndex + 1, temporalValueCollection.length - 1, now);
@@ -337,51 +332,40 @@ package org.osmf.metadata
 			}
 			
 			// See if the value at this index is within our tolerance
-			if ( !checkTemporalMetadata(index, now) && ((index + 1) < temporalValueCollection.length)) 
+			if (!checkTemporalMetadata(index, now) && ((index + 1) < temporalValueCollection.length)) 
 			{
 				// Look at the next one, see if it is close enough to fire
 				checkTemporalMetadata(index+1, now);
 			}
    		}
    		
-   		private function setupTraitEventListener(traitType:MediaTraitType, add:Boolean=true):void
+   		private function setupTraitEventListener(traitType:String, add:Boolean=true):void
    		{
    			if (add)
    			{
-	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
+	   			if (traitType == MediaTraitType.SEEK && seekTrait != null)
 	   			{
-					seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
 	   			}
 	   			
-	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
+	   			else if (traitType == MediaTraitType.PLAY && playTrait != null)
 	   			{
-	   				pausable.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
-	   			}
-	   			
-	   			else if (traitType == MediaTraitType.PLAYABLE && playable != null)
-	   			{
-	   				playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+	   				playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 	   			}
 	   		}
 	   		else
 	   		{
-	   			if (traitType == MediaTraitType.SEEKABLE && seekable != null)
+	   			if (traitType == MediaTraitType.SEEK && seekTrait != null)
 	   			{
-					seekable.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekable.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+					seekTrait.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
 	   			}
 	   			
-	   			else if (traitType == MediaTraitType.PAUSABLE && pausable != null)
+	   			else if (traitType == MediaTraitType.PLAY && playTrait != null)
 	   			{
-	   				pausable.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChange);
+	   				playTrait.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 	   			}
-
-	   			else if (traitType == MediaTraitType.PLAYABLE && playable != null)
-	   			{
-	   				playable.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
-	   			}
-	   			
 	   		}
    		}
    		
@@ -393,37 +377,16 @@ package org.osmf.metadata
    			}
    		}
    		
-   		private function onPausedChange(event:PausedChangeEvent):void
+   		private function onPlayStateChange(event:PlayEvent):void
    		{
-   			if (event.paused)
+   			if (event.playState == PlayState.PLAYING)
    			{
-   				// Pause any duration timers
-   				if (durationTimers != null)
-   				{
-   					for each (var timer:Timer in durationTimers)
-   					{
-   						timer.stop();
-   					}
-   				}
-   				
+   				startTimer();
+   			}
+   			else
+   			{
    				startTimer(false);
    			}
-   		}
-   		
-   		private function onPlayingChange(event:PlayingChangeEvent):void
-   		{
-   			if (event.playing)
-   			{
-   				// Start any duration timers
-   				if (durationTimers != null)
-   				{
-   					for each (var timer:Timer in durationTimers)
-   					{
-   						timer.start();
-   					}
-   				}
-   				startTimer();
-   			}	
    		}
    		
 		/**
@@ -475,28 +438,14 @@ package org.osmf.metadata
 			
 			if (valueObj.duration > 0)
 			{
-				var timer:Timer = new Timer(CHECK_INTERVAL);
-				var endTime:Number = valueObj.time + valueObj.duration;
-				
-				// Add it to the dictionary of duration timers so we can pause it 
-				// if the media pauses
-				if (durationTimers == null)
-				{
-					durationTimers = new Dictionary();
-				}
-				durationTimers[valueObj] = timer;
-				
+				var timer:Timer = new Timer(valueObj.duration*1000, 1);
 				timer.addEventListener(TimerEvent.TIMER, onDurationTimer);
 				timer.start();
 				
 				function onDurationTimer(event:TimerEvent):void
 				{
-					if (temporal && temporal.currentTime >= endTime)
-					{
-						timer.removeEventListener(TimerEvent.TIMER, onDurationTimer);
-						delete durationTimers[valueObj];
-						dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.DURATION_REACHED, valueObj));
-					}
+					timer.removeEventListener(TimerEvent.TIMER, onDurationTimer);
+					dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.DURATION_REACHED, valueObj));
 				}
 			}
 		}
@@ -591,18 +540,15 @@ package org.osmf.metadata
 		{
 			switch (event.traitType)
 			{
-				case MediaTraitType.TEMPORAL:
-					temporal = owner.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+				case MediaTraitType.TIME:
+					timeTrait = owner.getTrait(MediaTraitType.TIME) as TimeTrait;
 					startTimer();
 					break;
-				case MediaTraitType.SEEKABLE:
-					seekable = owner.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
+				case MediaTraitType.SEEK:
+					seekTrait = owner.getTrait(MediaTraitType.SEEK) as SeekTrait;
 					break;
-				case MediaTraitType.PAUSABLE:
-					pausable = owner.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-					break;
-				case MediaTraitType.PLAYABLE:
-					playable = owner.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+				case MediaTraitType.PLAY:
+					playTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					break;
 			}
 			
@@ -624,8 +570,8 @@ package org.osmf.metadata
 
 			switch (event.traitType)
 			{
-				case MediaTraitType.TEMPORAL:
-					temporal = null;
+				case MediaTraitType.TIME:
+					timeTrait = null;
 					// This is a work around for FM-171. Traits are added and removed for
 					// each child in a composition element when transitioning between child
 					// elements. So don't stop the timer if the owner is a composition.
@@ -637,14 +583,11 @@ package org.osmf.metadata
 						startTimer(false);
 					}
 					break;
-				case MediaTraitType.SEEKABLE:
-					seekable = null;
+				case MediaTraitType.SEEK:
+					seekTrait = null;
 					break;
-				case MediaTraitType.PAUSABLE:
-					pausable = null;
-					break;
-				case MediaTraitType.PLAYABLE:
-					playable = null;
+				case MediaTraitType.PLAY:
+					playTrait = null;
 					break;
 			}
 		}
@@ -656,15 +599,13 @@ package org.osmf.metadata
 		private var _namespace:URL;				
 		private var temporalValueCollection:Vector.<TemporalIdentifier>;
 		private var owner:MediaElement;
-		private var temporal:ITemporal;
-		private var seekable:ISeekable;
-		private var pausable:IPausable;
-		private var playable:IPlayable;
+		private var timeTrait:TimeTrait;
+		private var seekTrait:SeekTrait;
+		private var playTrait:PlayTrait;
 		private var lastFiredTemporalMetadataIndex:int;
 		private var intervalTimer:Timer;
 		private var restartTimer:Boolean;
 		private var enabled:Boolean;
 		private var _synthesizer:FacetSynthesizer;
-		private var durationTimers:Dictionary;
 	}
 }

@@ -23,8 +23,8 @@ package org.osmf.composition
 {
 	import flash.events.Event;
 	
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -63,7 +63,7 @@ package org.osmf.composition
 		 * 
 		 * @param type The event type; indicates the action that triggered the
 		 * event.
-		 * @param traitType The trait type for this event.
+		 * @param traitType The MediaTraitType for this event.
 		 * @param trait The trait for this event.  Should be null for events
 		 * related to the listenedChild.
 		 * @param oldListenedChild The previous value of listenedChild for the
@@ -77,8 +77,8 @@ package org.osmf.composition
 		 **/
 		public function TraitAggregatorEvent
 			( type:String
-			, traitType:MediaTraitType
-			, trait:IMediaTrait
+			, traitType:String
+			, trait:MediaTraitBase
 			, oldListenedChild:MediaElement=null
 			, newListenedChild:MediaElement=null
 			, bubbles:Boolean=false
@@ -102,10 +102,10 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * The trait type for this event.  Should be null for events related
+		 * The MediaTraitType for this event.  Should be null for events related
 		 * to the listenedChild.
 		 **/
-		public function get traitType():MediaTraitType
+		public function get traitType():String
 		{
 			return _traitType;
 		}
@@ -114,7 +114,7 @@ package org.osmf.composition
 		 * The trait for this event.  Should be null for events related to
 		 * the listenedChild.
 		 **/
-		public function get trait():IMediaTrait
+		public function get trait():MediaTraitBase
 		{
 			return _trait;
 		}
@@ -140,8 +140,8 @@ package org.osmf.composition
 		// Internals
 		//
 		
-		private var _traitType:MediaTraitType;
-		private var _trait:IMediaTrait;
+		private var _traitType:String;
+		private var _trait:MediaTraitBase;
 		private var _oldListenedChild:MediaElement;
 		private var _newListenedChild:MediaElement;
 	}

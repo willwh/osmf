@@ -24,14 +24,15 @@ package org.osmf.tracking
 	import flash.events.Event;
 	
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NetFactory;
@@ -44,39 +45,39 @@ package org.osmf.tracking
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 			
-			var playingChangeCount:int = 0;
+			var playStateChangeCount:int = 0;
 			var pingComplete:Boolean = false;
 			
 			var httpLoader:HTTPLoader = createHTTPLoader();
-			httpLoader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onLoaderStateChange);
+			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 			
 			var mediaElement:MediaElement = new BeaconElement(new Beacon(RESOURCE.url, httpLoader));
-			var playable:IPlayable = mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+			var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 			
-			playable.play();
+			playTrait.play();
 			
-			function onPlayingChange(event:PlayingChangeEvent):void
+			function onPlayStateChange(event:PlayEvent):void
 			{
-				if (playingChangeCount == 0)
+				if (playStateChangeCount == 0)
 				{
-					assertTrue(event.playing == true);
+					assertTrue(event.playState == PlayState.PLAYING);
 				}
-				else if (playingChangeCount == 1)
+				else if (playStateChangeCount == 1)
 				{
-					assertTrue(event.playing == false);
+					assertTrue(event.playState == PlayState.STOPPED);
 				}
 				else fail();
 				
-				playingChangeCount++;
+				playStateChangeCount++;
 				
 				checkForCompletion();
 			}
 			
 			function onLoaderStateChange(event:LoaderEvent):void
 			{
-				if (event.loadable.loadState == LoadState.READY)
+				if (event.loadTrait.loadState == LoadState.READY)
 				{
 					pingComplete = true;
 					
@@ -86,7 +87,7 @@ package org.osmf.tracking
 			
 			function checkForCompletion():void
 			{
-				if (playingChangeCount == 2 && pingComplete)
+				if (playStateChangeCount == 2 && pingComplete)
 				{
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -101,7 +102,7 @@ package org.osmf.tracking
 			return new BeaconElement(new Beacon(RESOURCE.url, createHTTPLoader()));
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
 			return false;
 		}
@@ -113,12 +114,12 @@ package org.osmf.tracking
 
 		override protected function get existentTraitTypesOnInitialization():Array
 		{
-			return [MediaTraitType.PLAYABLE];
+			return [MediaTraitType.PLAY];
 		}
 
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
-			return [MediaTraitType.PLAYABLE];
+			return [MediaTraitType.PLAY];
 		}
 		
 		// Internals

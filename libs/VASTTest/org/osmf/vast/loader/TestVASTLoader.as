@@ -31,10 +31,9 @@ package org.osmf.vast.loader
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadableTrait;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
@@ -76,8 +75,8 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithValidVASTDocument);
-			loader.load(createILoadable(SUCCESSFUL_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithValidVASTDocument);
+			loader.load(createLoadTrait(loader, SUCCESSFUL_RESOURCE));
 		}
 		
 		private function onTestLoadWithValidVASTDocument(event:LoaderEvent):void
@@ -103,8 +102,8 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithDefaultMaxNumWrapperRedirects);
-			loader.load(createILoadable(OUTER_WRAPPER_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithDefaultMaxNumWrapperRedirects);
+			loader.load(createLoadTrait(loader, OUTER_WRAPPER_RESOURCE));
 		}
 		
 		private function onTestLoadWithDefaultMaxNumWrapperRedirects(event:LoaderEvent):void
@@ -283,8 +282,8 @@ package org.osmf.vast.loader
 			
 			setOverriddenLoader(createInterfaceObject(0) as ILoader);
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithZeroMaxNumWrapperRedirects);
-			loader.load(createILoadable(OUTER_WRAPPER_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithZeroMaxNumWrapperRedirects);
+			loader.load(createLoadTrait(loader, OUTER_WRAPPER_RESOURCE));
 		}
 		
 		private function onTestLoadWithZeroMaxNumWrapperRedirects(event:LoaderEvent):void
@@ -316,8 +315,8 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithInvalidXMLVASTDocument);
-			loader.load(createILoadable(INVALID_XML_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithInvalidXMLVASTDocument);
+			loader.load(createLoadTrait(loader, INVALID_XML_RESOURCE));
 		}
 		
 		private function onTestLoadWithInvalidXMLVASTDocument(event:LoaderEvent):void
@@ -334,8 +333,8 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithInvalidVASTDocument);
-			loader.load(createILoadable(INVALID_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithInvalidVASTDocument);
+			loader.load(createLoadTrait(loader, INVALID_RESOURCE));
 		}
 		
 		private function onTestLoadWithInvalidVASTDocument(event:LoaderEvent):void
@@ -352,8 +351,8 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			loader.addEventListener(LoaderEvent.LOADABLE_STATE_CHANGE, onTestLoadWithInvalidWrapperRedirect);
-			loader.load(createILoadable(WRAPPER_WITH_INVALID_WRAPPED_RESOURCE));
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithInvalidWrapperRedirect);
+			loader.load(createLoadTrait(loader, WRAPPER_WITH_INVALID_WRAPPED_RESOURCE));
 		}
 		
 		private function onTestLoadWithInvalidWrapperRedirect(event:LoaderEvent):void
@@ -376,7 +375,7 @@ package org.osmf.vast.loader
 				);
 		}
 
-		override protected function createILoadable(resource:IMediaResource=null):ILoadable
+		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
 		{
 			var mockLoader:MockHTTPLoader = httpLoader as MockHTTPLoader;
 			if (mockLoader)
@@ -456,7 +455,7 @@ package org.osmf.vast.loader
 						);
 				}
 			}
-			return new LoadableTrait(loader, resource);
+			return new LoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():IMediaResource

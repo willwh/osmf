@@ -23,14 +23,15 @@ package org.osmf.media
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.traits.BufferableTrait;
+	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 
 	public class MediaTraitResolverBaseTestCase extends TestCase
 	{
-		public function constructResolver(type:MediaTraitType, traitOfType:IMediaTrait):MediaTraitResolver
+		public function constructResolver(type:String, traitOfType:MediaTraitBase):MediaTraitResolver
 		{
 			return null;	
 		}
@@ -54,15 +55,15 @@ package org.osmf.media
 		public function testType():void
 		{
 			var resolver:MediaTraitResolver;
-			resolver = constructResolver(MediaTraitType.BUFFERABLE, new BufferableTrait());
+			resolver = constructResolver(MediaTraitType.BUFFER, new BufferTrait());
 			assertNotNull(resolver);
-			assertEquals(MediaTraitType.BUFFERABLE, resolver.type);
+			assertEquals(MediaTraitType.BUFFER, resolver.type);
 		}
 		
 		public function testAddTrait():void
 		{
-			var type:MediaTraitType = MediaTraitType.TEMPORAL;
-			var resolver:MediaTraitResolver = constructResolver(type, new TemporalTrait());
+			var type:String = MediaTraitType.TIME;
+			var resolver:MediaTraitResolver = constructResolver(type, new TimeTrait());
 			
 			try
 			{
@@ -75,7 +76,7 @@ package org.osmf.media
 			
 			try
 			{
-				resolver.addTrait(new ViewableTrait());
+				resolver.addTrait(new ViewTrait(null));
 				fail();
 			}
 			catch(_:*)
@@ -85,8 +86,8 @@ package org.osmf.media
 		
 		public function testRemoveTrait():void
 		{
-			var type:MediaTraitType = MediaTraitType.TEMPORAL;
-			var resolver:MediaTraitResolver = constructResolver(type, new TemporalTrait());
+			var type:String = MediaTraitType.TIME;
+			var resolver:MediaTraitResolver = constructResolver(type, new TimeTrait());
 			
 			try
 			{
@@ -99,7 +100,7 @@ package org.osmf.media
 			
 			try
 			{
-				resolver.removeTrait(new ViewableTrait());
+				resolver.removeTrait(new ViewTrait(null));
 				fail();
 			}
 			catch(_:*)

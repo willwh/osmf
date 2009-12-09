@@ -52,7 +52,7 @@ package org.osmf.events
 		 * type property of the event object for a NetNegotiatorEvent when the 
 		 * the class has failed at negotiating a connected NetConnection. The specific reason for
 		 * the failure is captured in the constructor mediaError argument, which is captured by the 
-		 * NetConnectionFactory and dispatched as a mewdiaErrorEvent against the appropriate ILoadable.
+		 * NetConnectionFactory and dispatched as a mediaErrorEvent against the appropriate LoadTrait.
 		 * 
 		 * @eventType CONNECTION_FAILED
 		 *  

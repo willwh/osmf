@@ -21,149 +21,118 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.events.PausedChangeEvent;
-	import org.osmf.events.PlayingChangeEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaTrait;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.*;
-	import org.osmf.traits.AudibleTrait;
-	import org.osmf.traits.BufferableTrait;
-	import org.osmf.traits.DownloadableTrait;
+	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.ILoader;
-	import org.osmf.traits.LoadableTrait;
-	import org.osmf.traits.PausableTrait;
-	import org.osmf.traits.PlayableTrait;
-	import org.osmf.traits.SeekableTrait;
-	import org.osmf.traits.SpatialTrait;
-	import org.osmf.traits.SwitchableTrait;
-	import org.osmf.traits.TemporalTrait;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.MediaTraitBase;
+	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	
 	public class DynamicMediaElement extends MediaElement
 	{
-		public function DynamicMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null)
+		public function DynamicMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null, useDynamicTraits:Boolean=false)
 		{
 			this.resource = resource;
 			
+			var doCreateSeekTrait:Boolean = false;
+			
 			if (traitTypes != null)
 			{
-				for each (var traitType:MediaTraitType in traitTypes)
+				for each (var traitType:String in traitTypes)
 				{
-					var trait:IMediaTrait = null;
+					var trait:MediaTraitBase = null;
 					
 					switch (traitType)
 					{
-						case MediaTraitType.AUDIBLE:
-							trait = new AudibleTrait();
+						case MediaTraitType.AUDIO:
+							trait = new AudioTrait();
 							break;
-						case MediaTraitType.BUFFERABLE:
-							trait = new BufferableTrait();
+						case MediaTraitType.BUFFER:
+							if (useDynamicTraits)
+							{
+								trait = new DynamicBufferTrait();
+							}
+							else
+							{
+								trait = new BufferTrait();
+							}
 							break;
-						case MediaTraitType.LOADABLE:
-							trait = new LoadableTrait(loader, resource);
+						case MediaTraitType.LOAD:
+							if (useDynamicTraits)
+							{
+								trait = new DynamicLoadTrait(loader, resource);
+							}
+							else
+							{
+								trait = new LoadTrait(loader, resource);
+							}
 							break;
-						case MediaTraitType.PAUSABLE:
-							trait = new PausableTrait(this);
+						case MediaTraitType.PLAY:
+							trait = new PlayTrait();
 							break;
-						case MediaTraitType.PLAYABLE:
-							trait = new PlayableTrait(this);
+						case MediaTraitType.SEEK:
+							doCreateSeekTrait = true;
+							continue;
+						case MediaTraitType.DYNAMIC_STREAM:
+							trait = new DynamicStreamTrait(true, 0, 5);
 							break;
-						case MediaTraitType.SEEKABLE:
-							trait = new SeekableTrait();
+						case MediaTraitType.TIME:
+							if (useDynamicTraits)
+							{
+								trait = new DynamicTimeTrait();
+							}
+							else
+							{
+								trait = new TimeTrait();
+							}
+							timeTrait = trait as TimeTrait;
 							break;
-						case MediaTraitType.SPATIAL:
-							trait = new SpatialTrait();
-							break;
-						case MediaTraitType.SWITCHABLE:
-							trait = new SwitchableTrait(true, 0, 5);
-							break;
-						case MediaTraitType.TEMPORAL:
-							trait = new TemporalTrait();
-							break;
-						case MediaTraitType.VIEWABLE:
-							trait = new ViewableTrait();
-							break;
-						case MediaTraitType.DOWNLOADABLE:
-							trait = new DownloadableTrait(10, 100);
+						case MediaTraitType.VIEW:
+							if (useDynamicTraits)
+							{
+								trait = new DynamicViewTrait(null);
+							}
+							else
+							{
+								trait = new ViewTrait(null);
+							}
 							break;
 						default:
-							throw new ArgumentError();
+							break;
 					}
 					
-					doAddTrait(traitType, trait);
+					if (trait != null)
+					{
+						doAddTrait(traitType, trait);
+					}
 				}
 			}
 			
-			temporal = getTrait(MediaTraitType.TEMPORAL) as TemporalTrait;
-			var seekable:SeekableTrait = getTrait(MediaTraitType.SEEKABLE) as SeekableTrait;
-			
-			if (seekable != null && temporal != null)
+			if (doCreateSeekTrait)
 			{
-				seekable.temporal = temporal;
-				seekable.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChanged);
-				seekable.addEventListener(SeekEvent.SEEK_END, onSeekingChanged);
+				var seekTrait:SeekTrait = new SeekTrait(timeTrait);
+				doAddTrait(MediaTraitType.SEEK, seekTrait);
 			}
 		}
 		
-		public function doAddTrait(type:MediaTraitType,instance:IMediaTrait):void
+		public function doAddTrait(traitType:String, instance:MediaTraitBase):void
 		{
-			this.addTrait(type,instance);
-			if (type == MediaTraitType.PLAYABLE)
-			{
-				playable = instance as PlayableTrait;
-				playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChanged);
-			}
-			else if (type == MediaTraitType.PAUSABLE)
-			{
-				pausable = instance as PausableTrait;
-				pausable.addEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChanged);				
-			}
+			this.addTrait(traitType, instance);
 		}
 
-		public function doRemoveTrait(type:MediaTraitType):IMediaTrait
+		public function doRemoveTrait(traitType:String):MediaTraitBase
 		{
-			if (type == MediaTraitType.PLAYABLE)
-			{
-				playable.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChanged);
-				playable = null;
-			}
-			else if (type == MediaTraitType.PAUSABLE)
-			{
-				pausable.removeEventListener(PausedChangeEvent.PAUSED_CHANGE, onPausedChanged);
-				pausable = null;
-			}
-			
-			return this.removeTrait(type);
+			return this.removeTrait(traitType);
 		}
 		
-		private function onPlayingChanged(event:PlayingChangeEvent):void
-		{
-			if (event.playing == true && pausable != null)
-			{
-				pausable.resetPaused();
-			}
-		}
-		
-		private function onPausedChanged(event:PausedChangeEvent):void
-		{
-			if (event.paused == true && playable != null)
-			{
-				playable.resetPlaying();
-			}
-		}
-		
-		private function onSeekingChanged(event:SeekEvent):void
-		{
-			if (temporal != null && event.type == SeekEvent.SEEK_BEGIN)
-			{
-				temporal.currentTime = event.time;
-			}
-		}
-		
-		public var playable:PlayableTrait;
-		public var pausable:PausableTrait;
-		public var temporal:TemporalTrait;
+		private var timeTrait:TimeTrait;
 	}
 }

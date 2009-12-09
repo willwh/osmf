@@ -47,7 +47,7 @@ package org.osmf.tracking
 		 **/
 		override protected function setupTraits():void
 		{
-			addTrait(MediaTraitType.PLAYABLE, new BeaconPlayableTrait(this, beacon));
+			addTrait(MediaTraitType.PLAY, new BeaconPlayTrait(beacon));
 		}
 
 		private var beacon:Beacon;

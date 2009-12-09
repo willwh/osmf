@@ -21,11 +21,11 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.MediaTraitBase;
 	
 	public class TestMediaTraitResolver extends MediaTraitResolverBaseTestCase
 	{
-		override public function constructResolver(type:MediaTraitType, traitOfType:IMediaTrait):MediaTraitResolver
+		override public function constructResolver(type:String, traitOfType:MediaTraitBase):MediaTraitResolver
 		{
 			return new MediaTraitResolver(type);
 		}
