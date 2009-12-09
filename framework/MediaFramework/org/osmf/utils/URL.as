@@ -283,6 +283,14 @@ package org.osmf.utils
 			
 			return value;
 		}
+		
+		/**
+		 * The url is fully qualified.
+		 */ 
+		public function get absolute():Boolean
+		{
+			return protocol != "";
+		}
 				
 		/**
 		 * Parses the url into properties.

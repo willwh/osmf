@@ -35,6 +35,7 @@ package org.osmf
 	import org.osmf.logging.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
+	import org.osmf.manifest.*;
 	import org.osmf.net.*;
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.plugin.*;

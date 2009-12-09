@@ -1,4 +1,4 @@
-package org.osmf.net
+package org.osmf.manifest
 {
 	import flexunit.framework.TestCase;
 	
@@ -15,7 +15,9 @@ package org.osmf.net
 		{
 			//Test that both constructors work...
 			var loader:F4MLoader = new F4MLoader(null);
-			var loader2:F4MLoader = new F4MLoader(new MediaFactory());		
+			var loader2:F4MLoader = new F4MLoader(new ManifestParser(), new MediaFactory());
+			var loader3:F4MLoader = new F4MLoader(new ManifestParser());
+			var loader4:F4MLoader = new F4MLoader(null, new MediaFactory());		
 			assertTrue(true);	
 		}
 		

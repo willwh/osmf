@@ -1,4 +1,4 @@
-package org.osmf.net
+package org.osmf.manifest
 {
 	import __AS3__.vec.Vector;
 	
@@ -15,14 +15,15 @@ package org.osmf.net
 
 	public class TestManifestParser extends TestCase
 	{
+		private var parser:ManifestParser = new ManifestParser();
 		
 		public function testDefaults():void
 		{
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
 							</manifest>;
-			
-			var manifest:Manifest = ManifestParser.parse(test);
+			var parser:ManifestParser = new ManifestParser();
+			var manifest:Manifest = parser.parse(test);
 			assertEquals(manifest.id, "myvideo");
 			assertEquals(manifest.duration, NaN);
 			assertEquals(manifest.media.length, 0);
@@ -32,6 +33,7 @@ package org.osmf.net
 		
 		public function testNoURL():void
 		{
+			
 			var errorSeen:Boolean = false;
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
@@ -47,7 +49,7 @@ package org.osmf.net
 							</manifest>;
 			try
 			{
-				var manifest:Manifest = ManifestParser.parse(test);			
+				var manifest:Manifest = parser.parse(test);			
 			}
 			catch(error:ArgumentError)
 			{
@@ -74,7 +76,7 @@ package org.osmf.net
 							</manifest>;
 			try
 			{
-				var manifest:Manifest = ManifestParser.parse(test);			
+				var manifest:Manifest = parser.parse(test);			
 			}
 			catch(error:ArgumentError)
 			{
@@ -101,7 +103,7 @@ package org.osmf.net
 							</manifest>;
 			try
 			{
-				var manifest:Manifest = ManifestParser.parse(test);			
+				var manifest:Manifest = parser.parse(test);			
 			}
 			catch(error:ArgumentError)
 			{
@@ -125,7 +127,7 @@ package org.osmf.net
 								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
 							</manifest>;
 			
-			var manifest:Manifest = ManifestParser.parse(test);
+			var manifest:Manifest = parser.parse(test);
 			assertEquals(manifest.id, "myvideo");
 			assertEquals(manifest.duration, 253);
 			assertEquals(manifest.mimeType, "video/x-flv");		
@@ -150,7 +152,7 @@ package org.osmf.net
 								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
 							</manifest>
 			
-			var manifest:Manifest = ManifestParser.parse(test);
+			var manifest:Manifest = parser.parse(test);
 			
 			assertEquals(3, manifest.media.length);
 			assertEquals("http://example.com/myvideo/low", Media(manifest.media[0]).url);
@@ -192,8 +194,8 @@ package org.osmf.net
 								<drmMetadata>U29tZSBTYW1wbGUgRGF0YQ==</drmMetadata>
 								<media url="http://example.com/myvideo/low.mp4" bitrate="408" width="640" height="480"/>
 							</manifest>
-			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var manifest:Manifest = parser.parse(test);
+			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource)
 			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url.rawUrl)
@@ -218,8 +220,8 @@ package org.osmf.net
 								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080"/>
 							</manifest>
 							
-			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var manifest:Manifest = parser.parse(test);
+			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
@@ -263,8 +265,8 @@ package org.osmf.net
 								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmMetadataId='3'/>
 							</manifest>
 							
-			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var manifest:Manifest = parser.parse(test);
+			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 								
@@ -296,8 +298,8 @@ package org.osmf.net
 							<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" />
 						</manifest>
 							
-			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var manifest:Manifest = parser.parse(test);
+			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			
@@ -320,8 +322,8 @@ package org.osmf.net
 							<media url="myvideo/low.flv"  bitrate="408" width="640" height="480" />
 						</manifest>
 							
-			var manifest:Manifest = ManifestParser.parse(test);
-			var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var manifest:Manifest = parser.parse(test);
+			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource);
 			
@@ -343,11 +345,11 @@ package org.osmf.net
 							<media url="high.flv" bitrate="1708" width="1920" height="1080" />
 						</manifest>
 							
-			var manifest:Manifest = ManifestParser.parse(test);
+			var manifest:Manifest = parser.parse(test);
 			var errorSeen:Boolean = false;
 			try
 			{
-				var resource:IMediaResource = ManifestParser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+				var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			}
 			catch(error:Error)
 			{
