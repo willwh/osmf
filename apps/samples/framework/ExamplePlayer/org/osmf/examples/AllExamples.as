@@ -47,7 +47,7 @@ package org.osmf.examples
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.F4MLoader;
+	import org.osmf.manifest.*;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
