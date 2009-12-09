@@ -32,7 +32,7 @@ package org.osmf.vast.model
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class VASTWrapperAd extends VASTAdPackageBase
@@ -53,7 +53,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get vastAdTagURL():String 
@@ -71,7 +71,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get videoClick():VASTVideoClick
@@ -89,7 +89,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get companionImpressions():Vector.<VASTUrl>
@@ -107,7 +107,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get companionAdTag():VASTUrl
@@ -125,7 +125,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get nonLinearImpressions():Vector.<VASTUrl>
@@ -143,7 +143,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get nonLinearAdTag():VASTUrl

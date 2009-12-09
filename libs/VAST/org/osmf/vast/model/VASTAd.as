@@ -31,7 +31,7 @@ package org.osmf.vast.model
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class VASTAd
@@ -44,7 +44,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function VASTAd(id:String) 
@@ -58,7 +58,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get id():String 
@@ -72,7 +72,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get inlineAd():VASTInlineAd 
@@ -91,7 +91,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get wrapperAd():VASTWrapperAd 

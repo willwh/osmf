@@ -33,7 +33,7 @@ package org.osmf.vast.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public class DefaultVASTMediaFileResolver implements IVASTMediaFileResolver
@@ -43,7 +43,7 @@ package org.osmf.vast.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function resolveMediaFiles(mediaFiles:Vector.<VASTMediaFile>):VASTMediaFile

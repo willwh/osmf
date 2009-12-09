@@ -31,7 +31,7 @@ package org.osmf.vast.model
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class VASTCompanionAd extends VASTAdBase
@@ -41,7 +41,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function VASTCompanionAd()
@@ -55,7 +55,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get altText():String 

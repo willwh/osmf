@@ -30,7 +30,7 @@ package org.osmf.vast.model
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class VASTVideoClick
@@ -40,7 +40,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function VASTVideoClick()
@@ -56,7 +56,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get clickThrough():VASTUrl 
@@ -75,7 +75,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get clickTrackings():Vector.<VASTUrl> 
@@ -94,7 +94,7 @@ package org.osmf.vast.model
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get customClicks():Vector.<VASTUrl> 
