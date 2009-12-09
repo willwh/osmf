@@ -77,7 +77,7 @@ package org.osmf.video
 	import flash.net.drm.DRMContentData;	
 	import flash.system.SystemUpdaterType;
 	import flash.system.SystemUpdater;	
-	import org.osmf.net.NetStreamContentProtectableTrait;
+	import org.osmf.net.NetStreamContentProtectionTrait;
 	}
 	
 	/**
@@ -327,7 +327,7 @@ package org.osmf.video
 	  			LoadTrait(getTrait(MediaTraitType.LOAD)).load();  		  					
 	  		}	
 			
-			private function createProtectionTrait():NetStreamContentProtectableTrait
+			private function createProtectionTrait():NetStreamContentProtectionTrait
 			{				
 				var protectionTrait:NetStreamContentProtectionTrait = new NetStreamContentProtectionTrait();		    	
 		    	addTrait(MediaTraitType.CONTENT_PROTECTION, protectionTrait);	
