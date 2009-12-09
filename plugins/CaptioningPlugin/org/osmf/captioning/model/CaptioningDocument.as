@@ -134,6 +134,8 @@ package org.osmf.captioning.model
 		/**
 		 * Returns the style object at the index specified.
 		 * 
+		 * @throws IllegalOperationError If index argument is out of range.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
@@ -189,6 +191,8 @@ package org.osmf.captioning.model
 		
 		/**
 		 * Returns the caption object at the index specified.
+		 * 
+		 * @throws IllegalOperationError If index argument is out of range.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

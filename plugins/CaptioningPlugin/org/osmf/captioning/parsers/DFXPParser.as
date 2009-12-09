@@ -36,7 +36,8 @@ package org.osmf.captioning.parsers
 	 * This class parses a W3C Timed Text DFXP file and
 	 * creates a document object model representation of 
 	 * the file by returning a <code>CaptioningDocument</code> object
-	 * from the <code>parse</code> method.
+	 * from the <code>parse</code> method.  A load failure translates to
+	 * an OSMF media load failed message.
 	 * 
 	 * A subset of the W3C Timed Text Authoring Format 1.0 - Distribution
 	 * Format Exchange Profile (DFXP) is supported by this parser.
@@ -187,12 +188,22 @@ package org.osmf.captioning.parsers
 			// Tell the XML class not to normalize white space for toString() method calls
 			XML.prettyPrinting = false;
 			
-			var xml:XML = new XML(xmlStr);
+			try
+			{
+				var xml:XML = new XML(xmlStr);
+			}
+			catch (e:Error)
+			{
+				debugLog("Unhandled exception in DFXPParser : "+e.message);
+				throw e;				
+			}
+			finally
+			{
+				XML.ignoreWhitespace = saveXMLIgnoreWhitespace;
+				XML.prettyPrinting = saveXMLPrettyPrinting;
+			}
 			
 			rootNamespace = xml.namespace();
-			
-			XML.ignoreWhitespace = saveXMLIgnoreWhitespace;
-			XML.prettyPrinting = saveXMLPrettyPrinting;
 			
 			ns = xml.namespace();
 			ttm = xml.namespace("ttm");
@@ -291,14 +302,14 @@ package org.osmf.captioning.parsers
 		/**
 		 * Takes a string in the valid formats specified by the W3C Timed Text 
 		 * standard which include:<ul>
-		 * <li>#rrggbb</li>
-		 * <li>#rrggbbaa</li>
-		 * <li>rgb(red, green, blue)</li>
-		 * <li>rgba(red, green, blue, alpha)</li>
+		 * <li>#rrggbb - each color value is a hexadecimal digit, such as #ff0000 for red</li>
+		 * <li>#rrggbbaa - each color value is a hexadecial digit, such as #ff0000ff for fully opaque red</li>
+		 * <li>rgb(red, green, blue) - hexadecimal values</li>
+		 * <li>rgba(red, green, blue, alpha) - hexadecimal values</li>
 		 * </ul>
 		 * 
 		 * and returns an Object with the following properties:<ul>
-		 * <li>color : a hexidecimal value representing the color, for example, 0xff0000 is red.</li>
+		 * <li>color : a hexadecimal value representing the color, for example, 0xff0000 is red.</li>
 		 * <li>alpha : a Number between 0 and 1 specifying the alpha transparency</li>
 		 * </ul>
 		 */
@@ -316,7 +327,7 @@ package org.osmf.captioning.parsers
 				colorValue = parseInt(result[1], 16);
 				if (result.length == 3)
 				{
-					alphaValue = Number(parseInt(result[2])/100);
+					alphaValue = Number(parseInt(result[2])/255);
 				}
 			} 
 			else  
@@ -330,7 +341,7 @@ package org.osmf.captioning.parsers
 					colorValue = (parseInt(result[2]) << 16) + (parseInt(result[3]) << 8) + parseInt(result[4]);
 					if (result.length == 8 && result[7] != undefined)
 					{
-						alphaValue = Number(parseInt(result[7])/100);
+						alphaValue = Number(parseInt(result[7])/255);
 					}
 				}
 				else 
@@ -568,7 +579,7 @@ package org.osmf.captioning.parsers
 								}
 								break;
 							case "br":
-								text += "<br/>";
+								text += "<br />";
 								break;
 							default:
 								text += formatCCText(child.toString());
@@ -622,8 +633,8 @@ package org.osmf.captioning.parsers
 					}
 				}
 			}
-			else {
-
+			else 
+			{
 				try
 				{				
 					var attributes:XMLList = node.@tts::*;
@@ -706,6 +717,8 @@ package org.osmf.captioning.parsers
 		}
 			
 		/**
+		 * Takes a time as a string and returns that time in seconds.
+		 * 
 		 * The following time values are supported:<ul>
 		 * <li>full clock format in "hours:minutes:seconds:fraction" (e.g. 00:03:00:00).</li>
 		 * <li>offset time (e.g. 100.1s or 2m).</li>

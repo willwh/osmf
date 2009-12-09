@@ -37,13 +37,13 @@ package org.osmf.captioning.model
 		 * Creates a CaptionFormat object specifying the Style 
 		 * object and the zero-based start and end indices of the range.
 		 * 
-		 * @param style The instance of CaptionStyle 
-		 * object to apply.
+		 * @param style The instance of CaptionStyle object to apply.
 		 * @param start The optional zero-based index position specifying 
-		 * the first character of the desired range of text. Default is to start with the first character.
+		 * the first character of the desired range of text.
 		 * @param end The optional zero-based index position specifying the 
-		 * last character of the desired range of text. Default is to end 
-		 * with the last character.
+		 * last character of the desired range of text. 
+		 * 
+		 * @throws ArgumentError If the style argument is null.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

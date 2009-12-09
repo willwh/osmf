@@ -80,7 +80,7 @@ package org.osmf.captioning.loader
 		/**
 		 * Loads a Timed Text document.
 		 * <p>Updates the ILoadable's <code>loadedState</code> property to LOADING
-		 * while loading and to LOADED upon completing a successful load and parse of the
+		 * while loading and to READY upon completing a successful load and parse of the
 		 * Timed Text document.</p>
 		 * 
 		 * @see org.osmf.traits.LoadState
@@ -142,7 +142,6 @@ package org.osmf.captioning.loader
 							}
 						}
 						updateLoadable(loadable, LoadState.LOAD_ERROR);
-						throw e;
 					}
 					
 					updateLoadable(loadable, LoadState.READY, new CaptioningLoadedContext(captioningDocument));
@@ -163,7 +162,6 @@ package org.osmf.captioning.loader
 							logger.debug("Error loading captioning document");;
 						}
 					}
-					
 					
 					updateLoadable(loadable, event.newState);
 				}
@@ -210,7 +208,7 @@ package org.osmf.captioning.loader
 			return new DFXPParser();
 		}
 
-		private var httpLoader:HTTPLoader;		
+		private var httpLoader:HTTPLoader;
 		
 		CONFIG::LOGGING
 		{	

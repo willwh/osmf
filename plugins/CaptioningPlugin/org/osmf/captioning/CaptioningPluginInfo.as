@@ -46,7 +46,7 @@ package org.osmf.captioning
 	public class CaptioningPluginInfo implements IPluginInfo
 	{
 		// Constants for specifying the Timed Text document URL on the resource metadata
-		public static const CAPTIONING_METADATA_NAMESPACE:URL = new URL("http://www.osmf.com/captioning/1.0");
+		public static const CAPTIONING_METADATA_NAMESPACE:URL = new URL("http://www.osmf.org/captioning/1.0");
 		public static const CAPTIONING_METADATA_KEY_URI:String = "uri";
 		
 		// Constants for the temporal metadata (captions)
@@ -65,7 +65,7 @@ package org.osmf.captioning
 			mediaInfos = new Vector.<MediaInfo>();
 			
 			var resourceHandler:IMediaResourceHandler = new NetLoader();
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.caption.CaptioningPluginInfo",
+			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.captioning.CaptioningPluginInfo",
 													resourceHandler,
 													createCaptioningProxyElement,
 													MediaInfoType.PROXY);
@@ -88,6 +88,8 @@ package org.osmf.captioning
 		
 		/**
 		 * Returns a <code>MediaInfo</code> object at the supplied index position.
+		 * 
+		 * @throws IllegalOperationError If index argument is out of range.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -122,8 +124,8 @@ package org.osmf.captioning
 			}
 			
 			var verInfo:Array = version.split(".");
-			var major:int = 0
-			var minor:int = 0
+			var major:int = 0;
+			var minor:int = 0;
 			var subMinor:int = 0;
 			
 			if (verInfo.length >= 1)

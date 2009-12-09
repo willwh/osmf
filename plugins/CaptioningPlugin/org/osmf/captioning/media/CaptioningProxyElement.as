@@ -21,13 +21,14 @@
 *****************************************************/
 package org.osmf.captioning.media
 {
-	import flash.errors.IllegalOperationError;
-	
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.captioning.loader.CaptioningLoadedContext;
 	import org.osmf.captioning.loader.CaptioningLoader;
 	import org.osmf.captioning.model.CaptioningDocument;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -60,14 +61,14 @@ package org.osmf.captioning.media
 		 * 
 		 * @param continueLoadOnFailure Specifies whether or not the 
 		 * class should continue the load process if the captioning
-		 * document fails to load. The default value is <code>false</code>.
+		 * document fails to load. The default value is <code>true</code>.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function CaptioningProxyElement(wrappedElement:MediaElement=null, continueLoadOnFailure:Boolean=false)
+		public function CaptioningProxyElement(wrappedElement:MediaElement=null, continueLoadOnFailure:Boolean=true)
 		{
 			super(wrappedElement);
 			_continueLoadOnFailure = continueLoadOnFailure;
@@ -87,12 +88,7 @@ package org.osmf.captioning.media
 		{
 			return _continueLoadOnFailure;
 		}
-		
-		public function set continueLoadOnFailure(value:Boolean):void
-		{
-			_continueLoadOnFailure = value;
-		}
-		
+				
 		/**
 		 * @inheritDoc
 		 */
@@ -112,7 +108,8 @@ package org.osmf.captioning.media
 			{
 				if (!_continueLoadOnFailure)
 				{
-					throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
+					dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+									new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
 				}
 			}
 			else
@@ -122,7 +119,8 @@ package org.osmf.captioning.media
 				{
 					if (!_continueLoadOnFailure)
 					{
-						throw new IllegalOperationError(ERROR_MISSING_CAPTION_METADATA);
+						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+										new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
 					}
 				}
 				else
@@ -155,19 +153,32 @@ package org.osmf.captioning.media
 				
 				mediaElement.metadata.addFacet(temporalFacetDynamic);			
 
-				// Our work is done, remove the custom ILoadable.  This will
-				// expose the base ILoadable, which we can then use to do
-				// the actual load.
-				removeTrait(MediaTraitType.LOADABLE);
-				var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				if (loadable)
-				{
-					loadable.load();
-				}
+				cleanUp();
 			}
 			else if (event.loadState == LoadState.LOAD_ERROR)
 			{
-				dispatchEvent(event.clone());
+				if (!_continueLoadOnFailure)
+				{
+					dispatchEvent(event.clone());
+				}
+				else
+				{
+					cleanUp();
+				}
+			}
+		}
+		
+		private function cleanUp():void
+		{
+			// Our work is done, remove the custom ILoadable.  This will
+			// expose the base ILoadable, which we can then use to do
+			// the actual load.
+			removeTrait(MediaTraitType.LOADABLE);
+			
+			var loadable:ILoadable = getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			if (loadable != null)
+			{
+				loadable.load();
 			}
 		}
 		

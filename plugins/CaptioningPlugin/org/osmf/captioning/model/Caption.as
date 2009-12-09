@@ -42,9 +42,9 @@ package org.osmf.captioning.model
 		/**
 		 * Constructor.
 		 * 
-		 * @param id The caption id if supplied in the captioning document.
-		 * @param start The time in the media where the caption should appear.
-		 * @param end The end time in the media where the captoin should go away.
+		 * @param id The caption id if supplied (optional).
+		 * @param start The time in seconds the media when the caption should appear.
+		 * @param end The time in seconds the media when the caption should no longer appear.
 		 * @param captionText The caption text to display.
 		 * 
 		 *  @langversion 3.0
@@ -58,7 +58,6 @@ package org.osmf.captioning.model
 			super(start, duration);
 			
 			_id = id;
-			_end = end;
 			_captionText = captionText;
 		}
 		
@@ -104,6 +103,8 @@ package org.osmf.captioning.model
 		/**
 		 * Returns the CaptionFormat object at the index specified.
 		 * 
+		 * @throws IllegalOperationError If index argument is out of range.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
@@ -111,7 +112,7 @@ package org.osmf.captioning.model
 		 */
 		public function getCaptionFormatAt(index:int):CaptionFormat
 		{
-			if (_formats == null || index >= _formats.length)
+			if (_formats == null || index >= _formats.length || index < 0)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
@@ -153,9 +154,7 @@ package org.osmf.captioning.model
 		}
 		
 		private var _id:uint;
-		private var _end:Number;		// End display in seconds
-		
-		private var _captionText:String;	// The text to display, can contain embedded html tags, such as <br>
+		private var _captionText:String;	// The text to display, can contain embedded html tags, such as <br/>
 		private var _formats:Vector.<CaptionFormat>;
 	}
 }
