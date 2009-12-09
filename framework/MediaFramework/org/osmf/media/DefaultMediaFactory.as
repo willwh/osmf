@@ -51,19 +51,8 @@ package org.osmf.media
 		
 		private function init():void
 		{
-			addMediaInfo
-				( new MediaInfo
-					( "org.omsf.video"
-					, new NetLoader()
-					, function():MediaElement
-						{
-							return new VideoElement(new NetLoader())
-						}
-					, MediaInfoType.STANDARD
-					)
-				);
-				
-			addMediaInfo
+						
+			addMediaInfo            
 				( new MediaInfo
 					( "org.osmf.video.dynamicStreaming"
 					, new DynamicStreamingNetLoader()
@@ -74,7 +63,19 @@ package org.osmf.media
 					, MediaInfoType.STANDARD
 					)
 				);
-				
+			
+			addMediaInfo
+				( new MediaInfo
+					( "org.omsf.video"
+					, new NetLoader()
+					, function():MediaElement
+						{
+							return new VideoElement(new NetLoader())
+						}
+					, MediaInfoType.STANDARD
+					)
+				);		
+			
 			addMediaInfo
 				( new MediaInfo
 					( "org.osmf.audio"
