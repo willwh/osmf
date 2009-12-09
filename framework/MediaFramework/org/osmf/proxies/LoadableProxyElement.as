@@ -43,6 +43,7 @@ package org.osmf.proxies
 		public function LoadableProxyElement(loader:MediaElementLoader)
 		{	
 			super(null);		
+			_metadata = new MetadataProxy();
 			this.loader = loader;			
 		}
 	
@@ -52,7 +53,8 @@ package org.osmf.proxies
 			{
 				removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
 				var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
-				wrappedElement = context.element;
+				wrappedElement =  context.element;
+				_metadata.metadata = wrappedElement.metadata;
 				if (wrappedElement && wrappedElement.hasTrait(MediaTraitType.LOAD))
 				{
 					(wrappedElement.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
@@ -88,14 +90,11 @@ package org.osmf.proxies
 		 * will return null.
 		 **/
 		override public function get metadata():Metadata
-		{
-			if (wrappedElement != null)
-			{
-				return wrappedElement.metadata;
-			}
-			return null;
+		{			
+			return _metadata;
 		}
 
+		private var _metadata:MetadataProxy;
 		private var _resource:IMediaResource;
 		private var loadTrait:LoadTrait;
 		private var loader:ILoader;
