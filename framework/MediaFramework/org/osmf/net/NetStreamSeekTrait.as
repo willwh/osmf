@@ -55,8 +55,9 @@ package org.osmf.net
 			this.netStream = netStream;
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
-			seekBugTimer = new Timer(100);
-			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);		
+			seekBugTimer = new Timer(10, 10);
+			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);	
+			seekBugTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSeekBugTimerDone, false, 0, true);		
 		}
 
 		/**
@@ -103,17 +104,27 @@ package org.osmf.net
 					break;
 			}
 		}
-		
+				
 		private function onSeekBugTimer(event:TimerEvent):void
 		{
-			if (netStream.time >= expectedTime)
+			//We accept the netStream.time within 2 second of the desired seek.
+			//This fixes seeks where the value doesn't land directly on the desired time.
+			//This also fixes seeks backward.
+			if ((expectedTime - SEEK_MARGIN) <= netStream.time <= (expectedTime + SEEK_MARGIN))
 			{
-				seekBugTimer.stop();
-				
+				seekBugTimer.reset();			
 				processSeekCompletion(expectedTime);
-			}
+			}			
 		}
 		
+		private function onSeekBugTimerDone(event:TimerEvent):void
+		{			
+			seekBugTimer.reset();
+			processSeekCompletion(expectedTime);
+		}
+		
+		
+		private const SEEK_MARGIN:Number = .25; //Seconds
 		private var seekBugTimer:Timer;
 		private var netStream:NetStream;
 		private var expectedTime:Number;
