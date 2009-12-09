@@ -25,6 +25,7 @@ package org.osmf.metadata
 	
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
 	import org.osmf.composition.CompositeElement;
@@ -280,7 +281,12 @@ package org.osmf.metadata
 					 && !intervalTimer.running
 					) 
 			{
-				intervalTimer.start();
+				// If there is a PlayTrait and the media isn't playing, there is no reason to 
+				// start the timer.
+				if (playTrait != null && playTrait.playState == PlayState.PLAYING)
+				{
+					intervalTimer.start();
+				}
 			}
 		}
 						
@@ -379,12 +385,30 @@ package org.osmf.metadata
    		
    		private function onPlayStateChange(event:PlayEvent):void
    		{
+   			var timer:Timer;
    			if (event.playState == PlayState.PLAYING)
    			{
+   				// Start any duration timers.
+   				if (durationTimers != null)
+   				{
+   					for each (timer in durationTimers)
+   					{
+   						timer.start();
+   					}
+   				}
    				startTimer();
    			}
    			else
    			{
+  				// Pause any duration timers.
+   				if (durationTimers != null)
+   				{
+   					for each (timer in durationTimers)
+   					{
+   						timer.stop();
+   					}
+   				}
+ 
    				startTimer(false);
    			}
    		}
@@ -438,14 +462,28 @@ package org.osmf.metadata
 			
 			if (valueObj.duration > 0)
 			{
-				var timer:Timer = new Timer(valueObj.duration*1000, 1);
+				var timer:Timer = new Timer(CHECK_INTERVAL);
+				var endTime:Number = valueObj.time + valueObj.duration;
+				
+				// Add it to the dictionary of duration timers so we can pause it 
+				// if the media pauses
+				if (durationTimers == null)
+				{
+					durationTimers = new Dictionary();
+				}
+				durationTimers[valueObj] = timer;
+
 				timer.addEventListener(TimerEvent.TIMER, onDurationTimer);
 				timer.start();
 				
 				function onDurationTimer(event:TimerEvent):void
 				{
-					timer.removeEventListener(TimerEvent.TIMER, onDurationTimer);
-					dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.DURATION_REACHED, valueObj));
+					if (timeTrait && timeTrait.currentTime >= endTime)
+					{
+						timer.removeEventListener(TimerEvent.TIMER, onDurationTimer);
+						delete durationTimers[valueObj];
+						dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.DURATION_REACHED, valueObj));
+					}
 				}
 			}
 		}
@@ -607,5 +645,6 @@ package org.osmf.metadata
 		private var restartTimer:Boolean;
 		private var enabled:Boolean;
 		private var _synthesizer:FacetSynthesizer;
+		private var durationTimers:Dictionary;
 	}
 }
