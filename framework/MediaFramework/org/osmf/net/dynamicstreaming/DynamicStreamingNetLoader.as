@@ -39,7 +39,7 @@ package org.osmf.net.dynamicstreaming
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class DynamicStreamingNetLoader extends NetLoader
@@ -51,7 +51,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function DynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, factory:NetConnectionFactory=null)
@@ -64,7 +64,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream

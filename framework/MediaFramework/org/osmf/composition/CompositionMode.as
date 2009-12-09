@@ -32,7 +32,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const PARALLEL:CompositionMode = new CompositionMode("parallel");
@@ -43,7 +43,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const SERIAL:CompositionMode = new CompositionMode("serial");
@@ -58,7 +58,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function CompositionMode(token:String)

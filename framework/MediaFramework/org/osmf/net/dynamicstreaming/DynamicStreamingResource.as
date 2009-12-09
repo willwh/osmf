@@ -39,7 +39,7 @@ package org.osmf.net.dynamicstreaming
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class DynamicStreamingResource extends URLResource
@@ -52,7 +52,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function DynamicStreamingResource(host:URL, streamType:String=null)
@@ -68,7 +68,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get host():URL
@@ -115,7 +115,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get initialIndex():int
@@ -165,7 +165,7 @@ package org.osmf.net.dynamicstreaming
     	 *  
     	 *  @langversion 3.0
     	 *  @playerversion Flash 10
-    	 *  @playerversion AIR 1.0
+    	 *  @playerversion AIR 1.5
     	 *  @productversion OSMF 1.0
     	 */
 		private function compareStreamItems(a:DynamicStreamingItem, b:DynamicStreamingItem):Number

@@ -53,7 +53,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class TemporalFacet extends EventDispatcher implements IFacet
@@ -68,7 +68,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function TemporalFacet(namespaceURL:URL, owner:MediaElement, synthesizer:Class = null)
@@ -108,7 +108,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get namespaceURL():URL
@@ -124,7 +124,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set enable(value:Boolean):void 
@@ -144,7 +144,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function addValue(value:TemporalIdentifier):void
@@ -192,7 +192,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function getValue(identifier:IIdentifier):*
@@ -216,7 +216,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get numValues():int
@@ -236,7 +236,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function getValueAt(index:int):TemporalIdentifier
@@ -264,7 +264,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function startTimer(start:Boolean=true):void
@@ -295,7 +295,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function reset(startTimer:Boolean):void 
@@ -318,7 +318,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
    		private function checkForTemporalMetadata():void 
@@ -419,7 +419,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function findTemporalMetadata(firstIndex:int, lastIndex:int, time:Number):int 
@@ -452,7 +452,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function dispatchTemporalEvents(index:int):void
@@ -497,7 +497,7 @@ package org.osmf.metadata
    		 *  
    		 *  @langversion 3.0
    		 *  @playerversion Flash 10
-   		 *  @playerversion AIR 1.0
+   		 *  @playerversion AIR 1.5
    		 *  @productversion OSMF 1.0
    		 */
    		private function checkTemporalMetadata(index:int, now:Number):Boolean 
@@ -558,7 +558,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function onIntervalTimer(event:TimerEvent):void 
@@ -571,7 +571,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function onTraitAdd(event:MediaElementEvent):void
@@ -598,7 +598,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private function onTraitRemove(event:MediaElementEvent):void

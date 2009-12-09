@@ -91,7 +91,7 @@ package org.osmf.utils
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadTrait:LoadTrait):void
@@ -191,7 +191,7 @@ package org.osmf.utils
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadTrait:LoadTrait):void

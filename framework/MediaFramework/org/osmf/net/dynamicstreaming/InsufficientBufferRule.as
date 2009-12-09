@@ -33,7 +33,7 @@ package org.osmf.net.dynamicstreaming
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class InsufficientBufferRule extends SwitchingRuleBase
@@ -44,7 +44,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		private const PANIC_BUFFER_LEVEL:int = 2;
@@ -60,7 +60,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function InsufficientBufferRule(nsMetrics:INetStreamMetrics, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
@@ -77,7 +77,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override public function getNewIndex():int

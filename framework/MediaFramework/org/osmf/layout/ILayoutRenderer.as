@@ -36,7 +36,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function set parent(value:ILayoutRenderer):void;
@@ -52,7 +52,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function set context(value:ILayoutContext):void;
@@ -70,7 +70,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function addTarget(target:ILayoutTarget):ILayoutTarget;
@@ -86,7 +86,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function removeTarget(target:ILayoutTarget):ILayoutTarget;
@@ -99,7 +99,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function targets(target:ILayoutTarget):Boolean
@@ -111,7 +111,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		function invalidate():void;
@@ -124,7 +124,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function validateNow():void;

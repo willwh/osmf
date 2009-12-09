@@ -39,7 +39,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
      [Event(name='facetValueRemove', type='org.osmf.events.FacetEvent')]
@@ -51,7 +51,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
      [Event(name='facetValueChange', type='org.osmf.events.FacetValueChangeEvent')]
@@ -66,7 +66,7 @@ package org.osmf.metadata
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */  
 	public interface IFacet extends IEventDispatcher
@@ -76,7 +76,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		function get namespaceURL():URL;	
@@ -88,7 +88,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 
@@ -104,7 +104,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get synthesizer():FacetSynthesizer;

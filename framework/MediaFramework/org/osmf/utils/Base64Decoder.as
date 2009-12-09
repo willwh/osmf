@@ -28,9 +28,9 @@ package org.osmf.utils
 	 * A utility class to decode a Base64 encoded String to a ByteArray.
 	 *  
 	 *  @langversion 3.0
-	 *  @playerversion Flash 9
-	 *  @playerversion AIR 1.1
-	 *  @productversion Flex 3
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class Base64Decoder
 	{

@@ -48,7 +48,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function NetStreamDynamicStreamTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
@@ -67,7 +67,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override public function getBitrateForIndex(index:int):Number
@@ -80,7 +80,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override protected function processSwitchTo(value:int):void
@@ -93,7 +93,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		override protected function processAutoSwitchChange(value:Boolean):void
@@ -106,7 +106,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function processMaxIndexChange(value:int):void
@@ -122,7 +122,7 @@ package org.osmf.net.dynamicstreaming
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		override protected function postProcessSwitchTo(detail:SwitchingDetail=null):void

@@ -41,7 +41,7 @@ package org.osmf.layout
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
@@ -52,7 +52,7 @@ package org.osmf.layout
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	public interface ILayoutTarget extends IEventDispatcher
@@ -63,7 +63,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get metadata():Metadata;
@@ -76,7 +76,7 @@ package org.osmf.layout
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		function get view():DisplayObject;
@@ -89,7 +89,7 @@ package org.osmf.layout
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
-	 	 *  @playerversion AIR 1.0
+	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */	 	
 	 	function get intrinsicWidth():Number;
@@ -102,7 +102,7 @@ package org.osmf.layout
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
-	 	 *  @playerversion AIR 1.0
+	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
 	 	function get intrinsicHeight():Number;

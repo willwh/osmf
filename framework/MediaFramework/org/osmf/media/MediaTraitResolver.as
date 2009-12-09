@@ -47,7 +47,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function MediaTraitResolver(type:String)
@@ -65,7 +65,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function get type():String
@@ -81,7 +81,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		final protected function setResolvedTrait(value:MediaTraitBase):void
@@ -105,7 +105,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function get resolvedTrait():MediaTraitBase
@@ -125,7 +125,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		final public function addTrait(instance:MediaTraitBase):void
@@ -155,7 +155,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		final public function removeTrait(instance:MediaTraitBase):MediaTraitBase
@@ -184,7 +184,7 @@ package org.osmf.media
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processAddTrait(instance:MediaTraitBase):void
@@ -201,7 +201,7 @@ package org.osmf.media
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function processRemoveTrait(instance:MediaTraitBase):MediaTraitBase

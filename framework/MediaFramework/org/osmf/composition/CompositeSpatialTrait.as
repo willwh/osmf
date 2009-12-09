@@ -52,7 +52,7 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	internal class CompositeSpatialTrait extends CompositeMediaTraitBase implements ISpatial
@@ -103,7 +103,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		private function onOwnerAddTrait(event:MediaElementEvent):void
@@ -123,7 +123,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		private function onOwnerRemoveTrait(event:MediaElementEvent):void
@@ -141,7 +141,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function updateSpatialSource(oldSource:ISpatial, newSource:ISpatial):void
@@ -191,7 +191,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function updateViewableSibling(value:IViewable):void
@@ -209,7 +209,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function onSpatialSourceDimensionChange(event:DimensionEvent):void
@@ -223,7 +223,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		protected function updateDimensions(newWidth:Number = -1, newHeight:Number = -1):void

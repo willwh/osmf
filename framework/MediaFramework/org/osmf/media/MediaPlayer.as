@@ -46,7 +46,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="durationReached", type="org.osmf.events.TimeEvent")]
@@ -58,7 +58,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 
 	[Event(name="volumeChange", type="org.osmf.events.AudioEvent")]   
@@ -70,7 +70,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="mutedChange", type="org.osmf.events.AudioEvent")] 
@@ -82,7 +82,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 
 	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
@@ -102,7 +102,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
 	[Event(name="playingChange", type="org.osmf.events.PlayingChangeEvent")]
@@ -114,7 +114,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 		
 	[Event(name="pausedChange", type="org.osmf.events.PausedChangeEvent")]
@@ -126,7 +126,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
 	[Event(name="viewChange", type="org.osmf.events.ViewEvent")]
@@ -139,7 +139,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */		
 	[Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
@@ -151,7 +151,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	
 	[Event(name="seekingChange", type="org.osmf.events.SeekEvent")]
@@ -163,7 +163,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
@@ -184,7 +184,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
@@ -196,7 +196,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
@@ -208,7 +208,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferingChange", type="org.osmf.events.BufferEvent")]
@@ -220,7 +220,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferEvent")]
@@ -232,7 +232,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bytesLoadedChange",type="org.osmf.events.LoadEvent")]
@@ -244,7 +244,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
@@ -256,7 +256,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */    
 	[Event(name="playableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -268,7 +268,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */    
 	[Event(name="bufferableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -280,7 +280,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="pausableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -292,7 +292,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="seekableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -304,7 +304,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -316,7 +316,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 
 	[Event(name="temporalChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -328,7 +328,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="audibleChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -340,7 +340,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="viewableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -352,7 +352,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="spatialChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -364,7 +364,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="loadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -376,7 +376,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="downloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
@@ -405,7 +405,7 @@ package org.osmf.media
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
 	public class MediaPlayer extends EventDispatcher
@@ -416,7 +416,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function MediaPlayer(element:MediaElement=null)
@@ -436,7 +436,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set element(value:MediaElement):void
@@ -505,7 +505,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set autoRewind(value:Boolean):void
@@ -529,7 +529,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set autoPlay(value:Boolean):void
@@ -551,7 +551,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set loop(value:Boolean):void
@@ -576,7 +576,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function set currentTimeUpdateInterval(value:Number):void
@@ -614,7 +614,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
         public function set bytesLoadedUpdateInterval(value:Number):void
@@ -648,7 +648,7 @@ package org.osmf.media
          *  
          *  @langversion 3.0
          *  @playerversion Flash 10
-         *  @playerversion AIR 1.0
+         *  @playerversion AIR 1.5
          *  @productversion OSMF 1.0
          */      
         public function get state():String
@@ -663,7 +663,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get playable():Boolean
@@ -676,7 +676,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get canPause():Boolean
@@ -690,7 +690,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get seekable():Boolean
@@ -704,7 +704,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get temporal():Boolean
@@ -716,7 +716,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get audible():Boolean
@@ -731,7 +731,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get viewable():Boolean
@@ -746,7 +746,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get switchable():Boolean
@@ -759,7 +759,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get loadable():Boolean
@@ -772,7 +772,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get bufferable():Boolean
@@ -792,7 +792,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 	    public function get volume():Number
@@ -831,7 +831,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */				
 	    public function get muted():Boolean
@@ -871,7 +871,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */					
 		
@@ -908,7 +908,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get paused():Boolean
@@ -922,7 +922,7 @@ package org.osmf.media
 	    *  
 	    *  @langversion 3.0
 	    *  @playerversion Flash 10
-	    *  @playerversion AIR 1.0
+	    *  @playerversion AIR 1.5
 	    *  @productversion OSMF 1.0
 	    */
 	    public function pause():void
@@ -938,7 +938,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */					
 	    public function get playing():Boolean
@@ -952,7 +952,7 @@ package org.osmf.media
 	    *  
 	    *  @langversion 3.0
 	    *  @playerversion Flash 10
-	    *  @playerversion AIR 1.0
+	    *  @playerversion AIR 1.5
 	    *  @productversion OSMF 1.0
 	    */
 	    public function play():void
@@ -970,7 +970,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
 	    public function get seeking():Boolean
@@ -986,7 +986,7 @@ package org.osmf.media
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.0
+	     *  @playerversion AIR 1.5
 	     *  @productversion OSMF 1.0
 	     */	    
 	    public function seek(time:Number):void
@@ -1009,7 +1009,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 	    public function canSeekTo(time:Number):Boolean
@@ -1041,7 +1041,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 	    public function get width():int
@@ -1058,7 +1058,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get height():int
@@ -1077,7 +1077,7 @@ package org.osmf.media
 		 *
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 *		 
 		 */
@@ -1099,7 +1099,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get currentStreamIndex():int
@@ -1115,7 +1115,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function getBitrateForIndex(index:int):Number
@@ -1135,7 +1135,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get maxStreamIndex():int
@@ -1157,7 +1157,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function get switchUnderway():Boolean
@@ -1180,7 +1180,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public function switchTo(streamIndex:int):void
@@ -1199,7 +1199,7 @@ package org.osmf.media
          *  
          *  @langversion 3.0
          *  @playerversion Flash 10
-         *  @playerversion AIR 1.0
+         *  @playerversion AIR 1.5
          *  @productversion OSMF 1.0
          */
 	    public function get view():DisplayObject
@@ -1217,7 +1217,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 	    public function get duration():Number
@@ -1234,7 +1234,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		    
 	    public function get currentTime():Number
@@ -1249,7 +1249,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get buffering():Boolean
@@ -1263,7 +1263,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get bufferLength():Number
@@ -1281,7 +1281,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get bufferTime():Number
@@ -1303,7 +1303,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get bytesLoaded():Number
@@ -1317,7 +1317,7 @@ package org.osmf.media
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get bytesTotal():Number

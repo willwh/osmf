@@ -33,7 +33,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
 		public static const DEFAULT_METADATA:URL				= new URL("http://www.osmf.org/default/1.0");

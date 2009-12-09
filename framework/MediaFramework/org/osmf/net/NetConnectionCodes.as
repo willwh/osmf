@@ -34,7 +34,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CALL_BADVERSION:String = "NetConnection.Call.BadVersion";  		
@@ -52,7 +52,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CALL_PROHIBITED:String = "NetConnection.Call.Prohibited"; 	
@@ -62,7 +62,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_CLOSED:String = "NetConnection.Connect.Closed"; 	
@@ -72,7 +72,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_FAILED:String = "NetConnection.Connect.Failed"		
@@ -82,7 +82,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_SUCCESS:String = "NetConnection.Connect.Success";		
@@ -92,7 +92,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_REJECTED:String = "NetConnection.Connect.Rejected";		
@@ -102,7 +102,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const CONNECT_APPSHUTDOWN:String = "NetConnection.Connect.AppShutdown";
@@ -112,7 +112,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_INVALIDAPP:String = "NetConnection.Connect.InvalidApp";	
