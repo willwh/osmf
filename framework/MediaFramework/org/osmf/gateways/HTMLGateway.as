@@ -25,7 +25,7 @@ package org.osmf.gateways
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.html.HTMLElement;
+	import org.osmf.external.HTMLElement;
 	import org.osmf.media.IContainerGateway;
 	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
@@ -59,32 +59,22 @@ package org.osmf.gateways
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			var result:MediaElement;
-			
-			for each (var element:HTMLGatewayElementProxy in elements)
-			{
-				if (element.wrappedElement == child)
-				{
-					throw new IllegalOperationError("Element already listed");
-				}
-			}
-			
-			var elementId:String = "element_" + elementIdCounter++;
-			var elementScriptPath:String = gatewayScriptPath + "elements." + elementId + "."; 
-			elements[elementId] 
-				= new HTMLGatewayElementProxy
-					( child
-					, elementScriptPath
-					);
-			
 			// Find out if the element at hand is an HTML element or not:
 			var htmlElement:HTMLElement = elementAsHTMLElement(child);
 			
-			// If the element is an htmlElement, then set its dom-path:
-			if (htmlElement)
+			if (htmlElement == null)
 			{
-				htmlElement.scriptPath = elementScriptPath; 
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.UNSUPPORTED_MEDIA_ELEMENT_TYPE))
 			}
+			
+			var result:MediaElement;
+			
+			var elementId:String = "element_" + elementIdCounter++;
+			var elementScriptPath:String = gatewayScriptPath + "elements." + elementId + "."; 
+			
+			elements[elementId] = child;
+			
+			htmlElement.scriptPath = elementScriptPath; 
 			
 			ExternalInterface.call(gatewayScriptPath + "__addElement__", elementId);
 			
@@ -134,9 +124,9 @@ package org.osmf.gateways
 		 */
 		public function containsElement(child:MediaElement):Boolean
 		{
-			for each (var element:HTMLGatewayElementProxy in elements)
+			for each (var element:HTMLElement in elements)
 			{
-				if (element.wrappedElement == child)
+				if (element == child)
 				{
 					return true;
 				}
@@ -206,7 +196,7 @@ package org.osmf.gateways
 			
 			for (var index:String in elements)
 			{
-				if (HTMLGatewayElementProxy(elements[index]).wrappedElement == element)
+				if (elements[index] == element)
 				{
 					result = index;
 					break;
@@ -220,215 +210,22 @@ package org.osmf.gateways
 		{
 			var result:*;
 			
-			var element:MediaElement = elements[elementId];
+			var element:HTMLElement = elements[elementId];
 			if (element)
 			{
-				// All property names start with a capital, for they translate
-				// to 'getXxxx' in JavaScript.
-				switch (property)
-				{
-					// MediaElement core:
-					case "Resource":
-						if (element.resource is IURLResource)
-						{
-							result = IURLResource(element.resource).url;
-						}
-						break;
-					// LoadTrait:
-					case "LoadState":
-						if (element.hasTrait(MediaTraitType.LOAD))
-						{
-							result = LoadTrait(element.getTrait(MediaTraitType.LOAD)).loadState;
-						}
-						break;
-					// PlayTrait:
-					case "Playable":
-						result = element.hasTrait(MediaTraitType.PLAY);
-						break;
-					case "Playing":
-						if (element.hasTrait(MediaTraitType.PLAY))
-						{
-							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).playState == PlayState.PLAYING;
-						}
-						break;
-					case "Pausable":
-						if (element.hasTrait(MediaTraitType.PLAY))
-						{
-							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).canPause;
-						}
-						break;	
-					case "Paused":
-						if (element.hasTrait(MediaTraitType.PLAY))
-						{
-							result = PlayTrait(element.getTrait(MediaTraitType.PLAY)).playState == PlayState.PAUSED;
-						}
-						break;
-					// TimeTrait:
-					case "Temporal":
-						result = element.hasTrait(MediaTraitType.TIME);
-						break;
-					case "Duration":
-						if (element.hasTrait(MediaTraitType.TIME))
-						{
-							result = TimeTrait(element.getTrait(MediaTraitType.TIME)).duration;
-						}
-						break;
-					case "CurrentTime":
-						if (element.hasTrait(MediaTraitType.TIME))
-						{
-							result = TimeTrait(element.getTrait(MediaTraitType.TIME)).currentTime;
-						}
-					// AudioTrait:
-					case "Volume":
-						if (element.hasTrait(MediaTraitType.AUDIO))
-						{
-							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).volume;
-						}
-						break;
-					case "Muted":
-						if (element.hasTrait(MediaTraitType.AUDIO))
-						{
-							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).muted;
-						}
-						break;
-					case "Pan":
-						if (element.hasTrait(MediaTraitType.AUDIO))
-						{
-							result = AudioTrait(element.getTrait(MediaTraitType.AUDIO)).pan;
-						}
-						break;
-				}
+				result = element.getPropertyCallback(property);
 			}
 			
 			return result;
 		}
 		
-		private function setPropertyCallback(elementId:String, property:String, value:*):Boolean
+		private function setPropertyCallback(elementId:String, property:String, value:*):void
 		{
-			var element:MediaElement = elements[elementId];
+			var element:HTMLElement = elements[elementId] as HTMLElement;
 			if (element)
 			{
-				var htmlElement:HTMLElement = elementAsHTMLElement(element);
-				if (htmlElement)
-				{
-					var playable:PlayTrait = htmlElement.getSwitchableTrait(MediaTraitType.PLAY) as PlayTrait;
-					var temporal:TimeTrait = htmlElement.getSwitchableTrait(MediaTraitType.TIME) as TimeTrait;
-					var audible:AudioTrait = htmlElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
-				}
-				
-				// All property names start with a capital, for they translate
-				// to 'setXxxx' in JavaScript.
-				switch (property)
-				{
-					// LoadTrait
-					case "LoadState":
-						var newLoadState:String = value;
-						if (htmlElement)
-						{
-							htmlElement.loadState = newLoadState;
-						}
-						break;
-					// PlayTrait:
-					case "Playable":
-						if (htmlElement)
-						{
-							htmlElement.setTraitEnabled(MediaTraitType.PLAY, value as Boolean);
-						}
-						break;
-					case "Playing":
-						if (playable)
-						{
-							if (value == true)
-							{
-								playable.play();
-							}
-							else
-							{
-								playable.stop();
-							}
-						}
-						break;
-					case "Pausable":
-						if (htmlElement)
-						{
-							// TODO: How do we handle this?
-							//htmlElement.setTraitEnabled(MediaTraitType.PAUSABLE, value as Boolean);
-						}
-						break;
-					case "Paused":
-						if (playable)
-						{
-							if (value == true)
-							{
-								playable.pause();
-							}
-							else
-							{
-								playable.stop();
-							}
-						}
-						break;
-					// Timerait:
-					case "Temporal":
-						if (htmlElement)
-						{
-							htmlElement.setTraitEnabled(MediaTraitType.TIME, value as Boolean);
-						}
-						break;
-					case "Duration":
-						if (temporal)
-						{
-							// TODO: Fix here and below.  It seems inappropriate for HTMLGateway
-							// to set properties on a trait.  Would it be possible for HTMLGateway
-							// to expose these property callbacks in such a way that an HTMLTemporalTrait
-							// could listen for the change and set the duration on itself?
-							//temporal.duration = value as Number;
-						}
-						break;
-					case "CurrentTime":
-						if (temporal)
-						{
-							// TODO: Fix (see previous comment).
-							//temporal.currentTime = value as Number;
-						}
-						break;
-					// AudioTrait
-					case "Audible":
-						if (htmlElement)
-						{
-							htmlElement.setTraitEnabled(MediaTraitType.AUDIO, value as Boolean);
-						}
-						break;
-					case "Volume":
-						if (audible)
-						{
-							audible.volume = value as Number;
-						}
-						break;
-					case "Muted":
-						if (audible)
-						{
-							audible.muted = value as Boolean;
-						}
-						break;
-					case "Pan":
-						if (audible)
-						{
-							audible.pan = value as Number;
-						}
-						break;
-					// If the property is unknown, throw an exception:
-					default:
-						throw new IllegalOperationError
-							( "Property '"
-							+ property
-							+ "' assigned from JavaScript is not supported on a MediaElement."
-							);
-						break;
-				}
+				element.setPropertyCallback(property, value);
 			}
-			
-			return false;
 		}
 		
 		private function invokeCallback(elementId:String, method:String, args:Array):*
@@ -655,24 +452,15 @@ package org.osmf.gateways
         		addCallback	(this, 	"unload", 0); 
         		
 				// PlayTrait bridge:
-				
 				addGetSet	(this,	"Playable");
-				addGetSet	(this, 	"Playing");
-        		addCallback	(this, 	"onPlayingChange", 1);		// playing;
-        		
-        		// IPausable (???) bridge:
-        		
-        		addGetSet	(this,	"Pausable");
-        		addGetSet	(this,	"Paused");
-        		addCallback	(this,	"onPausedChange", 1);		// paused;
-        		
+				addGetSet	(this, 	"CanPause");
+				addGetSet	(this,	"PlayState");
+				addCallback (this,	"onPlayStateChange", 1);	// newPlayState string
+				
         		// TimeTrait bridge:
-        		
         		addGetSet	(this,	"Temporal");
         		addGetSet	(this,	"Duration");
-        		addCallback (this,	"onDurationChange", 1);		// duration;
         		addGetSet	(this,	"CurrentTime");
-        		addCallback	(this,	"onDurationReached");
         		
         		// AudioTrait bridge:
         		

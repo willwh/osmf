@@ -51,20 +51,25 @@ function onOSMFGatewayRegistered(gateway)
 		{
 			osmf.trace("Element " + element.elementId + " added.");
 			
-			// From JavaScript we determine what traits apply to this
-			// element:
-			element.setPlayable(true);
-			element.setPausable(true);
-			element.setTemporal(true);
-			
+			// Elements must be loadable, so having a 'load' and 'unload'
+			// method defined on the object is mandatory:
 			element.load = function(url)
 			{
+				osmf.trace("Element " + element.elementId + " loading.");
+				
 				activeBanner = this;
 				
 				bannerImage.src = url;
 				bannerImage.onclick = onBannerClick;
 				
 				this.setLoadState(osmf.constants.loadState.READY);
+				
+				// Define that we support the play trait:
+				element.setPlayable(true);
+				element.setCanPause(true);
+				
+				// Define that we now support the temporal trait:
+				this.setTemporal(true);
 				
 				// Set the duration of the element, and
 				// cater for a callback that will signal
@@ -85,20 +90,20 @@ function onOSMFGatewayRegistered(gateway)
 			
 			element.unload = function()
 			{
+				element.setPlayable(false);
+				element.setTemporal(false);
+				
 				activeBanner = null;
 				osmf.trace(element.elementId + "unloading " + url);
 				bannerImage.src = null;
 				this.loadState = osmf.constants.UNINITIALIZED;
 			}
 			
-			element.onPlayingChange = function(playing)
+			element.onPlayStateChange = function(newPlayState)
 			{
-				osmf.trace(element.elementId + " playing changed to " + playing);
-			}
-			
-			element.onPausedChange = function(paused)
-			{
-				osmf.trace(element.elementId + " paused changed to " + paused);
+				osmf.trace("onPlayStateChange: " + newPlayState);
+				
+				element.setPlayState("stopped");
 			}
 		}
 	}

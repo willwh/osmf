@@ -25,7 +25,7 @@ package
 	import org.osmf.composition.SerialElement;
 	import org.osmf.gateways.HTMLGateway;
 	import org.osmf.gateways.RegionGateway;
-	import org.osmf.html.HTMLElement;
+	import org.osmf.external.HTMLElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -36,6 +36,11 @@ package
 	public class HTMLGatewaySample extends RegionGateway
 	{
 		public function HTMLGatewaySample()
+		{
+			runSample2();
+		}
+		
+		private function runSample1():void
 		{
 			var htmlGateway:HTMLGateway = new HTMLGateway();
 			htmlGateway.initialize("bannerGateway");
@@ -68,6 +73,20 @@ package
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
 			mediaPlayer.element = rootElement;
+		}
+		
+		private function runSample2():void
+		{
+			var htmlGateway:HTMLGateway = new HTMLGateway();
+			htmlGateway.initialize("bannerGateway");
+			
+			var banner1:HTMLElement = new HTMLElement();
+			banner1.resource = new URLResource(new URL(BANNER_1));
+			banner1.gateway = htmlGateway;
+			
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.autoPlay = true;
+			mediaPlayer.element = banner1;
 		}
 		
 		private function constructVideo(url:String):VideoElement

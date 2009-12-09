@@ -25,7 +25,7 @@ package org.osmf.gateways
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.html.HTMLElement;
+	import org.osmf.external.HTMLElement;
 	
 	public class TestHTMLGateway extends TestCase
 	{

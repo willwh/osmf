@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.html
+package org.osmf.external
 {
 	import flash.errors.IllegalOperationError;
 	import flash.external.ExternalInterface;
@@ -29,13 +29,16 @@ package org.osmf.html
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.OSMFStrings;
 
+	/**
+	 * @private
+	 */
 	internal class HTMLLoadTrait extends LoadTrait
 	{
 		public function HTMLLoadTrait(owner:HTMLElement)
 		{
-			super(null, owner.resource);
-
 			this.owner = owner;
+			
+			super(null, owner.resource);
 		}
 		
 		public function set loadState(value:String):void
@@ -58,8 +61,6 @@ package org.osmf.html
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
 			
-			requireScriptPath;
-			
 			loadState = LoadState.LOADING;
 			
 			var urlResource:IURLResource = resource as IURLResource
@@ -70,11 +71,7 @@ package org.osmf.html
 						: ""
 					: "";
 			
-			var result:*
-				= ExternalInterface.call
-					( owner.scriptPath + "__load__"
-					, url
-					);
+			var result:* = owner.invokeJavaScriptMethod("load", url);
 					
 			if (result == false)
 			{
@@ -94,13 +91,7 @@ package org.osmf.html
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
 			}
 			
-			requireScriptPath;
-			
-			var result:*
-				= ExternalInterface.call
-					( owner.scriptPath + "__unload__"
-					, resource as IURLResource
-					);
+			var result:* = owner.invokeJavaScriptMethod("unload", resource);
 					
 			if (result == false)
 			{
@@ -111,16 +102,6 @@ package org.osmf.html
 		
 		// Internal
 		//
-
-		private function get requireScriptPath():*
-		{
-			if (owner.scriptPath == null)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_SCRIPT_PATH));	
-			}
-			
-			return undefined;
-		}
 		
 		private var owner:HTMLElement;
 	}

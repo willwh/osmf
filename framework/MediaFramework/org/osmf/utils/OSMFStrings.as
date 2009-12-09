@@ -71,6 +71,9 @@ package org.osmf.utils
 		public static const NULL_PARAM:String 							= "nullParam";
 		public static const FUNCTION_MUST_BE_OVERRIDDEN:String			= "functionMustBeOverridden";
 		public static const ALREADY_LISTED:String						= "alreadyListed";
+		public static const UNSUPPORTED_MEDIA_ELEMENT_TYPE:String		= "unsupportedMediaElementType";
+		public static const UNSUPPORTED_TRAIT_TYPE:String				= "unsupportedTraitType";
+		
 				
 		// MediaElement
 		
@@ -158,10 +161,6 @@ package org.osmf.utils
 		
 		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
 		
-		// HTMLElement
-		
-		public static const UNSUPPORTED_TRAIT_TYPE:String				= "unsupportedTraitType";
-		
 		// HTMLLoadTrait
 		
 		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
@@ -189,6 +188,9 @@ package org.osmf.utils
 			resourceDict[NULL_PARAM]								= "Null param passed to method";
 			resourceDict[FUNCTION_MUST_BE_OVERRIDDEN]				= "This function must be overridden";
 			resourceDict[ALREADY_LISTED]							= "The item is already listed";
+			resourceDict[UNSUPPORTED_TRAIT_TYPE]					= "The specified trait type is not supported";
+			resourceDict[UNSUPPORTED_MEDIA_ELEMENT_TYPE]			= "The specified media element type is not supported";
+			
 			
 			resourceDict[TRAIT_INSTANCE_ALREADY_ADDED]				= "An instance of this trait class has already been added to this MediaElement";
 			resourceDict[TRAIT_RESOLVER_ALREADY_ADDED]				= "A trait resolver for the specified trait type has already been added to this MediaElement";
@@ -222,8 +224,6 @@ package org.osmf.utils
 
 			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct ILayoutRenderer implementation";
 			
-			resourceDict[UNSUPPORTED_TRAIT_TYPE]					= "The specified trait type is not supported";
-
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
 			resourceDict[DRM_AUTHENTICATION_FAILED]					= "AuthenticationFailed	  SWF should ask user to reenter user credentials and retry license acquisition";
 			resourceDict[DRM_NEEDS_AUTHENTICATION]					= "NeedAuthentication	  Remedy is to authenticate the user and then redo license acquisition";

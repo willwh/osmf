@@ -29,7 +29,6 @@ package org.osmf
 	import org.osmf.display.*;
 	import org.osmf.events.*;
 	import org.osmf.gateways.*;
-	import org.osmf.html.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
