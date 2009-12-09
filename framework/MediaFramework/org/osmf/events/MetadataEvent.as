@@ -39,7 +39,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const FACET_ADD:String = "facetAdd";
@@ -52,7 +52,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const FACET_REMOVE:String = "facetRemove";
@@ -67,7 +67,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 				
 		public function MetadataEvent
@@ -87,7 +87,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get facet():IFacet

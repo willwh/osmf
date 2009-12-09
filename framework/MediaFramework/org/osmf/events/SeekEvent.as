@@ -37,7 +37,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const SEEK_BEGIN:String = "seekBegin";
@@ -51,7 +51,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const SEEK_END:String = "seekEnd";
@@ -65,7 +65,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public function SeekEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, time:Number=NaN)
@@ -80,7 +80,7 @@ package org.osmf.events
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get time():Number

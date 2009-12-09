@@ -28,7 +28,7 @@ package org.osmf.video
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
+	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
 	 */
 	public class CuePoint extends TemporalIdentifier
@@ -44,7 +44,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function CuePoint(type:CuePointType, time:Number, name:String, parameters:Array, 
@@ -62,7 +62,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function get type():CuePointType
@@ -75,7 +75,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function get name():String
@@ -88,7 +88,7 @@ package org.osmf.video
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function get parameters():Array

@@ -45,7 +45,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function KeyValueFacet(ns:URL = null, synthesizer:Class = null)		
@@ -69,7 +69,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function get namespaceURL():URL
@@ -82,7 +82,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function getValue(identifier:IIdentifier):*
@@ -99,7 +99,7 @@ package org.osmf.metadata
 		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function get synthesizer():FacetSynthesizer
@@ -117,7 +117,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function addValue(key:ObjectIdentifier, value:Object):void
@@ -159,7 +159,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function removeValue(key:ObjectIdentifier):*
@@ -187,7 +187,7 @@ package org.osmf.metadata
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get keys():Vector.<ObjectIdentifier>

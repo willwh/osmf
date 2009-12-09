@@ -36,7 +36,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		public static const AUDIBLE:MediaTraitType = new MediaTraitType(IAudible);
@@ -46,7 +46,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const BUFFERABLE:MediaTraitType = new MediaTraitType(IBufferable);
@@ -56,7 +56,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const LOADABLE:MediaTraitType = new MediaTraitType(ILoadable);
@@ -66,7 +66,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const PAUSABLE:MediaTraitType = new MediaTraitType(IPausable);
@@ -76,7 +76,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const PLAYABLE:MediaTraitType = new MediaTraitType(IPlayable);
@@ -86,7 +86,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SEEKABLE:MediaTraitType = new MediaTraitType(ISeekable);
@@ -96,7 +96,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SPATIAL:MediaTraitType = new MediaTraitType(ISpatial);
@@ -106,7 +106,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const TEMPORAL:MediaTraitType = new MediaTraitType(ITemporal);
@@ -116,7 +116,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const VIEWABLE:MediaTraitType = new MediaTraitType(IViewable); 
@@ -126,7 +126,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const SWITCHABLE:MediaTraitType = new MediaTraitType(ISwitchable);
@@ -136,7 +136,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONTENT_PROTECTABLE:MediaTraitType = new MediaTraitType(IContentProtectable);
@@ -146,7 +146,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public static const DOWNLOADABLE:MediaTraitType = new MediaTraitType(IDownloadable);
@@ -180,7 +180,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		 
 		public function MediaTraitType(traitInterface:Class)
@@ -193,7 +193,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		public function get traitInterface():Class
@@ -206,7 +206,7 @@ package org.osmf.traits
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function toString():String

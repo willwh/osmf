@@ -56,7 +56,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public function CompositeMetadataEvent
@@ -83,7 +83,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get child():Metadata
@@ -96,7 +96,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get facet():IFacet
@@ -109,7 +109,7 @@ package org.osmf.composition
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */	
 		public function get facetGroup():FacetGroup
@@ -136,6 +136,10 @@ package org.osmf.composition
 		 * Defines the facetSynthesizer that is to be used for synthesis. This
 		 * value can be set by listeners that wish to suggest a synthesizer. 
 		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.0
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get suggestedFacetSynthesizer():FacetSynthesizer
 		{

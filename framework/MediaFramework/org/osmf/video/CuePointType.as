@@ -24,40 +24,28 @@ package org.osmf.video
 	/**
 	 * A utility class for cue point types.
 	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 *  @langversion 3.0	 *  @playerversion Flash 10	 *  @playerversion AIR 1.0	 *  @productversion OSMF 1.0
 	 */
 	public class CuePointType
 	{
 		/**
 		 * A Navigation cue point.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 *  @langversion 3.0		 *  @playerversion Flash 10		 *  @playerversion AIR 1.0		 *  @productversion OSMF 1.0
 		 */
 		public static const NAVIGATION:CuePointType		= new CuePointType("navigation");
 		
 		/**
 		 * An Event cue point.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 *  @langversion 3.0		 *  @playerversion Flash 10		 *  @playerversion AIR 1.0		 *  @productversion OSMF 1.0
 		 */
 		public static const EVENT:CuePointType			= new CuePointType("event");
 		
 		/**
 		 * An ActionScript cue point.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 *  @langversion 3.0		 *  @playerversion Flash 10		 *  @playerversion AIR 1.0		 *  @productversion OSMF 1.0
 		 */
 		public static const ACTIONSCRIPT:CuePointType	= new CuePointType("actionscript");
 		
@@ -77,10 +65,7 @@ package org.osmf.video
 		 * Returns the cue point type constant that matches the given type name as a string,
 		 * null if there is no match.
 		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 *  @langversion 3.0		 *  @playerversion Flash 10		 *  @playerversion AIR 1.0		 *  @productversion OSMF 1.0
 		 */
 		public static function fromString(typeName:String):CuePointType
 		{

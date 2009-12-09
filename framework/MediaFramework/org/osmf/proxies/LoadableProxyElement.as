@@ -40,11 +40,6 @@ package org.osmf.proxies
 	{
 		/**
 		 * Creates a new LoadableProxyElement.  The Loader needs to return a MediaElementLoadedContext.
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		public function LoadableProxyElement(loader:MediaElementLoader)
 		{	

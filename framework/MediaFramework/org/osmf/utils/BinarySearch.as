@@ -47,7 +47,7 @@ package org.osmf.utils
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		public static function search(list:Object, compare:Function, item: *, firstIndex:int = 0, lastIndex:int = int.MIN_VALUE):int

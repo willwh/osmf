@@ -51,7 +51,7 @@ package org.osmf.composition
  	 *  
  	 *  @langversion 3.0
  	 *  @playerversion Flash 10
- 	 *  @playerversion AIR 1.5
+ 	 *  @playerversion AIR 1.0
  	 *  @productversion OSMF 1.0
  	 */	
 	internal class ParallelSpatialTrait extends CompositeSpatialTrait
@@ -61,7 +61,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		public function ParallelSpatialTrait(traitAggregator:TraitAggregator, owner:MediaElement)
@@ -88,7 +88,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processAggregatedChild(child:IMediaTrait):void
@@ -110,7 +110,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processUnaggregatedChild(child:IMediaTrait):void
@@ -135,7 +135,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		override protected function updateSpatialSource(oldSource:ISpatial, newSource:ISpatial):void
@@ -154,7 +154,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		private function toggleChildSpatialListeners(on:Boolean):void
@@ -176,7 +176,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */		
 		private function calculateDimensions(event:Event = null):void

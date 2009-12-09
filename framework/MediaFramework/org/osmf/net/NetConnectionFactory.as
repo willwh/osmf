@@ -73,7 +73,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function NetConnectionFactory(target:IEventDispatcher=null)
@@ -98,7 +98,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function create(loadable:ILoadable,allowNetConnectionSharing:Boolean):void
@@ -228,7 +228,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		public function closeNetConnectionByResource(resource:IURLResource):void
@@ -248,7 +248,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		protected function createNetNegotiator():NetNegotiator
@@ -264,7 +264,7 @@ package org.osmf.net
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
+		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
 		protected function extractKey(resource:IURLResource):String
@@ -284,9 +284,10 @@ import org.osmf.traits.ILoadable;
 /**
  * Utility class for structuring shared connection data.
  *
+ *  
  *  @langversion 3.0
  *  @playerversion Flash 10
- *  @playerversion AIR 1.5
+ *  @playerversion AIR 1.0
  *  @productversion OSMF 1.0
  */
 class SharedConnection
@@ -297,10 +298,11 @@ class SharedConnection
 
 /**
  * Utility class for structuring pending connection data.
+ *
  *  
  *  @langversion 3.0
  *  @playerversion Flash 10
- *  @playerversion AIR 1.5
+ *  @playerversion AIR 1.0
  *  @productversion OSMF 1.0
  */
 class PendingConnection

@@ -28,9 +28,9 @@ package org.osmf.utils
 	 * A utility class to decode a Base64 encoded String to a ByteArray.
 	 *  
 	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 *  @playerversion Flash 9
+	 *  @playerversion AIR 1.1
+	 *  @productversion Flex 3
 	 */
 	public class Base64Decoder
 	{
@@ -44,9 +44,9 @@ package org.osmf.utils
 	     * Constructor.
 	     *  
 	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
+	     *  @playerversion Flash 9
+	     *  @playerversion AIR 1.1
+	     *  @productversion Flex 3
 	     */
 	    public function Base64Decoder()
 	    {
@@ -69,9 +69,9 @@ package org.osmf.utils
 	     * @param encoded The Base64 encoded String to decode.
 	     *  
 	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
+	     *  @playerversion Flash 9
+	     *  @playerversion AIR 1.1
+	     *  @productversion Flex 3
 	     */
 	    public function decode(encoded:String):void
 	    {
@@ -134,9 +134,9 @@ package org.osmf.utils
 	     * Clears all buffers and resets the decoder to its initial state.
 	     *  
 	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
+	     *  @playerversion Flash 9
+	     *  @playerversion AIR 1.1
+	     *  @productversion Flex 3
 	     */
 	    public function reset():void
 	    {
@@ -153,9 +153,9 @@ package org.osmf.utils
 	     * @return The decoded <code>flash.utils.ByteArray</code>.
 	     *  
 	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
+	     *  @playerversion Flash 9
+	     *  @playerversion AIR 1.1
+	     *  @productversion Flex 3
 	     */
 	    public function toByteArray():ByteArray
 	    {
