@@ -37,30 +37,30 @@ package org.osmf.manifest
 		public var id:String;
 		
 		/**
-		 * The <baseURL> element contains the base URL for all relative (HTTP-based) URLs 
+		 * The &lt;baseURL&gt; element contains the base URL for all relative (HTTP-based) URLs 
 		 * in the manifest. It is optional. When specified, its value is prepended to all 
 		 * relative URLs (i.e. those URLs that don't begin with "http://" or "https://" 
-		 * within the manifest file. (Such URLs may include <media> URLs, <bootstrapInfo> 
-		 * URLs, and <drmMetadata> URLs.) 
+		 * within the manifest file. (Such URLs may include &lt;media&gt; URLs, &lt;bootstrapInfo&gt; 
+		 * URLs, and &lt;drmMetadata&gt; URLs.) 
 		 */ 
 		public var baseURL:URL;
 				
 		/**
-		 * The <duration> element represents the duration of the media, in seconds. 
+		 * The &lt;duration&gt; element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.
 		 */ 
 		public var duration:Number;
 		
 		/**
-		 * The <mimeType> element represents the MIME type of the media file. It is assumed 
+		 * The &lt;mimeType&gt; element represents the MIME type of the media file. It is assumed 
 		 * that all representations of the media have the same MIME type, hence its 
 		 * placement under the document root. It is optional.
 		 */ 
 		public var mimeType:String;
 		
 		/**
-		 * The <streamType> element is a string representing the way in which the media is streamed.
+		 * The &lt;streamType&gt; element is a string representing the way in which the media is streamed.
 		 * Valid values include "live", "recorded", and "any". It is assumed that all representations 
 		 * of the media have the same stream type, hence its placement under the document root. 
 		 * It is optional.
@@ -72,7 +72,7 @@ package org.osmf.manifest
 		 * "streaming" and "progressive". It is optional. If unspecified, then the delivery 
 		 * type is inferred from the media protocol. For media with an RTMP protocol, 
 		 * the default deliveryType is "streaming". For media with an HTTP protocol, the default 
-		 * deliveryType is also "streaming". In the latter case, the <bootstrapInfo> field must be 
+		 * deliveryType is also "streaming". In the latter case, the &lt;bootstrapInfo&gt; field must be 
 		 * present.
 		 */ 
 		public var deliveryType:String;

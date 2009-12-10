@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -67,10 +67,10 @@ package org.osmf.manifest
  		public var bootstrapProfile:String;
 		
 		/**
-		 * The ID of this <bootstrapInfo> element. It is optional. If it is not specified, 
-		 * then this bootstrapping block will apply to all <media> elements that don't have a 
+		 * The ID of this &lt;bootstrapInfo&gt; element. It is optional. If it is not specified, 
+		 * then this bootstrapping block will apply to all &lt;media&gt; elements that don't have a 
 		 * bootstrapInfoId property. If it is specified, then this bootstrapping block will apply 
-		 * only to those <media> elements that use the same ID in their bootstrapInfoId property.
+		 * only to those &lt;media&gt; elements that use the same ID in their bootstrapInfoId property.
 		 */ 		
 		public var bootstrapInfoId:String;
 				
@@ -86,7 +86,7 @@ package org.osmf.manifest
 		
 		/**
 		 * Represents the Movie Box, or "moov" atom, for one representation of 
-		 * the piece of media. It is an optional child element of <media>.
+		 * the piece of media. It is an optional child element of &lt;media&gt;.
 		 */
 		public var moov:ByteArray;
 		
