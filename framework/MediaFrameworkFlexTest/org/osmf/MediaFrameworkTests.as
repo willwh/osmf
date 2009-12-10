@@ -215,15 +215,21 @@ package org.osmf
 			
 			addTestSuite(TestTraitAggregator);
 			addTestSuite(TestTraitLoader);
+
 			addTestSuite(TestCompositeElement);
 			//addTestSuite(TestParallelElement);
 			//addTestSuite(TestSerialElement);
+
+			addTestSuite(TestParallelElementWithAudioTrait);
+			addTestSuite(TestParallelElementWithBufferTrait);
+			addTestSuite(TestSerialElementWithAudioTrait);
+			addTestSuite(TestSerialElementWithBufferTrait);
 			
+			addTestSuite(TestCompositeAudioTrait);
 			/*
 			addTestSuite(TestParallelDownloadableTrait);
 			addTestSuite(TestSerialDownloadableTrait);
 			addTestSuite(TestCompositeViewableTrait);
-			addTestSuite(TestCompositeAudibleTrait);
 			addTestSuite(TestSerialViewableTrait);
 			addTestSuite(TestParallelViewableTrait);
 			addTestSuite(TestParallelSwitchableTrait);

@@ -299,79 +299,6 @@ package org.osmf.composition
 			assertTrue(loadable4.loadState == LoadState.UNINITIALIZED);
 		}
 		
-		public function testGetTraitAudible():void
-		{
-			var parallel:ParallelElement = createParallelElement();
-			
-			// No trait to begin with.
-			assertTrue(parallel.getTrait(MediaTraitType.AUDIBLE) == null);
-			
-			// Create a few media elements with the IAudible trait and some
-			// initial properties.
-			//
-			
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE]);
-			var audible1:IAudible = mediaElement1.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			audible1.volume = 0.11;
-			audible1.muted = true;
-			audible1.pan = -0.22;
-
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE]);
-			var audible2:IAudible = mediaElement2.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			audible2.volume = 0.33;
-			audible2.muted = false;
-			audible2.pan = -0.44;
-			
-			// Add the first child.  This should cause its properties to
-			// propagate to the composition.
-			parallel.addChild(mediaElement1);
-			var audible:IAudible = parallel.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible != null);
-			assertTrue(audible.volume == 0.11);
-			assertTrue(audible.muted == true);
-			assertTrue(audible.pan == -0.22);
-			
-			// Add the second child.
-			parallel.addChild(mediaElement2);
-			
-			// Adding it shouldn't affect the properties of the composition.
-			audible = parallel.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible != null);
-			assertTrue(audible.volume == 0.11);
-			assertTrue(audible.muted == true);
-			assertTrue(audible.pan == -0.22);
-			
-			// But the added child should inherit the properties of the
-			// composition.
-			audible2 = mediaElement2.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible2 != null);
-			assertTrue(audible2.volume == 0.11);
-			assertTrue(audible2.muted == true);
-			assertTrue(audible2.pan == -0.22);
-			
-			// Change the settings on the second child.
-			audible2.volume = 0.55;
-			audible2.muted = false;
-			audible2.pan = -0.66;
-			
-			// This should affect the composition and all of its children.
-			audible = parallel.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible != null);
-			assertTrue(audible.volume == 0.55);
-			assertTrue(audible.muted == false);
-			assertTrue(audible.pan == -0.66);
-			audible1 = mediaElement1.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible1 != null);
-			assertTrue(audible1.volume == 0.55);
-			assertTrue(audible1.muted == false);
-			assertTrue(audible1.pan == -0.66);
-			audible2 = mediaElement2.getTrait(MediaTraitType.AUDIBLE) as IAudible;
-			assertTrue(audible2 != null);
-			assertTrue(audible2.volume == 0.55);
-			assertTrue(audible2.muted == false);
-			assertTrue(audible2.pan == -0.66);
-		}
-		
 		public function testGetTraitTemporal():void
 		{
 			var parallel:ParallelElement = createParallelElement();
@@ -829,12 +756,6 @@ package org.osmf.composition
 			assertTrue(pausable.paused == true);
 		}
 		
-		public function testGetTraitBufferable():void
-		{
-			runBufferablePropertiesTests();
-			runBufferableEventsTests();
-		}
-
 		public function testGetTraitSeekable():void
 		{
 			runBasicSeekableTests();
@@ -883,117 +804,7 @@ package org.osmf.composition
 		{
 			return createMediaElement() as ParallelElement;
 		}
-		/*
-		private function runBufferablePropertiesTests():void
-		{
-			var parallel:ParallelElement = createParallelElement();
-			
-			// No trait to begin with.
-			assertTrue(parallel.getTrait(MediaTraitType.BUFFERABLE) == null);
-
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.BUFFERABLE]);
-			var bufferable1:BufferableTrait = mediaElement1.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable1 != null);
-
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.BUFFERABLE]);
-			var bufferable2:BufferableTrait = mediaElement2.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable2 != null);
-			
-			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.BUFFERABLE]);
-			var bufferable3:BufferableTrait = mediaElement3.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable3 != null);
-			
-			// Set child bufferable properties
-			bufferable1.bufferLength = 6;
-			bufferable1.bufferTime = 12;
-			bufferable1.buffering = true;
-
-			bufferable2.bufferLength = 20;
-			bufferable2.bufferTime = 15;
-			bufferable2.buffering = true;
-			
-			bufferable3.bufferLength = 40;
-			bufferable3.bufferTime = 18;
-			bufferable3.buffering = true;
-
-			parallel.addChild(mediaElement1);
-			parallel.addChild(mediaElement2);
-			parallel.addChild(mediaElement3);
-			
-			var bufferable:IBufferable = parallel.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-
-			var avgBufferTime:Number = (bufferable1.bufferTime + bufferable2.bufferTime + bufferable3.bufferTime) / 3;
-			assertTrue(bufferable.bufferTime == avgBufferTime);
-			
-			var curBufferLength:Number = (bufferable1.bufferLength + bufferable2.bufferTime + bufferable3.bufferTime) / 3;
-			assertTrue(bufferable.bufferLength == curBufferLength);
-			
-			bufferable1.bufferLength = 15;
-			curBufferLength = (bufferable1.bufferLength + bufferable2.bufferLength + bufferable3.bufferLength) / 3;
-			assertTrue(bufferable.bufferLength == curBufferLength);
-			
-			bufferable1.buffering = false;
-			assertTrue(bufferable.buffering == true);
-			bufferable2.buffering = false;
-			bufferable3.buffering = false;
-			assertTrue(bufferable.buffering == false);
-			
-			bufferable.bufferTime = 80;
-			assertTrue(bufferable1.bufferTime == bufferable.bufferTime);
-			assertTrue(bufferable2.bufferTime == bufferable.bufferTime);
-			assertTrue(bufferable3.bufferTime == bufferable.bufferTime);
-		}
-
-		private function runBufferableEventsTests():void
-		{
-			events = new Vector.<Event>();
-			var parallel:ParallelElement = createParallelElement();
-			
-			// No trait to begin with.
-			assertTrue(parallel.getTrait(MediaTraitType.BUFFERABLE) == null);
-
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.BUFFERABLE]);
-			var bufferable1:BufferableTrait = mediaElement1.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable1 != null);
-
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.BUFFERABLE]);
-			var bufferable2:BufferableTrait = mediaElement2.getTrait(MediaTraitType.BUFFERABLE) as BufferableTrait;
-			assertTrue(bufferable2 != null);
-
-			bufferable1.bufferLength = 6;
-			bufferable1.bufferTime = 12;
-			bufferable1.buffering = true;
-
-			bufferable2.bufferLength = 20;
-			bufferable2.bufferTime = 15;
-			bufferable2.buffering = true;
-
-			parallel.addChild(mediaElement1);
-			parallel.addChild(mediaElement2);
-
-			var bufferable:IBufferable = parallel.getTrait(MediaTraitType.BUFFERABLE) as IBufferable;
-			bufferable.addEventListener(BufferEvent.BUFFERING_CHANGE, eventCatcher);
-			bufferable.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, eventCatcher);
-
-			bufferable.bufferTime = 20;
-			assertTrue(events.length == 1);
-			
-			bufferable.bufferTime = 20;
-			assertTrue(events.length == 1);
-
-			bufferable1.bufferTime = 30;
-			assertTrue(events.length == 2);
-			
-			bufferable1.bufferTime = 30;
-			assertTrue(events.length == 2);
-
-			bufferable1.buffering = false;
-			assertTrue(events.length == 2);
-
-			bufferable2.buffering = false;
-			assertTrue(events.length == 3);
-		}
-		
+/*
 		protected function runBasicSeekableTests():void
 		{
 			events = new Vector.<Event>();

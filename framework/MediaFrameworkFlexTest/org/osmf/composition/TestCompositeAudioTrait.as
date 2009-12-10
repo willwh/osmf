@@ -23,11 +23,11 @@ package org.osmf.composition
 {
 	import org.osmf.traits.TestAudioTrait;
 	
-	public class TestCompositeAudibleTrait extends TestAudioTrait
+	public class TestCompositeAudioTrait extends TestAudioTrait
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new CompositeAudibleTrait(new TraitAggregator());
+			return new CompositeAudioTrait(new TraitAggregator());
 		}
 	}
 }

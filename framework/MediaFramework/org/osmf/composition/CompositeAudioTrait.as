@@ -67,17 +67,17 @@ package org.osmf.composition
 
 		override protected function processVolumeChange(newVolume:Number):void
 		{
-			applyVolumeToChildren();
+			applyVolumeToChildren(newVolume);
 		}
 		
 		override protected function processMutedChange(newMuted:Boolean):void
 		{
-			applyMutedToChildren();
+			applyMutedToChildren(newMuted);
 		}
 		
 		override protected function processPanChange(newPan:Number):void
 		{
-			applyPanToChildren();
+			applyPanToChildren(newPan);
 		}
 		
 		// Internals
@@ -137,37 +137,37 @@ package org.osmf.composition
 			pan = (event.target as AudioTrait).pan;
 		}
 				
-		private function applyVolumeToChildren():void
+		private function applyVolumeToChildren(newVolume:Number):void
 		{
 			traitAggregator.forEachChildTrait
 				(
 				  function(mediaTrait:MediaTraitBase):void
 				  {
-				     AudioTrait(mediaTrait).volume = volume;
+				     AudioTrait(mediaTrait).volume = newVolume;
 				  }
 				, MediaTraitType.AUDIO
 				);
 		}
 		
-		private function applyMutedToChildren():void
+		private function applyMutedToChildren(newMuted:Boolean):void
 		{
 			traitAggregator.forEachChildTrait
 				(
 				  function(mediaTrait:MediaTraitBase):void
 				  {
-				     AudioTrait(mediaTrait).muted = muted;
+				     AudioTrait(mediaTrait).muted = newMuted;
 				  }
 				, MediaTraitType.AUDIO
 				);
 		}
 		
-		private function applyPanToChildren():void
+		private function applyPanToChildren(newPan:Number):void
 		{
 			traitAggregator.forEachChildTrait
 				(
 				  function(mediaTrait:MediaTraitBase):void
 				  {
-				     AudioTrait(mediaTrait).pan = pan;
+				     AudioTrait(mediaTrait).pan = newPan;
 				  }
 				, MediaTraitType.AUDIO
 				);

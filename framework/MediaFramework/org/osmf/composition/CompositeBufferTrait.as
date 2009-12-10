@@ -39,9 +39,8 @@ package org.osmf.composition
 		{
 			super();
 			
-			_bufferTime					= 0;
+			bufferTime					= 0;
 			bufferTimeFromChildren		= true;
-			_buffering					= false;
 			settingBufferTime			= false;
 			this.mode					= mode;
 			this.traitAggregator = traitAggregator;
@@ -53,20 +52,6 @@ package org.osmf.composition
 				);
 		}
 		
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get buffering():Boolean
-		{
-			return _buffering;
-		}
-
 		/**
 		 * @inheritDoc
 		 *  
@@ -132,14 +117,12 @@ package org.osmf.composition
 		
 		override public function set bufferTime(value:Number):void
 		{
-			if (_bufferTime == value)
+			if (bufferTime == value)
 			{
 				return;
 			}
 			
 			settingBufferTime = true;
-			
-			var oldBufferTime:Number = _bufferTime;
 			
 			// Set new bufferTime to each child who supports BufferTrait 
 			traitAggregator.forEachChildTrait
@@ -150,11 +133,11 @@ package org.osmf.composition
 				  }
 				, MediaTraitType.BUFFER
 				);
+
+			super.bufferTime = value;
 			
-			_bufferTime = value;
 			bufferTimeFromChildren = false;
 			settingBufferTime = false;
-			dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));
 		}
 		
 		/**
@@ -206,8 +189,7 @@ package org.osmf.composition
 			var newBufferingState:Boolean = checkBuffering();
 			if (newBufferingState != buffering)
 			{
-				_buffering = newBufferingState;
-				dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, buffering));
+				setBuffering(newBufferingState);
 			}
 		}
 		
@@ -221,12 +203,12 @@ package org.osmf.composition
 				return;
 			}
 			
-			var oldBufferTime:Number = _bufferTime;
-			_bufferTime = calculateBufferTime();
+			var oldBufferTime:Number = bufferTime;
+			var newBufferTime:Number = calculateBufferTime();
 			bufferTimeFromChildren = true;
-			if (oldBufferTime != _bufferTime)
+			if (oldBufferTime != newBufferTime)
 			{
-				dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));
+				super.bufferTime = newBufferTime;
 			}
 		}
 		
@@ -295,9 +277,7 @@ package org.osmf.composition
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
 		private var mode:CompositionMode;		
-		private var _bufferTime:Number;
 		private var bufferTimeFromChildren:Boolean;
-		private var _buffering:Boolean;
 		private var settingBufferTime:Boolean;
 	}
 }
