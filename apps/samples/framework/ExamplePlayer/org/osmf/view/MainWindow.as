@@ -218,8 +218,6 @@ package org.osmf.view
 		private function onMutedChange(event:AudioEvent):void
 		{
 			muteToggle.selected = event.muted;
-			
-			mediaPlayerWrapper.mediaPlayer.seek(46);
 		}
 
 		private function onBufferTimeChange(event:BufferEvent):void
