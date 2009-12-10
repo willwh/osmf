@@ -28,6 +28,7 @@ package org.osmf
 	import org.osmf.content.*;
 	import org.osmf.display.*;
 	import org.osmf.events.*;
+	import org.osmf.external.*;
 	import org.osmf.gateways.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
@@ -129,6 +130,15 @@ package org.osmf
 			addTestSuite(TestAudioAudioTrait);
 			addTestSuite(TestAudioSeekTrait); 
 			addTestSuite(TestSoundLoadTrait);
+			
+			// External
+			//
+			
+			addTestSuite(TestHTMLElement);
+			addTestSuite(TestHTMLPlayTrait);
+			addTestSuite(TestHTMLLoadTrait);
+			addTestSuite(TestHTMLTimeTrait);
+			addTestSuite(TestHTMLAudioTrait);
 			
 			// MediaPlayer
 			//
