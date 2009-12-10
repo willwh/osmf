@@ -28,7 +28,7 @@ package org.osmf.manifest
 	/**
 	 * Describes a specific piece of media.
 	 */ 
-	public class Media
+	internal class Media
 	{
 		/**
 		 * Information about the drm used with the media.

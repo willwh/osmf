@@ -26,10 +26,12 @@ package org.osmf.manifest
 	
 	import org.osmf.utils.URL;
 	
+	[ExcludeClass]
+	
 	/**
 	 * The Manifest Object represents the Manifest 
 	 */ 
-	public class Manifest
+	internal class Manifest
 	{			
 		/**
 		 * The id element represents a unique identifier for the media. It is optional.

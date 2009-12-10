@@ -41,7 +41,9 @@ package org.osmf.manifest
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
-	public class ManifestParser
+	[ExcludeClass]
+	
+	internal class ManifestParser
 	{		
 	
 		namespace xmlns = "http://ns.adobe.com/f4m/1.0";
@@ -94,16 +96,16 @@ package org.osmf.manifest
 			
 			//Media	
 			
-			var bitrateSeen:Boolean = false;
+			var bitrateMissing:Boolean = false;
 			
 			for each (var media:XML in root.xmlns::media)
 			{
 				var newMedia:Media = parseMedia(media);
 				manifest.media.push(newMedia);
-				bitrateSeen ||= !isNaN(newMedia.bitrate);
+				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
 			
-			if (manifest.media.length > 1 && !bitrateSeen)
+			if (manifest.media.length > 1 && bitrateMissing)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
 			}

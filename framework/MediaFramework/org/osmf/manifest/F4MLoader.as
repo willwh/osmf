@@ -106,10 +106,11 @@ package org.osmf.manifest
 			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
-			var loader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
-			loader.addEventListener(Event.COMPLETE, onComplete);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+			var manifest:Manifest;
+			var manifestLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
+			manifestLoader.addEventListener(Event.COMPLETE, onComplete);
+			manifestLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			manifestLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 						
 			function onError(event:ErrorEvent):void
 			{				
@@ -117,10 +118,13 @@ package org.osmf.manifest
 				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
 			}			
 			function onComplete(event:Event):void
-			{			
+			{	
+				manifestLoader.removeEventListener(Event.COMPLETE, onComplete);
+				manifestLoader.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+				manifestLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);		
 				try
 				{					
-					var manifest:Manifest = parser.parse(event.target.data);
+					manifest = parser.parse(event.target.data);
 				}
 				catch (parseError:Error)
 				{					
@@ -133,60 +137,61 @@ package org.osmf.manifest
 				var unfinishedLoads:Number = 0;
 				
 				for each (var item:Media in manifest.media)
-				{
-					var request:URLRequest;
-					var loader:URLLoader;
-					
-					//DRM Metadata  - we could make this load on demand in the future.
-					
+				{										
+					//DRM Metadata  - we may make this load on demand in the future.					
 					if (item.drmMetadataURL != null)
 					{												
-						loader = new URLLoader();
+						var drmLoader:URLLoader = new URLLoader();
 						unfinishedLoads++;
-						loader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
-						loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-						loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+						drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
+						drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+						drmLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 					
 						function onDRMLoadComplete(event:Event):void
 						{
+							event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
+							event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+							event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 							unfinishedLoads--;
 							item.drmMetadata = URLLoader(event.target).data;
 							if (unfinishedLoads == 0)
 							{
-								finishLoad(manifest, loadTrait)
+								finishLoad();
 							}
 						}
-						loader.load(new URLRequest(item.drmMetadataURL.rawUrl));
+						drmLoader.load(new URLRequest(item.drmMetadataURL.rawUrl));
 					}					
 				}	
 				if (unfinishedLoads == 0) // No external resources
 				{
-					finishLoad(manifest, loadTrait);
+					finishLoad();
 				}														
-			}		
+			}	
+			
+			function finishLoad():void
+			{			
+				var netResource:IMediaResource = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
+				
+				try
+				{
+					var loadedElem:MediaElement = factory.createMediaElement(netResource);	
+				}
+				catch (parseError:Error)
+				{					
+					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
+				}			
+				
+				if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
+				{
+					loadedElem["defaultDuration"] = manifest.duration;	
+				}									
+				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
+				updateLoadTrait(loadTrait, LoadState.READY, context);		
+			}				
 		} 
 		
-		private function finishLoad(manifest:Manifest, loadTrait:LoadTrait):void
-		{
-			var netResource:IMediaResource = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
-			
-			try
-			{
-				var loadedElem:MediaElement = factory.createMediaElement(netResource);	
-			}
-			catch (parseError:Error)
-			{					
-				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
-			}			
-			
-			if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
-			{
-				loadedElem["defaultDuration"] = manifest.duration;	
-			}									
-			var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
-			updateLoadTrait(loadTrait, LoadState.READY, context);		
-		}
+	
 		
 		/**
 		 * @ineritDoc
