@@ -37,7 +37,7 @@ package org.osmf.composition
 		 * @param mode The composition mode to which this composite trait
 		 * should adhere.  See CompositionMode for valid values.
 		 **/
-		public function CompositePlayableTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
+		public function CompositePlayTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
 		{
 			this.traitAggregator = traitAggregator;
 			this.mode = mode;
@@ -83,13 +83,10 @@ package org.osmf.composition
 			}
 		}
 		
-		// Overrides
+		// Internals
 		//
 		
-		/**
-		 * @inheritDoc
-		 **/
-		override protected function processAggregatedChild(child:MediaTraitBase):void
+		private function processAggregatedChild(child:MediaTraitBase):void
 		{
 			child.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange, false, 0, true);
 
@@ -118,16 +115,10 @@ package org.osmf.composition
 			}
 		}
 
-		/**
-		 * @inheritDoc
-		 **/
-		override protected function processUnaggregatedChild(child:IMediaTrait):void
+		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
 			child.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 		}
-		
-		// Internals
-		//
 		
 		private function onPlayStateChange(event:PlayEvent):void
 		{
@@ -161,7 +152,7 @@ package org.osmf.composition
 			}
 		}
 		
-		private function setPlayState(playTrait:PlayTrait, value:PlayState):void
+		private function setPlayState(playTrait:PlayTrait, value:String):void
 		{
 			if (value != playState)
 			{
@@ -180,10 +171,10 @@ package org.osmf.composition
 			}	
 		}
 		
-		private function get traitOfCurrentChild():IPlayable
+		private function get traitOfCurrentChild():PlayTrait
 		{
 			return   traitAggregator.listenedChild
-				   ? traitAggregator.listenedChild.getTrait(MediaTraitType.PLAYABLE) as IPlayable
+				   ? traitAggregator.listenedChild.getTrait(MediaTraitType.PLAY) as PlayTrait
 				   : null;
 		}
 
