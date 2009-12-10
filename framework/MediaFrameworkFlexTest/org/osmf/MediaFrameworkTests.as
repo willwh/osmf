@@ -60,7 +60,7 @@ package org.osmf
 			
 			// Utils
 			//
-
+			
 			addTestSuite(TestBinarySearch);
 			addTestSuite(TestOSMFStrings);
 			addTestSuite(TestVersion);		
@@ -213,15 +213,15 @@ package org.osmf
 			
 			// Composition
 			
+			addTestSuite(TestTraitAggregator);
+			addTestSuite(TestTraitLoader);
+			addTestSuite(TestCompositeElement);
+			//addTestSuite(TestParallelElement);
+			//addTestSuite(TestSerialElement);
+			
 			/*
 			addTestSuite(TestParallelDownloadableTrait);
 			addTestSuite(TestSerialDownloadableTrait);
-			addTestSuite(TestCompositeElement);
-			addTestSuite(TestParallelElement);
-			addTestSuite(TestSerialElement);
-			addTestSuite(TestTraitAggregator);
-			addTestSuite(TestTraitLoader);
-			
 			addTestSuite(TestCompositeViewableTrait);
 			addTestSuite(TestCompositeAudibleTrait);
 			addTestSuite(TestSerialViewableTrait);

@@ -60,25 +60,6 @@ package org.osmf.composition
 		// Tests
 		//
 
-		public function testDefaultDuration():void
-		{
-			var element:SerialElement = new SerialElement();
-			assertEquals(NaN, element.defaultDuration);
-			
-			element.defaultDuration = 100;
-			assertEquals(100, element.defaultDuration);
-			
-			var temporal:ITemporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNotNull(temporal);
-			assertEquals(temporal.duration, 100);
-			
-			element.defaultDuration = NaN;
-			assertEquals(NaN, element.defaultDuration);
-			
-			temporal = element.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
-			assertNull(temporal);
-		}
-
 		public function testGetTraitTypesDynamically():void
 		{
 			var serial:SerialElement = createSerialElement();
@@ -94,27 +75,27 @@ package org.osmf.composition
 			// Add some children with varying sets of traits.
 			//
 			
-			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE, MediaTraitType.LOADABLE]);
+			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.LOAD]);
 			serial.addChild(child1);
 			
 			// As soon as we add a child, the composition reflects its traits.
 			// It becomes the "current child" of the composition.
 			assertTrue(serial.traitTypes.length == 2);
-			assertTrue(MediaTraitType(serial.traitTypes[0]) == MediaTraitType.AUDIBLE);
-			assertTrue(MediaTraitType(serial.traitTypes[1]) == MediaTraitType.LOADABLE);
+			assertTrue(serial.traitTypes[0] == MediaTraitType.AUDIO);
+			assertTrue(serial.traitTypes[1] == MediaTraitType.LOAD);
 			assertTrue(traitAddEventCount == 2);
 			assertTrue(traitRemoveEventCount == 0);
 
 			// Although individual traits can internally cause the current child
 			// to change, the only way to do so externally is to add the first
 			// child to a serial composition.			
-			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE, MediaTraitType.BUFFERABLE]);
+			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.BUFFER]);
 			serial.addChild(child2);
 			
 			// No change, because a child already existed.
 			assertTrue(serial.traitTypes.length == 2);
-			assertTrue(MediaTraitType(serial.traitTypes[0]) == MediaTraitType.AUDIBLE);
-			assertTrue(MediaTraitType(serial.traitTypes[1]) == MediaTraitType.LOADABLE);
+			assertTrue(serial.traitTypes[0] == MediaTraitType.AUDIO);
+			assertTrue(serial.traitTypes[1] == MediaTraitType.LOAD);
 			assertTrue(traitAddEventCount == 2);
 			assertTrue(traitRemoveEventCount == 0);
 			
@@ -122,8 +103,8 @@ package org.osmf.composition
 			// should now be reflected as the "current child".
 			serial.removeChild(child1);
 			serial.addChildAt(child1, 0);
-			assertTrue(MediaTraitType(serial.traitTypes[0]) == MediaTraitType.AUDIBLE);
-			assertTrue(MediaTraitType(serial.traitTypes[1]) == MediaTraitType.BUFFERABLE);
+			assertTrue(serial.traitTypes[0] == MediaTraitType.AUDIO);
+			assertTrue(serial.traitTypes[1] == MediaTraitType.BUFFER);
 			assertTrue(traitAddEventCount == 4);
 			assertTrue(traitRemoveEventCount == 2);
 			serial.removeChild(child1);
@@ -134,14 +115,16 @@ package org.osmf.composition
 			// Add some more children.
 			//
 
+			var allTraitTypes:Array = vectorToArray(MediaTraitType.ALL_TYPES);
+			
 			var child3:DynamicMediaElement = new DynamicMediaElement([/*none*/]);
 			
 			serial.addChild(child3);
 
-			var child4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE]);
+			var child4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO]);
 			serial.addChildAt(child4, 0);
 
-			var child5:DynamicMediaElement = new DynamicMediaElement(ALL_TRAIT_TYPES);
+			var child5:DynamicMediaElement = new DynamicMediaElement(allTraitTypes);
 			serial.addChild(child5);
 			
 			// The first one we added should be the current child.
@@ -152,23 +135,23 @@ package org.osmf.composition
 			// When we remove the current child, the next child should be the
 			// new current child.
 			serial.removeChild(child3);
-			assertTrue(serial.traitTypes.length == ALL_TRAIT_TYPES.length);
-			assertTrue(traitAddEventCount == 4 + ALL_TRAIT_TYPES.length);
+			assertTrue(serial.traitTypes.length == allTraitTypes.length);
+			assertTrue(traitAddEventCount == 4 + allTraitTypes.length);
 			assertTrue(traitRemoveEventCount == 4);
 			
 			// Now when we remove the current child, the new current child is
 			// the first child since there is no next child.
 			serial.removeChild(child5);
 			assertTrue(serial.traitTypes.length == 1);
-			assertTrue(MediaTraitType(serial.traitTypes[0]) == MediaTraitType.AUDIBLE);
-			assertTrue(traitAddEventCount == 5 + ALL_TRAIT_TYPES.length);
-			assertTrue(traitRemoveEventCount == 4 + ALL_TRAIT_TYPES.length);
+			assertTrue(serial.traitTypes[0] == MediaTraitType.AUDIO);
+			assertTrue(traitAddEventCount == 5 + allTraitTypes.length);
+			assertTrue(traitRemoveEventCount == 4 + allTraitTypes.length);
 			
 			// When we remove the last child, we have no more traits.
 			serial.removeChild(child4);
 			assertTrue(serial.traitTypes.length == 0);
-			assertTrue(traitAddEventCount == 5 + ALL_TRAIT_TYPES.length);
-			assertTrue(traitRemoveEventCount == 5 + ALL_TRAIT_TYPES.length);
+			assertTrue(traitAddEventCount == 5 + allTraitTypes.length);
+			assertTrue(traitRemoveEventCount == 5 + allTraitTypes.length);
 		}
 		
 		public function testHasTraitDynamically():void
@@ -176,28 +159,30 @@ package org.osmf.composition
 			var serial:SerialElement = createSerialElement();
 			serial.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAddRemoveEvent, false, 0, true);
 			serial.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitAddRemoveEvent, false, 0, true);
-						
+					
 			// No traits to begin with.
 			assertHasTraits(serial,[]);
+			
+			var allTraitTypes:Array = vectorToArray(MediaTraitType.ALL_TYPES);
 			
 			// Add some children with varying sets of traits.
 			//
 			
-			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE, MediaTraitType.LOADABLE]);
+			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.LOAD]);
 			serial.addChild(child1);
 			
 			// The first child added is what gets reflected in the composite trait.
-			assertHasTraits(serial, [MediaTraitType.AUDIBLE, MediaTraitType.LOADABLE]);
+			assertHasTraits(serial, [MediaTraitType.AUDIO, MediaTraitType.LOAD]);
 			
-			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE, MediaTraitType.BUFFERABLE]);
+			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO, MediaTraitType.BUFFER]);
 			serial.addChild(child2);
 			
 			// No change, because this was the second child added.
-			assertHasTraits(serial, [MediaTraitType.AUDIBLE, MediaTraitType.LOADABLE]);
+			assertHasTraits(serial, [MediaTraitType.AUDIO, MediaTraitType.LOAD]);
 			
 			// But if we remove the first child, then the second becomes the current child.
 			serial.removeChildAt(0);
-			assertHasTraits(serial, [MediaTraitType.AUDIBLE, MediaTraitType.BUFFERABLE]);
+			assertHasTraits(serial, [MediaTraitType.AUDIO, MediaTraitType.BUFFER]);
 			serial.removeChildAt(0);
 			
 			var child3:DynamicMediaElement = new DynamicMediaElement([/*none*/]);
@@ -205,16 +190,16 @@ package org.osmf.composition
 			assertHasTraits(serial, [/*none*/]);
 			serial.removeChild(child3);
 			
-			var child4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIBLE]);
+			var child4:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO]);
 			serial.addChild(child4);
-			assertHasTraits(serial, [MediaTraitType.AUDIBLE]);
+			assertHasTraits(serial, [MediaTraitType.AUDIO]);
 			serial.removeChild(child4);
 			
-			var child5:DynamicMediaElement = new DynamicMediaElement(ALL_TRAIT_TYPES);
+			var child5:DynamicMediaElement = new DynamicMediaElement(allTraitTypes);
 			serial.addChild(child5);
-			assertHasTraits(serial, ALL_TRAIT_TYPES);
+			assertHasTraits(serial, allTraitTypes);
 		}
-		
+		/*
 		public function testGetTraitAudible():void
 		{
 			var serial:SerialElement = createSerialElement();
@@ -356,8 +341,6 @@ package org.osmf.composition
 			assertTrue(compAudible1.muted);
 			assertEquals(-1.0, compAudible1.pan);
 			assertEquals(0.5, compAudible1.volume);
-			/*
-			*/
 		}
 		
 		public function testGetTraitLoadable():void
@@ -761,9 +744,9 @@ package org.osmf.composition
 			
 			var playable3HasPlayed:Boolean = false;
 			
-			function onPlayable3PlayingChange(event:PlayingChangeEvent):void
+			function onPlayable3PlayingChange(event:PlayEvent):void
 			{
-				playable3.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayable3PlayingChange);
+				playable3.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayable3PlayingChange);
 				if (event.playing)
 				{
 					playable3.resetPlaying();
@@ -1249,17 +1232,17 @@ package org.osmf.composition
 			runAddSeekingCurrentChildren();
 			runAddSeekingNoncurrentChildren();
 		}
-		
+		*/
 		override public function testMediaErrorEventDispatch():void
 		{
-			forceLoadable = true;
+			forceLoadTrait = true;
 			
 			super.testMediaErrorEventDispatch();
 		}
 		
 		override public function testNestedMediaErrorEventDispatch():void
 		{
-			forceLoadable = true;
+			forceLoadTrait = true;
 			
 			super.testNestedMediaErrorEventDispatch();
 		}
@@ -1272,12 +1255,12 @@ package org.osmf.composition
 			durationReachedEventCount++;
 		}
 
-		private function onPlayingChanged(event:PlayingChangeEvent):void
+		private function onPlayStateChanged(event:PlayEvent):void
 		{
 			playingChangedEventCount++;
 		}
 		
-		private function onDimensionChange(event:DimensionEvent):void
+		private function onDimensionChange(event:ViewEvent):void
 		{
 			dimensionsChangeEventCount++;
 		}
@@ -1291,7 +1274,7 @@ package org.osmf.composition
 		{
 			return createMediaElement() as SerialElement;
 		}
-		
+		/*
 		private function runBufferablePropertiesTests():void
 		{
 			var serial:SerialElement = createSerialElement();
@@ -1558,7 +1541,7 @@ package org.osmf.composition
 			var seekable:ISeekable = serial.getTrait(MediaTraitType.SEEKABLE) as ISeekable;
 			assertTrue(seekable.seeking != true);
 		}
-		
+		*/
 		protected function eventCatcher(event:Event):void
 		{
 			events.push(event);

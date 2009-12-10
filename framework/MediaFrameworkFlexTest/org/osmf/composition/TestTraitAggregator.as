@@ -23,10 +23,10 @@ package org.osmf.composition
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.media.IMediaTrait;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
@@ -53,37 +53,36 @@ package org.osmf.composition
 			var video3:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
 			aggr.addChild(video3);
 			
-			assertEquals(aggr.getNextChildWithTrait(null, MediaTraitType.LOADABLE), video1);			
-			assertEquals(aggr.getNextChildWithTrait(video1, MediaTraitType.LOADABLE), video2);
-			assertEquals(aggr.getNextChildWithTrait(video2, MediaTraitType.LOADABLE), video3);
-			assertEquals(aggr.getNextChildWithTrait(video3, MediaTraitType.LOADABLE), null);
+			assertEquals(aggr.getNextChildWithTrait(null, MediaTraitType.LOAD), video1);			
+			assertEquals(aggr.getNextChildWithTrait(video1, MediaTraitType.LOAD), video2);
+			assertEquals(aggr.getNextChildWithTrait(video2, MediaTraitType.LOAD), video3);
+			assertEquals(aggr.getNextChildWithTrait(video3, MediaTraitType.LOAD), null);
 		}
 		
 		public function testForEachChildTrait():void
 		{			
 			var aggr:TraitAggregator = new TraitAggregator();			
 			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
-			var loadableTrait:ILoadable = video.getTrait(MediaTraitType.LOADABLE) as ILoadable;
+			var loadableTrait:LoadTrait = video.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			
 			aggr.addChild(video);
 						
 			var gotCallback:Boolean = false;
-			function callback(trait:IMediaTrait):void
+			function callback(trait:MediaTraitBase):void
 			{
 				gotCallback = true;
 				assertEquals(trait, loadableTrait)
 			}			
-			aggr.forEachChildTrait(callback, MediaTraitType.LOADABLE);
+			aggr.forEachChildTrait(callback, MediaTraitType.LOAD);
 			
 			assertTrue(gotCallback);
 			
 			aggr.removeChild(video);
 			gotCallback = false;
 			
-			aggr.forEachChildTrait(callback, MediaTraitType.LOADABLE);
+			aggr.forEachChildTrait(callback, MediaTraitType.LOAD);
 			
 			assertFalse(gotCallback);	
-								
 		}
 		
 		public function testInvokeOnEachChildTrait():void
@@ -94,21 +93,21 @@ package org.osmf.composition
 			aggr.addChild(video1);
 			aggr.addChild(video2);
 			
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);
 			
-			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.READY);
-			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.READY);
+			assertEquals( (video1.getTrait(MediaTraitType.LOAD) as LoadTrait).loadState, LoadState.READY);
+			assertEquals( (video2.getTrait(MediaTraitType.LOAD) as LoadTrait).loadState, LoadState.READY);
 			
-			(video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
-			(video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).unload();
+			(video1.getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
+			(video2.getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
 			
 			aggr.removeChild(video1);
 			aggr.removeChild(video2);
 			
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should be a no-op
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);  //Should be a no-op
 			
-			assertEquals( (video1.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.UNINITIALIZED);
-			assertEquals( (video2.getTrait(MediaTraitType.LOADABLE) as ILoadable).loadState, LoadState.UNINITIALIZED);			
+			assertEquals( (video1.getTrait(MediaTraitType.LOAD) as LoadTrait).loadState, LoadState.UNINITIALIZED);
+			assertEquals( (video2.getTrait(MediaTraitType.LOAD) as LoadTrait).loadState, LoadState.UNINITIALIZED);			
 		}
 		
 		public function testHasTrait():void
@@ -119,15 +118,15 @@ package org.osmf.composition
 			aggr.addChild(video1);
 			aggr.addChild(video2);
 			
-			assertTrue(aggr.hasTrait(MediaTraitType.LOADABLE));
+			assertTrue(aggr.hasTrait(MediaTraitType.LOAD));
 			
 			aggr.removeChild(video1);
 				
-			assertTrue(aggr.hasTrait(MediaTraitType.LOADABLE));	
+			assertTrue(aggr.hasTrait(MediaTraitType.LOAD));	
 			
 			aggr.removeChild(video2);
 					
-			assertFalse(aggr.hasTrait(MediaTraitType.LOADABLE));			
+			assertFalse(aggr.hasTrait(MediaTraitType.LOAD));			
 		}
 		
 		public function testGetNumTraits():void
@@ -136,20 +135,20 @@ package org.osmf.composition
 			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			
-			assertEquals( aggr.getNumTraits(MediaTraitType.LOADABLE), 0);
+			assertEquals( aggr.getNumTraits(MediaTraitType.LOAD), 0);
 			
 			aggr.addChild(video1);
 			aggr.addChild(video2);
 			
-			assertEquals(aggr.getNumTraits(MediaTraitType.LOADABLE), 2);
+			assertEquals(aggr.getNumTraits(MediaTraitType.LOAD), 2);
 			
 			aggr.removeChild(video1);
 				
-			assertEquals(aggr.getNumTraits(MediaTraitType.LOADABLE), 1);	
+			assertEquals(aggr.getNumTraits(MediaTraitType.LOAD), 1);	
 			
 			aggr.removeChild(video2);
 					
-			assertEquals(aggr.getNumTraits(MediaTraitType.LOADABLE), 0);			
+			assertEquals(aggr.getNumTraits(MediaTraitType.LOAD), 0);			
 		}
 		
 		public function testGetChildIndex():void
@@ -184,18 +183,18 @@ package org.osmf.composition
 			var aggr:TraitAggregator = new TraitAggregator();			
 			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			
-			var loadableSeen:Boolean = false;
-			var playableSeen:Boolean = false;
+			var loadTraitSeen:Boolean = false;
+			var playTraitSeen:Boolean = false;
 						
 			function onTraitAggregated(event:TraitAggregatorEvent):void
 			{
-				if (event.traitType == MediaTraitType.LOADABLE)
+				if (event.traitType == MediaTraitType.LOAD)
 				{
-					loadableSeen = true;
+					loadTraitSeen = true;
 				}
-				if (event.traitType == MediaTraitType.PLAYABLE)
+				if (event.traitType == MediaTraitType.PLAY)
 				{
-					playableSeen = true;
+					playTraitSeen = true;
 				}
 			}
 			
@@ -203,13 +202,14 @@ package org.osmf.composition
 			
 			aggr.addChild(video);
 						
-			assertTrue(loadableSeen);
-			assertFalse(playableSeen);
+			assertTrue(loadTraitSeen);
+			assertFalse(playTraitSeen);
 			
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should add the playable trait, among others.
+			// Should add the PlayTrait, among others.
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);
 			
-			assertTrue(loadableSeen);
-			assertTrue(playableSeen);
+			assertTrue(loadTraitSeen);
+			assertTrue(playTraitSeen);
 		}
 		
 		public function testAddChildAt():void
@@ -217,18 +217,18 @@ package org.osmf.composition
 			var aggr:TraitAggregator = new TraitAggregator();			
 			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			
-			var loadableSeen:Boolean = false;
-			var playableSeen:Boolean = false;
+			var loadTraitSeen:Boolean = false;
+			var playTraitSeen:Boolean = false;
 						
 			function onTraitAggregated(event:TraitAggregatorEvent):void
 			{
-				if (event.traitType == MediaTraitType.LOADABLE)
+				if (event.traitType == MediaTraitType.LOAD)
 				{
-					loadableSeen = true;
+					loadTraitSeen = true;
 				}
-				if (event.traitType == MediaTraitType.PLAYABLE)
+				if (event.traitType == MediaTraitType.PLAY)
 				{
-					playableSeen = true;
+					playTraitSeen = true;
 				}
 			}
 			
@@ -236,19 +236,19 @@ package org.osmf.composition
 			
 			aggr.addChildAt(video, 0);
 			
-			assertTrue(loadableSeen);
-			assertFalse(playableSeen);
+			assertTrue(loadTraitSeen);
+			assertFalse(playTraitSeen);
 			
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should add the playable trait, among others.
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);  //Should add the playable trait, among others.
 			
-			assertTrue(loadableSeen);
-			assertTrue(playableSeen);
+			assertTrue(loadTraitSeen);
+			assertTrue(playTraitSeen);
 			
 			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/2')));
 			
 			aggr.addChildAt(video2, 0);
 			
-			assertEquals(aggr.getNextChildWithTrait(video2, MediaTraitType.LOADABLE), video);
+			assertEquals(aggr.getNextChildWithTrait(video2, MediaTraitType.LOAD), video);
 		}
 		
 		public function testRemoveChild():void
@@ -256,38 +256,38 @@ package org.osmf.composition
 			var aggr:TraitAggregator = new TraitAggregator();			
 			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			
-			var loadableSeen:Boolean = false;
-			var playableSeen:Boolean = false;
+			var loadTraitSeen:Boolean = false;
+			var playTraitSeen:Boolean = false;
 						
 			function onTraitAggregated(event:TraitAggregatorEvent):void
 			{
-				if (event.traitType == MediaTraitType.LOADABLE)
+				if (event.traitType == MediaTraitType.LOAD)
 				{
-					loadableSeen = true;
+					loadTraitSeen = true;
 				}
-				if (event.traitType == MediaTraitType.PLAYABLE)
+				if (event.traitType == MediaTraitType.PLAY)
 				{
-					playableSeen = true;
+					playTraitSeen = true;
 				}
 			}
 			
 			aggr.addEventListener(TraitAggregatorEvent.TRAIT_UNAGGREGATED, onTraitAggregated);			
 			aggr.addChild(video);									
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should add the playable trait, among others.
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);  //Should add the playable trait, among others.
 									
-			assertFalse(loadableSeen);
-			assertFalse(playableSeen);		
+			assertFalse(loadTraitSeen);
+			assertFalse(playTraitSeen);		
 			
-			aggr.invokeOnEachChildTrait("unload", [], MediaTraitType.LOADABLE);	 ///should remove playable trait.
+			aggr.invokeOnEachChildTrait("unload", [], MediaTraitType.LOAD);	 ///should remove playable trait.
 			
-			assertFalse(loadableSeen);
-			assertTrue(playableSeen);		
+			assertFalse(loadTraitSeen);
+			assertTrue(playTraitSeen);		
 			
 			//Should unaggregate all traits
 			aggr.removeChild(video);
 			
-			assertTrue(loadableSeen);
-			assertTrue(playableSeen);	
+			assertTrue(loadTraitSeen);
+			assertTrue(playTraitSeen);	
 		}
 		
 		public function testRemoveChildAt():void
@@ -295,38 +295,38 @@ package org.osmf.composition
 			var aggr:TraitAggregator = new TraitAggregator();			
 			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
 			
-			var loadableSeen:Boolean = false;
-			var playableSeen:Boolean = false;
+			var loadTraitSeen:Boolean = false;
+			var playTraitSeen:Boolean = false;
 						
 			function onTraitAggregated(event:TraitAggregatorEvent):void
 			{
-				if (event.traitType == MediaTraitType.LOADABLE)
+				if (event.traitType == MediaTraitType.LOAD)
 				{
-					loadableSeen = true;
+					loadTraitSeen = true;
 				}
-				if (event.traitType == MediaTraitType.PLAYABLE)
+				if (event.traitType == MediaTraitType.PLAY)
 				{
-					playableSeen = true;
+					playTraitSeen = true;
 				}
 			}
 			
 			aggr.addEventListener(TraitAggregatorEvent.TRAIT_UNAGGREGATED, onTraitAggregated);			
 			aggr.addChild(video);									
-			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOADABLE);  //Should add the playable trait, among others.
+			aggr.invokeOnEachChildTrait("load", [], MediaTraitType.LOAD);  //Should add the playable trait, among others.
 									
-			assertFalse(loadableSeen);
-			assertFalse(playableSeen);		
+			assertFalse(loadTraitSeen);
+			assertFalse(playTraitSeen);		
 			
-			aggr.invokeOnEachChildTrait("unload", [], MediaTraitType.LOADABLE);	 ///should remove playable trait.
+			aggr.invokeOnEachChildTrait("unload", [], MediaTraitType.LOAD);	 ///should remove playable trait.
 			
-			assertFalse(loadableSeen);
-			assertTrue(playableSeen);		
+			assertFalse(loadTraitSeen);
+			assertTrue(playTraitSeen);		
 			
 			// Should unaggregate all traits
 			aggr.removeChildAt(0);
 			
-			assertTrue(loadableSeen);
-			assertTrue(playableSeen);
+			assertTrue(loadTraitSeen);
+			assertTrue(playTraitSeen);
 			
 			try
 			{

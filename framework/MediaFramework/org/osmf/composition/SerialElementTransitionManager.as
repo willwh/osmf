@@ -21,10 +21,11 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.PlayingChangeEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.IPlayable;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 
 	/**
 	 * @private
@@ -49,11 +50,11 @@ package org.osmf.composition
 			// child.
 			var nextChildren:Array = getNextChildren(traitAggregator, currentChild);
 			
-			// Use a TraitLoader to find the next child that's
-			// playable, loading along the way if necessary.
+			// Use a TraitLoader to find the next child that has the
+			// PlayTrait, loading along the way if necessary.
 			var traitLoader:TraitLoader = new TraitLoader();
 			traitLoader.addEventListener(TraitLoaderEvent.TRAIT_FOUND, onTraitFound);
-			traitLoader.findOrLoadMediaElementWithTrait(nextChildren, MediaTraitType.PLAYABLE);
+			traitLoader.findOrLoadMediaElementWithTrait(nextChildren, MediaTraitType.PLAY);
 			
 			function onTraitFound(event:TraitLoaderEvent):void
 			{
@@ -63,7 +64,7 @@ package org.osmf.composition
 				// Otherwise we're done playing.
 				if (event.mediaElement)
 				{
-					var traitOfNextPlayableChild:IPlayable = event.mediaElement.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
+					var traitOfNextPlayableChild:PlayTrait = event.mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 
 					// We want to set the new current child, and then initiate
 					// playback.  However, it's possible that the act of setting
@@ -73,16 +74,16 @@ package org.osmf.composition
 					// don't want to play it a second time.
 					//
 					// Unfortunately, it's not a simple matter of checking the
-					// state of IPlayable.playing, because it's possible that
-					// the play happened instantaneously (i.e IPlayable.playing
-					// would be false).  The most surefire way of detecting
+					// PlayTrait.playState property, because it's possible that
+					// the play happened instantaneously (i.e. playState wouldn't
+					// be PLAYING).  The most surefire way of detecting
 					// whether the play actually occurred is to listen for an
 					// event.
 					var playbackInitiated:Boolean = false;
-					traitOfNextPlayableChild.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
-					function onPlayingChange(event:PlayingChangeEvent):void
+					traitOfNextPlayableChild.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+					function onPlayStateChange(event:PlayEvent):void
 					{
-						if (event.playing)
+						if (event.playState == PlayState.PLAYING)
 						{
 							playbackInitiated = true;
 						}
@@ -93,7 +94,7 @@ package org.osmf.composition
 					traitAggregator.listenedChild = event.mediaElement;
 					
 					// No need to listen for the event anymore.
-					traitOfNextPlayableChild.removeEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChange);
+					traitOfNextPlayableChild.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 
 					if (playbackInitiated == false)
 					{
@@ -106,9 +107,9 @@ package org.osmf.composition
 						// occurred synchronously and already completed, in
 						// which case we should trigger playback of the next
 						// child (if it's not playing already).  This should
-						// only happen if the child lacks the ITemporal trait.
-						if (traitOfNextPlayableChild.playing == false &&
-							traitAggregator.listenedChild.hasTrait(MediaTraitType.TEMPORAL) == false)
+						// only happen if the child lacks the TimeTrait.
+						if (traitOfNextPlayableChild.playState == PlayState.STOPPED &&
+							traitAggregator.listenedChild.hasTrait(MediaTraitType.TIME) == false)
 						{
 							playNextPlayableChild
 								( traitAggregator

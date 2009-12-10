@@ -30,7 +30,7 @@ package org.osmf.composition
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoadable;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -48,7 +48,7 @@ package org.osmf.composition
 			
 			traitAddEventCount = 0;
 			traitRemoveEventCount = 0;
-			forceLoadable = false;
+			forceLoadTrait = false;
 		}
 
 		override protected function createMediaElement():MediaElement
@@ -58,9 +58,9 @@ package org.osmf.composition
 			return composite;
 		}
 		
-		override protected function get loadable():Boolean
+		override protected function get hasLoadTrait():Boolean
 		{
-			return forceLoadable;
+			return forceLoadTrait;
 		}
 		
 		override protected function get resourceForMediaElement():IMediaResource
@@ -323,7 +323,7 @@ package org.osmf.composition
 		
 		public function testNestedMediaErrorEventDispatch():void
 		{
-			if (loadable)
+			if (hasLoadTrait)
 			{
 				var composite:CompositeElement = createCompositeElement();
 				var child1:CompositeElement = createCompositeElement();
@@ -332,14 +332,14 @@ package org.osmf.composition
 				child1.addChild(child2);
 				
 				composite.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				var loadableTrait:ILoadable = child2.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				assertTrue(loadableTrait);
+				var loadTrait:LoadTrait = child2.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				assertTrue(loadTrait);
 				
 				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 				
 				// Make sure error events dispatched on the trait are redispatched
 				// on the root of the composition.
-				loadableTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -357,16 +357,16 @@ package org.osmf.composition
 		
 		final protected function postCreateCompositeElement(composite:CompositeElement):void
 		{
-			if (forceLoadable)
+			if (forceLoadTrait)
 			{
 				var loader:SimpleLoader = new SimpleLoader();
 				var childElement:MediaElement = 
-					new DynamicMediaElement([MediaTraitType.LOADABLE],
+					new DynamicMediaElement([MediaTraitType.LOAD],
 											loader,
-											new URLResource(new URL("http://www.example.com/loadable")));
-				var loadable:ILoadable = childElement.getTrait(MediaTraitType.LOADABLE) as ILoadable;
-				loadable.load();
-				assertTrue(loadable.loadState == LoadState.READY);
+											new URLResource(new URL("http://www.example.com/load")));
+				var loadTrait:LoadTrait = childElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.load();
+				assertTrue(loadTrait.loadState == LoadState.READY);
 	
 				// Add the child.  This should cause its properties to
 				// propagate to the composition.
@@ -380,16 +380,16 @@ package org.osmf.composition
 		}
 		
 		
-		final protected function assertHasTraits(mediaElement:MediaElement,traitTypes:Array):void
+		final protected function assertHasTraits(mediaElement:MediaElement, traitTypes:Array):void
 		{
 			// Create a separate list with the traits that should *not* exist
 			// on the media element.
-			var missingTraitTypes:Array = ALL_TRAIT_TYPES.concat();
-			for each (var traitType:MediaTraitType in traitTypes)
+			var missingTraitTypes:Vector.<String> = MediaTraitType.ALL_TYPES.concat();
+			for each (var traitType:String in traitTypes)
 			{
-				missingTraitTypes.splice(missingTraitTypes.indexOf(traitType),1);
+				missingTraitTypes.splice(missingTraitTypes.indexOf(traitType), 1);
 			}
-			assertTrue(traitTypes.length + missingTraitTypes.length == ALL_TRAIT_TYPES.length);
+			assertTrue(traitTypes.length + missingTraitTypes.length == MediaTraitType.ALL_TYPES.length);
 			
 			// Verify the ones that should exist do exist.
 			for (var i:int = 0; i < traitTypes.length; i++)
@@ -417,21 +417,21 @@ package org.osmf.composition
 			else fail();
 		}
 		
-		protected static const ALL_TRAIT_TYPES:Array = 
-			[     MediaTraitType.AUDIBLE
-				, MediaTraitType.BUFFERABLE
-				, MediaTraitType.LOADABLE
-				, MediaTraitType.PAUSABLE
-				, MediaTraitType.PLAYABLE
-				, MediaTraitType.SEEKABLE
-				, MediaTraitType.SPATIAL
-				, MediaTraitType.TEMPORAL
-				, MediaTraitType.VIEWABLE
-			];
+		final protected function vectorToArray(input:Vector.<String>):Array
+		{
+			var result:Array = [];
+			
+			for each (var str:String in input)
+			{
+				result.push(str);
+			}
+			
+			return result;
+		}
 
 		protected var traitAddEventCount:int;
 		protected var traitRemoveEventCount:int;
 		
-		protected var forceLoadable:Boolean;
+		protected var forceLoadTrait:Boolean;
 	}
 }
