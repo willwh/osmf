@@ -44,9 +44,9 @@ package com.akamai.osmf.net
 		/**
 		 * Constructor.
 		 */
-		public function AkamaiNetConnectionFactory(target:IEventDispatcher=null)
+		public function AkamaiNetConnectionFactory()
 		{
-			super(target);
+			super();
 		}
 
 		/**
