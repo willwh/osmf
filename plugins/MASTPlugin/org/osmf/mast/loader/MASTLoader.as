@@ -89,11 +89,7 @@ package org.osmf.mast.loader
 			var httpLoadTrait:LoadTrait = new LoadTrait(httpLoader, loadTrait.resource);
 						
 			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
-			
-			CONFIG::LOGGING
-			{
-				logger.debug("Downloading document at " + URLResource(httpLoadable.resource).url.rawUrl);
-			}
+		
 			
 			httpLoader.load(httpLoadTrait);
 			
