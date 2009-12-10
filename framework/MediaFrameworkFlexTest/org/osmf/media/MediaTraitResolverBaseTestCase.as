@@ -21,15 +21,14 @@
 *****************************************************/
 package org.osmf.media
 {
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.ViewTrait;
 
-	public class MediaTraitResolverBaseTestCase extends TestCase
+	public class MediaTraitResolverBaseTestCase extends TestCaseEx
 	{
 		public function constructResolver(type:String, traitOfType:MediaTraitBase):MediaTraitResolver
 		{
@@ -39,16 +38,13 @@ package org.osmf.media
 		public function testConstructor():void
 		{
 			var resolver:MediaTraitResolver;
-			
-			try
-			{
-				resolver = constructResolver(null, null);
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
-			
+			assertThrows
+				( function():void
+					{
+						resolver = constructResolver(null, null);
+					}
+				);
+				
 			assertNull(resolver);
 		}
 		
@@ -65,23 +61,19 @@ package org.osmf.media
 			var type:String = MediaTraitType.TIME;
 			var resolver:MediaTraitResolver = constructResolver(type, new TimeTrait());
 			
-			try
-			{
-				resolver.addTrait(null);
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
+			assertThrows
+				( function():void
+					{
+						resolver.addTrait(null);
+					}
+				);
 			
-			try
-			{
-				resolver.addTrait(new ViewTrait(null));
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
+			assertThrows
+				( function():void
+					{
+						resolver.addTrait(new ViewTrait(null));
+					}
+				);
 		}
 		
 		public function testRemoveTrait():void
@@ -89,29 +81,24 @@ package org.osmf.media
 			var type:String = MediaTraitType.TIME;
 			var resolver:MediaTraitResolver = constructResolver(type, new TimeTrait());
 			
-			try
-			{
-				resolver.removeTrait(null);
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
-			
-			try
-			{
-				resolver.removeTrait(new ViewTrait(null));
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
-		}
-		
-		public function testMediaTraitResolverBase():void
-		{
-			var resolver:MediaTraitResolver;
-			 	
+			assertThrows
+				( function():void
+					{
+						resolver.removeTrait(null);
+					}
+				);
+				
+			var tt:TimeTrait = new TimeTrait();
+				
+			assertThrows
+				( function():void
+					{
+						resolver.removeTrait(tt);
+					}
+				);
+				
+			resolver.addTrait(tt);
+			resolver.removeTrait(tt);
 		}
 	}
 }

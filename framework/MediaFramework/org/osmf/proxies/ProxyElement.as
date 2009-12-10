@@ -25,6 +25,7 @@ package org.osmf.proxies
 	
 	import flash.events.Event;
 	
+	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaGateway;
@@ -324,12 +325,14 @@ package org.osmf.proxies
 				_wrappedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_wrappedElement.addEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange);
 			}
 			else
 			{
 				_wrappedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_wrappedElement.removeEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange);
 			}
 		}
 		
@@ -346,6 +349,11 @@ package org.osmf.proxies
 		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			processTraitsChangeEvent(event);
+		}
+		
+		private function onGatewayChange(event:GatewayChangeEvent):void
+		{
+			dispatchEvent(event.clone());
 		}
 		
 		private function processTraitsChangeEvent(event:MediaElementEvent):void

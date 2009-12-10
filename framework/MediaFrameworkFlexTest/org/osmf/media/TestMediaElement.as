@@ -24,18 +24,21 @@ package org.osmf.media
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import flexunit.framework.TestCase;
-	
+	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.traits.LoadTrait;
+	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.URL;
 
-	public class TestMediaElement extends TestCase
+	public class TestMediaElement extends TestCaseEx
 	{
 		override public function setUp():void
 		{
@@ -219,6 +222,38 @@ package org.osmf.media
 					else fail();
 				}
 			}
+		}
+		
+		public function testGateway():void
+		{
+			var mediaElement:MediaElement = createMediaElement();
+			var gatewayA:RegionGateway = new RegionGateway();
+			var gatewayB:RegionGateway = new RegionGateway();
+			
+			assertNull(mediaElement.gateway);
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = gatewayA}
+				);
+				
+			assertEquals(gatewayA, mediaElement.gateway);
+			
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = gatewayB}
+				);
+			
+			assertEquals(gatewayB, mediaElement.gateway);
+			
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = null}
+				);
+				
+			assertNull(mediaElement.gateway);
 		}
 		
 		// Protected

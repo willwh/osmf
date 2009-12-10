@@ -38,23 +38,8 @@ package org.osmf.media
 			
 			var resolver:DefaultTraitResolver;
 			
-			try
-			{
-				resolver = new DefaultTraitResolver(MediaTraitType.AUDIO, new TimeTrait());
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
-			
-			try
-			{
-				resolver = new DefaultTraitResolver(MediaTraitType.TIME, null);
-				fail();
-			}
-			catch(_:*)
-			{	
-			}
+			assertThrows(function():void{new DefaultTraitResolver(MediaTraitType.AUDIO, new TimeTrait());});
+			assertThrows(function():void{new DefaultTraitResolver(MediaTraitType.TIME, null);});
 			
 			assertNull(resolver);
 			

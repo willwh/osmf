@@ -113,6 +113,23 @@ package org.osmf
 			addTestSuite(TestMediaInfo);
 			addTestSuite(TestMediaFactory);
 			
+			// Video
+			//
+			
+			addTestSuite(TestVideoElement);
+			addTestSuite(TestCuePoint);
+			
+			// Audio
+			//
+			
+			addTestSuite(TestAudioElement);
+			addTestSuite(TestAudioElementWithSoundLoader);
+			addTestSuite(TestSoundLoader);
+			
+			addTestSuite(TestAudioAudioTrait);
+			addTestSuite(TestAudioSeekTrait); 
+			addTestSuite(TestSoundLoadTrait);
+			
 			// MediaPlayer
 			//
 
@@ -177,23 +194,6 @@ package org.osmf
 			addTestSuite(TestDynamicStreamingNetLoader);
 			addTestSuite(TestDynamicNetStream);
 			addTestSuite(TestNetStreamDynamicStreamTrait);
-			
-			// Video
-			//
-			
-			addTestSuite(TestVideoElement);
-			addTestSuite(TestCuePoint);
-			
-			// Audio
-			//
-			
-			addTestSuite(TestAudioElement);
-			addTestSuite(TestAudioElementWithSoundLoader);
-			addTestSuite(TestSoundLoader);
-			
-			addTestSuite(TestAudioAudioTrait);
-			addTestSuite(TestAudioSeekTrait); 
-			addTestSuite(TestSoundLoadTrait);
 			
 			// These tests fail intermittently on the build machine.
 			//addTestSuite(TestAudioPlayTrait);

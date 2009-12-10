@@ -23,6 +23,8 @@ package org.osmf.proxies
 {
 	import flash.errors.IllegalOperationError;
 	
+	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.gateways.RegionGateway;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -92,6 +94,40 @@ package org.osmf.proxies
 			assertTrue(proxyElement.wrappedElement == null);
 
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
+		}
+		
+		override public function testGateway():void
+		{
+			var mediaElement:ProxyElement = createMediaElement() as ProxyElement;
+			mediaElement.wrappedElement = new MediaElement();
+			
+			var gatewayA:RegionGateway = new RegionGateway();
+			var gatewayB:RegionGateway = new RegionGateway();
+			
+			assertNull(mediaElement.gateway);
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = gatewayA}
+				);
+				
+			assertEquals(gatewayA, mediaElement.gateway);
+			
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = gatewayB}
+				);
+			
+			assertEquals(gatewayB, mediaElement.gateway);
+			
+			assertDispatches
+				( mediaElement
+				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, function():void{mediaElement.gateway = null}
+				);
+				
+			assertNull(mediaElement.gateway);
 		}
 		
 		// Protected
