@@ -105,11 +105,8 @@ package org.osmf.captioning.media
 			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
 			if (tempResource == null)
 			{
-				if (!_continueLoadOnFailure)
-				{
-					dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-									new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
-				}
+				dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+								new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
 			}
 			else
 			{
@@ -125,10 +122,19 @@ package org.osmf.captioning.media
 				else
 				{		
 					var timedTextURL:String = facet.getValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
-					loadTrait = new LoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
-					
-					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					addTrait(MediaTraitType.LOAD, loadTrait);
+					if (timedTextURL != null)
+					{
+						loadTrait = new LoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
+						
+						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						addTrait(MediaTraitType.LOAD, loadTrait);
+					}
+					else if (!_continueLoadOnFailure)
+					{
+						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+										new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
+					}
+ 
 				}
 			} 
 		}

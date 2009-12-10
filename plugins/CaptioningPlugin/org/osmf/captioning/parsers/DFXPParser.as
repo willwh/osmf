@@ -304,8 +304,8 @@ package org.osmf.captioning.parsers
 		 * standard which include:<ul>
 		 * <li>#rrggbb - each color value is a hexadecimal digit, such as #ff0000 for red</li>
 		 * <li>#rrggbbaa - each color value is a hexadecial digit, such as #ff0000ff for fully opaque red</li>
-		 * <li>rgb(red, green, blue) - hexadecimal values</li>
-		 * <li>rgba(red, green, blue, alpha) - hexadecimal values</li>
+		 * <li>rgb(red, green, blue) - each value has a range from 0 - 255</li>
+		 * <li>rgba(red, green, blue, alpha) - each value has a range from 0 - 255</li>
 		 * </ul>
 		 * 
 		 * and returns an Object with the following properties:<ul>
