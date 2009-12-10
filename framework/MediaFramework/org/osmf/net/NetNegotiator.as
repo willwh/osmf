@@ -29,7 +29,6 @@ package org.osmf.net
 	import flash.errors.IOError;
 	import flash.events.AsyncErrorEvent;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.TimerEvent;
@@ -80,9 +79,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetNegotiator(target:IEventDispatcher=null):void
+		public function NetNegotiator():void
 		{
-			super(target);
+			super();
 		}
 		
 		/**

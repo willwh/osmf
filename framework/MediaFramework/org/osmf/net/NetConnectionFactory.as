@@ -28,7 +28,6 @@ package org.osmf.net
 	import __AS3__.vec.Vector;
 	
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	import flash.net.NetConnection;
 	import flash.utils.Dictionary;
 	
@@ -76,9 +75,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetConnectionFactory(target:IEventDispatcher=null)
+		public function NetConnectionFactory()
 		{
-			super(target);
+			super();
 		}
 		
 		/**
