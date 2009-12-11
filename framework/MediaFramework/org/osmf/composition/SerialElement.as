@@ -216,7 +216,7 @@ package org.osmf.composition
 				}
 				else
 				{
-					(compositeTrait as IReusable).prepare();
+					(compositeTrait as IReusable).attach();
 					reusableTraits[traitType] = null;
 				}
 				
@@ -244,6 +244,7 @@ package org.osmf.composition
 				var trait:MediaTraitBase = removeTrait(traitType);
 				if (trait != null && trait is IReusable) 
 				{
+					(trait as IReusable).detach();
 					reusableTraits[traitType] = trait;
 				}
 			}

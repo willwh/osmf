@@ -57,9 +57,17 @@ package org.osmf.composition
 		/**
 		 * @private
 		 */
-		public function prepare():void
+		public function attach():void
 		{
 			traitAggregationHelper.attach();
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function detach():void
+		{
+			traitAggregationHelper.detach();
 		}
 		
 		// Overrides

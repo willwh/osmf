@@ -97,6 +97,21 @@ package org.osmf.traits
 			return _traitType;
 		}
 		
+		/**
+		 * Disposes of any resources used by this trait.  Called by the framework
+		 * whenever a trait is removed from a MediaElement.
+		 * 
+		 * Subclasses should override to do any disposal logic specific to their case.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function dispose():void
+		{
+		}
+		
 		private var _traitType:String;
 	}
 }

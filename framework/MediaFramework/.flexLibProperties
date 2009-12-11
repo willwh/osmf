@@ -200,7 +200,6 @@
     <classEntry path="org.osmf.traits.BufferTrait"/>
     <classEntry path="org.osmf.traits.ContentProtectionTrait"/>
     <classEntry path="org.osmf.traits.DynamicStreamTrait"/>
-    <classEntry path="org.osmf.traits.IDisposable"/>
     <classEntry path="org.osmf.traits.ILoadedContext"/>
     <classEntry path="org.osmf.traits.ILoader"/>
     <classEntry path="org.osmf.traits.LoadState"/>

@@ -22,15 +22,19 @@
 package org.osmf.composition
 {
 	/**
-	 * An IReusable interface is designed for the reuse of some composite traits, such
-	 * as CompositeBufferableTrait and CompositeAudibleTrait. In serial composition, 
-	 * the state of these traits need to be carried over from the current child to the
-	 * next child. IReusable signals that the composite trait has such a usage. Its client,
-	 * the SerialElement for now, needs to know a composite implements this interface and
-	 * reuses the composite trait as deemed appropriate.
+	 * IReusable is an interface that can be applied to composite traits that need
+	 * to be reused during the lifetime of a CompositeElement.
 	 * */
 	internal interface IReusable
 	{
-		function prepare():void;
+		/**
+		 * Detaches this object from its parent.
+		 **/
+		function detach():void;
+		
+		/**
+		 * Reattaches this object to its parent.
+		 **/ 
+		function attach():void;
 	}
 }

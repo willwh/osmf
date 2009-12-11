@@ -27,7 +27,7 @@ package org.osmf.composition
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	
-	internal class CompositePlayTrait extends PlayTrait
+	internal class CompositePlayTrait extends PlayTrait implements IReusable
 	{
 		/**
 		 * Constructor.
@@ -52,6 +52,22 @@ package org.osmf.composition
 				);
 		}
 		
+		/**
+		 * @private
+		 */
+		public function attach():void
+		{
+			traitAggregationHelper.attach();
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function detach():void
+		{
+			traitAggregationHelper.detach();
+		}
+
 		/**
 		 * @private
 		 **/

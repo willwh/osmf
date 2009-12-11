@@ -58,7 +58,7 @@ package org.osmf
 			
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
-			
+						
 			// Utils
 			//
 			
@@ -232,21 +232,25 @@ package org.osmf
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
+			//addTestSuite(TestParallelElementWithContentProtectionTrait);
+			//addTestSuite(TestParallelElementWithDynamicStreamTrait);
+			//addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
+			//addTestSuite(TestParallelElementWithSeekTrait);
+			//addTestSuite(TestParallelElementWithTimeTrait);
+			//addTestSuite(TestParallelElementWithViewTrait);
+			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
+			//addTestSuite(TestSerialElementWithContentProtectionTrait);
+			//addTestSuite(TestSeriallElementWithDynamicStreamTrait);
+			//addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
+			//addTestSuite(TestSerialElementWithSeekTrait);
+			//addTestSuite(TestSerialElementWithTimeTrait);
+			//addTestSuite(TestSerialElementWithViewTrait);
 			
 			addTestSuite(TestCompositeAudioTrait);
-			/*
-			addTestSuite(TestParallelDownloadableTrait);
-			addTestSuite(TestSerialDownloadableTrait);
-			addTestSuite(TestCompositeViewableTrait);
-			addTestSuite(TestSerialViewableTrait);
-			addTestSuite(TestParallelViewableTrait);
-			addTestSuite(TestParallelSwitchableTrait);
-			addTestSuite(TestSerialSwitchableTrait);
-			*/
 			
 			// Layout
 			//

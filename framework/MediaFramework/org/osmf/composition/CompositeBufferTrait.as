@@ -141,18 +141,21 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function prepare():void
+		public function attach():void
 		{
 			traitAggregationHelper.attach();
 		}
 		
+		/**
+		 * @private
+		 **/
+		public function detach():void
+		{
+			traitAggregationHelper.detach();
+		}
+
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
 			onBufferingChanged();

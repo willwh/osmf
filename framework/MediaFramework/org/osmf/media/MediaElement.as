@@ -31,7 +31,6 @@ package org.osmf.media
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.traits.IDisposable;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
@@ -490,10 +489,9 @@ package org.osmf.media
 				{
 					// Stop listening for errors:
 					result.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-					if (result is IDisposable)
-					{
-						(result as IDisposable).dispose();
-					}
+					
+					// Dispose of any resources:
+					result.dispose();
 	
 					// Signal removal is about to occur:
 					dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, type));
