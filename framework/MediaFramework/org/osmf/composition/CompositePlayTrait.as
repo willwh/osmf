@@ -39,6 +39,8 @@ package org.osmf.composition
 		 **/
 		public function CompositePlayTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
 		{
+			super();
+			
 			this.traitAggregator = traitAggregator;
 			this.mode = mode;
 			
@@ -48,8 +50,6 @@ package org.osmf.composition
 				, processAggregatedChild
 				, processUnaggregatedChild
 				);
-			
-			super();
 		}
 		
 		/**
@@ -57,8 +57,11 @@ package org.osmf.composition
 		 **/
 		override protected function processPlayStateChange(newPlayState:String):void
 		{
-			if (newPlayState != PlayState.PLAYING)
+			if (newPlayState != playState && !playStateIsChanging)
 			{
+				// Prevent this from being reentrant.
+				playStateIsChanging = true;
+				
 				if (mode == CompositionMode.PARALLEL)
 				{
 					// Invoke the appropriate method on all children.
@@ -80,6 +83,21 @@ package org.osmf.composition
 					// Invoke the appropriate method on the current child.
 					setPlayState(traitOfCurrentChild, newPlayState);
 				}
+				
+				playStateIsChanging = false;
+			}
+		}
+		
+		/**
+		 * @private
+		 **/
+		override protected function postProcessPlayStateChange():void
+		{
+			// Never dispatch the event while we're in the middle of
+			// processing.
+			if (playStateIsChanging == false)
+			{
+				super.postProcessPlayStateChange();
 			}
 		}
 		
@@ -89,6 +107,7 @@ package org.osmf.composition
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
 			child.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange, false, 0, true);
+			child.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, onCanPauseChange, false, 0, true);
 
 			var playTrait:PlayTrait = child as PlayTrait;
 			
@@ -106,18 +125,25 @@ package org.osmf.composition
 					// from the composite trait.
 					setPlayState(playTrait, this.playState);
 				}
+				
+				updateCanPauseState();
 			}
 			else if (child == traitOfCurrentChild)
 			{
 				// The first added child's properties are applied to the
 				// composite trait.
 				setPlayState(this, playTrait.playState);
+				
+				updateCanPauseState();
 			}
 		}
 
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
 			child.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+			child.removeEventListener(PlayEvent.CAN_PAUSE_CHANGE, onCanPauseChange);
+			
+			updateCanPauseState();
 		}
 		
 		private function onPlayStateChange(event:PlayEvent):void
@@ -152,23 +178,80 @@ package org.osmf.composition
 			}
 		}
 		
+		private function onCanPauseChange(event:PlayEvent):void
+		{
+			updateCanPauseState();
+		}
+		
 		private function setPlayState(playTrait:PlayTrait, value:String):void
 		{
-			if (value != playState)
+			if (value != playTrait.playState)
 			{
 				if (value == PlayState.PLAYING)
 				{
-					play();
+					playTrait.play();
 				}
 				else if (value == PlayState.PAUSED)
 				{
-					pause();
+					// If we can't pause, leave it alone.  The composition may
+					// get out of sync, but that's acceptable.
+					if (playTrait.canPause)
+					{
+						playTrait.pause();
+					}
 				}
 				else // STOPPED
 				{
-					stop();
+					playTrait.stop();
 				}
 			}	
+		}
+		
+		private function updateCanPauseState():void
+		{
+			if (mode == CompositionMode.PARALLEL)
+			{
+				// The composition can be paused if at least one child can be paused.
+				var newCanPause:Boolean = false;
+				traitAggregator.forEachChildTrait
+					(
+					  function(mediaTrait:MediaTraitBase):void
+					  {
+					     newCanPause ||= PlayTrait(mediaTrait).canPause;
+					  }
+					, MediaTraitType.PLAY
+					);
+				
+				if (canPause != newCanPause)
+				{
+					setCanPause(newCanPause);
+					
+					// If the composite trait changes from pausable to unpausable
+					// while it's paused, we need to get the composite trait's state
+					// in sync with the state of its children (whether that be playing
+					// or stopped).
+					if (newCanPause == false && playState == PlayState.PAUSED)
+					{
+						var newPlayState:String;
+						traitAggregator.forEachChildTrait
+							(
+							  function(mediaTrait:MediaTraitBase):void
+							  {
+							  	newPlayState ||= PlayTrait(mediaTrait).playState;
+							  }
+							, MediaTraitType.PLAY
+							);
+						if (newPlayState != null)
+						{
+							setPlayState(this, newPlayState);
+						}
+					} 
+				}
+			}
+			else
+			{
+				setCanPause(traitOfCurrentChild.canPause);
+			}
 		}
 		
 		private function get traitOfCurrentChild():PlayTrait
@@ -181,5 +264,6 @@ package org.osmf.composition
 		private var mode:CompositionMode;
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
+		private var playStateIsChanging:Boolean;
 	}
 }

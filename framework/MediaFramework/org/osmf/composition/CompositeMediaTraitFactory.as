@@ -63,6 +63,11 @@ package org.osmf.composition
 				case MediaTraitType.BUFFER:
 					compositeTrait = new CompositeBufferTrait(traitAggregator, mode);
 					break;
+					
+				case MediaTraitType.PLAY:
+					compositeTrait = new CompositePlayTrait(traitAggregator, mode);
+					break;
+
 				/*
 				case MediaTraitType.LOADABLE:
 					compositeTrait = new CompositeLoadableTrait(traitAggregator, mode);

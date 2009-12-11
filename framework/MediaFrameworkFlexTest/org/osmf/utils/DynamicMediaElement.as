@@ -76,7 +76,14 @@ package org.osmf.utils
 							}
 							break;
 						case MediaTraitType.PLAY:
-							trait = new PlayTrait();
+							if (useDynamicTraits)
+							{
+								trait = new DynamicPlayTrait();
+							}
+							else
+							{
+								trait = new PlayTrait();
+							}
 							break;
 						case MediaTraitType.SEEK:
 							doCreateSeekTrait = true;

@@ -24,6 +24,7 @@ package org.osmf.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.PlayEvent;
+	import org.osmf.utils.DynamicPlayTrait;
 
 	public class TestPlayTraitAsSubclass extends TestPlayTrait
 	{
@@ -66,15 +67,5 @@ package org.osmf.traits
 			dynamicPlayTrait.canPause = false;
 			assertTrue(events.length == 1);
 		}
-	}
-}
-
-import org.osmf.traits.PlayTrait;
-
-class DynamicPlayTrait extends PlayTrait
-{
-	public function set canPause(value:Boolean):void
-	{
-		setCanPause(value);
 	}
 }

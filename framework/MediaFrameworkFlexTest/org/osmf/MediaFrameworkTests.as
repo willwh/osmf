@@ -232,8 +232,10 @@ package org.osmf
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
+			addTestSuite(TestParallelElementWithPlayTrait);
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
+			addTestSuite(TestSerialElementWithPlayTrait);
 			
 			addTestSuite(TestCompositeAudioTrait);
 			/*
