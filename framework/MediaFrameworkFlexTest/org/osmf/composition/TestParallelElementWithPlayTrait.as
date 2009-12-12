@@ -235,6 +235,13 @@ package org.osmf.composition
 			assertTrue(playTrait.playState == PlayState.STOPPED);
 			assertTrue(playTrait3.playState == PlayState.STOPPED);
 			assertTrue(canPauseChangedEventCount == 4);
+			
+			// Changing the canPause state of a child should affect
+			// the composite trait's state.
+			playTrait3.canPause = true;
+			assertTrue(playTrait3.canPause == true);
+			assertTrue(playTrait.canPause == true);
+			assertTrue(canPauseChangedEventCount == 5);
 		}
 		
 		private function onPlayStateChanged(event:PlayEvent):void
