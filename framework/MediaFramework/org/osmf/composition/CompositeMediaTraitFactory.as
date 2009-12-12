@@ -67,29 +67,22 @@ package org.osmf.composition
 				case MediaTraitType.PLAY:
 					compositeTrait = new CompositePlayTrait(traitAggregator, mode);
 					break;
+					
+				case MediaTraitType.TIME:
+					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
+					break;
 
 				/*
 				case MediaTraitType.LOADABLE:
 					compositeTrait = new CompositeLoadableTrait(traitAggregator, mode);
 					break;
 				
-				case MediaTraitType.PLAYABLE:
-					compositeTrait = new CompositePlayableTrait(traitAggregator, mode);
-					break;
-					
-				case MediaTraitType.PAUSABLE:
-					compositeTrait = new CompositePausableTrait(traitAggregator, mode);
-					break;
-
 				case MediaTraitType.SEEKABLE:
 					compositeTrait 
 						= mode == CompositionMode.PARALLEL
 							?	new ParallelSeekableTrait(traitAggregator, owner)
 							:	new SerialSeekableTrait(traitAggregator, owner);
 					break;				
-				case MediaTraitType.TEMPORAL:
-					compositeTrait = new CompositeTemporalTrait(traitAggregator, mode, owner);
-					break;
 					
 				case MediaTraitType.SPATIAL:
 					compositeTrait 
@@ -104,12 +97,14 @@ package org.osmf.composition
 							? new ParallelViewableTrait(traitAggregator, owner)
 							: new SerialViewableTrait(traitAggregator, owner);
 					break;
+					
 				case MediaTraitType.SWITCHABLE:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelSwitchableTrait(traitAggregator)
 							: new SerialSwitchableTrait(traitAggregator);		
-					break;	
+					break;
+					
 				case MediaTraitType.DOWNLOADABLE:
 					compositeTrait = new CompositeDownloadableTrait(mode, traitAggregator);
 					break;
