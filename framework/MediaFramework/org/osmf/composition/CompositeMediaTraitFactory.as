@@ -72,31 +72,33 @@ package org.osmf.composition
 					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
 					break;
 
+				case MediaTraitType.SEEK:
+					compositeTrait 
+						= mode == CompositionMode.PARALLEL
+							?	new ParallelSeekTrait(traitAggregator, owner)
+							:	new SerialSeekTrait(traitAggregator, owner);
+					break;				
+
 				/*
 				case MediaTraitType.LOADABLE:
 					compositeTrait = new CompositeLoadableTrait(traitAggregator, mode);
 					break;
+				case MediaTraitType.DOWNLOADABLE:
+					compositeTrait = new CompositeDownloadableTrait(mode, traitAggregator);
+					break;
 				
-				case MediaTraitType.SEEKABLE:
-					compositeTrait 
-						= mode == CompositionMode.PARALLEL
-							?	new ParallelSeekableTrait(traitAggregator, owner)
-							:	new SerialSeekableTrait(traitAggregator, owner);
-					break;				
-					
-				case MediaTraitType.SPATIAL:
-					compositeTrait 
-						= mode == CompositionMode.PARALLEL
-							? new ParallelSpatialTrait(traitAggregator, owner)
-							: new SerialSpatialTrait(traitAggregator, owner);
-					break; 
-					
 				case MediaTraitType.VIEWABLE:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelViewableTrait(traitAggregator, owner)
 							: new SerialViewableTrait(traitAggregator, owner);
 					break;
+				case MediaTraitType.SPATIAL:
+					compositeTrait 
+						= mode == CompositionMode.PARALLEL
+							? new ParallelSpatialTrait(traitAggregator, owner)
+							: new SerialSpatialTrait(traitAggregator, owner);
+					break; 
 					
 				case MediaTraitType.SWITCHABLE:
 					compositeTrait
@@ -105,9 +107,6 @@ package org.osmf.composition
 							: new SerialSwitchableTrait(traitAggregator);		
 					break;
 					
-				case MediaTraitType.DOWNLOADABLE:
-					compositeTrait = new CompositeDownloadableTrait(mode, traitAggregator);
-					break;
 				*/	
 				default:
 					throw new Error("");

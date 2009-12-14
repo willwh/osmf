@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.events.SeekEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.AudioTrait;
@@ -56,34 +55,13 @@ package org.osmf.utils
 							trait = new AudioTrait();
 							break;
 						case MediaTraitType.BUFFER:
-							if (useDynamicTraits)
-							{
-								trait = new DynamicBufferTrait();
-							}
-							else
-							{
-								trait = new BufferTrait();
-							}
+							trait = useDynamicTraits ? new DynamicBufferTrait() : new BufferTrait();
 							break;
 						case MediaTraitType.LOAD:
-							if (useDynamicTraits)
-							{
-								trait = new DynamicLoadTrait(loader, resource);
-							}
-							else
-							{
-								trait = new LoadTrait(loader, resource);
-							}
+							trait = useDynamicTraits ? new DynamicLoadTrait(loader, resource) : new LoadTrait(loader, resource);
 							break;
 						case MediaTraitType.PLAY:
-							if (useDynamicTraits)
-							{
-								trait = new DynamicPlayTrait();
-							}
-							else
-							{
-								trait = new PlayTrait();
-							}
+							trait = useDynamicTraits ? new DynamicPlayTrait() : new PlayTrait();
 							break;
 						case MediaTraitType.SEEK:
 							doCreateSeekTrait = true;
@@ -92,25 +70,11 @@ package org.osmf.utils
 							trait = new DynamicStreamTrait(true, 0, 5);
 							break;
 						case MediaTraitType.TIME:
-							if (useDynamicTraits)
-							{
-								trait = new DynamicTimeTrait();
-							}
-							else
-							{
-								trait = new TimeTrait();
-							}
+							trait = useDynamicTraits ? new DynamicTimeTrait() : new TimeTrait();
 							timeTrait = trait as TimeTrait;
 							break;
 						case MediaTraitType.VIEW:
-							if (useDynamicTraits)
-							{
-								trait = new DynamicViewTrait(null);
-							}
-							else
-							{
-								trait = new ViewTrait(null);
-							}
+							trait = useDynamicTraits ? new DynamicViewTrait(null) : new ViewTrait(null);
 							break;
 						default:
 							break;
@@ -125,7 +89,7 @@ package org.osmf.utils
 			
 			if (doCreateSeekTrait)
 			{
-				var seekTrait:SeekTrait = new SeekTrait(timeTrait);
+				var seekTrait:SeekTrait = useDynamicTraits ? new DynamicSeekTrait(DynamicTimeTrait(timeTrait)) : new SeekTrait(timeTrait);
 				doAddTrait(MediaTraitType.SEEK, seekTrait);
 			}
 		}

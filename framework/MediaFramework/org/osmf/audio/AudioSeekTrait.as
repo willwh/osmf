@@ -40,8 +40,6 @@ package org.osmf.audio
 		{
 			if (newSeeking)
 			{
-				expectedTime = time;
-
 				soundAdapter.seek(time);	
 			}					
 		}
@@ -54,18 +52,17 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function postProcessSeekingChange():void
+		override protected function postProcessSeekingChange(time:Number):void
 		{
-			super.postProcessSeekingChange();
+			super.postProcessSeekingChange(time);
 			
 			// If we just started seeking, finish since this operation is async.
 			if (seeking == true)
 			{
-				processSeekCompletion(expectedTime);
+				processSeekCompletion(time);
 			}
 		}
 			
-		private var expectedTime:Number;		
 		private var soundAdapter:SoundAdapter;
 	}
 }

@@ -70,7 +70,7 @@ package org.osmf.traits
 		{
 			super(MediaTraitType.SEEK);
 			
-			this.timeTrait = timeTrait;
+			_timeTrait = timeTrait;
 		}
 		
 		/**
@@ -107,13 +107,11 @@ package org.osmf.traits
 		{
 			if (canSeekTo(time))
 			{
-				seekTargetTime = time;
-				
 				processSeekingChange(true, time);
 					
 				_seeking = true;
 					
-				postProcessSeekingChange();
+				postProcessSeekingChange(time);
 			}
 		}
 		
@@ -136,16 +134,24 @@ package org.osmf.traits
 			// latter is for the case where the media has no (NaN) duration, but
 			// is still progressing.  Presumably it should be possible to seek
 			// backwards.
-			return timeTrait 
+			return _timeTrait 
 				?	(	isNaN(time) == false
 					&& 	time >= 0
-					&&	(time <= timeTrait.duration || time <= timeTrait.currentTime)
+					&&	(time <= _timeTrait.duration || time <= _timeTrait.currentTime)
 					)
 				: 	false;
 		}
 		
 		// Internals
 		//
+		
+		/**
+		 * The TimeTrait used by this SeekTrait.
+		 **/
+		protected final function get timeTrait():TimeTrait
+		{
+			return _timeTrait;
+		}
 		
 		/**
          * Called immediately before the <code>seeking</code> property is changed.
@@ -167,20 +173,22 @@ package org.osmf.traits
 		 * 
 		 * <p>Subclasses that override should call this method to
 		 * dispatch the change event.</p>
+		 * 
+		 * @param time New <code>time</code> value representing the time that the playhead seeked to.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessSeekingChange():void
+		protected function postProcessSeekingChange(time:Number):void
 		{
 			dispatchEvent
 				( new SeekEvent
 					( seeking ? SeekEvent.SEEK_BEGIN : SeekEvent.SEEK_END
 					, false
 					, false
-					, seekTargetTime
+					, time
 					)
 				);
 		}
@@ -203,17 +211,15 @@ package org.osmf.traits
 		{
 			if (_seeking == true)
 			{
-				seekTargetTime = time;
-				
 				processSeekingChange(false, time);
+				
 				_seeking = false;
 				
-				postProcessSeekingChange();
+				postProcessSeekingChange(time);
 			}
 		}
 	
-		private var timeTrait:TimeTrait;
+		private var _timeTrait:TimeTrait;
 		private var _seeking:Boolean;
-		private var seekTargetTime:Number;
 	}
 }

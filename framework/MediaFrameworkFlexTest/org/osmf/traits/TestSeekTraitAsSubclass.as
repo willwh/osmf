@@ -24,6 +24,7 @@ package org.osmf.traits
 	import flash.display.Sprite;
 	
 	import org.osmf.events.ViewEvent;
+	import org.osmf.utils.DynamicSeekTrait;
 
 	public class TestSeekTraitAsSubclass extends TestSeekTrait
 	{
@@ -41,41 +42,4 @@ package org.osmf.traits
 			return true;
 		}
 	}
-}
-
-import flash.display.DisplayObject;
-
-import org.osmf.events.SeekEvent;
-import org.osmf.traits.SeekTrait;
-import org.osmf.traits.TimeTrait;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
-
-class DynamicSeekTrait extends SeekTrait
-{
-	public function DynamicSeekTrait(timeTrait:TimeTrait)
-	{
-		super(timeTrait);
-		
-		addEventListener(SeekEvent.SEEK_BEGIN, onSeekBegin);
-	}
-	
-	private function onSeekBegin(event:SeekEvent):void
-	{
-		seekTargetTime = event.time;
-		
-		// Complete the seek shortly after it begins.
-		var timer:Timer = new Timer(500, 1);
-		timer.addEventListener(TimerEvent.TIMER, onTimer);
-		timer.start();
-		
-		function onTimer(timerEvent:TimerEvent):void
-		{
-			timer.removeEventListener(TimerEvent.TIMER, onTimer);
-			
-			processSeekCompletion(seekTargetTime);
-		}
-	}
-
-	private var seekTargetTime:Number;
 }

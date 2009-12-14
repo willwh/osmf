@@ -36,25 +36,15 @@ package org.osmf.proxies
 			super(temporal);
 		}
 		
-		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
+		override protected function postProcessSeekingChange(time:Number):void
 		{
-			if (newSeeking)
-			{
-				lastSeekTime = time;
-			}
-		}
-		
-		override protected function postProcessSeekingChange():void
-		{
-			super.postProcessSeekingChange();
+			super.postProcessSeekingChange(time);
 
 			// Auto-complete any in-progress seek operation.
 			if (seeking == true)
 			{
-				processSeekCompletion(lastSeekTime);
+				processSeekCompletion(time);
 			}
 		}
-		
-		private var lastSeekTime:Number;
 	}
 }
