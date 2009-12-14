@@ -320,73 +320,6 @@ package org.osmf.composition
 			assertTrue(loadable3.loadState == LoadState.LOAD_ERROR);
 		}
 		
-		public function testGetTraitPlayableWithTemporal():void
-		{
-			var serial:SerialElement = createSerialElement();
-			
-			// No trait to begin with.
-			assertTrue(serial.getTrait(MediaTraitType.PLAYABLE) == null);
-			
-			// Create a few media elements with the IPlayable trait.
-			//
-
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
-			var playable1:PlayableTrait = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
-			var playable2:PlayableTrait = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-
-			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
-			var playable3:PlayableTrait = mediaElement3.getTrait(MediaTraitType.PLAYABLE) as PlayableTrait;
-			
-			// Adding a playing child should cause the composite trait to be
-			// "playing".
-			playable1.play();
-			serial.addChild(mediaElement1);
-			var playable:IPlayable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			assertTrue(playable.playing == true);
-			
-			// Removing the last child should cause the composite trait to
-			// disappear.
-			serial.removeChild(mediaElement1);
-			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable == null);
-			
-			playable1.resetPlaying();
-
-			serial.addChild(mediaElement1);
-			serial.addChild(mediaElement2);
-			serial.addChild(mediaElement3);
-			
-			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable != null);
-			assertTrue(playable.playing == false);
-			
-			playable.addEventListener(PlayingChangeEvent.PLAYING_CHANGE, onPlayingChanged);
-			
-			// Playing the composite trait should cause the current child to
-			// play (and dispatch an event).
-			playable.play();
-			assertTrue(playable.playing == true);
-			assertTrue(playable1.playing == true);
-			assertTrue(playable2.playing == false);
-			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 1);
-			
-			// When the current child stops playing, the next child does not
-			// automatically play.  When the temporal trait is present, the
-			// durationReached event is what's used to trigger playback of
-			// the next child.
-			playable1.resetPlaying();
-			playable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(playable.playing == false);
-			assertTrue(playable1.playing == false);
-			assertTrue(playable2.playing == false);
-			assertTrue(playable3.playing == false);
-			assertTrue(playingChangedEventCount == 2);
-		}
-		
 		public function testGetTraitPlayableWithLoadable():void
 		{
 			var serial:SerialElement = createSerialElement();
@@ -620,62 +553,6 @@ package org.osmf.composition
 			// No trait to end with.
 			assertFalse(serial.hasTrait(MediaTraitType.VIEWABLE));
 			assertNull(serial.getTrait(MediaTraitType.VIEWABLE));
-		}
-		
-		public function testGetTraitPausable():void
-		{
-			var serial:SerialElement = createSerialElement();
-			
-			// No trait to begin with.
-			assertTrue(serial.getTrait(MediaTraitType.PAUSABLE) == null);
-			
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PAUSABLE, MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
-			var pausable1:IPausable = mediaElement1.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			var playable1:IPlayable = mediaElement1.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PAUSABLE, MediaTraitType.PLAYABLE, MediaTraitType.TEMPORAL]);
-			var pausable2:IPausable = mediaElement2.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			var playable2:IPlayable = mediaElement2.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			pausable2.pause();
-			
-			// Add the first child. This should cause its properties to 
-			// propagate to the composition.
-			serial.addChild(mediaElement1);
-			var pausable:IPausable = serial.getTrait(MediaTraitType.PAUSABLE) as IPausable;
-			var playable:IPlayable = serial.getTrait(MediaTraitType.PLAYABLE) as IPlayable;
-			assertTrue(pausable.paused == false);
-			
-			// Add the second child.
-			serial.addChild(mediaElement2);
-
-			// The paused state of the second child should not affect the paused state of the composition.
-			assertTrue(pausable.paused == false);
-			
-			// Pausing the composite trait before it's playing should have no effect.
-			pausable.pause();
-			assertTrue(pausable.paused == false);
-			assertTrue(pausable1.paused == false);
-			assertTrue(pausable2.paused == false);
-			assertTrue(playable.playing == false);
-			assertTrue(playable1.playing == false);
-			assertTrue(playable2.playing == false);
-			
-			playable.play();
-			assertTrue(pausable.paused == false);
-			assertTrue(pausable1.paused == false);
-			assertTrue(pausable2.paused == false);
-			assertTrue(playable.playing == true);
-			assertTrue(playable1.playing == true);
-			assertTrue(playable2.playing == false);
-   
-			// Pause the composite trait and then check the state of the composition and the current child
-			pausable1.pause();
-			assertTrue(pausable.paused == true);
-			assertTrue(pausable1.paused == true);
-			assertTrue(pausable2.paused == false);
-			assertTrue(playable.playing == false);
-			assertTrue(playable1.playing == false);
-			assertTrue(playable2.playing == false);
 		}
 		*/
 		

@@ -142,7 +142,7 @@ package org.osmf
 			
 			// MediaPlayer
 			//
-
+			
 			addTestSuite(TestMediaPlayer);
 			addTestSuite(TestMediaPlayerWithAudioElement);
 			addTestSuite(TestMediaPlayerWithVideoElement);
@@ -170,7 +170,6 @@ package org.osmf
 
 			// NetStream
 			//
-			
 			
 			addTestSuite(TestNetLoadedContext);
 			addTestSuite(TestNetNegotiator);
@@ -222,6 +221,7 @@ package org.osmf
 			addTestSuite(TestSWFElement);
 			
 			// Composition
+			//
 			
 			addTestSuite(TestTraitAggregator);
 			addTestSuite(TestTraitLoader);
@@ -290,7 +290,6 @@ package org.osmf
 
 			// Proxies
 			//
-			
 			
 			addTestSuite(TestProxyElement);
 			addTestSuite(TestProxyElementAsDynamicProxy);

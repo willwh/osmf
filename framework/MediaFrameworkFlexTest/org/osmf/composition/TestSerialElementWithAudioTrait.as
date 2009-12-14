@@ -105,7 +105,7 @@ package org.osmf.composition
 			assertTrue(audioTrait2.pan == -0.66);
 		}
 		
-		public function testGetTraitAudibleDynamicChildTraits():void
+		public function testAudioTraitWithDynamicChildTraits():void
 		{
 			var serial:SerialElement = new SerialElement();
 			
@@ -128,9 +128,6 @@ package org.osmf.composition
 			var audioTrait2:AudioTrait = mediaElement2.getTrait(MediaTraitType.AUDIO) as AudioTrait;
 			assertNull(audioTrait2);
 			
-			// TODO: Enable the rest when the composite seek and time traits are in.
-			if (true) return;
-
 			// Set the initial AudioTrait properties on the first child. The serial element will
 			// adopt these for its composite AudioTrait:
 			audioTrait1.muted = true;
@@ -145,10 +142,6 @@ package org.osmf.composition
 			assertEquals(-1.0, compAudioTrait1.pan);
 			assertEquals(0.5, compAudioTrait1.volume);
 
-			// TODO: this assertion currently fails, whereas it shouldn't. Tracing into to
-			// next seek method, it turns out the composite trait's seekable _temporal
-			// reference points to a temporal trait that's only 5 secs. long, whereas I 
-			// think this should be 10 secs instead.
 			assertTrue(SeekTrait(serial.getTrait(MediaTraitType.SEEK)).canSeekTo(6));
 
 			// Skip to the next child:

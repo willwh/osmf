@@ -24,6 +24,7 @@ package org.osmf.composition
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Factory class for generating composite media traits.
@@ -56,22 +57,32 @@ package org.osmf.composition
 			switch (traitType)
 			{
 				case MediaTraitType.AUDIO:
-					// No distinction between modes for IAudible. 
+					// No distinction between modes for AudioTrait. 
 					compositeTrait = new CompositeAudioTrait(traitAggregator);
 					break;
 					
 				case MediaTraitType.BUFFER:
 					compositeTrait = new CompositeBufferTrait(traitAggregator, mode);
 					break;
-					
+				
+				/*
+				case MediaTraitType.DYNAMIC_STREAM:
+					compositeTrait
+						= mode == CompositionMode.PARALLEL
+							? new ParallelDynamicStreamTrait(traitAggregator)
+							: new SerialDynamicStreamTrait(traitAggregator);		
+					break;
+				*/
+				/*
+				case MediaTraitType.LOAD:
+					compositeTrait = new CompositeLoadTrait(traitAggregator, mode);
+					break;
+				*/
+				
 				case MediaTraitType.PLAY:
 					compositeTrait = new CompositePlayTrait(traitAggregator, mode);
 					break;
 					
-				case MediaTraitType.TIME:
-					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
-					break;
-
 				case MediaTraitType.SEEK:
 					compositeTrait 
 						= mode == CompositionMode.PARALLEL
@@ -79,37 +90,21 @@ package org.osmf.composition
 							:	new SerialSeekTrait(traitAggregator, owner);
 					break;				
 
+				case MediaTraitType.TIME:
+					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
+					break;
+
 				/*
-				case MediaTraitType.LOADABLE:
-					compositeTrait = new CompositeLoadableTrait(traitAggregator, mode);
-					break;
-				case MediaTraitType.DOWNLOADABLE:
-					compositeTrait = new CompositeDownloadableTrait(mode, traitAggregator);
-					break;
-				
-				case MediaTraitType.VIEWABLE:
+				case MediaTraitType.VIEW:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
-							? new ParallelViewableTrait(traitAggregator, owner)
-							: new SerialViewableTrait(traitAggregator, owner);
+							? new ParallelViewTrait(traitAggregator, owner)
+							: new SerialViewTrait(traitAggregator, owner);
 					break;
-				case MediaTraitType.SPATIAL:
-					compositeTrait 
-						= mode == CompositionMode.PARALLEL
-							? new ParallelSpatialTrait(traitAggregator, owner)
-							: new SerialSpatialTrait(traitAggregator, owner);
-					break; 
+				*/
 					
-				case MediaTraitType.SWITCHABLE:
-					compositeTrait
-						= mode == CompositionMode.PARALLEL
-							? new ParallelSwitchableTrait(traitAggregator)
-							: new SerialSwitchableTrait(traitAggregator);		
-					break;
-					
-				*/	
 				default:
-					throw new Error("");
+					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
 					break;
 			}
 			
