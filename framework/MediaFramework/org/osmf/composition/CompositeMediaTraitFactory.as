@@ -101,7 +101,8 @@ package org.osmf.composition
 					break;
 					
 				default:
-					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
+					// TODO: Reenable once the missing composite traits are back in.
+					//throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
 					break;
 			}
 			
