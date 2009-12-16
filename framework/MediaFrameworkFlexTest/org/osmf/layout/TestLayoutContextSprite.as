@@ -37,8 +37,8 @@ package org.osmf.layout
 			renderer.addTarget(child1);
 			renderer.addTarget(child2);
 			
-			assertEquals(NaN, lcs.intrinsicWidth);
-			assertEquals(NaN,lcs.intrinsicHeight);
+			assertEquals(0, lcs.intrinsicWidth);
+			assertEquals(0, lcs.intrinsicHeight);
 			
 		}
 		

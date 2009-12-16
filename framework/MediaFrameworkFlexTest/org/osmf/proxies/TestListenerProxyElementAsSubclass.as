@@ -346,7 +346,9 @@ package org.osmf.proxies
 		{
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.VIEW);
 			
-			assertTrue(events.length == 0);
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["oldView"] == null);
+			assertTrue(events[0]["newView"] != null);
 			
 			// Changing properties should result in events.
 			//
@@ -356,21 +358,21 @@ package org.osmf.proxies
 			var aView:DisplayObject = new Sprite();
 						
 			viewTrait.view = aView; 
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldView"] == null);
-			assertTrue(events[0]["newView"] == aView);
+			assertTrue(events.length == 2);
+			assertTrue(events[1]["oldView"] != null);
+			assertTrue(events[1]["newView"] == aView);
 			
 			viewTrait.view = null; 
-			assertTrue(events.length == 2);
-			assertTrue(events[1]["oldView"] == aView);
-			assertTrue(events[1]["newView"] == null);
+			assertTrue(events.length == 3);
+			assertTrue(events[2]["oldView"] == aView);
+			assertTrue(events[2]["newView"] == null);
 			
 			viewTrait.setDimensions(20, 10);
-			assertTrue(events.length == 3);
-			assertTrue(events[2]["oldWidth"] == 0);
-			assertTrue(events[2]["newWidth"] == 20);
-			assertTrue(events[2]["oldHeight"] == 0);
-			assertTrue(events[2]["newHeight"] == 10);
+			assertTrue(events.length == 4);
+			assertTrue(events[3]["oldWidth"] == 0);
+			assertTrue(events[3]["newWidth"] == 20);
+			assertTrue(events[3]["oldHeight"] == 0);
+			assertTrue(events[3]["newHeight"] == 10);
 
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -381,7 +383,7 @@ package org.osmf.proxies
 			viewTrait.view = aView;
 			viewTrait.setDimensions(0, 0);
 			
-			assertTrue(events.length == 3);
+			assertTrue(events.length == 4);
 		}
 		
 		public function testProcessViewTraitChangesOnAddViewTrait():void
