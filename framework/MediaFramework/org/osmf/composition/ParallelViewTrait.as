@@ -24,7 +24,9 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ViewEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
+	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
@@ -50,9 +52,8 @@ package org.osmf.composition
 		 */
 		public function ParallelViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
-			this.owner = owner as CompositeElement;
-			
 			super(traitAggregator, owner);
+			
 			traitAggregationHelper = new TraitAggregationHelper
 				( traitType
 				, traitAggregator
@@ -80,41 +81,43 @@ package org.osmf.composition
 		// Internals
 		//
 
-		private function processAggregatedChild(trait:MediaTraitBase):void
+		private function processAggregatedChild(child:MediaTraitBase):void
 		{
-			var child:MediaElement
-				= getMediaElementFromViewTrait(trait as ViewTrait);
+			child.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange, false, 0, true);
 			
-			if (child != null)
+			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
+			
+			if (mediaElement != null)
 			{
-				var layoutTarget:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
+				var layoutTarget:MediaElementLayoutTarget = mediaElementLayoutTargets[mediaElement];
 				
 				if (layoutTarget == null)
 				{
-					var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
+					var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(mediaElement);
 					
-					child.addEventListener
+					mediaElement.addEventListener
 						( GatewayChangeEvent.GATEWAY_CHANGE
 						, onLayoutTargetGatewayChange
 						);
 					
-					mediaElementLayoutTargets[child] = target;
+					mediaElementLayoutTargets[mediaElement] = target;
 					
 					setupLayoutTarget(target);
 				}	
 			}
 		}
 		
-		private function processUnaggregatedChild(trait:MediaTraitBase):void
+		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
-			var child:MediaElement
-				= getMediaElementFromViewTrait(trait as ViewTrait);
+			child.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
 			
-			if (child)
+			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
+			
+			if (mediaElement != null)
 			{
-				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
+				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[mediaElement];
 				
-				child.removeEventListener
+				mediaElement.removeEventListener
 					( GatewayChangeEvent.GATEWAY_CHANGE
 					, onLayoutTargetGatewayChange
 					);
@@ -124,7 +127,7 @@ package org.osmf.composition
 					layoutRenderer.removeTarget(target);
 				}
 				
-				delete mediaElementLayoutTargets[child];	
+				delete mediaElementLayoutTargets[mediaElement];	
 			}
 		}
 		
@@ -155,7 +158,6 @@ package org.osmf.composition
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
 		{
 			var gateway:IMediaGateway = target.mediaElement.gateway; 
-			var mediaElement:MediaElement = target.mediaElement;
 			
 			if (gateway && gateway != owner.gateway)
 			{
@@ -177,11 +179,32 @@ package org.osmf.composition
 		{
 			var mediaElement:MediaElement = event.target as MediaElement;
 			
-			setupLayoutTarget(mediaElementLayoutTargets[event.target]);
+			setupLayoutTarget(mediaElementLayoutTargets[mediaElement]);
 		}
 		
+		private function onDimensionChange(event:ViewEvent):void
+		{
+			updateDimensions();
+		}
+		
+		private function updateDimensions():void
+		{
+			var newMediaWidth:int = -1;
+			var newMediaHeight:int = -1;
+			
+			traitAggregator.forEachChildTrait
+				(	function(trait:ViewTrait):void
+					{
+						newMediaWidth = Math.max(newMediaWidth, trait.mediaWidth);
+						newMediaHeight = Math.max(newMediaHeight, trait.mediaHeight);
+					}
+				,	MediaTraitType.VIEW
+				);
+					
+			setMediaDimensions(newMediaWidth, newMediaHeight);
+		}
+
 		private var traitAggregationHelper:TraitAggregationHelper;
 		private var mediaElementLayoutTargets:Dictionary = new Dictionary();
-		private var owner:CompositeElement;
 	}
 }

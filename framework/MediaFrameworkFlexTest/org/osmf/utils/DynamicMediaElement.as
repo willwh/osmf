@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.utils
 {
+	import flash.display.Sprite;
+	
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.AudioTrait;
@@ -74,7 +76,7 @@ package org.osmf.utils
 							timeTrait = trait as TimeTrait;
 							break;
 						case MediaTraitType.VIEW:
-							trait = useDynamicTraits ? new DynamicViewTrait(null) : new ViewTrait(null);
+							trait = useDynamicTraits ? new DynamicViewTrait(new Sprite()) : new ViewTrait(new Sprite());
 							break;
 						default:
 							break;

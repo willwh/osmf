@@ -51,8 +51,6 @@ package org.osmf.composition
 		 */		
 		public function SerialViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
-			this.owner = owner;
-			
 			super(traitAggregator, owner);
 			
 			// In order to forward the serial's active child's view, we need
@@ -146,6 +144,5 @@ package org.osmf.composition
 		}
 		
 		private var layoutTarget:MediaElementLayoutTarget;
-		private var owner:MediaElement;
 	}
 }

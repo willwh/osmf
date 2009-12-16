@@ -34,7 +34,6 @@ package org.osmf.composition
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -62,12 +61,12 @@ package org.osmf.composition
 		{
 			super(null);
 			
-			this.traitAggregator = traitAggregator;
-			this.owner = owner as CompositeElement;
+			_traitAggregator = traitAggregator;
+			_owner = owner as CompositeElement;
 			
 			// Prepare a container to hold our viewable children:
-			container = constructLayoutContext();
-			container.addEventListener
+			_container = constructLayoutContext();
+			_container.addEventListener
 				( ViewEvent.DIMENSION_CHANGE
 				, onContainerDimensionChange
 				);
@@ -92,7 +91,7 @@ package org.osmf.composition
 		{
 			// The aggregate view is the container holding the composite
 			// trait's children:
-			return container.view;
+			return _container.view;
 		}
 
 		/**
@@ -105,7 +104,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaWidth():Number
 		{
-			return container.intrinsicWidth;
+			return _container.intrinsicWidth;
 		}
 		
 		/**
@@ -118,7 +117,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaHeight():Number
 		{
-			return container.intrinsicHeight;
+			return _container.intrinsicHeight;
 		}
 		
 		// Protected API
@@ -129,12 +128,27 @@ package org.osmf.composition
 			return _layoutRenderer;
 		}
 		
+		protected function get traitAggregator():TraitAggregator
+		{
+			return _traitAggregator;
+		}
+		
+		protected function get owner():CompositeElement
+		{
+			return _owner;
+		}
+		
+		protected function get container():ILayoutContext
+		{
+			return _container;
+		}
+		
 		// Internals
 		//
 		
 		private function constructLayoutContext():ILayoutContext
 		{
-			return new LayoutContextSprite(owner.metadata);
+			return new LayoutContextSprite(_owner.metadata);
 		}
 
 		private function onContainerDimensionChange(event:ViewEvent):void
@@ -173,13 +187,13 @@ package org.osmf.composition
 				_layoutRenderer = new DefaultLayoutRenderer();
 			}
 			
-			container.layoutRenderer = _layoutRenderer;
-			_layoutRenderer.context = container;
+			_container.layoutRenderer = _layoutRenderer;
+			_layoutRenderer.context = _container;
 		}
 
-		private var traitAggregator:TraitAggregator;		
-		private var owner:CompositeElement;
-		private var container:ILayoutContext;
+		private var _traitAggregator:TraitAggregator;		
+		private var _owner:CompositeElement;
+		private var _container:ILayoutContext;
 		private var _layoutRenderer:ILayoutRenderer;
 	}
 }

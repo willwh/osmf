@@ -40,16 +40,6 @@ package org.osmf.composition
 		// Overrides
 		//
 		
-		override public function setUp():void
-		{
-			super.setUp();
-			
-			durationReachedEventCount = 0;
-			playingChangedEventCount = 0;
-			dimensionsChangeEventCount = 0;
-			viewChangedEventCount = 0;
-		}
-		
 		override protected function createMediaElement():MediaElement
 		{
 			var composite:CompositeElement = new SerialElement();
@@ -200,115 +190,6 @@ package org.osmf.composition
 			assertHasTraits(serial, allTraitTypes);
 		}
 		
-		/*
-		public function testGetTraitSpatial():void
-		{
-			var serial:SerialElement = createSerialElement();
-			
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.SPATIAL]);
-			var spatial1:SpatialTrait = mediaElement1.getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
-			
-			// No trait to begin with.
-			assertFalse(serial.hasTrait(MediaTraitType.SPATIAL));
-			assertNull(serial.getTrait(MediaTraitType.SPATIAL));
-			
-			serial.addChild(mediaElement1);
-			
-			assertTrue(serial.hasTrait(MediaTraitType.SPATIAL));
-			var spatial:ISpatial = serial.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-			assertNotNull(spatial);
-			
-			spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE,onDimensionChange);
-			
-			assertEquals(0,spatial.width);
-			assertEquals(0,spatial.height);
-			
-			spatial1.setDimensions(10,100);
-			
-			assertEquals(1,dimensionsChangeEventCount);
-			
-			assertEquals(10,spatial.width);
-			assertEquals(100,spatial.height);
-			
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.SPATIAL]);
-			var spatial2:SpatialTrait = mediaElement2.getTrait(MediaTraitType.SPATIAL) as SpatialTrait;
-			spatial2.setDimensions(51,52);
-			
-			serial.addChild(mediaElement2);
-			assertEquals(spatial,serial.getTrait(MediaTraitType.SPATIAL));
-			assertNull(serial.getTrait(MediaTraitType.VIEWABLE));
-			
-			serial.removeChild(mediaElement1);
-			
-			assertNotNull(serial.getTrait(MediaTraitType.SPATIAL));
-			assertEquals(2,dimensionsChangeEventCount);
-			
-			// Child removal got us a new spatial trait:
-			spatial = serial.getTrait(MediaTraitType.SPATIAL) as ISpatial;
-			spatial.addEventListener(DimensionEvent.DIMENSION_CHANGE,onDimensionChange);
-			
-			assertEquals(51,spatial.width);
-			assertEquals(52,spatial.height);
-			
-			serial.removeChild(mediaElement2);
-			
-			// No trait to end with.
-			assertFalse(serial.hasTrait(MediaTraitType.SPATIAL));
-			assertNull(serial.getTrait(MediaTraitType.SPATIAL));
-		}
-		
-		public function testGetTraitViewable():void
-		{
-			var serial:SerialElement = createSerialElement();
-			
-			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.VIEWABLE]);
-			var viewable1:ViewableTrait = mediaElement1.getTrait(MediaTraitType.VIEWABLE) as ViewableTrait;
-			
-			// No trait to begin with.
-			assertFalse(serial.hasTrait(MediaTraitType.VIEWABLE));
-			assertNull(serial.getTrait(MediaTraitType.VIEWABLE));
-			
-			serial.addChild(mediaElement1);
-			
-			assertTrue(serial.hasTrait(MediaTraitType.VIEWABLE));
-			var viewable:IViewable = serial.getTrait(MediaTraitType.VIEWABLE) as IViewable;
-			assertNotNull(viewable);
-			
-			viewable.addEventListener(ViewEvent.VIEW_CHANGE,onViewChanged);
-			
-			var view1:Sprite = new Sprite();
-			viewable1.view = view1;
-			
-			// The view no longer changes: there's a fixed container sprite in between now:
-			assertEquals(0,viewChangedEventCount);
-			
-			// The container should contain 'view1' though (once the layout has been updated!)
-			CompositeViewableTrait(viewable).layoutRenderer.validateNow();
-			assertTrue(DisplayObjectContainer(viewable.view).contains(view1));
-			
-			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.VIEWABLE]);
-			var viewable2:ViewableTrait = mediaElement2.getTrait(MediaTraitType.VIEWABLE) as ViewableTrait;
-			var view2:Sprite = new Sprite();
-			viewable2.view = view2;
-			
-			serial.addChild(mediaElement2);
-			serial.removeChild(mediaElement1);
-			
-			assertEquals(0,viewChangedEventCount);
-			
-			// The container should contain 'view2' now (once the layout has been updated!)
-			CompositeViewableTrait(viewable).layoutRenderer.validateNow();
-			assertTrue(DisplayObjectContainer(viewable.view).contains(view2));
-			assertFalse(DisplayObjectContainer(viewable.view).contains(view1));
-				
-			serial.removeChild(mediaElement2);
-			
-			// No trait to end with.
-			assertFalse(serial.hasTrait(MediaTraitType.VIEWABLE));
-			assertNull(serial.getTrait(MediaTraitType.VIEWABLE));
-		}
-		*/
-		
 		override public function testMediaErrorEventDispatch():void
 		{
 			forceLoadTrait = true;
@@ -325,31 +206,10 @@ package org.osmf.composition
 
 		// Internals
 		//
-		
-		private function onDimensionChange(event:ViewEvent):void
-		{
-			dimensionsChangeEventCount++;
-		}
-		
-		private function onViewChanged(event:ViewEvent):void
-		{
-			viewChangedEventCount++;
-		}
 
 		private function createSerialElement():SerialElement
 		{
 			return createMediaElement() as SerialElement;
 		}
-
-		protected function eventCatcher(event:Event):void
-		{
-			events.push(event);
-		}
-		
-		private var durationReachedEventCount:int = 0;
-		private var dimensionsChangeEventCount:int = 0;
-		private var viewChangedEventCount:int = 0;
-		
-		private var events:Vector.<Event>;
 	}
 }

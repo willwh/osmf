@@ -287,8 +287,8 @@ package org.osmf.layout
 		private var _metadata:Metadata;
 		private var _renderer:ILayoutRenderer;
 		
-		private var _intrinsicWidth:Number;
-		private var _intrinsicHeight:Number;
+		private var _intrinsicWidth:Number = 0;
+		private var _intrinsicHeight:Number = 0;
 		
 		private var _calculatedWidth:Number;
 		private var _calculatedHeight:Number;
