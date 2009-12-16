@@ -495,7 +495,8 @@ package org.osmf.media
         }
             
         /**
-		 * Indicates which frame of a video the MediaPlayer displays after playback completes.
+		 * Indicates whether media is returned to the beginning of playback after
+                 * playback of the media completes.
 		 * <p>If <code>true</code>, the media displays the first frame.
 		 * If <code>false</code>, it displays the last frame.
 		 * The default is <code>false</code>.</p>
@@ -525,7 +526,7 @@ package org.osmf.media
 		 * The default is <code>true</code>.
 		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.IPlayable
+         * @see org.osmf.traits.PlayTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -572,7 +573,7 @@ package org.osmf.media
          * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
 		 * @see org.osmf.events.#event:TimeEvent
-         * @see org.osmf.traits.ITemporal
+         * @see org.osmf.traits.TimeTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -788,7 +789,7 @@ package org.osmf.media
 		 * <p>If the MediaElement is not audible, then the volume will be set to
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
-         * @see org.osmf.traits.IAudible
+         * @see org.osmf.traits.AudioTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -827,7 +828,7 @@ package org.osmf.media
 		 * <p>If the MediaElement is not audible, then the muted state will be set to
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
-         * @see org.osmf.traits.IAudible
+         * @see org.osmf.traits.AudioTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -867,7 +868,7 @@ package org.osmf.media
 		 * <p>If the MediaElement is not audible, then the pan property will be set to
 		 * this value as soon as the MediaElement becomes audible.</p>
 		 * 
-         * @see org.osmf.traits.IAudible
+         * @see org.osmf.traits.AudioTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -934,7 +935,7 @@ package org.osmf.media
 		 * Indicates whether the media is currently playing.
 		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.IPlayable
+         * @see org.osmf.traits.PlayTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -960,13 +961,13 @@ package org.osmf.media
 	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).play();	    	
 	    }
 		
-	    // ISeekable
+	    // SeekTrait
 		
 		/**
 		 * Indicates whether the media is currently seeking.
 		 * <p>The MediaElement must be seekable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ISeekable
+         * @see org.osmf.traits.SeekTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1030,14 +1031,14 @@ package org.osmf.media
 	    	seek(0);
 	    }
 	
-	    // ISpatial
+	    // ViewTrait
 				
 		/**
 		 * Intrinsic width of the media, in pixels.
 		 * The intrinsic width is the width of the media before any processing has been applied.
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ISpatial
+         * @see org.osmf.traits.ViewTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1054,7 +1055,7 @@ package org.osmf.media
 		 * The intrinsic height is the height of the media before any processing has been applied.
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ISpatial
+         * @see org.osmf.traits.ViewTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1188,14 +1189,14 @@ package org.osmf.media
 			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switchTo(streamIndex);
 		}	    
 	
-	    // IViewable
+	    // ViewTrait
 	    
 		/**
 		 * View property of the media.
 		 * This is the DisplayObject that represents the media.
 		 * <p>The MediaElement must be viewable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.IViewable
+         * @see org.osmf.traits.ViewTrait
          *  
          *  @langversion 3.0
          *  @playerversion Flash 10
@@ -1207,13 +1208,13 @@ package org.osmf.media
 	    	return viewable ? (getTraitOrThrow(MediaTraitType.VIEW) as ViewTrait).view : null;	
 	    }
 	
-        // ITemporal
+        // TimeTrait
 
 		 /**
 		 * Duration of the media's playback, in seconds.
 		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ITemporal
+         * @see org.osmf.traits.TimeTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1230,7 +1231,7 @@ package org.osmf.media
 		 * Must not exceed the duration.
 		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ITemporal
+         * @see org.osmf.traits.TimeTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

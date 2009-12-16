@@ -99,7 +99,7 @@ package org.osmf.drm
 	 * TODO: Remove private tag when DRM content / 10.1 content is public.
 	 *
 	 * The DRMServices class is a utility class to adapt the Flash Player's DRM to the
-	 * OSMF-style IContentProtectable trait API.  DRMServices handles triggering updates to
+	 * OSMF-style ContentProtectionTrait trait API.  DRMServices handles triggering updates to
 	 * the DRM subsystem, as well as triggering the appropriate events when authentication
 	 * is needed, complete, or failed.
 	 *  

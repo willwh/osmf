@@ -67,7 +67,7 @@ package org.osmf.proxies
 	 * temporal capabilities to a set of ImageElements to present them in a slide show
 	 * in which the images are displayed for a specified duration.
 	 * The ProxyElement subclass would wrap the non-temporal ImageElements
-	 * and override the wrapped element's ITemporal trait to return a custom
+	 * and override the wrapped element's TimeTrait to return a custom
 	 * instance of that trait.
 	 * A similar approach can be applied to other traits, either to provide an 
 	 * alternate implementation of some of the wrapped element's underlying traits,

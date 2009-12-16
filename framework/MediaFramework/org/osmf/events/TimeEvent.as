@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A TimeEvent is dispatched when properties of an ITemporal trait have changed.
+	 * A TimeEvent is dispatched when properties of a TimeTrait have changed.
 	 */	     
 	public class TimeEvent extends Event
 	{       	

@@ -25,7 +25,7 @@ package org.osmf.tracking
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
-	 * A MediaElement which maps the IPlayable trait to the triggering of a
+	 * A MediaElement which maps the PlayTrait to the triggering of a
 	 * Beacon.
 	 **/
 	public class BeaconElement extends MediaElement

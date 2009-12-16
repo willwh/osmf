@@ -27,7 +27,7 @@ package org.osmf.display
 	import org.osmf.media.MediaPlayer;
 	
 	/**
-	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with an <code>IViewable</code> trait to be placed on the display list.  
+	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a ViewTrait to be placed on the display list.  
 	 * It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well as the creation of a <code>MediaPlayer</code> controller class.
 	 **/
 	public class MediaPlayerSprite extends ScalableSprite

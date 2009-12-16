@@ -48,7 +48,7 @@ package org.osmf.metadata
 	 * The TemporalFacet class manages temporal metadata of the type
 	 * <code>TemporalIdentifier</code> associated with a <code>MediaElement</code> 
 	 * and dispatches events of type <code>TemporalFacetEvent</code> when 
-	 * the <code>ITemporal</code> position of the MediaElement matches any of the
+	 * the TimeTrait position of the MediaElement matches any of the
 	 * time values in it's collection of <code>TemporalIdentifer</code> objects. 
 	 *  
 	 *  @langversion 3.0
@@ -313,7 +313,7 @@ package org.osmf.metadata
 		
 		/**
 		 * The interval timer callback. Checks for temporal metadata 
-		 * around the current ITemporal.position and dispatches a TemporalFacetEvent
+		 * around the current TimeTrait.position and dispatches a TemporalFacetEvent
 		 * if found. 
 		 *  
 		 *  @langversion 3.0

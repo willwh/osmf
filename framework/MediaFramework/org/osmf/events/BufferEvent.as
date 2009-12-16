@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A BufferEvent is dispatched when properties of an IBufferable trait have changed.
+	 * A BufferEvent is dispatched when properties of a BufferTrait have changed.
 	 */	
 	public class BufferEvent extends Event
 	{

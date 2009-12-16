@@ -30,7 +30,7 @@ package org.osmf.composition
 	import org.osmf.traits.MediaTraitType;
 
 	/**
-	 * Dispatched when an IMediaTrait is aggregated by the TraitAggregator.
+	 * Dispatched when an MediaTraitBase is aggregated by the TraitAggregator.
 	 * This event is dispatched even if other aggregated media elements already
 	 * have a trait of the same type.
 	 *
@@ -39,7 +39,7 @@ package org.osmf.composition
 	[Event(name="traitAggregated",type="org.osmf.composition.TraitAggregatorEvent")]	
 
 	/**
-	 * Dispatched when an IMediaTrait is unaggregated by the TraitAggregator.
+	 * Dispatched when an MediaTraitBase is unaggregated by the TraitAggregator.
 	 * This event is dispatched even if other aggregated media elements still
 	 * have a trait of the same type.
 	 *
@@ -174,8 +174,8 @@ package org.osmf.composition
 		
 		 /**
          *  Calls the method passed, and passes the trait as an argument.
-         *  the signature of method should take one parameter, of type IMediaTrait.  Here is an example
-         *  	function myMethod(trait:IMediaTrait):void
+         *  the signature of method should take one parameter, of type MediaTraitBase.  Here is an example
+         *  	function myMethod(trait:MediaTraitBase):void
 		 *  Invokes on all traits of type traitType on all children.
 		 **/
 		public function forEachChildTrait(method:Function, traitType:String):void

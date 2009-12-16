@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A SeekEvent is dispatched when the properties of an ISeekable trait change.
+	 * A SeekEvent is dispatched when the properties of a SeekTrait change.
 	 */	
 	public class SeekEvent extends Event
 	{

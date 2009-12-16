@@ -33,7 +33,7 @@ package org.osmf.composition
 		 * Constructor.
 		 * 
 		 * @param traitAggregator The object which is aggregating all instances
-		 * of the IPlayable trait within this composite trait.
+		 * of the PlayTrait within this composite trait.
 		 * @param mode The composition mode to which this composite trait
 		 * should adhere.  See CompositionMode for valid values.
 		 **/

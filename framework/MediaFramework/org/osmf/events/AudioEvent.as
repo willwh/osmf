@@ -24,7 +24,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * An AudioEvent is dispatched when the properties of an IAudible trait change.
+	 * An AudioEvent is dispatched when the properties of an AudioTrait change.
 	 */	
 	public class AudioEvent extends Event
 	{

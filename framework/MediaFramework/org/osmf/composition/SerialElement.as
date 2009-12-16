@@ -52,60 +52,51 @@ package org.osmf.composition
 	 * child to another is when the state of one of the current child's 
 	 * traits changes in such a way that the
 	 * SerialElement knows that it needs to change its current child.  For
-	 * example, if each child in the sequence has the IPlayable trait,
+	 * example, if each child in the sequence has the PlayTrait,
 	 * the "current" status advances from one child to the next when a 
-	 * child finishes playing and its IPlayable's <code>playing</code>
-	 * property changes from <code>true</code> to <code>false</code>.  
-	 * Another example:  if the client of an
-	 * ISeekable SerialElement seeks from one point to another, the "current"
+	 * child finishes playing and its PlayTrait's <code>PlayState</code>
+	 * property changes from <code>PLAYING</code> to <code>STOPPED</code>.  
+	 * Another example:  if the client of a SerialElement with a SeekTrait
+	 * seeks from one point to another, the "current"
 	 * status is likely to change from one child to another.</p>   
 	 * 
 	 * <p>Here is how each trait is expressed when in serial:</p>
 	 * <ul>
 	 * <li>
-	 * IAudible - The composite trait keeps the audible properties of all
+	 * AudioTrait - The composite trait keeps the audible properties of all
 	 * children in sync.  When the volume of a child element (or the composite
 	 * element) is changed, the volume is similarly changed for all audible
 	 * children (and for the composite trait).
 	 * </li>
 	 * <li>
-	 * IBufferable - The composite trait represents the bufferable trait of
+	 * BufferTrait - The composite trait represents the bufferable trait of
 	 * the current child in the sequence.  Any changes apply only to the
 	 * current child.
 	 * </li>
 	 * <li>
-	 * ILoadable - The composite trait represents the loadable trait of the
+	 * LoadTrait - The composite trait represents the LoadTrait of the
 	 * current child in the sequence.  Any changes apply only to the current
 	 * child.
 	 * </li>
 	 * <li>
-	 * IPausable - The composite trait represents the Pausable trait of the
+	 * PlayTrait - The composite trait represents the PlayTrait of the
 	 * current child in the sequence.  Any changes apply only to the current
 	 * child. 
 	 * </li>
 	 * <li>
-	 * IPlayable - The composite trait represents the playable trait of the
-	 * current child in the sequence.  Any changes apply only to the current
-	 * child. 
-	 * </li>
-	 * <li>
-	 * ISeekable - The composite trait represents the seekable trait of the
+	 * SeekTrait - The composite trait represents the SeekTrait of the
 	 * current child in the sequence.  A seek operation can change the current
 	 * child.
 	 * </li>
 	 * <li>
-	 * ISpatial - The composite trait represents the spatial trait of the
+	 * ViewTrait - The composite trait represents the ViewTrait of the
 	 * current child in the sequence.
 	 * </li>
 	 * <li>
-	 * ITemporal - The composite trait represents a timeline that encapsulates
+	 * TimeTrait - The composite trait represents a timeline that encapsulates
 	 * the timeline of all children.  Its duration is the sum of the durations
 	 * of all children.  Its position is the sum of the positions of the first
 	 * N fully complete children, plus the position of the next child.
-	 * </li>
-	 * <li>
-	 * IViewable - The composite trait represents the viewable trait of the
-	 * current child in the sequence.
 	 * </li>
 	 * </ul>
 	 **/

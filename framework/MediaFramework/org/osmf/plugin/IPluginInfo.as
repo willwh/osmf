@@ -42,7 +42,7 @@ package org.osmf.plugin
 	 * customized traits. 
 	 * For example, a plugin that provides tracking might implement
 	 * a TrackingCompositeElement that includes a customized loader and customized
-	 * IPlayable and IPausable trait implementations that start and stop tracking
+	 * PlayTrait implementations that start and stop tracking
 	 * as well as the video.
 	 * </p>
 	 * <p>An IPluginInfo also gives the plugin an opportunity to accept or reject a specific

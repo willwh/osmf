@@ -25,7 +25,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A  ViewEvent is dispatched when the properties of an IViewable trait change.
+	 * A  ViewEvent is dispatched when the properties of a ViewTrait change.
 	 */	
 	public class ViewEvent extends Event
 	{

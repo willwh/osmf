@@ -36,8 +36,8 @@ package org.osmf.display
 	 [Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
 
 	/**
-	 * The MediaElementSprite class is designed to display media with IViewable and ISpatial properties.  It is based off
-	 * of flash.display.Sprite to be both compatible with Flash and Flex workflows.   The IViewable and ISpatial events
+	 * The MediaElementSprite class is designed to display media with ViewTrait properties.  It is based off
+	 * of flash.display.Sprite to be both compatible with Flash and Flex workflows.   The ViewTrait events
 	 * are adapted through this UI wrapper class. 
 	 *  
 	 *  @langversion 3.0

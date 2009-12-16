@@ -42,7 +42,7 @@ package org.osmf.audio
 	import org.osmf.utils.*;
 
 	/**
-	 * The SoundLoader class implements ILoader to provide
+	 * The SoundLoader class extends LoaderBase to provide
 	 * loading support to the AudioElement class for progressive audio.
 	 * <p>Creates a flash.media.Sound object, which it uses to load and
 	 * unload the audio file.</p>

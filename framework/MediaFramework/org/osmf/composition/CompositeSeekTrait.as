@@ -172,13 +172,13 @@ package org.osmf.composition
 		*/
 		
 		/**
-		 * Given the ISeekable trait of a child media element, this function 
-		 * returns the ITemporal trait of the child media element.
+		 * Given the SeekTrait of a child media element, this function 
+		 * returns the TimeTrait of the child media element.
 		 * 
-		 * @param childSeekable		The ISeekable trait of the child media element.
+		 * @param childSeekable		The SeekTrait of the child media element.
 		 **/
 		/*
-		protected function getChildTemporal(childSeekable:ISeekable):ITemporal
+		protected function getChildTemporal(childSeekable:SeekTrait):TimeTrait
 		{
 			// Given the SeekableTrait of a child, retrieve the corresponding TempoeralTrait.
 			for (var index:int = 0; index < traitAggregator.numChildren; index++)
@@ -186,7 +186,7 @@ package org.osmf.composition
 				var child:MediaElement = traitAggregator.getChildAt(index);
 				if (child.getTrait(MediaTraitType.SEEKABLE) == childSeekable)
 				{
-					return child.getTrait(MediaTraitType.TEMPORAL) as ITemporal;
+					return child.getTrait(MediaTraitType.TEMPORAL) as TimeTrait;
 				}
 			}
 			

@@ -32,7 +32,7 @@ package org.osmf.composition
 	internal class CompositeMediaTraitFactory
 	{
 		/**
-		 * Instantiates and returns a new IMediaTrait which acts as a composite
+		 * Instantiates and returns a new MediaTraitBase which acts as a composite
 		 * trait for a homogeneous set of child traits.
 		 * 
 		 * @param traitType The type of the composite trait (and by extension,
