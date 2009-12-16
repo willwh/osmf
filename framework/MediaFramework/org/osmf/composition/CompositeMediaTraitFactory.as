@@ -93,14 +93,12 @@ package org.osmf.composition
 					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
 					break;
 
-				/*
 				case MediaTraitType.VIEW:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelViewTrait(traitAggregator, owner)
 							: new SerialViewTrait(traitAggregator, owner);
 					break;
-				*/
 					
 				default:
 					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
