@@ -234,7 +234,7 @@ package org.osmf
 			addTestSuite(TestParallelElementWithBufferTrait);
 			//addTestSuite(TestParallelElementWithContentProtectionTrait);
 			//addTestSuite(TestParallelElementWithDynamicStreamTrait);
-			//addTestSuite(TestParallelElementWithLoadTrait);
+			addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
 			addTestSuite(TestParallelElementWithSeekTrait);
 			addTestSuite(TestParallelElementWithTimeTrait);
@@ -244,7 +244,7 @@ package org.osmf
 			addTestSuite(TestSerialElementWithBufferTrait);
 			//addTestSuite(TestSerialElementWithContentProtectionTrait);
 			//addTestSuite(TestSeriallElementWithDynamicStreamTrait);
-			//addTestSuite(TestSerialElementWithLoadTrait);
+			addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
 			addTestSuite(TestSerialElementWithSeekTrait);
 			addTestSuite(TestSerialElementWithTimeTrait);

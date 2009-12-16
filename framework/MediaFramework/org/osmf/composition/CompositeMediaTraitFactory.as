@@ -73,11 +73,10 @@ package org.osmf.composition
 							: new SerialDynamicStreamTrait(traitAggregator);		
 					break;
 				*/
-				/*
+				
 				case MediaTraitType.LOAD:
 					compositeTrait = new CompositeLoadTrait(traitAggregator, mode);
 					break;
-				*/
 				
 				case MediaTraitType.PLAY:
 					compositeTrait = new CompositePlayTrait(traitAggregator, mode);

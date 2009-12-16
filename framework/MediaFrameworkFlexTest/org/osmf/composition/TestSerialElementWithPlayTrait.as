@@ -23,13 +23,22 @@ package org.osmf.composition
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.media.MediaElement;
-	import org.osmf.traits.MediaTraitType;
+	import org.osmf.events.LoadEvent;
 	import org.osmf.events.PlayEvent;
+	import org.osmf.events.TimeEvent;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicPlayTrait;
+	import org.osmf.utils.DynamicTimeTrait;
+	import org.osmf.utils.SimpleLoader;
+	import org.osmf.utils.URL;
 	
 	public class TestSerialElementWithPlayTrait extends TestCase
 	{
@@ -263,7 +272,7 @@ package org.osmf.composition
 			assertTrue(playStateChangedEventCount == 1);
 			
 			// When the current child stops playing, the next child does not
-			// automatically play.  When the temporal trait is present, the
+			// automatically play.  When the TimeTrait is present, the
 			// durationReached event is what's used to trigger playback of
 			// the next child.
 			playTrait1.stop();
@@ -393,6 +402,136 @@ package org.osmf.composition
 			assertTrue(playTrait3.playState == PlayState.PLAYING);
 		}
 		
+		public function testPlayTraitWithLoadTrait():void
+		{
+			var serial:SerialElement = new SerialElement();
+			
+			// Create a few media elements.
+			//
+
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var playTrait1:PlayTrait = mediaElement1.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var timeTrait1:DynamicTimeTrait = mediaElement1.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait1.duration = 1;
+
+			var loader2:SimpleLoader = new SimpleLoader();
+			var mediaElement2:MediaElement =
+				new DynamicMediaElement([MediaTraitType.LOAD],
+										loader2,
+										new URLResource(new URL("http://www.example.com/loadTrait1")),
+										true
+										);
+			var playTrait2:PlayTrait = mediaElement2.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait2 == null);
+			var loadTrait2:LoadTrait = mediaElement2.getTrait(MediaTraitType.LOAD) as LoadTrait;			
+			assertTrue(loadTrait2.loadState == LoadState.UNINITIALIZED);
+			
+			var loader3:SimpleLoader = new SimpleLoader();
+			var mediaElement3:MediaElement =
+				new DynamicMediaElement([MediaTraitType.LOAD],
+										loader3,
+										new URLResource(new URL("http://www.example.com/loadTrait1")));
+			var playTrait3:PlayTrait = mediaElement3.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait3 == null);
+			var loadTrait3:LoadTrait = mediaElement3.getTrait(MediaTraitType.LOAD) as LoadTrait;			
+			assertTrue(loadTrait3.loadState == LoadState.UNINITIALIZED);
+			var timeTrait3:DynamicTimeTrait = null;
+			
+			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var playTrait4:PlayTrait = mediaElement4.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var timeTrait4:DynamicTimeTrait = mediaElement4.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait4.duration = 1;
+			
+			// Make sure that the third child gets the PlayTrait when
+			// it finishes loading.
+			loadTrait3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					loadTrait3.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+					timeTrait3 = new DynamicTimeTrait();
+					timeTrait3.duration = 1;
+					DynamicMediaElement(mediaElement3).doAddTrait(MediaTraitType.TIME, timeTrait3);
+				}
+			}
+			
+			// Add them as children.
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			serial.addChild(mediaElement3);
+			serial.addChild(mediaElement4);
+
+			var timeTrait:TimeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
+			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			
+			// Play the first child.  This should cause the composition to be
+			// playing.
+			playTrait1.play();
+			var playTrait:PlayTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait != null);
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			
+			// If the first child's playing state changes, that's not sufficient
+			// to trigger the playback of the next child.
+			playTrait1.stop();
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait.playState == PlayState.STOPPED);
+			playTrait2 = mediaElement2.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait2 == null);
+			playTrait3 = mediaElement3.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait3 == null);
+			assertTrue(loadTrait2.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadTrait3.loadState == LoadState.UNINITIALIZED);
+			
+			// However, when the first child reaches its duration, the following
+			// should happen:
+			// 1) The second child is loaded.
+			// 2) Because the second child doesn't have the PlayTrait
+			//    when it loads, the third child is loaded. 
+			// 3) Because the third child does have the PlayTrait when
+			//    it's loaded, it becomes the new current child.
+			timeTrait1.currentTime = timeTrait1.duration;
+			playTrait2 = mediaElement2.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait2 == null);
+			playTrait3 = mediaElement3.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait3 != null);
+			assertTrue(loadTrait2.loadState == LoadState.READY);
+			assertTrue(loadTrait3.loadState == LoadState.READY);
+			playTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait3.playState == PlayState.PLAYING);
+			assertTrue(playTrait4.playState == PlayState.STOPPED);
+			
+			assertTrue(durationReachedEventCount == 0);
+			
+			// When the third child reaches its duration, the next child
+			// should be playing.
+			playTrait3.stop();
+			timeTrait3.currentTime = timeTrait3.duration;
+			playTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait.playState == PlayState.PLAYING);
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait3.playState == PlayState.STOPPED);
+			assertTrue(playTrait4.playState == PlayState.PLAYING);
+			
+			assertTrue(durationReachedEventCount == 0);
+			
+			// When the fourth child reaches its duration, we should receive
+			// the duration reached event.
+			playTrait4.stop();
+			timeTrait4.currentTime = timeTrait4.duration;
+			playTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			assertTrue(playTrait.playState == PlayState.STOPPED);
+			assertTrue(playTrait1.playState == PlayState.STOPPED);
+			assertTrue(playTrait3.playState == PlayState.STOPPED);
+			assertTrue(playTrait4.playState == PlayState.STOPPED);
+			
+			assertTrue(durationReachedEventCount == 1);
+		}
+		
 		private function onPlayStateChanged(event:PlayEvent):void
 		{
 			playStateChangedEventCount++;
@@ -403,7 +542,13 @@ package org.osmf.composition
 			canPauseChangedEventCount++;
 		}
 		
+		private function onDurationReached(event:TimeEvent):void
+		{
+			durationReachedEventCount++;
+		}
+
 		private var playStateChangedEventCount:int = 0;
 		private var canPauseChangedEventCount:int = 0;
+		private var durationReachedEventCount:int = 0;
 	}
 }
