@@ -22,10 +22,10 @@
 package org.osmf.composition
 {
 	import org.osmf.events.GatewayChangeEvent;
-	import org.osmf.events.ViewEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.MediaTraitBase;
 
 	/**
 	 * Composite ViewTrait for serial elements.
@@ -39,7 +39,7 @@ package org.osmf.composition
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class SerialViewTrait extends CompositeViewTrait
+	internal class SerialViewTrait extends CompositeViewTrait implements IReusable
 	{
 		/**
 		 * Constructor
@@ -52,6 +52,13 @@ package org.osmf.composition
 		public function SerialViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
 			super(traitAggregator, owner);
+
+			traitAggregationHelper = new TraitAggregationHelper
+				( traitType
+				, traitAggregator
+				, processAggregatedChild
+				, processUnaggregatedChild
+				);
 			
 			// In order to forward the serial's active child's view, we need
 			// to track the serial's active child:
@@ -64,6 +71,22 @@ package org.osmf.composition
 			setupLayoutTarget(traitAggregator.listenedChild);
 		}
 		
+		/**
+		 * @private
+		 */
+		public function attach():void
+		{
+			traitAggregationHelper.attach();
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function detach():void
+		{
+			traitAggregationHelper.detach();
+		}
+
 		// Internals
 		//
 		
@@ -121,7 +144,7 @@ package org.osmf.composition
 					layoutRenderer.removeTarget(layoutTarget);
 				}
 			}
-			
+				
 			if (listenedChild != null)
 			{
 				layoutTarget = MediaElementLayoutTarget.getInstance(listenedChild);
@@ -143,6 +166,17 @@ package org.osmf.composition
 			}
 		}
 		
+		private function processAggregatedChild(child:MediaTraitBase):void
+		{
+			// Stub method, needed by the helper class.
+		}
+
+		private function processUnaggregatedChild(child:MediaTraitBase):void
+		{
+			// Stub method, needed by the helper class.
+		}
+		
+		private var traitAggregationHelper:TraitAggregationHelper;
 		private var layoutTarget:MediaElementLayoutTarget;
 	}
 }
