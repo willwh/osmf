@@ -1027,8 +1027,18 @@ package org.osmf.media
 	     **/
 	    public function stop():void
 	    {
-	    	pause();
-	    	seek(0);
+	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
+
+			if (autoRewind && seekable)
+			{
+				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
+				function onSeekEnd(event:SeekEvent):void
+				{
+					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
+					setState(MediaPlayerState.READY);
+				}
+				seek(0);									
+			}
 	    }
 	
 	    // ViewTrait
@@ -1593,15 +1603,9 @@ package org.osmf.media
 				}
 				seek(0); //If we don't wait for the seekend, everything breaks for looping.									
 			}
-			else if (autoRewind && seekable && !loop)
-			{	
-				addEventListener(SeekEvent.SEEK_END, onSeekEndRewind);
-				seek(0);					
-				function onSeekEndRewind(event:SeekEvent):void
-				{
-					removeEventListener(SeekEvent.SEEK_END, onSeekEndRewind);
-					setState(MediaPlayerState.READY);	
-				}					
+			else if (!loop && playable)
+			{
+				stop();
 			}
 			else
 			{

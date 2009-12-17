@@ -43,10 +43,8 @@ package org.osmf.media
 	import org.osmf.events.ViewEvent;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
-	import org.osmf.utils.MockMediaElementWithDownloadableTrait;
 	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayer extends TestCase
@@ -557,18 +555,25 @@ package org.osmf.media
 				{
 					assertTrue(mediaPlayer.paused == false);
 					
-					mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestPlayPause2);
-					mediaPlayer.pause();
-					
-					function onTestPlayPause2(event2:PlayEvent):void
+					if (mediaPlayer.canPause)
 					{
-						mediaPlayer.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestPlayPause2);
+						mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestPlayPause2);
+						mediaPlayer.pause();
 						
-						assertTrue(mediaPlayer.paused == true);
-						assertTrue(mediaPlayer.playing == false);
-						assertTrue(event2.playState == PlayState.PAUSED);
-						assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
-						
+						function onTestPlayPause2(event2:PlayEvent):void
+						{
+							mediaPlayer.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestPlayPause2);
+							
+							assertTrue(mediaPlayer.paused == true);
+							assertTrue(mediaPlayer.playing == false);
+							assertTrue(event2.playState == PlayState.PAUSED);
+							assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+							
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+					else
+					{
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
@@ -594,7 +599,34 @@ package org.osmf.media
 			}
 		}
 		
+		public function testStopWithAutoRewind():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			
+			mediaPlayer.autoRewind = true;
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestStopWithAutoRewind, false);
+			}
+			else
+			{
+				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				doTestStopWithAutoRewind();
+			}
+		}
+		
 		private function doTestStop():void
+		{
+			doTestStopCommon(false);
+		}
+
+		private function doTestStopWithAutoRewind():void
+		{
+			doTestStopCommon(true);
+		}
+		
+		private function doTestStopCommon(autoRewind:Boolean):void
 		{
 			if (traitExists(MediaTraitType.PLAY) && traitExists(MediaTraitType.SEEK))
 			{
@@ -613,7 +645,7 @@ package org.osmf.media
 					assertTrue(event.playState == PlayState.PLAYING);
 					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYING);
 
-					var hasPaused:Boolean = false;
+					var hasStopped:Boolean = false;
 					var hasSeeked:Boolean = false;
 					
 					mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestStop2);
@@ -624,23 +656,32 @@ package org.osmf.media
 					
 					function onTestStop2(event2:PlayEvent):void
 					{
-						hasPaused = true;
+						hasStopped = true;
 						
-						assertTrue(mediaPlayer.paused == true);
+						assertTrue(mediaPlayer.paused == false);
 						assertTrue(mediaPlayer.playing == false);
-						assertTrue(event2.playState == PlayState.PAUSED);
-						assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+						assertTrue(event2.playState == PlayState.STOPPED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
+						
+						if (autoRewind == false)
+						{
+							mediaPlayer.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestStop2);
+							mediaPlayer.removeEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
+							mediaPlayer.removeEventListener(SeekEvent.SEEK_END, onTestStop3);
+							
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
 					}
 					
 					function onTestStop3(event3:SeekEvent):void
 					{
-						assertTrue(hasPaused);
+						assertTrue(hasStopped);
 						
 						if (hasSeeked == false)
 						{
 							hasSeeked = true;
 							
-							assertTrue(mediaPlayer.paused == true);
+							assertTrue(mediaPlayer.paused == false);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == true);
 							assertTrue(event3.type == SeekEvent.SEEK_BEGIN);
@@ -652,13 +693,12 @@ package org.osmf.media
 							mediaPlayer.removeEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
 							mediaPlayer.removeEventListener(SeekEvent.SEEK_END, onTestStop3);
 							
-							assertTrue(mediaPlayer.paused == true);
+							assertTrue(mediaPlayer.paused == false);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == false);
 							assertTrue(event3.type == SeekEvent.SEEK_END);
 							
-							// Not sure whether this should be PAUSED or READY?
-							assertTrue(mediaPlayer.state == MediaPlayerState.PAUSED);
+							assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 	
 							eventDispatcher.dispatchEvent(new Event("testComplete"));
 						}
@@ -1220,16 +1260,13 @@ package org.osmf.media
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
 					
-					if (mediaPlayer.paused)
-					{
-						assertTrue(mediaPlayer.playing == false);
-					}
+					assertTrue(mediaPlayer.paused == false);
+					assertTrue(mediaPlayer.playing == false);
 					
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");
-					assertTrue(		statesStr == "playing paused"
-								||	statesStr == "playing"
-								||	statesStr == "playing ready"
+					assertTrue(		statesStr == "playing ready"
+								||	statesStr == "playing paused ready"
 							  ); 
 
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
