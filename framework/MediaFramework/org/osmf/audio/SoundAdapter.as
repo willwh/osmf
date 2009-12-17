@@ -189,23 +189,19 @@ package org.osmf.audio
 		}
 		
 		public function seek(time:Number):void
-		{		
+		{
+			var wasPlaying:Boolean = playing;
+			
 			if (channel != null)
 			{
 				clearChannel();
-				
-				var wasPlaying:Boolean = playing;
-				
-				play(time*1000);
-
-				if (wasPlaying == false)
-				{
-					pause();
-				}
 			}
-			else
+
+			play(time*1000);
+
+			if (wasPlaying == false)
 			{
-				play(time);
+				pause();
 			}
 		}	
 						
@@ -227,6 +223,7 @@ package org.osmf.audio
 			lastStartTime = channel.position;
 			
 			clearChannel();
+			playing = false;
 			
 			// Signal playback has completed.
 			dispatchEvent(new Event(Event.COMPLETE));
