@@ -109,7 +109,7 @@ package org.osmf.net
 					doPlay(streamName, startTime, len);
 				}
 			}
-			else if (newPlayState == PlayState.PAUSED)
+			else // PAUSED || STOPPED
 			{
 				netStream.pause();
 			}
@@ -146,7 +146,7 @@ package org.osmf.net
 		}
 		
 		private function onPlayStatus(event:Object):void
-		{			
+		{
 			switch (event.code)
 			{
 				// Fired when streaming connections finish.  Doesn't fire for
