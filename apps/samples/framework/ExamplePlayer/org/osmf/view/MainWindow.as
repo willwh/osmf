@@ -237,7 +237,7 @@ package org.osmf.view
 		private function updateControls():void
 		{
 			buttonPlay.visible 			= mediaPlayerWrapper.mediaPlayer.playable;
-			buttonPause.visible 		= mediaPlayerWrapper.mediaPlayer.playable;
+			buttonPause.visible 		= mediaPlayerWrapper.mediaPlayer.playable && mediaPlayerWrapper.mediaPlayer.canPause;
 			audioTraitControls.visible 	= mediaPlayerWrapper.mediaPlayer.audible;
 			timeTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
 			bufferTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.bufferable;
@@ -247,7 +247,7 @@ package org.osmf.view
 			if (mediaPlayerWrapper.mediaPlayer.temporal)
 			{
 				seekBar.maximum = mediaPlayerWrapper.mediaPlayer.duration;
-				duration.text = "" + mediaPlayerWrapper.mediaPlayer.duration;
+				duration.text = "" + Math.round(mediaPlayerWrapper.mediaPlayer.duration);
 			}
 			else
 			{
