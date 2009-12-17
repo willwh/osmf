@@ -54,7 +54,7 @@ package org.osmf.utils
 		 * dynamically generated at build time.
 		 **/
 		private static const _major:String = "0";
-		private static const _minor:String = "7";
+		private static const _minor:String = "8";
 		private static const _changelist:String = "0";	
 		
 		private static const FIELD_SEPARATOR:String = ".";	
