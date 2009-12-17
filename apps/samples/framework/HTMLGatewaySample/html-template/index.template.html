@@ -49,20 +49,18 @@ function onOSMFGatewayRegistered(gateway)
 	{
 		gateway.onElementAdd = function(element)
 		{
-			osmf.trace("Element " + element.elementId + " added.");
+			osmf.trace(element.elementId + " added.");
 			
 			// Elements must be loadable, so having a 'load' and 'unload'
 			// method defined on the object is mandatory:
 			element.load = function(url)
 			{
-				osmf.trace("Element " + element.elementId + " loading.");
+				osmf.trace(element.elementId + " loading.");
 				
 				activeBanner = this;
 				
 				bannerImage.src = url;
 				bannerImage.onclick = onBannerClick;
-				
-				this.setLoadState(osmf.constants.loadState.READY);
 				
 				// Define that we support the play trait:
 				element.setPlayable(true);
@@ -71,39 +69,52 @@ function onOSMFGatewayRegistered(gateway)
 				// Define that we now support the temporal trait:
 				this.setTemporal(true);
 				
-				// Set the duration of the element, and
-				// cater for a callback that will signal
-				// when its duration is reached. This will
-				// cause the next banner to be loaded from
-				// Flash:
+				// Set the duration of the element.
 				this.setDuration(5);
-				this.setPosition(0);
+				this.setCurrentTime(0);
 				
-				function complete()
-				{
-					bannerImage.src = null;
-					element.setPosition(5); // seconds
-				}
-				
-				setTimeout(complete, 5 * 1000 /* milliseconds */);
+				this.setLoadState(osmf.constants.loadState.READY);
 			}
 			
 			element.unload = function()
 			{
+				osmf.trace(element.elementId + " UNloading.");
+				
 				element.setPlayable(false);
 				element.setTemporal(false);
 				
-				activeBanner = null;
+				if (activeBanner == element) 
+				{
+					activeBanner = null;
+				}
+				
 				osmf.trace(element.elementId + "unloading " + url);
 				bannerImage.src = null;
-				this.loadState = osmf.constants.UNINITIALIZED;
+				
+				this.setLoadState(osmf.constants.UNINITIALIZED);
 			}
 			
 			element.onPlayStateChange = function(newPlayState)
 			{
-				osmf.trace("onPlayStateChange: " + newPlayState);
+				osmf.trace(element.elementId + " onPlayStateChange, new state: " + newPlayState);
 				
-				element.setPlayState("stopped");
+				if (newPlayState == osmf.constants.playState.PLAYING)
+				{
+					// Cater for a callback that will signal
+					// when its duration is reached. This will
+					// cause the next banner to be loaded from
+					// Flash:
+					
+					function complete()
+					{
+						osmf.trace(element.elementId + " completion callback");
+						
+						bannerImage.src = null;
+						element.setCurrentTime(5); // seconds
+					}
+					
+					element.timeoutId = setTimeout(complete, 5 * 1000 /* milliseconds */);
+				}
 			}
 		}
 	}
@@ -115,13 +126,15 @@ function onBannerClick()
 	
 	if (activeBanner)
 	{
-		if (activeBanner.getPlaying())
+		if (activeBanner.getPlayState() == document.osmf.constants.playState.PLAYING)
 		{
-			activeBanner.setPaused(true);
+			activeBanner.setPlayState(document.osmf.constants.playState.PAUSED);
+			clearTimeout(activeBanner.timeoutId);
 		}
 		else
 		{
-			activeBanner.setPlaying(true);
+			activeBanner.setPlayState(document.osmf.constants.playState.PLAYING);
+			activeBanner.onPlayStateChange(document.osmf.constants.playState.PLAYING);
 		}
 	}
 }

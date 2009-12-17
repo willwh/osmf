@@ -37,7 +37,7 @@ package
 	{
 		public function HTMLGatewaySample()
 		{
-			runSample2();
+			runSample1();
 		}
 		
 		private function runSample1():void
@@ -73,20 +73,6 @@ package
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
 			mediaPlayer.element = rootElement;
-		}
-		
-		private function runSample2():void
-		{
-			var htmlGateway:HTMLGateway = new HTMLGateway();
-			htmlGateway.initialize("bannerGateway");
-			
-			var banner1:HTMLElement = new HTMLElement();
-			banner1.resource = new URLResource(new URL(BANNER_1));
-			banner1.gateway = htmlGateway;
-			
-			var mediaPlayer:MediaPlayer = new MediaPlayer();
-			mediaPlayer.autoPlay = true;
-			mediaPlayer.element = banner1;
 		}
 		
 		private function constructVideo(url:String):VideoElement

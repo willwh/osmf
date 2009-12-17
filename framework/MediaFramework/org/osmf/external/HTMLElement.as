@@ -88,7 +88,7 @@ package org.osmf.external
 				case "Playable":
 					result = hasTrait(MediaTraitType.PLAY);
 					break;
-				case "PlayingState":
+				case "PlayState":
 					result = playable ? playable.playState : null; 
 					break;
 				case "CanPause":

@@ -383,7 +383,13 @@ package org.osmf.gateways
         			, READY: "ready"
         			, UNLOADING: "unloading"
         			, LOAD_ERROR: "loadError"
-        			}
+        			};
+        			
+        		this.playState =
+        			{ PLAYING: "playing"
+        			, PAUSED: "paused"
+        			, STOPPED: "stopped"
+        			};
         	}
         	]]>;
         
