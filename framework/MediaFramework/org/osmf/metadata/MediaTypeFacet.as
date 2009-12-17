@@ -25,6 +25,9 @@ package org.osmf.metadata
 	
 	import org.osmf.utils.URL;
 
+	/**
+	 * Facet class for representing media and MIME types.
+	 **/
 	public class MediaTypeFacet extends EventDispatcher implements IFacet
 	{
 		public function MediaTypeFacet(mediaType:String = null, mimeType:String = null)

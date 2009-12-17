@@ -35,7 +35,7 @@ package org.osmf.gateways
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * RegionSprite defines a Sprite based IContainerGateway implementation.
+	 * RegionGateway defines a Sprite based IContainerGateway implementation.
 	 */	
 	public class RegionGateway extends LayoutContextSprite implements IContainerGateway
 	{
@@ -50,7 +50,7 @@ package org.osmf.gateways
 		 * renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
 		 * @param regionsLayoutRenderer The layout renderer that will render
-		 * the child RegionSprite instances that get added to this region. If
+		 * the child RegionGateway instances that get added to this region. If
 		 * no renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
 		 *  
@@ -369,10 +369,10 @@ package org.osmf.gateways
 		}
 		
 		/**
-		 * Verifies if a region is a sub-region of this RegionSprite.
+		 * Verifies if a region is a sub-region of this RegionGateway.
 		 *  
 		 * @param region Region to verify.
-		 * @return True if target is a sub-region of this RegionSprite.
+		 * @return True if target is a sub-region of this RegionGateway.
 		 * 
 		 *  
 		 *  @langversion 3.0

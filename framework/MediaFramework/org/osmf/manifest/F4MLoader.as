@@ -40,43 +40,40 @@ package org.osmf.manifest
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.proxies.MediaElementLoadedContext;
 	import org.osmf.proxies.MediaElementLoader;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	
 	/**
-	 * The FMMLoader will load the Flash Media Manifest format
+	 * The F4MLoader will load the Flash Media Manifest format
 	 * files, generate a NetLoaded context corresponding to the resources
-	 * specified in the fmm file.
+	 * specified in the f4m file.
 	 */ 
 	public class F4MLoader extends MediaElementLoader
 	{
-			
-		//MimeType
+		// MimeType
 		public static const F4M_MIME_TYPE:String = "application/f4m+xml";
 					
 		/**
-		 * Generate a new FMMLoader.  
-		 * @param netLoader The factory that is used to create MediaElements based on the 
-		 * media specified in the manifest file. a default factory is created for the base OSMF media
+		 * Generate a new F4MLoader.  
+		 * @param factory The factory that is used to create MediaElements based on the 
+		 * media specified in the manifest file. A default factory is created for the base OSMF media
 		 * types, Video, Audio, Image, and SWF.
 		 */ 	
-		public function F4MLoader(parser:ManifestParser = null, factory:MediaFactory = null)
-		{		
+		public function F4MLoader(factory:MediaFactory = null)
+		{
+			super();
+			
 			supportedMimeTypes.push(F4M_MIME_TYPE);		
-			if (parser == null)
-			{
-				parser = new ManifestParser();
-			}		
 			if (factory == null)
 			{
 				factory = new DefaultMediaFactory();
 			}		
-			this.parser = parser;	
+			this.parser = new ManifestParser();	
 			this.factory = factory;				
 		}
 
 		/**
-		 * @ineritDoc
+		 * @private
 		 */ 
 		override public function canHandleResource(resource:IMediaResource):Boolean
 		{	
@@ -88,8 +85,8 @@ package org.osmf.manifest
 			}
 			else if (resource is URLResource)
 			{
-				var url:URLResource = URLResource(resource);
-				var extension:String = url.url.path.substr(url.url.path.length-3,3);
+				var urlResource:URLResource = URLResource(resource);
+				var extension:String = urlResource.url.path.substr(urlResource.url.path.length-3,3);
 				return extension == F4M_EXTENSION;
 			}		
 			else
@@ -99,7 +96,7 @@ package org.osmf.manifest
 		}
 		
 		/**
-		 * @ineritDoc
+		 * @private
 		 */
 		override public function load(loadTrait:LoadTrait):void
 		{
@@ -132,13 +129,13 @@ package org.osmf.manifest
 					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 				}
 				
-				//Load externals
+				// Load externals
 				
 				var unfinishedLoads:Number = 0;
 				
 				for each (var item:Media in manifest.media)
 				{										
-					//DRM Metadata  - we may make this load on demand in the future.					
+					// DRM Metadata  - we may make this load on demand in the future.					
 					if (item.drmMetadataURL != null)
 					{												
 						var drmLoader:URLLoader = new URLLoader();
@@ -189,12 +186,10 @@ package org.osmf.manifest
 				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
 				updateLoadTrait(loadTrait, LoadState.READY, context);		
 			}				
-		} 
-		
-	
+		}
 		
 		/**
-		 * @ineritDoc
+		 * @private
 		 */
 		override public function unload(loadTrait:LoadTrait):void
 		{

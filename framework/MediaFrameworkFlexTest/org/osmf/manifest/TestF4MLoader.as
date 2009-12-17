@@ -13,11 +13,10 @@ package org.osmf.manifest
 	{
 		public function testConstructorParams():void
 		{
-			//Test that both constructors work...
+			// Test that both constructors work...
 			var loader:F4MLoader = new F4MLoader(null);
-			var loader2:F4MLoader = new F4MLoader(new ManifestParser(), new MediaFactory());
-			var loader3:F4MLoader = new F4MLoader(new ManifestParser());
-			var loader4:F4MLoader = new F4MLoader(null, new MediaFactory());		
+			var loader2:F4MLoader = new F4MLoader(new MediaFactory());
+			var loader3:F4MLoader = new F4MLoader();
 			assertTrue(true);	
 		}
 		
