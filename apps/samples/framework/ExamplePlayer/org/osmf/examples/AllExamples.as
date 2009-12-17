@@ -62,6 +62,7 @@ package org.osmf.examples
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
@@ -154,7 +155,7 @@ package org.osmf.examples
 				  	   			// Only adjust the buffer while we're playing.
 				  	   			var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 				  	   			var bufferTrait:BufferTrait = videoElement.getTrait(MediaTraitType.BUFFER) as BufferTrait;
-				  	   			if (bufferTrait && !bufferTrait.buffering && playTrait && playTrait.playing)
+				  	   			if (bufferTrait && !bufferTrait.buffering && playTrait && playTrait.playState == PlayState.PLAYING)
 				  	   			{
 				  	   				if (timer.currentCount <= 10)
 				  	   				{
