@@ -766,53 +766,6 @@ package org.osmf.examples
 				
 			examples.push
 				( new Example
-					( 	"IDownloadable Parallel"
-					, 	"Demonstrates the compositional IDownloadable trait in a Parallel Composition ."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
-							var resource2:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE2));
-							
-							var parallel:ParallelElement = new ParallelElement();
-							
-							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
-							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
-							
-							LayoutUtils.setAbsoluteLayout(video1.metadata, 320, 240, 0,0);
-							LayoutUtils.setAbsoluteLayout(video2.metadata, 320, 240, 300,0);
-														
-							parallel.addChild(video1);
-							parallel.addChild(video2);
-														
-				  	   		return parallel; 
-				  	   	}
-				  	)
-				);	
-				
-			examples.push
-				( new Example
-					( 	"IDownloadable Serial"
-					, 	"Demonstrates the compositional IDownloadable trait in a Serial Composition."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
-							var resource2:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE2));
-							
-							var serial:SerialElement = new SerialElement();
-							
-							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
-							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
-														
-							serial.addChild(video1);
-							serial.addChild(video2);
-																	
-				  	   		return serial; 
-				  	   	}
-				  	)
-				);	
-				
-			examples.push
-				( new Example
 					( 	"DefaultDuration Serial"
 					, 	"Demonstrates the Video.defaultDuration feature on VideoElementm, in a Serial Composition."
 				  	,  	function():MediaElement
@@ -838,7 +791,7 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"Flash Media Manifest Progressive"
-					, 	"Demonstrates the use of the flash media manifest parser for a progressive video."
+					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for a progressive video."
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
@@ -851,7 +804,7 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"Flash Media Manifest Dynamic Streaming"
-					, 	"Demonstrates the use of the flash media manifest parser for a progressive video."
+					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for dynamic streaming video."
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
