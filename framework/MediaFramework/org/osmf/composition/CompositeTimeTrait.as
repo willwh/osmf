@@ -78,6 +78,21 @@ package org.osmf.composition
 			return super.currentTime;
 		}
 		
+		override protected function processDurationReached():void
+		{
+			// The base class can cause this method to get called, sometimes
+			// inappropriately (e.g. if currentTime == duration because we don't
+			// have duration for the next child).  For serial, we should only let
+			// the call pass through if we're truly at the end.
+			if (	mode == CompositionMode.PARALLEL
+				||  traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1
+			   )
+			{
+				super.processDurationReached()
+			}
+				
+		}
+		
 		// Internal
 		//
 		
@@ -213,25 +228,6 @@ package org.osmf.composition
 			setDuration(newDuration);
 		}
 		
-		/*
-		private function setDuration(value:Number):void
-		{
-			if (_duration != value)
-			{
-				var oldDuration:Number = _duration;
-				_duration = value;
-					
-				dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, _duration));
-				
-				// Current time cannot exceed duration.
-				if (currentTime > duration)
-				{
-					updateCurrentTime();
-				}
-			}
-		}
-		*/
-		
 		private function updateCurrentTime():void
 		{
 			var newCurrentTime:Number = 0;
@@ -278,20 +274,6 @@ package org.osmf.composition
 
 			setCurrentTime(newCurrentTime);
 		}
-		
-		/*
-		private function setCurrentTime(value:Number):void
-		{
-			// Don't ever let the currentTime exceed the duration.
-			value = Math.min(value, isNaN(duration) ? 0 : duration);
-
-			if (_currentTime != value)
-			{
-				var oldCurrentTime:Number = _currentTime;
-				_currentTime = value;
-			}
-		}
-		*/
 
 		private function get traitOfCurrentChild():TimeTrait
 		{
