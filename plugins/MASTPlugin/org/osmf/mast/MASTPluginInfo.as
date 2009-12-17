@@ -106,8 +106,8 @@ package org.osmf.mast
 				subMinor = parseInt(verInfo[2]);
 			}
 			
-			// Framework version 0.7.0 is the minimum this plugin supports.
-			return ((major > 0) || ((major == 0) && (minor >= 7) && (subMinor >= 0)));
+			// Framework version 0.8.0 is the minimum this plugin supports.
+			return ((major > 0) || ((major == 0) && (minor >= 8) && (subMinor >= 0)));
 		}
 		
 		private function createMASTProxyElement():MediaElement
