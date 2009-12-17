@@ -32,6 +32,11 @@ package org.osmf.examples.posterframe
 			super();
 		}
 		
+		override public function get canPause():Boolean
+		{
+			return false;
+		}
+		
 		override protected function postProcessPlayStateChange():void
 		{
 			super.postProcessPlayStateChange();

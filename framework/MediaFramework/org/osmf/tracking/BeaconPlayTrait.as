@@ -37,6 +37,11 @@ package org.osmf.tracking
 			this.beacon = beacon;
 		}
 
+		override public function get canPause():Boolean
+		{
+			return false;
+		}
+		
 		override protected function processPlayStateChange(newPlayState:String):void
 		{
 			if (newPlayState == PlayState.PLAYING)

@@ -54,6 +54,7 @@ package org.osmf.tracking
 			var mediaElement:MediaElement = new BeaconElement(new Beacon(RESOURCE.url, httpLoader));
 			var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			assertTrue(playTrait != null);
+			assertTrue(playTrait.canPause == false);
 			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 			
 			playTrait.play();
