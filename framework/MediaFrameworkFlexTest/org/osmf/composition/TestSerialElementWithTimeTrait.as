@@ -39,7 +39,7 @@ package org.osmf.composition
 			// No trait to begin with.
 			assertTrue(serial.getTrait(MediaTraitType.TIME) == null);
 			
-			// Create a few media elements with the ITemporal trait and some
+			// Create a few media elements with the TimeTrait and some
 			// initial properties.
 			//
 

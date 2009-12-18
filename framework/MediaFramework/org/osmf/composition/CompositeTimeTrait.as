@@ -105,6 +105,7 @@ package org.osmf.composition
 			child.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached, 	false, 0, true);
 			
 			updateDuration();
+			updateCurrentTime();
 		}
 
 		/**
@@ -116,6 +117,7 @@ package org.osmf.composition
 			child.removeEventListener(TimeEvent.DURATION_REACHED, 	onDurationReached);
 			
 			updateDuration();
+			updateCurrentTime();
 		}
 
 		private function onDurationChanged(event:TimeEvent):void
