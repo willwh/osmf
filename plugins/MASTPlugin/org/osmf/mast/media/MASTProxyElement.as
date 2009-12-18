@@ -44,12 +44,12 @@ package org.osmf.mast.media
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.PlayTrait;
-	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.URL;
 
 	/**
@@ -150,17 +150,16 @@ package org.osmf.mast.media
 				if (playTrait.playRequestPending)
 				{
 					// Call play on the original trait
-				
-					playTrait = this.getTrait(MediaTraitType.PLAY) as MASTPlayTrait;
+					var orgPlayTrait:PlayTrait = getTrait(MediaTraitType.PLAY) as PlayTrait;
 					
-					if (playTrait == null)
+					if (orgPlayTrait == null)
 					{
 						// Trait is not present yet, we need to wait for it to be added
-						this.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					}
 					else
 					{
-						playTrait.play();
+						orgPlayTrait.play();
 					}
 					
 				}	
@@ -169,11 +168,11 @@ package org.osmf.mast.media
 			
 		private function onTraitAdd(event:MediaElementEvent):void
 		{
-			this.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			
 			if (event.traitType == MediaTraitType.PLAY)
 			{
-				var playTrait:PlayTrait = this.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				var playTrait:PlayTrait = getTrait(MediaTraitType.PLAY) as PlayTrait;
 				playTrait.play();
 			}
 		}

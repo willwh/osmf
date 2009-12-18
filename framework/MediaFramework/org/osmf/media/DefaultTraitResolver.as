@@ -21,8 +21,11 @@
 *****************************************************/
 package org.osmf.media
 {
+	CONFIG::LOGGING 
+	{	
+		import org.osmf.logging.ILogger;
+	}
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
