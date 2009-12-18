@@ -363,13 +363,13 @@ package org.osmf.composition
 				}
 			}
 			
-			// If the playing of a child is synchronous (i.e. it resets its
-			// own playing state within its play call), then we should
-			// expect the following child to play.
-			playTrait3.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayTrait3PlayingChange);
+			// If the playing of a child is synchronous (i.e. it stops
+			// itself within its play call), then we should expect the
+			// following child to play.
+			playTrait3.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayTrait3PlayingChange, false);
 			playTrait2.stop();
 			playTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
-			assertTrue(playTrait.playState == PlayState.STOPPED);
+			assertTrue(playTrait.playState == PlayState.STOPPED);		
 			assertTrue(playTrait1.playState == PlayState.STOPPED);
 			assertTrue(playTrait2.playState == PlayState.STOPPED);
 			assertTrue(playTrait3.playState == PlayState.STOPPED);

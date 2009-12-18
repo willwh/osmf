@@ -1204,7 +1204,8 @@ package org.osmf.media
 					}
 					else
 					{
-						assertTrue(statesStr == "playing"); 
+						assertTrue(	   statesStr == "playing ready"
+									|| statesStr == "playing ready playing"); 
 					}
 					mediaPlayer.pause();
 					

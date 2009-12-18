@@ -147,15 +147,14 @@ package org.osmf.proxies
 		{
 			if (time >= _duration)
 			{
-				elapsedTime = _duration;
-				
 				playheadTimer.stop();
 				playTrait.stop();
-				timeTrait.currentTime = _duration;
+
+				elapsedTime = _duration;
 			}
 			else
 			{
-				timeTrait.currentTime = time;
+				elapsedTime = time;
 			}
 		}
 		

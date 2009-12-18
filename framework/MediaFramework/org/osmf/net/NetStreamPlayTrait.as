@@ -135,11 +135,9 @@ package org.osmf.net
 					// halt playback.
 					if (urlResource != null && NetStreamUtils.isRTMPStream(urlResource.url) == false) 
 					{
-						// Explicitly pause to prevent the stream from restarting on seek();
-						if (canPause)
-						{
-							pause();
-						}
+						// Explicitly stop to prevent the stream from restarting on seek();
+						streamStarted = false;
+						stop();
 					}
 					break;
 			}
@@ -152,11 +150,9 @@ package org.osmf.net
 				// Fired when streaming connections finish.  Doesn't fire for
 				// Progressive connections.  
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
-					// Explicitly pause to prevent the stream from restarting on seek();
-					if (canPause)
-					{
-						pause();
-					}				
+					// Explicitly stop to prevent the stream from restarting on seek();
+					streamStarted = false;
+					stop();
 					break;
 			}
 		}

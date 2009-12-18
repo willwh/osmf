@@ -92,9 +92,24 @@ package org.osmf.composition
 			assertTrue(playTrait3.playState == PlayState.PAUSED);
 			assertTrue(playStateChangedEventCount == 1);
 
-			// If we tell a child to stop, the composite trait should also
-			// pause.
+			// If we tell a child to stop, the composite trait should *not*
+			// stop.  Stopping only propagates to the composite trait when
+			// all children are stopped.
 			playTrait3.stop();
+			assertTrue(playTrait.playState == PlayState.PAUSED)
+			assertTrue(playTrait1.playState == PlayState.PAUSED)
+			assertTrue(playTrait2.playState == PlayState.PAUSED);
+			assertTrue(playTrait3.playState == PlayState.STOPPED);
+			assertTrue(playStateChangedEventCount == 1);
+
+			playTrait2.stop();
+			assertTrue(playTrait.playState == PlayState.PAUSED)
+			assertTrue(playTrait1.playState == PlayState.PAUSED)
+			assertTrue(playTrait2.playState == PlayState.STOPPED);
+			assertTrue(playTrait3.playState == PlayState.STOPPED);
+			assertTrue(playStateChangedEventCount == 1);
+
+			playTrait1.stop();
 			assertTrue(playTrait.playState == PlayState.STOPPED)
 			assertTrue(playTrait1.playState == PlayState.STOPPED)
 			assertTrue(playTrait2.playState == PlayState.STOPPED);

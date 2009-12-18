@@ -96,8 +96,16 @@ package org.osmf.composition
 				}
 				else // SERIAL
 				{
-					// Invoke the appropriate method on the current child.
-					setPlayState(traitOfCurrentChild, newPlayState);
+					// We want to set the playState on the current child.  But doing
+					// so could trigger events which would affect the state of this
+					// trait, which might cause it to get out of sync (since this call
+					// is generally followed by the set to the actual playState var).
+					// It is the responsibility of this trait to ensure that it's own
+					// state doesn't get out of sync.  It does this by remembering
+					// the operation to invoke, and invoking it at the next "safe" time
+					// (which is basically when the postProcess method gets called).
+					deferredPlayTraitToSet = traitOfCurrentChild;
+					deferredPlayStateToSet = newPlayState;
 				}
 				
 				playStateIsChanging = false;
@@ -115,6 +123,14 @@ package org.osmf.composition
 			{
 				super.postProcessPlayStateChange();
 			}
+			
+			// If we have a deferred operation to complete, do so now.
+			if (deferredPlayTraitToSet != null)
+			{
+				setPlayState(deferredPlayTraitToSet, deferredPlayStateToSet);
+			}
+			deferredPlayTraitToSet = null;
+			deferredPlayStateToSet = null;
 		}
 		
 		// Internals
@@ -169,7 +185,27 @@ package org.osmf.composition
 			if (mode == CompositionMode.PARALLEL)
 			{
 				// The composition should reflect what its children do.
-				setPlayState(this, playTrait.playState);
+				var computedPlayState:String = playTrait.playState;
+				
+				// If this child reached the STOPPED state by virtue of
+				// reaching the end, then we only want to set the composite
+				// trait's state to STOPPED if all other children are
+				// similarly STOPPED.
+				if (computedPlayState == PlayState.STOPPED)
+				{
+					traitAggregator.forEachChildTrait
+						(
+							function(mediaTrait:PlayTrait):void
+							{
+								if (mediaTrait.playState != PlayState.STOPPED)
+								{
+									computedPlayState = mediaTrait.playState;
+								}
+							}
+							, MediaTraitType.PLAY
+						);
+				}
+				setPlayState(this, computedPlayState);
 			}
 			else if (playTrait == traitOfCurrentChild)
 			{
@@ -281,5 +317,7 @@ package org.osmf.composition
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
 		private var playStateIsChanging:Boolean;
+		private var deferredPlayTraitToSet:PlayTrait;
+		private var deferredPlayStateToSet:String;
 	}
 }
