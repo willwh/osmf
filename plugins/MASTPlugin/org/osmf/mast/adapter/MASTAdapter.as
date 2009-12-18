@@ -122,21 +122,21 @@ package org.osmf.mast.adapter
 			_map = new Dictionary();
 			
 			// Properties
-			_map[DURATION] 		= "ITemporal.duration";
-			_map[POSITION] 		= "ITemporal.currentTime";
-			_map[IS_PLAYING]	= "IPlayable.playing";
-			_map[IS_PAUSED]		= "IPausable.paused";
-			_map[CONTENT_WIDTH]	= "ISpatial.width";
-			_map[CONTENT_HEIGHT]= "ISpatial.height";
+			_map[DURATION] 		= "TimeTrait.duration";
+			_map[POSITION] 		= "TimeTrait.currentTime";
+			_map[IS_PLAYING]	= "PlayTrait.playState";
+			_map[IS_PAUSED]		= "PlayTrait.playState";
+			_map[CONTENT_WIDTH]	= "ViewTrait.mediaWidth";
+			_map[CONTENT_HEIGHT]= "ViewTrait.mediaHeight";
 
 			// Events					
-			_map[ON_PLAY]			= "org.osmf.events.PlayingChangeEvent.PLAYING_CHANGE";
-			_map[ON_STOP]			= "org.osmf.events.PlayingChangeEvent.PLAYING_CHANGE";
-			_map[ON_PAUSE]			= "org.osmf.events.PausedChangeEvent.PAUSED_CHANGE";
-			_map[ON_MUTE]			= "org.osmf.events.MutedChangeEvent.MUTED_CHANGE";
-			_map[ON_VOLUME_CHANGE]	= "org.osmf.events.VolumeChangeEvent.VOLUME_CHANGE";
-			_map[ON_SEEK]			= "org.osmf.events.SeekEvent.SEEKING_CHANGE";
-			_map[ON_ITEM_START]		= "org.osmf.events.PlayingChangeEvent.PLAYING_CHANGE";
+			_map[ON_PLAY]			= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
+			_map[ON_STOP]			= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
+			_map[ON_PAUSE]			= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
+			_map[ON_MUTE]			= "org.osmf.events.AudioEvent.MUTED_CHANGE";
+			_map[ON_VOLUME_CHANGE]	= "org.osmf.events.AudioEvent.VOLUME_CHANGE";
+			_map[ON_SEEK]			= "org.osmf.events.SeekEvent.SEEK_END";
+			_map[ON_ITEM_START]		= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
 			_map[ON_ITEM_END]		= "org.osmf.events.TimeEvent.DURATION_REACHED";
 		}
 		

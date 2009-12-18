@@ -20,7 +20,7 @@ package org.osmf.test.mast.adapter
 		
 		public function testLookup():void
 		{
-			assertEquals("ITemporal.duration", _mastAdapter.lookup(MASTAdapter.DURATION));
+			assertEquals("TimeTrait.duration", _mastAdapter.lookup(MASTAdapter.DURATION));
 		}
 
 		private var _mastAdapter:MASTAdapter;		

@@ -46,7 +46,8 @@ package org.osmf.test.mast
 			assertEquals(true, pluginInfo.isFrameworkVersionSupported("1.0.0"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.0.1"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.5.1"));
-			assertEquals(true, pluginInfo.isFrameworkVersionSupported("0.7.0"));
+			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.7.0"));
+			assertEquals(true, pluginInfo.isFrameworkVersionSupported("0.8.0"));		
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.4.9"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported(null));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported(""));
