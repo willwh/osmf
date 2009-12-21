@@ -33,6 +33,7 @@ package org.osmf.chrome.controlbar.widgets
 	
 	import org.osmf.chrome.controlbar.ControlBarWidget;
 	import org.osmf.chrome.events.ScrubberEvent;
+	import org.osmf.chrome.fonts.Fonts;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
@@ -46,9 +47,6 @@ package org.osmf.chrome.controlbar.widgets
 		[Embed(source="../assets/images/scrubBarTrack.png")]
 		private static var scrubBarTrackType:Class;
 		
-		[Embed(source="../assets/fonts/type_writer.ttf", fontName="Type Writer Regular", mimeType="application/x-font-truetype")]
-		private static var TYPE_WRITER:String;
-		
 		private static var SCRUBBER_VERTICAL_OFFSET:Number = 8;
 		private static var SCRUBBER_START:Number = 50;
 		private static var SCRUBBER_END:Number = 260;
@@ -57,7 +55,7 @@ package org.osmf.chrome.controlbar.widgets
 		{
 			track ||= scrubBarTrackType;
 			
-			var textFormat:TextFormat = new TextFormat("Type Writer Regular", 8, 0xFFFFFF);
+			var textFormat:TextFormat = Fonts.defaultTextFormat();
 				
 			currentTime = new TextField();
 			currentTime.selectable = false;

@@ -29,6 +29,7 @@ package org.osmf.chrome.controlbar.widgets
 	import flash.text.TextFormat;
 	
 	import org.osmf.chrome.controlbar.ControlBarWidget;
+	import org.osmf.chrome.fonts.Fonts;
 	import org.osmf.media.MediaElement;
 	
 	[Event(name="change", type="flash.events.Change")];
@@ -37,7 +38,7 @@ package org.osmf.chrome.controlbar.widgets
 	{
 		public function URLInput()
 		{
-			var textFormat:TextFormat = new TextFormat("Type Writer Regular", 8, 0xFFFFFF);
+			var textFormat:TextFormat = Fonts.defaultTextFormat();
 			
 			var label:TextField = new TextField();
 			label.selectable = false;
