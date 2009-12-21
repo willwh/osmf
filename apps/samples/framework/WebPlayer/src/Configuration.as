@@ -32,6 +32,11 @@ package
 				= parameters.backgroundColor == undefined
 					? NaN
 					: parseInt(parameters.backgroundColor);
+					
+			_showStopButton
+				= parameters.showStopButton == undefined
+					? false
+					: parameters.showStopButton.toString().toLowerCase() == "true"
 		}
 
 		public function get url():String
@@ -44,10 +49,16 @@ package
 			return _backgroundColor;
 		}
 		
+		public function get showStopButton():Boolean
+		{
+			return _showStopButton;
+		}
+		
 		// Internals
 		//
 		
 		private var _url:String;
 		private var _backgroundColor:Number;
+		private var _showStopButton:Boolean;
 	}
 }

@@ -103,12 +103,15 @@ package
 			widget.setRegistrationTarget("playButton", Direction.RIGHT);
 			widget.setPosition(1, 0);
 			
-			widget = controlBar.addWidget("stopButton", new StopButton());
-			widget.setRegistrationTarget("pauseButton", Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
+			if (configuration.showStopButton)
+			{
+				widget = controlBar.addWidget("stopButton", new StopButton());
+				widget.setRegistrationTarget("pauseButton", Direction.RIGHT);
+				widget.setPosition(1, 0);
+			}
+				
 			widget = controlBar.addWidget("qualityAutoSwitch", new QualityAutoSwitchToggle());
-			widget.setRegistrationTarget("stopButton", Direction.RIGHT);
+			widget.setRegistrationTarget(configuration.showStopButton ? "stopButton" : "pauseButton", Direction.RIGHT);
 			widget.addEventListener(MouseEvent.CLICK, onQualityModeClick);
 			widget.setPosition(3, 0);
 			
