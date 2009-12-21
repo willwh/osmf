@@ -38,9 +38,11 @@ package org.osmf.chrome.controlbar
 		[Embed("../assets/images/controlBarBackdrop.png")]
 		public var backdropType:Class;
 		 
-		public function ControlBar()
+		public function ControlBar(backdrop:Class = null)
 		{
 			super();
+			
+			backdrop ||= backdropType;
 			
 			mouseChildren = true;
 			mouseEnabled = true;

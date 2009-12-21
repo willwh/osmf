@@ -57,10 +57,15 @@ package
 			// embedding WebPlayer.swf:
 			configuration = new Configuration(loaderInfo.parameters);
 			
+			// Set the SWF scale mode, and listen to the stage change
+			// dimensions:
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize);
-				
+			
+			// Construct a media factory. A media factory can create
+			// media elements on being passed a resource. Manually add
+			// support for the Flash Media Format file type:
 			factory = new DefaultMediaFactory();
 			factory.addMediaInfo     
 				( new MediaInfo
@@ -73,9 +78,13 @@ package
 					, MediaInfoType.STANDARD
 					)
 				);
-				
+			
+			// Construct a media player instance. This will help in loading
+			// the element that the factory will construct:
 			player = new MediaPlayer();
 			
+			// Construct a RegionGateway that will be used to show the media
+			// on screen once it has loaded.
 			region = new RegionGateway();
 			region.clipChildren = true;
 			region.backgroundColor = configuration.backgroundColor;
@@ -83,68 +92,24 @@ package
 			addChild(region);
 			onStageResize();
 			
-			controlBar = new ControlBar();
+			// Construct a default control bar, and add extra listeners to
+			// to some of its widgets:
+			
+			controlBar = new DefaultControlBar(configuration.showStopButton);
 			controlBar.region = region;
-			
-			var widget:ControlBarWidget;
-
-			widget = controlBar.addWidget("urlInput", new URLInput());
-			widget.setPosition(9,0);
-			widget.addEventListener(Event.CHANGE, onInputURLChange);
-			URLInput(widget).url = configuration.url;
-			
-			widget = controlBar.addWidget("scrubBar", new ScrubBar());
-			widget.setPosition(0, 0);
-			
-			widget = controlBar.addWidget("playButton", new PlayButton());
-			widget.setPosition(9, 20);
-
-			widget = controlBar.addWidget("pauseButton", new PauseButton());
-			widget.setRegistrationTarget("playButton", Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
-			if (configuration.showStopButton)
-			{
-				widget = controlBar.addWidget("stopButton", new StopButton());
-				widget.setRegistrationTarget("pauseButton", Direction.RIGHT);
-				widget.setPosition(1, 0);
-			}
-				
-			widget = controlBar.addWidget("qualityAutoSwitch", new QualityAutoSwitchToggle());
-			widget.setRegistrationTarget(configuration.showStopButton ? "stopButton" : "pauseButton", Direction.RIGHT);
-			widget.addEventListener(MouseEvent.CLICK, onQualityModeClick);
-			widget.setPosition(3, 0);
-			
-			widget = controlBar.addWidget("qualityIncrease", new QualityIncreaseButton());
-			widget.setRegistrationTarget("qualityAutoSwitch", Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
-			widget = controlBar.addWidget("qualityDecrease", new QualityDecreaseButton());
-			widget.setRegistrationTarget("qualityIncrease", Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
-			widget = controlBar.addWidget("ejectButton", new EjectButton());
-			widget.setPosition(292, 20);
-			widget.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
-			
-			widget = controlBar.addWidget("fullScreenEnter", new FullScreenEnterButton());
-			widget.setRegistrationTarget("ejectButton", Direction.LEFT);
-			widget.setPosition(3, 0);
-			
-			widget = controlBar.addWidget("fullScreenLeave", new FullScreenLeaveButton());
-			widget.setRegistrationTarget("fullScreenEnter", Direction.LEFT);
-			widget.setPosition(0, 0);
-			
-			widget = controlBar.addWidget("soundLess", new SoundLessButton());
-			widget.setRegistrationTarget("fullScreenLeave", Direction.LEFT);
-			widget.setPosition(3, 0);
-			
-			widget = controlBar.addWidget("soundMore", new SoundMoreButton());
-			widget.setRegistrationTarget("soundLess", Direction.LEFT);
-			widget.setPosition(1, 0);
-			
 			addChild(controlBar);
 			
+			var urlInput:URLInput = controlBar.getWidget(DefaultControlBar.URL_INPUT) as URLInput;
+			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
+			urlInput.url = configuration.url;
+			
+			var button:Button = controlBar.getWidget(DefaultControlBar.QUALITY_AUTO_SWITCH) as Button;
+			button.addEventListener(MouseEvent.CLICK, onQualityModeClick);
+			
+			button = controlBar.getWidget(DefaultControlBar.EJECT_BUTTON) as Button;
+			button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
+			
+			// Try to load the currently set URL (if any):
 			loadURL(new URL(configuration.url));
 		}
 		
@@ -156,13 +121,18 @@ package
 			LayoutUtils.setAbsoluteLayout(region.metadata, stage.stageWidth, stage.stageHeight);
 		}
 		
-		private function set element(value:MediaElement):void
+		private function loadURL(url:URL):void
 		{
-			if (value != _element)
+			updateTargetElement(factory.createMediaElement(new URLResource(url)));	
+		}
+		
+		private function updateTargetElement(value:MediaElement):void
+		{
+			if (value != element)
 			{
-				if (_element)
+				if (element)
 				{
-					_element.gateway = null;
+					element.gateway = null;
 				}
 				
 				if (player.playing)
@@ -174,25 +144,28 @@ package
 					= controlBar.element
 					= null;
 				
-				_element
+				element
 					= player.element 
 					= controlBar.element
 					= value;
 					
-				if (_element)
+				if (element)
 				{
-					LayoutUtils.setRelativeLayout(_element.metadata, 100, 100);
-					LayoutUtils.setLayoutAttributes(_element.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
+					LayoutUtils.setRelativeLayout(element.metadata, 100, 100);
+					LayoutUtils.setLayoutAttributes(element.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
 					
-					_element.gateway = region;
+					element.gateway = region;
 				}
 			}
 		}
 				
+		// Handlers
+		//
+		
 		private function onEjectButtonClick(event:MouseEvent):void
 		{
 			stage.displayState = StageDisplayState.NORMAL;
-			element = null;
+			updateTargetElement(null);
 		}
 		
 		private function onQualityModeClick(event:MouseEvent):void
@@ -221,27 +194,13 @@ package
 			}
 		}
 		
-		private function loadURL(url:URL):void
-		{
-			element = factory.createMediaElement(new URLResource(url));	
-		}
-		
 		private var configuration:Configuration;
 		private var factory:MediaFactory;
 		private var player:MediaPlayer;
 		
-		private var _element:MediaElement;
+		private var element:MediaElement;
 		
 		private var region:RegionGateway;
 		private var controlBar:ControlBar;
-		
-		private static const REMOTE_PROGRESSIVE:String
-			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
-		
-		private static const REMOTE_MANIFEST:String
-			= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m";
-			
-		private static const REMOTE_MBR_MANIFEST:String
-			= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m";
 	}
 }            
