@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>OSMF StandAlone Player</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  	<script type="text/javascript" src="swfobject/swfobject.js"></script>
+    <script type="text/javascript">
+			swfobject.embedSWF
+				( "WebPlayer.swf"
+				, "player"
+				, "640", "360"
+				, "10.0.0"
+				, 	{}
+				, 	{ url: "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv"
+					, backgroundColor: "0x333333"
+					}
+				, 	{ allowFullScreen: "true"
+					}
+				);
+     </script>
+  	<style type="text/css">
+	<!--
+	.Verdana {
+		font-family: Verdana, Geneva, sans-serif;
+	}
+	-->
+	</style>
+ 	</head>
+	<body>
+	<table width="100%" border="0" cellspacing="5">
+  <tr>
+    <td width="43"><img src="images/adobe-lq.png" alt="" width="43" height="72" /></td>
+    <td width="320" class="Verdana">OSMF StandAlone Player</td>
+    <td width="262"><img src="images/osmf_horizontal_red.png" width="262" height="57"/></td>
+    <td width="*"></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="5">
+  <tr>
+    <td>
+     <div id="player">
+      <p>Alternative content</p>
+    </div>
+    </td>
+  </tr>
+  <tr>
+    <td><p>Some links to media:</p>
+    <p>http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m<br />
+      http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m<br />
+    http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3<br />
+    http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv</p></td>
+  </tr>
+</table>
+ 
+  </body>
+</html>
