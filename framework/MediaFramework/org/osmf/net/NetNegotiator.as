@@ -24,6 +24,11 @@
 
 package org.osmf.net
 {
+	CONFIG::LOGGING
+	{
+		import org.osmf.logging.ILogger;
+	}
+	
 	import __AS3__.vec.Vector;
 	
 	import flash.errors.IOError;
@@ -253,7 +258,7 @@ package org.osmf.net
     				}
     				break;
 				case NetConnectionCodes.CONNECT_SUCCESS:
-					shutDownUnsuccessfullConnections();
+					shutDownUnsuccessfulConnections();
 					dispatchEvent
 						( new NetNegotiatorEvent
 							( NetNegotiatorEvent.CONNECTED
@@ -271,11 +276,11 @@ package org.osmf.net
 		 * Also shuts down the master timeout and attempt timers. 
 		 * @private
 		 */
-		private function shutDownUnsuccessfullConnections():void
+		private function shutDownUnsuccessfulConnections():void
 		{
 			timeOutTimer.stop();
 			connectionTimer.stop();
-			for (var i:int = 0; i<netConnections.length; i++) 
+			for (var i:int = 0; i < netConnections.length; i++) 
 			{
 				var nc:NetConnection = netConnections[i];
 				if (!nc.connected)
@@ -295,7 +300,11 @@ package org.osmf.net
 		 */
 		private function handleFailedConnectionSession(mediaError:MediaError = null):void
 		{
-			shutDownUnsuccessfullConnections();
+			CONFIG::LOGGING
+			{
+				logger.info("NetConnection attempt failed (" + mediaError.errorCode + "): " + mediaError.detail);
+			}
+			shutDownUnsuccessfulConnections();
 			dispatchEvent
 				( new NetNegotiatorEvent
 					( NetNegotiatorEvent.CONNECTION_FAILED
@@ -379,6 +388,8 @@ package org.osmf.net
 		private static const PROTOCOL_FILE:String = "file";
 		private static const PROTOCOL_EMPTY:String = "";
 		private static const MP3_EXTENSION:String = ".mp3";
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
 	}
 }
 

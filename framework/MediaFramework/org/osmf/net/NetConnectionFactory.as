@@ -24,7 +24,11 @@
 
 package org.osmf.net
 {
-
+	CONFIG::LOGGING 
+	{	
+		import org.osmf.logging.ILogger;
+	}
+	
 	import __AS3__.vec.Vector;
 	
 	import flash.events.EventDispatcher;
@@ -117,6 +121,11 @@ package org.osmf.net
 			// Check to see if we already have this connection ready to be shared.
 			if (sharedConnection != null && allowNetConnectionSharing)
 			{
+				CONFIG::LOGGING
+				{
+					logger.info("Reusing shared NetConnection: " + sharedConnection.netConnection.uri);
+				}
+
 				sharedConnection.count++;
 				dispatchEvent
 					( new NetConnectionFactoryEvent
@@ -153,6 +162,11 @@ package org.osmf.net
 				// Catch the connected event coming back from the NetNegotiator
 				function onConnected(event:NetNegotiatorEvent):void
 				{
+					CONFIG::LOGGING 
+					{	
+						logger.info("NetConnection established with: " + event.netConnection.uri);
+					}
+					
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
 					
@@ -193,6 +207,12 @@ package org.osmf.net
 				// Catch the failed event coming back from the NetNegotiator
 				function onConnectionFailed(event:NetNegotiatorEvent):void
 				{
+					CONFIG::LOGGING 
+					{
+						var fmsURL:FMSURL = urlResource.url is FMSURL ? urlResource.url as FMSURL : new FMSURL(urlResource.url.rawUrl);
+						logger.info("NetConnection failed for: " + fmsURL.protocol + "://" + fmsURL.host + (fmsURL.port.length > 0 ? ":" + fmsURL.port : "" ) + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""));
+					}
+
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
 					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
 					
@@ -274,6 +294,8 @@ package org.osmf.net
 		
 		private var connectionDictionary:Dictionary;
 		private var pendingDictionary:Dictionary;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetConnectionFactory");
 	}
 }
 
