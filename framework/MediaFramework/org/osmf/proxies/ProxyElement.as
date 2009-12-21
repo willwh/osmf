@@ -128,6 +128,9 @@ package org.osmf.proxies
 					// to respond to change events.  (Note that this class's
 					// setupTraits prevents a call to the base class.)
 					setupOverriddenTraits();
+					
+					// Forward our gateway (if any) to the wrapped element:
+					_wrappedElement.gateway = outerGateway;
 				}
 			}
 		}
@@ -212,11 +215,15 @@ package org.osmf.proxies
 		
 		override public function get gateway():IMediaGateway
 		{
-			return wrappedElement ? wrappedElement.gateway : null;
+			return wrappedElement ? wrappedElement.gateway : outerGateway;
 		}
 		
 		override public function set gateway(value:IMediaGateway):void
 		{	
+			// Retain the value as the gateway that was set from the outside
+			// of the wrapped element:
+			outerGateway = value;
+			
 			if (wrappedElement != null)
 			{		
 				wrappedElement.gateway = value;
@@ -360,13 +367,15 @@ package org.osmf.proxies
 		{
 			// We only redispatch the event if the change is for a non-blocked,
 			// non-overridden trait.
-			if (blocksTrait(event.traitType) == false &&
-				super.hasTrait(event.traitType) == false)
+			if	(	blocksTrait(event.traitType) == false
+				&&	super.hasTrait(event.traitType) == false
+				)
 			{
 				super.dispatchEvent(event.clone());
 			}
 		}
 		
 		private var _wrappedElement:MediaElement;
+		private var outerGateway:IMediaGateway;
 	}
 }
