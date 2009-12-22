@@ -25,6 +25,7 @@ package org.osmf.plugin
 	
 	import org.osmf.events.*;
 	import org.osmf.media.*;
+	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.utils.*;
 
@@ -237,6 +238,39 @@ package org.osmf.plugin
 			// the resource truly is a plugin resource or not (which probably
 			// means loading it).
 			assertFalse(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
+		}
+		
+		public function testPluginMetadata():void
+		{
+			var metadataNS:String = "http://sentinel/namespace";
+			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
+			
+			assertNull(pluginInfo.pluginMetadata);
+			
+			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
+			resource.metadata.addFacet(new KeyValueFacet(new URL(metadataNS)));
+			
+			pluginManager.loadPlugin(resource);
+			
+			assertNotNull(pluginInfo.pluginMetadata);
+			assertNotNull(pluginInfo.pluginMetadata.getFacet(new URL(metadataNS)));
+		}
+		
+		public function testPluginCreateOnLoad():void
+		{
+			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
+			assertEquals(0, pluginInfo.createCount);
+			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
+			
+			pluginManager.loadPlugin(resource);
+			assertEquals(1, pluginInfo.createCount);
+			
+			pluginManager.loadPlugin(resource); //No-op, plugin already loaded.
+			assertEquals(1, pluginInfo.createCount);
+			
+			pluginManager.unloadPlugin(resource);
+			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); //Unloading and reloading will force recreation.
+			assertEquals(2, pluginInfo.createCount);			
 		}
 		
 		private function doUnloadPluginWithInvalidParameter(resource:IMediaResource):Boolean
