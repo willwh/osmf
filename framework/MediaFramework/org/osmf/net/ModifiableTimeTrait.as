@@ -19,9 +19,15 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.traits
+package org.osmf.net
 {
+	import org.osmf.traits.TimeTrait;
+	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * TimeTrait which allows the client to modify the duration.
 	 **/
 	public class ModifiableTimeTrait extends TimeTrait

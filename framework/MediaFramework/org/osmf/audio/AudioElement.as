@@ -31,7 +31,6 @@ package org.osmf.audio
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ModifiableTimeTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 

@@ -44,6 +44,7 @@ package org.osmf.video
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.metadata.TemporalFacetEvent;
+	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetLoadedContext;
 	import org.osmf.net.NetLoader;
@@ -64,7 +65,6 @@ package org.osmf.video
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ModifiableTimeTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.OSMFStrings;
