@@ -52,20 +52,5 @@ package org.osmf.traits
 		 * The LoadTrait has failed to load.
 		 **/
 		public static const LOAD_ERROR:String		= "loadError";
-		
-		/**
-		 * All known load states.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const ALL_STATES:Vector.<String> = new Vector.<String>(5);
-			ALL_STATES[0] = UNINITIALIZED;
-			ALL_STATES[1] = LOADING;
-			ALL_STATES[2] = UNLOADING;
-			ALL_STATES[3] = READY;
-			ALL_STATES[4] = LOAD_ERROR;
 	}
 }

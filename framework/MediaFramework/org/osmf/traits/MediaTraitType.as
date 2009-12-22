@@ -122,8 +122,9 @@ package org.osmf.traits
 		public static const VIEW:String = "view";
 				
 		/**
-		 * Array containing all trait types in the system.  Useful for clients
-		 * who want to iterate over all traits.
+		 * @private
+		 * 
+		 * Array containing all trait types in the system.
 		 **/
 		public static const ALL_TYPES:Vector.<String> = Vector.<String>
 			( 
