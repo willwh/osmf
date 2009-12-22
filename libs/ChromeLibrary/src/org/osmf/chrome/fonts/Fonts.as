@@ -22,6 +22,8 @@
 
 package org.osmf.chrome.fonts
 {
+	import flash.text.Font;
+	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
 	public class Fonts
@@ -32,13 +34,16 @@ package org.osmf.chrome.fonts
 		 *
 		 * http://fontstruct.fontshop.com/fontstructions/show/212255
 		 *
-		 * Once the font (type_writer.ttf) is placed in ../assets/fonts, then
-		 * uncomment the commented lines for the font to get used on the UI:
+		 * Once the font (type_writer.ttf) is embedded in a SWF (by placing
+		 * it in a Flash Authoring project's Library, and marking it for
+		 * export, as 'TypeWriterFont'), then uncomment the commented lines for
+		 * the font to get used on the UI:
 		 */
 		 		
 		/*
-		[Embed(source="../assets/fonts/type_writer.ttf", fontName="Type Writer Regular", mimeType="application/x-font-truetype")]
-		private static var TYPE_WRITER:String;
+		//[Embed(source="../assets/fonts/type_writer.ttf", fontName="Type Writer Regular", mimeType="application/x-font-truetype")]
+		[Embed(source="../assets/fonts/TypeWriterFont.swf#TypeWriterFont")]
+		private static var TYPE_WRITER:Class;
 		*/
 		
 		public static function defaultTextFormat():TextFormat
@@ -49,18 +54,30 @@ package org.osmf.chrome.fonts
 					, 11
 					, 0xFFFFFF
 					);
-					
+			
 			/*
 			result
 				= new TextFormat
-					( "Type Writer Regular"
+					( new TYPE_WRITER().fontName
 					, 8
-					, 0xFFFFFF
+					, 0xffffff
 					);
+			
 			*/
 			
 			return result; 
 		}
-
+		
+		public static function getDefaultTextField():TextField
+		{
+			var result:TextField = new TextField();
+			result.defaultTextFormat = defaultTextFormat();
+			result.selectable = false;
+			
+			// Uncomment on using embedded font:
+			// result.embedFonts = true;
+			
+			return result;
+		}
 	}
 }

@@ -26,8 +26,13 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import org.osmf.chrome.controlbar.*;
 	import org.osmf.chrome.controlbar.widgets.*;
@@ -45,6 +50,7 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.utils.URL;
+	import org.osmf.utils.Version;
 	
 	[SWF(backgroundColor="0x000000",frameRate="25")]
 	public class WebPlayer extends Sprite
@@ -52,6 +58,16 @@ package
 		public function WebPlayer()
 		{
 			super();
+			
+			// Setup a context menu:
+			osmfMenuItem = new ContextMenuItem("OSMF Web Player v." + Version.version());
+			osmfMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onOSMFContextMenuItemSelect);
+			
+			customContextMenu = new ContextMenu();
+			customContextMenu.hideBuiltInItems();
+			customContextMenu.customItems.push(osmfMenuItem);
+			
+			contextMenu = customContextMenu;
 			
 			// Parse configuration from the parameters passed on
 			// embedding WebPlayer.swf:
@@ -193,6 +209,14 @@ package
 				loadURL(new URL(urlInput.url));
 			}
 		}
+		
+		private function onOSMFContextMenuItemSelect(event:ContextMenuEvent):void
+		{
+			flash.net.navigateToURL(new URLRequest("http://www.osmf.org"), "_blank");
+		}
+		
+		private var customContextMenu:ContextMenu;
+		private var osmfMenuItem:ContextMenuItem;
 		
 		private var configuration:Configuration;
 		private var factory:MediaFactory;

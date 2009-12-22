@@ -55,24 +55,18 @@ package org.osmf.chrome.controlbar.widgets
 		{
 			track ||= scrubBarTrackType;
 			
-			var textFormat:TextFormat = Fonts.defaultTextFormat();
-				
-			currentTime = new TextField();
-			currentTime.selectable = false;
+			currentTime = Fonts.getDefaultTextField();
 			currentTime.height = 12;
 			currentTime.width = 52;
 			currentTime.alpha = 0.4;
-			currentTime.defaultTextFormat = textFormat;
 			currentTime.x = 7;
 			currentTime.y = 7;
 			addChild(currentTime);
 			
-			remainingTime = new TextField();
-			remainingTime.selectable = false;
+			remainingTime = Fonts.getDefaultTextField();
 			remainingTime.height = 12;
 			remainingTime.width = 52;
 			remainingTime.alpha = 0.4;
-			remainingTime.defaultTextFormat = textFormat;
 			remainingTime.x = 269;
 			remainingTime.y = 7;
 			addChild(remainingTime);

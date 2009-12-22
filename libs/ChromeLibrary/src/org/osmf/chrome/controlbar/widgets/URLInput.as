@@ -38,20 +38,17 @@ package org.osmf.chrome.controlbar.widgets
 	{
 		public function URLInput()
 		{
-			var textFormat:TextFormat = Fonts.defaultTextFormat();
-			
-			var label:TextField = new TextField();
-			label.selectable = false;
+			var label:TextField = Fonts.getDefaultTextField();
 			label.height = 12;
 			label.width = 300;
 			label.alpha = 0.4;
 			label.y = 7;
-			label.defaultTextFormat = textFormat;
 			label.text = "MEDIA URL:";
 			addChild(label);
 			
-			input = new TextField();
+			input = Fonts.getDefaultTextField();
 			input.type = TextFieldType.INPUT;
+			input.selectable = true;
 			input.background = true;
 			input.backgroundColor = 0x808080;
 			input.height = 12;
@@ -59,7 +56,6 @@ package org.osmf.chrome.controlbar.widgets
 			input.alpha = 0.8;
 			input.x = 2;
 			input.y = 23;
-			input.defaultTextFormat = textFormat;
 			input.addEventListener(KeyboardEvent.KEY_DOWN, onInputKeyDown);
 			addChild(input);
 			
