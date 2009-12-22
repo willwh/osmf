@@ -56,6 +56,8 @@
 			import org.osmf.utils.*;
 			import org.osmf.traits.*;
 			import org.osmf.video.*;
+			import org.osmf.plugins.smoothing.SmootherPluginInfo;
+			import org.osmf.plugins.smoothing.Smoother;
 			
 			
 			// Steps to run this app:
@@ -143,7 +145,7 @@
 				// loading the video plugin statically (scenario 1 described above),
 				// this class needs to be included.
 				var v:SimpleVideoPluginInfo;
-				
+				var s:SmootherPluginInfo;
 				initUI();
 				initLogging();
 			}
@@ -267,6 +269,9 @@
 					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
 				
+				var creationParam:KeyValueFacet = new KeyValueFacet(new URL("http://org.yourcompany/creation_params/"));
+				pluginResource.metadata.addFacet(creationParam);
+				
 				loadPluginFromResource(pluginResource);			
 			}
 			
@@ -321,12 +326,19 @@
 
 			<!-- Replace this text with "org.osmf.plugins.video.SimpleVideoPlauginInfo" 
 				for the static plugin example -->
-			<mx:TextInput
-				width="500"
-				id="urlInput"
-				text="http://yourserver.com/strobeplugin/yourDynamicPlugin.swf"
-			/>			
-
+			<mx:ComboBox
+					width="500"
+					id="urlInput"
+					editable="true">				
+					<mx:dataProvider>
+						<mx:Array>							
+							<mx:String>org.osmf.plugins.video.SimpleVideoPluginInfo</mx:String>
+							<mx:String>org.osmf.plugins.smoothing.SmootherPluginInfo</mx:String>
+							<mx:String>http://yourserver.com/strobeplugin/yourDynamicPlugin.swf</mx:String>
+						</mx:Array>
+					</mx:dataProvider>
+				</mx:ComboBox>
+			
 			<mx:Button label="Load Plugin" click="{loadPlugin(urlInput.text)}"/>
 			
 			<mx:Label id="pluginLoadState" text="" visible="false" />
@@ -340,11 +352,20 @@
 			<mx:VBox>
 				<!-- Replace this text with a url to a real video (http or rtmp) 
 					for the static plugin example -->
-				<mx:TextInput
+				<mx:ComboBox
 					width="500"
 					id="mediaInput"
-					text="http://yourserver.com/strobeplugin/sampleSmil.smi"
-				/>
+					editable="true">				
+					<mx:dataProvider>
+						<mx:Array>
+							<mx:String>http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv</mx:String>
+							<mx:String>rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short</mx:String>
+							<mx:String>http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3</mx:String>
+							<mx:String>http://yourserver.com/strobeplugin/sampleSmil.smi</mx:String>
+							<mx:String>http://mediapm.edgesuite.net/osmf/image/adobe-lq.png</mx:String>
+						</mx:Array>
+					</mx:dataProvider>
+				</mx:ComboBox>
 			</mx:VBox>
 
 			<mx:Button label="Load Media Resource" click="{loadItem(mediaInput.text)}"/>
