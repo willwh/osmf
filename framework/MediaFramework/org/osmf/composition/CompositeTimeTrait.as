@@ -84,15 +84,19 @@ package org.osmf.composition
 			// inappropriately (e.g. if currentTime == duration because we don't
 			// have duration for the next child).  For serial, we should only let
 			// the call pass through if we're truly at the end.
+			// Also - Don't dispatch if the final trait doesn't have a time, wait until it either it gets it's
+			// non-zero time or it dispatches durationReached.  -> FM-303.			
 			if (	mode == CompositionMode.PARALLEL
-				||  traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1
+				||  (traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1 &&
+					(traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration > 0 &&
+					!isNaN((traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration))  
 			   )
 			{
 				super.processDurationReached()
 			}
 				
 		}
-		
+				
 		// Internal
 		//
 		
@@ -196,8 +200,8 @@ package org.osmf.composition
 					);
 			
 			if (nextChild == null)
-			{
-				dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
+			{				
+				super.processDurationReached();
 			}
 		}
 		

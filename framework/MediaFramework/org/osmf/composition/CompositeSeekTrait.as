@@ -34,7 +34,7 @@ package org.osmf.composition
 	/**
 	 * Implementation of SeekTrait which can be a composite media trait.
 	 **/
-	internal class CompositeSeekTrait extends SeekTrait
+	internal class CompositeSeekTrait extends SeekTrait implements IReusable
 	{
 		public function CompositeSeekTrait(traitAggregator:TraitAggregator, mode:CompositionMode, owner:MediaElement)
 		{
@@ -52,6 +52,23 @@ package org.osmf.composition
 				, processUnaggregatedChild
 				);
 		}
+		
+		/**
+		 * @private
+		 */
+		public function attach():void
+		{
+			traitAggregationHelper.attach();
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function detach():void
+		{
+			traitAggregationHelper.detach();
+		}
+		
 		
 		/**
 		 * @private

@@ -106,13 +106,12 @@ package org.osmf.plugin
 		 **/
 		public function loadPlugin(resource:IMediaResource):void
 		{
-			if ((resource == null) || 
-				(!(resource is URLResource) && !(resource is PluginClassResource)))
+			if (resource == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			var identifier:String = getPluginIdentifier(resource);
+			var identifier:Object = getPluginIdentifier(resource);
 			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
 			if (pluginEntry != null)
 			{
@@ -193,13 +192,13 @@ package org.osmf.plugin
 		 **/
 		public function unloadPlugin(resource:IMediaResource):void
 		{
-			if ((resource == null) || 
-				(!(resource is URLResource) && !(resource is PluginClassResource)))
+			if (resource == null) 
+	
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			var identifier:String = getPluginIdentifier(resource);
+			var identifier:Object = getPluginIdentifier(resource);
 			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
 			if (pluginEntry != null)
 			{
@@ -238,14 +237,13 @@ package org.osmf.plugin
 		 **/
 		public function isPluginLoaded(resource:IMediaResource):Boolean
 		{
-			if ((resource == null) || 
-				(!(resource is URLResource) && !(resource is PluginClassResource)))
+			if (resource == null)
 			{
 				return false;
 			}
 			
-			var identifier:String = getPluginIdentifier(resource);
-			if (identifier == null || identifier.length <= 0)
+			var identifier:Object = getPluginIdentifier(resource);
+			if (identifier == null)
 			{
 				return false;
 			}
@@ -296,18 +294,23 @@ package org.osmf.plugin
 		// Internals
 		//
 		
-		private function getPluginIdentifier(resource:IMediaResource):String
+		private function getPluginIdentifier(resource:IMediaResource):Object
 		{
-			var identifier:String = "";
+			var identifier:Object = null;
 			
 			if (resource is URLResource)
 			{
 				identifier = (resource as URLResource).url.rawUrl;
 			}
-			else if (resource is PluginClassResource)
+			else if (resource is PluginInfoResource)
 			{
-				identifier = (resource as PluginClassResource).pluginInfoRef.toString();
+				identifier = (resource as PluginInfoResource).pluginInfoRef;
 			}
+			else
+			{
+				throw new Error("unknown resource");
+			}
+			
 			
 			return identifier;
 		}

@@ -55,7 +55,7 @@ package org.osmf.net
 			this.netStream = netStream;
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
-			seekBugTimer = new Timer(10, 10);
+			seekBugTimer = new Timer(10, 100);
 			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);	
 			seekBugTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSeekBugTimerDone, false, 0, true);		
 		}
@@ -72,7 +72,6 @@ package org.osmf.net
 			{
 				previousTime = netStream.time;
 				expectedTime = time;
-				
 				netStream.seek(time);
 				
 				if (netStream.time == time)
@@ -110,7 +109,8 @@ package org.osmf.net
 			//We accept the netStream.time within 2 second of the desired seek.
 			//This fixes seeks where the value doesn't land directly on the desired time.
 			//This also fixes seeks backward.
-			if ((expectedTime - SEEK_MARGIN) <= netStream.time <= (expectedTime + SEEK_MARGIN))
+			if ((expectedTime - SEEK_MARGIN) <= netStream.time &&
+				netStream.time <= (expectedTime + SEEK_MARGIN))
 			{
 				seekBugTimer.reset();			
 				processSeekCompletion(expectedTime);
@@ -118,7 +118,7 @@ package org.osmf.net
 		}
 		
 		private function onSeekBugTimerDone(event:TimerEvent):void
-		{			
+		{		
 			seekBugTimer.reset();
 			processSeekCompletion(expectedTime);
 		}

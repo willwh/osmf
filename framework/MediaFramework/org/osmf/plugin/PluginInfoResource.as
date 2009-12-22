@@ -25,13 +25,13 @@ package org.osmf.plugin
 	import org.osmf.metadata.Metadata;
 	
 	/**
-	 * PluginClassResource implements IMediaResource for static 
+	 * PluginInfoResource implements IMediaResource for static 
 	 * plugins. A static plugin is a plugin that is compiled within the application that uses it,
 	 * in contrast to a dynamic plugin, which is loaded at runtime.
 	 * 
 	 * @see IPluginInfo
 	 */
-	public class PluginClassResource implements IMediaResource
+	public class PluginInfoResource implements IMediaResource
 	{
 		
 		/**
@@ -39,15 +39,17 @@ package org.osmf.plugin
 		 * <p>The default constructor must be able to instantiate the class
 		 * referenced by <code>pluginInfoRef</code>.</p>
 		 * @param pluginInfoRef Reference to a Class that implements IPluginInfo.
+		 * @param parameters the list of initialization paramerers
+		 *  to pass to the IPlugin info once loaded
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginClassResource(pluginInfoRef:Class)
+		public function PluginInfoResource(pluginInfoRef:IPluginInfo)
 		{
-			_pluginInfoRef = pluginInfoRef;			
+			_pluginInfoRef = pluginInfoRef;		
 		}
 			
 		/**
@@ -60,11 +62,12 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get pluginInfoRef():Class
+		public function get pluginInfoRef():IPluginInfo
 		{
 			return _pluginInfoRef;	
 		}
-		
+	
+			
 		/**
 		 *  inheritDoc
 		 *  
@@ -81,9 +84,9 @@ package org.osmf.plugin
 			}
 			return _metadata;
 		}
-		
+
 		private var _metadata:Metadata;	
-		private var _pluginInfoRef:Class;
+		private var _pluginInfoRef:IPluginInfo;
 		
 	}
 }

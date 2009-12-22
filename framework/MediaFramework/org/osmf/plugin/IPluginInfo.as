@@ -22,6 +22,7 @@
 package org.osmf.plugin
 {
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * IPluginInfo is the encapsulation of the set of MediaInfo objects
@@ -42,7 +43,7 @@ package org.osmf.plugin
 	 * customized traits. 
 	 * For example, a plugin that provides tracking might implement
 	 * a TrackingCompositeElement that includes a customized loader and customized
-	 * PlayTrait implementations that start and stop tracking
+	 * IPlayable and IPausable trait implementations that start and stop tracking
 	 * as well as the video.
 	 * </p>
 	 * <p>An IPluginInfo also gives the plugin an opportunity to accept or reject a specific
@@ -149,5 +150,14 @@ package org.osmf.plugin
 		 *  @productversion OSMF 1.0
 		 */
 		function isFrameworkVersionSupported(version:String):Boolean;
+		
+		/**
+		 * Data from the player passed to the plugin to initialize the plugin.
+		 * This is the metadata on the IMediaResource pass to loadPlugin.
+		 * This method is called beforegetMediaInfoAt or get numMediaInfos()
+		 * 
+		 * @see PluginManager
+		 */ 
+		function initializePlugin(pluginMetadata:Metadata):void;
 	}
 }

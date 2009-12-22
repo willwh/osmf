@@ -41,7 +41,7 @@ package org.osmf.plugin
 		
 		override protected function get resourceForMediaElement():IMediaResource
 		{
-			return new PluginClassResource(SimpleVideoPluginInfo);
+			return new PluginInfoResource(new SimpleVideoPluginInfo);
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array
@@ -56,9 +56,9 @@ package org.osmf.plugin
 
 		public function testPluginElementConstruction():void
 		{
-			var pluginElement:MediaElement = new PluginElement(new StaticPluginLoader(new MediaFactory()), new PluginClassResource(null));
+			var pluginElement:MediaElement = new PluginElement(new StaticPluginLoader(new MediaFactory()), new PluginInfoResource(null));
 			assertTrue(pluginElement.resource != null);	
-			assertTrue(pluginElement.resource is PluginClassResource);
+			assertTrue(pluginElement.resource is PluginInfoResource);
 		}
 	}
 }

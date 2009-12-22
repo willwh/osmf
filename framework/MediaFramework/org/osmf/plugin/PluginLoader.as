@@ -26,10 +26,13 @@ package org.osmf.plugin
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.IMediaReferrer;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
-	import org.osmf.traits.LoadTrait;
+	import org.osmf.media.MediaInfoType;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.Version;
 	
@@ -94,7 +97,9 @@ package org.osmf.plugin
 				if (pluginInfo.isFrameworkVersionSupported(Version.version()))
 				{
 					try
-					{
+					{						
+						pluginInfo.initializePlugin(loadTrait.resource.metadata);
+					
 						for (var i:int = 0; i < pluginInfo.numMediaInfos; i++)
 						{
 							// Range error usually comes from this method call.  But
@@ -106,6 +111,13 @@ package org.osmf.plugin
 							}
 							
 							mediaFactory.addMediaInfo(mediaInfo);
+							
+							if (mediaInfo.type == MediaInfoType.CREATE_ON_LOAD)
+							{
+								var autoElem:MediaElement = mediaInfo.mediaElementCreationFunction();	
+								mediaFactory.registerReferrer(autoElem as IMediaReferrer);														
+							}
+							
 						}
 						
 						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 

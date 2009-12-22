@@ -50,7 +50,7 @@ package org.osmf.plugin
 		
 		public function testLoadPluginWithValidClassResource():void
 		{
-			var pluginResource:PluginClassResource = new PluginClassResource(SimpleVideoPluginInfo);
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
@@ -71,7 +71,7 @@ package org.osmf.plugin
 
 		public function testUnloadStaticPluginWithValidClassResource():void
 		{
-			var pluginResource:PluginClassResource = new PluginClassResource(SimpleVideoPluginInfo);
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_UNLOADED, addAsync(onPluginUnloadedEvent, 500));
@@ -107,7 +107,7 @@ package org.osmf.plugin
 
 		public function testCheckLoadStatusOfStaticPluginWithValidClassResource():void
 		{
-			var pluginResource:PluginClassResource = new PluginClassResource(SimpleVideoPluginInfo);
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
@@ -130,7 +130,7 @@ package org.osmf.plugin
 
 		public function testLoadStatusOfStaticPluginWithInvalidClassResource():void
 		{
-			var pluginResource:PluginClassResource = new PluginClassResource(InvalidVersionPluginInfo);
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new InvalidVersionPluginInfo);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
@@ -151,7 +151,7 @@ package org.osmf.plugin
 	
 		public function testLoadStaticPluginWithInvalidClassResource():void
 		{
-			var pluginResource:PluginClassResource = new PluginClassResource(InvalidVersionPluginInfo);
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new InvalidVersionPluginInfo);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
@@ -219,7 +219,7 @@ package org.osmf.plugin
 			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL(""))) == false);
 			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL("rtmp://example.com/vod"))) == false);			
 
-			assertTrue(pluginManager.isPluginLoaded(new PluginClassResource(SimpleVideoPluginInfo)) == false);			
+			assertTrue(pluginManager.isPluginLoaded(new PluginInfoResource(new SimpleVideoPluginInfo)) == false);			
 		}
 		
 		public function testLoadPluginWithInvalidParameters():void

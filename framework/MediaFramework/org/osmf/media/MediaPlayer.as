@@ -1429,7 +1429,7 @@ package org.osmf.media
 					}
 					eventType = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;		
 					break;
-				case MediaTraitType.SEEK:														
+				case MediaTraitType.SEEK:
 					changeListeners(add, _element, traitType, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
 					changeListeners(add, _element, traitType, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
 					_seekable = add;					
@@ -1523,7 +1523,8 @@ package org.osmf.media
 		}	
 				
 		private function onSeeking(event:SeekEvent):void
-		{				
+		{	
+			trace('onSeeking:' + event.time);			
 			if (event.type == SeekEvent.SEEK_BEGIN)
 			{				
 				setState(MediaPlayerState.BUFFERING);				
@@ -1593,12 +1594,15 @@ package org.osmf.media
 		
 		private function onDurationReached(event:TimeEvent):void
 		{
+			trace('MediaPlayer: onDurationReached' );
 			if (loop && seekable && playable)
 			{	
+				trace('looping');
 				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
 				function onSeekEnd(event:SeekEvent):void
 				{
 					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
+					trace('finish loop');
 					play();	
 				}
 				seek(0); //If we don't wait for the seekend, everything breaks for looping.									

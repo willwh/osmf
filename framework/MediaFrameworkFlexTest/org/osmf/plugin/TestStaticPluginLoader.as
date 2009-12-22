@@ -66,12 +66,12 @@ package org.osmf.plugin
 		
 		override protected function get successfulResource():IMediaResource
 		{
-			return new PluginClassResource(SimpleVideoPluginInfo);
+			return new PluginInfoResource(new SimpleVideoPluginInfo);
 		}
 
 		override protected function get failedResource():IMediaResource
 		{
-			return new PluginClassResource(InvalidVersionPluginInfo);
+			return new PluginInfoResource(new InvalidVersionPluginInfo);
 		}
 
 		override protected function get unhandledResource():IMediaResource
@@ -89,7 +89,7 @@ package org.osmf.plugin
 
 		public function testLoadOfPlugin():void
 		{
-			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoPluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoPluginInfo));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
@@ -102,7 +102,7 @@ package org.osmf.plugin
 
 		public function testLoadOfPluginWithMultipleMediaInfos():void
 		{
-			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoImagePluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoImagePluginInfo));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
@@ -116,7 +116,7 @@ package org.osmf.plugin
 
 		public function testUnloadOfPlugin():void
 		{
-			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginClassResource(SimpleVideoPluginInfo));
+			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoPluginInfo()));
 			
 			assertTrue(mediaFactory.numMediaInfos == 0);
 			
@@ -129,15 +129,15 @@ package org.osmf.plugin
 		
 		public function testLoadOfInvalidVersionPlugin():void
 		{
-			doTestLoadOfInvalidPlugin(new PluginClassResource(InvalidVersionPluginInfo));
+			doTestLoadOfInvalidPlugin(new PluginInfoResource(new InvalidVersionPluginInfo));
 		}
 
 		public function testLoadOfInvalidImplementationPlugin():void
 		{
-			doTestLoadOfInvalidPlugin(new PluginClassResource(InvalidImplementationPluginInfo));
+			doTestLoadOfInvalidPlugin(new PluginInfoResource(new InvalidImplementationPluginInfo));
 		}
 		
-		private function doTestLoadOfInvalidPlugin(pluginResource:PluginClassResource):void
+		private function doTestLoadOfInvalidPlugin(pluginResource:PluginInfoResource):void
 		{
 			var loadTrait:LoadTrait = createLoadTrait(loader, pluginResource);
 			

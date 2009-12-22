@@ -48,6 +48,7 @@ package org.osmf.composition
 			this.owner = owner;
 		}
 		
+		
 		/**
 		 * @inheritDoc
 		 **/
@@ -198,27 +199,42 @@ package org.osmf.composition
 		{
 			// If the composite is in the middle of a seek that crosses multiple children,
 			// the composite trait will expect to receive SeekingChangeEvents from its children.
-			// However, it should ignore these events since these events are "initiated" by the
-			// composite trait itself.
+			// Once all children finish seeking, then the seek is considered complete.
 			if (crossChildrenSeeking)
 			{
-				return; 
-			}
-			
-			var newSeekingState:Boolean = checkSeeking();
-			if (newSeekingState != seeking)
-			{
-				// At this point, we know that the change of the child seeking state will cause the
-				// composite seeking state to change.
-				if (newSeekingState)
-				{
-					// Do nothing.
+				var child:MediaElement;
+				while (child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.SEEK))
+				{					
+					if ((child.getTrait(MediaTraitType.SEEK) as SeekTrait).seeking)
+					{
+						return; //return if any children haven't completed the seek.
+					}
 				}
-				else
+				crossChildrenSeeking = false;		
+				
+				// The child is exiting the seeking state, so we just
+				// update the composite seeking state.
+				processSeekCompletion(timeTrait.currentTime);		
+				
+			}					
+			else
+			{
+				var newSeekingState:Boolean = checkSeeking();
+				if (newSeekingState != seeking)
 				{
-					// The child is exiting the seeking state, so we just
-					// update the composite seeking state.
-					processSeekCompletion(event.time);
+					// At this point, we know that the change of the child seeking state will cause the
+					// composite seeking state to change.
+					if (newSeekingState)
+					{
+						// Do nothing.
+					}
+					else
+					{
+						
+						// The child is exiting the seeking state, so we just
+						// update the composite seeking state.
+						processSeekCompletion(event.time);
+					}
 				}
 			}
 		}
@@ -335,7 +351,7 @@ package org.osmf.composition
 			
 			return seekToOp;
 		}
-
+		
 		private function get traitOfCurrentChild():SeekTrait
 		{
 			return   traitAggregator.listenedChild
@@ -349,6 +365,7 @@ package org.osmf.composition
 			return (playTrait == null)? false : playTrait.playState == PlayState.PLAYING;
 		}
 
+		private var traitAggregationHelper:TraitAggregationHelper;
 		private var owner:MediaElement;
 		private var crossChildrenSeeking:Boolean;
 	}

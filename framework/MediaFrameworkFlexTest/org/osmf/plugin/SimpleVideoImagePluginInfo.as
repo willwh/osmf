@@ -25,6 +25,7 @@ package org.osmf.plugin
 	import org.osmf.image.ImageLoader;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
 	
@@ -83,5 +84,11 @@ package org.osmf.plugin
 		{
 			return new ImageElement(new ImageLoader());
 		}
+		
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
+		}
+		
 	}
 }

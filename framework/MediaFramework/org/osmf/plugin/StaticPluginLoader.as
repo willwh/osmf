@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.MediaFactory;
 	import org.osmf.media.IMediaResource;
-	import org.osmf.traits.LoadTrait;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	
 	internal class StaticPluginLoader extends PluginLoader
 	{
@@ -50,7 +50,7 @@ package org.osmf.plugin
 		 */
 	    override public function canHandleResource(resource:IMediaResource):Boolean
 	    {
-	    	return (resource is PluginClassResource);
+	    	return (resource is PluginInfoResource);
 	    }
 	    
 		override public function load(loadTrait:LoadTrait):void
@@ -59,8 +59,8 @@ package org.osmf.plugin
 
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
-			var classResource:PluginClassResource = loadTrait.resource as PluginClassResource; 	
-			var pluginInfo:IPluginInfo = new classResource.pluginInfoRef();
+			var classResource:PluginInfoResource = loadTrait.resource as PluginInfoResource; 	
+			var pluginInfo:IPluginInfo = classResource.pluginInfoRef;
 			
 			loadFromPluginInfo(loadTrait, pluginInfo);
 		}

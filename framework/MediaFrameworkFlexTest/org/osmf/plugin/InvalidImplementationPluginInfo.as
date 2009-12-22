@@ -22,6 +22,7 @@
 package org.osmf.plugin
 {
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	
 	public class InvalidImplementationPluginInfo implements IPluginInfo
 	{
@@ -52,6 +53,11 @@ package org.osmf.plugin
 		public function isFrameworkVersionSupported(version:String):Boolean
 		{
 			return true;
+		}
+		
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
 		}
 	}
 }

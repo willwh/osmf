@@ -258,17 +258,7 @@ package org.osmf.media
 				// If the created element is a referrer element, we should
 				// register it as such.
 				var newReferrer:IMediaReferrer = mediaElement as IMediaReferrer;
-				if (newReferrer != null)
-				{
-					// Set up any references from the new referrer to other
-					// MediaElements.
-					addReferenceToCreatedMediaElements(newReferrer);
-	
-					// Add the new referrer to our list of referrers, so that it
-					// can acquire references to any (relevant) MediaElements that
-					// are created in the future.
-					referrers[newReferrer] = newReferrer;
-				}
+				registerReferrer(newReferrer);
 							
 				// Add the newly created MediaElement (or its root proxy) to
 				// our list of created elements, so that it can be added as a
@@ -277,6 +267,26 @@ package org.osmf.media
 			}
 			
 			return mediaElement;
+		}
+		
+		/**
+		 * Registers a media element as a referrer.  This is automatically 
+		 * called for elements creaed with this factory create MediaElement 
+		 * is called.
+		 */ 
+		public function registerReferrer(newReferrer:IMediaReferrer):void
+		{
+			if (newReferrer != null)
+			{
+				// Set up any references from the new referrer to other
+				// MediaElements.
+				addReferenceToCreatedMediaElements(newReferrer);
+
+				// Add the new referrer to our list of referrers, so that it
+				// can acquire references to any (relevant) MediaElements that
+				// are created in the future.
+				referrers[newReferrer] = newReferrer;
+			}
 		}
 		
 		// Internals

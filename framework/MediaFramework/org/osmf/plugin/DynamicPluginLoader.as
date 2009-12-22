@@ -26,8 +26,8 @@ package org.osmf.plugin
 	import org.osmf.content.ContentLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.MediaFactory;
 	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -94,7 +94,7 @@ package org.osmf.plugin
 					var loadedContext:ContentLoadedContext = event.loadedContext as ContentLoadedContext;
 					var root:DisplayObject = loadedContext.loader.content;
 					var pluginInfo:IPluginInfo = root[PLUGININFO_PROPERTY_NAME] as IPluginInfo;
-	
+					
 					loadFromPluginInfo(loadTrait, pluginInfo, loadedContext.loader);
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)

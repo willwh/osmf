@@ -122,7 +122,7 @@ package org.osmf.composition
 				{
 					if (noNextPlayableChildCallback != null)
 					{
-						noNextPlayableChildCallback.call(null);
+						noNextPlayableChildCallback();
 					}
 				}
 			}
