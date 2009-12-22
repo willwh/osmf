@@ -97,8 +97,14 @@ package org.osmf.media
 			}
 			else
 			{
-				infos.push(info);
+				infos.push(info);		
 			}
+			
+			if (info.type == MediaInfoType.CREATE_ON_LOAD)
+			{
+				var autoElem:MediaElement = info.mediaElementCreationFunction();	
+				registerReferrer(autoElem as IMediaReferrer);														
+			}			
 		}
 		
 		/**
@@ -274,7 +280,7 @@ package org.osmf.media
 		 * called for elements creaed with this factory create MediaElement 
 		 * is called.
 		 */ 
-		public function registerReferrer(newReferrer:IMediaReferrer):void
+		private function registerReferrer(newReferrer:IMediaReferrer):void
 		{
 			if (newReferrer != null)
 			{

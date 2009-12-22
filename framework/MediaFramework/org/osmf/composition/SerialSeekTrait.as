@@ -364,8 +364,7 @@ package org.osmf.composition
 			var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			return (playTrait == null)? false : playTrait.playState == PlayState.PLAYING;
 		}
-
-		private var traitAggregationHelper:TraitAggregationHelper;
+		
 		private var owner:MediaElement;
 		private var crossChildrenSeeking:Boolean;
 	}

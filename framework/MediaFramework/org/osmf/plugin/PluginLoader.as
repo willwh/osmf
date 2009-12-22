@@ -110,14 +110,7 @@ package org.osmf.plugin
 								throw new RangeError();
 							}
 							
-							mediaFactory.addMediaInfo(mediaInfo);
-							
-							if (mediaInfo.type == MediaInfoType.CREATE_ON_LOAD)
-							{
-								var autoElem:MediaElement = mediaInfo.mediaElementCreationFunction();	
-								mediaFactory.registerReferrer(autoElem as IMediaReferrer);														
-							}
-							
+							mediaFactory.addMediaInfo(mediaInfo);							
 						}
 						
 						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 

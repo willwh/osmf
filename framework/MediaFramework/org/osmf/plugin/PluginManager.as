@@ -306,12 +306,7 @@ package org.osmf.plugin
 			{
 				identifier = (resource as PluginInfoResource).pluginInfoRef;
 			}
-			else
-			{
-				throw new Error("unknown resource");
-			}
-			
-			
+					
 			return identifier;
 		}
 		
