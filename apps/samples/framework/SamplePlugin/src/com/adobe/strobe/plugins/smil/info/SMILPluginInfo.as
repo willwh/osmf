@@ -28,6 +28,7 @@ package com.adobe.strobe.plugins.smil.info
 	import org.osmf.logging.Log;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.plugin.IPluginInfo;
 	
 	public class SMILPluginInfo implements IPluginInfo
@@ -76,6 +77,11 @@ package com.adobe.strobe.plugins.smil.info
 			}
 			
 			return true;
+		}
+		
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
 		}
 		
 		private function createSMILElement():MediaElement

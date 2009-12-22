@@ -25,6 +25,7 @@ package
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.utils.OSMFStrings;
@@ -77,6 +78,11 @@ package
 		private function createVideoElement():MediaElement
 		{
 			return new VideoElement(netLoader);
+		}
+		
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
 		}
 
 		private var netLoader:NetLoader;

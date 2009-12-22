@@ -16,7 +16,7 @@ package org.osmf.test.mast.managers
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginClassResource;
+	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
@@ -59,7 +59,7 @@ package org.osmf.test.mast.managers
 			{
 				// Assume this is a class
 				var pluginInfoRef:Class = getDefinitionByName(source) as Class;
-				pluginResource = new PluginClassResource(pluginInfoRef);
+				pluginResource = new PluginInfoResource(new pluginInfoRef);
 			}
 			
 			loadPluginFromResource(pluginResource);			

@@ -29,12 +29,10 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginClassResource;
+	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.URL;
 	
 	public class MainWindow extends MainWindowLayout
 	{
@@ -51,7 +49,7 @@ package
 			netLoader = new NetLoader();
 			
 			loadPlugins
-				(	[ new PluginClassResource(MetadataVideoPluginInfo)
+				(	[ new PluginInfoResource(new MetadataVideoPluginInfo)
 				  	]
 				);
 		}

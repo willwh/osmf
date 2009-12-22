@@ -40,7 +40,7 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginClassResource;
+	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
@@ -89,7 +89,7 @@ package
 			{
 				// Assume this is a class
 				var pluginInfoRef:Class = getDefinitionByName(source) as Class;
-				pluginResource = new PluginClassResource(pluginInfoRef);
+				pluginResource = new PluginInfoResource(new pluginInfoRef);
 			}
 			
 			loadPluginFromResource(pluginResource);			

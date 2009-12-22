@@ -27,12 +27,12 @@
 	<mx:Style source="CaptioningSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.plugin.PluginInfoResource;
 			import mx.controls.Alert;
 
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.ViewEvent;
 			import org.osmf.media.MediaInfo;
-			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.metadata.ObjectIdentifier;
 			import org.osmf.utils.FMSURL;
 			import org.osmf.events.MediaErrorEvent;
@@ -158,7 +158,7 @@
 				{
 					// Assume this is a class
 					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
-					pluginResource = new PluginClassResource(pluginInfoRef);
+					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
 				
 				if (load)

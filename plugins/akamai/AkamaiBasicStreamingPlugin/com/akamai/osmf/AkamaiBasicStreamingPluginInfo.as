@@ -30,6 +30,7 @@ package com.akamai.osmf
 	import org.osmf.audio.AudioElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.utils.OSMFStrings;
@@ -120,6 +121,14 @@ package com.akamai.osmf
 		private function createAudioElement():MediaElement
 		{
 			return new AudioElement(netLoader);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */ 
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
 		}
 
 		private var netLoader:NetLoader;

@@ -23,6 +23,7 @@ package org.osmf.plugins.video
 {
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.video.VideoElement;
@@ -64,5 +65,11 @@ package org.osmf.plugins.video
 		{
 			return new VideoElement(new NetLoader());
 		}
+		
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
+		}
+		
 	}
 }

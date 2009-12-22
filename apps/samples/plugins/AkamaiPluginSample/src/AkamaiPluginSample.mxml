@@ -29,6 +29,7 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.plugin.PluginInfoResource;
 			import org.osmf.traits.LoadTrait;
 			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 			
@@ -44,7 +45,6 @@
 			import org.osmf.media.URLResource;
 			import org.osmf.metadata.*;
 			import org.osmf.net.NetLoader;
-			import org.osmf.plugin.PluginClassResource;
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.LoadState;
@@ -222,7 +222,7 @@
 				{
 					// Assume this is a class
 					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
-					pluginResource = new PluginClassResource(pluginInfoRef);
+					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
 				
 				if (load)

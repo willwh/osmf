@@ -28,6 +28,7 @@ package org.osmf.mast
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.IPluginInfo;
 	import org.osmf.utils.OSMFStrings;
@@ -108,6 +109,14 @@ package org.osmf.mast
 			
 			// Framework version 0.8.0 is the minimum this plugin supports.
 			return ((major > 0) || ((major == 0) && (minor >= 8) && (subMinor >= 0)));
+		}
+		
+		/**
+		 * @inheritDoc
+		 */ 
+		public function initializePlugin(metadata:Metadata):void
+		{
+			
 		}
 		
 		private function createMASTProxyElement():MediaElement

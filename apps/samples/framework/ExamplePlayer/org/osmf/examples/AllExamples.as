@@ -33,6 +33,7 @@ package org.osmf.examples
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
+	import org.osmf.examples.plugins.ReferencePluginInfo;
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
@@ -41,10 +42,11 @@ package org.osmf.examples
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.AbsoluteLayoutFacet;
-	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RelativeLayoutFacet;
 	import org.osmf.manifest.F4MLoader;
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -52,6 +54,8 @@ package org.osmf.examples
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.plugin.PluginInfoResource;
+	import org.osmf.plugin.PluginManager;
 	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.swf.SWFElement;
@@ -813,6 +817,23 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);	
+				
+			examples.push
+				( new Example
+					( 	"Auto Create Plugin"
+					, 	"Demonstrates the auto creation of a plugin."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		var factory:MediaFactory = new DefaultMediaFactory();
+				  	   		var pluginManager:PluginManager = new PluginManager(factory);
+				  	   		pluginManager.loadPlugin(new PluginInfoResource(new ReferencePluginInfo()));
+				  	   		
+				  	   		var elem:MediaElement = factory.createMediaElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+				  	   																
+				  	   		return elem; 
+				  	   	}
+				  	)
+				);		
 									
 				
 			/* TODO: Uncomment this once we have the VAST library integrated

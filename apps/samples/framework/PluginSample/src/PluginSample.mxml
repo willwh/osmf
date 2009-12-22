@@ -264,7 +264,7 @@
 				{
 					// Assume the source is a class
 					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
-					pluginResource = new PluginClassResource(pluginInfoRef);
+					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
 				
 				loadPluginFromResource(pluginResource);			

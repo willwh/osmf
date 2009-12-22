@@ -37,8 +37,7 @@
 			import mx.core.UIComponent;
 			
 			import org.osmf.parsers.SMILParser;
-			import org.osmf.plugin.PluginClassResource;
-
+		
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
 			import org.osmf.traits.LoadTrait;
