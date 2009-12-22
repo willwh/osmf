@@ -83,7 +83,7 @@ package org.osmf.composition
 
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
-			child.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange, false, 0, true);
+			child.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
 			
 			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
 			
@@ -109,7 +109,7 @@ package org.osmf.composition
 		
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
-			child.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+			child.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
 			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
 			
@@ -182,12 +182,12 @@ package org.osmf.composition
 			setupLayoutTarget(mediaElementLayoutTargets[mediaElement]);
 		}
 		
-		private function onDimensionChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:ViewEvent):void
 		{
-			updateDimensions();
+			updateMediaSize();
 		}
 		
-		private function updateDimensions():void
+		private function updateMediaSize():void
 		{
 			var newMediaWidth:int = -1;
 			var newMediaHeight:int = -1;
@@ -201,7 +201,7 @@ package org.osmf.composition
 				,	MediaTraitType.VIEW
 				);
 					
-			setMediaDimensions(newMediaWidth, newMediaHeight);
+			setMediaSize(newMediaWidth, newMediaHeight);
 		}
 
 		private var traitAggregationHelper:TraitAggregationHelper;

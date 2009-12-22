@@ -378,14 +378,14 @@ package org.osmf.layout
 			if (oldTrait)
 			{
 				oldTrait.removeEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler);
-				oldTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, dimensionChangeEventHandler);
+				oldTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler);
 			}
 			
 			if (viewableTrait)
 			{
 				processViewChange(viewableTrait.view);
 				viewableTrait.addEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
-				viewableTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, dimensionChangeEventHandler, false, 0, true);
+				viewableTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler, false, 0, true);
 			}
 			else
 			{
@@ -401,7 +401,7 @@ package org.osmf.layout
 				||	oldHeight != intrinsicHeight
 				)
 			{
-				dispatchEvent(new ViewEvent(ViewEvent.DIMENSION_CHANGE, false, false, null, null, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
+				dispatchEvent(new ViewEvent(ViewEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
 			}
 		}
 		
@@ -412,7 +412,7 @@ package org.osmf.layout
 			dispatchEvent(event.clone());
 		}
 		
-		private function dimensionChangeEventHandler(event:Event):void
+		private function mediaSizeChangeEventHandler(event:Event):void
 		{
 			dispatchEvent(event.clone());
 		}

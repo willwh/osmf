@@ -113,7 +113,7 @@ package org.osmf.utils
 			changeEventQueue.push({"newDuration":newDuration});
 		}
 
-		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
+		override protected function processMediaSizeChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
 		{
 			changeEventQueue.push({"oldWidth":oldWidth, "oldHeight":oldHeight, "newWidth":newWidth, "newHeight":newHeight});
 		}

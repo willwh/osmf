@@ -67,7 +67,7 @@ package org.osmf.composition
 			// Prepare a container to hold our viewable children:
 			_container = constructLayoutContext();
 			_container.addEventListener
-				( ViewEvent.DIMENSION_CHANGE
+				( ViewEvent.MEDIA_SIZE_CHANGE
 				, onContainerDimensionChange
 				);
 			

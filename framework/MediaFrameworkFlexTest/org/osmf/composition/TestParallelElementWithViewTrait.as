@@ -55,11 +55,11 @@ package org.osmf.composition
 			assertTrue(viewTrait.mediaWidth == viewTrait1.mediaWidth);
 			assertTrue(viewTrait.mediaHeight == viewTrait1.mediaHeight);
 			
-			viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
-			viewTrait1.setDimensions(50, 50);
+			viewTrait1.setSize(50, 50);
 			
-			assertTrue(dimensionsChangeEventCount == 1);
+			assertTrue(sizeChangeEventCount == 1);
 			
 			// TODO: Fix the rest of this test.  For some reason, setting the dimensions
 			// doesn't propagate to the container, it only affects the underlying trait. 
@@ -99,7 +99,7 @@ package org.osmf.composition
 			viewTrait = parallel.getTrait(MediaTraitType.VIEW) as ViewTrait;
 			assertNotNull(viewTrait);
 			
-			assertEquals(4, dimensionsChangeEventCount);
+			assertEquals(4, sizeChangeEventCount);
 			
 			assertEquals(0, viewTrait.mediaWidth);
 			assertEquals(0, viewTrait.mediaHeight);
@@ -197,12 +197,12 @@ package org.osmf.composition
 			viewChangedEventCount++;
 		}
 
-		private function onDimensionChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:ViewEvent):void
 		{
-			dimensionsChangeEventCount++;
+			sizeChangeEventCount++;
 		}
 
 		private var viewChangedEventCount:int = 0;
-		private var dimensionsChangeEventCount:int = 0;
+		private var sizeChangeEventCount:int = 0;
 	}
 }

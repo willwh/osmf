@@ -68,11 +68,11 @@ package org.osmf.display
 			view2.width = 80;
 			view2.height = 80;
 			
-			sprite.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
+			sprite.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
 			
 			var dimsChanged:Boolean = false;
 			
-			function onDimensions(event:ViewEvent):void
+			function onMediaSize(event:ViewEvent):void
 			{
 				assertFalse(dimsChanged); //call only once
 				assertEquals(event.newHeight, 40);

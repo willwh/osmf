@@ -83,7 +83,7 @@ package org.osmf.examples.chromeless
 					var viewTrait:ViewTrait= getTrait(MediaTraitType.VIEW) as ViewTrait;
 					viewTrait.dispatchEvent
 						( new ViewEvent
-							( ViewEvent.DIMENSION_CHANGE
+							( ViewEvent.MEDIA_SIZE_CHANGE
 							, false
 							, false
 							, null

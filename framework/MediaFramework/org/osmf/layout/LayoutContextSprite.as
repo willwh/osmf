@@ -254,7 +254,7 @@ package org.osmf.layout
 			{
 				var event:ViewEvent
 						= new ViewEvent
-							( ViewEvent.DIMENSION_CHANGE, false, false
+							( ViewEvent.MEDIA_SIZE_CHANGE, false, false
 							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, newIntrinsicWidth	, _intrinsicHeight
@@ -273,7 +273,7 @@ package org.osmf.layout
 			{
 				var event:ViewEvent
 						= new ViewEvent
-							( ViewEvent.DIMENSION_CHANGE, false, false
+							( ViewEvent.MEDIA_SIZE_CHANGE, false, false
 							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, _intrinsicWidth	, newIntrinsicHeight

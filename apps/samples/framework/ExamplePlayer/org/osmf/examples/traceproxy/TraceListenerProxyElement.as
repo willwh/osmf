@@ -97,7 +97,7 @@ package org.osmf.examples.traceproxy
 			trace("Duration Change: " + newDuration);
 		}
 
-		override protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
+		override protected function processMediaSizeChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
 		{
 			trace("Dimension Change: " + oldWidth + "x" + oldHeight + "->" + newWidth + "x" + newHeight);
 		}

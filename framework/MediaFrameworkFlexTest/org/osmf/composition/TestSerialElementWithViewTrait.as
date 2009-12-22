@@ -51,12 +51,12 @@ package org.osmf.composition
 			var viewTrait:ViewTrait = serial.getTrait(MediaTraitType.VIEW) as ViewTrait;
 			assertNotNull(viewTrait);
 			
-			viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
 			assertEquals(0, viewTrait.mediaWidth);
 			assertEquals(0, viewTrait.mediaHeight);
 			
-			viewTrait1.setDimensions(10, 100);
+			viewTrait1.setSize(10, 100);
 			
 			// TODO: Fix the rest of this test.  For some reason, setting the dimensions
 			// doesn't propagate to the container, it only affects the underlying trait. 
@@ -147,9 +147,9 @@ package org.osmf.composition
 			assertFalse(serial.hasTrait(MediaTraitType.VIEW));
 		}
 		
-		private function onDimensionChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:ViewEvent):void
 		{
-			dimensionsChangeEventCount++;
+			sizeChangeEventCount++;
 		}
 		
 		private function onViewChanged(event:ViewEvent):void
@@ -157,7 +157,7 @@ package org.osmf.composition
 			viewChangedEventCount++;
 		}
 		
-		private var dimensionsChangeEventCount:int = 0;
+		private var sizeChangeEventCount:int = 0;
 		private var viewChangedEventCount:int = 0;
 	}
 }

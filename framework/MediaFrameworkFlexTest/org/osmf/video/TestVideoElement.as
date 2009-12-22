@@ -239,8 +239,8 @@ package org.osmf.video
 					assertEquals(0, viewTrait.view.height);
 					
 					viewTrait.addEventListener
-							( ViewEvent.DIMENSION_CHANGE
-							, onDimensionChange
+							( ViewEvent.MEDIA_SIZE_CHANGE
+							, onMediaSizeChange
 							);
 					
 					// Playing the media should result in our receiving the
@@ -249,9 +249,9 @@ package org.osmf.video
 					assertTrue(playTrait != null);
 					playTrait.play();
 					
-					function onDimensionChange(event:ViewEvent):void
+					function onMediaSizeChange(event:ViewEvent):void
 					{
-						viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+						viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 						
 						assertTrue(viewTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
 						assertTrue(viewTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);

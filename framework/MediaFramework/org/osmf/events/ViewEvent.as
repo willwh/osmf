@@ -44,13 +44,13 @@ package org.osmf.events
 		public static const VIEW_CHANGE:String = "viewChange";
 		
 		/**
-		 * The ViewEvent.DIMENSION_CHANGE constant defines the value
-		 * of the type property of the event object for a dimensionChange
+		 * The ViewEvent.MEDIA_SIZE_CHANGE constant defines the value
+		 * of the type property of the event object for a mediaSizeChange
 		 * event.
 		 * 
-		 * @eventType DIMENSION_CHANGE
+		 * @eventType MEDIA_SIZE_CHANGE
 		 **/
-		public static const DIMENSION_CHANGE:String = "dimensionChange";
+		public static const MEDIA_SIZE_CHANGE:String = "mediaSizeChange";
 
 		/**
 		 * Constructor.

@@ -130,7 +130,7 @@ package org.osmf.layout
 			
 			dispatchEvent
 				( new ViewEvent
-					( ViewEvent.DIMENSION_CHANGE, false, false
+					( ViewEvent.MEDIA_SIZE_CHANGE, false, false
 					, null, null
 					, _intrinsicWidth
 					, _intrinsicHeight

@@ -63,7 +63,7 @@ package org.osmf.net
 			assertTrue(viewTrait.mediaWidth == 0);
 			assertTrue(viewTrait.mediaHeight == 0);
 			
-			viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, addAsync(onTestOnMetadata, 5000));
+			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
 			
 			stream.play(NetStreamUtils.getStreamNameFromURL(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
 		

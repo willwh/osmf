@@ -31,6 +31,7 @@ package org.osmf.layout
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicViewTrait;
 
 	public class TestMediaElementLayoutTarget extends TestCase
 	{
@@ -87,7 +88,7 @@ package org.osmf.layout
 				eventCounter++;
 			}
 			
-			lt.addEventListener(ViewEvent.DIMENSION_CHANGE, onEvent);
+			lt.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onEvent);
 			lt.addEventListener(ViewEvent.VIEW_CHANGE, onEvent);
 			
 			var sprite2:Sprite = new Sprite();
@@ -99,7 +100,7 @@ package org.osmf.layout
 			assertEquals(vce.oldView, sprite);
 			assertEquals(vce.newView, sprite2);
 			
-			viewTrait.setDimensions(300,400);
+			viewTrait.setSize(300,400);
 			
 			assertEquals(2, eventCounter);
 			var dce:ViewEvent = lastEvent as ViewEvent;
@@ -149,27 +150,5 @@ package org.osmf.layout
 			
 			return result;
 		}
-	}
-}
-
-import flash.display.DisplayObject;
-
-import org.osmf.traits.ViewTrait;
-
-class DynamicViewTrait extends ViewTrait
-{
-	public function DynamicViewTrait(view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
-	{
-		super(view, mediaWidth, mediaHeight);
-	}
-	
-	public function set view(value:DisplayObject):void
-	{
-		setView(value);
-	}
-
-	public function setDimensions(width:Number, height:Number):void
-	{
-		setMediaDimensions(width, height);
 	}
 }

@@ -36,9 +36,9 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the trait's mediaWidth and/or mediaHeight property has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.MEDIA_SIZE_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.ViewEvent")]
 
 	/**
 	 * ViewTrait defines the trait interface for media that expose a DisplayObject,
@@ -117,9 +117,6 @@ package org.osmf.traits
 		 * Defines the trait's view. If the view is different from the one
 		 * that is currently set, a viewChange event will be dispatched.
 		 * 
-		 * @see processViewChange
-		 * @see postProcessViewChange
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -144,13 +141,10 @@ package org.osmf.traits
 		 * <p>Forces non numerical and negative values to zero.</p>
 		 * 
 		 * <p>If the either the width or the height differs from the
-		 * previous width or height, dispatches a dimensionChange event.</p>
+		 * previous width or height, dispatches a mediaSizeChange event.</p>
 		 * 
 		 * @param width The new width.
 		 * @param height The new height.
-		 * 
-		 * @see #processMediaDimensionsChange()
-		 * @see #postProcessMediaDimensionsChange()
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -158,13 +152,13 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function setMediaDimensions(mediaWidth:Number, mediaHeight:Number):void
+		protected final function setMediaSize(mediaWidth:Number, mediaHeight:Number):void
 		{
 			if	(	mediaWidth != _mediaWidth
 				||	mediaHeight != _mediaHeight
 				)
 			{
-				processMediaDimensionsChange(mediaWidth, mediaHeight);
+				processMediaSizeChange(mediaWidth, mediaHeight);
 				
 				var oldMediaWidth:Number = _mediaWidth;
 				var oldMediaHeight:Number = _mediaHeight;
@@ -172,7 +166,7 @@ package org.osmf.traits
 				_mediaWidth = mediaWidth;
 				_mediaHeight = mediaHeight;
 				
-				postProcessMediaDimensionsChange(oldMediaWidth, oldMediaHeight);
+				postProcessMediaSizeChange(oldMediaWidth, oldMediaHeight);
 			}
 		}
 				
@@ -210,7 +204,7 @@ package org.osmf.traits
 		}
 				
 		/**
-		 * Called just before a call to <code>setMediaDimensions()</code>. 
+		 * Called just before a call to <code>setMediaSize()</code>. 
 		 * Subclasses implement this method to communicate the change to the media.
 		 * @param newMediaWidth New <code>mediaWidth</code> value.
 		 * @param newMediaHeight New <code>mediaHeight</code> value.
@@ -220,16 +214,16 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processMediaDimensionsChange(newMediaWidth:Number, newMediaHeight:Number):void
+		protected function processMediaSizeChange(newMediaWidth:Number, newMediaHeight:Number):void
 		{
 		}
 		
 		/**
-		 * Called just after <code>setMediaDimensions()</code> has applied new mediaWidth
+		 * Called just after <code>setMediaSize()</code> has applied new mediaWidth
 		 * and/or mediaHeight values. Dispatches the change event.
 		 * 
 		 * <p>Subclasses that override should call this method 
-		 * to dispatch the dimensionChange event.</p>
+		 * to dispatch the mediaSizeChange event.</p>
 		 *  
 		 * @param oldMediaWidth Previous <code>mediaWidth</code> value.
 		 * @param oldMediaHeight Previous <code>mediaHeight</code> value.
@@ -240,9 +234,9 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessMediaDimensionsChange(oldMediaWidth:Number, oldMediaHeight:Number):void
+		protected function postProcessMediaSizeChange(oldMediaWidth:Number, oldMediaHeight:Number):void
 		{
-			dispatchEvent(new ViewEvent(ViewEvent.DIMENSION_CHANGE, false, false, null, null, oldMediaWidth, oldMediaHeight, _mediaWidth, _mediaHeight));
+			dispatchEvent(new ViewEvent(ViewEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldMediaWidth, oldMediaHeight, _mediaWidth, _mediaHeight));
 		}
 
 		private var _view:DisplayObject;

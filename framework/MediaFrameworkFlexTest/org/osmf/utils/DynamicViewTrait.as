@@ -37,9 +37,9 @@ package org.osmf.utils
 			setView(value);
 		}
 	
-		public function setDimensions(width:Number, height:Number):void
+		public function setSize(width:Number, height:Number):void
 		{
-			setMediaDimensions(width, height);
+			setMediaSize(width, height);
 		}
 	}
 }

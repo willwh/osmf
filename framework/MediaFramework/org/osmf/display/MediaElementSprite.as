@@ -105,7 +105,7 @@ package org.osmf.display
 		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
 		 		
 		 			viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onView);
-		 			viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
+		 			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
 		 			
 		 			view = viewTrait.view;
 		 			setIntrinsicSize(viewTrait.mediaWidth, viewTrait.mediaHeight);		 			
@@ -120,7 +120,7 @@ package org.osmf.display
 		 		case MediaTraitType.VIEW:
 		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
 		 			
-		 			viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensions);
+		 			viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
 		 			viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onView);		 			
 
 		 			view = null;
@@ -128,7 +128,7 @@ package org.osmf.display
 		 	}
 		 }
 		 
-		 private function onDimensions(event:ViewEvent):void
+		 private function onMediaSize(event:ViewEvent):void
 		 {
 		 	setIntrinsicSize(event.newWidth, event.newHeight);	
 		 	dispatchEvent(event.clone());	 	

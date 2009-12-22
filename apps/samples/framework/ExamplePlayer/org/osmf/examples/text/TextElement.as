@@ -79,7 +79,7 @@ package org.osmf.examples.text
 					addTrait(MediaTraitType.VIEW, viewTrait);
 				}
 				
-				viewTrait.setDimensions(textField.width, textField.height);
+				viewTrait.setSize(textField.width, textField.height);
             }
 		}
 		

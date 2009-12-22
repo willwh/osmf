@@ -938,7 +938,7 @@ package org.osmf.media
 				assertTrue(mediaPlayer.width == 0);
 				assertTrue(mediaPlayer.height == 0);
 				
-				mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onTestWidthHeight);
+				mediaPlayer.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 								
 				// For some media, triggering playback will cause the true
 				// dimensions to get set.
@@ -946,7 +946,7 @@ package org.osmf.media
 				
 				function onTestWidthHeight(event:ViewEvent):void
 				{
-					mediaPlayer.removeEventListener(ViewEvent.DIMENSION_CHANGE, onTestWidthHeight);
+					mediaPlayer.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 
 					assertTrue(mediaPlayer.width == expectedWidthAfterLoad);
 					assertTrue(mediaPlayer.height == expectedHeightAfterLoad);

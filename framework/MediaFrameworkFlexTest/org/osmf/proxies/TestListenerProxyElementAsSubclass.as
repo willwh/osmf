@@ -367,7 +367,7 @@ package org.osmf.proxies
 			assertTrue(events[2]["oldView"] == aView);
 			assertTrue(events[2]["newView"] == null);
 			
-			viewTrait.setDimensions(20, 10);
+			viewTrait.setSize(20, 10);
 			assertTrue(events.length == 4);
 			assertTrue(events[3]["oldWidth"] == 0);
 			assertTrue(events[3]["newWidth"] == 20);
@@ -381,7 +381,7 @@ package org.osmf.proxies
 			proxyElement.wrappedElement = null;
 			
 			viewTrait.view = aView;
-			viewTrait.setDimensions(0, 0);
+			viewTrait.setSize(0, 0);
 			
 			assertTrue(events.length == 4);
 		}

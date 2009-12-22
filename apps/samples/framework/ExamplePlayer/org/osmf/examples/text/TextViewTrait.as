@@ -32,9 +32,9 @@ package org.osmf.examples.text
 			super(view, mediaWidth, mediaHeight);
 		}
 
-		public function setDimensions(mediaWidth:Number, mediaHeight:Number):void
+		public function setSize(mediaWidth:Number, mediaHeight:Number):void
 		{
-			setMediaDimensions(mediaWidth, mediaHeight);
+			setMediaSize(mediaWidth, mediaHeight);
 		}
 	}
 }

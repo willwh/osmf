@@ -92,7 +92,7 @@
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekEnd);
@@ -210,7 +210,7 @@
    				Alert.show("Media Load Error : "+event.error.errorCode+" - "+event.error.description);
    			}
 			
-			private function onDimensionChange(event:ViewEvent):void 
+			private function onMediaSizeChange(event:ViewEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;

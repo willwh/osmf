@@ -98,26 +98,26 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>playing</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.PlayingChangeEvent.PLAYING_CHANGE
+	 * @eventType org.osmf.events.PlayEvent.PLAYING_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
-	[Event(name="playingChange", type="org.osmf.events.PlayingChangeEvent")]
+	[Event(name="playingChange", type="org.osmf.events.PlayEvent")]
 	
 	/**
 	 * Dispatched when the <code>paused</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.PausedChangeEvent.PAUSED_CHANGE
+	 * @eventType org.osmf.events.PlayEvent.PAUSED_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 		
-	[Event(name="pausedChange", type="org.osmf.events.PausedChangeEvent")]
+	[Event(name="pausedChange", type="org.osmf.events.PlayEvent")]
 	
 	/**
 	 * Dispatched when the <code>view</code> property of the media has changed.
@@ -135,19 +135,19 @@ package org.osmf.media
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
 	 * media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.MEDIA_SIZE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */		
-	[Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
+	[Event(name="mediaSizeChange", type="org.osmf.events.ViewEvent")]
 	 
 	/**
 	 * Dispatched when the <code>seeking</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.SeekingChangeEvent.SEEKING_CHANGE
+	 * @eventType org.osmf.events.SeekEvent.SEEKING_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -276,7 +276,7 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>Pausable</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.Pausable_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -368,19 +368,7 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="loadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-		
-	/**
-	 * Dispatched when the <code>downloadable</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="downloadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-		
+				
 	/**
 	 * Dispatched when an error which impacts the operation of the media
 	 * player occurs.
@@ -1442,7 +1430,7 @@ package org.osmf.media
 					break;						
 				case MediaTraitType.VIEW:					
 					changeListeners(add, _element, traitType, ViewEvent.VIEW_CHANGE, [redispatchEvent]);											
-					changeListeners(add, _element, traitType, ViewEvent.DIMENSION_CHANGE, [redispatchEvent]);
+					changeListeners(add, _element, traitType, ViewEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
 					_viewable = add;						
 					eventType = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	

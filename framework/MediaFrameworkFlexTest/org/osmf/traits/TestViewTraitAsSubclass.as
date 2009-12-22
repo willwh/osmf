@@ -78,20 +78,20 @@ package org.osmf.traits
 			
 			var dynamicViewTrait:DynamicViewTrait = viewTrait as DynamicViewTrait;
 			
-			dynamicViewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, eventCatcher);
+			dynamicViewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, eventCatcher);
 			
 			// Should not cause a change event:
-			dynamicViewTrait.setDimensions(0, 0);
+			dynamicViewTrait.setSize(0, 0);
 			
 			assertTrue(events.length == 0);
 			
-			dynamicViewTrait.setDimensions(30, 60);
+			dynamicViewTrait.setSize(30, 60);
 			
 			assertTrue(events.length == 1);
 			
 			var dce:ViewEvent = events[0] as ViewEvent;
 			assertNotNull(dce);
-			assertTrue(dce.type == ViewEvent.DIMENSION_CHANGE);
+			assertTrue(dce.type == ViewEvent.MEDIA_SIZE_CHANGE);
 			assertTrue(dce.oldWidth == 0);
 			assertTrue(dce.oldHeight == 0);
 			assertTrue(dce.newWidth == 30);

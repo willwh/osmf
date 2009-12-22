@@ -212,7 +212,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processDimensionChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
+		protected function processMediaSizeChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
 		{
 		}
 		
@@ -317,9 +317,9 @@ package org.osmf.proxies
 			processViewChange(event.oldView, event.newView);
 		}
 
-		private function onDimensionChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:ViewEvent):void
 		{
-			processDimensionChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
+			processMediaSizeChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
 		}
 
 		// Internals
@@ -514,12 +514,12 @@ package org.osmf.proxies
 				if (added)
 				{
 					viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
-					viewTrait.addEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+					viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 				}
 				else
 				{
 					viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
-					viewTrait.removeEventListener(ViewEvent.DIMENSION_CHANGE, onDimensionChange);
+					viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 				}
 			}
 		}

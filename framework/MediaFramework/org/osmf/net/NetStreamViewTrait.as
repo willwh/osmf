@@ -50,7 +50,7 @@ package org.osmf.net
     			view.width = info.width;
     			view.height = info.height;
     				
-				setMediaDimensions(info.width, info.height);
+				setMediaSize(info.width, info.height);
     		}
     	}
     	
