@@ -167,7 +167,15 @@ package org.osmf.net
 		protected function buildConnectionAddress(url:URL, protocol:String, port:String):String
 		{
 			var fmsURL:FMSURL = url is FMSURL ? url as FMSURL : new FMSURL(url.rawUrl);
-			return protocol + "://" + fmsURL.host + ":" + port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
+			var addr:String = protocol + "://" + fmsURL.host + ":" + port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
+			
+			// Pass along any query string params
+			if (fmsURL.query != null && fmsURL.query != "")
+			{
+				addr += "?" + fmsURL.query;
+			}
+			
+			return addr;
 		}
 		
 		/**
