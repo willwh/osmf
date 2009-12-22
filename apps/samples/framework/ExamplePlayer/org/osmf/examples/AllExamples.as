@@ -33,7 +33,7 @@ package org.osmf.examples
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
-	import org.osmf.examples.plugins.ReferencePluginInfo;
+
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
