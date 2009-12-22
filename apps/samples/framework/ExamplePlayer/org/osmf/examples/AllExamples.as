@@ -817,25 +817,7 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);	
-				
-			examples.push
-				( new Example
-					( 	"Auto Create Plugin"
-					, 	"Demonstrates the auto creation of a plugin."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var factory:MediaFactory = new DefaultMediaFactory();
-				  	   		var pluginManager:PluginManager = new PluginManager(factory);
-				  	   		pluginManager.loadPlugin(new PluginInfoResource(new ReferencePluginInfo()));
-				  	   		
-				  	   		var elem:MediaElement = factory.createMediaElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
-				  	   																
-				  	   		return elem; 
-				  	   	}
-				  	)
-				);		
-									
-				
+							
 			/* TODO: Uncomment this once we have the VAST library integrated
 			   with the build system.
 			examples.push
