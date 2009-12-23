@@ -22,45 +22,61 @@
 
 package org.osmf.chrome.controlbar.widgets
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import org.osmf.events.SwitchEvent;
-	import org.osmf.media.MediaElement;
-	import org.osmf.traits.DynamicStreamTrait;
-	import org.osmf.traits.MediaTraitType;
 	
-	public class QualityAutoSwitchToggle extends Button
+	public class QualityAutoButton extends Button
 	{
-		[Embed("../assets/images/qualityMode_up.png")]
-		public var qualityModeUpType:Class;
-		[Embed("../assets/images/qualityMode_down.png")]
-		public var qualityModeDownType:Class;
-		[Embed("../assets/images/qualityMode_disabled.png")]
-		public var qualityModeDisabledType:Class;
+		import __AS3__.vec.Vector;
+	
+		import flash.events.MouseEvent;
 		
-		public function QualityAutoSwitchToggle(up:Class = null, down:Class = null, disabled:Class = null)
+		import org.osmf.media.MediaElement;
+		import org.osmf.traits.DynamicStreamTrait;
+		import org.osmf.traits.MediaTraitType;
+			
+		[Embed("../assets/images/qualityAuto_up.png")]
+		public var qualityAutoUpType:Class;
+		[Embed("../assets/images/qualityAuto_down.png")]
+		public var qualityAutoDownType:Class;
+		[Embed("../assets/images/qualityAuto_disabled.png")]
+		public var qualityAutoDisabledType:Class;
+		
+		public function QualityAutoButton(up:Class = null, down:Class = null, disabled:Class = null)
 		{
 			super
-				( up || qualityModeUpType
-				, down || qualityModeDownType
-				, disabled || qualityModeDisabledType
+				( up || qualityAutoUpType
+				, down || qualityAutoDownType
+				, disabled || qualityAutoDisabledType
 				); 
 		}
 		
 		// Overrides
 		//
 		
+		override protected function processElementChange(oldElement:MediaElement):void
+		{
+			visibilityDeterminingEventHandler();
+		}
+		
 		override protected function processRequiredTraitsAvailable(element:MediaElement):void
 		{
-			visible = true;
+			dynamicStream = element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			dynamicStream.addEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+			
+			visibilityDeterminingEventHandler();
 		}
 		
 		override protected function processRequiredTraitsUnavailable(element:MediaElement):void
 		{
-			visible = false;
+			if (dynamicStream)
+			{
+				dynamicStream.removeEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream = null;
+			}
+			
+			visibilityDeterminingEventHandler();
 		}
 		
 		override protected function get requiredTraits():Vector.<String>
@@ -70,15 +86,26 @@ package org.osmf.chrome.controlbar.widgets
 		
 		override protected function onMouseClick(event:MouseEvent):void
 		{
-			var dynamicStream:DynamicStreamTrait = element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 			dynamicStream.autoSwitch = !dynamicStream.autoSwitch;
 		}
 		
 		// Internals
 		//
 		
+		protected function visibilityDeterminingEventHandler(event:Event = null):void
+		{
+			visible
+				=	element != null 
+				&&	(dynamicStream ? dynamicStream.autoSwitch == false : true);
+				 
+			enabled = dynamicStream != null;
+		}
+		
+		protected var dynamicStream:DynamicStreamTrait;
+		
 		/* static */
 		private static const _requiredTraits:Vector.<String> = new Vector.<String>;
 		_requiredTraits[0] = MediaTraitType.DYNAMIC_STREAM;
+		
 	}
 }

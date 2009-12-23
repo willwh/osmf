@@ -28,7 +28,7 @@ package org.osmf.chrome.controlbar.widgets
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.text.TextField;
-	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Timer;
 	
 	import org.osmf.chrome.controlbar.ControlBarWidget;
@@ -60,29 +60,30 @@ package org.osmf.chrome.controlbar.widgets
 			currentTime.width = 52;
 			currentTime.alpha = 0.4;
 			currentTime.x = 7;
-			currentTime.y = 7;
+			currentTime.y = 6;
 			addChild(currentTime);
 			
-			remainingTime = Fonts.getDefaultTextField();
+			remainingTime = Fonts.getDefaultTextField(TextFormatAlign.RIGHT);
 			remainingTime.height = 12;
-			remainingTime.width = 52;
+			remainingTime.width = 45;
 			remainingTime.alpha = 0.4;
-			remainingTime.x = 269;
-			remainingTime.y = 7;
+			remainingTime.x = 268;
+			remainingTime.y = 6;
+			
 			addChild(remainingTime);
 			
 			var scrubBarClickArea:Sprite = new Sprite();
 			scrubBarClickArea.x = SCRUBBER_START + 2;
 			scrubBarClickArea.y = 6;
 			scrubBarClickArea.addEventListener(MouseEvent.MOUSE_DOWN, onTrackMouseDown);
-			scrubBarClickArea.graphics.beginFill(0xff0000, 0.0);
-			scrubBarClickArea.graphics.drawRect(0,0, SCRUBBER_END - SCRUBBER_START + 2, 12);
+			scrubBarClickArea.graphics.beginFill(0xFFFFFF, 0);
+			scrubBarClickArea.graphics.drawRect(0, 4, SCRUBBER_END - SCRUBBER_START + 4, 10);
 			scrubBarClickArea.graphics.endFill();
 			addChild(scrubBarClickArea);
 			
 			scrubBarTrack = new track();
 			scrubBarTrack.x = SCRUBBER_START + 2;
-			scrubBarTrack.y = SCRUBBER_VERTICAL_OFFSET + 1;
+			scrubBarTrack.y = SCRUBBER_VERTICAL_OFFSET + 3;
 			addChild(scrubBarTrack);
 			
 			scrubber = new Scrubber();

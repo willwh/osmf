@@ -22,62 +22,36 @@
 
 package org.osmf.chrome.fonts
 {
-	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	
 	public class Fonts
 	{
-		/**
-		 * The free 'type writer' font is a bitmap font that fits the default
-		 * chrome design nicely. It can be downloaded from:
-		 *
-		 * http://fontstruct.fontshop.com/fontstructions/show/212255
-		 *
-		 * Once the font (type_writer.ttf) is embedded in a SWF (by placing
-		 * it in a Flash Authoring project's Library, and marking it for
-		 * export, as 'TypeWriterFont'), then uncomment the commented lines for
-		 * the font to get used on the UI:
-		 */
-		 		
-		/*
-		//[Embed(source="../assets/fonts/type_writer.ttf", fontName="Type Writer Regular", mimeType="application/x-font-truetype")]
-		[Embed(source="../assets/fonts/TypeWriterFont.swf#TypeWriterFont")]
-		private static var TYPE_WRITER:Class;
-		*/
+		[Embed(source="../assets/fonts/UNI05_53.swf#Uni05_53_Font")]
+		private static var DEFAULT_FONT:Class;
 		
-		public static function defaultTextFormat():TextFormat
+		public static function defaultTextFormat(alignment:String = null):TextFormat
 		{
-			var result:TextFormat
-				= new TextFormat
-					( ""
-					, 11
-					, 0xFFFFFF
-					);
-			
-			/*
-			result
-				= new TextFormat
-					( new TYPE_WRITER().fontName
+			var textFormat:TextFormat =  new TextFormat
+					( new DEFAULT_FONT().fontName
 					, 8
 					, 0xffffff
 					);
+					
+			textFormat.align = alignment ||  TextFormatAlign.LEFT;
 			
-			*/
-			
-			return result; 
+			return textFormat; 
 		}
 		
-		public static function getDefaultTextField():TextField
+		public static function getDefaultTextField(alignment:String = null):TextField
 		{
-			var result:TextField = new TextField();
-			result.defaultTextFormat = defaultTextFormat();
-			result.selectable = false;
+			var textField:TextField = new TextField();
+			textField.defaultTextFormat = defaultTextFormat(alignment);
+			textField.selectable = false;
+			textField.embedFonts = true;
 			
-			// Uncomment on using embedded font:
-			// result.embedFonts = true;
-			
-			return result;
+			return textField;
 		}
 	}
 }

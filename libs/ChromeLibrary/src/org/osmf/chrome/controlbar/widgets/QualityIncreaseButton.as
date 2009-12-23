@@ -50,11 +50,6 @@ package org.osmf.chrome.controlbar.widgets
 				); 
 		}
 		
-		public function update():void
-		{
-			visibilityDeterminingEventHandler();
-		}
-		
 		// Overrides
 		//
 		
@@ -63,6 +58,7 @@ package org.osmf.chrome.controlbar.widgets
 			dynamicStream = element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 			dynamicStream.addEventListener(SwitchEvent.INDICES_CHANGE, visibilityDeterminingEventHandler);
 			dynamicStream.addEventListener(SwitchEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
+			dynamicStream.addEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 			
 			visibilityDeterminingEventHandler();
 		}
@@ -73,6 +69,7 @@ package org.osmf.chrome.controlbar.widgets
 			{
 				dynamicStream.removeEventListener(SwitchEvent.INDICES_CHANGE, visibilityDeterminingEventHandler);
 				dynamicStream.removeEventListener(SwitchEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream.removeEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 				dynamicStream = null;
 			}
 			
@@ -98,12 +95,10 @@ package org.osmf.chrome.controlbar.widgets
 				=	dynamicStream != null
 				&&	dynamicStream.autoSwitch == false;
 				
-			if (dynamicStream)
-			{
-				enabled
-					=	dynamicStream.switchUnderway == false
-					&&	dynamicStream.currentIndex < dynamicStream.maxIndex
-			}
+			enabled
+				=	dynamicStream != null
+				&&	dynamicStream.switchUnderway == false
+				&&	dynamicStream.currentIndex < dynamicStream.maxIndex;
 		}
 		
 		protected var dynamicStream:DynamicStreamTrait;

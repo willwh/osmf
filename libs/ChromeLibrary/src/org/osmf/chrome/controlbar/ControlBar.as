@@ -22,193 +22,83 @@
 
 package org.osmf.chrome.controlbar
 {
-	import flash.display.Sprite;
-	import flash.utils.Dictionary;
+	import org.osmf.chrome.controlbar.widgets.*;
 	
-	import org.osmf.chrome.events.RequestLayoutEvent;
-	import org.osmf.gateways.RegionGateway;
-	import org.osmf.layout.AbsoluteLayoutFacet;
-	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.MetadataWatcher;
-	
-	public class ControlBar extends Sprite
+	public class ControlBar extends ControlBarBase
 	{
-		[Embed("../assets/images/controlBarBackdrop.png")]
-		public var backdropType:Class;
-		 
-		public function ControlBar(backdrop:Class = null)
+		public static const URL_INPUT:String = "urlInput";
+		public static const SCRUB_BAR:String = "scrubBar";
+		public static const PAUSE_BUTTON:String = "pauseButton";
+		public static const PLAY_BUTTON:String = "playButton";
+		public static const STOP_BUTTON:String = "stopButton";
+		public static const QUALITY_MANUAL_BUTTON:String = "qualityManualButton";
+		public static const QUALITY_AUTO_BUTTON:String = "qualityAutoButton";
+		public static const QUALITY_INCREASE:String = "qualityIncrease";
+		public static const QUALITY_DECREASE:String = "qualityDecrease";
+		public static const EJECT_BUTTON:String = "ejectButton";
+		public static const FULL_SCREEN_ENTER:String = "fullScreenEnter";
+		public static const FULL_SCREEN_LEAVE:String = "fullScreenLeave";
+		public static const SOUND_LESS:String = "soundLess";
+		public static const SOUND_MORE:String = "soundMore";
+		
+		public static const BUTTONS_VERTICAL_OFFSET:Number = 10;
+		public static const SCRUBBAR_VERTICAL_OFFSET:Number = 22;
+		public static const BORDER_SPACE:Number = 9;
+		
+		public function ControlBar(showStopButton:Boolean)
 		{
 			super();
 			
-			backdrop ||= backdropType;
+			var widget:ControlBarWidget;
+
+			widget = addWidget(URL_INPUT, new URLInput());
+			widget.setPosition(BORDER_SPACE,0);
 			
-			mouseChildren = true;
-			mouseEnabled = true;
+			widget = addWidget(SCRUB_BAR, new ScrubBar());
+			widget.setPosition(0, SCRUBBAR_VERTICAL_OFFSET);
+						
+			widget = addWidget(STOP_BUTTON, new StopButton());
+			widget.setPosition(width / 2 - widget.width / 2, BUTTONS_VERTICAL_OFFSET);
 			
-			addChild(new backdropType());
-		}
-		
-		public function set element(value:MediaElement):void
-		{
-			if (_element != value)
-			{
-				_element = value;
-				updateWidgets();
-			}
-		}
-		
-		public function get element():MediaElement
-		{
-			return _element;
-		}
-		
-		public function set region(value:RegionGateway):void
-		{
-			if (_region != value)
-			{
-				if (regionSizeWatcher != null)
-				{
-					regionSizeWatcher.unwatch();
-					regionSizeWatcher = null;
-				}
+			widget = addWidget(PLAY_BUTTON, new PlayButton());
+			widget.setRegistrationTarget(STOP_BUTTON, Direction.RIGHT);
+			widget.setPosition(1, 0);
+
+			widget = addWidget(PAUSE_BUTTON, new PauseButton());
+			widget.setRegistrationTarget(PLAY_BUTTON, Direction.RIGHT);
+			widget.setPosition(1, 0);
+			
+			widget = addWidget(EJECT_BUTTON, new EjectButton());
+			widget.setRegistrationTarget(STOP_BUTTON, Direction.LEFT);
+			widget.setPosition(1, 0);
 				
-				_region = value;
-				
-				if (_region != null)
-				{
-					regionSizeWatcher = MetadataUtils.watchFacet
-						( _region.metadata
-						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
-						, onRegionAbsoluteLayoutChange
-						);
-				}
-			}
+			widget = addWidget(QUALITY_MANUAL_BUTTON, new QualityManualButton());
+			widget.setPosition(BORDER_SPACE, BUTTONS_VERTICAL_OFFSET);
+			
+			widget = addWidget(QUALITY_AUTO_BUTTON, new QualityAutoButton());
+			widget.setPosition(BORDER_SPACE, BUTTONS_VERTICAL_OFFSET);
+			
+			widget = addWidget(QUALITY_INCREASE, new QualityIncreaseButton());
+			widget.setRegistrationTarget(QUALITY_AUTO_BUTTON, Direction.RIGHT);
+			widget.setPosition(1, 0);
+			
+			widget = addWidget(QUALITY_DECREASE, new QualityDecreaseButton());
+			widget.setRegistrationTarget(QUALITY_INCREASE, Direction.RIGHT);
+			widget.setPosition(1, 0);
+			
+			widget = addWidget(FULL_SCREEN_ENTER, new FullScreenEnterButton());
+			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);
+			
+			widget = addWidget(FULL_SCREEN_LEAVE, new FullScreenLeaveButton());
+			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);
+			
+			widget = addWidget(SOUND_LESS, new SoundLessButton());
+			widget.setRegistrationTarget(FULL_SCREEN_LEAVE, Direction.LEFT);
+			widget.setPosition(3, 0);
+			
+			widget = addWidget(SOUND_MORE, new SoundMoreButton());
+			widget.setRegistrationTarget(SOUND_LESS, Direction.LEFT);
+			widget.setPosition(1, 0);
 		}
-		
-		public function addWidget(id:String, widget:ControlBarWidget):ControlBarWidget
-		{
-			widgets[id] = widget;
-			widget.element = _element;
-			widget.addEventListener
-				( RequestLayoutEvent.REQUEST_LAYOUT
-				, onWidgetLayoutRequest
-				);
-			
-			addChild(widget);
-			
-			updateWidgets();
-			
-			return widget;
-		}
-		
-		public function getWidget(id:String):ControlBarWidget
-		{
-			return widgets[id];
-		}
-		
-		// Protected
-		//
-		
-		protected function onRegionAbsoluteLayoutChange(parameters:AbsoluteLayoutFacet):void
-		{
-			if (parameters)
-			{
-				x = (parameters.width - width) / 2;
-				y = (parameters.height - height) - 50;
-			}
-			else
-			{
-				x = 0;
-				y = 0;
-			}
-		}
-		
-		// Internals
-		//
-	
-		private var _element:MediaElement;
-		private var widgets:Dictionary = new Dictionary();
-		
-		private var _region:RegionGateway;
-		private var regionSizeWatcher:MetadataWatcher;
-	
-		private function updateWidgets():void
-		{
-			for each (var widget:ControlBarWidget in widgets)
-			{
-				widget.element = _element;
-				layoutWidget(widget);
-			}
-		}
-		
-		private function onWidgetLayoutRequest(event:RequestLayoutEvent):void
-		{
-			updateWidgets();
-		}
-		
-		private function layoutWidget(widget:ControlBarWidget):void
-		{
-			var registrationWidget:ControlBarWidget 
-				= widget.registrationTarget
-					? widgets[widget.registrationTarget]
-					: null;
-			
-			var x:Number, y :Number;
-			
-			if (registrationWidget)
-			{
-				layoutWidget(registrationWidget);
-				switch(widget.registrationTargetDirection)
-				{
-					case Direction.LEFT:
-						x 	= registrationWidget.x 
-							- (widget.visible ? widget.width : 0)
-							- widget.left;
-						y	= registrationWidget.y
-							+ widget.top;
-						break;
-					case Direction.RIGHT:
-						x	= registrationWidget.x
-							+	( registrationWidget.visible 
-									? registrationWidget.width + widget.left
-									: 0
-								)
-						y 	= registrationWidget.y
-							+ widget.top;
-						break;
-					case Direction.BOTTOM:
-						x 	= registrationWidget.x
-							+ widget.left;
-						y 	= registrationWidget.y
-							+ (registrationWidget.visible ? registrationWidget.height : 0)
-							+ widget.top;
-						break;
-					case Direction.TOP:
-						x 	= registrationWidget.x
-							+ widget.left;
-						y 	= registrationWidget.y
-							- (widget.visible ? widget.height : 0)
-							- widget.top;
-						break;	
-					default: // OVER
-						x 	= registrationWidget.x
-							+ widget.left;
-						y 	= registrationWidget.y
-							+ widget.top;
-						break;
-				}
-			
-			}
-			else
-			{
-				x = widget.left;
-				y = widget.top;
-			}
-			
-			widget.x = x;
-			widget.y = y;
-		}	
 	}
 }

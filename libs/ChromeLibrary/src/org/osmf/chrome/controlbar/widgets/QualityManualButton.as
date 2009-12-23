@@ -23,44 +23,50 @@
 package org.osmf.chrome.controlbar.widgets
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
-	public class QualityDecreaseButton extends QualityIncreaseButton
+	public class QualityManualButton extends QualityAutoButton
 	{
-		[Embed("../assets/images/qualityDecrease_up.png")]
-		public var qualityDecreaseUpType:Class;
-		[Embed("../assets/images/qualityDecrease_down.png")]
-		public var qualityDecreaseDownType:Class;
-		[Embed("../assets/images/qualityDecrease_disabled.png")]
-		public var qualityDecreaseDisabledType:Class;
+		import __AS3__.vec.Vector;
+	
+		import flash.events.MouseEvent;
 		
-		public function QualityDecreaseButton(up:Class=null, down:Class=null, disabled:Class=null)
+		import org.osmf.media.MediaElement;
+		import org.osmf.traits.DynamicStreamTrait;
+		import org.osmf.traits.MediaTraitType;
+			
+		[Embed("../assets/images/qualityManual_up.png")]
+		public var qualityManualUpType:Class;
+		[Embed("../assets/images/qualityManual_down.png")]
+		public var qualityManualDownType:Class;
+		[Embed("../assets/images/qualityManual_disabled.png")]
+		public var qualityManualDisabledType:Class;
+		
+		public function QualityManualButton(up:Class = null, down:Class = null, disabled:Class = null)
 		{
 			super
-				( up || qualityDecreaseUpType
-				, down || qualityDecreaseDownType
-				, disabled || qualityDecreaseDisabledType
+				( up || qualityManualUpType
+				, down || qualityManualDownType
+				, disabled || qualityManualDisabledType
 				); 
 		}
 		
 		// Overrides
 		//
 		
-		override protected function onMouseClick(event:MouseEvent):void
-		{
-			dynamicStream.switchTo(dynamicStream.currentIndex - 1);
-		}
-		
 		override protected function visibilityDeterminingEventHandler(event:Event = null):void
 		{
 			visible
-				=	dynamicStream != null
-				&&	dynamicStream.autoSwitch == false;
-				
-			enabled
-				=	dynamicStream != null
-				&&	dynamicStream.switchUnderway == false
-				&&	dynamicStream.currentIndex != 0;
+				=	enabled
+				=	element != null
+				&& 	(dynamicStream ? dynamicStream.autoSwitch == true : false);
 		}
+		
+		// Internals
+		//
+		
+		/* static */
+		private static const _requiredTraits:Vector.<String> = new Vector.<String>;
+		_requiredTraits[0] = MediaTraitType.DYNAMIC_STREAM;
+		
 	}
 }
