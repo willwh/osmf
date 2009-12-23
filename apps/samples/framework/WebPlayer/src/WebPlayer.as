@@ -22,6 +22,7 @@
 
 package
 {
+	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
@@ -59,16 +60,6 @@ package
 		{
 			super();
 			
-			// Setup a context menu:
-			osmfMenuItem = new ContextMenuItem("OSMF Web Player v." + Version.version());
-			osmfMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onOSMFContextMenuItemSelect);
-			
-			customContextMenu = new ContextMenu();
-			customContextMenu.hideBuiltInItems();
-			customContextMenu.customItems.push(osmfMenuItem);
-			
-			contextMenu = customContextMenu;
-			
 			// Parse configuration from the parameters passed on
 			// embedding WebPlayer.swf:
 			configuration = new Configuration(loaderInfo.parameters);
@@ -79,6 +70,44 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize);
 			
+			setupContextMenu();
+			
+			setupMediaFactory();
+			
+			// Construct a media player instance. This will help in loading
+			// the element that the factory will construct:
+			player = new MediaPlayer();
+			
+			setupMediaContainer();
+			
+			setupUserInterface();
+			
+			// Simulate the stage resizing, to update the dimensions of the
+			// container and overlay:
+			onStageResize();
+			
+			// Try to load the currently set URL (if any):
+			loadURL(new URL(configuration.url));
+		}
+		
+		// Internals
+		//
+		
+		private function setupContextMenu():void
+		{
+			// Setup a context menu:
+			osmfMenuItem = new ContextMenuItem("OSMF Web Player v." + Version.version());
+			osmfMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onOSMFContextMenuItemSelect);
+			
+			customContextMenu = new ContextMenu();
+			customContextMenu.hideBuiltInItems();
+			customContextMenu.customItems.push(osmfMenuItem);
+			
+			contextMenu = customContextMenu;	
+		}
+		
+		private function setupMediaFactory():void
+		{
 			// Construct a media factory. A media factory can create
 			// media elements on being passed a resource. Manually add
 			// support for the Flash Media Format file type:
@@ -94,47 +123,40 @@ package
 					, MediaInfoType.STANDARD
 					)
 				);
-			
-			// Construct a media player instance. This will help in loading
-			// the element that the factory will construct:
-			player = new MediaPlayer();
-			
+		}
+		
+		private function setupMediaContainer():void
+		{
 			// Construct a RegionGateway that will be used to show the media
 			// on screen once it has loaded.
-			region = new RegionGateway();
-			region.clipChildren = true;
-			region.backgroundColor = configuration.backgroundColor;
-			region.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
-			addChild(region);
-			onStageResize();
+			container = new RegionGateway();
+			container.clipChildren = true;
+			container.backgroundColor = configuration.backgroundColor;
+			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
+			addChild(container);
 			
+			// Create a transparent overlay. This is a work-around for the
+			// context menu otherwise not triggering MENU_ITEM_SELECT when being
+			// invoked while over a Video object:
+			overlay = new Sprite();
+			addChild(overlay);
+		}
+		
+		private function setupUserInterface():void
+		{
 			// Construct a default control bar, and add extra listeners to
 			// to some of its widgets:
 			
-			controlBar = new DefaultControlBar(configuration.showStopButton);
-			controlBar.region = region;
+			controlBar = new ControlBar(configuration.showStopButton);
+			controlBar.container = container;
 			addChild(controlBar);
 			
-			var urlInput:URLInput = controlBar.getWidget(DefaultControlBar.URL_INPUT) as URLInput;
+			var urlInput:URLInput = controlBar.getWidget(ControlBar.URL_INPUT) as URLInput;
 			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
 			urlInput.url = configuration.url;
 			
-			var button:Button = controlBar.getWidget(DefaultControlBar.QUALITY_AUTO_SWITCH) as Button;
-			button.addEventListener(MouseEvent.CLICK, onQualityModeClick);
-			
-			button = controlBar.getWidget(DefaultControlBar.EJECT_BUTTON) as Button;
+			var button:Button = controlBar.getWidget(ControlBar.EJECT_BUTTON) as Button;
 			button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
-			
-			// Try to load the currently set URL (if any):
-			loadURL(new URL(configuration.url));
-		}
-		
-		// Internals
-		//
-		
-		private function onStageResize(event:Event = null):void
-		{
-			LayoutUtils.setAbsoluteLayout(region.metadata, stage.stageWidth, stage.stageHeight);
 		}
 		
 		private function loadURL(url:URL):void
@@ -148,7 +170,7 @@ package
 			{
 				if (element)
 				{
-					element.gateway = null;
+					container.removeElement(element);
 				}
 				
 				if (player.playing)
@@ -167,10 +189,16 @@ package
 					
 				if (element)
 				{
+					// Set the element to occupy 100% of the container's available
+					// width, and height:
 					LayoutUtils.setRelativeLayout(element.metadata, 100, 100);
+					// Set the element to scale "LETTERBOX" style, meaning that the
+					// media's original width:height ratio will be respected. If there's
+					// surplus space, then the content will be shown centered:
 					LayoutUtils.setLayoutAttributes(element.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
 					
-					element.gateway = region;
+					// Add the element to the media container:
+					container.addElement(element);
 				}
 			}
 		}
@@ -178,27 +206,20 @@ package
 		// Handlers
 		//
 		
+		private function onStageResize(event:Event = null):void
+		{
+			LayoutUtils.setAbsoluteLayout(container.metadata, stage.stageWidth, stage.stageHeight);
+			
+			var g:Graphics = overlay.graphics; 
+			g.clear();
+			g.beginFill(0xffffff, 0);
+			g.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+		}
+		
 		private function onEjectButtonClick(event:MouseEvent):void
 		{
 			stage.displayState = StageDisplayState.NORMAL;
 			updateTargetElement(null);
-		}
-		
-		private function onQualityModeClick(event:MouseEvent):void
-		{
-			// The DynamicStreaming trait doesn't signal 'autoSwitch' changing,
-			// so the related buttons have to be manually updated, like so:
-			
-			var qualityIncrease:QualityIncreaseButton
-				= controlBar.getWidget("qualityIncrease")
-				as QualityIncreaseButton;
-				
-			var qualityDecrease:QualityDecreaseButton
-				= controlBar.getWidget("qualityDecrease")
-				as QualityDecreaseButton;
-				
-			qualityIncrease.update();
-			qualityDecrease.update();
 		}
 		
 		private function onInputURLChange(event:Event):void
@@ -224,7 +245,9 @@ package
 		
 		private var element:MediaElement;
 		
-		private var region:RegionGateway;
-		private var controlBar:ControlBar;
+		private var container:RegionGateway;
+		private var controlBar:ControlBarBase;
+		
+		private var overlay:Sprite;
 	}
 }            
