@@ -63,6 +63,20 @@ package org.osmf.events
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const INDICES_CHANGE:String = "indicesChange";
+		
+		/**
+		 * The SwitchEvent.AUTO_SWITCH_CHANGE constant defines the value
+		 * of the type property of the event object for an autoSwitchChange
+		 * event.
+		 * 
+		 * @eventType AUTO_SWITCH_CHANGE 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public static const AUTO_SWITCH_CHANGE:String = "autoSwitchChange";
 
 		/**
 		 * This means a switch request was made but is not

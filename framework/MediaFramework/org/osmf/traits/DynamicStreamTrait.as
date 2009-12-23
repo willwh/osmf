@@ -48,6 +48,18 @@ package org.osmf.traits
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
+	
+	/**
+	 * Dispatched when the autoSwitch property changed.
+	 * 
+	 * @eventType org.osmf.events.SwitchEvent.AUTOS_WITCH_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="autoSwitchChange",type="org.osmf.events.SwitchEvent")]
 		
 	/**
 	 * DynamicStreamTrait defines the trait interface for media supporting dynamic stream
@@ -118,6 +130,8 @@ package org.osmf.traits
 				processAutoSwitchChange(value);
 
 				_autoSwitch = value;
+				
+				dispatchEvent(new SwitchEvent(SwitchEvent.AUTO_SWITCH_CHANGE));
 				
 				postProcessAutoSwitchChange();
 			}
