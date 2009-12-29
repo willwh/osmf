@@ -36,14 +36,14 @@ package org.osmf.proxies
 			super(temporal);
 		}
 		
-		override protected function postProcessSeekingChange(time:Number):void
+		override protected function seekingChangeEnd(time:Number):void
 		{
-			super.postProcessSeekingChange(time);
+			super.seekingChangeEnd(time);
 
 			// Auto-complete any in-progress seek operation.
 			if (seeking == true)
 			{
-				processSeekCompletion(time);
+				signalSeekComplete(time);
 			}
 		}
 	}

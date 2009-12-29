@@ -214,7 +214,7 @@ package org.osmf.composition
 				
 				// The child is exiting the seeking state, so we just
 				// update the composite seeking state.
-				processSeekCompletion(timeTrait.currentTime);		
+				signalSeekComplete(timeTrait.currentTime);		
 				
 			}					
 			else
@@ -233,7 +233,7 @@ package org.osmf.composition
 						
 						// The child is exiting the seeking state, so we just
 						// update the composite seeking state.
-						processSeekCompletion(event.time);
+						signalSeekComplete(event.time);
 					}
 				}
 			}

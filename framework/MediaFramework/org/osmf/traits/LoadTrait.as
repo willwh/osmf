@@ -245,12 +245,12 @@ package org.osmf.traits
 		{
 			if (_loadState != newState)
 			{
-				processLoadStateChange(newState, newContext);
+				loadStateChangeStart(newState, newContext);
 				
 				_loadState = newState;
 				_loadedContext = newContext;
 				
-				postProcessLoadStateChange();				
+				loadStateChangeEnd();				
 			}
 		}
 		
@@ -273,11 +273,11 @@ package org.osmf.traits
 			
 			if (value != _bytesLoaded)
 			{
-				processBytesLoadedChange(value);
+				bytesLoadedChangeStart(value);
 				
 				_bytesLoaded = value;
 				
-				postProcessBytesLoadedChange();
+				bytesLoadedChangeEnd();
 			}
 		}
 		
@@ -286,10 +286,6 @@ package org.osmf.traits
 		 *  
 		 * @throws ArgumentError If value is negative or smaller than bytesLoaded.
 		 * 
-		 * @see canProcessBytesTotalChange
-		 * @see processBytesTotalChange
-		 * @see postProcessBytesTotalChange
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -304,17 +300,17 @@ package org.osmf.traits
 
 			if (value != _bytesTotal)
 			{
-				processBytesTotalChange(value);
+				bytesTotalChangeStart(value);
 				
 				_bytesTotal = value;
 				
-				postProcessBytesTotalChange();
+				bytesTotalChangeEnd();
 			}
 		}
 		
 		/**
 		 * Called immediately before the <code>bytesLoaded</code> property is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 *  
 		 * @param newValue New <code>bytesLoaded</code> value.
 		 *  
@@ -323,39 +319,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processBytesLoadedChange(newValue:Number):void
-		{
-		}
-
-		/**
-		 * Called immediately before the <code>bytesTotal</code> property is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-		 *  
-		 * @param newValue New <code>bytesTotal</code> value.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		protected function processBytesTotalChange(newValue:Number):void
-		{
-		}
-
-		/**
-		 * Called immediately before the <code>loadState</code> and <code>loadedContext</code>
-		 * properties are changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-		 *  
-		 * @param newState New <code>loadState</code> value.
-		 * @param newContext New <code>loadedContext</code> value.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		protected function processLoadStateChange(newState:String, newContext:ILoadedContext):void
+		protected function bytesLoadedChangeStart(newValue:Number):void
 		{
 		}
 
@@ -368,25 +332,56 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessBytesLoadedChange():void
+		protected function bytesLoadedChangeEnd():void
 		{
 		}
 
 		/**
-		 * Called just after the <code>bytesTotal</code> property has changed.
-		 * Dispatches the bytesTotalChange event.
-		 * <p>Subclasses that override should call this method to
-		 * dispatch the bytesTotalChange event.</p>
-		 * 
+		 * Called immediately before the <code>bytesTotal</code> property is changed.
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
+		 *  
+		 * @param newValue New <code>bytesTotal</code> value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessBytesTotalChange():void
+		protected function bytesTotalChangeStart(newValue:Number):void
+		{
+		}
+		
+		/**
+		 * Called just after the <code>bytesTotal</code> property has changed.
+		 * Dispatches the bytesTotalChange event.
+		 * <p>Subclasses that override should call this method to
+		 * dispatch the bytesTotalChange event.</p>
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		protected function bytesTotalChangeEnd():void
 		{
 			dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, _bytesTotal));
+		}
+
+		/**
+		 * Called immediately before the <code>loadState</code> and <code>loadedContext</code>
+		 * properties are changed.
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
+		 *  
+		 * @param newState New <code>loadState</code> value.
+		 * @param newContext New <code>loadedContext</code> value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
+		{
 		}
 		
 		/**
@@ -398,7 +393,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessLoadStateChange():void
+		protected function loadStateChangeEnd():void
 		{
 			dispatchEvent(new LoadEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, _loadState));
 		}

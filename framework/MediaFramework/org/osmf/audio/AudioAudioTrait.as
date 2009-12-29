@@ -36,21 +36,21 @@ package org.osmf.audio
 			soundAdapter.soundTransform.pan = pan;
 		}
 		
-		override protected function processVolumeChange(newVolume:Number):void
+		override protected function volumeChangeStart(newVolume:Number):void
 		{
 			var soundTransform:SoundTransform = soundAdapter.soundTransform;				
 			soundTransform.volume = muted ? 0 : newVolume;
 			soundAdapter.soundTransform = soundTransform;
 		}
 
-		override protected function processMutedChange(newMuted:Boolean):void
+		override protected function mutedChangeStart(newMuted:Boolean):void
 		{
 			var soundTransform:SoundTransform = soundAdapter.soundTransform;			
 			soundTransform.volume = newMuted ? 0 : volume;
 			soundAdapter.soundTransform = soundTransform;
 		}
 		
-		override protected function processPanChange(newPan:Number):void
+		override protected function panChangeStart(newPan:Number):void
 		{
 			var soundTransform:SoundTransform = soundAdapter.soundTransform;					
 			soundTransform.pan = newPan;

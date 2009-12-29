@@ -36,7 +36,7 @@ package org.osmf.audio
 		/** 
 		 * @inheritDoc
 		 */
-		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
+		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 			if (newSeeking)
 			{
@@ -52,14 +52,14 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function postProcessSeekingChange(time:Number):void
+		override protected function seekingChangeEnd(time:Number):void
 		{
-			super.postProcessSeekingChange(time);
+			super.seekingChangeEnd(time);
 			
 			// If we just started seeking, finish since this operation is async.
 			if (seeking == true)
 			{
-				processSeekCompletion(time);
+				signalSeekComplete(time);
 			}
 		}
 			

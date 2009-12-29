@@ -127,13 +127,11 @@ package org.osmf.traits
 		{
 			if (autoSwitch != value)
 			{
-				processAutoSwitchChange(value);
+				autoSwitchChangeStart(value);
 
 				_autoSwitch = value;
 				
-				dispatchEvent(new SwitchEvent(SwitchEvent.AUTO_SWITCH_CHANGE));
-				
-				postProcessAutoSwitchChange();
+				autoSwitchChangeEnd();
 			}
 		}
 		
@@ -167,6 +165,7 @@ package org.osmf.traits
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
+			
 			return -1;
 		}
 			
@@ -199,11 +198,11 @@ package org.osmf.traits
 
 			if (maxIndex != value)
 			{
-				processMaxIndexChange(value);
+				maxIndexChangeStart(value);
 
 				_maxIndex = value;
 				
-				postProcessMaxIndexChange();
+				maxIndexChangeEnd();
 			}		
 		}
 		
@@ -257,12 +256,13 @@ package org.osmf.traits
 
 				var detail:SwitchingDetail = new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL);
 				
-				processSwitchState(SwitchEvent.SWITCHSTATE_REQUESTED, detail);
-				processSwitchTo(index);
+				signalSwitchStateChange(SwitchEvent.SWITCHSTATE_REQUESTED, detail);
+				
+				switchToStart(index);
 				
 				_currentIndex = index;
 				
-				postProcessSwitchTo(detail);
+				switchToEnd(detail);
 			}			
 		}
 		
@@ -290,7 +290,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function processAutoSwitchChange(value:Boolean):void
+		protected function autoSwitchChangeStart(value:Boolean):void
 		{			
 		}
 				
@@ -302,8 +302,9 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function postProcessAutoSwitchChange():void
-		{			
+		protected function autoSwitchChangeEnd():void
+		{
+			dispatchEvent(new SwitchEvent(SwitchEvent.AUTO_SWITCH_CHANGE));	
 		}
 		
 		/**
@@ -314,7 +315,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function processSwitchTo(value:int):void
+		protected function switchToStart(value:int):void
 		{			
 		}
 		
@@ -326,20 +327,20 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function postProcessSwitchTo(detail:SwitchingDetail=null):void
+		protected function switchToEnd(detail:SwitchingDetail=null):void
 		{
-			processSwitchState(SwitchEvent.SWITCHSTATE_COMPLETE, detail);
+			signalSwitchStateChange(SwitchEvent.SWITCHSTATE_COMPLETE, detail);
 		}
 		
 		/**
-		 * Does the acutal switching of indices.
+		 * Does the actual switching of indices.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function processSwitchState(newState:int, detail:SwitchingDetail=null):void
+		protected function signalSwitchStateChange(newState:int, detail:SwitchingDetail=null):void
 		{			
 			var oldState:int = switchState;
 			switchState = newState;
@@ -354,7 +355,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function processMaxIndexChange(value:int):void
+		protected function maxIndexChangeStart(value:int):void
 		{			
 		}
 		
@@ -366,7 +367,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		protected function postProcessMaxIndexChange():void
+		protected function maxIndexChangeEnd():void
 		{			
 		}
 

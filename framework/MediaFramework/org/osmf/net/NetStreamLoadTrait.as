@@ -46,7 +46,7 @@ package org.osmf.net
 			isStreamingResource = NetStreamUtils.isRTMPResource(resource);
 		}
 		
-		override protected function processLoadStateChange(newState:String, newContext:ILoadedContext):void
+		override protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
 		{
 			if (newState == LoadState.READY)
 			{

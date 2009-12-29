@@ -86,12 +86,12 @@ package org.osmf.net
 			return drmServices.authenticationMethod;
 		}
 		
-		override protected function processAuthenticate(username:String, password:String):void
+		override public function authenticate(username:String, password:String):void
 		{							
 			drmServices.authenticate(username, password);
 		}
 		
-		override protected function processAuthenticateWithToken(token:Object):void
+		override public function authenticateWithToken(token:Object):void
 		{							
 			drmServices.authenticateWithToken(token);
 		}

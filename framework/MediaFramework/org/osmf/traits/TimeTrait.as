@@ -110,7 +110,7 @@ package org.osmf.traits
 		
 		/**
 		 * Called immediately before the <code>duration</code> property is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 *  
 		 * @param newDuration New <code>duration</code> value.
 		 *  
@@ -119,7 +119,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processDurationChange(newDuration:Number):void
+		protected function durationChangeStart(newDuration:Number):void
 		{
 		}
 		
@@ -137,14 +137,14 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessDurationChange(oldDuration:Number):void
+		protected function durationChangeEnd(oldDuration:Number):void
 		{
 			dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, _duration));
 		}
 
 		/**
 		 * Called immediately before the <code>currentTime</code> property is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 * @param newCurrentTime New <code>currentTime</code> value.
 		 *  
 		 *  @langversion 3.0
@@ -152,7 +152,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processCurrentTimeChange(newCurrentTime:Number):void
+		protected function currentTimeChangeStart(newCurrentTime:Number):void
 		{
 		}
 		
@@ -166,7 +166,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessCurrentTimeChange(oldCurrentTime:Number):void
+		protected function currentTimeChangeEnd(oldCurrentTime:Number):void
 		{
 		}
 		
@@ -182,7 +182,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processDurationReached():void
+		protected function signalDurationReached():void
 		{
 			dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
 		}
@@ -191,10 +191,6 @@ package org.osmf.traits
 		 * Invoking this setter will result in the trait's currentTime
 		 * value changing if it differs from currentTime's current value.
 		 * 
-		 * @see canProcessCurrentTimeChange
-		 * @see processCurrentTimeChange
-		 * @see postProcessCurrentTimeChange
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -217,16 +213,16 @@ package org.osmf.traits
 			
 			if (_currentTime != value)
 			{
-				processCurrentTimeChange(value);
+				currentTimeChangeStart(value);
 					
 				var oldCurrentTime:Number = _currentTime;
 				_currentTime = value;
 				
-				postProcessCurrentTimeChange(oldCurrentTime);
+				currentTimeChangeEnd(oldCurrentTime);
 				
 				if (currentTime == duration && currentTime > 0)
 				{
-					processDurationReached();
+					signalDurationReached();
 				} 
 			}
 		}
@@ -235,10 +231,6 @@ package org.osmf.traits
 		 * Invoking this setter will result in the trait's duration
 		 * value changing if it differs from duration's current value.
 		 * 
-		 * @see canProcessDurationChange
-		 * @see processDurationChange
-		 * @see postProcessDurationChange
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -248,12 +240,12 @@ package org.osmf.traits
 		{
 			if (_duration != value)
 			{
-				processDurationChange(value);
+				durationChangeStart(value);
 			
 				var oldDuration:Number = _duration;
 				_duration = value;
 				
-				postProcessDurationChange(oldDuration);
+				durationChangeEnd(oldDuration);
 				
 				// Current time cannot exceed duration.
 				if (	!isNaN(_currentTime)

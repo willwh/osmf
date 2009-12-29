@@ -167,14 +167,14 @@ package org.osmf.traits
 		
 		/**
 		 * Called immediately before the <code>playState</code> property value is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p> 
+		 * <p>Subclasses can override this method to communicate the change to the media.</p> 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function processPlayStateChange(newPlayState:String):void
+		protected function playStateChangeStart(newPlayState:String):void
 		{
 		}
 		
@@ -189,7 +189,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessPlayStateChange():void
+		protected function playStateChangeEnd():void
 		{
 			dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, playState));
 		}
@@ -198,11 +198,11 @@ package org.osmf.traits
 		{	
 			if (_playState != newPlayState)
 			{
-				processPlayStateChange(newPlayState);
+				playStateChangeStart(newPlayState);
 					
 				_playState = newPlayState;
 					
-				postProcessPlayStateChange();
+				playStateChangeEnd();
 			}
 		}
 				

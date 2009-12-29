@@ -73,17 +73,17 @@ package org.osmf.composition
 		// Overrides
 		//
 
-		override protected function processVolumeChange(newVolume:Number):void
+		override protected function volumeChangeStart(newVolume:Number):void
 		{
 			applyVolumeToChildren(newVolume);
 		}
 		
-		override protected function processMutedChange(newMuted:Boolean):void
+		override protected function mutedChangeStart(newMuted:Boolean):void
 		{
 			applyMutedToChildren(newMuted);
 		}
 		
-		override protected function processPanChange(newPan:Number):void
+		override protected function panChangeStart(newPan:Number):void
 		{
 			applyPanToChildren(newPan);
 		}

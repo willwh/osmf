@@ -112,7 +112,6 @@ package org.osmf.traits
 		 */ 
 		public function authenticate(username:String, password:String):void
 		{
-			processAuthenticate(username, password);
 		}
 		
 		/**
@@ -129,7 +128,6 @@ package org.osmf.traits
 		 */ 
 		public function authenticateWithToken(token:Object):void
 		{							
-			processAuthenticateWithToken(token);
 		}
 
 		/**
@@ -183,42 +181,6 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Called immediately before the <code>authenticationState</code> property is changed
-		 * in response to a call to authenticate.
-		 * 
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-		 *
-		 * @param username The username for the authentication request.
-		 * @param password The password for the authentication request.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		protected function processAuthenticate(username:String, password:String):void
-		{							
-		}
-		
-		/**
-		 * Called immediately before the <code>authenticationState</code> property is changed
-		 * in response to a call to authenticateWithToken.
-		 * 
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
-		 *
-		 * @param username The username for the authentication request.
-		 * @param password The password for the authentication request.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		protected function processAuthenticateWithToken(token:Object):void
-		{							
-		}
-		
-		/**
 		 * Must be called by the implementing media on completing authentication.  Dispatches
 		 * the change event.
 		 *  
@@ -227,7 +189,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function processAuthenticateCompletion(success:Boolean, token:Object, error:MediaError):void
+		protected final function signalAuthenticateComplete(success:Boolean, token:Object, error:MediaError):void
 		{
 			dispatchEvent
 				( new ContentProtectionEvent

@@ -93,10 +93,6 @@ package org.osmf.traits
 		 * If <code>time</code> is non numerical or negative, does not attempt to seek. 
 		 * 
 		 * @param time Time to seek to in seconds.
-		 * @see #processSeekCompletion()
-		 * @see #canProcessSeekingChange()
-		 * @see #processSeekingChange()
-		 * @see #postProcessSeekingChange()
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -107,11 +103,11 @@ package org.osmf.traits
 		{
 			if (canSeekTo(time))
 			{
-				processSeekingChange(true, time);
+				seekingChangeStart(true, time);
 					
 				_seeking = true;
 					
-				postProcessSeekingChange(time);
+				seekingChangeEnd(time);
 			}
 		}
 		
@@ -155,7 +151,7 @@ package org.osmf.traits
 		
 		/**
          * Called immediately before the <code>seeking</code> property is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param time New <code>time</code> value representing the time that the playhead seeks to.
 		 *  
 		 *  @langversion 3.0
@@ -163,7 +159,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processSeekingChange(newSeeking:Boolean, time:Number):void
+		protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 		}
 		
@@ -181,7 +177,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessSeekingChange(time:Number):void
+		protected function seekingChangeEnd(time:Number):void
 		{
 			dispatchEvent
 				( new SeekEvent
@@ -196,7 +192,7 @@ package org.osmf.traits
 		/**
 		 * Must be called by the implementing media
 		 * on completing a seek.
-		 * Calls the <code>processSeekingChange()</code> and <code>postProcessSeekingChange()</code>
+		 * Calls the <code>seekingChangeStart()</code> and <code>seekingChangeEnd()</code>
 		 * methods.
 		 * @param time Position in seconds that the playhead was ultimately
 		 * moved to.
@@ -207,15 +203,15 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function processSeekCompletion(time:Number):void
+		protected final function signalSeekComplete(time:Number):void
 		{
 			if (_seeking == true)
 			{
-				processSeekingChange(false, time);
+				seekingChangeStart(false, time);
 				
 				_seeking = false;
 				
-				postProcessSeekingChange(time);
+				seekingChangeEnd(time);
 			}
 		}
 	

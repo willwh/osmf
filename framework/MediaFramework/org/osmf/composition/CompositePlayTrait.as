@@ -71,7 +71,7 @@ package org.osmf.composition
 		/**
 		 * @private
 		 **/
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{
 			if (newPlayState != playState && !playStateIsChanging)
 			{
@@ -115,13 +115,13 @@ package org.osmf.composition
 		/**
 		 * @private
 		 **/
-		override protected function postProcessPlayStateChange():void
+		override protected function playStateChangeEnd():void
 		{
 			// Never dispatch the event while we're in the middle of
 			// processing.
 			if (playStateIsChanging == false)
 			{
-				super.postProcessPlayStateChange();
+				super.playStateChangeEnd();
 			}
 			
 			// If we have a deferred operation to complete, do so now.

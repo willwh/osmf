@@ -78,13 +78,13 @@ package org.osmf.composition
 			return super.currentTime;
 		}
 		
-		override protected function processDurationReached():void
+		override protected function signalDurationReached():void
 		{
 			// The base class can cause this method to get called, sometimes
 			// inappropriately (e.g. if currentTime == duration because we don't
 			// have duration for the next child).  For serial, we should only let
 			// the call pass through if we're truly at the end.
-			// Also - Don't dispatch if the final trait doesn't have a time, wait until it either it gets it's
+			// Also - Don't dispatch if the final trait doesn't have a time, wait until it either it gets its
 			// non-zero time or it dispatches durationReached.  -> FM-303.			
 			if (	mode == CompositionMode.PARALLEL
 				||  (traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1 &&
@@ -92,7 +92,7 @@ package org.osmf.composition
 					!isNaN((traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration))  
 			   )
 			{
-				super.processDurationReached()
+				super.signalDurationReached()
 			}
 				
 		}
@@ -201,7 +201,7 @@ package org.osmf.composition
 			
 			if (nextChild == null)
 			{				
-				super.processDurationReached();
+				super.signalDurationReached();
 			}
 		}
 		

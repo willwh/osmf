@@ -73,7 +73,7 @@ package org.osmf.net
 		 *
 		 * @param newTime New <code>bufferTime</code> value.
 		 */											
-		override protected function processBufferTimeChange(newTime:Number):void
+		override protected function bufferTimeChangeStart(newTime:Number):void
 		{
 			netStream.bufferTime = newTime;
 		}

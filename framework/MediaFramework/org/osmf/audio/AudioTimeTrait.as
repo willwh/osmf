@@ -67,7 +67,7 @@ package org.osmf.audio
 		
 		private function onPlaybackComplete(event:Event):void
 		{
-			processDurationReached();
+			signalDurationReached();
 		}
 		
 		private var soundAdapter:SoundAdapter;

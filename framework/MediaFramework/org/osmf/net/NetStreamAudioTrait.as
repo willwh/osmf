@@ -53,21 +53,21 @@ package org.osmf.net
 			this.netStream = netStream;
 		}
 		
-		override protected function processVolumeChange(newVolume:Number):void
+		override protected function volumeChangeStart(newVolume:Number):void
 		{
 			var soundTransform:SoundTransform = netStream.soundTransform;				
 			soundTransform.volume = muted ? 0 : newVolume;
 			netStream.soundTransform = soundTransform;
 		}
 		
-		override protected function processMutedChange(newMuted:Boolean):void
+		override protected function mutedChangeStart(newMuted:Boolean):void
 		{
 			var soundTransform:SoundTransform = netStream.soundTransform;			
 			soundTransform.volume = newMuted ? 0 : volume;
 			netStream.soundTransform = soundTransform;
 		}
 
-		override protected function processPanChange(newPan:Number):void
+		override protected function panChangeStart(newPan:Number):void
 		{
 			var soundTransform:SoundTransform = netStream.soundTransform;					
 			soundTransform.pan = newPan;

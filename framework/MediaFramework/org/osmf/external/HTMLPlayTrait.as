@@ -64,9 +64,9 @@ package org.osmf.external
 		// Overrides
 		//
 		
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{
-			super.processPlayStateChange(newPlayState);
+			super.playStateChangeStart(newPlayState);
 			
 			if (internalMutation == 0)
 			{

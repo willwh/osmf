@@ -37,9 +37,9 @@ package org.osmf.examples.posterframe
 			return false;
 		}
 		
-		override protected function postProcessPlayStateChange():void
+		override protected function playStateChangeEnd():void
 		{
-			super.postProcessPlayStateChange();
+			super.playStateChangeEnd();
 			
 			if (playState == PlayState.PLAYING)
 			{

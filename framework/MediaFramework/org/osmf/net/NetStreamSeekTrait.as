@@ -66,7 +66,7 @@ package org.osmf.net
 		 * @param newSeeking New <code>seeking</code> value.
 		 * @param time Time to seek to, in seconds.
 		 */						
-		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
+		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 			if (newSeeking)
 			{
@@ -99,32 +99,32 @@ package org.osmf.net
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
-					processSeekCompletion(previousTime);					
+					signalSeekComplete(previousTime);					
 					break;
 			}
 		}
 				
 		private function onSeekBugTimer(event:TimerEvent):void
 		{
-			//We accept the netStream.time within 2 second of the desired seek.
-			//This fixes seeks where the value doesn't land directly on the desired time.
-			//This also fixes seeks backward.
+			// We accept the NetStream.time within a margin of the desired seek.
+			// This fixes seeks where the value doesn't land directly on the desired time.
+			// This also fixes seeks backward.
 			if ((expectedTime - SEEK_MARGIN) <= netStream.time &&
 				netStream.time <= (expectedTime + SEEK_MARGIN))
 			{
 				seekBugTimer.reset();			
-				processSeekCompletion(expectedTime);
+				signalSeekComplete(expectedTime);
 			}			
 		}
 		
 		private function onSeekBugTimerDone(event:TimerEvent):void
 		{		
 			seekBugTimer.reset();
-			processSeekCompletion(expectedTime);
+			signalSeekComplete(expectedTime);
 		}
 		
 		
-		private const SEEK_MARGIN:Number = .25; //Seconds
+		private const SEEK_MARGIN:Number = .25; // Seconds
 		private var seekBugTimer:Timer;
 		private var netStream:NetStream;
 		private var expectedTime:Number;

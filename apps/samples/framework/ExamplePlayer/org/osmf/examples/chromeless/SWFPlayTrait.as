@@ -40,7 +40,7 @@ package org.osmf.examples.chromeless
 			onPlayingChange(null);
 		}
 
-		override protected function processPlayStateChange(playState:String):void
+		override protected function playStateChangeStart(playState:String):void
 		{
 			if (playState == PlayState.PLAYING && Object(swfRoot).videoPlayer.isPlaying == false)
 			{

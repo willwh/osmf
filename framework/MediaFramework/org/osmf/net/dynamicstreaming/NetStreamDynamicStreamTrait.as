@@ -76,40 +76,40 @@ package org.osmf.net.dynamicstreaming
 		}	
 				
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function processSwitchTo(value:int):void
+		override protected function switchToStart(value:int):void
 		{
 			_ns.switchTo(value);
 		}
 			
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function processAutoSwitchChange(value:Boolean):void
+		override protected function autoSwitchChangeStart(value:Boolean):void
 		{
 			_ns.useManualSwitchMode = !value;
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		override protected function processMaxIndexChange(value:int):void
+		override protected function maxIndexChangeStart(value:int):void
 		{
 			if(_ns != null)
 			{
@@ -118,14 +118,14 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		override protected function postProcessSwitchTo(detail:SwitchingDetail=null):void
+		override protected function switchToEnd(detail:SwitchingDetail=null):void
 		{
 			// Do nothing, wait for onNetStreamSwitchingChange handler to dispatch SwitchComplete.
 		}
@@ -140,7 +140,7 @@ package org.osmf.net.dynamicstreaming
 			switch (event.info.code) 
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
-					processSwitchState(SwitchEvent.SWITCHSTATE_FAILED);					
+					signalSwitchStateChange(SwitchEvent.SWITCHSTATE_FAILED);					
 					break;
 			}			
 		}
@@ -152,7 +152,7 @@ package org.osmf.net.dynamicstreaming
 				setCurrentIndex(_ns.renderingIndex);
 			}
 
-			processSwitchState(event.newState, event.detail);
+			signalSwitchStateChange(event.newState, event.detail);
 		}				
 						
 		private var _ns:DynamicNetStream;

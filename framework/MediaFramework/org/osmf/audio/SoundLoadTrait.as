@@ -44,7 +44,7 @@ package org.osmf.audio
 			super(loader, resource);
 		}
 		
-		override protected function processLoadStateChange(newState:String, newContext:ILoadedContext):void
+		override protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
 		{
 			if (newState == LoadState.READY)
 			{

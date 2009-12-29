@@ -128,11 +128,11 @@ package org.osmf.traits
 			
 			if (value != _volume)
 			{
-				processVolumeChange(value);
+				volumeChangeStart(value);
 				
 				_volume = value;
 				
-				postProcessVolumeChange();
+				volumeChangeEnd();
 			}
 		}
 		
@@ -160,11 +160,11 @@ package org.osmf.traits
 		{
 			if (value != _muted)
 			{
-				processMutedChange(value);
+				mutedChangeStart(value);
 				
 				_muted = value;
 				
-				postProcessMutedChange();
+				mutedChangeEnd();
 			}
 		}
 		
@@ -206,11 +206,11 @@ package org.osmf.traits
 			
 			if (value != _pan)
 			{
-				processPanChange(value);
+				panChangeStart(value);
 				
 				_pan = value;
 				
-				postProcessPanChange();
+				panChangeEnd();
 			}
 		}
 	
@@ -219,7 +219,7 @@ package org.osmf.traits
 		
 		/**
 		 * Called immediately before the <code>volume</code> value is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 * @param newVolume New <code>volume</code> value.
 		 * 
 		 *  
@@ -228,7 +228,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function processVolumeChange(newVolume:Number):void
+		protected function volumeChangeStart(newVolume:Number):void
 		{
 		} 
 		
@@ -243,14 +243,14 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessVolumeChange():void
+		protected function volumeChangeEnd():void
 		{
 			dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, false, _volume));
 		}
 		
 		/**
 		 * Called immediately before the <code>muted</code> value is toggled. 
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 * @param newMuted New <code>muted</code> value.
 		 *  
 		 *  @langversion 3.0
@@ -258,7 +258,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processMutedChange(newMuted:Boolean):void
+		protected function mutedChangeStart(newMuted:Boolean):void
 		{
 		}
 		
@@ -273,14 +273,14 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessMutedChange():void
+		protected function mutedChangeEnd():void
 		{
 			dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, _muted));
 		}
 				
 		/**
 		 * Called immediately before the <code>pan</code> value is changed.
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 * @param newPan New <code>pan</code> value.
 		 *  
 		 *  @langversion 3.0
@@ -288,7 +288,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processPanChange(newPan:Number):void
+		protected function panChangeStart(newPan:Number):void
 		{	
 		}
 		
@@ -303,7 +303,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessPanChange():void
+		protected function panChangeEnd():void
 		{
 			dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, false, NaN, _pan));
 		}

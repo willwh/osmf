@@ -126,12 +126,12 @@ package org.osmf.traits
 		{
 			if (_view != value)
 			{
-				processViewChange(value);
+				viewChangeStart(value);
 				
 				var oldView:DisplayObject = _view;
 				_view = value;
 				
-				postProcessViewChange(oldView);
+				viewChangeEnd(oldView);
 			}
 		}
 
@@ -158,7 +158,7 @@ package org.osmf.traits
 				||	mediaHeight != _mediaHeight
 				)
 			{
-				processMediaSizeChange(mediaWidth, mediaHeight);
+				mediaSizeChangeStart(mediaWidth, mediaHeight);
 				
 				var oldMediaWidth:Number = _mediaWidth;
 				var oldMediaHeight:Number = _mediaHeight;
@@ -166,13 +166,13 @@ package org.osmf.traits
 				_mediaWidth = mediaWidth;
 				_mediaHeight = mediaHeight;
 				
-				postProcessMediaSizeChange(oldMediaWidth, oldMediaHeight);
+				mediaSizeChangeEnd(oldMediaWidth, oldMediaHeight);
 			}
 		}
 				
 		/**
 		 * Called immediately before the <code>view</code> property is changed. 
-		 * <p>Subclasses implement this method to communicate the change to the media.</p>
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 * @param newView New <code>view</code> value.
 		 *  
 		 *  @langversion 3.0
@@ -180,7 +180,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processViewChange(newView:DisplayObject):void
+		protected function viewChangeStart(newView:DisplayObject):void
 		{
 		}
 		
@@ -191,21 +191,20 @@ package org.osmf.traits
 		 * dispatch the viewChange event.</p>
 		 *  
 		 * @param oldView Previous <code>view</code> value.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessViewChange(oldView:DisplayObject):void
+		protected function viewChangeEnd(oldView:DisplayObject):void
 		{
 			dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
 		}
 				
 		/**
 		 * Called just before a call to <code>setMediaSize()</code>. 
-		 * Subclasses implement this method to communicate the change to the media.
+		 * Subclasses can override this method to communicate the change to the media.
 		 * @param newMediaWidth New <code>mediaWidth</code> value.
 		 * @param newMediaHeight New <code>mediaHeight</code> value.
 		 *  
@@ -214,7 +213,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processMediaSizeChange(newMediaWidth:Number, newMediaHeight:Number):void
+		protected function mediaSizeChangeStart(newMediaWidth:Number, newMediaHeight:Number):void
 		{
 		}
 		
@@ -234,7 +233,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessMediaSizeChange(oldMediaWidth:Number, oldMediaHeight:Number):void
+		protected function mediaSizeChangeEnd(oldMediaWidth:Number, oldMediaHeight:Number):void
 		{
 			dispatchEvent(new ViewEvent(ViewEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldMediaWidth, oldMediaHeight, _mediaWidth, _mediaHeight));
 		}

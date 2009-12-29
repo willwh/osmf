@@ -133,11 +133,11 @@ package org.osmf.traits
 			
 			if (value != _bufferTime)
 			{
-				processBufferTimeChange(value);
+				bufferTimeChangeStart(value);
 					
 				_bufferTime = value;
 					
-				postProcessBufferTimeChange(); 
+				bufferTimeChangeEnd(); 
 			}
 		}
 
@@ -150,10 +150,6 @@ package org.osmf.traits
 		 * <p>This method fires a BufferLengthChangeEvent if the value's
 		 * change persists.</p>
 		 * 
-		 * @see canProcessBufferLengthChange
-		 * @see processBufferLengthChange
-		 * @see postProcessBufferLengthChange
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -163,11 +159,11 @@ package org.osmf.traits
 		{
 			if (value != _bufferLength)
 			{
-				processBufferLengthChange(value);
+				bufferLengthChangeStart(value);
 					
 				_bufferLength = value;
 					
-				postProcessBufferLengthChange();
+				bufferLengthChangeEnd();
 			}
 		}
 		
@@ -176,10 +172,6 @@ package org.osmf.traits
 		 * a bufferingChange event if invocation results in the <code>buffering</code>
 		 * property changing.
 		 * 
-		 * @see #canProcessBufferingChange()
-		 * @see #processBufferingChange()
-		 * @see #postProcessBufferingChange()
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -189,11 +181,11 @@ package org.osmf.traits
 		{
 			if (value != _buffering)
 			{
-				processBufferingChange(value);
+				bufferingChangeStart(value);
 					
 				_buffering = value;
 					
-				postProcessBufferingChange();
+				bufferingChangeEnd();
 			}
 		}
 		
@@ -208,7 +200,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processBufferingChange(newBuffering:Boolean):void
+		protected function bufferingChangeStart(newBuffering:Boolean):void
 		{
 		}
 		
@@ -224,7 +216,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessBufferingChange():void
+		protected function bufferingChangeEnd():void
 		{
 			dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, _buffering));
 		}
@@ -239,7 +231,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processBufferLengthChange(newSize:Number):void
+		protected function bufferLengthChangeStart(newSize:Number):void
 		{
 		}
 		
@@ -252,7 +244,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessBufferLengthChange():void
+		protected function bufferLengthChangeEnd():void
 		{	
 		}
 				
@@ -267,7 +259,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processBufferTimeChange(newTime:Number):void
+		protected function bufferTimeChangeStart(newTime:Number):void
 		{
 		}
 		
@@ -283,7 +275,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function postProcessBufferTimeChange():void
+		protected function bufferTimeChangeEnd():void
 		{
 			dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, false, _bufferTime));	
 		}

@@ -36,7 +36,7 @@ package org.osmf.audio
 			this.soundAdapter = soundAdapter;				
 		}
 		
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{	
 			if (newPlayState == PlayState.PLAYING)
 			{
@@ -52,7 +52,7 @@ package org.osmf.audio
 			}				
 		}
 
-		override protected function postProcessPlayStateChange():void
+		override protected function playStateChangeEnd():void
 		{
 			if (lastPlayFailed)
 			{
@@ -62,7 +62,7 @@ package org.osmf.audio
 			}
 			else
 			{
-				super.postProcessPlayStateChange();
+				super.playStateChangeEnd();
 			}
 		}
 			

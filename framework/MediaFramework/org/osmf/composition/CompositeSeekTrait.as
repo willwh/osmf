@@ -73,7 +73,7 @@ package org.osmf.composition
 		/**
 		 * @private
 		 */
-		override protected function processSeekingChange(newSeeking:Boolean, time:Number):void
+		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 			if (newSeeking)
 			{

@@ -100,7 +100,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
 					// For streaming, NetStream.Play.Complete means the duration
 					// was reached.  But this isn't fired for progressive.
-					processDurationReached();
+					signalDurationReached();
 					break;
 			}
 		}
@@ -114,7 +114,7 @@ package org.osmf.net
 					// was reached.  But this isn't fired for streaming.
 					if (NetStreamUtils.isRTMPResource(resource) == false)
 					{
-						processDurationReached();
+						signalDurationReached();
 					}
 					break;
 			}

@@ -42,7 +42,7 @@ package org.osmf.tracking
 			return false;
 		}
 		
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{
 			if (newPlayState == PlayState.PLAYING)
 			{
@@ -72,9 +72,9 @@ package org.osmf.tracking
 			}
 		}
 		
-		override protected function postProcessPlayStateChange():void
+		override protected function playStateChangeEnd():void
 		{
-			super.postProcessPlayStateChange();
+			super.playStateChangeEnd();
 			
 			if (playState == PlayState.PLAYING)
 			{

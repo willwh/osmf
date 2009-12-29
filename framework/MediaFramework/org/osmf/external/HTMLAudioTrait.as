@@ -65,9 +65,9 @@ package org.osmf.external
 		// Overrides
 		//
 		
-		override protected function processVolumeChange(newVolume:Number):void
+		override protected function volumeChangeStart(newVolume:Number):void
 		{
-			super.processVolumeChange(newVolume);
+			super.volumeChangeStart(newVolume);
 			
 			if (internalMutation == 0)
 			{
@@ -75,9 +75,9 @@ package org.osmf.external
 			}
 		} 
 		
-		override protected function processMutedChange(newMuted:Boolean):void
+		override protected function mutedChangeStart(newMuted:Boolean):void
 		{
-			super.processMutedChange(newMuted);
+			super.mutedChangeStart(newMuted);
 			
 			if (internalMutation == 0)
 			{
@@ -85,9 +85,9 @@ package org.osmf.external
 			}
 		}
 		
-		override protected function processPanChange(newPan:Number):void
+		override protected function panChangeStart(newPan:Number):void
 		{
-			super.processPanChange(newPan);
+			super.panChangeStart(newPan);
 			
 			if (internalMutation == 0)
 			{

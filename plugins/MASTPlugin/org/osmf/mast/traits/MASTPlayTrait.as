@@ -55,7 +55,7 @@ package org.osmf.mast.traits
 		/**
 		 * @inheritDoc
 		 */
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{
 			_playRequestPending = false;
 			

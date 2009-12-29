@@ -39,12 +39,12 @@ package org.osmf.examples.chromeless
 			onVolumeChange(null);
 		}
 
-		override protected function processVolumeChange(newVolume:Number):void
+		override protected function volumeChangeStart(newVolume:Number):void
 		{
 			Object(swfRoot).videoPlayer.setVolume(newVolume);
 		}
 
-		override protected function processMutedChange(newMuted:Boolean):void
+		override protected function mutedChangeStart(newMuted:Boolean):void
 		{
 			if (Object(swfRoot).videoPlayer.isMuted != newMuted)
 			{
@@ -52,7 +52,7 @@ package org.osmf.examples.chromeless
 			}
 		}
 
-		override protected function processPanChange(newPan:Number):void
+		override protected function panChangeStart(newPan:Number):void
 		{
 			// No op.	
 		}

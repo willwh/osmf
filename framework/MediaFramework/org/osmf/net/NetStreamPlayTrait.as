@@ -85,7 +85,7 @@ package org.osmf.net
 		 * <p>For streaming media, parses the URL to extract the stream name.</p>
 		 * @param newPlaying New <code>playing</code> value.
 		 */								
-		override protected function processPlayStateChange(newPlayState:String):void
+		override protected function playStateChangeStart(newPlayState:String):void
 		{
 			if (newPlayState == PlayState.PLAYING)
 			{
@@ -118,7 +118,6 @@ package org.osmf.net
 		// Needed to detect when the stream didn't play:  i.e. complete or error cases.
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			trace('netstatus:' + event.info.code);
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
@@ -136,7 +135,6 @@ package org.osmf.net
 					// halt playback.
 					if (urlResource != null && NetStreamUtils.isRTMPStream(urlResource.url) == false) 
 					{
-						trace('stop() called from NetStreamPlayTrait');
 						// Explicitly stop to prevent the stream from restarting on seek();
 						stop();
 					}
@@ -146,13 +144,11 @@ package org.osmf.net
 		
 		private function onPlayStatus(event:Object):void
 		{
-			trace("event.code" + event.code);
 			switch (event.code)
 			{
 				// Fired when streaming connections finish.  Doesn't fire for
 				// Progressive connections.  
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
-					trace('stop() called from NetStreamPlayTrait');
 					// Explicitly stop to prevent the stream from restarting on seek();
 					stop();
 					break;
