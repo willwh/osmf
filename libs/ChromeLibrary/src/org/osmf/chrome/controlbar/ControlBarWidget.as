@@ -25,8 +25,12 @@ package org.osmf.chrome.controlbar
 	import __AS3__.vec.Vector;
 	
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
+	import org.osmf.chrome.hint.Hint;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 
@@ -40,6 +44,9 @@ package org.osmf.chrome.controlbar
 			
 			processElementChange(null);
 			onElementTraitsChange(null);
+			
+			addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+			addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 		}
 		
 		public function set element(value:MediaElement):void
@@ -138,6 +145,28 @@ package org.osmf.chrome.controlbar
 			dispatchEvent(new RequestLayoutEvent(RequestLayoutEvent.REQUEST_LAYOUT));
 		}
 		
+		public function set hint(value:String):void
+		{
+			if (value != _hint)
+			{
+				if	(	stage
+					&&	_hint
+					&&	_hint != ""
+					&&	Hint.getInstance(stage).text == _hint
+					)
+				{
+					Hint.getInstance(stage).text = value;
+				}
+				
+				_hint = value;
+			}
+		}
+		
+		public function get hint():String
+		{
+			return _hint;
+		}
+		
 		// Overrides
 		//
 		
@@ -160,33 +189,27 @@ package org.osmf.chrome.controlbar
 		}
 		
 		protected function processElementChange(oldElement:MediaElement):void
-		{
-			
+		{	
 		}
 		
 		protected function processEnabledChange():void
-		{
-			
+		{	
 		}
 		
 		protected function onElementTraitAdd(event:MediaElementEvent):void
-		{
-			
+		{	
 		}
 		
 		protected function onElementTraitRemove(event:MediaElementEvent):void
-		{
-			
+		{	
 		}
 		
 		protected function processRequiredTraitsAvailable(element:MediaElement):void
-		{
-			
+		{	
 		}
 		
 		protected function processRequiredTraitsUnavailable(element:MediaElement):void
-		{
-			
+		{	
 		}
 		
 		// Internals
@@ -231,6 +254,22 @@ package org.osmf.chrome.controlbar
 			}
 		}
 		
+		private function onRollOver(event:MouseEvent):void
+		{
+			Hint.getInstance(stage).text = _hint;
+		}
+		
+		private function onRollOut(event:MouseEvent):void
+		{
+			Hint.getInstance(stage).text = null;
+		}
+		
+		private function onRollOverTimerComplete(event:TimerEvent):void
+		{
+			
+		}
+		
+		private var _hint:String;
 		private var _element:MediaElement;
 		private var _enabled:Boolean = true;
 		private var _left:Number = 0;
@@ -238,5 +277,6 @@ package org.osmf.chrome.controlbar
 		private var _registrationTarget:String;
 		private var _registrationTargetDirection:String;
 		private var _requiredTraitsAvailable:Boolean;
+		
 	}
 }

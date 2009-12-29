@@ -22,6 +22,8 @@
 
 package org.osmf.chrome.controlbar
 {
+	import flash.events.MouseEvent;
+	
 	import org.osmf.chrome.controlbar.widgets.*;
 	
 	public class ControlBar extends ControlBarBase
@@ -40,6 +42,8 @@ package org.osmf.chrome.controlbar
 		public static const FULL_SCREEN_LEAVE:String = "fullScreenLeave";
 		public static const SOUND_LESS:String = "soundLess";
 		public static const SOUND_MORE:String = "soundMore";
+		public static const PIN_UP_BUTTON:String = "pinUpButton";
+		public static const PIN_DOWN_BUTTON:String = "pinDownButton";
 		
 		public static const BUTTONS_VERTICAL_OFFSET:Number = 10;
 		public static const SCRUBBAR_VERTICAL_OFFSET:Number = 22;
@@ -70,13 +74,25 @@ package org.osmf.chrome.controlbar
 			
 			widget = addWidget(EJECT_BUTTON, new EjectButton());
 			widget.setRegistrationTarget(STOP_BUTTON, Direction.LEFT);
-			widget.setPosition(1, 0);
-				
-			widget = addWidget(QUALITY_MANUAL_BUTTON, new QualityManualButton());
+			
+			widget = addWidget(PIN_UP_BUTTON, new PinUpButton());
 			widget.setPosition(BORDER_SPACE, BUTTONS_VERTICAL_OFFSET);
+			widget.addEventListener(MouseEvent.CLICK, onPinButtonClick);
+			widget.hint = "Click to auto hide the control bar";
+			
+			widget = addWidget(PIN_DOWN_BUTTON, new PinDownButton());
+			widget.setRegistrationTarget(PIN_UP_BUTTON, Direction.RIGHT);
+			widget.setPosition(1, 0);
+			widget.hint = "Click to lock the control bar in place";
+			widget.addEventListener(MouseEvent.CLICK, onPinButtonClick);
+			
+			widget = addWidget(QUALITY_MANUAL_BUTTON, new QualityManualButton());
+			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
+			widget.setPosition(3, 0);
 			
 			widget = addWidget(QUALITY_AUTO_BUTTON, new QualityAutoButton());
-			widget.setPosition(BORDER_SPACE, BUTTONS_VERTICAL_OFFSET);
+			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
+			widget.setPosition(3, 0);
 			
 			widget = addWidget(QUALITY_INCREASE, new QualityIncreaseButton());
 			widget.setRegistrationTarget(QUALITY_AUTO_BUTTON, Direction.RIGHT);
@@ -88,9 +104,11 @@ package org.osmf.chrome.controlbar
 			
 			widget = addWidget(FULL_SCREEN_ENTER, new FullScreenEnterButton());
 			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);
+			widget.hint = "Click to enter full screen mode";
 			
 			widget = addWidget(FULL_SCREEN_LEAVE, new FullScreenLeaveButton());
 			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);
+			widget.hint = "Click to leave full screen mode";
 			
 			widget = addWidget(SOUND_LESS, new SoundLessButton());
 			widget.setRegistrationTarget(FULL_SCREEN_LEAVE, Direction.LEFT);
@@ -99,6 +117,11 @@ package org.osmf.chrome.controlbar
 			widget = addWidget(SOUND_MORE, new SoundMoreButton());
 			widget.setRegistrationTarget(SOUND_LESS, Direction.LEFT);
 			widget.setPosition(1, 0);
+		}
+		
+		private function onPinButtonClick(event:MouseEvent):void
+		{
+			autoHide = !autoHide;
 		}
 	}
 }

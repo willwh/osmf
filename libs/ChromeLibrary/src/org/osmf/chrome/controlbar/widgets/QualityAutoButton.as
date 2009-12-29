@@ -94,11 +94,13 @@ package org.osmf.chrome.controlbar.widgets
 		
 		protected function visibilityDeterminingEventHandler(event:Event = null):void
 		{
+			enabled = dynamicStream != null;
+			
 			visible
 				=	element != null 
+				&&	enabled == true
 				&&	(dynamicStream ? dynamicStream.autoSwitch == false : true);
 				 
-			enabled = dynamicStream != null;
 		}
 		
 		protected var dynamicStream:DynamicStreamTrait;
