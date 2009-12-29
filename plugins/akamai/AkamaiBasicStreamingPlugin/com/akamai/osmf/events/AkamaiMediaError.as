@@ -26,7 +26,7 @@ package com.akamai.osmf.events
 
 	/**
 	 * An AkamaiMediaError encapsulates an error specific to Akamai plugins.  
-	 * Errors are represented as error codes with corresponding descriptions.  
+	 * Errors are represented as error IDs with corresponding messages.  
 	 * 
 	 * <p>A list of all possible Akamai plugin-level errors can be found in the
 	 * <code>AkamaiMediaErrorCodes</code> class.</p>
@@ -36,21 +36,21 @@ package com.akamai.osmf.events
 	public class AkamaiMediaError extends MediaError
 	{
 		/**
-		 * Constructor. Takes an error code.
+		 * Constructor. Takes an error id.
 		 * 
 		 * @see AkamaiMediaErrorCodes
 		 */
-		public function AkamaiMediaError(errorCode:int)
+		public function AkamaiMediaError(errorID:int)
 		{
-			super(errorCode);
+			super(errorID);
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override protected function getDescriptionForErrorCode(errorCode:int):String
+		override protected function getMessageForErrorID(errorID:int):String
 		{
-			return AkamaiMediaErrorCodes.getDescriptionForErrorCode(errorCode);
+			return AkamaiMediaErrorCodes.getMessageForErrorID(errorID);
 		}
 	}
 }

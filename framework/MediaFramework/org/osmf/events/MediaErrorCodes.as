@@ -26,9 +26,9 @@ package org.osmf.events
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * The MediaErrorCodes class provides static constants for error codes,
-	 * as well as a means for retrieving a description for a particular error
-	 * code.
+	 * The MediaErrorCodes class provides static constants for error IDs,
+	 * as well as a means for retrieving a message for a particular error
+	 * ID.
 	 */ 
 	public final class MediaErrorCodes
 	{
@@ -74,64 +74,62 @@ package org.osmf.events
 
 
 		/**
-		 * Returns a description of the error for the specified error code.  If
-		 * the error code is unknown, returns the empty string.
+		 * Returns a message for the error of the specified ID.  If the error ID
+		 * is unknown, returns the empty string.
 		 * 
-		 * @param errorCode The error code for the error.
+		 * @param errorID The ID for the error.
 		 * 
-		 * @return A description of the error with the specified error code.
+		 * @return The message for the error with the specified ID.
 		 **/
-		public static function getDescriptionForErrorCode(errorCode:int):String
+		public static function getMessageForErrorID(errorID:int):String
 		{
-			var description:String = "";
+			var message:String = "";
 			
 			for (var i:int = 0; i < errorMap.length; i++)
 			{
-				if (errorMap[i].code == errorCode)
+				if (errorMap[i].errorID == errorID)
 				{
-					description = OSMFStrings.getString(errorMap[i].description);
+					message = OSMFStrings.getString(errorMap[i].message);
 					break;
 				}
 			}
 			
-			return description;
+			return message;
 		}
 
 		private static const errorMap:Array =
 		[
-			  {code:CONTENT_IO_LOAD_ERROR,					description:OSMFStrings.CONTENT_IO_LOAD_ERROR}
-			, {code:CONTENT_SECURITY_LOAD_ERROR,			description:OSMFStrings.CONTENT_SECURITY_LOAD_ERROR}
-			, {code:INVALID_SWF_AS_VERSION,					description:OSMFStrings.INVALID_SWF_AS_VERSION}
-			, {code:INVALID_PLUGIN_VERSION,					description:OSMFStrings.INVALID_PLUGIN_VERSION}
-			, {code:INVALID_PLUGIN_IMPLEMENTATION,			description:OSMFStrings.INVALID_PLUGIN_IMPLEMENTATION}
-			, {code:INVALID_URL_PROTOCOL,					description:OSMFStrings.INVALID_URL_PROTOCOL}
-			, {code:PLAY_FAILED, 							description:OSMFStrings.PLAY_FAILED}
-			, {code:STREAM_NOT_FOUND,	 					description:OSMFStrings.STREAM_NOT_FOUND}
-			, {code:FILE_STRUCTURE_INVALID,					description:OSMFStrings.FILE_STRUCTURE_INVALID}
-			, {code:NO_SUPPORTED_TRACK_FOUND,				description:OSMFStrings.NO_SUPPORTED_TRACK_FOUND}
-			, {code:PLAY_FAILED_NETCONNECTION_FAILURE, 		description:OSMFStrings.PLAY_FAILED_NETCONNECTION_FAILURE}
-			, {code:NETCONNECTION_REJECTED,					description:OSMFStrings.NETCONNECTION_REJECTED}
-			, {code:NETCONNECTION_INVALID_APP,				description:OSMFStrings.NETCONNECTION_INVALID_APP}
-			, {code:NETCONNECTION_FAILED,					description:OSMFStrings.NETCONNECTION_FAILED}
-			, {code:NETCONNECTION_TIMEOUT,					description:OSMFStrings.NETCONNECTION_TIMEOUT}
-			, {code:NETCONNECTION_SECURITY_ERROR,			description:OSMFStrings.NETCONNECTION_SECURITY_ERROR}
-			, {code:NETCONNECTION_ASYNC_ERROR,				description:OSMFStrings.NETCONNECTION_ASYNC_ERROR}
-			, {code:NETCONNECTION_IO_ERROR,					description:OSMFStrings.NETCONNECTION_IO_ERROR}
-			, {code:NETCONNECTION_ARGUMENT_ERROR,			description:OSMFStrings.NETCONNECTION_ARGUMENT_ERROR}
-			, {code:STREAMSWITCH_INVALID_INDEX,				description:OSMFStrings.STREAMSWITCH_INVALID_INDEX}
-			, {code:STREAMSWITCH_STREAM_NOT_FOUND,  		description:OSMFStrings.STREAMSWITCH_STREAM_NOT_FOUND}
-			, {code:STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE,	description:OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE}			
-			, {code:AUDIO_IO_LOAD_ERROR,					description:OSMFStrings.AUDIO_IO_LOAD_ERROR}
-			, {code:AUDIO_SECURITY_LOAD_ERROR,				description:OSMFStrings.AUDIO_SECURITY_LOAD_ERROR}
-			, {code:PLAY_FAILED_NO_SOUND_CHANNELS,			description:OSMFStrings.PLAY_FAILED_NO_SOUND_CHANNELS}
-			, {code:HTTP_IO_LOAD_ERROR,						description:OSMFStrings.HTTP_IO_LOAD_ERROR}
-			, {code:HTTP_SECURITY_LOAD_ERROR,				description:OSMFStrings.HTTP_SECURITY_LOAD_ERROR}
-			, {code:BEACON_FAILURE_ERROR,					description:OSMFStrings.BEACON_FAILURE_ERROR}
-			, {code:DRM_AUTHENTICATION_FAILED,				description:OSMFStrings.DRM_AUTHENTICATION_FAILED}
-			, {code:DRM_NEEDS_AUTHENTICATION,				description:OSMFStrings.DRM_NEEDS_AUTHENTICATION}
-			, {code:DRM_CONTENT_NOT_YET_VALID,				description:OSMFStrings.DRM_CONTENT_NOT_YET_VALID}
+			  {errorID:CONTENT_IO_LOAD_ERROR,					message:OSMFStrings.CONTENT_IO_LOAD_ERROR}
+			, {errorID:CONTENT_SECURITY_LOAD_ERROR,				message:OSMFStrings.CONTENT_SECURITY_LOAD_ERROR}
+			, {errorID:INVALID_SWF_AS_VERSION,					message:OSMFStrings.INVALID_SWF_AS_VERSION}
+			, {errorID:INVALID_PLUGIN_VERSION,					message:OSMFStrings.INVALID_PLUGIN_VERSION}
+			, {errorID:INVALID_PLUGIN_IMPLEMENTATION,			message:OSMFStrings.INVALID_PLUGIN_IMPLEMENTATION}
+			, {errorID:INVALID_URL_PROTOCOL,					message:OSMFStrings.INVALID_URL_PROTOCOL}
+			, {errorID:PLAY_FAILED, 							message:OSMFStrings.PLAY_FAILED}
+			, {errorID:STREAM_NOT_FOUND,	 					message:OSMFStrings.STREAM_NOT_FOUND}
+			, {errorID:FILE_STRUCTURE_INVALID,					message:OSMFStrings.FILE_STRUCTURE_INVALID}
+			, {errorID:NO_SUPPORTED_TRACK_FOUND,				message:OSMFStrings.NO_SUPPORTED_TRACK_FOUND}
+			, {errorID:PLAY_FAILED_NETCONNECTION_FAILURE, 		message:OSMFStrings.PLAY_FAILED_NETCONNECTION_FAILURE}
+			, {errorID:NETCONNECTION_REJECTED,					message:OSMFStrings.NETCONNECTION_REJECTED}
+			, {errorID:NETCONNECTION_INVALID_APP,				message:OSMFStrings.NETCONNECTION_INVALID_APP}
+			, {errorID:NETCONNECTION_FAILED,					message:OSMFStrings.NETCONNECTION_FAILED}
+			, {errorID:NETCONNECTION_TIMEOUT,					message:OSMFStrings.NETCONNECTION_TIMEOUT}
+			, {errorID:NETCONNECTION_SECURITY_ERROR,			message:OSMFStrings.NETCONNECTION_SECURITY_ERROR}
+			, {errorID:NETCONNECTION_ASYNC_ERROR,				message:OSMFStrings.NETCONNECTION_ASYNC_ERROR}
+			, {errorID:NETCONNECTION_IO_ERROR,					message:OSMFStrings.NETCONNECTION_IO_ERROR}
+			, {errorID:NETCONNECTION_ARGUMENT_ERROR,			message:OSMFStrings.NETCONNECTION_ARGUMENT_ERROR}
+			, {errorID:STREAMSWITCH_INVALID_INDEX,				message:OSMFStrings.STREAMSWITCH_INVALID_INDEX}
+			, {errorID:STREAMSWITCH_STREAM_NOT_FOUND,  			message:OSMFStrings.STREAMSWITCH_STREAM_NOT_FOUND}
+			, {errorID:STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE,	message:OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE}			
+			, {errorID:AUDIO_IO_LOAD_ERROR,						message:OSMFStrings.AUDIO_IO_LOAD_ERROR}
+			, {errorID:AUDIO_SECURITY_LOAD_ERROR,				message:OSMFStrings.AUDIO_SECURITY_LOAD_ERROR}
+			, {errorID:PLAY_FAILED_NO_SOUND_CHANNELS,			message:OSMFStrings.PLAY_FAILED_NO_SOUND_CHANNELS}
+			, {errorID:HTTP_IO_LOAD_ERROR,						message:OSMFStrings.HTTP_IO_LOAD_ERROR}
+			, {errorID:HTTP_SECURITY_LOAD_ERROR,				message:OSMFStrings.HTTP_SECURITY_LOAD_ERROR}
+			, {errorID:BEACON_FAILURE_ERROR,					message:OSMFStrings.BEACON_FAILURE_ERROR}
+			, {errorID:DRM_AUTHENTICATION_FAILED,				message:OSMFStrings.DRM_AUTHENTICATION_FAILED}
+			, {errorID:DRM_NEEDS_AUTHENTICATION,				message:OSMFStrings.DRM_NEEDS_AUTHENTICATION}
+			, {errorID:DRM_CONTENT_NOT_YET_VALID,				message:OSMFStrings.DRM_CONTENT_NOT_YET_VALID}
 		];
 	}
-			
-	
 }

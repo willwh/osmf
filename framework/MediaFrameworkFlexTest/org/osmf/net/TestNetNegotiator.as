@@ -111,7 +111,7 @@ package org.osmf.net
 			{
 				assertTrue(event.type == NetNegotiatorEvent.CONNECTION_FAILED);
 				assertTrue(event.netConnection == null);
-				assertTrue(event.mediaError.errorCode == MediaErrorCodes.NETCONNECTION_REJECTED);
+				assertTrue(event.mediaError.errorID == MediaErrorCodes.NETCONNECTION_REJECTED);
 			}
 		}
 		
@@ -124,11 +124,11 @@ package org.osmf.net
 			{
 				assertTrue(event.type == NetNegotiatorEvent.CONNECTION_FAILED);
 				assertTrue(event.netConnection == null);
-				assertTrue(event.mediaError.errorCode == MediaErrorCodes.NETCONNECTION_FAILED);
+				assertTrue(event.mediaError.errorID == MediaErrorCodes.NETCONNECTION_FAILED);
 			}
 		}
 		
-		private function doTestError(expectation:NetConnectionExpectation,errorCode:Number):void
+		private function doTestError(expectation:NetConnectionExpectation,errorID:Number):void
 		{
 			var negotiator:NetNegotiator = createNetNegotiator(expectation);
 			negotiator.addEventListener(NetNegotiatorEvent.CONNECTION_FAILED,onConnectionFailed);
@@ -138,7 +138,7 @@ package org.osmf.net
 			{
 				assertTrue(event.type == NetNegotiatorEvent.CONNECTION_FAILED);
 				assertTrue(event.netConnection == null);
-				assertTrue(event.mediaError.errorCode == errorCode);
+				assertTrue(event.mediaError.errorID == errorID);
 			}
 		}
 	

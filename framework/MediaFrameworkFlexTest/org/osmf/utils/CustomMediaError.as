@@ -25,14 +25,14 @@ package org.osmf.utils
 	
 	public class CustomMediaError extends MediaError
 	{
-		public function CustomMediaError(errorCode:int, detail:String=null)
+		public function CustomMediaError(errorID:int, detail:String=null)
 		{
-			super(errorCode, detail);
+			super(errorID, detail);
 		}
 		
-		override protected function getDescriptionForErrorCode(errorCode:int):String
+		override protected function getMessageForErrorID(errorID:int):String
 		{
-			return errorCode >= 1000 ? "custom error" : super.getDescriptionForErrorCode(errorCode);
+			return errorID >= 1000 ? "custom error" : super.getMessageForErrorID(errorID);
 		}
 	}
 }

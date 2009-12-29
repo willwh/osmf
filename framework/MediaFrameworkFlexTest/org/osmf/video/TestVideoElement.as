@@ -339,7 +339,7 @@ package org.osmf.video
 				   ];
 		}	
 
-		private function doTestMediaError(netStreamCode:String, errorCode:int, level:String="error"):void
+		private function doTestMediaError(netStreamCode:String, errorID:int, level:String="error"):void
 		{
 			var mockLoader:MockNetLoader = loader as MockNetLoader;
 			if (mockLoader != null)
@@ -357,7 +357,7 @@ package org.osmf.video
 				
 				function onTestMediaError(event:MediaErrorEvent):void
 				{
-					assertTrue(event.error.errorCode == errorCode);
+					assertTrue(event.error.errorID == errorID);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}

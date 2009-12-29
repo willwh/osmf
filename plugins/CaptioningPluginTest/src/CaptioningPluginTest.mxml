@@ -230,7 +230,7 @@
 			
    			private function onMediaError(event:MediaErrorEvent):void
    			{
-   				Alert.show("Media Load Error : "+event.error.errorCode+" - "+event.error.description);
+   				Alert.show("Media Load Error : "+event.error.errorID+" - "+event.error.message);
    			}
 			
 			private function onMediaPlayerStateChange(event:MediaPlayerStateChangeEvent):void

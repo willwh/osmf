@@ -45,9 +45,9 @@ package org.osmf.content
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(error.errorCode == MediaErrorCodes.CONTENT_IO_LOAD_ERROR ||
-					   error.errorCode == MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR ||
-					   error.errorCode == MediaErrorCodes.INVALID_SWF_AS_VERSION);
+			assertTrue(error.errorID == MediaErrorCodes.CONTENT_IO_LOAD_ERROR ||
+					   error.errorID == MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR ||
+					   error.errorID == MediaErrorCodes.INVALID_SWF_AS_VERSION);
 		}
 	}
 }

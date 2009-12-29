@@ -138,7 +138,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			if (!_testPlayFailed)
 			{
-				fail("Media error: "+e.error.description);
+				fail("Media error: " + e.error.message);
 			}
 		}
 		

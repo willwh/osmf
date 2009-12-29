@@ -141,8 +141,8 @@ package org.osmf.test.mast.loader
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(		error.errorCode == MediaErrorCodes.HTTP_IO_LOAD_ERROR
-						||	error.errorCode == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
+			assertTrue(		error.errorID == MediaErrorCodes.HTTP_IO_LOAD_ERROR
+						||	error.errorID == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
 					  );
 		}
 		

@@ -264,7 +264,7 @@
 	</mx:HBox>
 	
 	<mx:HBox
-		id						="errorCodeBox"
+		id						="errorIDBox"
 		color					="white"
 		right					="0"
 		width					="500"
@@ -276,17 +276,17 @@
 		>
 
 		<mx:Label
-			text				="Error Code: "
+			text				="Error ID: "
 			/>
 		<mx:Label
-			id					="errorCode"
+			id					="errorID"
 			text				=""
 			/>
 			
 	</mx:HBox>
 	
 	<mx:HBox
-		id						="errorDescriptionBox"
+		id						="errorMessageBox"
 		color					="white"
 		right					="0"
 		width					="500"
@@ -298,10 +298,10 @@
 		>
 	
 		<mx:Label
-			text				="Error Description: "
+			text				="Error Message: "
 			/>
 		<mx:Label
-			id					="errorDescription"
+			id					="errorMessage"
 			text				=""
 			/>
 	</mx:HBox>

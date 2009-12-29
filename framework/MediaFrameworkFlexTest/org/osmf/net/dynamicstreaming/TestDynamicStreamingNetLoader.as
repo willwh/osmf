@@ -112,15 +112,15 @@ package org.osmf.net.dynamicstreaming
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(error.errorCode == MediaErrorCodes.INVALID_URL_PROTOCOL ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_REJECTED ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_INVALID_APP ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_FAILED ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_TIMEOUT ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_SECURITY_ERROR ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_ASYNC_ERROR ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_IO_ERROR ||
-					   error.errorCode == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
+			assertTrue(error.errorID == MediaErrorCodes.INVALID_URL_PROTOCOL ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_REJECTED ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_INVALID_APP ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_FAILED ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_TIMEOUT ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_SECURITY_ERROR ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_ASYNC_ERROR ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_IO_ERROR ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
 		}
 		
 		override protected function createNetFactory():NetFactory

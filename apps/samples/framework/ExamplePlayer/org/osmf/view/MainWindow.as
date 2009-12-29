@@ -163,8 +163,8 @@ package org.osmf.view
 				exampleDescription.text = "";
 			}
 			
-			errorCodeBox.visible = errorDescriptionBox.visible = errorDetailBox.visible = false;
-			errorCode.text = errorDescription.text = errorDetail.text = "";
+			errorIDBox.visible = errorMessageBox.visible = errorDetailBox.visible = false;
+			errorID.text = errorMessage.text = errorDetail.text = "";
 			duration.text = "";
 			
 			updateControls();
@@ -186,10 +186,10 @@ package org.osmf.view
 
 		private function onMediaError(event:MediaErrorEvent):void
 		{
-			errorCodeBox.visible = errorDescriptionBox.visible = errorDetailBox.visible = true;
+			errorIDBox.visible = errorMessageBox.visible = errorDetailBox.visible = true;
 			
-			errorCode.text = "" + event.error.errorCode;
-			errorDescription.text = event.error.description;
+			errorID.text = "" + event.error.errorID;
+			errorMessage.text = event.error.message;
 			errorDetail.text = event.error.detail;
 			
 			updateControls();

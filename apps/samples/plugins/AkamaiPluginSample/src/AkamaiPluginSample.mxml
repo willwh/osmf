@@ -364,7 +364,7 @@
    				{
    					taInfo.text += "\n";
    				}
-   				taInfo.text += taInfo.text + "error code="+event.error.errorCode+" description="+event.error.description;
+   				taInfo.text += taInfo.text + "error ID="+event.error.errorID+" message="+event.error.message;
    			}
    			
 			private function timeCode(sec:Number):String 

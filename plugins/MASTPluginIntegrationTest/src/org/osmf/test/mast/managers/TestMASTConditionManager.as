@@ -132,7 +132,7 @@ package org.osmf.test.mast.managers
 		
    		private function onMediaError(event:MediaErrorEvent):void
    		{
-   			var errMsg:String = "Media error : code="+event.error.errorCode+" description="+event.error.description;
+   			var errMsg:String = "Media error : ID="+event.error.errorID+" message="+event.error.message;
    			
    			trace(errMsg);
    		}

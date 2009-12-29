@@ -28,24 +28,24 @@ package org.osmf.events
 		public function testGetters():void
 		{
 			var mediaError:MediaError = createMediaError(999);
-			assertTrue(mediaError.errorCode == 999);
-			assertTrue(mediaError.description == "");
+			assertTrue(mediaError.errorID == 999);
+			assertTrue(mediaError.message == "");
 			assertTrue(mediaError.detail == null);
 			
 			mediaError = createMediaError(MediaErrorCodes.INVALID_URL_PROTOCOL, "Here are some details...");
-			assertTrue(mediaError.errorCode == MediaErrorCodes.INVALID_URL_PROTOCOL);
-			assertTrue(mediaError.description == "Invalid URL protocol");
+			assertTrue(mediaError.errorID == MediaErrorCodes.INVALID_URL_PROTOCOL);
+			assertTrue(mediaError.message == "Invalid URL protocol");
 			assertTrue(mediaError.detail == "Here are some details...");
 
 			mediaError = createMediaError(33, "");
-			assertTrue(mediaError.errorCode == 33);
-			assertTrue(mediaError.description == "");
+			assertTrue(mediaError.errorID == 33);
+			assertTrue(mediaError.message == "");
 			assertTrue(mediaError.detail == "");
 		}
 		
-		protected function createMediaError(errorCode:int, detail:String=null):MediaError
+		protected function createMediaError(errorID:int, detail:String=null):MediaError
 		{
-			return new MediaError(errorCode, detail);
+			return new MediaError(errorID, detail);
 		}
 	}
 }

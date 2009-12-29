@@ -343,8 +343,8 @@ package org.osmf.composition
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
-					assertTrue(event.error.errorCode == 99);
-					assertTrue(event.error.description == "");
+					assertTrue(event.error.errorID == 99);
+					assertTrue(event.error.message == "");
 					assertTrue(event.target == composite);
 						
 					eventDispatcher.dispatchEvent(new Event("testComplete"));

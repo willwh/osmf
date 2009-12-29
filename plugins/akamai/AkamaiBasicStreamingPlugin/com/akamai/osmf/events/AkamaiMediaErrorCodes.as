@@ -25,42 +25,42 @@ package com.akamai.osmf.events
 	
 	/**
 	 * The AkamaiMediaErrorCodes class provides static constants for Akamai-specific
-	 * error codes, as well as a means for retrieving a description for a particular error
-	 * code.
+	 * error IDs, as well as a means for retrieving a message for a particular error
+	 * ID.
 	 */ 
 	public final class AkamaiMediaErrorCodes
 	{
 		/**
-		 * Returns a description of the error for the specified error code.  If
-		 * the error code is unknown, returns the empty string.
+		 * Returns a message for the error of the specified ID.  If the error ID
+		 * is unknown, returns the empty string.
 		 * 
-		 * @param errorCode The error code for the error.
+		 * @param errorID The ID for the error.
 		 * 
-		 * @return A description of the error with the specified error code.
+		 * @return The message for the error with the specified ID.
 		 **/
-		public static function getDescriptionForErrorCode(errorCode:int):String
+		public static function getMessageForErrorID(errorID:int):String
 		{
-			var description:String = "";
+			var message:String = "";
 			
 			for (var i:int = 0; i < errorMap.length; i++)
 			{
-				if (errorMap[i].code == errorCode)
+				if (errorMap[i].errorID == errorID)
 				{
-					description = errorMap[i].description;
+					message = errorMap[i].message;
 					break;
 				}
 			}
 			
-			return description;
+			return message;
 		}
 
 		private static const errorMap:Array =
 		[
-			{code:LIVE_SUBSCRIBE_TIMEOUT,		description:"Unable to subscribe to the live stream."},
-			{code:LIVE_FCSUBSCRIBE_NO_RESPONSE,	description:"No response from the FCSubscribe call, unable to subscribe to the live stream."}
+			{errorID:LIVE_SUBSCRIBE_TIMEOUT,		message:"Unable to subscribe to the live stream."},
+			{errorID:LIVE_FCSUBSCRIBE_NO_RESPONSE,	message:"No response from the FCSubscribe call, unable to subscribe to the live stream."}
 		];
 		
-		// Akamai-specific error codes start at 1000
+		// Akamai-specific error IDs start at 1000
 		public static const LIVE_SUBSCRIBE_TIMEOUT:int			= 1000;
 		public static const LIVE_FCSUBSCRIBE_NO_RESPONSE:int	= 1001;		
 	}		

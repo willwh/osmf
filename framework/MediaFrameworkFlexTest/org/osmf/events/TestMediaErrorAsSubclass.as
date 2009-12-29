@@ -30,14 +30,14 @@ package org.osmf.events
 		public function testGettersForSubclass():void
 		{
 			var mediaError:MediaError = createMediaError(1999);
-			assertTrue(mediaError.errorCode == 1999);
-			assertTrue(mediaError.description == "custom error");
+			assertTrue(mediaError.errorID == 1999);
+			assertTrue(mediaError.message == "custom error");
 			assertTrue(mediaError.detail == null);
 		}
 		
-		override protected function createMediaError(errorCode:int, detail:String=null):MediaError
+		override protected function createMediaError(errorID:int, detail:String=null):MediaError
 		{
-			return new CustomMediaError(errorCode, detail);
+			return new CustomMediaError(errorID, detail);
 		}
 	}
 }

@@ -1359,8 +1359,8 @@ package org.osmf.media
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
-					assertTrue(event.error.errorCode == 99);
-					assertTrue(event.error.description == "");
+					assertTrue(event.error.errorID == 99);
+					assertTrue(event.error.message == "");
 					
 					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
 					

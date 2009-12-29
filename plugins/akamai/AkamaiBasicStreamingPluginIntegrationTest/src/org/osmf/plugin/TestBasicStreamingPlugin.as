@@ -186,7 +186,7 @@ package org.osmf.plugin
 
 		private function onMediaError(event:MediaErrorEvent):void
 		{
-			fail("Media Error: "+ event.error.errorCode + " - " + event.error.description);	
+			fail("Media Error: "+ event.error.errorID + " - " + event.error.message);	
 		}
 		
 		private function mustReceiveEvent(event:Event):void

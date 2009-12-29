@@ -207,14 +207,14 @@ package org.osmf.media
 					
 					if (eventCtr == 1)
 					{
-						assertTrue(event.error.errorCode == 99);
-						assertTrue(event.error.description == "");
+						assertTrue(event.error.errorID == 99);
+						assertTrue(event.error.message == "");
 						assertTrue(event.target == mediaElement);
 					}
 					else if (eventCtr == 2)
 					{
-						assertTrue(event.error.errorCode == MediaErrorCodes.FILE_STRUCTURE_INVALID);
-						assertTrue(event.error.description == "File has invalid structure");
+						assertTrue(event.error.errorID == MediaErrorCodes.FILE_STRUCTURE_INVALID);
+						assertTrue(event.error.message == "File has invalid structure");
 						assertTrue(event.target == mediaElement);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
