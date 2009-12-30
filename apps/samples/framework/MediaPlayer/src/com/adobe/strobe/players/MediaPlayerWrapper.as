@@ -26,7 +26,7 @@ package com.adobe.strobe.players
 	import mx.core.UIComponent;
 	
 	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	
@@ -95,14 +95,14 @@ package com.adobe.strobe.players
 		// Internals
 		//
 													
-		protected function onView(event:ViewEvent):void
+		protected function onView(event:DisplayObjectEvent):void
 		{
-			if (event.oldView)
+			if (event.oldDisplayObject)
 			{
-				removeChild(event.oldView);
+				removeChild(event.oldDisplayObject);
 			}
 			
-			if (event.newView)
+			if (event.newDisplayObject)
 			{				
 				addChild(mediaPlayer.view);
 			}
