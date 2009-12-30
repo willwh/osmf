@@ -25,7 +25,7 @@ package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.utils.OSMFStrings;
@@ -33,33 +33,33 @@ package org.osmf.traits
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
+	 * @eventType org.osmf.events.DynamicStreamEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
-	 * Dispatched when the number of indices or associated bitrates have changed.
+	 * Dispatched when the number of dynamic streams has changed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="numDynamicStreamsChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
 	 * Dispatched when the autoSwitch property changed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent.AUTOS_WITCH_CHANGE
+	 * @eventType org.osmf.events.DynamicStreamEvent.AUTO_SWITCH_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="autoSwitchChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="autoSwitchChange",type="org.osmf.events.DynamicStreamEvent")]
 		
 	/**
 	 * DynamicStreamTrait defines the trait interface for media supporting dynamic stream
@@ -88,24 +88,25 @@ package org.osmf.traits
 		/**
 		 * Constructor.
 		 * 
-		 * The maxIndex is initially set to numIndices - 1.
-		 * 
-		 * @param autoSwitch the initial autoSwitch state for the trait.
-		 * @param currentIndex the start index for the swichable trait.
-		 * @param numIndices the maximum value allow to be set on maxIndex 
+		 * @param autoSwitch The initial autoSwitch state for the trait.  The default is true.
+		 * @param currentIndex The initial stream index for the trait.
+		 * @param numDynamicStreams The total number of dynamic streams.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function DynamicStreamTrait(autoSwitch:Boolean=true, currentIndex:int=0, numIndices:int=1)
+		public function DynamicStreamTrait(autoSwitch:Boolean=true, currentIndex:int=0, numDynamicStreams:int=1)
 		{
 			super(MediaTraitType.DYNAMIC_STREAM);
 			
 			_autoSwitch = autoSwitch;
 			_currentIndex = currentIndex;		
-			this.numIndices = numIndices;
+			_numDynamicStreams = numDynamicStreams;
+			_maxAllowedIndex = numDynamicStreams - 1;
+
+			_switching = false;
 		}
 		
 		/**
@@ -123,7 +124,7 @@ package org.osmf.traits
 			return _autoSwitch;
 		}
 		
-		public function set autoSwitch(value:Boolean):void
+		public final function set autoSwitch(value:Boolean):void
 		{
 			if (autoSwitch != value)
 			{
@@ -136,7 +137,20 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * The index of the stream currently rendering. Uses a zero-based index.
+		 * The total number of dynamic streams.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get numDynamicStreams():int
+		{
+			return _numDynamicStreams;
+		}
+
+		/**
+		 * The index of the current dynamic stream.  Uses a zero-based index.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -147,9 +161,47 @@ package org.osmf.traits
 		{
 			return _currentIndex;
 		}
+
+		/**
+		 * The maximum allowed index. This can be set at run-time to 
+		 * provide a ceiling for the switching profile, for example,
+		 * to keep from switching up to a higher quality stream when 
+		 * the current video is too small to handle a higher quality stream.
+		 * 
+		 * The default is the highest stream index.
+		 * 
+		 * @throws RangeError If the specified index is less than zero or
+		 * greater than the total number of dynamic streams.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get maxAllowedIndex():int
+		{
+			return _maxAllowedIndex;
+		}
+		
+		public final function set maxAllowedIndex(value:int):void
+		{
+			if (value < 0 || value > _numDynamicStreams - 1)
+			{
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
+			}
+
+			if (maxAllowedIndex != value)
+			{
+				maxAllowedIndexChangeStart(value);
+
+				_maxAllowedIndex = value;
+				
+				maxAllowedIndexChangeEnd();
+			}		
+		}
 		
 		/**
-		 * Gets the associated bitrate, in kilobits per second for the specified index.
+		 * Returns the associated bitrate, in kilobits per second, for the specified index.
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the highest index available.
@@ -161,51 +213,14 @@ package org.osmf.traits
 		 */ 
 		public function getBitrateForIndex(index:int):Number
 		{
-			if (index > (numIndices-1) || index < 0)
+			if (index > _numDynamicStreams - 1 || index < 0)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			
-			return -1;
+			return 0;
 		}
-			
-		/**
-		 * The maximum available index. This can be set at run-time to 
-		 * provide a ceiling for your switching profile. For example,
-		 * to keep from switching up to a higher quality stream when 
-		 * the current video is too small to realize the added value
-		 * of a higher quality stream.
-		 * 
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater than the highest index available.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get maxIndex():int
-		{
-			return _maxIndex;
-		}
-		
-		public function set maxIndex(value:int):void
-		{
-			if (value < 0 || value > _numIndices-1)
-			{
-				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
-			}
 
-			if (maxIndex != value)
-			{
-				maxIndexChangeStart(value);
-
-				_maxIndex = value;
-				
-				maxIndexChangeEnd();
-			}		
-		}
-		
 		/**
 		 * Indicates whether or not a switch is currently in progress.
 		 * This property will return <code>true</code> while a switch has been 
@@ -218,9 +233,9 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get switchUnderway():Boolean
+		public function get switching():Boolean
 		{			
-			return (switchState == SwitchEvent.SWITCHSTATE_REQUESTED);
+			return _switching;
 		}
 		
 		/**
@@ -231,10 +246,10 @@ package org.osmf.traits
 		 * </code>
 		 * </p>
 		 * @throws RangeError If the specified index is less than zero or
-		 * greater than <code>maxIndex</code>.
+		 * greater than <code>maxAllowedIndex</code>.
 		 * @throws IllegalOperationError If the stream is not in manual switch mode.
 		 * 
-		 * @see maxIndex
+		 * @see maxAllowedIndex
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -249,29 +264,54 @@ package org.osmf.traits
 			}
 			else if (index != currentIndex)
 			{
-				if (index < 0 || index > maxIndex)
+				if (index < 0 || index > maxAllowedIndex)
 				{
 					throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				}
 
-				var detail:SwitchingDetail = new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL);
+				// This method sets the switching state to true.  The processing
+				// and completion of the switch are up to the implementing media.
+				setSwitching
+					( true
+					, index
+					, new SwitchingDetail(SwitchingDetailCodes.SWITCHING_MANUAL)
+					);
+			}			
+		}
 				
-				signalSwitchStateChange(SwitchEvent.SWITCHSTATE_REQUESTED, detail);
+		// Internals
+		//
+
+		/**
+		 * Invoking this setter will result in the trait's numDynamicStreams
+		 * property changing.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		protected final function setNumDynamicStreams(value:int):void
+		{
+			if (value != _numDynamicStreams)
+			{
+				_numDynamicStreams = value;
 				
-				switchToStart(index);
+				// Only adjust our maxAllowedIndex property if the old value
+				// is now out of range.
+				if (maxAllowedIndex >= _numDynamicStreams)
+				{
+					maxAllowedIndex = _numDynamicStreams - 1;
+				}
 				
-				_currentIndex = index;
-				
-				switchToEnd(detail);
+				dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE));
 			}			
 		}
 		
-		// Internals
-		//
-		
 		/**
-		 * Sets the currentIndex property
-		 *  
+		 * Invoking this setter will result in the trait's currentIndex
+		 * property changing.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -283,162 +323,136 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Does the actual processing of changes to the autoSwitch property
+		 * Must be called by the implementing media on completing a switch.
+		 * 
+		 * Calls the <code>switchingChangeStart()</code> and <code>switchingChangeEnd()</code>
+		 * methods.
+		 * @param newSwitching New <code>switching</code> value for the trait.
+		 * @param index The index to which the switch shall (or did) occur.
+		 * @param detail Optional detail associated with the switching change.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
+		 */		
+		protected final function setSwitching(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
+		{
+			if (newSwitching != _switching)
+			{
+				switchingChangeStart(newSwitching, index, detail);
+				
+				_switching = newSwitching;
+				
+				switchingChangeEnd(index, detail);
+			}
+		}
+
+		/**
+         * Called immediately before the <code>autoSwitch</code> property is changed.
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
+         * @param value New value for the <code>autoSwitch</code> property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		protected function autoSwitchChangeStart(value:Boolean):void
 		{			
 		}
 				
 		/**
-		 * Called after the change to the autoSwitch property
-		 *  
+		 * Called just after the <code>autoSwitch</code> property has changed.
+		 * Dispatches the change event.
+		 * 
+		 * <p>Subclasses that override should call this method to
+		 * dispatch the change event.</p>
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
+		 */		
 		protected function autoSwitchChangeEnd():void
 		{
-			dispatchEvent(new SwitchEvent(SwitchEvent.AUTO_SWITCH_CHANGE));	
+			dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, null, _autoSwitch));	
 		}
 		
 		/**
-		 * Does the actual switching of indices.
-		 *  
-		 *  @langversion 3.0
+		 * Called immediately before the <code>switching</code> property is changed.
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
+         * @param newSwitching New value for the <code>switching</code> property.
+         * @param index The index of the stream to switch to.
+         * @param detail Optional detail associated with the switching change.
+         * 
+         *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
-		protected function switchToStart(value:int):void
+		 */
+		protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
 		{			
 		}
 		
 		/**
-		 * Fires the SwitchState complete event
-		 *  
+		 * Called just after the <code>switching</code> property has changed.
+		 * Dispatches the change event.
+		 * 
+		 * <p>Subclasses that override should call this method to
+		 * dispatch the change event.</p>
+		 * 
+		 * @param index The index of the switched-to stream.
+		 * @param detail Optional detail associated with the switching change.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
-		protected function switchToEnd(detail:SwitchingDetail=null):void
+		 */		
+		protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
 		{
-			signalSwitchStateChange(SwitchEvent.SWITCHSTATE_COMPLETE, detail);
+			dispatchEvent
+				( new DynamicStreamEvent
+					( DynamicStreamEvent.SWITCHING_CHANGE
+					, false
+					, false
+					, switching
+					, detail
+					)
+				);
 		}
 		
 		/**
-		 * Does the actual switching of indices.
-		 *  
-		 *  @langversion 3.0
+		 * Called immediately before the <code>maxAllowedIndex</code> property is changed.
+		 * <p>Subclasses can override this method to communicate the change to the media.</p>
+         * @param newIndex New value for the <code>maxAllowedIndex</code> property.
+         * 
+         *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
-		protected function signalSwitchStateChange(newState:int, detail:SwitchingDetail=null):void
-		{			
-			var oldState:int = switchState;
-			switchState = newState;
-			dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, newState, oldState, detail));
-		}
-		
-		/**
-		 * Does the setting of the max index.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		protected function maxIndexChangeStart(value:int):void
+		 */
+		protected function maxAllowedIndexChangeStart(newIndex:int):void
 		{			
 		}
 		
 		/**
-		 * Called after the change to the maxIndex property
-		 *  
+		 * Called just after the <code>maxAllowedIndex</code> property has changed.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
-		protected function maxIndexChangeEnd():void
-		{			
-		}
-
-		/**
-		 * The number of indices this trait can switch between.
-		 **/
-		private function get numIndices():int
+		 */		
+		protected function maxAllowedIndexChangeEnd():void
 		{
-			return _numIndices;
 		}
 		
-		private function set numIndices(value:int):void
-		{
-			if (value != _numIndices)
-			{
-				_numIndices = value;
-				maxIndex = _numIndices - 1;
-				
-				dispatchEvent(new SwitchEvent(SwitchEvent.INDICES_CHANGE));
-			}			
-		}
-		
-		/**
-		 * Backing variable for autoSwitch
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 	
 		private var _autoSwitch:Boolean;
-		
-		/**
-		 * Backing variable for currentIndex
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
 		private var _currentIndex:int = 0;
-	
-		/**
-		 * Backing variable for maxIndex
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		private var _maxIndex:int = 0;
-		
-		/**
-		 * tracks the number of possible indices
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		private var _numIndices:int;
-		
-		/**
-		 * Tracks the current switching state of this trait.  
-		 * See SwitchEvent for all possible states.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		private var switchState:int = SwitchEvent.SWITCHSTATE_UNDEFINED;
+		private var _maxAllowedIndex:int = 0;
+		private var _numDynamicStreams:int;
+		private var _switching:Boolean;
 	}
 }

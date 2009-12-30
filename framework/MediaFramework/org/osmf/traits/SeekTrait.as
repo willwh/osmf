@@ -103,11 +103,7 @@ package org.osmf.traits
 		{
 			if (canSeekTo(time))
 			{
-				seekingChangeStart(true, time);
-					
-				_seeking = true;
-					
-				seekingChangeEnd(time);
+				setSeeking(true, time);
 			}
 		}
 		
@@ -150,6 +146,29 @@ package org.osmf.traits
 		}
 		
 		/**
+		 * Must be called by the implementing media on completing a seek.
+		 * Calls the <code>seekingChangeStart()</code> and <code>seekingChangeEnd()</code>
+		 * methods.
+		 * 
+		 * @param value New seeking value.
+		 * @param time Position in seconds that the playhead was ultimately
+		 * moved to.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		protected final function setSeeking(value:Boolean, time:Number):void
+		{
+			seekingChangeStart(value, time);
+					
+			_seeking = value;
+					
+			seekingChangeEnd(time);
+		}
+		
+		/**
          * Called immediately before the <code>seeking</code> property is changed.
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param time New <code>time</code> value representing the time that the playhead seeks to.
@@ -187,32 +206,6 @@ package org.osmf.traits
 					, time
 					)
 				);
-		}
-
-		/**
-		 * Must be called by the implementing media
-		 * on completing a seek.
-		 * Calls the <code>seekingChangeStart()</code> and <code>seekingChangeEnd()</code>
-		 * methods.
-		 * @param time Position in seconds that the playhead was ultimately
-		 * moved to.
-		 * 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		protected final function signalSeekComplete(time:Number):void
-		{
-			if (_seeking == true)
-			{
-				seekingChangeStart(false, time);
-				
-				_seeking = false;
-				
-				seekingChangeEnd(time);
-			}
 		}
 	
 		private var _timeTrait:TimeTrait;

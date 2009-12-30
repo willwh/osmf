@@ -152,7 +152,7 @@ package org.osmf.composition
 			{
 				// The child is exiting the seeking state, so we just
 				// update the composite seeking state.
-				signalSeekComplete(event.time);
+				setSeeking(false, event.time);
 			}
 		}
 		

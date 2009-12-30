@@ -24,7 +24,7 @@ package org.osmf.traits
 	import flash.errors.*;
 	import flash.events.*;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.utils.InterfaceTestCase;
 	
 	public class TestDynamicStreamTrait extends InterfaceTestCase
@@ -37,20 +37,34 @@ package org.osmf.traits
 			return new DynamicStreamTrait(args.length > 0 ? args[0] : true, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 1);
 		}
 		
+		protected function get processesSwitchCompletion():Boolean
+		{
+			// Some implementations of DynamicStreamTrait will signal completion 
+			// of a switch, although the default implementation doesn't.
+			// Subclasses can override this to indicate that they process
+			// completion.
+			return false;
+		}
+
+		protected function get dynamicStreamTrait():DynamicStreamTrait
+		{
+			return _dynamicStreamTrait;
+		}
+		
 		override public function setUp():void
 		{
 			super.setUp();
 			
-			dynamicStreamTrait = createInterfaceObject(true, 0, 5) as DynamicStreamTrait;
+			_dynamicStreamTrait = createInterfaceObject(true, 0, 4) as DynamicStreamTrait;
 			eventDispatcher = new EventDispatcher();
 		}
 
 		public function testSwitchUp():void
 		{
-			assertFalse(dynamicStreamTrait.switchUnderway);
+			assertFalse(dynamicStreamTrait.switching);
 			assertTrue(dynamicStreamTrait.autoSwitch);
 			
-			dynamicStreamTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+			dynamicStreamTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 			
 			dynamicStreamTrait.autoSwitch = false;
 			dynamicStreamTrait.switchTo(0);
@@ -62,34 +76,34 @@ package org.osmf.traits
 		
 		public function testSwitchDown():void
 		{
-			assertFalse(dynamicStreamTrait.switchUnderway);
+			assertFalse(dynamicStreamTrait.switching);
 			assertTrue(dynamicStreamTrait.autoSwitch);
 			
-			dynamicStreamTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+			dynamicStreamTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 			dynamicStreamTrait.autoSwitch = false;
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
-			dynamicStreamTrait.switchTo(dynamicStreamTrait.maxIndex);
+			dynamicStreamTrait.switchTo(dynamicStreamTrait.maxAllowedIndex);
 			dynamicStreamTrait.switchTo(0);
 		}
 		
 		public function testSwitchUpMax():void
 		{
-			assertFalse(dynamicStreamTrait.switchUnderway);
+			assertFalse(dynamicStreamTrait.switching);
 			assertTrue(dynamicStreamTrait.autoSwitch);
 			
-			dynamicStreamTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+			dynamicStreamTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 			dynamicStreamTrait.autoSwitch = false;
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));			
-			dynamicStreamTrait.switchTo(dynamicStreamTrait.maxIndex);		
+			dynamicStreamTrait.switchTo(dynamicStreamTrait.maxAllowedIndex);		
 		}
 		
-		public function testBadMaxIndex():void
+		public function testBadMaxAllowedIndex():void
 		{
 			try
 			{
-				dynamicStreamTrait.maxIndex = 99;
+				dynamicStreamTrait.maxAllowedIndex = 99;
 				
 				fail();
 			}
@@ -147,7 +161,7 @@ package org.osmf.traits
 		
 		public function testGetBitrateForIndex():void
 		{				
-			assertEquals(-1, dynamicStreamTrait.getBitrateForIndex(0));
+			assertEquals(0, dynamicStreamTrait.getBitrateForIndex(0));
 			
 			try
 			{
@@ -160,25 +174,27 @@ package org.osmf.traits
 			}
 		}
 
-		protected function onSwitchingChange(event:SwitchEvent):void
+		protected function onSwitchingChange(event:DynamicStreamEvent):void
 		{
-			switch (event.newState)
+			if (event.switching)
 			{
-				case SwitchEvent.SWITCHSTATE_COMPLETE:
-					assertFalse(dynamicStreamTrait.switchUnderway);
-					assertEquals(SwitchEvent.SWITCHSTATE_REQUESTED, event.oldState);
+				assertTrue(dynamicStreamTrait.switching);
+				
+				assertTrue(event.detail.detailCode > 0);
+				assertTrue(event.detail.description.length > 0);
+				
+				if (processesSwitchCompletion == false)
+				{
+					dynamicStreamTrait.removeEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+					eventDispatcher.dispatchEvent(new Event("testComplete"));	
+				}
+			}
+			else
+			{
+				assertFalse(dynamicStreamTrait.switching);
 					
-					dynamicStreamTrait.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
-					eventDispatcher.dispatchEvent(new Event("testComplete"));									
-					break;
-				case SwitchEvent.SWITCHSTATE_REQUESTED:
-					assertTrue(dynamicStreamTrait.switchUnderway);
-					assertTrue(event.detail.detailCode > 0);
-					assertTrue(event.detail.description.length > 0);
-					break;
-				case SwitchEvent.SWITCHSTATE_FAILED:
-					fail("Error switching streams");
-					break;
+				dynamicStreamTrait.removeEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+				eventDispatcher.dispatchEvent(new Event("testComplete"));									
 			}
 		}
 		
@@ -188,7 +204,8 @@ package org.osmf.traits
 		}
 				
 		private static const TIMEOUT:int = 4000;
-		protected var dynamicStreamTrait:DynamicStreamTrait;
+		
+		private var _dynamicStreamTrait:DynamicStreamTrait;
 		private var eventDispatcher:EventDispatcher;
 	}
 }

@@ -87,13 +87,13 @@
 			private var _smilFileLoadState:String = "Not Loaded";
 			
 			[Bindable]
-			private var _switchable:DynamicStreamTrait;
+			private var _dsTrait:DynamicStreamTrait;
 			
 			[Bindable]
 			private var _isAutoSwitchable:Boolean = true;
 			
 			[Bindable]
-			private var _autoswitchBtnLabel:String = "Manual";
+			private var _autoSwitchBtnLabel:String = "Manual";
 			
 			private var _viewTrait:ViewTrait;
 						
@@ -128,11 +128,11 @@
 				{
 					case LoadState.READY:
 						_smilFileLoadState = "Ready";
-						_switchable = wrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+						_dsTrait = wrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 
-						if (_switchable != null)
+						if (_dsTrait != null)
 						{
-							_switchable.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+							_dsTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
 						
 						_viewTrait = wrapper.element.getTrait(MediaTraitType.VIEW) as ViewTrait;		
@@ -150,39 +150,34 @@
 				}
 			}
 			
-			private function onSwitchingChange(event:SwitchEvent):void
+			private function onSwitchingChange(event:DynamicStreamEvent):void
 			{
 				var msg:String = "Switching change "
 				var showCurrentIndex:Boolean = false;
 				
-				switch(event.newState)
+				if (event.switching)
 				{
-					case SwitchEvent.SWITCHSTATE_COMPLETE:
-						msg += "COMPLETE";
-						showCurrentIndex = true;
-						break;
-					case SwitchEvent.SWITCHSTATE_FAILED:
-						msg += "FAILED";
-						break;
-					case SwitchEvent.SWITCHSTATE_REQUESTED:
-						msg += "REQUESTED";
-						break;
-
+					msg += "REQUESTED";
+				}
+				else
+				{
+					msg += "COMPLETE";
+					showCurrentIndex = true;
 				}
 				
 				if (event.detail != null)
 				{
-					msg += ", " + event.detail.description + ". " + event.detail.moreInfo;
+					msg += ", " + event.detail.description + ". " + (event.detail.moreInfo != null ? event.detail.moreInfo : "");
 				}
 				
 				debug(msg);
 				
 				if (showCurrentIndex)
 				{
-					var streamMsg:String = "Current streaming profile index: " + _switchable.currentIndex + " of " + _switchable.maxIndex;
+					var streamMsg:String = "Current streaming profile index: " + _dsTrait.currentIndex + " of " + _dsTrait.maxAllowedIndex;
 					debug(streamMsg);
 					
-					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.streamItems[_switchable.currentIndex].bitrate + "kbps";
+					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.streamItems[_dsTrait.currentIndex].bitrate + "kbps";
 					debug(streamMsg);
 				}
 				
@@ -192,17 +187,17 @@
 			private function updateSwitchingControls():void
 			{				
 				// Disable if a switch is pending or the video is not switchable
-				if (_switchable == null || _switchable.switchUnderway)
+				if (_dsTrait == null || _dsTrait.switching)
 				{
 					autoSwitchBtn.enabled = false;
 					switchUpBtn.enabled = false;
 					switchDownBtn.enabled = false;
 				}
-				else if (!_switchable.autoSwitch)
+				else if (!_dsTrait.autoSwitch)
 				{
 					autoSwitchBtn.enabled = true;
-					switchUpBtn.enabled = (_switchable.currentIndex == _switchable.maxIndex) ? false : true;
-					switchDownBtn.enabled = (_switchable.currentIndex == 0) ? false : true;
+					switchUpBtn.enabled = (_dsTrait.currentIndex == _dsTrait.maxAllowedIndex) ? false : true;
+					switchDownBtn.enabled = (_dsTrait.currentIndex == 0) ? false : true;
 				}
 				else
 				{
@@ -344,7 +339,6 @@
 				seekBar.maximum = event.time;
 				lblDuration.text = timeCode(event.time);
 				seekBar.enabled = seekBar.visible = wrapper.mediaPlayer.seekable;
-				
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
@@ -365,9 +359,11 @@
 				}
 			}
 
-   			private function toggleDragging(state:Boolean):void {
+   			private function toggleDragging(state:Boolean):void
+   			{
    				sliderDragging = state;
-   				if (!state) {
+   				if (!state)
+   				{
    					waitForSeek = true;
    					if (wrapper.mediaPlayer.seekable)
    					{
@@ -401,12 +397,12 @@
    			
 			private function onSwitchUp():void
 			{
-				if (_switchable && !_switchable.autoSwitch && !_switchable.switchUnderway)
+				if (_dsTrait && !_dsTrait.autoSwitch && !_dsTrait.switching)
 				{
-					var max:int = _switchable.maxIndex;
-					if (_switchable.currentIndex < max)
+					var max:int = _dsTrait.maxAllowedIndex;
+					if (_dsTrait.currentIndex < max)
 					{
-						_switchable.switchTo(_switchable.currentIndex + 1);
+						_dsTrait.switchTo(_dsTrait.currentIndex + 1);
 					}
 				}
 				
@@ -414,24 +410,24 @@
 			
 			private function onSwitchDown():void
 			{
-				if (_switchable && !_switchable.autoSwitch && !_switchable.switchUnderway)
+				if (_dsTrait && !_dsTrait.autoSwitch && !_dsTrait.switching)
 				{
-					if (_switchable.currentIndex > 0)
+					if (_dsTrait.currentIndex > 0)
 					{
-						_switchable.switchTo(_switchable.currentIndex - 1);
+						_dsTrait.switchTo(_dsTrait.currentIndex - 1);
 					}
 				}				
 			}
 			
 			private function onAutoSwitchable():void
 			{
-				if (_switchable)
+				if (_dsTrait)
 				{
 					this._isAutoSwitchable = !this._isAutoSwitchable;
-					_switchable.autoSwitch = this._isAutoSwitchable; 
-					debug("Setting auto switch mode to "+ this._isAutoSwitchable);
+					_dsTrait.autoSwitch = this._isAutoSwitchable; 
+					debug("Setting auto switch mode to " + this._isAutoSwitchable);
 					
-					_autoswitchBtnLabel = (_isAutoSwitchable ? "Manual" : "Auto");
+					_autoSwitchBtnLabel = (_isAutoSwitchable ? "Manual" : "Auto");
 					updateSwitchingControls();
 				}
 			}
@@ -484,7 +480,7 @@
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
 						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{wrapper.mediaPlayer.playable}" />
-						<mx:Button id="autoSwitchBtn" label="{_autoswitchBtnLabel}" click="onAutoSwitchable()" enabled="{_switchable!=null}" />
+						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{_dsTrait!=null}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />
 	    			</mx:HBox>

@@ -59,7 +59,7 @@ package org.osmf.audio
 			// If we just started seeking, finish since this operation is async.
 			if (seeking == true)
 			{
-				signalSeekComplete(time);
+				setSeeking(false, time);
 			}
 		}
 			

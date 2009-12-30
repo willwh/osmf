@@ -56,10 +56,6 @@ package org.osmf
 		{
 			super(param);
 			
-			addTestSuite(TestParallelElementWithPlayTrait);
-			addTestSuite(TestSerialElementWithPlayTrait);
-
-			
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 			

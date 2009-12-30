@@ -43,7 +43,7 @@ package org.osmf.proxies
 			// Auto-complete any in-progress seek operation.
 			if (seeking == true)
 			{
-				signalSeekComplete(time);
+				setSeeking(false, time);
 			}
 		}
 	}

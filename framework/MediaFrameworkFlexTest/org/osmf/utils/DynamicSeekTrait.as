@@ -57,7 +57,7 @@ package org.osmf.utils
 				dynamicTimeTrait.currentTime = time;
 			}
 			
-			super.signalSeekComplete(time);
+			super.setSeeking(false, time);
 		}
 		
 		// Internals
@@ -78,7 +78,7 @@ package org.osmf.utils
 				{
 					timer.removeEventListener(TimerEvent.TIMER, onTimer);
 					
-					signalSeekComplete(seekTargetTime);
+					setSeeking(false, seekTargetTime);
 				}
 			}
 		}

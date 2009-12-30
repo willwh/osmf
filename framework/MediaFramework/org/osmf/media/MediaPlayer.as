@@ -180,26 +180,33 @@ package org.osmf.media
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent.SWITCHING_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 * @eventType org.osmf.events.DynamicStreamEvent.SWITCHING_CHANGE
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
-	 * Dispatched when the number of indicies or associated bitrates have changed.
+	 * Dispatched when the number of dynamic streams has changed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent.INDICES_CHANGE
+	 * @eventType org.osmf.events.DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="indicesChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="numDynamicStreamsChange",type="org.osmf.events.DynamicStreamEvent")]
+	
+	/**
+	 * Dispatched when the autoSwitch property changed.
+	 * 
+	 * @eventType org.osmf.events.DynamicStreamEvent.AUTO_SWITCH_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="autoSwitchChange",type="org.osmf.events.DynamicStreamEvent")]
 
 	/**
 	 * Dispatched when the <code>buffering</code> property has changed.
@@ -1139,12 +1146,12 @@ package org.osmf.media
 		 */
 		public function get maxStreamIndex():int
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxIndex : 0;
+			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex : 0;
 		}
 		
 		public function set maxStreamIndex(value:int):void
 		{
-			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxIndex = value; 
+			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex = value; 
 		}
 		
 		/**
@@ -1161,7 +1168,7 @@ package org.osmf.media
 		 */
 		public function get switchUnderway():Boolean
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switchUnderway : false;
+			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switching : false;
 		}
 		
 		/**
@@ -1424,7 +1431,9 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:	
-					changeListeners(add, _element, traitType, SwitchEvent.SWITCHING_CHANGE, [redispatchEvent]);								
+					changeListeners(add, _element, traitType, DynamicStreamEvent.SWITCHING_CHANGE, [redispatchEvent]);
+					changeListeners(add, _element, traitType, DynamicStreamEvent.AUTO_SWITCH_CHANGE, [redispatchEvent]);
+					changeListeners(add, _element, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, [redispatchEvent]);
 					_switchable = add;						
 					eventType = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
 					break;						

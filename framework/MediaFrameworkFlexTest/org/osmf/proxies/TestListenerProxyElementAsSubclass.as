@@ -320,16 +320,19 @@ package org.osmf.proxies
 			//
 			
 			var dsTrait:DynamicStreamTrait = proxyElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			
 			dsTrait.autoSwitch = false;
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["newAutoSwitch"] == false );
 			
 			dsTrait.switchTo(3);
-			assertTrue(events.length == 2);
-			assertTrue(events[0]["oldState"] == SwitchEvent.SWITCHSTATE_UNDEFINED);
-			assertTrue(events[0]["newState"] == SwitchEvent.SWITCHSTATE_REQUESTED);
-			assertTrue((events[0]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
-			assertTrue(events[1]["oldState"] == SwitchEvent.SWITCHSTATE_REQUESTED);
-			assertTrue(events[1]["newState"] == SwitchEvent.SWITCHSTATE_COMPLETE);
+			assertTrue(events.length ==  2);
+			assertTrue(events[1]["switching"] == true);
 			assertTrue((events[1]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
+			
+			dsTrait.autoSwitch = true;
+			assertTrue(events.length == 3);
+			assertTrue(events[2]["newAutoSwitch"] == true);
 			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -337,9 +340,10 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
+			dsTrait.autoSwitch = false;
 			dsTrait.switchTo(1);
 			
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 3);
 		}
 				
 		public function testProcessViewTraitChanges():void

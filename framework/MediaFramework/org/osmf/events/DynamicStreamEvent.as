@@ -26,18 +26,18 @@ package org.osmf.events
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	
 	/**
-	 * A trait that implements the ISwitchable interface dispatches
-	 * this event when a switching change has occurred.
+	 * A DynamicStreamEvent is dispatched when properties of a DynamicStreamTrait
+	 * have changed.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */		
-	public class SwitchEvent extends Event
+	public class DynamicStreamEvent extends Event
 	{
 		/**
-		 * The SwitchEvent.SWITCHING_CHANGE constant defines the value
+		 * The DynamicStreamEvent.SWITCHING_CHANGE constant defines the value
 		 * of the type property of the event object for a switchingChange
 		 * event.
 		 * 
@@ -51,21 +51,21 @@ package org.osmf.events
 		public static const SWITCHING_CHANGE:String = "switchingChange";
 		
 		/**
-		 * The SwitchEvent.INDICES_CHANGE constant defines the value
-		 * of the type property of the event object for an indicesChange
+		 * The DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE constant defines the value
+		 * of the type property of the event object for a numDynamicStreamsChange
 		 * event.
 		 * 
-		 * @eventType INDICES_CHANGE 
+		 * @eventType NUM_DYNAMIC_STREAMS_CHANGE 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const INDICES_CHANGE:String = "indicesChange";
+		public static const NUM_DYNAMIC_STREAMS_CHANGE:String = "numDynamicStreamsChange";
 		
 		/**
-		 * The SwitchEvent.AUTO_SWITCH_CHANGE constant defines the value
+		 * The DynamicStreamEvent.AUTO_SWITCH_CHANGE constant defines the value
 		 * of the type property of the event object for an autoSwitchChange
 		 * event.
 		 * 
@@ -77,41 +77,6 @@ package org.osmf.events
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const AUTO_SWITCH_CHANGE:String = "autoSwitchChange";
-
-		/**
-		 * This means a switch request was made but is not
-		 * complete and has not failed.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SWITCHSTATE_REQUESTED:int	= 1;
-				
-		/**
-		 * This means the switch was completed and is visible to the 
-		 * user.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SWITCHSTATE_COMPLETE:int	= 2;
-		
-		/**
-		 * This means the switch request failed.  The current index remains unchanged.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const SWITCHSTATE_FAILED:int		= 3;
-		
-
-		public static const SWITCHSTATE_UNDEFINED:int	= 0;
 		
 		/**
 		 * Constructor
@@ -119,8 +84,7 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param newState The new switching state, should be one of the contants defined in this class.
-		 * @param oldState The previous switching state, should be one of the contents defined in this class.
+		 * @param switching The new switching value.
 		 * @param switchingDetail A SwitchingDetail object containing the details for the switching change.
 		 *  
 		 *  @langversion 3.0
@@ -128,43 +92,36 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function SwitchEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, newState:int=SWITCHSTATE_UNDEFINED, oldState:int=SWITCHSTATE_UNDEFINED, switchingDetail:SwitchingDetail=null)
+		public function DynamicStreamEvent
+			( type:String
+			, bubbles:Boolean=false
+			, cancelable:Boolean=false
+			, switching:Boolean=false
+			, detail:SwitchingDetail=null
+			, autoSwitch:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 			
-			_newState = newState;
-			_oldState = oldState;
-			_detail = switchingDetail;
+			_switching = switching;
+			_detail = detail;
+			_autoSwitch = autoSwitch;
 		}
 		
 		/**
-		 * The new switching state.
+		 * The new switching value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get newState():int
+		public function get switching():Boolean
 		{
-			return _newState;
+			return _switching;
 		}
 		
 		/**
-		 * The previous switching state.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get oldState():int
-		{
-			return _oldState;
-		}
-		
-		/**
-		 * The SwitchingDetail containing the details for this change.
+		 * The details associated with this change.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -177,15 +134,28 @@ package org.osmf.events
 		}
 		
 		/**
+		 * The new autoSwitch value.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get autoSwitch():Boolean
+		{
+			return _autoSwitch;
+		}
+
+		/**
 		 * @private
 		 */
 		override public function clone():Event
 		{
-			return new SwitchEvent(type, bubbles, cancelable, _newState, _oldState, _detail);
+			return new DynamicStreamEvent(type, bubbles, cancelable, _switching, _detail, _autoSwitch);
 		}
 		
+		private var _switching:Boolean;	
 		private var _detail:SwitchingDetail;
-		private var _newState:int;
-		private var _oldState:int;		
+		private var _autoSwitch:Boolean;
 	}
 }

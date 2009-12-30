@@ -25,22 +25,22 @@ package org.osmf.proxies
 	
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
-	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
-	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.ViewTrait;
 	
@@ -220,7 +220,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processSwitchingChange(oldState:int, newState:int, detail:SwitchingDetail):void
+		protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
 		{
 		}
 		
@@ -228,7 +228,15 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processIndicesChange():void
+		protected function processNumDynamicStreamsChange():void
+		{
+		}
+
+		/**
+		 * Subclasses can override to perform custom processing in response to
+		 * this change.
+		 **/
+		protected function processAutoSwitchChange(newAutoSwitch:Boolean):void
 		{
 		}
 
@@ -302,14 +310,19 @@ package org.osmf.proxies
 			processDurationChange(event.time);
 		}
 
-		private function onSwitchingChange(event:SwitchEvent):void
+		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
-			processSwitchingChange(event.oldState, event.newState, event.detail);
+			processSwitchingChange(event.switching, event.detail);
 		}
 		
-		private function onIndicesChange(event:SwitchEvent):void
+		private function onNumDynamicStreamsChange(event:DynamicStreamEvent):void
 		{
-			processIndicesChange();
+			processNumDynamicStreamsChange();
+		}
+
+		private function onAutoSwitchChange(event:DynamicStreamEvent):void
+		{
+			processAutoSwitchChange(event.autoSwitch);
 		}
 
 		private function onViewChange(event:ViewEvent):void
@@ -478,13 +491,15 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					dynamicStreamTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
-					dynamicStreamTrait.addEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
+					dynamicStreamTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+					dynamicStreamTrait.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onNumDynamicStreamsChange);
+					dynamicStreamTrait.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onAutoSwitchChange);
 				}
 				else
 				{
-					dynamicStreamTrait.removeEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
-					dynamicStreamTrait.removeEventListener(SwitchEvent.INDICES_CHANGE, onIndicesChange);
+					dynamicStreamTrait.removeEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+					dynamicStreamTrait.removeEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onNumDynamicStreamsChange);
+					dynamicStreamTrait.removeEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onAutoSwitchChange);
 				}
 			}
 		}

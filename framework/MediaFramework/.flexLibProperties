@@ -54,6 +54,7 @@
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferEvent"/>
     <classEntry path="org.osmf.events.ContentProtectionEvent"/>
+    <classEntry path="org.osmf.events.DynamicStreamEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>
     <classEntry path="org.osmf.events.GatewayChangeEvent"/>
@@ -71,7 +72,6 @@
     <classEntry path="org.osmf.events.PlayEvent"/>
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
     <classEntry path="org.osmf.events.SeekEvent"/>
-    <classEntry path="org.osmf.events.SwitchEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.events.ViewEvent"/>
     <classEntry path="org.osmf.external.HTMLAudioTrait"/>

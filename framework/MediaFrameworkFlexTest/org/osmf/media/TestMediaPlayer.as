@@ -31,6 +31,7 @@ package org.osmf.media
 	
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
@@ -38,7 +39,6 @@ package org.osmf.media
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
-	import org.osmf.events.SwitchEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.ViewEvent;
 	import org.osmf.traits.LoadState;
@@ -1083,11 +1083,11 @@ package org.osmf.media
 				
 				mediaPlayer.maxStreamIndex = 2;
 				
-				mediaPlayer.addEventListener(SwitchEvent.SWITCHING_CHANGE, onTestSwitchable);
+				mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onTestSwitchable);
 				mediaPlayer.autoSwitch = false;
 				mediaPlayer.switchTo(1);
 				
-				function onTestSwitchable(event:SwitchEvent):void
+				function onTestSwitchable(event:DynamicStreamEvent):void
 				{
 					eventCount++;
 					
@@ -1101,21 +1101,14 @@ package org.osmf.media
 					else if (eventCount == 2)
 					{
 						assertTrue(mediaPlayer.autoSwitch == false);
-						assertTrue(mediaPlayer.currentStreamIndex == 0);
-						assertTrue(mediaPlayer.maxStreamIndex == 2);
-						assertTrue(mediaPlayer.switchUnderway == true);
-					}
-					else if (eventCount == 3)
-					{
-						assertTrue(mediaPlayer.autoSwitch == false);
-						
 						// TODO: Fix this, then reenable.  For some reason
 						// MockDynamicNetStream isn't dispatching the correct
 						// series of events.
 						//assertTrue(mediaPlayer.currentStreamIndex == 1);
+						assertTrue(mediaPlayer.currentStreamIndex == 0);
 						assertTrue(mediaPlayer.maxStreamIndex == 2);
 						assertTrue(mediaPlayer.switchUnderway == false);
-
+						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 					else fail();

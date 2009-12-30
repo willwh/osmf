@@ -99,7 +99,7 @@ package org.osmf.net
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
-					signalSeekComplete(previousTime);					
+					setSeeking(false, previousTime);
 					break;
 			}
 		}
@@ -113,14 +113,14 @@ package org.osmf.net
 				netStream.time <= (expectedTime + SEEK_MARGIN))
 			{
 				seekBugTimer.reset();			
-				signalSeekComplete(expectedTime);
+				setSeeking(false, expectedTime);
 			}			
 		}
 		
 		private function onSeekBugTimerDone(event:TimerEvent):void
 		{		
 			seekBugTimer.reset();
-			signalSeekComplete(expectedTime);
+			setSeeking(false, expectedTime);
 		}
 		
 		

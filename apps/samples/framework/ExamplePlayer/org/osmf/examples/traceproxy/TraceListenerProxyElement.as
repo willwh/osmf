@@ -102,14 +102,19 @@ package org.osmf.examples.traceproxy
 			trace("Dimension Change: " + oldWidth + "x" + oldHeight + "->" + newWidth + "x" + newHeight);
 		}
 		
-		override protected function processSwitchingChange(oldState:int, newState:int, detail:SwitchingDetail):void
+		override protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
 		{
-			trace("Switching Change: " + oldState + "->" + newState + " (" + detail + ")");
+			trace("Switching Change: " + switching + " (" + detail + ")");
 		}
 		
-		override protected function processIndicesChange():void
+		override protected function processNumDynamicStreamsChange():void
 		{
-			trace("Indices Change");
+			trace("Num Dynamic Streams Change");
+		}
+
+		override protected function processAutoSwitchChange(newAutoSwitch:Boolean):void
+		{
+			trace("Auto Switch Change: " + newAutoSwitch);
 		}
 
 		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void

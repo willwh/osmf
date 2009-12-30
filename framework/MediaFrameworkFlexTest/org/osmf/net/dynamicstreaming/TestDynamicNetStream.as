@@ -152,7 +152,7 @@ package org.osmf.net.dynamicstreaming
 					netLoadedContext.stream.client.addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 					
 					_dsTrait = _mediaElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
-					_dsTrait.addEventListener(SwitchEvent.SWITCHING_CHANGE, onSwitchingChange);
+					_dsTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 					if (_startInManualMode)
 					{
 						_dsTrait.autoSwitch = false;
@@ -218,30 +218,30 @@ package org.osmf.net.dynamicstreaming
 			}	
 		}
 		
-		private function onSwitchingChange(event:SwitchEvent):void
+		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
 			var msg:String = "Switching change "
 			var showCurrentIndex:Boolean = false;
 			
-			switch(event.newState)
+			if (event.switching)
 			{
-				case SwitchEvent.SWITCHSTATE_COMPLETE:
-					msg += "COMPLETE";
-					showCurrentIndex = true;
-					break;
-				case SwitchEvent.SWITCHSTATE_FAILED:
-					if (!this._testPlayFailed)
-					{
-						msg += "FAILED";
-						fail(msg);
-					}
-					break;
-				case SwitchEvent.SWITCHSTATE_REQUESTED:
-					msg += "REQUESTED";
-					break;
-
+				msg += "REQUESTED";
+			}
+			else
+			{
+				msg += "COMPLETE";
+				showCurrentIndex = true;
 			}
 			
+			/*
+			case SwitchEvent.SWITCHSTATE_FAILED:
+				if (!this._testPlayFailed)
+				{
+					msg += "FAILED";
+					fail(msg);
+				}
+				break;
+			*/
 			
 			if (event.detail != null)
 			{

@@ -25,7 +25,6 @@ package org.osmf.utils
 	
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.traits.MediaTraitBase;
 		
 	public class DynamicListenerProxyElement extends ListenerProxyElement
 	{
@@ -118,14 +117,19 @@ package org.osmf.utils
 			changeEventQueue.push({"oldWidth":oldWidth, "oldHeight":oldHeight, "newWidth":newWidth, "newHeight":newHeight});
 		}
 		
-		override protected function processSwitchingChange(oldState:int, newState:int, detail:SwitchingDetail):void
+		override protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
 		{
-			changeEventQueue.push({"oldState":oldState, "newState":newState, "detail":detail});
+			changeEventQueue.push({"switching":switching, "detail":detail});
 		}
 
-		override protected function processIndicesChange():void
+		override protected function processNumDynamicStreamsChange():void
 		{
-			changeEventQueue.push({"indicesChange":true});
+			changeEventQueue.push({"numDynamicStreamsChange":true});
+		}
+
+		override protected function processAutoSwitchChange(newAutoSwitch:Boolean):void
+		{
+			changeEventQueue.push({"newAutoSwitch":newAutoSwitch});
 		}
 
 		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void

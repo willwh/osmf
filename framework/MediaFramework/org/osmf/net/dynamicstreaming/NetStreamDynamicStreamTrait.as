@@ -21,14 +21,14 @@
 *  Contributor(s): Adobe Systems Incorporated.
 * 
 *****************************************************/
-
 package org.osmf.net.dynamicstreaming
 {
 	import flash.events.NetStatusEvent;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.traits.DynamicStreamTrait;
+	import org.osmf.utils.OSMFStrings;
 
 	[ExcludeClass]
 	
@@ -43,119 +43,123 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param ns The DynamicNetStream object the class will work with.
-		 * @param res The DynamicStreamingResource the class will use.
+		 * @param netStream The DynamicNetStream object the class will work with.
+		 * @param dsResource The DynamicStreamingResource the class will use.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetStreamDynamicStreamTrait(ns:DynamicNetStream, res:DynamicStreamingResource)
+		public function NetStreamDynamicStreamTrait(netStream:DynamicNetStream, dsResource:DynamicStreamingResource)
 		{
-			super(!ns.useManualSwitchMode, ns.renderingIndex, res.streamItems.length);	
+			super(!netStream.useManualSwitchMode, netStream.renderingIndex, dsResource.streamItems.length);	
 			
-			_ns = ns;
-			_resource = res;
+			this.netStream = netStream;
+			this.dsResource = dsResource;
 									
-			_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			_ns.addEventListener(SwitchEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
+			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			netStream.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
-			return _resource.streamItems[index].bitrate;
+			if (index > numDynamicStreams - 1 || index < 0)
+			{
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
+			}
+
+			return dsResource.streamItems[index].bitrate;
 		}	
 				
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
-		override protected function switchToStart(value:int):void
+		override protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
 		{
-			_ns.switchTo(value);
+			if (newSwitching && !netStreamIsSwitching)
+			{
+				// Keep track of the target index, we don't want to begin
+				// the switch now since our switching state won't be
+				// updated until the switchingChangeEnd method is called.
+				indexToSwitchTo = index;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
+		{
+			super.switchingChangeEnd(index, detail);
+			
+			if (switching && !netStreamIsSwitching)
+			{
+				netStream.switchTo(indexToSwitchTo);
+			}
 		}
 			
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override protected function autoSwitchChangeStart(value:Boolean):void
 		{
-			_ns.useManualSwitchMode = !value;
+			netStream.useManualSwitchMode = !value;
 		}
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
-		override protected function maxIndexChangeStart(value:int):void
+		override protected function maxAllowedIndexChangeStart(value:int):void
 		{
-			if(_ns != null)
-			{
-				_ns.maxIndex = value;
-			}
+			netStream.maxIndex = value;
 		}
-		
-		/**
-		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		override protected function switchToEnd(detail:SwitchingDetail=null):void
-		{
-			// Do nothing, wait for onNetStreamSwitchingChange handler to dispatch SwitchComplete.
-		}
-				
+						
 		private function onNetStatus(event:NetStatusEvent):void
 		{			
-			if (!switchUnderway)
+			if (switching)
 			{
-				return;
-			}
-			
-			switch (event.info.code) 
-			{
-				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
-					signalSwitchStateChange(SwitchEvent.SWITCHSTATE_FAILED);					
-					break;
+				switch (event.info.code) 
+				{
+					case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
+						setSwitching(false, currentIndex);					
+						break;
+				}
 			}			
 		}
 		
-		private function onNetStreamSwitchingChange(event:SwitchEvent):void
+		private function onNetStreamSwitchingChange(event:DynamicStreamEvent):void
 		{
-			if (event.newState == SwitchEvent.SWITCHSTATE_COMPLETE)
+			if (event.type == DynamicStreamEvent.SWITCHING_CHANGE)
 			{
-				setCurrentIndex(_ns.renderingIndex);
+				// When a switch finishes, make sure our current index and switching
+				// state reflect the changes to the NetStream.
+				if (event.switching == false)
+				{
+					setCurrentIndex(netStream.renderingIndex);
+					setSwitching(false, netStream.renderingIndex);
+				}
+				else
+				{
+					// This switch is driven by the NetStream, we set a member
+					// variable so that we don't assume it's being requested by
+					// the client (and thus trigger a second switch).
+					netStreamIsSwitching = true;
+					
+					// TODO: Fix the index, this is the wrong value.
+					setSwitching(true, netStream.renderingIndex);
+					
+					netStreamIsSwitching = false;
+				}
 			}
-
-			signalSwitchStateChange(event.newState, event.detail);
 		}				
-						
-		private var _ns:DynamicNetStream;
-		private var _resource:DynamicStreamingResource;		
+		
+		private var netStream:DynamicNetStream;
+		private var netStreamIsSwitching:Boolean;
+		private var dsResource:DynamicStreamingResource;
+		private var indexToSwitchTo:int;	
 	}
 }

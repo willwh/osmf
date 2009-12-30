@@ -35,7 +35,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.metadata.KeyValueFacet;
@@ -50,14 +50,14 @@ package org.osmf.net.dynamicstreaming
 	/**
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
-	 * @eventType org.osmf.events.SwitchEvent
+	 * @eventType org.osmf.events.DynamicStreamEvent
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="switchingChange",type="org.osmf.events.SwitchEvent")]
+	[Event(name="switchingChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
 	 * DynamicNetStream extends NetStream to provide dynamic
@@ -395,7 +395,15 @@ package org.osmf.net.dynamicstreaming
 			debug("switchToIndex() - Switching to index " + (targetIndex) + " at " + Math.round(_dsResource.streamItems[targetIndex].bitrate) + " kbps");
 						
 			_switchUnderway = true;	
-			dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, SwitchEvent.SWITCHSTATE_REQUESTED, SwitchEvent.SWITCHSTATE_UNDEFINED, _detail));
+			dispatchEvent
+				( new DynamicStreamEvent
+					( DynamicStreamEvent.SWITCHING_CHANGE
+					, false
+					, false
+					, true
+					, _detail
+					)
+				);
 			
 			this.playStream(nso);
 			
@@ -535,7 +543,14 @@ package org.osmf.net.dynamicstreaming
 					
 					debug("onPlayStatus() - Transition complete to index: " + _renderingIndex + " at " + Math.round(_dsResource.streamItems[_renderingIndex].bitrate) + " kbps");
 					_pendingTransitionsArray.shift();
-					dispatchEvent(new SwitchEvent(SwitchEvent.SWITCHING_CHANGE, false, false, SwitchEvent.SWITCHSTATE_COMPLETE, SwitchEvent.SWITCHSTATE_REQUESTED));
+					dispatchEvent
+						( new DynamicStreamEvent
+							( DynamicStreamEvent.SWITCHING_CHANGE
+							, false
+							, false
+							, false
+							)
+						);
 					_detail = null;
 					break;
 			}

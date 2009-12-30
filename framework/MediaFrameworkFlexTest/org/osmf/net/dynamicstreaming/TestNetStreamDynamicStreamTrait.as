@@ -47,8 +47,8 @@ package org.osmf.net.dynamicstreaming
 
 		public function testMaxIndex():void
 		{
-			dynamicStreamTrait.maxIndex = 2;
-			assertTrue(2, dynamicStreamTrait.maxIndex);
+			dynamicStreamTrait.maxAllowedIndex = 2;
+			assertTrue(2, dynamicStreamTrait.maxAllowedIndex);
 		}
 		
 		override public function testGetBitrateForIndex():void
