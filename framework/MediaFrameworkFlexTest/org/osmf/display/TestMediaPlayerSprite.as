@@ -26,7 +26,7 @@ package org.osmf.display
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaPlayerSprite extends TestCase
@@ -35,28 +35,28 @@ package org.osmf.display
 		{
 			var player:MediaPlayerSprite = new MediaPlayerSprite();
 			var element:DynamicMediaElement = new DynamicMediaElement();
-			var viewTrait:ViewTrait = new ViewTrait(new Sprite(), 150, 150);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(new Sprite(), 150, 150);
 						
-			Sprite(viewTrait.view).graphics.beginFill(0);
-			Sprite(viewTrait.view).graphics.drawRect(0,0,150,150);
+			Sprite(displayObjectTrait.displayObject).graphics.beginFill(0);
+			Sprite(displayObjectTrait.displayObject).graphics.drawRect(0,0,150,150);
 			
 			player.element = element;
 			
-			element.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			element.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			player.scaleMode = ScaleMode.NONE;
 			
 			player.setAvailableSize(300, 300);
 			
-			assertEquals( viewTrait.view.width, viewTrait.view.height, 150);
+			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 150);
 			
 			player.scaleMode = ScaleMode.STRETCH;
 			
-			assertEquals( viewTrait.view.width, viewTrait.view.height, 300);
+			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 300);
 						
 			player.setAvailableSize(500, 500);
 			
-			assertEquals( viewTrait.view.width, viewTrait.view.height, 500);
+			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 500);
 			
 			player.scaleMode = ScaleMode.NONE;
 						

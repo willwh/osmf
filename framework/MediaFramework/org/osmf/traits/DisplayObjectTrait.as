@@ -23,36 +23,36 @@ package org.osmf.traits
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 
 	/**
-	 * Dispatched when the trait's <code>view</code> property has changed.
+	 * Dispatched when the trait's <code>displayObject</code> property has changed.
 	 * This occurs when a different DisplayObject is assigned to represent the media.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
 	 * Dispatched when the trait's mediaWidth and/or mediaHeight property has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.MEDIA_SIZE_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 */	
-	[Event(name="mediaSizeChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
-	 * ViewTrait defines the trait interface for media that expose a DisplayObject,
-	 * and which may have intrinsic dimensions.  The intrinsic dimensions of a piece of
+	 * DisplayObjectTrait defines the trait interface for media that expose a DisplayObject,
+	 * and which may have intrinsic dimensions. The intrinsic dimensions of a piece of
 	 * media refer to its dimensions without regard to those observed when it is projected
 	 * onto the stage.
 	 * 
 	 * <p>For an image, for example, the intrinsic dimensions are the height and 
 	 * width of the image as it is stored.</p>
 	 * 
-	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.VIEW)</code> method to query
+	 * <p>Use the <code>MediaElement.hasTrait(MediaTraitType.DISPLAY_OBJECT)</code> method to query
 	 * whether a media element has a trait of this type.
-	 * If <code>hasTrait(MediaTraitType.VIEW)</code> returns <code>true</code>,
-	 * use the <code>MediaElement.getTrait(MediaTraitType.VIEW)</code> method
+	 * If <code>hasTrait(MediaTraitType.DISPLAY_OBJECT)</code> returns <code>true</code>,
+	 * use the <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method
 	 * to get an object that is of this type.</p>
 	 * <p>Through its MediaElement, a ViewTrait can participate in media compositions.
 	 * See the applicable class in the composition package for details about its behavior
@@ -67,31 +67,31 @@ package org.osmf.traits
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class ViewTrait extends MediaTraitBase
+	public class DisplayObjectTrait extends MediaTraitBase
 	{
 		/**
 		 * Constructor.
 		 **/
-		public function ViewTrait(view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function DisplayObjectTrait(displayObject:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
-			super(MediaTraitType.VIEW);
+			super(MediaTraitType.DISPLAY_OBJECT);
 			
-			_view = view;
+			_displayObject = displayObject;
 			_mediaWidth = mediaWidth;
 			_mediaHeight = mediaHeight;
 		}
 		
 		/**
-		 * DisplayObject representing the media's view.
+		 * The media's display object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get view():DisplayObject
+		public function get displayObject():DisplayObject
 		{
-			return _view;
+			return _displayObject;
 		}
 		
 		/**
@@ -114,24 +114,24 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Defines the trait's view. If the view is different from the one
-		 * that is currently set, a viewChange event will be dispatched.
+		 * Defines the trait's displayObject. If the displayObject is different from the one
+		 * that is currently set, a displayObjectChange event will be dispatched.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function setView(value:DisplayObject):void
+		protected final function setDisplayObject(value:DisplayObject):void
 		{
-			if (_view != value)
+			if (_displayObject != value)
 			{
-				viewChangeStart(value);
+				displayObjectChangeStart(value);
 				
-				var oldView:DisplayObject = _view;
-				_view = value;
+				var oldDisplayObject:DisplayObject = _displayObject;
+				_displayObject = value;
 				
-				viewChangeEnd(oldView);
+				displayObjectChangeEnd(oldDisplayObject);
 			}
 		}
 
@@ -171,35 +171,35 @@ package org.osmf.traits
 		}
 				
 		/**
-		 * Called immediately before the <code>view</code> property is changed. 
+		 * Called immediately before the <code>displayObject</code> property is changed. 
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
-		 * @param newView New <code>view</code> value.
+		 * @param newView New <code>displayObject</code> value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function viewChangeStart(newView:DisplayObject):void
+		protected function displayObjectChangeStart(newView:DisplayObject):void
 		{
 		}
 		
 		/**
-		 * Called just after the <code>view</code> property has changed.
+		 * Called just after the <code>displayObject</code> property has changed.
 		 * Dispatches the change event.
 		 * <p>Subclasses that override should call this method to
-		 * dispatch the viewChange event.</p>
+		 * dispatch the displayObjectChange event.</p>
 		 *  
-		 * @param oldView Previous <code>view</code> value.
+		 * @param oldDisplayObject Previous <code>displayObject</code> value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function viewChangeEnd(oldView:DisplayObject):void
+		protected function displayObjectChangeEnd(oldDisplayObject:DisplayObject):void
 		{
-			dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
+			dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, oldDisplayObject, _displayObject));
 		}
 				
 		/**
@@ -235,10 +235,10 @@ package org.osmf.traits
 		 */		
 		protected function mediaSizeChangeEnd(oldMediaWidth:Number, oldMediaHeight:Number):void
 		{
-			dispatchEvent(new ViewEvent(ViewEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldMediaWidth, oldMediaHeight, _mediaWidth, _mediaHeight));
+			dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldMediaWidth, oldMediaHeight, _mediaWidth, _mediaHeight));
 		}
 
-		private var _view:DisplayObject;
+		private var _displayObject:DisplayObject;
 		private var _mediaWidth:Number = 0;
 		private var _mediaHeight:Number = 0;
 	}

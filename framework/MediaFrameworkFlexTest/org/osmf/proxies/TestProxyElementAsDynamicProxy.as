@@ -263,7 +263,7 @@ package org.osmf.proxies
 					, MediaTraitType.BUFFER
 					, MediaTraitType.LOAD
 					, MediaTraitType.PLAY
-				    , MediaTraitType.VIEW
+				    , MediaTraitType.DISPLAY_OBJECT
 				    ];
 
 		private static const REFLECTED_TRAITS:Array =
@@ -271,7 +271,7 @@ package org.osmf.proxies
 					, MediaTraitType.BUFFER
 					, MediaTraitType.LOAD
 					, MediaTraitType.PLAY
-				    , MediaTraitType.VIEW
+				    , MediaTraitType.DISPLAY_OBJECT
 				    ];
 	}
 }

@@ -35,7 +35,7 @@ package org.osmf.display
 			
 			sprite.setAvailableSize(1,1); //ensure this works without a view set.
 						
-			sprite.view = displayObject;
+			sprite.displayObject = displayObject;
 			//assertEquals(sprite.view, displayObject);				
 			//assertEquals(sprite.scaleMode, ScaleMode.LETTERBOX);
 			
@@ -76,10 +76,10 @@ package org.osmf.display
 			//assertEquals(Math.round( displayObject.height ) , Math.round( 2/6 * 500 ) );	 //Should maintain aspect ratio	
 			
 			var displayObject2:Video = new Video();
-			sprite.view = displayObject2;
+			sprite.displayObject = displayObject2;
 			//assertEquals(sprite.view, displayObject2);	
 			
-			sprite.view = null;
+			sprite.displayObject = null;
 			sprite.setAvailableSize(NaN, NaN);
 			
 		}

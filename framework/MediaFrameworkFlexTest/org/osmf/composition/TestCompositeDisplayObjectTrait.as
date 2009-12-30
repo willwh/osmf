@@ -26,16 +26,16 @@ package org.osmf.composition
 	import org.osmf.layout.*;
 	import org.osmf.media.MediaElement;
 
-	public class TestCompositeViewableTrait extends TestCase
+	public class TestCompositeDisplayObjectTrait extends TestCase
 	{
-		public function testCompositeViewableTrait():void
+		public function testCompositedisplayObjectTrait():void
 		{
 			var aggregator:TraitAggregator = new TraitAggregator();
 			
 			var owner:MediaElement = new SerialElement;
 			
-			var trait:CompositeViewableTrait
-				= new CompositeViewableTrait(aggregator, owner); 
+			var trait:CompositedisplayObjectTrait
+				= new CompositedisplayObjectTrait(aggregator, owner); 
 			
 			// No layout renderer class being assigned, the default
 			// should have been used:

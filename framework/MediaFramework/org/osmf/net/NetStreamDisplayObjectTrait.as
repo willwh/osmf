@@ -24,16 +24,16 @@ package org.osmf.net
 	import flash.display.DisplayObject;
 	import flash.net.NetStream;
 	
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	[ExcludeClass]
 	
 	/**
 	 * @private
 	 **/
-	public class NetStreamViewTrait extends ViewTrait
+	public class NetStreamDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function NetStreamViewTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
 			super(view, mediaWidth, mediaHeight);
 			
@@ -47,8 +47,8 @@ package org.osmf.net
     			||	info.height != mediaHeight
     			)
     		{	
-    			view.width = info.width;
-    			view.height = info.height;
+    			displayObject.width = info.width;
+    			displayObject.height = info.height;
     				
 				setMediaSize(info.width, info.height);
     		}

@@ -25,16 +25,16 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataUtils;
 
 	/**
 	 * Dispatched when a layout element's intrinsic width and height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
 	 * LayoutContextSprite defines a Sprite based ILayoutContext implementation.
@@ -87,7 +87,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get view():DisplayObject
+		public function get displayObject():DisplayObject
 		{
 			return this;
 		}
@@ -252,9 +252,9 @@ package org.osmf.layout
 					
 			if (newIntrinsicWidth != _intrinsicWidth)
 			{
-				var event:ViewEvent
-						= new ViewEvent
-							( ViewEvent.MEDIA_SIZE_CHANGE, false, false
+				var event:DisplayObjectEvent
+						= new DisplayObjectEvent
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, newIntrinsicWidth	, _intrinsicHeight
@@ -271,9 +271,9 @@ package org.osmf.layout
 			
 			if (newIntrinsicHeight != _intrinsicHeight)
 			{
-				var event:ViewEvent
-						= new ViewEvent
-							( ViewEvent.MEDIA_SIZE_CHANGE, false, false
+				var event:DisplayObjectEvent
+						= new DisplayObjectEvent
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 							, null				, null
 							, _intrinsicWidth	, _intrinsicHeight
 							, _intrinsicWidth	, newIntrinsicHeight

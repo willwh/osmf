@@ -22,13 +22,14 @@
 package org.osmf.display
 {
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	
 	/**
-	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a ViewTrait to be placed on the display list.  
-	 * It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well as the creation of a <code>MediaPlayer</code> controller class.
+	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a DisplayObjectTrait to be placed
+	 * on the display list. It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well
+	 * as the creation of a <code>MediaPlayer</code> controller class.
 	 **/
 	public class MediaPlayerSprite extends ScalableSprite
 	{	
@@ -43,7 +44,7 @@ package org.osmf.display
 		}	
 		
  		/**
-		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  Setting the element will set
+		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code>. Setting the element will set
          * as the element on the mediaPlayer, if mediaPlayer is not null.
 		 */
 		public function set element(value:MediaElement):void
@@ -60,8 +61,9 @@ package org.osmf.display
 		}
 		
 		/**
-		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's element set either 
-		 * on the MediaPlayer or on this object (see element) after this property is set.
+		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.
+		 * The player needs to have it's element set either on the MediaPlayer or on this object (see element)
+		 * after this property is set.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -73,19 +75,19 @@ package org.osmf.display
 			if (_player != null)
 			{
 				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.removeEventListener(ViewEvent.VIEW_CHANGE, onView);	
-				_player.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
-				view = null;
+				_player.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
+				_player.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
+				displayObject = null;
 			}
 			_player = value;
 			if (_player != null)
 			{
 				_player.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
-				_player.addEventListener(ViewEvent.VIEW_CHANGE, onView);	
-				_player.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
+				_player.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
+				_player.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
 				if (_player.viewable)
 				{
-					view = _player.view;		
+					displayObject = _player.view;		
 					setIntrinsicSize(_player.width, _player.height);
 				}
 			}
@@ -96,17 +98,17 @@ package org.osmf.display
 			return _player;
 		}				
 						
-		private function onView(event:ViewEvent):void
+		private function onView(event:DisplayObjectEvent):void
 		{	
-			view = event.newView;				
+			displayObject = event.newDisplayObject;				
 		}
 		
 		private function onViewable(event:MediaPlayerCapabilityChangeEvent):void
 		{	
-			view = event.enabled ? _player.view : null;				
+			displayObject = event.enabled ? _player.view : null;				
 		}
 				
-		private function onMediaSize(event:ViewEvent):void
+		private function onMediaSize(event:DisplayObjectEvent):void
 		{
 			setIntrinsicSize(event.newWidth, event.newHeight);
 		}

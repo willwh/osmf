@@ -26,52 +26,52 @@ package org.osmf.traits
 	
 	import org.osmf.utils.InterfaceTestCase;
 
-	public class TestViewTrait extends InterfaceTestCase
+	public class TestDisplayObjectTrait extends InterfaceTestCase
 	{
 		/**
 		 * Subclasses can override to specify their own trait class.
 		 **/
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new ViewTrait(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 0);
+			return new DisplayObjectTrait(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 0);
 		}
 		
 		override public function setUp():void
 		{
 			super.setUp();
 			
-			viewTrait = createInterfaceObject() as ViewTrait;
+			displayObjectTrait = createInterfaceObject() as DisplayObjectTrait;
 			events = [];
 		}
 		
-		public function testView():void
+		public function testDisplayObject():void
 		{
-			var nullViewTrait:ViewTrait = createInterfaceObject() as ViewTrait;
-			assertTrue(nullViewTrait.view == null);
+			var nullDisplayObjectTrait:DisplayObjectTrait = createInterfaceObject() as DisplayObjectTrait;
+			assertTrue(nullDisplayObjectTrait.displayObject == null);
 			
 			var sprite:Sprite = new Sprite();
 			
-			var nonNullViewTrait:ViewTrait = createInterfaceObject(sprite) as ViewTrait;
-			assertTrue(nonNullViewTrait.view == sprite);
+			var nonNullDisplayObjectTrait:DisplayObjectTrait = createInterfaceObject(sprite) as DisplayObjectTrait;
+			assertTrue(nonNullDisplayObjectTrait.displayObject == sprite);
 		}
 
 		public function testMediaDimensions():void
 		{
-			assertTrue(viewTrait.mediaWidth == 0);
-			assertTrue(viewTrait.mediaHeight == 0);
+			assertTrue(displayObjectTrait.mediaWidth == 0);
+			assertTrue(displayObjectTrait.mediaHeight == 0);
 			
 			var sprite:Sprite = new Sprite();
 			
-			var spatialViewTrait:ViewTrait = createInterfaceObject(sprite, 33, 66) as ViewTrait;
+			var spatialDisplayObjectTrait:DisplayObjectTrait = createInterfaceObject(sprite, 33, 66) as DisplayObjectTrait;
 			
-			assertTrue(spatialViewTrait.mediaWidth == 33);
-			assertTrue(spatialViewTrait.mediaHeight == 66);
+			assertTrue(spatialDisplayObjectTrait.mediaWidth == 33);
+			assertTrue(spatialDisplayObjectTrait.mediaHeight == 66);
 		}
 		
 		// Utils
 		//
 		
-		protected var viewTrait:ViewTrait;
+		protected var displayObjectTrait:DisplayObjectTrait;
 		protected var events:Array;
 		
 		protected function eventCatcher(event:Event):void

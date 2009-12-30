@@ -25,7 +25,7 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.NullResource;
 
@@ -39,7 +39,7 @@ package org.osmf.layout
 			return _metadata;
 		}
 		
-		public function get view():DisplayObject
+		public function get displayObject():DisplayObject
 		{
 			return this;
 		}
@@ -129,8 +129,8 @@ package org.osmf.layout
 			graphics.endFill();
 			
 			dispatchEvent
-				( new ViewEvent
-					( ViewEvent.MEDIA_SIZE_CHANGE, false, false
+				( new DisplayObjectEvent
+					( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 					, null, null
 					, _intrinsicWidth
 					, _intrinsicHeight

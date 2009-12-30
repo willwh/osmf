@@ -40,7 +40,7 @@ package org.osmf.media
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -933,20 +933,20 @@ package org.osmf.media
 
 		private function doTestWidthHeight():void
 		{
-			if (traitExists(MediaTraitType.VIEW))
+			if (traitExists(MediaTraitType.DISPLAY_OBJECT))
 			{
 				assertTrue(mediaPlayer.width == 0);
 				assertTrue(mediaPlayer.height == 0);
 				
-				mediaPlayer.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 								
 				// For some media, triggering playback will cause the true
 				// dimensions to get set.
 				mediaPlayer.play();
 				
-				function onTestWidthHeight(event:ViewEvent):void
+				function onTestWidthHeight(event:DisplayObjectEvent):void
 				{
-					mediaPlayer.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
+					mediaPlayer.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 
 					assertTrue(mediaPlayer.width == expectedWidthAfterLoad);
 					assertTrue(mediaPlayer.height == expectedHeightAfterLoad);
@@ -980,7 +980,7 @@ package org.osmf.media
 
 		private function doTestView():void
 		{
-			if (traitExists(MediaTraitType.VIEW))
+			if (traitExists(MediaTraitType.DISPLAY_OBJECT))
 			{
 				assertTrue(mediaPlayer.view != null);
 
@@ -1420,7 +1420,7 @@ package org.osmf.media
 								case MediaTraitType.TIME:
 									assertTrue(mediaPlayer.temporal == true);
 									break;
-								case MediaTraitType.VIEW:
+								case MediaTraitType.DISPLAY_OBJECT:
 									assertTrue(mediaPlayer.viewable == true);
 									break;
 								default:

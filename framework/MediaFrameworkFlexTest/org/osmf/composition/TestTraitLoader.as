@@ -55,7 +55,7 @@ package org.osmf.composition
 			//
 
 			var mediaElement1:MediaElement =
-				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.VIEW]);
+				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.DISPLAY_OBJECT]);
 
 			var loader2:SimpleLoader = new SimpleLoader();
 			var mediaElement2:MediaElement =
@@ -65,7 +65,7 @@ package org.osmf.composition
 			
 			var loader3:SimpleLoader = new SimpleLoader();
 			var mediaElement3:MediaElement =
-				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.VIEW, MediaTraitType.SEEK],
+				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.DISPLAY_OBJECT, MediaTraitType.SEEK],
 										loader3,
 										new URLResource(new URL("http://www.example.com/loadable3")));
 

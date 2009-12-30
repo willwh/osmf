@@ -74,7 +74,7 @@ package org.osmf.proxies
 			assertTrue(proxy.getTrait(MediaTraitType.AUDIO) == null);
 			assertTrue(proxy.getTrait(MediaTraitType.BUFFER) == null);
 			assertTrue(proxy.getTrait(MediaTraitType.LOAD) == null);
-			assertTrue(proxy.getTrait(MediaTraitType.VIEW) == null);
+			assertTrue(proxy.getTrait(MediaTraitType.DISPLAY_OBJECT) == null);
 		}
 		
 		public function testEvents():void

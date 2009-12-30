@@ -154,13 +154,13 @@ package org.osmf.layout
 					, true
 					)
 					;
-			var view:DisplayObject = target.view;
-			if (view)
+			var displayObject:DisplayObject = target.displayObject;
+			if (displayObject)
 			{
-				view.x = rect.x;
-				view.y = rect.y;
-				view.width = isNaN(rect.width) ? view.width : rect.width;
-				view.height = isNaN(rect.height) ? view.height : rect.height;
+				displayObject.x = rect.x;
+				displayObject.y = rect.y;
+				displayObject.width = isNaN(rect.width) ? displayObject.width : rect.width;
+				displayObject.height = isNaN(rect.height) ? displayObject.height : rect.height;
 			}
 			
 			return rect;

@@ -31,7 +31,7 @@ package org.osmf.proxies
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.AudioTrait;
@@ -42,7 +42,7 @@ package org.osmf.proxies
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	/**
 	 * A ProxyElement which listens to all events from its wrapped MediaElement,
@@ -244,7 +244,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void
+		protected function processDisplayObjectChange(oldDisplayObject:DisplayObject, newView:DisplayObject):void
 		{
 		}
 		
@@ -325,12 +325,12 @@ package org.osmf.proxies
 			processAutoSwitchChange(event.autoSwitch);
 		}
 
-		private function onViewChange(event:ViewEvent):void
+		private function onDisplayObjectChange(event:DisplayObjectEvent):void
 		{
-			processViewChange(event.oldView, event.newView);
+			processDisplayObjectChange(event.oldDisplayObject, event.newDisplayObject);
 		}
 
-		private function onMediaSizeChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:DisplayObjectEvent):void
 		{
 			processMediaSizeChange(event.oldWidth, event.oldHeight, event.newWidth, event.newHeight);
 		}
@@ -377,16 +377,16 @@ package org.osmf.proxies
 				case MediaTraitType.TIME:
 					toggleTimeTraitListeners(added);
 					break;
-				case MediaTraitType.VIEW:
-					toggleViewTraitListeners(added);
+				case MediaTraitType.DISPLAY_OBJECT:
+					toggleDisplayObjectTraitListeners(added);
 					
 					// ViewTrait is the one trait where the change event is
 					// merged with the trait addition/removal event.  So we
 					// forcibly signal a view change event.
-					var viewTrait:ViewTrait = wrappedElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
-					if (viewTrait != null && viewTrait.view != null)
+					var displayObjectTrait:DisplayObjectTrait = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					if (displayObjectTrait != null && displayObjectTrait.displayObject != null)
 					{
-						processViewChange(added ? null : viewTrait.view, added ? viewTrait.view : null);
+						processDisplayObjectChange(added ? null : displayObjectTrait.displayObject, added ? displayObjectTrait.displayObject : null);
 					}
 					break;
 			}
@@ -521,20 +521,20 @@ package org.osmf.proxies
 			}
 		}
 		
-		private function toggleViewTraitListeners(added:Boolean):void
+		private function toggleDisplayObjectTraitListeners(added:Boolean):void
 		{
-			var viewTrait:ViewTrait = wrappedElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
-			if (viewTrait)
+			var displayObjectTrait:DisplayObjectTrait = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			if (displayObjectTrait)
 			{
 				if (added)
 				{
-					viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
-					viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+					displayObjectTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
+					displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 				}
 				else
 				{
-					viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onViewChange);
-					viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+					displayObjectTrait.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
+					displayObjectTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 				}
 			}
 		}

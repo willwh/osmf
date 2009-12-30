@@ -34,7 +34,7 @@ package org.osmf.content
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	/**
 	 * ContentElement is a media element that can present the content loaded
@@ -82,7 +82,7 @@ package org.osmf.content
 				=	(getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext
 				as	ContentLoadedContext;
 				
-			var view:DisplayObject = null;
+			var displayObject:DisplayObject = null;
 			var mediaWidth:Number = 0;
 			var mediaHeight:Number = 0;
 			
@@ -92,15 +92,15 @@ package org.osmf.content
 				// overdraw its bounds, while maintaining scale, and size
 				// with the layout system.
 				//
-				// Note that it's critical that the ViewTrait's view be set to
-				// the Loader's content property (and not to a container Sprite,
-				// as was the case with a previous fix), since player-to-SWF
-				// communication is based on the player's ability to reference
-				// the SWF's API.
+				// Note that it's critical that the DisplayObjectTriat's
+				// displayObject be set to the Loader's content property (and
+				// not to a container Sprite,as was the case with a previous fix),
+				// since player-to-SWF communication is based on the player's
+				// ability to reference the SWF's API.
 				var info:LoaderInfo = context.loader.contentLoaderInfo;  
 				context.loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
 				
-				view = context.loader.content;	
+				displayObject = context.loader.content;	
 				mediaWidth = info.width;
 				mediaHeight = info.height;
 			}
@@ -119,7 +119,10 @@ package org.osmf.content
 					);
 			}
 			
-			addTrait(MediaTraitType.VIEW, new ViewTrait(view, mediaWidth, mediaHeight));
+			addTrait
+				( MediaTraitType.DISPLAY_OBJECT
+				, new DisplayObjectTrait(displayObject, mediaWidth, mediaHeight)
+				);
 		}
 		
 		/**
@@ -127,7 +130,7 @@ package org.osmf.content
 		 */ 
 		override protected function processUnloadingState():void
 		{
-			removeTrait(MediaTraitType.VIEW);	
+			removeTrait(MediaTraitType.DISPLAY_OBJECT);	
 		}
 	}
 }

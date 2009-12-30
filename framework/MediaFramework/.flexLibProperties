@@ -22,7 +22,7 @@
     <classEntry path="org.osmf.composition.CompositeSeekOperationInfo"/>
     <classEntry path="org.osmf.composition.CompositeSeekTrait"/>
     <classEntry path="org.osmf.composition.CompositeTimeTrait"/>
-    <classEntry path="org.osmf.composition.CompositeViewTrait"/>
+    <classEntry path="org.osmf.composition.CompositeDisplayObjectTrait"/>
     <classEntry path="org.osmf.composition.CompositionMode"/>
     <classEntry path="org.osmf.composition.IReusable"/>
     <classEntry path="org.osmf.composition.ParallelElement"/>
@@ -73,7 +73,7 @@
     <classEntry path="org.osmf.events.PluginLoadEvent"/>
     <classEntry path="org.osmf.events.SeekEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
-    <classEntry path="org.osmf.events.ViewEvent"/>
+    <classEntry path="org.osmf.events.DisplayObjectEvent"/>
     <classEntry path="org.osmf.external.HTMLAudioTrait"/>
     <classEntry path="org.osmf.external.HTMLElement"/>
     <classEntry path="org.osmf.external.HTMLLoadTrait"/>
@@ -163,7 +163,7 @@
     <classEntry path="org.osmf.net.NetStreamSeekTrait"/>
     <classEntry path="org.osmf.net.NetStreamTimeTrait"/>
     <classEntry path="org.osmf.net.NetStreamUtils"/>
-    <classEntry path="org.osmf.net.NetStreamViewTrait"/>
+    <classEntry path="org.osmf.net.NetStreamDisplayObjectTrait"/>
     <classEntry path="org.osmf.net.StreamType"/>
     <classEntry path="org.osmf.net.StreamingURLResource"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DroppedFramesRule"/>
@@ -220,7 +220,7 @@
     <classEntry path="org.osmf.traits.PlayTrait"/>
     <classEntry path="org.osmf.traits.SeekTrait"/>
     <classEntry path="org.osmf.traits.TimeTrait"/>
-    <classEntry path="org.osmf.traits.ViewTrait"/>
+    <classEntry path="org.osmf.traits.DisplayObjectTrait"/>
     <classEntry path="org.osmf.utils.Base64Decoder"/>
     <classEntry path="org.osmf.utils.BinarySearch"/>
     <classEntry path="org.osmf.utils.DateUtil"/>

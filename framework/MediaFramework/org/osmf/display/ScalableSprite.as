@@ -69,7 +69,7 @@ package org.osmf.display
 			if(_scaleMode != value)
 			{				
 				_scaleMode = value;
-				updateView(availableWidth, availableHeight);
+				updateDisplayObject(availableWidth, availableHeight);
 			}
 		}	
 	
@@ -86,7 +86,7 @@ package org.osmf.display
 		{			
 			availableWidth = width;
 			availableHeight = height;
-			updateView(availableWidth, availableHeight);			
+			updateDisplayObject(availableWidth, availableHeight);			
 		}
 		
 		/**
@@ -100,7 +100,7 @@ package org.osmf.display
 		override public function set width(value:Number):void
 		{
 			availableWidth = value;
-			updateView(availableWidth, availableHeight);				
+			updateDisplayObject(availableWidth, availableHeight);				
 		}
 		
 		override public function get width():Number
@@ -119,7 +119,7 @@ package org.osmf.display
 		override public function set height(value:Number):void
 		{
 			availableHeight = value;
-			updateView(availableWidth, availableHeight);					
+			updateDisplayObject(availableWidth, availableHeight);					
 		}
 		
 		override public function get height():Number
@@ -129,39 +129,39 @@ package org.osmf.display
 		
 		/**
 		 * The <code>DisplayObject</code> to be laid out by this container. Sets the initial <code>intrinsicSize</code> of the
-		 * view based on the current measured width and height of the view.
+		 * displayObject based on the current measured width and height of the displayObject.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function set view(value:DisplayObject):void
+		public function set displayObject(value:DisplayObject):void
 		{
-			if (_view)
+			if (_displayObject)
 			{
-				if (contains(_view))
+				if (contains(_displayObject))
 				{
-					removeChild(_view);
+					removeChild(_displayObject);
 				}
 			}
-			_view = value;
-			if (_view)
+			_displayObject = value;
+			if (_displayObject)
 			{
-				addChild(_view);				
-				intrinsicWidth = _view.width / _view.scaleX;
-				intrinsicHeight = _view.height / _view.scaleY;				
+				addChild(_displayObject);				
+				intrinsicWidth = _displayObject.width / _displayObject.scaleX;
+				intrinsicHeight = _displayObject.height / _displayObject.scaleY;				
 			}
-			updateView(availableWidth, availableHeight);			
+			updateDisplayObject(availableWidth, availableHeight);			
 		}
 	
-		public function get view():DisplayObject
+		public function get displayObject():DisplayObject
 		{
-			return _view;
+			return _displayObject;
 		}
 		
 		/**
-		 * Sets the preferred size of the view, and updates the layout of the view inside the container
+		 * Sets the preferred size of the displayObject, and updates the layout of the displayObject inside the container
 		 * The <code>intrinsicSize</code> is a preferred size and is not guaranteed unless <code>scaleMode</code> is set to <code>NONE</code>.
 		 * For more information on how <code>intrinsicSize</code> and the size of the container interact: 
 		 * @see org.osmf.display.ScaleMode
@@ -175,23 +175,23 @@ package org.osmf.display
 		{
 			intrinsicWidth = width;
 			intrinsicHeight = height;
-			updateView(availableWidth, availableHeight);
+			updateDisplayObject(availableWidth, availableHeight);
 		}
 						
-		private function updateView(width:Number, height:Number):void
+		private function updateDisplayObject(width:Number, height:Number):void
 		{			
-			if (_view && !isNaN(availableWidth) && !isNaN(availableHeight))						
+			if (_displayObject && !isNaN(availableWidth) && !isNaN(availableHeight))						
 			{
 				var size:Point = ScaleModeUtils.getScaledSize(_scaleMode, width, height, intrinsicWidth, intrinsicHeight);		
 							
-				_view.width = size.x;
-				_view.height = size.y;				 
-				_view.x = (width - size.x)/2;
-				_view.y = (height - size.y)/2;				
+				_displayObject.width = size.x;
+				_displayObject.height = size.y;				 
+				_displayObject.x = (width - size.x)/2;
+				_displayObject.y = (height - size.y)/2;				
 			}
 		}
 				
-		private var _view:DisplayObject;
+		private var _displayObject:DisplayObject;
 		private var availableWidth:Number = NaN;
 		private var availableHeight:Number = NaN;
 		private var intrinsicWidth:Number = NaN;

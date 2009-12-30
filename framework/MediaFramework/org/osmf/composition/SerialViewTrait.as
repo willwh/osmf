@@ -39,7 +39,7 @@ package org.osmf.composition
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class SerialViewTrait extends CompositeViewTrait implements IReusable
+	internal class SerialViewTrait extends CompositeDisplayObjectTrait implements IReusable
 	{
 		/**
 		 * Constructor

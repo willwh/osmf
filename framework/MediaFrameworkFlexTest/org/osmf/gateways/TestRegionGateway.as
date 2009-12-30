@@ -32,7 +32,7 @@ package org.osmf.gateways
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestRegionGateway extends TestCase
@@ -120,8 +120,8 @@ package org.osmf.gateways
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:ViewTrait = new ViewTrait(viewSprite, 486, 60);
-			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 

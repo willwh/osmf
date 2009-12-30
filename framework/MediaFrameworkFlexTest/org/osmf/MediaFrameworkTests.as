@@ -93,8 +93,8 @@ package org.osmf
 			addTestSuite(TestSeekTraitAsSubclass);
 			addTestSuite(TestTimeTrait);
 			addTestSuite(TestTimeTraitAsSubclass);
-			addTestSuite(TestViewTrait);
-			addTestSuite(TestViewTraitAsSubclass);
+			addTestSuite(TestDisplayObjectTrait);
+			addTestSuite(TestDisplayObjectTraitAsSubclass);
 
 			// Events
 			//
@@ -185,7 +185,7 @@ package org.osmf
 			addTestSuite(TestNetStreamPlayTrait);
 			addTestSuite(TestNetStreamSeekTrait);
 			addTestSuite(TestNetStreamTimeTrait);
-			addTestSuite(TestNetStreamViewTrait);
+			addTestSuite(TestNetStreamDisplayObjectTrait);
 			
 			addTestSuite(TestManifestParser);
 			addTestSuite(TestF4MLoader);		
@@ -238,7 +238,7 @@ package org.osmf
 			addTestSuite(TestParallelElementWithPlayTrait);
 			addTestSuite(TestParallelElementWithSeekTrait);
 			addTestSuite(TestParallelElementWithTimeTrait);
-			addTestSuite(TestParallelElementWithViewTrait);
+			addTestSuite(TestParallelElementWithDisplayObjectTrait);
 			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
@@ -248,7 +248,7 @@ package org.osmf
 			addTestSuite(TestSerialElementWithPlayTrait);
 			addTestSuite(TestSerialElementWithSeekTrait);
 			addTestSuite(TestSerialElementWithTimeTrait);
-			addTestSuite(TestSerialElementWithViewTrait);
+			addTestSuite(TestSerialElementWithDisplayObjectTrait);
 			
 			addTestSuite(TestCompositeAudioTrait);
 			

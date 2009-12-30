@@ -30,21 +30,21 @@ package org.osmf.layout
 	/**
 	 * Dispatched when a layout target's view has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
 	 * Dispatched when a layout target's intrinsical width and/or height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.MEDIA_SIZE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.DimensionEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
 	 * ILayoutTarget defines the interface to the objects that an ILayoutRenderer
@@ -79,7 +79,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		function get view():DisplayObject;
+		function get displayObject():DisplayObject;
 		
 	 	/**
 	 	 * Defines the width of the element without any transformations being

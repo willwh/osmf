@@ -35,7 +35,7 @@ package org.osmf.utils
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	public class DynamicProxyElement extends ProxyElement
 	{
@@ -99,8 +99,8 @@ package org.osmf.utils
 						case MediaTraitType.TIME:
 							trait = new TimeTrait();
 							break;
-						case MediaTraitType.VIEW:
-							trait = new ViewTrait(null);
+						case MediaTraitType.DISPLAY_OBJECT:
+							trait = new DisplayObjectTrait(null);
 							break;
 						default:
 							throw new ArgumentError();

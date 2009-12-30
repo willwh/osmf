@@ -32,40 +32,40 @@ package org.osmf.composition
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewableTrait;
+	import org.osmf.traits.displayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
-	public class TestParallelViewableTrait extends TestCase
+	public class TestParalleldisplayObjectTrait extends TestCase
 	{
-		public function testParallelViewableTrait():void
+		public function testParalleldisplayObjectTrait():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
 			
-			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
+			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.DISPLAY_OBJECTABLE] );
 			var me1Sprite:Sprite = new Sprite();
 			me1Sprite.graphics.drawRect(0,0,100,100);
-			ViewableTrait(me1.getTrait(MediaTraitType.VIEWABLE)).view = me1Sprite;
+			displayObjectTrait(me1.getTrait(MediaTraitType.DISPLAY_OBJECTABLE)).view = me1Sprite;
 			
-			var me2:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
+			var me2:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.DISPLAY_OBJECTABLE] );
 			var me2Sprite:Sprite = new Sprite();
 			me2Sprite.graphics.drawRect(0,0,200,200);
-			ViewableTrait(me2.getTrait(MediaTraitType.VIEWABLE)).view = me2Sprite;
+			displayObjectTrait(me2.getTrait(MediaTraitType.DISPLAY_OBJECTABLE)).view = me2Sprite;
 			
 			var region2:RegionGateway = new RegionGateway();
 			me2.gateway = region2;
 			
-			var me3:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
+			var me3:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.DISPLAY_OBJECTABLE] );
 			var me3Sprite:Sprite = new Sprite();
 			me3Sprite.graphics.drawRect(0,0,300,300);
-			ViewableTrait(me3.getTrait(MediaTraitType.VIEWABLE)).view = me3Sprite;
+			displayObjectTrait(me3.getTrait(MediaTraitType.DISPLAY_OBJECTABLE)).view = me3Sprite;
 			
 			parallel.addChild(me1);
 			parallel.addChild(me2);
 			parallel.addChild(me3);
 			
-			var pvt:ParallelViewableTrait
-				= parallel.getTrait(MediaTraitType.VIEWABLE) 
-				as ParallelViewableTrait;
+			var pvt:ParalleldisplayObjectTrait
+				= parallel.getTrait(MediaTraitType.DISPLAY_OBJECTABLE) 
+				as ParalleldisplayObjectTrait;
 				
 			assertNotNull(pvt);
 			
@@ -105,21 +105,21 @@ package org.osmf.composition
 			LayoutUtils.setLayoutRenderer(serial.metadata, CustomRenderer);
 			MetadataUtils.setElementId(serial.metadata,"serial");
 			
-			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.VIEWABLE] );
+			var me1:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.DISPLAY_OBJECTABLE] );
 			var me1Sprite:Sprite = new Sprite();
 			me1Sprite.graphics.drawRect(0,0,100,100);
-			ViewableTrait(me1.getTrait(MediaTraitType.VIEWABLE)).view = me1Sprite;
+			displayObjectTrait(me1.getTrait(MediaTraitType.DISPLAY_OBJECTABLE)).view = me1Sprite;
 			
 			parallel.addChild(serial);
 			serial.addChild(me1);
 			
-			var pvt:ParallelViewableTrait
-				= parallel.getTrait(MediaTraitType.VIEWABLE) 
-				as ParallelViewableTrait;
+			var pvt:ParalleldisplayObjectTrait
+				= parallel.getTrait(MediaTraitType.DISPLAY_OBJECTABLE) 
+				as ParalleldisplayObjectTrait;
 				
-			var svt:SerialViewableTrait
-				= serial.getTrait(MediaTraitType.VIEWABLE) 
-				as SerialViewableTrait;
+			var svt:SerialdisplayObjectTrait
+				= serial.getTrait(MediaTraitType.DISPLAY_OBJECTABLE) 
+				as SerialdisplayObjectTrait;
 				
 			assertNotNull(pvt);
 			assertNotNull(svt);

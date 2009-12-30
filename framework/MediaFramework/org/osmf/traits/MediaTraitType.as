@@ -119,7 +119,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VIEW:String = "view";
+		public static const DISPLAY_OBJECT:String = "displayObject";
 				
 		/**
 		 * @private
@@ -136,7 +136,7 @@ package org.osmf.traits
 				, PLAY
 				, SEEK
 				, TIME
-				, VIEW
+				, DISPLAY_OBJECT
 			  ]
 			);
 	}

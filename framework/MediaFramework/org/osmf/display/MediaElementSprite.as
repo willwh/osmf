@@ -22,23 +22,24 @@
 package org.osmf.display
 {
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 
     /**
-	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
+	 * Dispatched when the <code>mediaWidth</code> and/or <code>mediaHeight</code> property of the 
 	 * source media has changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DimensionEvent.MEDIA_SIZE_CHANGE
 	 */		
-	 [Event(name="dimensionChange", type="org.osmf.events.DimensionEvent")]
+	 [Event(name="mediaSizeChange", type="org.osmf.events.DimensionEvent")]
 
 	/**
-	 * The MediaElementSprite class is designed to display media with ViewTrait properties.  It is based off
-	 * of flash.display.Sprite to be both compatible with Flash and Flex workflows.   The ViewTrait events
-	 * are adapted through this UI wrapper class. 
+	 * The MediaElementSprite class is designed to display media with DisplayObjectTrait
+	 * properties. It is based off of flash.display.Sprite to be both compatible with
+	 * Flash and Flex workflows. The DisplayObjectTrait events are adapted through this
+	 * UI wrapper class. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -74,9 +75,9 @@ package org.osmf.display
 			{
 				_source.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_source.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);		
-				if (_source.hasTrait(MediaTraitType.VIEW)) //Take care of event listeners
+				if (_source.hasTrait(MediaTraitType.DISPLAY_OBJECT)) //Take care of event listeners
 				{	
-					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.VIEW));
+					onTraitRemove(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, MediaTraitType.DISPLAY_OBJECT));
 				}
 			}
 			_source = value;	
@@ -84,9 +85,9 @@ package org.osmf.display
 			{	
 				_source.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_source.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				if (_source.hasTrait(MediaTraitType.VIEW)) 
+				if (_source.hasTrait(MediaTraitType.DISPLAY_OBJECT)) 
 				{					
-					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.VIEW));
+					onTraitAdd(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, MediaTraitType.DISPLAY_OBJECT));
 				}
 			}	
 		}
@@ -101,14 +102,14 @@ package org.osmf.display
 		{	
 		 	switch (event.traitType)
 		 	{
-		 		case MediaTraitType.VIEW:
-		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
+		 		case MediaTraitType.DISPLAY_OBJECT:
+		 			var displayObjectTrait:DisplayObjectTrait = _source.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 		 		
-		 			viewTrait.addEventListener(ViewEvent.VIEW_CHANGE, onView);
-		 			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
+		 			displayObjectTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
+		 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 		 			
-		 			view = viewTrait.view;
-		 			setIntrinsicSize(viewTrait.mediaWidth, viewTrait.mediaHeight);		 			
+		 			displayObject = displayObjectTrait.displayObject;
+		 			setIntrinsicSize(displayObjectTrait.mediaWidth, displayObjectTrait.mediaHeight);		 			
 		 			break;		 			
 		 	}
 		 }
@@ -117,26 +118,26 @@ package org.osmf.display
 		 {
 		 	switch (event.traitType)
 		 	{
-		 		case MediaTraitType.VIEW:
-		 			var viewTrait:ViewTrait = _source.getTrait(MediaTraitType.VIEW) as ViewTrait;
+		 		case MediaTraitType.DISPLAY_OBJECT:
+		 			var displayObjectTrait:DisplayObjectTrait = _source.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 		 			
-		 			viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
-		 			viewTrait.removeEventListener(ViewEvent.VIEW_CHANGE, onView);		 			
+		 			displayObjectTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+		 			displayObjectTrait.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);		 			
 
-		 			view = null;
+		 			displayObject = null;
 		 			break;		 			
 		 	}
 		 }
 		 
-		 private function onMediaSize(event:ViewEvent):void
+		 private function onMediaSizeChange(event:DisplayObjectEvent):void
 		 {
 		 	setIntrinsicSize(event.newWidth, event.newHeight);	
 		 	dispatchEvent(event.clone());	 	
 		 }
 		 
-		 private function onView(event:ViewEvent):void
+		 private function onDisplayObjectChange(event:DisplayObjectEvent):void
 		 {
-		 	view = event.newView;
+		 	displayObject = event.newDisplayObject;
 		 }
 		 
 		 private var _source:MediaElement;

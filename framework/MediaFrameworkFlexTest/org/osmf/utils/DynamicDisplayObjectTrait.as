@@ -23,18 +23,18 @@ package org.osmf.utils
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
-	public class DynamicViewTrait extends ViewTrait
+	public class DynamicDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function DynamicViewTrait(view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function DynamicDisplayObjectTrait(displayObject:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
-			super(view, mediaWidth, mediaHeight);
+			super(displayObject, mediaWidth, mediaHeight);
 		}
 		
-		public function set view(value:DisplayObject):void
+		public function set displayObject(value:DisplayObject):void
 		{
-			setView(value);
+			setDisplayObject(value);
 		}
 	
 		public function setSize(width:Number, height:Number):void

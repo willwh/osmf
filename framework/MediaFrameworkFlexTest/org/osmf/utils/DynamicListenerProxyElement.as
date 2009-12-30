@@ -132,9 +132,9 @@ package org.osmf.utils
 			changeEventQueue.push({"newAutoSwitch":newAutoSwitch});
 		}
 
-		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void
+		override protected function processDisplayObjectChange(oldDisplayObject:DisplayObject, newDisplayObject:DisplayObject):void
 		{
-			changeEventQueue.push({"oldView":oldView, "newView":newView});
+			changeEventQueue.push({"oldDisplayObject":oldDisplayObject, "newDisplayObject":newDisplayObject});
 		}
 
 		private var changeEventQueue:Array;

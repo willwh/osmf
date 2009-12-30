@@ -25,26 +25,26 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A  ViewEvent is dispatched when the properties of a ViewTrait change.
+	 * A DisplayObjectEvent is dispatched when the properties of a DisplayObjectTrait change.
 	 */	
-	public class ViewEvent extends Event
+	public class DisplayObjectEvent extends Event
 	{
 		/**
-		 * The ViewEvent.VIEW_CHANGE constant defines the value
-		 * of the type property of the event object for a viewChange
+		 * The DisplayObjectEvent.DISPLAY_OBJECT_CHANGE constant defines the value
+		 * of the type property of the event object for a displayObjectChange
 		 * event.
 		 * 
-		 * @eventType VIEW_CHANGE 
+		 * @eventType DISPLAY_OBJECT_CHANGE 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VIEW_CHANGE:String = "viewChange";
+		public static const DISPLAY_OBJECT_CHANGE:String = "displayObjectChange";
 		
 		/**
-		 * The ViewEvent.MEDIA_SIZE_CHANGE constant defines the value
+		 * The DisplayObjectEvent.MEDIA_SIZE_CHANGE constant defines the value
 		 * of the type property of the event object for a mediaSizeChange
 		 * event.
 		 * 
@@ -58,8 +58,8 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param oldView Previous view.
-		 * @param newView New view.
+		 * @param oldDisplayObject Previous view.
+		 * @param newDisplayObject New view.
 		 * @param oldWidth Previous width.
 		 * @param oldHeight Previous height.
 		 * @param newWidth New width.
@@ -70,12 +70,12 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ViewEvent
+		public function DisplayObjectEvent
 			( type:String
 			, bubbles:Boolean=false
 			, cancelable:Boolean=false
-			, oldView:DisplayObject=null
-			, newView:DisplayObject=null
+			, oldDisplayObject:DisplayObject=null
+			, newDisplayObject:DisplayObject=null
 			, oldWidth:Number=NaN
 			, oldHeight:Number=NaN
 			, newWidth:Number=NaN
@@ -84,8 +84,8 @@ package org.osmf.events
 		{
 			super(type, bubbles, cancelable);
 
-			_oldView = oldView;
-			_newView = newView;
+			_oldDisplayObject = oldDisplayObject;
+			_newDisplayObject = newDisplayObject;
 			_oldWidth = oldWidth;
 			_oldHeight = oldHeight;
 			_newWidth = newWidth;
@@ -100,9 +100,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get oldView():DisplayObject
+		public function get oldDisplayObject():DisplayObject
 		{
-			return _oldView;
+			return _oldDisplayObject;
 		}
 		
 		/**
@@ -113,9 +113,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get newView():DisplayObject
+		public function get newDisplayObject():DisplayObject
 		{
-			return _newView;
+			return _newDisplayObject;
 		}
 		
 		/**
@@ -175,14 +175,14 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new ViewEvent(type, bubbles, cancelable, _oldView, _newView, _oldWidth, _oldHeight, _newWidth, _newHeight);
+			return new DisplayObjectEvent(type, bubbles, cancelable, _oldDisplayObject, _newDisplayObject, _oldWidth, _oldHeight, _newWidth, _newHeight);
 		}
 		
 		// Internals
 		//
 		
-		private var _oldView:DisplayObject;
-		private var _newView:DisplayObject;
+		private var _oldDisplayObject:DisplayObject;
+		private var _newDisplayObject:DisplayObject;
 		private var _oldWidth:Number;
 		private var _oldHeight:Number;
 		private var _newWidth:Number;

@@ -35,7 +35,7 @@ package org.osmf.utils
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	public class DynamicMediaElement extends MediaElement
 	{
@@ -75,8 +75,8 @@ package org.osmf.utils
 							trait = useDynamicTraits ? new DynamicTimeTrait() : new TimeTrait();
 							timeTrait = trait as TimeTrait;
 							break;
-						case MediaTraitType.VIEW:
-							trait = useDynamicTraits ? new DynamicViewTrait(new Sprite()) : new ViewTrait(new Sprite());
+						case MediaTraitType.DISPLAY_OBJECT:
+							trait = useDynamicTraits ? new DynamicDisplayObjectTrait(new Sprite()) : new DisplayObjectTrait(new Sprite());
 							break;
 						default:
 							break;

@@ -24,7 +24,7 @@ package org.osmf.composition
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutContext;
 	import org.osmf.layout.ILayoutRenderer;
@@ -34,17 +34,17 @@ package org.osmf.composition
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Composite ViewTrait.
+	 * Composite CompositeDisplayObjectTrait.
 	 * 
-	 * The view property of the composite trait refers to a
+	 * The displayObject property of the composite trait refers to a
 	 * DisplayObjectContainer implementing instance, that holds each of the composite trait
-	 * children's DisplayObject.
+	 * children's display objects.
 	 * 
-	 * The bounds of the container determine the intrinsic size of the composition.
+	 * The bounds of the container determine the media size of the composition.
 	 * 
 	 * The characteristics of a composite trait changing influence
 	 * the container's characteristics - hence the trait needs to watch these traits on
@@ -55,9 +55,9 @@ package org.osmf.composition
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	internal class CompositeViewTrait extends ViewTrait
+	internal class CompositeDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function CompositeViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
+		public function CompositeDisplayObjectTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
 			super(null);
 			
@@ -67,7 +67,7 @@ package org.osmf.composition
 			// Prepare a container to hold our viewable children:
 			_container = constructLayoutContext();
 			_container.addEventListener
-				( ViewEvent.MEDIA_SIZE_CHANGE
+				( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 				, onContainerDimensionChange
 				);
 			
@@ -87,11 +87,11 @@ package org.osmf.composition
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 **/
-		override public function get view():DisplayObject
+		override public function get displayObject():DisplayObject
 		{
-			// The aggregate view is the container holding the composite
+			// The aggregate displayObject is the container holding the composite
 			// trait's children:
-			return _container.view;
+			return _container.displayObject;
 		}
 
 		/**
@@ -151,7 +151,7 @@ package org.osmf.composition
 			return new LayoutContextSprite(_owner.metadata);
 		}
 
-		private function onContainerDimensionChange(event:ViewEvent):void
+		private function onContainerDimensionChange(event:DisplayObjectEvent):void
 		{
 			// Re-dispatch the event.
 			dispatchEvent(event.clone());

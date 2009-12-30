@@ -26,7 +26,7 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 
 	public class MediaTraitResolverBaseTestCase extends TestCaseEx
 	{
@@ -71,7 +71,7 @@ package org.osmf.media
 			assertThrows
 				( function():void
 					{
-						resolver.addTrait(new ViewTrait(null));
+						resolver.addTrait(new DisplayObjectTrait(null));
 					}
 				);
 		}

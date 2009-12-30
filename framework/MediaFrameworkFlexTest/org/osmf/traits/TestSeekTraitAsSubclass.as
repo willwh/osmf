@@ -23,7 +23,7 @@ package org.osmf.traits
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.utils.DynamicSeekTrait;
 
 	public class TestSeekTraitAsSubclass extends TestSeekTrait

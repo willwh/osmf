@@ -93,7 +93,7 @@ package org.osmf.composition
 					compositeTrait = new CompositeTimeTrait(traitAggregator, mode, owner);
 					break;
 
-				case MediaTraitType.VIEW:
+				case MediaTraitType.DISPLAY_OBJECT:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelViewTrait(traitAggregator, owner)

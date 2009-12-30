@@ -27,7 +27,7 @@ package org.osmf.video
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -47,7 +47,7 @@ package org.osmf.video
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
@@ -229,17 +229,17 @@ package org.osmf.video
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onTestGetMetadata);
 					
 					// We should now have a view trait with the default dimensions:
-					var viewTrait:ViewTrait = mediaElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
-					assertTrue(viewTrait != null);
-					assertTrue(viewTrait.mediaWidth == 0);
-					assertTrue(viewTrait.mediaHeight == 0);
+					var displayObjectTrait:DisplayObjectTrait = mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					assertTrue(displayObjectTrait != null);
+					assertTrue(displayObjectTrait.mediaWidth == 0);
+					assertTrue(displayObjectTrait.mediaHeight == 0);
 					
 					// See if the view matches the reported size:
-					assertEquals(0, viewTrait.view.width);
-					assertEquals(0, viewTrait.view.height);
+					assertEquals(0, displayObjectTrait.displayObject.width);
+					assertEquals(0, displayObjectTrait.displayObject.height);
 					
-					viewTrait.addEventListener
-							( ViewEvent.MEDIA_SIZE_CHANGE
+					displayObjectTrait.addEventListener
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 							, onMediaSizeChange
 							);
 					
@@ -249,15 +249,15 @@ package org.osmf.video
 					assertTrue(playTrait != null);
 					playTrait.play();
 					
-					function onMediaSizeChange(event:ViewEvent):void
+					function onMediaSizeChange(event:DisplayObjectEvent):void
 					{
-						viewTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+						displayObjectTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 						
-						assertTrue(viewTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
-						assertTrue(viewTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
+						assertTrue(displayObjectTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
+						assertTrue(displayObjectTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
 						
-						assertEquals(viewTrait.mediaWidth, viewTrait.view.width);
-						assertEquals(viewTrait.mediaHeight, viewTrait.view.height);
+						assertEquals(displayObjectTrait.mediaWidth, displayObjectTrait.displayObject.width);
+						assertEquals(displayObjectTrait.mediaHeight, displayObjectTrait.displayObject.height);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -335,7 +335,7 @@ package org.osmf.video
 				   , MediaTraitType.PLAY
 				   , MediaTraitType.SEEK
 				   , MediaTraitType.TIME
-				   , MediaTraitType.VIEW
+				   , MediaTraitType.DISPLAY_OBJECT
 				   ];
 		}	
 

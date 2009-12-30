@@ -26,14 +26,14 @@ package org.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.netmocker.MockNetStream;
-	import org.osmf.traits.TestViewTrait;
+	import org.osmf.traits.TestDisplayObjectTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
-	public class TestNetStreamViewTrait extends TestViewTrait
+	public class TestNetStreamDisplayObjectTrait extends TestDisplayObjectTrait
 	{
 		override public function setUp():void
 		{
@@ -51,7 +51,7 @@ package org.osmf.net
 
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new NetStreamViewTrait(createStream(), args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 0);
+			return new NetStreamDisplayObjectTrait(createStream(), args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : 0, args.length > 2 ? args[2] : 0);
 		}
 		
 		public function testOnMetadata():void
@@ -59,15 +59,15 @@ package org.osmf.net
 			var stream:NetStream = createStream();
 			
 			var sprite:Sprite = new Sprite();
-			var viewTrait:NetStreamViewTrait = new NetStreamViewTrait(stream, sprite);
+			var viewTrait:NetStreamDisplayObjectTrait = new NetStreamDisplayObjectTrait(stream, sprite);
 			assertTrue(viewTrait.mediaWidth == 0);
 			assertTrue(viewTrait.mediaHeight == 0);
 			
-			viewTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
+			viewTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
 			
 			stream.play(NetStreamUtils.getStreamNameFromURL(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
 		
-			function onTestOnMetadata(event:ViewEvent):void
+			function onTestOnMetadata(event:DisplayObjectEvent):void
 			{
 				assertTrue(viewTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
 				assertTrue(viewTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);

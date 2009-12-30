@@ -26,12 +26,12 @@ package org.osmf.layout
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
-	import org.osmf.utils.DynamicViewTrait;
+	import org.osmf.utils.DynamicDisplayObjectTrait;
 
 	public class TestMediaElementLayoutTarget extends TestCase
 	{
@@ -44,7 +44,7 @@ package org.osmf.layout
 			
 			melt.updateIntrinsicDimensions();
 			
-			assertNull(melt.view);
+			assertNull(melt.displayObject);
 			assertEquals(melt.metadata, me.metadata);
 			assertNull(melt.container);
 			assertEquals(NaN, melt.calculatedWidth);
@@ -59,15 +59,15 @@ package org.osmf.layout
 			var me:DynamicMediaElement = new DynamicMediaElement();
 				
 			var sprite:Sprite = new Sprite();
-			var viewTrait:DynamicViewTrait = new DynamicViewTrait(sprite, 100, 200);
-			me.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(sprite, 100, 200);
+			me.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
 			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
 			lt.updateIntrinsicDimensions();
 			
 			assertEquals(lt.metadata, me.metadata);
-			assertEquals(lt.view, sprite);
+			assertEquals(lt.displayObject, sprite);
 			assertEquals(lt.intrinsicWidth, 100);
 			assertEquals(lt.intrinsicHeight, 200); 
 			assertNull(lt.container);
@@ -88,22 +88,22 @@ package org.osmf.layout
 				eventCounter++;
 			}
 			
-			lt.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onEvent);
-			lt.addEventListener(ViewEvent.VIEW_CHANGE, onEvent);
+			lt.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onEvent);
+			lt.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onEvent);
 			
 			var sprite2:Sprite = new Sprite();
-			viewTrait.view = sprite2;
+			displayObjectTrait.displayObject = sprite2;
 			
 			assertEquals(1, eventCounter);
-			var vce:ViewEvent = lastEvent as ViewEvent;
+			var vce:DisplayObjectEvent = lastEvent as DisplayObjectEvent;
 			assertNotNull(vce);
-			assertEquals(vce.oldView, sprite);
-			assertEquals(vce.newView, sprite2);
+			assertEquals(vce.oldDisplayObject, sprite);
+			assertEquals(vce.newDisplayObject, sprite2);
 			
-			viewTrait.setSize(300,400);
+			displayObjectTrait.setSize(300,400);
 			
 			assertEquals(2, eventCounter);
-			var dce:ViewEvent = lastEvent as ViewEvent;
+			var dce:DisplayObjectEvent = lastEvent as DisplayObjectEvent;
 			assertNotNull(dce);
 			assertEquals(dce.oldWidth, 100);
 			assertEquals(dce.oldHeight, 200);

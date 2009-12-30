@@ -29,33 +29,33 @@ package org.osmf.layout
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Dispatched when a layout child's view has changed.
+	 * Dispatched when a layout child's displayObject has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
 	 */	
-	[Event(name="viewChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
 	 * Dispatched when a layout element's intrinsical width and height changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.DIMENSION_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="dimensionChange",type="org.osmf.events.ViewEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
 	 * Class wraps a MediaElement into a ILayoutChild.
@@ -90,7 +90,7 @@ package org.osmf.layout
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				
-				updateViewableTrait();
+				updatedisplayObjectTrait();
 			}
 		}
 		
@@ -107,14 +107,14 @@ package org.osmf.layout
 		 */
 		public function get layoutRenderer():ILayoutRenderer
 		{
-			return viewLayoutTarget ? viewLayoutTarget.layoutRenderer : null;
+			return displayObjectLayoutTarget ? displayObjectLayoutTarget.layoutRenderer : null;
 		}
 		
 		public function set layoutRenderer(value:ILayoutRenderer):void
 		{
-			if (viewLayoutTarget)
+			if (displayObjectLayoutTarget)
 			{
-				viewLayoutTarget.layoutRenderer = value;
+				displayObjectLayoutTarget.layoutRenderer = value;
 			}
 		}
 		
@@ -139,9 +139,9 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get view():DisplayObject
+		public function get displayObject():DisplayObject
 		{
-			return _view;
+			return _displayObject;
 		}
 		
 		/**
@@ -154,7 +154,7 @@ package org.osmf.layout
 		 */
 		public function get container():DisplayObjectContainer
 		{
-			return viewLayoutTarget ? viewLayoutTarget.container : null; 
+			return displayObjectLayoutTarget ? displayObjectLayoutTarget.container : null; 
 		}
 		
 		/**
@@ -167,7 +167,7 @@ package org.osmf.layout
 		 */
 		public function get firstChildIndex():uint
 		{
-			return viewLayoutTarget ? viewLayoutTarget.firstChildIndex : 0;
+			return displayObjectLayoutTarget ? displayObjectLayoutTarget.firstChildIndex : 0;
 		}
 		
 		/**
@@ -180,10 +180,10 @@ package org.osmf.layout
 		 */
 		public function get intrinsicWidth():Number
 		{
-			return viewLayoutTarget
-					? viewLayoutTarget.intrinsicWidth
-				 	: viewableTrait 
-				 		? viewableTrait.mediaWidth
+			return displayObjectLayoutTarget
+					? displayObjectLayoutTarget.intrinsicWidth
+				 	: displayObjectTrait 
+				 		? displayObjectTrait.mediaWidth
 				 		: NaN;
 		}
 		
@@ -197,10 +197,10 @@ package org.osmf.layout
 		 */
 		public function get intrinsicHeight():Number
 		{
-			return viewLayoutTarget
-					? viewLayoutTarget.intrinsicHeight
-					: viewableTrait
-						? viewableTrait.mediaHeight
+			return displayObjectLayoutTarget
+					? displayObjectLayoutTarget.intrinsicHeight
+					: displayObjectTrait
+						? displayObjectTrait.mediaHeight
 						: NaN;
 		}
 		
@@ -214,9 +214,9 @@ package org.osmf.layout
 		 */
 		public function updateIntrinsicDimensions():void
 		{
-			if (viewLayoutTarget)
+			if (displayObjectLayoutTarget)
 			{
-				viewLayoutTarget.updateIntrinsicDimensions();
+				displayObjectLayoutTarget.updateIntrinsicDimensions();
 			}
 		}
 		
@@ -230,9 +230,9 @@ package org.osmf.layout
 		 */
 	 	public function set calculatedWidth(value:Number):void
 	 	{
-	 		if (viewLayoutTarget)
+	 		if (displayObjectLayoutTarget)
 	 		{
-	 			viewLayoutTarget.calculatedWidth = value;
+	 			displayObjectLayoutTarget.calculatedWidth = value;
 	 		}
 	 		else
 	 		{
@@ -242,8 +242,8 @@ package org.osmf.layout
 	 	
 	 	public function get calculatedWidth():Number
 	 	{
-	 		return viewLayoutTarget
-	 				? viewLayoutTarget.calculatedWidth
+	 		return displayObjectLayoutTarget
+	 				? displayObjectLayoutTarget.calculatedWidth
 	 				: _calculatedWidth;
 	 	}
 	 	
@@ -258,15 +258,15 @@ package org.osmf.layout
 		public function set calculatedHeight(value:Number):void
 		{
 			_calculatedHeight = value;
-			if (viewLayoutTarget)
+			if (displayObjectLayoutTarget)
 	 		{
-	 			viewLayoutTarget.calculatedHeight = value;
+	 			displayObjectLayoutTarget.calculatedHeight = value;
 	 		}
 		}
 		public function get calculatedHeight():Number
 		{
-			return viewLayoutTarget
-					? viewLayoutTarget.calculatedHeight
+			return displayObjectLayoutTarget
+					? displayObjectLayoutTarget.calculatedHeight
 					: _calculatedHeight;
 		}
 		
@@ -280,9 +280,9 @@ package org.osmf.layout
 		 */
 		public function set projectedWidth(value:Number):void
 	 	{
-	 		if (viewLayoutTarget)
+	 		if (displayObjectLayoutTarget)
 	 		{
-	 			viewLayoutTarget.projectedWidth = value;
+	 			displayObjectLayoutTarget.projectedWidth = value;
 	 		}
 	 		else
 	 		{
@@ -291,8 +291,8 @@ package org.osmf.layout
 	 	}
 	 	public function get projectedWidth():Number
 	 	{
-	 		return viewLayoutTarget
-	 				? viewLayoutTarget.projectedWidth
+	 		return displayObjectLayoutTarget
+	 				? displayObjectLayoutTarget.projectedWidth
 	 				: _projectedWidth;
 	 	}
 	 	
@@ -307,15 +307,15 @@ package org.osmf.layout
 		public function set projectedHeight(value:Number):void
 		{
 	 		_projectedHeight = value;
-			if (viewLayoutTarget)
+			if (displayObjectLayoutTarget)
 	 		{
-	 			viewLayoutTarget.projectedHeight = value;
+	 			displayObjectLayoutTarget.projectedHeight = value;
 	 		}
 		}
 		public function get projectedHeight():Number
 		{
-			return viewLayoutTarget
-					? viewLayoutTarget.projectedHeight
+			return displayObjectLayoutTarget
+					? displayObjectLayoutTarget.projectedHeight
 					: _projectedHeight;
 		}
 		
@@ -360,54 +360,54 @@ package org.osmf.layout
 		
 		private function onMediaElementTraitsChange(event:MediaElementEvent):void
 		{
-			if (event.traitType == MediaTraitType.VIEW)
+			if (event.traitType == MediaTraitType.DISPLAY_OBJECT)
 			{
-				updateViewableTrait();
+				updatedisplayObjectTrait();
 			}
 		}
 		
-		private function updateViewableTrait():void
+		private function updatedisplayObjectTrait():void
 		{
-			var oldTrait:ViewTrait = viewableTrait;
-			var oldView:DisplayObject = _view;
+			var oldTrait:DisplayObjectTrait = displayObjectTrait;
+			var oldView:DisplayObject = _displayObject;
 			var oldWidth:Number = intrinsicWidth;
 			var oldHeight:Number = intrinsicHeight;
 			
-			viewableTrait = _mediaElement.getTrait(MediaTraitType.VIEW) as ViewTrait;
+			displayObjectTrait = _mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			
 			if (oldTrait)
 			{
-				oldTrait.removeEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler);
-				oldTrait.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler);
+				oldTrait.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, displayObjectChangeEventHandler);
+				oldTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler);
 			}
 			
-			if (viewableTrait)
+			if (displayObjectTrait)
 			{
-				processViewChange(viewableTrait.view);
-				viewableTrait.addEventListener(ViewEvent.VIEW_CHANGE, viewChangeEventHandler, false, 0, true);
-				viewableTrait.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler, false, 0, true);
+				processViewChange(displayObjectTrait.displayObject);
+				displayObjectTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, displayObjectChangeEventHandler, false, 0, true);
+				displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, mediaSizeChangeEventHandler, false, 0, true);
 			}
 			else
 			{
 				processViewChange(null);
 			}
 			
-			if (oldView != _view)
+			if (oldView != _displayObject)
 			{
-				dispatchEvent(new ViewEvent(ViewEvent.VIEW_CHANGE, false, false, oldView, _view));
+				dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, oldView, _displayObject));
 			}
 
 			if 	(	oldWidth != intrinsicWidth
 				||	oldHeight != intrinsicHeight
 				)
 			{
-				dispatchEvent(new ViewEvent(ViewEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
+				dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, oldWidth, oldHeight, intrinsicWidth, intrinsicHeight));
 			}
 		}
 		
-		private function viewChangeEventHandler(event:ViewEvent):void
+		private function displayObjectChangeEventHandler(event:DisplayObjectEvent):void
 		{
-			processViewChange(event.newView);
+			processViewChange(event.newDisplayObject);
 			
 			dispatchEvent(event.clone());
 		}
@@ -419,15 +419,15 @@ package org.osmf.layout
 		
 		private function processViewChange(newView:DisplayObject):void
 		{
-			_view = newView;
-			viewLayoutTarget = _view as ILayoutContext;
+			_displayObject = newView;
+			displayObjectLayoutTarget = _displayObject as ILayoutContext;
 		}
 		
 		private var _mediaElement:MediaElement;
-		private var _view:DisplayObject;
-		private var viewLayoutTarget:ILayoutContext;
+		private var _displayObject:DisplayObject;
+		private var displayObjectLayoutTarget:ILayoutContext;
 		
-		private var viewableTrait:ViewTrait;
+		private var displayObjectTrait:DisplayObjectTrait;
 		
 		private var _calculatedWidth:Number;
 		private var _calculatedHeight:Number;

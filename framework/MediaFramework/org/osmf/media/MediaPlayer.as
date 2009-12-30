@@ -120,16 +120,16 @@ package org.osmf.media
 	[Event(name="pausedChange", type="org.osmf.events.PlayEvent")]
 	
 	/**
-	 * Dispatched when the <code>view</code> property of the media has changed.
+	 * Dispatched when the <code>displayObject</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.VIEW_CHANGE
+	 * @eventType org.osmf.events.ViewEvent.DISPLAY_OBJECT_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
-	[Event(name="viewChange", type="org.osmf.events.ViewEvent")]
+	[Event(name="displayObjectChange", type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
 	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
@@ -142,7 +142,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */		
-	[Event(name="mediaSizeChange", type="org.osmf.events.ViewEvent")]
+	[Event(name="mediaSizeChange", type="org.osmf.events.DisplayObjectEvent")]
 	 
 	/**
 	 * Dispatched when the <code>seeking</code> property of the media has changed.
@@ -1052,7 +1052,7 @@ package org.osmf.media
 		 */
 	    public function get width():int
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.VIEW) as ViewTrait).mediaWidth : 0;
+	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaWidth : 0;
 	    }
 		   
 		/**
@@ -1069,7 +1069,7 @@ package org.osmf.media
 		 */	
 		public function get height():int
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.VIEW) as ViewTrait).mediaHeight : 0;
+	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaHeight : 0;
 	    }
 	    
 	    // ISwitchable
@@ -1194,7 +1194,7 @@ package org.osmf.media
 			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switchTo(streamIndex);
 		}	    
 	
-	    // ViewTrait
+	    // DisplayObjectTrait
 	    
 		/**
 		 * View property of the media.
@@ -1210,7 +1210,7 @@ package org.osmf.media
          */
 	    public function get view():DisplayObject
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.VIEW) as ViewTrait).view : null;	
+	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject : null;	
 	    }
 	
         // TimeTrait
@@ -1437,9 +1437,9 @@ package org.osmf.media
 					_switchable = add;						
 					eventType = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
 					break;						
-				case MediaTraitType.VIEW:					
-					changeListeners(add, _element, traitType, ViewEvent.VIEW_CHANGE, [redispatchEvent]);											
-					changeListeners(add, _element, traitType, ViewEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
+				case MediaTraitType.DISPLAY_OBJECT:					
+					changeListeners(add, _element, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, [redispatchEvent]);											
+					changeListeners(add, _element, traitType, DisplayObjectEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
 					_viewable = add;						
 					eventType = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
 					break;	

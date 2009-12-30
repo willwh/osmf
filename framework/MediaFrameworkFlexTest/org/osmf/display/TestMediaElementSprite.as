@@ -25,11 +25,11 @@ package org.osmf.display
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
@@ -47,8 +47,8 @@ package org.osmf.display
 			(element.getTrait(MediaTraitType.LOAD) as LoadTrait).load();	
 			(element2.getTrait(MediaTraitType.LOAD) as LoadTrait).load();	
 						
-			var view:DisplayObject = (element.getTrait(MediaTraitType.VIEW) as ViewTrait).view;
-			var view2:DisplayObject = (element2.getTrait(MediaTraitType.VIEW) as ViewTrait).view;
+			var view:DisplayObject = (element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject;
+			var view2:DisplayObject = (element2.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject;
 			
 			var w:Number = 300;
 			var h:Number = 225;
@@ -68,11 +68,11 @@ package org.osmf.display
 			view2.width = 80;
 			view2.height = 80;
 			
-			sprite.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSize);
+			sprite.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);
 			
 			var dimsChanged:Boolean = false;
 			
-			function onMediaSize(event:ViewEvent):void
+			function onMediaSize(event:DisplayObjectEvent):void
 			{
 				assertFalse(dimsChanged); //call only once
 				assertEquals(event.newHeight, 40);

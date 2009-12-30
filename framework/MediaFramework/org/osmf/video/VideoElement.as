@@ -56,7 +56,7 @@ package org.osmf.video
 	import org.osmf.net.NetStreamSeekTrait;
 	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
-	import org.osmf.net.NetStreamViewTrait;
+	import org.osmf.net.NetStreamDisplayObjectTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
@@ -66,7 +66,7 @@ package org.osmf.video
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 
 	CONFIG::FLASH_10_1
@@ -371,8 +371,8 @@ package org.osmf.video
 			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, resource);
 			addTrait(MediaTraitType.TIME, timeTrait);
-			viewTrait = new NetStreamViewTrait(stream, video, video.width, video.height);
-			addTrait(MediaTraitType.VIEW, viewTrait);
+			displayObjectTrait = new NetStreamDisplayObjectTrait(stream, video, video.width, video.height);
+			addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
@@ -399,7 +399,7 @@ package org.osmf.video
 	    	removeTrait(MediaTraitType.BUFFER);
 			removeTrait(MediaTraitType.PLAY);
 			removeTrait(MediaTraitType.TIME);
-			removeTrait(MediaTraitType.VIEW);
+			removeTrait(MediaTraitType.DISPLAY_OBJECT);
 	    	removeTrait(MediaTraitType.SEEK);
     		removeTrait(MediaTraitType.DYNAMIC_STREAM);
 	    	
@@ -414,7 +414,7 @@ package org.osmf.video
 			video.attachNetStream(null);
 			stream = null;
 			video = null;
-			viewTrait = null;
+			displayObjectTrait = null;
 		}
 
 		private function onMetaData(info:Object):void 
@@ -504,7 +504,7 @@ package org.osmf.video
      	
      	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
      	
-     	private var viewTrait:ViewTrait;
+     	private var displayObjectTrait:DisplayObjectTrait;
      	private var defaultTimeTrait:ModifiableTimeTrait;
      	
      	private var stream:NetStream;

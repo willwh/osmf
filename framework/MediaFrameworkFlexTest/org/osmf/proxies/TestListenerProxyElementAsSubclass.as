@@ -33,7 +33,7 @@ package org.osmf.proxies
 	import org.osmf.utils.DynamicLoadTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicTimeTrait;
-	import org.osmf.utils.DynamicViewTrait;
+	import org.osmf.utils.DynamicDisplayObjectTrait;
 	import org.osmf.utils.SimpleLoader;
 	
 	public class TestListenerProxyElementAsSubclass extends TestListenerProxyElement
@@ -348,30 +348,30 @@ package org.osmf.proxies
 				
 		public function testProcessViewTraitChanges():void
 		{
-			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.VIEW);
+			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.DISPLAY_OBJECT);
 			
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldView"] == null);
-			assertTrue(events[0]["newView"] != null);
+			assertTrue(events[0]["oldDisplayObject"] == null);
+			assertTrue(events[0]["newDisplayObject"] != null);
 			
 			// Changing properties should result in events.
 			//
 			
-			var viewTrait:DynamicViewTrait = proxyElement.getTrait(MediaTraitType.VIEW) as DynamicViewTrait;
+			var displayObjectTrait:DynamicDisplayObjectTrait = proxyElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DynamicDisplayObjectTrait;
 			
 			var aView:DisplayObject = new Sprite();
 						
-			viewTrait.view = aView; 
+			displayObjectTrait.displayObject = aView; 
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["oldView"] != null);
-			assertTrue(events[1]["newView"] == aView);
+			assertTrue(events[1]["oldDisplayObject"] != null);
+			assertTrue(events[1]["newDisplayObject"] == aView);
 			
-			viewTrait.view = null; 
+			displayObjectTrait.displayObject = null; 
 			assertTrue(events.length == 3);
-			assertTrue(events[2]["oldView"] == aView);
-			assertTrue(events[2]["newView"] == null);
+			assertTrue(events[2]["oldDisplayObject"] == aView);
+			assertTrue(events[2]["newDisplayObject"] == null);
 			
-			viewTrait.setSize(20, 10);
+			displayObjectTrait.setSize(20, 10);
 			assertTrue(events.length == 4);
 			assertTrue(events[3]["oldWidth"] == 0);
 			assertTrue(events[3]["newWidth"] == 20);
@@ -384,8 +384,8 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
-			viewTrait.view = aView;
-			viewTrait.setSize(0, 0);
+			displayObjectTrait.displayObject = aView;
+			displayObjectTrait.setSize(0, 0);
 			
 			assertTrue(events.length == 4);
 		}
@@ -395,17 +395,17 @@ package org.osmf.proxies
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAY);
 			
 			var aView:DisplayObject = new Sprite();
-			var viewTrait:ViewTrait = new ViewTrait(aView);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(aView);
 			
 			assertTrue(events.length == 0);
 			
 			// VIEW is the one trait where adding the trait to the
 			// MediaElement can trigger a ListenerProxyElement event.
-			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.VIEW, viewTrait);
+			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			assertTrue(events.length == 1);
-			assertTrue(events[0]["oldView"] == null);
-			assertTrue(events[0]["newView"] == aView);
+			assertTrue(events[0]["oldDisplayObject"] == null);
+			assertTrue(events[0]["newDisplayObject"] == aView);
 		}
 		
 		private function createProxyWithTrait(traitType:String):ProxyElement

@@ -27,7 +27,7 @@ package org.osmf.composition
 	
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;

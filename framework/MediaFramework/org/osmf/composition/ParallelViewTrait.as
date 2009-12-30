@@ -24,14 +24,14 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.GatewayChangeEvent;
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.media.IMediaGateway;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 
 	/**
 	 * The view property of the composite trait of a parallel composition refers to a
@@ -40,7 +40,7 @@ package org.osmf.composition
 	 * 
 	 * The bounds of the container determine the size of the composition.
 	 */	
-	internal class ParallelViewTrait extends CompositeViewTrait
+	internal class ParallelViewTrait extends CompositeDisplayObjectTrait
 	{
 		/**
 		 * Constructor
@@ -83,9 +83,9 @@ package org.osmf.composition
 
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
-			child.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
+			child.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
 			
-			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
+			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as DisplayObjectTrait);
 			
 			if (mediaElement != null)
 			{
@@ -109,9 +109,9 @@ package org.osmf.composition
 		
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
-			child.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
+			child.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
-			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as ViewTrait);
+			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as DisplayObjectTrait);
 			
 			if (mediaElement != null)
 			{
@@ -131,7 +131,7 @@ package org.osmf.composition
 			}
 		}
 		
-		private function getMediaElementFromViewTrait(viewTrait:ViewTrait):MediaElement
+		private function getMediaElementFromViewTrait(viewTrait:DisplayObjectTrait):MediaElement
 		{
 			var result:MediaElement;
 			
@@ -141,7 +141,7 @@ package org.osmf.composition
 				for (var i:int = 0; i < owner.numChildren; i++)
 				{
 					result = owner.getChildAt(i);
-					if (result.getTrait(MediaTraitType.VIEW) == viewTrait)
+					if (result.getTrait(MediaTraitType.DISPLAY_OBJECT) == viewTrait)
 					{
 						break;
 					}
@@ -182,7 +182,7 @@ package org.osmf.composition
 			setupLayoutTarget(mediaElementLayoutTargets[mediaElement]);
 		}
 		
-		private function onMediaSizeChange(event:ViewEvent):void
+		private function onMediaSizeChange(event:DisplayObjectEvent):void
 		{
 			updateMediaSize();
 		}
@@ -193,12 +193,12 @@ package org.osmf.composition
 			var newMediaHeight:int = -1;
 			
 			traitAggregator.forEachChildTrait
-				(	function(trait:ViewTrait):void
+				(	function(trait:DisplayObjectTrait):void
 					{
 						newMediaWidth = Math.max(newMediaWidth, trait.mediaWidth);
 						newMediaHeight = Math.max(newMediaHeight, trait.mediaHeight);
 					}
-				,	MediaTraitType.VIEW
+				,	MediaTraitType.DISPLAY_OBJECT
 				);
 					
 			setMediaSize(newMediaWidth, newMediaHeight);

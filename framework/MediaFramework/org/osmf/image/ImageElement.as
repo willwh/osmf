@@ -41,11 +41,11 @@ package org.osmf.image
 	 * <li>Get the ImageElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
 	 * <li>Load the image using the LoadTrait's <code>load()</code> method.</li>
-	 * <li>Get the ImageElement's ViewTrait trait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.VIEW)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the ImageElement's ViewTrait trait
+	 * <li>Get the ImageElement's DisplayObjectTrait trait using the 
+	 * <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method.</li>
+	 * <li>Add the DisplayObject that represents the ImageElement's DisplayObjectTrait trait
 	 * to the display list. This DisplayObjects is in the <code>view</code>
-	 * property of the ViewTrait.</li>
+	 * property of the DisplayObjectTrait.</li>
 	 * <li>When done with the ImageElement, unload the image using the
 	 * LoadTrait's <code>unload()</code> method.</li>
 	 * </ol>

@@ -35,7 +35,7 @@ package org.osmf.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.URL;
 
 	public class TestMediaElement extends TestCaseEx
@@ -475,7 +475,7 @@ package org.osmf.media
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.PLAY);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.SEEK);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.TIME);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.VIEW);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DISPLAY_OBJECT);
 			
 			return inverseTraitTypes;
 		}

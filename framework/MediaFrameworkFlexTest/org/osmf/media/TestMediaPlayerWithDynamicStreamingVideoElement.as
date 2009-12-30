@@ -117,7 +117,7 @@ package org.osmf.media
 				   , MediaTraitType.PLAY
 				   , MediaTraitType.SEEK
 				   , MediaTraitType.TIME
-				   , MediaTraitType.VIEW
+				   , MediaTraitType.DISPLAY_OBJECT
 				   ];
 		}
 		

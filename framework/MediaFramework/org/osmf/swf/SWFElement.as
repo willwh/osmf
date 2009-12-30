@@ -25,7 +25,7 @@ package org.osmf.swf
 	
 	import org.osmf.content.ContentElement;
 	import org.osmf.media.IURLResource;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -45,7 +45,7 @@ package org.osmf.swf
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
 	 * <li>Load the SWF using the LoadTrait's <code>load()</code> method.</li>
 	 * <li>Get the SWFElement's ViewTrait using the 
-	 * <code>MediaElement.getTrait(MediaTraitType.VIEW)</code> method.</li>
+	 * <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method.</li>
 	 * <li>Add the DisplayObject that represents the SWFElement's ViewTrait
 	 * to the display list. This DisplayObject is in the <code>view</code>
 	 * property of the ViewTrait.</li>
@@ -87,8 +87,8 @@ package org.osmf.swf
 		{
 			super.processReadyState();
 			
-			var viewTrait:ViewTrait = getTrait(MediaTraitType.VIEW) as ViewTrait;
-			_swfRoot = viewTrait != null ? viewTrait.view : null;
+			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			_swfRoot = displayObjectTrait != null ? displayObjectTrait.displayObject : null;
 		}
 		
 		/**

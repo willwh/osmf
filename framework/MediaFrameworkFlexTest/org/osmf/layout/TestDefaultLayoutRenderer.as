@@ -28,7 +28,7 @@ package org.osmf.layout
 	import org.osmf.display.ScaleMode;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestDefaultLayoutRenderer extends TestCase
@@ -42,8 +42,8 @@ package org.osmf.layout
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
-			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
 			var mediaElementRelative:RelativeLayoutFacet = new RelativeLayoutFacet();
 			mediaElementRelative.x = 10;
@@ -184,8 +184,8 @@ package org.osmf.layout
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:ViewTrait = new ViewTrait(viewSprite, 50, 50);
-			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 50, 50);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
 			LayoutUtils.setRelativeLayout(mediaElement.metadata, 80, 80 /* width, height */, 10, 10 /* x,y */);
 			var meAttr:LayoutAttributesFacet
@@ -216,56 +216,56 @@ package org.osmf.layout
 			assertEquals(50, melt.projectedWidth);
 			assertEquals(50, melt.projectedHeight);
 			
-			assertEquals(80 + 640 - 50, melt.view.x);
-			assertEquals(60 + 480 / 2 - 50 / 2, melt.view.y);
+			assertEquals(80 + 640 - 50, melt.displayObject.x);
+			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.CENTER;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80 + 640 / 2 - 50 / 2, melt.view.x);
-			assertEquals(60 + 480 / 2 - 50 / 2, melt.view.y);
+			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
+			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.MIDDLE_LEFT;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80, melt.view.x);
-			assertEquals(60 + 480 / 2 - 50 / 2, melt.view.y);
+			assertEquals(80, melt.displayObject.x);
+			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.TOP_LEFT;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80, melt.view.x);
-			assertEquals(60, melt.view.y);
+			assertEquals(80, melt.displayObject.x);
+			assertEquals(60, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.TOP_MIDDLE;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80 + 640 / 2 - 50 / 2, melt.view.x);
-			assertEquals(60, melt.view.y);
+			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
+			assertEquals(60, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.TOP_RIGHT;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80 + 640 - 50, melt.view.x);
-			assertEquals(60, melt.view.y);	
+			assertEquals(80 + 640 - 50, melt.displayObject.x);
+			assertEquals(60, melt.displayObject.y);	
 			
 			meAttr.alignment = RegistrationPoint.BOTTOM_LEFT;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80, melt.view.x);
-			assertEquals(480 + 60 - 50, melt.view.y);
+			assertEquals(80, melt.displayObject.x);
+			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.BOTTOM_MIDDLE;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80 + 640 / 2 - 50 / 2, melt.view.x);
-			assertEquals(480 + 60 - 50, melt.view.y);
+			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
+			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
 			meAttr.alignment = RegistrationPoint.BOTTOM_RIGHT;
 			layoutRenderer.validateNow();
 			
-			assertEquals(80 + 640 - 50, melt.view.x);
-			assertEquals(480 + 60 - 50, melt.view.y);	
+			assertEquals(80 + 640 - 50, melt.displayObject.x);
+			assertEquals(480 + 60 - 50, melt.displayObject.y);	
 		}
 		
 		public function testBottomUp():void
@@ -276,8 +276,8 @@ package org.osmf.layout
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
-			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			
@@ -316,8 +316,8 @@ package org.osmf.layout
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:ViewTrait = new ViewTrait(viewSprite);
-			mediaElement.doAddTrait(MediaTraitType.VIEW, viewTrait);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			

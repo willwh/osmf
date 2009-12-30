@@ -31,7 +31,7 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
@@ -120,7 +120,7 @@ package org.osmf.layout
 							);
 					
 					_context.addEventListener
-						( ViewEvent.MEDIA_SIZE_CHANGE
+						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 						, invalidatingEventHandler
 						, false, 0, true
 						);
@@ -183,9 +183,9 @@ package org.osmf.layout
 					);
 			}
 			
-			// Watch the target's view and dimenions change:
-			target.addEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
-			target.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
+			// Watch the target's displayObject and dimenions change:
+			target.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
+			target.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
 			
 			invalidate();
 			
@@ -235,9 +235,9 @@ package org.osmf.layout
 					targetContext.layoutRenderer.parent = null;
 				}
 				
-				// Un-watch the target's view and dimenions change:
-				target.removeEventListener(ViewEvent.VIEW_CHANGE, invalidatingEventHandler);
-				target.removeEventListener(ViewEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
+				// Un-watch the target's displayObject and dimenions change:
+				target.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
+				target.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
 								
 				// Remove the metadata change watchers that we added:
 				for each (var watcher:MetadataWatcher in metaDataWatchers[target])
@@ -558,7 +558,7 @@ package org.osmf.layout
 		
 		/**
 		 * Subclasses may override this method should they require special
-		 * processing on the view of a target being staged.
+		 * processing on the displayObject of a target being staged.
 		 *  
 		 * @param target The target that is being staged
 		 *  
@@ -574,7 +574,7 @@ package org.osmf.layout
 		
 		/**
 		 * Subclasses may override this method should they require special
-		 * processing on the view of a target being unstaged.
+		 * processing on the displayObject of a target being unstaged.
 		 *  
 		 * @param target The target that has been unstaged
 		 *  
@@ -590,12 +590,12 @@ package org.osmf.layout
 		
 		protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
 		{
-			return target.view.getBounds(target.view);
+			return target.displayObject.getBounds(target.displayObject);
 		}
 		
 		protected function applyTargetLayout(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			var view:DisplayObject;
+			var displayObject:DisplayObject;
 			
 			return new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
 		}
@@ -631,7 +631,7 @@ package org.osmf.layout
 			if (_context)
 			{
 				_context.removeEventListener
-					( ViewEvent.MEDIA_SIZE_CHANGE
+					( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 					, invalidatingEventHandler
 					);
 						
@@ -685,21 +685,21 @@ package org.osmf.layout
 		
 		private function prepareTargets():void
 		{
-			// Setup a view counter:
+			// Setup a displayObject counter:
 			var displayListCounter:int = _context.firstChildIndex;
 			
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
-				var view:DisplayObject = target.view;
-				if (view)
+				var displayObject:DisplayObject = target.displayObject;
+				if (displayObject)
 				{
-					// If the target's view is not on our container, then stage it. If
+					// If the target's displayObject is not on our container, then stage it. If
 					// it is already present, then make sure it is at the right index
 					// of the display list:
-					if (container.contains(view))
+					if (container.contains(displayObject))
 					{
 						container.setChildIndex
-							( view
+							( displayObject
 							// Make sure that the display index that we pass, is within
 							// dimensions:
 							, Math.min(Math.max(0,container.numChildren-1),displayListCounter)
@@ -710,7 +710,7 @@ package org.osmf.layout
 					else
 					{
 						container.addChildAt
-							( view
+							( displayObject
 							// Make sure that the display index that we pass, is within
 							// dimensions:
 							, Math.min(Math.max(0,container.numChildren),displayListCounter)
@@ -719,27 +719,27 @@ package org.osmf.layout
 						CONFIG::LOGGING { logger.debug("addChildAt: setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 					
-					// Only invoke 'processStagedTarget' if the view
+					// Only invoke 'processStagedTarget' if the displayObject
 					// is not on our list of staged items yet:
 					if (staged[target] == undefined)
 					{
-						staged[target] = view;
+						staged[target] = displayObject;
 						
 						processStagedTarget(target);
 					}
 					else
 					{
-						staged[target] = view;
+						staged[target] = displayObject;
 						
-						CONFIG::LOGGING { logger.debug("prepareTarget:updated staged view, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+						CONFIG::LOGGING { logger.debug("prepareTarget:updated staged displayObject, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 					
 					displayListCounter++;
 				}
-				else if (view == null)
+				else if (displayObject == null)
 				{
-					// If this target does not (currently) have a view, then check if
-					// we have a view for it that is still on stage. If so, then 
+					// If this target does not (currently) have a displayObject, then check if
+					// we have a displayObject for it that is still on stage. If so, then 
 					// remove it:
 					var oldView:DisplayObject = staged[target];
 					if (oldView)
@@ -755,7 +755,7 @@ package org.osmf.layout
 					}
 					else
 					{
-						CONFIG::LOGGING { logger.debug("prepareTarget: no view for, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+						CONFIG::LOGGING { logger.debug("prepareTarget: no displayObject for, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					}
 				}
 			}
