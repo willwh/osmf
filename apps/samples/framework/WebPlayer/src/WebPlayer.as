@@ -170,7 +170,7 @@ package
 			{
 				if (element)
 				{
-					container.removeElement(element);
+					container.removeMediaElement(element);
 				}
 				
 				if (player.playing)
@@ -198,7 +198,7 @@ package
 					LayoutUtils.setLayoutAttributes(element.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
 					
 					// Add the element to the media container:
-					container.addElement(element);
+					container.addMediaElement(element);
 				}
 			}
 		}
