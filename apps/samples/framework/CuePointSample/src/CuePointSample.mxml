@@ -103,7 +103,7 @@
 			
 			private function init():void
 			{
-				mediaPlayerWrapper.mediaPlayer.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
@@ -187,7 +187,7 @@
 				taCuePointEvents.verticalScrollPosition = taCuePointEvents.maxVerticalScrollPosition;
 			}
 											
-			private function onMediaSizeChange(event:ViewEvent):void 
+			private function onMediaSizeChange(event:DisplayObjectEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
