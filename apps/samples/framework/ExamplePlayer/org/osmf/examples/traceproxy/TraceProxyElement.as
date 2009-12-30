@@ -117,7 +117,7 @@ package org.osmf.examples.traceproxy
 				case MediaTraitType.TEMPORAL:
 					toggleTemporalListeners(added);
 					break;
-				case MediaTraitType.VIEWABLE:
+				case MediaTraitType.DISPLAY_OBJECTABLE:
 					toggleViewableListeners(added);
 					break;
 			}
@@ -275,7 +275,7 @@ package org.osmf.examples.traceproxy
 		
 		private function toggleViewableListeners(added:Boolean):void
 		{
-			var viewable:IViewable = wrappedElement.getTrait(MediaTraitType.VIEWABLE) as IViewable;
+			var viewable:IViewable = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECTABLE) as IViewable;
 			if (viewable)
 			{
 				if (added)

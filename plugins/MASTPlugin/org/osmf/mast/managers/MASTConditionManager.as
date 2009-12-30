@@ -464,8 +464,8 @@ package org.osmf.mast.managers
 				case "PlayTrait":
 					traitType = MediaTraitType.PLAY;
 					break;
-				case "ViewTrait":
-					traitType = MediaTraitType.VIEW;
+				case "DisplayObjectTrait":
+					traitType = MediaTraitType.DISPLAY_OBJECT;
 					break;
 			}
 			
