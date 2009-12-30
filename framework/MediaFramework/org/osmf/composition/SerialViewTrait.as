@@ -23,7 +23,7 @@ package org.osmf.composition
 {
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.media.IMediaGateway;
+	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 
@@ -105,8 +105,8 @@ package org.osmf.composition
 		
 		private function onTargetGatewayChange(event:GatewayChangeEvent):void
 		{
-			var oldGateway:IMediaGateway = event.oldValue;
-			var newGateway:IMediaGateway = event.newValue;
+			var oldGateway:IMediaContainer = event.oldValue;
+			var newGateway:IMediaContainer = event.newValue;
 			var element:MediaElement = layoutTarget.mediaElement;
 			
 			var targetInLayoutRenderer:Boolean

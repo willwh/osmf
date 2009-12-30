@@ -201,20 +201,19 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get gateway():IMediaGateway
+		public function get gateway():IMediaContainer
 		{
 			return _gateway;
 		}
 		
-		public function set gateway(value:IMediaGateway):void
+		public function set gateway(value:IMediaContainer):void
 		{
 			if (_gateway != value)
 			{
-				var containerGateway:IContainerGateway = _gateway as IContainerGateway;
-				if (containerGateway && containerGateway.containsElement(this))
+				if (_gateway != null)
 				{
-					containerGateway.removeElement(this);	
-				}
+					_gateway.removeMediaElement(this);
+				}	
 				
 				var event:GatewayChangeEvent = new GatewayChangeEvent
 					( GatewayChangeEvent.GATEWAY_CHANGE
@@ -225,11 +224,10 @@ package org.osmf.media
 					);
 					
 				_gateway = value;
-				containerGateway = _gateway as IContainerGateway;
 				
-				if (containerGateway && containerGateway.containsElement(this) == false)
+				if (_gateway != null && _gateway.containsMediaElement(this) == false)
 				{
-					containerGateway.addElement(this);
+					_gateway.addMediaElement(this);
 				}
 				
 				dispatchEvent(event);
@@ -543,7 +541,7 @@ package org.osmf.media
 
 		private var _traitTypes:Vector.<String> = new Vector.<String>();
 		private var _resource:IMediaResource;
-		private var _gateway:IMediaGateway;
+		private var _gateway:IMediaContainer;
 		private var _metadata:Metadata;
 		
 	}

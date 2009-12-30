@@ -29,15 +29,15 @@ package org.osmf.gateways
 	import org.osmf.layout.ILayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.media.IContainerGateway;
+	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * RegionGateway defines a Sprite based IContainerGateway implementation.
+	 * RegionGateway defines a Sprite based IMediaContainer implementation.
 	 */	
-	public class RegionGateway extends LayoutContextSprite implements IContainerGateway
+	public class RegionGateway extends LayoutContextSprite implements IMediaContainer
 	{
 		/**
 		 * Constructor
@@ -94,7 +94,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function addElement(element:MediaElement):MediaElement
+		public function addMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
 			{
@@ -124,7 +124,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function removeElement(element:MediaElement):MediaElement
+		public function removeMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
 			{
@@ -156,7 +156,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function containsElement(element:MediaElement):Boolean
+		public function containsMediaElement(element:MediaElement):Boolean
 		{
 			return contentLayoutTargets[element] != undefined
 		}

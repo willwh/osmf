@@ -23,7 +23,7 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.media.IMediaGateway;
+	import org.osmf.media.IMediaContainer;
 
 	/**
 	 * GatewayChangeEvent signals that a reference to an IGateway has changed.
@@ -53,7 +53,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function GatewayChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaGateway=null, newValue:IMediaGateway=null)
+		public function GatewayChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaContainer=null, newValue:IMediaContainer=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -69,7 +69,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get oldValue():IMediaGateway
+		public function get oldValue():IMediaContainer
 		{
 			return _oldValue;
 		}
@@ -82,7 +82,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get newValue():IMediaGateway
+		public function get newValue():IMediaContainer
 		{
 			return _newValue;
 		}
@@ -101,7 +101,7 @@ package org.osmf.events
 		// Internals
 		//
 		
-		private var _oldValue:IMediaGateway;
-		private var _newValue:IMediaGateway;
+		private var _oldValue:IMediaContainer;
+		private var _newValue:IMediaContainer;
 	}
 }

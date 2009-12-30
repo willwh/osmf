@@ -27,7 +27,7 @@ package org.osmf.composition
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.layout.LayoutContextSprite;
-	import org.osmf.media.IMediaGateway;
+	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -157,7 +157,7 @@ package org.osmf.composition
 		
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
 		{
-			var gateway:IMediaGateway = target.mediaElement.gateway; 
+			var gateway:IMediaContainer = target.mediaElement.gateway; 
 			
 			if (gateway && gateway != owner.gateway)
 			{

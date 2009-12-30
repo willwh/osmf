@@ -47,15 +47,15 @@ package org.osmf.gateways
 				var element:HTMLElement = new HTMLElement();
 				element.gateway = gateway;
 				
-				assertTrue(gateway.containsElement(element));
+				assertTrue(gateway.containsMediaElement(element));
 				
-				gateway.removeElement(element);
+				gateway.removeMediaElement(element);
 				
-				assertFalse(gateway.containsElement(element));
+				assertFalse(gateway.containsMediaElement(element));
 				
-				gateway.addElement(element);
+				gateway.addMediaElement(element);
 				
-				assertTrue(gateway.containsElement(element));
+				assertTrue(gateway.containsMediaElement(element));
 			}
 		}
 		

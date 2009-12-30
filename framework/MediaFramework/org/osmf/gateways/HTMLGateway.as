@@ -26,18 +26,17 @@ package org.osmf.gateways
 	import flash.utils.Dictionary;
 	
 	import org.osmf.external.HTMLElement;
-	import org.osmf.media.IContainerGateway;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * HTMLGateway is an IContainerGateway implementing class that uses the ExternalConnection
+	 * HTMLGateway is an IMediaContainer implementing class that uses the ExternalConnection
 	 * to expose the gateway's child media elements to JavaScript.
 	 */	
-	public class HTMLGateway implements IContainerGateway
+	public class HTMLGateway implements IMediaContainer
 	{
 		// IContainerGateway
 		//
@@ -50,7 +49,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function addElement(child:MediaElement):MediaElement
+		public function addMediaElement(child:MediaElement):MediaElement
 		{
 			requireExternalInterface;
 			
@@ -89,7 +88,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function removeElement(child:MediaElement):MediaElement
+		public function removeMediaElement(child:MediaElement):MediaElement
 		{
 			requireExternalInterface;
 			
@@ -122,7 +121,7 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function containsElement(child:MediaElement):Boolean
+		public function containsMediaElement(child:MediaElement):Boolean
 		{
 			for each (var element:HTMLElement in elements)
 			{

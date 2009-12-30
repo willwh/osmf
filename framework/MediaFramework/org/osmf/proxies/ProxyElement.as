@@ -28,7 +28,7 @@ package org.osmf.proxies
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaGateway;
+	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
@@ -213,12 +213,12 @@ package org.osmf.proxies
 			}
 		}
 		
-		override public function get gateway():IMediaGateway
+		override public function get gateway():IMediaContainer
 		{
 			return wrappedElement ? wrappedElement.gateway : outerGateway;
 		}
 		
-		override public function set gateway(value:IMediaGateway):void
+		override public function set gateway(value:IMediaContainer):void
 		{	
 			// Retain the value as the gateway that was set from the outside
 			// of the wrapped element:
@@ -376,6 +376,6 @@ package org.osmf.proxies
 		}
 		
 		private var _wrappedElement:MediaElement;
-		private var outerGateway:IMediaGateway;
+		private var outerGateway:IMediaContainer;
 	}
 }
