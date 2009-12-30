@@ -43,7 +43,7 @@
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;			
 			import org.osmf.traits.DynamicStreamTrait;
-			import org.osmf.traits.ViewTrait;
+			import org.osmf.traits.DisplayObjectTrait;
 
 			import org.osmf.events.*;
 
@@ -95,11 +95,11 @@
 			[Bindable]
 			private var _autoSwitchBtnLabel:String = "Manual";
 			
-			private var _viewTrait:ViewTrait;
+			private var _displayObjectTrait:DisplayObjectTrait;
 						
 			private function initApp():void
 			{
-				wrapper.mediaPlayer.addEventListener(ViewEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				wrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
@@ -135,7 +135,7 @@
 							_dsTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
 						}
 						
-						_viewTrait = wrapper.element.getTrait(MediaTraitType.VIEW) as ViewTrait;		
+						_displayObjectTrait = wrapper.element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;		
 						updateSwitchingControls();
 						break;					
 					case LoadState.LOAD_ERROR:
@@ -308,7 +308,7 @@
 				Alert.show("SMIL parser is currently busy, pleast wait and try again.");	
 			}
 			
-			private function onMediaSizeChange(event:ViewEvent):void 
+			private function onMediaSizeChange(event:DisplayObjectEvent):void 
 			{
 				var width:int = event.newWidth;
 				var height:int = event.newHeight;
