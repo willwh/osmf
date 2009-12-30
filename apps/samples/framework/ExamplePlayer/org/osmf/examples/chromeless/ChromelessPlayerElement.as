@@ -24,12 +24,12 @@ package org.osmf.examples.chromeless
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import org.osmf.events.ViewEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.IURLResource;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	/**
 	 * SWFElement which can control the SWF it wraps via a custom SWF API
@@ -80,18 +80,18 @@ package org.osmf.examples.chromeless
 					)
 				{
 					// Re-dispatch our dimensions:
-					var viewTrait:ViewTrait= getTrait(MediaTraitType.VIEW) as ViewTrait;
-					viewTrait.dispatchEvent
-						( new ViewEvent
-							( ViewEvent.MEDIA_SIZE_CHANGE
+					var displayObjectTrait:DisplayObjectTrait= getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					displayObjectTrait.dispatchEvent
+						( new DisplayObjectEvent
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 							, false
 							, false
 							, null
 							, null
 							, 0
 							, 0
-							, viewTrait.mediaWidth
-							, viewTrait.mediaHeight
+							, displayObjectTrait.mediaWidth
+							, displayObjectTrait.mediaHeight
 							)
 						);
 				}

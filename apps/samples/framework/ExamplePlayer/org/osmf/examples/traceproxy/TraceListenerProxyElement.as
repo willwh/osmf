@@ -117,7 +117,7 @@ package org.osmf.examples.traceproxy
 			trace("Auto Switch Change: " + newAutoSwitch);
 		}
 
-		override protected function processViewChange(oldView:DisplayObject, newView:DisplayObject):void
+		override protected function processDisplayObjectChange(oldView:DisplayObject, newView:DisplayObject):void
 		{
 			trace("View Change: " + (oldView != null ? oldView.toString() : "null") + "->" + (newView != null ? newView.toString() : "null"));
 		}

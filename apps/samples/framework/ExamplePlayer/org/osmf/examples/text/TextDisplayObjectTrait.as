@@ -23,13 +23,13 @@ package org.osmf.examples.text
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
-	internal class TextViewTrait extends ViewTrait
+	internal class TextDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function TextViewTrait(view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function TextDisplayObjectTrait(displayObject:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
-			super(view, mediaWidth, mediaHeight);
+			super(displayObject, mediaWidth, mediaHeight);
 		}
 
 		public function setSize(mediaWidth:Number, mediaHeight:Number):void

@@ -27,7 +27,7 @@ package org.osmf.examples.text
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.ViewTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	
 	public class TextElement extends MediaElement
 	{
@@ -72,18 +72,18 @@ package org.osmf.examples.text
             {
             	textField.text = text;
 
-				if (viewTrait == null)
+				if (displayObjectTrait == null)
 				{
-  					viewTrait = new TextViewTrait(textField);
+  					displayObjectTrait = new TextDisplayObjectTrait(textField);
 			
-					addTrait(MediaTraitType.VIEW, viewTrait);
+					addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 				}
 				
-				viewTrait.setSize(textField.width, textField.height);
+				displayObjectTrait.setSize(textField.width, textField.height);
             }
 		}
 		
-		private var viewTrait:TextViewTrait;
+		private var displayObjectTrait:TextDisplayObjectTrait;
 		private var _text:String;
 	}
 }
