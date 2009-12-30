@@ -59,7 +59,7 @@ package org.osmf.chrome.controlbar.widgets
 				
 			enabled
 				=	dynamicStream != null
-				&&	dynamicStream.switchUnderway == false
+				&&	dynamicStream.switching == false
 				&&	dynamicStream.currentIndex != 0;
 		}
 	}

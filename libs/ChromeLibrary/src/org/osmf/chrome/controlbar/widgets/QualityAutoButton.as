@@ -24,7 +24,7 @@ package org.osmf.chrome.controlbar.widgets
 {
 	import flash.events.Event;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	
 	public class QualityAutoButton extends Button
 	{
@@ -63,7 +63,7 @@ package org.osmf.chrome.controlbar.widgets
 		override protected function processRequiredTraitsAvailable(element:MediaElement):void
 		{
 			dynamicStream = element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
-			dynamicStream.addEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+			dynamicStream.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 			
 			visibilityDeterminingEventHandler();
 		}
@@ -72,7 +72,7 @@ package org.osmf.chrome.controlbar.widgets
 		{
 			if (dynamicStream)
 			{
-				dynamicStream.removeEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream.removeEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 				dynamicStream = null;
 			}
 			

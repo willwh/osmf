@@ -27,7 +27,7 @@ package org.osmf.chrome.controlbar.widgets
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import org.osmf.events.SwitchEvent;
+	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -56,9 +56,9 @@ package org.osmf.chrome.controlbar.widgets
 		override protected function processRequiredTraitsAvailable(element:MediaElement):void
 		{
 			dynamicStream = element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
-			dynamicStream.addEventListener(SwitchEvent.INDICES_CHANGE, visibilityDeterminingEventHandler);
-			dynamicStream.addEventListener(SwitchEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
-			dynamicStream.addEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+			dynamicStream.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, visibilityDeterminingEventHandler);
+			dynamicStream.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
+			dynamicStream.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 			
 			visibilityDeterminingEventHandler();
 		}
@@ -67,9 +67,9 @@ package org.osmf.chrome.controlbar.widgets
 		{
 			if (dynamicStream)
 			{
-				dynamicStream.removeEventListener(SwitchEvent.INDICES_CHANGE, visibilityDeterminingEventHandler);
-				dynamicStream.removeEventListener(SwitchEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
-				dynamicStream.removeEventListener(SwitchEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream.removeEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream.removeEventListener(DynamicStreamEvent.SWITCHING_CHANGE, visibilityDeterminingEventHandler);
+				dynamicStream.removeEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, visibilityDeterminingEventHandler);
 				dynamicStream = null;
 			}
 			
@@ -97,8 +97,8 @@ package org.osmf.chrome.controlbar.widgets
 				
 			enabled
 				=	dynamicStream != null
-				&&	dynamicStream.switchUnderway == false
-				&&	dynamicStream.currentIndex < dynamicStream.maxIndex;
+				&&	dynamicStream.switching == false
+				&&	dynamicStream.currentIndex < dynamicStream.numDynamicStreams;
 		}
 		
 		protected var dynamicStream:DynamicStreamTrait;
