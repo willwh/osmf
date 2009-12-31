@@ -65,7 +65,7 @@ package org.osmf.examples.posterframe
 			// to be displayed.  But because this play trait is detached, no
 			// events are dispatched to the client.  From a traits perspective,
 			// this is functionally equivalent to an ImageElement, where there's
-			// a ViewTrait but no PlayTrait.
+			// a DisplayObjectTrait but no PlayTrait.
 			playTrait.play();
 			
 			// Last, to ensure that the user can complete playback of this item,

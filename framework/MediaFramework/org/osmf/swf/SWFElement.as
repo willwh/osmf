@@ -44,11 +44,11 @@ package org.osmf.swf
 	 * <li>Get the SWFElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
 	 * <li>Load the SWF using the LoadTrait's <code>load()</code> method.</li>
-	 * <li>Get the SWFElement's ViewTrait using the 
+	 * <li>Get the SWFElement's DisplayObjectTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT)</code> method.</li>
-	 * <li>Add the DisplayObject that represents the SWFElement's ViewTrait
-	 * to the display list. This DisplayObject is in the <code>view</code>
-	 * property of the ViewTrait.</li>
+	 * <li>Add the DisplayObject that represents the SWFElement's DisplayObjectTrait
+	 * to the display list. This DisplayObject is in the <code>displayObject</code>
+	 * property of the DisplayObjectTrait.</li>
 	 * <li>When done with the SWFElement, unload the SWF using the
 	 * LoadTrait's <code>unload()</code> method.</li>
 	 * </ol>

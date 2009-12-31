@@ -1036,14 +1036,14 @@ package org.osmf.media
 			}
 	    }
 	
-	    // ViewTrait
+	    // DisplayObjectTrait
 				
 		/**
 		 * Intrinsic width of the media, in pixels.
 		 * The intrinsic width is the width of the media before any processing has been applied.
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ViewTrait
+         * @see org.osmf.traits.DisplayObjectTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1060,7 +1060,7 @@ package org.osmf.media
 		 * The intrinsic height is the height of the media before any processing has been applied.
 		 * <p>The MediaElement must be spatial to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ViewTrait
+         * @see org.osmf.traits.DisplayObjectTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1201,7 +1201,7 @@ package org.osmf.media
 		 * This is the DisplayObject that represents the media.
 		 * <p>The MediaElement must be viewable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.ViewTrait
+         * @see org.osmf.traits.DisplayObjectTrait
          *  
          *  @langversion 3.0
          *  @playerversion Flash 10

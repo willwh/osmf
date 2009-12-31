@@ -28,7 +28,7 @@ package org.osmf.composition
 	import org.osmf.traits.MediaTraitBase;
 
 	/**
-	 * Composite ViewTrait for serial elements.
+	 * Composite DisplayObjectTrait for serial elements.
 	 * 
 	 * The view characteristics of a serial composition are identical to the view
 	 * characteristics of the active child of that serial composition.
@@ -39,7 +39,7 @@ package org.osmf.composition
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class SerialViewTrait extends CompositeDisplayObjectTrait implements IReusable
+	internal class SerialDisplayObjectTrait extends CompositeDisplayObjectTrait implements IReusable
 	{
 		/**
 		 * Constructor
@@ -49,7 +49,7 @@ package org.osmf.composition
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function SerialViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
+		public function SerialDisplayObjectTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
 			super(traitAggregator, owner);
 

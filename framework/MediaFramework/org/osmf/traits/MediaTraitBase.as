@@ -73,9 +73,9 @@ package org.osmf.traits
 	 * going to be specific to one class of media elements, namely the class
 	 * that plays video, since the playback operations will be specific to the
 	 * underlying implementation of video (i.e. NetStream).  On the other hand,
-	 * an implementation of a "view" trait might be able to work with any media
-	 * element, since ViewTrait will use the same underlying media implementation
-	 * (DisplayObject) for any media element.</p> 
+	 * an implementation of a "display object" trait might be able to work with
+	 * any media element, since DisplayObjectTrait will use the same underlying
+	 *  media implementation (DisplayObject) for any media element.</p> 
 	 **/
 	public class MediaTraitBase extends EventDispatcher
 	{

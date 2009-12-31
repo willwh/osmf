@@ -68,7 +68,7 @@ package
 				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
 				rootElement.addChild(video);
 			
-			this.addElement(rootElement);
+			this.addMediaElement(rootElement);
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;

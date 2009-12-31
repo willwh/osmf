@@ -59,18 +59,18 @@ package org.osmf.net
 			var stream:NetStream = createStream();
 			
 			var sprite:Sprite = new Sprite();
-			var viewTrait:NetStreamDisplayObjectTrait = new NetStreamDisplayObjectTrait(stream, sprite);
-			assertTrue(viewTrait.mediaWidth == 0);
-			assertTrue(viewTrait.mediaHeight == 0);
+			var displayObjectTrait:NetStreamDisplayObjectTrait = new NetStreamDisplayObjectTrait(stream, sprite);
+			assertTrue(displayObjectTrait.mediaWidth == 0);
+			assertTrue(displayObjectTrait.mediaHeight == 0);
 			
-			viewTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
+			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
 			
 			stream.play(NetStreamUtils.getStreamNameFromURL(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
 		
 			function onTestOnMetadata(event:DisplayObjectEvent):void
 			{
-				assertTrue(viewTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
-				assertTrue(viewTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
+				assertTrue(displayObjectTrait.mediaWidth == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH);
+				assertTrue(displayObjectTrait.mediaHeight == TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT);
 			}
 		}
 		

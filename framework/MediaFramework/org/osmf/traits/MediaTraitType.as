@@ -112,7 +112,7 @@ package org.osmf.traits
 		public static const TIME:String = "time";
 		
 		/**
-		 * Identifies an instance of a ViewTrait. 
+		 * Identifies an instance of a DisplayObjectTrait. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

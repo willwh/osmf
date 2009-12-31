@@ -153,7 +153,7 @@ package org.osmf.utils
 		public static const SWITCHING_UP_OTHER:String					= "switchingUpOther";
 		public static const SWITCHING_MANUAL:String						= "switchingManual";
 				
-		// CompositeViewTrait
+		// CompositeDisplayObjectTrait
 		
 		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "invalidLayoutRendererConstructor";	
 		

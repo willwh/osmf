@@ -35,7 +35,7 @@ package org.osmf.composition
 	
 	public class TestSerialElementWithDisplayObjectTrait extends TestCase
 	{
-		public function testViewTraitDimensions():void
+		public function testDisplayObjectTraitDimensions():void
 		{
 			var serial:SerialElement = new SerialElement();
 			
@@ -94,7 +94,7 @@ package org.osmf.composition
 			assertNull(serial.getTrait(MediaTraitType.DISPLAY_OBJECT));
 		}
 		
-		public function testViewTraitView():void
+		public function testDisplayObjectTraitView():void
 		{
 			var serial:SerialElement = new SerialElement();
 			

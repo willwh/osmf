@@ -126,8 +126,8 @@ package org.osmf.mast.adapter
 			_map[POSITION] 		= "TimeTrait.currentTime";
 			_map[IS_PLAYING]	= "PlayTrait.playState";
 			_map[IS_PAUSED]		= "PlayTrait.playState";
-			_map[CONTENT_WIDTH]	= "ViewTrait.mediaWidth";
-			_map[CONTENT_HEIGHT]= "ViewTrait.mediaHeight";
+			_map[CONTENT_WIDTH]	= "DisplayObjectTrait.mediaWidth";
+			_map[CONTENT_HEIGHT]= "DisplayObjectTrait.mediaHeight";
 
 			// Events					
 			_map[ON_PLAY]			= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";

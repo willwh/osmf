@@ -47,7 +47,7 @@ package org.osmf.content
 		override protected function get existentTraitTypesAfterLoad():Array
 		{
 			return 	[ MediaTraitType.LOAD
-					, MediaTraitType.VIEW
+					, MediaTraitType.DISPLAY_OBJECT
 				   	];
 		}
 		

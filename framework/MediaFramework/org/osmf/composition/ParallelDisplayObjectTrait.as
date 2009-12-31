@@ -23,15 +23,14 @@ package org.osmf.composition
 {
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.DisplayObjectEvent;
+	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.DisplayObjectTrait;
 
 	/**
 	 * The view property of the composite trait of a parallel composition refers to a
@@ -40,7 +39,7 @@ package org.osmf.composition
 	 * 
 	 * The bounds of the container determine the size of the composition.
 	 */	
-	internal class ParallelViewTrait extends CompositeDisplayObjectTrait
+	internal class ParallelDisplayObjectTrait extends CompositeDisplayObjectTrait
 	{
 		/**
 		 * Constructor
@@ -50,7 +49,7 @@ package org.osmf.composition
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function ParallelViewTrait(traitAggregator:TraitAggregator, owner:MediaElement)
+		public function ParallelDisplayObjectTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{
 			super(traitAggregator, owner);
 			

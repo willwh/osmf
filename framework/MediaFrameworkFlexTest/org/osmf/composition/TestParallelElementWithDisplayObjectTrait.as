@@ -37,7 +37,7 @@ package org.osmf.composition
 
 	public class TestParallelElementWithDisplayObjectTrait extends TestCase
 	{
-		public function testViewTraitDimensions():void
+		public function testDisplayObjectTraitDimensions():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
 			
@@ -116,7 +116,7 @@ package org.osmf.composition
 			assertFalse(parallel.hasTrait(MediaTraitType.DISPLAY_OBJECT));
 		}
 		
-		public function testViewTraitView():void
+		public function testDisplayObjectTraitDisplayObject():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
 			
@@ -141,7 +141,7 @@ package org.osmf.composition
 			assertNotNull(view);
 			
 			// TODO: We should either enable the commented out lines, or remove them
-			// entirely (if they aren't appropriate to this test).  Note that the ViewTrait
+			// entirely (if they aren't appropriate to this test).  Note that the DisplayObjectTrait
 			// should not expose the layoutRenderer, so we would need some other way of
 			// validating (perhaps we just wait for an invalidation and make the test
 			// async>).
@@ -164,7 +164,7 @@ package org.osmf.composition
 			//assertTrue(view.contains(displayObjectTrait2.view));
 		}
 		
-		public function testViewTraitLayout():void
+		public function testDisplayObjectTraitLayout():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
 			var absolute:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();

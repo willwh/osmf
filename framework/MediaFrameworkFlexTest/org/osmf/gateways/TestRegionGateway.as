@@ -120,8 +120,8 @@ package org.osmf.gateways
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
-			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 

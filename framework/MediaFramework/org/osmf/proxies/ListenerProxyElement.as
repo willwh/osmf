@@ -380,7 +380,7 @@ package org.osmf.proxies
 				case MediaTraitType.DISPLAY_OBJECT:
 					toggleDisplayObjectTraitListeners(added);
 					
-					// ViewTrait is the one trait where the change event is
+					// DisplayObjectTrait is the one trait where the change event is
 					// merged with the trait addition/removal event.  So we
 					// forcibly signal a view change event.
 					var displayObjectTrait:DisplayObjectTrait = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;

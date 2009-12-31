@@ -54,7 +54,7 @@ package org.osmf.layout
 			assertEquals(0, melt.firstChildIndex);
 		}
 		
-		public function testMediaElementLayoutTargetWithViewTrait():void
+		public function testMediaElementLayoutTargetWithDisplayObjectTrait():void
 		{
 			var me:DynamicMediaElement = new DynamicMediaElement();
 				

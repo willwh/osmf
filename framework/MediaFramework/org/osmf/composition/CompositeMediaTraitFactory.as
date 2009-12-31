@@ -96,8 +96,8 @@ package org.osmf.composition
 				case MediaTraitType.DISPLAY_OBJECT:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
-							? new ParallelViewTrait(traitAggregator, owner)
-							: new SerialViewTrait(traitAggregator, owner);
+							? new ParallelDisplayObjectTrait(traitAggregator, owner)
+							: new SerialDisplayObjectTrait(traitAggregator, owner);
 					break;
 					
 				default:

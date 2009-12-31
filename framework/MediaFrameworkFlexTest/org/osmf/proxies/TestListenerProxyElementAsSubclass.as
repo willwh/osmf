@@ -346,7 +346,7 @@ package org.osmf.proxies
 			assertTrue(events.length == 3);
 		}
 				
-		public function testProcessViewTraitChanges():void
+		public function testProcessDisplayObjectTraitChanges():void
 		{
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.DISPLAY_OBJECT);
 			
@@ -390,7 +390,7 @@ package org.osmf.proxies
 			assertTrue(events.length == 4);
 		}
 		
-		public function testProcessViewTraitChangesOnAddViewTrait():void
+		public function testProcessDisplayObjectTraitChangesOnAddDisplayObjectTrait():void
 		{
 			var proxyElement:ProxyElement = createProxyWithTrait(MediaTraitType.PLAY);
 			
@@ -399,7 +399,7 @@ package org.osmf.proxies
 			
 			assertTrue(events.length == 0);
 			
-			// VIEW is the one trait where adding the trait to the
+			// DISPLAY_OBJECT is the one trait where adding the trait to the
 			// MediaElement can trigger a ListenerProxyElement event.
 			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			

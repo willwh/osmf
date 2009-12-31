@@ -27,11 +27,11 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
-	import org.osmf.traits.ViewTrait;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 
@@ -62,8 +62,8 @@ package
 					var playTrait:PlayTrait = element.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					playTrait.play();
 					
-					var viewTrait:ViewTrait = element.getTrait(MediaTraitType.VIEW) as ViewTrait;
-					addChild(viewTrait.view);
+					var displayObjectTrait:DisplayObjectTrait = element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					addChild(displayObjectTrait.displayObject);
 				}
 			}
 		}
