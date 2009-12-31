@@ -40,6 +40,9 @@
     <classEntry path="org.osmf.composition.TraitAggregatorEvent"/>
     <classEntry path="org.osmf.composition.TraitLoader"/>
     <classEntry path="org.osmf.composition.TraitLoaderEvent"/>
+    <classEntry path="org.osmf.containers.HTMLMediaContainer"/>
+    <classEntry path="org.osmf.containers.IMediaContainer"/>
+    <classEntry path="org.osmf.containers.MediaContainer"/>
     <classEntry path="org.osmf.content.ContentElement"/>
     <classEntry path="org.osmf.content.ContentLoadTrait"/>
     <classEntry path="org.osmf.content.ContentLoadedContext"/>
@@ -79,8 +82,6 @@
     <classEntry path="org.osmf.external.HTMLLoadTrait"/>
     <classEntry path="org.osmf.external.HTMLPlayTrait"/>
     <classEntry path="org.osmf.external.HTMLTimeTrait"/>
-    <classEntry path="org.osmf.gateways.HTMLGateway"/>
-    <classEntry path="org.osmf.gateways.RegionGateway"/>
     <classEntry path="org.osmf.image.ImageElement"/>
     <classEntry path="org.osmf.image.ImageLoader"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutFacet"/>
@@ -111,7 +112,6 @@
     <classEntry path="org.osmf.media.DefaultMediaFactory"/>
     <classEntry path="org.osmf.media.DefaultMediaResourceHandlerResolver"/>
     <classEntry path="org.osmf.media.DefaultTraitResolver"/>
-    <classEntry path="org.osmf.media.IMediaContainer"/>
     <classEntry path="org.osmf.media.IMediaReferrer"/>
     <classEntry path="org.osmf.media.IMediaResource"/>
     <classEntry path="org.osmf.media.IMediaResourceHandler"/>

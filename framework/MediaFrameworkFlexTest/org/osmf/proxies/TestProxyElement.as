@@ -24,7 +24,7 @@ package org.osmf.proxies
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.GatewayChangeEvent;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -101,8 +101,8 @@ package org.osmf.proxies
 			var mediaElement:ProxyElement = createMediaElement() as ProxyElement;
 			mediaElement.wrappedElement = new MediaElement();
 			
-			var gatewayA:RegionGateway = new RegionGateway();
-			var gatewayB:RegionGateway = new RegionGateway();
+			var gatewayA:MediaContainer = new MediaContainer();
+			var gatewayB:MediaContainer = new MediaContainer();
 			
 			assertNull(mediaElement.gateway);
 			assertDispatches

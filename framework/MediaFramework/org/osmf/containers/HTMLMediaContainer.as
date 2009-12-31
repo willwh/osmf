@@ -19,26 +19,25 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.containers
 {
 	import flash.errors.IllegalOperationError;
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.external.HTMLElement;
-	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * HTMLGateway is an IMediaContainer implementing class that uses the ExternalConnection
-	 * to expose the gateway's child media elements to JavaScript.
+	 * HTMLContainer is an IMediaContainer implementing class that uses the ExternalConnection
+	 * to expose the container's child media elements to JavaScript.
 	 */	
-	public class HTMLGateway implements IMediaContainer
+	public class HTMLMediaContainer implements IMediaContainer
 	{
-		// IContainerGateway
+		// IContainerContainer
 		//
 
 		/**
@@ -69,13 +68,13 @@ package org.osmf.gateways
 			var result:MediaElement;
 			
 			var elementId:String = "element_" + elementIdCounter++;
-			var elementScriptPath:String = gatewayScriptPath + "elements." + elementId + "."; 
+			var elementScriptPath:String = containerScriptPath + "elements." + elementId + "."; 
 			
 			elements[elementId] = child;
 			
 			htmlElement.scriptPath = elementScriptPath; 
 			
-			ExternalInterface.call(gatewayScriptPath + "__addElement__", elementId);
+			ExternalInterface.call(containerScriptPath + "__addElement__", elementId);
 			
 			return child;
 		}
@@ -106,7 +105,7 @@ package org.osmf.gateways
 			delete elements[elementId];
 			
 			ExternalInterface.call
-				( gatewayScriptPath + "__removeElement__"
+				( containerScriptPath + "__removeElement__"
 				, elementId
 				);
 			
@@ -137,27 +136,47 @@ package org.osmf.gateways
 		//
 		
 		/**
-		 * Initializes the HTMLGateway. Injects the components JavaScript API into the
-		 * hosting page.
+		 * Constructor.
 		 * 
-		 * @param gatewayIdentifier The identifier that will be used for this gateway
-		 * in JavaScript. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @param containerIdentifier The identifier that will be used for this container
+		 * in JavaScript. If no identifier is specified, a random one will be generated.
+		 * 
 		 */		
-		public function initialize(gatewayIdentifier:String):void
+		public function HTMLMediaContainer(containerIdentifier:String = null)
+		{
+			_containerIdentifier
+				= 	containerIdentifier
+				||	( "OSMF_HTMLMediaContainer_"
+					+ instanceCounter
+					+ "_"
+					+ Math.round(0xffffffff * Math.random())
+					);
+					
+			initialize();
+			
+			instanceCounter++;
+		}
+		
+		/**
+		 * Defines the identifier that JavaScript can use to address the container.
+		 */		
+		public function get containerIdentifier():String
+		{
+			return _containerIdentifier;
+		}
+		
+		// Internals
+		//
+		
+		private function initialize():void
 		{
 			requireExternalInterface;
 			
-			this.gatewayIdentifier = gatewayIdentifier;
-			gatewayScriptPath 
-				= "document.osmf.gateways."
+			containerScriptPath 
+				= "document.osmf.mediaContainers."
 				+ ExternalInterface.objectID
 				+ "_"
-				+ gatewayIdentifier + ".";
+				+ _containerIdentifier + ".";
 			
 			ExternalInterface.marshallExceptions = true;
 			ExternalInterface.addCallback("osmf_getProperty", getPropertyCallback);
@@ -165,19 +184,17 @@ package org.osmf.gateways
 			ExternalInterface.addCallback("osmf_invoke", invokeCallback);
 			
 			ExternalInterface.call
-				( registerGateway_js
-				, ExternalInterface.objectID, gatewayIdentifier
+				( registerContainer_js
+				, ExternalInterface.objectID
+				, _containerIdentifier
 				);
 		}
-		
-		// Internals
-		//
 		
 		private var elements:Dictionary = new Dictionary();
 		private var elementIdCounter:int = 0;
 		
-		private var gatewayIdentifier:String;
-		private var gatewayScriptPath:String;
+		private var _containerIdentifier:String;
+		private var containerScriptPath:String;
 		
 		private function get requireExternalInterface():*
 		{
@@ -235,7 +252,7 @@ package org.osmf.gateways
 			{
 				switch (method)
 				{
-					// Gateway
+					// Container
 					case "trace":
 						if (args.length)
 						{
@@ -246,7 +263,7 @@ package org.osmf.gateways
 						throw new IllegalOperationError
 							( "Method '"
 							+ method
-							+ "' invoked from JavaScript is not supported on a Gateway."
+							+ "' invoked from JavaScript is not supported on a Container."
 							);
 						break;
 				}
@@ -316,7 +333,7 @@ package org.osmf.gateways
         			= function()
         				{ 
         					return element
-	        					.__gateway__
+	        					.__container__
 	        					.__flashObject__
 	        					.osmf_getProperty(element.elementId, property);
         				}
@@ -328,7 +345,7 @@ package org.osmf.gateways
         			= function(value)
         				{ 
         					return element
-	        					.__gateway__
+	        					.__container__
 	        					.__flashObject__
 	        					.osmf_setProperty(element.elementId, property, value);
         				}
@@ -362,7 +379,7 @@ package org.osmf.gateways
         	{
         		element[method] = function()
         		{
-        			element.gateway.__flashObject__.osmf_invoke
+        			element.mediaContainer.__flashObject__.osmf_invoke
     					( element.elementId
     					, method
     					, arguments.length ? arguments : []
@@ -392,12 +409,12 @@ package org.osmf.gateways
         	}
         	]]>;
         
-        // Defines the JS Gateway class:
-		private static const gateway_js:XML =
+        // Defines the JS Container class:
+		private static const container_js:XML =
 			<![CDATA[
-			function Gateway(objectId, gatewayId)
+			function Container(objectId, containerId)
         	{
-        		this.gatewayId = gatewayId;
+        		this.containerId = containerId;
         		
         		this.__flashObject__ = document.getElementById(objectId);
         		
@@ -421,7 +438,7 @@ package org.osmf.gateways
         			var element = this.elements[elementId];
         			if (element == null)
         			{
-        				throw "Gateway doesn not contain the specified element ("
+        				throw "Container doesn not contain the specified element ("
         					+ elementId
         					+ ")";
         			}
@@ -441,10 +458,10 @@ package org.osmf.gateways
         // Defines the JS MediaElement class:
         private static const mediaElement_js:XML =
         	<![CDATA[
-        	function MediaElement(gateway, elementId)
+        	function MediaElement(container, elementId)
         	{
         		this.elementId = elementId;
-        		this.__gateway__ = gateway;
+        		this.__container__ = container;
         		
         		// MediaElement core properties:
         		
@@ -479,10 +496,10 @@ package org.osmf.gateways
         	}
         	]]>;
         	
-        // Defines the logic that sets up the document.osmf object, adding a gateway:
+        // Defines the logic that sets up the document.osmf object, adding a container:
         private static const registrationLogic_js:XML =
         	<![CDATA[
-        	// Get a reference to, or otherwise construct, the document.osmf.gateways path:
+        	// Get a reference to, or otherwise construct, the document.osmf.mediaContainers path:
             var osmf 
         		= document.osmf
         		= document.osmf || {};
@@ -490,9 +507,9 @@ package org.osmf.gateways
         	osmf.constants
         		= osmf.constants || new Constants();
         		
-        	var gateways
-        		= osmf.gateways
-        		= osmf.gateways || {};
+        	var containers
+        		= osmf.mediaContainers
+        		= osmf.mediaContainers || {};
         
         	// For debugging, provide a 'trace' function on: it will
         	// forward the message to Flash:
@@ -507,42 +524,44 @@ package org.osmf.gateways
         		}
         	}
 	        	
-        	// See if the gateway with the specified name has been registered:
+        	// See if the container with the specified name has been registered:
         	
-        	var identifier = objectId + "_" + gatewayId;
+        	var identifier = objectId + "_" + containerId;
         	
-        	if (gateways[identifier] != null)
+        	if (containers[identifier] != null)
         	{
-        		throw "A gateway by the name of "+identifier+" has already been registered."
+        		throw "A container by the name of "+identifier+" has already been registered."
         	}
         	else
         	{
-        		var gateway
-        			= gateways[identifier]
-        			= new Gateway(objectId, gatewayId);
+        		var container
+        			= containers[identifier]
+        			= new Container(objectId, containerId);
         	}
         	
-        	// Invoke "onOSMFGatewayRegistered"
-        	if 	(	this["onOSMFGatewayRegistered"] != null
-        		&&	this.onOSMFGatewayRegistered.length == 1
+        	// Invoke "onHTMLMediaContainerConstructed"
+        	if 	(	this["onHTMLMediaContainerConstructed"] != null
+        		&&	this.onHTMLMediaContainerConstructed.length == 1
         		)
         	{
-        		this.onOSMFGatewayRegistered(gateway);
+        		this.onHTMLMediaContainerConstructed(container);
         	}
 	        
         	]]>;
 		
-		private static const registerGateway_js:XML = new XML
+		private static const registerContainer_js:XML = new XML
 			( "<![CDATA["
-			+ "function(objectId, gatewayId)"
+			+ "function(objectId, containerId)"
 			+ "{"
 			+ utils_js.toString()
 			+ constants_js.toString()
-            + gateway_js.toString()
+            + container_js.toString()
             + mediaElement_js.toString()
             + registrationLogic_js.toString()
             + "}"
             + "]]>"
             );
+     	
+     	private static var instanceCounter:int;
 	}
 }

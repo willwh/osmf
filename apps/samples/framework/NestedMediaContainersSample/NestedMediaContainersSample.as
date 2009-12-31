@@ -28,7 +28,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -42,9 +42,9 @@ package
 	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
-	public class NestedRegionsSample extends Sprite
+	public class NestedMediaContainersSample extends Sprite
 	{
-		public function NestedRegionsSample()
+		public function NestedMediaContainersSample()
 		{
 			// Setup the Flash stage:
 			
@@ -83,33 +83,33 @@ package
 			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
 			LayoutUtils.setLayoutAttributes(mainContent.metadata, ScaleMode.STRETCH, RegistrationPoint.TOP_MIDDLE);
 			
-			// Consruct a tree of regions:
+			// Consruct a tree of containers:
 
-			var mainRegion:RegionGateway = new RegionGateway();
-			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 800, 450);
-			mainRegion.backgroundColor = 0xFFFFFF;
-			mainRegion.backgroundAlpha = .2;
-			addChild(mainRegion);
+			var mainContainer:MediaContainer = new MediaContainer();
+			LayoutUtils.setAbsoluteLayout(mainContainer.metadata, 800, 450);
+			mainContainer.backgroundColor = 0xFFFFFF;
+			mainContainer.backgroundAlpha = .2;
+			addChild(mainContainer);
 			
-				var bannerRegion:RegionGateway = new RegionGateway();
-				bannerRegion.backgroundColor = 0xFF;
-				bannerRegion.backgroundAlpha = .2;
-				LayoutUtils.setAnchorLayout(bannerRegion.metadata, 5, 5, 5, NaN);
-				LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, NaN, 60);
-				mainRegion.addChildRegion(bannerRegion);
+				var bannerContainer:MediaContainer = new MediaContainer();
+				bannerContainer.backgroundColor = 0xFF;
+				bannerContainer.backgroundAlpha = .2;
+				LayoutUtils.setAnchorLayout(bannerContainer.metadata, 5, 5, 5, NaN);
+				LayoutUtils.setAbsoluteLayout(bannerContainer.metadata, NaN, 60);
+				mainContainer.addChildContainer(bannerContainer);
 				
-				var skyScraperRegion:RegionGateway = new RegionGateway();
-				skyScraperRegion.backgroundColor = 0xFF00;
-				skyScraperRegion.backgroundAlpha = .2;
-				LayoutUtils.setAnchorLayout(skyScraperRegion.metadata, NaN, 5, 5, 5);
-				LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, NaN);
-				mainRegion.addChildRegion(skyScraperRegion);
+				var skyScraperContainer:MediaContainer = new MediaContainer();
+				skyScraperContainer.backgroundColor = 0xFF00;
+				skyScraperContainer.backgroundAlpha = .2;
+				LayoutUtils.setAnchorLayout(skyScraperContainer.metadata, NaN, 5, 5, 5);
+				LayoutUtils.setAbsoluteLayout(skyScraperContainer.metadata, 120, NaN);
+				mainContainer.addChildContainer(skyScraperContainer);
 				
-			// Bind media elements to their target regions:
+			// Bind media elements to their target containers:
 			
-			mainContent.gateway = mainRegion;
-			banners.gateway = bannerRegion;
-			skyScraper.gateway = skyScraperRegion;
+			mainContent.gateway = mainContainer;
+			banners.gateway = bannerContainer;
+			skyScraper.gateway = skyScraperContainer;
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will

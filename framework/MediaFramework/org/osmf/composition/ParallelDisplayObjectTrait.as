@@ -26,7 +26,7 @@ package org.osmf.composition
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.media.IMediaContainer;
+	import org.osmf.containers.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitBase;

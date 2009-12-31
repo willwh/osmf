@@ -37,8 +37,8 @@ package
 	
 	import org.osmf.chrome.controlbar.*;
 	import org.osmf.chrome.controlbar.widgets.*;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.gateways.RegionGateway;
 	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.manifest.F4MLoader;
@@ -127,9 +127,9 @@ package
 		
 		private function setupMediaContainer():void
 		{
-			// Construct a RegionGateway that will be used to show the media
+			// Construct a MediaContainer that will be used to show the media
 			// on screen once it has loaded.
-			container = new RegionGateway();
+			container = new MediaContainer();
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
@@ -245,7 +245,7 @@ package
 		
 		private var element:MediaElement;
 		
-		private var container:RegionGateway;
+		private var container:MediaContainer;
 		private var controlBar:ControlBarBase;
 		
 		private var overlay:Sprite;

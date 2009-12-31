@@ -30,7 +30,7 @@ package org.osmf.media
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -227,8 +227,8 @@ package org.osmf.media
 		public function testGateway():void
 		{
 			var mediaElement:MediaElement = createMediaElement();
-			var gatewayA:RegionGateway = new RegionGateway();
-			var gatewayB:RegionGateway = new RegionGateway();
+			var gatewayA:MediaContainer = new MediaContainer();
+			var gatewayB:MediaContainer = new MediaContainer();
 			
 			assertNull(mediaElement.gateway);
 			assertDispatches

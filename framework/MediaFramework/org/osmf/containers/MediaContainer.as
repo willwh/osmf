@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.containers
 {
 	import flash.errors.IllegalOperationError;
 	import flash.geom.Rectangle;
@@ -29,28 +29,27 @@ package org.osmf.gateways
 	import org.osmf.layout.ILayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.media.IMediaContainer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * RegionGateway defines a Sprite based IMediaContainer implementation.
+	 * MediaContainer defines a Sprite based IMediaContainer implementation.
 	 */	
-	public class RegionGateway extends LayoutContextSprite implements IMediaContainer
+	public class MediaContainer extends LayoutContextSprite implements IMediaContainer
 	{
 		/**
 		 * Constructor
 		 *  
 		 * @param metadata The metadata that elementLayoutRenderer and/or
-		 * regionsLayoutRenderer may be using on calculating their layouts using
-		 * this region as their context.
+		 * containersLayoutRenderer may be using on calculating their layouts using
+		 * this container as their context.
 		 * @param elementLayoutRenderer The layout renderer that will render
-		 * the MediaElement instances that get added to this region. If no
+		 * the MediaElement instances that get added to this container. If no
 		 * renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
-		 * @param regionsLayoutRenderer The layout renderer that will render
-		 * the child RegionGateway instances that get added to this region. If
+		 * @param containersLayoutRenderer The layout renderer that will render
+		 * the child MediaContainer instances that get added to this container. If
 		 * no renderer is specified, a DefaultLayoutRenderer instance will be
 		 * used.
 		 *  
@@ -59,10 +58,10 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function RegionGateway
+		public function MediaContainer
 							( metadata:Metadata=null
 							, contentLayoutRenderer:ILayoutRenderer=null
-							, regionsLayoutRenderer:ILayoutRenderer=null
+							, containersLayoutRenderer:ILayoutRenderer=null
 							)
 		{
 			super(metadata);
@@ -76,11 +75,11 @@ package org.osmf.gateways
 			this.contentLayoutRenderer.context = content;
 			content.layoutRenderer = this.contentLayoutRenderer;
 			
-			// Setup the layout renderer that will govern sub-regions:
+			// Setup the layout renderer that will govern sub-containers:
 			
-			this.regionsLayoutRenderer = regionsLayoutRenderer || new DefaultLayoutRenderer();
-			this.regionsLayoutRenderer.context = this;
-			layoutRenderer = this.regionsLayoutRenderer; 
+			this.containersLayoutRenderer = containersLayoutRenderer || new DefaultLayoutRenderer();
+			this.containersLayoutRenderer.context = this;
+			layoutRenderer = this.containersLayoutRenderer; 
 		}
 		
 		// IContainerGateway
@@ -165,7 +164,7 @@ package org.osmf.gateways
 		//
 		
 		/**
-		 * Defines if the children of the region that display outside of its bounds 
+		 * Defines if the children of the container that display outside of its bounds 
 		 * will be clipped or not.
 		 * 
 		 *  
@@ -196,7 +195,7 @@ package org.osmf.gateways
 		
 		/**
 		 * Returns 1, for index 0 is occupied by the LayoutContextSprite instance
-		 * that holds sub-regions.
+		 * that holds sub-containers.
 		 * 
 		 * @inheritDoc
 		 *  
@@ -207,7 +206,7 @@ package org.osmf.gateways
 		 */
 		override public function get firstChildIndex():uint
 		{
-			// The content sprite is at index 0, add sub-regions
+			// The content sprite is at index 0, add sub-containers
 			// at index 1 and up:
 			return 1;
 		}
@@ -310,69 +309,79 @@ package org.osmf.gateways
 		//
 		
 		/**
-		 * Adds the specified region as a sub-region.
+		 * Adds the specified container as a sub-container.
 		 * 
-		 * If the region contains metadata, then it will be layed out using this
-		 * instance's regions layout renderer.
+		 * If the container contains metadata, then it will be layed out using this
+		 * instance's containers layout renderer.
 		 *  
-		 * @param region The child region to add.
-		 * @throws IllegalOperationError if region is null, or already a sub-region.
+		 * @param container The child container to add.
+		 * @throws IllegalOperationError if container is null, or already a sub-container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function addChildRegion(region:RegionGateway):void
+		public function addChildContainer(container:MediaContainer):MediaContainer
 		{
-			if (region == null)
+			var result:MediaContainer;
+			
+			if (container == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (regionsLayoutRenderer.targets(region) == false)
+			if (containersLayoutRenderer.targets(container) == false)
 			{
-				regionsLayoutRenderer.addTarget(region);
+				containersLayoutRenderer.addTarget(container);
+				result = container;
 			}
 			else
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
+			
+			return result;
 		}
 		
 		/**
-		 * Removes a sub-region.
+		 * Removes a sub-container.
 		 *  
-		 * @param region The region to remove.
-		 * @throws IllegalOperationErrror if region is null, or not a sub-region.
+		 * @param container The container to remove.
+		 * @throws IllegalOperationErrror if container is null, or not a sub-container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function removeChildRegion(region:RegionGateway):void
+		public function removeChildContainer(container:MediaContainer):MediaContainer
 		{
-			if (region == null)
+			var result:MediaContainer;
+			
+			if (container == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (regionsLayoutRenderer.targets(region))
+			if (containersLayoutRenderer.targets(container))
 			{
-				regionsLayoutRenderer.removeTarget(region);
+				containersLayoutRenderer.removeTarget(container);
+				result = container;
 			}
 			else
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
+			
+			return result;
 		}
 		
 		/**
-		 * Verifies if a region is a sub-region of this RegionGateway.
+		 * Verifies if a container is a sub-container of this MediaContainer.
 		 *  
-		 * @param region Region to verify.
-		 * @return True if target is a sub-region of this RegionGateway.
+		 * @param container Container to verify.
+		 * @return True if target is a sub-container of this MediaContainer.
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -380,9 +389,9 @@ package org.osmf.gateways
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function containsRegion(region:RegionGateway):Boolean
+		public function containsContainer(container:MediaContainer):Boolean
 		{
-			return regionsLayoutRenderer.targets(region);
+			return containersLayoutRenderer.targets(container);
 		}
 		
 		public function validateContentNow():void
@@ -391,7 +400,7 @@ package org.osmf.gateways
 		}
 		
 		/**
-		 * Defines the region's background color. By default, this value
+		 * Defines the container's background color. By default, this value
 		 * is set to NaN, which results in no background being drawn.
 		 *  
 		 *  @langversion 3.0
@@ -413,10 +422,10 @@ package org.osmf.gateways
 		}
 		
 		/**
-		 * Defines the region's background alpha. By default, this value
+		 * Defines the container's background alpha. By default, this value
 		 * is set to 1, which results in the background being fully opaque.
 		 * 
-		 * Note that a region will not have a background drawn unless its
+		 * Note that a container will not have a background drawn unless its
 		 * backgroundColor property is set.
 		 *  
 		 *  @langversion 3.0
@@ -469,7 +478,7 @@ package org.osmf.gateways
 		private var content:LayoutContextSprite;
 		
 		private var contentLayoutRenderer:ILayoutRenderer;
-		private var regionsLayoutRenderer:ILayoutRenderer;
+		private var containersLayoutRenderer:ILayoutRenderer;
 		
 		private var _backgroundColor:Number;
 		private var _backgroundAlpha:Number;

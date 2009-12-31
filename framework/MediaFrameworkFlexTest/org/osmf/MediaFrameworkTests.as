@@ -29,7 +29,7 @@ package org.osmf
 	import org.osmf.display.*;
 	import org.osmf.events.*;
 	import org.osmf.external.*;
-	import org.osmf.gateways.*;
+	import org.osmf.containers.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
@@ -272,11 +272,11 @@ package org.osmf
 			addTestSuite(TestScalableSprite);
 			addTestSuite(TestMediaPlayerSprite);
 			
-			// Gateways
+			// Containers
 			//
 			
-			addTestSuite(TestRegionGateway);
-			addTestSuite(TestHTMLGateway);
+			addTestSuite(TestMediaContainer);
+			addTestSuite(TestHTMLMediaContainer);
 	
 			// Plugins
 			//

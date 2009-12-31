@@ -27,12 +27,12 @@ package org.osmf.media
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.containers.IMediaContainer;
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 
 	/**

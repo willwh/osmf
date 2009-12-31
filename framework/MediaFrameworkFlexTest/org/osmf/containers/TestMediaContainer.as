@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.containers
 {
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
@@ -35,11 +35,11 @@ package org.osmf.gateways
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.DynamicMediaElement;
 
-	public class TestRegionGateway extends TestCase
+	public class TestMediaContainer extends TestCase
 	{
 		public function testRegionElements():void
 		{
-			var parent:RegionGateway = new RegionGateway();
+			var parent:MediaContainer = new MediaContainer();
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
@@ -76,31 +76,31 @@ package org.osmf.gateways
 		
 		public function testRegionSubRegions():void
 		{
-			var parent:RegionGateway = new RegionGateway();
+			var parent:MediaContainer = new MediaContainer();
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
 			
-			var sub1:RegionGateway = new RegionGateway();
-			var sub2:RegionGateway = new RegionGateway();
+			var sub1:MediaContainer = new MediaContainer();
+			var sub2:MediaContainer = new MediaContainer();
 			
 			assertNotNull(parent);
-			assertFalse(parent.containsRegion(sub1));
-			assertFalse(parent.containsRegion(sub2));
+			assertFalse(parent.containsContainer(sub1));
+			assertFalse(parent.containsContainer(sub2));
 			
-			parent.addChildRegion(sub1);
-			assertTrue(parent.containsRegion(sub1));
+			parent.addChildContainer(sub1);
+			assertTrue(parent.containsContainer(sub1));
 			
-			parent.addChildRegion(sub2);
-			assertTrue(parent.containsRegion(sub2));
+			parent.addChildContainer(sub2);
+			assertTrue(parent.containsContainer(sub2));
 			
-			parent.removeChildRegion(sub1);
-			assertFalse(parent.containsRegion(sub1));
+			parent.removeChildContainer(sub1);
+			assertFalse(parent.containsContainer(sub1));
 			
 			var error:Error;
 			try
 			{
-				parent.removeChildRegion(sub1);
+				parent.removeChildContainer(sub1);
 			}
 			catch(e:Error)
 			{
@@ -120,12 +120,12 @@ package org.osmf.gateways
 			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
-			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
-			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
+			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
+			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 
-			var region:RegionGateway = new RegionGateway();
+			var region:MediaContainer = new MediaContainer();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
 			
 			region.addMediaElement(mediaElement);
@@ -141,7 +141,7 @@ package org.osmf.gateways
 		
 		public function testRegionAttributes():void
 		{
-			var region:RegionGateway = new RegionGateway();
+			var region:MediaContainer = new MediaContainer();
 			LayoutUtils.setAbsoluteLayout(region.metadata, 500, 400);
 			
 			assertEquals(NaN,region.backgroundColor);
@@ -163,14 +163,14 @@ package org.osmf.gateways
 		
 		public function testNestedRegions():void
 		{
-			var root:RegionGateway = new RegionGateway();
-			var childA:RegionGateway = new RegionGateway();
-			var childA1:RegionGateway = new RegionGateway();
-			var childA1A:RegionGateway = new RegionGateway();
+			var root:MediaContainer = new MediaContainer();
+			var childA:MediaContainer = new MediaContainer();
+			var childA1:MediaContainer = new MediaContainer();
+			var childA1A:MediaContainer = new MediaContainer();
 			
-			root.addChildRegion(childA);
-			childA.addChildRegion(childA1);
-			childA1.addChildRegion(childA1A);
+			root.addChildContainer(childA);
+			childA.addChildContainer(childA1);
+			childA1.addChildContainer(childA1A);
 			
 			root.layoutRenderer.validateNow();
 			

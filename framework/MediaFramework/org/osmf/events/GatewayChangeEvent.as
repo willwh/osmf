@@ -23,7 +23,7 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.media.IMediaContainer;
+	import org.osmf.containers.IMediaContainer;
 
 	/**
 	 * GatewayChangeEvent signals that a reference to an IGateway has changed.

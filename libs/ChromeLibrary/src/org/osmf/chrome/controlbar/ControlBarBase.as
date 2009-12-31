@@ -28,7 +28,8 @@ package org.osmf.chrome.controlbar
 	import flash.utils.Dictionary;
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.IMediaContainer;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -88,7 +89,7 @@ package org.osmf.chrome.controlbar
 			return _element;
 		}
 		
-		public function set container(value:RegionGateway):void
+		public function set container(value:MediaContainer):void
 		{
 			if (_container != value)
 			{
@@ -175,7 +176,7 @@ package org.osmf.chrome.controlbar
 		private var _element:MediaElement;
 		private var widgets:Dictionary = new Dictionary();
 		
-		private var _container:RegionGateway;
+		private var _container:MediaContainer
 		private var regionSizeWatcher:MetadataWatcher;
 		
 		private var _autoHide:Boolean = true;

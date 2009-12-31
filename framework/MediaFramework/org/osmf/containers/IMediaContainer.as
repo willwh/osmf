@@ -19,8 +19,10 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.media
+package org.osmf.containers
 {
+	import org.osmf.media.MediaElement;
+	
 	/**
 	 * Defines the interface of objects within the OSMF that
 	 * act as a gateway to a media object.
@@ -40,8 +42,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		function addMediaElement(element:MediaElement):MediaElement;
-		
+		function addMediaElement(element:MediaElement):MediaElement
 		
 		/**
 		 * Removes a MediaElement instance from the gateway.

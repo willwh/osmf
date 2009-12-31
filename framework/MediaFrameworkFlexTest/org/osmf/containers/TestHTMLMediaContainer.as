@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.gateways
+package org.osmf.containers
 {
 	import flash.external.ExternalInterface;
 	
@@ -27,35 +27,34 @@ package org.osmf.gateways
 	
 	import org.osmf.external.HTMLElement;
 	
-	public class TestHTMLGateway extends TestCase
+	public class TestHTMLMediaContainer extends TestCase
 	{
-		public function testHTMLGateway():void
+		public function testHTMLMediaContainer():void
 		{
 			if (ExternalInterface.available)
 			{
-				var gateway:HTMLGateway = new HTMLGateway();
-				gateway.initialize("test");
+				var container:HTMLMediaContainer = new HTMLMediaContainer("test");
 				
 				// There three lines need further review: they seem to fail on IE for no
 				// apparent reason:
 				/*
 				assertTrue(ExternalInterface.call("function(){return document.osmf;}"));
-				assertTrue(ExternalInterface.call("function(){return document.osmf.gateways;}"));
-				assertTrue(ExternalInterface.call("function(){return document.osmf.gateways.MediaFrameworkTest_test;}"));
+				assertTrue(ExternalInterface.call("function(){return document.osmf.containers;}"));
+				assertTrue(ExternalInterface.call("function(){return document.osmf.containers.MediaFrameworkTest_test;}"));
 				*/
 				
 				var element:HTMLElement = new HTMLElement();
-				element.gateway = gateway;
+				element.gateway = container;
 				
-				assertTrue(gateway.containsMediaElement(element));
+				assertTrue(container.containsMediaElement(element));
 				
-				gateway.removeMediaElement(element);
+				container.removeMediaElement(element);
 				
-				assertFalse(gateway.containsMediaElement(element));
+				assertFalse(container.containsMediaElement(element));
 				
-				gateway.addMediaElement(element);
+				container.addMediaElement(element);
 				
-				assertTrue(gateway.containsMediaElement(element));
+				assertTrue(container.containsMediaElement(element));
 			}
 		}
 		

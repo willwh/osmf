@@ -23,8 +23,8 @@ package
 {
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.gateways.HTMLGateway;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.HTMLMediaContainer;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.external.HTMLElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -33,17 +33,16 @@ package
 	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30', width='640', height='358')]
-	public class HTMLGatewaySample extends RegionGateway
+	public class HTMLMediaContainerSample extends MediaContainer
 	{
-		public function HTMLGatewaySample()
+		public function HTMLMediaContainerSample()
 		{
 			runSample1();
 		}
 		
 		private function runSample1():void
 		{
-			var htmlGateway:HTMLGateway = new HTMLGateway();
-			htmlGateway.initialize("bannerGateway");
+			var htmlContainer:HTMLMediaContainer = new HTMLMediaContainer("bannerContainer");
 			
 			var rootElement:ParallelElement = new ParallelElement();
 			
@@ -52,23 +51,23 @@ package
 				
 					var banner1:HTMLElement = new HTMLElement();
 					banner1.resource = new URLResource(new URL(BANNER_1));
-					banner1.gateway = htmlGateway;
+					banner1.gateway = htmlContainer;
 					banners.addChild(banner1);
 					
 					var banner2:HTMLElement = new HTMLElement();
 					banner2.resource = new URLResource(new URL(BANNER_2));
-					banner2.gateway = htmlGateway;
+					banner2.gateway = htmlContainer;
 					banners.addChild(banner2);
 					
 					var banner3:HTMLElement = new HTMLElement();
 					banner3.resource = new URLResource(new URL(BANNER_3));
-					banner3.gateway = htmlGateway;
+					banner3.gateway = htmlContainer;
 					banners.addChild(banner3);
 				
 				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
 				rootElement.addChild(video);
 			
-			this.addMediaElement(rootElement);
+			addMediaElement(rootElement);
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;

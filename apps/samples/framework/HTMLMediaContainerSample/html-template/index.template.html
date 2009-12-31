@@ -40,14 +40,14 @@ var requiredMinorVersion = ${version_minor};
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 
-function onOSMFGatewayRegistered(gateway)
+function onHTMLMediaContainerConstructed(container)
 {
 	var osmf = document["osmf"];
-	osmf.trace("Gateway " + gateway.gatewayId + " added.");
+	osmf.trace("Container " + container.containerId + " added.");
 		
-	if (gateway.gatewayId == "bannerGateway")
+	if (container.containerId == "bannerContainer")
 	{
-		gateway.onElementAdd = function(element)
+		container.onElementAdd = function(element)
 		{
 			osmf.trace(element.elementId + " added.");
 			
@@ -172,7 +172,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"quality", "high",
 		"bgcolor", "${bgcolor}",
 		"name", "${application}",
-		"allowScriptAccess","alwyays",
+		"allowScriptAccess","always",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -188,7 +188,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"quality", "high",
 			"bgcolor", "${bgcolor}",
 			"name", "${application}",
-			"allowScriptAccess","alwyays",
+			"allowScriptAccess","always",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);

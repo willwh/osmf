@@ -28,7 +28,7 @@ package org.osmf.proxies
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaContainer;
+	import org.osmf.containers.IMediaContainer;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
