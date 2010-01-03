@@ -58,7 +58,7 @@ package org.osmf.plugin
 		}
 		
 		/**
-		 * Unloads the given IPluginInfo.
+		 * Unloads the given PluginInfo.
 		 **/ 
 		protected function unloadFromPluginInfo(pluginInfo:PluginInfo):void
 		{
@@ -81,7 +81,7 @@ package org.osmf.plugin
 		 * Loads the plugin into the LoadTrait.
 		 * On success sets the LoadState of the LoadTrait to LOADING, 
 		 * on failure to LOAD_ERROR.
-		 * @param pluginInfo IPluginInfo instance to use for this load operation.
+		 * @param pluginInfo PluginInfo instance to use for this load operation.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -139,7 +139,7 @@ package org.osmf.plugin
 			}
 			else
 			{
-				// No IPluginInfo on root.
+				// No PluginInfo on root.
 				invalidImplementation = true;
 			}
 			

@@ -28,7 +28,7 @@ package
 	import org.osmf.video.VideoElement;
 	
 	/**
-	 * Implementation of IPluginInfo for a plugin that exposes a MediaInfo
+	 * Implementation of PluginInfo for a plugin that exposes a MediaInfo
 	 * which can only handle input resources that have a specific piece of
 	 * metadata.
 	 **/ 

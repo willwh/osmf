@@ -38,7 +38,7 @@ package org.osmf.plugin
 		 * Constructor. 
 		 * <p>The default constructor must be able to instantiate the class
 		 * referenced by <code>pluginInfoRef</code>.</p>
-		 * @param pluginInfoRef Reference to a Class that implements IPluginInfo.
+		 * @param pluginInfoRef Reference to an instance of PluginInfo.
 		 * @param parameters the list of initialization paramerers
 		 *  to pass to the IPlugin info once loaded
 		 *  

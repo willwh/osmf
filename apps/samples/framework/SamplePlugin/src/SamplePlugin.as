@@ -46,8 +46,7 @@ package
 		
 		
 		/**
-		 * Property used by the Strobe framework in order to get access to the class that 
-		 * implements the IPluginInfo interface
+		 * Property used by the Strobe framework in order to get access to the PluginInfo.
 		 */
 		public function get pluginInfo():PluginInfo
 		{

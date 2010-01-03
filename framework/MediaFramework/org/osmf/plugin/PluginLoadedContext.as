@@ -37,7 +37,7 @@ package org.osmf.plugin
 		}
 		
 		/**
-		 * Returns the <code>IPluginInfo</code> reference
+		 * Returns the <code>PluginInfo</code> reference
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

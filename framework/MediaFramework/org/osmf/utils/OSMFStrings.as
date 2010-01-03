@@ -239,7 +239,7 @@ package org.osmf.utils
 			resourceDict[SWF_IO_LOAD_ERROR]							= "I/O error when loading SWF";
 			resourceDict[SWF_SECURITY_LOAD_ERROR]					= "Security error when loading SWF";
 			resourceDict[INVALID_PLUGIN_VERSION]					= "Plugin failed to load due to version mismatch";
-			resourceDict[INVALID_PLUGIN_IMPLEMENTATION]				= "Plugin failed to load due to improper or missing implementation of IPluginInfo";
+			resourceDict[INVALID_PLUGIN_IMPLEMENTATION]				= "Plugin failed to load due to improper or missing implementation of PluginInfo";
 			resourceDict[INVALID_URL_PROTOCOL]						= "Invalid URL protocol";
 			resourceDict[PLAY_FAILED] 								= "Playback failed";
 			resourceDict[STREAM_NOT_FOUND]	 						= "Stream not found";

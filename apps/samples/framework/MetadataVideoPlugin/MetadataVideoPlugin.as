@@ -26,7 +26,7 @@ package
 	import org.osmf.plugin.PluginInfo;
 
 	/**
-	 * The root of the plugin.  Exposes an IPluginInfo.
+	 * The root of the plugin.  Exposes a PluginInfo.
 	 **/
 	public class MetadataVideoPlugin extends Sprite
 	{
