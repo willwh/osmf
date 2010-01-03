@@ -24,7 +24,7 @@ package {
 		
 	import flash.display.Sprite;
 	
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 
@@ -44,9 +44,9 @@ package {
 		}
 		
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
+		 * Gives the player the PluginInfo.
 		 */
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _akamaiPluginInfo;
 		}

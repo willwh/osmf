@@ -60,7 +60,7 @@ package org.osmf.plugin
 		/**
 		 * Unloads the given IPluginInfo.
 		 **/ 
-		protected function unloadFromPluginInfo(pluginInfo:IPluginInfo):void
+		protected function unloadFromPluginInfo(pluginInfo:PluginInfo):void
 		{
 			if (pluginInfo != null)
 			{
@@ -88,7 +88,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function loadFromPluginInfo(loadTrait:LoadTrait, pluginInfo:IPluginInfo, loader:Loader = null):void
+		protected function loadFromPluginInfo(loadTrait:LoadTrait, pluginInfo:PluginInfo, loader:Loader = null):void
 		{
 			var invalidImplementation:Boolean = false;
 			

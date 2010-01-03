@@ -60,7 +60,7 @@ package org.osmf.plugin
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
 			var classResource:PluginInfoResource = loadTrait.resource as PluginInfoResource; 	
-			var pluginInfo:IPluginInfo = classResource.pluginInfoRef;
+			var pluginInfo:PluginInfo = classResource.pluginInfoRef;
 			
 			loadFromPluginInfo(loadTrait, pluginInfo);
 		}
@@ -70,7 +70,7 @@ package org.osmf.plugin
 			super.unload(loadTrait);
 			
 			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
-			var pluginInfo:IPluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
+			var pluginInfo:PluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
 
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
 						

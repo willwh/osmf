@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.plugin
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.media.MediaElement;
@@ -29,52 +31,23 @@ package org.osmf.plugin
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
 	
-	public class SimpleVideoImagePluginInfo implements IPluginInfo
+	public class SimpleVideoImagePluginInfo extends PluginInfo
 	{
 		public static const VIDEO_MEDIA_INFO_ID:String = "org.osmf.video.Video2";
 		public static const IMAGE_MEDIA_INFO_ID:String = "org.osmf.video.Image2";
 
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register
-		 */
-		public function get numMediaInfos():int
-		{
-			return 2;
-		}
-
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
+		public function SimpleVideoImagePluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
 			var imageLoader:ImageLoader = new ImageLoader();
-			var mediaInfo:MediaInfo;
+
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			mediaInfos.push(new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, createVideoElement));
+			mediaInfos.push(new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, createImageElement));
 			
-			switch(index)
-			{
-				case 0:
-					mediaInfo = new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, createVideoElement);
-					break;
-				case 1:
-					mediaInfo = new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, createImageElement);
-					break;
-			}
-			return mediaInfo;
-			
+			super(mediaInfos, "0.9.0");
 		}
 		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return true;
-		}
-
 		private function createVideoElement():MediaElement
 		{
 			return new VideoElement(new NetLoader());
@@ -84,11 +57,5 @@ package org.osmf.plugin
 		{
 			return new ImageElement(new ImageLoader());
 		}
-		
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
-		}
-		
 	}
 }

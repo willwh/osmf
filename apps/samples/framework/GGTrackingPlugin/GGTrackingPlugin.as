@@ -25,7 +25,7 @@ package
 	import flash.system.Security;
 	
 	import org.osmf.gg.GGPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * The GlanceGuide Tracking Plugin...
@@ -44,7 +44,7 @@ package
 			_pluginInfo = new GGPluginInfo();
 		}
 		
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}

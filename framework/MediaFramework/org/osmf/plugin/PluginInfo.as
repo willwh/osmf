@@ -21,14 +21,17 @@
 *****************************************************/
 package org.osmf.plugin
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.media.MediaInfo;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * IPluginInfo is the encapsulation of the set of MediaInfo objects
+	 * PluginInfo is the encapsulation of the set of MediaInfo objects
 	 * that will be available to the application after the plugin has been
 	 * successfully loaded.
-	 * Every Open Source Media Framework plugin must implement this interface
+	 * Every Open Source Media Framework plugin must define a subclass of PluginInfo
 	 * to provide the application with the information it needs
 	 * to create and load the plugin's MediaElement.
 	 * <p>
@@ -40,41 +43,39 @@ package org.osmf.plugin
 	 * MediaElements: VideoElement, AudioElement, or ImageElement.
 	 * More likely, a plugin provides some type of specialized processing,
 	 * such as a custom loader or special-purpose media element with
-	 * customized traits. 
+	 * custom implementations of the traits. 
 	 * For example, a plugin that provides tracking might implement
-	 * a TrackingCompositeElement that includes a customized loader and customized
-	 * IPlayable and IPausable trait implementations that start and stop tracking
+	 * a TrackingCompositeElement that includes a customized loader and a customized
+	 * PlayTrait implementation that start and stop tracking
 	 * as well as the video.
 	 * </p>
-	 * <p>An IPluginInfo also gives the plugin an opportunity to accept or reject a specific
+	 * <p>A PluginInfo also gives the plugin an opportunity to accept or reject a specific
 	 * Open Source Media Framework version through its <code>isFrameworkVersionSupported()</code> method.</p>
 	 * <p>A dynamic plugin is loaded at runtime from a SWF or SWC.
 	 * A static plugin is compiled as part of the Open Source Media Framework application.
 	 * An application attempting to load a dynamic plugin accesses the class
-	 * that implements IPluginInfo through
+	 * that extends PluginInfo through
 	 * the <code>pluginInfo</code> property on the root of the plugin SWF.
 	 * If this class is not found,
 	 * the plugin is not loaded.
-	 * An application attempting to load a static plugin instantiates a class
-	 * from the class reference
-	 * of its PluginClassResource class
-	 * and casts the instance to a PluginInfo. </p>
-	 * <p>The following code ilustrates a very simple IPluginInfo implementation:</p>
+	 * An application attempting to load a static plugin accesses the PluginInfo
+	 * exposed by the PluginInfoResource object.</p>
+	 * <p>The following code illustrates a very simple PluginInfo implementation:</p>
 	 * <listing>
-	 * public class SimpleVideoPluginInfo implements IPluginInfo
+	 * public class SimpleVideoPluginInfo extends PluginInfo
 	 * {
 	 * 		public function SimpleVideoPluginInfo()
 	 * 		{
 	 * 		}
 	 * 
 	 * 		// Returns the number of MediaInfo objects the plugin exposes.
-	 * 		public function get numMediaInfos():int
+	 * 		override public function get numMediaInfos():int
 	 * 		{
 	 * 			return 1;
 	 * 		}
 	 * 
 	 * 		// Returns the MediaInfo object at the specified index position.
-	 * 		public function getMediaInfoAt(index:int):MediaInfo
+	 * 		override public function getMediaInfoAt(index:int):MediaInfo
 	 * 		{
 	 * 			var netLoader:NetLoader = new NetLoader();
 	 * 			return new MediaInfo("org.osmf.video.Video", netLoader,
@@ -82,7 +83,7 @@ package org.osmf.plugin
 	 * 		}
 	 * 
 	 * 		// Return if the plugin supports the specified version of the framework.
-	 * 		public function isFrameworkVersionSupported(version:String):Boolean
+	 * 		override public function isFrameworkVersionSupported(version:String):Boolean
 	 * 		{
 	 * 			return true;
 	 * 		}
@@ -93,11 +94,27 @@ package org.osmf.plugin
 	 * 		}
 	 * }
 	 * </listing>
-	 * @see PluginClassResource
+	 * @see PluginInfoResource
 	 * @see org.osmf.media.MediaInfo
 	 */
-	public interface IPluginInfo
+	public class PluginInfo
 	{
+		/**
+		 * Constructor.
+		 * 
+		 * @param mediaInfos Vector of MediaInfo objects that this plugin
+		 * exposes.
+		 * @param supportedFrameworkVersion The version of the framework
+		 * that this plugin supports.
+		 **/
+		public function PluginInfo(mediaInfos:Vector.<MediaInfo>, supportedFrameworkVersion:String)
+		{
+			super();
+			
+			this.mediaInfos = mediaInfos;
+			this.supportedFrameworkVersion = supportedFrameworkVersion;
+		}
+		
 		/**
 		 * Returns the number of MediaInfo objects that the plugin
 		 * exposes to the loading application.
@@ -107,11 +124,14 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function get numMediaInfos():int;
+		public function get numMediaInfos():int
+		{
+			return mediaInfos.length;
+		}
 
 		/**
 		 * Used by the application to get the MediaInfo object at the specified index.
-		 * <p>If the index is out of range, the implementation should throw a
+		 * <p>If the index is out of range, throws a
 		 * RangeError.</p>
 		 * <p>	
 		 * The following code shows how an application that uses plugins
@@ -122,7 +142,7 @@ package org.osmf.plugin
 		 * {
 		 * 	  var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
 		 * 
-		 * 	  //process the MediaInfo 
+		 * 	  // process the MediaInfo 
 		 * }
 		 * </listing>
 		 * @param index Zero-based index position of the requested MediaInfo.
@@ -134,7 +154,15 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function getMediaInfoAt(index:int):MediaInfo;
+		public function getMediaInfoAt(index:int):MediaInfo
+		{
+			if (index < 0 || index >= mediaInfos.length)
+			{
+				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
+			
+			return mediaInfos[index] as MediaInfo;
+		}
 		
 		/**
 		 * Returns <code>true</code> if the plugin supports the specified version
@@ -149,15 +177,64 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function isFrameworkVersionSupported(version:String):Boolean;
+		public function isFrameworkVersionSupported(version:String):Boolean
+		{
+			if (version == null || version.length == 0)
+			{
+				return false;
+			}
+
+			var inputVersion:Object = parseVersionString(version);
+			var pluginVersion:Object = parseVersionString(supportedFrameworkVersion);
+			
+			return 		inputVersion.major > pluginVersion.major
+					||	(	inputVersion.major == pluginVersion.major
+						&&	( 	inputVersion.minor > pluginVersion.minor
+							||	(	inputVersion.minor == pluginVersion.minor
+								&&	inputVersion.subMinor >= pluginVersion.subMinor
+								)
+							)
+						);
+		}
 		
 		/**
 		 * Data from the player passed to the plugin to initialize the plugin.
-		 * This is the metadata on the IMediaResource pass to loadPlugin.
-		 * This method is called beforegetMediaInfoAt or get numMediaInfos()
+		 * This method is called before getMediaInfoAt or get numMediaInfos.
 		 * 
-		 * @see PluginManager
+		 * Subclasses can override this method to do custom initialization.
 		 */ 
-		function initializePlugin(pluginMetadata:Metadata):void;
+		public function initializePlugin(metadata:Metadata):void
+		{
+		}
+		
+		// Internals
+		//
+		
+		private static function parseVersionString(version:String):Object
+		{
+			var versionInfo:Array = version.split(".");
+			
+			var major:int = 0;
+			var minor:int = 0;
+			var subMinor:int = 0;
+			
+			if (versionInfo.length >= 1)
+			{
+				major = parseInt(versionInfo[0]);
+			}
+			if (versionInfo.length >= 2)
+			{
+				minor = parseInt(versionInfo[1]);
+			}
+			if (versionInfo.length >= 3)
+			{
+				subMinor = parseInt(versionInfo[2]);
+			}
+
+			return {major:major, minor:minor, subMinor:subMinor};
+		}
+		
+		private var mediaInfos:Vector.<MediaInfo>;
+		private var supportedFrameworkVersion:String;
 	}
 }

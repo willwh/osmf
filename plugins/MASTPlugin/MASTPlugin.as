@@ -25,7 +25,7 @@ package
 	import flash.system.Security;
 	
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * The root level object of the MAST plugin.
@@ -45,9 +45,9 @@ package
 		}
 		
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
+		 * Gives the player the PluginInfo.
 		 */		
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}

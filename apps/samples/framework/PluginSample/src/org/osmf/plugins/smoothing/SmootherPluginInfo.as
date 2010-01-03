@@ -1,43 +1,29 @@
 package  org.osmf.plugins.smoothing
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 	import org.osmf.utils.URL;
 
 	/**
 	 * The plugin info for the smoothing plugin.
 	 */ 
-	public class SmootherPluginInfo implements IPluginInfo
+	public class SmootherPluginInfo extends PluginInfo
 	{
 		public function SmootherPluginInfo()
 		{
-			info = new MediaInfo("com.adobe.osmf.example.smoother", new Smoother(), createMediaElement, MediaInfoType.CREATE_ON_LOAD);
+			var mediaInfo:MediaInfo = new MediaInfo("com.adobe.osmf.example.smoother", new Smoother(), createMediaElement, MediaInfoType.CREATE_ON_LOAD);
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			mediaInfos.push(mediaInfo);
+			
+			super(mediaInfos, "0.9.0")
 		}
-
-		public function get numMediaInfos():int
-		{
-			return 1;
-		}
-		
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			return info;
-		}
-		
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return true;
-		}
-		
-		public function createMediaElement():MediaElement
-		{
-			return new Smoother();
-		}
-		
-		public function initializePlugin(metadata:Metadata):void
+				
+		override public function initializePlugin(metadata:Metadata):void
 		{
 			if (metadata.getFacet(new URL("http://org.yourcompany/creation_params/")))
 			{
@@ -45,7 +31,9 @@ package  org.osmf.plugins.smoothing
 			}
 		}
 		
-		private var info:MediaInfo;
-		
+		private function createMediaElement():MediaElement
+		{
+			return new Smoother();
+		}
 	}
 }

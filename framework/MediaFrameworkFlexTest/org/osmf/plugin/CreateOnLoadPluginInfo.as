@@ -1,5 +1,7 @@
 package org.osmf.plugin
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
@@ -7,42 +9,18 @@ package org.osmf.plugin
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
 
-	public class CreateOnLoadPluginInfo implements IPluginInfo
+	public class CreateOnLoadPluginInfo extends PluginInfo
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			super();
-			_mediaInfo = new MediaInfo("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader(), createElement, MediaInfoType.CREATE_ON_LOAD);
+			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader(), createElement, MediaInfoType.CREATE_ON_LOAD);
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			mediaInfos.push(mediaInfo);
+			
+			super(mediaInfos, "0.9.0");
 		}
 		
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register
-		 */
-		public function get numMediaInfos():int
-		{
-			return 1;
-		}
-
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			return _mediaInfo;
-		}
-		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return true;
-		}
-		
-		public function initializePlugin(metadata:Metadata):void
+		override public function initializePlugin(metadata:Metadata):void
 		{
 			_pluginMetadata = metadata;
 		}

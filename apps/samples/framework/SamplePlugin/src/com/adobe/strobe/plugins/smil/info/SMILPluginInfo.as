@@ -24,73 +24,30 @@ package com.adobe.strobe.plugins.smil.info
 	import com.adobe.strobe.plugins.smil.loader.SMILLoader;
 	import com.adobe.strobe.plugins.smil.media.SMILElement;
 	
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 	
-	public class SMILPluginInfo implements IPluginInfo
+	public class SMILPluginInfo extends PluginInfo
 	{
 		/**
 		 * Constructor
 		 */
 		public function SMILPluginInfo()
 		{
-			logger = Log.getLogger("com.adobe.strobe.plugins.smil.info.SMILPluginInfo");
-		}
-
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register
-		 */
-		public function get numMediaInfos():int
-		{
-			return 1;
-		}
-
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			if (logger != null && logger.debugEnabled)
-			{
-				logger.debug("MediaInfo with ID {0} has been created.", "com.adobe.smil.SMIL");
-			}
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			
 			var smilLoader:SMILLoader = new SMILLoader();
-			return new MediaInfo("com.adobe.smil.SMIL", smilLoader, createSMILElement);
-		}
-		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			if (logger != null && logger.debugEnabled)
-			{
-				logger.debug("OSMF version is: " + version);
-			}
+			var mediaInfo:MediaInfo = new MediaInfo("com.adobe.smil.SMIL", smilLoader, createSMILElement);
+
+			mediaInfos.push(mediaInfo);
 			
-			return true;
-		}
-		
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
+			super(mediaInfos, "0.9.0");
 		}
 		
 		private function createSMILElement():MediaElement
 		{
 			return new SMILElement(new SMILLoader());
 		}
-		
-		// internal
-		
-		private var logger:ILogger;
 	}
 }

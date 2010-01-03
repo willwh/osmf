@@ -21,43 +21,18 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.MediaInfo;
-	import org.osmf.metadata.Metadata;
+	import __AS3__.vec.Vector;
 	
-	public class InvalidVersionPluginInfo implements IPluginInfo
+	import org.osmf.media.MediaInfo;
+	
+	public class InvalidVersionPluginInfo extends PluginInfo
 	{
 		public static const MEDIA_INFO_ID:String = "InvalidVersionPluginInfo";
 		
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register
-		 */
-		public function get numMediaInfos():int
+		public function InvalidVersionPluginInfo()
 		{
-			return 0;
-		}
-
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			return null;
-		}
-		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return false;
-		}
-		
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			super(mediaInfos, "99.0.0");
 		}
 	}
 }

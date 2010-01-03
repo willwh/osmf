@@ -30,7 +30,7 @@ package org.osmf.plugin
 	 */	
 	internal class PluginLoadedContext implements ILoadedContext
 	{
-		public function PluginLoadedContext(_pluginInfo:IPluginInfo, _loader:Loader)
+		public function PluginLoadedContext(_pluginInfo:PluginInfo, _loader:Loader)
 		{
 			this._pluginInfo = _pluginInfo;
 			this._loader = _loader;
@@ -44,7 +44,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}
@@ -62,7 +62,7 @@ package org.osmf.plugin
 			return _loader;
 		}
 
-		private var _pluginInfo:IPluginInfo;
+		private var _pluginInfo:PluginInfo;
 		private var _loader:Loader;
 	}
 }

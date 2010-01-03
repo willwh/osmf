@@ -93,7 +93,7 @@ package org.osmf.plugin
 	
 					var loadedContext:ContentLoadedContext = event.loadedContext as ContentLoadedContext;
 					var root:DisplayObject = loadedContext.loader.content;
-					var pluginInfo:IPluginInfo = root[PLUGININFO_PROPERTY_NAME] as IPluginInfo;
+					var pluginInfo:PluginInfo = root[PLUGININFO_PROPERTY_NAME] as PluginInfo;
 					
 					loadFromPluginInfo(loadTrait, pluginInfo, loadedContext.loader);
 				}
@@ -136,11 +136,11 @@ package org.osmf.plugin
 			
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
 			
-			// First unload the IPluginInfo.
+			// First unload the PluginInfo.
 			//
 			
 			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
-			var pluginInfo:IPluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
+			var pluginInfo:PluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
 			
 			unloadFromPluginInfo(pluginInfo);
 

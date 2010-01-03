@@ -21,14 +21,10 @@
 *****************************************************/
 package
 {
-	import flash.errors.IllegalOperationError;
-	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.IPluginInfo;
-	import org.osmf.utils.OSMFStrings;
+	import org.osmf.plugin.PluginInfo;
 	import org.osmf.video.VideoElement;
 	
 	/**
@@ -36,12 +32,11 @@ package
 	 * which can only handle input resources that have a specific piece of
 	 * metadata.
 	 **/ 
-	public class MetadataVideoPluginInfo implements IPluginInfo
+	public class MetadataVideoPluginInfo extends PluginInfo
 	{
 		public function MetadataVideoPluginInfo()
 		{		
-			mediaInfos = new Vector.<MediaInfo>();
-			netLoader = new NetLoader();
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			
 			// Here is the IMediaResourceHandler that checks for the presence
 			// of the piece of metadata.  By passing it into the MediaInfo, we
@@ -49,44 +44,17 @@ package
 			// the player app attempts to dynamically instantiate a MediaElement,
 			// then this plugin will create the MediaElement if the input resource
 			// has the specific piece of metadata.
-			metadataResourceHandler = new MetadataResourceHandler();
+			var metadataResourceHandler:MetadataResourceHandler = new MetadataResourceHandler();
 			
 			var mediaInfo:MediaInfo = new MediaInfo("my.example", metadataResourceHandler, createVideoElement);
 			mediaInfos.push(mediaInfo);
-		}
-		
-		public function get numMediaInfos():int
-		{
-			return mediaInfos.length;
-		}
-		
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			if (index >= mediaInfos.length)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
-			}
 			
-			return mediaInfos[index];
-		}
-		
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return true;
+			super(mediaInfos, "0.9.0");
 		}
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(netLoader);
+			return new VideoElement(new NetLoader());
 		}
-		
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
-		}
-
-		private var netLoader:NetLoader;
-		private var mediaInfos:Vector.<MediaInfo>;
-		private var metadataResourceHandler:MetadataResourceHandler;
 	}
 }

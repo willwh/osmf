@@ -43,7 +43,7 @@ package org.osmf.swf
 		override protected function get expectedBytesTotal():Number
 		{
 			// Size of resourceForMediaElement.
-			return 122267;
+			return 283078;
 		}
 	}
 }

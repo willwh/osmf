@@ -24,7 +24,7 @@ package
 	import flash.display.Sprite;
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * The root level object of the Caption Plugin.
@@ -50,14 +50,14 @@ package
 		}
 		
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
+		 * Gives the player the PluginInfo.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}

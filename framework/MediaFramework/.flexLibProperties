@@ -181,7 +181,7 @@
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingDetailCodes"/>
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingRuleBase"/>
     <classEntry path="org.osmf.plugin.DynamicPluginLoader"/>
-    <classEntry path="org.osmf.plugin.IPluginInfo"/>
+    <classEntry path="org.osmf.plugin.PluginInfo"/>
     <classEntry path="org.osmf.plugin.PluginElement"/>
     <classEntry path="org.osmf.plugin.PluginEntry"/>
     <classEntry path="org.osmf.plugin.PluginInfoResource"/>

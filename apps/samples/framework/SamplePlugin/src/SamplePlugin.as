@@ -28,7 +28,7 @@ package
 	import flash.display.Sprite;
 	import flash.system.Security;
 	
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * This class is at the root of the plugin SWF. The property <code>pluginInfo</code> is what the Strobe
@@ -49,7 +49,7 @@ package
 		 * Property used by the Strobe framework in order to get access to the class that 
 		 * implements the IPluginInfo interface
 		 */
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _smilPluginInfo;
 		}

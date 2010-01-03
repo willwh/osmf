@@ -23,7 +23,7 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * The root of the plugin.  Exposes an IPluginInfo.
@@ -35,7 +35,7 @@ package
 			_pluginInfo = new MetadataVideoPluginInfo();
 		}
 		
-		public function get pluginInfo():IPluginInfo
+		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}

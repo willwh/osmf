@@ -25,51 +25,24 @@ package org.osmf.plugins.video
 	import org.osmf.media.MediaInfo;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 	import org.osmf.video.VideoElement;
 	
-	public class SimpleVideoPluginInfo implements IPluginInfo
+	public class SimpleVideoPluginInfo extends PluginInfo
 	{
-		
-		// Implemnets interface IPluginInfo
-		
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register
-		 */
-		public function get numMediaInfos():int
-		{
-			return 1;
-		}
-
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
+		public function SimpleVideoPluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
-			return new MediaInfo("org.osmf.video.Video", netLoader, createVideoElement);
-		}
-		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			return true;
+			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.video.SimpleVideoPlugin", netLoader, createVideoElement);
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			mediaInfos.push(mediaInfo);
+			
+			super(mediaInfos, "0.9.0")
 		}
 		
 		private function createVideoElement():MediaElement
 		{
 			return new VideoElement(new NetLoader());
 		}
-		
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
-		}
-		
 	}
 }

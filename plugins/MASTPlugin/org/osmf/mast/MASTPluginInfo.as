@@ -21,29 +21,27 @@
 *****************************************************/
 package org.osmf.mast
 {
-	import flash.errors.IllegalOperationError;
+	import __AS3__.vec.Vector;
 	
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.media.MediaInfoType;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.IPluginInfo;
-	import org.osmf.utils.OSMFStrings;
+	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * Encapsulation of a MAST plugin.
 	 **/
-	public class MASTPluginInfo implements IPluginInfo
+	public class MASTPluginInfo extends PluginInfo
 	{	
 		/**
 		 * Constructor.
 		 */	
 		public function MASTPluginInfo()
 		{		
-			mediaInfos = new Vector.<MediaInfo>();
+			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			
 			var resourceHandler:IMediaResourceHandler = new NetLoader();
 			var mediaInfo:MediaInfo = new MediaInfo
@@ -53,77 +51,13 @@ package org.osmf.mast
 				, MediaInfoType.PROXY
 				);
 			mediaInfos.push(mediaInfo);
-		}
-
-		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
-		 * to register.
-		 */
-		public function get numMediaInfos():int
-		{
-			return mediaInfos.length;
-		}
-		
-		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position.
-		 */
-		public function getMediaInfoAt(index:int):MediaInfo
-		{
-			if (index >= mediaInfos.length)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));				
-			}
 			
-			return mediaInfos[index];
-		}
-		
-		/**
-		 * Returns if the given version of the framework is supported by the plugin. If the 
-		 * return value is <code>true</code>, the framework proceeds with loading the plugin. 
-		 * If the value is <code>false</code>, the framework does not load the plugin.
-		 */
-		public function isFrameworkVersionSupported(version:String):Boolean
-		{
-			if (version == null || version.length < 1)
-			{
-				return false;
-			}
-			
-			var verInfo:Array = version.split(".");
-			var major:int = 0
-			var minor:int = 0
-			var subMinor:int = 0;
-			
-			if (verInfo.length >= 1)
-			{
-				major = parseInt(verInfo[0]);
-			}
-			if (verInfo.length >= 2)
-			{
-				minor = parseInt(verInfo[1]);
-			}
-			if (verInfo.length >= 3)
-			{
-				subMinor = parseInt(verInfo[2]);
-			}
-			
-			// Framework version 0.8.0 is the minimum this plugin supports.
-			return ((major > 0) || ((major == 0) && (minor >= 8) && (subMinor >= 0)));
-		}
-		
-		/**
-		 * @inheritDoc
-		 */ 
-		public function initializePlugin(metadata:Metadata):void
-		{
-			
+			super(mediaInfos, "0.9.0");
 		}
 		
 		private function createMASTProxyElement():MediaElement
 		{
 			return new MASTProxyElement();
 		}
-
-		private var mediaInfos:Vector.<MediaInfo>;			
 	}
 }
