@@ -71,7 +71,7 @@ package
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
-			mediaPlayer.element = rootElement;
+			mediaPlayer.media = rootElement;
 		}
 		
 		private function constructVideo(url:String):VideoElement
