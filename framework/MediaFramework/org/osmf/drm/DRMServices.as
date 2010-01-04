@@ -412,7 +412,7 @@ package org.osmf.drm
 					, null
 					, new MediaError
 						( event.errorID
-						, MediaErrorCodes.getDescriptionForErrorCode(event.errorID)
+						, MediaErrorCodes.getMessageForErrorID(event.errorID)
 						)
 					)
 				);
