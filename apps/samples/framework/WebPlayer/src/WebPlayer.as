@@ -178,12 +178,12 @@ package
 					player.stop();
 				}
 				
-				player.element 
+				player.media
 					= controlBar.element
 					= null;
 				
 				element
-					= player.element 
+					= player.media 
 					= controlBar.element
 					= value;
 					
