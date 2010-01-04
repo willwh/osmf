@@ -65,7 +65,7 @@
 	 			 		
 	 		protected function setupFactory():void
 	 		{
-	 			wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE, onAudible);		 	
+	 			wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE, onAudible);		 	
 	 			wrapper.mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
 	 			factory = new MediaFactory();
 	 			sharedNetLoader = new NetLoader();
@@ -184,7 +184,7 @@
 	 		
 	 		protected function onAudible(event:MediaPlayerCapabilityChangeEvent):void
 	 		{
-	 			if(wrapper.mediaPlayer.audible)
+	 			if (wrapper.mediaPlayer.hasAudio)
 	 			{
 	 				wrapper.mediaPlayer.volume = .25;
 	 			}	

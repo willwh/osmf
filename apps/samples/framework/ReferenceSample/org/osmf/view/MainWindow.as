@@ -124,7 +124,7 @@ package org.osmf.view
 		
 		private function onPlayPauseClick(event:MouseEvent):void
 		{
-			if (mediaPlayerWrapper.mediaPlayer.playable)
+			if (mediaPlayerWrapper.mediaPlayer.canPlay)
 			{
 				if (mediaPlayerWrapper.mediaPlayer.playing)
 				{
@@ -144,7 +144,7 @@ package org.osmf.view
 		
 		private function updateButtonText():void
 		{
-			if (mediaPlayerWrapper.mediaPlayer.playable &&
+			if (mediaPlayerWrapper.mediaPlayer.canPlay &&
 				mediaPlayerWrapper.mediaPlayer.playing)
 			{
 				buttonPlayPause.label = "Pause";

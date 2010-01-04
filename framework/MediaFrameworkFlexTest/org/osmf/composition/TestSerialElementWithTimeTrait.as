@@ -102,19 +102,19 @@ package org.osmf.composition
 			assertTrue(timeTrait.duration == 60);
 			assertTrue(timeTrait.currentTime == 55);
 			
-			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 			
-			// We should get a durationReached event when the current child
+			// We should get a complete event when the current child
 			// is the last child, and it reaches its duration.
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			timeTrait1.currentTime = 10;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			timeTrait2.currentTime = 30;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			timeTrait3.currentTime = 19;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			timeTrait3.currentTime = 20;
-			assertTrue(durationReachedEventCount == 1);
+			assertTrue(completeEventCount == 1);
 			
 			// Adding a child before the current position should affect our
 			// duration and position.
@@ -141,12 +141,12 @@ package org.osmf.composition
 			durationChangedEventCount++;
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			durationReachedEventCount++;
+			completeEventCount++;
 		}
 		
 		private var durationChangedEventCount:int = 0;
-		private var durationReachedEventCount:int = 0;
+		private var completeEventCount:int = 0;
 	}
 }

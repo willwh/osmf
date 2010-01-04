@@ -296,7 +296,7 @@ package org.osmf.proxies
 			
 			timeTrait.currentTime = 3;
 			assertTrue(events.length == 2);
-			assertTrue(events[1]["durationReached"] == true);
+			assertTrue(events[1]["complete"] == true);
 			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.

@@ -31,6 +31,7 @@ package org.osmf.media
 	
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
@@ -40,7 +41,6 @@ package org.osmf.media
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -90,7 +90,7 @@ package org.osmf.media
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestSource
 					);
-				mediaPlayer.element = mediaElement;
+				mediaPlayer.media = mediaElement;
 				
 				function onTestSource(event:LoadEvent):void
 				{
@@ -107,7 +107,7 @@ package org.osmf.media
 						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 						
 						// Now verify that we can unload the media.
-						mediaPlayer.element = null;
+						mediaPlayer.media = null;
 					}
 					else if (eventCount == 3)
 					{
@@ -131,11 +131,11 @@ package org.osmf.media
 					, mustNotReceiveEvent
 					);
 						
-				mediaPlayer.element = mediaElement;
+				mediaPlayer.media = mediaElement;
 				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
 				// Now verify that we can unload the media.
-				mediaPlayer.element = null;
+				mediaPlayer.media = null;
 				assertTrue(mediaPlayer.state == MediaPlayerState.UNINITIALIZED);
 			}
 		}
@@ -158,7 +158,7 @@ package org.osmf.media
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestSourceWithInvalidResource
 					);
-				mediaPlayer.element = mediaElement;
+				mediaPlayer.media = mediaElement;
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -195,7 +195,7 @@ package org.osmf.media
 					, mustNotReceiveEvent
 					);
 						
-				mediaPlayer.element = mediaElement;
+				mediaPlayer.media = mediaElement;
 				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 			}
 		}
@@ -210,7 +210,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestVolume();
 			}
 		}
@@ -241,7 +241,7 @@ package org.osmf.media
 				}
 				else
 				{
-					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					mediaPlayer.media = createMediaElement(resourceForMediaElement);
 					doTestVolumeWithPreset();
 				}
 			}
@@ -273,7 +273,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.audible == false);
+				assertTrue(mediaPlayer.hasAudio == false);
 				assertTrue(mediaPlayer.volume == expectedVolume);
 				
 				// Setting the volume should apply, even when the MediaPlayer isn't audible.
@@ -294,7 +294,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestMuted();
 			}
 		}
@@ -325,7 +325,7 @@ package org.osmf.media
 				}
 				else
 				{
-					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					mediaPlayer.media = createMediaElement(resourceForMediaElement);
 					doTestMutedWithPreset();
 				}
 			}
@@ -357,7 +357,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.audible == false);
+				assertTrue(mediaPlayer.hasAudio == false);
 				assertTrue(mediaPlayer.muted == expectedMuted);
 				
 				// Setting muted should apply, even when the MediaPlayer isn't audible.
@@ -378,7 +378,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestPan();
 			}
 		}
@@ -395,7 +395,7 @@ package org.osmf.media
 			// Assign a pan value up front.  This value will take precedence
 			// over any pan value inherited from the MediaElement.
 			mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, onPanChange);
-			mediaPlayer.pan = -0.5;
+			mediaPlayer.audioPan = -0.5;
 
 			function onPanChange(event:AudioEvent):void
 			{
@@ -409,7 +409,7 @@ package org.osmf.media
 				}
 				else
 				{
-					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					mediaPlayer.media = createMediaElement(resourceForMediaElement);
 					doTestPanWithPreset();
 				}
 			}
@@ -424,16 +424,16 @@ package org.osmf.media
 		{
 			if (traitExists(MediaTraitType.AUDIO))
 			{
-				assertTrue(mediaPlayer.pan == expectedPan);
+				assertTrue(mediaPlayer.audioPan == expectedPan);
 				
 				mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, onTestPan);
-				mediaPlayer.pan = 0.7;
+				mediaPlayer.audioPan = 0.7;
 				
 				function onTestPan(event:AudioEvent):void
 				{
 					mediaPlayer.removeEventListener(AudioEvent.PAN_CHANGE, onTestPan);
 					
-					assertTrue(mediaPlayer.pan == 0.7);
+					assertTrue(mediaPlayer.audioPan == 0.7);
 					assertTrue(event.pan == 0.7);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -441,12 +441,12 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.audible == false);
-				assertTrue(mediaPlayer.pan == expectedPan);
+				assertTrue(mediaPlayer.hasAudio == false);
+				assertTrue(mediaPlayer.audioPan == expectedPan);
 
 				// Setting pan should apply, even when the MediaPlayer isn't audible.
-				mediaPlayer.pan = 0.3;
-				assertTrue(mediaPlayer.pan == 0.3);
+				mediaPlayer.audioPan = 0.3;
+				assertTrue(mediaPlayer.audioPan == 0.3);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -462,7 +462,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestPlay();
 			}
 		}
@@ -475,7 +475,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.playable == false);
+				assertTrue(mediaPlayer.canPlay == false);
 				assertTrue(mediaPlayer.playing == false);
 				
 				try
@@ -503,7 +503,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestPause();
 			}
 		}
@@ -516,7 +516,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.playable == false);
+				assertTrue(mediaPlayer.canPlay == false);
 				assertTrue(mediaPlayer.paused == false);
 				
 				try
@@ -536,7 +536,7 @@ package org.osmf.media
 		
 		private function doTestPlayPause(pauseAfterPlay:Boolean):void
 		{
-			assertTrue(mediaPlayer.playable == true);
+			assertTrue(mediaPlayer.canPlay == true);
 			assertTrue(mediaPlayer.playing == false);
 			assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
@@ -594,7 +594,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestStop();
 			}
 		}
@@ -611,7 +611,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestStopWithAutoRewind();
 			}
 		}
@@ -630,7 +630,7 @@ package org.osmf.media
 		{
 			if (traitExists(MediaTraitType.PLAY) && traitExists(MediaTraitType.SEEK))
 			{
-				assertTrue(mediaPlayer.playable == true);
+				assertTrue(mediaPlayer.canPlay == true);
 				assertTrue(mediaPlayer.playing == false);
 				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 					
@@ -721,7 +721,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestSeek();
 			}
 		}
@@ -730,7 +730,7 @@ package org.osmf.media
 		{
 			if (traitExists(MediaTraitType.SEEK))
 			{
-				assertTrue(mediaPlayer.seekable == true);
+				assertTrue(mediaPlayer.canSeek == true);
 				assertTrue(mediaPlayer.seeking == false);
 				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 				
@@ -780,7 +780,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.seekable == false);
+				assertTrue(mediaPlayer.canSeek == false);
 				assertTrue(mediaPlayer.seeking == false);
 				
 				try
@@ -819,7 +819,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestCurrentTimeWithChangeEvents();
 			}
 		}
@@ -834,7 +834,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestCurrentTimeWithNoChangeEvents();
 			}
 		}
@@ -859,7 +859,7 @@ package org.osmf.media
 				assertTrue(mediaPlayer.currentTimeUpdateInterval == 250);
 
 				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestCurrentTime);
+				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestCurrentTime);
 				
 				if (enableChangeEvents)
 				{
@@ -879,7 +879,7 @@ package org.osmf.media
 				function onTestCurrentTime(event:TimeEvent):void
 				{
 					mediaPlayer.removeEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestCurrentTime);
+					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestCurrentTime);
 					
 					assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
 					assertTrue(mediaPlayer.state == MediaPlayerState.READY);
@@ -926,7 +926,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestWidthHeight();
 			}
 		}
@@ -935,8 +935,8 @@ package org.osmf.media
 		{
 			if (traitExists(MediaTraitType.DISPLAY_OBJECT))
 			{
-				assertTrue(mediaPlayer.width == 0);
-				assertTrue(mediaPlayer.height == 0);
+				assertTrue(mediaPlayer.mediaWidth == 0);
+				assertTrue(mediaPlayer.mediaHeight == 0);
 				
 				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 								
@@ -948,48 +948,47 @@ package org.osmf.media
 				{
 					mediaPlayer.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 
-					assertTrue(mediaPlayer.width == expectedWidthAfterLoad);
-					assertTrue(mediaPlayer.height == expectedHeightAfterLoad);
+					assertTrue(mediaPlayer.mediaWidth == expectedMediaWidthAfterLoad);
+					assertTrue(mediaPlayer.mediaHeight == expectedMediaHeightAfterLoad);
 
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 			}
 			else
 			{
-				assertTrue(mediaPlayer.width == 0);
-				assertTrue(mediaPlayer.height == 0);
+				assertTrue(mediaPlayer.mediaWidth == 0);
+				assertTrue(mediaPlayer.mediaHeight == 0);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
 		
-		public function testView():void
+		public function testDisplayObject():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			if (hasLoadTrait)
 			{
-				callAfterLoad(doTestView, false);
+				callAfterLoad(doTestDisplayObject, false);
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestView();
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestDisplayObject();
 			}
 		}
 
-		private function doTestView():void
+		private function doTestDisplayObject():void
 		{
 			if (traitExists(MediaTraitType.DISPLAY_OBJECT))
 			{
-				assertTrue(mediaPlayer.view != null);
+				assertTrue(mediaPlayer.displayObject != null);
 
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 			else
 			{
-				assertTrue(mediaPlayer.viewable == false);
-				assertTrue(mediaPlayer.view == null);
+				assertTrue(mediaPlayer.displayObject == null);
 								
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -1005,7 +1004,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestBufferTime();
 			}
 		}
@@ -1034,7 +1033,7 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.bufferable == false);
+				assertTrue(mediaPlayer.canBuffer == false);
 				assertTrue(mediaPlayer.buffering == false);
 				assertEquals(0, mediaPlayer.bufferLength);
 				assertEquals(0, mediaPlayer.bufferTime);
@@ -1047,67 +1046,67 @@ package org.osmf.media
 			}
 		}
 		
-		public function testSwitchable():void
+		public function testDynamicStream():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
 			if (hasLoadTrait)
 			{
-				callAfterLoad(doTestSwitchable, false, switchableResource);
+				callAfterLoad(doTestDynamicStream, false, dynamicStreamResource);
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
-				doTestSwitchable();
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestDynamicStream();
 			}
 		}
 
-		private function doTestSwitchable():void
+		private function doTestDynamicStream():void
 		{
 			if (traitExists(MediaTraitType.DYNAMIC_STREAM))
 			{
 				// The stream must be playing before a switch can happen.
 				mediaPlayer.play();
 				
-				assertTrue(mediaPlayer.autoSwitch == true);
-				assertTrue(mediaPlayer.currentStreamIndex == 0);
-				assertTrue(mediaPlayer.maxStreamIndex == expectedMaxStreamIndex);
-				assertTrue(mediaPlayer.switchUnderway == false);
+				assertTrue(mediaPlayer.autoDynamicStreamSwitch == true);
+				assertTrue(mediaPlayer.currentDynamicStreamIndex == 0);
+				assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == expectedMaxAllowedDynamicStreamIndex);
+				assertTrue(mediaPlayer.dynamicStreamSwitching == false);
 				
-				for (var i:int = 0; i <= expectedMaxStreamIndex; i++)
+				for (var i:int = 0; i <= expectedMaxAllowedDynamicStreamIndex; i++)
 				{
-					assertTrue(mediaPlayer.getBitrateForIndex(i) == getExpectedBitrateForIndex(i));
+					assertTrue(mediaPlayer.getBitrateForDynamicStreamIndex(i) == getExpectedBitrateForDynamicStreamIndex(i));
 				}
 				
 				var eventCount:int = 0;
 				
-				mediaPlayer.maxStreamIndex = 2;
+				mediaPlayer.maxAllowedDynamicStreamIndex = 2;
 				
-				mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onTestSwitchable);
-				mediaPlayer.autoSwitch = false;
-				mediaPlayer.switchTo(1);
+				mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onTestDynamicStream);
+				mediaPlayer.autoDynamicStreamSwitch = false;
+				mediaPlayer.switchDynamicStreamIndex(1);
 				
-				function onTestSwitchable(event:DynamicStreamEvent):void
+				function onTestDynamicStream(event:DynamicStreamEvent):void
 				{
 					eventCount++;
 					
 					if (eventCount == 1)
 					{
-						assertTrue(mediaPlayer.autoSwitch == false);
-						assertTrue(mediaPlayer.currentStreamIndex == 0);
-						assertTrue(mediaPlayer.maxStreamIndex == 2);
-						assertTrue(mediaPlayer.switchUnderway == true);
+						assertTrue(mediaPlayer.autoDynamicStreamSwitch == false);
+						assertTrue(mediaPlayer.currentDynamicStreamIndex == 0);
+						assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == 2);
+						assertTrue(mediaPlayer.dynamicStreamSwitching == true);
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(mediaPlayer.autoSwitch == false);
+						assertTrue(mediaPlayer.autoDynamicStreamSwitch == false);
 						// TODO: Fix this, then reenable.  For some reason
 						// MockDynamicNetStream isn't dispatching the correct
 						// series of events.
-						//assertTrue(mediaPlayer.currentStreamIndex == 1);
-						assertTrue(mediaPlayer.currentStreamIndex == 0);
-						assertTrue(mediaPlayer.maxStreamIndex == 2);
-						assertTrue(mediaPlayer.switchUnderway == false);
+						//assertTrue(mediaPlayer.currentDynamicStreamIndex == 1);
+						assertTrue(mediaPlayer.currentDynamicStreamIndex == 0);
+						assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == 2);
+						assertTrue(mediaPlayer.dynamicStreamSwitching == false);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -1116,19 +1115,19 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.switchable == false);
-				assertTrue(mediaPlayer.autoSwitch == true);
-				assertTrue(mediaPlayer.currentStreamIndex == 0);
-				assertTrue(mediaPlayer.maxStreamIndex == 0);
-				assertTrue(mediaPlayer.switchUnderway == false);
+				assertTrue(mediaPlayer.isDynamicStream == false);
+				assertTrue(mediaPlayer.autoDynamicStreamSwitch == true);
+				assertTrue(mediaPlayer.currentDynamicStreamIndex == 0);
+				assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == 0);
+				assertTrue(mediaPlayer.dynamicStreamSwitching == false);
 
-				// Setting autoSwitch should have no effect.
-				mediaPlayer.autoSwitch = false;
-				assertTrue(mediaPlayer.autoSwitch == true);
+				// Setting autoDynamicStreamSwitch should have no effect.
+				mediaPlayer.autoDynamicStreamSwitch = false;
+				assertTrue(mediaPlayer.autoDynamicStreamSwitch == true);
 								
 				try
 				{
-					mediaPlayer.switchTo(1);
+					mediaPlayer.switchDynamicStreamIndex(1);
 					
 					fail();
 				}
@@ -1151,7 +1150,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestLoop();
 			}
 		}
@@ -1168,7 +1167,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestLoop();
 			}
 		}
@@ -1182,13 +1181,13 @@ package org.osmf.media
 				var states:Array = [];
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestLoop);
+				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestLoop);
 				mediaPlayer.play();
 				
 				function onTestLoop(event:TimeEvent):void
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestLoop);
+					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestLoop);
 					var statesStr:String = states.join(" ");
 					if (mediaPlayer.paused)
 					{
@@ -1232,7 +1231,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestAutoRewind();
 			}
 		}
@@ -1246,13 +1245,13 @@ package org.osmf.media
 				var states:Array = [];
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-				mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
+				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestAutoRewind);
 				mediaPlayer.play();
 				
 				function onTestAutoRewind(event:TimeEvent):void
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-					mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestAutoRewind);
+					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestAutoRewind);
 					
 					assertTrue(mediaPlayer.paused == false);
 					assertTrue(mediaPlayer.playing == false);
@@ -1295,7 +1294,7 @@ package org.osmf.media
 				var eventCount:int = 0;
 				
 				mediaPlayer.autoPlay = true;
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				
 				function onStateChange(event:MediaPlayerStateChangeEvent):void
 				{
@@ -1339,7 +1338,7 @@ package org.osmf.media
 				
 				var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
 				
-				mediaPlayer.element = mediaElement;
+				mediaPlayer.media = mediaElement;
 	
 				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 				assertTrue(loadTrait);
@@ -1374,17 +1373,20 @@ package org.osmf.media
 				
 				var eventCount:int = 0;
 				
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE	, onCapabilityChange);
-				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE	, onCapabilityChange);
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				var numExistentTraitTypesAfterLoad:Number = existentTraitTypesAfterLoad.length;
+				if (existentTraitTypesAfterLoad.indexOf(MediaTraitType.DISPLAY_OBJECT) != -1)
+				{
+					numExistentTraitTypesAfterLoad--;
+				}
+				
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE			, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE	, onCapabilityChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE			, onCapabilityChange);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				
 				function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
 				{
@@ -1393,35 +1395,35 @@ package org.osmf.media
 						eventCount++;
 					}
 					
-					if (eventCount == existentTraitTypesAfterLoad.length)
+					if (eventCount == numExistentTraitTypesAfterLoad)
 					{
 						for each (var traitType:String in existentTraitTypesAfterLoad)
 						{
 							switch (traitType)
 							{
 								case MediaTraitType.AUDIO:
-									assertTrue(mediaPlayer.audible == true);
+									assertTrue(mediaPlayer.hasAudio == true);
 									break;
 								case MediaTraitType.BUFFER:
-									assertTrue(mediaPlayer.bufferable == true);
+									assertTrue(mediaPlayer.canBuffer == true);
 									break;
 								case MediaTraitType.LOAD:
-									assertTrue(mediaPlayer.loadable == true);
+									assertTrue(mediaPlayer.canLoad == true);
 									break;
 								case MediaTraitType.PLAY:
-									assertTrue(mediaPlayer.playable == true);
+									assertTrue(mediaPlayer.canPlay == true);
 									break;
 								case MediaTraitType.SEEK:
-									assertTrue(mediaPlayer.seekable == true);
+									assertTrue(mediaPlayer.canSeek == true);
 									break;
 								case MediaTraitType.DYNAMIC_STREAM:
-									assertTrue(mediaPlayer.switchable == true);
+									assertTrue(mediaPlayer.isDynamicStream == true);
 									break;
 								case MediaTraitType.TIME:
 									assertTrue(mediaPlayer.temporal == true);
 									break;
 								case MediaTraitType.DISPLAY_OBJECT:
-									assertTrue(mediaPlayer.viewable == true);
+									// Ignore
 									break;
 								default:
 									fail();
@@ -1434,7 +1436,7 @@ package org.osmf.media
 			}
 		}
 		
-		public function ttestBytesLoadedTotal():void
+		public function testBytesLoadedTotal():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
 			
@@ -1447,7 +1449,7 @@ package org.osmf.media
 			}
 			else
 			{
-				mediaPlayer.element = createMediaElement(resourceForMediaElement);
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
 				doTestBytesLoadedTotal();
 			}
 		}
@@ -1480,7 +1482,7 @@ package org.osmf.media
 				}
 				else
 				{
-					mediaPlayer.element = createMediaElement(resourceForMediaElement);
+					mediaPlayer.media = createMediaElement(resourceForMediaElement);
 					doTestSubclip();
 				}
 			}
@@ -1492,12 +1494,12 @@ package org.osmf.media
 			
 			assertTrue(mediaPlayer.currentTime == 0);
 			
-			mediaPlayer.addEventListener(TimeEvent.DURATION_REACHED, onTestSubclip);
+			mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestSubclip);
 			mediaPlayer.play();
 			
 			function onTestSubclip(event:TimeEvent):void
 			{
-				mediaPlayer.removeEventListener(TimeEvent.DURATION_REACHED, onTestSubclip);
+				mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestSubclip);
 				
 				assertTrue(Math.abs(mediaPlayer.currentTime - mediaPlayer.duration) < 1);
 				assertTrue(mediaPlayer.duration == expectedSubclipDuration);
@@ -1554,30 +1556,30 @@ package org.osmf.media
 			return [];
 		}
 		
-		protected function get expectedWidthOnInitialization():Number
+		protected function get expectedMediaWidthOnInitialization():Number
 		{
-			// Subclasses can override to specify the expected width of the
+			// Subclasses can override to specify the expected mediaWidth of the
 			// MediaElement upon initialization.
 			return 0;
 		}
 
-		protected function get expectedHeightOnInitialization():Number
+		protected function get expectedMediaHeightOnInitialization():Number
 		{
-			// Subclasses can override to specify the expected height of the
+			// Subclasses can override to specify the expected mediaHeight of the
 			// MediaElement upon initialization.
 			return 0;
 		}
 
-		protected function get expectedWidthAfterLoad():Number
+		protected function get expectedMediaWidthAfterLoad():Number
 		{
-			// Subclasses can override to specify the expected width of the
+			// Subclasses can override to specify the expected mediaWidth of the
 			// MediaElement after it has been loaded.
 			return 0;
 		}
 
-		protected function get expectedHeightAfterLoad():Number
+		protected function get expectedMediaHeightAfterLoad():Number
 		{
-			// Subclasses can override to specify the expected height of the
+			// Subclasses can override to specify the expected mediaHeight of the
 			// MediaElement after it has been loaded.
 			return 0;
 		}
@@ -1610,24 +1612,24 @@ package org.osmf.media
 			return 0;
 		}
 
-		protected function get switchableResource():IMediaResource
+		protected function get dynamicStreamResource():IMediaResource
 		{
 			// Subclasses can override to specify a media resource that is
-			// switchable.
+			// a dynamic stream.
 			return null;
 		}
 		
-		protected function get expectedMaxStreamIndex():int
+		protected function get expectedMaxAllowedDynamicStreamIndex():int
 		{
-			// Subclasses can override to specify the expected max stream index
-			// when switchable.
+			// Subclasses can override to specify the expected max allowed dynamic
+			// stream index.
 			return -1;
 		}
 		
-		protected function getExpectedBitrateForIndex(index:int):Number
+		protected function getExpectedBitrateForDynamicStreamIndex(index:int):Number
 		{
 			// Subclasses can override to specify the expected bitrates for each
-			// switchable index.
+			// dynamic stream index.
 			return -1;
 		}
 		
@@ -1679,7 +1681,7 @@ package org.osmf.media
 					( LoadEvent.LOAD_STATE_CHANGE
 					, onTestCallAfterLoad
 					);
-			mediaPlayer.element = mediaElement;
+			mediaPlayer.media = mediaElement;
 			
 			function onTestCallAfterLoad(event:LoadEvent):void
 			{

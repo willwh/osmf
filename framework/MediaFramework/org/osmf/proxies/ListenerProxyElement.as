@@ -196,7 +196,7 @@ package org.osmf.proxies
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
 		 **/
-		protected function processDurationReached():void
+		protected function processComplete():void
 		{
 		}
 
@@ -300,9 +300,9 @@ package org.osmf.proxies
 			processSeekingChange(event.type == SeekEvent.SEEK_BEGIN, event.time);
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			processDurationReached();
+			processComplete();
 		}
 
 		private function onDurationChange(event:TimeEvent):void
@@ -510,12 +510,12 @@ package org.osmf.proxies
 			{
 				if (added)
 				{
-					timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 					timeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 				else
 				{
-					timeTrait.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					timeTrait.removeEventListener(TimeEvent.COMPLETE, onComplete);
 					timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 			}

@@ -104,7 +104,7 @@
 				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
 				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
-				wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE, onPlayingChange);
+				wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
 				
 				wrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
@@ -115,7 +115,7 @@
 			
 			private function onPlayingChange(event:MediaPlayerCapabilityChangeEvent):void
 			{
-				if (event.type == MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE)
+				if (event.type == MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE)
 				{
 					this.playBtn.enabled = event.enabled;
 				}	
@@ -338,7 +338,7 @@
 			{
 				seekBar.maximum = event.time;
 				lblDuration.text = timeCode(event.time);
-				seekBar.enabled = seekBar.visible = wrapper.mediaPlayer.seekable;
+				seekBar.enabled = seekBar.visible = wrapper.mediaPlayer.canSeek;
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
@@ -365,7 +365,7 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (wrapper.mediaPlayer.seekable)
+   					if (wrapper.mediaPlayer.canSeek)
    					{
    						wrapper.mediaPlayer.seek(seekBar.value); 
    					}
@@ -439,7 +439,7 @@
 					playBtn.label = "Play";
 					wrapper.mediaPlayer.pause();
 				}
-				else if (wrapper.mediaPlayer.paused && wrapper.mediaPlayer.playable)
+				else if (wrapper.mediaPlayer.paused && wrapper.mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
 					wrapper.mediaPlayer.play();
@@ -479,7 +479,7 @@
 						<mx:Label id="lblPlayhead" width="100" styleName="timeCode" />
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
-						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{wrapper.mediaPlayer.playable}" />
+						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{wrapper.mediaPlayer.canPlay}" />
 						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{_dsTrait!=null}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />

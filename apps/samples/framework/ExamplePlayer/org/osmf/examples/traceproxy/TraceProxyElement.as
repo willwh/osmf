@@ -262,12 +262,12 @@ package org.osmf.examples.traceproxy
 			{
 				if (added)
 				{
-					temporal.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.addEventListener(TimeEvent.COMPLETE, onComplete);
 					temporal.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 				else
 				{
-					temporal.removeEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+					temporal.removeEventListener(TimeEvent.COMPLETE, onComplete);
 					temporal.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 				}
 			}
@@ -337,9 +337,9 @@ package org.osmf.examples.traceproxy
 			trace("SeekingChangeEvent: " + (event.seeking ? "seeking" : "not seeking") + " at " + event.time);
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			trace("DurationReachedEvent");
+			trace("CompleteEvent");
 		}
 
 		private function onDurationChange(event:TimeEvent):void

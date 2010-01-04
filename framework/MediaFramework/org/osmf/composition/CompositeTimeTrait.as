@@ -78,23 +78,22 @@ package org.osmf.composition
 			return super.currentTime;
 		}
 		
-		override protected function signalDurationReached():void
+		override protected function signalComplete():void
 		{
 			// The base class can cause this method to get called, sometimes
 			// inappropriately (e.g. if currentTime == duration because we don't
 			// have duration for the next child).  For serial, we should only let
 			// the call pass through if we're truly at the end.
 			// Also - Don't dispatch if the final trait doesn't have a time, wait until it either it gets its
-			// non-zero time or it dispatches durationReached.  -> FM-303.			
+			// non-zero time or it dispatches complete.  -> FM-303.			
 			if (	mode == CompositionMode.PARALLEL
 				||  (traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1 &&
 					(traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration > 0 &&
 					!isNaN((traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration))  
 			   )
 			{
-				super.signalDurationReached()
+				super.signalComplete()
 			}
-				
 		}
 				
 		// Internal
@@ -105,8 +104,8 @@ package org.osmf.composition
 		 **/
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
-			child.addEventListener(TimeEvent.DURATION_CHANGE,  onDurationChanged, 	false, 0, true);
-			child.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached, 	false, 0, true);
+			child.addEventListener(TimeEvent.DURATION_CHANGE,  	onDurationChanged, 	false, 0, true);
+			child.addEventListener(TimeEvent.COMPLETE, 			onComplete, 		false, 0, true);
 			
 			updateDuration();
 			updateCurrentTime();
@@ -118,7 +117,7 @@ package org.osmf.composition
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
 			child.removeEventListener(TimeEvent.DURATION_CHANGE, 	onDurationChanged);
-			child.removeEventListener(TimeEvent.DURATION_REACHED, 	onDurationReached);
+			child.removeEventListener(TimeEvent.COMPLETE, 			onComplete);
 			
 			updateDuration();
 			updateCurrentTime();
@@ -129,14 +128,14 @@ package org.osmf.composition
 			updateDuration();
 		}
 
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
 			var timeTrait:TimeTrait = event.target as TimeTrait;
 			
 			if (mode == CompositionMode.PARALLEL)
 			{
 				// If every child has reached their duration, then we should
-				// dispatch the durationReached event.
+				// dispatch the complete event.
 				var allHaveReachedDuration:Boolean = true;
 				traitAggregator.forEachChildTrait
 					(
@@ -157,7 +156,7 @@ package org.osmf.composition
 				
 				if (allHaveReachedDuration)
 				{
-					dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
+					dispatchEvent(new TimeEvent(TimeEvent.COMPLETE));
 				}
 			}
 			else // SERIAL
@@ -171,28 +170,28 @@ package org.osmf.composition
 					if (playTrait != null)
 					{
 						// Note that we don't check whether to dispatch the 
-						// durationReached event until we determine that
+						// complete event until we determine that
 						// there's no more playable children -- otherwise we'd
 						// almost certainly dispatch it when it shouldn't be
 						// dispatched since subsequent children are likely to
 						// lack the temporal trait until they're loaded.
 						SerialElementTransitionManager.playNextPlayableChild
 							( traitAggregator
-							, checkDispatchDurationReachedEvent
+							, checkDispatchCompleteEvent
 							);
 					}
 					else
 					{
-						checkDispatchDurationReachedEvent();
+						checkDispatchCompleteEvent();
 					}
 				}
 			}
 		}
 		
-		private function checkDispatchDurationReachedEvent():void
+		private function checkDispatchCompleteEvent():void
 		{
 			// If the current child is the last temporal child, then we should
-			// dispatch the durationReached event.
+			// dispatch the complete event.
 			var nextChild:MediaElement = 
 				traitAggregator.getNextChildWithTrait
 					( traitAggregator.listenedChild
@@ -201,7 +200,7 @@ package org.osmf.composition
 			
 			if (nextChild == null)
 			{				
-				super.signalDurationReached();
+				super.signalComplete();
 			}
 		}
 		

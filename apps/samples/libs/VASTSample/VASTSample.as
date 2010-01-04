@@ -127,7 +127,7 @@ package
 
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			sprite.element = serialElement;
+			sprite.media = serialElement;
 		}
 		
 		private function onStageResize(event:Event):void

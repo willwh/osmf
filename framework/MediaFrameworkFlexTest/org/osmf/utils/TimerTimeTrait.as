@@ -48,9 +48,9 @@ package org.osmf.utils
 			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 		}
 		
-		override protected function signalDurationReached():void
+		override protected function signalComplete():void
 		{
-			super.signalDurationReached();
+			super.signalComplete();
 			
 			playheadTimer.stop();
 		}

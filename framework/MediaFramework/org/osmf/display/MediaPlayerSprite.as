@@ -44,20 +44,20 @@ package org.osmf.display
 		}	
 		
  		/**
-		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code>. Setting the element will set
-         * as the element on the mediaPlayer, if mediaPlayer is not null.
+		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code>. Setting the media will set
+         * as the media on the mediaPlayer, if mediaPlayer is not null.
 		 */
-		public function set element(value:MediaElement):void
+		public function set media(value:MediaElement):void
 		{
-			if(_player)
+			if (_player)
 			{
-				_player.element = value;
+				_player.media = value;
 			}
 		}
 		
-		public function get element():MediaElement
+		public function get media():MediaElement
 		{			
-			return _player ? _player.element : null;
+			return _player ? _player.media : null;
 		}
 		
 		/**
@@ -74,7 +74,6 @@ package org.osmf.display
 		{
 			if (_player != null)
 			{
-				_player.removeEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
 				_player.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
 				_player.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
 				displayObject = null;
@@ -82,14 +81,10 @@ package org.osmf.display
 			_player = value;
 			if (_player != null)
 			{
-				_player.addEventListener(MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE, onViewable);	
 				_player.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
 				_player.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
-				if (_player.viewable)
-				{
-					displayObject = _player.view;		
-					setIntrinsicSize(_player.width, _player.height);
-				}
+				displayObject = _player.displayObject;		
+				setIntrinsicSize(_player.mediaWidth, _player.mediaHeight);
 			}
 		}		
 		 
@@ -103,11 +98,6 @@ package org.osmf.display
 			displayObject = event.newDisplayObject;				
 		}
 		
-		private function onViewable(event:MediaPlayerCapabilityChangeEvent):void
-		{	
-			displayObject = event.enabled ? _player.view : null;				
-		}
-				
 		private function onMediaSize(event:DisplayObjectEvent):void
 		{
 			setIntrinsicSize(event.newWidth, event.newHeight);

@@ -64,8 +64,8 @@ package org.osmf.media
 				// we get metadata.
 				MockDynamicStreamingNetLoader(loader).netStreamExpectedDuration = 6; // TODO: ???
 				MockDynamicStreamingNetLoader(loader).netStreamExpectedSubclipDuration = 3;
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedWidth = expectedWidthAfterLoad;
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedHeight = expectedHeightAfterLoad;
+				MockDynamicStreamingNetLoader(loader).netStreamExpectedWidth = expectedMediaWidthAfterLoad;
+				MockDynamicStreamingNetLoader(loader).netStreamExpectedHeight = expectedMediaHeightAfterLoad;
 			
 				if (resource == INVALID_RESOURCE)
 				{
@@ -87,7 +87,7 @@ package org.osmf.media
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			return switchableResource;
+			return dynamicStreamResource;
 		}
 
 		override protected function get invalidResourceForMediaElement():IMediaResource
@@ -97,7 +97,7 @@ package org.osmf.media
 			return INVALID_RESOURCE;
 		}
 		
-		override protected function get switchableResource():IMediaResource
+		override protected function get dynamicStreamResource():IMediaResource
 		{
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
 			for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
@@ -129,34 +129,34 @@ package org.osmf.media
 				   ];
 		}
 		
-		override protected function get expectedWidthOnInitialization():Number
+		override protected function get expectedMediaWidthOnInitialization():Number
 		{
 			// Default width for a Video object.
 			return 320;
 		}
 
-		override protected function get expectedHeightOnInitialization():Number
+		override protected function get expectedMediaHeightOnInitialization():Number
 		{
 			// Default height for a Video object.
 			return 240;
 		}
 		
-		override protected function get expectedWidthAfterLoad():Number
+		override protected function get expectedMediaWidthAfterLoad():Number
 		{
 			return 640;
 		}
 
-		override protected function get expectedHeightAfterLoad():Number
+		override protected function get expectedMediaHeightAfterLoad():Number
 		{
 			return 352;
 		}
 		
-		override protected function get expectedMaxStreamIndex():int
+		override protected function get expectedMaxAllowedDynamicStreamIndex():int
 		{
 			return 3;
 		}
 
-		override protected function getExpectedBitrateForIndex(index:int):Number
+		override protected function getExpectedBitrateForDynamicStreamIndex(index:int):Number
 		{
 			switch (index)
 			{

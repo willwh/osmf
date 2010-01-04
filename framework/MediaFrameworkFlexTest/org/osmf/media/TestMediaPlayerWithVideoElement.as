@@ -90,7 +90,7 @@ package org.osmf.media
 			return INVALID_RESOURCE;
 		}
 		
-		override protected function get switchableResource():IMediaResource
+		override protected function get dynamicStreamResource():IMediaResource
 		{
 			return null;
 		}
@@ -112,24 +112,24 @@ package org.osmf.media
 				   ];
 		}
 		
-		override protected function get expectedWidthOnInitialization():Number
+		override protected function get expectedMediaWidthOnInitialization():Number
 		{
 			// Default width for a Video object.
 			return 320;
 		}
 
-		override protected function get expectedHeightOnInitialization():Number
+		override protected function get expectedMediaHeightOnInitialization():Number
 		{
 			// Default height for a Video object.
 			return 240;
 		}
 		
-		override protected function get expectedWidthAfterLoad():Number
+		override protected function get expectedMediaWidthAfterLoad():Number
 		{
 			return TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH;
 		}
 
-		override protected function get expectedHeightAfterLoad():Number
+		override protected function get expectedMediaHeightAfterLoad():Number
 		{
 			return TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
 		}

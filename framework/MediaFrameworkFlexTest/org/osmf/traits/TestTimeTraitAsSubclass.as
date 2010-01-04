@@ -50,9 +50,9 @@ package org.osmf.traits
 			assertTrue(dynamicTimeTrait.currentTime == 5);
 			
 			// Setting the currentTime to the duration should cause the
-			// durationReached event to fire.
+			// complete event to fire.
 			
-			dynamicTimeTrait.addEventListener(TimeEvent.DURATION_REACHED, eventCatcher);
+			dynamicTimeTrait.addEventListener(TimeEvent.COMPLETE, eventCatcher);
 			
 			dynamicTimeTrait.duration = 20;
 			dynamicTimeTrait.currentTime = 20;
@@ -61,7 +61,7 @@ package org.osmf.traits
 			
 			var dre:TimeEvent;
 			dre = events[0] as TimeEvent;
-			assertNotNull(dre && dre.type == TimeEvent.DURATION_REACHED);
+			assertNotNull(dre && dre.type == TimeEvent.COMPLETE);
 			
 			// Current time changes shouldn't trigger events.
 			dynamicTimeTrait.currentTime = 20;

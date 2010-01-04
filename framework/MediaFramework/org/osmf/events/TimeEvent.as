@@ -52,8 +52,8 @@ package org.osmf.events
 		public static const DURATION_CHANGE:String = "durationChange";
 
 		/**
-		 * The TimeEvent.DURATION_REACHED constant defines the value
-		 * of the type property of the event object for a durationReached
+		 * The TimeEvent.COMPLETE constant defines the value
+		 * of the type property of the event object for a complete
 		 * event.
 		 *  
 		 *  @langversion 3.0
@@ -61,7 +61,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public static const DURATION_REACHED:String = "durationReached";
+		public static const COMPLETE:String = "complete";
 
 		/**
 		 * Constructor
@@ -87,7 +87,7 @@ package org.osmf.events
 		/**
 		 * New time value resulting from this change.  For currentTimeChange events, this
 		 * corresponds to the currentTime property.  For durationChange events, this corresponds
-		 * to the duration property.  For durationReached events, this is unused.
+		 * to the duration property.  For complete events, this is unused.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

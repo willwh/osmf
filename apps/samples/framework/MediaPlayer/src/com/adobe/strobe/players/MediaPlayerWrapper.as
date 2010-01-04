@@ -40,12 +40,12 @@ package com.adobe.strobe.players
 		
 		public function set element(value:MediaElement):void
 		{
-			mediaPlayer.element = value;
+			mediaPlayer.media = value;
 		}
 		
 		public function get element():MediaElement
 		{
-			return mediaPlayer.element;
+			return mediaPlayer.media;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]
@@ -95,7 +95,7 @@ package com.adobe.strobe.players
 		// Internals
 		//
 													
-		protected function onView(event:DisplayObjectEvent):void
+		private function onView(event:DisplayObjectEvent):void
 		{
 			if (event.oldDisplayObject)
 			{
@@ -104,7 +104,7 @@ package com.adobe.strobe.players
 			
 			if (event.newDisplayObject)
 			{				
-				addChild(mediaPlayer.view);
+				addChild(mediaPlayer.displayObject);
 			}
 			
 			invalidateDisplayList();			
@@ -115,6 +115,6 @@ package com.adobe.strobe.players
 			dispatchEvent(event.clone());
 		}
 					
-		protected var _playerSprite:MediaPlayerSprite;
+		private var _playerSprite:MediaPlayerSprite;
 	}
 }

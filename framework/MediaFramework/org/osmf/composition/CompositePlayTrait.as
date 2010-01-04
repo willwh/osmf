@@ -214,7 +214,7 @@ package org.osmf.composition
 				
 				// Typically, the CompositeTimeTrait will handle transitioning
 				// from one child to the next based on the receipt of the
-				// durationReached event.  However, if the current child
+				// complete event.  However, if the current child
 				// doesn't have the TimeTrait, then it obviously can't do so.
 				// So we check here for that case.
 				if (playTrait.playState == PlayState.STOPPED &&

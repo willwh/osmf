@@ -106,7 +106,7 @@ package org.osmf.composition
 			timeTrait1.duration = 10;
 			timeTrait1.currentTime = 5;
 			
-			// The composite trait dispatches the durationReached event
+			// The composite trait dispatches the complete event
 			// when every child has reached its duration.
 			//
 			
@@ -116,19 +116,19 @@ package org.osmf.composition
 			assertTrue(timeTrait3.currentTime == 15);
 			assertTrue(durationChangedEventCount == 3);
 			
-			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 			
 			timeTrait1.currentTime = 10;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			
 			timeTrait2.currentTime = 25;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			
 			timeTrait3.currentTime = 20;
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 
 			timeTrait2.currentTime = 30;
-			assertTrue(durationReachedEventCount == 1);
+			assertTrue(completeEventCount == 1);
 			
 			// If two children have the same (max) duration, then we should
 			// only get one event (when both have reached their duration).
@@ -138,10 +138,10 @@ package org.osmf.composition
 			timeTrait3.duration = 30;
 			
 			timeTrait2.currentTime = 30;
-			assertTrue(durationReachedEventCount == 1);
+			assertTrue(completeEventCount == 1);
 			
 			timeTrait3.currentTime = 30;
-			assertTrue(durationReachedEventCount == 2);
+			assertTrue(completeEventCount == 2);
 			
 			timeTrait1.currentTime = 5;
 			timeTrait2.currentTime = 10;
@@ -163,12 +163,12 @@ package org.osmf.composition
 			durationChangedEventCount++;
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			durationReachedEventCount++;
+			completeEventCount++;
 		}
 		
 		private var durationChangedEventCount:int = 0;
-		private var durationReachedEventCount:int = 0;
+		private var completeEventCount:int = 0;
 	}
 }

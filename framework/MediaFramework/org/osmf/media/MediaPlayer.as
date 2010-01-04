@@ -40,16 +40,16 @@ package org.osmf.media
 	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	 
 	/**
-	 * Dispatched when the playhead reaches the duration for playable media.
+	 * Dispatched when the media has completed playback.
 	 * 
-	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.COMPLETE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 
-	[Event(name="durationReached", type="org.osmf.events.TimeEvent")]
+	[Event(name="complete", type="org.osmf.events.TimeEvent")]
 	 	 
 	/**
 	 * Dispatched when the <code>volume</code> property of the media has changed.
@@ -87,14 +87,6 @@ package org.osmf.media
 	 */	 	 
 	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
 
- 	/**
-	 * Dispatched when the load state has changed.
-	 * @see LoadState
-	 *
-	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
-	 **/
-	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
-
 	/**
 	 * Dispatched when the <code>playing</code> property of the media has changed.
 	 * 
@@ -122,7 +114,7 @@ package org.osmf.media
 	/**
 	 * Dispatched when the <code>displayObject</code> property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.DISPLAY_OBJECT_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -132,10 +124,10 @@ package org.osmf.media
 	[Event(name="displayObjectChange", type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
-	 * Dispatched when the <code>width</code> and/or <code>height</code> property of the 
+	 * Dispatched when the <code>mediaWidth</code> and/or <code>mediaHeight</code> property of the 
 	 * media has changed.
 	 * 
-	 * @eventType org.osmf.events.ViewEvent.MEDIA_SIZE_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -169,7 +161,7 @@ package org.osmf.media
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
 
     /**
-	 * Dispatched when the <code>currentTime</code> property of the MediaPlayer has changed.
+	 * Dispatched when the <code>currentTime</code> property of the media has changed.
 	 * This value is updated at the interval set by 
 	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
 	 *
@@ -178,9 +170,14 @@ package org.osmf.media
     [Event(name="currentTimeChange",type="org.osmf.events.TimeEvent")]  
     
 	/**
-	 * Dispatched when a stream switch is requested, completed, or failed.
+	 * Dispatched when a dynamic stream switch change occurs.
 	 * 
 	 * @eventType org.osmf.events.DynamicStreamEvent.SWITCHING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.DynamicStreamEvent")]
 	
@@ -197,7 +194,7 @@ package org.osmf.media
 	[Event(name="numDynamicStreamsChange",type="org.osmf.events.DynamicStreamEvent")]
 	
 	/**
-	 * Dispatched when the autoSwitch property changed.
+	 * Dispatched when the autoDynamicStreamSwitch property has changed.
 	 * 
 	 * @eventType org.osmf.events.DynamicStreamEvent.AUTO_SWITCH_CHANGE
 	 *  
@@ -233,7 +230,7 @@ package org.osmf.media
 	[Event(name="bufferTimeChange", type="org.osmf.events.BufferEvent")]
 	
 	/**
-	 * Dispatched when the data is received as a download operation progresses.
+	 * Dispatched when the value of bytesLoaded has changed.
 	 *
 	 * @eventType org.osmf.events.LoadEvent
 	 *  
@@ -257,64 +254,64 @@ package org.osmf.media
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
     /**
-	 * Dispatched when the <code>playable</code> property has changed.
+	 * Dispatched when the <code>canPlay</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */    
-	[Event(name="playableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="canPlayChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>bufferable</code> property has changed.
+	 * Dispatched when the <code>canBuffer</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */    
-	[Event(name="bufferableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="canBufferChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 		
 	/**
-	 * Dispatched when the <code>Pausable</code> property has changed.
+	 * Dispatched when the <code>canPause</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_PAUSE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="pausableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="canPauseChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>seekable</code> property has changed.
+	 * Dispatched when the <code>canSeek</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="seekableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="canSeekChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>switchable</code> property has changed.
+	 * Dispatched when the <code>isDynamicStream</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="switchableChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="isDynamicStreamChange",type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
 	 * Dispatched when the <code>temporal</code> property has changed.
@@ -329,52 +326,28 @@ package org.osmf.media
 	[Event(name="temporalChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>audible</code> property has changed.
+	 * Dispatched when the <code>hasAudio</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="audibleChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
+	[Event(name="hasAudioChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+			
 	/**
-	 * Dispatched when the <code>viewable</code> property has changed.
+	 * Dispatched when the <code>canLoad</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="viewableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
-	/**
-	 * Dispatched when the <code>spatial</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="spatialChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
-	/**
-	 * Dispatched when the <code>loadable</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="loadableChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	[Event(name="canLoadChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 				
 	/**
 	 * Dispatched when an error which impacts the operation of the media
@@ -407,43 +380,45 @@ package org.osmf.media
 	{
 		/**
 		 * Constructor.
-         * @param element Source MediaElement to be controlled by this MediaPlayer.
+		 * 
+         * @param media Source MediaElement to be controlled by this MediaPlayer.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function MediaPlayer(element:MediaElement=null)
+		public function MediaPlayer(media:MediaElement=null)
 		{
 			super();
 			
 			_state = MediaPlayerState.UNINITIALIZED;
-			this.element = element;			
+			this.media = media;
+			
 			_currentTimeTimer.addEventListener(TimerEvent.TIMER, onCurrentTimeTimer);			
 			_bytesLoadedTimer.addEventListener(TimerEvent.TIMER, onBytesLoadedTimer);				
 		}
 
 		/**
-		 * Source MediaElement controlled by this MediaPlayer.  Setting the element will attempt to load 
+		 * Source MediaElement controlled by this MediaPlayer.  Setting the media will attempt to load 
 		 * media that is loadable, that isn't loading or loaded.  It will automatically unload media when
-		 * the element changes to a new MediaElement or null.
+		 * the property changes to a new MediaElement or null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function set element(value:MediaElement):void
+		public function set media(value:MediaElement):void
 		{
-			if (value != _element)
+			if (value != _media)
 			{
 				var traitType:String;
-				if (_element)
+				if (_media != null)
 				{											
-					if (loadable)
+					if (canLoad)
 					{	 
-						var loadTrait:LoadTrait = _element.getTrait(MediaTraitType.LOAD) as LoadTrait;
+						var loadTrait:LoadTrait = _media.getTrait(MediaTraitType.LOAD) as LoadTrait;
 						if (loadTrait.loadState == LoadState.READY) // Do a courtesy unload
 						{							
 							loadTrait.unload();
@@ -451,32 +426,32 @@ package org.osmf.media
 					}	
 					setState(MediaPlayerState.UNINITIALIZED);
 					
-					if (_element) //sometimes _element is null here due to unload nulling the element.
+					if (_media) //sometimes _media is null here due to unload nulling the element.
 					{
-						_element.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-						_element.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-						_element.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
-						for each (traitType in _element.traitTypes)
+						_media.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						_media.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+						_media.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
+						for each (traitType in _media.traitTypes)
 						{
 							updateTraitListeners(traitType, false);
 						}
 					}								
 				}	
-				_element = value;
-				if (_element)
+				_media = value;
+				if (_media != null)
 				{
-					_element.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);					
-					_element.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-					_element.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
+					_media.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);					
+					_media.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+					_media.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
 
-					// If the media is not loadable, then the MediaPlayer's state
+					// If the media cannnot be loaded, then the MediaPlayer's state
 					// should represent the media as already ready.
-					if (_element.hasTrait(MediaTraitType.LOAD) == false)
+					if (_media.hasTrait(MediaTraitType.LOAD) == false)
 					{
 						processReadyState();
 					}
 
-					for each (traitType  in _element.traitTypes)
+					for each (traitType  in _media.traitTypes)
 					{
 						updateTraitListeners(traitType, true);
 					}
@@ -484,20 +459,19 @@ package org.osmf.media
 			}
 		}
 		
-        public function get element():MediaElement
+        public function get media():MediaElement
         {
-        	return _element;
+        	return _media;
         }
             
         /**
 		 * Indicates whether media is returned to the beginning of playback after
-                 * playback of the media completes.
+         * playback of the media completes.
 		 * <p>If <code>true</code>, the media displays the first frame.
 		 * If <code>false</code>, it displays the last frame.
 		 * The default is <code>false</code>.</p>
 		 * <p>The <code>autoRewind</code> property is ignored if the <code>loop</code> property 
 		 * is set to <code>true</code>.</p>
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -514,16 +488,12 @@ package org.osmf.media
         	return _autoRewind;
         }
 
-
         /**
 		 * Indicates whether the MediaPlayer starts playing the media as soon as its
 		 * load operation has successfully completed.
 		 * The default is <code>true</code>.
-		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.PlayTrait
-		 *  
-		 *  @langversion 3.0
+ 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -565,10 +535,8 @@ package org.osmf.media
 		 * in milliseconds. 
          * <p>The default is 250 milliseconds.
          * A non-positive value disables the dispatch of the change events.</p>
-         * <p>The MediaElement must be temporal to support this property.</p>
-		 * 
+ 		 * 
 		 * @see org.osmf.events.#event:TimeEvent
-         * @see org.osmf.traits.TimeTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -604,7 +572,6 @@ package org.osmf.media
 		 * Interval between the dispatch of change events for the bytesLoaded property. 
          * <p>The default is 250 milliseconds.
          * A non-positive value disables the dispatch of the change events.</p>
-         * <p>The MediaElement must be loadable to support this property.</p>
 		 * 
 		 * @see org.osmf.events.#event:LoadEvent
 		 *  
@@ -626,7 +593,7 @@ package org.osmf.media
 				else
 				{				
 					_bytesLoadedTimer.delay = _bytesLoadedUpdateInterval;		
-					if (loadable)
+					if (canLoad)
 					{
 						_bytesLoadedTimer.start();
 					}			
@@ -652,19 +619,17 @@ package org.osmf.media
         	return _state;
         }               
  		
-		// Trait availability
-		
 		/**
-		 *  Indicates whether the media is playable.
+		 *  Indicates whether the media can be played.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get playable():Boolean
+		public function get canPlay():Boolean
 		{
-			return _playable;
+			return _canPlay;
 		}
 
 		/**
@@ -677,7 +642,7 @@ package org.osmf.media
 		 */
 		public function get canPause():Boolean
 		{
-			return playable ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).canPause : false;
+			return canPlay ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).canPause : false;
 		}
 				
 		/**
@@ -689,14 +654,14 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get seekable():Boolean
+		public function get canSeek():Boolean
 		{
-			return _seekable;
+			return _canSeek;
 		}
 		
 		/**
 		 * Indicates whether the media is temporal.
-		 * Temporal media supports a duration and a currentT tme within that duration.
+		 * Temporal media supports a duration and a currentTime within that duration.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -708,84 +673,63 @@ package org.osmf.media
 			return _temporal;
 		}
 		/**
-		 *  Indicates whether the media is audible.
+		 *  Indicates whether the media has audio.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get audible():Boolean
+		public function get hasAudio():Boolean
 		{
-			return _audible;
+			return _hasAudio;
 		}
-		
+						
 		/**
-		 * Indicates whether the media is viewable.
-		 * Viewable media is exposed by a DisplayObject.
-		 * @see flash.display.DisplayObject
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		public function get viewable():Boolean
-		{
-			return _viewable;
-		}
-				
-		/**
-		 * Indicates whether the media is switchable.
-		 * Wwitchable exposes the ability to autoswitch or manually switch
-		 * between multiple bitrate streams.
+		 * Indicates whether the media consists of a dynamic stream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get switchable():Boolean
+		public function get isDynamicStream():Boolean
 		{
-			return _switchable;
+			return _isDynamicStream;
 		}
 				
 		/**
-		 *  Indicates whether the media is loadable.
+		 *  Indicates whether the media can be loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get loadable():Boolean
+		public function get canLoad():Boolean
 		{
-			return _loadable;
+			return _canLoad;
 		}
 		
 		/**
-		 * Indicates whether the media is capable of buffering.
+		 * Indicates whether the media can buffer.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get bufferable():Boolean
+		public function get canBuffer():Boolean
 		{
-			return _bufferable;
+			return _canBuffer;
 		}
 				
-		// Trait Based properties
-		
 		/**
 		 * Volume of the media.
 		 * Ranges from 0 (silent) to 1 (full volume). 
-		 * <p>If the MediaElement is not audible, then the volume will be set to
-		 * this value as soon as the MediaElement becomes audible.</p>
+		 * <p>If the MediaElement doesn't have audio, then the volume will be set to
+		 * this value as soon as the MediaElement has audio.</p>
 		 * 
-         * @see org.osmf.traits.AudioTrait
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -793,14 +737,14 @@ package org.osmf.media
 		 */
 	    public function get volume():Number
 	    {	
-	    	return audible ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).volume : mediaPlayerVolume;	    		    
+	    	return hasAudio ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).volume : mediaPlayerVolume;	    		    
 	    }		   
 	    
 	    public function set volume(value:Number):void
 	    {
 	    	var doDispatchEvent:Boolean = false;
 	    	
-	    	if (audible)
+	    	if (hasAudio)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIO) as AudioTrait).volume = value;
 	    	}
@@ -820,10 +764,8 @@ package org.osmf.media
 		
 		/**
 		 * Indicates whether the media is currently muted.
-		 * <p>If the MediaElement is not audible, then the muted state will be set to
-		 * this value as soon as the MediaElement becomes audible.</p>
-		 * 
-         * @see org.osmf.traits.AudioTrait
+		 * <p>If the MediaElement doesn't have audio, then the muted state will be set to
+		 * this value as soon as the MediaElement has audio.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -832,14 +774,14 @@ package org.osmf.media
 		 */				
 	    public function get muted():Boolean
 	    {
-	    	return audible ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).muted : mediaPlayerMuted;	    	   
+	    	return hasAudio ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).muted : mediaPlayerMuted;	    	   
 	    }
 	    
 	    public function set muted(value:Boolean):void
 	    {
 	    	var doDispatchEvent:Boolean = false;
 	    	
-	    	if (audible)
+	    	if (hasAudio)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIO) as AudioTrait).muted = value;
 	    	}
@@ -860,37 +802,34 @@ package org.osmf.media
 		/**
 		 * Pan property of the media.
 		 * Ranges from -1 (full pan left) to 1 (full pan right).
-		 * <p>If the MediaElement is not audible, then the pan property will be set to
-		 * this value as soon as the MediaElement becomes audible.</p>
+		 * <p>If the MediaElement doesn't have audio, then the pan property will be set to
+		 * this value as soon as the MediaElement has audio.</p>
 		 * 
-         * @see org.osmf.traits.AudioTrait
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */					
-		
-	    public function get pan():Number
+		 */
+	    public function get audioPan():Number
 	    {
-	    	return audible ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).pan : mediaPlayerPan;	    		
+	    	return hasAudio ? AudioTrait(getTraitOrThrow(MediaTraitType.AUDIO)).pan : mediaPlayerAudioPan;	    		
 	    }
 	    
-	    public function set pan(value:Number):void
+	    public function set audioPan(value:Number):void
 	    {
 	    	var doDispatchEvent:Boolean = false;
 	    	
-	    	if (audible)
+	    	if (hasAudio)
 	    	{
 	    		(getTraitOrThrow(MediaTraitType.AUDIO) as AudioTrait).pan = value;
 	    	}
-	    	else if (value != mediaPlayerPan)
+	    	else if (value != mediaPlayerAudioPan)
 	    	{
 	    		doDispatchEvent = true;
 	    	}
 
-    		mediaPlayerPan = value;
-    		mediaPlayerPanSet = true;
+    		mediaPlayerAudioPan = value;
+    		mediaPlayerAudioPanSet = true;
     		
     		if (doDispatchEvent)
     		{
@@ -900,7 +839,6 @@ package org.osmf.media
 			
 		/**
 		 * Indicates whether the media is currently paused.
-		 * <p>The MediaElement must be pausable to support this property.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -909,12 +847,12 @@ package org.osmf.media
 		 */	
 		public function get paused():Boolean
 	    {
-	    	return playable ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).playState == PlayState.PAUSED : false;	    		    
+	    	return canPlay ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).playState == PlayState.PAUSED : false;	    		    
 	    }
 	    
 		/**
 	    * Pauses the media, if it is not already paused.
-	    * @throws IllegalOperationError if capability isn't supported
+	    * @throws IllegalOperationError if the media cannot be paused.
 	    *  
 	    *  @langversion 3.0
 	    *  @playerversion Flash 10
@@ -930,21 +868,19 @@ package org.osmf.media
 		 * Indicates whether the media is currently playing.
 		 * <p>The MediaElement must be playable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.PlayTrait
-		 *  
-		 *  @langversion 3.0
+ 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */					
 	    public function get playing():Boolean
 	    {
-	    	return playable ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).playState == PlayState.PLAYING : false;	    		
+	    	return canPlay ? (getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).playState == PlayState.PLAYING : false;	    		
 	    }
 	    
 	    /**
 	    * Plays the media, if it is not already playing.
-	    * @throws IllegalOperationError if capability isn't supported
+	    * @throws IllegalOperationError if the media cannot be played.
 	    *  
 	    *  @langversion 3.0
 	    *  @playerversion Flash 10
@@ -956,29 +892,24 @@ package org.osmf.media
 	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).play();	    	
 	    }
 		
-	    // SeekTrait
-		
 		/**
 		 * Indicates whether the media is currently seeking.
-		 * <p>The MediaElement must be seekable to support this property.</p>
 		 * 
-         * @see org.osmf.traits.SeekTrait
-		 *  
-		 *  @langversion 3.0
+ 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
 	    public function get seeking():Boolean
 	    {
-	    	return seekable ? (getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).seeking : false;
+	    	return canSeek ? (getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).seeking : false;
 	    }
 	    
 	    /**
 	     * Instructs the playhead to jump to the specified time.
 	     * <p>If <code>time</code> is NaN or negative, does not attempt to seek.</p>
 	     * @param time Time to seek to in seconds.
-	     * @throws IllegalOperationError if capability isn't supported
+	     * @throws IllegalOperationError if the media cannot be seeked.
 	     *  
 	     *  @langversion 3.0
 	     *  @playerversion Flash 10
@@ -994,14 +925,9 @@ package org.osmf.media
 		 * Indicates whether the media is capable of seeking to the
 		 * specified time.
 		 *  
-		 * <p>This method is not bound to the trait's current <code>seeking</code> state. It can
-         * return <code>true</code> while the media is seeking, even though a call to <code>seek()</code>
-         * will fail if a previous seek is still in progress.</p>
-		 * 
 		 * @param time Time to seek to in seconds.
 		 * @return Returns <code>true</code> if the media can seek to the specified time.
-		 * @throws IllegalOperationError if capability isn't supported
-		 * 
+		 * @throws IllegalOperationError if the media cannot be seeked.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1017,14 +943,14 @@ package org.osmf.media
 	     * Immediately halts playback and returns the playhead to the beginning
 	     * of the media file.
 	     * 
-	     * @throws IllegalOperationError If either the pause or seek capability
-	     * isn't supported.
+	     * @throws IllegalOperationError If the media cannot be played (and therefore
+	     * cannot be stopped).
 	     **/
 	    public function stop():void
 	    {
 	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
 
-			if (autoRewind && seekable)
+			if (autoRewind && canSeek)
 			{
 				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
 				function onSeekEnd(event:SeekEvent):void
@@ -1036,47 +962,37 @@ package org.osmf.media
 			}
 	    }
 	
-	    // DisplayObjectTrait
-				
 		/**
 		 * Intrinsic width of the media, in pixels.
 		 * The intrinsic width is the width of the media before any processing has been applied.
-		 * <p>The MediaElement must be spatial to support this property.</p>
-		 * 
-         * @see org.osmf.traits.DisplayObjectTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    public function get width():int
+	    public function get mediaWidth():Number
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaWidth : 0;
+	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaWidth : 0;
 	    }
 		   
 		/**
 		 * Intrinsic height of the media, in pixels.
 		 * The intrinsic height is the height of the media before any processing has been applied.
-		 * <p>The MediaElement must be spatial to support this property.</p>
-		 * 
-         * @see org.osmf.traits.DisplayObjectTrait
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get height():int
+		public function get mediaHeight():Number
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaHeight : 0;
+	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaHeight : 0;
 	    }
 	    
-	    // ISwitchable
-	    
 	    /**
-		 * Defines whether or not the ISwitchable trait should be in manual 
-		 * or auto-switch mode. If in manual mode the <code>switchTo</code>
+		 * Indicates whether or not the media will automatically switch between
+		 * dynamic streams.  If in manual mode the <code>switchDynamicStreamIndex</code>
 		 * method can be used to manually switch to a specific stream.
 		 * 
 		 * <p>The default is true.</p>
@@ -1087,75 +1003,89 @@ package org.osmf.media
 		 *  @productversion OSMF 1.0
 		 *		 
 		 */
-		public function get autoSwitch():Boolean
+		public function get autoDynamicStreamSwitch():Boolean
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch : true;
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch : true;
 		}
 		
-		public function set autoSwitch(value:Boolean):void
+		public function set autoDynamicStreamSwitch(value:Boolean):void
 		{
-			if (switchable)
+			if (isDynamicStream)
 			{
 				(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch = value;
 			}
 		}
 		
 		/**
-		 * The index of the stream currently rendering. Uses a zero-based index.
+		 * The index of the dynamic stream currently rendering.  Uses a zero-based index.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get currentStreamIndex():int
+		public function get currentDynamicStreamIndex():int
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).currentIndex : 0; 
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).currentIndex : 0; 
+		}
+
+		/**
+		 * The total number of dynamic stream indices.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get numDynamicStreams():int
+		{
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).numDynamicStreams : 0; 
 		}
 		
 		/**
-		 * Gets the associated bitrate, in kilobytes for the specified index.
+		 * Gets the associated bitrate, in kilobytes for the specified dynamic stream index.
 		 * 
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater than the highest index available.
+		 * @throws RangeError If the specified dynamic stream index is less than zero or
+		 * greater than the highest dynamic stream index available.
+		 * @throws IllegalOperationError If the media is not a dynamic stream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function getBitrateForIndex(index:int):Number
+		public function getBitrateForDynamicStreamIndex(index:int):Number
 		{
 			return (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).getBitrateForIndex(index);
 		}
 		
 		/**
-		 * The maximum available index. This can be set at run-time to 
-		 * provide a ceiling for your switching profile. For example,
-		 * to keep from switching up to a higher quality stream when 
-		 * the current video is too small to realize the added value
-		 * of a higher quality stream.
+		 * The maximum allowed dynamic stream index. This can be set at run-time to 
+		 * provide a ceiling for the switching profile, for example, to keep from
+		 * switching up to a higher quality stream when the current video is too small
+		 * handle a higher quality stream.
 		 * 
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater than the highest index available.
+		 * @throws RangeError If the specified dynamic stream index is less than zero or
+		 * greater than the highest dynamic stream index available.
+		 * @throws IllegalOperationError If the media is not a dynamic stream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get maxStreamIndex():int
+		public function get maxAllowedDynamicStreamIndex():int
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex : 0;
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex : 0;
 		}
 		
-		public function set maxStreamIndex(value:int):void
+		public function set maxAllowedDynamicStreamIndex(value:int):void
 		{
 			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex = value; 
 		}
 		
 		/**
-		 * Indicates whether or not a switch is currently in progress.
+		 * Indicates whether or not a dynamic stream switch is currently in progress.
 		 * This property will return <code>true</code> while a switch has been 
 		 * requested and the switch has not yet been acknowledged and no switch failure 
 		 * has occurred.  Once the switch request has been acknowledged or a 
@@ -1166,61 +1096,51 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get switchUnderway():Boolean
+		public function get dynamicStreamSwitching():Boolean
 		{
-			return switchable ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switching : false;
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switching : false;
 		}
 		
 		/**
-		 * Switch to a specific index. To switch up, use the <code>currentIndex</code>
+		 * Switch to a specific dynamic stream index. To switch up, use the <code>currentDynamicStreamIndex</code>
 		 * property, such as:<p>
 		 * <code>
-		 * obj.switchTo(obj.currentStreamIndex + 1);
+		 * mediaPlayer.switchDynamicStreamIndex(mediaPlayer.currentDynamicStreamIndex + 1);
 		 * </code>
 		 * </p>
-		 * @throws RangeError If the specified index is less than zero or
-		 * greater than <code>maxIndex</code>.
-		 * @throws IllegalOperationError If the stream is not in manual switch mode.
+		 * @throws RangeError If the specified dynamic stream index is less than zero or
+		 * greater than <code>maxAllowedDynamicStreamIndex</code>.
+		 * @throws IllegalOperationError If the media is not a dynamic stream, or if the dynamic
+		 * stream is not in manual switch mode.
 		 * 
-		 * @see maxIndex
+		 * @see maxAllowedDynamicStreamIndex
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function switchTo(streamIndex:int):void
+		public function switchDynamicStreamIndex(streamIndex:int):void
 		{
 			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).switchTo(streamIndex);
 		}	    
 	
-	    // DisplayObjectTrait
-	    
 		/**
-		 * View property of the media.
-		 * This is the DisplayObject that represents the media.
-		 * <p>The MediaElement must be viewable to support this property.</p>
+		 * DisplayObject for the media.
 		 * 
-         * @see org.osmf.traits.DisplayObjectTrait
-         *  
          *  @langversion 3.0
          *  @playerversion Flash 10
          *  @playerversion AIR 1.5
          *  @productversion OSMF 1.0
          */
-	    public function get view():DisplayObject
+	    public function get displayObject():DisplayObject
 	    {
-	    	return viewable ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject : null;	
+	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject : null;	
 	    }
 	
-        // TimeTrait
-
 		 /**
 		 * Duration of the media's playback, in seconds.
-		 * <p>The MediaElement must be temporal to support this property.</p>
 		 * 
-         * @see org.osmf.traits.TimeTrait
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -1233,11 +1153,7 @@ package org.osmf.media
 	  	  
     	/**
 		 * Current time of the playhead in seconds.
-		 * Must not exceed the duration.
-		 * <p>The MediaElement must be temporal to support this property.</p>
-		 * 
-         * @see org.osmf.traits.TimeTrait
-		 *  
+		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -1260,7 +1176,7 @@ package org.osmf.media
 		 */		
 		public function get buffering():Boolean
 		{
-			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).buffering : false;	    	
+			return canBuffer ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).buffering : false;	    	
 		}
 		
 		/**
@@ -1274,7 +1190,7 @@ package org.osmf.media
 		 */		
 		public function get bufferLength():Number
 		{
-			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferLength : 0;	    	
+			return canBuffer ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferLength : 0;	    	
 		}
 		
 		/**
@@ -1292,20 +1208,19 @@ package org.osmf.media
 		 */		
 		public function get bufferTime():Number
 		{
-			return bufferable ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime : 0;		    	
+			return canBuffer ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime : 0;		    	
 		}
 		
 		public function set bufferTime(value:Number):void
 		{
-			if (bufferable)
+			if (canBuffer)
 			{
 				(getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime = value;
 			}	    	
 		}
 		
 		/**
-		 * The number of bytes of the media that has been downloaded. When the underlying trait is absent, 0 is returned.
-		 * 
+		 * The number of bytes of the media that have been loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1314,12 +1229,22 @@ package org.osmf.media
 		 */		
 		public function get bytesLoaded():Number
 		{
-			return loadable ? (getTraitOrThrow(MediaTraitType.LOAD) as LoadTrait).bytesLoaded : 0;
+			var bytes:Number = 0;
+			
+			if (canLoad)
+			{
+				bytes = (getTraitOrThrow(MediaTraitType.LOAD) as LoadTrait).bytesLoaded;
+				if (isNaN(bytes))
+				{
+					bytes = 0;
+				}
+			}
+			
+			return bytes;
 		}
 		
 		/**
-		 * The total number of bytes of the media that will be downloaded. When the underlying trait is absent, 0 is returned.
-		 * 
+		 * The total number of bytes of the media that will be loaded.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -1328,7 +1253,18 @@ package org.osmf.media
 		 */		
 		public function get bytesTotal():Number
 		{
-			return loadable ? (getTraitOrThrow(MediaTraitType.LOAD) as LoadTrait).bytesTotal : 0;
+			var bytes:Number = 0;
+			
+			if (canLoad)
+			{
+				bytes = (getTraitOrThrow(MediaTraitType.LOAD) as LoadTrait).bytesTotal;
+				if (isNaN(bytes))
+				{
+					bytes = 0;
+				}
+			}
+			
+			return bytes;
 		}
 
 		// Internals
@@ -1336,7 +1272,7 @@ package org.osmf.media
 	    
 	    private function getTraitOrThrow(traitType:String):MediaTraitBase
 	    {
-	    	if (!_element || !_element.hasTrait(traitType))
+	    	if (!_media || !_media.hasTrait(traitType))
 	    	{
 	    		var error:String = OSMFStrings.getString(OSMFStrings.TRAIT_NOT_SUPPORTED);
 	    		var traitName:String = traitType.replace("[class ", "");
@@ -1346,7 +1282,7 @@ package org.osmf.media
 	    			    		
 	    		throw new IllegalOperationError(error);		    		
 	    	}
-	    	return _element.getTrait(traitType);
+	    	return _media.getTrait(traitType);
 	    }
 
 	    private function onMediaError(event:MediaErrorEvent):void
@@ -1376,8 +1312,8 @@ package org.osmf.media
 			switch (traitType)
 			{
 				case MediaTraitType.TIME:									
-					changeListeners(add, _element, traitType, TimeEvent.DURATION_CHANGE, [redispatchEvent]);							
-					changeListeners(add, _element, traitType, TimeEvent.DURATION_REACHED, [redispatchEvent, onDurationReached] );								
+					changeListeners(add, _media, traitType, TimeEvent.DURATION_CHANGE, [redispatchEvent]);							
+					changeListeners(add, _media, traitType, TimeEvent.COMPLETE, [redispatchEvent, onComplete] );								
 					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
 					{
 						_currentTimeTimer.start();
@@ -1390,25 +1326,25 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
 					break;
 				case MediaTraitType.PLAY:						
-					changeListeners(add, _element, traitType, PlayEvent.PLAY_STATE_CHANGE, [redispatchEvent,onPlayStateChange] );			
-					_playable = add;							
-					if (autoPlay && playable && !playing)
+					changeListeners(add, _media, traitType, PlayEvent.PLAY_STATE_CHANGE, [redispatchEvent,onPlayStateChange] );			
+					_canPlay = add;							
+					if (autoPlay && canPlay && !playing)
 					{
 						play();
 					}
-					eventType = MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE;												
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIO:					
-					changeListeners(add, _element, traitType, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);		
-					changeListeners(add, _element, traitType, AudioEvent.MUTED_CHANGE, [redispatchEvent]);
-					changeListeners(add, _element, traitType, AudioEvent.PAN_CHANGE, [redispatchEvent]);
-					_audible = add;
-					if (audible)
+					changeListeners(add, _media, traitType, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);		
+					changeListeners(add, _media, traitType, AudioEvent.MUTED_CHANGE, [redispatchEvent]);
+					changeListeners(add, _media, traitType, AudioEvent.PAN_CHANGE, [redispatchEvent]);
+					_hasAudio = add;
+					if (hasAudio)
 					{
 						// When AudioTrait is added, we should tell it to reflect any
-						// explicitly-specified MediaPlayer-level audible properties.
+						// explicitly-specified MediaPlayer-level audio properties.
 						// Note that we don't do so if the current MediaPlayer-level
-						// audible properties are implicit (i.e. not set by the client).
+						// audio properties are implicit (i.e. not set by the client).
 						if (mediaPlayerVolumeSet)
 						{
 							volume = mediaPlayerVolume;
@@ -1417,45 +1353,52 @@ package org.osmf.media
 						{
 							muted = mediaPlayerMuted;
 						}
-						if (mediaPlayerPanSet)
+						if (mediaPlayerAudioPanSet)
 						{
-							pan = mediaPlayerPan;
+							audioPan = mediaPlayerAudioPan;
 						}
 					}
-					eventType = MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE;		
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
 					break;
 				case MediaTraitType.SEEK:
-					changeListeners(add, _element, traitType, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
-					changeListeners(add, _element, traitType, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
-					_seekable = add;					
-					eventType = MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE;							
+					changeListeners(add, _media, traitType, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
+					changeListeners(add, _media, traitType, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
+					_canSeek = add;					
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;							
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:	
-					changeListeners(add, _element, traitType, DynamicStreamEvent.SWITCHING_CHANGE, [redispatchEvent]);
-					changeListeners(add, _element, traitType, DynamicStreamEvent.AUTO_SWITCH_CHANGE, [redispatchEvent]);
-					changeListeners(add, _element, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, [redispatchEvent]);
-					_switchable = add;						
-					eventType = MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE;					
+					changeListeners(add, _media, traitType, DynamicStreamEvent.SWITCHING_CHANGE, [redispatchEvent]);
+					changeListeners(add, _media, traitType, DynamicStreamEvent.AUTO_SWITCH_CHANGE, [redispatchEvent]);
+					changeListeners(add, _media, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, [redispatchEvent]);
+					_isDynamicStream = add;						
+					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;					
 					break;						
 				case MediaTraitType.DISPLAY_OBJECT:					
-					changeListeners(add, _element, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, [redispatchEvent]);											
-					changeListeners(add, _element, traitType, DisplayObjectEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
-					_viewable = add;						
-					eventType = MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE;					
-					break;	
-				case MediaTraitType.LOAD:					
-					changeListeners(add, _element, traitType, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);
-					changeListeners(add, _element, traitType, LoadEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);					
-					_loadable = add;		
+					changeListeners(add, _media, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, [redispatchEvent]);											
+					changeListeners(add, _media, traitType, DisplayObjectEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
+					_hasDisplayObject = add;
 					if (add)
 					{
-						var loadState:String = (_element.getTrait(traitType) as LoadTrait).loadState;
+						var displayObject:DisplayObject = DisplayObjectTrait(_media.getTrait(MediaTraitType.DISPLAY_OBJECT)).displayObject;
+						if (displayObject != null)
+						{
+							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject));
+						}
+					}				
+					break;	
+				case MediaTraitType.LOAD:					
+					changeListeners(add, _media, traitType, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);
+					changeListeners(add, _media, traitType, LoadEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);					
+					_canLoad = add;		
+					if (add)
+					{
+						var loadState:String = (_media.getTrait(traitType) as LoadTrait).loadState;
 						if (loadState != LoadState.READY && 
 							loadState != LoadState.LOADING)
 						{
 							load();
 						}
-						else if (autoPlay && playable && !playing)
+						else if (autoPlay && canPlay && !playing)
 						{
 							play();	
 						}
@@ -1469,16 +1412,16 @@ package org.osmf.media
 							_bytesLoadedTimer.stop();					
 						}			
 					}						
-					eventType = MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE;				
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
-					changeListeners(add, _element, traitType, BufferEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
-					changeListeners(add, _element, traitType, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
-					_bufferable = add;
-					eventType = MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE;									
+					changeListeners(add, _media, traitType, BufferEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
+					changeListeners(add, _media, traitType, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
+					_canBuffer = add;
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;									
 					break;						
 			}					 
-			if (eventType)
+			if (eventType != null)
 			{
 				dispatchEvent
 					( new MediaPlayerCapabilityChangeEvent
@@ -1525,15 +1468,15 @@ package org.osmf.media
 			{				
 				setState(MediaPlayerState.BUFFERING);				
 			}
-			else if (playable && playing)
+			else if (canPlay && playing)
 			{
 				setState(MediaPlayerState.PLAYING);
 			}
-			else if (playable && paused)
+			else if (canPlay && paused)
 			{
 				setState(MediaPlayerState.PAUSED);
 			}	
-			else if (bufferable && buffering)
+			else if (canBuffer && buffering)
 			{
 				setState(MediaPlayerState.BUFFERING);
 			}					
@@ -1582,15 +1525,15 @@ package org.osmf.media
 		private function processReadyState():void
 		{
 			setState(MediaPlayerState.READY);
-			if (autoPlay && playable && !playing)
+			if (autoPlay && canPlay && !playing)
 			{
 				play();
 			}
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			if (loop && seekable && playable)
+			if (loop && canSeek && canPlay)
 			{	
 				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
 				function onSeekEnd(event:SeekEvent):void
@@ -1598,9 +1541,9 @@ package org.osmf.media
 					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
 					play();	
 				}
-				seek(0); //If we don't wait for the seekend, everything breaks for looping.									
+				seek(0); // If we don't wait for the seek-end, everything breaks for looping.									
 			}
-			else if (!loop && playable)
+			else if (!loop && canPlay)
 			{
 				stop();
 			}
@@ -1614,7 +1557,7 @@ package org.osmf.media
 		{
 			if (temporal && 
 				currentTime != lastCurrentTime && 
-			 	(!seekable || !seeking) )
+			 	(!canSeek || !seeking) )
 			{				
 				lastCurrentTime = currentTime;
 				dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));
@@ -1623,7 +1566,7 @@ package org.osmf.media
 		
 		private function onBytesLoadedTimer(event:TimerEvent):void
 		{
-			if (loadable && (bytesLoaded != lastBytesLoaded))
+			if (canLoad && (bytesLoaded != lastBytesLoaded))
 			{
 				var bytesLoadedEvent:LoadEvent 
 					= new LoadEvent
@@ -1648,11 +1591,11 @@ package org.osmf.media
 			}
 			else
 			{
-				if (playable && playing)
+				if (canPlay && playing)
 				{
 					setState(MediaPlayerState.PLAYING);					
 				}
-				else if (playable && paused)
+				else if (canPlay && paused)
 				{
 					setState(MediaPlayerState.PAUSED);
 				}
@@ -1683,7 +1626,7 @@ package org.osmf.media
 		{
 			try
 			{
-				(_element.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
+				(_media.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 			}
 			catch (error:Error)
 			{
@@ -1700,7 +1643,7 @@ package org.osmf.media
 		private var _loop:Boolean = false;		
 		private var _currentTimeUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _currentTimeTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
-		private var _element:MediaElement;
+		private var _media:MediaElement;
 		private var _state:String; // MediaPlayerState
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
@@ -1712,16 +1655,16 @@ package org.osmf.media
 		private var mediaPlayerVolumeSet:Boolean = false;
 		private var mediaPlayerMuted:Boolean = false;
 		private var mediaPlayerMutedSet:Boolean = false;
-		private var mediaPlayerPan:Number = 0;
-		private var mediaPlayerPanSet:Boolean = false;
+		private var mediaPlayerAudioPan:Number = 0;
+		private var mediaPlayerAudioPanSet:Boolean = false;
 		
-		private var _playable:Boolean;
-		private var _seekable:Boolean;
+		private var _canPlay:Boolean;
+		private var _canSeek:Boolean;
 		private var _temporal:Boolean;
-		private var _audible:Boolean;
-		private var _viewable:Boolean;
-		private var _loadable:Boolean;
-		private var _bufferable:Boolean;
-		private var _switchable:Boolean;
+		private var _hasAudio:Boolean;
+		private var _hasDisplayObject:Boolean;
+		private var _canLoad:Boolean;
+		private var _canBuffer:Boolean;
+		private var _isDynamicStream:Boolean;
 	}
 }

@@ -115,7 +115,7 @@ package org.osmf.proxies
 			super.setupOverriddenTraits();
 			
 			timeTrait = new TemporalProxyTimeTrait(_duration);
-			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 			addTrait(MediaTraitType.TIME, timeTrait);
 
 			seekTrait = new TemporalProxySeekTrait(timeTrait);
@@ -186,7 +186,7 @@ package org.osmf.proxies
 			}
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
 			playheadTimer.stop();
 		}

@@ -102,9 +102,9 @@ package org.osmf.utils
 			changeEventQueue.push({"seeking":seeking, "time":time});
 		}
 		
-		override protected function processDurationReached():void
+		override protected function processComplete():void
 		{
-			changeEventQueue.push({"durationReached":true});
+			changeEventQueue.push({"complete":true});
 		}
 
 		override protected function processDurationChange(newDuration:Number):void

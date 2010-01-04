@@ -28,7 +28,7 @@ package org.osmf.net
 			player.autoPlay = false;
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
 			
-			player.element = proxy;
+			player.media = proxy;
 			
 			function onLoadedError(event:MediaErrorEvent):void
 			{
@@ -37,9 +37,9 @@ package org.osmf.net
 			
 			function onLoaded(event:LoadEvent):void
 			{
-				if(event.loadState == LoadState.READY)
+				if (event.loadState == LoadState.READY)
 				{
-					player.element = null;
+					player.media = null;
 					finished(null);
 				}
 			}		
@@ -59,7 +59,7 @@ package org.osmf.net
 			
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
 			
-			player.element = proxy;
+			player.media = proxy;
 			
 			function onLoadedError(event:MediaErrorEvent):void
 			{
@@ -68,9 +68,9 @@ package org.osmf.net
 			
 			function onLoaded(event:LoadEvent):void
 			{
-				if(event.loadState == LoadState.READY)
+				if (event.loadState == LoadState.READY)
 				{
-					player.element = null;
+					player.media = null;
 					finished(null);
 				}
 			}	
@@ -89,7 +89,7 @@ package org.osmf.net
 			player.autoPlay = false;
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadedError);
 			
-			player.element = proxy;
+			player.media = proxy;
 			
 			function onLoadedError(event:MediaErrorEvent):void
 			{
@@ -98,14 +98,12 @@ package org.osmf.net
 			
 			function onLoaded(event:LoadEvent):void
 			{
-				if(event.loadState == LoadState.READY)
+				if (event.loadState == LoadState.READY)
 				{
-					player.element = null;
+					player.media = null;
 					finished(null);
 				}
 			}	
 		}
-
-
 	}
 }

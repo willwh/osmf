@@ -34,14 +34,14 @@ package org.osmf.traits
 	 * Dispatched when the currentTime of the trait has changed to a value
 	 * equal to its duration.
 	 * 
-	 * @eventType org.osmf.events.TimeEvent.DURATION_REACHED
+	 * @eventType org.osmf.events.TimeEvent.COMPLETE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="durationReached",type="org.osmf.events.TimeEvent")]
+	[Event(name="complete",type="org.osmf.events.TimeEvent")]
 	
 	/**
 	 * TimeTrait defines the trait interface for media that have a duration and
@@ -175,16 +175,16 @@ package org.osmf.traits
 		 * that <code>currentTime</code> equals <code>duration</code>.
 		 * <p>Not called when both <code>currentTime</code> and <code>duration</code> equal zero.</p>
 		 * 
-		 * <p>Dispatches the durationReached event.</p>
+		 * <p>Dispatches the complete event.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function signalDurationReached():void
+		protected function signalComplete():void
 		{
-			dispatchEvent(new TimeEvent(TimeEvent.DURATION_REACHED));
+			dispatchEvent(new TimeEvent(TimeEvent.COMPLETE));
 		}
 
 		/**
@@ -222,7 +222,7 @@ package org.osmf.traits
 				
 				if (currentTime == duration && currentTime > 0)
 				{
-					signalDurationReached();
+					signalComplete();
 				} 
 			}
 		}

@@ -273,7 +273,7 @@ package org.osmf.composition
 			
 			// When the current child stops playing, the next child does not
 			// automatically play.  When the TimeTrait is present, the
-			// durationReached event is what's used to trigger playback of
+			// complete event is what's used to trigger playback of
 			// the next child.
 			playTrait1.stop();
 			playTrait = serial.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -464,7 +464,7 @@ package org.osmf.composition
 			serial.addChild(mediaElement4);
 
 			var timeTrait:TimeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
-			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, onDurationReached);
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 			
 			// Play the first child.  This should cause the composition to be
 			// playing.
@@ -505,7 +505,7 @@ package org.osmf.composition
 			assertTrue(playTrait3.playState == PlayState.PLAYING);
 			assertTrue(playTrait4.playState == PlayState.STOPPED);
 			
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			
 			// When the third child reaches its duration, the next child
 			// should be playing.
@@ -517,7 +517,7 @@ package org.osmf.composition
 			assertTrue(playTrait3.playState == PlayState.STOPPED);
 			assertTrue(playTrait4.playState == PlayState.PLAYING);
 			
-			assertTrue(durationReachedEventCount == 0);
+			assertTrue(completeEventCount == 0);
 			
 			// When the fourth child reaches its duration, we should receive
 			// the duration reached event.
@@ -529,7 +529,7 @@ package org.osmf.composition
 			assertTrue(playTrait3.playState == PlayState.STOPPED);
 			assertTrue(playTrait4.playState == PlayState.STOPPED);
 			
-			assertTrue(durationReachedEventCount == 1);
+			assertTrue(completeEventCount == 1);
 		}
 		
 		private function onPlayStateChanged(event:PlayEvent):void
@@ -542,13 +542,13 @@ package org.osmf.composition
 			canPauseChangedEventCount++;
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
-			durationReachedEventCount++;
+			completeEventCount++;
 		}
 
 		private var playStateChangedEventCount:int = 0;
 		private var canPauseChangedEventCount:int = 0;
-		private var durationReachedEventCount:int = 0;
+		private var completeEventCount:int = 0;
 	}
 }

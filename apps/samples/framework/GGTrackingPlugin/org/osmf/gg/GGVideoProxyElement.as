@@ -127,7 +127,7 @@ package org.osmf.gg
 			}
 		}
 		
-		override protected function processDurationReached():void
+		override protected function processComplete():void
 		{
 			sendEvent(STOP, currentTime);
 		}

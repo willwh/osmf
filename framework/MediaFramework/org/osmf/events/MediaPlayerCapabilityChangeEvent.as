@@ -29,46 +29,46 @@ package org.osmf.events
 	public class MediaPlayerCapabilityChangeEvent extends Event
 	{
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.PLAYABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a playableChange
+		 * The MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE constant defines
+		 * the value of the type property of the event object for a canPlayChange
 		 * event.
 		 * 
-		 * @eventType playableChange 
+		 * @eventType canPlayChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PLAYABLE_CHANGE:String = "playableChange";
+		public static const CAN_PLAY_CHANGE:String = "canPlayChange";
 
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.PAUSABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a pausableChange
+		 * The MediaPlayerCapabilityChangeEvent.CAN_PAUSE_CHANGE constant defines
+		 * the value of the type property of the event object for a canPauseChange
 		 * event.
 		 * 
-		 * @eventType pausableChange 
+		 * @eventType canPauseChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PAUSABLE_CHANGE:String = "pausableChange";
+		public static const CAN_PAUSE_CHANGE:String = "canPauseChange";
 		
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.SEEKABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a seekableChange
+		 * The MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE constant defines
+		 * the value of the type property of the event object for a canSeekChange
 		 * event.
 		 * 
-		 * @eventType seekableChange 
+		 * @eventType canSeekChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const SEEKABLE_CHANGE:String = "seekableChange";
+		public static const CAN_SEEK_CHANGE:String = "canSeekChange";
 	
 		/**
 		 * The MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE constant defines
@@ -85,103 +85,61 @@ package org.osmf.events
 		public static const TEMPORAL_CHANGE:String = "temporalChange";
 	
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.AUDIBLE_CHANGE constant defines
-		 * the value of the type property of the event object for a audibleChange
+		 * The MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE constant defines
+		 * the value of the type property of the event object for a hasAudioChange
 		 * event.
 		 * 
-		 * @eventType audibleChange 
+		 * @eventType hasAudioChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const AUDIBLE_CHANGE:String = "audibleChange";
-	
-		/**
-		 * The MediaPlayerCapabilityChangeEvent.VIEWABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a viewableChange
-		 * event.
-		 * 
-		 * @eventType viewableChange 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const VIEWABLE_CHANGE:String = "viewableChange";
-	
-		/**
-		 * The MediaPlayerCapabilityChangeEvent.SWITCHABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a switchableChange
-		 * event.
-		 * 
-		 * @eventType switchableChange 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const SWITCHABLE_CHANGE:String = "switchableChange";
-	
-		/**
-		 * The MediaPlayerCapabilityChangeEvent.SPATIAL_CHANGE constant defines
-		 * the value of the type property of the event object for a spatialChange
-		 * event.
-		 * 
-		 * @eventType spatialChange 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const SPATIAL_CHANGE:String = "spatialChange";
+		public static const HAS_AUDIO_CHANGE:String = "hasAudioChange";
 		
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.LOADABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a loadableChange
+		 * The MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE constant defines
+		 * the value of the type property of the event object for a isDynamicStreamChange
 		 * event.
 		 * 
-		 * @eventType loadableChange 
+		 * @eventType isDynamicStreamChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const LOADABLE_CHANGE:String = "loadableChange";
+		public static const IS_DYNAMIC_STREAM_CHANGE:String = "isDynamicStreamChange";
+			
+		/**
+		 * The MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE constant defines
+		 * the value of the type property of the event object for a canLoadChange
+		 * event.
+		 * 
+		 * @eventType canLoadChange 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const CAN_LOAD_CHANGE:String = "canLoadChange";
 		
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.BUFFERABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a bufferableChange
+		 * The MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE constant defines
+		 * the value of the type property of the event object for a canBufferChange
 		 * event.
 		 * 
-		 * @eventType bufferableChange 
+		 * @eventType canBufferChange 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const BUFFERABLE_CHANGE:String = "bufferableChange";
+		public static const CAN_BUFFER_CHANGE:String = "canBufferChange";
 						
-		/**
-		 * The MediaPlayerCapabilityChangeEvent.DOWNLOADABLE_CHANGE constant defines
-		 * the value of the type property of the event object for a downloadableChange
-		 * event.
-		 * 
-		 * @eventType downloadableChange 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const DOWNLOADABLE_CHANGE:String = "downloadableChange";
-
 		/**
 		 * Constructor.
 		 * 

@@ -115,7 +115,7 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 **/
-		override protected function processDurationReached():void
+		override protected function processComplete():void
 		{
 			playheadTimer.stop();
 			

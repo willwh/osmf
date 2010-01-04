@@ -299,7 +299,7 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.seekable)
+   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
    					{
    						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
    					}
@@ -455,7 +455,7 @@
 					playBtn.label = "Play";
 					mediaPlayerWrapper.mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.playable)
+				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
 					mediaPlayerWrapper.mediaPlayer.play();

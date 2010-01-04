@@ -371,10 +371,10 @@
 			<mx:Button label="Load Media Resource" click="{loadItem(mediaInput.text)}"/>
 
 			<mx:Button label="Play" click="{wrapper.mediaPlayer.play()}"
-				enabled="{wrapper.mediaPlayer.playable}" />
+				enabled="{wrapper.mediaPlayer.canPlay}" />
 				
 			<mx:Button label="Pause" click="{wrapper.mediaPlayer.pause()}"
-				enabled="{wrapper.mediaPlayer.playable}"  />
+				enabled="{wrapper.mediaPlayer.canPlay}"  />
 			
 		</mx:HBox>	
 		

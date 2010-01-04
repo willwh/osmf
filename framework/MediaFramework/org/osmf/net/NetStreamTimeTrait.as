@@ -98,9 +98,9 @@ package org.osmf.net
 			switch(event.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
-					// For streaming, NetStream.Play.Complete means the duration
-					// was reached.  But this isn't fired for progressive.
-					signalDurationReached();
+					// For streaming, NetStream.Play.Complete means playback
+					// has completed.  But this isn't fired for progressive.
+					signalComplete();
 					break;
 			}
 		}
@@ -110,11 +110,11 @@ package org.osmf.net
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
-					// For progressive,	NetStream.Play.Stop means the duration
-					// was reached.  But this isn't fired for streaming.
+					// For progressive,	NetStream.Play.Stop means playback
+					// has completed.  But this isn't fired for streaming.
 					if (NetStreamUtils.isRTMPResource(resource) == false)
 					{
-						signalDurationReached();
+						signalComplete();
 					}
 					break;
 			}

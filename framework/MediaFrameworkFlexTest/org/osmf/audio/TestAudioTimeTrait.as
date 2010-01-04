@@ -63,10 +63,10 @@ package org.osmf.audio
 			soundAdapter.soundTransform.volume = 0;
 			soundAdapter.play();
 			
-			timeTrait.addEventListener(TimeEvent.DURATION_REACHED, addAsync(onDurationReached, 7000));			
+			timeTrait.addEventListener(TimeEvent.COMPLETE, addAsync(onComplete, 7000));			
 		}
 		
-		private function onDurationReached(event:TimeEvent):void
+		private function onComplete(event:TimeEvent):void
 		{
 			assertEquals(timeTrait.currentTime, timeTrait.duration);
 			assertTrue(timeTrait.currentTime >= EXPECTED_DURATION);		

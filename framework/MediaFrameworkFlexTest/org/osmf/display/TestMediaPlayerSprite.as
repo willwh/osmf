@@ -34,15 +34,15 @@ package org.osmf.display
 		public function testMediaPlayer():void
 		{
 			var player:MediaPlayerSprite = new MediaPlayerSprite();
-			var element:DynamicMediaElement = new DynamicMediaElement();
+			var media:DynamicMediaElement = new DynamicMediaElement();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(new Sprite(), 150, 150);
 						
 			Sprite(displayObjectTrait.displayObject).graphics.beginFill(0);
 			Sprite(displayObjectTrait.displayObject).graphics.drawRect(0,0,150,150);
 			
-			player.element = element;
+			player.media = media;
 			
-			element.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
+			media.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			player.scaleMode = ScaleMode.NONE;
 			
@@ -61,9 +61,9 @@ package org.osmf.display
 			player.scaleMode = ScaleMode.NONE;
 						
 			// Sanity checks
-			player.element = null;
+			player.media = null;
 			player.setAvailableSize(0,0);
-			assertNull(player.element);
+			assertNull(player.media);
 			assertEquals(player.width, player.height, 0);
 		}
 	}
