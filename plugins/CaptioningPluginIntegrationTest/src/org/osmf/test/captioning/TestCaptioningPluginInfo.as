@@ -6,13 +6,13 @@ package org.osmf.test.captioning
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.media.MediaInfo;
-	import org.osmf.plugin.IPluginInfo;
+	import org.osmf.plugin.PluginInfo;
 
 	public class TestCaptioningPluginInfo extends TestCase
 	{
 		public function testGetMediaInfoAt():void
 		{
-			var pluginInfo:IPluginInfo = new CaptioningPluginInfo();
+			var pluginInfo:PluginInfo = new CaptioningPluginInfo();
 			
 			assertNotNull(pluginInfo);
 			
@@ -23,7 +23,7 @@ package org.osmf.test.captioning
 		
 		public function testGetMediaInfoAtWithBadIndex():void
 		{
-			var pluginInfo:IPluginInfo = new CaptioningPluginInfo();
+			var pluginInfo:PluginInfo = new CaptioningPluginInfo();
 			
 			assertNotNull(pluginInfo);
 
@@ -39,7 +39,7 @@ package org.osmf.test.captioning
 		
 		public function testIsFrameworkVersionSupported():void
 		{
-			var pluginInfo:IPluginInfo = new CaptioningPluginInfo();
+			var pluginInfo:PluginInfo = new CaptioningPluginInfo();
 			assertNotNull(pluginInfo);
 			
 			// Framework version 0.7.0 is the minimum this plugin supports.
@@ -58,7 +58,7 @@ package org.osmf.test.captioning
 		
 		public function testNumMediaInfos():void
 		{
-			var pluginInfo:IPluginInfo = new CaptioningPluginInfo();
+			var pluginInfo:PluginInfo = new CaptioningPluginInfo();
 			assertNotNull(pluginInfo);
 
 			assertTrue(pluginInfo.numMediaInfos > 0);			
