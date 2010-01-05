@@ -25,10 +25,10 @@ package org.osmf.proxies
 	
 	import flash.events.Event;
 	
+	import org.osmf.containers.IMediaContainer;
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.containers.IMediaContainer;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
@@ -103,12 +103,21 @@ package org.osmf.proxies
 		 **/
 		public function set wrappedElement(value:MediaElement):void
 		{
+			var traitType:String;
+			
 			if (value != _wrappedElement)
 			{
 				if (_wrappedElement != null)
 				{
 					// Clear the listeners for the old wrapped element.
 					toggleMediaElementListeners(_wrappedElement, false);
+
+					// The wrapped element is changing, signal trait removal
+					// for all traits.
+					for each (traitType in _wrappedElement.traitTypes)
+					{
+						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
+					}
 					
 					// All traits that were overridden on the proxy must be
 					// removed.
@@ -129,6 +138,13 @@ package org.osmf.proxies
 					// setupTraits prevents a call to the base class.)
 					setupOverriddenTraits();
 					
+					// The wrapped element has changed, signal trait addition
+					// for all traits.
+					for each (traitType in _wrappedElement.traitTypes)
+					{
+						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
+					}
+
 					// Forward our gateway (if any) to the wrapped element:
 					_wrappedElement.gateway = outerGateway;
 				}

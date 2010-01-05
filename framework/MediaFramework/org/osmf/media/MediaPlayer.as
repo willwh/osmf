@@ -1379,11 +1379,15 @@ package org.osmf.media
 					_hasDisplayObject = add;
 					if (add)
 					{
-						var displayObject:DisplayObject = DisplayObjectTrait(_media.getTrait(MediaTraitType.DISPLAY_OBJECT)).displayObject;
-						if (displayObject != null)
+						// Force the dispatch of the DisplayObject events, so that clients
+						// will be notified.  This is particularly important when a MediaElement
+						// removes a DisplayObjectTrait and then re-adds it.
+						var displayObjectTrait:DisplayObjectTrait = _media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+						if (displayObjectTrait.displayObject != null)
 						{
-							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject));
+							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObjectTrait.displayObject));
 						}
+						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, NaN, NaN, displayObjectTrait.mediaWidth, displayObjectTrait.mediaHeight));
 					}				
 					break;	
 				case MediaTraitType.LOAD:					

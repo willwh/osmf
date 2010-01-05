@@ -23,8 +23,9 @@ package org.osmf.proxies
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
@@ -36,6 +37,14 @@ package org.osmf.proxies
 
 	public class TestProxyElement extends TestMediaElement
 	{
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			traitsAddedCount = 0;
+			traitsRemovedCount = 0;
+		}
+		
 		public function testConstructor():void
 		{
 			// No exception here.
@@ -72,19 +81,29 @@ package org.osmf.proxies
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY) == false);
 			
 			// Setting a new wrapped element is possible.  Doing so should
-			// cause the proxy's traits to change.
+			// cause the proxy's traits to change, and for some events to
+			// fire.
 			//
+			
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
 			var wrappedElement2:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 			
+			assertTrue(traitsAddedCount == 0);
+			assertTrue(traitsRemovedCount == 0);
+			
 			proxyElement.wrappedElement = wrappedElement2;
 			
 			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME) == false);
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
 			
+			assertTrue(traitsAddedCount == 2);
+			assertTrue(traitsRemovedCount == 2);
+
 			// Clearing the wrapped element is also possible.  This should
 			// clear out the traits, and make many operations invalid.
 			//
@@ -94,6 +113,9 @@ package org.osmf.proxies
 			assertTrue(proxyElement.wrappedElement == null);
 
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
+
+			assertTrue(traitsAddedCount == 2);
+			assertTrue(traitsRemovedCount == 4);
 		}
 		
 		override public function testGateway():void
@@ -165,5 +187,21 @@ package org.osmf.proxies
 		{
 			return [];
 		}
+		
+		// Internals
+		//
+		
+		private function onTraitAdd(event:MediaElementEvent):void
+		{
+			traitsAddedCount++;
+		}
+
+		private function onTraitRemove(event:MediaElementEvent):void
+		{
+			traitsRemovedCount++;
+		}
+		
+		private var traitsAddedCount:int;
+		private var traitsRemovedCount:int;
 	}
 }

@@ -33,10 +33,10 @@ package org.osmf.examples
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
-
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
+	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.image.ImageElement;
@@ -44,9 +44,7 @@ package org.osmf.examples
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.layout.RelativeLayoutFacet;
 	import org.osmf.manifest.F4MLoader;
-	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -54,8 +52,6 @@ package org.osmf.examples
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.plugin.PluginInfoResource;
-	import org.osmf.plugin.PluginManager;
 	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.swf.SWFElement;
@@ -525,6 +521,19 @@ package org.osmf.examples
 					,	function():MediaElement
 				  	   	{
 				  	  		return new UnseekableProxyElement(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Switching ProxyElement (Two Videos)"
+					, 	"Demonstrates the use of a custom ProxyElement to provide a means to seamlessly switch between two MediaElements.  In this case, we switch from one video to another every five seconds."
+					,	function():MediaElement
+				  	   	{
+				  	   		var firstElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+				  	   		var secondElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_PROGRESSIVE)));
+				  	  		return new SwitchingProxyElement(firstElement, secondElement, 5, 10);
 				  	   	}
 				  	)
 				);
