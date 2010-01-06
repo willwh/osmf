@@ -25,6 +25,7 @@ package org.osmf.display
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	
@@ -62,7 +63,7 @@ package org.osmf.display
 				_element = value;	
 				if (_element != null)
 				{
-					LayoutUtils.setLayoutAttributes(_element.metadata, 	_scaleMode);
+					LayoutUtils.setLayoutAttributes(_element.metadata, 	_scaleMode, RegistrationPoint.CENTER);
 					LayoutUtils.setRelativeLayout(_element.metadata, 100, 100);
 					_element.gateway = _containerSprite;
 				}
@@ -124,7 +125,7 @@ package org.osmf.display
 				_scaleMode = value;
 				if (_element != null)
 				{
-					LayoutUtils.setLayoutAttributes(_element.metadata, value);
+					LayoutUtils.setLayoutAttributes(_element.metadata, value, RegistrationPoint.CENTER);
 					_containerSprite.validateContentNow();
 				}
 			}
