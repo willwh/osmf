@@ -268,8 +268,6 @@ package org.osmf
 			addTestSuite(TestRelativeLayoutFacet);
 			addTestSuite(TestLayoutUtils);
 
-		 	addTestSuite(TestMediaElementSprite);
-			addTestSuite(TestScalableSprite);
 			addTestSuite(TestMediaPlayerSprite);
 			
 			// Containers

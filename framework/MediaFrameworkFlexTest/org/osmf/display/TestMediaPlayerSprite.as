@@ -40,13 +40,14 @@ package org.osmf.display
 			Sprite(displayObjectTrait.displayObject).graphics.beginFill(0);
 			Sprite(displayObjectTrait.displayObject).graphics.drawRect(0,0,150,150);
 			
-			player.media = media;
+			player.element = media;
 			
 			media.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			player.scaleMode = ScaleMode.NONE;
 			
-			player.setAvailableSize(300, 300);
+			player.width = 300;
+			player.height = 300;
 			
 			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 150);
 			
@@ -54,16 +55,18 @@ package org.osmf.display
 			
 			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 300);
 						
-			player.setAvailableSize(500, 500);
+			player.width = 500;
+			player.height = 500;
 			
 			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 500);
 			
 			player.scaleMode = ScaleMode.NONE;
 						
 			// Sanity checks
-			player.media = null;
-			player.setAvailableSize(0,0);
-			assertNull(player.media);
+			player.element = null;
+			player.width = 0;
+			player.height = 0;
+			assertNull(player.element);
 			assertEquals(player.width, player.height, 0);
 		}
 	}

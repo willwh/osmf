@@ -21,17 +21,18 @@
 *****************************************************/
 package org.osmf.display
 {
-	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.events.DisplayObjectEvent;
+	import flash.display.Sprite;
+	
+	import org.osmf.containers.MediaContainer;
+	import org.osmf.layout.LayoutUtils;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	
 	/**
-	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a DisplayObjectTrait to be placed
-	 * on the display list. It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well
-	 * as the creation of a <code>MediaPlayer</code> controller class.
+	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a ViewTrait to be placed on the display list.  
+	 * It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well as the creation of a <code>MediaPlayer</code> controller class.
 	 **/
-	public class MediaPlayerSprite extends ScalableSprite
+	public class MediaPlayerSprite extends Sprite
 	{	
 		/**
 		 * Constructs a <code>MediaPlayerSprite</code>  
@@ -40,30 +41,44 @@ package org.osmf.display
 		public function MediaPlayerSprite(player:MediaPlayer = null)
 		{
 			super();	
-			mediaPlayer = player ? player : new MediaPlayer(); 					
+			mediaPlayer = player ? player : new MediaPlayer(); 		
+			_containerSprite = new MediaContainer();
+			addChild(_containerSprite);			
 		}	
 		
  		/**
-		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code>. Setting the media will set
-         * as the media on the mediaPlayer, if mediaPlayer is not null.
+		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  Setting the element will set
+         * as the element on the mediaPlayer, if mediaPlayer is not null.
 		 */
-		public function set media(value:MediaElement):void
+		public function set element(value:MediaElement):void
 		{
-			if (_player)
+			
+			if (_element != value)
 			{
-				_player.media = value;
+				if (_element != null)
+				{
+					_element.gateway = null;
+				}		
+				_element = value;	
+				if (_element != null)
+				{
+					LayoutUtils.setLayoutAttributes(_element.metadata, 	_scaleMode);
+					LayoutUtils.setRelativeLayout(_element.metadata, 100, 100);
+					_element.gateway = _containerSprite;
+				}
+				_player.media = _element;
+				
 			}
 		}
 		
-		public function get media():MediaElement
+		public function get element():MediaElement
 		{			
-			return _player ? _player.media : null;
+			return _element;
 		}
 		
 		/**
-		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.
-		 * The player needs to have it's element set either on the MediaPlayer or on this object (see element)
-		 * after this property is set.
+		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's element set either 
+		 * on the MediaPlayer or on this object (see element) after this property is set.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -72,46 +87,95 @@ package org.osmf.display
 		 */ 
 		public function set mediaPlayer(value:MediaPlayer):void
 		{
-			if (_player != null)
+			if (_player != value)
 			{
-				_player.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
-				_player.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
-				displayObject = null;
+				_player = value;
+				_player.media = _element;
 			}
-			_player = value;
-			if (_player != null)
-			{
-				_player.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onView);	
-				_player.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSize);	
-				displayObject = _player.displayObject;		
-				setIntrinsicSize(_player.mediaWidth, _player.mediaHeight);
-			}
+			
 		}		
 		 
 		public function get mediaPlayer():MediaPlayer
 		{
 			return _player;
-		}				
-						
-		private function onView(event:DisplayObjectEvent):void
-		{	
-			displayObject = event.newDisplayObject;				
 		}
 		
-		private function onMediaSize(event:DisplayObjectEvent):void
-		{
-			setIntrinsicSize(event.newWidth, event.newHeight);
-		}
-		
+								
 		/**
-		 * The player class that exposes most of the MediaElement's interface, such as the viewable and dimensional 
-		 * properties.
+		 * The <code>scaleMode</code> property describes different ways of laying out the media content within a this sprite.
+		 * <code>scaleMode</code> can be set to <code>none</code>, <code>straetch</code>, <code>letterbox</code> or <code>zoom</code>.
+		 * <code>MediaElementSprite</code> uses the value to calculate the layout.  The default scale mode is LETTERBOX.
+		 * @see org.osmf.display.ScaleMode for usage examples.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 */ 			
+		public function get scaleMode():String
+		{
+			return _scaleMode;
+		}
+		
+		public function set scaleMode(value:String):void
+		{
+			if(_scaleMode != value)
+			{				
+				_scaleMode = value;
+				if (_element != null)
+				{
+					LayoutUtils.setLayoutAttributes(_element.metadata, value);
+					_containerSprite.validateContentNow();
+				}
+			}
+		}					
+		
+		/**
+		 * @private
 		 */ 
+		override public function set width(value:Number):void
+		{
+			_containerSprite.width = value;
+			if (_element != null)
+			{
+				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, value, height);
+				_containerSprite.validateContentNow();
+			}
+		}
+				
+		/**
+		 * @private
+		 */ 
+		override public function get width():Number
+		{					
+			return _containerSprite.width;
+		}
+		
+		/**
+		 * @private
+		 */ 
+		override public function set height(value:Number):void
+		{
+			_containerSprite.height = value;
+			if (_element != null)
+			{
+				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, width, value);
+				_containerSprite.validateContentNow();
+			}
+		}
+				
+		/**
+		 * @private
+		 */ 
+		override public function get height():Number
+		{					
+			return _containerSprite.height;
+		}
+						
+		private var _scaleMode:String = ScaleMode.LETTERBOX;
+		private var _element:MediaElement;
+		private var _containerSprite:MediaContainer;
 		private var _player:MediaPlayer;
+		
 	}
 }
