@@ -136,7 +136,7 @@ package
 			
 			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 			
-			sprite.media = mediaElement;
+			sprite.element = mediaElement;
 		}
 		
 		private function createVideoElement():MediaElement
