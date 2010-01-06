@@ -310,7 +310,7 @@ package org.osmf.net
 		{
 			CONFIG::LOGGING
 			{
-				logger.info("NetConnection attempt failed (" + mediaError.errorCode + "): " + mediaError.detail);
+				logger.info("NetConnection attempt failed (" + mediaError.errorID + "): " + mediaError.message);
 			}
 			shutDownUnsuccessfulConnections();
 			dispatchEvent
