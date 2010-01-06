@@ -39,13 +39,17 @@ package com.adobe.strobe.players
 		//
 		
 		public function set element(value:MediaElement):void
-		{
-			mediaPlayer.media = value;
+		{			
+			if (value != _playerSprite.element)
+			{
+				_playerSprite.element = value;
+				invalidateDisplayList();
+			}
 		}
 		
 		public function get element():MediaElement
 		{
-			return mediaPlayer.media;
+			return _playerSprite.element;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]
@@ -63,9 +67,7 @@ package com.adobe.strobe.players
 		{
 			return _playerSprite.scaleMode;
 		}
-		
-		
-		
+				
 		// Overrides
 		//
 		
@@ -77,45 +79,18 @@ package com.adobe.strobe.players
 		
 		override protected function createChildren():void
 		{
-			super.createChildren();
-			
-			_playerSprite = new MediaPlayerSprite();				
-			addChild(_playerSprite);
-			
+			super.createChildren();						
+			addChild(_playerSprite);			
 			dispatchEvent(new Event("mediaPlayerChange"));
 		}
 			
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{	
-			super.updateDisplayList(w,h);
-			
+			super.updateDisplayList(w,h);			
 			_playerSprite.width = w;
 			_playerSprite.height = h;
 		}
-				
-		// Internals
-		//
-													
-		private function onView(event:DisplayObjectEvent):void
-		{
-			if (event.oldDisplayObject)
-			{
-				removeChild(event.oldDisplayObject);
-			}
-			
-			if (event.newDisplayObject)
-			{				
-				addChild(mediaPlayer.displayObject);
-			}
-			
-			invalidateDisplayList();			
-		}
-				
-		private function redispatch(event:Event):void
-		{
-			dispatchEvent(event.clone());
-		}
 					
-		private var _playerSprite:MediaPlayerSprite;
+		private var _playerSprite:MediaPlayerSprite = new MediaPlayerSprite();
 	}
 }
