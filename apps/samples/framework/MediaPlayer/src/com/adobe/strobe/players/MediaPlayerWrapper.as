@@ -89,7 +89,8 @@ package com.adobe.strobe.players
 		{	
 			super.updateDisplayList(w,h);
 			
-			_playerSprite.setAvailableSize(w,h);
+			_playerSprite.width = w;
+			_playerSprite.height = h;
 		}
 				
 		// Internals
