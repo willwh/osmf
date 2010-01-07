@@ -133,7 +133,7 @@ package org.osmf.net
 					// Fired when streaming connections buffer, but also when
 					// progressive connections finish.  In the latter case, we
 					// halt playback.
-					if (urlResource != null && NetStreamUtils.isRTMPStream(urlResource.url) == false) 
+					if (urlResource != null && NetStreamUtils.isStreamingResource(urlResource) == false) 
 					{
 						// Explicitly stop to prevent the stream from restarting on seek();
 						stop();

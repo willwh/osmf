@@ -73,9 +73,9 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Returns true if the given resource represents an RTMP resource, false otherwise.
+		 * Returns true if the given resource represents a streaming resource, false otherwise.
 		 **/
-		public static function isRTMPResource(resource:IMediaResource):Boolean
+		public static function isStreamingResource(resource:IMediaResource):Boolean
 		{
 			var result:Boolean = false;
 			
@@ -85,14 +85,6 @@ package org.osmf.net
 				if (urlResource != null)
 				{
 					result = NetStreamUtils.isRTMPStream(urlResource.url);
-				}
-				else
-				{
-					var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-					if (dsResource != null)
-					{
-						result = NetStreamUtils.isRTMPStream(dsResource.host);
-					}
 				}
 			}
 			
@@ -125,7 +117,9 @@ package org.osmf.net
 		 */
 		public static function getStreamType(resource:IMediaResource):String
 		{
-			var streamType:String = null;
+			// Default to ANY.
+			var streamType:String = StreamType.ANY;
+			
 			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 

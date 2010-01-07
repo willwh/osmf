@@ -112,7 +112,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					// For progressive,	NetStream.Play.Stop means playback
 					// has completed.  But this isn't fired for streaming.
-					if (NetStreamUtils.isRTMPResource(resource) == false)
+					if (NetStreamUtils.isStreamingResource(resource) == false)
 					{
 						signalComplete();
 					}

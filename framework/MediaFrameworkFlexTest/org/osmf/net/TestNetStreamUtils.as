@@ -34,6 +34,21 @@ package org.osmf.net
 	
 	public class TestNetStreamUtils extends TestCase
 	{
+		public function testGetStreamType():void
+		{
+			assertTrue(NetStreamUtils.getStreamType(null) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new NullResource()) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new URLResource(new URL("rtmp://example.com"))) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource(new URL("rtmp://example.com"))) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource(new URL("rtmp://example.com"), StreamType.ANY)) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource(new URL("rtmp://example.com"), StreamType.LIVE)) == StreamType.LIVE);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource(new URL("rtmp://example.com"), StreamType.RECORDED)) == StreamType.RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"))) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.ANY)) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.LIVE)) == StreamType.LIVE);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.RECORDED)) == StreamType.RECORDED);
+		}
+		
 		public function testGetStreamNameFromURL():void
 		{
 			assertTrue(NetStreamUtils.getStreamNameFromURL(null) == "");
@@ -62,29 +77,29 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.isRTMPStream(new URL("rtmps://example.com")) == true);
 		}
 
-		public function testIsRTMPResource():void
+		public function testIsStreamingResource():void
 		{
-			assertTrue(NetStreamUtils.isRTMPResource(null) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new NullResource()) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL(""))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("http://example.com"))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmfp://example.com"))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmp"))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL(""))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("http://example.com"))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmfp://example.com"))) == false);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmp"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(null) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new NullResource()) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL(""))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("http://example.com"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmfp://example.com"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmp"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL(""))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("http://example.com"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmfp://example.com"))) == false);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmp"))) == false);
 
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmp://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpe://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpt://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmpte://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new URLResource(new URL("rtmps://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmp://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpe://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpt://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmpte://example.com"))) == true);
-			assertTrue(NetStreamUtils.isRTMPResource(new DynamicStreamingResource(new URL("rtmps://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmp://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmpe://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmpt://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmpte://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new URLResource(new URL("rtmps://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmp://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmpe://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmpt://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmpte://example.com"))) == true);
+			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmps://example.com"))) == true);
 		}
 		
 		public function testGetPlayArgsForResource():void
