@@ -59,7 +59,6 @@ package org.osmf.net.dynamicstreaming
 		{
 			super(host, streamType);
 			
-			_streamType = streamType || StreamType.ANY;
 			_initialIndex = 0;
 		}
 		
@@ -176,7 +175,6 @@ package org.osmf.net.dynamicstreaming
 			return result;
 		}
 
-		private var _streamType:String; // StreamType
 		private var _metadata:Metadata;
 
 		private var _streamItems:Vector.<DynamicStreamingItem>;
