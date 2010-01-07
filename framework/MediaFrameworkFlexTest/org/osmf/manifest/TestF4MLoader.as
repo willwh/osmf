@@ -66,7 +66,7 @@ package org.osmf.manifest
 			
 			var loader:F4MLoader = new F4MLoader();
 			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource(new URL("http://example.com/notValid.f4m")));
-			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 3000));
+			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 10000));
 			
 			var errorThrown:Boolean = false;
 			var errorThrownLoader:Boolean = false;
