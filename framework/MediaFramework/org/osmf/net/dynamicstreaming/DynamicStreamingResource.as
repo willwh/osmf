@@ -25,7 +25,7 @@ package org.osmf.net.dynamicstreaming
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.URLResource;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;
@@ -42,7 +42,7 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class DynamicStreamingResource extends URLResource
+	public class DynamicStreamingResource extends StreamingURLResource
 	{
 		/**
 		 * Constructor.
@@ -57,7 +57,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		public function DynamicStreamingResource(host:URL, streamType:String=null)
 		{
-			super(host);
+			super(host, streamType);
 			
 			_streamType = streamType || StreamType.ANY;
 			_initialIndex = 0;
@@ -74,14 +74,6 @@ package org.osmf.net.dynamicstreaming
 		public function get host():URL
 		{
 			return url;
-		}
-		
-		/**
-		 * The StreamType for this resource.
-		 **/
-		public function get streamType():String
-		{
-			return _streamType;
 		}
 		
 		/**

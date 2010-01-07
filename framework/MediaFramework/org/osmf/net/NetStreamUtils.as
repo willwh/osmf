@@ -121,15 +121,10 @@ package org.osmf.net
 			var streamType:String = StreamType.ANY;
 			
 			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 
 			if (streamingURLResource != null)
 			{
 				streamType = streamingURLResource.streamType;
-			}
-			else if (dsResource != null)
-			{
-				streamType = dsResource.streamType;
 			}
 
 			return streamType;
