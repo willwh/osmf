@@ -221,6 +221,7 @@
 <classEntry path="org.osmf.utils.Base64Decoder"/>
 <classEntry path="org.osmf.utils.BinarySearch"/>
 <classEntry path="org.osmf.utils.DateUtil"/>
+<classEntry path="org.osmf.utils.TimeUtil"/>
 <classEntry path="org.osmf.utils.FMSHost"/>
 <classEntry path="org.osmf.utils.FMSURL"/>
 <classEntry path="org.osmf.utils.HTTPLoadedContext"/>
