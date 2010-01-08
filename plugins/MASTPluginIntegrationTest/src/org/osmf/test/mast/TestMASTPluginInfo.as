@@ -1,7 +1,5 @@
 package org.osmf.test.mast
 {
-	import flash.errors.IllegalOperationError;
-	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.mast.MASTPluginInfo;
@@ -32,7 +30,7 @@ package org.osmf.test.mast
 				var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(10);
 				fail();
 			}
-			catch(error:IllegalOperationError)
+			catch(error:RangeError)
 			{
 			}
 		}
@@ -42,13 +40,11 @@ package org.osmf.test.mast
 			var pluginInfo:PluginInfo = new MASTPluginInfo();
 			assertNotNull(pluginInfo);
 			
-			// Framework version 0.9.0 is the minimum this plugin supports.
 			assertEquals(true, pluginInfo.isFrameworkVersionSupported("1.0.0"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.0.1"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.5.1"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.7.0"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.8.0"));
-			assertEquals(true, pluginInfo.isFrameworkVersionSupported("0.9.0"));		
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported("0.4.9"));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported(null));
 			assertEquals(false, pluginInfo.isFrameworkVersionSupported(""));

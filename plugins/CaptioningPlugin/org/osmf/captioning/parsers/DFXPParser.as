@@ -27,6 +27,7 @@ package org.osmf.captioning.parsers
 	import org.osmf.captioning.model.CaptionFormat;
 	import org.osmf.captioning.model.CaptionStyle;
 	import org.osmf.captioning.model.CaptioningDocument;
+	import org.osmf.utils.TimeUtil;
 	CONFIG::LOGGING
 	{
 		import org.osmf.logging.ILogger;
@@ -528,18 +529,18 @@ package org.osmf.captioning.parsers
 			}
 			
 			// Format begin in seconds
-			var beginSecs:Number = formatTime(begin);
+			var beginSecs:Number = TimeUtil.parseTime(begin);
 			
 			var endSecs:Number = 0;
 			
 			// If we found both 'end' and 'dur', ignore 'dur'
 			if (end != "") 
 			{
-				endSecs = formatTime(end);
+				endSecs = TimeUtil.parseTime(end);
 			}
 			else if (dur != "") 
 			{
-				endSecs = beginSecs + formatTime(dur);
+				endSecs = beginSecs + TimeUtil.parseTime(dur);
 			}
 									
 			var captionFormatList:Array = new Array();
@@ -716,58 +717,6 @@ package org.osmf.captioning.parsers
 			return retString;
 		}
 			
-		/**
-		 * Takes a time as a string and returns that time in seconds.
-		 * 
-		 * The following time values are supported:<ul>
-		 * <li>full clock format in "hours:minutes:seconds:fraction" (e.g. 00:03:00:00).</li>
-		 * <li>offset time (e.g. 100.1s or 2m).</li>
-		 * </ul>
-		 * Note: Offset times without units (for example, 10) are assumed to be seconds.
-		 */
-		private function formatTime(time:String):Number 
-		{
-			var _time:Number = 0;
-			var a:Array = time.split(":");
-			
-			if (a.length > 1) 
-			{
-				// clock format,  "hh:mm:ss"
-				_time = a[0] * 3600;
-				_time += a[1] * 60;
-				_time += Number(a[2]);
-			}
-			else 
-			{
-				// offset time format, "1h", "8m", "10s"
-				var mul:int = 0;
-				
-				switch (time.charAt(time.length-1)) 
-				{
-					case 'h':
-						mul = 3600;
-						break;
-					case 'm':
-						mul = 60;
-						break;
-					case 's':
-						mul = 1;
-						break;
-				}
-				
-				if (mul) 
-				{
-					_time = Number(time.substr(0, time.length-1)) * mul;
-				}
-				else 
-				{
-					_time = Number(time);
-				}
-			}
-			
-			return _time;
-		}
-		
 		/**
 		 * Utility method to calculate the length
 		 * of a string non-inclusive of any HTML tags.

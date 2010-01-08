@@ -111,7 +111,7 @@ package org.osmf.test.mast.managers
 			_timer.addEventListener(TimerEvent.TIMER, onTimer);
 			_timer.start();
 			
-			sprite.media = mediaElement;
+			sprite.element = mediaElement;
 		}
 		
 		private function createVideoElement():MediaElement
