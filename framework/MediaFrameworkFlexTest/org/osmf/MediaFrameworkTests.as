@@ -68,6 +68,7 @@ package org.osmf
 			addTestSuite(TestURL);
 			addTestSuite(TestFMSURL);
 			addTestSuite(TestHTTPLoader);
+			addTestSuite(TestTimeUtil);
 
 			// Logging
 			//
@@ -311,7 +312,7 @@ package org.osmf
 			addTestSuite(TestDefaultVASTMediaFileResolver);
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
-			addTestSuite(TestVASTTrackingProxyElement);		
+			addTestSuite(TestVASTTrackingProxyElement);
 		}
 	}
 }
