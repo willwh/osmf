@@ -178,14 +178,6 @@ package org.osmf.containers
 			instanceCounter++;
 		}
 		
-		/**
-		 * Defines the identifier that JavaScript can use to address the container.
-		 */		
-		public function get containerIdentifier():String
-		{
-			return _containerIdentifier;
-		}
-		
 		// Internals
 		//
 		
