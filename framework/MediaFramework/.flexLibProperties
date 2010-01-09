@@ -47,6 +47,7 @@
     <classEntry path="org.osmf.content.ContentLoadTrait"/>
     <classEntry path="org.osmf.content.ContentLoadedContext"/>
     <classEntry path="org.osmf.content.ContentLoader"/>
+    <classEntry path="org.osmf.display.MediaContainerGroup"/>
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.display.ScaleModeUtils"/>
@@ -54,12 +55,12 @@
     <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferEvent"/>
+    <classEntry path="org.osmf.events.ContainerChangeEvent"/>
     <classEntry path="org.osmf.events.ContentProtectionEvent"/>
     <classEntry path="org.osmf.events.DisplayObjectEvent"/>
     <classEntry path="org.osmf.events.DynamicStreamEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
     <classEntry path="org.osmf.events.FacetValueEvent"/>
-    <classEntry path="org.osmf.events.ContainerChangeEvent"/>
     <classEntry path="org.osmf.events.LoadEvent"/>
     <classEntry path="org.osmf.events.LoaderEvent"/>
     <classEntry path="org.osmf.events.MediaElementEvent"/>
@@ -221,12 +222,12 @@
     <classEntry path="org.osmf.utils.Base64Decoder"/>
     <classEntry path="org.osmf.utils.BinarySearch"/>
     <classEntry path="org.osmf.utils.DateUtil"/>
-    <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>
     <classEntry path="org.osmf.utils.HTTPLoadedContext"/>
     <classEntry path="org.osmf.utils.HTTPLoader"/>
     <classEntry path="org.osmf.utils.OSMFStrings"/>
+    <classEntry path="org.osmf.utils.TimeUtil"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.utils.Version"/>
     <classEntry path="org.osmf.video.CuePoint"/>

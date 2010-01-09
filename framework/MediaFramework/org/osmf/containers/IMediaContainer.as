@@ -25,21 +25,21 @@ package org.osmf.containers
 	
 	/**
 	 * Defines the interface of objects within the OSMF that
-	 * act as a gateway to a media object.
+	 * act as a container to a media object.
 	 */	
 	public interface IMediaContainer
 	{
 		/**
-		 * Adds a MediaElement instance to the gateway.
+		 * Adds a MediaElement instance to the container.
 		 * 
 		 * It is mandatory for implementations to dispatch a
 		 * ContainerChangeEvent via the element that is being
 		 * added to the container.
 		 * 
-		 * @param element The MediaElementInstance to add to the gateway.
+		 * @param element The MediaElementInstance to add to the container.
 		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
-		 * or already a child of the gateway.
+		 * or already a child of the container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -49,13 +49,13 @@ package org.osmf.containers
 		function addMediaElement(element:MediaElement):MediaElement
 		
 		/**
-		 * Removes a MediaElement instance from the gateway.
+		 * Removes a MediaElement instance from the container.
 		 * 
 		 * It is mandatory for implementations to dispatch a
 		 * ContainerChangeEvent via the element that is being
 		 * removed from the container.
 		 * 
-		 * @param element The element to remove from the gateway.
+		 * @param element The element to remove from the container.
 		 * @returns The removed MediaElement instance.
 		 * @throws IllegalOperationError if the specified element isn't
 		 * a child element, or is null.
@@ -68,10 +68,10 @@ package org.osmf.containers
 		function removeMediaElement(element:MediaElement):MediaElement;
 		
 		/**
-		 * Verifies if an element is a child of the gateway.
+		 * Verifies if an element is a child of the container.
 		 *  
 		 * @param element Element to verify.
-		 * @return True if the element if a child of the gateway.
+		 * @return True if the element if a child of the container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

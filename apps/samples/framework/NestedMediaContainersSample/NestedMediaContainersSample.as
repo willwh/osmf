@@ -27,8 +27,9 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.containers.MediaContainerGroup;
+	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -85,31 +86,31 @@ package
 			
 			// Consruct a tree of containers:
 
-			var mainContainer:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(mainContainer.metadata, 800, 450);
-			mainContainer.backgroundColor = 0xFFFFFF;
-			mainContainer.backgroundAlpha = .2;
-			addChild(mainContainer);
+			var mainGroup:MediaContainerGroup = new MediaContainerGroup();
+			LayoutUtils.setAbsoluteLayout(mainGroup.metadata, 800, 450);
+			mainGroup.mediaContainer.backgroundColor = 0xFFFFFF;
+			mainGroup.mediaContainer.backgroundAlpha = .2;
+			addChild(mainGroup);
 			
-				var bannerContainer:MediaContainer = new MediaContainer();
-				bannerContainer.backgroundColor = 0xFF;
-				bannerContainer.backgroundAlpha = .2;
-				LayoutUtils.setAnchorLayout(bannerContainer.metadata, 5, 5, 5, NaN);
-				LayoutUtils.setAbsoluteLayout(bannerContainer.metadata, NaN, 60);
-				mainContainer.addChildContainer(bannerContainer);
+				var bannerGroup:MediaContainerGroup = new MediaContainerGroup();
+				bannerGroup.mediaContainer.backgroundColor = 0xFF;
+				bannerGroup.mediaContainer.backgroundAlpha = .2;
+				LayoutUtils.setAnchorLayout(bannerGroup.metadata, 5, 5, 5, NaN);
+				LayoutUtils.setAbsoluteLayout(bannerGroup.metadata, NaN, 60);
+				mainGroup.addChildGroup(bannerGroup);
 				
-				var skyScraperContainer:MediaContainer = new MediaContainer();
-				skyScraperContainer.backgroundColor = 0xFF00;
-				skyScraperContainer.backgroundAlpha = .2;
-				LayoutUtils.setAnchorLayout(skyScraperContainer.metadata, NaN, 5, 5, 5);
-				LayoutUtils.setAbsoluteLayout(skyScraperContainer.metadata, 120, NaN);
-				mainContainer.addChildContainer(skyScraperContainer);
+				var skyScraperGroup:MediaContainerGroup = new MediaContainerGroup();
+				skyScraperGroup.mediaContainer.backgroundColor = 0xFF00;
+				skyScraperGroup.mediaContainer.backgroundAlpha = .2;
+				LayoutUtils.setAnchorLayout(skyScraperGroup.metadata, NaN, 5, 5, 5);
+				LayoutUtils.setAbsoluteLayout(skyScraperGroup.metadata, 120, NaN);
+				mainGroup.addChildGroup(skyScraperGroup);
 				
 			// Bind media elements to their target containers:
 			
-			mainContainer.addMediaElement(mainContent);
-			bannerContainer.addMediaElement(banners);
-			skyScraperContainer.addMediaElement(skyScraper);
+			mainGroup.mediaContainer.addMediaElement(mainContent);
+			bannerGroup.mediaContainer.addMediaElement(banners);
+			skyScraperGroup.mediaContainer.addMediaElement(skyScraper);
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will

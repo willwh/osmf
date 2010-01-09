@@ -126,7 +126,7 @@ package org.osmf.display
 				if (_element != null)
 				{
 					LayoutUtils.setLayoutAttributes(_element.metadata, value, RegistrationPoint.CENTER);
-					_containerSprite.validateContentNow();
+					_containerSprite.validateNow();
 				}
 			}
 		}					
@@ -140,7 +140,7 @@ package org.osmf.display
 			if (_element != null)
 			{
 				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, value, height);
-				_containerSprite.validateContentNow();
+				_containerSprite.validateNow();
 			}
 		}
 				
@@ -161,7 +161,7 @@ package org.osmf.display
 			if (_element != null)
 			{
 				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, width, value);
-				_containerSprite.validateContentNow();
+				_containerSprite.validateNow();
 			}
 		}
 				

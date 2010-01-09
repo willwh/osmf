@@ -31,15 +31,20 @@ package org.osmf.containers
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaContainer extends TestCase
 	{
-		public function testRegionElements():void
+		public function constructContainer():MediaContainer
 		{
-			var parent:MediaContainer = new MediaContainer();
+			return new MediaContainer();
+		}
+		
+		public function testContainerElements():void
+		{
+			var parent:MediaContainer = constructContainer();
 			parent.backgroundColor = 0xff0000;
 			parent.backgroundAlpha = 1;
 			parent.clipChildren = true;
@@ -74,44 +79,7 @@ package org.osmf.containers
 			assertTrue(error is IllegalOperationError);
 		}
 		
-		public function testRegionSubRegions():void
-		{
-			var parent:MediaContainer = new MediaContainer();
-			parent.backgroundColor = 0xff0000;
-			parent.backgroundAlpha = 1;
-			parent.clipChildren = true;
-			
-			var sub1:MediaContainer = new MediaContainer();
-			var sub2:MediaContainer = new MediaContainer();
-			
-			assertNotNull(parent);
-			assertFalse(parent.containsContainer(sub1));
-			assertFalse(parent.containsContainer(sub2));
-			
-			parent.addChildContainer(sub1);
-			assertTrue(parent.containsContainer(sub1));
-			
-			parent.addChildContainer(sub2);
-			assertTrue(parent.containsContainer(sub2));
-			
-			parent.removeChildContainer(sub1);
-			assertFalse(parent.containsContainer(sub1));
-			
-			var error:Error;
-			try
-			{
-				parent.removeChildContainer(sub1);
-			}
-			catch(e:Error)
-			{
-				error = e;
-			}
-			
-			assertNotNull(error);
-			assertTrue(error is IllegalOperationError);
-		}
-		
-		public function testRegionScaleAndAlign():void
+		public function testContainerScaleAndAlign():void
 		{
 			// Child
 			
@@ -125,12 +93,12 @@ package org.osmf.containers
 			
 			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
 
-			var region:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(region.metadata, 800, 80);
+			var container:MediaContainer = constructContainer();
+			LayoutUtils.setAbsoluteLayout(container.metadata, 800, 80);
 			
-			region.addMediaElement(mediaElement);
+			container.addMediaElement(mediaElement);
 			
-			region.validateContentNow();
+			container.validateNow();
 			
 			assertEquals(486, viewSprite.width);
 			assertEquals(60, viewSprite.height);
@@ -139,69 +107,28 @@ package org.osmf.containers
 			assertEquals(80/2 - 60/2, viewSprite.y);
 		}
 		
-		public function testRegionAttributes():void
+		public function testContainerAttributes():void
 		{
-			var region:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(region.metadata, 500, 400);
+			var container:MediaContainer = constructContainer();
+			LayoutUtils.setAbsoluteLayout(container.metadata, 500, 400);
 			
-			assertEquals(NaN,region.backgroundColor);
-			assertEquals(NaN,region.backgroundAlpha);
+			assertEquals(NaN,container.backgroundColor);
+			assertEquals(NaN,container.backgroundAlpha);
 			
-			region.backgroundColor = 0xFF00FF;
-			assertEquals(0xFF00FF, region.backgroundColor);
+			container.backgroundColor = 0xFF00FF;
+			assertEquals(0xFF00FF, container.backgroundColor);
 			
-			region.backgroundAlpha = 0.5;
-			assertEquals(0.5, region.backgroundAlpha);
+			container.backgroundAlpha = 0.5;
+			assertEquals(0.5, container.backgroundAlpha);
 			
-			assertFalse(region.clipChildren);
-			region.clipChildren = true;
-			assertTrue(region.clipChildren);
+			assertFalse(container.clipChildren);
+			container.clipChildren = true;
+			assertTrue(container.clipChildren);
 			
-			assertEquals(500, region.width);
-			assertEquals(400, region.height);
+			assertEquals(500, container.width);
+			assertEquals(400, container.height);
 		}
 		
-		public function testNestedRegions():void
-		{
-			var root:MediaContainer = new MediaContainer();
-			var childA:MediaContainer = new MediaContainer();
-			var childA1:MediaContainer = new MediaContainer();
-			var childA1A:MediaContainer = new MediaContainer();
-			
-			root.addChildContainer(childA);
-			childA.addChildContainer(childA1);
-			childA1.addChildContainer(childA1A);
-			
-			root.layoutRenderer.validateNow();
-			
-			assertEquals(NaN, root.width);
-			assertEquals(NaN, root.height);
-			assertEquals(NaN, root.calculatedWidth);
-			assertEquals(NaN, root.calculatedHeight);
-			assertEquals(NaN, root.projectedWidth);
-			assertEquals(NaN, root.projectedHeight);
-			
-			LayoutUtils.setAbsoluteLayout(childA1A.metadata,400,50);
-			root.layoutRenderer.validateNow();
-			
-			assertEquals(NaN, root.width);
-			assertEquals(NaN, root.height);
-			assertEquals(400, root.calculatedWidth);
-			assertEquals(50, root.calculatedHeight);
-			assertEquals(NaN, root.projectedWidth);
-			assertEquals(NaN, root.projectedHeight);
-			
-			assertEquals(400, childA1A.width);
-			assertEquals(50, childA1A.height);
-			assertEquals(400, childA1A.calculatedWidth);
-			assertEquals(50, childA1A.calculatedHeight);
-			assertEquals(400, childA1A.projectedWidth);
-			assertEquals(50, childA1A.projectedHeight);
-			
-			assertEquals(400, childA1.calculatedWidth);
-			assertEquals(50, childA1.calculatedHeight);
-			
-			
-		}
+		
 	}
 }

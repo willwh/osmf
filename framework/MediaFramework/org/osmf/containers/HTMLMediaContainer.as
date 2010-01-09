@@ -77,7 +77,7 @@ package org.osmf.containers
 			
 			ExternalInterface.call(containerScriptPath + "__addElement__", elementId);
 			
-			// Media containers are under obigation to dispatch a gateway change event when
+			// Media containers are under obligation to dispatch a gateway change event when
 			// they add a media element:
 			child.dispatchEvent
 				( new ContainerChangeEvent
