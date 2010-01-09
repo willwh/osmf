@@ -38,7 +38,7 @@ package org.osmf.containers
 	 */	
 	public class HTMLMediaContainer implements IMediaContainer
 	{
-		// IContainerContainer
+		// IMediaContainerContainer
 		//
 
 		/**

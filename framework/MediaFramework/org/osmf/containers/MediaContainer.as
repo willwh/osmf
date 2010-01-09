@@ -83,7 +83,7 @@ package org.osmf.containers
 			layoutRenderer = this.containersLayoutRenderer; 
 		}
 		
-		// IContainerGateway
+		// IMediaContainerGateway
 		//
 		
 		/**
