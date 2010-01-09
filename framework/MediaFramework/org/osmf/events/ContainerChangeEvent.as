@@ -26,18 +26,18 @@ package org.osmf.events
 	import org.osmf.containers.IMediaContainer;
 
 	/**
-	 * GatewayChangeEvent signals that a reference to an IGateway has changed.
+	 * ContainerChangeEvent signals that a reference to an IContainer has changed.
 	 */	
 	public class ContainerChangeEvent extends Event
 	{
 		/**
-		 * The GatewayChangeEvent.CONTAINER_CHANGE constant defines the value
-		 * of the type property of the event object for a gatewayChange
+		 * The ContainerChangeEvent.CONTAINER_CHANGE constant defines the value
+		 * of the type property of the event object for a containerChange
 		 * event.
 		 * 
 		 * @eventType CONTAINER_CHANGE
 		 **/
-		public static const CONTAINER_CHANGE:String = "gatewayChange";
+		public static const CONTAINER_CHANGE:String = "containerChange";
 		
 		/**
 		 * Constructor
@@ -45,8 +45,8 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param oldValue Old IGateway reference.
-		 * @param newValue New IGateway reference.
+		 * @param oldValue Old IContainer reference.
+		 * @param newValue New IContainer reference.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -62,7 +62,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Defines the old gateway reference.
+		 * Defines the old container reference.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -75,7 +75,7 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Defines the new gateway reference.
+		 * Defines the new container reference.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
