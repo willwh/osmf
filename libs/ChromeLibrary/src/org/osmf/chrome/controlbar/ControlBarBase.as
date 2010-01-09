@@ -28,7 +28,6 @@ package org.osmf.chrome.controlbar
 	import flash.utils.Dictionary;
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
-	import org.osmf.containers.IMediaContainer;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.media.MediaElement;
