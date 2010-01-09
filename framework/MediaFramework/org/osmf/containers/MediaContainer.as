@@ -25,6 +25,7 @@ package org.osmf.containers
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
@@ -112,6 +113,16 @@ package org.osmf.containers
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
+			// Media containers are under obigation to dispatch a gateway change event when
+			// they add a media element:
+			element.dispatchEvent
+				( new GatewayChangeEvent
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, false, false
+					, element.gateway, this
+					)
+				);
+			
 			return element;
 		}
 		
@@ -143,6 +154,16 @@ package org.osmf.containers
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
+			
+			// Media containers are under obigation to dispatch a gateway change event when
+			// they remove a media element:
+			element.dispatchEvent
+				( new GatewayChangeEvent
+					( GatewayChangeEvent.GATEWAY_CHANGE
+					, false, false
+					, element.gateway, null
+					)
+				);
 			
 			return result;
 		}

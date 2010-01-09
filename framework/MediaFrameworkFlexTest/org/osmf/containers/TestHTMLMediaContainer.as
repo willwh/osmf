@@ -44,7 +44,7 @@ package org.osmf.containers
 				*/
 				
 				var element:HTMLElement = new HTMLElement();
-				element.gateway = container;
+				container.addMediaElement(element);
 				
 				assertTrue(container.containsMediaElement(element));
 				

@@ -130,7 +130,7 @@ package org.osmf.proxies
 			assertDispatches
 				( mediaElement
 				, [GatewayChangeEvent.GATEWAY_CHANGE]
-				, function():void{mediaElement.gateway = gatewayA}
+				, function():void{gatewayA.addMediaElement(mediaElement);}
 				);
 				
 			assertEquals(gatewayA, mediaElement.gateway);
@@ -138,7 +138,7 @@ package org.osmf.proxies
 			assertDispatches
 				( mediaElement
 				, [GatewayChangeEvent.GATEWAY_CHANGE]
-				, function():void{mediaElement.gateway = gatewayB}
+				, function():void{gatewayB.addMediaElement(mediaElement);}
 				);
 			
 			assertEquals(gatewayB, mediaElement.gateway);
@@ -146,7 +146,7 @@ package org.osmf.proxies
 			assertDispatches
 				( mediaElement
 				, [GatewayChangeEvent.GATEWAY_CHANGE]
-				, function():void{mediaElement.gateway = null}
+				, function():void{mediaElement.gateway.removeMediaElement(mediaElement);}
 				);
 				
 			assertNull(mediaElement.gateway);

@@ -107,9 +107,9 @@ package
 				
 			// Bind media elements to their target containers:
 			
-			mainContent.gateway = mainContainer;
-			banners.gateway = bannerContainer;
-			skyScraper.gateway = skyScraperContainer;
+			mainContainer.addMediaElement(mainContent);
+			bannerContainer.addMediaElement(banners);
+			skyScraperContainer.addMediaElement(skyScraper);
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will

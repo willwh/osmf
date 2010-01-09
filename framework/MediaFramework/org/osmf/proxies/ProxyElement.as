@@ -146,7 +146,10 @@ package org.osmf.proxies
 					}
 
 					// Forward our gateway (if any) to the wrapped element:
-					_wrappedElement.gateway = outerGateway;
+					if (outerGateway)
+					{
+						outerGateway.addMediaElement(_wrappedElement);
+					}
 				}
 			}
 		}
@@ -229,6 +232,7 @@ package org.osmf.proxies
 			}
 		}
 		
+		/**
 		override public function get gateway():IMediaContainer
 		{
 			return wrappedElement ? wrappedElement.gateway : outerGateway;
@@ -244,7 +248,7 @@ package org.osmf.proxies
 			{		
 				wrappedElement.gateway = value;
 			}
-		}
+		}*/
 		
 		/**
 		 * @private

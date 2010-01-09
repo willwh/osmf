@@ -56,16 +56,16 @@ package org.osmf.display
 			
 			if (_element != value)
 			{
-				if (_element != null)
+				if (_element != null && _element.gateway)
 				{
-					_element.gateway = null;
+					_element.gateway.removeMediaElement(_element);
 				}		
 				_element = value;	
 				if (_element != null)
 				{
 					LayoutUtils.setLayoutAttributes(_element.metadata, 	_scaleMode, RegistrationPoint.CENTER);
 					LayoutUtils.setRelativeLayout(_element.metadata, 100, 100);
-					_element.gateway = _containerSprite;
+					_containerSprite.addMediaElement(_element);
 				}
 				_player.media = _element;
 				

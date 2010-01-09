@@ -32,6 +32,10 @@ package org.osmf.containers
 		/**
 		 * Adds a MediaElement instance to the gateway.
 		 * 
+		 * It is mandatory for implementations to dispatch a
+		 * ContainerChangeEvent via the element that is being
+		 * added to the container.
+		 * 
 		 * @param element The MediaElementInstance to add to the gateway.
 		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
@@ -46,6 +50,10 @@ package org.osmf.containers
 		
 		/**
 		 * Removes a MediaElement instance from the gateway.
+		 * 
+		 * It is mandatory for implementations to dispatch a
+		 * ContainerChangeEvent via the element that is being
+		 * removed from the container.
 		 * 
 		 * @param element The element to remove from the gateway.
 		 * @returns The removed MediaElement instance.

@@ -28,6 +28,7 @@ package org.osmf.media
 	import flash.utils.Dictionary;
 	
 	import org.osmf.containers.IMediaContainer;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.GatewayChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
@@ -109,6 +110,8 @@ package org.osmf.media
 		{	
 			setupTraitResolvers();		
 			setupTraits();
+			
+			addEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange, false, Number.MAX_VALUE);
 		}
 	
 		/**
@@ -204,34 +207,6 @@ package org.osmf.media
 		public function get gateway():IMediaContainer
 		{
 			return _gateway;
-		}
-		
-		public function set gateway(value:IMediaContainer):void
-		{
-			if (_gateway != value)
-			{
-				if (_gateway != null)
-				{
-					_gateway.removeMediaElement(this);
-				}	
-				
-				var event:GatewayChangeEvent = new GatewayChangeEvent
-					( GatewayChangeEvent.GATEWAY_CHANGE
-					, false
-					, false
-					, _gateway
-					, value
-					);
-					
-				_gateway = value;
-				
-				if (_gateway != null && _gateway.containsMediaElement(this) == false)
-				{
-					_gateway.addMediaElement(this);
-				}
-				
-				dispatchEvent(event);
-			}
 		}
 		
 		/**
@@ -472,6 +447,14 @@ package org.osmf.media
 		// Internals
 		//
 		
+		private function onGatewayChange(event:GatewayChangeEvent):void
+		{
+			if (event.oldValue == _gateway)
+			{
+				_gateway = event.newValue; 
+			}
+		}
+		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			dispatchEvent(event.clone());
@@ -541,8 +524,8 @@ package org.osmf.media
 
 		private var _traitTypes:Vector.<String> = new Vector.<String>();
 		private var _resource:IMediaResource;
-		private var _gateway:IMediaContainer;
 		private var _metadata:Metadata;
 		
+		private var _gateway:IMediaContainer;
 	}
 }

@@ -22,9 +22,7 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <applications>
-    <application path="MediaContainerSample.as"/>
-  </applications>
+  <applications/>
   <modules/>
   <buildCSSFiles/>
 </actionScriptProperties>

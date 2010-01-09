@@ -51,23 +51,23 @@ package
 				
 					var banner1:HTMLElement = new HTMLElement();
 					banner1.resource = new URLResource(new URL(BANNER_1));
-					banner1.gateway = htmlContainer;
 					banners.addChild(banner1);
 					
 					var banner2:HTMLElement = new HTMLElement();
 					banner2.resource = new URLResource(new URL(BANNER_2));
-					banner2.gateway = htmlContainer;
 					banners.addChild(banner2);
 					
 					var banner3:HTMLElement = new HTMLElement();
 					banner3.resource = new URLResource(new URL(BANNER_3));
-					banner3.gateway = htmlContainer;
 					banners.addChild(banner3);
 				
 				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
 				rootElement.addChild(video);
 			
 			addMediaElement(rootElement);
+			htmlContainer.addMediaElement(banner1);
+			htmlContainer.addMediaElement(banner2);
+			htmlContainer.addMediaElement(banner3);
 			
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
 			mediaPlayer.autoPlay = true;
