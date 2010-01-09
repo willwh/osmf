@@ -119,7 +119,7 @@ package org.osmf.display
 		
 		/**
 		 * Returns 1, for index 0 is occupied by the LayoutContextSprite instance
-		 * that holds sub-groups.
+		 * that holds child groups.
 		 * 
 		 * @inheritDoc
 		 *  
@@ -130,7 +130,7 @@ package org.osmf.display
 		 */
 		override public function get firstChildIndex():uint
 		{
-			// The _mediaContainer sprite is at index 0, add sub-groups
+			// The _mediaContainer sprite is at index 0, add child groups
 			// at index 1 and up:
 			return 1;
 		}
@@ -223,13 +223,13 @@ package org.osmf.display
 		//
 		
 		/**
-		 * Adds the specified group group as a sub-group.
+		 * Adds the specified group group as a child group.
 		 * 
 		 * If the group contains metadata, then it will be layed out using this
 		 * instance's groups layout renderer.
 		 *  
 		 * @param group The child group to add.
-		 * @throws IllegalOperationError if group is null, or already a sub-group.
+		 * @throws IllegalOperationError if group is null, or already a child group.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -259,10 +259,10 @@ package org.osmf.display
 		}
 		
 		/**
-		 * Removes a sub-group.
+		 * Removes a child group.
 		 *  
 		 * @param group The group to remove.
-		 * @throws IllegalOperationErrror if group is null, or not a sub-group.
+		 * @throws IllegalOperationErrror if group is null, or not a child group.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -292,10 +292,10 @@ package org.osmf.display
 		}
 		
 		/**
-		 * Verifies if a group is a sub-group of this MediaContainer.
+		 * Verifies if a group is a child group of this MediaContainer.
 		 *  
 		 * @param group Container to verify.
-		 * @return True if target is a sub-group of this MediaContainer.
+		 * @return True if target is a child group of this MediaContainer.
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -303,11 +303,14 @@ package org.osmf.display
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function containsGroup(group:MediaContainerGroup):Boolean
+		public function containsChildGroup(group:MediaContainerGroup):Boolean
 		{
 			return layoutRenderer.targets(group);
 		}
 		
+		/**
+		 * @private
+		 */		
 		public function validateNow():void
 		{
 			layoutRenderer.validateNow();

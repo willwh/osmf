@@ -81,17 +81,17 @@ package org.osmf.display
 			var sub2:MediaContainerGroup = new MediaContainerGroup();
 			
 			assertNotNull(parent);
-			assertFalse(parent.containsGroup(sub1));
-			assertFalse(parent.containsGroup(sub2));
+			assertFalse(parent.containsChildGroup(sub1));
+			assertFalse(parent.containsChildGroup(sub2));
 			
 			parent.addChildGroup(sub1);
-			assertTrue(parent.containsGroup(sub1));
+			assertTrue(parent.containsChildGroup(sub1));
 			
 			parent.addChildGroup(sub2);
-			assertTrue(parent.containsGroup(sub2));
+			assertTrue(parent.containsChildGroup(sub2));
 			
 			parent.removeChildGroup(sub1);
-			assertFalse(parent.containsGroup(sub1));
+			assertFalse(parent.containsChildGroup(sub1));
 			
 			var error:Error;
 			try

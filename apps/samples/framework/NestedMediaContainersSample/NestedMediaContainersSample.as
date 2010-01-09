@@ -27,8 +27,7 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.containers.MediaContainer;
-	import org.osmf.containers.MediaContainerGroup;
+	import org.osmf.display.MediaContainerGroup;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;

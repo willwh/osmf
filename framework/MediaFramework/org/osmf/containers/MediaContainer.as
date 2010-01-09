@@ -243,6 +243,9 @@ package org.osmf.containers
 			}
 		}
 		
+		/**
+		 * @private
+		 */
 		public function validateNow():void
 		{
 			layoutRenderer.validateNow();
