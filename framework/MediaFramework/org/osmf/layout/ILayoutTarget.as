@@ -47,7 +47,7 @@ package org.osmf.layout
 	[Event(name="mediaSizeChange",type="org.osmf.events.DimensionEvent")]
 
 	/**
-	 * ILayoutTarget defines the interface to the objects that an ILayoutRenderer
+	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer
 	 * implementing instance will be capable of laying out. 
 	 *  
 	 *  @langversion 3.0
@@ -58,7 +58,7 @@ package org.osmf.layout
 	public interface ILayoutTarget extends IEventDispatcher
 	{
 		/**
-		 * A reference to the metadata that is to be used by the ILayoutRenderer
+		 * A reference to the metadata that is to be used by the LayoutRenderer
 		 * on determining its size and position.
 		 *  
 		 *  @langversion 3.0
@@ -70,7 +70,7 @@ package org.osmf.layout
 	 
 		/**
 		 * A reference to the display object that represents the target. An
-		 * ILayoutRenderer may use this reference to effect its calculated
+		 * LayoutRenderer may use this reference to effect its calculated
 		 * values onto the target, as well as correctly parenting the target on
 		 * its context's display object container.
 		 *  
@@ -84,7 +84,7 @@ package org.osmf.layout
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
-	 	 * would be 1024 pixels. An ILayoutRenderer may use this value to
+	 	 * would be 1024 pixels. An LayoutRenderer may use this value to
 	 	 * for example keep ratio on scaling the element.
 	 	 *  
 	 	 *  @langversion 3.0
@@ -97,7 +97,7 @@ package org.osmf.layout
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
-	 	 * would be 768 pixels. An ILayoutRenderer may use this value to
+	 	 * would be 768 pixels. An LayoutRenderer may use this value to
 	 	 * for example keep ratio on scaling the element.
 	 	 *  
 	 	 *  @langversion 3.0

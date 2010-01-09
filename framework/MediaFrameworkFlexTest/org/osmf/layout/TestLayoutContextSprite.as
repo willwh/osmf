@@ -28,7 +28,7 @@ package org.osmf.layout
 		public function testLayoutContextSprite():void
 		{
 			var lcs:LayoutContextSprite = new LayoutContextSprite();
-			var renderer:ILayoutRenderer = new DefaultLayoutRenderer();
+			var renderer:LayoutRenderer = new DefaultLayoutRenderer();
 			renderer.context = lcs;
 			
 			var child1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();

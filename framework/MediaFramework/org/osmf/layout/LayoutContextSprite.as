@@ -49,7 +49,7 @@ package org.osmf.layout
 		/**
 		 * Constructor
 		 * 
-		 * @param metadata The metadata that an ILayoutRenderer may be using on calculating
+		 * @param metadata The metadata that an LayoutRenderer may be using on calculating
 		 * a layout using this context.
 		 *  
 		 *  @langversion 3.0
@@ -132,12 +132,12 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get layoutRenderer():ILayoutRenderer
+		public function get layoutRenderer():LayoutRenderer
 		{
 			return _renderer;
 		}
 
-		public function set layoutRenderer(value:ILayoutRenderer):void
+		public function set layoutRenderer(value:LayoutRenderer):void
 		{
 			_renderer = value;
 			_renderer.context = this;
@@ -285,7 +285,7 @@ package org.osmf.layout
 		}
 		
 		private var _metadata:Metadata;
-		private var _renderer:ILayoutRenderer;
+		private var _renderer:LayoutRenderer;
 		
 		private var _intrinsicWidth:Number = 0;
 		private var _intrinsicHeight:Number = 0;

@@ -54,7 +54,7 @@ package org.osmf.composition
 			// Should be 'default' once more: 
 			assertTrue(trait.layoutRenderer is DefaultLayoutRenderer);
 			
-			// Assigning class that is not ILayoutRenderer implementing:
+			// Assigning class that is not LayoutRenderer implementing:
 			layoutRendererFacet = new LayoutRendererFacet(Array);
 			owner.metadata.addFacet(layoutRendererFacet);
 			
@@ -69,14 +69,14 @@ import org.osmf.layout.*;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
 
-internal class MyLayoutRenderer extends EventDispatcher implements ILayoutRenderer
+internal class MyLayoutRenderer extends EventDispatcher implements LayoutRenderer
 {
-	public function get parent():ILayoutRenderer
+	public function get parent():LayoutRenderer
 	{
 		return _parent;
 	}
 	
-	public function set parent(value:ILayoutRenderer):void
+	public function set parent(value:LayoutRenderer):void
 	{
 		_parent = value;
 	}
@@ -120,5 +120,5 @@ internal class MyLayoutRenderer extends EventDispatcher implements ILayoutRender
 	{
 	}
 	
-	private var _parent:ILayoutRenderer;
+	private var _parent:LayoutRenderer;
 }

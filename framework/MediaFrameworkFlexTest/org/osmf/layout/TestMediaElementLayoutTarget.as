@@ -73,7 +73,7 @@ package org.osmf.layout
 			assertNull(lt.container);
 			assertFalse(isNaN(lt.firstChildIndex));
 			
-			var renderer:ILayoutRenderer = new DefaultLayoutRenderer();
+			var renderer:LayoutRenderer = new DefaultLayoutRenderer();
 			lt.layoutRenderer = renderer;
 			
 			// Without a context, the renderer cannot stick:

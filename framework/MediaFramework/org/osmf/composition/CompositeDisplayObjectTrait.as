@@ -27,7 +27,7 @@ package org.osmf.composition
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutContext;
-	import org.osmf.layout.ILayoutRenderer;
+	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.layout.LayoutRendererFacet;
 	import org.osmf.media.MediaElement;
@@ -123,7 +123,7 @@ package org.osmf.composition
 		// Protected API
 		//
 		
-		protected function get layoutRenderer():ILayoutRenderer
+		protected function get layoutRenderer():LayoutRenderer
 		{
 			return _layoutRenderer;
 		}
@@ -174,7 +174,7 @@ package org.osmf.composition
 				{
 					_layoutRenderer
 						= new layoutRendererFacet.rendererType()
-						as ILayoutRenderer;
+						as LayoutRenderer;
 				}
 				catch (e:*)
 				{
@@ -194,6 +194,6 @@ package org.osmf.composition
 		private var _traitAggregator:TraitAggregator;		
 		private var _owner:CompositeElement;
 		private var _container:ILayoutContext;
-		private var _layoutRenderer:ILayoutRenderer;
+		private var _layoutRenderer:LayoutRenderer;
 	}
 }

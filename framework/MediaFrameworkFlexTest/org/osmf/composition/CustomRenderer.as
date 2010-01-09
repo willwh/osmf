@@ -26,12 +26,12 @@ package org.osmf.composition
 	import flash.geom.Rectangle;
 	
 	import org.osmf.layout.ILayoutTarget;
-	import org.osmf.layout.LayoutRendererBase;
+	import org.osmf.layout.LayoutRenderer;
 
 	/**
 	 * Custom renderer class, used to test LayoutRendererBase
 	 */	
-	public class CustomRenderer extends LayoutRendererBase
+	public class CustomRenderer extends LayoutRenderer
 	{
 		override protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
 		{

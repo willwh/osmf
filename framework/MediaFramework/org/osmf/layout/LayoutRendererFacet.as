@@ -27,7 +27,7 @@ package org.osmf.layout
 
 	/**
 	 * The LayoutRendererFacet is a facet that holds a single value of type
-	 * Class that implements ILayoutRenderer.
+	 * Class that implements LayoutRenderer.
 	 */	
 	public class LayoutRendererFacet extends ObjectFacet
 	{

@@ -222,7 +222,7 @@ package org.osmf.utils
 			resourceDict[SWITCHING_UP_OTHER]						= "Switching up";
 			resourceDict[SWITCHING_MANUAL]							= "Switching Manual";
 
-			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct ILayoutRenderer implementation";
+			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";
 			
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
 			resourceDict[DRM_AUTHENTICATION_FAILED]					= "AuthenticationFailed	  SWF should ask user to reenter user credentials and retry license acquisition";

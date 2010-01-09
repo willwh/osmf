@@ -27,7 +27,7 @@ package org.osmf.layout
 	{
 		public function testBaseLayoutRenderer():void
 		{
-			var renderer:LayoutRendererBase = new LayoutRendererBase();
+			var renderer:LayoutRenderer = new LayoutRenderer();
 			assertNotNull(renderer);
 			
 			var c:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();

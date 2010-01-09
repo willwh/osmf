@@ -105,12 +105,12 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get layoutRenderer():ILayoutRenderer
+		public function get layoutRenderer():LayoutRenderer
 		{
 			return displayObjectLayoutTarget ? displayObjectLayoutTarget.layoutRenderer : null;
 		}
 		
-		public function set layoutRenderer(value:ILayoutRenderer):void
+		public function set layoutRenderer(value:LayoutRenderer):void
 		{
 			if (displayObjectLayoutTarget)
 			{

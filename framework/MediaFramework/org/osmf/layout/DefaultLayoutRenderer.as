@@ -49,7 +49,7 @@ package org.osmf.layout
 	 * are interpreted by this renderer.
 	 * 
 	 */	
-	public class DefaultLayoutRenderer extends LayoutRendererBase
+	public class DefaultLayoutRenderer extends LayoutRenderer
 	{
 		// Overrides
 		//

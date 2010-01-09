@@ -27,7 +27,7 @@ package org.osmf.containers
 	
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
-	import org.osmf.layout.ILayoutRenderer;
+	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.MediaElement;
@@ -59,7 +59,7 @@ package org.osmf.containers
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MediaContainer(metadata:Metadata=null, layoutRenderer:ILayoutRenderer=null)
+		public function MediaContainer(metadata:Metadata=null, layoutRenderer:LayoutRenderer=null)
 		{
 			super(metadata);
 			

@@ -26,7 +26,7 @@ package org.osmf.display
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.DefaultLayoutRenderer;
-	import org.osmf.layout.ILayoutRenderer;
+	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
@@ -61,8 +61,8 @@ package org.osmf.display
 		 */		
 		public function MediaContainerGroup
 							( metadata:Metadata=null
-							, groupsLayoutRenderer:ILayoutRenderer=null
-							, containerLayoutRenderer:ILayoutRenderer=null
+							, groupsLayoutRenderer:LayoutRenderer=null
+							, containerLayoutRenderer:LayoutRenderer=null
 							)
 		{
 			super(metadata);

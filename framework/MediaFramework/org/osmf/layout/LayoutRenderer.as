@@ -72,29 +72,43 @@ package org.osmf.layout
 	 *    of the context's container.  
 	 * 
 	 */	
-	public class LayoutRendererBase extends EventDispatcher implements ILayoutRenderer
+	public class LayoutRenderer extends EventDispatcher
 	{
-		// ILayoutRenderer
+		// LayoutRenderer
 		//
 		
-		final public function set parent(value:ILayoutRenderer):void
-		{
-			_parent = value;
-		}
-		
-		final public function get parent():ILayoutRenderer
-		{
-			return _parent;	
-		}
-		
 		/**
-		 * @inheritDoc
+		 * Defines the renderer that this renderer is a child of.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 */	
+		final public function get parent():LayoutRenderer
+		{
+			return _parent;	
+		}
+		final protected function setParent(value:LayoutRenderer):void
+		{
+			_parent = value;
+		}
+		
+		/**
+		 * Defines the context against which the renderer will calculate the size
+		 * and position values of its targets. The renderer additionally manages
+		 * targets being added and removed as children of the set context's
+		 * display list.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
+		final public function get context():ILayoutContext
+		{
+			return _context;
+		}
 		final public function set context(value:ILayoutContext):void
 		{
 			if (value != _context)
@@ -132,13 +146,16 @@ package org.osmf.layout
 			}
 		}
 		
-		final public function get context():ILayoutContext
-		{
-			return _context;
-		}
-		
 		/**
-		 * @inheritDoc
+		 * Method for adding a target to the layout renderer's list of objects
+		 * that it calculates the size and position for. Adding a target will
+		 * result the associated display object to be placed on the display
+		 * list of the renderer's context.
+		 * 
+		 * @param target The target to add.
+		 * @throws IllegalOperationError when the specified target is null, or 
+		 * already a target of the renderer.
+		 * @returns The added target.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -167,7 +184,7 @@ package org.osmf.layout
 			var targetContext:ILayoutContext = target as ILayoutContext;
 			if (targetContext && targetContext.layoutRenderer)
 			{
-				targetContext.layoutRenderer.parent = this;
+				targetContext.layoutRenderer.setParent(this);
 			}
 			
 			// Watch the facets on the target's metadata that we're interested in:
@@ -195,13 +212,19 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Method for removing a target from the layout render's list of objects
+		 * that it will render. See addTarget for more information.
+		 * 
+		 * @param target The target to remove.
+		 * @throws IllegalOperationErrror when the specified target is null, or
+		 * not a target of the renderer.
+		 * @returns The removed target.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */
+		 */	
 		final public function removeTarget(target:ILayoutTarget):ILayoutTarget
 		{
 			if (target == null)
@@ -232,7 +255,7 @@ package org.osmf.layout
 				var targetContext:ILayoutContext = target as ILayoutContext;
 				if (targetContext && targetContext.layoutRenderer)
 				{
-					targetContext.layoutRenderer.parent = null;
+					targetContext.layoutRenderer.setParent(null);
 				}
 				
 				// Un-watch the target's displayObject and dimenions change:
@@ -260,20 +283,25 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Method for querying if a layout target is currently a target of this
+		 * layout renderer.
+		 *  
+		 * @return True if the specified target is a target of this renderer.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */
+		 */	
 		final public function targets(target:ILayoutTarget):Boolean
 		{
 			return layoutTargets.indexOf(target) != -1;
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Method that will mark the renderer's last rendering pass invalid. At
+		 * the descretion of the implementing instance, the renderer may either
+		 * directly re-render, or do so at a later time.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -304,7 +332,10 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * Method ordering the direct recalculation of the position and size
+		 * of all of the renderer's assigned targets. The implementing class
+		 * may still skip recalculation if the renderer has not been invalidated
+		 * since the last rendering pass. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -336,20 +367,15 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function updateCalculatedBounds():Rectangle
+		protected function updateCalculatedBounds():Rectangle
 		{
 			var bounds:Rectangle = calculateTargetBounds(_context);
 			var counter:int = 0;
 			
 			var targetContext:ILayoutContext
-			var targetRenderer:ILayoutRenderer;
+			var targetRenderer:LayoutRenderer;
 			var targetBounds:Rectangle;
 			var unifiedTargetBounds:Rectangle;
 			
@@ -375,7 +401,7 @@ package org.osmf.layout
 				{
 					// Process another node (going in, top to bottom):
 					targetBounds = targetRenderer.updateCalculatedBounds();
-					flagClean(targetRenderer as LayoutRendererBase);
+					flagClean(targetRenderer as LayoutRenderer);
 				}
 				else
 				{
@@ -426,14 +452,9 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function updateLayout():void
+		protected function updateLayout():void
 		{
 			// Take care of all targets being staged correctly:
 			prepareTargets();
@@ -442,7 +463,7 @@ package org.osmf.layout
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				var targetContext:ILayoutContext = target as ILayoutContext;
-				var targetRenderer:ILayoutRenderer = targetContext ? targetContext.layoutRenderer : null;
+				var targetRenderer:LayoutRenderer = targetContext ? targetContext.layoutRenderer : null;
 				var targetBounds:Rectangle 
 					= applyTargetLayout
 						( target
@@ -761,7 +782,7 @@ package org.osmf.layout
 			}
 		}
 		
-		private var _parent:ILayoutRenderer;
+		private var _parent:LayoutRenderer;
 		private var _context:ILayoutContext;		
 		private var container:DisplayObjectContainer;
 		private var metadata:Metadata;
@@ -778,7 +799,7 @@ package org.osmf.layout
 		// Private Static
 		//
 		
-		private static function flagDirty(renderer:LayoutRendererBase, displayObject:DisplayObject):void
+		private static function flagDirty(renderer:LayoutRenderer, displayObject:DisplayObject):void
 		{
 			if (renderer == null || dirtyRenderers.indexOf(renderer) != -1)
 			{
@@ -802,7 +823,7 @@ package org.osmf.layout
 			}
 		}
 		
-		private static function flagClean(renderer:LayoutRendererBase):void
+		private static function flagClean(renderer:LayoutRenderer):void
 		{
 			var index:Number = dirtyRenderers.indexOf(renderer);
 			if (index != -1)
@@ -820,7 +841,7 @@ package org.osmf.layout
 			
 			while (dirtyRenderers.length != 0)
 			{
-				var renderer:LayoutRendererBase = dirtyRenderers.shift();
+				var renderer:LayoutRenderer = dirtyRenderers.shift();
 				if 	(	renderer.parent == null
 					||	dirtyRenderers.indexOf(renderer.parent) == -1
 					)
@@ -834,7 +855,7 @@ package org.osmf.layout
 		
 		private static var dispatcher:DisplayObject;
 		private static var cleaningRenderers:Boolean;
-		private static var dirtyRenderers:Vector.<LayoutRendererBase> = new Vector.<LayoutRendererBase>;
+		private static var dirtyRenderers:Vector.<LayoutRenderer> = new Vector.<LayoutRenderer>;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRendererBase");
 	}

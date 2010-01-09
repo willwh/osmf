@@ -24,18 +24,18 @@ package org.osmf.layout
 	import flash.display.DisplayObjectContainer;
 	
 	/**
-	 * ILayoutContext defines the interface to the objects that an ILayoutRenderer
+	 * ILayoutContext defines the interface to the objects that an LayoutRenderer
 	 * implementing instance requires in order to calculate and effect the spatial
 	 * characteristics of its targets.
 	 * 
 	 * An ILayoutContext exposes a container property of type DisplayObjectContainer
-	 * that ILayoutRenderer implementing classes may use to stage and unstage their
+	 * that LayoutRenderer implementing classes may use to stage and unstage their
 	 * targets, as well as to manage the z-ordering of their targets.
 	 */	
 	public interface ILayoutContext extends ILayoutTarget
 	{
 		/**
-		 * Defines the DisplayObjectContainer instance that an ILayoutRenderer class
+		 * Defines the DisplayObjectContainer instance that an LayoutRenderer class
 		 * may use to to stage and unstage their targets, as well as to manage the
 		 * z-ordering of their targets.
 		 *  
@@ -47,7 +47,7 @@ package org.osmf.layout
 		function get container():DisplayObjectContainer;
 		
 		/**
-		 * Defines the index that the ILayoutRenderer class should use on staging
+		 * Defines the index that the LayoutRenderer class should use on staging
 		 * its first target onto the container. 
 		 *  
 		 *  @langversion 3.0
@@ -65,11 +65,11 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function get layoutRenderer():ILayoutRenderer;
-		function set layoutRenderer(value:ILayoutRenderer):void;
+		function get layoutRenderer():LayoutRenderer;
+		function set layoutRenderer(value:LayoutRenderer):void;
 		
 		/**
-		 * Method invoked by an ILayoutRenderer class to inform the context that it
+		 * Method invoked by an LayoutRenderer class to inform the context that it
 		 * should recalculate its intrinsicWidth and intrinsicHeight fields:
 		 *  
 		 *  @langversion 3.0

@@ -54,12 +54,12 @@ package org.osmf.layout
 			return 0;
 		}
 		
-		public function get layoutRenderer():ILayoutRenderer
+		public function get layoutRenderer():LayoutRenderer
 		{
 			return null;
 		}
 		
-		public function set layoutRenderer(value:ILayoutRenderer):void
+		public function set layoutRenderer(value:LayoutRenderer):void
 		{
 		}
 		
@@ -142,7 +142,7 @@ package org.osmf.layout
 		
 		private var _metadata:Metadata = new Metadata();
 		
-		private var _layoutRenderer:ILayoutRenderer;
+		private var _layoutRenderer:LayoutRenderer;
 		
 		private var _intrinsicWidth:Number;
 		private var _intrinsicHeight:Number;
