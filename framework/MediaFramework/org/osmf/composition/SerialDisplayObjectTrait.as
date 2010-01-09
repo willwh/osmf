@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.composition
 {
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.containers.IMediaContainer;
 	import org.osmf.media.MediaElement;
@@ -103,7 +103,7 @@ package org.osmf.composition
 			setupLayoutTarget(event.newListenedChild);
 		}
 		
-		private function onTargetGatewayChange(event:GatewayChangeEvent):void
+		private function onTargetGatewayChange(event:ContainerChangeEvent):void
 		{
 			var oldGateway:IMediaContainer = event.oldValue;
 			var newGateway:IMediaContainer = event.newValue;
@@ -112,7 +112,7 @@ package org.osmf.composition
 			var targetInLayoutRenderer:Boolean
 				= layoutRenderer.targets(layoutTarget);
 				
-			if (newGateway == null || newGateway == owner.gateway)
+			if (newGateway == null || newGateway == owner.container)
 			{
 				if (targetInLayoutRenderer == false)
 				{
@@ -133,7 +133,7 @@ package org.osmf.composition
 			if (layoutTarget != null)
 			{
 				layoutTarget.mediaElement.removeEventListener
-					( GatewayChangeEvent.GATEWAY_CHANGE
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, onTargetGatewayChange
 					);
 				
@@ -150,17 +150,17 @@ package org.osmf.composition
 				layoutTarget = MediaElementLayoutTarget.getInstance(listenedChild);
 				
 				listenedChild.addEventListener
-					( GatewayChangeEvent.GATEWAY_CHANGE
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, onTargetGatewayChange
 					);
 					
 				onTargetGatewayChange
-					( new GatewayChangeEvent
-						( GatewayChangeEvent.GATEWAY_CHANGE
+					( new ContainerChangeEvent
+						( ContainerChangeEvent.CONTAINER_CHANGE
 						, false
 						, false
 						, null
-						, layoutTarget.mediaElement.gateway
+						, layoutTarget.mediaElement.container
 						)
 					);
 			}

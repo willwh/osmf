@@ -29,7 +29,7 @@ package org.osmf.media
 	
 	import org.osmf.containers.IMediaContainer;
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
@@ -61,9 +61,9 @@ package org.osmf.media
 	/**
 	 * Dispatched when the element's gateway property changed.
 	 * 
-	 * @eventType org.osmf.events.GatewayChangeEvent.GATEWAY_CHANGE
+	 * @eventType org.osmf.events.GatewayChangeEvent.CONTAINER_CHANGE
 	 */	
-	[Event(name="gatewayChange",type="org.osmf.events.GatewayChangeEvent")]
+	[Event(name="gatewayChange",type="org.osmf.events.ContainerChangeEvent")]
 		
 	/**
      * A MediaElement represents a unified media experience.
@@ -111,7 +111,7 @@ package org.osmf.media
 			setupTraitResolvers();		
 			setupTraits();
 			
-			addEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange, false, Number.MAX_VALUE);
+			addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange, false, Number.MAX_VALUE);
 		}
 	
 		/**
@@ -197,16 +197,16 @@ package org.osmf.media
 		}
 		
 		/**
-		 * The gateway that this element uses.
+		 * The media container that this element uses.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get gateway():IMediaContainer
+		public function get container():IMediaContainer
 		{
-			return _gateway;
+			return _container;
 		}
 		
 		/**
@@ -447,11 +447,11 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function onGatewayChange(event:GatewayChangeEvent):void
+		private function onContainerChange(event:ContainerChangeEvent):void
 		{
-			if (event.oldValue == _gateway)
+			if (event.oldValue == _container)
 			{
-				_gateway = event.newValue; 
+				_container = event.newValue; 
 			}
 		}
 		
@@ -526,6 +526,6 @@ package org.osmf.media
 		private var _resource:IMediaResource;
 		private var _metadata:Metadata;
 		
-		private var _gateway:IMediaContainer;
+		private var _container:IMediaContainer;
 	}
 }

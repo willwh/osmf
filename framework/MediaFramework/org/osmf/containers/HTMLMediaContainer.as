@@ -25,7 +25,7 @@ package org.osmf.containers
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.external.HTMLElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
@@ -80,10 +80,10 @@ package org.osmf.containers
 			// Media containers are under obigation to dispatch a gateway change event when
 			// they add a media element:
 			child.dispatchEvent
-				( new GatewayChangeEvent
-					( GatewayChangeEvent.GATEWAY_CHANGE
+				( new ContainerChangeEvent
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, false, false
-					, child.gateway, this
+					, child.container, this
 					)
 				);
 			
@@ -123,10 +123,10 @@ package org.osmf.containers
 			// Media containers are under obigation to dispatch a gateway change event when
 			// they remove a media element:
 			child.dispatchEvent
-				( new GatewayChangeEvent
-					( GatewayChangeEvent.GATEWAY_CHANGE
+				( new ContainerChangeEvent
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, false, false
-					, child.gateway, null
+					, child.container, null
 					)
 				);
 			

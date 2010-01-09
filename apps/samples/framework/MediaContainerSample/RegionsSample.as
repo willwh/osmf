@@ -31,7 +31,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.gateways.RegionGateway;
+	import org.osmf.containers.RegionGateway;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -122,9 +122,9 @@ package
 			
 			// Bind media elements to their target regions:
 			
-			banners.gateway = bannerRegion;
-			mainContent.gateway = mainRegion;
-			skyScraper.gateway = skyScraperRegion; 
+			banners.container = bannerRegion;
+			mainContent.container = mainRegion;
+			skyScraper.container = skyScraperRegion; 
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will
@@ -149,7 +149,7 @@ package
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						banners.gateway = bottomBannerRegion;		
+						banners.container = bottomBannerRegion;		
 					}
 				);
 				
@@ -157,7 +157,7 @@ package
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						banners.gateway = bannerRegion;		
+						banners.container = bannerRegion;		
 					}
 				);
 				

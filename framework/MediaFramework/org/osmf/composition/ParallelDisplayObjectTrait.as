@@ -24,7 +24,7 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.containers.IMediaContainer;
 	import org.osmf.media.MediaElement;
@@ -67,7 +67,7 @@ package org.osmf.composition
 				
 				var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
 				target.addEventListener
-					( GatewayChangeEvent.GATEWAY_CHANGE
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, onLayoutTargetGatewayChange
 					);
 				
@@ -95,7 +95,7 @@ package org.osmf.composition
 					var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(mediaElement);
 					
 					mediaElement.addEventListener
-						( GatewayChangeEvent.GATEWAY_CHANGE
+						( ContainerChangeEvent.CONTAINER_CHANGE
 						, onLayoutTargetGatewayChange
 						);
 					
@@ -117,7 +117,7 @@ package org.osmf.composition
 				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[mediaElement];
 				
 				mediaElement.removeEventListener
-					( GatewayChangeEvent.GATEWAY_CHANGE
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, onLayoutTargetGatewayChange
 					);
 				
@@ -156,9 +156,9 @@ package org.osmf.composition
 		
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
 		{
-			var gateway:IMediaContainer = target.mediaElement.gateway; 
+			var gateway:IMediaContainer = target.mediaElement.container; 
 			
-			if (gateway && gateway != owner.gateway)
+			if (gateway && gateway != owner.container)
 			{
 				if (layoutRenderer.targets(target))
 				{
@@ -174,7 +174,7 @@ package org.osmf.composition
 			}
 		}
 		
-		private function onLayoutTargetGatewayChange(event:GatewayChangeEvent):void
+		private function onLayoutTargetGatewayChange(event:ContainerChangeEvent):void
 		{
 			var mediaElement:MediaElement = event.target as MediaElement;
 			

@@ -52,7 +52,7 @@ package org.osmf.composition
 			displayObjectTrait(me2.getTrait(MediaTraitType.DISPLAY_OBJECTABLE)).view = me2Sprite;
 			
 			var region2:MediaContainer = new MediaContainer();
-			me2.gateway = region2;
+			me2.container = region2;
 			
 			var me3:DynamicMediaElement = new DynamicMediaElement( [MediaTraitType.DISPLAY_OBJECTABLE] );
 			var me3Sprite:Sprite = new Sprite();
@@ -76,19 +76,19 @@ package org.osmf.composition
 			var region3:MediaContainer = new MediaContainer();
 			
 			// Assigning me3 to a region should result in its size changing:
-			me3.gateway = region3;
+			me3.container = region3;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(100, pvt.width);
 			assertEquals(100, pvt.height);
 			
-			me2.gateway = null;
+			me2.container = null;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(200, pvt.width);
 			assertEquals(200, pvt.height);
 			
-			me3.gateway = null;
+			me3.container = null;
 			
 			pvt.layoutRenderer.validateNow();
 			assertEquals(300, pvt.width);

@@ -56,9 +56,9 @@ package org.osmf.display
 			
 			if (_element != value)
 			{
-				if (_element != null && _element.gateway)
+				if (_element != null && _element.container)
 				{
-					_element.gateway.removeMediaElement(_element);
+					_element.container.removeMediaElement(_element);
 				}		
 				_element = value;	
 				if (_element != null)

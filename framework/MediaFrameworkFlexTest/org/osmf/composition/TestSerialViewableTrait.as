@@ -61,9 +61,9 @@ package org.osmf.composition
 			assertEquals(100, svt.width);
 			assertEquals(100, svt.height);
 			
-			// Making me1 go to a region should change the dimension:
+			// Making me1 go to a container should change the dimension:
 			var region:MediaContainer = new MediaContainer();
-			me1.gateway = region;
+			me1.container = region;
 			
 			// With me1 out, we should be 0x0 - our view being ignored.
 			svt.layoutRenderer.validateNow();
@@ -71,13 +71,13 @@ package org.osmf.composition
 			assertEquals(0, svt.height);
 			
 			// Removing the facet should restore our dimensions:
-			me1.gateway = null;
+			me1.container = null;
 			
 			svt.layoutRenderer.validateNow();
 			assertEquals(100, svt.width);
 			assertEquals(100, svt.height);
 			
-			me3.gateway = region;
+			me3.container = region;
 			serial.addChild(me3);
 			
 			// Poor man's way of changing the active child:

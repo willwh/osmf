@@ -24,7 +24,7 @@ package org.osmf.proxies
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
@@ -126,30 +126,30 @@ package org.osmf.proxies
 			var gatewayA:MediaContainer = new MediaContainer();
 			var gatewayB:MediaContainer = new MediaContainer();
 			
-			assertNull(mediaElement.gateway);
+			assertNull(mediaElement.container);
 			assertDispatches
 				( mediaElement
-				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, [ContainerChangeEvent.CONTAINER_CHANGE]
 				, function():void{gatewayA.addMediaElement(mediaElement);}
 				);
 				
-			assertEquals(gatewayA, mediaElement.gateway);
+			assertEquals(gatewayA, mediaElement.container);
 			
 			assertDispatches
 				( mediaElement
-				, [GatewayChangeEvent.GATEWAY_CHANGE]
+				, [ContainerChangeEvent.CONTAINER_CHANGE]
 				, function():void{gatewayB.addMediaElement(mediaElement);}
 				);
 			
-			assertEquals(gatewayB, mediaElement.gateway);
+			assertEquals(gatewayB, mediaElement.container);
 			
 			assertDispatches
 				( mediaElement
-				, [GatewayChangeEvent.GATEWAY_CHANGE]
-				, function():void{mediaElement.gateway.removeMediaElement(mediaElement);}
+				, [ContainerChangeEvent.CONTAINER_CHANGE]
+				, function():void{mediaElement.container.removeMediaElement(mediaElement);}
 				);
 				
-			assertNull(mediaElement.gateway);
+			assertNull(mediaElement.container);
 		}
 		
 		// Protected

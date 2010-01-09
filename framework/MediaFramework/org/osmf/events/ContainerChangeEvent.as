@@ -28,16 +28,16 @@ package org.osmf.events
 	/**
 	 * GatewayChangeEvent signals that a reference to an IGateway has changed.
 	 */	
-	public class GatewayChangeEvent extends Event
+	public class ContainerChangeEvent extends Event
 	{
 		/**
-		 * The GatewayChangeEvent.GATEWAY_CHANGE constant defines the value
+		 * The GatewayChangeEvent.CONTAINER_CHANGE constant defines the value
 		 * of the type property of the event object for a gatewayChange
 		 * event.
 		 * 
-		 * @eventType GATEWAY_CHANGE
+		 * @eventType CONTAINER_CHANGE
 		 **/
-		public static const GATEWAY_CHANGE:String = "gatewayChange";
+		public static const CONTAINER_CHANGE:String = "gatewayChange";
 		
 		/**
 		 * Constructor
@@ -53,7 +53,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function GatewayChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaContainer=null, newValue:IMediaContainer=null)
+		public function ContainerChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaContainer=null, newValue:IMediaContainer=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -95,7 +95,7 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new GatewayChangeEvent(type, bubbles, cancelable, _oldValue, _newValue);
+			return new ContainerChangeEvent(type, bubbles, cancelable, _oldValue, _newValue);
 		}
 		
 		// Internals

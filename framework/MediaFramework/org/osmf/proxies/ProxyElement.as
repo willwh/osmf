@@ -26,7 +26,7 @@ package org.osmf.proxies
 	import flash.events.Event;
 	
 	import org.osmf.containers.IMediaContainer;
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.IMediaResource;
@@ -235,7 +235,7 @@ package org.osmf.proxies
 		/**
 		override public function get gateway():IMediaContainer
 		{
-			return wrappedElement ? wrappedElement.gateway : outerGateway;
+			return wrappedElement ? wrappedElement.container : outerGateway;
 		}
 		
 		override public function set gateway(value:IMediaContainer):void
@@ -246,7 +246,7 @@ package org.osmf.proxies
 			
 			if (wrappedElement != null)
 			{		
-				wrappedElement.gateway = value;
+				wrappedElement.container = value;
 			}
 		}*/
 		
@@ -352,14 +352,14 @@ package org.osmf.proxies
 				_wrappedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				_wrappedElement.addEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange);
+				_wrappedElement.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 			else
 			{
 				_wrappedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				_wrappedElement.removeEventListener(GatewayChangeEvent.GATEWAY_CHANGE, onGatewayChange);
+				_wrappedElement.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 		}
 		
@@ -378,7 +378,7 @@ package org.osmf.proxies
 			processTraitsChangeEvent(event);
 		}
 		
-		private function onGatewayChange(event:GatewayChangeEvent):void
+		private function onContainerChange(event:ContainerChangeEvent):void
 		{
 			dispatchEvent(event.clone());
 		}

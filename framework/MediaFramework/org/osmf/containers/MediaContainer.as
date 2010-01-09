@@ -25,7 +25,7 @@ package org.osmf.containers
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.GatewayChangeEvent;
+	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
@@ -116,10 +116,10 @@ package org.osmf.containers
 			// Media containers are under obigation to dispatch a gateway change event when
 			// they add a media element:
 			element.dispatchEvent
-				( new GatewayChangeEvent
-					( GatewayChangeEvent.GATEWAY_CHANGE
+				( new ContainerChangeEvent
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, false, false
-					, element.gateway, this
+					, element.container, this
 					)
 				);
 			
@@ -158,10 +158,10 @@ package org.osmf.containers
 			// Media containers are under obigation to dispatch a gateway change event when
 			// they remove a media element:
 			element.dispatchEvent
-				( new GatewayChangeEvent
-					( GatewayChangeEvent.GATEWAY_CHANGE
+				( new ContainerChangeEvent
+					( ContainerChangeEvent.CONTAINER_CHANGE
 					, false, false
-					, element.gateway, null
+					, element.container, null
 					)
 				);
 			
