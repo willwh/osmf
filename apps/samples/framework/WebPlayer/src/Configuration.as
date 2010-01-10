@@ -32,11 +32,11 @@ package
 				= parameters.backgroundColor == undefined
 					? NaN
 					: parseInt(parameters.backgroundColor);
-					
-			_showStopButton
-				= parameters.showStopButton == undefined
-					? false
-					: parameters.showStopButton.toString().toLowerCase() == "true"
+							
+			_autoHideControlBar
+				= parameters.autoHideControlBar == undefined
+					? true
+					: parameters.autoHideControlBar.toString().toLowerCase() == "false"
 		}
 
 		public function get url():String
@@ -49,9 +49,9 @@ package
 			return _backgroundColor;
 		}
 		
-		public function get showStopButton():Boolean
+		public function get autoHideControlBar():Boolean
 		{
-			return _showStopButton;
+			return _autoHideControlBar;
 		}
 		
 		// Internals
@@ -60,5 +60,6 @@ package
 		private var _url:String;
 		private var _backgroundColor:Number;
 		private var _showStopButton:Boolean;
+		private var _autoHideControlBar:Boolean;
 	}
 }

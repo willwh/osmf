@@ -49,7 +49,7 @@ package org.osmf.chrome.controlbar
 		public static const SCRUBBAR_VERTICAL_OFFSET:Number = 22;
 		public static const BORDER_SPACE:Number = 9;
 		
-		public function ControlBar(showStopButton:Boolean)
+		public function ControlBar()
 		{
 			super();
 			

@@ -147,7 +147,8 @@ package
 			// Construct a default control bar, and add extra listeners to
 			// to some of its widgets:
 			
-			controlBar = new ControlBar(configuration.showStopButton);
+			controlBar = new ControlBar();
+			controlBar.autoHide = configuration.autoHideControlBar;
 			controlBar.container = container;
 			addChild(controlBar);
 			

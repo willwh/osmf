@@ -3,21 +3,52 @@
   <head>
     <title>OSMF Web Player</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  	<script type="text/javascript" src="swfobject/swfobject.js"></script>
+  	<script type="text/javascript" src="scripts/swfobject.js"></script>
+  	<script type="text/javascript" src="scripts/ParsedQueryString.js"></script>
     <script type="text/javascript">
+    
+    		var pqs = new ParsedQueryString();
+    		var url = pqs.param("url") || "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
+    		var pBackgroundColor = pqs.param("backgroundColor") || "0x000000";
+    		var pAutoHideControlBar
+				= pqs.param("autoHideControlBar") != undefined
+					? pqs.param("autoHideControlBar")
+					: false;
+			
 			swfobject.embedSWF
 				( "WebPlayer.swf"
 				, "player"
 				, "640", "360"
 				, "10.0.0"
 				, 	{}
-				, 	{ url: "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv"
-					, backgroundColor: "0x333333"
-					, showStopButton: "false"
+				, 	{ url: url
+					, backgroundColor: pBackgroundColor
+					, autoHideControlBar: pAutoHideControlBar 
 					}
 				, 	{ allowFullScreen: "true"
 					}
 				);
+				
+			var linkingCode = "";
+			var links
+				= 	[ "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m"
+					, "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m"
+					, "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3"
+					, "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv"
+					, "images/osmf_horizontal_red.png"
+					, "images/adobe-lq.png"
+					]
+					
+			for each (var link in links)
+			{
+				linkingCode = linkingCode
+					+ '<a href="WebPlayer.html?url='
+					+ encodeURI(link)
+					+ '">'
+					+ link
+					+ '</a><br/>';
+			}
+			
      </script>
   	<style type="text/css">
 	<!--
@@ -45,11 +76,13 @@
     </td>
   </tr>
   <tr>
-    <td><p>Some links to media:</p>
-    <p>http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m<br />
-      http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m<br />
-    http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3<br />
-    http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv</p></td>
+    <td><p>Click on one of the links below to have it loaded, or use the eject button on the player to enter a URL by hand:</p>
+    <p>
+    <script type="text/javascript">
+		document.write(linkingCode);
+	</script>
+	</p>
+	</td>
   </tr>
 </table>
  
