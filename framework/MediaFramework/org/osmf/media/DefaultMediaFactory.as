@@ -33,6 +33,18 @@ package org.osmf.media
 	
 	/**
 	 * Defines a default media factory.
+	 * 
+	 * The default media factory can construct media elements of
+	 * the following types:
+	 * 
+	 *  - VideoElement, using either:
+	 *  	- NetLoader (streaming or progressive),
+	 * 		- DynamicStreamNetLoader (MBR streaming).
+	 *  - SoundElement, using either:
+	 * 		- SoundLoader (progressive), or
+	 * 		- NetLoader (streaming).
+	 * 	- ImageElement
+	 * 	- SWFElement
 	 */	
 	public class DefaultMediaFactory extends MediaFactory
 	{
