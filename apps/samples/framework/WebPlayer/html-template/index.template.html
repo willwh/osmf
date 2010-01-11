@@ -7,27 +7,38 @@
   	<script type="text/javascript" src="scripts/ParsedQueryString.js"></script>
     <script type="text/javascript">
     
+    		// Collect query parameters in an object that we can
+    		// forward to SWFObject:
+    		
     		var pqs = new ParsedQueryString();
-    		var url = pqs.param("url") || "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
-    		var pBackgroundColor = pqs.param("backgroundColor") || "0x000000";
-    		var pAutoHideControlBar
-				= pqs.param("autoHideControlBar") != undefined
-					? pqs.param("autoHideControlBar")
-					: false;
-			
-			swfobject.embedSWF
+    		var parameterNames = pqs.params(false);
+    		var parameters =
+    			{	url: "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv"
+    			,	backgroundColor: "0x000000"
+    			,	autoHideControlBar: "false"
+    			};
+    		
+    		for each(var parameterName in parameterNames)
+    		{
+    			parameters[parameterName]
+    				=	pqs.param(parameterName)
+    				||	parameters[parameterName];
+    		}
+    		
+    		// Embed the player SWF:
+    		
+    		swfobject.embedSWF
 				( "WebPlayer.swf"
 				, "player"
 				, "640", "360"
 				, "10.0.0"
-				, 	{}
-				, 	{ url: url
-					, backgroundColor: pBackgroundColor
-					, autoHideControlBar: pAutoHideControlBar 
-					}
-				, 	{ allowFullScreen: "true"
-					}
+				, {}
+				, parameters
+				, { allowFullScreen: "true" }
 				);
+				
+			// Construct the HTML required to reload with any of the
+			// listed media links:
 				
 			var linkingCode = "";
 			var links

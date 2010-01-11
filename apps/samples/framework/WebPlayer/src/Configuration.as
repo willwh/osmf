@@ -36,7 +36,9 @@ package
 			_autoHideControlBar
 				= parameters.autoHideControlBar == undefined
 					? true
-					: parameters.autoHideControlBar.toString().toLowerCase() == "false"
+					: parameters.autoHideControlBar.toString().toLowerCase() == "false" 
+						? false
+						: true;
 		}
 
 		public function get url():String
