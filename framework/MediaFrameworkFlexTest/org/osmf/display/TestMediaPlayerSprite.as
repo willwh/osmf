@@ -25,13 +25,13 @@ package org.osmf.display
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.media.MediaPlayer;
+	import org.osmf.traits.*;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaPlayerSprite extends TestCase
 	{
-		public function testMediaPlayer():void
+		public function testMediaPlayerSprite():void
 		{
 			var player:MediaPlayerSprite = new MediaPlayerSprite();
 			var media:DynamicMediaElement = new DynamicMediaElement();
@@ -69,5 +69,32 @@ package org.osmf.display
 			assertNull(player.element);
 			assertEquals(player.width, player.height, 0);
 		}
+		
+		public function testMediaPlayer():void
+		{
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			var player:MediaPlayerSprite = new MediaPlayerSprite(mediaPlayer);
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(new Sprite(), 150, 150);
+			
+			assertEquals(mediaPlayer, player.mediaPlayer);
+			
+			mediaPlayer = new MediaPlayer();
+			player.mediaPlayer = mediaPlayer;
+			
+			assertEquals(mediaPlayer, player.mediaPlayer);
+		}
+		
+		public function testScaleMode():void
+		{			
+			var player:MediaPlayerSprite = new MediaPlayerSprite();
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(new Sprite(), 150, 150);
+			
+			assertEquals(ScaleMode.LETTERBOX, player.scaleMode);
+			player.scaleMode = ScaleMode.NONE;
+			assertEquals(player.scaleMode, ScaleMode.NONE);			
+		}
+		
 	}
 }
