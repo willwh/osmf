@@ -55,10 +55,6 @@ package org.osmf.proxies
 				var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
 				wrappedElement =  context.element;
 				_metadata.metadata = wrappedElement.metadata;
-				if (wrappedElement && wrappedElement.hasTrait(MediaTraitType.LOAD))
-				{
-					(wrappedElement.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
-				}
 			}
 		}
 		
