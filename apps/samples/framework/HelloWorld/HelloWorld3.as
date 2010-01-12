@@ -71,7 +71,7 @@ package
 			
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			sprite.media = mediaElement;
+			sprite.element = mediaElement;
 		}
 		
 		private function createMediaElement():MediaElement
