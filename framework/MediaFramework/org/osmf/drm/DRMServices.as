@@ -48,8 +48,7 @@ package org.osmf.drm
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.events.DRMEvent;
-	import flash.system.SystemUpdater;
-
+	
 	
 	/**
 	 * @private
