@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication
+	xmlns:mx				="http://www.adobe.com/2006/mxml"
+	layout					="absolute"
+	 applicationComplete	="init()"
+	>
+	
+	<mx:DataGrid
+		width	="100%"
+		height	="100%"
+		id		="grid"
+		>
+		<mx:columns>
+			<mx:DataGridColumn width="25" headerText="ID" dataField="0"/>
+			<mx:DataGridColumn width="25" headerText="Time" dataField="1"/>
+			<mx:DataGridColumn width="75" headerText="Message" dataField="2"/>
+			<mx:DataGridColumn headerText="Parameters" dataField="3"/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.automation.codec.ArrayPropertyCodec;
+			private function init():void
+			{
+				log = new ArrayCollection();
+				grid.dataProvider = log;
+				
+				receiver = new LocalConnection();
+				receiver.allowDomain("*");
+				receiver.client
+					= 	{ debug: receiverDebug
+						};
+						
+				receiver.connect("_OSMFWebPlayerDebugger");	
+			}
+			
+			private function receiverDebug(...args):void
+			{
+				log.addItemAt([args.shift(), args.shift(), args.shift(), args], 0);
+			}
+			
+			private var receiver:LocalConnection;
+			private var log:ArrayCollection;
+		]]>
+	</mx:Script>
+	
+</mx:WindowedApplication>
