@@ -81,6 +81,7 @@ package org.osmf.chrome.controlbar.widgets
 		private function onAddedToStage(event:Event):void
 		{
 			stage.addEventListener(FullScreenEvent.FULL_SCREEN, onFullScreenEvent);
+			processRequiredTraitsAvailable(null);
 		}
 		
 		private function onFullScreenEvent(event:FullScreenEvent):void
