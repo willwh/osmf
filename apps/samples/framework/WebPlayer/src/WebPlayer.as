@@ -24,6 +24,7 @@ package
 {
 	import flash.display.Graphics;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
@@ -53,22 +54,26 @@ package
 	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
-	[SWF(backgroundColor="0x000000",frameRate="25")]
+	[Frame(factoryClass="Preloader")]
+	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="380")]
 	public class WebPlayer extends Sprite
 	{
-		public function WebPlayer()
+		public function WebPlayer(preloader:Preloader)
 		{
 			super();
 			
+			this.preloader = preloader;
+			_stage = preloader.stage;
+			
 			// Parse configuration from the parameters passed on
 			// embedding WebPlayer.swf:
-			configuration = new Configuration(loaderInfo.parameters);
+			configuration = new Configuration(preloader.loaderInfo.parameters);
 			
-			// Set the SWF scale mode, and listen to the stage change
+			// Set the SWF scale mode, and listen to the _stage change
 			// dimensions:
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
-			stage.addEventListener(Event.RESIZE, onStageResize);
+			_stage.scaleMode = StageScaleMode.NO_SCALE;
+			_stage.align = StageAlign.TOP_LEFT;
+			_stage.addEventListener(Event.RESIZE, onStageResize);
 			
 			setupContextMenu();
 			
@@ -82,7 +87,7 @@ package
 			
 			setupUserInterface();
 			
-			// Simulate the stage resizing, to update the dimensions of the
+			// Simulate the _stage resizing, to update the dimensions of the
 			// container and overlay:
 			onStageResize();
 			
@@ -183,6 +188,16 @@ package
 					= controlBar.element
 					= null;
 				
+				CONFIG::DEBUG
+				{
+					if (value)
+					{
+						value = new DebuggerElementProxy(value, preloader.debugger);
+					}
+					
+					preloader.debugger.send("media change", value);
+				}
+				
 				element
 					= player.media 
 					= controlBar.element
@@ -209,17 +224,22 @@ package
 		
 		private function onStageResize(event:Event = null):void
 		{
-			LayoutUtils.setAbsoluteLayout(container.metadata, stage.stageWidth, stage.stageHeight);
+			LayoutUtils.setAbsoluteLayout(container.metadata, _stage.stageWidth, _stage.stageHeight);
 			
 			var g:Graphics = overlay.graphics; 
 			g.clear();
 			g.beginFill(0xffffff, 0);
-			g.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			g.drawRect(0, 0, _stage.stageWidth, _stage.stageHeight);
+			
+			CONFIG::DEBUG
+			{
+				preloader.debugger.send("stage resize", _stage.stageWidth, _stage.stageHeight);
+			}
 		}
 		
 		private function onEjectButtonClick(event:MouseEvent):void
 		{
-			stage.displayState = StageDisplayState.NORMAL;
+			_stage.displayState = StageDisplayState.NORMAL;
 			updateTargetElement(null);
 		}
 		
@@ -236,6 +256,9 @@ package
 		{
 			flash.net.navigateToURL(new URLRequest("http://www.osmf.org"), "_blank");
 		}
+		
+		private var preloader:Preloader;
+		private var _stage:Stage;
 		
 		private var customContextMenu:ContextMenu;
 		private var osmfMenuItem:ContextMenuItem;
