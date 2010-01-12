@@ -206,7 +206,7 @@
 						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
 					}
 				}
-				else
+				else if (width > 0 && height > 0)
 				{
 					mediaPlayerWrapper.width = event.newWidth;
 					mediaPlayerWrapper.height = event.newHeight;			
