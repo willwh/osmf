@@ -27,11 +27,11 @@ package org.osmf.chrome.controlbar.widgets
 	
 	public class QualityDecreaseButton extends QualityIncreaseButton
 	{
-		[Embed("../assets/images/qualityDecrease_up.png")]
+		[Embed("../assets/images/minus_up.png")]
 		public var qualityDecreaseUpType:Class;
-		[Embed("../assets/images/qualityDecrease_down.png")]
+		[Embed("../assets/images/minus_down.png")]
 		public var qualityDecreaseDownType:Class;
-		[Embed("../assets/images/qualityDecrease_disabled.png")]
+		[Embed("../assets/images/minus_disabled.png")]
 		public var qualityDecreaseDisabledType:Class;
 		
 		public function QualityDecreaseButton(up:Class=null, down:Class=null, disabled:Class=null)

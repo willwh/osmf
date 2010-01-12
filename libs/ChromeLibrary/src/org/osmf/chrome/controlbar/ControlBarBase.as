@@ -218,8 +218,9 @@ package org.osmf.chrome.controlbar
 						break;
 					case Direction.RIGHT:
 						x	= registrationWidget.x
+							+ widget.left
 							+	( registrationWidget.visible 
-									? registrationWidget.width + widget.left
+									? registrationWidget.width 
 									: 0
 								)
 						y 	= registrationWidget.y

@@ -34,11 +34,11 @@ package org.osmf.chrome.controlbar.widgets
 	
 	public class QualityIncreaseButton extends Button
 	{
-		[Embed("../assets/images/qualityIncrease_up.png")]
+		[Embed("../assets/images/plus_up.png")]
 		public var qualityIncreaseUpType:Class;
-		[Embed("../assets/images/qualityIncrease_down.png")]
+		[Embed("../assets/images/plus_down.png")]
 		public var qualityIncreaseDownType:Class;
-		[Embed("../assets/images/qualityIncrease_disabled.png")]
+		[Embed("../assets/images/plus_disabled.png")]
 		public var qualityIncreaseDisabledType:Class;
 		
 		public function QualityIncreaseButton(up:Class = null, down:Class = null, disabled:Class = null)

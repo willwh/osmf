@@ -33,10 +33,10 @@ package org.osmf.chrome.controlbar
 		public static const PAUSE_BUTTON:String = "pauseButton";
 		public static const PLAY_BUTTON:String = "playButton";
 		public static const STOP_BUTTON:String = "stopButton";
-		public static const QUALITY_MANUAL_BUTTON:String = "qualityManualButton";
-		public static const QUALITY_AUTO_BUTTON:String = "qualityAutoButton";
+		public static const QUALITY_BUTTON:String = "qualityButton";
 		public static const QUALITY_INCREASE:String = "qualityIncrease";
 		public static const QUALITY_DECREASE:String = "qualityDecrease";
+		public static const QUALITY_LABEL:String = "qualityLabel";
 		public static const EJECT_BUTTON:String = "ejectButton";
 		public static const FULL_SCREEN_ENTER:String = "fullScreenEnter";
 		public static const FULL_SCREEN_LEAVE:String = "fullScreenLeave";
@@ -86,21 +86,22 @@ package org.osmf.chrome.controlbar
 			widget.hint = "Click to lock the control bar in place";
 			widget.addEventListener(MouseEvent.CLICK, onPinButtonClick);
 			
-			widget = addWidget(QUALITY_MANUAL_BUTTON, new QualityManualButton());
+			widget = addWidget(QUALITY_BUTTON, new QualityModeToggle());
 			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
-			widget.setPosition(3, 0);
-			
-			widget = addWidget(QUALITY_AUTO_BUTTON, new QualityAutoButton());
-			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
+			widget.hint = "Click to toggle between automatic and manual quality mode";
 			widget.setPosition(3, 0);
 			
 			widget = addWidget(QUALITY_INCREASE, new QualityIncreaseButton());
-			widget.setRegistrationTarget(QUALITY_AUTO_BUTTON, Direction.RIGHT);
-			widget.setPosition(1, 0);
+			widget.setRegistrationTarget(QUALITY_BUTTON, Direction.RIGHT);
+			widget.setPosition(-2, 4);
 			
 			widget = addWidget(QUALITY_DECREASE, new QualityDecreaseButton());
 			widget.setRegistrationTarget(QUALITY_INCREASE, Direction.RIGHT);
 			widget.setPosition(1, 0);
+			
+			widget = addWidget(QUALITY_LABEL, new QualityLabel());
+			widget.setRegistrationTarget(QUALITY_DECREASE, Direction.RIGHT);
+			widget.setPosition(0, -3);
 			
 			widget = addWidget(FULL_SCREEN_ENTER, new FullScreenEnterButton());
 			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);

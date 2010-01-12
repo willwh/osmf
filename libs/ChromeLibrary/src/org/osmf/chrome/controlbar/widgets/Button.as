@@ -114,12 +114,12 @@ package org.osmf.chrome.controlbar.widgets
 			// Stub
 		}
 		
-		private var currentFace:DisplayObject;
-		private var mouseOver:Boolean;
+		protected var currentFace:DisplayObject;
+		protected var mouseOver:Boolean;
 		
-		private var up:DisplayObject;
-		private var down:DisplayObject;
-		private var disabled:DisplayObject;
+		protected var up:DisplayObject;
+		protected var down:DisplayObject;
+		protected var disabled:DisplayObject;
 		
 	}
 }

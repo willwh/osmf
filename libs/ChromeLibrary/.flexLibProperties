@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.PauseButton"/>
-    <classEntry path="org.osmf.chrome.hint.Hint"/>
-    <classEntry path="org.osmf.chrome.events.ScrubberEvent"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.EjectButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.SoundLessButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.SoundMoreButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.PinUpButton"/>
     <classEntry path="org.osmf.chrome.controlbar.ControlBar"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.FullScreenLeaveButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.PinDownButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.FullScreenEnterButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.URLInput"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.Scrubber"/>
-    <classEntry path="org.osmf.chrome.events.RequestLayoutEvent"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.Button"/>
     <classEntry path="org.osmf.chrome.controlbar.ControlBarBase"/>
-    <classEntry path="org.osmf.chrome.fonts.Fonts"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityAutoButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.ControlBarWidget"/>
     <classEntry path="org.osmf.chrome.controlbar.Direction"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityManualButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.Button"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.EjectButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.FullScreenEnterButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.FullScreenLeaveButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.Label"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.PauseButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.PinDownButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.PinUpButton"/>
     <classEntry path="org.osmf.chrome.controlbar.widgets.PlayButton"/>
     <classEntry path="org.osmf.chrome.controlbar.widgets.PlayableButton"/>
-    <classEntry path="org.osmf.chrome.controlbar.ControlBarWidget"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.ScrubBar"/>
-    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityIncreaseButton"/>
     <classEntry path="org.osmf.chrome.controlbar.widgets.QualityDecreaseButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityIncreaseButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityLabel"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.QualityModeToggle"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.ScrubBar"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.Scrubber"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.SoundLessButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.SoundMoreButton"/>
     <classEntry path="org.osmf.chrome.controlbar.widgets.StopButton"/>
+    <classEntry path="org.osmf.chrome.controlbar.widgets.URLInput"/>
+    <classEntry path="org.osmf.chrome.events.RequestLayoutEvent"/>
+    <classEntry path="org.osmf.chrome.events.ScrubberEvent"/>
+    <classEntry path="org.osmf.chrome.fonts.Fonts"/>
+    <classEntry path="org.osmf.chrome.hint.Hint"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
