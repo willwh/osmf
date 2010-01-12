@@ -22,8 +22,6 @@
 package org.osmf.net
 {
 	import flexunit.framework.TestCase;
-	
-	import org.osmf.net.NetClient;
 
 	public class TestNetClient extends TestCase
 	{
@@ -77,6 +75,63 @@ package org.osmf.net
 			
 			assertNotNull(func);
 			assertTrue(myFuncCalled);					
+		}
+
+		public function testAddHandlerWithPriority():void
+		{
+			var client:NetClient = new NetClient();
+			var eventName:String = "onEvent";
+
+			var funcsCalled:Array = [];
+			
+			function myFuncA():void
+			{
+				funcsCalled.push("myFuncA");
+			}
+
+			function myFuncB():void
+			{
+				funcsCalled.push("myFuncB");
+			}
+
+			function myFuncC():void
+			{
+				funcsCalled.push("myFuncC");
+			}
+
+			function myFuncD():void
+			{
+				funcsCalled.push("myFuncD");
+			}
+
+			function myFuncE():void
+			{
+				funcsCalled.push("myFuncE");
+			}
+
+			function myFuncF():void
+			{
+				funcsCalled.push("myFuncF");
+			}
+			
+			var func:Function = client.onEvent;
+			
+			assertNull(func);
+			assertTrue(funcsCalled.length == 0);
+			
+			// Highest priority handlers should get called first.
+			client.addHandler("onEvent", myFuncA, 2);
+			client.addHandler("onEvent", myFuncB, 1);
+			client.addHandler("onEvent", myFuncC);
+			client.addHandler("onEvent", myFuncD, 3);
+			client.addHandler("onEvent", myFuncE, 2);
+			client.addHandler("onEvent", myFuncF);
+			
+			func = client.onEvent;
+			func.apply(this, []);
+			
+			assertNotNull(func);
+			assertTrue(funcsCalled.join(" ") == "myFuncD myFuncA myFuncE myFuncB myFuncC myFuncF");					
 		}
 		
 		public function testRemoveHandler():void

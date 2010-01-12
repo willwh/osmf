@@ -23,7 +23,6 @@ package org.osmf.net
 {
 	import flash.utils.Dictionary;
 	import flash.utils.Proxy;
-	import flash.utils.Timer;
 	import flash.utils.flash_proxy;
 
 	/**
@@ -75,6 +74,10 @@ package org.osmf.net
 		 * The callback names are enumerated in the 
 		 * and NetStreamCodes class.
 		 * @param handler Handler to add.
+		 * @priority The priority level of the handler.  The higher the number, the higher the priority.
+		 * All handlers with priority N are processed before handlers of priority N-1.  If two or more
+		 * handlers are added with the same priority, they are processed in the order in which they
+		 * were added.
 		 * @see NetStreamCodes
 		 *  
 		 *  @langversion 3.0
@@ -82,8 +85,8 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function addHandler(name:String,handler:Function):void
-		{			
+		public function addHandler(name:String, handler:Function, priority:int=0):void
+		{
 			var handlersForName:Array 
 				= handlers.hasOwnProperty(name)
 					? handlers[name]
@@ -91,7 +94,31 @@ package org.osmf.net
 			
 			if (handlersForName.indexOf(handler) == -1)
 			{
-				handlersForName.push(handler);
+				var inserted:Boolean = false;
+				
+				priority = Math.max(0, priority);
+				
+				// Higher priority handlers are at the front of the list.
+				if (priority > 0)
+				{
+					for (var i:int = 0; i < handlersForName.length; i++)
+					{
+						var handlerWithPriority:Object = handlersForName[i];
+						
+						// Stop iterating when we're passed all handlers of
+						// this priority.
+						if (handlerWithPriority.priority < priority)
+						{
+							handlersForName.splice(i, 0, {handler:handler, priority:priority});
+							inserted = true;
+							break;
+						}
+					}
+				}
+				if (!inserted)
+				{
+					handlersForName.push({handler:handler, priority:priority});
+				}
 			}
 		}
 		
@@ -116,16 +143,19 @@ package org.osmf.net
 		{
 			var result:Boolean;
 			
-			if (handlers.hasOwnProperty(name) )
+			if (handlers.hasOwnProperty(name))
 			{
 				var handlersForName:Array = handlers[name];
-				var index:int = handlersForName.indexOf(handler);
-			
-				if (index != -1)
+				for (var i:int = 0; i < handlersForName.length; i++)
 				{
-					handlersForName.splice(index,1);
-					
-					result = true;
+					var handlerWithPriority:Object = handlersForName[i];
+					if (handlerWithPriority.handler == handler)
+					{
+						handlersForName.splice(i, 1);
+						
+						result = true;
+						break;
+					}
 				}
 			}
 			
@@ -141,7 +171,7 @@ package org.osmf.net
 		 */		
 		override flash_proxy function callProperty(methodName:*, ... args):*
 		{
-			return invokeHandlers(methodName,args);
+			return invokeHandlers(methodName, args);
         }
         
         /**
@@ -156,7 +186,7 @@ package org.osmf.net
 				result 
 					=  function():*
 						{
-							return invokeHandlers(arguments.callee.name,arguments);
+							return invokeHandlers(arguments.callee.name, arguments);
 						}
 				
 				result.name = name;
@@ -189,7 +219,7 @@ package org.osmf.net
 		 * each individual handler invokation. 
 		 * 
 		 */				
-		private function invokeHandlers(name:String,args:Array):*
+		private function invokeHandlers(name:String, args:Array):*
 		{
 			var result:Array;
 			
@@ -197,9 +227,9 @@ package org.osmf.net
 			{
 				result = [];
 				var handlersForName:Array = handlers[name];
-				for each (var handler:Function in handlersForName)
+				for each (var handler:Object in handlersForName)
 				{
-					result.push(handler.apply(null,args));
+					result.push(handler.handler.apply(null,args));
 				}
 			}
 			

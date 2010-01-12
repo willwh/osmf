@@ -368,9 +368,9 @@ package org.osmf.video
 
 	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
 	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
-			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, resource);
 			addTrait(MediaTraitType.TIME, timeTrait);
+			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 			displayObjectTrait = new NetStreamDisplayObjectTrait(stream, video, video.width, video.height);
 			addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
