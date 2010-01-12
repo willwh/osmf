@@ -62,17 +62,17 @@ package
 		
 		private function onAsyncError(event:AsyncErrorEvent):void
 		{
-			
+			//	
 		}
 		
 		private function onSecurityError(event:SecurityErrorEvent):void
 		{
-			
+			//	
 		}
 		
 		private function onStatus(event:StatusEvent):void
 		{
-			trace(event.code);
+			//
 		}
 	}
 }
