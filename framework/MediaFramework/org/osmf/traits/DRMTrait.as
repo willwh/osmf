@@ -21,41 +21,19 @@
 *****************************************************/
 package org.osmf.traits
 {
-	import org.osmf.events.ContentProtectionEvent;
+
+	import org.osmf.drm.DRMState;
+	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	
 	/**
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
 	 * to playback the media.
 	 *
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
+	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
  	 */ 
-	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
-	
-	/**
-	 * Dispatched when an authentication attempt succeeds.
-	 * 
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
-	 
-	/**	 	
-	 * Dispatches when an authentication attempt fails.
-	 * 
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
-	
+	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
+				
 	/**
 	 * ContentProtectionTrait defines the trait interface for media which can be
 	 * protected by digital rights management (DRM) technology.  It can also be
@@ -72,19 +50,20 @@ package org.osmf.traits
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 	
-	public class ContentProtectionTrait extends MediaTraitBase
+	public class DRMTrait extends MediaTraitBase
 	{
 		/**
 		 * Constructor.
 		 **/
-		public function ContentProtectionTrait()
+		public function DRMTrait()
 		{
-			super(MediaTraitType.CONTENT_PROTECTION);
+			super(MediaTraitType.DRM);
 		}
 		
 		/**
 		 * The required method of authentication.  Possible values are "anonymous"
-		 * and "usernameAndPassword".
+		 * and "usernameAndPassword".  The default is "".  This method should be override by
+		 * subclasses.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -93,7 +72,7 @@ package org.osmf.traits
 		 */ 
 		public function get authenticationMethod():String
 		{
-			return _authenticationMethod;
+			return "";
 		}
 		
 		/**
@@ -110,7 +89,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function authenticate(username:String, password:String):void
+		public function authenticate(username:String = null, password:String = null):void
 		{
 		}
 		
@@ -129,6 +108,21 @@ package org.osmf.traits
 		public function authenticateWithToken(token:Object):void
 		{							
 		}
+		
+		/**
+		 * The current state of the DRM for this media.  The states are explained
+		 * in the DRMState enumeration in the org.osmf.drm package.
+		 * @see DRMState
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get drmState():String
+		{
+			return _drmState;
+		}  
 
 		/**
 		 * Returns the start date for the playback window.  Returns null if authentication 
@@ -181,30 +175,41 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Must be called by the implementing media on completing authentication.  Dispatches
-		 * the change event.
+		 * Must be called by the implementing drm subsystem classes.  
+		 * Dispatches the change event, as well as updates the start,
+		 * end, period values.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function signalAuthenticateComplete(success:Boolean, token:Object, error:MediaError):void
+		protected final function drmStateChange(newState:String, token:Object, error:MediaError, start:Date = null, end:Date = null, period:Number = 0):void
 		{
+			_drmState = newState;
+			_period = period;	
+			_endDate = end;	
+			_startDate = start;
 			dispatchEvent
-				( new ContentProtectionEvent
-					( success ? ContentProtectionEvent.AUTHENTICATION_COMPLETE : ContentProtectionEvent.AUTHENTICATION_FAILED
-					, false
-					, false
-					, token
-					, error
+				( new DRMEvent
+					( DRMEvent.DRM_STATE_CHANGE,
+					newState,
+					false,
+					false,
+					_startDate,
+					_endDate,
+					_period,
+					token,
+					error					
 					)
 				);
 		}
-
-		private var _authenticationMethod:String;
-		private var _startDate:Date;
-		private var _endDate:Date;
-		private var _period:Number;
+		
+		private var _drmState:String = DRMState.INITIALIZING;	
+		private var _period:Number = 0;	
+		private var _endDate:Date;	
+		private var _startDate:Date;	
+		
+			
 	}
 }

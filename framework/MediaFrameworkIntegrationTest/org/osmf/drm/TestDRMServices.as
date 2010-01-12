@@ -23,6 +23,7 @@ package org.osmf.drm
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
+	import flash.net.drm.AuthenticationMethod;
 	import flash.utils.ByteArray;
 	
 	import flexunit.framework.Assert;
@@ -30,7 +31,7 @@ package org.osmf.drm
 	
 	import mx.utils.Base64Decoder;
 	
-	import org.osmf.events.ContentProtectionEvent;
+	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.utils.OSMFStrings;
 
@@ -52,61 +53,62 @@ package org.osmf.drm
 				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);	
 						
 				var services:DRMServices = new DRMServices();						
-				services.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED,  onAuthNeeded );
-				services.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE,  onAuthComp);
-				services.addEventListener(ContentProtectionEvent.AUTHENTICATION_FAILED, onAuthError);
+				services.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 				var meta:ByteArray = new ByteArray();
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(DRM_FAIL_TEST_TREE);
 				services.drmMetadata =  decoder.toByteArray();
 				services.authenticate("wrong", "credentials");	
 				
-				function onAuthNeeded(event:ContentProtectionEvent):void
-				{						
-					services.authenticate("wrong", "credentials");
-				}										
-				function onAuthError(event:ContentProtectionEvent):void
+				function onStateChange(event:DRMEvent):void
 				{
-					Assert.assertEquals(event.detail, OSMFStrings.DRM_AUTHENTICATION_FAILED)
-					Assert.assertEquals(MediaErrorCodes.DRM_AUTHENTICATION_FAILED, event.errorID);
-					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED,  onAuthNeeded );
-					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE,  onAuthComp);
-					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_FAILED, onAuthError);
-					testFinished(null);			
-				}	
-				function onAuthComp(event:ContentProtectionEvent):void
-				{					
-					throw new Error("Shouldn't complete");			
-				}							
+					switch(services.drmState)
+					{
+						case DRMState.AUTHENTICATION_NEEDED:
+							services.authenticate("wrong", "credentials");
+							break;
+						case DRMState.AUTHENTICATE_FAILED:	
+							Assert.assertEquals(event.error.detail, OSMFStrings.DRM_AUTHENTICATION_FAILED)
+							Assert.assertEquals(MediaErrorCodes.DRM_AUTHENTICATION_FAILED, event.error.errorID);
+							services.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
+							testFinished(null);
+							break;
+						case DRMState.AUTHENTICATED:
+							throw new Error("Shouldn't complete");		
+					}					
+				}
+										
 			}
 			
 			public function testAuthenticationSuccess():void
 			{			
-				var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
+				var testFinished:Function = addAsync( function (event:Event):void {}, 13000);
 									
-				var services:DRMServices = new DRMServices();						
-				services.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED,  onAuthNeeded );
-				services.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE,   onAuthComp );
+				var services:DRMServices = new DRMServices();		
+				services.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);				
+				
 				var meta:ByteArray = new ByteArray();
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(IDENT_METADATA);
 				services.drmMetadata =  decoder.toByteArray();
-					
-				// Doesn't fire if the voucher is already present.	
-				function onAuthNeeded(event:ContentProtectionEvent):void
-				{				
-					Assert.assertTrue(AuthenticationMethod.USERNAME_AND_PASSWORD, services.authenticationMethod);
-					services.authenticate(USERNAME, PASSWORD);
-				}
-										
-				function onAuthComp(event:ContentProtectionEvent):void
-				{					
-					Assert.assertTrue(services.startDate.time <= (new Date()).time);
-					Assert.assertTrue(services.endDate.time >= (new Date()).time);
-					Assert.assertTrue(services.period >= 0);	
-					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED, onAuthNeeded);
-					services.removeEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onAuthComp);
-					testFinished(null);				
+				
+				function onStateChange(event:DRMEvent):void
+				{
+					switch(services.drmState)
+					{
+						case DRMState.AUTHENTICATION_NEEDED:	
+							// Doesn't fire if the voucher is already present.							
+							Assert.assertTrue(AuthenticationMethod.USERNAME_AND_PASSWORD, services.authenticationMethod);
+							services.authenticate(USERNAME, PASSWORD);
+							break;
+						case DRMState.AUTHENTICATED:										
+							Assert.assertTrue(services.startDate.time <= (new Date()).time);
+							Assert.assertTrue(services.endDate.time >= (new Date()).time);
+							Assert.assertTrue(services.period >= 0);	
+							services.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
+							testFinished(null);				
+							break;
+					}
 				}
 			}
 			

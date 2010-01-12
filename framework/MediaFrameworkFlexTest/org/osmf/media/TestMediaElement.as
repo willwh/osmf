@@ -469,7 +469,7 @@ package org.osmf.media
 			
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.AUDIO);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.BUFFER);
-			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.CONTENT_PROTECTION);
+			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DRM);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.DYNAMIC_STREAM);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.LOAD);
 			addIfNotPresent(traitTypes, inverseTraitTypes, MediaTraitType.PLAY);

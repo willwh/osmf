@@ -31,7 +31,8 @@ package org.osmf.video
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
-	import org.osmf.events.ContentProtectionEvent;
+	import org.osmf.drm.DRMState;
+	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -51,22 +52,22 @@ package org.osmf.video
 	import org.osmf.net.NetStreamAudioTrait;
 	import org.osmf.net.NetStreamBufferTrait;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.NetStreamDisplayObjectTrait;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.NetStreamPlayTrait;
 	import org.osmf.net.NetStreamSeekTrait;
 	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
-	import org.osmf.net.NetStreamDisplayObjectTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 
 	CONFIG::FLASH_10_1
@@ -77,7 +78,7 @@ package org.osmf.video
 	import flash.net.drm.DRMContentData;	
 	import flash.system.SystemUpdaterType;
 	import flash.system.SystemUpdater;	
-	import org.osmf.net.NetStreamContentProtectionTrait;
+	import org.osmf.net.NetStreamDRMTrait;
 	}
 	
 	/**
@@ -292,12 +293,13 @@ package org.osmf.video
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
-    				addProtectableTrait(metadata).addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onMetadataAuth);	   
-    				return;  //Don't add traits until the "auth" has completed. 			
+    				setupDRMTrait(metadata);
+    				drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	   
+    				return;  //Don't finishLoad() until the "auth" has completed. 			
 	    		}
 	    		else
 	    		{
-	    			// Non sidecar
+	    			// Non sidecar, we need to play before getting access to the DRMTrait.
     				stream.addEventListener(StatusEvent.STATUS, onStatus);
 	    		}			
     		}
@@ -310,53 +312,56 @@ package org.osmf.video
   			private function onStatus(event:StatusEvent):void
 			{
 				if (event.code == DRM_STATUS_CODE 
-					&& getTrait(MediaTraitType.CONTENT_PROTECTION) == null)
+					&& getTrait(MediaTraitType.DRM) == null)
 				{			
-					createProtectionTrait().addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, reloadAfterAuth);	  			
+					createDRMTrait();
+					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	  			
 	    		}
 	  		}
 	  		
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
-	  		private function reloadAfterAuth(event:ContentProtectionEvent):void
+	  		private function reloadAfterAuth(event:DRMEvent):void
 	  		{
-	  			if (LoadTrait(getTrait(MediaTraitType.LOAD)).loadState == LoadState.READY)
-	  			{				  			
-	  				LoadTrait(getTrait(MediaTraitType.LOAD)).unload();	  	
-	  			}
-
-	  			LoadTrait(getTrait(MediaTraitType.LOAD)).load();  		  					
+	  			if (drmTrait.drmState == DRMState.AUTHENTICATED)
+	  			{
+	  				if (LoadTrait(getTrait(MediaTraitType.LOAD)).loadState == LoadState.READY)
+		  			{				  			
+		  				LoadTrait(getTrait(MediaTraitType.LOAD)).unload();	  	
+		  			}	
+		  			LoadTrait(getTrait(MediaTraitType.LOAD)).load();  	
+	  			}	  				  					
 	  		}	
 			
-			private function createProtectionTrait():NetStreamContentProtectionTrait
+			private function createDRMTrait():void
 			{				
-				var protectionTrait:NetStreamContentProtectionTrait = new NetStreamContentProtectionTrait();		    	
-		    	addTrait(MediaTraitType.CONTENT_PROTECTION, protectionTrait);	
-		    	return protectionTrait;	    			
+				drmTrait = new NetStreamDRMTrait();		    	
+		    	addTrait(MediaTraitType.DRM, drmTrait);			    				
 			}	
 			
-			private function addProtectableTrait(contentData:ByteArray):NetStreamContentProtectionTrait
+			private function setupDRMTrait(contentData:ByteArray):void
 			{			
-	    		var trait:NetStreamContentProtectionTrait = createProtectionTrait();
-			   	trait.drmMetadata = contentData;
-			   	return trait;
+	    		createDRMTrait();
+			   	drmTrait.drmMetadata = contentData;
 			}
 							
 			private function onDRMErrorEvent(event:DRMErrorEvent):void
 			{
 				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  // Needs authentication
 				{					
-					NetStreamContentProtectionTrait(getTrait(MediaTraitType.CONTENT_PROTECTION)).drmMetadata = event.contentData;
+					drmTrait.drmMetadata = event.contentData;
 				}
 				else // Inline DRM - Errors need to be forwarded
-				{				
-					var trait:NetStreamContentProtectionTrait = NetStreamContentProtectionTrait(getTrait(MediaTraitType.CONTENT_PROTECTION));
-					trait.dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(event.errorID)));	
+				{						
+					drmTrait.signalInlineAuthFailed(new MediaError(event.errorID));
 				}				
 			}	
 			
-			private function onMetadataAuth(event:Event):void
+			private function onMetadataAuth(event:DRMEvent):void
 			{
-				finishLoad();	
+				if (drmTrait.drmState == DRMState.AUTHENTICATED)
+				{
+					finishLoad();
+				}	
 			}	
 		}
 			
@@ -407,7 +412,8 @@ package org.osmf.video
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
-    			removeTrait(MediaTraitType.CONTENT_PROTECTION);    					
+    			removeTrait(MediaTraitType.DRM);  
+    			drmTrait = null;  					
     		}
     		
 	    	// Null refs to garbage collect.	    	
@@ -513,5 +519,11 @@ package org.osmf.video
 		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream
 		private var _smoothing:Boolean;
 		private var _deblocking:int;
+		
+		CONFIG::FLASH_10_1
+		{
+		private var drmTrait:NetStreamDRMTrait;	
+		}
+		
 	}
 }

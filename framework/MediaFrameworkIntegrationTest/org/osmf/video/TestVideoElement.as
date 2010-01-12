@@ -29,7 +29,8 @@ package org.osmf.video
 	
 	import mx.utils.Base64Decoder;
 	
-	import org.osmf.events.ContentProtectionEvent;
+	import org.osmf.drm.DRMState;
+	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaPlayer;
@@ -38,9 +39,8 @@ package org.osmf.video
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.IContentProtectable;
+	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
 	public class TestVideoElement extends TestCase
@@ -65,7 +65,7 @@ package org.osmf.video
 			decoder.decode(ANONYMOUS_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(ANONYMOUS_ENCRYPTED));
 			resource.metadata.addFacet(facet);
@@ -75,7 +75,7 @@ package org.osmf.video
 		
 		override public function tearDown():void
 		{
-			mediaPlayer.element = null;				
+			mediaPlayer.media = null;				
 		}
 	
 		public function testIdentSidecar():void
@@ -86,7 +86,7 @@ package org.osmf.video
 			decoder.decode(IDENT_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
 			resource.metadata.addFacet(facet);
@@ -98,7 +98,7 @@ package org.osmf.video
 		{
 			// Anonymous Encrypted content without metadata sidecar
 			var resource:URLResource = new URLResource(new URL(ANONYMOUS_INLINE));
-			var protectable:IContentProtectable;
+			var protectable:DRMTrait;
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
 			//We never get the IContentProtectableTRait here, so we have to basicly dectect decyption by checking for  the files duration
@@ -106,26 +106,31 @@ package org.osmf.video
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);
 			
 			mediaPlayer =  new MediaPlayer();
-			mediaPlayer.element = elem;
+			mediaPlayer.media = elem;
 			
 			function onTrait(event:MediaElementEvent):void
 			{
-				if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
+				if (event.traitType == MediaTraitType.DRM)
 				{
-					protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+					protectable = (elem.getTrait(MediaTraitType.DRM) as DRMTrait);
+					protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange );	
+					elem.removeEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);				
 				}
 			}
-			function onAuthNeeded(event:ContentProtectionEvent):void // May or may not get fired - if previous auth's doesn't fire.
-			{					
-				throw new Error("Should not happen");
+			function onStateChange(event:DRMEvent):void
+			{
+				switch(protectable.drmState)
+				{
+					case DRMState.AUTHENTICATION_NEEDED:
+						throw new Error("Should not happen, anonymous");
+						break;
+					case DRMState.AUTHENTICATED:
+						protectable.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange );
+						testFinished(null);
+						break;
+				}
 			}
-			function onAuthComplete(event:ContentProtectionEvent):void
-			{					
-				testFinished(null);
-			}	
-			
+						
 		}
 		
 		public function testAuthenticationToken():void
@@ -136,49 +141,60 @@ package org.osmf.video
 			decoder.decode(IDENT_METADATA);				
 			//Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(new ObjectIdentifier(OSMFStrings.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
+			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
 			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
 			resource.metadata.addFacet(facet);
 						
 			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
-			var protectable:IContentProtectable;
+			var protectable:DRMTrait;
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 			var token:Object;
 										
-			mediaPlayer.element = elem;
+			mediaPlayer.media = elem;
 			
 			function onTrait(event:MediaElementEvent):void
 			{
-				if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
+				if (event.traitType == MediaTraitType.DRM)
 				{
-					protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+					protectable = (elem.getTrait(MediaTraitType.DRM) as DRMTrait);
+					protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange );	
+					elem.removeEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);				
 				}
 			}
-			function onAuthNeeded(event:ContentProtectionEvent):void //May or may not get fired - if previous auth's doesn't fire.
-			{					
-				protectable.authenticate("dmo", "password");
+			function onStateChange(event:DRMEvent):void
+			{
+				switch(protectable.drmState)
+				{
+					case DRMState.AUTHENTICATION_NEEDED:
+						protectable.authenticate("dmo", "password");
+						break;
+					case DRMState.AUTHENTICATED:
+						protectable.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange );
+						token = event.token;					
+						var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
+						timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
+						timer.start();
+						break;
+				}
 			}
-			function onAuthComplete(event:ContentProtectionEvent):void
-			{	
-				token = event.token;					
-				var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
-				timer.start();
-			}					
+										
 			function onFinished(event:TimerEvent):void
 			{
-				mediaPlayer.element = null;
-				mediaPlayer.element = new VideoElement(new NetLoader(), resource);
-				protectable = (mediaPlayer.element.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable)
-				protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onTokenAuth);
+				mediaPlayer.media = null;
+				mediaPlayer.media = new VideoElement(new NetLoader(), resource);
+				protectable = (mediaPlayer.media.getTrait(MediaTraitType.DRM) as DRMTrait);
+				protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onTokenAuth);
 				protectable.authenticateWithToken(token);
 			}
-			function onTokenAuth(event:ContentProtectionEvent):void
+			function onTokenAuth(event:DRMEvent):void
 			{
-				testFinished(null);
+				switch(protectable.drmState)
+				{
+					case DRMState.AUTHENTICATED:
+						testFinished(null);
+						break;
+				}
 			}
 		}
 	
@@ -194,30 +210,34 @@ package org.osmf.video
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
 			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
-			var protectable:IContentProtectable;
+			var protectable:DRMTrait;
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 							
-			mediaPlayer.element = elem;
+			mediaPlayer.media = elem;
 			
 			function onTrait(event:MediaElementEvent):void
 			{
-				if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
+				if (event.traitType == MediaTraitType.DRM)
 				{
-					protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED, onAuthNeeded );
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+					protectable = (elem.getTrait(MediaTraitType.DRM) as DRMTrait);
+					protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange );	
+					elem.removeEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);
 				}
 			}
-			function onAuthNeeded(event:ContentProtectionEvent):void //May or may not get fired - if previous auth's doesn't fire.
-			{					
-				protectable.authenticate(user, pass);
-			}
-			function onAuthComplete(event:ContentProtectionEvent):void
-			{						
-				var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
-				timer.start();
-			}					
+			function onStateChange(event:DRMEvent):void
+			{
+				switch(protectable.drmState)
+				{
+					case DRMState.AUTHENTICATION_NEEDED:
+						protectable.authenticate(user, pass);
+						break;
+					case DRMState.AUTHENTICATED:
+						var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
+						timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
+						timer.start();
+						break;	
+				}
+			}				
 			function onFinished(event:TimerEvent):void
 			{
 				testFinished(null);
@@ -228,27 +248,33 @@ package org.osmf.video
 		{						
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 					
-			var protectable:IContentProtectable;
+			var protectable:DRMTrait;
 			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 			
-			mediaPlayer.element = elem;
+			mediaPlayer.media = elem;
 			
 			function onTrait(event:MediaElementEvent):void
 			{					
-				if (event.traitType == MediaTraitType.CONTENT_PROTECTABLE)
+				if (event.traitType == MediaTraitType.DRM)
 				{
-					protectable = (elem.getTrait(MediaTraitType.CONTENT_PROTECTABLE) as IContentProtectable);
-					protectable.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, onAuthComplete);
+					protectable = (elem.getTrait(MediaTraitType.DRM) as DRMTrait);
+					protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 				}
 			}
 			
-			function onAuthComplete(event:ContentProtectionEvent):void
+			function onStateChange(event:DRMEvent):void
 			{
-				var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
-				timer.start();
-			}					
+				switch(protectable.drmState)
+				{				
+					case DRMState.AUTHENTICATED:
+						var timer:Timer = new Timer(0, 1); //required to let the video element finish loading
+						timer.addEventListener(TimerEvent.TIMER_COMPLETE, onFinished);
+						timer.start();
+						break;	
+				}
+			}				
+								
 			function onFinished(event:TimerEvent):void
 			{
 				testFinished(null);

@@ -41,12 +41,15 @@ package org.osmf.drm
 		import flash.net.drm.LoadVoucherSetting;
 		import flash.system.SystemUpdater;
 		import flash.system.SystemUpdaterType;
+		import org.osmf.events.DRMEvent;
 	}
 		
-	import org.osmf.events.ContentProtectionEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.events.DRMEvent;
+	import flash.system.SystemUpdater;
+
 	
 	/**
 	 * @private
@@ -126,6 +129,21 @@ package org.osmf.drm
 		}
 		
 		/**
+		 * The current state of the DRM for this media.  The states are explained
+		 * in the DRMState enumeration in the org.osmf.drm package.
+		 * @see DRMState
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get drmState():String
+		{
+			return _drmState;
+		} 
+			
+		/**
 		 * The metadata property is specific to the DRM for the Flash Player.  Once set, authentication
 		 * and voucher retrieval is started.  This method may trigger an update to the DRM subsystem.  Metadata
 		 * forms the basis for content data.
@@ -151,15 +169,12 @@ package org.osmf.drm
 					retrieveVoucher();	
 				}
 				catch (argError:ArgumentError)  // DRM ContentData is invalid
-				{				
-					dispatchEvent
-						( new ContentProtectionEvent
-							( ContentProtectionEvent.AUTHENTICATION_FAILED
-							, false
-							, false
-							, new MediaError(argError.errorID, "DRMContentData invalid")
-							)
+				{		
+					updateDRMState		
+						( 	DRMState.AUTHENTICATE_FAILED,
+							new MediaError(argError.errorID, "DRMContentData invalid")
 						);
+						
 				}
 				catch (error:Error)
 				{
@@ -172,13 +187,17 @@ package org.osmf.drm
 						if (event.type == Event.COMPLETE)
 						{
 								drmMetadata = value;
+								return;
 						}	
-					}					
-					var updater:SystemUpdater = new SystemUpdater();
-					updater.addEventListener(IOErrorEvent.IO_ERROR, onComplete);
-					updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
-					updater.addEventListener(Event.COMPLETE, onComplete);
-					updater.update(SystemUpdaterType.DRM);				
+					}				
+					if (updater == null)
+					{
+						updater = new SystemUpdater();
+						updater.addEventListener(IOErrorEvent.IO_ERROR, onComplete);
+						updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
+						updater.addEventListener(Event.COMPLETE, onComplete);
+						updater.update(SystemUpdaterType.DRM);				
+					}
 				}
 			}
 		}
@@ -218,7 +237,7 @@ package org.osmf.drm
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function authenticate(username:String, password:String):void
+		public function authenticate(username:String = null, password:String = null):void
 		{			
 			if (drmContentData == null)
 			{
@@ -226,8 +245,16 @@ package org.osmf.drm
 			}
 		
 			drmManager.addEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);			
-			drmManager.addEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);			
-			drmManager.authenticate(drmContentData.serverURL, drmContentData.domain, username, password);
+			drmManager.addEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);		
+			
+			if (password == null && username == null)
+			{
+				retrieveVoucher();
+			}	
+			else
+			{
+				drmManager.authenticate(drmContentData.serverURL, drmContentData.domain, username, password);
+			}
 		}
 		
 		/**
@@ -322,6 +349,22 @@ package org.osmf.drm
 			}		
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Signals failures from the DRMsubsystem not captured though the 
+		 * DRMServices class.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function signalInlineAuthFailed(error:MediaError):void
+		{
+			updateDRMState(DRMState.AUTHENTICATE_FAILED, error);
+		}
+		
 		// Internals
 		//
 		
@@ -353,8 +396,15 @@ package org.osmf.drm
 			    )
 			{
 				removeEventListeners();
-				
-				dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_COMPLETE, false, false, lastToken));			
+							
+				if (voucher.playbackTimeWindow == null)
+				{					
+					updateDRMState(DRMState.AUTHENTICATED, null, voucher.voucherStartDate, voucher.voucherEndDate, period, lastToken);
+				} 
+				else
+				{
+					updateDRMState(DRMState.AUTHENTICATED, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
+				}								
 			}
 			else
 			{
@@ -375,12 +425,11 @@ package org.osmf.drm
 					forceRefreshVoucher();
 					break;
 				case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
-					dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_NEEDED));
+					updateDRMState(DRMState.AUTHENTICATION_NEEDED);
 					break;
 				default:
-					removeEventListeners();
-							
-					dispatchEvent(new ContentProtectionEvent(ContentProtectionEvent.AUTHENTICATION_FAILED, false, false, null, new MediaError(event.errorID, event.text)));	
+					removeEventListeners();							
+					updateDRMState(DRMState.AUTHENTICATE_FAILED,  new MediaError(event.errorID, event.text));	
 					break;
 			}	
 		}
@@ -404,24 +453,39 @@ package org.osmf.drm
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
 			
-			dispatchEvent
-				( new ContentProtectionEvent
-					( ContentProtectionEvent.AUTHENTICATION_FAILED
-					, false
-					, false
-					, null
-					, new MediaError
+			updateDRMState
+				( DRMState.AUTHENTICATE_FAILED,
+					new MediaError
 						( event.errorID
 						, MediaErrorCodes.getMessageForErrorID(event.errorID)
-						)
+						)					
+				);
+		}
+		
+		private function updateDRMState(newState:String,  error:MediaError = null,  start:Date = null, end:Date = null, period:Number = 0 , token:Object=null):void
+		{
+			_drmState = newState;
+			dispatchEvent
+				( new DRMEvent
+					( DRMEvent.DRM_STATE_CHANGE,
+					newState,
+					false,
+					false,
+					null,
+					null,
+					0,
+					null,
+					error
 					)
 				);
 		}
 		
+		private var _drmState:String = DRMState.INITIALIZING;
 		private var lastToken:ByteArray
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;
 		private var drmManager:DRMManager;
+		private var updater:SystemUpdater;
 	}
 	}
 }

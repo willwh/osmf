@@ -83,7 +83,7 @@ package org.osmf
 			addTestSuite(TestAudioTrait);
 			addTestSuite(TestBufferTrait);
 			addTestSuite(TestBufferTraitAsSubclass);
-			addTestSuite(TestContentProtectionTrait);
+			addTestSuite(TestDRMTrait);
 			addTestSuite(TestDynamicStreamTrait);
 			addTestSuite(TestLoadTrait);
 			//addTestSuite(TestLoaderBase);

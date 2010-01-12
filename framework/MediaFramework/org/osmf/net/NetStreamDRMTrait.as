@@ -25,21 +25,23 @@ package org.osmf.net
 	
 	CONFIG::FLASH_10_1
 	{
-	import org.osmf.drm.DRMServices;
-	import flash.net.drm.DRMContentData;
+		import org.osmf.drm.DRMServices;
+		import flash.net.drm.DRMContentData;
 	}
-	
-	import org.osmf.traits.ContentProtectionTrait;
-	import org.osmf.events.ContentProtectionEvent;
+
+	import org.osmf.events.DRMEvent;
+	import org.osmf.traits.DRMTrait;
+	import org.osmf.events.MediaError;
+	import org.osmf.drm.DRMState;
 
     [ExcludeClass]
     
     /**
 	 * @private
 	 * 
-     * NetStream-specific protected content trait.
+     * NetStream-specific DRM trait.
      */
-	public class NetStreamContentProtectionTrait extends ContentProtectionTrait
+	public class NetStreamDRMTrait extends DRMTrait
 	{
 	CONFIG::FLASH_10_1
 	{
@@ -51,13 +53,10 @@ package org.osmf.net
    		 *  @playerversion AIR 1.5
    		 *  @productversion OSMF 1.0
    		 */ 
-		public function NetStreamContentProtectionTrait()
+		public function NetStreamDRMTrait()
 		{
-			super();
-			
-			drmServices.addEventListener(ContentProtectionEvent.AUTHENTICATION_COMPLETE, redispatchEvent);
-			drmServices.addEventListener(ContentProtectionEvent.AUTHENTICATION_FAILED, redispatchEvent);
-			drmServices.addEventListener(ContentProtectionEvent.AUTHENTICATION_NEEDED, redispatchEvent);						
+			super();			
+			drmServices.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);		
 		}
 		
 		/**
@@ -75,48 +74,57 @@ package org.osmf.net
 				drmServices.drmMetadata = value;
 			}
 		}
-		
+	
 		public function get drmMetadata():Object
 		{
 			return drmServices.drmMetadata;
 		}
-				
+
+		/**
+		 * @private
+		 */				
 		override public function get authenticationMethod():String
 		{
 			return drmServices.authenticationMethod;
 		}
-		
-		override public function authenticate(username:String, password:String):void
+
+		/**
+		 * @private
+		 */				
+		override public function authenticate(username:String = null, password:String = null):void
 		{							
 			drmServices.authenticate(username, password);
 		}
-		
+
+		/**
+		 * @private
+		 */		
 		override public function authenticateWithToken(token:Object):void
 		{							
 			drmServices.authenticateWithToken(token);
 		}
 		
-		override public function get startDate():Date
+		/**
+		 * @private
+		 * Signals failures from the DRMsubsystem not captured though the 
+		 * DRMServices class.
+	
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function signalInlineAuthFailed(error:MediaError):void
 		{
-			return drmServices.startDate;
-		}
-		
-		override public function get endDate():Date
-		{
-			return drmServices.endDate;
-		}
-		
-		override public function get period():Number
-		{
-			return drmServices.period;
+			drmServices.signalInlineAuthFailed(error);
 		}
 		
 		// Internals
 		//
 						
-		private function redispatchEvent(event:Event):void
+		private function onStateChange(event:DRMEvent):void
 		{
-			dispatchEvent(event.clone());
+			drmStateChange(drmServices.drmState, event.token, event.error, event.startDate, event.endDate, event.period);
 		}
 															
 		private var drmServices:DRMServices = new DRMServices();

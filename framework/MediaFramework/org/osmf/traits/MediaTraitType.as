@@ -52,14 +52,14 @@ package org.osmf.traits
 		public static const BUFFER:String = "buffer";
 		
 		/**
-		 * Identifies an instance of a ContentProtectionTrait. 
+		 * Identifies an instance of a DRMTrait. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const CONTENT_PROTECTION:String = "contentProtection";
+		public static const DRM:String = "drm";
 
 		/**
 		 * Identifies an instance of a DynamicStreamTrait. 
@@ -130,7 +130,7 @@ package org.osmf.traits
 			( 
 			  [   AUDIO
 				, BUFFER
-				, CONTENT_PROTECTION
+				, DRM
 				, DYNAMIC_STREAM
 				, LOAD
 				, PLAY
