@@ -49,9 +49,10 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginLoader(mediaFactory:MediaFactory)
-		{
+		public function PluginLoader(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String)
+		{			
 			this.mediaFactory = mediaFactory;
+			this.minimumSupportedFrameworkVersion = minimumSupportedFrameworkVersion;
 		}
 		
 		/**
@@ -73,7 +74,7 @@ package org.osmf.plugin
 				}
 			}
 		}
-
+		
 		/**
 		 * Loads the plugin into the LoadTrait.
 		 * On success sets the LoadState of the LoadTrait to LOADING, 
@@ -90,8 +91,9 @@ package org.osmf.plugin
 			var invalidImplementation:Boolean = false;
 			
 			if (pluginInfo != null)
-			{
-				if (pluginInfo.isFrameworkVersionSupported(Version.version()))
+			{				
+				if (pluginInfo.isFrameworkVersionSupported(Version.version()) &&
+					isPluginVersionSupported(pluginInfo.frameworkVersion))
 				{
 					try
 					{						
@@ -154,6 +156,51 @@ package org.osmf.plugin
 			}
 		}
 		
+		private function isPluginVersionSupported(pluginVersion:String):Boolean
+		{
+			if (pluginVersion == null || pluginVersion.length == 0)
+			{
+				return false;
+			}
+
+			var minVersion:Object = parseVersionString(minimumSupportedFrameworkVersion);
+			var pVersion:Object = parseVersionString(pluginVersion);
+			
+			return 		pVersion.major > minVersion.major
+					||	(	pVersion.major == minVersion.major
+						&&	( 	pVersion.minor > minVersion.minor
+							||	(	pVersion.minor == minVersion.minor
+								&&	pVersion.subMinor >= minVersion.subMinor
+								)
+							)
+						);
+		}
+		
+		private static function parseVersionString(version:String):Object
+		{
+			var versionInfo:Array = version.split(".");
+			
+			var major:int = 0;
+			var minor:int = 0;
+			var subMinor:int = 0;
+			
+			if (versionInfo.length >= 1)
+			{
+				major = parseInt(versionInfo[0]);
+			}
+			if (versionInfo.length >= 2)
+			{
+				minor = parseInt(versionInfo[1]);
+			}
+			if (versionInfo.length >= 3)
+			{
+				subMinor = parseInt(versionInfo[2]);
+			}
+
+			return {major:major, minor:minor, subMinor:subMinor};
+		}
+		
+		private var minimumSupportedFrameworkVersion:String;
 		private var mediaFactory:MediaFactory;
 	}
 }

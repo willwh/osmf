@@ -36,6 +36,7 @@ package org.osmf.plugin
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.Version;
 	
 	/**
 	 * Dispatched when the PluginManager has successfully loaded a plugin.
@@ -82,11 +83,16 @@ package org.osmf.plugin
 		 * supported MediaInfo objects. The best practice is to use a single instance of
 		 * MediaFactory across the MediaPlayer application such that all MediaInfo can be 
 		 * accessed from the same MediaFactory.
+		 * @param minimumSupportedFrameworkVersion  The minimum version number of the
+		 * framework that a loaded plugin must be compiled against in order to load.
+		 * Version numbers are defined in the org.osmf.utils.Version class.  The default
+		 * (null) indicates that the PluginManager should use Version.lastAPICompatibleVersion.
 		 *
 		 **/
-		public function PluginManager(mediaFactory:MediaFactory)
+		public function PluginManager(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String=null)
 		{
 			_mediaFactory = mediaFactory;
+			this.minimumSupportedFrameworkVersion = minimumSupportedFrameworkVersion != null ? minimumSupportedFrameworkVersion : Version.lastAPICompatibleVersion ;
 			initPluginFactory();
 			_pluginMap = new Dictionary();
 			_pluginList = new Vector.<PluginEntry>();
@@ -324,8 +330,8 @@ package org.osmf.plugin
 		private function initPluginFactory():void
 		{
 			_pluginFactory = new MediaFactory();
-			staticPluginLoader = new StaticPluginLoader(mediaFactory);
-			dynamicPluginLoader = new DynamicPluginLoader(mediaFactory);
+			staticPluginLoader = new StaticPluginLoader(mediaFactory, minimumSupportedFrameworkVersion);
+			dynamicPluginLoader = new DynamicPluginLoader(mediaFactory, minimumSupportedFrameworkVersion);
 			
 			// Add MediaInfo objects for the static and dynamic plugin loaders.
 			//
@@ -360,6 +366,7 @@ package org.osmf.plugin
 		private var _pluginMap:Dictionary;
 		private var _pluginList:Vector.<PluginEntry>;
 		
+		private var minimumSupportedFrameworkVersion:String;
 		private var staticPluginLoader:StaticPluginLoader;
 		private var dynamicPluginLoader:DynamicPluginLoader;
 

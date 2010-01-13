@@ -128,6 +128,16 @@ package org.osmf.plugin
 		{
 			return mediaInfos.length;
 		}
+		
+		/**
+		 * Returns the version of the framework that this plugin was compiled against.  The
+		 * current version can be obtained from org.osmf.utils.Version.version.
+		 **/
+		public function get frameworkVersion():String
+		{
+			return "0.9.0";
+		}
+
 
 		/**
 		 * Used by the application to get the MediaInfo object at the specified index.

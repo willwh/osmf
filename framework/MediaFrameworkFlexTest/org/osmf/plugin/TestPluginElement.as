@@ -26,12 +26,13 @@ package org.osmf.plugin
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.Version;
 	
 	public class TestPluginElement extends TestMediaElement
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new PluginElement(new StaticPluginLoader(new MediaFactory())); 
+			return new PluginElement(new StaticPluginLoader(new MediaFactory(), Version.version())); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -56,7 +57,7 @@ package org.osmf.plugin
 
 		public function testPluginElementConstruction():void
 		{
-			var pluginElement:MediaElement = new PluginElement(new StaticPluginLoader(new MediaFactory()), new PluginInfoResource(null));
+			var pluginElement:MediaElement = new PluginElement(new StaticPluginLoader(new MediaFactory(), Version.version()), new PluginInfoResource(null));
 			assertTrue(pluginElement.resource != null);	
 			assertTrue(pluginElement.resource is PluginInfoResource);
 		}

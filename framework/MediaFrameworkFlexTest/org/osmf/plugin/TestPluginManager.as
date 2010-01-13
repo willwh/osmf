@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.plugin
 {
+	import __AS3__.vec.Vector;
+	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.*;
@@ -273,6 +275,34 @@ package org.osmf.plugin
 			assertEquals(2, pluginInfo.createCount);			
 		}
 		
+		public function testMinimumVersionOverrride():void
+		{
+			var loaded:Boolean = false;
+			var loadedFailed:Boolean = false;
+			
+			
+			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaInfo>, "0.5.0");
+			
+			pluginManager = new PluginManager(mediaFactory, "0.5.0");
+			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onLoaded);
+			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
+			assertTrue(loaded);
+			
+			pluginManager = new PluginManager(mediaFactory, "0.6.0");
+			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onFailed);
+			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
+			assertTrue(loadedFailed);
+			
+			function onLoaded(event:PluginLoadEvent):void
+			{
+				loaded = true;
+			}	
+			function onFailed(event:PluginLoadEvent):void
+			{
+				loadedFailed = true;
+			}			
+		}
+		
 		private function doUnloadPluginWithInvalidParameter(resource:IMediaResource):Boolean
 		{
 			try 
@@ -307,3 +337,21 @@ package org.osmf.plugin
 		private var pluginManager:PluginManager;
 	}
 }
+	
+import __AS3__.vec.Vector;
+import org.osmf.media.MediaInfo;
+		
+class OldPluginInfo extends org.osmf.plugin.PluginInfo
+{
+	public function OldPluginInfo(mediaInfos:Vector.<MediaInfo>, supportedFrameworkVersion:String)
+	{
+		super(mediaInfos, supportedFrameworkVersion);
+	}
+	
+	override public function get frameworkVersion():String
+	{
+		return "0.5.0";
+	}
+	
+}
+

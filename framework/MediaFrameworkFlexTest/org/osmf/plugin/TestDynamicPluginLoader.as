@@ -25,12 +25,10 @@ package org.osmf.plugin
 	
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
+	import org.osmf.utils.Version;
 	
 	/**
 	 * Note that because DynamicPluginLoader must make network calls and cannot
@@ -46,7 +44,7 @@ package org.osmf.plugin
 	{
 		public function testCanHandleResource():void
 		{
-			var loader:DynamicPluginLoader = new DynamicPluginLoader(new MediaFactory());
+			var loader:DynamicPluginLoader = new DynamicPluginLoader(new MediaFactory(), Version.version());
 
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.SWF);

@@ -35,6 +35,7 @@ package org.osmf.plugin
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.URL;
+	import org.osmf.utils.Version;
 	
 	public class TestStaticPluginLoader extends TestILoader
 	{
@@ -56,7 +57,7 @@ package org.osmf.plugin
 				
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new StaticPluginLoader(mediaFactory);
+			return new StaticPluginLoader(mediaFactory, Version.version());
 		}
 
 		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait

@@ -48,6 +48,14 @@ package org.osmf.utils
 		{
 			return _major + FIELD_SEPARATOR + _minor + FIELD_SEPARATOR + _changelist;
 		}
+		
+		/**
+		 * The most recent OSMF version which is API compatible with the current version.
+		 **/
+		public static function get lastAPICompatibleVersion():String
+		{
+			return "0.9.0";
+		}
 				
 		/**
 		 * The actual string values of major, minor and changelist will be

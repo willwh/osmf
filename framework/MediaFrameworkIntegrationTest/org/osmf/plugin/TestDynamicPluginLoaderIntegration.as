@@ -29,6 +29,7 @@ package org.osmf.plugin
 	import org.osmf.traits.TestILoader;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.URL;
+	import org.osmf.utils.Version;
 	
 	public class TestDynamicPluginLoaderIntegration extends TestILoader
 	{
@@ -48,7 +49,7 @@ package org.osmf.plugin
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new DynamicPluginLoader(mediaFactory);
+			return new DynamicPluginLoader(mediaFactory, Version.version());
 		}
 		
 		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait

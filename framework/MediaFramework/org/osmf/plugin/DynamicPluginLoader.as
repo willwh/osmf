@@ -37,9 +37,9 @@ package org.osmf.plugin
 		/**
 		 * Constructor
 		 */
-		public function DynamicPluginLoader(mediaFactory:MediaFactory)
+		public function DynamicPluginLoader(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String)
 		{
-			super(mediaFactory);
+			super(mediaFactory, minimumSupportedFrameworkVersion);
 		}
 
 		/**

@@ -31,9 +31,9 @@ package org.osmf.plugin
 		/**
 		 * Constructor
 		 */
-		public function StaticPluginLoader(mediaFactory:MediaFactory)
+		public function StaticPluginLoader(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String)
 		{
-			super(mediaFactory);
+			super(mediaFactory, minimumSupportedFrameworkVersion);
 		}
 
 		/**
