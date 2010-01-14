@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -44,7 +44,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    override public function canHandleResource(resource:IMediaResource):Boolean
+	    override public function canHandleResource(resource:MediaResourceBase):Boolean
 	    {
 	    	return (resource is PluginInfoResource);
 	    }

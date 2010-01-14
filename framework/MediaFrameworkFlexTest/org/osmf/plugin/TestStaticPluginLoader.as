@@ -27,7 +27,7 @@ package org.osmf.plugin
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
@@ -60,22 +60,22 @@ package org.osmf.plugin
 			return new StaticPluginLoader(mediaFactory, Version.version());
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return new PluginInfoResource(new SimpleVideoPluginInfo);
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return new PluginInfoResource(new InvalidVersionPluginInfo);
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return new URLResource(new URL("http://example.com"));
 		}

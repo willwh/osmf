@@ -28,7 +28,6 @@ package org.osmf.media
 	import flash.utils.Dictionary;
 	
 	import org.osmf.containers.IMediaContainer;
-	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
@@ -86,7 +85,7 @@ package org.osmf.media
      * the media resource URL might be a document that references
      * the multiple resources used in the media composition.</p>
      * @see MediaTraitBase
-     * @see IMediaResource
+     * @see MediaResourceBase
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -108,9 +107,9 @@ package org.osmf.media
 		 */
 		public function MediaElement()
 		{	
+			createMetadata();
 			setupTraitResolvers();		
 			setupTraits();
-			
 			addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange, false, Number.MAX_VALUE);
 		}
 	
@@ -186,12 +185,12 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get resource():IMediaResource
+		public function get resource():MediaResourceBase
 		{
 			return _resource;
 		}
 		
-		public function set resource(value:IMediaResource):void
+		public function set resource(value:MediaResourceBase):void
 		{
 			_resource = value;		
 		}
@@ -218,11 +217,7 @@ package org.osmf.media
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
-		{
-			if(_metadata == null)
-			{
-				_metadata = createMetadata();
-			}
+		{			
 			return _metadata;
 		}
 				
@@ -523,7 +518,7 @@ package org.osmf.media
 		private var unresolvedTraits:Dictionary = new Dictionary();
 
 		private var _traitTypes:Vector.<String> = new Vector.<String>();
-		private var _resource:IMediaResource;
+		private var _resource:MediaResourceBase;
 		private var _metadata:Metadata;
 		
 		private var _container:IMediaContainer;

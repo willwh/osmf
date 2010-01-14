@@ -25,7 +25,7 @@ package org.osmf.traits
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -47,7 +47,7 @@ package org.osmf.traits
 	 * can be presented.  It can also be used as the base class for a more specific
 	 * LoadTrait subclass.
 	 * 
-	 * <p>The load operation takes an IMediaResource as input and produces an
+	 * <p>The load operation takes an MediaResourceBase as input and produces an
 	 * ILoadedContext as output.</p>
 	 * 
 	 * <p>If <code>hasTrait(MediaTraitType.LOAD)</code> returns <code>true</code>,
@@ -67,7 +67,7 @@ package org.osmf.traits
 		 * 
 		 * @param loader The ILoader instance that will be used to load the
 		 * media for the media element that owns this trait.
-		 * @param resource The IMediaResource instance that represents the media resource 
+		 * @param resource The MediaResourceBase instance that represents the media resource 
 		 * to be loaded.
 		 * 
 		 *  
@@ -76,7 +76,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function LoadTrait(loader:ILoader, resource:IMediaResource)
+		public function LoadTrait(loader:ILoader, resource:MediaResourceBase)
 		{
 			super(MediaTraitType.LOAD);
 			
@@ -100,7 +100,7 @@ package org.osmf.traits
 		 * Resource representing the piece of media to be loaded into
 		 * this LoadTrait.
 		 **/
-		public function get resource():IMediaResource
+		public function get resource():MediaResourceBase
 		{
 			return _resource;
 		}
@@ -407,7 +407,7 @@ package org.osmf.traits
 		}
 
 		private var loader:ILoader;
-		private var _resource:IMediaResource;
+		private var _resource:MediaResourceBase;
 		
 		private var _loadState:String;
 		private var _loadedContext:ILoadedContext;

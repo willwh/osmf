@@ -26,7 +26,7 @@ package org.osmf.plugin
 	import org.osmf.content.ContentLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.LoadState;
@@ -50,7 +50,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    override public function canHandleResource(resource:IMediaResource):Boolean
+	    override public function canHandleResource(resource:MediaResourceBase):Boolean
 	    {
 	    	return new SWFLoader().canHandleResource(resource);
 	    }

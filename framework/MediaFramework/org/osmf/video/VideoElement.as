@@ -37,8 +37,8 @@ package org.osmf.video
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultTraitResolver;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -90,11 +90,11 @@ package org.osmf.video
 	* These loaders should subclass NetLoader.</p>
 	* <p>The basic steps for creating and using a VideoElement are:
 	* <ol>
-	* <li>Create a new IURLResource pointing to the URL of the video stream or file
+	* <li>Create a new URLResource pointing to the URL of the video stream or file
 	* containing the video to be loaded.</li>
 	* <li>Create a new NetLoader.</li>
 	* <li>Create the new VideoElement, 
-	* passing the NetLoader and IURLResource
+	* passing the NetLoader and URLResource
 	* as parameters.</li>
 	* <li>Get the VideoElement's LoadTrait using the 
 	* <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
@@ -107,7 +107,7 @@ package org.osmf.video
 	* </p>
 	* 
 	* @see org.osmf.net.NetLoader
-	* @see org.osmf.media.IURLResource
+	* @see org.osmf.media.URLResource
 	* @see org.osmf.media.MediaElement
 	* @see org.osmf.traits
 	**/
@@ -118,21 +118,21 @@ package org.osmf.video
 		 * Constructor.
 		 * 
 		 * @param loader Loader used to load the video.
-		 * @param resource An object implementing IMediaResource that points to the video 
+		 * @param resource An object implementing MediaResourceBase that points to the video 
 		 * the VideoElement will use.
 		 * 
 		 * @throws ArgumentError If loader is null, or resource is neither an
-		 * IURLResource nor a DynamicStreamingResource.
+		 * URLResource nor a DynamicStreamingResource.
 		 */
-		public function VideoElement(loader:NetLoader, resource:IMediaResource=null)
+		public function VideoElement(loader:NetLoader, resource:MediaResourceBase=null)
 		{	
 			super(loader, resource);
 			
-			// The resource argument must either implement IURLResource or be
+			// The resource argument must either implement URLResource or be
 			// a DynamicStreamingResource object			
 			if (resource != null)
 			{
-				var urlResource:IURLResource = resource as IURLResource;
+				var urlResource:URLResource = resource as URLResource;
 				var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 				
 				if (urlResource == null && dsResource == null) 
@@ -254,7 +254,7 @@ package org.osmf.video
       	/**
 		 * @private
 		 **/
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new NetStreamLoadTrait(loader, resource);
 		}

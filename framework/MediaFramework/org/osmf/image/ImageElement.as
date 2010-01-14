@@ -22,7 +22,7 @@
 package org.osmf.image
 {
 	import org.osmf.content.ContentElement;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	
 	/**
 	 * ImageElement is a media element specifically created for
@@ -72,7 +72,7 @@ package org.osmf.image
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ImageElement(loader:ImageLoader, resource:IURLResource = null)
+		public function ImageElement(loader:ImageLoader, resource:URLResource = null)
 		{
 			super(loader, resource);		
 		}

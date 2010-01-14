@@ -31,19 +31,19 @@ package org.osmf.media
 	/**
 	 * A MediaFactory represents a factory class for media elements.
 	 * 
-	 * <p>The factory operation takes an IMediaResource as input and produces a MediaElement
+	 * <p>The factory operation takes an MediaResourceBase as input and produces a MediaElement
 	 * as output.</p>
 	 * <p>The MediaFactory maintains a list of MediaInfo objects,
 	 * each of which encapsulates all the information necessary to create 
 	 * a specific MediaElement. The MediaFactory relies on
-	 * the <code>IMediaResourceHandler.canHandleResource()</code> method to find a MediaInfo
-	 * object than can handle the specified IMediaResource.</p>
+	 * the <code>MediaResourceBaseHandler.canHandleResource()</code> method to find a MediaInfo
+	 * object than can handle the specified MediaResourceBase.</p>
 	 *
 	 * <p>The factory interface also exposes methods for querying for specific MediaInfo 
 	 * objects.</p>
 	 * @see MediaInfo
-	 * @see IMediaResource
-	 * @see IMediaResourceHandler    
+	 * @see MediaResourceBase
+	 * @see MediaResourceBaseHandler    
 	 * @see MediaElement
 	 */	
 	public class MediaFactory
@@ -68,7 +68,7 @@ package org.osmf.media
 		
 		/**
 		 * Adds the specified MediaInfo to the factory.
-		 * After the MediaInfo has been added, for any IMediaResource
+		 * After the MediaInfo has been added, for any MediaResourceBase
 		 * that this MediaInfo can handle, the factory will be able to create
 		 * the corresponding media element.
 		 * 
@@ -221,21 +221,21 @@ package org.osmf.media
 
 		/**
 		 * Returns a MediaElement that can be created based on the specified
-		 * IMediaResource.
+		 * MediaResourceBase.
 		 * <p>Returns <code>null</code> if the
-		 * <code>IMediaResourceHandler.canHandleResource()</code> method cannot         
+		 * <code>MediaResourceBaseHandler.canHandleResource()</code> method cannot         
 		 * find a MediaInfo object
 		 * capable of creating such a MediaElement in this factory.</p>
 		 * 
-		 * @see IMediaResourceHandler#canHandleResource()
+		 * @see MediaResourceBaseHandler#canHandleResource()
 		 *
-		 * @param resource The IMediaResource for which a corresponding
+		 * @param resource The MediaResourceBase for which a corresponding
 		 * MediaElement should be created.
 		 * 
 		 * @return The MediaElement that was created or <code>null</code> if no such
-		 * MediaElement could be created from the IMediaResource.
+		 * MediaElement could be created from the MediaResourceBase.
 		 **/
-		public function createMediaElement(resource:IMediaResource):MediaElement
+		public function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			// Note that proxies are resolved before references are applied:
 			// if a media element is proxied, then references apply to the root
@@ -309,7 +309,7 @@ package org.osmf.media
 		}
 		
 		private function createMediaElementByResource
-			( resource:IMediaResource
+			( resource:MediaResourceBase
 			, mediaInfoType:MediaInfoType
 			, wrappedElement:MediaElement=null
 			):MediaElement
@@ -367,7 +367,7 @@ package org.osmf.media
 			return mediaElement;
 		}
 				
-		private static function getMediaInfosByResource(resource:IMediaResource, infos:Vector.<MediaInfo>):Vector.<MediaInfo>
+		private static function getMediaInfosByResource(resource:MediaResourceBase, infos:Vector.<MediaInfo>):Vector.<MediaInfo>
 		{
 			var results:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			

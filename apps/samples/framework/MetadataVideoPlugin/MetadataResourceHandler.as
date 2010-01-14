@@ -21,8 +21,8 @@
 *****************************************************/
 package
 {
-	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.net.NetLoader;
 	import org.osmf.utils.URL;
@@ -33,7 +33,7 @@ package
 	 **/
 	public class MetadataResourceHandler implements IMediaResourceHandler
 	{
-		public function canHandleResource(resource:IMediaResource):Boolean
+		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var canHandle:Boolean = false;
 			

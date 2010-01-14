@@ -144,7 +144,7 @@ package org.osmf.plugin
 		
 		private function doTestMediaElementLoadAndPlay(url:URL):void
 		{			
-			var urlResource:IURLResource = new URLResource(url);
+			var urlResource:URLResource = new URLResource(url);
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(urlResource);
 			assertTrue(mediaElement != null);
 			

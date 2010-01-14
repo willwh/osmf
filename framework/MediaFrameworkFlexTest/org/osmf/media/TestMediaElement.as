@@ -24,18 +24,16 @@ package org.osmf.media
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.containers.MediaContainer;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.URL;
 
 	public class TestMediaElement extends TestCaseEx
@@ -273,7 +271,7 @@ package org.osmf.media
 			return false;
 		}
 		
-		protected function get resourceForMediaElement():IMediaResource
+		protected function get resourceForMediaElement():MediaResourceBase
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement can work with.

@@ -22,12 +22,10 @@
 
 package com.akamai.osmf.net
 {
-	import flash.events.IEventDispatcher;
-
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetNegotiator;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.media.IURLResource;
 
 	/**
 	 * The AkamaiNetConnectionFactory class extends NetConnectionFactory to
@@ -61,7 +59,7 @@ package com.akamai.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		override protected function extractKey(resource:IURLResource):String
+		override protected function extractKey(resource:URLResource):String
 		{
 			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
 			var authToken:String = fmsURL.getParamValue("auth");

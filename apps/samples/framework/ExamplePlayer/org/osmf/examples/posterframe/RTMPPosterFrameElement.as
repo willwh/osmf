@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.examples.posterframe
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
@@ -35,7 +35,7 @@ package org.osmf.examples.posterframe
 	 **/
 	public class RTMPPosterFrameElement extends VideoElement
 	{
-		public function RTMPPosterFrameElement(loader:NetLoader, resource:IMediaResource, posterFrameTime:Number)
+		public function RTMPPosterFrameElement(loader:NetLoader, resource:MediaResourceBase, posterFrameTime:Number)
 		{
 			// Add metadata to our resource so that it's treated as a zero-length
 			// subclip.

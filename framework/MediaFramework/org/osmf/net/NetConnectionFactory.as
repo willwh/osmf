@@ -38,7 +38,8 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.events.NetNegotiatorEvent;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.FMSURL;
 
@@ -106,7 +107,7 @@ package org.osmf.net
 		 */
 		public function create(loadTrait:LoadTrait,allowNetConnectionSharing:Boolean):void
 		{
-			var urlResource:IURLResource = loadTrait.resource as IURLResource;
+			var urlResource:URLResource = loadTrait.resource as URLResource;
 			var key:String = extractKey(urlResource);
 			
 			// The first time this method is called, we create our dictionaries.
@@ -243,14 +244,14 @@ package org.osmf.net
 		 * Manages the closing of a shared NetConnection using the resource as the key. NetConnections
 		 * are only physically closed after the last sharer has requested a close().
 		 * 
-		 * @param resource the IURLresource originally used to establish the NetConenction
+		 * @param resource the URLResource originally used to establish the NetConenction
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function closeNetConnectionByResource(resource:IURLResource):void
+		public function closeNetConnectionByResource(resource:URLResource):void
 		{
 			var key:String = extractKey(resource);
 			var obj:SharedConnection = connectionDictionary[key] as SharedConnection;
@@ -278,7 +279,7 @@ package org.osmf.net
 		/**
 		 * Generates a key to uniquely identify each connection. 
 		 * 
-		 * @param resource a IURLResource
+		 * @param resource a URLResource
 		 * @return a String hash that uniquely identifies the NetConnection
 		 *  
 		 *  @langversion 3.0
@@ -286,7 +287,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function extractKey(resource:IURLResource):String
+		protected function extractKey(resource:URLResource):String
 		{
 			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
 			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName;

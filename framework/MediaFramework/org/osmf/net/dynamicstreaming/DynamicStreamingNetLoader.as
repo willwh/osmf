@@ -24,7 +24,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadTrait;

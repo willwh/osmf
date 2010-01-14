@@ -23,7 +23,7 @@ package org.osmf.content
 {
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
@@ -33,12 +33,12 @@ package org.osmf.content
 	
 	public class TestContentLoaderIntegration extends TestILoader
 	{
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
 		
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
 		}

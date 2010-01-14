@@ -303,7 +303,7 @@ package org.osmf.plugin
 			}			
 		}
 		
-		private function doUnloadPluginWithInvalidParameter(resource:IMediaResource):Boolean
+		private function doUnloadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
 		{
 			try 
 			{
@@ -318,7 +318,7 @@ package org.osmf.plugin
 			return false;
 		}
 		
-		private function doLoadPluginWithInvalidParameter(resource:IMediaResource):Boolean
+		private function doLoadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
 		{
 			try 
 			{

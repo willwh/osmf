@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.TestMediaElement;
@@ -40,7 +40,7 @@ package org.osmf.plugin
 			return true;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new PluginInfoResource(new SimpleVideoPluginInfo);
 		}

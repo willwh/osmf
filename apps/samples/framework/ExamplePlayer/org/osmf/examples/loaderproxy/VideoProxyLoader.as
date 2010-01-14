@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -36,7 +36,7 @@ package org.osmf.examples.loaderproxy
 		/**
 		 * @private
 		 **/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			// Always true for simplicity.
 			return true;

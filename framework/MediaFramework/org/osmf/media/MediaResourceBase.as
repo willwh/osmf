@@ -21,17 +21,31 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.utils.URL;
+	import org.osmf.metadata.Metadata;
 	
 	/**
-	 * An IURLResource is a media resource that has a URL.  It serves as a
-	 * context object for MediaElements that expect a URL as input.
+	 * An MediaResourceBase is a base class for media that serves as input
+	 * to a MediaElement.
+	 * 
+	 * <p>Different MediaElement instances can "handle" (i.e. input) different
+	 * resource types (e.g. a URL vs. an array of streams), or even different
+	 * variations of the same resource type (e.g. a URL with the ".jpg"
+	 * extension vs. a URL with a ".mp3" extension).</p>
 	 **/
-	public interface IURLResource extends IMediaResource
+	public class MediaResourceBase
 	{
+		public function MediaResourceBase()
+		{
+			_metadata = new Metadata();
+		}
+		
 		/**
-		 * The URL of the media resource.
-		 **/
-		function get url():URL;		
+		 * The metadata associated with this media resource.
+		 */ 
+		public function get metadata():Metadata
+		{
+			return _metadata;
+		}
+		private var _metadata:Metadata;
 	}
 }

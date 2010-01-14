@@ -25,7 +25,7 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
@@ -41,13 +41,13 @@ package org.osmf.traits
 	 */	 
 	public class LoaderBase extends EventDispatcher implements ILoader
 	{
-		// IMediaResourceHandler
+		// MediaResourceBaseHandler
 		//
 		
 		/**
 		 * @private
 		 **/
-		public function canHandleResource(resource:IMediaResource):Boolean
+		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return false;
 		}

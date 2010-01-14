@@ -38,7 +38,7 @@ package org.osmf.mast.media
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.traits.MASTPlayTrait;
 	import org.osmf.mast.types.MASTConditionType;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
@@ -108,7 +108,7 @@ package org.osmf.mast.media
 			var serialElement:SerialElement = super.wrappedElement as SerialElement;
 			var mediaElement:MediaElement = serialElement.getChildAt(0);
 			
-			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
 			if (tempResource == null)
 			{
 				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);

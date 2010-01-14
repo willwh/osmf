@@ -26,7 +26,7 @@ package org.osmf.proxies
 	import flash.events.Event;
 	
 	import org.osmf.events.SeekEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
@@ -122,7 +122,7 @@ package org.osmf.proxies
 			return false;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(new URL("http://example.com"));
 		}

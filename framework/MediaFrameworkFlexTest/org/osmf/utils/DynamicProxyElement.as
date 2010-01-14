@@ -23,7 +23,7 @@ package org.osmf.utils
 {
 	import flash.utils.Dictionary;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.AudioTrait;
@@ -39,7 +39,7 @@ package org.osmf.utils
 	
 	public class DynamicProxyElement extends ProxyElement
 	{
-		public function DynamicProxyElement(wrappedElement:MediaElement=null, traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null)
+		public function DynamicProxyElement(wrappedElement:MediaElement=null, traitTypes:Array=null, loader:ILoader=null, resource:MediaResourceBase=null)
 		{
 			super(wrappedElement);
 			
@@ -69,7 +69,7 @@ package org.osmf.utils
 			return blockedTraits[type] == true;
 		}
 
-		private function initialize(traitTypes:Array, loader:ILoader, resource:IMediaResource):void
+		private function initialize(traitTypes:Array, loader:ILoader, resource:MediaResourceBase):void
 		{
 			this.resource = resource;
 		

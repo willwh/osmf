@@ -29,7 +29,7 @@ package org.osmf.proxies
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
@@ -216,7 +216,7 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function get resource():IMediaResource
+		override public function get resource():MediaResourceBase
 		{		
 			return wrappedElement ? wrappedElement.resource : null;
 		}
@@ -224,7 +224,7 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/		
-		override public function set resource(value:IMediaResource):void
+		override public function set resource(value:MediaResourceBase):void
 		{	
 			if (wrappedElement != null)
 			{

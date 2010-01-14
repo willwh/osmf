@@ -27,7 +27,7 @@ package org.osmf.mast.loader
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.parser.MASTParser;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -61,7 +61,7 @@ package org.osmf.mast.loader
 		/**
 		 * @private
 		 **/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return httpLoader.canHandleResource(resource);
 		}

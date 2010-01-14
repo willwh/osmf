@@ -75,13 +75,13 @@
 			// What happened here?
 			//
 			// To start with, the MediaFactory was empty. When you clicked on 'Load Media Resource' for the video URL, the MediaFactory
-			// could not create a MediaElement that had an associated IMediaResourceHandler for the URLResource (pointing to the video).
+			// could not create a MediaElement that had an associated MediaResourceBaseHandler for the URLResource (pointing to the video).
 			// When you loaded the plugin (org.osmf.plugins.video.SimpleVideoPluginInfo - this class is compiled in with this project)
-			// the MediaFactory got populated with 1 MediaInfo object that had the IMediaResourceHandler for handling videos. On the subsequent
+			// the MediaFactory got populated with 1 MediaInfo object that had the MediaResourceBaseHandler for handling videos. On the subsequent
 			// click to load the media resource, the video started playing back.
 			//
 			//
-			// Notice that the method 'loadPlugin' parses the input string and creates an appropriate IMediaResource for loading the plugin.
+			// Notice that the method 'loadPlugin' parses the input string and creates an appropriate MediaResourceBase for loading the plugin.
 			// If you specify a URL to a plugin, it will create a URLResource. In the above example, since the string represented a class name,
 			// the PluginFactory returned a plugin element that knows how to load plugins statically.
 			//
@@ -256,7 +256,7 @@
 			
 			private function loadPlugin(source:String):void
 			{
-				var pluginResource:IMediaResource;
+				var pluginResource:MediaResourceBase;
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// Create a URLResource if the source is URL based
@@ -275,7 +275,7 @@
 				loadPluginFromResource(pluginResource);			
 			}
 			
-			private function loadPluginFromResource(pluginResource:IMediaResource):void
+			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
 				var model:Model = Model.getInstance();
 				model.pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);

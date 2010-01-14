@@ -49,9 +49,8 @@
 
 			import org.osmf.media.MediaInfo;
 			import org.osmf.media.MediaElement;
-			import org.osmf.media.IMediaResource;
+			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;			
-			import org.osmf.media.IURLResource;
 
 			import org.osmf.video.VideoElement;
 			
@@ -219,7 +218,7 @@
 				taDebug.verticalScrollPosition = taDebug.maxVerticalScrollPosition;
 			}
 
-			private function createDynamicStreamingElement(res:IMediaResource):void
+			private function createDynamicStreamingElement(res:MediaResourceBase):void
 			{	
 				clearDebugText();
 								

@@ -24,7 +24,7 @@ package org.osmf.net
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.TimeTrait;
 	
 	[ExcludeClass]
@@ -46,7 +46,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NetStreamTimeTrait(netStream:NetStream, resource:IMediaResource)
+		public function NetStreamTimeTrait(netStream:NetStream, resource:MediaResourceBase)
 		{
 			super();
 			
@@ -121,6 +121,6 @@ package org.osmf.net
 		}
 		
 		private var netStream:NetStream;
-		private var resource:IMediaResource;
+		private var resource:MediaResourceBase;
 	}
 }

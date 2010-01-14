@@ -107,7 +107,7 @@ package org.osmf.media
 		/**
 		 * @inheritDoc
 		 **/
-		public function canHandleResource(resource:IMediaResource):Boolean
+		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return _resourceHandler != null ? _resourceHandler.canHandleResource(resource) : false;
 		}

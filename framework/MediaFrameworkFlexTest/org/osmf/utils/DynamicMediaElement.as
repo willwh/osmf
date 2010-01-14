@@ -23,7 +23,7 @@ package org.osmf.utils
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
@@ -39,7 +39,7 @@ package org.osmf.utils
 	
 	public class DynamicMediaElement extends MediaElement
 	{
-		public function DynamicMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:IMediaResource=null, useDynamicTraits:Boolean=false)
+		public function DynamicMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:MediaResourceBase=null, useDynamicTraits:Boolean=false)
 		{
 			this.resource = resource;
 			

@@ -22,7 +22,7 @@
 package org.osmf.image
 {
 	import org.osmf.content.TestContentLoaderIntegration;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
@@ -34,12 +34,12 @@ package org.osmf.image
 			return new ImageLoader();
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE));
 		}

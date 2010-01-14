@@ -25,11 +25,11 @@ package org.osmf.examples.chromeless
 	import flash.events.Event;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * SWFElement which can control the SWF it wraps via a custom SWF API
@@ -37,7 +37,7 @@ package org.osmf.examples.chromeless
 	 **/
 	public class ChromelessPlayerElement extends SWFElement
 	{
-		public function ChromelessPlayerElement(loader:SWFLoader=null, resource:IURLResource=null)
+		public function ChromelessPlayerElement(loader:SWFLoader=null, resource:URLResource=null)
 		{
 			super(loader, resource);		
 		}

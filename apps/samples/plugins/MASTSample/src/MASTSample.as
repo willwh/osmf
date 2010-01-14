@@ -32,8 +32,8 @@ package
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.*;
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
@@ -79,7 +79,7 @@ package
 		
 		private function loadPlugin(source:String):void
 		{
-			var pluginResource:IMediaResource;
+			var pluginResource:MediaResourceBase;
 			if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 			{
 				// This is a URL, create a URLResource
@@ -95,7 +95,7 @@ package
 			loadPluginFromResource(pluginResource);			
 		}
 		
-		private function loadPluginFromResource(pluginResource:IMediaResource):void
+		private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 		{
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
@@ -115,7 +115,7 @@ package
 					
 		private function loadMainVideo(url:String):void
 		{	
-			var resource:IURLResource = new URLResource(new FMSURL(url));
+			var resource:URLResource = new URLResource(new FMSURL(url));
 
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).

@@ -37,12 +37,12 @@ package org.osmf.media
 		 * Constructor.
 		 * 
 		 * @param loader Loader used to load the media.
-		 * @param resource The IMediaResource that represents the piece of
+		 * @param resource The MediaResourceBase that represents the piece of
 		 * media to load into this media element.
 		 * 
 		 * @throws ArgumentError If loader is null.
 		 **/
-		public function LoadableMediaElement(loader:ILoader, resource:IMediaResource=null)
+		public function LoadableMediaElement(loader:ILoader, resource:MediaResourceBase=null)
 		{
 			super();
 			
@@ -59,7 +59,7 @@ package org.osmf.media
 		 * 
 		 * @inheritDoc
 		 */
-		override public function set resource(value:IMediaResource):void
+		override public function set resource(value:MediaResourceBase):void
 	    {
 			super.resource = value;
 			
@@ -73,7 +73,7 @@ package org.osmf.media
 		 * Subclasses can override this method to return a custom LoadTrait
 		 * subclass.
 		 **/
-		protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}

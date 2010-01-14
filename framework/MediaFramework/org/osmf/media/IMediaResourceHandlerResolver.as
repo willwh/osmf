@@ -22,9 +22,6 @@
 package org.osmf.media
 {
 	import __AS3__.vec.Vector;
-
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaResourceHandler;
 	
 	/**
 	 * When multiple MediaInfo can handle a media resource, an arbitration is needed to 
@@ -38,6 +35,6 @@ package org.osmf.media
 		* that has the highest relevance/priority for the given resource.
 		**/
 		function resolveHandlers(
-			resource:IMediaResource, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler;
+			resource:MediaResourceBase, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler;
 	}
 }

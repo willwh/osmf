@@ -29,7 +29,7 @@ package org.osmf.captioning.media
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
@@ -102,7 +102,7 @@ package org.osmf.captioning.media
 			// Get the Timed Text url resource from the metadata of the element
 			// that is wrapped.
 			var mediaElement:MediaElement = super.wrappedElement;
-			var tempResource:IMediaResource = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
 			if (tempResource == null)
 			{
 				dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 

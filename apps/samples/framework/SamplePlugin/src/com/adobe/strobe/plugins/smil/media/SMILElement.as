@@ -27,8 +27,8 @@ package com.adobe.strobe.plugins.smil.media
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -36,13 +36,13 @@ package com.adobe.strobe.plugins.smil.media
 	
 	public class SMILElement extends SerialElement
 	{
-		public function SMILElement(loader:SMILLoader, resource:IURLResource = null)
+		public function SMILElement(loader:SMILLoader, resource:URLResource = null)
 		{
 			this.loader = loader;
 			this.resource = resource;
 		}
 
-		override public function set resource(value:IMediaResource):void
+		override public function set resource(value:MediaResourceBase):void
 		{
 			if (_resource2 != value)
 			{
@@ -60,7 +60,7 @@ package com.adobe.strobe.plugins.smil.media
 			}
 		}
 		
-		override public function get resource():IMediaResource
+		override public function get resource():MediaResourceBase
 		{
 			return _resource2;	
 		}
@@ -109,6 +109,6 @@ package com.adobe.strobe.plugins.smil.media
 
 		private var loadTrait:LoadTrait;
 		private var loader:ILoader;
-		private var _resource2:IMediaResource;
+		private var _resource2:MediaResourceBase;
 	}
 }

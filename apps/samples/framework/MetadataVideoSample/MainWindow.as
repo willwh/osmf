@@ -25,7 +25,7 @@ package
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.PluginLoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
@@ -61,7 +61,7 @@ package
 			pluginManager = new PluginManager(mediaFactory);
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 			
-			for each (var pluginResource:IMediaResource in pluginResources)
+			for each (var pluginResource:MediaResourceBase in pluginResources)
 			{
 				pluginManager.loadPlugin(pluginResource);
 			}

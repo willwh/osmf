@@ -22,7 +22,7 @@
 package org.osmf.swf
 {
 	import org.osmf.content.TestContentElementIntegration;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.IntegrationTestUtils;
@@ -35,7 +35,7 @@ package org.osmf.swf
 			return new SWFElement(new SWFLoader()); 
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_SWF_URL));
 		}

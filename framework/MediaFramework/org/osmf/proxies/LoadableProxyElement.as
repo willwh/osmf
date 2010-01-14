@@ -22,7 +22,7 @@
 package org.osmf.proxies
 {
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -62,7 +62,7 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 */ 
-		override public function set resource(value:IMediaResource):void 
+		override public function set resource(value:MediaResourceBase):void 
 		{
 			if (_resource != value && value != null)
 			{
@@ -76,7 +76,7 @@ package org.osmf.proxies
 		/**
 		 * @private
 		 **/
-		override public function get resource():IMediaResource
+		override public function get resource():MediaResourceBase
 		{
 			return _resource;
 		}
@@ -91,7 +91,7 @@ package org.osmf.proxies
 		}
 
 		private var _metadata:MetadataProxy;
-		private var _resource:IMediaResource;
+		private var _resource:MediaResourceBase;
 		private var loadTrait:LoadTrait;
 		private var loader:ILoader;
 	}

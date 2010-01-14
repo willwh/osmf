@@ -30,7 +30,7 @@ package org.osmf.traits
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.InterfaceTestCase;
 	
 	public class TestILoader extends InterfaceTestCase
@@ -367,22 +367,22 @@ package org.osmf.traits
 			return _loader;
 		}
 		
-		protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
 		
-		protected function get successfulResource():IMediaResource
+		protected function get successfulResource():MediaResourceBase
 		{
 			throw new Error("Subclass must override get successfulResource!");
 		}
 
-		protected function get failedResource():IMediaResource
+		protected function get failedResource():MediaResourceBase
 		{
 			throw new Error("Subclass must override get failedResource!");
 		}
 
-		protected function get unhandledResource():IMediaResource
+		protected function get unhandledResource():MediaResourceBase
 		{
 			throw new Error("Subclass must override get unhandledResource!");
 		}

@@ -41,9 +41,9 @@
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaElement;
 			import org.osmf.metadata.KeyValueFacet;
-			import org.osmf.media.IURLResource;
+			import org.osmf.media.URLResource;
 			import org.osmf.events.PluginLoadEvent;
-			import org.osmf.media.IMediaResource;
+			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
@@ -110,7 +110,7 @@
 			
 			private function loadMedia(url:String):void
 			{
-				var resource:IURLResource = new URLResource(new FMSURL(url));
+				var resource:URLResource = new URLResource(new FMSURL(url));
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
@@ -149,7 +149,7 @@
 
 			private function loadPlugin(source:String, load:Boolean=true):void
 			{
-				var pluginResource:IMediaResource;
+				var pluginResource:MediaResourceBase;
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// This is a URL, create a URLResource
@@ -172,14 +172,14 @@
 				}			
 			}
 			
-			private function loadPluginFromResource(pluginResource:IMediaResource):void
+			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
 				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
 				pluginManager.loadPlugin(pluginResource);
 			}
 			
-			private function unloadPluginFromResource(pluginResource:IMediaResource):void
+			private function unloadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
 				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_UNLOADED, onPluginUnloaded);
 				pluginManager.unloadPlugin(pluginResource);

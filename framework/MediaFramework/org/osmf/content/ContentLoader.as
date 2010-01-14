@@ -35,7 +35,7 @@ package org.osmf.content
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -104,7 +104,7 @@ package org.osmf.content
 			updateLoadTrait(loadTrait, LoadState.LOADING, loadedContext);
 			
 			var context:LoaderContext 	= new LoaderContext();
-			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as IURLResource).url.toString());
+			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as URLResource).url.toString());
 			
 			context.checkPolicyFile = true;
 			if (useCurrentSecurityDomain)

@@ -24,8 +24,8 @@ package org.osmf.image
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.content.ContentLoader;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.utils.*;
@@ -58,7 +58,7 @@ package org.osmf.image
 		
 		/**
 		 * Indicates whether this ImageLoader is capable of handling the specified resource.
-		 * Returns <code>true</code> for IURLResources with GIF, JPG, or PNG extensions.
+		 * Returns <code>true</code> for URLResources with GIF, JPG, or PNG extensions.
 		 * @param resource Resource proposed to be loaded.
 		 *  
 		 *  @langversion 3.0
@@ -66,7 +66,7 @@ package org.osmf.image
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
 			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
@@ -74,7 +74,7 @@ package org.osmf.image
 				return rt == MetadataUtils.METADATA_MATCH_FOUND;
 			}			
 			
-			var urlResource:IURLResource = resource as IURLResource;
+			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null &&
 				urlResource.url != null)
 			{

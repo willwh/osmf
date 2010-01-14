@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -44,7 +44,7 @@ package org.osmf.utils
 		/**
 		 * @inheritDoc
 		 **/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var simpleResource:SimpleResource = resource as SimpleResource;
 			if (simpleResource != null)

@@ -25,7 +25,7 @@ package org.osmf.metadata
 	
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
@@ -50,7 +50,7 @@ package org.osmf.metadata
 		 * 			METADATA_MATCH_UNKNOWN		if metadata required are absent therefore there is no way to know
 		 **/
 		public static function checkMetadataMatchWithResource(
-			resource:IMediaResource, mediaTypesSupported:Vector.<String>, mimeTypesSupported:Vector.<String>):int
+			resource:MediaResourceBase, mediaTypesSupported:Vector.<String>, mimeTypesSupported:Vector.<String>):int
 		{
 			var facet:MediaTypeFacet;
 		

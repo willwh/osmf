@@ -33,7 +33,7 @@ package org.osmf.model
 		}
 
 		public function resolveHandlers(
-			resource:IMediaResource, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler
+			resource:MediaResourceBase, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler
 		{
 			if (handlers == null || handlers.length <= 0)
 			{

@@ -23,7 +23,7 @@ package org.osmf.content
 {
 	import flash.events.ProgressEvent;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -31,7 +31,7 @@ package org.osmf.content
 	
 	internal class ContentLoadTrait extends LoadTrait
 	{
-		public function ContentLoadTrait(loader:ILoader, resource:IMediaResource)
+		public function ContentLoadTrait(loader:ILoader, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 		}

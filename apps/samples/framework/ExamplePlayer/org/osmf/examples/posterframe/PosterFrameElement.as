@@ -23,7 +23,7 @@ package org.osmf.examples.posterframe
 {
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -32,7 +32,7 @@ package org.osmf.examples.posterframe
 	 **/
 	public class PosterFrameElement extends ImageElement
 	{
-		public function PosterFrameElement(loader:ImageLoader, resource:IURLResource=null)
+		public function PosterFrameElement(loader:ImageLoader, resource:URLResource=null)
 		{
 			super(loader, resource);
 		}

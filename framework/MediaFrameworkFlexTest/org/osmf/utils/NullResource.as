@@ -21,20 +21,11 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	
-	public class NullResource implements IMediaResource
+	public class NullResource extends MediaResourceBase
 	{
-		public function get metadata():Metadata
-		{
-			if (_metadata == null)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
 		
-		private var _metadata:Metadata
 	}
 }

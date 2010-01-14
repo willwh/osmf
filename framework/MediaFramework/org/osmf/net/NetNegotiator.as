@@ -43,7 +43,7 @@ package org.osmf.net
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetNegotiatorEvent;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
@@ -96,7 +96,7 @@ package org.osmf.net
 		 * 
 		 * @see org.osmf.utils.FMSURL
 		 **/
-		public function connect(urlResource:IURLResource):void
+		public function connect(urlResource:URLResource):void
 		{
 			connectionAttempts = getConnectionSequence(urlResource.url);
 			initializeConnectionAttempts();

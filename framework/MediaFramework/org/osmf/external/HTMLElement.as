@@ -28,9 +28,10 @@ package org.osmf.external
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -73,9 +74,9 @@ package org.osmf.external
 			{
 				// MediaElement core:
 				case "Resource":
-					if (resource is IURLResource)
+					if (resource is URLResource)
 					{
-						result = IURLResource(resource).url;
+						result = URLResource(resource).url;
 					}
 					break;
 					
@@ -262,7 +263,7 @@ package org.osmf.external
 		// Overrides
 		//
 		
-		override public function set resource(value:IMediaResource):void
+		override public function set resource(value:MediaResourceBase):void
 		{
 			if (resource != value)
 			{

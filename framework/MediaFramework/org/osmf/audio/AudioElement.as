@@ -24,9 +24,9 @@ package org.osmf.audio
 	import flash.net.NetStream;
 	
 	import org.osmf.media.DefaultTraitResolver;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
@@ -81,7 +81,7 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function AudioElement(loader:ILoader, resource:IURLResource=null)
+		public function AudioElement(loader:ILoader, resource:URLResource=null)
 		{
 			super(loader, resource);
 			
@@ -144,7 +144,7 @@ package org.osmf.audio
 		/**
 		 * @private
 		 **/
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return 	loader is NetLoader
 				  ? new NetStreamLoadTrait(loader, resource)

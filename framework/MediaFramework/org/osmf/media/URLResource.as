@@ -29,7 +29,7 @@ package org.osmf.media
 	/**
 	 * Default implementation of IURLResource.
 	 **/
-	public class URLResource implements IURLResource
+	public class URLResource extends MediaResourceBase
 	{		
 		// Public interface
 		//
@@ -52,24 +52,6 @@ package org.osmf.media
 			return _url;
 		}
 		
-		/**
-		 *  @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get metadata():Metadata
-		{
-			if (!_metadata)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
-		
-		private var _metadata:Metadata;	
 		private var _url:URL;	
 	}
 }

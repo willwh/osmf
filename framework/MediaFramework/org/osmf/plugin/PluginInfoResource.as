@@ -21,17 +21,17 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	
 	/**
-	 * PluginInfoResource implements IMediaResource for static 
+	 * PluginInfoResource implements MediaResourceBase for static 
 	 * plugins. A static plugin is a plugin that is compiled within the application that uses it,
 	 * in contrast to a dynamic plugin, which is loaded at runtime.
 	 * 
 	 * @see PluginInfo
 	 */
-	public class PluginInfoResource implements IMediaResource
+	public class PluginInfoResource extends MediaResourceBase
 	{
 		
 		/**
@@ -65,25 +65,6 @@ package org.osmf.plugin
 			return _pluginInfoRef;	
 		}
 	
-			
-		/**
-		 *  @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get metadata():Metadata
-		{
-			if(!_metadata)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
-
-		private var _metadata:Metadata;	
 		private var _pluginInfoRef:PluginInfo;
 		
 	}

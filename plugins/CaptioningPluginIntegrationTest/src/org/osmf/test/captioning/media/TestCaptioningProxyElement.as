@@ -2,13 +2,10 @@ package org.osmf.test.captioning.media
 {
 	import flash.events.Event;
 	
-	import mx.events.IndexChangedEvent;
-	
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.captioning.media.CaptioningProxyElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
@@ -163,9 +160,9 @@ package org.osmf.test.captioning.media
 			}
 		}
 
-		private function createResource(captioningDoc:String):IURLResource
+		private function createResource(captioningDoc:String):URLResource
 		{
-			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 	
 			var kvFacet:KeyValueFacet = new KeyValueFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), captioningDoc);
@@ -173,9 +170,9 @@ package org.osmf.test.captioning.media
 			return resource;			
 		}
 		
-		private function createResourceWithBadFacet():IURLResource
+		private function createResourceWithBadFacet():URLResource
 		{
-			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 			var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.osmf.bogus/captioning/1.0"));
 			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
 			resource.metadata.addFacet(kvFacet);

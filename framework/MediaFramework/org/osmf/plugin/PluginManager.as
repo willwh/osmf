@@ -27,7 +27,7 @@ package org.osmf.plugin
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.PluginLoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
@@ -104,13 +104,13 @@ package org.osmf.plugin
 		 * event will be dispatched. Otherwise, a PluginLoadEvent.PLUGIN_LOAD_FAILED
 		 * event will be dispatched.
 		 *
-		 * @param resource IMediaResource at which the plugin (swf file or class) is hosted. It is assumed that 
-		 * it is sufficient to identify a plugin using the IMediaResource.  
+		 * @param resource MediaResourceBase at which the plugin (swf file or class) is hosted. It is assumed that 
+		 * it is sufficient to identify a plugin using the MediaResourceBase.  
 		 *
 		 * @throws ArgumentError If resource is null or resource is not IURLResource or PluginClassResource
 		 *
 		 **/
-		public function loadPlugin(resource:IMediaResource):void
+		public function loadPlugin(resource:MediaResourceBase):void
 		{
 			if (resource == null)
 			{
@@ -196,7 +196,7 @@ package org.osmf.plugin
 		 * @throws ArgumentError If resource is null or resource is not IURLResource or PluginClassResource
 		 *
 		 **/
-		public function unloadPlugin(resource:IMediaResource):void
+		public function unloadPlugin(resource:MediaResourceBase):void
 		{
 			if (resource == null) 
 	
@@ -237,11 +237,11 @@ package org.osmf.plugin
 		/**
 		 * Check whether a plugin has been loaded.
 		 * 
-		 * @param resource IMediaResource that is used to identify the plugin.
+		 * @param resource MediaResourceBase that is used to identify the plugin.
 		 * 
 		 * @return Returns true or false accordingly.
 		 **/
-		public function isPluginLoaded(resource:IMediaResource):Boolean
+		public function isPluginLoaded(resource:MediaResourceBase):Boolean
 		{
 			if (resource == null)
 			{
@@ -286,12 +286,12 @@ package org.osmf.plugin
 		 *
 		 * @param index The index identifies the slot at which the plugin is stored
 		 *
-		 * @return Returns the IMediaResource that represents the plugin
+		 * @return Returns the MediaResourceBase that represents the plugin
 		 *
 		 * @throws RangeError if the index is out of the range
 		 *
 		 **/
-		public function getLoadedPluginAt(index:int):IMediaResource
+		public function getLoadedPluginAt(index:int):MediaResourceBase
 		{
 			var pluginEntry:PluginEntry = _pluginList[index];
 			return pluginEntry.pluginElement.resource;
@@ -300,7 +300,7 @@ package org.osmf.plugin
 		// Internals
 		//
 		
-		private function getPluginIdentifier(resource:IMediaResource):Object
+		private function getPluginIdentifier(resource:MediaResourceBase):Object
 		{
 			var identifier:Object = null;
 			

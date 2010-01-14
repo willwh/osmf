@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.net
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -75,7 +75,7 @@ package org.osmf.net
 		/**
 		 * Returns true if the given resource represents a streaming resource, false otherwise.
 		 **/
-		public static function isStreamingResource(resource:IMediaResource):Boolean
+		public static function isStreamingResource(resource:MediaResourceBase):Boolean
 		{
 			var result:Boolean = false;
 			
@@ -115,7 +115,7 @@ package org.osmf.net
 		 * 
 		 * @returns One of the stream types defined in org.osmf.net.StreamType
 		 */
-		public static function getStreamType(resource:IMediaResource):String
+		public static function getStreamType(resource:MediaResourceBase):String
 		{
 			// Default to ANY.
 			var streamType:String = StreamType.ANY;
@@ -137,7 +137,7 @@ package org.osmf.net
 		 * in an untyped Object where the start value maps to "start"
 		 * and the len value maps to "len".
 		 **/
-		public static function getPlayArgsForResource(resource:IMediaResource):Object
+		public static function getPlayArgsForResource(resource:MediaResourceBase):Object
 		{
 			var startArg:int = PLAY_START_ARG_ANY;
 			var lenArg:int = PLAY_LEN_ARG_ALL;

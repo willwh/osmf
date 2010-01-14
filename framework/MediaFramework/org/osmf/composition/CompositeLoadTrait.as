@@ -22,7 +22,7 @@
 package org.osmf.composition
 {
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitBase;
@@ -114,9 +114,9 @@ package org.osmf.composition
 		/**
 		 * @inheritDoc
 		 **/
-		override public function get resource():IMediaResource
+		override public function get resource():MediaResourceBase
 		{
-			var value:IMediaResource = null;
+			var value:MediaResourceBase = null;
 			
 			// For serial compositions, expose the resource of the current
 			// child.  For parallel compositions, no return value makes

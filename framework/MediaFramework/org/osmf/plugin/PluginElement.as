@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.LoadableMediaElement;
 	
 	/**
@@ -46,7 +46,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginElement(loader:PluginLoader, resource:IMediaResource=null)
+		public function PluginElement(loader:PluginLoader, resource:MediaResourceBase=null)
 		{
 			super(loader, resource);			
 		}

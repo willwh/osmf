@@ -1511,7 +1511,7 @@ package org.osmf.media
 		// Protected
 		//
 		
-		protected function createMediaElement(resource:IMediaResource):MediaElement
+		protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			// Subclasses can override to specify the MediaElement subclass
 			// to use with the MediaPlayer.
@@ -1527,14 +1527,14 @@ package org.osmf.media
 			return false;
 		}
 		
-		protected function get resourceForMediaElement():IMediaResource
+		protected function get resourceForMediaElement():MediaResourceBase
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement can work with.
 			return new URLResource(new URL("http://www.example.com"));
 		}
 
-		protected function get invalidResourceForMediaElement():IMediaResource
+		protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement should fail to load.
@@ -1612,7 +1612,7 @@ package org.osmf.media
 			return 0;
 		}
 
-		protected function get dynamicStreamResource():IMediaResource
+		protected function get dynamicStreamResource():MediaResourceBase
 		{
 			// Subclasses can override to specify a media resource that is
 			// a dynamic stream.
@@ -1664,7 +1664,7 @@ package org.osmf.media
 			return false;
 		}
 		
-		private function callAfterLoad(func:Function, triggerTestCompleteEvent:Boolean=true, requestedResource:IMediaResource=null):void
+		private function callAfterLoad(func:Function, triggerTestCompleteEvent:Boolean=true, requestedResource:MediaResourceBase=null):void
 		{
 			assertTrue(this.hasLoadTrait);
 			

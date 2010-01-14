@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	
-	public class SimpleResource implements IMediaResource
+	public class SimpleResource extends MediaResourceBase
 	{
 		public static const SUCCESSFUL:String = "successful";
 		public static const FAILED:String = "failed";
@@ -39,17 +39,7 @@ package org.osmf.utils
 		{
 			return _type;
 		}
-
-		public function get metadata():Metadata
-		{
-			if (_metadata == null)
-			{
-				_metadata = new Metadata();
-			}
-			return _metadata;
-		}
-		
-		private var _metadata:Metadata;
+	
 		private var _type:String;
 	}
 }

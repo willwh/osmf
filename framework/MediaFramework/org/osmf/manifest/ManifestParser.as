@@ -25,7 +25,7 @@ package org.osmf.manifest
 	
 	import flash.utils.ByteArray;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
@@ -293,12 +293,12 @@ package org.osmf.manifest
 		}
 		
 		/**
-		 * Generates an IMediaResource for the given manifest. 
+		 * Generates an MediaResourceBase for the given manifest. 
 		 */ 		
-		public function createResource(value:Manifest, manifestLocation:URL):IMediaResource
+		public function createResource(value:Manifest, manifestLocation:URL):MediaResourceBase
 		{			
 			var drmFacet:KeyValueFacet;
-			var resource:IMediaResource;
+			var resource:MediaResourceBase;
 					
 			var url:URL;
 						

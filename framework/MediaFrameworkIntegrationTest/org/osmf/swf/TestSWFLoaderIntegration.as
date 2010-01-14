@@ -26,7 +26,7 @@ package org.osmf.swf
 	
 	import org.osmf.content.TestContentLoaderIntegration;
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.utils.IntegrationTestUtils;
@@ -55,12 +55,12 @@ package org.osmf.swf
 			return new SWFLoader();
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
 		}

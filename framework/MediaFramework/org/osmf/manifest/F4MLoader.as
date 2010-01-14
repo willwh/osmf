@@ -33,7 +33,7 @@ package org.osmf.manifest
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
@@ -75,7 +75,7 @@ package org.osmf.manifest
 		/**
 		 * @private
 		 */ 
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{	
 			var supported:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), supportedMimeTypes);
 			
@@ -167,7 +167,7 @@ package org.osmf.manifest
 			
 			function finishLoad():void
 			{			
-				var netResource:IMediaResource = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
+				var netResource:MediaResourceBase = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
 				
 				try
 				{

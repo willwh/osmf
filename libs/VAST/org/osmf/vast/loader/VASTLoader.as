@@ -27,7 +27,7 @@ package org.osmf.vast.loader
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -65,7 +65,7 @@ package org.osmf.vast.loader
 		/**
 		 * Returns true for HTTP(s) resource.
 		 **/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return httpLoader.canHandleResource(resource);
 		}

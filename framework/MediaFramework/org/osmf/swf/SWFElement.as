@@ -24,7 +24,7 @@ package org.osmf.swf
 	import flash.display.DisplayObject;
 	
 	import org.osmf.content.ContentElement;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	
@@ -75,7 +75,7 @@ package org.osmf.swf
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function SWFElement(loader:SWFLoader, resource:IURLResource = null)
+		public function SWFElement(loader:SWFLoader, resource:URLResource = null)
 		{
 			super(loader, resource);		
 		}

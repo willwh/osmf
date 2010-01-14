@@ -29,7 +29,7 @@ package com.adobe.strobe.plugins.smil.loader
 	import flash.net.URLRequest;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
@@ -53,7 +53,7 @@ package com.adobe.strobe.plugins.smil.loader
 			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onURLLoadingError);
 		}
 		
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var urlResource:URLResource = resource as URLResource;
 			if (urlResource == null || urlResource.url == null)

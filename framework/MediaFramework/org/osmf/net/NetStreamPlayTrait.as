@@ -27,7 +27,7 @@ package org.osmf.net
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
@@ -55,7 +55,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function NetStreamPlayTrait(netStream:NetStream, resource:IMediaResource)
+		public function NetStreamPlayTrait(netStream:NetStream, resource:MediaResourceBase)
 		{
 			super();
 			

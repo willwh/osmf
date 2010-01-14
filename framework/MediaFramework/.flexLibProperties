@@ -112,10 +112,8 @@
 <classEntry path="org.osmf.media.DefaultMediaResourceHandlerResolver"/>
 <classEntry path="org.osmf.media.DefaultTraitResolver"/>
 <classEntry path="org.osmf.media.IMediaReferrer"/>
-<classEntry path="org.osmf.media.IMediaResource"/>
 <classEntry path="org.osmf.media.IMediaResourceHandler"/>
 <classEntry path="org.osmf.media.IMediaResourceHandlerResolver"/>
-<classEntry path="org.osmf.media.IURLResource"/>
 <classEntry path="org.osmf.media.LoadableMediaElement"/>
 <classEntry path="org.osmf.media.MediaElement"/>
 <classEntry path="org.osmf.media.MediaFactory"/>
@@ -123,6 +121,7 @@
 <classEntry path="org.osmf.media.MediaInfoType"/>
 <classEntry path="org.osmf.media.MediaPlayer"/>
 <classEntry path="org.osmf.media.MediaPlayerState"/>
+<classEntry path="org.osmf.media.MediaResourceBase"/>
 <classEntry path="org.osmf.media.MediaTraitResolver"/>
 <classEntry path="org.osmf.media.URLResource"/>
 <classEntry path="org.osmf.metadata.Facet"/>

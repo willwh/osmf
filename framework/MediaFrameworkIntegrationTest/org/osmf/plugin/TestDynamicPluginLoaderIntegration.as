@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
@@ -52,22 +52,22 @@ package org.osmf.plugin
 			return new DynamicPluginLoader(mediaFactory, Version.version());
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return new URLResource(new URL(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL));
 		}

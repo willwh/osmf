@@ -31,8 +31,8 @@ package org.osmf.utils
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -54,12 +54,12 @@ package org.osmf.utils
 		/**
 		 * Returns true for any resource using the HTTP(S) protocol.
 		 **/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			// Rule out protocols other than http(s).
 			//
 			
-			var urlResource:IURLResource = resource as IURLResource;
+			var urlResource:URLResource = resource as URLResource;
 			
 			if (	urlResource == null
 				|| 	urlResource.url == null

@@ -32,8 +32,8 @@ package org.osmf.audio
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.LoadState;
@@ -80,7 +80,7 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
 			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
@@ -90,7 +90,7 @@ package org.osmf.audio
 			
 			// If no metadata matches, then we can only handle if the URL
 			// extension matches.
-			var urlResource:IURLResource = resource as IURLResource;
+			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null && 
 				urlResource.url != null)
 			{
@@ -122,7 +122,7 @@ package org.osmf.audio
 			updateLoadTrait(loadTrait, LoadState.LOADING, context);
 			toggleSoundListeners(sound, true);
 
-			var urlRequest:URLRequest = new URLRequest((loadTrait.resource as IURLResource).url.toString());
+			var urlRequest:URLRequest = new URLRequest((loadTrait.resource as URLResource).url.toString());
 			
 			try
 			{

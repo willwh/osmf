@@ -32,8 +32,8 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.NetConnectionFactoryEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MimeTypes;
@@ -126,7 +126,7 @@ package org.osmf.net
 		{	
 			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
-			switch ((loadTrait.resource as IURLResource).url.protocol)
+			switch ((loadTrait.resource as URLResource).url.protocol)
 			{
 				case PROTOCOL_RTMP:
 				case PROTOCOL_RTMPS:
@@ -186,16 +186,16 @@ package org.osmf.net
 		}
 		
 		/**
-		 * The NetLoader returns true for IURLResources which support the media and mime-types
+		 * The NetLoader returns true for URLResources which support the media and mime-types
 		 * (or file extensions) for streaming audio and streaming or progressive video, or
 		 * implement one of the following schemes: http, https, file, rtmp, rtmpt, rtmps,
 		 * rtmpe or rtmpte.
 		 * 
 		 * @param resource The URL of the source media.
-		 * @return Returns <code>true</code> for IURLResources which it can load
+		 * @return Returns <code>true</code> for URLResources which it can load
 		 * @inheritDoc
 		**/
-		override public function canHandleResource(resource:IMediaResource):Boolean
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MimeTypes.SUPPORTED_VIDEO_MIME_TYPES);
 			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
@@ -214,7 +214,7 @@ package org.osmf.net
 			 *
 			 * We assume being unable to handle the resource for conditions not mentioned above
 			 */
-			var res:IURLResource = resource as IURLResource;
+			var res:URLResource = resource as URLResource;
 			if (res == null || res.url == null || res.url.rawUrl == null || res.url.rawUrl.length <= 0)
 			{
 				return false;
@@ -277,7 +277,7 @@ package org.osmf.net
 		{
 			var stream:NetStream = createNetStream(connection, loadTrait);				
 			stream.client = new NetClient();				
-			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadTrait.resource as IURLResource));		
+			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadTrait.resource as URLResource));		
 		}	
 		
 		/**

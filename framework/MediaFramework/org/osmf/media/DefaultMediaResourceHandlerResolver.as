@@ -23,9 +23,6 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IMediaResourceHandler;
-	
 	/**
 	 * DefaultMediaResourceHandlerResolver implements IMediaResourceHandlerResolver. It provides
 	 * the a default implementation to pick the right resource handler. Since the default
@@ -39,7 +36,7 @@ package org.osmf.media
 		}
 
 		public function resolveHandlers(
-			resource:IMediaResource, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler
+			resource:MediaResourceBase, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler
 		{
 			if (resource == null || handlers == null)
 			{

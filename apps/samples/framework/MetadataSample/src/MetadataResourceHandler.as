@@ -1,7 +1,7 @@
 package
 {
-	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaResourceHandler;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
@@ -13,7 +13,7 @@ package
 			type = mediaType;
 		}
 
-		public function canHandleResource(resource:IMediaResource):Boolean
+		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var metadata:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DEFAULT_METADATA) as KeyValueFacet;
 			return (metadata.getValue(new ObjectIdentifier(MetadataNamespaces.METADATA_KEY_MEDIA_TYPE)) == type);	

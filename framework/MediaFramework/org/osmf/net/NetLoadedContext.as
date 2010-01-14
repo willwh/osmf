@@ -27,7 +27,7 @@ package org.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoadedContext;
 
 	[ExcludeClass]
@@ -59,7 +59,7 @@ package org.osmf.net
 											stream:NetStream,
 											shareable:Boolean = false,
 											netConnectionFactory:NetConnectionFactory = null,
-											resource:IURLResource = null
+											resource:URLResource = null
 										)
 		{
 			_connection = connection;
@@ -121,7 +121,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    public function get resource():IURLResource
+	    public function get resource():URLResource
 	    {	   	
 	   		return _resource;
 	   	}
@@ -143,7 +143,7 @@ package org.osmf.net
 	   	private var _stream:NetStream;
 	   	private var _connection:NetConnection;
 	   	private var _netConnectionFactory:NetConnectionFactory;
-	   	private var _resource:IURLResource;
+	   	private var _resource:URLResource;
 	   	private var _shareable:Boolean;
 
 	}

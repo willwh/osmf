@@ -25,7 +25,7 @@ package org.osmf.tracking
 	
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.PlayEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
@@ -108,7 +108,7 @@ package org.osmf.tracking
 			return false;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return RESOURCE;
 		}

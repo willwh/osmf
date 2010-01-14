@@ -23,7 +23,7 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 
 	/**
 	 * This class represents the events when a plugin is loaded, unloaded or fail to load. The 
@@ -78,7 +78,7 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param resource The resource representing the plugin.
 		 **/
-		public function PluginLoadEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:IMediaResource=null)
+		public function PluginLoadEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:MediaResourceBase=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -93,7 +93,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get resource():IMediaResource
+		public function get resource():MediaResourceBase
 		{
 			return _resource;
 		}
@@ -109,6 +109,6 @@ package org.osmf.events
 		// Internals
 		//
 
-		private var _resource:IMediaResource;
+		private var _resource:MediaResourceBase;
 	}
 }

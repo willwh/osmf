@@ -28,13 +28,13 @@ package org.osmf.content
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.URLResource;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.DisplayObjectTrait;
 	
 	/**
 	 * ContentElement is a media element that can present the content loaded
@@ -57,7 +57,7 @@ package org.osmf.content
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ContentElement(loader:ContentLoader, resource:IURLResource = null)
+		public function ContentElement(loader:ContentLoader, resource:URLResource = null)
 		{
 			super(loader, resource);
 		}
@@ -68,7 +68,7 @@ package org.osmf.content
 		/**
 		 * @private 
 		 */ 		
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new ContentLoadTrait(loader, resource);
 		}

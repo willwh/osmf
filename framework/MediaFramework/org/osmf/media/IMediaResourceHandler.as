@@ -22,19 +22,19 @@
 package org.osmf.media
 {
 	/**
-	 * An IMediaResourceHandler is an interface for objects that need to
-	 * specify the types of IMediaResources that they can handle.
+	 * An MediaResourceBaseHandler is an interface for objects that need to
+	 * specify the types of MediaResourceBases that they can handle.
 	 **/
 	public interface IMediaResourceHandler
 	{
 		/**
 		 * Indicates whether this object is capable of handling the given
-		 * IMediaResource.
+		 * MediaResourceBase.
 		 * 
 		 * @param resource The media resource in question.
 		 * 
 		 * @return True if this handler can handle the given resource.
 		 **/
-		function canHandleResource(resource:IMediaResource):Boolean;
+		function canHandleResource(resource:MediaResourceBase):Boolean;
 	}
 }

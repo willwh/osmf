@@ -26,14 +26,14 @@ package org.osmf.model
 	
 	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.IMediaResourceHandler;
-	import org.osmf.media.IURLResource;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
-	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * A SWFElement which can reference other MediaElements so that
@@ -41,7 +41,7 @@ package org.osmf.model
 	 **/ 
 	public class ReferenceSWFElement extends SWFElement implements IMediaReferrer
 	{
-		public function ReferenceSWFElement(loader:SWFLoader=null, resource:IURLResource=null)
+		public function ReferenceSWFElement(loader:SWFLoader=null, resource:URLResource=null)
 		{
 			super(loader, resource);
 			

@@ -26,7 +26,7 @@ package org.osmf.view
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.PluginLoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
@@ -72,7 +72,7 @@ package org.osmf.view
 				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
 			
-				var pluginResource:IMediaResource = new URLResource(new URL(GG_PLUGIN_URL));
+				var pluginResource:MediaResourceBase = new URLResource(new URL(GG_PLUGIN_URL));
 				pluginManager.loadPlugin(pluginResource);
 			}
 			else

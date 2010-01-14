@@ -24,7 +24,7 @@ package org.osmf.external
 	import flash.errors.IllegalOperationError;
 	import flash.external.ExternalInterface;
 	
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.OSMFStrings;
@@ -56,14 +56,14 @@ package org.osmf.external
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));
 			}
-			if (resource is IURLResource == false)
+			if (resource is URLResource == false)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
 			}
 			
 			loadState = LoadState.LOADING;
 			
-			var urlResource:IURLResource = resource as IURLResource
+			var urlResource:URLResource = resource as URLResource
 			var url:String
 				= urlResource
 					? urlResource.url

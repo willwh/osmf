@@ -60,7 +60,7 @@ package org.osmf.metadata
 	 * The base class for all classes that hold metadata relating to Open Source Media Framework media. 
 	 * Metadata is descriptive information relative to a piece of media.  
 	 * Examples of metadata classes include DictionaryMetadata and XMPMetadata.  
-	 * These classes are stored on all IMediaResources as initial information relating to the media.  
+	 * These classes are stored on all MediaResources as initial information relating to the media.  
 	 * They are also stored on the MediaElement for per element, possibly dynamic metadata.
 	 * Example of metadata content include: title, size, language, and subject.  
 	 *  
