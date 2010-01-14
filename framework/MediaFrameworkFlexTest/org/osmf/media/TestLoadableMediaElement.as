@@ -42,7 +42,7 @@ package org.osmf.media
 			return true;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new NullResource();
 		}

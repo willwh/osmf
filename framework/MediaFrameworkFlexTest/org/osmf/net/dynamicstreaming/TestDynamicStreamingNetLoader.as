@@ -66,7 +66,7 @@ package org.osmf.net.dynamicstreaming
 			return netFactory.createNetLoader();
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockDynamicStreamingNetLoader = loader as MockDynamicStreamingNetLoader;
 			if (mockLoader)
@@ -87,7 +87,7 @@ package org.osmf.net.dynamicstreaming
 			return new NetStreamLoadTrait(loader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			if (_dsResource == null)
 			{
@@ -97,15 +97,15 @@ package org.osmf.net.dynamicstreaming
 					_dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 				}
 			}
-			return _dsResource as IMediaResource;
+			return _dsResource as MediaResourceBase;
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return UNSUCCESSFUL_RESOURCE;
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
 		}

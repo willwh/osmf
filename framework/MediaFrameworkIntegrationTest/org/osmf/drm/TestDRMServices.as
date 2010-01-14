@@ -68,7 +68,7 @@ package org.osmf.drm
 							services.authenticate("wrong", "credentials");
 							break;
 						case DRMState.AUTHENTICATE_FAILED:	
-							Assert.assertEquals(event.error.detail, OSMFStrings.DRM_AUTHENTICATION_FAILED)
+							Assert.assertEquals(event.error.detail, OSMFStrings.getString(OSMFStrings.DRM_AUTHENTICATION_FAILED))
 							Assert.assertEquals(MediaErrorCodes.DRM_AUTHENTICATION_FAILED, event.error.errorID);
 							services.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 							testFinished(null);

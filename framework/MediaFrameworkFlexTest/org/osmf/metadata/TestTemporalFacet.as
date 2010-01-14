@@ -29,7 +29,7 @@ package org.osmf.metadata
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
@@ -311,7 +311,7 @@ package org.osmf.metadata
 			// Placeholder to ensure an event is received.
 		}
 		
-		private function get resourceForMediaElement():IMediaResource
+		private function get resourceForMediaElement():MediaResourceBase
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.

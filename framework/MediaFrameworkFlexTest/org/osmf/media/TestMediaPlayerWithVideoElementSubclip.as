@@ -53,7 +53,7 @@ package org.osmf.media
 			loader = null;
 		}
 
-		override protected function createMediaElement(resource:IMediaResource):MediaElement
+		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			if (loader is MockNetLoader)
 			{
@@ -80,7 +80,7 @@ package org.osmf.media
 			return true;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
@@ -92,14 +92,14 @@ package org.osmf.media
 			return resource;
 		}
 
-		override protected function get invalidResourceForMediaElement():IMediaResource
+		override protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			// Use an invalid URL so that the tests will fail if we use
 			// a real NetLoader rather than a MockNetLoader.
 			return INVALID_RESOURCE;
 		}
 		
-		override protected function get dynamicStreamResource():IMediaResource
+		override protected function get dynamicStreamResource():MediaResourceBase
 		{
 			return null;
 		}

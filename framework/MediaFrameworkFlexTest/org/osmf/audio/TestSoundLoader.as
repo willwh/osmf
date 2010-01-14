@@ -22,7 +22,7 @@
 package org.osmf.audio
 {
 	import org.osmf.events.MediaError;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
@@ -40,22 +40,22 @@ package org.osmf.audio
 			return new SoundLoader();
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new SoundLoadTrait(loader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return new URLResource(new URL("http://example.com"));
 		}

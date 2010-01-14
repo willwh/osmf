@@ -28,7 +28,7 @@ package org.osmf.video
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.TestMediaElement;
@@ -315,7 +315,7 @@ package org.osmf.video
 			return true;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.

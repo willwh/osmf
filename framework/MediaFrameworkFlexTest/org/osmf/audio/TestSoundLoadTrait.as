@@ -24,7 +24,7 @@ package org.osmf.audio
 	import flash.media.Sound;
 	import flash.net.URLRequest;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.TestLoadTrait;
@@ -37,7 +37,7 @@ package org.osmf.audio
 		override protected function createInterfaceObject(... args):Object
 		{
 			var loader:ILoader = args.length > 0 ? args[0] : null;
-			var resource:IMediaResource = args.length > 1 ? args[1] : null;
+			var resource:MediaResourceBase = args.length > 1 ? args[1] : null;
 
 			var sound:Sound = new Sound(new URLRequest(TestConstants.LOCAL_SOUND_FILE));
 
@@ -49,17 +49,17 @@ package org.osmf.audio
 			return new SoundLoader();
 		}
 
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return SUCCESSFUL_RESOURCE;
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return FAILED_RESOURCE;
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
 		}
@@ -76,6 +76,6 @@ package org.osmf.audio
 		
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
 		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
-		private static const UNHANDLED_RESOURCE:IMediaResource = new NullResource();
+		private static const UNHANDLED_RESOURCE:MediaResourceBase = new NullResource();
 	}
 }

@@ -233,7 +233,7 @@ package org.osmf.metadata
 			assertTrue(value == collection.getFacet(new URL(nameSpaces[0])) || value == collection.getFacet(new URL(nameSpaces[1])));
 			assertTrue(collection.getFacet(new URL(nameSpaces[0])) != collection.getFacet(new URL(nameSpaces[1])));
 						
-			var facet:IFacet = collection.getFacet(new URL(adobe));
+			var facet:Facet = collection.getFacet(new URL(adobe));
 			assertEquals(value, facet);
 		
 					
@@ -266,36 +266,21 @@ package org.osmf.metadata
 }
 
 
-import org.osmf.metadata.IFacet;
+import org.osmf.metadata.Facet;
 import org.osmf.metadata.Metadata
 import org.osmf.utils.URL;
 import flash.events.EventDispatcher;
 import org.osmf.metadata.IIdentifier;
 import org.osmf.metadata.FacetSynthesizer;
+import org.osmf.metadata.Facet;
 
-internal class CustomFacet extends EventDispatcher implements IFacet
+internal class CustomFacet extends Facet
 {
 		
 	public function CustomFacet(ns:URL)
 	{
-		_ns = ns;
+		super(ns);
 	}
 
-	
-	public function get namespaceURL():URL
-	{
-		return _ns;
-	}
-	
-	public function getValue(identifier:IIdentifier):*
-	{
-		return undefined;
-	}
-	
-	public function get synthesizer():FacetSynthesizer
-	{
-		return null;
-	}
-	
-	private var _ns:URL;
+		
 }

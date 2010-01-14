@@ -48,7 +48,7 @@ package org.osmf.media
 			httpLoader = null;
 		}
 				
-		override protected function createMediaElement(resource:IMediaResource):MediaElement
+		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			if (httpLoader is MockHTTPLoader)
 			{
@@ -64,12 +64,12 @@ package org.osmf.media
 			return false;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(PING_URL)
 		}
 
-		override protected function get invalidResourceForMediaElement():IMediaResource
+		override protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(INVALID_URL);
 		}

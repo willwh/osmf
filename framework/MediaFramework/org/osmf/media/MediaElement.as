@@ -107,7 +107,7 @@ package org.osmf.media
 		 */
 		public function MediaElement()
 		{	
-			createMetadata();
+			_metadata = createMetadata();
 			setupTraitResolvers();		
 			setupTraits();
 			addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange, false, Number.MAX_VALUE);

@@ -127,7 +127,7 @@ package org.osmf.media
 					);
 		}
 		
-		private function canHandleResource(resource:IMediaResource):Boolean
+		private function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return resource == VALID_RESOURCE ? true : false;
 		}

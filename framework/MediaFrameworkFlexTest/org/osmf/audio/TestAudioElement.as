@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.audio
 {
-	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -59,7 +59,7 @@ package org.osmf.audio
 			return true;
 		}
 
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
 		}

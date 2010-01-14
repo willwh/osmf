@@ -128,7 +128,7 @@ package org.osmf.composition
 		public function testCompositeMetadataEvent():void
 		{
 			var child:Metadata = new Metadata();
-			var facet:IFacet = new ObjectFacet(new URL(""), "test");
+			var facet:Facet = new ObjectFacet(new URL(""), "test");
 			var facetGroup:FacetGroup = new FacetGroup(new URL(""));
 			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer(new URL(""));
 			var e:CompositeMetadataEvent

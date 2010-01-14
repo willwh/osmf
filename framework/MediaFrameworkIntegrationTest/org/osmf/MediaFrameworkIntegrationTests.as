@@ -53,6 +53,15 @@ package org.osmf
 			
 			NetFactory.neverUseMockObjects = true;
 			
+			CONFIG::FLASH_10_1
+			{
+				addTestSuite(TestDRMServices);
+				addTestSuite(TestVideoElement);
+				addTestSuite(TestNetContentProtectable);
+				
+			}
+			/*
+			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
 	
@@ -77,13 +86,7 @@ package org.osmf
 			
 			addTestSuite(TestManifestLoader);
 			
-			CONFIG::FLASH_10_1
-			{
-				addTestSuite(TestDRMServices);
-				addTestSuite(TestVideoElement);
-				addTestSuite(TestNetContentProtectable);
-				
-			}
+			*/
 			
 		}
 	}

@@ -27,6 +27,7 @@ package org.osmf.net
 	
 	import flexunit.framework.Assert;
 	
+	import org.osmf.traits.DRMTrait;
 	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.utils.Base64Decoder;
@@ -80,8 +81,9 @@ package org.osmf.net
 		public function testAuthenticationEvents():void
 		{		
 			var testFinished:Function = addAsync( function (event:Event):void {}, 13000);
+			var drmTrait:DRMTrait = new NetStreamDRMTrait();
 						
-			nsDRMTRait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);				
+			drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);				
 			
 			var meta:ByteArray = new ByteArray();
 			var decoder:Base64Decoder = new Base64Decoder();
@@ -91,7 +93,7 @@ package org.osmf.net
 			
 			function onStateChange(event:DRMEvent):void
 			{				
-				switch(nsDRMTRait.drmState)
+				switch(drmTrait.drmState)
 				{
 					case DRMState.AUTHENTICATING:						
 						authenticatingSeen = true;
@@ -99,13 +101,13 @@ package org.osmf.net
 					case DRMState.AUTHENTICATION_NEEDED:	
 						// Doesn't fire if the voucher is already present.							
 						Assert.assertEquals(AuthenticationMethod.USERNAME_AND_PASSWORD, nsDRMTRait.authenticationMethod);
-						nsDRMTRait.authenticate(USERNAME, PASSWORD);
+						drmTrait.authenticate(USERNAME, PASSWORD);
 						break;
 					case DRMState.AUTHENTICATED:										
 						Assert.assertTrue(nsDRMTRait.startDate.time <= (new Date()).time);
 						Assert.assertTrue(nsDRMTRait.endDate.time >= (new Date()).time);
 						Assert.assertTrue(nsDRMTRait.period >= 0);	
-						nsDRMTRait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
+						drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 						testFinished(null);				
 						break;
 				}			

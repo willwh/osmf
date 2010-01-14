@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.utils.InterfaceTestCase;
 	import org.osmf.utils.URL;
 	
@@ -30,19 +29,19 @@ package org.osmf.media
 		public function testGetURL():void
 		{
 			// Simple URL
-			var resource:IURLResource = createIURLResource(new URL("http://www.example.com"));
+			var resource:URLResource = createURLResource(new URL("http://www.example.com"));
 			assertTrue(resource != null);
 			assertTrue(resource.url.toString() == "http://www.example.com");
 			assertTrue(resource.url.protocol == "http");
 			assertTrue(resource.url.host == "www.example.com");
 			
 			// Empty URL
-			resource = createIURLResource(new URL(""));
+			resource = createURLResource(new URL(""));
 			assertTrue(resource != null);
 			assertTrue(resource.url.toString() == "");
 
 			// null URL
-			resource = createIURLResource(null);
+			resource = createURLResource(null);
 			assertTrue(resource != null);
 			assertTrue(resource.url.toString() == null);			
 		}
@@ -50,16 +49,29 @@ package org.osmf.media
 		public function testMetadata():void
 		{
 			// Simple URL
-			var resource:IURLResource = createIURLResource(new URL("http://www.example.com"));
+			var resource:URLResource = createURLResource(new URL("http://www.example.com"));
 			
 			//Test metadata list is valid, and empty.
 			assertNotNull(resource.metadata);
 			
 		}
-				
-		protected function createIURLResource(url:URL):IURLResource
+		
+		private function createURLResource(url:URL):URLResource
 		{
-			return createInterfaceObject(url) as IURLResource; 
+			return createInterfaceObject(url) as URLResource;
+		}
+				
+		override protected function createInterfaceObject(... args):Object
+		{
+			var resource:URLResource = null;
+		
+			if (args.length > 0)
+			{
+				assertTrue(args.length == 1);
+				resource = new URLResource(args[0]);
+			}
+			
+			return resource;
 		}
 	}
 }

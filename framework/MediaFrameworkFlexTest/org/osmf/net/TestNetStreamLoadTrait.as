@@ -28,7 +28,7 @@ package org.osmf.net
 	import flash.utils.Timer;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
@@ -62,7 +62,7 @@ package org.osmf.net
 		override protected function createInterfaceObject(... args):Object
 		{
 			var loader:ILoader = args.length > 0 ? args[0] : null;
-			var resource:IMediaResource = args.length > 1 ? args[1] : null;
+			var resource:MediaResourceBase = args.length > 1 ? args[1] : null;
 			
 			var mockLoader:MockNetLoader = loader as MockNetLoader;
 			if (mockLoader)
@@ -92,17 +92,17 @@ package org.osmf.net
 			return netFactory.createNetLoader();
 		}
 
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return SUCCESSFUL_RESOURCE;
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return FAILED_RESOURCE;
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
 		}
@@ -158,7 +158,7 @@ package org.osmf.net
 		
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_VIDEO));
-		private static const UNHANDLED_RESOURCE:IMediaResource = new NullResource();
+		private static const UNHANDLED_RESOURCE:MediaResourceBase = new NullResource();
 		
 		private var netFactory:NetFactory;
 		private var eventDispatcher:EventDispatcher;

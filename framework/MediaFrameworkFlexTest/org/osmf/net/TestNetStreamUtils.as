@@ -23,7 +23,7 @@ package org.osmf.net
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -107,7 +107,7 @@ package org.osmf.net
 			// First try some negative/default cases.
 			//
 			
-			var resource:IMediaResource = null;
+			var resource:MediaResourceBase = null;
 			var result:Object = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);

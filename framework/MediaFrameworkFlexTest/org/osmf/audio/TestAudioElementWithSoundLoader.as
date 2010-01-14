@@ -23,7 +23,7 @@ package org.osmf.audio
 {
 	import flash.media.SoundMixer;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
@@ -43,7 +43,7 @@ package org.osmf.audio
 			return true;
 		}
 
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
 		}

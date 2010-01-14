@@ -28,7 +28,7 @@ package org.osmf.media
 		// Overrides
 		//
 				
-		override protected function createMediaElement(resource:IMediaResource):MediaElement
+		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			return new ProxyElement(new MediaElement());
 		}
@@ -38,12 +38,12 @@ package org.osmf.media
 			return false;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(new URL("http://example.com"));
 		}
 
-		override protected function get invalidResourceForMediaElement():IMediaResource
+		override protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			return null;
 		}

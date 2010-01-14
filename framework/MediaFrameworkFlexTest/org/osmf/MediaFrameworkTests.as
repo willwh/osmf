@@ -61,7 +61,7 @@ package org.osmf
 			
 			// Utils
 			//
-			/*
+			
 			addTestSuite(TestBinarySearch);
 			addTestSuite(TestOSMFStrings);
 			addTestSuite(TestVersion);		
@@ -277,7 +277,7 @@ package org.osmf
 			addTestSuite(TestMediaContainer);
 			addTestSuite(TestMediaContainerGroup);
 			addTestSuite(TestHTMLMediaContainer);
-	*/
+
 			// Plugins
 			//
 			

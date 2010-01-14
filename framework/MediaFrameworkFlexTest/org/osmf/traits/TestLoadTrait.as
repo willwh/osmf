@@ -26,7 +26,7 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.InterfaceTestCase;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.SimpleResource;
@@ -52,17 +52,17 @@ package org.osmf.traits
 		/**
 		 * Subclasses can override to specify their own resource.
 		 **/
-		protected function get successfulResource():IMediaResource
+		protected function get successfulResource():MediaResourceBase
 		{
 			return new SimpleResource(SimpleResource.SUCCESSFUL);
 		}
 
-		protected function get failedResource():IMediaResource
+		protected function get failedResource():MediaResourceBase
 		{
 			return new SimpleResource(SimpleResource.FAILED);
 		}
 
-		protected function get unhandledResource():IMediaResource
+		protected function get unhandledResource():MediaResourceBase
 		{
 			return new SimpleResource(SimpleResource.UNHANDLED);
 		}
@@ -112,7 +112,7 @@ package org.osmf.traits
 			
 			assertTrue(loadTrait.resource == null);
 			
-			var resource:IMediaResource = successfulResource;
+			var resource:MediaResourceBase = successfulResource;
 			
 			loadTrait = createLoadTrait(resource);
 			
@@ -472,7 +472,7 @@ package org.osmf.traits
 		
 		//---------------------------------------------------------------------
 		
-		protected final function createLoadTrait(resource:IMediaResource=null):LoadTrait
+		protected final function createLoadTrait(resource:MediaResourceBase=null):LoadTrait
 		{
 			return createInterfaceObject(createLoader(), resource) as LoadTrait; 
 		}

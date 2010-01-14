@@ -21,9 +21,9 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaResource;
 	import org.osmf.media.IMediaResourceHandler;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	
 	public class SampleResourceHandler implements IMediaResourceHandler
 	{
@@ -36,7 +36,7 @@ package org.osmf.utils
 			this.urlToMatch = urlToMatch;
 		}
 		
-		public function canHandleResource(resource:IMediaResource):Boolean
+		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var result:Boolean = false;
 			
@@ -46,7 +46,7 @@ package org.osmf.utils
 			}
 			else
 			{
-				var urlResource:IURLResource = resource as IURLResource;
+				var urlResource:URLResource = resource as URLResource;
 				if (urlResource)
 				{
 					result = (urlResource.url.toString() == urlToMatch);

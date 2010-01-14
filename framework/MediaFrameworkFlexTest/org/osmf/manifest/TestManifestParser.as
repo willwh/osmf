@@ -4,7 +4,7 @@ package org.osmf.manifest
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -195,7 +195,7 @@ package org.osmf.manifest
 								<media url="http://example.com/myvideo/low.mp4" bitrate="408" width="640" height="480"/>
 							</manifest>
 			var manifest:Manifest = parser.parse(test);
-			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource)
 			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url.rawUrl)
@@ -221,7 +221,7 @@ package org.osmf.manifest
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
@@ -266,7 +266,7 @@ package org.osmf.manifest
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 								
@@ -299,7 +299,7 @@ package org.osmf.manifest
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			
@@ -323,7 +323,7 @@ package org.osmf.manifest
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource);
 			
@@ -349,7 +349,7 @@ package org.osmf.manifest
 			var errorSeen:Boolean = false;
 			try
 			{
-				var resource:IMediaResource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+				var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			}
 			catch(error:Error)
 			{
