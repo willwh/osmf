@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
 *  
@@ -82,9 +82,9 @@ package org.osmf.utils
 		/**
 		 * Takes time in seconds and returns a string in a time code
 		 * format of hh:mm:ss.  If hours are not present, returns only
-		 * mm:ss. For example, passing a value of <code>18750<code> will
+		 * mm:ss. For example, passing a value of <code>18750</code> will
 		 * return <code>05:12:30</code>, but passing a value of <code>31</code>
-		 * will return <code>00:31<code>. So in other words, minutes and seconds 
+		 * will return <code>00:31</code>. So in other words, minutes and seconds 
 		 * will always be present.
 		 */
 		public static function formatAsTimeCode(sec:Number):String 
