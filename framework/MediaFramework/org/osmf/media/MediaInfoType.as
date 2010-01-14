@@ -45,10 +45,10 @@ package org.osmf.media
 		/**
 		 * A create on load plugin is created once it is added to a media factory. 
 		 * No resource will be set when the plugin's element is created after loaded.
-		 * This type of plugin is meant to be used with the IMediaReferrer in order to create
-		 * a reference plugin without the need to create the plugin explicitly.  
+		 * This type of plugin is meant to be used as a reference plugin without 
+		 * the need to create the plugin's MediaElement explicitly.  
 		 **/
-		public static const CREATE_ON_LOAD:MediaInfoType = new MediaInfoType("creatOnLoad");
+		public static const CREATE_ON_LOAD:MediaInfoType = new MediaInfoType("createOnLoad");
 		
 		/**
 		 * @private

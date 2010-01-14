@@ -42,7 +42,7 @@ package org.osmf.display
 		public function MediaPlayerSprite(player:MediaPlayer = null)
 		{
 			super();	
-			mediaPlayer = player ? player : new MediaPlayer(); 		
+			mediaPlayer = player != null ? player : new MediaPlayer(); 		
 			_containerSprite = new MediaContainer();
 			addChild(_containerSprite);			
 		}	
