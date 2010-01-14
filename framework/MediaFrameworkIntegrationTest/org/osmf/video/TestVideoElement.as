@@ -32,8 +32,8 @@ package org.osmf.video
 	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -205,7 +205,7 @@ package org.osmf.video
 			testElementCred(resource, "dmo", "password");				
 		}
 		
-		private function testElementCred(resource:IMediaResource, user:String, pass:String):void
+		private function testElementCred(resource:MediaResourceBase, user:String, pass:String):void
 		{
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
@@ -244,7 +244,7 @@ package org.osmf.video
 			}
 		}
 					
-		private function testElementAnon(resource:IMediaResource):void
+		private function testElementAnon(resource:MediaResourceBase):void
 		{						
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 					
