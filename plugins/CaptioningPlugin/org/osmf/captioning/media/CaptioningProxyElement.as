@@ -32,7 +32,7 @@ package org.osmf.captioning.media
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.proxies.ProxyElement;
@@ -110,7 +110,7 @@ package org.osmf.captioning.media
 			}
 			else
 			{
-				var facet:IFacet = tempResource.metadata.getFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+				var facet:Facet = tempResource.metadata.getFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 				if (facet == null)
 				{
 					if (!_continueLoadOnFailure)

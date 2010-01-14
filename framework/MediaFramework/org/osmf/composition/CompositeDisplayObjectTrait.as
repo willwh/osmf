@@ -27,11 +27,11 @@ package org.osmf.composition
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutContext;
-	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutContextSprite;
+	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererFacet;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -157,7 +157,7 @@ package org.osmf.composition
 			dispatchEvent(event.clone());
 		}
 
-		private function layoutRendererFacetChangeCallback(facet:IFacet):void
+		private function layoutRendererFacetChangeCallback(facet:Facet):void
 		{
 			if (_layoutRenderer)
 			{

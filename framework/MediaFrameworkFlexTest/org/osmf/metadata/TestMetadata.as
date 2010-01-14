@@ -50,7 +50,7 @@ package org.osmf.metadata
 			collection.addFacet(value);
 			assertTrue(addCalled);
 					
-			var facet:IFacet = 	collection.getFacet(testNs);
+			var facet:Facet = 	collection.getFacet(testNs);
 									
 			assertEquals(value, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
 			
@@ -104,7 +104,7 @@ package org.osmf.metadata
 			assertNull( collection.removeFacet(new KeyValueFacet(new URL("unknown"))));					
 			assertFalse(removeCalled); //Make sure we didn't dispatch an event for an already removed item.
 								
-			var facet:IFacet = 	collection.getFacet(testNs);
+			var facet:Facet = 	collection.getFacet(testNs);
 									
 			assertEquals(value, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
 			
@@ -160,7 +160,7 @@ package org.osmf.metadata
 			assertTrue(removeCalled);	
 			assertTrue(addCalled);				
 								
-			var facet:IFacet = 	collection.getFacet(testNs);
+			var facet:Facet = 	collection.getFacet(testNs);
 									
 			assertEquals(value1, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
 			
@@ -196,7 +196,7 @@ package org.osmf.metadata
 			assertTrue(adobe == nameSpaces[1] || example == nameSpaces[1] );
 			assertTrue(example == nameSpaces[0] || adobe == nameSpaces[0]  );
 			
-			var facet:IFacet = collection.getFacet(new URL(adobe));
+			var facet:Facet = collection.getFacet(new URL(adobe));
 			assertEquals(value, facet);
 			
 			facet = collection.getFacet(new URL(adobe));

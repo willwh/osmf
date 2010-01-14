@@ -27,7 +27,7 @@ package org.osmf.events
 
 	/**
 	 * FacetValueChangeEvent is the event dispatched when the data within a facet changes.
-	 * Data is tracked within an IFacet using an IIdentifier.  The newly changed value is also present in this 
+	 * Data is tracked within an Facet using an IIdentifier.  The newly changed value is also present in this 
 	 * event, as well as the old value.
 	 */ 
 	public class FacetValueChangeEvent extends FacetValueEvent

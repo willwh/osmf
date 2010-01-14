@@ -90,9 +90,9 @@ package org.osmf.metadata
 							, facetGroup:FacetGroup
 							, mode:CompositionMode
 							, activeMetadata:Metadata
-							):IFacet
+							):Facet
 		{	
-			var result:IFacet;
+			var result:Facet;
 			
 			if (mode == CompositionMode.SERIAL && activeMetadata)
 			{

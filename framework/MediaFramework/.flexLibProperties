@@ -125,9 +125,9 @@
 <classEntry path="org.osmf.media.MediaPlayerState"/>
 <classEntry path="org.osmf.media.MediaTraitResolver"/>
 <classEntry path="org.osmf.media.URLResource"/>
+<classEntry path="org.osmf.metadata.Facet"/>
 <classEntry path="org.osmf.metadata.FacetGroup"/>
 <classEntry path="org.osmf.metadata.FacetSynthesizer"/>
-<classEntry path="org.osmf.metadata.IFacet"/>
 <classEntry path="org.osmf.metadata.IIdentifier"/>
 <classEntry path="org.osmf.metadata.KeyValueFacet"/>
 <classEntry path="org.osmf.metadata.MediaType"/>

@@ -22,14 +22,14 @@
 package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.StringIdentifier;
 	import org.osmf.utils.URL;
 	
 	/**
-	 * Signals that one of IFacets's values has changed.
+	 * Signals that one of Facets's values has changed.
 	 * 
 	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
 	 */
@@ -92,7 +92,7 @@ package org.osmf.layout
 		 */
 		public static const HEIGHT:StringIdentifier = new StringIdentifier("height");
 		
-		// IFacet
+		// Facet
 		//
 		
 		/**

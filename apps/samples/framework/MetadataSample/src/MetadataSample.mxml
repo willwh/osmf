@@ -31,6 +31,7 @@
 	 horizontalAlign="center">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import org.osmf.metadata.Facet;
 			import org.osmf.audio.AudioElement;
 			import org.osmf.composition.CompositeElement;
 			import org.osmf.composition.ParallelElement;
@@ -50,7 +51,7 @@
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaInfo;
 			import org.osmf.media.URLResource;
-			import org.osmf.metadata.IFacet;
+			import org.osmf.metadata.Facet;
 			import org.osmf.metadata.KeyValueFacet;
 			import org.osmf.metadata.MediaType;
 			import org.osmf.metadata.MetadataNamespaces;
@@ -261,7 +262,7 @@
 	 		//Adds a new KeyValueFacet to the metadata list
 	 		protected function removeFacet():void
 	 		{
-	 			wrapper.element.metadata.removeFacet(metadataFacets.selectedItem as IFacet);	 			
+	 			wrapper.element.metadata.removeFacet(metadataFacets.selectedItem as Facet);	 			
 	 		}
 	 			 		
 	 		//Adds a value to the KeyValueFacet

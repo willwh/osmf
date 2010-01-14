@@ -33,7 +33,7 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
@@ -666,7 +666,7 @@ package org.osmf.layout
 			this.metadata = null;
 		}
 		
-		private function targetMetadataChangeCallback(facet:IFacet):void
+		private function targetMetadataChangeCallback(facet:Facet):void
 		{
 			invalidate();
 		}

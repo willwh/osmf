@@ -36,7 +36,7 @@ package org.osmf.metadata
 	 * storing metadata in a facet.  The keys are all Object, and the values are all Objects.
 	 * Keys and values may not available for garbage collection until they are removed from the collection. 
 	 */
-	public class KeyValueFacet extends EventDispatcher implements IFacet
+	public class KeyValueFacet extends Facet
 	{
 		/**
 		 * Constructs a KeyValueMetadata that holds metadata, seeded with the data param. It is assumed that all metadata is in the 
@@ -49,43 +49,25 @@ package org.osmf.metadata
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function KeyValueFacet(ns:URL = null, synthesizer:Class = null)		
-		{			
-			data = new Dictionary();			
-			if (ns == null)
-			{
-				ns = MetadataNamespaces.DEFAULT_METADATA;
-			}			
-			_namespaceURL = ns;
+		{						
+			super(ns ||= MetadataNamespaces.DEFAULT_METADATA);
 			
+			data = new Dictionary();
 			synthesizer ||= FacetSynthesizer;
 			_synthesizer = new synthesizer(ns);
 		}
 		
-		// IFacet
-		//
+		
 				
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get namespaceURL():URL
-		{
-			return _namespaceURL;
-		}
-				
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function getValue(identifier:IIdentifier):*
+		override public function getValue(identifier:IIdentifier):*
 		{
 			var objectIdentifier:ObjectIdentifier = identifier as ObjectIdentifier; 
 			if (objectIdentifier)
@@ -95,14 +77,14 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *   
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get synthesizer():FacetSynthesizer
+		override public function get synthesizer():FacetSynthesizer
 		{
 			return _synthesizer;
 		} 
@@ -201,8 +183,7 @@ package org.osmf.metadata
 		}
 				
 		private var data:Dictionary;
-		private var _namespaceURL:URL;
-		
+			
 		private var _synthesizer:FacetSynthesizer;
 
 	}

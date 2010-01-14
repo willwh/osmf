@@ -21,10 +21,8 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import flash.events.EventDispatcher;
-	
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.utils.URL;
@@ -32,7 +30,7 @@ package org.osmf.layout
 	/**
 	 * Base class for the default renderer's layout facets.
 	 */	
-	public class LayoutFacet extends EventDispatcher implements IFacet
+	public class LayoutFacet extends Facet
 	{
 		/**
 		 * Constructor
@@ -49,44 +47,15 @@ package org.osmf.layout
 			_synthesizer = new NullFacetSynthesizer(namespaceURL);
 		}
 		
-		// IFacet
-		//
-		
 		/**
-		 * @inheritDoc
-		  *  
+		 * @private
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get namespaceURL():URL
-		{
-			return null;
-		}
-		
-		/**
-		 * @inheritDoc
-		  *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function getValue(identifier:IIdentifier):*
-		{
-			return null;
-		}
-		
-		/**
-		 * @inheritDoc
-		  *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get synthesizer():FacetSynthesizer
+		override public function get synthesizer():FacetSynthesizer
 		{
 			return _synthesizer;
 		}

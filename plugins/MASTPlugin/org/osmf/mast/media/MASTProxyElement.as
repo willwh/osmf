@@ -41,7 +41,7 @@ package org.osmf.mast.media
 	import org.osmf.media.IMediaResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.LoadState;
@@ -114,7 +114,7 @@ package org.osmf.mast.media
 				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
 			}
 			
-			var facet:IFacet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
+			var facet:Facet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
 			if (facet == null)
 			{
 				throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);

@@ -56,7 +56,7 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class TemporalFacet extends EventDispatcher implements IFacet
+	public class TemporalFacet extends Facet
 	{
 		/**
 		 * Constructor.
@@ -73,7 +73,7 @@ package org.osmf.metadata
 		 */
 		public function TemporalFacet(namespaceURL:URL, owner:MediaElement, synthesizer:Class = null)
 		{
-			_namespace = namespaceURL;
+			super(namespaceURL);
 
 			if (owner == null)
 			{
@@ -101,19 +101,6 @@ package org.osmf.metadata
 			
 			synthesizer ||= FacetSynthesizer;
 			_synthesizer = new synthesizer(namespaceURL);
-		}
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get namespaceURL():URL
-		{
-			return _namespace;
 		}
 		
 		/**
@@ -188,14 +175,14 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getValue(identifier:IIdentifier):*
+		override public function getValue(identifier:IIdentifier):*
 		{
 			if (identifier is TemporalIdentifier)
 			{
@@ -254,7 +241,7 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 */
-		public function get synthesizer():FacetSynthesizer
+		override public function get synthesizer():FacetSynthesizer
 		{
 			return _synthesizer;
 		}
@@ -633,8 +620,7 @@ package org.osmf.metadata
 		private static const CHECK_INTERVAL:Number = 100;	// The default interval (in milliseconds) the 
 															// class will check for temporal metadata
 		private static const TOLERANCE:Number = 0.25;	// A value must be within this tolerence to trigger
-														//	a position reached event.		
-		private var _namespace:URL;				
+														//	a position reached event.				
 		private var temporalValueCollection:Vector.<TemporalIdentifier>;
 		private var owner:MediaElement;
 		private var timeTrait:TimeTrait;

@@ -27,7 +27,7 @@ package org.osmf.proxies
 	import flash.events.Event;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.URL;
 	
@@ -53,7 +53,7 @@ package org.osmf.proxies
 		/** 
 		 * @inheritDoc
 		 */ 
-		override public function getFacet(nameSpace:URL):IFacet
+		override public function getFacet(nameSpace:URL):Facet
 		{				
 			return wrapped.getFacet(nameSpace);		
 		}
@@ -61,7 +61,7 @@ package org.osmf.proxies
 		/** 
 		 * @inheritDoc
 		 */ 
-		override public function addFacet(data:IFacet):void
+		override public function addFacet(data:Facet):void
 		{
 			if (wrapped != null)
 			{
@@ -72,7 +72,7 @@ package org.osmf.proxies
 		/** 
 		 * @inheritDoc
 		 */ 
-		override public function removeFacet(data:IFacet):IFacet
+		override public function removeFacet(data:Facet):Facet
 		{			
 			return wrapped.removeFacet(data);
 		}	

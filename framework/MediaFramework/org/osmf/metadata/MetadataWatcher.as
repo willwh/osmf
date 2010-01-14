@@ -39,7 +39,7 @@ package org.osmf.metadata
 		/**
 		 * Constructor 
 		 * @param metadata The Metadata to watch for change.
-		 * @param nameSpace The namespace that identifies the IFacet instance to watch
+		 * @param nameSpace The namespace that identifies the Facet instance to watch
 		 * for change.
 		 * @param identifier The identifier pointing to the value of interest to watch
 		 * for change. Note that this parameter is optional: not specifying an
@@ -129,12 +129,12 @@ package org.osmf.metadata
 		// Internals
 		//
 			
-		private function processWatchedFacetChange(facet:IFacet, dispatchChange:Boolean = true):void
+		private function processWatchedFacetChange(facet:Facet, dispatchChange:Boolean = true):void
 		{
 			// Don't change anything if the new facet matches the old one:
 			if (currentFacet != facet)
 			{
-				var oldFacet:IFacet = currentFacet;
+				var oldFacet:Facet = currentFacet;
 				
 				if (currentFacet)
 				{
@@ -234,7 +234,7 @@ package org.osmf.metadata
 			else
 			{
 				// We're watching the entire facet: invoke callback:
-				callback(event.target as IFacet);
+				callback(event.target as Facet);
 			}
 		}
 		
@@ -252,7 +252,7 @@ package org.osmf.metadata
 			else
 			{
 				// We're watching the entire facet: invoke callback:
-				callback(event.target as IFacet);
+				callback(event.target as Facet);
 			}
 		}
 		
@@ -270,7 +270,7 @@ package org.osmf.metadata
 			else
 			{
 				// We're watching the entire facet: invoke callback:
-				callback(event.target as IFacet);
+				callback(event.target as Facet);
 			}
 		}
 		
@@ -279,7 +279,7 @@ package org.osmf.metadata
 		private var identifier:IIdentifier;
 		private var callback:Function;
 		
-		private var currentFacet:IFacet;
+		private var currentFacet:Facet;
 		private var watching:Boolean;
 		
 	}

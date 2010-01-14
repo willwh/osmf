@@ -41,7 +41,7 @@ package org.osmf.metadata
 		// Overrides
 		//
 		
-		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:CompositionMode, activeMetadata:Metadata):IFacet
+		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:CompositionMode, activeMetadata:Metadata):Facet
 		{
 			return null;
 		}

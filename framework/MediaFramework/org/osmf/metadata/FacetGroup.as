@@ -91,7 +91,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function addFacet(metadata:Metadata, facet:IFacet):void
+		public function addFacet(metadata:Metadata, facet:Facet):void
 		{
 			if (metadata == null || facet == null)
 			{
@@ -123,9 +123,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function removeFacet(metadata:Metadata, facet:IFacet):IFacet
+		public function removeFacet(metadata:Metadata, facet:Facet):Facet
 		{
-			var result:IFacet;
+			var result:Facet;
 			var index:int = indexOf(metadata, facet);
 			
 			if (index != -1)
@@ -180,7 +180,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function getFacetAt(index:int):IFacet
+		public function getFacetAt(index:int):Facet
 		{
 			if (index >= facets.length)
 			{
@@ -202,7 +202,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
-		public function indexOf(metadata:Metadata, facet:IFacet):int
+		public function indexOf(metadata:Metadata, facet:Facet):int
 		{
 			var result:int = -1;
 			var record:Object;

@@ -23,9 +23,9 @@ package org.osmf.composition
 {
 	import flash.events.Event;
 	
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
 
 	/**
@@ -64,7 +64,7 @@ package org.osmf.composition
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
 							, child:Metadata = null
-							, facet:IFacet = null
+							, facet:Facet = null
 							, facetGroup:FacetGroup = null
 							, suggestedFacetSynthesizer:FacetSynthesizer = null
 							)
@@ -99,7 +99,7 @@ package org.osmf.composition
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get facet():IFacet
+		public function get facet():Facet
 		{
 			return _facet;
 		}
@@ -161,7 +161,7 @@ package org.osmf.composition
 		//
 		
 		private var _child:Metadata;
-		private var _facet:IFacet;
+		private var _facet:Facet;
 		private var _facetGroup:FacetGroup;
 		private var _suggestedFacetSynthesizer:FacetSynthesizer;
 	}

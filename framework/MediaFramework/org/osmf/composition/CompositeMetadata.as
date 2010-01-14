@@ -28,9 +28,9 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.IFacet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
@@ -92,7 +92,7 @@ package org.osmf.composition
 	 * synthesizer takes precedence over the inherited one.
 	 * 
 	 * Last, facet synthesis occurs if the first facet from a FacetGroup
-	 * returns a facet synthesizer for it IFacet.synthesizer property. Facet
+	 * returns a facet synthesizer for it Facet.synthesizer property. Facet
 	 * synthesizer set on this class directly, or indirectly via its parent,
 	 * take precedence over the facet's suggested synthesizer.
 	 * 
@@ -461,7 +461,7 @@ package org.osmf.composition
 		// Internals
 		//
 		
-		private function processChildFacetAdd(child:Metadata, facet:IFacet, dispatchAddChildEvent:Boolean = true):void
+		private function processChildFacetAdd(child:Metadata, facet:Facet, dispatchAddChildEvent:Boolean = true):void
 		{
 			var groupAddEvent:CompositeMetadataEvent;
 			
@@ -507,7 +507,7 @@ package org.osmf.composition
 			}
 		}
 		
-		private function processChildFacetRemove(child:Metadata, facet:IFacet, dispatchChildRemoveEvent:Boolean = true):void
+		private function processChildFacetRemove(child:Metadata, facet:Facet, dispatchChildRemoveEvent:Boolean = true):void
 		{
 			var groupRemoveEvent:CompositeMetadataEvent;
 			
@@ -606,7 +606,7 @@ package org.osmf.composition
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			var synthesizedFacet:IFacet;
+			var synthesizedFacet:Facet;
 			var facetSynthesizer:FacetSynthesizer = facetSynthesizers[facetGroup.namespaceURL.rawUrl];
 			
 			var localEvent:CompositeMetadataEvent
@@ -627,7 +627,7 @@ package org.osmf.composition
 				||= localEvent.suggestedFacetSynthesizer
 				// If no synthesizer has been suggested by our parents, then look
 				// at the facet group, and take the synthesizer set on the first
-				// IFacet that we encounter:
+				// Facet that we encounter:
 				||	(	(facetGroup.length > 0)
 							? facetGroup.getFacetAt(0).synthesizer
 							: null
@@ -648,7 +648,7 @@ package org.osmf.composition
 			{
 				// If the synthesized value is null, then we might need to clear
 				// out a previously set value:
-				var currentFacet:IFacet = getFacet(facetGroup.namespaceURL);
+				var currentFacet:Facet = getFacet(facetGroup.namespaceURL);
 				if (currentFacet != null)
 				{
 					removeFacet(currentFacet);

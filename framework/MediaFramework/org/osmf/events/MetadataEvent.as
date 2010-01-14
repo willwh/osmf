@@ -23,11 +23,11 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 
 	/**
 	 * Metadata Events are dispatched by the IMetadata object when 
-	 * IFacets are added or removed from the metadata collection.
+	 * Facets are added or removed from the metadata collection.
 	 */ 
 	public class MetadataEvent extends Event
 	{
@@ -74,7 +74,7 @@ package org.osmf.events
 			( type:String
 			, bubbles:Boolean=false
 			, cancelable:Boolean=false
-			, facet:IFacet=null
+			, facet:Facet=null
 			)
 		{
 			super(type, bubbles, cancelable);
@@ -90,7 +90,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get facet():IFacet
+		public function get facet():Facet
 		{
 			return _facet;
 		}
@@ -103,6 +103,6 @@ package org.osmf.events
 			return new MetadataEvent(type, bubbles, cancelable, _facet);
 		}
 		
-		private var _facet:IFacet;		
+		private var _facet:Facet;		
 	}
 }

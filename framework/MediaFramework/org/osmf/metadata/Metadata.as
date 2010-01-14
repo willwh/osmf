@@ -72,9 +72,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function getFacet(nameSpace:URL):IFacet
+		public function getFacet(nameSpace:URL):Facet
 		{				
-			return _list[nameSpace.rawUrl] as IFacet;			
+			return _list[nameSpace.rawUrl] as Facet;			
 		}
 		
 		/** 
@@ -90,7 +90,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function addFacet(data:IFacet):void
+		public function addFacet(data:Facet):void
 		{
 			if (data == null)
 			{
@@ -102,7 +102,7 @@ package org.osmf.metadata
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				return;
 			}	
-			var oldFacet:IFacet = _list[data.namespaceURL.rawUrl];			
+			var oldFacet:Facet = _list[data.namespaceURL.rawUrl];			
 			_list[data.namespaceURL.rawUrl] = data;
 			if (oldFacet)
 			{
@@ -125,7 +125,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function removeFacet(data:IFacet):IFacet
+		public function removeFacet(data:Facet):Facet
 		{		
 			if (data == null)
 			{

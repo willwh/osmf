@@ -22,14 +22,14 @@
 package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.StringIdentifier;
 	import org.osmf.utils.URL;
 
 	/**
-	 * Signals that one of IFacets's values has changed.
+	 * Signals that one of Facets's values has changed.
 	 * 
 	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
 	 */
@@ -92,7 +92,7 @@ package org.osmf.layout
 		 */
 		public static const BOTTOM:StringIdentifier = new StringIdentifier("bottom");
 		
-		// IFacet
+		// Facet
 		//
 		
 		/**
@@ -154,7 +154,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function merge(childFacet:IFacet):IFacet
+		public function merge(childFacet:Facet):Facet
 		{
 			return null;
 		}

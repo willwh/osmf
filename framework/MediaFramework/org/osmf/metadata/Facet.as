@@ -21,19 +21,19 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import flash.events.IEventDispatcher;
+	import flash.events.EventDispatcher;
 	
 	import org.osmf.utils.URL;
 	 
      /**
-	 * Signals that all of the IFacets's values have changed.
+	 * Signals that all of the Facets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_ADD
 	 */
      [Event(name='facetValueAdd', type='org.osmf.events.FacetValueEvent')]
 	
      /**
-	 * Signals that all of the IFacets's values have changed.
+	 * Signals that all of the Facets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_REMOVE
 	 *  
@@ -45,7 +45,7 @@ package org.osmf.metadata
      [Event(name='facetValueRemove', type='org.osmf.events.FacetEvent')]
 	
      /**
-	 * Signals that all of the IFacets's values have changed.
+	 * Signals that all of the Facets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetValueChangeEvent.VALUE_CHANGE
 	 *  
@@ -57,7 +57,7 @@ package org.osmf.metadata
      [Event(name='facetValueChange', type='org.osmf.events.FacetValueChangeEvent')]
 	
 	/**
-	 * The interface for all concrete classes that hold metadata relating to Open Source Media Framework media. 
+	 * The base class for all classes that hold metadata relating to Open Source Media Framework media. 
 	 * Metadata is descriptive information relative to a piece of media.  
 	 * Examples of metadata classes include DictionaryMetadata and XMPMetadata.  
 	 * These classes are stored on all IMediaResources as initial information relating to the media.  
@@ -69,8 +69,16 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */  
-	public interface IFacet extends IEventDispatcher
+	public class Facet extends EventDispatcher
 	{		
+		/**
+		 * Constructs a new facet with the specified namespace url.
+		 */ 
+		public function Facet(namespaceURL:URL)
+		{
+			_namespaceURL = namespaceURL;
+		}
+		
 		/**
 		 * The namespace that corresponds to the schema for this metadata.
 		 *  
@@ -79,7 +87,10 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		function get namespaceURL():URL;	
+		public function get namespaceURL():URL
+		{
+			return _namespaceURL;
+		}
 		
 		/**
 		 * Method returning the value that belongs to the passed identifier.
@@ -92,7 +103,10 @@ package org.osmf.metadata
 		 *  @productversion OSMF 1.0
 		 */
 
-		function getValue(identifier:IIdentifier):*;
+		public function getValue(identifier:IIdentifier):*
+		{
+			return null;
+		}
 		
 		/**
 		 * Defines the facet synthesizer that will be used by default to
@@ -107,7 +121,11 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		function get synthesizer():FacetSynthesizer;
+		public function get synthesizer():FacetSynthesizer
+		{
+			return null;
+		}
 		
+		private var _namespaceURL:URL;
 	}
 }

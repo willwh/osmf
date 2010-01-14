@@ -29,7 +29,7 @@ package org.osmf.metadata
 	/**
 	 * ObjectFacet defines a facet that holds a single object value.
 	 */	
-	public class ObjectFacet extends EventDispatcher implements IFacet
+	public class ObjectFacet extends Facet
 	{
 		/**
 		 * Constructor
@@ -45,7 +45,7 @@ package org.osmf.metadata
 		 */		
 		public function ObjectFacet(namespaceURL:URL, value:Object, synthesizer:Class = null)
 		{
-			_namespaceURL = namespaceURL;
+			super(namespaceURL);
 			_object = value;
 			
 			// If no synthesizer is specified, then use the default one:
@@ -84,23 +84,7 @@ package org.osmf.metadata
 		{
 			return _object;
 		}
-		
-		// IFacet
-		//
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get namespaceURL():URL
-		{
-			return _namespaceURL;
-		}
-		
+						
 		/**
 		 * Always returns the set object value.
 		 * @inheritDoc
@@ -110,20 +94,20 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getValue(identifier:IIdentifier):*
+		override public function getValue(identifier:IIdentifier):*
 		{
 			return _object;
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get synthesizer():FacetSynthesizer
+		override public function get synthesizer():FacetSynthesizer
 		{
 			return _synthesizer;
 		}
@@ -147,7 +131,6 @@ package org.osmf.metadata
 		// Internals
 		//
 		
-		protected var _namespaceURL:URL;
 		protected var _object:Object;
 		
 		private var _synthesizer:FacetSynthesizer;

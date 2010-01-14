@@ -185,7 +185,7 @@ package org.osmf.metadata
 		 * after creating the watcher.
 		 * 
 		 * The callback's expected type is:
-		 * function callback(newValue:IFacet):void
+		 * function callback(newValue:Facet):void
 		 * 
 		 * @param metadata The metadata instance to watch.
 		 * @param nameSpace The namespace of the facet to watch.

@@ -72,9 +72,9 @@ package org.osmf.metadata
 		
 		public function testWatchFacet():void
 		{
-			var callbackArgument:IFacet = null;
+			var callbackArgument:Facet = null;
 			var callbackCount:int = 0;
-			function facetChangeCallback(facet:IFacet):void
+			function facetChangeCallback(facet:Facet):void
 			{
 				callbackArgument = facet;
 				callbackCount++;

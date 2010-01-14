@@ -24,7 +24,7 @@ package org.osmf.composition
 	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.utils.URL;
@@ -75,7 +75,7 @@ package org.osmf.composition
 			assertNull(null, cm.getFacetSynthesizer(url));
 			cm.addFacetSynthesizer(synth);
 			
-			var facet:IFacet = new ObjectFacet(url,"test");
+			var facet:Facet = new ObjectFacet(url,"test");
 			cm.addChild(metadata);
 			assertDispatches
 				(	cm
@@ -150,7 +150,7 @@ package org.osmf.composition
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.composition.CompositionMode;
-	import org.osmf.metadata.IFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.utils.URL;
 	
 
@@ -166,7 +166,7 @@ class AFacetSynthesizer extends FacetSynthesizer
 		, facetGroup:FacetGroup
 		, mode:CompositionMode
 		, activeMetadata:Metadata
-		):IFacet
+		):Facet
 	{
 		return null;
 	}
