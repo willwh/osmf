@@ -28,7 +28,7 @@ package org.osmf.test.mast.loader
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.mast.loader.*;
 	import org.osmf.mast.model.*;
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.test.mast.MASTTestConstants;
 	import org.osmf.traits.ILoader;
@@ -91,7 +91,7 @@ package org.osmf.test.mast.loader
 			return new MASTLoader(httpLoader);
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockHTTPLoader = httpLoader as MockHTTPLoader;
 			if (mockLoader)
@@ -124,17 +124,17 @@ package org.osmf.test.mast.loader
 			return new LoadTrait(loader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return SUCCESSFUL_RESOURCE;
 		}
 		
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return FAILED_RESOURCE;
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
 		}

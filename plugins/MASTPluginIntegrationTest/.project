@@ -15,4 +15,16 @@
 		<nature>com.adobe.flexbuilder.project.flexnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] MediaFrameworkFlexTest</name>
+			<type>2</type>
+			<location>/Users/oconnell/src/osmf public/trunk/framework/MediaFrameworkFlexTest</location>
+		</link>
+		<link>
+			<name>[source path] MASTPlugin</name>
+			<type>2</type>
+			<location>/Users/oconnell/src/osmf public/trunk/plugins/MASTPlugin</location>
+		</link>
+	</linkedResources>
 </projectDescription>

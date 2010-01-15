@@ -23,21 +23,19 @@ package org.osmf.smil.media
 {
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;	
-	
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
+	import org.osmf.utils.URL;
+	import org.osmf.net.NetLoader;
+	import org.osmf.video.VideoElement;
+	import org.osmf.net.dynamicstreaming.*;
+	import org.osmf.media.*;
 	
 	/**
 	 * A utility class for creating MediaElements from a <code>SMILDocument</code>.
@@ -52,7 +50,7 @@ package org.osmf.smil.media
 		 */
 		public function createMediaElement(smilDocument:SMILDocument, factory:MediaFactory):MediaElement
 		{
-			var mediaResource:IMediaResource = null;
+			var mediaResource:MediaResourceBase = null;
 			
 			if (DEBUG)
 			{
@@ -128,7 +126,7 @@ package org.osmf.smil.media
 			return parallelElement;
 		}
 
-		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument):IMediaResource
+		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument):MediaResourceBase
 		{
 			var dsr:DynamicStreamingResource = null;
 			var hostURL:URL;

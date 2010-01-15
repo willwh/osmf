@@ -6,7 +6,7 @@ package org.osmf.test.mast.media
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.mast.media.MASTProxyElement;
-	import org.osmf.media.IURLResource;
+	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
@@ -53,7 +53,7 @@ package org.osmf.test.mast.media
 	
 		public function testWithNoMetadata():void
 		{
-			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 			var mediaElement:MediaElement = new MediaElement();
 			mediaElement.resource = resource;
 			
@@ -112,7 +112,7 @@ package org.osmf.test.mast.media
 		public function testLoadFailure():void
 		{
 			var mediaElement:MediaElement = new VideoElement(new NetLoader());
-			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), "http://foo.com/bogus/badfile.xml");
@@ -174,9 +174,9 @@ package org.osmf.test.mast.media
 			playTrait.play();
 		}
 
-		private function createResourceWithMetadata(preroll:Boolean=true):IURLResource
+		private function createResourceWithMetadata(preroll:Boolean=true):URLResource
 		{
-			var resource:IURLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
