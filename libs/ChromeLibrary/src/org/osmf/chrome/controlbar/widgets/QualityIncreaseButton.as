@@ -98,7 +98,8 @@ package org.osmf.chrome.controlbar.widgets
 			enabled
 				=	dynamicStream != null
 				&&	dynamicStream.switching == false
-				&&	dynamicStream.currentIndex < dynamicStream.numDynamicStreams;
+				&&	dynamicStream.numDynamicStreams > 0
+				&&	dynamicStream.currentIndex < (dynamicStream.numDynamicStreams - 1);
 		}
 		
 		protected var dynamicStream:DynamicStreamTrait;
