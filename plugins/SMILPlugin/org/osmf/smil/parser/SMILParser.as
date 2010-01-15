@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.smil.parser
 {
+	import flash.errors.IllegalOperationError;
+	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.smil.model.SMILDocument;
@@ -46,30 +48,23 @@ package org.osmf.smil.parser
 			{
 				throw new ArgumentError();
 			}
-			
-			var xml:XML = new XML(rawData);
+
 			var smilDocument:SMILDocument = new SMILDocument();
-			
-			parseHead(smilDocument, xml);
-			parseBody(smilDocument, xml);
-			
-			return smilDocument;
-		}
-		
-		/**
-		 * Override to provide custom formatting of bitrate
-		 * values. 
-		 */
-		protected function formatBitrate(value:String):Number
-		{
-			var bitrate:Object = null;
-			
-			if ((value != null) && (value.length > 0))
+
+			try
+			{			
+				var xml:XML = new XML(rawData);
+				
+				parseHead(smilDocument, xml);
+				parseBody(smilDocument, xml);
+			}
+			catch (err:Error)
 			{
-				bitrate = Number(value)/1000;
+				debugLog("Unhandled exception in SMILParser : "+err.message);
+				throw err;
 			}
 			
-			return Number(bitrate);
+			return smilDocument;
 		}
 		
 		private function parseHead(doc:SMILDocument, xml:XML):void
@@ -81,7 +76,6 @@ package org.osmf.smil.parser
 			{
 				parseElement(doc, head.children());
 			}
-			
 		}
 		
 		private function parseBody(doc:SMILDocument, xml:XML):void
@@ -92,7 +86,8 @@ package org.osmf.smil.parser
 			// The <body> tag is required
 			if (body.length() <= 0)
 			{
-				debugLog("Invalid SMIL file: <body> tag is missing.");
+				debugLog(INVALID_FILE_MISSING_BODY_TAG);
+				throw new IllegalOperationError(INVALID_FILE_MISSING_BODY_TAG);
 			}
 			else
 			{
@@ -100,6 +95,9 @@ package org.osmf.smil.parser
 			}
 		}
 		
+		/**
+		 * Recursive function that parses all elements in a SMIL file.
+		 */
 		private function parseElement(doc:SMILDocument, children:XMLList, parent:SMILElement=null):void
 		{
 			for (var i:uint = 0; i < children.length(); i++)
@@ -123,6 +121,7 @@ package org.osmf.smil.parser
 								break;
 							case SMILElementType.IMAGE:
 							case SMILElementType.VIDEO:
+							case SMILElementType.AUDIO:
 								element = parseMediaElement(childNode);
 								break;
 							case SMILElementType.META:
@@ -133,13 +132,17 @@ package org.osmf.smil.parser
 				}
 				
 				parseElement(doc, childNode.children(), element);
-				if (parent != null)
+				
+				if (element != null)
 				{
-					parent.addChild(element);
-				}
-				else
-				{
-					doc.addElement(element);
+					if (parent != null)
+					{
+						parent.addChild(element);
+					}
+					else
+					{
+						doc.addElement(element);
+					}
 				}
 			}	
 		}
@@ -155,15 +158,41 @@ package org.osmf.smil.parser
 					{
 						case SMILElementType.VIDEO:
 							element = new SMILMediaElement(SMILElementType.VIDEO);
-							element.src = node.@[ATTRIB_SOURCE];
-							element.bitrate = formatBitrate(node.@[ATTRIB_BITRATE]);
-							if (node.@dur != null)
-							{
-								element.duration = TimeUtil.parseTime(node.@[ATTRIB_DURATION]);
-							} 
+							break;
+						case SMILElementType.IMAGE:
+							element = new SMILMediaElement(SMILElementType.IMAGE);
+							break;
+						case SMILElementType.AUDIO:
+							element = new SMILMediaElement(SMILElementType.AUDIO);
 							break;
 					}
 					break;
+			}
+			
+			if (element != null)
+			{
+				element.src = node.@[ATTRIB_SOURCE];
+				
+				if (node.@[ATTRIB_BITRATE] != null)
+				{
+					element.bitrate = node.@[ATTRIB_BITRATE];
+				}
+				
+				if (node.@[ATTRIB_DURATION] != null)
+				{
+					element.duration = TimeUtil.parseTime(node.@[ATTRIB_DURATION]);
+				}
+				
+				if (node.@[ATTRIB_CLIP_BEGIN] != null)
+				{
+					element.clipBegin = TimeUtil.parseTime(node.@[ATTRIB_CLIP_BEGIN]);
+				}
+				
+				if (node.@[ATTRIB_CLIP_END] != null)
+				{
+					element.clipEnd = TimeUtil.parseTime(node.@[ATTRIB_CLIP_END]);
+				}
+				
 			}
 			
 			return element;
@@ -205,9 +234,15 @@ package org.osmf.smil.parser
 			private static const logger:ILogger = org.osmf.logging.Log.getLogger("SMILParser");
 		}
 		
+		// SMIL tag attributes
 		private static const ATTRIB_SOURCE:String = "src";
 		private static const ATTRIB_BITRATE:String = "system-bitrate";
 		private static const ATTRIB_DURATION:String = "dur";
 		private static const ATTRIB_META_BASE:String = "base";
+		private static const ATTRIB_CLIP_BEGIN:String = "clipBegin";
+		private static const ATTRIB_CLIP_END:String = "clipEnd";
+		
+		// Error messages
+		private static const INVALID_FILE_MISSING_BODY_TAG:String = "Invalid SMIL file: <body> tag is missing.";
 	}
 }

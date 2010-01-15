@@ -71,18 +71,46 @@ package org.osmf.smil.model
 		/**
 		 * The duration of the media in seconds if applicable.
 		 */
-		public function get duration():int
+		public function get duration():Number
 		{
 			return _duration;	
 		}
 		
-		public function set duration(value:int):void
+		public function set duration(value:Number):void
 		{
 			_duration = value;	
 		}
 		
+		/** 
+		 * Specifies the beginning of a sub-clip in seconds.
+		 */
+		public function get clipBegin():Number
+		{
+			return _clipBegin;
+		}
+		
+		public function set clipBegin(value:Number):void
+		{
+			_clipBegin = value;
+		}
+		
+		/**
+		 * Specifies the end of a sub-clip in seconds.
+		 */
+		public function get clipEnd():Number
+		{
+			return _clipEnd;
+		}
+		
+		public function set clipEnd(value:Number):void
+		{
+			_clipEnd = value;
+		}
+		
 		private var _src:String;
 		private var _bitrate:Number;
-		private var _duration:int;
+		private var _duration:Number;
+		private var _clipBegin:Number;
+		private var _clipEnd:Number;
 	}
 }

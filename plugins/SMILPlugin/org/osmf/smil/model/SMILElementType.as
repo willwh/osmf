@@ -54,6 +54,11 @@ package org.osmf.smil.model
 		public static const IMAGE:String = "img";
 		
 		/**
+		 * The audio type.
+		 */
+		public static const AUDIO:String = "audio";
+		
+		/**
 		 * The meta tag.
 		 */
 		public static const META:String = "meta";
@@ -67,7 +72,8 @@ package org.osmf.smil.model
 																			PARALLEL, 
 																			SWITCH, 
 																			VIDEO, 
-																			IMAGE, 
+																			IMAGE,
+																			AUDIO,
 																			META ] );
 	}
 }

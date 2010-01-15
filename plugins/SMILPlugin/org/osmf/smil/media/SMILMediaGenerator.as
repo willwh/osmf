@@ -21,26 +21,35 @@
 *****************************************************/
 package org.osmf.smil.media
 {
+	import org.osmf.composition.CompositeElement;
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
+	import org.osmf.image.ImageElement;
+	import org.osmf.image.ImageLoader;
+	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Log;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
 	import org.osmf.utils.URL;
-	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
-	import org.osmf.net.dynamicstreaming.*;
-	import org.osmf.media.*;
 	
 	/**
 	 * A utility class for creating MediaElements from a <code>SMILDocument</code>.
 	 */
-	public class SMILMediaGenerator implements ISMILMediaGenerator
+	public class SMILMediaGenerator
 	{
 		/**
 		 * Creates the relevant MediaElement from the SMILDocument.
@@ -50,9 +59,9 @@ package org.osmf.smil.media
 		 */
 		public function createMediaElement(smilDocument:SMILDocument, factory:MediaFactory):MediaElement
 		{
-			var mediaResource:MediaResourceBase = null;
+			this.factory = factory;
 			
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
 				traceElements(smilDocument);
 			}
@@ -62,70 +71,81 @@ package org.osmf.smil.media
 			for (var i:int = 0; i < smilDocument.numElements; i++)
 			{
 				var smilElement:SMILElement = smilDocument.getElementAt(i);
-				switch (smilElement.type)
+				mediaElement = internalCreateMediaElement(null, smilDocument, smilElement);
+			}
+							
+			return mediaElement;
+		}
+		
+		/**
+		 * Recursive function to create a media element and all of it's children.
+		 */
+		private function internalCreateMediaElement(parentMediaElement:MediaElement, smilDocument:SMILDocument, 
+													smilElement:SMILElement):MediaElement
+		{
+			var mediaResource:MediaResourceBase = null;
+			
+			var mediaElement:MediaElement;
+			
+			switch (smilElement.type)
+			{
+				case SMILElementType.SWITCH:
+					mediaResource = createDynamicStreamingResource(smilElement, smilDocument);
+					break;
+				case SMILElementType.PARALLEL:
+					var parallelElement:ParallelElement = new ParallelElement();
+					mediaElement = parallelElement;
+					break;
+				case SMILElementType.SEQUENCE:
+					var serialElement:SerialElement = new SerialElement();
+					mediaElement = serialElement;
+					break;
+				case SMILElementType.VIDEO:
+					var videoElement:VideoElement = new VideoElement(new NetLoader());
+					var resource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var smilVideoElement:SMILMediaElement = smilElement as SMILMediaElement;
+					
+					if (!isNaN(smilVideoElement.clipBegin) && smilVideoElement.clipBegin > 0 &&
+					    !isNaN(smilVideoElement.clipEnd) && smilVideoElement.clipEnd > 0)
+					{
+						var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
+						kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, smilVideoElement.clipBegin);
+						kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, smilVideoElement.clipEnd);
+						resource.metadata.addFacet(kvFacet);
+					}
+					videoElement.resource = resource;
+					var duration:Number = (smilElement as SMILMediaElement).duration;
+					if (!isNaN(duration) && duration > 0)
+					{
+						videoElement.defaultDuration = duration;
+					}
+					(parentMediaElement as CompositeElement).addChild(videoElement);
+					break;
+				case SMILElementType.IMAGE:
+					var imageElement:ImageElement = new ImageElement(new ImageLoader());
+					imageElement.resource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var dur:Number = (smilElement as SMILMediaElement).duration;
+					var temporalProxyElement:TemporalProxyElement = new TemporalProxyElement(dur, imageElement);
+					(parentMediaElement as CompositeElement).addChild(temporalProxyElement);
+					break;
+			}
+			
+			if (mediaElement != null)
+			{
+				for (var i:int = 0; i < smilElement.numChildren; i++)
 				{
-					case SMILElementType.SWITCH:
-						mediaResource = createDynamicStreamingResource(smilElement, smilDocument);
-						break;
-					case SMILElementType.PARALLEL:
-						mediaElement = createParallelElement(smilElement);
-						break;
-					case SMILElementType.SEQUENCE:
-						mediaElement = createSerialElement(smilElement);
-						break;
+					var childElement:SMILElement = smilElement.getChildAt(i);
+					internalCreateMediaElement(mediaElement, smilDocument, childElement);
 				}
 			}
-
-			if (mediaElement == null)
+			else if (mediaResource != null)
 			{
 				mediaElement = factory.createMediaElement(mediaResource);
 			}
 			
-			return mediaElement;
+			return mediaElement;			
 		}
 		
-		private function createSerialElement(parent:SMILElement):MediaElement
-		{
-			var serialElement:SerialElement = new SerialElement();
-			
-			for (var i:int = 0; i < parent.numChildren; i++)
-			{
-				var smilElement:SMILElement = parent.getChildAt(i);
-				switch (smilElement.type)
-				{
-					case SMILElementType.VIDEO:
-						var videoElement:VideoElement = new VideoElement(new NetLoader());
-						var resource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
-						videoElement.resource = resource;
-						serialElement.addChild(videoElement);
-						break;
-				}
-			}
-			
-			return serialElement;
-		}
-		
-		private function createParallelElement(parent:SMILElement):MediaElement
-		{
-			var parallelElement:ParallelElement = new ParallelElement();
-			
-			for (var i:int = 0; i < parent.numChildren; i++)
-			{
-				var smilElement:SMILElement = parent.getChildAt(i);
-				switch (smilElement.type)
-				{
-					case SMILElementType.VIDEO:
-						var videoElement:VideoElement = new VideoElement(new NetLoader());
-						var resource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
-						videoElement.resource = resource;
-						parallelElement.addChild(videoElement);
-						break;
-				}
-			}
-			
-			return parallelElement;
-		}
-
 		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument):MediaResourceBase
 		{
 			var dsr:DynamicStreamingResource = null;
@@ -160,7 +180,10 @@ package org.osmf.smil.media
 				if (smilElement.type == SMILElementType.VIDEO)
 				{
 					var videoElement:SMILMediaElement = smilElement as SMILMediaElement;
-					var dsi:DynamicStreamingItem = new DynamicStreamingItem(videoElement.src, videoElement.bitrate);
+					
+					// We need to divide the bitrate by 1000 because the DynamicStreamingItem class 
+					// requires the bitrate in kilobits per second.
+					var dsi:DynamicStreamingItem = new DynamicStreamingItem(videoElement.src, videoElement.bitrate/1000);
 					streamItems.push(dsi);
 				}
 			}
@@ -177,9 +200,10 @@ package org.osmf.smil.media
 		
 		private function traceElements(smilDocument:SMILDocument):void
 		{
-			if (DEBUG)
+			CONFIG::LOGGING
 			{
-				trace(">>> SMILMediaGenerator.traceElements()  ");
+				debugLog(">>> SMILMediaGenerator.traceElements()  ");
+				
 				for (var i:int = 0; i < smilDocument.numElements; i++)
 				{
 					var smilElement:SMILElement = smilDocument.getElementAt(i);
@@ -188,17 +212,42 @@ package org.osmf.smil.media
 				
 				function traceElement(e:SMILElement, level:int=0):void
 				{
-					trace("     level: "+level+" element type = " + e.type);
-					level++;
-					for (var j:int = 0; j < e.numChildren; j++)
+					var levelMarker:String = "*";
+					
+					for (var j:int = 0; j < level; j++)
 					{
-						traceElement(e.getChildAt(j), level);
+						levelMarker += "*";
 					}
+					
+					debugLog(levelMarker + e.type);
+					level++;
+					
+					for (var k:int = 0; k < e.numChildren; k++)
+					{
+						traceElement(e.getChildAt(k), level);
+					}
+					
 					level--;
 				}
 			}
 		}
 		
-		private static const DEBUG:Boolean = true;		
+		private function debugLog(msg:String):void
+		{
+			CONFIG::LOGGING
+			{
+				if (logger != null)
+				{
+					logger.debug(msg);
+				}
+			}
+		}
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:ILogger = org.osmf.logging.Log.getLogger("SMILParser");
+		}
+
+		private var factory:MediaFactory;		
 	}
 }

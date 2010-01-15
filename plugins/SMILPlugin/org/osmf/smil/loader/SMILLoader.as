@@ -33,9 +33,9 @@ package org.osmf.smil.loader
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.proxies.MediaElementLoadedContext;
@@ -45,12 +45,6 @@ package org.osmf.smil.loader
 	import org.osmf.smil.parser.SMILParser;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	
-	
-	import org.osmf.smil.media.ISMILMediaGenerator;
-	import org.osmf.smil.media.SMILMediaGenerator;
-	import org.osmf.smil.model.SMILDocument;
-	import org.osmf.smil.parser.SMILParser;
 
 	/**
 	 * The SMILLoader class will load a SMIL (Synchronized 
@@ -59,7 +53,9 @@ package org.osmf.smil.loader
 	 */
 	public class SMILLoader extends MediaElementLoader
 	{
-		// MimeType
+		/**
+		 * The SMIL mime type as of SMIL 3.0.
+		 */
 		public static const SMIL_MIME_TYPE:String = "application/smil+xml";
 
 		/**
@@ -77,7 +73,7 @@ package org.osmf.smil.loader
 			
 			if (mediaFactory == null)
 			{
-				factory == new DefaultMediaFactory();
+				factory = new DefaultMediaFactory();
 			}
 			else
 			{
@@ -90,7 +86,7 @@ package org.osmf.smil.loader
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{	
-			var match:int = MetadataUtils.checkMetadataMatchWithResource(resource, new Vector.<String>(), supportedMimeTypes);
+			var match:int = MetadataUtils.checkMetadataMatchWithResource(resource, mediaTypesSupported, supportedMimeTypes);
 			var canHandle:Boolean = false;
 			
 			if (match == MetadataUtils.METADATA_MATCH_FOUND)
@@ -114,37 +110,48 @@ package org.osmf.smil.loader
 			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
-			var smilLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
-			smilLoader.addEventListener(Event.COMPLETE, onComplete);
-			smilLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-			smilLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+			var urlLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
+			setupListeners();
+			
+			function setupListeners(add:Boolean=true):void
+			{
+				if (add)
+				{
+					urlLoader.addEventListener(Event.COMPLETE, onComplete);
+					urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+					urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+				}
+				else
+				{
+					urlLoader.removeEventListener(Event.COMPLETE, onComplete);
+					urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+					urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+				}
+			}
 			
 			function onError(event:ErrorEvent):void
 			{
+				setupListeners(false);
 				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR); 	
 				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
 			}			
 
 			function onComplete(event:Event):void
 			{	
-				smilLoader.removeEventListener(Event.COMPLETE, onComplete);
-				smilLoader.removeEventListener(IOErrorEvent.IO_ERROR, onError);
-				smilLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);		
+				setupListeners(false);
+				
 				try
 				{
-					var parser:SMILParser = new SMILParser();
+					var parser:SMILParser = createParser();
 					var smilDocument:SMILDocument = parser.parse(event.target.data);
+					finishLoad(loadTrait, smilDocument);
 				}
 				catch (parseError:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 				}
-				
-				finishLoad(loadTrait, smilDocument);
-				
 			}	
-			
 		}
 		
 		/**
@@ -153,28 +160,45 @@ package org.osmf.smil.loader
 		override public function unload(loadTrait:LoadTrait):void
 		{
 			super.unload(loadTrait);	
+			var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 		
 		/**
 		 * Override to provide a custom media generator.
 		 */
-		protected function createMediaGenerator():ISMILMediaGenerator
+		protected function createMediaGenerator():SMILMediaGenerator
 		{
 			return new SMILMediaGenerator();	
 		}
 		
-		private function finishLoad(loadTrait:LoadTrait, smilDocument:SMILDocument):void
+		/**
+		 * Override to provide a custom SMIL parser.
+		 */
+		protected function createParser():SMILParser
 		{
-			var mediaGenerator:ISMILMediaGenerator = createMediaGenerator();
-			var loadedElement:MediaElement = mediaGenerator.createMediaElement(smilDocument, factory);
-			var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElement);
-																					
-			updateLoadTrait(loadTrait, LoadState.READY, context);		
+			return new SMILParser();
 		}
 		
+		private function finishLoad(loadTrait:LoadTrait, smilDocument:SMILDocument):void
+		{
+			var mediaGenerator:SMILMediaGenerator = createMediaGenerator();
+			var loadedElement:MediaElement = mediaGenerator.createMediaElement(smilDocument, factory);
+			
+			if (loadedElement == null)
+			{
+				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+			}
+			else
+			{
+				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElement);
+				updateLoadTrait(loadTrait, LoadState.READY, context);
+			}		
+		}
 				
-		private var supportedMimeTypes:Vector.<String> = new Vector.<String>();		
+		private var supportedMimeTypes:Vector.<String> = new Vector.<String>();
+		private var mediaTypesSupported:Vector.<String> = new Vector.<String>();
 		private var factory:MediaFactory;
 	}
 }

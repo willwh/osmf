@@ -27,8 +27,9 @@ package org.osmf.smil
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaInfo;
 	import org.osmf.plugin.PluginInfo;
+	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.smil.loader.SMILLoader;
-	import org.osmf.smil.media.SMILProxyElement;
+
 
 	/**
 	 * Encapsulation of the SMIL plugin.
@@ -46,15 +47,16 @@ package org.osmf.smil
 													createSMILProxyElement);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
-			
+			super(mediaInfos, FRAMEWORK_VERSION_SUPPORTED);
 		}
 		
 		private function createSMILProxyElement():MediaElement
 		{
-			return new SMILProxyElement(new SMILLoader(new DefaultMediaFactory()));
+			return new LoadableProxyElement(new SMILLoader(new DefaultMediaFactory()));
 		}
 		
 		private var mediaInfos:Vector.<MediaInfo>;
+		
+		private const FRAMEWORK_VERSION_SUPPORTED:String = "0.9.0";
 	}
 }

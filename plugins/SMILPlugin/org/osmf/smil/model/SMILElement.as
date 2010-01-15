@@ -23,6 +23,8 @@ package org.osmf.smil.model
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.utils.OSMFStrings;
+	
 	/**
 	 * Represents an element in a SMIL document.
 	 */
@@ -88,8 +90,7 @@ package org.osmf.smil.model
 				return children[index];
 			}
 			
-			throw new RangeError("Invalid index requested");
-			
+			throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 		}
 		
 		private var _type:String;

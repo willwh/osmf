@@ -22,6 +22,8 @@
 package org.osmf.smil.model
 {
 	import __AS3__.vec.Vector;
+	
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Represents the root level elements of a SMIL document.
@@ -70,7 +72,7 @@ package org.osmf.smil.model
 				return elements[index];
 			}
 			
-			throw new RangeError("Invalid index requested");
+			throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 		}
 		
 		private var elements:Vector.<SMILElement>;
