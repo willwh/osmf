@@ -28,14 +28,15 @@ package org.osmf.manifest
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.proxies.MediaElementLoadedContext;
@@ -139,6 +140,7 @@ package org.osmf.manifest
 					if (item.drmMetadataURL != null)
 					{												
 						var drmLoader:URLLoader = new URLLoader();
+						drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
 						unfinishedLoads++;
 						drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
 						drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
