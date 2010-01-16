@@ -64,8 +64,9 @@
 			
 			// Force the inclusion of the PluginInfo class so we can 
 			// load the plugin statically
-			import org.osmf.smil.SMILPluginInfo;
-			private static const forceReference:SMILPluginInfo = null;
+			// Temporarily commented out to fix build. -- Brian
+			//import org.osmf.smil.SMILPluginInfo;
+			//private static const forceReference:SMILPluginInfo = null;
 			
 			
 			private var sliderDragging:Boolean;
