@@ -23,6 +23,7 @@ package org.osmf.plugin
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.getDefinitionByName;
 	
 	import flexunit.framework.TestCase;
 	
@@ -32,8 +33,12 @@ package org.osmf.plugin
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 
+	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+
 	public class TestBasicStreamingPlugin extends TestCase
 	{
+		private static const forceReference:AkamaiBasicStreamingPluginInfo = null;
+		
 		public function TestBasicStreamingPlugin(methodName:String=null)
 		{
 			super(methodName);
@@ -131,7 +136,10 @@ package org.osmf.plugin
 			assertTrue(mediaFactory.getMediaInfoById(AKAMAI_AUDIO_MEDIA_INFO_ID) == null);
 			
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
-			pluginManager.loadPlugin(new URLResource(new URL(AKAMAI_BASIC_STREAMING_PLUGIN_URL)));
+			
+			var pluginInfoRef:Class = flash.utils.getDefinitionByName(AKAMAI_BASIC_STREAMING_PLUGIN_INFO) as Class;
+			var pluginResource:MediaResourceBase = new PluginInfoResource(new pluginInfoRef);
+			pluginManager.loadPlugin(pluginResource);
 			
 			function onPluginLoaded(event:PluginLoadEvent):void
 			{
@@ -198,10 +206,10 @@ package org.osmf.plugin
 		private var pluginManager:PluginManager;
 		private var eventDispatcher:EventDispatcher;
 		
+		private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFO:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";
 		private static const AKAMAI_VIDEO_MEDIA_INFO_ID:String = "com.akamai.osmf.BasicStreamingVideoElement";
 		private static const AKAMAI_AUDIO_MEDIA_INFO_ID:String = "com.akamai.osmf.BasicStreamingAudioElement";
 		
-		private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://mediapm.edgesuite.net/osmf/swf/AkamaiBasicStreamingPlugin.swf";
 		private static const TEST_TIME:int = 4000;
 
 		private static const PROGRESSIVE_FLV:String 		= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
