@@ -29,6 +29,11 @@
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.net.NetLoader;
+			import org.osmf.plugin.PluginInfoResource;
+			import org.osmf.media.MediaFactory;
+			import org.osmf.plugin.PluginManager;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;
 			import mx.events.DropdownEvent;		
@@ -36,8 +41,6 @@
 			import mx.controls.Alert;
 			import mx.core.UIComponent;
 			
-			import org.osmf.parsers.SMILParser;
-		
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
 			import org.osmf.traits.LoadTrait;
@@ -59,13 +62,20 @@
 			import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 			import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 			
+			// Force the inclusion of the PluginInfo class so we can 
+			// load the plugin statically
+			import org.osmf.smil.SMILPluginInfo;
+			private static const forceReference:SMILPluginInfo = null;
+			
+			
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
 			private var currentDebugLineNo:int;
 			
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
 			private static const MAX_VIDEO_WIDTH:int = 640;
-			private static const MAX_VIDEO_HEIGHT:int = 360;		
+			private static const MAX_VIDEO_HEIGHT:int = 360;
+			private static const MEDIA_PLAYER_UNLOADED_ALPHA:Number = .11;	
 
 			// ------ TEST CONTENT ------
 			// SMIL
@@ -80,10 +90,8 @@
 			[Bindable]
 			private var smilFiles:Array = [ SMIL_TEST1, SMIL_TEST2, PROGRESSIVE_FLV, STREAMING_F4V ];
 			
-			private var _smilParser:SMILParser;
-			
 			[Bindable]
-			private var _smilFileLoadState:String = "Not Loaded";
+			private var _mediaFileLoadState:String = "Not Loaded";
 			
 			[Bindable]
 			private var _dsTrait:DynamicStreamTrait;
@@ -95,56 +103,159 @@
 			private var _autoSwitchBtnLabel:String = "Manual";
 			
 			private var _displayObjectTrait:DisplayObjectTrait;
+			private var pluginManager:PluginManager;
+			private var mediaFactory:DefaultMediaFactory;
+			private var mediaElement:MediaElement;
 						
 			private function initApp():void
 			{
-				wrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				wrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				wrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-				wrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
-				wrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
+				mediaFactory = new DefaultMediaFactory();
+				pluginManager = new PluginManager(mediaFactory);
 				
-				wrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
+				
+				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
 				clearDebugText();
+				
+				loadPlugin("org.osmf.smil.SMILPluginInfo");
+			}
+			
+			private function loadMedia(url:String):void
+			{
+				clear();
+				
+				var resource:URLResource = new URLResource(new FMSURL(url));
+
+				mediaElement = mediaFactory.createMediaElement(resource);
+
+				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
+				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				
+				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+								
+				mediaPlayerWrapper.element = mediaElement;
+				mediaPlayerWrapper.alpha = 1.0;
+			}
+			
+			private function loadPlugin(source:String, load:Boolean=true):void
+			{
+				var pluginResource:MediaResourceBase;
+
+				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
+				{
+					// This is a URL, create a URLResource
+					pluginResource = new URLResource(new URL(source));
+				}
+				else
+				{
+					// Assume this is a class
+					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
+					pluginResource = new PluginInfoResource(new pluginInfoRef);
+				}
+				
+				if (load)
+				{
+					loadPluginFromResource(pluginResource);
+				}
+				else
+				{
+					unloadPluginFromResource(pluginResource);
+				}			
+			}
+			
+			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
+			{
+				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
+				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				pluginManager.loadPlugin(pluginResource);
+			}
+			
+			private function unloadPluginFromResource(pluginResource:MediaResourceBase):void
+			{
+				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_UNLOADED, onPluginUnloaded);
+				pluginManager.unloadPlugin(pluginResource);
+			}
+			
+			private function unloadPlugin(source:String):void
+			{
+				loadPlugin(source, false);
+			}
+			
+			private function onPluginLoaded(event:PluginLoadEvent):void
+			{
+				trace("Plugin LOADED!"); 
+			}
+
+			private function onPluginUnloaded(event:PluginLoadEvent):void
+			{
+				trace("Plugin UNLOADED!");
+			}
+			
+			
+			private function onPluginLoadFailed(event:PluginLoadEvent):void
+			{
+				trace("Plugin LOAD FAILED!");
 			}
 			
 			private function onPlayingChange(event:MediaPlayerCapabilityChangeEvent):void
 			{
 				if (event.type == MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE)
 				{
-					this.playBtn.enabled = event.enabled;
+					enableControls(event.enabled);
 				}	
 			}
 			
-			private function onLoadStateChange(event:LoadEvent):void
+			private function enableControls(enable:Boolean):void
 			{
-				debug("onLoadStateChange() - loadState="+event.loadState);
-				switch (event.loadState)
-				{
-					case LoadState.READY:
-						_smilFileLoadState = "Ready";
-						_dsTrait = wrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+				seekBar.enabled = playBtn.enabled = autoSwitchBtn.enabled = 
+					switchDownBtn.enabled = switchUpBtn.enabled = enable;
+			}
+			
+   			private function onTraitAdd(event:MediaElementEvent):void
+   			{
+   				switch (event.traitType)
+   				{
+   					case MediaTraitType.DYNAMIC_STREAM:
+						_dsTrait = mediaPlayerWrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 
 						if (_dsTrait != null)
 						{
 							_dsTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+							updateSwitchingControls();
 						}
-						
-						_displayObjectTrait = wrapper.element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;		
-						updateSwitchingControls();
+   						break;
+   					case MediaTraitType.DISPLAY_OBJECT:
+						_displayObjectTrait = mediaPlayerWrapper.element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;						
+   						break;
+   				}	
+   			}
+
+			private function onLoadStateChange(event:LoadEvent):void
+			{
+				debug("onLoadStateChange() - loadState="+event.loadState);
+
+				switch (event.loadState)
+				{
+					case LoadState.READY:
+						_mediaFileLoadState = "Ready";
 						break;					
 					case LoadState.LOAD_ERROR:
-						_smilFileLoadState = "Load Error";
+						_mediaFileLoadState = "Load Error";
 						break;
 					case LoadState.UNINITIALIZED:
-						_smilFileLoadState = "Not Loaded";
+						_mediaFileLoadState = "Not Loaded";
 						break;
 					case LoadState.UNLOADING:
-						_smilFileLoadState = "Unloading";
+						_mediaFileLoadState = "Unloading";
 						break;
 				}
 			}
@@ -176,7 +287,7 @@
 					var streamMsg:String = "Current streaming profile index: " + _dsTrait.currentIndex + " of " + _dsTrait.maxAllowedIndex;
 					debug(streamMsg);
 					
-					streamMsg = "Current bitrate = " + this._smilParser.dynamicStreamingResource.streamItems[_dsTrait.currentIndex].bitrate + "kbps";
+					streamMsg = "Current bitrate = " + _dsTrait.getBitrateForIndex(_dsTrait.currentIndex) + "kbps";
 					debug(streamMsg);
 				}
 				
@@ -218,20 +329,6 @@
 				taDebug.verticalScrollPosition = taDebug.maxVerticalScrollPosition;
 			}
 
-			private function createDynamicStreamingElement(res:MediaResourceBase):void
-			{	
-				clearDebugText();
-								
-				var mediaElement:VideoElement = new VideoElement(new DynamicStreamingNetLoader(), res);
-				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				
-				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-									
-				wrapper.element = mediaElement;
-				wrapper.mediaPlayer.autoPlay = true;
-			}
-			
 			private function clearDebugText():void
 			{
 				taDebug.text = "";
@@ -244,68 +341,22 @@
 				{
 					clearDebugText();
 				}
-				wrapper.width = 640;
-				wrapper.height = 360;
+				mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
+				mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
 			}
 			
 			private function unload():void
 			{
-				var mediaElement:MediaElement = wrapper.element;
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
+				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+				
+				if (loadTrait && (loadTrait.loadState == LoadState.READY))
 				{
-					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-					if (loadTrait.loadState == LoadState.READY)
-					{
-						loadTrait.unload();
-					}
+					loadTrait.unload();
 				}
+				mediaPlayerWrapper.alpha = MEDIA_PLAYER_UNLOADED_ALPHA;
 				clear(false);
 			}			
-			
-			
-			private function loadSMIL():void
-			{
-				clear();
-				
-				var smilURL:String = cbMediaURL.text as String;
-				
-				if (smilURL.search(/\.smil$/i) == -1)
-				{
-					// This sample player can handle "regular" content as well
-					this.createDynamicStreamingElement(new URLResource(new FMSURL(smilURL)));
-					return;
-				}
-				_smilParser = new SMILParser();
-				
-				_smilParser.addEventListener(SMILParser.PARSED, onSMILParsed, false, 0, true);
-				_smilParser.addEventListener(SMILParser.ERROR, onSMILParseError, false, 0, true);
-				_smilParser.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSMILSecurityError, false, 0, true);
-				_smilParser.addEventListener(SMILParser.BUSY, onSMILParserBusy, false, 0, true);
-				
-				_smilParser.load(smilURL);		
-			}
-			
-			private function onSMILParsed(e:Event):void
-			{
-				var dynamicStreamingResource:DynamicStreamingResource = _smilParser.dynamicStreamingResource;
-				this.createDynamicStreamingElement(dynamicStreamingResource);
-				
-			}
-			
-			private function onSMILParseError(e:IOErrorEvent):void
-			{
-				Alert.show("SMIL parsing error: " + e.toString());
-			}
-			
-			private function onSMILSecurityError(e:SecurityErrorEvent):void
-			{
-				Alert.show("SMIL parsing security error: " + e.toString());
-			}
-			
-			private function onSMILParserBusy(e:Event):void
-			{
-				Alert.show("SMIL parser is currently busy, pleast wait and try again.");	
-			}
 			
 			private function onMediaSizeChange(event:DisplayObjectEvent):void 
 			{
@@ -317,19 +368,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						wrapper.width = MAX_VIDEO_WIDTH;
-						wrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
+						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						wrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						wrapper.height = MAX_VIDEO_HEIGHT;
+						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
 					}
 				}
-				else
+				else if (width > 0 && height > 0)
 				{
-					wrapper.width = event.newWidth;
-					wrapper.height = event.newHeight;			
+					mediaPlayerWrapper.width = event.newWidth;
+					mediaPlayerWrapper.height = event.newHeight;			
 				}
 			}
 			
@@ -337,12 +388,12 @@
 			{
 				seekBar.maximum = event.time;
 				lblDuration.text = timeCode(event.time);
-				seekBar.enabled = seekBar.visible = wrapper.mediaPlayer.canSeek;
+				seekBar.enabled = seekBar.visible = mediaPlayerWrapper.mediaPlayer.canSeek;
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (wrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = timeCode(event.time);
@@ -364,9 +415,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (wrapper.mediaPlayer.canSeek)
+   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
    					{
-   						wrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -433,15 +484,15 @@
 			
 			private function onClickPlayBtn():void
 			{
-				if (wrapper.mediaPlayer.playing && wrapper.mediaPlayer.canPause)
+				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
-					wrapper.mediaPlayer.pause();
+					mediaPlayerWrapper.mediaPlayer.pause();
 				}
-				else if (wrapper.mediaPlayer.paused && wrapper.mediaPlayer.canPlay)
+				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					wrapper.mediaPlayer.play();
+					mediaPlayerWrapper.mediaPlayer.play();
 				}
 			}
 						
@@ -459,9 +510,9 @@
 		<mx:HBox id="inputContainer" height="60">
 			<mx:Spacer width="10" />
 			<mx:ComboBox id="cbMediaURL" editable="true" dataProvider="{this.smilFiles}" />
-			<mx:Button label="Load" click="{loadSMIL()}"/>
+			<mx:Button label="Load" click="{loadMedia(cbMediaURL.selectedItem as String)}"/>
 			<mx:Button label="Unload" click="{unload()}"/>
-			<mx:Label text="{_smilFileLoadState}"/>
+			<mx:Label text="{_mediaFileLoadState}"/>
 		</mx:HBox>	
 
 		<mx:Spacer height="5" />
@@ -469,7 +520,7 @@
 			<mx:VBox id="videoContainer" paddingLeft="20">
 				<mx:Spacer width="10" />
 				<mx:Canvas id="wrapperContainer">
-				    <players:MediaPlayerWrapper id="wrapper" width="640" height="360"  />				
+				    <players:MediaPlayerWrapper id="mediaPlayerWrapper" width="640" height="360"  />				
 				</mx:Canvas>
 			    <mx:VBox id="controlsContainer">
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" />
@@ -478,7 +529,7 @@
 						<mx:Label id="lblPlayhead" width="100" styleName="timeCode" />
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
-						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{wrapper.mediaPlayer.canPlay}" />
+						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{mediaPlayerWrapper.mediaPlayer.canPlay}" />
 						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{_dsTrait!=null}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />
