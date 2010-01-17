@@ -54,11 +54,7 @@ package org.osmf.composition
 			
 			// Process each aggregated trait of our type.
 			traitAggregator.forEachChildTrait
-				(
-					function(mediaTrait:MediaTraitBase):void
-					{
-						traitAggregationFunction.call(null, mediaTrait);
-					}
+				(	traitAggregationFunction
 				,   traitType
 				);
 		}
@@ -73,7 +69,9 @@ package org.osmf.composition
 		{
 			if (event.traitType == traitType)
 			{
-				traitAggregationFunction.call(null, event.trait);
+				traitAggregationFunction.length == 2
+					? traitAggregationFunction.call(null, event.trait, event.child)
+					: traitAggregationFunction.call(null, event.trait);
 			}
 		}
 
@@ -81,7 +79,9 @@ package org.osmf.composition
 		{
 			if (event.traitType == traitType)
 			{
-				traitUnaggregationFunction.call(null, event.trait);
+				traitUnaggregationFunction.length == 2
+					? traitUnaggregationFunction.call(null, event.trait, event.child)
+					: traitUnaggregationFunction.call(null, event.trait);
 			}
 		}
 		

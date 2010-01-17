@@ -25,7 +25,6 @@ package org.osmf.composition
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * The TraitAggregator dispatches a TraitAggregatorEvent when media traits are
@@ -66,6 +65,8 @@ package org.osmf.composition
 		 * @param traitType The MediaTraitType for this event.
 		 * @param trait The trait for this event.  Should be null for events
 		 * related to the listenedChild.
+		 * @param child The child for this event.  Should be null for events
+		 * related to the listenedChild.
 		 * @param oldListenedChild The previous value of listenedChild for the
 		 * TraitAggregator.  Should be null for events related to aggregation.
 		 * @param newListenedChild The new value of listenedChild for the
@@ -79,6 +80,7 @@ package org.osmf.composition
 			( type:String
 			, traitType:String
 			, trait:MediaTraitBase
+			, child:MediaElement
 			, oldListenedChild:MediaElement=null
 			, newListenedChild:MediaElement=null
 			, bubbles:Boolean=false
@@ -86,6 +88,7 @@ package org.osmf.composition
 		{
 			super(type, bubbles, cancelable);
 
+			_child = child;
 			_oldListenedChild = oldListenedChild;
 			_newListenedChild = newListenedChild;
 			
@@ -120,6 +123,15 @@ package org.osmf.composition
 		}
 		
 		/**
+		 * The child for this event.  Should be null for events related to
+		 * the listenedChild.
+		 **/
+		public function get child():MediaElement
+		{
+			return _child;
+		}
+		
+		/**
 		 * The old value of listenedChild for the TraitAggregator.  Should be
 		 * null for events related to aggregation.
 		 **/
@@ -142,6 +154,7 @@ package org.osmf.composition
 		
 		private var _traitType:String;
 		private var _trait:MediaTraitBase;
+		private var _child:MediaElement;
 		private var _oldListenedChild:MediaElement;
 		private var _newListenedChild:MediaElement;
 	}

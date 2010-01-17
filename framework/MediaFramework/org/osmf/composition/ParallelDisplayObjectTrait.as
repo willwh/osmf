@@ -23,10 +23,10 @@ package org.osmf.composition
 {
 	import flash.utils.Dictionary;
 	
-	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.events.ContainerChangeEvent;
-	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.containers.IMediaContainer;
+	import org.osmf.events.ContainerChangeEvent;
+	import org.osmf.events.DisplayObjectEvent;
+	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitBase;
@@ -91,78 +91,44 @@ package org.osmf.composition
 		// Internals
 		//
 
-		private function processAggregatedChild(child:MediaTraitBase):void
+		private function processAggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			child.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
+			childTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange, false, 0, true);
 			
-			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as DisplayObjectTrait);
+			var layoutTarget:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
 			
-			if (mediaElement != null)
+			if (layoutTarget == null)
 			{
-				var layoutTarget:MediaElementLayoutTarget = mediaElementLayoutTargets[mediaElement];
+				var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
 				
-				if (layoutTarget == null)
-				{
-					var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(mediaElement);
-					
-					mediaElement.addEventListener
-						( ContainerChangeEvent.CONTAINER_CHANGE
-						, onLayoutTargetGatewayChange
-						);
-					
-					mediaElementLayoutTargets[mediaElement] = target;
-					
-					setupLayoutTarget(target);
-				}	
-			}
-		}
-		
-		private function processUnaggregatedChild(child:MediaTraitBase):void
-		{
-			child.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
-			
-			var mediaElement:MediaElement = getMediaElementFromViewTrait(child as DisplayObjectTrait);
-			
-			if (mediaElement != null)
-			{
-				var target:MediaElementLayoutTarget = mediaElementLayoutTargets[mediaElement];
-				
-				mediaElement.removeEventListener
+				child.addEventListener
 					( ContainerChangeEvent.CONTAINER_CHANGE
 					, onLayoutTargetGatewayChange
 					);
 				
-				if (layoutRenderer.targets(target))
-				{
-					layoutRenderer.removeTarget(target);
-				}
+				mediaElementLayoutTargets[child] = target;
 				
-				delete mediaElementLayoutTargets[mediaElement];	
-			}
+				setupLayoutTarget(target);
+			}	
 		}
 		
-		private function getMediaElementFromViewTrait(viewTrait:DisplayObjectTrait):MediaElement
+		private function processUnaggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
-			var result:MediaElement;
+			childTrait.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
-			if (viewTrait != null)
+			var target:MediaElementLayoutTarget = mediaElementLayoutTargets[child];
+				
+			child.removeEventListener
+				( ContainerChangeEvent.CONTAINER_CHANGE
+				, onLayoutTargetGatewayChange
+				);
+			
+			if (layoutRenderer.targets(target))
 			{
-				// Resolve the media-element that this view trait belongs to:
-				for (var i:int = 0; i < owner.numChildren; i++)
-				{
-					result = owner.getChildAt(i);
-					if (result.getTrait(MediaTraitType.DISPLAY_OBJECT) == viewTrait)
-					{
-						break;
-					}
-					else
-					{
-						result = null;
-					}
-				}
+				layoutRenderer.removeTarget(target);
 			}
 			
-			return result;
+			delete mediaElementLayoutTargets[child];
 		}
 		
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void

@@ -101,6 +101,7 @@ package org.osmf.composition
 								( TraitAggregatorEvent.TRAIT_UNAGGREGATED
 								, removingTraitType
 								, listenedChild.getTrait(removingTraitType)
+								, listenedChild
 								)
 							);			
 					}
@@ -119,6 +120,7 @@ package org.osmf.composition
 								( TraitAggregatorEvent.TRAIT_AGGREGATED
 								, addingTraitType
 								, listenedChild.getTrait(addingTraitType)
+								, listenedChild
 								)
 							);			
 					}
@@ -185,7 +187,14 @@ package org.osmf.composition
 				var trait:MediaTraitBase = mediaElement.getTrait(traitType);
 				if (trait != null)
 				{
-					method(trait);
+					if (method.length == 1)
+					{
+						method(trait);
+					}
+					else
+					{
+						method(trait, mediaElement);
+					}
 				}
 			}
 		}
@@ -293,6 +302,7 @@ package org.osmf.composition
 						( TraitAggregatorEvent.TRAIT_AGGREGATED
 						, traitType
 						, child.getTrait(traitType)
+						, child
 						)
 					);
 			}
@@ -320,6 +330,7 @@ package org.osmf.composition
 						( TraitAggregatorEvent.TRAIT_UNAGGREGATED
 						, removingTraitType
 						, child.getTrait(removingTraitType)
+						, child
 						)
 					);		
 			}						
@@ -354,6 +365,7 @@ package org.osmf.composition
 					( TraitAggregatorEvent.TRAIT_UNAGGREGATED
 					, event.traitType
 					, child.getTrait(event.traitType)
+					, child
 					)
 				);
 		}
@@ -374,6 +386,7 @@ package org.osmf.composition
 					( TraitAggregatorEvent.TRAIT_AGGREGATED
 					, event.traitType
 					, trait
+					, child
 					)
 				);
 		}
