@@ -60,7 +60,6 @@ package org.osmf
 				addTestSuite(TestNetContentProtectable);
 				
 			}
-			/*
 			
 			// Tests that use mock objects, now to be run a second time without
 			// using mock objects:
@@ -85,9 +84,6 @@ package org.osmf
 			addTestSuite(TestPluginManagerIntegration);
 			
 			addTestSuite(TestManifestLoader);
-			
-			*/
-			
 		}
 	}
 }
