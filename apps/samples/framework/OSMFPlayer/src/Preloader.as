@@ -90,7 +90,7 @@ package
 			
 			nextFrame();
 			
-			var player:Class = flash.utils.getDefinitionByName("WebPlayer") as Class;
+			var player:Class = flash.utils.getDefinitionByName("OSMFPlayer") as Class;
 			addChild(new player(this));
 		}
 	}

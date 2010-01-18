@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
-    <title>OSMF Web Player</title>
+    <title>OSMF Player</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   	<script type="text/javascript" src="scripts/swfobject.js"></script>
   	<script type="text/javascript" src="scripts/ParsedQueryString.js"></script>
@@ -30,14 +30,14 @@
     		// Embed the player SWF:
     		
     		swfobject.embedSWF
-				( "WebPlayer.swf"
+				( "OSMFPlayer.swf"
 				, "player"
 				, "640", "360"
 				, "10.0.0"
 				, {}
 				, parameters
 				, { allowFullScreen: "true" }
-				, { name: "WebPlayer" }
+				, { name: "OSMFPlayer" }
 				);
      </script>
   	<style type="text/css">
@@ -52,7 +52,7 @@
 	<table width="100%" border="0" cellspacing="5">
   <tr>
     <td width="43"><img src="images/adobe-lq.png" alt="" width="43" height="72" /></td>
-    <td width="320" class="Verdana">OSMF Web Player</td>
+    <td width="320" class="Verdana">OSMF Player</td>
     <td width="262"><img src="images/osmf_horizontal_red.png" width="262" height="57"/></td>
     <td width="*"></td>
   </tr>
@@ -87,7 +87,7 @@
 		{
 			var link = links[i];
 			linkingCode = linkingCode
-				+ '<a href="WebPlayer.html?url='
+				+ '<a href="OSMFPlayer.html?url='
 				+ encodeURI(link)
 				+ '">'
 				+ link

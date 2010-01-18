@@ -1,4 +1,4 @@
-The WebPlayer sample defines an application that can be embedded on a webpage in order to play back media. It contains a control bar that manages the various supported aspects of the media.
+The OSMFPlayer sample defines an application that can be embedded on a webpage in order to play back media. It contains a control bar that manages the various supported aspects of the media.
 
 Features:
 
