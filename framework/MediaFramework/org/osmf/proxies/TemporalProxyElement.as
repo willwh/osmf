@@ -98,6 +98,8 @@ package org.osmf.proxies
 		}
 		
 		/**
+		 * @private
+		 * 
 	 	 * Sets up the temporal proxy's TimeTrait, SeekTrait, and PlayTrait.
 	 	 * The proxy's traits will override the same traits in the wrapped element.
 	 	 * <p>This gives the application access to the trait properties in the wrapped

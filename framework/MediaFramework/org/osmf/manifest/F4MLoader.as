@@ -45,20 +45,26 @@ package org.osmf.manifest
 	import org.osmf.traits.LoadTrait;
 	
 	/**
-	 * The F4MLoader will load the Flash Media Manifest format
-	 * files, generate a NetLoaded context corresponding to the resources
-	 * specified in the f4m file.
+	 * The F4MLoader is a LoaderBase that's capable of loading files of the Flash
+	 * Media Manifest format, also known as F4M files (after the file extension).
+	 * 
+	 * For details on the Flash Media Manifest format, see
+	 * http://opensource.adobe.com/wiki/display/osmf/Flash+Media+Manifest+File+Format+Specification.
+	 * 
 	 */ 
 	public class F4MLoader extends MediaElementLoader
 	{
-		// MimeType
+		/**
+		 * The MIME type for F4M files.
+		 **/
 		public static const F4M_MIME_TYPE:String = "application/f4m+xml";
 					
 		/**
-		 * Generate a new F4MLoader.  
+		 * Constructor.
+		 * 
 		 * @param factory The factory that is used to create MediaElements based on the 
-		 * media specified in the manifest file. A default factory is created for the base OSMF media
-		 * types, Video, Audio, Image, and SWF.
+		 * media specified in the manifest file.  If no factory is provided, the F4MLoader
+		 * will use a DefaultMediaFactory.
 		 */ 	
 		public function F4MLoader(factory:MediaFactory = null)
 		{

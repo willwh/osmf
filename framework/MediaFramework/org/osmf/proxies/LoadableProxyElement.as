@@ -82,6 +82,8 @@ package org.osmf.proxies
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Returns the MediaElement's metadata, if the media element hasn't been created yet this
 		 * will return null.
 		 **/
