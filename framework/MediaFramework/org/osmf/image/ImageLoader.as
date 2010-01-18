@@ -57,6 +57,8 @@ package org.osmf.image
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Indicates whether this ImageLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for URLResources with GIF, JPG, or PNG extensions.
 		 * @param resource Resource proposed to be loaded.
