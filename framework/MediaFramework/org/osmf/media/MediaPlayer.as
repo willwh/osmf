@@ -88,29 +88,17 @@ package org.osmf.media
 	[Event(name="panChange", type="org.osmf.events.AudioEvent")]
 
 	/**
-	 * Dispatched when the <code>playing</code> property of the media has changed.
+	 * Dispatched when the <code>playing</code> or <code>paused></code>property of the media has changed.
 	 * 
-	 * @eventType org.osmf.events.PlayEvent.PLAYING_CHANGE
+	 * @eventType org.osmf.events.PlayEvent.PLAY_STATE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
-	[Event(name="playingChange", type="org.osmf.events.PlayEvent")]
-	
-	/**
-	 * Dispatched when the <code>paused</code> property of the media has changed.
-	 * 
-	 * @eventType org.osmf.events.PlayEvent.PAUSED_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	 		
-	[Event(name="pausedChange", type="org.osmf.events.PlayEvent")]
-	
+	[Event(name="playStateChange", type="org.osmf.events.PlayEvent")]
+		
 	/**
 	 * Dispatched when the <code>displayObject</code> property of the media has changed.
 	 * 
