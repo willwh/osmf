@@ -67,6 +67,14 @@ package org.osmf.composition
 				, processUnaggregatedChild
 				);
 		}
+		
+		override public function dispose():void
+		{
+			traitAggregationHelper.detach();
+			traitAggregationHelper = null;
+			
+			super.dispose();
+		}
 
 		/**
 		 * @private

@@ -55,6 +55,14 @@ package org.osmf.composition
 				);
 		}
 		
+		override public function dispose():void
+		{
+			traitAggregationHelper.detach();
+			traitAggregationHelper = null;
+			
+			super.dispose();
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
