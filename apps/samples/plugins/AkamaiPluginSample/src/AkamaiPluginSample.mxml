@@ -23,7 +23,7 @@
 *****************************************************/
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
-	xmlns:players="com.adobe.strobe.players.*" applicationComplete="initApp()"
+	xmlns:samples="org.osmf.samples.*" applicationComplete="initApp()"
 	backgroundColor="#000000">
 
 	<mx:Style source="AkamaiPluginSample.css" />
@@ -428,7 +428,7 @@
 		<mx:HBox>
 			<mx:VBox paddingLeft="20">
 				<mx:Spacer width="10" />
-			    <players:MediaPlayerWrapper id="mediaPlayerWrapper" width="320" height="240"  />
+			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="320" height="240"  />
 	    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" enabled="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
 	    			<mx:Label text="Position: " />

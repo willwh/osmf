@@ -23,7 +23,7 @@
 *****************************************************/
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
-	xmlns:players="com.adobe.strobe.players.*" applicationComplete="initApp()"
+	xmlns:samples="org.osmf.samples.*" applicationComplete="initApp()"
 	backgroundColor="#000000">
 
 	<mx:Style source="DynamicStreamingSample.css" />
@@ -521,7 +521,7 @@
 			<mx:VBox id="videoContainer" paddingLeft="20">
 				<mx:Spacer width="10" />
 				<mx:Canvas id="wrapperContainer">
-				    <players:MediaPlayerWrapper id="mediaPlayerWrapper" width="640" height="360"  />				
+				    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="640" height="360"  />				
 				</mx:Canvas>
 			    <mx:VBox id="controlsContainer">
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" />

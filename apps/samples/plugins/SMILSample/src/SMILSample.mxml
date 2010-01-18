@@ -23,7 +23,7 @@
 *****************************************************/
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="#000000" 
-	xmlns:players="com.adobe.strobe.players.*" applicationComplete="init()">
+	xmlns:samples="org.osmf.samples.*" applicationComplete="init()">
 	<mx:Style source="SMILSample.css" />
 	<mx:Script>
 		<![CDATA[
@@ -320,7 +320,7 @@
 		<mx:HBox>
 			<mx:VBox>
 				<mx:VBox id="videoContainer">
-				    <players:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
+				    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
 		    		<mx:HSlider id="seekBar" width="480" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
 		    			dataTipFormatFunction="showScrubTime" enabled="false" />
 		    		<mx:HBox horizontalAlign="right" width="100%">

@@ -24,12 +24,12 @@
 -->
 <mx:Canvas 
 	xmlns:mx					="http://www.adobe.com/2006/mxml"
-	xmlns:players				="com.adobe.strobe.players.*"
+	xmlns:samples				="org.osmf.samples.*"
 	>
 	
 	<!-- Center (Player) Region -->
 	
-	<players:MediaPlayerWrapper
+	<samples:MediaPlayerWrapper
 		id						="mediaPlayerWrapper"
 		top						="0"
 		left					="0"

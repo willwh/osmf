@@ -22,7 +22,7 @@
 *  
 *****************************************************/
 -->
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:players="com.adobe.strobe.players.*"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:samples="org.osmf.samples.*"
 	creationComplete="setupFactory()"
 	 verticalAlign="middle"
 	 backgroundColor="black"
@@ -334,7 +334,7 @@
 	 	}
 	 </mx:Style>
 		 
-	<players:MediaPlayerWrapper id="wrapper" width="100%" height="50%" />
+	<samples:MediaPlayerWrapper id="wrapper" width="100%" height="50%" />
 	<mx:HBox
 		width="100%"
 		height="50%"

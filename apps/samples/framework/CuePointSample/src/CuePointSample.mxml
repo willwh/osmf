@@ -23,7 +23,7 @@
 *****************************************************/
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="#000000" 
-	xmlns:players="com.adobe.strobe.players.*" applicationComplete="init()">
+	xmlns:samples="org.osmf.samples.*" applicationComplete="init()">
 	<mx:Style source="CuePointSample.css" />
 	<mx:Script>
 		<![CDATA[
@@ -358,7 +358,7 @@
 		<mx:Spacer height="5" />
 		<mx:HBox>
 			<mx:VBox>
-			    <players:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
+			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
 	    		<mx:HSlider id="seekBar" width="480" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" enabled="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
 	    			<mx:Label text="Position: " />
