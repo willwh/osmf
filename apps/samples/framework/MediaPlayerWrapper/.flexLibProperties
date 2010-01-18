@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties version="1">
 <includeClasses>
-<classEntry path="com.adobe.strobe.players.MediaPlayerWrapper"/>
-<classEntry path="com.adobe.strobe.players.MediaPlayerWrapper"/>
+<classEntry path="org.osmf.samples.MediaPlayerWrapper"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>
