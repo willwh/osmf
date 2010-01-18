@@ -15,4 +15,16 @@
 		<nature>com.adobe.flexbuilder.project.flexnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] AkamaiBasicStreamingPlugin</name>
+			<type>2</type>
+			<location>C:/Dev/osmf/public/trunk/plugins/akamai/AkamaiBasicStreamingPlugin</location>
+		</link>
+		<link>
+			<name>[source path] MASTPlugin</name>
+			<type>2</type>
+			<location>C:/Dev/osmf/public/trunk/plugins/MASTPlugin</location>
+		</link>
+	</linkedResources>
 </projectDescription>

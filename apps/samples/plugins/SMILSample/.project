@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] SMILPlugin</name>
 			<type>2</type>
-			<location>/Users/charles/Documents/dev/osmf/svn/public/osmf/trunk/plugins/SMILPlugin</location>
+			<location>C:/Dev/osmf/public/trunk/plugins/SMILPlugin</location>
 		</link>
 	</linkedResources>
 </projectDescription>

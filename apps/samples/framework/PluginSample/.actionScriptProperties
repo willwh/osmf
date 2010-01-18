@@ -4,9 +4,9 @@
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="1" path="/MediaFramework/bin/MediaFramework.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/MediaPlayer/bin/MediaPlayer.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/SampleLoggers/bin/SampleLoggers.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/OSMF/bin/OSMF.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/MediaPlayerWrapper/bin/MediaPlayerWrapper.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>

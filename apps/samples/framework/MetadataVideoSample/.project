@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] MetadataVideoPlugin</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/apps/samples/framework/MetadataVideoPlugin</locationURI>
+			<locationURI>apps/samples/framework/MetadataVideoPlugin</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
