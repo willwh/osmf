@@ -166,7 +166,6 @@ package org.osmf.net
 		//
 		
 		/**
-		 * @inheritDoc
 		 * @private
 		 */		
 		override flash_proxy function callProperty(methodName:*, ... args):*
@@ -175,7 +174,6 @@ package org.osmf.net
         }
         
         /**
-		 * @inheritDoc
 		 * @private
 		 */
 		override flash_proxy function getProperty(name:*):* 
@@ -195,6 +193,9 @@ package org.osmf.net
 			return result;
 		}
 		
+        /**
+		 * @private
+		 */
 		override flash_proxy function hasProperty(name:*):Boolean
 		{
 			return handlers.hasOwnProperty(name);

@@ -40,7 +40,7 @@ package org.osmf.proxies
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 * 
 		 * @throws Error if the LoadedContext is not a MediaElementLoadedContext
 		 */ 

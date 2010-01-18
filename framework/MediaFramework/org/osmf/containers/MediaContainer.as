@@ -66,11 +66,11 @@ package org.osmf.containers
 			this.layoutRenderer = layoutRenderer || new DefaultLayoutRenderer(); 
 		}
 		
-		// IMediaContainerGateway
+		// IMediaContainer
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -96,7 +96,7 @@ package org.osmf.containers
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			// Media containers are under obligation to dispatch a gateway change event when
+			// Media containers are under obligation to dispatch a container change event when
 			// they add a media element:
 			element.dispatchEvent
 				( new ContainerChangeEvent
@@ -110,7 +110,7 @@ package org.osmf.containers
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -138,7 +138,7 @@ package org.osmf.containers
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			// Media containers are under obligation to dispatch a gateway change event when
+			// Media containers are under obligation to dispatch a container change event when
 			// they remove a media element:
 			element.dispatchEvent
 				( new ContainerChangeEvent
@@ -152,7 +152,7 @@ package org.osmf.containers
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -198,7 +198,7 @@ package org.osmf.containers
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -221,7 +221,7 @@ package org.osmf.containers
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

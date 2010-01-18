@@ -51,7 +51,7 @@ package org.osmf.proxies
 		}
 		
 		/** 
-		 * @inheritDoc
+		 * @private
 		 */ 
 		override public function getFacet(nameSpace:URL):Facet
 		{				
@@ -59,7 +59,7 @@ package org.osmf.proxies
 		}
 		
 		/** 
-		 * @inheritDoc
+		 * @private
 		 */ 
 		override public function addFacet(data:Facet):void
 		{
@@ -70,7 +70,7 @@ package org.osmf.proxies
 		}
 		
 		/** 
-		 * @inheritDoc
+		 * @private
 		 */ 
 		override public function removeFacet(data:Facet):Facet
 		{			
@@ -78,7 +78,7 @@ package org.osmf.proxies
 		}	
 			
 		/** 
-		 * @inheritDoc
+		 * @private
 		 */ 
 		override public function get namespaceURLs():Vector.<String>
 		{			

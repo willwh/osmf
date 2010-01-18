@@ -111,6 +111,9 @@ package org.osmf.composition
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override protected function createMetadata():Metadata
 		{
 			var result:Metadata = super.createMetadata();

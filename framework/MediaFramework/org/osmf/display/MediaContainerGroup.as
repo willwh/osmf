@@ -79,7 +79,7 @@ package org.osmf.display
 		
 		// Public API
 		//
-		
+
 		public function get mediaContainer():MediaContainer
 		{
 			return _mediaContainer;
@@ -136,7 +136,7 @@ package org.osmf.display
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -149,6 +149,14 @@ package org.osmf.display
 			super.calculatedWidth = value;
 		}
 		
+		/**
+		 * @private
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		override public function set calculatedHeight(value:Number):void
 		{
 			_mediaContainer.calculatedHeight = value;
@@ -156,7 +164,7 @@ package org.osmf.display
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -170,7 +178,7 @@ package org.osmf.display
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -184,7 +192,7 @@ package org.osmf.display
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -202,7 +210,7 @@ package org.osmf.display
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

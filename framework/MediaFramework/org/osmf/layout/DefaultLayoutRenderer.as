@@ -54,7 +54,7 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -67,7 +67,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -80,7 +80,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

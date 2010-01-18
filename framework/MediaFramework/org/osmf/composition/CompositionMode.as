@@ -67,7 +67,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		public function toString():String
 		{

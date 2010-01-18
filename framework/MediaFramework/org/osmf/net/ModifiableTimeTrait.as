@@ -41,7 +41,7 @@ package org.osmf.net
 		}
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		public function set duration(value:Number):void
 		{

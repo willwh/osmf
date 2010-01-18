@@ -31,7 +31,7 @@ package org.osmf.metadata
 	public class NullFacetSynthesizer extends FacetSynthesizer
 	{
 		/**
-		 * @inheritDoc
+		 * Constructor.
 		 */		
 		public function NullFacetSynthesizer(nameSpace:URL)
 		{
@@ -41,6 +41,9 @@ package org.osmf.metadata
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:CompositionMode, activeMetadata:Metadata):Facet
 		{
 			return null;

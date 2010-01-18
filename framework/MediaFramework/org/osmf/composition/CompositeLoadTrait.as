@@ -64,7 +64,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function get bytesLoaded():Number
 		{
@@ -120,7 +120,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override public function get resource():MediaResourceBase
 		{
@@ -141,7 +141,7 @@ package org.osmf.composition
 		}
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override public function load():void
 		{
@@ -176,7 +176,7 @@ package org.osmf.composition
 		}
 
 		/**
-         * @inheritDoc
+         * @private
 		 **/
 		override public function unload():void
 		{

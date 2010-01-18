@@ -105,7 +105,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{

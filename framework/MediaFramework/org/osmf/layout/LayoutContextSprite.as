@@ -62,10 +62,10 @@ package org.osmf.layout
 			_metadata = metadata || new Metadata();
 		}
 		
-		// ILayoutTarget
+		// ILayoutContext
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -80,7 +80,7 @@ package org.osmf.layout
 		/**
 		 * A reference to this instance.
 		 * 
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -93,7 +93,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -106,7 +106,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -125,7 +125,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -146,7 +146,7 @@ package org.osmf.layout
 		/**
 		 * A reference to this instance.
 		 * 
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -162,7 +162,7 @@ package org.osmf.layout
 		 * Returns 0, for this context has no children other than the ones placed on
 		 * it by the layout renderer.
 		 * 
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -46,7 +46,7 @@ package org.osmf.composition
 		//
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
@@ -67,7 +67,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override protected function prepareSeekOperationInfo(time:Number):CompositeSeekOperationInfo
 		{
@@ -117,7 +117,7 @@ package org.osmf.composition
 		}
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override protected function checkSeeking():Boolean
 		{
@@ -138,7 +138,7 @@ package org.osmf.composition
 		}
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override protected function onSeekingChanged(event:SeekEvent):void
 		{

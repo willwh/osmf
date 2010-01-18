@@ -65,6 +65,8 @@ package org.osmf.swf
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Indicates whether this SWFLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for URLResources with SWF extensions.
 		 * @param resource Resource proposed to be loaded.

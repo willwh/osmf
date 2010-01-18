@@ -53,7 +53,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -97,7 +97,7 @@ package org.osmf.composition
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 **/
 		override public function clone():Event
 		{

@@ -122,6 +122,9 @@ package org.osmf.external
 			return result;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function setPropertyCallback(property:String, value:*):void
 		{
 			settingAProperty = true;
@@ -211,8 +214,14 @@ package org.osmf.external
 			settingAProperty = false;
 		} 
 		
+		/**
+		 * @private
+		 */
 		internal var settingAProperty:Boolean;
 		
+		/**
+		 * @private
+		 */
 		internal function invokeJavaScriptMethod(methodName:String, ...arguments):*
 		{
 			requireScriptPath;
@@ -263,6 +272,9 @@ package org.osmf.external
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function set resource(value:MediaResourceBase):void
 		{
 			if (resource != value)

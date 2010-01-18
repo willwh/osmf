@@ -120,10 +120,12 @@ package org.osmf.composition
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the length of the list.
 		 * @throws IllegalOperation If the child is already a child.
+		 * 
+		 * @return The MediaElement that you pass in the child parameter.
 		 **/
-		public function addChild(child:MediaElement):void
+		public function addChild(child:MediaElement):MediaElement
 		{
-			addChildAt(child, numChildren);
+			return addChildAt(child, numChildren);
 		}
 		
 		/**
@@ -138,8 +140,10 @@ package org.osmf.composition
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the length of the list.
 		 * @throws IllegalOperation If the child is already a child.
+		 * 
+		 * @return The MediaElement that you pass in the child parameter.
 		 **/
-		public function addChildAt(child:MediaElement,index:Number):void
+		public function addChildAt(child:MediaElement,index:Number):MediaElement
 		{
 			if (child == null)
 			{
@@ -157,6 +161,8 @@ package org.osmf.composition
 			children.splice(index, 0, child);
 			
 			processAddedChild(child, index);
+			
+			return child;
 		}
 
 		/**
@@ -286,6 +292,9 @@ package org.osmf.composition
 		{
 		}
 		
+		/**
+		 * @private
+		 **/
 		override protected function createMetadata():Metadata
 		{
 			return new CompositeMetadata();

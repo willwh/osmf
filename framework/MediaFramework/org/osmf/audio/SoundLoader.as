@@ -70,6 +70,8 @@ package org.osmf.audio
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Indicates whether this SoundLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for IURLResources with MP3 extensions or media/mime
 		 * types that match MP3.
@@ -101,6 +103,8 @@ package org.osmf.audio
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Loads the Sound object.. 
 		 * <p>Updates the LoadTrait's <code>loadedState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load.</p> 
@@ -203,6 +207,8 @@ package org.osmf.audio
 		}
 
 		/**
+		 * @private
+		 * 
 		 * Unloads the Sound object.  
 		 * 
 		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING

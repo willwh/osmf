@@ -54,7 +54,7 @@ package org.osmf.media
 	public class DefaultMediaFactory extends MediaFactory
 	{
 		/**
-		 * @inheritDoc
+		 * Constructor.
 		 */		
 		public function DefaultMediaFactory(handlerResolver:IMediaResourceHandlerResolver=null)
 		{

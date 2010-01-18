@@ -56,8 +56,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * 
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function set resource(value:MediaResourceBase):void
 	    {

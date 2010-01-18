@@ -81,6 +81,8 @@ package org.osmf.content
 		//
 		
 		/**
+		 * @private
+		 * 
 		 * Loads content using a flash.display.Loader object. 
 		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load.</p> 
@@ -215,6 +217,8 @@ package org.osmf.content
 
 		
 		/**
+		 * @private
+		 * 
 		 * Unloads content using a flash.display.Loader object.  
 		 * 
 		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING

@@ -65,7 +65,6 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 * @inheritDoc
 		 **/
 		override public function clone():Event
 		{

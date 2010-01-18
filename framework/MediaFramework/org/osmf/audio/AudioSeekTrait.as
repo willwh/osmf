@@ -34,7 +34,7 @@ package org.osmf.audio
 		}
 
 		/** 
-		 * @inheritDoc
+		 * @private
 		 */
 		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
@@ -45,7 +45,7 @@ package org.osmf.audio
 		}
 		
 		/** 
-		 * @inheritDoc
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
