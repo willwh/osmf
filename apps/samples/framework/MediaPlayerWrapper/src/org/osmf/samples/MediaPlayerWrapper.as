@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package com.adobe.strobe.players
+package org.osmf.samples
 {
 	import flash.events.Event;
 	
