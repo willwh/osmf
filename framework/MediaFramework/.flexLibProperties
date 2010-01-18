@@ -50,7 +50,6 @@
     <classEntry path="org.osmf.display.MediaContainerGroup"/>
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
-    <classEntry path="org.osmf.display.ScaleModeUtils"/>
     <classEntry path="org.osmf.drm.DRMServices"/>
     <classEntry path="org.osmf.drm.DRMState"/>
     <classEntry path="org.osmf.events.AudioEvent"/>
@@ -101,6 +100,7 @@
     <classEntry path="org.osmf.layout.PaddingLayoutFacet"/>
     <classEntry path="org.osmf.layout.RegistrationPoint"/>
     <classEntry path="org.osmf.layout.RelativeLayoutFacet"/>
+    <classEntry path="org.osmf.layout.ScaleModeUtils"/>
     <classEntry path="org.osmf.logging.ILogger"/>
     <classEntry path="org.osmf.logging.ILoggerFactory"/>
     <classEntry path="org.osmf.logging.Log"/>

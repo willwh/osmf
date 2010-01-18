@@ -19,14 +19,18 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.display
+package org.osmf.layout
 {
+	import org.osmf.display.ScaleMode;
+	
 	import flash.geom.Point;
 	
 	/**
+	 * @private
+	 * 
 	 * Utility class for working with scale modes.
 	 */ 
-	public class ScaleModeUtils
+	internal class ScaleModeUtils
 	{				
 		/**
 		 * Calculates the scaled size based on the scaling algorithm.  

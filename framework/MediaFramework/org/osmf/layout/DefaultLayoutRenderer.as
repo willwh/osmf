@@ -28,7 +28,6 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.display.ScaleModeUtils;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
