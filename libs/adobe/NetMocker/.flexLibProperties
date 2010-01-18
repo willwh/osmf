@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
-<includeClasses>
-<classEntry path="org.osmf.netmocker.DefaultNetConnectionFactory"/>
-<classEntry path="org.osmf.netmocker.EventInfo"/>
-<classEntry path="org.osmf.netmocker.IMockNetLoader"/>
-<classEntry path="org.osmf.netmocker.IMockNetStream"/>
-<classEntry path="org.osmf.netmocker.MockDynamicNetStream"/>
-<classEntry path="org.osmf.netmocker.MockDynamicStreamingNetLoader"/>
-<classEntry path="org.osmf.netmocker.MockNetConnection"/>
-<classEntry path="org.osmf.netmocker.MockNetLoader"/>
-<classEntry path="org.osmf.netmocker.MockNetNegotiator"/>
-<classEntry path="org.osmf.netmocker.MockNetStream"/>
-<classEntry path="org.osmf.netmocker.NetConnectionExpectation"/>
-<classEntry path="org.osmf.netmocker.NetStatusEventInterceptor"/>
-<classEntry path="org.osmf.netmocker.TracingNetLoader"/>
-<classEntry path="org.osmf.netmocker.TracingNetNegotiator"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests/>
+  <includeClasses>
+    <classEntry path="org.osmf.netmocker.DefaultNetConnectionFactory"/>
+    <classEntry path="org.osmf.netmocker.EventInfo"/>
+    <classEntry path="org.osmf.netmocker.IMockNetLoader"/>
+    <classEntry path="org.osmf.netmocker.IMockNetStream"/>
+    <classEntry path="org.osmf.netmocker.MockDynamicNetStream"/>
+    <classEntry path="org.osmf.netmocker.MockDynamicStreamingNetLoader"/>
+    <classEntry path="org.osmf.netmocker.MockNetConnection"/>
+    <classEntry path="org.osmf.netmocker.MockNetLoader"/>
+    <classEntry path="org.osmf.netmocker.MockNetNegotiator"/>
+    <classEntry path="org.osmf.netmocker.MockNetStream"/>
+    <classEntry path="org.osmf.netmocker.NetConnectionExpectation"/>
+    <classEntry path="org.osmf.netmocker.NetStatusEventInterceptor"/>
+    <classEntry path="org.osmf.netmocker.TracingNetLoader"/>
+    <classEntry path="org.osmf.netmocker.TracingNetNegotiator"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
 </flexLibProperties>
