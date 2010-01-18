@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="MediaFramework.as" version="3">
+<actionScriptProperties mainApplicationPath="OSMF.as" version="3">
 <compiler additionalCompilerArguments="-define CONFIG::LOGGING false -define CONFIG::FLASH_10_1 false" copyDependentFiles="false" enableModuleDebug="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath/>
 <libraryPath defaultLinkType="1">
@@ -21,7 +21,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
-<application path="MediaFramework.as"/>
+<application path="OSMF.as"/>
 </applications>
 <modules/>
 <buildCSSFiles/>
