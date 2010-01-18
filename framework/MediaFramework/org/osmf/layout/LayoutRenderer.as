@@ -237,16 +237,7 @@ package org.osmf.layout
 			if (index != -1)
 			{
 				// Remove the target from the context stage:
-				var targetView:DisplayObject = staged[target]; 
-				if (targetView != null)
-				{
-					if (container.contains(targetView))
-					{
-						container.removeChild(targetView);
-					}
-					
-					delete staged[target];
-				}
+				removeFromStage(target);
 				
 				// Remove the target from our listing:
 				removedTarget = layoutTargets.splice(index,1)[0];
@@ -714,71 +705,55 @@ package org.osmf.layout
 				var displayObject:DisplayObject = target.displayObject;
 				if (displayObject)
 				{
-					// If the target's displayObject is not on our container, then stage it. If
-					// it is already present, then make sure it is at the right index
-					// of the display list:
-					if (container.contains(displayObject))
-					{
-						container.setChildIndex
-							( displayObject
-							// Make sure that the display index that we pass, is within
-							// dimensions:
-							, Math.min(Math.max(0,container.numChildren-1),displayListCounter)
-							);
-							
-						CONFIG::LOGGING { logger.debug("prepareTarget: setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
-					}
-					else
-					{
-						container.addChildAt
-							( displayObject
-							// Make sure that the display index that we pass, is within
-							// dimensions:
-							, Math.min(Math.max(0,container.numChildren),displayListCounter)
-							);
-						
-						CONFIG::LOGGING { logger.debug("addChildAt: setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
-					}
-					
-					// Only invoke 'processStagedTarget' if the displayObject
-					// is not on our list of staged items yet:
-					if (staged[target] == undefined)
-					{
-						staged[target] = displayObject;
-						
-						processStagedTarget(target);
-					}
-					else
-					{
-						staged[target] = displayObject;
-						
-						CONFIG::LOGGING { logger.debug("prepareTarget:updated staged displayObject, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
-					}
-					
+					addToStage(target, target.displayObject, displayListCounter);
 					displayListCounter++;
 				}
-				else if (displayObject == null)
+				else
 				{
-					// If this target does not (currently) have a displayObject, then check if
-					// we have a displayObject for it that is still on stage. If so, then 
-					// remove it:
-					var oldView:DisplayObject = staged[target];
-					if (oldView)
-					{
-						if (container.contains(oldView))
-						{
-							container.removeChild(oldView);
-						}
-						
-						delete staged[target];
-						
-						processUnstagedTarget(target);
-					}
-					else
-					{
-						CONFIG::LOGGING { logger.debug("prepareTarget: no displayObject for, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
-					}
+					removeFromStage(target);
 				}
+			}
+		}
+		
+		private function addToStage(target:ILayoutTarget, object:DisplayObject, index:Number):void
+		{
+			var currentObject:DisplayObject = stagedDisplayObjects[target];
+			if (currentObject == object)
+			{
+				// Make sure that the object is at the right position in the display list:
+				container.setChildIndex(object, Math.min(Math.max(0,container.numChildren-1), index));
+				CONFIG::LOGGING { logger.debug("setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+			}
+			else
+			{
+				if (currentObject != null)
+				{
+					// Remove the current object:
+					container.removeChild(currentObject);
+					CONFIG::LOGGING { logger.debug("removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				}
+				
+				// Add the new object:
+				container.addChildAt(object, index);
+				stagedDisplayObjects[target] = object;
+				CONFIG::LOGGING { logger.debug("addChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				
+				// If there wasn't an old object, then trigger the staging processor:
+				if (currentObject == null)
+				{
+					processStagedTarget(target);
+				}
+			}
+		}
+		
+		private function removeFromStage(target:ILayoutTarget):void
+		{
+			var currentObject:DisplayObject = stagedDisplayObjects[target];
+			if (currentObject != null)
+			{
+				container.removeChild(currentObject);
+				delete stagedDisplayObjects[target];
+				CONFIG::LOGGING { logger.debug("removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			}
 		}
 		
@@ -789,7 +764,7 @@ package org.osmf.layout
 		private var absoluteLayoutWatcher:MetadataWatcher;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
-		private var staged:Dictionary = new Dictionary(true);
+		private var stagedDisplayObjects:Dictionary = new Dictionary(true);
 		
 		private var dirty:Boolean;
 		private var cleaning:Boolean;
