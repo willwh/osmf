@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.netmocker
 {
-	import org.osmf.media.IMediaResource;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadTrait;
@@ -60,7 +60,7 @@ package org.osmf.netmocker
 			return netLoader;
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:IMediaResource):LoadTrait
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			if (resource == successfulResource)
 			{
@@ -77,17 +77,17 @@ package org.osmf.netmocker
 			return new LoadTrait(netLoader, resource);
 		}
 		
-		override protected function get successfulResource():IMediaResource
+		override protected function get successfulResource():MediaResourceBase
 		{
 			return SUCCESSFUL_RESOURCE;
 		}
 
-		override protected function get failedResource():IMediaResource
+		override protected function get failedResource():MediaResourceBase
 		{
 			return UNSUCCESSFUL_RESOURCE;
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
 		}
