@@ -134,33 +134,36 @@ package org.osmf.manifest
 				
 				var unfinishedLoads:Number = 0;
 				
-				for each (var item:Media in manifest.media)
-				{										
-					// DRM Metadata  - we may make this load on demand in the future.					
-					if (item.drmMetadataURL != null)
-					{												
-						var drmLoader:URLLoader = new URLLoader();
-						drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
-						unfinishedLoads++;
-						drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
-						drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-						drmLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-					
-						function onDRMLoadComplete(event:Event):void
-						{
-							event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
-							event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
-							event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-							unfinishedLoads--;
-							item.drmMetadata = URLLoader(event.target).data;
-							if (unfinishedLoads == 0)
+				if (manifest != null)
+				{
+					for each (var item:Media in manifest.media)
+					{										
+						// DRM Metadata  - we may make this load on demand in the future.					
+						if (item.drmMetadataURL != null)
+						{												
+							var drmLoader:URLLoader = new URLLoader();
+							drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
+							unfinishedLoads++;
+							drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
+							drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+							drmLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+						
+							function onDRMLoadComplete(event:Event):void
 							{
-								finishLoad();
+								event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
+								event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+								event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+								unfinishedLoads--;
+								item.drmMetadata = URLLoader(event.target).data;
+								if (unfinishedLoads == 0)
+								{
+									finishLoad();
+								}
 							}
-						}
-						drmLoader.load(new URLRequest(item.drmMetadataURL.rawUrl));
-					}					
-				}	
+							drmLoader.load(new URLRequest(item.drmMetadataURL.rawUrl));
+						}					
+					}
+				}
 				if (unfinishedLoads == 0) // No external resources
 				{
 					finishLoad();

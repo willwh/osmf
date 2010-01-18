@@ -194,7 +194,12 @@ package org.osmf.net
 			
 			return result;
 		}
-				
+		
+		override flash_proxy function hasProperty(name:*):Boolean
+		{
+			return handlers.hasOwnProperty(name);
+		}
+
 		// Internals
 		//
 		

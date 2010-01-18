@@ -25,8 +25,11 @@ package org.osmf.media
 	import org.osmf.audio.SoundLoader;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
+	import org.osmf.manifest.F4MLoader;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.video.VideoElement;
@@ -38,11 +41,13 @@ package org.osmf.media
 	 * the following types:
 	 * 
 	 *  - VideoElement, using either:
-	 *  	- NetLoader (streaming or progressive),
-	 * 		- DynamicStreamNetLoader (MBR streaming).
+	 *  	- NetLoader (streaming or progressive)
+	 * 		- DynamicStreamingNetLoader (MBR streaming)
+	 * 		- HTTPStreamingNetLoader (HTTP streaming)
+	 * 		- F4MLoader (Flash Media Manifest files)
 	 *  - SoundElement, using either:
-	 * 		- SoundLoader (progressive), or
-	 * 		- NetLoader (streaming).
+	 * 		- SoundLoader (progressive)
+	 * 		- NetLoader (streaming)
 	 * 	- ImageElement
 	 * 	- SWFElement
 	 */	
@@ -63,7 +68,32 @@ package org.osmf.media
 		
 		private function init():void
 		{
-						
+			var f4mLoader:F4MLoader = new F4MLoader(this);
+			
+			addMediaInfo     
+				( new MediaInfo
+					( "org.osmf.f4m"
+					, f4mLoader
+					, function():MediaElement
+						{
+							return new LoadableProxyElement(f4mLoader);
+						}
+					, MediaInfoType.STANDARD
+					)
+				);
+				
+			addMediaInfo     
+				( new MediaInfo
+					( "org.osmf.video.httpstreaming"
+					, new HTTPStreamingNetLoader()
+					, function():MediaElement
+						{
+							return new VideoElement(new HTTPStreamingNetLoader());
+						}
+					, MediaInfoType.STANDARD
+					)
+				);
+
 			addMediaInfo            
 				( new MediaInfo
 					( "org.osmf.video.dynamicStreaming"

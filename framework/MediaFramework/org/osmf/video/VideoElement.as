@@ -62,6 +62,9 @@ package org.osmf.video
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
+	import org.osmf.net.httpstreaming.HTTPNetStream;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	import org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -387,7 +390,14 @@ package org.osmf.video
 			var dynRes:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dynRes != null)
 			{
-				addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dynRes));
+				if (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(dynRes) != null)
+				{
+					addTrait(MediaTraitType.DYNAMIC_STREAM, new HTTPStreamingNetStreamDynamicStreamTrait(stream as HTTPNetStream, dynRes));
+				}
+				else
+				{
+					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dynRes));
+				}
 			}	    	
 		}
 		

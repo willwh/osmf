@@ -94,7 +94,7 @@ package org.osmf.net.dynamicstreaming
 			_checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			_checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
 									
-			_useManualSwitchMode = false;
+			_autoSwitch = true;
 			addSwitchingRules();
 			
 			_nc = connection;
@@ -123,6 +123,9 @@ package org.osmf.net.dynamicstreaming
 		{
 			return _dsResource;			
 		}
+		
+		// Overrides
+		//
 		
 		/**
 		 * Plays either a standard non-dynamic stream or a dynamic stream.
@@ -195,7 +198,10 @@ package org.osmf.net.dynamicstreaming
 		override public function play2(param:NetStreamPlayOptions):void 
 		{
 			throw new IllegalOperationError("The play2() method is disabled for the DynamicNetStream class.");
-		}		
+		}
+		
+		// Protected
+		//
 		
 		/**
 		 * Override this method to provide your own switching rules. Switching
@@ -213,6 +219,26 @@ package org.osmf.net.dynamicstreaming
 			addSwitchingRule(new InsufficientBandwidthRule(_metricsProvider));
 			addSwitchingRule(new DroppedFramesRule(_metricsProvider));
 			addSwitchingRule(new InsufficientBufferRule(_metricsProvider));
+		}
+		
+		/**
+		 * Adds a switching rule to the collection of switching
+		 * rules. Developers can override the default set of switching
+		 * rules or add to them by overridding the <code>addSwitchingRules</code>
+		 * method.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function addSwitchingRule(rule:ISwitchingRule):void
+		{
+			if (_switchingRules == null)
+			{
+				_switchingRules = new Vector.<ISwitchingRule>();			
+			}
+			_switchingRules.push(rule);
 		}
 		
 		/**
@@ -310,67 +336,6 @@ package org.osmf.net.dynamicstreaming
 			_nc.call("setBandwidthLimit",null, rate * 1.40, rate * 1.40);
 		}
 		
-		/**
-		 * If DEBUG is true, traces out debug messages.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		private function debug(...args):void
-		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.DynamicNetStream");
-				}
-				_logger.debug(new Date().toTimeString() + ">>> DynamicNetStream."+args);
-			}
-		}
-		
-		/**
-		 * Adds a switching rule to the collection of switching
-		 * rules. Developers can override the default set of switching
-		 * rules or add to them by overridding the <code>addSwitchingRules</code>
-		 * method.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function addSwitchingRule(rule:ISwitchingRule):void
-		{
-			if (_switchingRules == null)
-			{
-				_switchingRules = new Vector.<ISwitchingRule>();			
-			}
-			_switchingRules.push(rule);
-		}
-				
-		/**
-		 * Begins playing the stream for the first time by initiating
-		 * the first switch.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		private function makeFirstSwitch():void
-		{
-			if (!_useManualSwitchMode)
-			{
-				_checkRulesTimer.start();
-			}
-			
-			setThrottleLimits(_dsResource.streamItems.length - 1);
-			debug("makeFirstSwitch() - Starting with stream index " + _streamIndex + " at " + Math.round(_dsResource.streamItems[_streamIndex].bitrate) + " kbps");
-			switchToIndex(_streamIndex, true);
-			_metricsProvider.currentIndex = _streamIndex;
-		}
 		
 		/**
 		 * Switches to the specified index.
@@ -409,7 +374,7 @@ package org.osmf.net.dynamicstreaming
 			
 			_oldStreamName = _dsResource.streamItems[targetIndex].streamName;
 			
-			if ((!firstPlay) && (targetIndex < _streamIndex) && (!_useManualSwitchMode)) 
+			if ((!firstPlay) && (targetIndex < _streamIndex) && (_autoSwitch)) 
 			{
 				// this is a failure for the current stream so lets tag it as such
 				incrementDSIFailedCount(_streamIndex);
@@ -444,6 +409,72 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
+		 * The object implementing the INetStreamMetrics interface which 
+		 * provides metrics to the switching rules. This class
+		 * creates a metrics class by default but it can be overridden by a class
+		 * extending this class. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function get metricsProvider():INetStreamMetrics
+		{
+			return _metricsProvider;
+		}
+		
+		protected function set metricsProvider(value:INetStreamMetrics):void
+		{
+			_metricsProvider = value;
+		}
+		
+		// Internal
+		//
+		
+		/**
+		 * If DEBUG is true, traces out debug messages.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		private function debug(...args):void
+		{
+			CONFIG::LOGGING
+			{
+				if (_logger == null)
+				{
+					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.DynamicNetStream");
+				}
+				_logger.debug(new Date().toTimeString() + ">>> DynamicNetStream."+args);
+			}
+		}
+		
+		/**
+		 * Begins playing the stream for the first time by initiating
+		 * the first switch.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		private function makeFirstSwitch():void
+		{
+			if (_autoSwitch)
+			{
+				_checkRulesTimer.start();
+			}
+			
+			setThrottleLimits(_dsResource.streamItems.length - 1);
+			debug("makeFirstSwitch() - Starting with stream index " + _streamIndex + " at " + Math.round(_dsResource.streamItems[_streamIndex].bitrate) + " kbps");
+			switchToIndex(_streamIndex, true);
+			_metricsProvider.currentIndex = _streamIndex;
+		}
+		
+		/**
 		 * Checks all the switching rules. If a switching rule returns -1, it is 
 		 * recommending no change.  If a switching rule returns a number greater than
 		 * -1 it is recommending a switch to that index. This method uses the lesser of 
@@ -475,7 +506,7 @@ package org.osmf.net.dynamicstreaming
 			}
 			
 			if ((newIndex != -1) && (newIndex != int.MAX_VALUE)  && (newIndex != _streamIndex) &&
-					(!_switchUnderway) && isDSIAvailable(newIndex) && (newIndex <= this.maxIndex)) 
+					(!_switchUnderway) && isDSIAvailable(newIndex) && (newIndex <= this.maxAllowedIndex)) 
 			{
 				debug("checkRules() - Calling for switch to " + newIndex + " at " + _dsResource.streamItems[newIndex].bitrate + " kbps, detail: " + _detail.description + " " + _detail.moreInfo);
 
@@ -603,35 +634,35 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * @private
 		 */
-		internal function get useManualSwitchMode():Boolean
+		internal function get autoSwitch():Boolean
 		{
-			return _useManualSwitchMode;
+			return _autoSwitch;
 		}
 		
 		/**
 		 * @private
 		 */
-		internal function set useManualSwitchMode(value:Boolean):void
+		internal function set autoSwitch(value:Boolean):void
 		{
-			debug("useManualSwitchMode() - setting to "+value);
+			debug("autoSwitch() - setting to "+value);
 			
-			_useManualSwitchMode = value;
-			if (_useManualSwitchMode)
+			_autoSwitch = value;
+			if (_autoSwitch)
 			{
-				debug("useManualSwitchMode() - stopping check rules timer.");
-				_checkRulesTimer.stop();
+				debug("autoSwitch() - starting check rules timer.");
+				_checkRulesTimer.start();
 			}
 			else
 			{
-				debug("useManualSwitchMode() - starting check rules timer.");
-				_checkRulesTimer.start();
+				debug("autoSwitch() - stopping check rules timer.");
+				_checkRulesTimer.stop();
 			}
 		}
 		
 		/**
 		 * @private
 		 */
-		internal function get maxIndex():int 
+		internal function get maxAllowedIndex():int 
 		{
 			if (_dsResource)
 			{
@@ -644,7 +675,7 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * @private
 		 */
-		internal function set maxIndex(value:int):void
+		internal function set maxAllowedIndex(value:int):void
 		{
 			if (value > _dsResource.streamItems.length)
 			{
@@ -654,11 +685,11 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Returns the current stream index that is rendering on the client. Note this may 
 		 * differ from the last index requested if this property is called between the
 		 * NetStream.Play.Transition and the NetStream.Play.TransitionComplete events.
-		 * 
-		 * @private
 		 */
 		internal function get renderingIndex():uint
 		{
@@ -670,9 +701,9 @@ package org.osmf.net.dynamicstreaming
 		 */
 		internal function switchTo(index:int):void
 		{
-			if (_useManualSwitchMode)
+			if (!_autoSwitch)
 			{
-				if ((index < 0) || (index > maxIndex))
+				if ((index < 0) || (index > maxAllowedIndex))
 				{
 					throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 				}
@@ -701,11 +732,11 @@ package org.osmf.net.dynamicstreaming
 		}
 				
 		/**
+		 * @private
+		 * 
 		 * Returns <code>true</code> if a switch has been requested but has
 		 * not been accepted by the server (via a <code>NetStream.Play.Transition</code> 
 		 * code in the NetStatusEvent handler.
-		 * 
-		 * @private
 		 */
 		internal function get switchUnderway():Boolean
 		{
@@ -715,27 +746,6 @@ package org.osmf.net.dynamicstreaming
 		protected function set switchUnderway(value:Boolean):void
 		{
 			_switchUnderway = value;
-		}
-		
-		/**
-		 * The object implementing the INetStreamMetrics interface which 
-		 * provides metrics to the switching rules. This class
-		 * creates a metrics class by default but it can be overridden by a class
-		 * extending this class. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function get metricsProvider():INetStreamMetrics
-		{
-			return _metricsProvider;
-		}
-		
-		protected function set metricsProvider(value:INetStreamMetrics):void
-		{
-			_metricsProvider = value;
 		}
 		 
 		/**
@@ -767,7 +777,7 @@ package org.osmf.net.dynamicstreaming
 		private var _streamIndex:int = -1;
 		private var _oldStreamName:String;
 		private var _dsResource:DynamicStreamingResource;
-		private var _useManualSwitchMode:Boolean;
+		private var _autoSwitch:Boolean;
 		private var _switchUnderway:Boolean;
 		private var _renderingIndex:int;
 		private var _pendingTransitionsArray:Array;

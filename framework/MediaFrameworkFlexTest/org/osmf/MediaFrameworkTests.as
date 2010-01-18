@@ -38,6 +38,7 @@ package org.osmf
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
 	import org.osmf.net.dynamicstreaming.*;
+	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.plugin.*;
 	import org.osmf.proxies.*;
 	import org.osmf.swf.*;
@@ -131,6 +132,10 @@ package org.osmf
 			addTestSuite(TestAudioAudioTrait);
 			addTestSuite(TestAudioSeekTrait); 
 			addTestSuite(TestSoundLoadTrait);
+
+			// These tests fail intermittently on the build machine.
+			//addTestSuite(TestAudioPlayTrait);
+			//addTestSuite(TestAudioTimeTrait);
 			
 			// External
 			//
@@ -205,9 +210,13 @@ package org.osmf
 			addTestSuite(TestDynamicNetStream);
 			addTestSuite(TestNetStreamDynamicStreamTrait);
 			
-			// These tests fail intermittently on the build machine.
-			//addTestSuite(TestAudioPlayTrait);
-			//addTestSuite(TestAudioTimeTrait);
+			// HTTP Streaming
+			//
+			
+			addTestSuite(TestBoxParser);
+			addTestSuite(TestAdobeBootstrapBox);
+			addTestSuite(TestAdobeFragmentRunTable);
+			addTestSuite(TestAdobeSegmentRunTable);
 
 			// Images & SWFs
 			//

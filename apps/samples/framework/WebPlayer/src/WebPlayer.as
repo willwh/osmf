@@ -114,20 +114,8 @@ package
 		private function setupMediaFactory():void
 		{
 			// Construct a media factory. A media factory can create
-			// media elements on being passed a resource. Manually add
-			// support for the Flash Media Format file type:
+			// media elements on being passed a resource.
 			factory = new DefaultMediaFactory();
-			factory.addMediaInfo     
-				( new MediaInfo
-					( "org.osmf.flashmanifest"
-					, new F4MLoader()
-					, function():MediaElement
-						{
-							return new LoadableProxyElement(new F4MLoader());
-						}
-					, MediaInfoType.STANDARD
-					)
-				);
 		}
 		
 		private function setupMediaContainer():void

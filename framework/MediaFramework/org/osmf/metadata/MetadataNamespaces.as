@@ -63,7 +63,12 @@ package org.osmf.metadata
 		
 		public static const TEMPORAL_METADATA_EMBEDDED:URL		= new URL("http://www.osmf.org/temporal/embedded");
 		public static const TEMPORAL_METADATA_DYNAMIC:URL		= new URL("http://www.osmf.org/temporal/dynamic");
-		
+
 		public static const PLUGIN_PARAMETERS:URL				= new URL("http://www.osmf.org/plugin/parameters");
+		
+		public static const HTTP_STREAMING_METADATA:URL			= new URL("http://www.osmf.org/httpstreaming/1.0");
+		public static const HTTP_STREAMING_ABST_URL_KEY:String	= "abstUrl";
+		public static const HTTP_STREAMING_ABST_DATA_KEY:String	= "abstData";
+		public static const HTTP_STREAMING_SERVER_BASE_URLS_KEY:String = "serverBaseUrls";
 	}
 }

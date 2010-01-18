@@ -21,21 +21,30 @@
 *****************************************************/
 package org.osmf.net
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
+	import flash.utils.ByteArray;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.traits.MediaTraitType;
+	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
+	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
+	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
-	
+
 	[ExcludeClass]
 	
 	/**
@@ -65,8 +74,8 @@ package org.osmf.net
 			}
 			this.netStream = netStream;
 			this.urlResource = resource as URLResource;
-			this.dsResource = resource as DynamicStreamingResource;
-			
+			this.hsFacet = HTTPStreamingUtils.getHTTPStreamingMetadataFacet(resource);
+
 			// Note that we add the listener (and handler) with a slightly
 			// higher priority.  The reason for this is that we want to process
 			// any Play.Stop (and Play.Complete) events first, so that we can
@@ -92,10 +101,16 @@ package org.osmf.net
 				{				
 					netStream.resume();						
 				}
-				else if (dsResource != null)
+				else if (hsFacet != null)
 				{
-					doPlay(dsResource);
-				}					
+					doPlayHTTPStream();
+				}
+				// TODO: Refactor DynamicNetStream so that we can code to the
+				// base NetStream API (play2).
+				else if (urlResource is DynamicStreamingResource)
+				{
+					doPlay(urlResource);
+				}
 				else if (urlResource != null) 
 				{
 					// Map the resource to the NetStream.play arguments.
@@ -185,11 +200,54 @@ package org.osmf.net
 			}
 		}
 		
+		private function doPlayHTTPStream():void
+		{
+			var abstURL:String
+				= hsFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
+			var abstData:ByteArray
+				= hsFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_DATA_KEY)) as ByteArray;
+			var serverBaseURLs:Vector.<String>
+				= hsFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY)) as Vector.<String>;
+			
+			var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = generateStreamInfos(urlResource);
+			
+			var indexInfo:HTTPStreamingF4FIndexInfo =
+				new HTTPStreamingF4FIndexInfo
+					( abstURL
+					, abstData
+					, serverBaseURLs != null && serverBaseURLs.length > 0 ? serverBaseURLs[0] : null
+					, streamInfos
+					);
+					 
+			doPlay(indexInfo);
+		}
+		
+		private function generateStreamInfos(resource:URLResource):Vector.<HTTPStreamingF4FStreamInfo>
+		{
+			var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = new Vector.<HTTPStreamingF4FStreamInfo>();
+			
+			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			if (dsResource != null)
+			{
+				for each (var streamItem:DynamicStreamingItem in dsResource.streamItems)
+				{
+					streamInfos.push(new HTTPStreamingF4FStreamInfo(streamItem.streamName, streamItem.bitrate));
+				}
+			}
+			else
+			{
+				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
+				streamInfos.push(new HTTPStreamingF4FStreamInfo(streamName));
+			}
+
+			return streamInfos;
+		}
+		
 		private static const NETCONNECTION_FAILURE_ERROR_CODE:int = 2154;
 		
 		private var streamStarted:Boolean;
 		private var netStream:NetStream;
 		private var urlResource:URLResource;
-		private var dsResource:DynamicStreamingResource;
+		private var hsFacet:Facet;
 	}
 }

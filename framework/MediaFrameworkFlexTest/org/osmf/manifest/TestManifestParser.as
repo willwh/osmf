@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.manifest
 {
 	import __AS3__.vec.Vector;
@@ -11,6 +32,7 @@ package org.osmf.manifest
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.URL;
 
 	public class TestManifestParser extends TestCase
@@ -319,7 +341,8 @@ package org.osmf.manifest
 							<duration>253</duration>
 							<mimeType>video/x-flv</mimeType>
 							<streamType>recorded</streamType>
-							<media url="myvideo/low.flv"  bitrate="408" width="640" height="480" />
+							<bootstrapInfo profile="named" id='1' url='foo'/>
+							<media url="myvideo/low.flv"  bitrate="408" width="640" height="480" bootstrapInfoId='1'/>
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
@@ -330,7 +353,13 @@ package org.osmf.manifest
 			var urlResource:URLResource = resource as URLResource;
 				
 			assertEquals(urlResource.url.rawUrl, "http://example.com/myvideo/low.flv");
-						
+			CONFIG::FLASH_10_1
+			{
+				var hsFacet:KeyValueFacet = HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) as KeyValueFacet;
+				assertTrue(hsFacet != null);
+				var abstURL:String = hsFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
+				assertTrue(abstURL == "http://example.com/foo");
+			}
 		}
 		
 		public function testNoURLDynStreaming():void
@@ -340,23 +369,33 @@ package org.osmf.manifest
 							<duration>253</duration>
 							<mimeType>video/x-flv</mimeType>
 							<streamType>recorded</streamType>
-							<media url="low.flv"  bitrate="408" width="640" height="480" />
-							<media url="medium.flv" bitrate="908" width="800" height="600" />
-							<media url="high.flv" bitrate="1708" width="1920" height="1080" />
+							<media url="low"  bitrate="408" width="640" height="480" />
+							<media url="medium" bitrate="908" width="800" height="600" />
+							<media url="high" bitrate="1708" width="1920" height="1080" />
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
 			var errorSeen:Boolean = false;
+			var resource:MediaResourceBase;
 			try
 			{
-				var resource:MediaResourceBase = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
+				resource = parser.createResource(manifest, new URL('http://example.com/manifest.f4m'));
 			}
 			catch(error:Error)
 			{
 				errorSeen = true;
 			}			
-			assertTrue(errorSeen);
+			assertFalse(errorSeen);
 			
+			// With no URL, the stream items should be prefixed by the location of the manifest.
+			assertTrue(resource != null);
+			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			assertTrue(dynResource);
+			assertTrue(dynResource.streamItems.length == 3);
+			assertEquals(dynResource.streamItems[0].streamName, "low");
+			assertEquals(dynResource.streamItems[1].streamName, "medium");
+			assertEquals(dynResource.streamItems[2].streamName, "high");
+			assertEquals(dynResource.host.rawUrl, "http://example.com");
 		}
 			
 	}

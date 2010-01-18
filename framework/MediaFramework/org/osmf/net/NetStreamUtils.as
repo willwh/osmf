@@ -26,6 +26,7 @@ package org.osmf.net
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
@@ -84,7 +85,8 @@ package org.osmf.net
 				var urlResource:URLResource = resource as URLResource;
 				if (urlResource != null)
 				{
-					result = NetStreamUtils.isRTMPStream(urlResource.url);
+					result = 		NetStreamUtils.isRTMPStream(urlResource.url)
+								||	HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) != null;
 				}
 			}
 			
@@ -109,7 +111,7 @@ package org.osmf.net
 			
 			return result;
 		}
-		
+				
 		/**
 		 * Returns the stream type of the given resource.
 		 * 

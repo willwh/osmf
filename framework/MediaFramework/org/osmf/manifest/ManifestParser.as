@@ -35,6 +35,7 @@ package org.osmf.manifest
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.Base64Decoder;
 	import org.osmf.utils.DateUtil;
 	import org.osmf.utils.FMSURL;
@@ -94,7 +95,7 @@ package org.osmf.manifest
 				manifest.baseURL = new URL(root.xmlns::baseURL.text());
 			}
 			
-			//Media	
+			// Media	
 			
 			var bitrateMissing:Boolean = false;
 			
@@ -110,21 +111,21 @@ package org.osmf.manifest
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_BITRATE_MISSING));
 			}
 								
-			//DRM Metadata	
+			// DRM Metadata	
 			
 			for each (var data:XML in root.xmlns::drmMetadata)
 			{
 				parseDRMMetadata(data, manifest.media);
 			}	
 			
-			//Bootstrap	
+			// Bootstrap	
 			
 			for each (var info:XML in root.xmlns::bootstrapInfo)
 			{
 				parseBootstrapInfo(info, manifest.media);
 			}	
 			
-			//Required if base URL is omitted from Manifest
+			// Required if base URL is omitted from Manifest
 			generateRTMPBaseURL(manifest);
 									
 			return manifest;
@@ -138,7 +139,7 @@ package org.osmf.manifest
 			{
 				media.url = new URL(value.@url);
 			}
-			else  //Raise parse error
+			else  // Raise parse error
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));
 			}
@@ -180,7 +181,6 @@ package org.osmf.manifest
 		
 		private function parseDRMMetadata(value:XML, allMedia:Vector.<Media>):void
 		{
-			
 			var id:String = null;
 			var url:URL = null;
 			var data:ByteArray;
@@ -214,10 +214,9 @@ package org.osmf.manifest
 					else
 					{
 						media.drmMetadata = data;
-					}					
-				}						
-			}	
-									
+					}
+				}
+			}
 		}		
 		
 		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>):void
@@ -232,7 +231,7 @@ package org.osmf.manifest
 			{
 				profile = value.@profile;
 			}
-			else  //Raise parse error
+			else  // Raise parse error
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_PROFILE_MISSING));
 			}
@@ -293,18 +292,40 @@ package org.osmf.manifest
 		}
 		
 		/**
-		 * Generates an MediaResourceBase for the given manifest. 
+		 * Generates a MediaResourceBase for the given manifest. 
 		 */ 		
 		public function createResource(value:Manifest, manifestLocation:URL):MediaResourceBase
 		{			
 			var drmFacet:KeyValueFacet;
 			var resource:MediaResourceBase;
-					
+			var media:Media;
+			var serverBaseURLs:Vector.<String>
 			var url:URL;
-						
-			if(value.media.length == 1)  //Single Stream/Progressive Resource
-			{									
-				url = value.media[0].url;
+			
+			var cleanedPath:String = "/" + manifestLocation.path;
+			cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/"));
+			var manifestFolder:String = manifestLocation.protocol + "://" +  manifestLocation.host + (manifestLocation.port != "" ? ":" + manifestLocation.port : "") + cleanedPath;
+			
+			if (value.media.length == 1)  // Single Stream/Progressive Resource
+			{
+				media = value.media[0] as Media;
+				url = media.url;
+				
+				var baseURLString:String = null;
+				if (url.absolute)
+				{
+					// The server base URL needs to be extracted from the media's
+					// URL.  Note that we assume it's the same for all media.
+					baseURLString = media.url.rawUrl.substr(0, media.url.rawUrl.lastIndexOf("/"));
+				}
+				else if (value.baseURL != null)
+				{
+					baseURLString = value.baseURL.rawUrl;
+				}
+				else
+				{
+					baseURLString = manifestFolder;
+				}
 				
 				if (url.absolute)
 				{
@@ -317,35 +338,50 @@ package org.osmf.manifest
 						resource = new URLResource(url);
 					}					
 				}				
-				else if (value.baseURL != null)	//Relative to Base URL					
+				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new URLResource(new FMSURL(value.baseURL.rawUrl + url.rawUrl));
+					resource = new URLResource(new FMSURL(value.baseURL.rawUrl + "/" + url.rawUrl));
 				}
-				else //Relative to f4m file  (no absolute or base urls or rtmp urls).
-				{					
-					var cleanedPath:String = "/" + manifestLocation.path;
-					cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/",0)+1);
-					var base:String = manifestLocation.protocol + "://" +  manifestLocation.host + (manifestLocation.port != "" ? ":" + manifestLocation.port : "") + cleanedPath;
-					resource = new URLResource(new URL(base + url.rawUrl));
+				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
+				{
+					resource = new URLResource(new URL(manifestFolder + "/" + url.rawUrl));
 				}
 				
-				if (Media(value.media[0]).drmMetadata != null)
+				if (media.bootstrapInfo	!= null ||
+					media.bootstrapInfoURL != null)
+				{
+					serverBaseURLs = new Vector.<String>();
+					serverBaseURLs.push(baseURLString);
+					
+					var bootstrapInfoURLString:String = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
+					if (media.bootstrapInfoURL != null &&
+						media.bootstrapInfoURL.absolute == false)
+					{
+						bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
+					}
+					resource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(bootstrapInfoURLString, media.bootstrapInfo, serverBaseURLs));
+				}
+
+				if (media.drmMetadata != null)
 				{
 					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), Media(value.media[0]).drmMetadata);
 					resource.metadata.addFacet(drmFacet);
-				}					
-			}				
-			else if(value.baseURL && NetStreamUtils.isRTMPStream(value.baseURL))//Dynamic Streaming
-			{	
-									
-				var baseURL:FMSURL = new FMSURL(value.baseURL.rawUrl);
-								
+				}
+			}
+			else if (value.media.length > 1) // Dynamic Streaming
+			{
+				var baseURL:URL = value.baseURL != null ? new FMSURL(value.baseURL.rawUrl) : new URL(manifestFolder);
+				
+				// TODO: MBR streams can be absolute (with no baseURL) or relative (with a baseURL).
+				// But we need to map them into the DynamicStreamingResource object model, which
+				// assumes the latter.  For now, we only support the latter input, but we should
+				// add support for the former (absolute URLs with no base URL).
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 								
-				for each (var media:Media in value.media)
+				for each (media in value.media)
 				{	
 					var stream:String;
 					
@@ -355,7 +391,7 @@ package org.osmf.manifest
 					}
 					else
 					{
-						stream = media.url.rawUrl
+						stream = media.url.rawUrl;
 					}					
 					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
@@ -368,12 +404,22 @@ package org.osmf.manifest
 						}						
 						drmFacet.addValue(new ObjectIdentifier(item), media.drmMetadata);	
 					}
+					
+					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.
+					// For now we assume they're all the same.
+					if (media.bootstrapInfo	!= null ||
+						media.bootstrapInfoURL != null)
+					{
+						serverBaseURLs = new Vector.<String>();
+						serverBaseURLs.push(baseURL.rawUrl);
+						dynResource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null, media.bootstrapInfo, serverBaseURLs));
+					}
 				}
 				resource = dynResource;
 			}
 			else if (value.baseURL == null)
 			{	
-				//This is a parse error, we need an rtmp url
+				// This is a parse error, we need an rtmp url
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.F4M_PARSE_MEDIA_URL_MISSING));					
 			}	
 			
@@ -384,7 +430,5 @@ package org.osmf.manifest
 			
 			return resource;
 		}
-
-
 	}
 }

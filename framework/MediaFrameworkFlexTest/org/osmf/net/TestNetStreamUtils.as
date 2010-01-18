@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net
 {
+	import __AS3__.vec.Vector;
+	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.MediaResourceBase;
@@ -28,6 +30,7 @@ package org.osmf.net
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
@@ -48,7 +51,7 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.LIVE)) == StreamType.LIVE);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource(new URL("rtmp://example.com"), StreamType.RECORDED)) == StreamType.RECORDED);
 		}
-		
+
 		public function testGetStreamNameFromURL():void
 		{
 			assertTrue(NetStreamUtils.getStreamNameFromURL(null) == "");
@@ -100,6 +103,14 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmpt://example.com"))) == true);
 			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmpte://example.com"))) == true);
 			assertTrue(NetStreamUtils.isStreamingResource(new DynamicStreamingResource(new URL("rtmps://example.com"))) == true);
+			
+			CONFIG::FLASH_10_1
+			{
+				var resource:URLResource = new URLResource(new URL("http://example.com"));
+				var serverBaseURLs:Vector.<String> = new Vector.<String>();
+				resource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet("http://example.com/abstURL", null, serverBaseURLs));
+				assertTrue(NetStreamUtils.isStreamingResource(resource));
+			}
 		}
 		
 		public function testGetPlayArgsForResource():void

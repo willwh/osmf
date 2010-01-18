@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -14,36 +14,33 @@
 *  under the License.
 *   
 *  
-*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
-*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
-*  Technologies, Inc. All Rights Reserved. 
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
 *  
-*  Contributor(s): Adobe Systems Incorporated.
-* 
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.httpstreaming
 {
 	import flash.events.NetStatusEvent;
 	
-	import org.osmf.events.DynamicStreamEvent;
+	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.utils.OSMFStrings;
-
+	
 	[ExcludeClass]
 	
 	/**
 	 * @private
-	 * 
-	 * The NetStreamDynamicStreamTrait class extends DynamicStreamTrait for NetStream-based
-	 * dynamic streaming.
-	 */   
-	public class NetStreamDynamicStreamTrait extends DynamicStreamTrait
+	 **/
+	public class HTTPStreamingNetStreamDynamicStreamTrait extends DynamicStreamTrait
 	{
 		/**
 		 * Constructor.
 		 * 
-		 * @param netStream The DynamicNetStream object the class will work with.
+		 * @param netStream The HTTPNetStream object the class will work with.
 		 * @param dsResource The DynamicStreamingResource the class will use.
 		 *  
 		 *  @langversion 3.0
@@ -51,17 +48,20 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetStreamDynamicStreamTrait(netStream:DynamicNetStream, dsResource:DynamicStreamingResource)
+		public function HTTPStreamingNetStreamDynamicStreamTrait(netStream:HTTPNetStream, dsResource:DynamicStreamingResource)
 		{
-			super(netStream.autoSwitch, netStream.renderingIndex, dsResource.streamItems.length);	
+			super(false, 0, dsResource.streamItems.length);	
 			
 			this.netStream = netStream;
 			this.dsResource = dsResource;
-									
+			
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			netStream.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+			
+			autoSwitch = !netStream.manualSwitchMode;
+			setNumDynamicStreams(dsResource.streamItems.length);
 		}
-		
+				
 		/**
 		 * @private
 		 */
@@ -74,13 +74,21 @@ package org.osmf.net.dynamicstreaming
 
 			return dsResource.streamItems[index].bitrate;
 		}	
-				
+		
+		/**
+		 * @private
+		 **/
+		override protected function autoSwitchChangeStart(value:Boolean):void
+		{
+			netStream.manualSwitchMode = !value;
+		}
+
 		/**
 		 * @private
 		 */
 		override protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
 		{
-			if (newSwitching && !netStreamIsSwitching)
+			if (newSwitching && !inSetSwitching)
 			{
 				// Keep track of the target index, we don't want to begin
 				// the switch now since our switching state won't be
@@ -96,69 +104,45 @@ package org.osmf.net.dynamicstreaming
 		{
 			super.switchingChangeEnd(index, detail);
 			
-			if (switching && !netStreamIsSwitching)
+			if (switching && !inSetSwitching)
 			{
-				netStream.switchTo(indexToSwitchTo);
+				// TODO: Use play2() API.
+				netStream.qualityLevel = indexToSwitchTo;
+				
+				setCurrentIndex(indexToSwitchTo);
 			}
 		}
-			
-		/**
-		 * @private
-		 */
-		override protected function autoSwitchChangeStart(value:Boolean):void
-		{
-			netStream.autoSwitch = value;
-		}
 		
-		/**
-		 * @private
-		 */ 
-		override protected function maxAllowedIndexChangeStart(value:int):void
-		{
-			netStream.maxAllowedIndex = value;
-		}
-						
 		private function onNetStatus(event:NetStatusEvent):void
-		{			
-			if (switching)
-			{
-				switch (event.info.code) 
-				{
-					case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
-						setSwitching(false, currentIndex);					
-						break;
-				}
-			}			
-		}
-		
-		private function onNetStreamSwitchingChange(event:DynamicStreamEvent):void
 		{
-			if (event.type == DynamicStreamEvent.SWITCHING_CHANGE)
+			switch (event.info.code)
 			{
-				// When a switch finishes, make sure our current index and switching
-				// state reflect the changes to the NetStream.
-				if (event.switching == false)
-				{
-					setCurrentIndex(netStream.renderingIndex);
-					setSwitching(false, netStream.renderingIndex);
-				}
-				else
-				{
+				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					// This switch is driven by the NetStream, we set a member
 					// variable so that we don't assume it's being requested by
 					// the client (and thus trigger a second switch).
-					netStreamIsSwitching = true;
+					inSetSwitching = true;
 					
-					// TODO: Fix the index, this is the wrong value.
-					setSwitching(true, netStream.renderingIndex);
+					setSwitching(true, netStream.qualityLevel);
 					
-					netStreamIsSwitching = false;
-				}
+					inSetSwitching = false;
+					
 			}
-		}				
+		}
 		
-		private var netStream:DynamicNetStream;
-		private var netStreamIsSwitching:Boolean;
+		private function onPlayStatus(event:Object):void
+		{
+			if (event.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				// When a switch finishes, make sure our current index and switching
+				// state reflect the changes to the NetStream.
+				setCurrentIndex(netStream.qualityLevel);
+				setSwitching(false, netStream.qualityLevel);
+			}
+		}
+
+		private var netStream:HTTPNetStream;
+		private var inSetSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
 		private var indexToSwitchTo:int;	
 	}
