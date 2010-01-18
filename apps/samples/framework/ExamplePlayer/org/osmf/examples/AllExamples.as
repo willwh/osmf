@@ -382,6 +382,9 @@ package org.osmf.examples
 				  	)
 				);
 
+			/* This example requires a local video file to be present.  To run this,
+			uncomment this section and set a valid path for LOCAL_PROGRESSIVE.
+			
 			examples.push
 				( new Example
 					( 	"Local Video"
@@ -392,7 +395,7 @@ package org.osmf.examples
 				  	   	} 
 				  	)
 				);
-
+			*/
 			examples.push
 				( new Example
 					( 	"Poster Frame"
