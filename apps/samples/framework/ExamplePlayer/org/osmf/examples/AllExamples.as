@@ -221,7 +221,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a streaming audio file using AudioElement and NetLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM)));
+							return new AudioElement(new NetLoader(), new URLResource(new URL(REMOTE_AUDIO_STREAM)));
 				  	   	}
 				  	)
 				);
@@ -874,6 +874,7 @@ package org.osmf.examples
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
+		private static const REMOTE_AUDIO_STREAM:String 		= "rtmp://cp67126.edgefcs.net/ondemand/mp3:mediapm/strobe/content/test/train_1500";
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
 		private static const REMOTE_IMAGE:String 				= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
