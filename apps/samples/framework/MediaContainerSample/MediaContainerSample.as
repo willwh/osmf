@@ -31,7 +31,7 @@ package
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.containers.RegionGateway;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.LayoutUtils;
@@ -46,9 +46,9 @@ package
 	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
-	public class RegionsSample extends Sprite
+	public class MediaContainerSample extends Sprite
 	{
-		public function RegionsSample()
+		public function MediaContainerSample()
 		{
 			// Setup the Flash stage:
 			
@@ -94,76 +94,76 @@ package
 			
 			// Consruct 3 regions:
 
-			var bannerRegion:RegionGateway = new RegionGateway();
-			LayoutUtils.setAbsoluteLayout(bannerRegion.metadata, 600, 70);
-			bannerRegion.backgroundColor = 0xFF0000;
-			bannerRegion.backgroundAlpha = .2;
-			addChild(bannerRegion);
+			var bannerContainer:MediaContainer = new MediaContainer();
+			LayoutUtils.setAbsoluteLayout(bannerContainer.metadata, 600, 70);
+			bannerContainer.backgroundColor = 0xFF0000;
+			bannerContainer.backgroundAlpha = .2;
+			addChild(bannerContainer);
 			
-			var mainRegion:RegionGateway = new RegionGateway();
-			LayoutUtils.setAbsoluteLayout(mainRegion.metadata, 600, 400);
-			mainRegion.backgroundColor = 0xFFFFFF;
-			mainRegion.backgroundAlpha = .2;
-			mainRegion.y = 80;
-			addChild(mainRegion);
+			var mainContainer:MediaContainer = new MediaContainer();
+			LayoutUtils.setAbsoluteLayout(mainContainer.metadata, 600, 400);
+			mainContainer.backgroundColor = 0xFFFFFF;
+			mainContainer.backgroundAlpha = .2;
+			mainContainer.y = 80;
+			addChild(mainContainer);
 			
-			var skyScraperRegion:RegionGateway = new RegionGateway();
-			LayoutUtils.setAbsoluteLayout(skyScraperRegion.metadata, 120, 600);
-			skyScraperRegion.backgroundColor = 0xFF00;
-			skyScraperRegion.backgroundAlpha = .2;
-			skyScraperRegion.x = 610;
-			skyScraperRegion.y = 10;
-			addChild(skyScraperRegion);
+			var skyScraperContainer:MediaContainer = new MediaContainer();
+			LayoutUtils.setAbsoluteLayout(skyScraperContainer.metadata, 120, 600);
+			skyScraperContainer.backgroundColor = 0xFF00;
+			skyScraperContainer.backgroundAlpha = .2;
+			skyScraperContainer.x = 610;
+			skyScraperContainer.y = 10;
+			addChild(skyScraperContainer);
 			
 			// DEBUG: add id's to the elements at hand:
-			MetadataUtils.setElementId(mainRegion.metadata, "mainRegion");
-			MetadataUtils.setElementId(bannerRegion.metadata, "bannerRegion");
-			MetadataUtils.setElementId(skyScraperRegion.metadata, "skyScraperRegion");
+			MetadataUtils.setElementId(mainContainer.metadata, "mainContainer");
+			MetadataUtils.setElementId(bannerContainer.metadata, "bannerContainer");
+			MetadataUtils.setElementId(skyScraperContainer.metadata, "skyScraperContainer");
 			
 			// Bind media elements to their target regions:
 			
-			banners.container = bannerRegion;
-			mainContent.container = mainRegion;
-			skyScraper.container = skyScraperRegion; 
+			bannerContainer.addMediaElement(banners);
+			mainContainer.addMediaElement(mainContent);
+			skyScraperContainer.addMediaElement(skyScraper); 
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will
 			// automatically start its loading and playback:
 			
 			var player:MediaPlayer = new MediaPlayer();
-			player.element = rootElement;
+			player.media = rootElement;
 			
 			// Next, to make things more interesting by adding some interactivity:
 			// Let's create another region, at the bottom of the main content. Now,
 			// if we click the top banner, let's have it moved to this region, and
 			// vice-versa:
 			
-			var bottomBannerRegion:RegionGateway = new RegionGateway();
-			LayoutUtils.setAbsoluteLayout(bottomBannerRegion.metadata, 600, 70);
-			bottomBannerRegion.backgroundColor = 0xFF;
-			bottomBannerRegion.backgroundAlpha = .2;
-			bottomBannerRegion.y = 490;
-			addChild(bottomBannerRegion);
+			var bottomBannerContainer:MediaContainer = new MediaContainer();
+			LayoutUtils.setAbsoluteLayout(bottomBannerContainer.metadata, 600, 70);
+			bottomBannerContainer.backgroundColor = 0xFF;
+			bottomBannerContainer.backgroundAlpha = .2;
+			bottomBannerContainer.y = 490;
+			addChild(bottomBannerContainer);
 			
-			bannerRegion.addEventListener
+			bannerContainer.addEventListener
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						banners.container = bottomBannerRegion;		
+						bottomBannerContainer.addMediaElement(banners);		
 					}
 				);
 				
-			bottomBannerRegion.addEventListener
+			bottomBannerContainer.addEventListener
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void
 					{
-						banners.container = bannerRegion;		
+						bannerContainer.addMediaElement(banners);		
 					}
 				);
 				
 			// Let's link to the IAB site on the sky-scraper being clicked:
 			
-			skyScraperRegion.addEventListener
+			skyScraperContainer.addEventListener
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void	
 					{
