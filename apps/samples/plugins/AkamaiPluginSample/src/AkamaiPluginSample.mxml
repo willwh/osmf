@@ -29,14 +29,16 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.net.StreamType;
+			import org.osmf.net.StreamingURLResource;
+			import mx.controls.Alert;
+			import org.osmf.media.DefaultMediaFactory;
 			import org.osmf.plugin.PluginInfoResource;
 			import org.osmf.traits.LoadTrait;
-			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
 			
 			import mx.events.DropdownEvent;
 			
 			import org.osmf.events.*;
-			import org.osmf.mast.MASTPluginInfo;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.media.MediaElement;
@@ -52,23 +54,27 @@
 			import org.osmf.video.VideoElement;
 			
 			private var pluginManager:PluginManager;
-			private var mediaFactory:MediaFactory;
+			private var mediaFactory:DefaultMediaFactory;
 			private var pluginElement:MediaElement;
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
+			private var pluginResourceMap:Dictionary;
 		
+			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+			import org.osmf.mast.MASTPluginInfo;
+			import org.osmf.smil.SMILPluginInfo;
 			
-			private static const AKAMAI_BASIC_STREAMING_PLUGIN_URL:String = "http://mediapm.edgesuite.net/osmf/swf/AkamaiBasicStreamingPlugin.swf";
-			private static const MAST_PLUGIN_URL:String = 					"http://mediapm.edgesuite.net/osmf/swf/MASTPlugin.swf";
-			
-			private static const DEFAULT_PROGRESS_DELAY:uint = 100;					
-
+			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
+			private static const MAX_VIDEO_WIDTH:int = 640;
+			private static const MAX_VIDEO_HEIGHT:int = 360;
 			private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";	
 			private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";
+			private static const SMIL_PLUGIN_INFOCLASS:String = "org.osmf.smil.SMILPluginInfo";
 			
 			// We need these or getDefinitionByName will fail:
-			private static const loadTestRef:AkamaiBasicStreamingPluginInfo = null;
-			private static const loadTestRef2:MASTPluginInfo = null;
+			private static const forceReferenceAkamai:AkamaiBasicStreamingPluginInfo = null;
+			private static const forceReferenceMAST:MASTPluginInfo = null;
+			private static const forceReferenceSMIL:SMILPluginInfo = null;
 
 			// ------ TEST CONTENT ------
 			// FLV
@@ -107,14 +113,18 @@
 			// MAST documents
 			private static const MAST_URL_POSTROLL:String 		= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemend.xml";
 			private static const MAST_URL_PREROLL:String 		= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemstart.xml";
+			
+			// SMIL documents
+			private static const SMIL_TEST_1:String				= "http://mediapm.edgesuite.net/osmf/content/test/smil/elephants_dream.smil";
+			private static const SMIL_TEST_2:String				= "http://www.streamflashhd.com/video/train.smil";
+			private static const SMIL_TEST_3:String				= "http://mediapm.edgesuite.net/osmf/content/test/smil/sweet.smil";
+			private static const SMIL_TEST_4:String				= "http://mediapm.edgesuite.net/osmf/content/test/smil/seq-test.smil";
 					
 			[Bindable]
-			private var plugins:Array = [	{label:"Akamai Basic Streaming Plugin (Dynamic)", url:AKAMAI_BASIC_STREAMING_PLUGIN_URL},
-										  	{label:"Akamai Basic Streaming Plugin (Static)", url:AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS},
-										  	{label:"MAST plugin (Dynamic)", url:MAST_PLUGIN_URL},
-										  	{label:"MAST plugin (Static)", url:MAST_PLUGIN_INFOCLASS}
+			private var plugins:Array = [	{label:"Akamai Basic Streaming Plugin", url:AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS},
+										  	{label:"MAST plugin", url:MAST_PLUGIN_INFOCLASS},
+										  	{label:"SMIL plugin", url:SMIL_PLUGIN_INFOCLASS}
 										];
-				
 			
 			[Bindable]
 			private var streams:Array = [ 	{label:"Progressive FLV", url:PROGRESSIVE_FLV},
@@ -133,14 +143,18 @@
 											{label:"Progressive MOV", url:PROGRESSIVE_MOV},
 											{label:"Progressive MOV (https)", url:PROGRESSIVE_MOV_SSL},
 											{label:"Streaming MOV", url:STREAMING_MOV},
-											{label:"Streaming Audio", url:STREAMING_AUDIO}
+											{label:"Streaming Audio", url:STREAMING_AUDIO},
+											{label:"RTMP Dynamic Streaming 1 (SMIL)", url:SMIL_TEST_1},
+											{label:"RTMP Dynamic Streaming 2 (SMIL)", url:SMIL_TEST_2},
+											{label:"RTMP Dynamic Streaming 3 (SMIL)", url:SMIL_TEST_3},
+											{label:"SerialElement (SMIL)", url:SMIL_TEST_4},
 										];
 										
 			private var _currentInfoLineNum:int;											
 			
 			private function initApp():void
 			{	
-				mediaFactory = new MediaFactory();
+				mediaFactory = new DefaultMediaFactory();
 				pluginManager = new PluginManager(mediaFactory);
 				urlInput.text = plugins[0].url;
 				mediaInput.text = streams[0].url;
@@ -157,43 +171,64 @@
 				
 				clearInfoText();
 			}
-						
+			
+			private function isLiveStream(url:String):Boolean
+			{
+				var isLive:Boolean = false;
+				
+				if (url == REMOTE_LIVE)
+				{
+					isLive = true;
+				}
+				
+				return isLive;
+			}
+			
+			private function isMASTPluginLoaded():Boolean
+			{
+				var isLoaded:Boolean = false;
+				
+				if (pluginResourceMap && pluginResourceMap[MAST_PLUGIN_INFOCLASS] != null)
+				{
+					isLoaded = true;
+				}
+				
+				return isLoaded;
+			}
+			
 			private function loadMedia(url:String):void
 			{	
-				var resource:URLResource = new URLResource(new FMSURL(url));
-			
-				// Assign to the resource the metadata that indicates that it should have a MAST
-				// document applied (and include the URL of that MAST document).
-				var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.akamai.com/mast"));
-				kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_PREROLL);
-				resource.metadata.addFacet(kvFacet);
+				var resource:URLResource = new StreamingURLResource(new FMSURL(url), 
+																	isLiveStream(url) ? StreamType.LIVE : StreamType.RECORDED); 
+				if (isMASTPluginLoaded())
+				{
+					// Assign to the resource the metadata that indicates that it should have a MAST
+					// document applied (and include the URL of that MAST document).
+					var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.akamai.com/mast"));
+					kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_PREROLL);
+					resource.metadata.addFacet(kvFacet);
+				}
 				
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 				
 				if (mediaElement == null)
 				{
-					var netLoader:NetLoader = new NetLoader();
-					
-					// Add a default VideoElement
-					mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
-					mediaElement = mediaFactory.createMediaElement(resource);
+					Alert.show("No MediaInfo was found for the media. Did you load the proper plugin?");
 				}
-				
-				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
-				// when ISeekable is added
-				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				
-				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
-								
-				mediaPlayerWrapper.element = mediaElement;
-				enablePlayerControls(true);
+				else
+				{
+					// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
+					// when ISeekable is added
+					mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd, false, 0, true);
+					mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove, false, 0, true);
+					
+					mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
+									
+					mediaPlayerWrapper.element = mediaElement;
+					enablePlayerControls(true);
+				}
 			}
 			
-			private function createVideoElement():MediaElement
-			{
-				return new VideoElement(new NetLoader());
-			}
-						
 			private function unloadMedia():void
 			{
 				var mediaElement:MediaElement = mediaPlayerWrapper.element;
@@ -209,9 +244,10 @@
 				enablePlayerControls(false);
 			}			
 			
-			private function loadPlugin(source:String, load:Boolean=true):void
+			private function loadPlugin(source:String):void
 			{
 				var pluginResource:MediaResourceBase;
+				
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// This is a URL, create a URLResource
@@ -223,15 +259,24 @@
 					var pluginInfoRef:Class = flash.utils.getDefinitionByName(source) as Class;
 					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
+
+				if (pluginResourceMap == null)
+				{
+					pluginResourceMap = new Dictionary();
+				}				
 				
-				if (load)
+				pluginResourceMap[source] = pluginResource;
+				loadPluginFromResource(pluginResource);
+			}
+			
+			private function unloadPlugin(source:String):void
+			{
+				if (pluginResourceMap != null)
 				{
-					loadPluginFromResource(pluginResource);
-				}
-				else
-				{
+					var pluginResource:MediaResourceBase = pluginResourceMap[source];
 					unloadPluginFromResource(pluginResource);
-				}			
+					delete pluginResourceMap[source];
+				}
 			}
 			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
@@ -247,30 +292,32 @@
 				pluginManager.unloadPlugin(pluginResource);
 			}
 			
-			private function unloadPlugin(source:String):void
-			{
-				loadPlugin(source, false);
-			}
-			
 			private function onPluginLoaded(event:PluginLoadEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
-								
-				appendInfoText("Plugin LOADED: " + selection.label); 
+				appendInfoText("Plugin LOADED: " + selection.label);
+				removePluginManagerEventListeners();
 			}
 			
 			private function onPluginLoadFailed(event:PluginLoadEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
-
 				appendInfoText("Plugin LOAD FAILED: " + selection.label);
+				removePluginManagerEventListeners();
 			}
 
 			private function onPluginUnloaded(event:PluginLoadEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
-				
 				appendInfoText("Plugin UNLOADED: " + selection.label);
+				removePluginManagerEventListeners();
+			}
+			
+			private function removePluginManagerEventListeners():void
+			{
+				pluginManager.removeEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
+				pluginManager.removeEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				pluginManager.removeEventListener(PluginLoadEvent.PLUGIN_UNLOADED, onPluginUnloaded);
 			}
 			
 			private function pluginComboBoxChanged(event:DropdownEvent):void
@@ -291,14 +338,34 @@
 			
 			private function onMediaSizeChange(event:DisplayObjectEvent):void 
 			{
-				mediaPlayerWrapper.width = event.newWidth;
-				mediaPlayerWrapper.height = event.newHeight;
+				var width:int = event.newWidth;
+				var height:int = event.newHeight;
+				
+				// Scale to native or smaller
+				if (width > MAX_VIDEO_WIDTH || height > MAX_VIDEO_HEIGHT)
+				{
+					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
+					{
+						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
+						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+					}
+					else
+					{
+						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+					}
+				}
+				else if (width > 0 && height > 0)
+				{
+					mediaPlayerWrapper.width = event.newWidth;
+					mediaPlayerWrapper.height = event.newHeight;			
+				}
 			}
 			
 			private function onDurationChange(event:TimeEvent):void
 			{
 				seekBar.maximum = event.time;
-				lblDuration.text = timeCode(event.time);
+				lblDuration.text = TimeUtil.formatAsTimeCode(event.time);
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
@@ -306,7 +373,7 @@
 				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
-					lblPlayhead.text = timeCode(event.time);
+					lblPlayhead.text = TimeUtil.formatAsTimeCode(event.time);
 				}
 			}
 			
@@ -338,6 +405,16 @@
    				}	
    			}
    			
+   			private function onTraitRemove(event:MediaElementEvent):void
+   			{
+   				switch (event.traitType)
+   				{
+   					case MediaTraitType.SEEK:
+   						seekBar.enabled = seekBar.visible = false;
+   						break;
+   				}	
+   			}
+
    			private function appendInfoText(...args):void
    			{
    				var lineNum:int = _currentInfoLineNum++;
@@ -365,20 +442,6 @@
    				}
    				taInfo.text += taInfo.text + "error ID="+event.error.errorID+" message="+event.error.message;
    			}
-   			
-			private function timeCode(sec:Number):String 
-			{
-				var h:Number = Math.floor(sec/3600);
-				h = isNaN(h) ? 0 : h;
-				
-				var m:Number = Math.floor((sec%3600)/60);
-				m = isNaN(m) ? 0 : m;
-				
-				var s:Number = Math.floor((sec%3600)%60);
-				s = isNaN(s) ? 0 : s;
-				
-				return (h == 0 ? "":(h<10 ? "0"+h.toString()+":" : h.toString()+":"))+(m<10 ? "0"+m.toString() : m.toString())+":"+(s<10 ? "0"+s.toString() : s.toString());
-			}
 
 			private function onClickPlayBtn():void
 			{
@@ -396,7 +459,8 @@
 				
 			private function enablePlayerControls(enable:Boolean=true):void
 			{
-				playBtn.enabled = seekBar.enabled = enable;
+				playBtn.enabled = enable;
+				mediaPlayerContainer.alpha = (enable ? 1.0 : .33);
 			}
 		]]>
 	</mx:Script>
@@ -426,10 +490,11 @@
 
 		<mx:Spacer height="5" />
 		<mx:HBox>
-			<mx:VBox paddingLeft="20">
+			<mx:VBox id="mediaPlayerContainer" paddingLeft="20" alpha=".33">
 				<mx:Spacer width="10" />
-			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="320" height="240"  />
-	    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" enabled="false" />
+			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="{MAX_VIDEO_WIDTH}" height="{MAX_VIDEO_HEIGHT}"  />
+	    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
+	    			enabled="false" visible="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
 	    			<mx:Label text="Position: " />
 					<mx:Label id="lblPlayhead" width="100" styleName="timeCode" />
