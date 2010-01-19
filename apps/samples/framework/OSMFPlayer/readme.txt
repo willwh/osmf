@@ -1,4 +1,4 @@
-The OSMFPlayer sample defines an application that can be embedded on a webpage in order to play back media. It contains a control bar that manages the various supported aspects of the media.
+The OSMFPlayer sample defines an application that can be embedded on a web page in order to play back media. It contains a control bar that manages the various supported aspects of the media.
 
 Features:
 
@@ -13,7 +13,19 @@ Features:
 * Full screen (toggleable),
 * Background fill (backgroundColor parameter can be passed to the SWF),
 * Debug support (see WebPlayerDebugConsole project for more info),
-* Media support for video (streaming, progressive, mbr, live), audio (progressive, streaming), images, SWF, and F4M.
+
+By leveraging the DefaultMediaFactory class, the player can distill the following media element types from the provided input URL:
+
+* VideoElement, using either:
+	- NetLoader (streaming or progressive)
+	- DynamicStreamingNetLoader (MBR streaming)
+	- HTTPStreamingNetLoader (HTTP streaming)
+	- F4MLoader (Flash Media Manifest files)
+* SoundElement, using either:
+	- SoundLoader (progressive)
+	- NetLoader (streaming)
+* ImageElement
+* SWFElement
 
 Usage:
 
