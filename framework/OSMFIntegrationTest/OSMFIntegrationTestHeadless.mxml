@@ -24,8 +24,8 @@
 -->
 <mx:Application
 	xmlns:mx		="http://www.adobe.com/2006/mxml"
-	layout			="absolute"
-	creationComplete="onComplete()"
+	layout		="absolute"
+	creationComplete	="onComplete()"
 	>
 	
 	<mx:Script>
@@ -58,7 +58,7 @@
 				}
 				
 				var runner:JUnitTestRunner = new JUnitTestRunner();
-				runner.run(new MediaFrameworkIntegrationTests(), onTestComplete);
+				runner.run(new OSMFIntegrationTests(), onTestComplete);
 			}
 
 			private function onTestComplete():void

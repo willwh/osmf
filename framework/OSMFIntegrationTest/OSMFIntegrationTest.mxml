@@ -25,8 +25,8 @@
 <mx:Application
 	xmlns:mx		="http://www.adobe.com/2006/mxml"
 	xmlns:flexunit	="flexunit.flexui.*"
-	layout			="absolute"
-	creationComplete="runTests()"
+	layout		="absolute"
+	creationComplete	="runTests()"
 	>
 	
 	<mx:Script>
@@ -53,7 +53,7 @@
 				{
 					IntegrationTestUtils.integrationTestAssetsRoot = IntegrationTestUtils.INTEGRATION_TEST_ASSET_ROOT;
 				}
-				testRunner.test = new MediaFrameworkIntegrationTests();
+				testRunner.test = new OSMFIntegrationTests();
 				testRunner.startTest();
 			}
 		]]>

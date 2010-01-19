@@ -29,9 +29,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import com.allurent.coverage.runtime.CoverageManager;
-	
-			import org.osmf.MediaFrameworkTests;
+			import org.osmf.OSMFTests;
 			import flexunit.framework.TestSuite;
 			import flexunit.junit.JUnitTestRunner;
 		
@@ -40,12 +38,11 @@
 			private function onComplete():void
 			{
 				var runner:JUnitTestRunner = new JUnitTestRunner();
-				runner.run(new MediaFrameworkTests(), onTestComplete);
+				runner.run(new OSMFTests(), onTestComplete);
 			}
 		
 			private function onTestComplete():void
 			{
-				CoverageManager.exit();
 				fscommand("quit");
 			}
 		]]>

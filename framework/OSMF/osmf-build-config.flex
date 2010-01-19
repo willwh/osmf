@@ -1,9 +1,9 @@
 <flex-config>
 
    <compiler>
-      <!-- Turn on flexcov instrumentation of the swf. -->
-      <coverage>true</coverage>
-
+      <!-- Turn on generatation of accessible swfs. -->
+      <accessible>false</accessible>
+      
       <define>
         <name>CONFIG::LOGGING</name>
         <value>false</value>
@@ -13,9 +13,6 @@
         <name>CONFIG::FLASH_10_1</name>
         <value>false</value>
       </define>
-      
-      <!-- Turn on generatation of accessible swfs. -->
-      <accessible>false</accessible>
       
       <!-- Specifies the locales for internationalization. -->
       <locale>
@@ -328,8 +325,8 @@
    
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFramework</title>
-      <description>MediaFramework</description>
+      <title>OSMF</title>
+      <description>OSMF</description>
       <publisher>Wei Zhang</publisher>
       <creator>Wei Zhang</creator>
       <language>EN</language>

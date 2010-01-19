@@ -44,9 +44,9 @@ package org.osmf
 	import org.osmf.net.TestManifestLoader;
 	
 
-	public class MediaFrameworkIntegrationTests extends TestSuite
+	public class OSMFIntegrationTests extends TestSuite
 	{
-		public function MediaFrameworkIntegrationTests(param:Object=null)
+		public function OSMFIntegrationTests(param:Object=null)
 		{
 			super(param);
 			

@@ -25,8 +25,8 @@
 <strobeUnit:StrobeUnitTestApp
 	xmlns:mx			="http://www.adobe.com/2006/mxml"
 	xmlns:strobeUnit	="com.adobe.strobe.strobeunit.*"
-	suite				="{new MediaFrameworkTests()}" 
-	logName				="MediaFrameworkAirTest"
+	suite				="{new OSMFTests()}" 
+	logName				="OSMFAIRTest"
 	>
 	<mx:Script>
 		<![CDATA[

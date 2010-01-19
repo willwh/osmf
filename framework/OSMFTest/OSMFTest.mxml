@@ -37,7 +37,7 @@
 			
 			private function runTests():void
 			{
-				testRunner.test = new MediaFrameworkTests();
+				testRunner.test = new OSMFTests();
 				testRunner.startTest();
 			}
 		]]>

@@ -325,8 +325,8 @@
    
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFramework</title>
-      <description>MediaFramework</description>
+      <title>OSMF</title>
+      <description>OSMF</description>
       <publisher>Wei Zhang</publisher>
       <creator>Wei Zhang</creator>
       <language>EN</language>

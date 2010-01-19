@@ -1,6 +1,7 @@
 <flex-config>
 
    <compiler>
+
       <!-- Turn on generatation of accessible swfs. -->
       <accessible>false</accessible>
       
@@ -12,8 +13,8 @@
       <define>
         <name>CONFIG::FLASH_10_1</name>
         <value>false</value>
-      </define>
-      
+      </define>      
+
       <!-- Specifies the locales for internationalization. -->
       <locale>
           <locale-element>en_US</locale-element>
@@ -22,6 +23,7 @@
       <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
       <source-path>
          <path-element>.</path-element>
+         <path-element>../OSMFTest</path-element>
       </source-path>
  
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
@@ -59,10 +61,10 @@
       <library-path>
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>../../build/lib/MediaFramework.swc</path-element>
+         <path-element>../../build/unittests/libs/StrobeUnit.swc</path-element>
+         <path-element>../../build/lib/OSMF.swc</path-element>
          <path-element>../../build/lib/VAST.swc</path-element>
          <path-element>../../libs/adobe/FlexUnit/FlexUnit.swc</path-element>
-         <path-element>../../libs/adobe/FlexUnit/FlexUnitOptional.swc</path-element>
          <path-element>../../build/unittests/libs/NetMocker.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
@@ -324,10 +326,10 @@
 	 
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFrameworkTest</title>
-      <description>MediaFrameworkTest</description>
-      <publisher>Wei Zhang</publisher>
-      <creator>Wei Zhang</creator>
+      <title>OSMFAIRTest</title>
+      <description>OSMFAIRTest</description>
+      <publisher>Brian Riggs</publisher>
+      <creator>Brian Riggs</creator>
       <language>EN</language>
    </metadata>
    

@@ -13,7 +13,7 @@
         <name>CONFIG::FLASH_10_1</name>
         <value>false</value>
       </define>
-
+      
       <!-- Specifies the locales for internationalization. -->
       <locale>
           <locale-element>en_US</locale-element>
@@ -24,8 +24,8 @@
          <path-element>.</path-element>
       </source-path>
  
-      <!-- Allow the source-path to have path-elements which contain other path-elements -->
-      <allow-source-path-overlap>false</allow-source-path-overlap>
+	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
+	  <allow-source-path-overlap>false</allow-source-path-overlap>
       
       <!-- Run the AS3 compiler in a mode that detects legal but potentially incorrect -->
       <!-- code.                                                                       -->
@@ -59,12 +59,11 @@
       <library-path>
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-<!--
-         <path-element>../Libraries/corelib/corelib.swc</path-element>
-         <path-element>../Libraries/crypto/crypto.swc</path-element>
-         <path-element>../build/lib/Utils.swc</path-element>
-         <path-element>../build/lib/Core.swc</path-element>
--->
+         <path-element>../../build/lib/OSMF.swc</path-element>
+         <path-element>../../build/lib/VAST.swc</path-element>
+         <path-element>../../libs/adobe/FlexUnit/FlexUnit.swc</path-element>
+         <path-element>../../libs/adobe/FlexUnit/FlexUnitOptional.swc</path-element>
+         <path-element>../../build/unittests/libs/NetMocker.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
       </library-path>
@@ -322,14 +321,15 @@
 
    <!-- Enables SWFs to access the network. -->
    <use-network>true</use-network>
-   
+	 
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFramework</title>
-      <description>MediaFramework</description>
+      <title>OSMFTest</title>
+      <description>OSMFTest</description>
       <publisher>Wei Zhang</publisher>
       <creator>Wei Zhang</creator>
       <language>EN</language>
    </metadata>
-
+   
 </flex-config>
+

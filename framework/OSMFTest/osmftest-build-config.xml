@@ -1,9 +1,9 @@
 <flex-config>
 
    <compiler>
-      <!-- Turn on flexcov instrumentation of the swf. -->
-      <coverage>true</coverage>
-
+      <!-- Turn on generatation of accessible swfs. -->
+      <accessible>false</accessible>
+      
       <define>
         <name>CONFIG::LOGGING</name>
         <value>false</value>
@@ -13,9 +13,6 @@
         <name>CONFIG::FLASH_10_1</name>
         <value>false</value>
       </define>
-      
-      <!-- Turn on generatation of accessible swfs. -->
-      <accessible>false</accessible>
       
       <!-- Specifies the locales for internationalization. -->
       <locale>
@@ -62,7 +59,7 @@
       <library-path>
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
-         <path-element>../../build/lib/MediaFramework.swc</path-element>
+         <path-element>../../build/lib/OSMF.swc</path-element>
          <path-element>../../build/lib/VAST.swc</path-element>
          <path-element>../../libs/adobe/FlexUnit/FlexUnit.swc</path-element>
          <path-element>../../libs/adobe/FlexUnit/FlexUnitOptional.swc</path-element>
@@ -327,8 +324,8 @@
 	 
    <!-- Metadata added to SWFs via the SWF Metadata tag. -->
    <metadata>
-      <title>MediaFrameworkTest</title>
-      <description>MediaFrameworkTest</description>
+      <title>OSMFTest</title>
+      <description>OSMFTest</description>
       <publisher>Wei Zhang</publisher>
       <creator>Wei Zhang</creator>
       <language>EN</language>

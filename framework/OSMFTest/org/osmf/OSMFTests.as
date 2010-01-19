@@ -51,9 +51,9 @@ package org.osmf
 	import org.osmf.vast.parser.*;
 	import org.osmf.video.*;
 
-	public class MediaFrameworkTests extends TestSuite
+	public class OSMFTests extends TestSuite
 	{
-		public function MediaFrameworkTests(param:Object=null)
+		public function OSMFTests(param:Object=null)
 		{
 			super(param);
 			
