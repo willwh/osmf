@@ -134,6 +134,7 @@ package org.osmf.composition
 						( TraitAggregatorEvent.LISTENED_CHILD_CHANGE
 						, null
 						, null
+						, null
 						, oldListenedChild
 						, _listenedChild
 						)
