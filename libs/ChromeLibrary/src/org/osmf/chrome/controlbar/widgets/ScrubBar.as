@@ -50,25 +50,26 @@ package org.osmf.chrome.controlbar.widgets
 		private static var SCRUBBER_VERTICAL_OFFSET:Number = 8;
 		private static var SCRUBBER_START:Number = 50;
 		private static var SCRUBBER_END:Number = 260;
+		private static var TIME_LABELS_Y:Number = 5;
 		
 		public function ScrubBar(track:Class = null)
 		{
 			track ||= scrubBarTrackType;
 			
 			currentTime = Fonts.getDefaultTextField();
-			currentTime.height = 12;
+			currentTime.height = 20;
 			currentTime.width = 52;
 			currentTime.alpha = 0.4;
 			currentTime.x = 7;
-			currentTime.y = 6;
+			currentTime.y = TIME_LABELS_Y;
 			addChild(currentTime);
 			
 			remainingTime = Fonts.getDefaultTextField(TextFormatAlign.RIGHT);
-			remainingTime.height = 12;
+			remainingTime.height = 20;
 			remainingTime.width = 45;
 			remainingTime.alpha = 0.4;
 			remainingTime.x = 268;
-			remainingTime.y = 6;
+			remainingTime.y = TIME_LABELS_Y;
 			
 			addChild(remainingTime);
 			

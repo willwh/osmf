@@ -33,7 +33,7 @@ package org.osmf.chrome.controlbar.widgets
 		public function Label(width:Number = 52)
 		{
 			textField = Fonts.getDefaultTextField();
-			textField.height = 12;
+			textField.height = 20;
 			textField.width = width;
 			textField.alpha = 0.4;
 			textField.text = "";
