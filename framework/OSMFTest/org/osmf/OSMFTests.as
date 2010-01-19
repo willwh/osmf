@@ -39,6 +39,7 @@ package org.osmf
 	import org.osmf.net.*;
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.net.httpstreaming.f4f.*;
+	import org.osmf.net.httpstreaming.flv.*;
 	import org.osmf.plugin.*;
 	import org.osmf.proxies.*;
 	import org.osmf.swf.*;
@@ -57,12 +58,13 @@ package org.osmf
 		{
 			super(param);
 			
+//			addTestSuite(TestFLVTagAudio);
+
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 			
 			// Utils
 			//
-			
 			addTestSuite(TestBinarySearch);
 			addTestSuite(TestOSMFStrings);
 			addTestSuite(TestVersion);		
@@ -217,6 +219,7 @@ package org.osmf
 			addTestSuite(TestAdobeBootstrapBox);
 			addTestSuite(TestAdobeFragmentRunTable);
 			addTestSuite(TestAdobeSegmentRunTable);
+			addTestSuite(TestFLVHeader);
 
 			// Images & SWFs
 			//
