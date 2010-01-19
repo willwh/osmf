@@ -33,6 +33,8 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import mx.utils.Base64Decoder;
 	
+	import org.osmf.utils.TestConstants;
+	
 	public class TestBoxParser extends TestCase
 	{
 		override public function setUp():void
@@ -46,7 +48,7 @@ package org.osmf.net.httpstreaming.f4f
 		public function testGetBoxesWithABST():void
 		{
 			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(ABST_BOX_DATA);
+			decoder.decode(TestConstants.ABST_BOX_DATA);
 			var bytes:ByteArray = decoder.drain();
 
 			var parser:BoxParser = new BoxParser();
@@ -129,7 +131,7 @@ package org.osmf.net.httpstreaming.f4f
 		public function testGetBoxesWithAFRA():void
 		{
 			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(AFRA_BOX_DATA);
+			decoder.decode(TestConstants.AFRA_BOX_DATA);
 			var bytes:ByteArray = decoder.drain();
 
 			var parser:BoxParser = new BoxParser();
@@ -146,7 +148,7 @@ package org.osmf.net.httpstreaming.f4f
 		public function testReadFragmentRandomAccessBox():void
 		{
 			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(AFRA_BOX_DATA);
+			decoder.decode(TestConstants.AFRA_BOX_DATA);
 			var bytes:ByteArray = decoder.drain();
 
 			var parser:BoxParser = new BoxParser();
@@ -302,10 +304,7 @@ package org.osmf.net.httpstreaming.f4f
 		}
 		
 		private static const ASYNC_DELAY:Number = 5000;
-		
-		private static const ABST_BOX_DATA:String = "AAABGmFic3QAAAAAAAAADwAAAAPoAAAAAAAA7ekAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAAA8BAAAA1WFmcnQAAAAAAAAD6AAAAAAMAAAAAQAAAAAAAAAAAAARMAAAAAMAAAAAAAAiaAAADOQAAAAEAAAAAAAAL1AAABEwAAAABgAAAAAAAFG4AAAM5AAAAAcAAAAAAABeoAAAETAAAAAJAAAAAAAAgSoAAAyAAAAACgAAAAAAAI3OAAARMAAAAAsAAAAAAACfAwAADtgAAAAMAAAAAAAArd8AABEwAAAADQAAAAAAAL8TAAAM5AAAAA4AAAAAAADL+gAAETAAAAAPAAAAAAAA3S8AABDM";
-		private static const AFRA_BOX_DATA:String = "AAAB+WFmcmEAAAAA4AAAA+gAAAAAAAAADwAAAAAAAAAAAAAAAQAAAAEAAAAAAAofUgAAAAAAAAAAAAAAAAAAETQAAAABAAAAAgAAAAAAQCdbAAAAAAAAAAAAAAAAAAAiaAAAAAEAAAADAAAAAABy3ZgAAAAAAAAAAAAAAAAAAC9QAAAAAQAAAAQAAAAAAJdI4QAAAAAAAAAAAAAAAAAAQIQAAAABAAAABQAAAAAA0CltAAAAAAAAAAAAAAAAAABRuAAAAAEAAAAGAAAAAAECGTsAAAAAAAAAAAAAAAAAAF6gAAAAAQAAAAcAAAAAASF1lwAAAAAAAAAAAAAAAAAAb9QAAAABAAAACAAAAAABX6IMAAAAAAAAAAAAAAAAAACBKgAAAAEAAAAJAAAAAAGaRKgAAAAAAAAAAAAAAAAAAI3OAAAAAQAAAAoAAAAAAcAHowAAAAAAAAAAAAAAAAAAnwMAAAABAAAACwAAAAAB49KkAAAAAAAAAAAAAAAAAACt3wAAAAEAAAAMAAAAAAIYd80AAAAAAAAAAAAAAAAAAL8TAAAAAQAAAA0AAAAAAkrsbAAAAAAAAAAAAAAAAAAAy/oAAAABAAAADgAAAAACcR6jAAAAAAAAAAAAAAAAAADdLwAAAAEAAAAPAAAAAAKuC8cAAAAAAAAAAA==";
-		
+				
 		private var eventDispatcher:EventDispatcher;
 		private var base64Data:String;
 	}

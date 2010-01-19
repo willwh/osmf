@@ -27,12 +27,14 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import mx.utils.Base64Decoder;
 	
+	import org.osmf.utils.TestConstants;
+	
 	public class TestAdobeSegmentRunTable extends TestCase
 	{
 		override public function setUp():void
 		{
 			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(ABST_BOX_DATA);
+			decoder.decode(TestConstants.ABST_BOX_DATA);
 			var bytes:ByteArray = decoder.drain();
 
 			var parser:BoxParser = new BoxParser();
@@ -65,7 +67,5 @@ package org.osmf.net.httpstreaming.f4f
 		//
 		
 		private var asrt:AdobeSegmentRunTable;
-
-		private static const ABST_BOX_DATA:String = "AAABGmFic3QAAAAAAAAADwAAAAPoAAAAAAAA7ekAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAAA8BAAAA1WFmcnQAAAAAAAAD6AAAAAAMAAAAAQAAAAAAAAAAAAARMAAAAAMAAAAAAAAiaAAADOQAAAAEAAAAAAAAL1AAABEwAAAABgAAAAAAAFG4AAAM5AAAAAcAAAAAAABeoAAAETAAAAAJAAAAAAAAgSoAAAyAAAAACgAAAAAAAI3OAAARMAAAAAsAAAAAAACfAwAADtgAAAAMAAAAAAAArd8AABEwAAAADQAAAAAAAL8TAAAM5AAAAA4AAAAAAADL+gAAETAAAAAPAAAAAAAA3S8AABDM";
 	}
 }
