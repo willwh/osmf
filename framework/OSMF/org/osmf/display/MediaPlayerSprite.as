@@ -51,7 +51,7 @@ package org.osmf.display
 		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  Setting the element will set
          * as the element on the mediaPlayer, if mediaPlayer is not null.
 		 */
-		public function set element(value:MediaElement):void
+		public function set mediaElement(value:MediaElement):void
 		{
 			
 			if (_element != value)
@@ -72,7 +72,7 @@ package org.osmf.display
 			}
 		}
 		
-		public function get element():MediaElement
+		public function get mediaElement():MediaElement
 		{			
 			return _element;
 		}

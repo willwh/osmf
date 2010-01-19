@@ -40,16 +40,16 @@ package org.osmf.samples
 		
 		public function set element(value:MediaElement):void
 		{			
-			if (value != _playerSprite.element)
+			if (value != _playerSprite.mediaElement)
 			{
-				_playerSprite.element = value;
+				_playerSprite.mediaElement = value;
 				invalidateDisplayList();
 			}
 		}
 		
 		public function get element():MediaElement
 		{
-			return _playerSprite.element;
+			return _playerSprite.mediaElement;
 		}	
 		
 		[ChangeEvent('mediaPlayerChange')]

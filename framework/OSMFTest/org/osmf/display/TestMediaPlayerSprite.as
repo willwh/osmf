@@ -40,7 +40,7 @@ package org.osmf.display
 			Sprite(displayObjectTrait.displayObject).graphics.beginFill(0);
 			Sprite(displayObjectTrait.displayObject).graphics.drawRect(0,0,150,150);
 			
-			player.element = media;
+			player.mediaElement = media;
 			
 			media.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
@@ -63,10 +63,10 @@ package org.osmf.display
 			player.scaleMode = ScaleMode.NONE;
 						
 			// Sanity checks
-			player.element = null;
+			player.mediaElement = null;
 			player.width = 0;
 			player.height = 0;
-			assertNull(player.element);
+			assertNull(player.mediaElement);
 			assertEquals(player.width, player.height, 0);
 		}
 		
