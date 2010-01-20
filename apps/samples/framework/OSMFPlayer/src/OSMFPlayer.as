@@ -101,7 +101,7 @@ package
 		private function setupContextMenu():void
 		{
 			// Setup a context menu:
-			osmfMenuItem = new ContextMenuItem("OSMF Web Player v." + Version.version());
+			osmfMenuItem = new ContextMenuItem("OSMF Player v." + Version.version());
 			osmfMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onOSMFContextMenuItemSelect);
 			
 			customContextMenu = new ContextMenu();
