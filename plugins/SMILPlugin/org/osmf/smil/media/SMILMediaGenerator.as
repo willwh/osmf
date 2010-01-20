@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.smil.media
 {
+	import org.osmf.audio.AudioElement;
+	import org.osmf.audio.SoundLoader;
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
@@ -35,6 +37,7 @@ package org.osmf.smil.media
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.proxies.TemporalProxyElement;
@@ -127,6 +130,12 @@ package org.osmf.smil.media
 					var dur:Number = (smilElement as SMILMediaElement).duration;
 					var temporalProxyElement:TemporalProxyElement = new TemporalProxyElement(dur, imageElement);
 					(parentMediaElement as CompositeElement).addChild(temporalProxyElement);
+					break;
+				case SMILElementType.AUDIO:
+					var audioResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var loader:ILoader = NetStreamUtils.isStreamingResource(audioResource) ? new NetLoader() : new SoundLoader();
+					var audioElement:AudioElement = new AudioElement(loader, audioResource);
+					(parentMediaElement as CompositeElement).addChild(audioElement);
 					break;
 			}
 			
