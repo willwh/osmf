@@ -28,6 +28,7 @@ package org.osmf.chrome.controlbar.widgets
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
+	import org.osmf.traits.SeekTrait;
 	
 	public class StopButton extends PlayableButton
 	{
@@ -54,6 +55,15 @@ package org.osmf.chrome.controlbar.widgets
 		{
 			var playable:PlayTrait = element.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			playable.stop();
+			
+			// On stop being invoked, rewind manually. NOTE: this is a work-around
+			// for the PlayTrait currently not doing so automatically. See bug report
+			// FM-350.
+			var seekable:SeekTrait = element.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			if (seekable && seekable.canSeekTo(0))
+			{
+				seekable.seek(0);
+			}
 		}
 		
 		override protected function visibilityDeterminingEventHandler(event:Event = null):void
