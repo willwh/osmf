@@ -23,7 +23,6 @@ package org.osmf.metadata
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
@@ -345,6 +344,14 @@ package org.osmf.metadata
 	   			else if (traitType == MediaTraitType.PLAY && playTrait != null)
 	   			{
 	   				playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+	   				
+	   				// We need to check the playing state, if the media is already playing, we won't 
+	   				// get the play state change event and the interval timer will never start.
+	   				if (playTrait.playState == PlayState.PLAYING)
+	   				{
+	   					var event:PlayEvent = new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, PlayState.PLAYING);
+	   					onPlayStateChange(event);
+	   				}
 	   			}
 	   		}
 	   		else
