@@ -1,0 +1,1 @@
+The UNI05_53.swf uses the Uni0553.ttf font that is freely available from http://www.miniml.com.
