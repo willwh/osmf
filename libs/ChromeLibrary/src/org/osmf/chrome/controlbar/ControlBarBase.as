@@ -22,12 +22,12 @@
 
 package org.osmf.chrome.controlbar
 {
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
+	import org.osmf.chrome.utils.FadingSprite;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.media.MediaElement;
@@ -37,7 +37,7 @@ package org.osmf.chrome.controlbar
 	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.utils.URL;
 	
-	public class ControlBarBase extends Sprite
+	public class ControlBarBase extends FadingSprite
 	{
 		[Embed("../assets/images/controlBarBackdrop.png")]
 		public var backdropType:Class;
