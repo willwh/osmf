@@ -55,9 +55,9 @@ package org.osmf.net.httpstreaming.flv
 		public static const SOUND_CHANNELS_MONO:int = 1;
 		public static const SOUND_CHANNELS_STEREO:int = 2;
 		
-		public function FLVTagAudio()
+		public function FLVTagAudio(type:int = FLVTag.TAG_TYPE_AUDIO)
 		{
-			super(FLVTag.TAG_TYPE_AUDIO);
+			super(type);
 		}
 		
 		public function get soundFormatByte():int
@@ -216,33 +216,34 @@ package org.osmf.net.httpstreaming.flv
 			}
 		}
 		
-		// XXX need warnings about get/set having different behavior after format is set to AAC
+		// XXX need warnings about get/set having different behavior after format is set to AAC		
 		override public function get data():ByteArray
 		{
-			var data:ByteArray;
+			var data:ByteArray = new ByteArray();
 			if (soundFormat == SOUND_FORMAT_AAC)
 			{
-				data.readBytes(bytes, TAG_HEADER_BYTE_COUNT + 2, dataSize - 2);	// just the audio payload, not the format OR the AACPacketType
+				data.writeBytes(bytes, TAG_HEADER_BYTE_COUNT + 2, dataSize - 2);	// just the audio payload, not the format OR the AACPacketType
 			}
 			else
 			{
-				data.readBytes(bytes, TAG_HEADER_BYTE_COUNT + 1, dataSize - 1);	// just the audio payload, not the format
+				data.writeBytes(bytes, TAG_HEADER_BYTE_COUNT + 1, dataSize - 1);	// just the audio payload, not the format
 			}
 			return data;
 		}
+		
 		
 		override public function set data(value:ByteArray):void
 		{
 			if (soundFormat == SOUND_FORMAT_AAC)
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 2;	// resize array first
-				bytes.readBytes(value, TAG_HEADER_BYTE_COUNT + 2, value.length); // copy in after format AND AACPacketType
+				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 2, value.length); // copy in after format AND AACPacketType
 				dataSize = value.length + 2;	// set dataSize field to new payload length plus format + AACPacketType length
 			}
 			else
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT+value.length + 1;	// resize array first
-				bytes.readBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
+				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
 				dataSize = value.length + 1;	// set dataSize field to new payload length plus format length
 			}		
 		}

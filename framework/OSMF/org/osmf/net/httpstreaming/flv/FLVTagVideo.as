@@ -51,9 +51,9 @@ package org.osmf.net.httpstreaming.flv
 		public static const INFO_PACKET_SEEK_START:int = 0;
 		public static const INFO_PACKET_SEEK_END:int = 1;
 		
-		public function FLVTagVideo()
+		public function FLVTagVideo(type:int = FLVTag.TAG_TYPE_VIDEO)
 		{
-			super(FLVTag.TAG_TYPE_VIDEO);
+			super(type);
 		}
 		
 		public function get frameType():int
@@ -168,17 +168,17 @@ package org.osmf.net.httpstreaming.flv
 		override public function get data():ByteArray
 		{
 			// throw error if frameType == FRAME_TYPE_INFO?
-			var data:ByteArray;
+			var data:ByteArray = new ByteArray();
 			if (codecID == CODEC_ID_AVC)
 			{
-				data.readBytes(bytes, TAG_HEADER_BYTE_COUNT + 5, dataSize - 5);	// just the AVC payload
+				data.writeBytes(bytes, TAG_HEADER_BYTE_COUNT + 5, dataSize - 5);	// just the AVC payload
 			}
 			else
 			{
-				data.readBytes(bytes, TAG_HEADER_BYTE_COUNT + 1, dataSize - 1);	// just the video payload, not the format
+				data.writeBytes(bytes, TAG_HEADER_BYTE_COUNT + 1, dataSize - 1);	// just the video payload, not the format
 			}
 			return data;		
-		}
+		}	
 	
 		override public function set data(value:ByteArray):void
 		{
@@ -186,13 +186,13 @@ package org.osmf.net.httpstreaming.flv
 			if (codecID == CODEC_ID_AVC)
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 5;	// resize array first
-				bytes.readBytes(value, TAG_HEADER_BYTE_COUNT + 5, value.length); // copy in after format, AVC packet type, and composition time offset
+				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 5, value.length); // copy in after format, AVC packet type, and composition time offset
 				dataSize = value.length + 5;	// set dataSize field to new payload length plus format, AVC packet type, and composition time offset length
 			}
 			else
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 1;	// resize array first
-				bytes.readBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
+				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
 				dataSize = value.length + 1;	// set dataSize field to new payload length plus format length
 			}	
 		}

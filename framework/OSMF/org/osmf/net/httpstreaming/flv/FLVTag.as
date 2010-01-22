@@ -24,7 +24,7 @@ package org.osmf.net.httpstreaming.flv
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
-	
+
 	[ExcludeClass]
 	
 	/**
@@ -33,9 +33,15 @@ package org.osmf.net.httpstreaming.flv
   	public class FLVTag
 	{
 		// arguably these should move to their own class...
-		public static const TAG_TYPE_AUDIO:uint = 8;
-		public static const TAG_TYPE_VIDEO:uint = 9;
-		public static const TAG_TYPE_SCRIPTDATAOBJECT:uint = 18;
+		public static const TAG_TYPE_AUDIO:int = 8;
+		public static const TAG_TYPE_VIDEO:int = 9;
+		public static const TAG_TYPE_SCRIPTDATAOBJECT:int = 18;
+		
+		// TODO: Do we call this "filtered" or "encrypted" or "DRM" or "protected"?
+		public static const TAG_FLAG_ENCRYPTED:int = 0x20;
+		public static const TAG_TYPE_ENCRYPTED_AUDIO:int = TAG_TYPE_AUDIO + TAG_FLAG_ENCRYPTED;
+		public static const TAG_TYPE_ENCRYPTED_VIDEO:int = TAG_TYPE_VIDEO + TAG_FLAG_ENCRYPTED;
+		public static const TAG_TYPE_ENCRYPTED_SCRIPTDATAOBJECT:int = TAG_TYPE_SCRIPTDATAOBJECT + TAG_FLAG_ENCRYPTED;
 		
 		// but these are good here...
 		internal static const TAG_HEADER_BYTE_COUNT:int = 11;
@@ -127,6 +133,11 @@ package org.osmf.net.httpstreaming.flv
 			bytes[0] = value;
 		}
 		
+		public function get isEncrpted():Boolean
+		{
+			return((bytes[0] & TAG_FLAG_ENCRYPTED) ? true : false);
+		}
+		
 		public function get dataSize():uint
 		{
 			return (bytes[1] << 16) | (bytes[2] << 8) | (bytes[3]);  
@@ -156,18 +167,17 @@ package org.osmf.net.httpstreaming.flv
 		
 		public function get data():ByteArray
 		{
-			var data:ByteArray;
-			data.readBytes(bytes, TAG_HEADER_BYTE_COUNT, dataSize);
+			var data:ByteArray = new ByteArray();
+			data.writeBytes(bytes, TAG_HEADER_BYTE_COUNT, dataSize);
 			return data;
-		}
+		}		
 		
 		public function set data(value:ByteArray):void
 		{
 			bytes.length = TAG_HEADER_BYTE_COUNT + value.length;	// resize first
-			bytes.readBytes(value, TAG_HEADER_BYTE_COUNT, value.length); // copy in
+			bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT, value.length); // copy in
 			dataSize = value.length;	// set dataSize field to new payload length
 		}
-		
 		protected var bytes:ByteArray = null;
 	}
 }

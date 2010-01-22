@@ -30,9 +30,9 @@ package org.osmf.net.httpstreaming.flv
 	 **/ 
 	public class FLVTagScriptDataObject extends FLVTag
 	{
-		public function FLVTagScriptDataObject()
+		public function FLVTagScriptDataObject(type:int = FLVTag.TAG_TYPE_SCRIPTDATAOBJECT)
 		{
-			super(FLVTag.TAG_TYPE_SCRIPTDATAOBJECT);
+			super(type);
 		}
 		
 		public function get objects():Array
