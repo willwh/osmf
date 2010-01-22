@@ -53,48 +53,12 @@ package org.osmf.drm
 	/**
 	 * @private
 	 * TODO: Remove private tag when DRM content / 10.1 content is public.
-	 *
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
 	 * to playback the media.
 	 *
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_NEEDED
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
+	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
  	 */ 
-	[Event(name='authenticationNeeded', type='org.osmf.events.ContentProtectionEvent')]
-	
-	/**
-	 * @private
-	 * TODO: Remove private tag when DRM content / 10.1 content is public.
-	 *
-	 * Dispatched when an authentication attempt succeeds.
-	 * 
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_COMPLETE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */ 
-	[Event(name='authenticationComplete', type='org.osmf.events.ContentProtectionEvent')] 	
-	 
-	/**
-	 * @private
-	 * TODO: Remove private tag when DRM content / 10.1 content is public.
-	 *
-	 * Dispatches when an authentication attempt fails.
-	 * 
-	 * @eventType org.osmf.events.ContentProtectionEvent.AUTHENTICATION_FAILED
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10.1
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name='authenticationFailed', type='org.osmf.events.ContentProtectionEvent')] 	 	
+	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]	
 
 	/**
 	 * @private
@@ -359,7 +323,7 @@ package org.osmf.drm
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function signalInlineAuthFailed(error:MediaError):void
+		public function inlineDRMFailed(error:MediaError):void
 		{
 			updateDRMState(DRMState.AUTHENTICATE_FAILED, error);
 		}

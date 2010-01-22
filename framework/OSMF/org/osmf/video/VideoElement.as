@@ -355,7 +355,7 @@ package org.osmf.video
 				}
 				else // Inline DRM - Errors need to be forwarded
 				{						
-					drmTrait.signalInlineAuthFailed(new MediaError(event.errorID));
+					drmTrait.inlineDRMFailed(new MediaError(event.errorID));
 				}				
 			}	
 			

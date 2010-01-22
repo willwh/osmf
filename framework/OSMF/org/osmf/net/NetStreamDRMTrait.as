@@ -114,9 +114,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function signalInlineAuthFailed(error:MediaError):void
+		public function inlineDRMFailed(error:MediaError):void
 		{
-			drmServices.signalInlineAuthFailed(error);
+			drmServices.inlineDRMFailed(error);
 		}
 		
 		// Internals
