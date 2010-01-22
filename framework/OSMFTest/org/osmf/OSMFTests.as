@@ -58,8 +58,6 @@ package org.osmf
 		{
 			super(param);
 			
-//			addTestSuite(TestFLVTagAudio);
-
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 			
@@ -240,13 +238,13 @@ package org.osmf
 			addTestSuite(TestTraitLoader);
 
 			addTestSuite(TestCompositeElement);
-			//addTestSuite(TestParallelElement);
-			//addTestSuite(TestSerialElement);
+			addTestSuite(TestParallelElement);
+			addTestSuite(TestSerialElement);
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
 			//addTestSuite(TestParallelElementWithContentProtectionTrait);
-			//addTestSuite(TestParallelElementWithDynamicStreamTrait);
+			addTestSuite(TestParallelElementWithDynamicStreamTrait);
 			addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
 			addTestSuite(TestParallelElementWithSeekTrait);
@@ -256,7 +254,7 @@ package org.osmf
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
 			//addTestSuite(TestSerialElementWithContentProtectionTrait);
-			//addTestSuite(TestSeriallElementWithDynamicStreamTrait);
+			addTestSuite(TestSerialElementWithDynamicStreamTrait);
 			addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
 			addTestSuite(TestSerialElementWithSeekTrait);

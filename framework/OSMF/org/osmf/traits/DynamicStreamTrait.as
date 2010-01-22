@@ -344,6 +344,12 @@ package org.osmf.traits
 				
 				_switching = newSwitching;
 				
+				// Update the index when a switch finishes.
+				if (newSwitching == false)
+				{
+					setCurrentIndex(index);
+				}
+				
 				switchingChangeEnd(index, detail);
 			}
 		}

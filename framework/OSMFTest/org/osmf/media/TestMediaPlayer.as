@@ -948,8 +948,10 @@ package org.osmf.media
 				{
 					mediaPlayer.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
 
-					assertTrue(mediaPlayer.mediaWidth == expectedMediaWidthAfterLoad);
-					assertTrue(mediaPlayer.mediaHeight == expectedMediaHeightAfterLoad);
+					assertTrue((mediaPlayer.mediaWidth == expectedMediaWidthAfterLoad) ||
+							   (isNaN(mediaPlayer.mediaWidth) && isNaN(expectedMediaWidthAfterLoad)));
+					assertTrue((mediaPlayer.mediaHeight == expectedMediaHeightAfterLoad) ||
+							   (isNaN(mediaPlayer.mediaHeight) && isNaN(expectedMediaHeightAfterLoad)));
 
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -1312,7 +1314,12 @@ package org.osmf.media
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
-					else fail();
+					else
+					{
+						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+					
+						fail();
+					}
 				}
 			
 				function onLoaded(event:LoadEvent):void

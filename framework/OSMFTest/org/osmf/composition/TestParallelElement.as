@@ -47,6 +47,7 @@ package org.osmf.composition
 		// Tests
 		//
 		
+		/* TODO: Reenable these two tests once we have a composite DRM trait.
 		public function testGetTraitTypesDynamically():void
 		{
 			var parallel:ParallelElement = createParallelElement();
@@ -168,6 +169,7 @@ package org.osmf.composition
 			parallel.removeChild(mediaElement1);
 			assertHasTraits(parallel,[]);
 		}
+		*/
 		
 		override public function testMediaErrorEventDispatch():void
 		{

@@ -69,7 +69,7 @@ package org.osmf.utils
 							doCreateSeekTrait = true;
 							continue;
 						case MediaTraitType.DYNAMIC_STREAM:
-							trait = new DynamicStreamTrait(true, 0, 5);
+							trait = useDynamicTraits ? new DynamicDynamicStreamTrait() : new DynamicStreamTrait(true, 0, 5);
 							break;
 						case MediaTraitType.TIME:
 							trait = useDynamicTraits ? new DynamicTimeTrait() : new TimeTrait();

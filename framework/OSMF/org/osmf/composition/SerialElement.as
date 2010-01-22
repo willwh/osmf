@@ -162,7 +162,6 @@ package org.osmf.composition
 			{
 				// Our first choice for the new current child is the next
 				// child.
-				listenedChildIndex += 1;
 				var newListenedChild:MediaElement = getChildAt(listenedChildIndex);
 				
 				// If there is no next child, then we pick the first child.

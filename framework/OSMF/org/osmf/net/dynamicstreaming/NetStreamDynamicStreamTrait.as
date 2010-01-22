@@ -139,7 +139,6 @@ package org.osmf.net.dynamicstreaming
 				// state reflect the changes to the NetStream.
 				if (event.switching == false)
 				{
-					setCurrentIndex(netStream.renderingIndex);
 					setSwitching(false, netStream.renderingIndex);
 				}
 				else

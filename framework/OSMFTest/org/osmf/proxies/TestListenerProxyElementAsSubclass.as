@@ -32,6 +32,7 @@ package org.osmf.proxies
 	import org.osmf.utils.DynamicListenerProxyElement;
 	import org.osmf.utils.DynamicLoadTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.DynamicDisplayObjectTrait;
 	import org.osmf.utils.SimpleLoader;
@@ -319,20 +320,26 @@ package org.osmf.proxies
 			// Changing properties should result in events.
 			//
 			
-			var dsTrait:DynamicStreamTrait = proxyElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			var dsTrait:DynamicDynamicStreamTrait = proxyElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicDynamicStreamTrait;
+			dsTrait.bitrates = [100, 200, 300, 400];
+			assertTrue(events.length == 1);
+			assertTrue(events[0]["numDynamicStreamsChange"] == true);
 			
 			dsTrait.autoSwitch = false;
-			assertTrue(events.length == 1);
-			assertTrue(events[0]["newAutoSwitch"] == false );
+			assertTrue(events.length == 2);
+			assertTrue(events[1]["newAutoSwitch"] == false);
 			
+			// For our mock trait, switches complete synchronously.
 			dsTrait.switchTo(3);
-			assertTrue(events.length ==  2);
-			assertTrue(events[1]["switching"] == true);
-			assertTrue((events[1]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
+			assertTrue(events.length == 4);
+			assertTrue(events[2]["switching"] == true);
+			assertTrue((events[2]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
+			assertTrue(events[3]["switching"] == false);
+			assertTrue((events[3]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
 			
 			dsTrait.autoSwitch = true;
-			assertTrue(events.length == 3);
-			assertTrue(events[2]["newAutoSwitch"] == true);
+			assertTrue(events.length == 5);
+			assertTrue(events[4]["newAutoSwitch"] == true);
 			
 			// We shouldn't get any events when we're no longer proxying the
 			// wrapped element.
@@ -340,10 +347,11 @@ package org.osmf.proxies
 			
 			proxyElement.wrappedElement = null;
 			
+			dsTrait.bitrates = [300, 400, 500];
 			dsTrait.autoSwitch = false;
 			dsTrait.switchTo(1);
 			
-			assertTrue(events.length == 3);
+			assertTrue(events.length == 5);
 		}
 				
 		public function testProcessDisplayObjectTraitChanges():void

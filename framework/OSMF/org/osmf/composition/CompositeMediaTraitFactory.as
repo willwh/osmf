@@ -65,14 +65,12 @@ package org.osmf.composition
 					compositeTrait = new CompositeBufferTrait(traitAggregator, mode);
 					break;
 				
-				/*
 				case MediaTraitType.DYNAMIC_STREAM:
 					compositeTrait
 						= mode == CompositionMode.PARALLEL
 							? new ParallelDynamicStreamTrait(traitAggregator)
 							: new SerialDynamicStreamTrait(traitAggregator);		
 					break;
-				*/
 				
 				case MediaTraitType.LOAD:
 					compositeTrait = new CompositeLoadTrait(traitAggregator, mode);
@@ -101,8 +99,7 @@ package org.osmf.composition
 					break;
 					
 				default:
-					// TODO: Reenable once the missing composite traits are back in.
-					//throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
+					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
 					break;
 			}
 			
