@@ -33,7 +33,7 @@ package org.osmf.traits
 	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
  	 *  
  	 *  @langversion 3.0
- 	 *  @playerversion Flash 10
+ 	 *  @playerversion Flash 10.1
  	 *  @playerversion AIR 1.5
  	 *  @productversion OSMF 1.0
  	 */ 
@@ -51,7 +51,7 @@ package org.osmf.traits
 	 * for a specific time window.
 	 *  
 	 *  @langversion 3.0
-	 *  @playerversion Flash 10
+	 *  @playerversion Flash 10.1
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 	
@@ -61,7 +61,7 @@ package org.osmf.traits
 		 * Constructor.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -76,7 +76,7 @@ package org.osmf.traits
 		 * subclasses.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
@@ -95,7 +95,7 @@ package org.osmf.traits
 		 * @throws IllegalOperationError If the media is not initialized yet.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
@@ -111,7 +111,7 @@ package org.osmf.traits
 		 * @param token The token to use for authentication.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
@@ -125,7 +125,7 @@ package org.osmf.traits
 		 * @see DRMState
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -139,7 +139,7 @@ package org.osmf.traits
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
@@ -153,7 +153,7 @@ package org.osmf.traits
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
@@ -172,7 +172,7 @@ package org.osmf.traits
 		 * one week rental).
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
@@ -190,7 +190,7 @@ package org.osmf.traits
 		 * end, period values.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		

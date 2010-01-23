@@ -44,7 +44,7 @@ package org.osmf.events
 		 * @eventType DRM_STATE_CHANGE
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -60,7 +60,7 @@ package org.osmf.events
 		 * @param error The error that describes an authentication failure.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -80,7 +80,7 @@ package org.osmf.events
 		 * The token returned as a result of a successful authentication.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -93,7 +93,7 @@ package org.osmf.events
 		 * The error that describes an authentication failure.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
@@ -107,7 +107,7 @@ package org.osmf.events
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
@@ -121,7 +121,7 @@ package org.osmf.events
 		 * hasn't taken place.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
@@ -140,7 +140,7 @@ package org.osmf.events
 		 * one week rental).
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
@@ -154,7 +154,7 @@ package org.osmf.events
 		 * are listed on the DRMState enumeration.
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
