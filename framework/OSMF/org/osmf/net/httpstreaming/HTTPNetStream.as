@@ -116,8 +116,6 @@ package org.osmf.net.httpstreaming
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
 			mainTimer.start();
 			
-			addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
-			
 			// Just like DynamicStream... we need to use onPlayStatus.  This is part of remapping code.
 			_ownerClientObject = new Object();
 			_ownerClientObject.onPlayStatus = function(... rest):void {};
@@ -818,41 +816,26 @@ package org.osmf.net.httpstreaming
 					}
 					else
 					{
-						bufferEmptyEventReceived = false;
-						
-						dispatchEvent
-							( new NetStatusEvent
-								( NetStatusEvent.NET_STATUS
-								, false
-								, false
-								, {code:NetStreamCodes.NETSTREAM_PLAY_STOP, level:"status"}
-								)
-							); 
-
-						setState(HTTPStreamingState.STOP_WAIT);
-					}
-					
-					break;
-				
-				case HTTPStreamingState.STOP_WAIT:
-					
-					CONFIG::LOGGING
-					{
-						logger.debug("bufferLength = " + bufferLength);
-					}
-					
-					// Wait until the buffer is empty before signalling stop.
-					if (bufferEmptyEventReceived == true)
-					{
 						// XXX need to append EOS in this case for sure, even if we don't do it for some of the seek-paused cases
 						// (need to update playerglobal.swc to pick that up and switch to latest build in order to have the action)
 						setState(HTTPStreamingState.STOP);
 						
-						// Trigger the Play.Complete event through onPlayStatus
-						// (to mirror what NetStream does for RTMP streams).
-						client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_COMPLETE});
-						
-						bufferEmptyEventReceived = false;
+			            var playCompleteInfo:Object = new Object();
+			            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
+			            playCompleteInfo.level = "status";
+			                                    
+			            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
+			
+			            var tagBytes:ByteArray = new ByteArray();
+			            playCompleteInfoSDOTag.write(tagBytes);
+
+       					CONFIG::FLASH_10_1
+						{
+							appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+						}
+			            attemptAppendBytes(tagBytes);
 					}
 					
 					break;
@@ -971,14 +954,6 @@ package org.osmf.net.httpstreaming
 				default:
 					throw new Error("HTTPStream cannot run undefined _state "+_state);
 					break;
-			}
-		}
-		
-		private function onNetStatusEvent(netStatusEvent:NetStatusEvent):void
-		{
-			if (netStatusEvent.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY)
-			{
-				bufferEmptyEventReceived = true;
 			}
 		}
 		
@@ -1179,7 +1154,6 @@ package org.osmf.net.httpstreaming
 		private var _insertScriptDataTags:Vector.<FLVTagScriptDataObject> = null;
 		private var _flvParserISD:FLVParser = null;
 		private var _isdTag:FLVTag = null;	// using a member var like this is a little ugly
-		private var bufferEmptyEventReceived:Boolean = false;
 		
 		CONFIG::LOGGING
 		{

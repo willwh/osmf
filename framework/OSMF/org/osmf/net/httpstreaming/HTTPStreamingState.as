@@ -96,13 +96,6 @@ package org.osmf.net.httpstreaming
 		internal static const SEEK:String = "seek";
 
 		/**
-		 * Indicates the HTTPNetStream has stopped playing, but that it's
-		 * waiting for the buffer to empty before signalling that it's
-		 * stopped.
-		 **/
-		internal static const STOP_WAIT:String = "stopWait";
-
-		/**
 		 * Indicates the HTTPNetStream has stopped playing.
 		 **/
 		internal static const STOP:String = "stop";
