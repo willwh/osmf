@@ -27,12 +27,22 @@ package org.osmf.vast.model
 	
 	/**
 	 * Base class for the top-level VAST ad packages (inline ads and wrapper ads).
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class VASTAdPackageBase
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function VASTAdPackageBase()
 		{
 			super();
@@ -122,7 +132,12 @@ package org.osmf.vast.model
 		/**
 		 * Returns the VASTTrackingEvent with the given event type, null if no
 		 * such tracking event exists.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getTrackingEventByType(eventType:VASTTrackingEventType):VASTTrackingEvent
 		{
 			for each (var trackingEvent:VASTTrackingEvent in _trackingEvents)

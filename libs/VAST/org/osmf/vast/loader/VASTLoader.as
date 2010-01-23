@@ -41,7 +41,12 @@ package org.osmf.vast.loader
 	 * document has been parsed into a VAST document object model.
 	 * 
 	 * @see http://www.iab.net/vast
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class VASTLoader extends LoaderBase
 	{
 		/**
@@ -53,6 +58,11 @@ package org.osmf.vast.loader
 		 * @param The HTTPLoader to be used by this VASTLoader to retrieve
 		 * the VAST document.  If null, then a new one will be created on
 		 * demand.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTLoader(maxNumWrapperRedirects:Number=-1, httpLoader:HTTPLoader=null)
 		{
@@ -64,7 +74,12 @@ package org.osmf.vast.loader
 		
 		/**
 		 * Returns true for HTTP(s) resource.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return httpLoader.canHandleResource(resource);

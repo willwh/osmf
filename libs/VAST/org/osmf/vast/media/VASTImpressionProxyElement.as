@@ -42,7 +42,12 @@ package org.osmf.vast.media
 	 * 
 	 * According to the IAB, an impression should only be recorded after
 	 * the media has initially exited the buffering state.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class VASTImpressionProxyElement extends ListenerProxyElement
 	{
 		/**
@@ -54,7 +59,12 @@ package org.osmf.vast.media
 		 * @param wrappedElement The MediaElement to wrap.
 		 * 
 		 * @throws ArgumentError If urls is null.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function VASTImpressionProxyElement(urls:Vector.<VASTUrl>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null)
 		{
 			this.urls = urls;
@@ -76,7 +86,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processLoadStateChange(loadState:String):void
 		{
 			if (loadState == LoadState.READY)
@@ -90,7 +100,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processPlayStateChange(playState:String):void
 		{
 			if (playState == PlayState.PLAYING && !impressionsRecorded)
@@ -115,7 +125,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processBufferingChange(buffering:Boolean):void
 		{
 			if (	buffering == false

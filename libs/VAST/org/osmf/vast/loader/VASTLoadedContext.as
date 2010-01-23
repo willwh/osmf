@@ -33,13 +33,23 @@ package org.osmf.vast.loader
 	 * 
 	 * @see http://www.iab.net/vast
  	 * @see VASTLoader
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class VASTLoadedContext implements ILoadedContext
 	{
 		/**
 		 * Constructor.
 		 * 
 		 * @param vastDocument The root level object of the VAST document object model.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function VASTLoadedContext(vastDocument:VASTDocument)
 		{

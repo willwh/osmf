@@ -37,7 +37,12 @@ package org.osmf.vast.media
 	
 	/**
 	 * Utility class for creating MediaElements from a VASTDocument.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class VASTMediaGenerator
 	{
 		/**
@@ -46,7 +51,12 @@ package org.osmf.vast.media
 		 * @param mediaFileResolver The resolver to use when a VASTDocument
 		 * contains multiple representations of the same content (MediaFile).
 		 * If null, this object will use a DefaultVASTMediaFileResolver.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function VASTMediaGenerator(mediaFileResolver:IVASTMediaFileResolver=null)
 		{
 			super();
@@ -64,7 +74,12 @@ package org.osmf.vast.media
 		 * 
 		 * @returns A Vector of MediaElements, where each MediaElement
 		 * represents a different VASTAd within the VASTDocument. 
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function createMediaElements(vastDocument:VASTDocument):Vector.<MediaElement>
 		{
 			var mediaElements:Vector.<MediaElement> = new Vector.<MediaElement>();

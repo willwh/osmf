@@ -36,13 +36,23 @@ package org.osmf.vast.model
 		/**
 		 * Constant for the delivery property, when the media file is
 		 * delivered as a stream.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const DELIVERY_STREAMING:String 	= "streaming";
 
 		/**
 		 * Constant for the delivery property, when the media file is
 		 * delivered progressively.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const DELIVERY_PROGRESSIVE:String = "progressive";		
 
 		/**

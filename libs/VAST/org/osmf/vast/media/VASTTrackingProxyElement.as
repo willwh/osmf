@@ -43,7 +43,12 @@ package org.osmf.vast.media
 	/**
 	 * A ProxyElement that wraps up another MediaElement and fires
 	 * HTTP events as the wrapped media enters different states.
-	 **/ 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */ 
 	public class VASTTrackingProxyElement extends ListenerProxyElement
 	{
 		/**
@@ -56,7 +61,12 @@ package org.osmf.vast.media
 		 * @param wrappedElement The MediaElement to wrap.
 		 * 
 		 * @throws ArgumentError If urls is null.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function VASTTrackingProxyElement(events:Vector.<VASTTrackingEvent>, httpLoader:HTTPLoader=null, wrappedElement:MediaElement=null)
 		{
 			setEvents(events);
@@ -78,7 +88,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processMutedChange(muted:Boolean):void
 		{
 			if (muted)
@@ -89,7 +99,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processPlayStateChange(playState:String):void
 		{
 			if (playState == PlayState.PLAYING)
@@ -114,7 +124,7 @@ package org.osmf.vast.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processComplete():void
 		{
 			playheadTimer.stop();
