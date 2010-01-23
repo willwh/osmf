@@ -85,6 +85,7 @@ package org.osmf.drm
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  
 		 */ 
 		public function DRMServices()
 		{
@@ -97,7 +98,7 @@ package org.osmf.drm
 		 * @see DRMState
 		 *  
 		 *  @langversion 3.0
-		 *  @playerversion Flash 10
+		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */

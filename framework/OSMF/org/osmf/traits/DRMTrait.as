@@ -31,6 +31,11 @@ package org.osmf.traits
 	 * to playback the media.
 	 *
 	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
+ 	 *  
+ 	 *  @langversion 3.0
+ 	 *  @playerversion Flash 10
+ 	 *  @playerversion AIR 1.5
+ 	 *  @productversion OSMF 1.0
  	 */ 
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
 				
@@ -43,7 +48,7 @@ package org.osmf.traits
 	 * 
 	 * The workflow for media which has a ContentProtectionTrait is that the media undergoes
 	 * some type of authentication, after which it is valid (i.e. able to be played)
-	 * for a specific time window. 
+	 * for a specific time window.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -54,7 +59,12 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function DRMTrait()
 		{
 			super(MediaTraitType.DRM);

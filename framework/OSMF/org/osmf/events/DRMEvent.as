@@ -42,7 +42,12 @@ package org.osmf.events
 		 * of a DRMTrait.
 		 * 
 		 * @eventType DRM_STATE_CHANGE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const DRM_STATE_CHANGE:String = "drmStateChange";
 
 		/**
@@ -53,7 +58,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
 		 * @param token The token returned as a result of a successful authentication.
 		 * @param error The error that describes an authentication failure.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function DRMEvent(type:String, state:String, bubbles:Boolean=false, cancelable:Boolean=false, start:Date = null, end:Date = null, period:Number = 0 ,token:Object=null, error:MediaError=null)
 		{
 			super(type, bubbles, cancelable);
@@ -68,7 +78,12 @@ package org.osmf.events
 		
 		/**
 		 * The token returned as a result of a successful authentication.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get token():Object
 		{
 			return _token;
@@ -76,7 +91,12 @@ package org.osmf.events
 
 		/**
 		 * The error that describes an authentication failure.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get error():MediaError
 		{
 			return _error;
@@ -132,6 +152,11 @@ package org.osmf.events
 		/**
 		 * The current state of the DRM trait.  Possible values
 		 * are listed on the DRMState enumeration.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get drmState():String
 		{
@@ -140,7 +165,7 @@ package org.osmf.events
 				
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new DRMEvent(type, _drmState, bubbles, cancelable, _startDate, _endDate, _period, _token, _error);
