@@ -25,6 +25,11 @@ package org.osmf.utils
 	
 	/**
 	 * Utility class that generalizes binary search within sorted lists.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class BinarySearch
 	{

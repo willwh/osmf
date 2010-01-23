@@ -27,6 +27,11 @@ package org.osmf.traits
 	 * Dispatched when the trait's <code>buffering</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.BufferEvent.BUFFERING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bufferingChange",type="org.osmf.events.BufferEvent")]
 	
@@ -70,7 +75,12 @@ package org.osmf.traits
 		
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function BufferTrait()
 		{
 			super(MediaTraitType.BUFFER);
@@ -149,7 +159,7 @@ package org.osmf.traits
 		 * 
 		 * <p>This method fires a BufferLengthChangeEvent if the value's
 		 * change persists.</p>
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -171,7 +181,7 @@ package org.osmf.traits
 		 * Indicates whether the trait is in a buffering state. Dispatches
 		 * a bufferingChange event if invocation results in the <code>buffering</code>
 		 * property changing.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

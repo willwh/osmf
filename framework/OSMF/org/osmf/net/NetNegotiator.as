@@ -52,7 +52,12 @@ package org.osmf.net
 	 *
 	 * @eventType org.osmf.events.NetNegotiatorEvent.CONNECTED
 	 * 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event( name="connected", type="org.osmf.events.NetNegotiatorEvent")]
 	
 	/**
@@ -60,7 +65,12 @@ package org.osmf.net
 	 *
 	 * @eventType org.osmf.events.NetNegotiatorEvent.CONNECTION_FAILED
 	 * 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event( name="connectionfailed", type="org.osmf.events.NetNegotiatorEvent")]
 	
 	
@@ -71,6 +81,11 @@ package org.osmf.net
 	 * the class can accept any resource that extends IURLResource although it would expect to receive a FMSURL since
 	 * its purpose is specifically connecting to Flash Media Server. 
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class NetNegotiator extends EventDispatcher 
 	{
@@ -95,7 +110,12 @@ package org.osmf.net
 		 * @param urlResource a IURLResource, usually a FMSURL
 		 * 
 		 * @see org.osmf.utils.FMSURL
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function connect(urlResource:URLResource):void
 		{
 			connectionAttempts = getConnectionSequence(urlResource.url);
@@ -183,7 +203,12 @@ package org.osmf.net
 		 *
 		 *  @return An unconnected NetConnection.
 	     * 	@see flash.net.NetConnection
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function createNetConnection():NetConnection
 		{
 			return new NetConnection();

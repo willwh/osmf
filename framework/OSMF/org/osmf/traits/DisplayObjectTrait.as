@@ -30,6 +30,11 @@ package org.osmf.traits
 	 * This occurs when a different DisplayObject is assigned to represent the media.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 
@@ -37,6 +42,11 @@ package org.osmf.traits
 	 * Dispatched when the trait's mediaWidth and/or mediaHeight property has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 
@@ -71,7 +81,12 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function DisplayObjectTrait(displayObject:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
 			super(MediaTraitType.DISPLAY_OBJECT);
@@ -96,7 +111,12 @@ package org.osmf.traits
 		
 		/**
 		 * The intrinsic width of the media.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get mediaWidth():Number
 		{
 			return _mediaWidth;
@@ -104,7 +124,12 @@ package org.osmf.traits
 		
 		/**
 		 * The intrinsic height of the media.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get mediaHeight():Number
 		{
 			return _mediaHeight;
@@ -116,7 +141,7 @@ package org.osmf.traits
 		/**
 		 * Defines the trait's displayObject. If the displayObject is different from the one
 		 * that is currently set, a displayObjectChange event will be dispatched.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

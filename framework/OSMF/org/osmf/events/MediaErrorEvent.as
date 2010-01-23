@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A MediaElement dispatches a MediaErrorEvent when it encounters an error. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaErrorEvent extends Event
 	{
@@ -48,7 +53,12 @@ package org.osmf.events
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param error The error that this event encapsulates.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaErrorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, error:MediaError=null)
 		{
 			super(MEDIA_ERROR, bubbles, cancelable);
@@ -58,7 +68,7 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new MediaErrorEvent(type, bubbles, cancelable, error);
@@ -66,7 +76,12 @@ package org.osmf.events
 		
 		/**
 		 * The error that this event encapsulates.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get error():MediaError
 		{
 			return _error;

@@ -51,12 +51,22 @@ package org.osmf.manifest
 	 * For details on the Flash Media Manifest format, see
 	 * http://opensource.adobe.com/wiki/display/osmf/Flash+Media+Manifest+File+Format+Specification.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class F4MLoader extends MediaElementLoader
 	{
 		/**
 		 * The MIME type for F4M files.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const F4M_MIME_TYPE:String = "application/f4m+xml";
 					
 		/**
@@ -65,6 +75,11 @@ package org.osmf.manifest
 		 * @param factory The factory that is used to create MediaElements based on the 
 		 * media specified in the manifest file.  If no factory is provided, the F4MLoader
 		 * will use a DefaultMediaFactory.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 	
 		public function F4MLoader(factory:MediaFactory = null)
 		{

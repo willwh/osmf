@@ -64,6 +64,11 @@ package org.osmf.audio
 	 * @see org.osmf.media.IURLResource
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.traits
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class AudioElement extends LoadableMediaElement
 	{
@@ -98,7 +103,7 @@ package org.osmf.audio
        	 * Setting this property to a positive value results in the element becoming
        	 * temporal. Any other value will remove the element's TimeTrait, unless the
        	 * loaded content is exposing a duration. 
-       	 * 
+       	 *  
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
        	 *  @playerversion AIR 1.5
@@ -143,7 +148,7 @@ package org.osmf.audio
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return 	loader is NetLoader

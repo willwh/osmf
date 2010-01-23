@@ -35,6 +35,11 @@ package org.osmf.metadata
 	 * The KeyValue Facet class represents a concrete class of key value pairs for 
 	 * storing metadata in a facet.  The keys are all Object, and the values are all Objects.
 	 * Keys and values may not available for garbage collection until they are removed from the collection. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class KeyValueFacet extends Facet
 	{
@@ -61,11 +66,6 @@ package org.osmf.metadata
 				
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function getValue(identifier:IIdentifier):*
 		{
@@ -78,11 +78,6 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 *   
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function get synthesizer():FacetSynthesizer
 		{

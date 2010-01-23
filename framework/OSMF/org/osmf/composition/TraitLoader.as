@@ -34,12 +34,22 @@ package org.osmf.composition
 	 * has been determined that no such MediaElement exists.
 	 * 
 	 * @eventType org.osmf.composition.events.TraitLoaderEvent.TRAIT_FOUND
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="traitFound",type="org.osmf.composition.events.TraitLoaderEvent")]
 
 	/**
 	 * Utility class for doing conditional loads of MediaElements.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class TraitLoader extends EventDispatcher
 	{
 		/**
@@ -48,7 +58,12 @@ package org.osmf.composition
 		 * or which acquires the trait as a result of being loaded.  (As such,
 		 * has the side effect of loading all MediaElements in the list up until
 		 * it finds one with the requested trait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function findOrLoadMediaElementWithTrait(mediaElements:Array, traitType:String):void
 		{
 			var noSuchTrait:Boolean = true;

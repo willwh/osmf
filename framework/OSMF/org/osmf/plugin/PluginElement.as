@@ -29,6 +29,11 @@ package org.osmf.plugin
 	 * external modules (plugins) into a Open Source Media Framework application to provide enhanced functionality.
 	 * <p>A PluginElement can represent a dynamic plugin, which is loaded at runtime from a SWF or SWC,
 	 * or a static plugin, which is compiled as part of the application.</p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	internal class PluginElement extends LoadableMediaElement
 	{

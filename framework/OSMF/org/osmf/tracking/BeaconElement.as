@@ -27,14 +27,24 @@ package org.osmf.tracking
 	/**
 	 * A MediaElement which maps the PlayTrait to the triggering of a
 	 * Beacon.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class BeaconElement extends MediaElement
 	{
 		/**
 		 * Constructor.
 		 * 
 		 * @param url The Beacon to ping when this BeaconElement is played.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function BeaconElement(beacon:Beacon)
 		{
 			this.beacon = beacon;
@@ -44,7 +54,7 @@ package org.osmf.tracking
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function setupTraits():void
 		{
 			addTrait(MediaTraitType.PLAY, new BeaconPlayTrait(beacon));

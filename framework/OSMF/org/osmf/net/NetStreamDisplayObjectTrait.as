@@ -30,7 +30,7 @@ package org.osmf.net
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class NetStreamDisplayObjectTrait extends DisplayObjectTrait
 	{
 		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)

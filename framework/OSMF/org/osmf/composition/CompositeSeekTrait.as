@@ -33,7 +33,12 @@ package org.osmf.composition
 
 	/**
 	 * Implementation of SeekTrait which can be a composite media trait.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeSeekTrait extends SeekTrait implements IReusable
 	{
 		public function CompositeSeekTrait(traitAggregator:TraitAggregator, mode:CompositionMode, owner:MediaElement)
@@ -63,7 +68,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();
@@ -121,7 +126,12 @@ package org.osmf.composition
 		 * of a child/children. This must be overridden by derived classes. 
 		 * 
 		 * @param event The SeekEvent.
-  		 **/
+  		 *  
+  		 *  @langversion 3.0
+  		 *  @playerversion Flash 10
+  		 *  @playerversion AIR 1.5
+  		 *  @productversion OSMF 1.0
+  		 */
 		protected function onSeekingChanged(event:SeekEvent):void
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
@@ -133,7 +143,12 @@ package org.osmf.composition
 		 * 
 		 * @param seekOp The object that contains the complete information of how to carry out this 
 		 * particular seek operation.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
@@ -145,7 +160,12 @@ package org.osmf.composition
 		 * classes must override this function.
 		 * 
 		 * @param time The time the seek operation will seek to.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function prepareSeekOperationInfo(time:Number):CompositeSeekOperationInfo
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
@@ -154,7 +174,12 @@ package org.osmf.composition
 		/**
 		 * This function checks whether the composite seek trait is currently seeking.  The derived
 		 * classes must override this function.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function checkSeeking():Boolean
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
@@ -170,7 +195,12 @@ package org.osmf.composition
 		 * 
 		 * @param value		Whether the composite trait is in seeking state.
 		 * @param seekTo	The time that the seek operation will seek to.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		/*
 		protected function setSeeking(value:Boolean, seekTo:Number = 0):void
 		{
@@ -186,6 +216,11 @@ package org.osmf.composition
 				dispatchEvent(new SeekEvent(_seeking ? SeekEvent.SEEK_BEGIN : SeekEvent.SEEK_END, false, false, seekTo));
 			}
 		}
+		*  
+		*  @langversion 3.0
+		*  @playerversion Flash 10
+		*  @playerversion AIR 1.5
+		*  @productversion OSMF 1.0
 		*/
 		
 		/**
@@ -193,7 +228,12 @@ package org.osmf.composition
 		 * returns the TimeTrait of the child media element.
 		 * 
 		 * @param childSeekable		The SeekTrait of the child media element.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		/*
 		protected function getChildTemporal(childSeekable:SeekTrait):TimeTrait
 		{
@@ -209,6 +249,11 @@ package org.osmf.composition
 			
 			return null;
 		}
+		*  
+		*  @langversion 3.0
+		*  @playerversion Flash 10
+		*  @playerversion AIR 1.5
+		*  @productversion OSMF 1.0
 		*/
 
 		// The time that the seek operation seeks to.

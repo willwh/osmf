@@ -38,6 +38,11 @@ package org.osmf.audio
 	 * Dispatched when playback of the Sound completes.
 	 * 
 	 * @eventType flash.events.Event.COMPLETE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
     [Event(name="complete", type="flash.events.Event")]
     
@@ -67,7 +72,12 @@ package org.osmf.audio
             
     /**
     * Utility class to make working with the Sound class a bit easier.
-    **/
+    *  
+    *  @langversion 3.0
+    *  @playerversion Flash 10
+    *  @playerversion AIR 1.5
+    *  @productversion OSMF 1.0
+    */
 	internal class SoundAdapter extends EventDispatcher
 	{
 		public static const DOWNLOAD_COMPLETE:String = "downloadComplete";	
@@ -93,7 +103,12 @@ package org.osmf.audio
 		/**
 		 * Returns an estimate of the duration of the partially downloaded
 		 * audio file, in seconds.
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		public function get estimatedDuration():Number
 		{
 			return sound.length / (1000 * sound.bytesLoaded / sound.bytesTotal);	
@@ -119,7 +134,12 @@ package org.osmf.audio
 		 * 
 		 * @returns True if playing the file was successful, false if
 		 * playback failed for some reason.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function play(time:Number=-1):Boolean
 		{
 			var success:Boolean = false;

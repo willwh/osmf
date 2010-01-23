@@ -27,6 +27,11 @@ package org.osmf.events
 	
 	/**
 	 * A MediaElementEvent is dispatched when properties of a MediaElement have changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaElementEvent extends Event
 	{
@@ -35,7 +40,12 @@ package org.osmf.events
 		 * property of the event object for a traitAdd event.
 		 * 
 		 * @eventType traitAdd
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const TRAIT_ADD:String = "traitAdd";
 		
 		/**
@@ -43,7 +53,12 @@ package org.osmf.events
 		 * type property of the event object for a traitRemove event.
 		 * 
 		 * @eventType traitRemove
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const TRAIT_REMOVE:String = "traitRemove";
 		
 		/**
@@ -55,7 +70,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
 		 * @param traitType The MediaTraitType for the trait that was added or removed,.
- 		 **/
+ 		 *  
+ 		 *  @langversion 3.0
+ 		 *  @playerversion Flash 10
+ 		 *  @playerversion AIR 1.5
+ 		 *  @productversion OSMF 1.0
+ 		 */
 		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null)
 		{
 			super(type, bubbles, cancelable);
@@ -65,7 +85,7 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new MediaElementEvent(type, bubbles, cancelable, traitType);
@@ -73,7 +93,12 @@ package org.osmf.events
 		
 		/**
 		 * The MediaTraitType for this event.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get traitType():String
 		{
 			return _traitType;

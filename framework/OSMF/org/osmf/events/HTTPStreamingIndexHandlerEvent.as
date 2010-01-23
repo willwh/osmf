@@ -29,7 +29,7 @@ package org.osmf.events
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class HTTPStreamingIndexHandlerEvent extends Event
 	{
 		public static const NOTIFY_INDEX_READY:String = "notifyIndexReady";

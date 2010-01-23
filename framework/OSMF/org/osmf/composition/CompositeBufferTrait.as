@@ -32,7 +32,12 @@ package org.osmf.composition
 	 * For both parallel and serial media elements, a composite buffer trait
 	 * keeps all buffer properties in sync for the composite element and its
 	 * children.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeBufferTrait extends BufferTrait implements IReusable
 	{
 		public function CompositeBufferTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
@@ -54,11 +59,6 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function get bufferLength():Number
 		{
@@ -150,7 +150,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();

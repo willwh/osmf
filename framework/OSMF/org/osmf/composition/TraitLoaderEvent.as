@@ -28,6 +28,11 @@ package org.osmf.composition
 	/**
 	 * The TraitLoader dispatches a TraitLoaderEvent when the requested
 	 * MediaElement has been found.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	internal class TraitLoaderEvent extends Event
 	{
@@ -36,7 +41,12 @@ package org.osmf.composition
 		 * property of the event object for a traitFound event.
 		 * 
 		 * @eventType traitAdd
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const TRAIT_FOUND:String = "traitFound";
 				
 		/**
@@ -48,7 +58,12 @@ package org.osmf.composition
  		 * list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function TraitLoaderEvent
 			( mediaElement:MediaElement=null
 			, bubbles:Boolean=false
@@ -61,7 +76,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new TraitLoaderEvent(mediaElement);
@@ -69,7 +84,12 @@ package org.osmf.composition
 		
 		/**
 		 * The found MediaElement.  May be null if no such element found.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public var mediaElement:MediaElement;
 	}
 }

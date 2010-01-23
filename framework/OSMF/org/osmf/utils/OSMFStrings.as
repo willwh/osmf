@@ -26,14 +26,24 @@ package org.osmf.utils
 	/**
 	 * Repository for all user-facing strings.  Currently just stored as static
 	 * constants on the class.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class OSMFStrings
 	{
 		/**
 		 * Returns the user-facing string for the given key.  All possible keys
 		 * are defined as static constants on this class.  The parameters are
 		 * optional substitution variables, formatted as {0}, {1}, etc.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function getString(key:String, params:Array=null):String
 		{
 			return resourceStringFunction(key, params);
@@ -47,7 +57,12 @@ package org.osmf.utils
 		 * 
 		 * Clients can supply their own getString function to localize the strings.
 		 * By default, the getString function returns an English-language String.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function get resourceStringFunction():Function
 		{
 			return _resourceStringFunction;

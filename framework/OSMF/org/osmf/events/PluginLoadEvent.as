@@ -28,6 +28,11 @@ package org.osmf.events
 	/**
 	 * This class represents the events when a plugin is loaded, unloaded or fail to load. The 
 	 * event is dispatched by the PluginManager.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class PluginLoadEvent extends Event
 	{
@@ -77,7 +82,12 @@ package org.osmf.events
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param resource The resource representing the plugin.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function PluginLoadEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:MediaResourceBase=null)
 		{
 			super(type, bubbles, cancelable);

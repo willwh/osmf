@@ -34,16 +34,16 @@ package org.osmf.composition
 	 * 
 	 * The SerialDynamicStreamTrait aggregates DynamicStreamTraits in serial, acting as a single
 	 * trait.  This trait will match settings between child traits when switching between children.
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
-	 *  @productversion OSMF 1.0
 	 */ 
 	internal class SerialDynamicStreamTrait extends DynamicStreamTrait implements IReusable
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function SerialDynamicStreamTrait(traitAggregator:TraitAggregator)
 		{
@@ -60,7 +60,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
 			return traitOfCurrentChild.getBitrateForIndex(index);
@@ -76,7 +76,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();
@@ -84,7 +84,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function autoSwitchChangeEnd():void
 		{
 			// Propagate to the current child.
@@ -95,7 +95,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
 		{
 			if (switching)
@@ -113,11 +113,6 @@ package org.osmf.composition
 		 * Adds the child as the current listened child.  Sets the autoswitch, property to 
 		 * carry over from the previous child.  If autoswitch is false, attempts to match the bitrate
 		 * for the next media element.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
-		 *  @productversion OSMF 1.0
 		 */ 
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{		

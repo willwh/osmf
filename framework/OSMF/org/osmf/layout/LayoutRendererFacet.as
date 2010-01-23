@@ -28,6 +28,11 @@ package org.osmf.layout
 	/**
 	 * The LayoutRendererFacet is a facet that holds a single value of type
 	 * Class that implements LayoutRenderer.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class LayoutRendererFacet extends ObjectFacet
 	{

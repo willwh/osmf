@@ -63,6 +63,11 @@ package org.osmf.net
 	 * @see flash.net.NetConnection
 	 * @see flash.net.NetStream
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class NetLoader extends LoaderBase
 	{
@@ -257,7 +262,12 @@ package org.osmf.net
 		 *  Function for creating a NetConnectionFactory  
 		 *
 		 *  @return An NetConnectionFactory
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private function createNetConnectionFactory():NetConnectionFactory
 		{
 			if (netConnectionFactory == null)
@@ -284,7 +294,7 @@ package org.osmf.net
 		 * Initiates the process of creating a connected NetConnection
 		 * 
 		 * @private
-		 **/
+		 */
 		private function startLoadingRTMP(loadTrait:LoadTrait):void
 		{
 			var factory:NetConnectionFactory  = createNetConnectionFactory();
@@ -296,7 +306,7 @@ package org.osmf.net
 		 * Called once the NetConnectionFactory has successfully created a NetConnection
 		 * 
 		 * @private
-		 **/
+		 */
 		private function onCreated(event:NetConnectionFactoryEvent):void
 		{
 			finishLoading(event.netConnection, event.loadTrait, event.shareable, event.currentTarget as NetConnectionFactory);
@@ -307,7 +317,7 @@ package org.osmf.net
 		 * TBD - error dispatched at lower level.
 		 * 
 		 * @private
-		 **/
+		 */
 		private function onCreationFailed(event:NetConnectionFactoryEvent):void
 		{
 			updateLoadTrait(event.loadTrait, LoadState.LOAD_ERROR);
@@ -318,7 +328,7 @@ package org.osmf.net
 		 * 
 		 * @private
 		 * 
-		 **/
+		 */
 		private function startLoadingHTTP(loadTrait:LoadTrait):void
 		{
 			var connection:NetConnection = new NetConnection();
@@ -334,7 +344,7 @@ package org.osmf.net
 		 * new ones are added.
 		 * @private
 		 * 
-		 **/
+		 */
 		private function addListenersToFactory():void
 		{
 			if (netConnectionFactory.hasEventListener(NetConnectionFactoryEvent.CREATED))

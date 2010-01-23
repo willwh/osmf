@@ -30,6 +30,11 @@ package org.osmf.plugin
 	 * in contrast to a dynamic plugin, which is loaded at runtime.
 	 * 
 	 * @see PluginInfo
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class PluginInfoResource extends MediaResourceBase
 	{

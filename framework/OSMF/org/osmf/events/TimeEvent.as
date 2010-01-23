@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A TimeEvent is dispatched when properties of a TimeTrait have changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	     
 	public class TimeEvent extends Event
 	{       	

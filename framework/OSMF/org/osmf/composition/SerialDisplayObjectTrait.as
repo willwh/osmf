@@ -81,7 +81,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();

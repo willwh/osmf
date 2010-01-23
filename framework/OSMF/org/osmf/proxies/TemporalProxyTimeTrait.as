@@ -27,7 +27,7 @@ package org.osmf.proxies
 	
 	/**
 	 * @private
-	 **/
+	 */
 	internal class TemporalProxyTimeTrait extends TimeTrait
 	{
 		public function TemporalProxyTimeTrait(duration:Number)

@@ -28,6 +28,11 @@ package org.osmf.metadata
 
 	/**
 	 * ObjectFacet defines a facet that holds a single object value.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class ObjectFacet extends Facet
 	{
@@ -89,11 +94,6 @@ package org.osmf.metadata
 		 * Always returns the set object value.
 		 * 
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function getValue(identifier:IIdentifier):*
 		{
@@ -102,11 +102,6 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function get synthesizer():FacetSynthesizer
 		{
@@ -118,11 +113,6 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function toString():String
 		{

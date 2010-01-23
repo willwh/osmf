@@ -37,13 +37,23 @@ package org.osmf.utils
 	 * 
 	 * v1 &#60; v2 //otherwise
 	 * </listing>
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class Version
 	{
 		/**
 		 * returns the version string in the format of 
 		 * 	[major][FIELD_SEPARATOR][minor][FIELD_SEPARATOR][changelist]
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function version():String
 		{
 			return _major + FIELD_SEPARATOR + _minor + FIELD_SEPARATOR + _changelist;
@@ -51,7 +61,12 @@ package org.osmf.utils
 		
 		/**
 		 * The most recent OSMF version which is API compatible with the current version.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function get lastAPICompatibleVersion():String
 		{
 			return "0.9.0";
@@ -60,7 +75,12 @@ package org.osmf.utils
 		/**
 		 * The actual string values of major, minor and changelist will be
 		 * dynamically generated at build time.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private static const _major:String = "0";
 		private static const _minor:String = "9";
 		private static const _changelist:String = "0";	

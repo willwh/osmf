@@ -38,6 +38,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * @param bi The box info that contains the size and type of the box
 		 * @param parser The box parser to be used to assist constructing the box
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function AdobeSegmentRunTable()
 		{
@@ -48,6 +53,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The quality segment URL modifiers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get qualitySegmentURLModifiers():Vector.<String>
 		{
@@ -61,6 +71,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * A list of <first segment, number of fragments> pairs.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get segmentFragmentPairs():Vector.<SegmentFragmentPair>
 		{
@@ -69,7 +84,12 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * Adds the given SegmentFragmentPair to this run table.
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		public function addSegmentFragmentPair(sfp:SegmentFragmentPair):void
 		{
 			var prevSfp:SegmentFragmentPair 
@@ -93,6 +113,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * @param fragmentId The Id of the fragment whose segment Id is to be returned.
 		 * 
 		 * @return the Id of the segment that contains the fragment. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function findSegmentIdByFragmentId(fragmentId:uint):uint
 		{

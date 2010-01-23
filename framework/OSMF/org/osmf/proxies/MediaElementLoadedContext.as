@@ -28,11 +28,21 @@ package org.osmf.proxies
 	 * This context carries over the reference to MediaElements created
 	 * by loaders.  This class is useful for chained loading scenarios, such
 	 * as playlists.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class MediaElementLoadedContext implements ILoadedContext
 	{
 		/**
 		 * Created a new element context.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function MediaElementLoadedContext(element:MediaElement)
 		{
@@ -41,6 +51,11 @@ package org.osmf.proxies
 		
 		/**
 		 * The Associated MediaElement
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get element():MediaElement
 		{

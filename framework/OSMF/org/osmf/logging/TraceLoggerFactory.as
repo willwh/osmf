@@ -26,6 +26,11 @@ package org.osmf.logging
 	/**
 	 * This class implements ILoggerFactory. It is the associated logger factory
 	 * for the TraceLogger. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class TraceLoggerFactory implements ILoggerFactory
 	{

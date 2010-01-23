@@ -24,6 +24,11 @@ package org.osmf.metadata
 	/**
 	 * The ObjectIdentifier is the implementation of IIdentifier 
 	 * used to wrap any given Object.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class ObjectIdentifier implements IIdentifier
 	{

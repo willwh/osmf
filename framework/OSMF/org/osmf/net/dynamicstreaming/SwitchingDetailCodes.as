@@ -52,7 +52,12 @@ package org.osmf.net.dynamicstreaming
 		 * @param detailCode The code for the switching detail.
 		 * 
 		 * @return A description of the detail for the specified detail code.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function getDescriptionForSwitchingDetail(detailCode:int):String
 		{
 			var description:String = "";

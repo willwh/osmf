@@ -35,6 +35,11 @@ package org.osmf.containers
 	/**
 	 * HTMLContainer is an IMediaContainer implementing class that uses the ExternalConnection
 	 * to expose the container's child media elements to JavaScript.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class HTMLMediaContainer implements IMediaContainer
 	{
@@ -43,11 +48,6 @@ package org.osmf.containers
 
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function addMediaElement(child:MediaElement):MediaElement
 		{
@@ -92,11 +92,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function removeMediaElement(child:MediaElement):MediaElement
 		{
@@ -135,11 +130,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function containsMediaElement(child:MediaElement):Boolean
 		{
@@ -162,6 +152,11 @@ package org.osmf.containers
 		 * @param containerIdentifier The identifier that will be used for this container
 		 * in JavaScript. If no identifier is specified, a random one will be generated.
 		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function HTMLMediaContainer(containerIdentifier:String = null)
 		{

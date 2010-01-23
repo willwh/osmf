@@ -27,11 +27,21 @@ package org.osmf.metadata
 	/**
 	 * Defines a facet synthesizer that has a synthesize method that always
 	 * returns null.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class NullFacetSynthesizer extends FacetSynthesizer
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function NullFacetSynthesizer(nameSpace:URL)
 		{
@@ -43,7 +53,7 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:CompositionMode, activeMetadata:Metadata):Facet
 		{
 			return null;

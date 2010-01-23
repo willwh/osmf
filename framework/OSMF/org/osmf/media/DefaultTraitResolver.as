@@ -40,6 +40,11 @@ package org.osmf.media
 	 * 
 	 * Removing the added trait will re-instate the default trait as the
 	 * resolvee.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class DefaultTraitResolver extends MediaTraitResolver
 	{
@@ -52,7 +57,7 @@ package org.osmf.media
 		 * 
 		 * @throws ArgumentError If defaultTrait is null, or if its type does
 		 * not match the specified type.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -85,7 +90,7 @@ package org.osmf.media
 		 * Only a single trait can be added to this resolver. Attempting to
 		 * add a second will fail. To change the trait, remove the previously
 		 * added one first.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -108,11 +113,6 @@ package org.osmf.media
 		
 		/**
 		 * @private
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		override protected function processRemoveTrait(instance:MediaTraitBase):MediaTraitBase 
 		{

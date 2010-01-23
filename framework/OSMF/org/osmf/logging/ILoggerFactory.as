@@ -26,6 +26,11 @@ package org.osmf.logging
 	 * point for OSMF applications to get a hold on various loggers. Usually in an OSMF
 	 * application there is one instance of ILoggerFactory object and multiple instances
 	 * of ILogger object
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public interface ILoggerFactory
 	{

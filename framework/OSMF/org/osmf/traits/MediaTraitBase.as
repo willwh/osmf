@@ -76,12 +76,22 @@ package org.osmf.traits
 	 * an implementation of a "display object" trait might be able to work with
 	 * any media element, since DisplayObjectTrait will use the same underlying
 	 *  media implementation (DisplayObject) for any media element.</p> 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MediaTraitBase extends EventDispatcher
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaTraitBase(traitType:String)
 		{
 			super();
@@ -91,7 +101,12 @@ package org.osmf.traits
 		
 		/**
 		 * The MediaTraitType for this trait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get traitType():String
 		{
 			return _traitType;

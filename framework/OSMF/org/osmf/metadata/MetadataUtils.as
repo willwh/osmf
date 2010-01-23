@@ -31,7 +31,12 @@ package org.osmf.metadata
 
 	/**
 	 * Utility class which contains static methods to perform common metadata functions
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 
 	public class MetadataUtils
 	{
@@ -48,7 +53,12 @@ package org.osmf.metadata
 		 * @returns METADATA_MATCH_FOUND		if a match for the metadata is found
 		 * 			METADATA_CONFLICTS_FOUND	if the combination of metadata is conflicting
 		 * 			METADATA_MATCH_UNKNOWN		if metadata required are absent therefore there is no way to know
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function checkMetadataMatchWithResource(
 			resource:MediaResourceBase, mediaTypesSupported:Vector.<String>, mimeTypesSupported:Vector.<String>):int
 		{
@@ -77,7 +87,12 @@ package org.osmf.metadata
 		 * @returns METADATA_MATCH_FOUND		if there are/is match(es) for media type and/or mime type
 		 * 			METADATA_CONFLICTS_FOUND	if the combination media type and mime type is conflicting, or if the MediaTypes don't match, or he MimeTypes don't match.
 		 * 			METADATA_MATCH_UNKNOWN		if media type and mime type are both null therefore there is no way to know
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function checkMetadataMatch(
 			mediaType:String, 
 			mimeType:String, 

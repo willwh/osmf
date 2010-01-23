@@ -34,6 +34,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function AdobeFragmentRandomAccessBox()
 		{
@@ -43,6 +48,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * It is the number of time units in one second which the currentMediaTime and smpteTimeCodeOffset
 		 * use to represent time. By default, 1000 is for milliseconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get timeScale():uint
 		{
@@ -56,6 +66,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The list of local access entries for this fragment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get localRandomAccessEntries():Vector.<LocalRandomAccessEntry>
 		{
@@ -69,6 +84,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The list of global access entries for this fragment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get globalRandomAccessEntries():Vector.<GlobalRandomAccessEntry>
 		{
@@ -83,6 +103,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * Given a seekTime, return the offset of the key frame that is nearest from the 
 		 * left. This is done among localRandomAccessEntries only. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function findNearestKeyFrameOffset(seekToTime:Number):LocalRandomAccessEntry
 		{

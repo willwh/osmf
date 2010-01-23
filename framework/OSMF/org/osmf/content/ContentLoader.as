@@ -49,6 +49,11 @@ package org.osmf.content
 	 * @see ContentElement
 	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.display.Loader
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class ContentLoader extends LoaderBase
 	{
@@ -90,11 +95,6 @@ package org.osmf.content
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#load()
 		 * @param loadTrait LoadTrait to be loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadTrait:LoadTrait):void
 		{
@@ -227,11 +227,6 @@ package org.osmf.content
 		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#unload()
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadTrait:LoadTrait):void
 		{

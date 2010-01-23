@@ -35,6 +35,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function Box()
 		{
@@ -42,6 +47,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * Size of the box.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get size():Number
 		{
@@ -55,6 +65,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * Type of the box.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get type():String
 		{
@@ -68,6 +83,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The size of the box if large box size is used, otherwise 0.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get boxLength():uint
 		{

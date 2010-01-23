@@ -32,6 +32,11 @@ package org.osmf.layout
 	 * Signals that one of Facets's values has changed.
 	 * 
 	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
     [Event(name='facetValueChange', type='org.osmf.events.FacetChangeEvent')]
 
@@ -98,11 +103,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		override public function get namespaceURL():URL
 		{

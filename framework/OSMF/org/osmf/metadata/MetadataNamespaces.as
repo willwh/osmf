@@ -25,6 +25,11 @@ package org.osmf.metadata
 	
 	/**
 	 *  Contains the static constants for metadata namespaces used with Open Source Media Framework.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class MetadataNamespaces
 	{

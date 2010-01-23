@@ -50,11 +50,21 @@ package org.osmf.media
 	 * 		- NetLoader (streaming)
 	 * 	- ImageElement
 	 * 	- SWFElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class DefaultMediaFactory extends MediaFactory
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function DefaultMediaFactory(handlerResolver:IMediaResourceHandlerResolver=null)
 		{

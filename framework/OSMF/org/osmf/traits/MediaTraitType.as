@@ -28,6 +28,11 @@ package org.osmf.traits
 	 * 
 	 * <p>The set of traits in the system are fixed:  clients are not expected
 	 * to introduce their own, as they form the core vocabulary of the system.</p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public final class MediaTraitType
 	{
@@ -125,7 +130,7 @@ package org.osmf.traits
 		 * @private
 		 * 
 		 * Array containing all trait types in the system.
-		 **/
+		 */
 		public static const ALL_TYPES:Vector.<String> = Vector.<String>
 			( 
 			  [   AUDIO

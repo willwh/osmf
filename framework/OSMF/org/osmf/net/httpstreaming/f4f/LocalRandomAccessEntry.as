@@ -33,6 +33,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function LocalRandomAccessEntry()
 		{
@@ -42,6 +47,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * A 64 bit integer that indicates the presentation time of the random access sample 
 		 * in units defined in the timescale field 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get time():Number
 		{
@@ -55,6 +65,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The byte-offset between the beginning of the this afra and the beginning of the random access sample
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get offset():Number
 		{

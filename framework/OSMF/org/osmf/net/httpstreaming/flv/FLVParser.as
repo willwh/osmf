@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	public class FLVParser
 	{
 		public function FLVParser(startWithFileHeader:Boolean)

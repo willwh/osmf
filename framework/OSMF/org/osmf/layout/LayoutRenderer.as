@@ -71,6 +71,11 @@ package org.osmf.layout
 	 *  * processUnstagedTarget, invoked when a target is removed from the stage
 	 *    of the context's container.  
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class LayoutRenderer extends EventDispatcher
 	{
@@ -99,7 +104,7 @@ package org.osmf.layout
 		 * and position values of its targets. The renderer additionally manages
 		 * targets being added and removed as children of the set context's
 		 * display list.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

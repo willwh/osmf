@@ -33,6 +33,11 @@ package org.osmf.metadata
 	/**
 	 * The MetadataWatcher class is a convenience class that helps monitoring Metadata
 	 * instances for change.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MetadataWatcher
 	{

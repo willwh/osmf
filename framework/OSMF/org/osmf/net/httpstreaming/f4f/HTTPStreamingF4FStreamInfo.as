@@ -27,7 +27,7 @@ package org.osmf.net.httpstreaming.f4f
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class HTTPStreamingF4FStreamInfo
 	{
 		public function HTTPStreamingF4FStreamInfo(streamName:String, bitrate:Number=NaN, additionalHeader:ByteArray=null)

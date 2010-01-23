@@ -28,7 +28,7 @@ package org.osmf.composition
 	
 	/**
 	 * @private
-	 **/
+	 */
 	internal class TraitAggregationHelper
 	{
 		public function TraitAggregationHelper

@@ -25,12 +25,22 @@ package org.osmf.display
 	 * <code>ScaleMode</code> controls the layout of out a single piece of content within a container.
 	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>ZOOM</code>.
 	 * <code>ScalableSprite</code> uses <code>ScaleMode</code> to calculate the layout.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public final class ScaleMode
 	{				
 		/**
 		 * <code>NONE</code> implies that the media size is set to match its intrinsic size.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const NONE:String 		= "none";
 		
 		/**
@@ -70,7 +80,7 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function ScaleMode()
 		{
 		}

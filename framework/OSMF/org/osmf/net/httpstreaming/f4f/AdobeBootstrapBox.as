@@ -34,6 +34,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function AdobeBootstrapBox()
 		{
@@ -44,6 +49,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Indicates the version number of the bootstrap information. When the
 		 * update field is set, this indicates the version number that is being
 		 * updated. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get bootstrapVersion():uint
 		{
@@ -58,6 +68,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * Indicates if it is the Named Access (0) or the Range Access (1) Profile. One bit reserved 
 		 * for future profiles. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get profile():uint
 		{
@@ -71,6 +86,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * Indicates if the media presentation is live (1) or not. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get live():Boolean
 		{
@@ -86,6 +106,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Indicates if this table is an update (1) to a previously defined (sent) version of the 
 		 * bootstrap box (or file). Updates are not complete replacement and MAY contain only the 
 		 * changed elements and are sent only when there are changes to the bootstrap information. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get update():Boolean
 		{
@@ -100,6 +125,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * The number of time units in one second which the currentMediaTime and smpteTimeCodeOffset
 		 * use to represent time. By default, 1000 is for milliseconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get timeScale():uint
 		{
@@ -116,6 +146,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * represented in timescale units (default is milliseconds for the live scenario. 
 		 * This is used by the client to request the right fragment number - it MAY be set to the total 
 		 * duration or 0 for non-live cases. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get currentMediaTime():Number
 		{
@@ -131,6 +166,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * The offset of the media time from the SMPTE time code converted to milliseconds. 
 		 * This field could be set to zero when not used. The SMPTE time code modulo 24 hours is used to 
 		 * make the offset positive. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get smpteTimeCodeOffset():Number
 		{
@@ -145,6 +185,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * The identifier of this presentation in the form of a NULL terminated string. 
 		 * This could be a file or pathname in a URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get movieIdentifier():String
 		{
@@ -158,6 +203,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The list of server base URLs.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get serverBaseURLs():Vector.<String>
 		{
@@ -171,6 +221,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The list of quality segment URL modifiers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get qualitySegmentURLModifiers():Vector.<String>
 		{
@@ -185,6 +240,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * DRM metadata required for encrypted files to obtain the necessary keys/license 
 		 * for decryption and playback..
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get drmData():String
 		{
@@ -198,6 +258,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * Metadata.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get metadata():String
 		{
@@ -211,6 +276,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The list of segment run tables. Normally there should be only one. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get segmentRunTables():Vector.<AdobeSegmentRunTable>
 		{
@@ -224,6 +294,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The list of fragment run tables. Normally there should be only one.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get fragmentRunTables():Vector.<AdobeFragmentRunTable>
 		{
@@ -242,6 +317,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * @param fragmentId The Id of the fragment whose containing segment to be found.
 		 * 
 		 * @return the Id of the segment that contains the segment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function findSegmentId(fragmentId:uint):uint
 		{
@@ -250,6 +330,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The total number of fragments in the movie.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get totalFragments():uint
 		{
@@ -260,6 +345,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The total duration of the movie.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get totalDuration():uint
 		{

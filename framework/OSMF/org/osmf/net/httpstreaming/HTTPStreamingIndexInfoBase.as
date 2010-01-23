@@ -28,7 +28,7 @@ package org.osmf.net.httpstreaming
 	 * 
 	 * Base class for the info object which is used to initialize
 	 * the index.
-	 **/
+	 */
 	public class HTTPStreamingIndexInfoBase
 	{
 	}

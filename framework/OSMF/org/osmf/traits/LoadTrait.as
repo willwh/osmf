@@ -32,13 +32,23 @@ package org.osmf.traits
 	 * Dispatched when the state of the LoadTrait has changed.
 	 *
 	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 
 	/**
 	 * Dispatched when total size in bytes of data being loaded has changed.
 	 * 
 	 * @eventType org.osmf.events.LoadEvent.BYTES_TOTAL_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
@@ -59,6 +69,11 @@ package org.osmf.traits
 	 * @see LoadState
 	 * @see org.osmf.composition
 	 * @see org.osmf.media.MediaElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class LoadTrait extends MediaTraitBase
 	{
@@ -99,7 +114,12 @@ package org.osmf.traits
 		/**
 		 * Resource representing the piece of media to be loaded into
 		 * this LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get resource():MediaResourceBase
 		{
 			return _resource;
@@ -107,7 +127,12 @@ package org.osmf.traits
 		
 		/**
 		 * The load state of this trait.  See LoadState for possible values.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get loadState():String
 		{
 			return _loadState;
@@ -121,7 +146,12 @@ package org.osmf.traits
          * <code>LOADING</code> or <code>READY</code>, depending on the loader
          * implementation at hand. The context is <code>null</code> after the
          * LoadTrait has been unloaded.</p>
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
  		public function get loadedContext():ILoadedContext
 		{
 			return _loadedContext;
@@ -143,7 +173,12 @@ package org.osmf.traits
 		 * @throws IllegalOperationError If this trait is unable to load
 		 * itself or if the LoadState is <code>LOADING</code> or
          * <code>READY</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function load():void
 		{
 			if (loader)
@@ -183,7 +218,12 @@ package org.osmf.traits
 		 * 
 		 * @throws IllegalOperationError If this trait is unable to unload
 		 * itself, or if the LoadState is not <code>READY</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function unload():void
 		{
 			if (loader)
@@ -206,7 +246,7 @@ package org.osmf.traits
 		
 		/**
 		 * The number of bytes of data that have been loaded.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -235,7 +275,7 @@ package org.osmf.traits
 		
 		/**
 		 * Sets the load state and (optionally) the loaded context for this LoadTrait.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -258,7 +298,7 @@ package org.osmf.traits
 		 * Sets the number of bytes of data that have been loaded.
 		 *  
 		 * @throws ArgumentError If value is negative, NaN, or greater than bytesTotal.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -285,7 +325,7 @@ package org.osmf.traits
 		 * Sets the total size in bytes of the data being loaded.
 		 *  
 		 * @throws ArgumentError If value is negative or smaller than bytesLoaded.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -387,7 +427,7 @@ package org.osmf.traits
 		/**
 		 * Called just after the <code>loadState</code> and <code>loadedContext</code>
 		 * properties are changed.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

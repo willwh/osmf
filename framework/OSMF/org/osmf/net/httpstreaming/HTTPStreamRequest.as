@@ -27,7 +27,7 @@ package org.osmf.net.httpstreaming
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class HTTPStreamRequest
 	{
 		/**
@@ -35,7 +35,12 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * quality of -1 means "same as was requested"
 		 * truncateAt of -1 means "don't truncate" 
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function HTTPStreamRequest(url:String = null, quality:int = -1, truncateAt:Number = -1)
 		{
 			super();

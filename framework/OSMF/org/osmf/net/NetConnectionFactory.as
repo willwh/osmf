@@ -48,7 +48,12 @@ package org.osmf.net
 	 *
 	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATED
 	 * 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="created", type="org.osmf.events.NetConnectionFactoryEvent")]
 	
 	/**
@@ -56,7 +61,12 @@ package org.osmf.net
 	 *
 	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_FAILED
 	 * 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="creationfailed", type="org.osmf.events.NetConnectionFactoryEvent")]
 	
 	/**
@@ -68,6 +78,11 @@ package org.osmf.net
 	 * 
 	 * @see NetNegotiator
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class NetConnectionFactory extends EventDispatcher
 	{

@@ -27,6 +27,11 @@ package org.osmf.utils
 	 * FMSHost is a utility class providing the FMSURL class the means to 
 	 * return vectors of a typed object for it's properties regarding
 	 * origin/edge information.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class FMSHost
 	{

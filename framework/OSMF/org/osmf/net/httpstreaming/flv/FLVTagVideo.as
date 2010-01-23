@@ -27,7 +27,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	public class FLVTagVideo extends FLVTag
 	{
 		public static const FRAME_TYPE_KEYFRAME:int = 1;

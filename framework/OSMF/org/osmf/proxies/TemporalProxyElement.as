@@ -78,14 +78,24 @@ package org.osmf.proxies
 	 * </listing>
 	 * @see ProxyElement
 	 * @see org.osmf.composition.SerialElement
-	 **/	
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
 	public class TemporalProxyElement extends ProxyElement
 	{
 		/**
 	 	 * Constructor.
 	 	 * @param duration Duration of the TemporalProxyElement's TimeTrait, in seconds.
 	 	 * @param mediaElement Element to be wrapped by this TemporalProxyElement.
-	 	 **/		
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.5
+	 	 *  @productversion OSMF 1.0
+	 	 */		
 		public function TemporalProxyElement(duration:Number, mediaElement:MediaElement=null)
 		{
 			_duration = duration;
@@ -111,7 +121,7 @@ package org.osmf.proxies
 	 	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
 	 	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")),20);	
 	 	 * </listing>
-	 	 **/	
+	 	 */	
 		override protected function setupOverriddenTraits():void
 		{
 			super.setupOverriddenTraits();

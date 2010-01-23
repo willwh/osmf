@@ -23,12 +23,22 @@ package org.osmf.metadata
 {
 	/**
 	 * Utility class for media MIME types.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MimeTypes
 	{
 		/**
 		 * All video MIME types supported by the Flash Player.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const SUPPORTED_VIDEO_MIME_TYPES:Vector.<String> = Vector.<String>
 		([
 			"video/x-flv", 

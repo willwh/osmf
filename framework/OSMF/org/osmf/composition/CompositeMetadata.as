@@ -37,36 +37,71 @@ package org.osmf.composition
 
 	/**
 	 * Event fired when a child metadata instance was added to the composite. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="childAdd", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when a child metadata instance was removed from the composite. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childRemove", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when a child metadata instance got a facet added. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childFacetAdd", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when a child metadata instance got a facet removed. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="childFacetRemove", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when a new facet group emerged. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupAdd", type="org.osmf.event.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when an existing facet group seized to exist. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupRemove", type="org.osmf.event.CompositeMetadataEvent")]
 	
 	/**
 	 * Event fired when a facet group changed. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="facetGroupChange", type="org.osmf.event.CompositeMetadataEvent")]
 	
@@ -96,6 +131,11 @@ package org.osmf.composition
 	 * synthesizer set on this class directly, or indirectly via its parent,
 	 * take precedence over the facet's suggested synthesizer.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	internal class CompositeMetadata extends Metadata
 	{
@@ -344,7 +384,7 @@ package org.osmf.composition
 		 * Only one synthesizer can be registered for a given namespace URL.
 		 * 
 		 * @param synthesizer The facet synthesizer to add.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -424,6 +464,11 @@ package org.osmf.composition
 		 * Collects the namespaces of the facet groups that are currently in existence.
 		 *  
 		 * @return The collected namespaces.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function getFacetGroupNamespaceURLs():Vector.<String>
 		{

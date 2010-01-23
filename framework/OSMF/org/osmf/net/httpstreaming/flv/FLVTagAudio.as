@@ -27,7 +27,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class FLVTagAudio extends FLVTag
 	{
 		public static const SOUND_FORMAT_LINEAR:int = 0;

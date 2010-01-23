@@ -27,7 +27,7 @@ package org.osmf.events
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class HTTPStreamingFileHandlerEvent extends Event
 	{
 		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";

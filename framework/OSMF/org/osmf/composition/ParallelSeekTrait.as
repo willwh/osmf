@@ -34,7 +34,12 @@ package org.osmf.composition
 	 * Implementation of SeekTrait which can be a composite media trait.
 	 * 
 	 * This is the parallel case in which all child media elements seek together.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class ParallelSeekTrait extends CompositeSeekTrait
 	{
 		public function ParallelSeekTrait(traitAggregator:TraitAggregator, owner:MediaElement)
@@ -47,7 +52,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
 			inSeek = true;
@@ -68,7 +73,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function prepareSeekOperationInfo(time:Number):CompositeSeekOperationInfo
 		{
 			var seekToOp:ParallelSeekOperationInfo = new ParallelSeekOperationInfo();
@@ -118,7 +123,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function checkSeeking():Boolean
 		{
 			// The parallel seek trait is in the seeking state if at least one
@@ -139,7 +144,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function onSeekingChanged(event:SeekEvent):void
 		{
 			if (event.type == SeekEvent.SEEK_BEGIN && !inSeek)

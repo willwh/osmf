@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A PlayEvent is dispatched when properties of a PlayTrait have changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class PlayEvent extends Event
 	{
@@ -34,7 +39,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType canPauseChange
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const CAN_PAUSE_CHANGE:String = "canPauseChange";
 
 		/**
@@ -43,7 +53,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType playStateChange
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PLAY_STATE_CHANGE:String = "playStateChange";
 		
 		/**
@@ -54,7 +69,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param playState New PlayState of the PlayTrait.
 		 * @param bytes New value of bytesLoaded or bytesTotal.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function PlayEvent
 							( type:String,
 							  bubbles:Boolean=false,
@@ -71,7 +91,7 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new PlayEvent(type, bubbles, cancelable, playState, canPause);
@@ -79,7 +99,12 @@ package org.osmf.events
 
 		/**
 		 * New PlayState of the PlayTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get playState():String
 		{
 			return _playState;
@@ -87,7 +112,12 @@ package org.osmf.events
 
 		/**
 		 * New canPause state of the PlayTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get canPause():Boolean
 		{
 			return _canPause;

@@ -23,22 +23,42 @@ package org.osmf.traits
 {
 	/**
 	 * The state of a PlayTrait.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public final class PlayState
 	{
 		/**
 		 * The trait is playing.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PLAYING:String	= "playing";
 		
 		/**
 		 * The trait is paused.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PAUSED:String = "paused";
 		
 		/**
 		 * The trait is stopped (i.e. neither playing nor paused).
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const STOPPED:String = "stopped";
 	}
 }

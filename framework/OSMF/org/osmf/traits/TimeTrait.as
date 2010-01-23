@@ -27,6 +27,11 @@ package org.osmf.traits
 	 * Dispatched when the duration of the trait changed.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	
@@ -69,7 +74,12 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function TimeTrait(duration:Number=NaN)
 		{
 			super(MediaTraitType.TIME);
@@ -190,7 +200,7 @@ package org.osmf.traits
 		/**
 		 * Invoking this setter will result in the trait's currentTime
 		 * value changing if it differs from currentTime's current value.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -230,7 +240,7 @@ package org.osmf.traits
 		/**
 		 * Invoking this setter will result in the trait's duration
 		 * value changing if it differs from duration's current value.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

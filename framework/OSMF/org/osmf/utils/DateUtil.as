@@ -30,6 +30,11 @@ package org.osmf.utils
 	* 	@langversion ActionScript 3.0
 	*	@playerversion Flash 9.0
 	*	@tiptext
+	*  
+	*  @langversion 3.0
+	*  @playerversion Flash 10
+	*  @playerversion AIR 1.5
+	*  @productversion OSMF 1.0
 	*/	
 	public class DateUtil
 	{
@@ -48,6 +53,11 @@ package org.osmf.utils
 		* @tiptext
 		*
 		* @see http://www.w3.org/TR/NOTE-datetime
+		*  
+		*  @langversion 3.0
+		*  @playerversion Flash 10
+		*  @playerversion AIR 1.5
+		*  @productversion OSMF 1.0
 		*/		     
 		public static function parseW3CDTF(str:String):Date
 		{

@@ -24,7 +24,12 @@ package org.osmf.media
 	/**
 	 * An MediaResourceBaseHandler is an interface for objects that need to
 	 * specify the types of MediaResourceBases that they can handle.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public interface IMediaResourceHandler
 	{
 		/**
@@ -34,7 +39,12 @@ package org.osmf.media
 		 * @param resource The media resource in question.
 		 * 
 		 * @return True if this handler can handle the given resource.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function canHandleResource(resource:MediaResourceBase):Boolean;
 	}
 }

@@ -47,6 +47,11 @@ package org.osmf.layout
 	 * The documentation on each of these classes states how their respective properties
 	 * are interpreted by this renderer.
 	 * 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class DefaultLayoutRenderer extends LayoutRenderer
 	{
@@ -55,11 +60,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
 		{
@@ -68,11 +68,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override protected function get usedMetadataFacets():Vector.<URL>
 		{
@@ -81,11 +76,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{

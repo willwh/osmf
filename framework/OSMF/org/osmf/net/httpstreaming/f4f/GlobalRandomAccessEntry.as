@@ -33,6 +33,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function GlobalRandomAccessEntry()
 		{
@@ -42,6 +47,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * A 64 bit integer that indicates the presentation time of the random access sample 
 		 * in units defined in the timescale field 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get time():Number
 		{
@@ -55,6 +65,11 @@ package org.osmf.net.httpstreaming.f4f
 				
 		/**
 		 * The Segment Id corresponding to this random access point
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get segment():uint
 		{
@@ -68,6 +83,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The Fragment Id corresponding to this random access point
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get fragment():uint
 		{
@@ -82,6 +102,11 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * The byte offset from the beginning of the corresponding Segment of the afra of the Fragment associated 
 		 * with this random access point
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get afraOffset():Number
 		{
@@ -95,6 +120,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The byte offset of this random access point from the associated afra
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get offsetFromAfra():Number
 		{

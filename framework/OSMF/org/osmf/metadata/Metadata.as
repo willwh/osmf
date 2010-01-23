@@ -35,6 +35,11 @@ package org.osmf.metadata
 	 * Dispatched when the an IMetadata has been added.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.FACET_ADD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="facetAdd",type="org.osmf.events.MetadataEvent")]
 	

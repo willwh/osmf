@@ -35,7 +35,12 @@ package org.osmf.composition
 	 * have a trait of the same type.
 	 *
 	 * @eventType org.osmf.composition.TraitAggregatorEvent.TRAIT_AGGREGATED
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="traitAggregated",type="org.osmf.composition.TraitAggregatorEvent")]	
 
 	/**
@@ -44,14 +49,24 @@ package org.osmf.composition
 	 * have a trait of the same type.
 	 *
 	 * @eventType org.osmf.composition.TraitAggregatorEvent.TRAIT_UNAGGREGATED
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="traitUnaggregated",type="org.osmf.composition.TraitAggregatorEvent")]	
 
 	/**
 	 * Dispatched when the listened child changes.
 	 *
 	 * @eventType org.osmf.composition.TraitAggregatorEvent.LISTENED_CHILD_CHANGE
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="listenedChildChange",type="org.osmf.composition.TraitAggregatorEvent")]	
 
 	/**
@@ -59,12 +74,22 @@ package org.osmf.composition
 	 * of MediaElements.  A client of this class will add MediaElements to it,
 	 * and can then perform operations (and receive events) related to all
 	 * instances of the same trait across all MediaElements.
-	 **/		 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */		 
 	internal class TraitAggregator extends EventDispatcher
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function TraitAggregator()
 		{
 			childrenTraits = new Dictionary();		
@@ -79,7 +104,12 @@ package org.osmf.composition
 		 * 
 		 * Dispatches trait removed / trait added events for the previous and
 		 * new listenedChild's traits, respectively.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function set listenedChild(value:MediaElement):void
 		{
 			if (value != _listenedChild)
@@ -150,7 +180,12 @@ package org.osmf.composition
 		/**
 		 * Returns the next child after child which has the given trait.  If child is null,
 		 * returns the first child with the given trait.
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		public function getNextChildWithTrait(child:MediaElement, traitType:String):MediaElement
 		{
 			var nextChild:MediaElement = null;
@@ -180,7 +215,12 @@ package org.osmf.composition
          *  the signature of method should take one parameter, of type MediaTraitBase.  Here is an example
          *  	function myMethod(trait:MediaTraitBase):void
 		 *  Invokes on all traits of type traitType on all children.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function forEachChildTrait(method:Function, traitType:String):void
 		{
 			for each (var mediaElement:MediaElement in childMediaElements)
@@ -203,7 +243,12 @@ package org.osmf.composition
 	    /**
          *  Calls the method named by method, and applies the arguments in args to each trait of children.
 		 *  Invokes on all traits of type traitType on all children.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function invokeOnEachChildTrait(method:String, args:Array, traitType:String):void	
 		{			
 			for each (var mediaElement:MediaElement in childMediaElements)
@@ -219,7 +264,12 @@ package org.osmf.composition
 			
 		/**
 		 *	Returns true any children within this collection have the specified trait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function hasTrait(traitType:String):Boolean
 		{
 			return getNumTraits(traitType) > 0;
@@ -227,7 +277,12 @@ package org.osmf.composition
 		
 		/**
 		 * Returns the number of children within this collection that have the specified trait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getNumTraits(traitType:String):int
 		{
 			var numTraits:int = 0;
@@ -246,7 +301,12 @@ package org.osmf.composition
 		
 		/**
 		 * Returns the number of MediaElements aggregated by the aggregator.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get numChildren():int
 		{
 			return childMediaElements.length;
@@ -255,7 +315,12 @@ package org.osmf.composition
 		/**
 		 * Returns the child at the given index, null if no child exists at
 		 * that index.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getChildAt(index:int):MediaElement
 		{
 			return childMediaElements[index];
@@ -264,7 +329,12 @@ package org.osmf.composition
 		/**
 		 * Returns the index of the given child, -1 if the child is not known
 		 * by the aggregator.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getChildIndex(child:MediaElement):int
 		{
 			return childMediaElements.indexOf(child);
@@ -273,7 +343,12 @@ package org.osmf.composition
 		/**
 		 * Add a child, with traits to be aggregated.  Will cause trait added
 		 * events to be dispatched.
-		 **/			
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */			
 		public function addChild(child:MediaElement):void
 		{
 			addChildAt(child, childMediaElements.length);
@@ -282,7 +357,12 @@ package org.osmf.composition
 		/**
 		 * Add a child, with traits to be aggregated, at the given index.  Will
 		 * cause trait added events to be dispatched.
-		 **/			
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */			
 		public function addChildAt(child:MediaElement, index:int):void
 		{
 			child.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
@@ -311,7 +391,12 @@ package org.osmf.composition
 		
 		/**
 		 * Remove a child, with traits to be aggregated.  Will cause trait removed events to be dispatched.
-		 **/	
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
 		public function removeChild(child:MediaElement):void
 		{	
 			child.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdded);
@@ -340,7 +425,12 @@ package org.osmf.composition
 		/**
 		 * Remove a child, with traits to be aggregated, from the given index.
 		 * Will cause traits removed events to be dispatched.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function removeChildAt(index:int):void
 		{
 			if (index < 0 || index >= childMediaElements.length)
@@ -397,7 +487,12 @@ package org.osmf.composition
 		 * To access, do something like this:  
 		 * 		var mediaElements:Array = childrenTraits[traitType];
 		 * 		var trait:MediaTraitBase = mediaElements[0].getTrait(traitType);
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private var childrenTraits:Dictionary;
 		
 		private var childMediaElements:Array = new Array();

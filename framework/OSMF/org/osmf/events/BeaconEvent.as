@@ -26,7 +26,12 @@ package org.osmf.events
 	/**
 	 * The BeaconEvent is dispatched by a Beacon when its HTTP request
 	 * either succeeds or fails.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class BeaconEvent extends Event
 	{
 		/**
@@ -35,7 +40,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType PING_COMPLETE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PING_COMPLETE:String = "pingComplete";
 
 		/**
@@ -44,7 +54,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType PING_FAILED
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PING_FAILED:String = "pingFailed";
 
 		/**
@@ -55,7 +70,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param errorText Textual description of the error.  Only valid for
 		 * events of type PING_FAILED.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function BeaconEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, errorText:String=null)
 		{
 			super(type, bubbles, cancelable);
@@ -66,7 +86,12 @@ package org.osmf.events
 		/**
 		 * Textual description of the error.  Only valid for events of type
 		 * PING_FAILED.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get errorText():String
 		{
 			return _errorText;

@@ -76,7 +76,12 @@ package org.osmf.proxies
 	 * @see TemporalProxyElement
 	 * @see org.osmf.events.MediaElementEvent
 	 * @see org.osmf.traits
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class ProxyElement extends MediaElement
 	{
 		/**
@@ -89,7 +94,12 @@ package org.osmf.proxies
 		 * wrappedElement setter) immediately after this constructor call, and
 		 * before any other methods on this ProxyElement are called, or an
 		 * IllegalOperationError will be thrown.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function ProxyElement(wrappedElement:MediaElement)
 		{
 			super();
@@ -100,7 +110,12 @@ package org.osmf.proxies
 		/**
 		 * The MediaElement for which this ProxyElement serves as a proxy,
 		 * or wrapper.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function set wrappedElement(value:MediaElement):void
 		{
 			var traitType:String;
@@ -161,7 +176,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get traitTypes():Vector.<String>
 		{
 			var results:Vector.<String> = new Vector.<String>();
@@ -180,7 +195,7 @@ package org.osmf.proxies
 
 		/**
 		 * @private
-		 **/
+		 */
 		override public function hasTrait(type:String):Boolean
 		{
 			if (type == null)
@@ -193,7 +208,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function getTrait(type:String):MediaTraitBase
 		{
 			if (type == null)
@@ -215,7 +230,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get resource():MediaResourceBase
 		{		
 			return wrappedElement ? wrappedElement.resource : null;
@@ -223,7 +238,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/		
+		 */		
 		override public function set resource(value:MediaResourceBase):void
 		{	
 			if (wrappedElement != null)
@@ -252,7 +267,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function dispatchEvent(event:Event):Boolean
 		{			
 			var doDispatchEvent:Boolean = true;
@@ -280,7 +295,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get metadata():Metadata
 		{
 			return wrappedElement.metadata;
@@ -290,7 +305,7 @@ package org.osmf.proxies
 		 * @private
 		 * 
 		 * Don't create any metadata, since we will be using the wrapped element's data only.
-		 **/
+		 */
 		override protected function createMetadata():Metadata
 		{
 			return null;
@@ -300,7 +315,12 @@ package org.osmf.proxies
 		 * Sets up overridden traits and finalizes them to ensure a consistent initialization
 		 * process.  Clients should subclass <code>setupOverriddenTraits()</code>
 		 * instead of this method.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		final override protected function setupTraits():void
 		{
 		}
@@ -311,7 +331,12 @@ package org.osmf.proxies
 		 * element.
 		 * 
 		 * Subclasses can override this method to set up their own traits.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function setupOverriddenTraits():void
 		{
 			super.setupTraits();
@@ -327,7 +352,12 @@ package org.osmf.proxies
 		 * @param type MediaTraitType to block or not block
 		 * @return Returns <code>true</code> to block the trait of the specified type, 
 		 * <code>false</code> not to block
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		protected function blocksTrait(traitType:String):Boolean
 		{
 			return false;

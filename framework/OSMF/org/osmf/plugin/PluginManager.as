@@ -42,21 +42,36 @@ package org.osmf.plugin
 	 * Dispatched when the PluginManager has successfully loaded a plugin.
 	 *
 	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_LOADED
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="pluginLoaded", type="org.osmf.events.PluginLoadEvent")]
 
 	/**
 	 * Dispatched when the PluginManager has failed to load a plugin.
 	 *
 	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_LOAD_FAILED
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="pluginLoadFailed", type="org.osmf.events.PluginLoadEvent")]
 
 	/**
 	 * Dispatched when the PluginManager has successfully unloaded a plugin.
 	 *
 	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_UNLOADED
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="pluginUnloaded", type="org.osmf.events.PluginLoadEvent")]
 
 	/**
@@ -73,6 +88,11 @@ package org.osmf.plugin
 	 * </ul>
 	 * </p> 
 	 *
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class PluginManager extends EventDispatcher
 	{
@@ -88,7 +108,12 @@ package org.osmf.plugin
 		 * Version numbers are defined in the org.osmf.utils.Version class.  The default
 		 * (null) indicates that the PluginManager should use Version.lastAPICompatibleVersion.
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function PluginManager(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String=null)
 		{
 			_mediaFactory = mediaFactory;
@@ -109,7 +134,12 @@ package org.osmf.plugin
 		 *
 		 * @throws ArgumentError If resource is null or resource is not IURLResource or PluginClassResource
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function loadPlugin(resource:MediaResourceBase):void
 		{
 			if (resource == null)
@@ -195,7 +225,12 @@ package org.osmf.plugin
 		 * 
 		 * @throws ArgumentError If resource is null or resource is not IURLResource or PluginClassResource
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function unloadPlugin(resource:MediaResourceBase):void
 		{
 			if (resource == null) 
@@ -240,7 +275,12 @@ package org.osmf.plugin
 		 * @param resource MediaResourceBase that is used to identify the plugin.
 		 * 
 		 * @return Returns true or false accordingly.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function isPluginLoaded(resource:MediaResourceBase):Boolean
 		{
 			if (resource == null)
@@ -264,7 +304,12 @@ package org.osmf.plugin
 		 * MediaInfo registering. Plugins can use this MediaFactory to create
 		 * other types of MediaElement.
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get mediaFactory():MediaFactory
 		{
 			return _mediaFactory;
@@ -275,7 +320,12 @@ package org.osmf.plugin
 		 *
 		 * @return Returns the number of plugins that have been loaded
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get numLoadedPlugins():int
 		{
 			return _pluginList.length;
@@ -290,7 +340,12 @@ package org.osmf.plugin
 		 *
 		 * @throws RangeError if the index is out of the range
 		 *
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getLoadedPluginAt(index:int):MediaResourceBase
 		{
 			var pluginEntry:PluginEntry = _pluginList[index];

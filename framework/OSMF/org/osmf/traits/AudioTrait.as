@@ -27,6 +27,11 @@ package org.osmf.traits
 	 * Dispatched when the trait's <code>volume</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.AudioEvent.VOLUME_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="volumeChange",type="org.osmf.events.AudioEvent")]
 	
@@ -80,7 +85,12 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function AudioTrait()
 		{
 			super(MediaTraitType.AUDIO);

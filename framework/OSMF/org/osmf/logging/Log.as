@@ -25,6 +25,11 @@ package org.osmf.logging
 	 * Usually, there is one instance of ILoggerFactory per OSMF application. Log is the
 	 * designated holder of the logger factory for the OSMF application as well as OSMF 
 	 * media framework to access the global logger factory. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class Log
 	{

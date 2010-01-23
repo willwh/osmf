@@ -38,6 +38,11 @@ package org.osmf.composition
 	 * view children's DisplayObject.
 	 * 
 	 * The bounds of the container determine the size of the composition.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	internal class ParallelDisplayObjectTrait extends CompositeDisplayObjectTrait
 	{

@@ -48,12 +48,22 @@ package org.osmf.proxies
 	 * A ProxyElement which listens to all events from its wrapped MediaElement,
 	 * and exposes hooks (available to subclasses) for doing custom processing
 	 * in response to those events.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class ListenerProxyElement extends ProxyElement
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function ListenerProxyElement(wrappedElement:MediaElement)
 		{
 			super(wrappedElement);
@@ -61,7 +71,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function set wrappedElement(value:MediaElement):void
 		{
 			var traitType:String;
@@ -99,7 +109,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processTraitAdd(traitType:String):void
 		{
 		}
@@ -107,7 +122,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processTraitRemove(traitType:String):void
 		{
 		}
@@ -115,7 +135,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processVolumeChange(newVolume:Number):void
 		{
 		}
@@ -123,7 +148,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processMutedChange(muted:Boolean):void
 		{
 		}
@@ -131,7 +161,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processPanChange(newPan:Number):void
 		{
 		}
@@ -139,7 +174,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processBufferingChange(buffering:Boolean):void
 		{
 		}
@@ -147,7 +187,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processBufferTimeChange(newBufferTime:Number):void
 		{
 		}
@@ -155,7 +200,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processLoadStateChange(loadState:String):void
 		{
 		}
@@ -163,7 +213,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processBytesTotalChange(newBytes:Number):void
 		{
 		}
@@ -171,7 +226,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processCanPauseChange(canPause:Boolean):void
 		{
 		}
@@ -179,7 +239,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processPlayStateChange(playState:String):void
 		{
 		}
@@ -187,7 +252,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processSeekingChange(seeking:Boolean, time:Number):void
 		{
 		}
@@ -195,7 +265,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processComplete():void
 		{
 		}
@@ -203,7 +278,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processDurationChange(newDuration:Number):void
 		{
 		}
@@ -211,7 +291,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processMediaSizeChange(oldWidth:Number, oldHeight:Number, newWidth:Number, newHeight:Number):void
 		{
 		}
@@ -219,7 +304,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
 		{
 		}
@@ -227,7 +317,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processNumDynamicStreamsChange():void
 		{
 		}
@@ -235,7 +330,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processAutoSwitchChange(newAutoSwitch:Boolean):void
 		{
 		}
@@ -243,7 +343,12 @@ package org.osmf.proxies
 		/**
 		 * Subclasses can override to perform custom processing in response to
 		 * this change.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processDisplayObjectChange(oldDisplayObject:DisplayObject, newView:DisplayObject):void
 		{
 		}

@@ -25,7 +25,12 @@ package org.osmf.traits
 	 * An ILoadedContext is a marker interface for the context loaded into an
 	 * LoadTrait.  Different LoadTraits will have different types of loaded
 	 * contexts.  
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public interface ILoadedContext
 	{
 	}

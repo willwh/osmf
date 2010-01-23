@@ -29,6 +29,11 @@ package org.osmf.metadata
 	 * Signals that all of the Facets's values have changed.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_ADD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
      [Event(name='facetValueAdd', type='org.osmf.events.FacetValueEvent')]
 	
@@ -73,6 +78,11 @@ package org.osmf.metadata
 	{		
 		/**
 		 * Constructs a new facet with the specified namespace url.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function Facet(namespaceURL:URL)
 		{

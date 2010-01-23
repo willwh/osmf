@@ -36,6 +36,11 @@ package org.osmf.containers
 
 	/**
 	 * MediaContainer defines a Sprite based IMediaContainer implementation.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaContainer extends LayoutContextSprite implements IMediaContainer
 	{
@@ -71,11 +76,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function addMediaElement(element:MediaElement):MediaElement
 		{
@@ -111,11 +111,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function removeMediaElement(element:MediaElement):MediaElement
 		{
@@ -153,11 +148,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function containsMediaElement(element:MediaElement):Boolean
 		{
@@ -199,11 +189,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set width(value:Number):void
 		{
@@ -222,11 +207,6 @@ package org.osmf.containers
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set height(value:Number):void
 		{

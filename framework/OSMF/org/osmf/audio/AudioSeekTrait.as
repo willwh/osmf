@@ -46,11 +46,6 @@ package org.osmf.audio
 		
 		/** 
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override protected function seekingChangeEnd(time:Number):void
 		{

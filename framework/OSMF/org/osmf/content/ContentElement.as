@@ -41,6 +41,11 @@ package org.osmf.content
 	 * by a flash.display.Loader.
 
 	 * @see flash.display.Loader
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class ContentElement extends LoadableMediaElement
 	{

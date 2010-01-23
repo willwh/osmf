@@ -34,13 +34,18 @@ package org.osmf.net
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class NetStreamUtils
 	{
 		/**
 		 * Returns the stream name to be passed to NetStream for a given URL,
 		 * the empty string if no such stream name can be extracted.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function getStreamNameFromURL(url:URL):String
 		{
 			var streamName:String = "";
@@ -75,7 +80,12 @@ package org.osmf.net
 		
 		/**
 		 * Returns true if the given resource represents a streaming resource, false otherwise.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function isStreamingResource(resource:MediaResourceBase):Boolean
 		{
 			var result:Boolean = false;
@@ -95,7 +105,12 @@ package org.osmf.net
 
 		/**
 		 * Returns true if the given URL represents an RTMP stream, false otherwise.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function isRTMPStream(url:URL):Boolean
 		{
 			var result:Boolean = false;
@@ -116,6 +131,11 @@ package org.osmf.net
 		 * Returns the stream type of the given resource.
 		 * 
 		 * @returns One of the stream types defined in org.osmf.net.StreamType
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public static function getStreamType(resource:MediaResourceBase):String
 		{
@@ -138,7 +158,12 @@ package org.osmf.net
 		 * live vs. recorded, subclips, etc.  The results are returned
 		 * in an untyped Object where the start value maps to "start"
 		 * and the len value maps to "len".
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function getPlayArgsForResource(resource:MediaResourceBase):Object
 		{
 			var startArg:int = PLAY_START_ARG_ANY;

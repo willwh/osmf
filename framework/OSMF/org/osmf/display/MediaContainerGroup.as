@@ -34,6 +34,11 @@ package org.osmf.display
 	/**
 	 * MediaContainerGroup defines a d
 	 * more child groups.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaContainerGroup extends LayoutContextSprite
 	{
@@ -137,11 +142,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set calculatedWidth(value:Number):void
 		{
@@ -151,11 +151,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set calculatedHeight(value:Number):void
 		{
@@ -165,11 +160,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set projectedWidth(value:Number):void
 		{
@@ -179,11 +169,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set projectedHeight(value:Number):void
 		{
@@ -193,11 +178,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set width(value:Number):void
 		{
@@ -211,11 +191,6 @@ package org.osmf.display
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function set height(value:Number):void
 		{

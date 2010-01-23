@@ -34,7 +34,7 @@ package org.osmf.net.httpstreaming
 	
 	/**
 	 * @private
-	 **/
+	 */
 	public class HTTPStreamingNetStreamDynamicStreamTrait extends DynamicStreamTrait
 	{
 		/**
@@ -77,7 +77,7 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function autoSwitchChangeStart(value:Boolean):void
 		{
 			netStream.manualSwitchMode = !value;

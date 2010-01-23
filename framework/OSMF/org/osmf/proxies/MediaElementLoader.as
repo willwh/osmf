@@ -28,11 +28,21 @@ package org.osmf.proxies
 	/**
 	 * The Base class for Chained loaders that are used by the 
 	 * LoadableProxyElement.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class MediaElementLoader extends LoaderBase
 	{
 		/**
 		 * Creates a new MediaElementLoader
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function MediaElementLoader()
 		{

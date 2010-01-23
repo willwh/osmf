@@ -30,7 +30,12 @@ package org.osmf.composition
 	
 	/**
 	 * Implementation of LoadTrait which can be a composite media trait.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeLoadTrait extends LoadTrait
 	{
 		/**
@@ -40,7 +45,12 @@ package org.osmf.composition
 		 * of the ILoadable trait within this composite trait.
 		 * @param mode The composition mode to which this composite trait
 		 * should adhere.  See CompositionMode for valid values.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function CompositeLoadTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
 		{
 			super(null, null);
@@ -121,7 +131,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get resource():MediaResourceBase
 		{
 			var value:MediaResourceBase = null;
@@ -142,7 +152,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override public function load():void
 		{
 			if (mode == CompositionMode.PARALLEL)
@@ -177,7 +187,7 @@ package org.osmf.composition
 
 		/**
          * @private
-		 **/
+		 */
 		override public function unload():void
 		{
 			if (mode == CompositionMode.PARALLEL)

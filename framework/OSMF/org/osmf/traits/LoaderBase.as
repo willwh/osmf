@@ -33,11 +33,21 @@ package org.osmf.traits
 	 * the ILoader has changed.
 	 *
 	 * @eventType org.osmf.events.LoaderEvent.STATE_CHANGE
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="loaderStateChange", type="org.osmf.events.LoaderEvent")]
 	
 	/**
 	 * Default implementation of ILoader.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	 
 	public class LoaderBase extends EventDispatcher implements ILoader
 	{
@@ -46,7 +56,7 @@ package org.osmf.traits
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return false;
@@ -58,7 +68,12 @@ package org.osmf.traits
 		/**
 		 * If this method is overridden, the subclass must call super.load() in order
 		 * to validate the load.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function load(loadTrait:LoadTrait):void
 		{
 			validateLoad(loadTrait);
@@ -67,7 +82,12 @@ package org.osmf.traits
 		/**
 		 * If this method is overridden, the subclass must call super.unload() in order
 		 * to validate the unload.  The LoadTrait's loadState is set to LoadState.UNINITIALIZED.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function unload(loadTrait:LoadTrait):void
 		{
 			validateUnload(loadTrait);		
@@ -82,7 +102,12 @@ package org.osmf.traits
 		 * @param loadTrait The LoadTrait to update.
 		 * @param newState The new LoadState of the LoadTrait.
 		 * @param loadedContext The loaded context (if any) of the LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function updateLoadTrait(loadTrait:LoadTrait, newState:String, loadedContext:ILoadedContext=null):void
 		{
 			if (newState != loadTrait.loadState)
@@ -115,7 +140,12 @@ package org.osmf.traits
 		
 		/**
 		 * Validates that the given LoadTrait can be loaded.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private function validateLoad(loadTrait:LoadTrait):void
 		{
 			if (loadTrait == null)
@@ -139,7 +169,12 @@ package org.osmf.traits
 		
 		/**
 		 * Validates that the given LoadTrait can be unloaded.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private function validateUnload(loadTrait:LoadTrait):void
 		{
 			if (loadTrait == null)

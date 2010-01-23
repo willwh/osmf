@@ -30,7 +30,12 @@ package org.osmf.media
 	
 	/**
 	 * A base implementation of a MediaElement that has a LoadTrait.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class LoadableMediaElement extends MediaElement
 	{
 		/**
@@ -41,7 +46,12 @@ package org.osmf.media
 		 * media to load into this media element.
 		 * 
 		 * @throws ArgumentError If loader is null.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function LoadableMediaElement(loader:ILoader, resource:MediaResourceBase=null)
 		{
 			super();
@@ -71,7 +81,12 @@ package org.osmf.media
 		/**
 		 * Subclasses can override this method to return a custom LoadTrait
 		 * subclass.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
@@ -81,7 +96,12 @@ package org.osmf.media
 		 * 
 		 * Subclasses can override this method to do processing when the media
 		 * element enters the LOADING state.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processLoadingState():void
 		{
 			// Subclass stub
@@ -90,7 +110,12 @@ package org.osmf.media
 		/**
 		 * Subclasses can override this method to do processing when the media
 		 * element enters the READY state.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processReadyState():void
 		{
 			// Subclass stub
@@ -99,7 +124,12 @@ package org.osmf.media
 		/**
 		 * Subclasses can override this method to do processing when the media
 		 * element enters the UNLOADING state.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function processUnloadingState():void
 		{
 			// Subclass stub

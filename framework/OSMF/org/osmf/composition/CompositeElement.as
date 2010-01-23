@@ -54,12 +54,22 @@ package org.osmf.composition
      *
      * <p>Typically a CompositeElement is not instantiated directly but instead is used as 
      * the base class for creating specific types of media compositions.</p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class CompositeElement extends MediaElement
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function CompositeElement()
 		{
 			super();
@@ -71,7 +81,12 @@ package org.osmf.composition
 		
 		/**
 		 * The number of child MediaElements in this media composition.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get numChildren():int
 		{
 			return children.length;
@@ -83,7 +98,12 @@ package org.osmf.composition
 		 * @param index The index in the list from which to retrieve the child.
 		 * 
 		 * @return The child at that index or <code>null</code> if there is none.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getChildAt(index:int):MediaElement
 		{
 			if (index >= 0 && index < children.length)
@@ -104,7 +124,12 @@ package org.osmf.composition
 		 * 
 		 * @return The index of the child or -1 if the child is not in the
 		 * list.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getChildIndex(child:MediaElement):int
 		{
 			return children.indexOf(child);
@@ -122,7 +147,12 @@ package org.osmf.composition
 		 * @throws IllegalOperation If the child is already a child.
 		 * 
 		 * @return The MediaElement that you pass in the child parameter.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function addChild(child:MediaElement):MediaElement
 		{
 			return addChildAt(child, numChildren);
@@ -142,7 +172,12 @@ package org.osmf.composition
 		 * @throws IllegalOperation If the child is already a child.
 		 * 
 		 * @return The MediaElement that you pass in the child parameter.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function addChildAt(child:MediaElement,index:Number):MediaElement
 		{
 			if (child == null)
@@ -174,7 +209,12 @@ package org.osmf.composition
 		 * @return The MediaElement that you pass in the child parameter.
 		 * 
 		 * @throws ArgumentError If the child is not a child of this composition.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function removeChild(child:MediaElement):MediaElement
 		{
 			var index:int = children.indexOf(child);
@@ -196,7 +236,12 @@ package org.osmf.composition
 		 * 
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than the length of the list.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function removeChildAt(index:int):MediaElement
 		{
 			var child:MediaElement = null;
@@ -220,7 +265,7 @@ package org.osmf.composition
 						
 		/**
 		 * @private
-		 **/
+		 */
 		override public function set resource(value:MediaResourceBase):void
 		{
 			// No-op -- a CompositeElement has no notion of a media resource.
@@ -235,7 +280,7 @@ package org.osmf.composition
 		 * 
 		 * Invoked when a child of the composite element is added.  Subclasses
 		 * can override to do custom processing.
-		 **/
+		 */
 		protected function processAddedChild(child:MediaElement, index:int):void
 		{
 			child.addEventListener(MediaErrorEvent.MEDIA_ERROR, onChildError);
@@ -255,7 +300,7 @@ package org.osmf.composition
 		 * 
 		 * Invoked when a child of the composite element is removed.  Subclasses
 		 * can override to do custom processing.
-		 **/
+		 */
 		protected function processRemovedChild(child:MediaElement):void
 		{
 			child.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onChildError);
@@ -276,7 +321,7 @@ package org.osmf.composition
 		 * Invoked when the specified trait of the specified MediaTraitType is aggregated
 		 * by the TraitAggregator used by this CompositeElement.  Subclasses
 		 * can override to do custom processing.
-		 **/
+		 */
 		protected function processAggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 		}
@@ -287,14 +332,14 @@ package org.osmf.composition
 		 * Invoked when the specified trait of the specified MediaTraitType is
 		 * unaggregated by the TraitAggregator used by this CompositeElement.
 		 * Subclasses can override to do custom processing.
-		 **/
+		 */
 		protected function processUnaggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 		}
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function createMetadata():Metadata
 		{
 			return new CompositeMetadata();
@@ -302,7 +347,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		protected function get compositeMetadata():CompositeMetadata
 		{
 			return CompositeMetadata(metadata);
@@ -314,7 +359,7 @@ package org.osmf.composition
 		 * The TraitAggregator for this CompositeElement.   Used to aggregate
 		 * traits across the children of the composition.  Subclasses can set
 		 * this via <code>createTraitAggregator()</code>.
-		 **/
+		 */
 		protected final function get traitAggregator():TraitAggregator
 		{
 			return _traitAggregator;
@@ -324,7 +369,7 @@ package org.osmf.composition
 		 * @private
 		 * 
 		 * Factory class used to create composite traits.
-		 **/
+		 */
 		protected final function get traitFactory():CompositeMediaTraitFactory
 		{
 			return _traitFactory;

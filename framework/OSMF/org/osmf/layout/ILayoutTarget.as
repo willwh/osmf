@@ -31,6 +31,11 @@ package org.osmf.layout
 	 * Dispatched when a layout target's view has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 	

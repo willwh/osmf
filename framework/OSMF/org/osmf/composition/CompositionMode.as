@@ -23,13 +23,18 @@ package org.osmf.composition
 {
 	/**
 	 * Enumeration of different modes for composite media elements.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public final class CompositionMode
 	{
 		/**
 		 * The PARALLEL composition mode represents media compositions whose
 		 * elements are presented in parallel.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -40,7 +45,7 @@ package org.osmf.composition
 		/**
 		 * The SERIAL composition mode represents media compositions whose
 		 * elements are presented serially.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -55,7 +60,7 @@ package org.osmf.composition
 		 * Constructor
 		 * 
 		 * @param token The token that identifies the composition mode.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

@@ -44,6 +44,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function BoxParser()
 		{
@@ -56,6 +61,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Set bytes to be parsed upon.
 		 * 
 		 * @param ba The byte array to be parsed upon.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function init(ba:ByteArray):void
 		{
@@ -67,6 +77,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * and return a BoxInfo object
 		 * 
 		 * @return a BoxInfo object
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function getNextBoxInfo():BoxInfo
 		{
@@ -86,6 +101,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * of the boxes in the byte array.
 		 * 
 		 * @return the list of root level boxes.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function getBoxes():Vector.<Box>
 		{
@@ -130,6 +150,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Parse and returns AFRA
 		 * 
 		 * @return AFRA if the current byte array from the current position is indeed an AFRA, null otherwise.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function readFragmentRandomAccessBox(bi:BoxInfo):AdobeFragmentRandomAccessBox
 		{
@@ -149,6 +174,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * add the new unsigned integer to the existing number.
 		 * 
 		 * @return the number that is created from the 8 bytes read from the byte array at the current position.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		internal function readLongUIntToNumber():Number
 		{
@@ -168,6 +198,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Reads and returns an unsigned integer from the byte array at the current position.
 		 * 
 		 * @return an unsigned integer.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function readUnsignedInt():uint
 		{
@@ -190,6 +225,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * @param length The number of bytes to read. The default value of 0 causes all available data to be read.  
 		 * 
 		 * @throws IllegalOperaitonError There is not sufficient data available to read.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function readBytes(bytes:ByteArray, offset:uint = 0, length:uint = 0):void
 		{
@@ -207,6 +247,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * @return A 32-bit unsigned integer between 0 and 255.
 		 *  
 		 * @throws IllegalOperaitonError There is not sufficient data available to read.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function readUnsignedByte():uint
 		{
@@ -225,6 +270,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * @return A 32-bit unsigned integer converted from the list of bytes.
 		 *  
 		 * @throws IllegalOperaitonError There is not sufficient data available to read.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function readBytesToUint(length:uint):uint
 		{
@@ -253,6 +303,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Read a null terminated string.
 		 * 
 		 * @return the null terminated string.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		private function readString():String
 		{

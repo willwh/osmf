@@ -126,6 +126,11 @@ package org.osmf.video
 		 * 
 		 * @throws ArgumentError If loader is null, or resource is neither an
 		 * URLResource nor a DynamicStreamingResource.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function VideoElement(loader:NetLoader, resource:MediaResourceBase=null)
 		{	
@@ -148,7 +153,7 @@ package org.osmf.video
        	/**
        	 * The NetClient used by this VideoElement's NetStream.  Available after the 
        	 * element has been loaded.
-	 	 *  
+       	 *  
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
        	 *  @playerversion AIR 1.5
@@ -166,7 +171,7 @@ package org.osmf.video
        	 * Setting this property to a positive value results in the element becoming
        	 * temporal. Any other value will remove the element's TimeTrait, unless the
        	 * loaded content is exposing a duration. 
-       	 * 
+       	 *  
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
        	 *  @playerversion AIR 1.5
@@ -236,6 +241,11 @@ package org.osmf.video
 		 * see flash.media.Video for more information on deblocking modes.
 		 * 
 		 * @see flash.media.Video
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function set deblocking(value:int):void
 		{
@@ -256,7 +266,7 @@ package org.osmf.video
        	
       	/**
 		 * @private
-		 **/
+		 */
 		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
 		{
 			return new NetStreamLoadTrait(loader, resource);
@@ -264,7 +274,7 @@ package org.osmf.video
        	
 	    /**
 	     * @private
-		 **/
+		 */
 		override protected function processReadyState():void
 		{
 			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
@@ -403,7 +413,7 @@ package org.osmf.video
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processUnloadingState():void
 		{
 			NetClient(stream.client).removeHandler(NetStreamCodes.ON_META_DATA, onMetaData);

@@ -32,7 +32,12 @@ package org.osmf.events
 	 * <p>For custom errors, clients should subclass MediaError and override
 	 * <code>getMessageForErrorID</code> to return messages for the custom
 	 * errors.</p>
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MediaError extends Error
 	{
 		/**
@@ -45,7 +50,12 @@ package org.osmf.events
 		 * @param detail An optional string that contains supporting detail
 		 * for the error.  Typically this string is simply the error detail
 		 * provided by a Flash Player API.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaError(errorID:int, detail:String=null)
 		{
 			super(getMessageForErrorID(errorID), errorID);
@@ -57,7 +67,12 @@ package org.osmf.events
 		 * An optional string that contains supporting detail for the error.
 		 * Typically this string is simply the error detail provided by a
 		 * Flash Player API.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get detail():String
 		{
 			return _detail;
@@ -77,7 +92,12 @@ package org.osmf.events
 		 * @param errorID The ID for the error.
 		 * 
 		 * @return The message for the error with the specified error ID.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function getMessageForErrorID(errorID:int):String
 		{
 			return MediaErrorCodes.getMessageForErrorID(errorID);

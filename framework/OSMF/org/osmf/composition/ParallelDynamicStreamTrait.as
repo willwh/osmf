@@ -37,13 +37,18 @@ package org.osmf.composition
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.0
+	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
 	internal class ParallelDynamicStreamTrait extends DynamicStreamTrait
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function ParallelDynamicStreamTrait(traitAggregator:TraitAggregator)
 		{
@@ -60,7 +65,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function getBitrateForIndex(index:int):Number
 		{
 			if (index >= bitrates.length || index < 0)
@@ -73,7 +78,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function autoSwitchChangeStart(value:Boolean):void
 		{
 			if (autoSwitchIsChanging == false)
@@ -199,6 +204,11 @@ package org.osmf.composition
 		 * Updates the max index based on the children's max indices.
 		 * 
 		 * @returns True if there were changes to the bitrate table.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function rebuildBitRateTable():Boolean
 		{
@@ -227,6 +237,11 @@ package org.osmf.composition
 		 * sorted order.
 		 * 
 		 * @returns True if the indices changed.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function mergeChildRates(child:DynamicStreamTrait):Boolean
 		{	
@@ -266,7 +281,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		private function recomputeIndices(event:DynamicStreamEvent = null):void
@@ -299,7 +314,7 @@ package org.osmf.composition
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.0
+		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
 		private function onSwitchingChange(event:DynamicStreamEvent):void

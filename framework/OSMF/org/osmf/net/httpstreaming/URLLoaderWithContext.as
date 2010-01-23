@@ -28,7 +28,7 @@ package org.osmf.net.httpstreaming
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	internal class URLLoaderWithContext extends URLLoader
 	{
 		public function URLLoaderWithContext(request:URLRequest=null, context:* = null)

@@ -26,6 +26,11 @@ package org.osmf.metadata
 	 * a collection of objects.  The IIdentifier should point to one value within the collection.
 	 * an equality function is required to determine of two keys are pointing to the 
 	 * same value.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public interface IIdentifier
 	{

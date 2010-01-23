@@ -28,6 +28,11 @@ package org.osmf.events
 	/**
 	 * The FacetValue change event is used to listen for changes to values within the
 	 * Facets.  The identifier, value, and namespace are all dispatched with this event.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class FacetValueEvent extends Event
 	{
@@ -37,7 +42,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType VALUE_ADD
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const VALUE_ADD:String = "facetValueAdd";
 		
 		/**
@@ -46,7 +56,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType VALUE_REMOVE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const VALUE_REMOVE:String = "facetValueRemove";
 				
 		/**
@@ -57,7 +72,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param identifier The unique identifier for this key in the facet's collection.
 		 * @param value The affected value.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function FacetValueEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null)
 		{		
 			super(type, bubbles, cancelable);

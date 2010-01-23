@@ -30,6 +30,11 @@ package org.osmf.events
 	/**
 	 * A NetNegotiator dispatches this event when it has either succeeded or failed at
 	 * negotiating a connected NetConnection. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class NetNegotiatorEvent extends Event
 	{
@@ -71,7 +76,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param netConnection NetConnection to which this event refers.
  		 * @param mediaError A MediaError associated with this event.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function NetNegotiatorEvent
 			( type:String
 			, bubbles:Boolean=false

@@ -27,14 +27,24 @@ package org.osmf.utils
 	
 	/**
 	 * Loaded context for an HTTP request.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class HTTPLoadedContext implements ILoadedContext
 	{
 		/**
 		 * Constructor.
 		 * 
 		 * @param The URLLoader for the HTTP request.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function HTTPLoadedContext(urlLoader:URLLoader)
 		{
 			_urlLoader = urlLoader;
@@ -42,7 +52,12 @@ package org.osmf.utils
 		
 		/**
 		 * The URLLoader for the HTTP request.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get urlLoader():URLLoader
 		{
 			return _urlLoader;

@@ -29,6 +29,11 @@ package org.osmf.events
 	 * FacetValueChangeEvent is the event dispatched when the data within a facet changes.
 	 * Data is tracked within an Facet using an IIdentifier.  The newly changed value is also present in this 
 	 * event, as well as the old value.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class FacetValueChangeEvent extends FacetValueEvent
 	{
@@ -38,7 +43,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType VALUE_CHANGE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const VALUE_CHANGE:String = "facetValueChange";
 		
 		/**
@@ -50,7 +60,12 @@ package org.osmf.events
 		 * @param identifier The unique identifier for this key in the facet's collection.
 		 * @param value The affected value.
 		 * @param oldValue The previous value.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function FacetValueChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null, oldValue:*=null)
 		{
 			super(type, bubbles, cancelable, identifier, value);

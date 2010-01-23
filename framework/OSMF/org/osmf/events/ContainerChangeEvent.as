@@ -27,6 +27,11 @@ package org.osmf.events
 
 	/**
 	 * ContainerChangeEvent signals that a reference to an IMediaContainer has changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class ContainerChangeEvent extends Event
 	{
@@ -36,7 +41,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType CONTAINER_CHANGE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const CONTAINER_CHANGE:String = "containerChange";
 		
 		/**

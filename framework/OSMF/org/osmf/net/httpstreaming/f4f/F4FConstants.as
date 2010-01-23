@@ -25,7 +25,7 @@ package org.osmf.net.httpstreaming.f4f
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	internal class F4FConstants
 	{
 		internal static const BOX_TYPE_UUID:String = "uuid";

@@ -32,13 +32,18 @@ package org.osmf.composition
 	 * 
 	 * Helper class for managing transitions from one child of
 	 * a SerialElement to another.
-	 **/
+	 */
 	internal class SerialElementTransitionManager
 	{
 		/**
 		 * Plays the next playable child that follows the current child,
 		 * using the TraitAggregator as the source of available children.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function playNextPlayableChild
 			( traitAggregator:TraitAggregator
 			, noNextPlayableChildCallback:Function
@@ -132,7 +137,12 @@ package org.osmf.composition
 		 * Returns all children that follow the specified currentChild,
 		 * using the specified TraitAggregator as the source of all
 		 * children.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private static function getNextChildren(traitAggregator:TraitAggregator, currentChild:MediaElement):Array
 		{
 			var nextChildren:Array = [];

@@ -33,6 +33,11 @@ package org.osmf.layout
 	 * Dispatched when a layout element's intrinsic width and height changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
@@ -66,11 +71,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get metadata():Metadata
 		{
@@ -81,11 +81,6 @@ package org.osmf.layout
 		 * A reference to this instance.
 		 * 
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get displayObject():DisplayObject
 		{
@@ -94,11 +89,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get intrinsicWidth():Number
 		{
@@ -107,11 +97,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get intrinsicHeight():Number
 		{
@@ -126,11 +111,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		public function get layoutRenderer():LayoutRenderer
 		{
@@ -147,11 +127,6 @@ package org.osmf.layout
 		 * A reference to this instance.
 		 * 
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get container():DisplayObjectContainer
 		{
@@ -163,11 +138,6 @@ package org.osmf.layout
 		 * it by the layout renderer.
 		 * 
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		public function get firstChildIndex():uint
 		{

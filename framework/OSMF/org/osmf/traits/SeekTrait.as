@@ -27,6 +27,11 @@ package org.osmf.traits
 	 * Dispatched when this trait begins a seek operation.
 	 * 
 	 * @eventType org.osmf.events.SeekEvent.SEEK_BEGIN
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="seekBegin",type="org.osmf.events.SeekEvent")]
 
@@ -139,7 +144,12 @@ package org.osmf.traits
 		
 		/**
 		 * The TimeTrait used by this SeekTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected final function get timeTrait():TimeTrait
 		{
 			return _timeTrait;

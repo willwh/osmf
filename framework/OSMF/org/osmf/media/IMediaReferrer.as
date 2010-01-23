@@ -23,7 +23,12 @@ package org.osmf.media
 {
 	/**
 	 * Interface for objects that are capable of referencing MediaElements.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public interface IMediaReferrer
 	{
 		/**
@@ -31,7 +36,12 @@ package org.osmf.media
 		 * false otherwise.
 		 *
 		 * @throws ArgumentError If the parameter is <code>null</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function canReferenceMedia(target:MediaElement):Boolean;
 
 		/**
@@ -44,7 +54,12 @@ package org.osmf.media
 		 * references when it no longer needs to reference them.</p>
 		 *
 		 * @throws ArgumentError If the parameter is <code>null</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function addReference(target:MediaElement):void;
 	}
 }

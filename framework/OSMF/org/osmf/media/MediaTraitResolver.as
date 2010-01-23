@@ -30,12 +30,22 @@ package org.osmf.media
 	
 	/**
 	 * Dispatched when the resolver's resolvedTrait property changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="change", type="flash.events.Event")]
 	
 	/**
 	 * Abstract base class for objects that keep a list of traits of similar type, capable
 	 * of pointing out a so called "active" trait, that currently represents the group.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaTraitResolver extends EventDispatcher
 	{
@@ -44,7 +54,7 @@ package org.osmf.media
 		 *  
 		 * @param type The MediaTraitType for traits that this resolver will be resolving.
 		 * @throws ArgumentError If type is null.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -62,7 +72,7 @@ package org.osmf.media
 		
 		/**
 		 * Defines the MediaTraitType that the resolver handles.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -78,7 +88,7 @@ package org.osmf.media
 		 * a change event if the set value differs from the current value.
 		 * 
 		 * @param value The trait instance to set as the resolved trait.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -102,7 +112,7 @@ package org.osmf.media
 		/**
 		 * Defines the trait instance that currently represents the group of traits as
 		 * a whole.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -122,7 +132,7 @@ package org.osmf.media
 		 * @param instance The instance to add.
 		 * @throws ArgumentError If the passed trait is null, or if the trait's type
 		 * does not match the resolver's trait type.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -152,7 +162,7 @@ package org.osmf.media
 		 * @return The instance that was removed. Null if no matching instance was found.
 		 * @throws ArgumentError If the passed trait is null, or if the trait's type
 		 * does not match the resolver's trait type.
-		 *
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -181,7 +191,7 @@ package org.osmf.media
 		 * 
 		 * @param instance The trait instance to add. On invocation of this method,
 		 * instance has been checked for not being null, or of the wrong trait type.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -198,7 +208,7 @@ package org.osmf.media
 		 * @param instance The trait instance to add. On invocation of this method,
 		 * instance has been checked for not being null, or of the wrong trait type.
 		 * @return The instance that got removed, or null if no instance got removed. 
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

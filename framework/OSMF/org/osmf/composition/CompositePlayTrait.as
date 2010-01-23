@@ -36,7 +36,12 @@ package org.osmf.composition
 		 * of the PlayTrait within this composite trait.
 		 * @param mode The composition mode to which this composite trait
 		 * should adhere.  See CompositionMode for valid values.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function CompositePlayTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
 		{
 			super();
@@ -62,7 +67,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();
@@ -70,7 +75,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function playStateChangeStart(newPlayState:String):void
 		{
 			if (newPlayState != playState && !playStateIsChanging)
@@ -114,7 +119,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function playStateChangeEnd():void
 		{
 			// Never dispatch the event while we're in the middle of

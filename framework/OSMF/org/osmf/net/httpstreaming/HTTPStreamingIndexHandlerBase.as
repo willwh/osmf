@@ -28,29 +28,54 @@ package org.osmf.net.httpstreaming
 
 	/**
 	 * Dispatched when the bootstrap information has been downloaded and parsed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifyIndexReady", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 	
 	/**
 	 * Dispatched when rates information becomes available. The rates usually becomes available
 	 * when the bootstrap information has been parsed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifyRates", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 
 	/**
 	 * Dispatched when total duration value becomes available. The total duration usually becomes available
 	 * when the bootstrap information has been parsed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifyTotalDuration", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 
 	/**
 	 * Dispatched when the index handler needs the index to be downloaded.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="requestLoadIndex", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 	
 	/**
 	 * Dispatched when the index handler encounters an unrecoverable error, such as an invalid 
 	 * bootstrap box or an empty server base url.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifyError", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 
@@ -68,6 +93,11 @@ package org.osmf.net.httpstreaming
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingIndexHandlerBase()
 		{
@@ -79,6 +109,11 @@ package org.osmf.net.httpstreaming
 		 * Subclasses must override to provide a specific implementation.
 		 * 
 		 * @param indexInfo The info object used to initialize the index.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function initialize(indexInfo:HTTPStreamingIndexInfoBase):void
 		{	
@@ -93,6 +128,11 @@ package org.osmf.net.httpstreaming
 		 * notifyIndexReady event.
 		 * 
 		 * @param data The data from the index file.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function processIndexData(data:*):void
 		{
@@ -108,6 +148,11 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * @param time The time for which to retrieve a request object.
 		 * @param quality The quality of the requested stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
@@ -122,6 +167,11 @@ package org.osmf.net.httpstreaming
 		 * Subclasses must override to provide a specific implementation.
 		 * 
 		 * @param quality The quality of the requested stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */	
 		public function getNextFile(quality:int):HTTPStreamRequest
 		{

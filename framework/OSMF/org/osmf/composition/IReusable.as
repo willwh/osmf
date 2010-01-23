@@ -29,12 +29,22 @@ package org.osmf.composition
 	{
 		/**
 		 * Detaches this object from its parent.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function detach():void;
 		
 		/**
 		 * Reattaches this object to its parent.
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		function attach():void;
 	}
 }

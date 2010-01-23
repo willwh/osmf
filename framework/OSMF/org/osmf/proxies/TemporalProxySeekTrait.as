@@ -28,7 +28,7 @@ package org.osmf.proxies
 	
 	/**
 	 * @private
-	 **/
+	 */
 	internal class TemporalProxySeekTrait extends SeekTrait
 	{
 		public function TemporalProxySeekTrait(temporal:TimeTrait)

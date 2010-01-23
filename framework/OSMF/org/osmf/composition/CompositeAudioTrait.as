@@ -32,7 +32,12 @@ package org.osmf.composition
 	 * For both parallel and serial media elements, a composite audio trait
 	 * keeps all audio properties in sync for the composite element and its
 	 * children.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeAudioTrait extends AudioTrait implements IReusable
 	{
 		/**
@@ -40,7 +45,12 @@ package org.osmf.composition
 		 * 
 		 * @param traitAggregator The object which is aggregating all instances
 		 * of the AudioTrait within this composite trait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function CompositeAudioTrait(traitAggregator:TraitAggregator)
 		{
 			super();
@@ -64,7 +74,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function detach():void
 		{
 			traitAggregationHelper.detach();

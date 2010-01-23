@@ -32,6 +32,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function FullBox()
 		{
@@ -40,6 +45,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * Specifies the version of this format of the box.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get version():uint
 		{
@@ -53,6 +63,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * A map of flags
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get flags():uint
 		{

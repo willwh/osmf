@@ -97,12 +97,22 @@ package org.osmf.composition
 	 * greater than its duration.
 	 * </li>
 	 * </ul>
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class ParallelElement extends CompositeElement
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function ParallelElement()
 		{
 			super();
@@ -113,7 +123,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function createMetadata():Metadata
 		{
 			var result:Metadata = super.createMetadata();
@@ -124,7 +134,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/			
+		 */			
 		override protected function processAggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processAggregatedTrait(traitType, trait);
@@ -149,7 +159,7 @@ package org.osmf.composition
 		}
 		/**
 		 * @private
-		 **/	
+		 */	
 		override protected function processUnaggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processUnaggregatedTrait(traitType, trait);

@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	public class FLVHeader
 	{
 		public function FLVHeader(input:IDataInput=null)
@@ -96,7 +96,7 @@ package org.osmf.net.httpstreaming.flv
 		
 		/**
 		 * @private
-		 **/
+		 */
 		internal function readHeader(input:IDataInput):void
 		{
 			if (input.bytesAvailable < MIN_FILE_HEADER_BYTE_COUNT)
@@ -137,7 +137,7 @@ package org.osmf.net.httpstreaming.flv
 		
 		/**
 		 * @private
-		 **/
+		 */
 		internal function readRest(input:IDataInput):void
 		{
 			if (offset > MIN_FILE_HEADER_BYTE_COUNT)
@@ -164,7 +164,7 @@ package org.osmf.net.httpstreaming.flv
 		
 		/**
 		 * @private
-		 **/
+		 */
 		internal function get restBytesNeeded():int
 		{
 			return FLVTag.PREV_TAG_BYTE_COUNT + (offset - MIN_FILE_HEADER_BYTE_COUNT);
@@ -172,7 +172,7 @@ package org.osmf.net.httpstreaming.flv
 		
 		/**
 		 * @private
-		 **/
+		 */
 		internal static const MIN_FILE_HEADER_BYTE_COUNT:int = 9;
 		
 		private var _hasVideoTags:Boolean = true;

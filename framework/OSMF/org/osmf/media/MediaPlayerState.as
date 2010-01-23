@@ -24,6 +24,11 @@ package org.osmf.media
 	/**
      *  The MediaPlayerState class enumerates public constants that describe the current
      *  state of the MediaPlayer.
+     *  
+     *  @langversion 3.0
+     *  @playerversion Flash 10
+     *  @playerversion AIR 1.5
+     *  @productversion OSMF 1.0
      */
     public final class MediaPlayerState
     {

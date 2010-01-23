@@ -34,6 +34,11 @@ package org.osmf.net.httpstreaming
 	
 	/**
 	 * Contains a set of HTTP streaming-related utility functions.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class HTTPStreamingUtils
 	{
@@ -51,6 +56,11 @@ package org.osmf.net.httpstreaming
 		 * @param resource The IMediaResource to be loaded
 		 * 
 		 * @return The Facet if the resource can be loaded for HTTP streaming, null otherwise.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public static function getHTTPStreamingMetadataFacet(resource:MediaResourceBase):Facet
 		{
@@ -95,6 +105,11 @@ package org.osmf.net.httpstreaming
 		 * @param serverBaseUrls The list of server base URLs.
 		 * 
 		 * @return The facet.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public static function createHTTPStreamingMetadataFacet(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Facet
 		{

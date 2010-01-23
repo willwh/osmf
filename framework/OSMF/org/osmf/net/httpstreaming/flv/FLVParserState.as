@@ -25,7 +25,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	internal class FLVParserState
 	{
 		internal static const FILE_HEADER:String = "fileHeader";

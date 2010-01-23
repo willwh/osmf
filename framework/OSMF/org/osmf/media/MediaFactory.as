@@ -45,12 +45,22 @@ package org.osmf.media
 	 * @see MediaResourceBase
 	 * @see MediaResourceBaseHandler    
 	 * @see MediaElement
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class MediaFactory
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaFactory(handlerResolver:IMediaResourceHandlerResolver=null)
 		{
 			allInfos = new Dictionary();
@@ -79,7 +89,12 @@ package org.osmf.media
 		 * 
 		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
 		 * has a <code>null</code> ID field.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function addMediaInfo(info:MediaInfo):void
 		{
 			if (info == null || info.id == null)
@@ -116,7 +131,12 @@ package org.osmf.media
 		 * 
 		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
 		 * has a <code>null</code> ID field.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function removeMediaInfo(info:MediaInfo):void
 		{
 			if (info == null || info.id == null)
@@ -137,7 +157,12 @@ package org.osmf.media
 
 		/**
 		 * The number of MediaInfos managed by the factory.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get numMediaInfos():int
 		{
 			var numInfos:int = 0;
@@ -160,7 +185,12 @@ package org.osmf.media
 		 * @param index The index in the list from which to retrieve the MediaInfo.
 		 * 
 		 * @return The MediaInfo at that index or <code>null</code> if there is none.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getMediaInfoAt(index:int):MediaInfo
 		{
 			var result:MediaInfo = null;
@@ -197,7 +227,12 @@ package org.osmf.media
 		 * 
 		 * @return The MediaInfo with the specified ID or <code>null</code> if the specified
 		 * MediaInfo does not exist in this factory. 
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function getMediaInfoById(id:String):MediaInfo
 		{
 			var result:MediaInfo = null;
@@ -234,7 +269,12 @@ package org.osmf.media
 		 * 
 		 * @return The MediaElement that was created or <code>null</code> if no such
 		 * MediaElement could be created from the MediaResourceBase.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
 			// Note that proxies are resolved before references are applied:
@@ -279,6 +319,11 @@ package org.osmf.media
 		 * Registers a media element as a referrer.  This is automatically 
 		 * called for elements creaed with this factory create MediaElement 
 		 * is called.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		private function registerReferrer(newReferrer:IMediaReferrer):void
 		{

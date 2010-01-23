@@ -38,6 +38,11 @@ package org.osmf.swf
 	 *
 	 * @see SWFElement
 	 * @see flash.display.Loader
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class SWFLoader extends ContentLoader
 	{
@@ -70,11 +75,6 @@ package org.osmf.swf
 		 * Indicates whether this SWFLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for URLResources with SWF extensions.
 		 * @param resource Resource proposed to be loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{

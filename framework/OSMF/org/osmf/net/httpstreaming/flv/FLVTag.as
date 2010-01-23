@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
   	public class FLVTag
 	{
 		// arguably these should move to their own class...

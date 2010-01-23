@@ -36,68 +36,123 @@ package org.osmf.net.httpstreaming
 	 * 
 	 * The LOAD and PLAY states have several sub-states to distinguish between
 	 * operations triggered by seeks, and operations triggered by normal playback.
-	 **/ 
+	 */ 
 	internal class HTTPStreamingState
 	{
 		/**
 		 * Indicates the HTTPNetStream is in its initial state.  No media
 		 * has been passed-in yet.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const INIT:String = "init";
 		
 		/**
 		 * Indicates the HTTPNetStream is about to load a new file in
 		 * response to a seek (or upon startup).
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const LOAD_SEEK:String = "loadSeek";
 
 		/**
 		 * Indicates the HTTPNetStream is loading a new file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const LOAD:String = "load";
 		
 		/**
 		 * Indicates the HTTPNetStream is waiting for conditions to be
 		 * appropriate to load a new file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const LOAD_WAIT:String = "loadWait";
 		
 		/**
 		 * Indicates the HTTPNetStream is about to load a new file as
 		 * a result of completing playback of the previous file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const LOAD_NEXT:String = "loadNext";
 		
 		/**
 		 * Indicates the HTTPNetStream is about to play a new file in
 		 * response to a seek (or upon startup).
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const PLAY_START_SEEK:String = "playStartSeek";
 		
 		/**
 		 * Indicates the HTTPNetStream is about to play a new file as
 		 * a result of completing playback of the previous file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const PLAY_START_NEXT:String = "playStartNext";
 		
 		/**
 		 * Indicates the HTTPNetStream is playing the current file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const PLAY:String = "play";
 		
 		/**
 		 * Indicates the HTTPNetStream has finished playing the current file.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const END_SEGMENT:String = "endSegment";
 		
 		/**
 		 * Indicates the HTTPNetStream is currently seeking.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const SEEK:String = "seek";
 
 		/**
 		 * Indicates the HTTPNetStream has stopped playing.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		internal static const STOP:String = "stop";
 	}
 }

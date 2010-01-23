@@ -28,6 +28,11 @@ package org.osmf.events
 	/**
 	 * Metadata Events are dispatched by the IMetadata object when 
 	 * Facets are added or removed from the metadata collection.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class MetadataEvent extends Event
 	{

@@ -41,7 +41,12 @@ package org.osmf.net.dynamicstreaming
 		 * by the framework.
 		 * @param moreInfo An optional string that contains more information about the
 		 * switching detail.
-		 **/		
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function SwitchingDetail(detailCode:int, moreInfo:String=null)
 		{
 			update(detailCode, moreInfo);

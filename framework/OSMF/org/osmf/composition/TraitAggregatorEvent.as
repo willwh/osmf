@@ -29,6 +29,11 @@ package org.osmf.composition
 	/**
 	 * The TraitAggregator dispatches a TraitAggregatorEvent when media traits are
 	 * aggregated or unaggregated by the aggregator. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	internal class TraitAggregatorEvent extends Event
 	{
@@ -37,7 +42,12 @@ package org.osmf.composition
 		 * property of the event object for a traitAdd event.
 		 * 
 		 * @eventType traitAdd
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const TRAIT_AGGREGATED:String = "traitAggregated";
 		
 		/**
@@ -45,7 +55,12 @@ package org.osmf.composition
 		 * type property of the event object for a traitRemove event.
 		 * 
 		 * @eventType traitRemove
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const TRAIT_UNAGGREGATED:String = "traitUnaggregated";
 
 		/**
@@ -54,7 +69,12 @@ package org.osmf.composition
 		 * listenedChildChange event.
 		 * 
 		 * @eventType traitRemove
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const LISTENED_CHILD_CHANGE:String = "listenedChildChange";
 		
 		/**
@@ -75,7 +95,12 @@ package org.osmf.composition
  		 * list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function TraitAggregatorEvent
 			( type:String
 			, traitType:String
@@ -98,7 +123,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new TraitAggregatorEvent(type, _traitType, _trait, _oldListenedChild, _newListenedChild);
@@ -107,7 +132,12 @@ package org.osmf.composition
 		/**
 		 * The MediaTraitType for this event.  Should be null for events related
 		 * to the listenedChild.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get traitType():String
 		{
 			return _traitType;
@@ -116,7 +146,12 @@ package org.osmf.composition
 		/**
 		 * The trait for this event.  Should be null for events related to
 		 * the listenedChild.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get trait():MediaTraitBase
 		{
 			return _trait;
@@ -125,7 +160,12 @@ package org.osmf.composition
 		/**
 		 * The child for this event.  Should be null for events related to
 		 * the listenedChild.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get child():MediaElement
 		{
 			return _child;
@@ -134,7 +174,12 @@ package org.osmf.composition
 		/**
 		 * The old value of listenedChild for the TraitAggregator.  Should be
 		 * null for events related to aggregation.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get oldListenedChild():MediaElement
 		{
 			return _oldListenedChild;
@@ -143,7 +188,12 @@ package org.osmf.composition
 		/**
 		 * The new value of listenedChild for the TraitAggregator.  Should be
 		 * null for events related to aggregation.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get newListenedChild():MediaElement
 		{
 			return _newListenedChild;

@@ -59,6 +59,11 @@ package org.osmf.swf
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.traits
 	 * @see flash.display.DisplayObjectContainer#addChild()
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class SWFElement extends ContentElement
 	{
@@ -104,7 +109,12 @@ package org.osmf.swf
 		/**
 		 * The root DisplayObject of the loaded SWF.  Null until the SWF is in
 		 * the loaded state, or after it enters the unloading state.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function get swfRoot():DisplayObject
 		{
 			return _swfRoot;

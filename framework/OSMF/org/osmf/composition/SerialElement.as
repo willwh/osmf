@@ -99,12 +99,22 @@ package org.osmf.composition
 	 * N fully complete children, plus the position of the next child.
 	 * </li>
 	 * </ul>
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class SerialElement extends CompositeElement
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function SerialElement()
 		{
 			super();
@@ -122,7 +132,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function createMetadata():Metadata
 		{
 			var result:Metadata = super.createMetadata();
@@ -133,7 +143,7 @@ package org.osmf.composition
 			
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processAddedChild(child:MediaElement, index:int):void
 		{
 			super.processAddedChild(child, index);
@@ -151,7 +161,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processRemovedChild(child:MediaElement):void
 		{
 			super.processRemovedChild(child);
@@ -179,7 +189,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processAggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processAggregatedTrait(traitType, trait);
@@ -219,7 +229,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function processUnaggregatedTrait(traitType:String, trait:MediaTraitBase):void
 		{
 			super.processUnaggregatedTrait(traitType, trait);

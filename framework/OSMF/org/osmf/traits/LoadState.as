@@ -23,34 +23,64 @@ package org.osmf.traits
 {
 	/**
 	 * The state of a LoadTrait.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public final class LoadState
 	{
 		/**
 		 * The LoadTrait has been constructed, but either has not yet started
 		 * loading or has been unloaded.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const UNINITIALIZED:String	= "uninitialized";
 		
 		/**
 		 * The LoadTrait has begun loading.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const LOADING:String			= "loading";
 		
 		/**
 		 * The LoadTrait has begun unloading. Dispatched before any in memory
 		 * media representations are released.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const UNLOADING:String		= "unloading";
 		
 		/**
 		 * The LoadTrait is ready for playback.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const READY:String			= "ready";
 
 		/**
 		 * The LoadTrait has failed to load.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const LOAD_ERROR:String		= "loadError";
 	}
 }

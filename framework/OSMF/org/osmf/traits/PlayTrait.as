@@ -29,6 +29,11 @@ package org.osmf.traits
 	 * Dispatched when the canPause property has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayEvent.CAN_PAUSE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="canPauseChange",type="org.osmf.events.PlayEvent")]
 
@@ -36,6 +41,11 @@ package org.osmf.traits
 	 * Dispatched when the state of the PlayTrait has changed.
 	 * 
 	 * @eventType org.osmf.events.PlayEvent.PLAY_STATE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="playStateChange",type="org.osmf.events.PlayEvent")]
 
@@ -90,7 +100,12 @@ package org.osmf.traits
 		/**
 		 * Indicates whether the media can be paused.  If false, then
 		 * the pause() method is not supported.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get canPause():Boolean
 		{
 			return _canPause;
@@ -149,7 +164,7 @@ package org.osmf.traits
 		
 		/**
 		 * Sets the canPause property for this PlayTrait.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

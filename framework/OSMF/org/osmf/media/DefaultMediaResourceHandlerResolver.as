@@ -28,6 +28,11 @@ package org.osmf.media
 	 * the a default implementation to pick the right resource handler. Since the default
 	 * media resource handler resolver has no further knowledge of various resource handlers,
 	 * it picks the first resource handler from the candidate list, by default.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class DefaultMediaResourceHandlerResolver implements IMediaResourceHandlerResolver
 	{

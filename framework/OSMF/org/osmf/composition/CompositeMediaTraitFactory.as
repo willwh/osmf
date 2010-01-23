@@ -28,7 +28,12 @@ package org.osmf.composition
 	
 	/**
 	 * Factory class for generating composite media traits.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeMediaTraitFactory
 	{
 		/**
@@ -44,7 +49,12 @@ package org.osmf.composition
 		 * adhere.  See CompositionMode for valid values.
 		 * 
 		 * @return The composite trait of the specified type.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function createTrait
 							( traitType:String
 							, traitAggregator:TraitAggregator

@@ -88,6 +88,11 @@ package org.osmf.net.httpstreaming
 		 * @param fileHandler Object which canunmarshal the data from a
 		 * media file fragment so that it can be fed to the NetStream as
 		 * TCMessages.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPNetStream
 			( connection:NetConnection
@@ -129,6 +134,11 @@ package org.osmf.net.httpstreaming
 		 * Whether HTTPNetStream implements enhanced seek on the client side.
 		 * 
 		 * Enhanced seek allows for keyframe-accurate seeking.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function set enhancedSeek(value:Boolean):void
 		{
@@ -142,6 +152,11 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * Getters/(setters if applicable) of a bunch of properties related to the quality of service.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get downloadRatio():Number
 		{
@@ -192,6 +207,11 @@ package org.osmf.net.httpstreaming
 		 * The index info object will be passed to the HTTPStreamingIndexHandler.
 		 * 
 		 * @inheritDoc
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		override public function play(...args):void 
 		{
@@ -251,7 +271,7 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function seek(offset:Number):void
 		{
 			// (change to override seek rather than do this based on seek notify event)
@@ -268,7 +288,7 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function close():void
 		{
 			switch (_state)
@@ -297,7 +317,7 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get time():Number
 		{
 			return super.time + _timeBias;
@@ -305,7 +325,7 @@ package org.osmf.net.httpstreaming
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function set client(object:Object):void 
 		{
 			// and just like DS, we override the client setter to get in between for onPlayStatus (and maybe more in the future)
@@ -463,6 +483,11 @@ package org.osmf.net.httpstreaming
 	
 		/**
 		 * All decision making code for MBR switching happens in this method.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function autoAdjustQuality(seeking:Boolean):void
 		{
@@ -1070,6 +1095,11 @@ package org.osmf.net.httpstreaming
 		/**
 		 * All errors from file index handler and file handler are passed to HTTPNetStream
 		 * via MediaErrorEvent. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		private function onIndexError(event:HTTPStreamingIndexHandlerEvent):void
 		{

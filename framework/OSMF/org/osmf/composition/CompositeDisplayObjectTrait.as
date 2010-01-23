@@ -81,12 +81,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 **/
+		 */
 		override public function get displayObject():DisplayObject
 		{
 			// The aggregate displayObject is the container holding the composite
@@ -96,11 +91,6 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		override public function get mediaWidth():Number
 		{
@@ -109,11 +99,6 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		override public function get mediaHeight():Number
 		{

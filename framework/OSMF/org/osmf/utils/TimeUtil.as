@@ -24,6 +24,11 @@ package org.osmf.utils
 	/**
 	 * Class that contains static utility methods for manipulating and working
 	 * with time values.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class TimeUtil
 	{
@@ -35,6 +40,11 @@ package org.osmf.utils
 		 * <li>offset time (for example 10s or 2m).</li>
 		 * </ul></p>
 		 * Note: Offset times without units (for example 10) are assumed to be seconds.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public static function parseTime(value:String):Number 
 		{
@@ -86,6 +96,11 @@ package org.osmf.utils
 		 * return <code>05:12:30</code>, but passing a value of <code>31</code>
 		 * will return <code>00:31</code>. So in other words, minutes and seconds 
 		 * will always be present.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public static function formatAsTimeCode(sec:Number):String 
 		{

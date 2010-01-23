@@ -30,6 +30,11 @@ package org.osmf.plugin
 	{
 		/**
 		 * Constructor
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function StaticPluginLoader(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String)
 		{
@@ -38,7 +43,7 @@ package org.osmf.plugin
 
 		/**
 		 * Indicates if this loader can handle the given resource.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

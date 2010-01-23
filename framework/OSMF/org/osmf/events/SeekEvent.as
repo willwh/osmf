@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A SeekEvent is dispatched when the properties of a SeekTrait change.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class SeekEvent extends Event
 	{

@@ -31,6 +31,11 @@ package org.osmf.composition
 	/**
 	 * Defines the event class that CompositeMetadata uses on signaling
 	 * various event.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	internal class CompositeMetadataEvent extends Event
 	{
@@ -53,7 +58,7 @@ package org.osmf.composition
 		 * @param facetGroup
 		 * @param facetSynthesizer
 		 * 
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -80,7 +85,7 @@ package org.osmf.composition
 		
 		/**
 		 * Defines the metadata child that is associated with the event.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -93,7 +98,7 @@ package org.osmf.composition
 		
 		/**
 		 * Defines the facet that is associated with the event.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -106,7 +111,7 @@ package org.osmf.composition
 		
 		/**
 		 * Defines the facetGroup that is associated with the event.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -135,11 +140,6 @@ package org.osmf.composition
 		 * 
 		 * Defines the facetSynthesizer that is to be used for synthesis. This
 		 * value can be set by listeners that wish to suggest a synthesizer. 
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */	
 		public function get suggestedFacetSynthesizer():FacetSynthesizer
 		{

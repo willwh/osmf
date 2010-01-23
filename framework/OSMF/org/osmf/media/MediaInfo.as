@@ -26,6 +26,11 @@ package org.osmf.media
 	/**
 	 * Encapsulation of all information needed to dynamically create and
 	 * initialize a MediaElement.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaInfo implements IMediaResourceHandler
 	{
@@ -45,7 +50,12 @@ package org.osmf.media
 		 * <code>MediaInfoType.STANDARD</code>.
 		 * 
 		 * @throws ArgumentError If any argument (except type) is null.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaInfo
 							( id:String,
 							  resourceHandler:IMediaResourceHandler,
@@ -72,7 +82,12 @@ package org.osmf.media
 		
 		/**
 		 *  An identifier that represents this MediaInfo.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get id():String
 		{
 			return _id;
@@ -81,7 +96,12 @@ package org.osmf.media
 		/**
 		 * The handler that determines whether this MediaInfo can handle a
 		 * particular resource.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get resourceHandler():IMediaResourceHandler
 		{
 			return _resourceHandler;
@@ -90,7 +110,12 @@ package org.osmf.media
 		/**
 		 * Function which creates a new instance of the desired MediaElement.
 		 * The function must take no params, and return a MediaElement.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get mediaElementCreationFunction():Function
 		{
 			return _mediaElementCreationFunction;
@@ -98,7 +123,12 @@ package org.osmf.media
 
 		/**
 		 * The type of this MediaInfo.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get type():MediaInfoType
 		{
 			return _type;
@@ -106,7 +136,7 @@ package org.osmf.media
 		
 		/**
 		 * @private
-		 **/
+		 */
 		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return _resourceHandler != null ? _resourceHandler.canHandleResource(resource) : false;

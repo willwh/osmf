@@ -34,11 +34,21 @@ package org.osmf.proxies
 	 * The MediaElement will them be used as the proxies wrapped element.  The Loader needs
 	 * to return a MediaElementContext.  This class is generally used to create on step loading and
 	 * creation of compositions using playlists, such as SMIL.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class LoadableProxyElement extends ProxyElement
 	{
 		/**
 		 * Creates a new LoadableProxyElement.  The Loader needs to return a MediaElementLoadedContext.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function LoadableProxyElement(loader:MediaElementLoader)
 		{	
@@ -75,7 +85,7 @@ package org.osmf.proxies
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function get resource():MediaResourceBase
 		{
 			return _resource;
@@ -86,7 +96,7 @@ package org.osmf.proxies
 		 * 
 		 * Returns the MediaElement's metadata, if the media element hasn't been created yet this
 		 * will return null.
-		 **/
+		 */
 		override public function get metadata():Metadata
 		{			
 			return _metadata;

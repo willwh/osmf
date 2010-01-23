@@ -58,6 +58,11 @@ package org.osmf.logging
 	 * 				logger.debug("here is some channel info {0} and {1}", 15.4, true);
 	 * 				This will log the following String:
 	 * 					"here is some channel info 15.4 and true"
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public interface ILogger
 	{

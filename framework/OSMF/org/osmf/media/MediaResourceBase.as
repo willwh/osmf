@@ -31,7 +31,12 @@ package org.osmf.media
 	 * resource types (e.g. a URL vs. an array of streams), or even different
 	 * variations of the same resource type (e.g. a URL with the ".jpg"
 	 * extension vs. a URL with a ".mp3" extension).</p>
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MediaResourceBase
 	{
 		public function MediaResourceBase()
@@ -41,6 +46,11 @@ package org.osmf.media
 		
 		/**
 		 * The metadata associated with this media resource.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get metadata():Metadata
 		{

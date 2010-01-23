@@ -53,6 +53,11 @@ package org.osmf.manifest
 		 * Parses a Manifest Object from a XML string.
 		 * 
 		 * @throws Error if the parse fails.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function parse(value:String):Manifest
 		{
@@ -293,6 +298,11 @@ package org.osmf.manifest
 		
 		/**
 		 * Generates a MediaResourceBase for the given manifest. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public function createResource(value:Manifest, manifestLocation:URL):MediaResourceBase
 		{			

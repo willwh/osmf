@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A MediaPlayer dispatches a MediaPlayerCapabilityChangeEvent when its capabilities have changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class MediaPlayerCapabilityChangeEvent extends Event
 	{
@@ -150,7 +155,12 @@ package org.osmf.events
 		 * as a result of the change described in the <code>type</code> parameter.
 		 * Value of <code>true</code> means the player has the capability as a
 		 * result of the change, <code>false</code> means it does not.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function MediaPlayerCapabilityChangeEvent
 							( type:String
 							, bubbles:Boolean=false
@@ -166,7 +176,12 @@ package org.osmf.events
 		/**
 		 * Indicates whether the MediaPlayer has the capability
 		 * described by the event.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get enabled():Boolean
 		{
 			return _enabled;
@@ -174,7 +189,7 @@ package org.osmf.events
 
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new MediaPlayerCapabilityChangeEvent(type, bubbles, cancelable, _enabled);

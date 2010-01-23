@@ -30,7 +30,12 @@ package org.osmf.traits
 	 * the ILoader has changed.
 	 *
 	 * @eventType org.osmf.loader.events.LoaderEvent.STATE_CHANGE
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="loadStateChange", type="org.osmf.events.LoaderEvent")]
 
 	/**
@@ -40,6 +45,11 @@ package org.osmf.traits
 	 * actual load operation.
 	 * This decoupling of the loading and unloading from the media allows a 
 	 * MediaElement to use different loaders for different circumstances.</p>
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface ILoader extends IMediaResourceHandler, IEventDispatcher 
 	{
@@ -64,7 +74,12 @@ package org.osmf.traits
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
          * or if the LoadTrait's LoadState is <code>LOADING</code> or
          * <code>READY</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function load(loadTrait:LoadTrait):void;
 		 
 		/**
@@ -86,7 +101,12 @@ package org.osmf.traits
 		 * If this loader cannot unload the specified LoadTrait (as determined by
          * the <code>IMediaResourceHandler.canHandleResource()</code> method),
          * or if the LoadTrait's LoadState is not <code>READY</code>.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		function unload(loadTrait:LoadTrait):void;
 	}
 }

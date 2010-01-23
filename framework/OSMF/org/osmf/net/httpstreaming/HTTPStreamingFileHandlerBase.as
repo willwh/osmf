@@ -29,12 +29,22 @@ package org.osmf.net.httpstreaming
 	/**
 	 * Dispatched when the segment duration value becomes available, after
 	 * beginProcessFile has been invoked.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifySegmentDuration", type="org.osmf.events.HTTPStreamingFileHandlerEvent")]
 	
 	/**
 	 * Dispatched when the time bias value becomes available, after beginProcessFile
 	 * has been invoked.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="notifyTimeBias", type="org.osmf.events.HTTPStreamingFileHandlerEvent")]
 	
@@ -51,6 +61,11 @@ package org.osmf.net.httpstreaming
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingFileHandlerBase()
 		{
@@ -64,6 +79,11 @@ package org.osmf.net.httpstreaming
 		 * @param seek Indicates whether this requested was prompted by a seek.
 		 * @param seekTime Indicates the requested seek time.  Only valid if the
 		 * seek param is true.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function beginProcessFile(seek:Boolean, seekTime:Number):void
 		{
@@ -74,6 +94,11 @@ package org.osmf.net.httpstreaming
 		 * The minimum number of bytes that must be retrieved from the file.
 		 * 
 		 * Subclasses must override to provide a specific implementation. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */	
 		public function get inputBytesNeeded():Number
 		{
@@ -92,6 +117,11 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * @return A ByteArray containing the bytes that should be fed to the
 		 * NetStream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function processFileSegment(input:IDataInput):ByteArray
 		{
@@ -107,6 +137,11 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * @return A ByteArray containing the remaining bytes of the file, that should be
 		 * fed to the NetStream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */	
 		public function endProcessFile(input:IDataInput):ByteArray
 		{
@@ -124,7 +159,12 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * @return A ByteArray containing the remaining bytes of the file, that should be
 		 * fed to the NetStream.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function flushFileSegment(input:IDataInput):ByteArray
 		{
 			throw new IllegalOperationError("The flushFileSegment() method must be overridden by HttpStreamingFileHandlerBase's derived class.");

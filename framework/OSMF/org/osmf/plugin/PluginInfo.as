@@ -96,6 +96,11 @@ package org.osmf.plugin
 	 * </listing>
 	 * @see PluginInfoResource
 	 * @see org.osmf.media.MediaInfo
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class PluginInfo
 	{
@@ -106,7 +111,12 @@ package org.osmf.plugin
 		 * exposes.
 		 * @param supportedFrameworkVersion The version of the framework
 		 * that this plugin supports.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function PluginInfo(mediaInfos:Vector.<MediaInfo>, supportedFrameworkVersion:String)
 		{
 			super();
@@ -132,7 +142,12 @@ package org.osmf.plugin
 		/**
 		 * Returns the version of the framework that this plugin was compiled against.  The
 		 * current version can be obtained from org.osmf.utils.Version.version.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get frameworkVersion():String
 		{
 			return "0.9.0";
@@ -212,6 +227,11 @@ package org.osmf.plugin
 		 * This method is called before getMediaInfoAt or get numMediaInfos.
 		 * 
 		 * Subclasses can override this method to do custom initialization.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function initializePlugin(metadata:Metadata):void
 		{

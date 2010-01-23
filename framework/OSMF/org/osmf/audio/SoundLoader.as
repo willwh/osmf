@@ -53,6 +53,11 @@ package org.osmf.audio
 	 * @see AudioElement
 	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.media.Sound
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class SoundLoader extends LoaderBase
 	{
@@ -76,11 +81,6 @@ package org.osmf.audio
 		 * Returns <code>true</code> for IURLResources with MP3 extensions or media/mime
 		 * types that match MP3.
 		 * @param resource Resource proposed to be loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -111,11 +111,6 @@ package org.osmf.audio
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @param loadTrait LoadTrait to be loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function load(loadTrait:LoadTrait):void
 		{
@@ -216,11 +211,6 @@ package org.osmf.audio
 		 *
 		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function unload(loadTrait:LoadTrait):void
 		{

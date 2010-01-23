@@ -47,6 +47,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingF4FIndexHandler()
 		{
@@ -287,6 +292,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * When there is an MBR switching and the switched-to fragment is DRM protected,
 		 * we need to append the additionalHeader that contains the DRM metadata to the Flash Player
 		 * for that fragment before any additional TCMessage can be appended to FP.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function checkQuality(quality:int):void
 		{

@@ -23,6 +23,11 @@ package org.osmf.metadata
 {
 	/**
 	 * MediaType identifies the varous media types that the Open Source Media Framework can handle out of the box. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class MediaType
 	{	

@@ -27,7 +27,7 @@ package org.osmf.net.httpstreaming.flv
 	
 	/**
 	 * @private
-	 **/ 
+	 */ 
 	public class FLVTagScriptDataObject extends FLVTag
 	{
 		public function FLVTagScriptDataObject(type:int = FLVTag.TAG_TYPE_SCRIPTDATAOBJECT)

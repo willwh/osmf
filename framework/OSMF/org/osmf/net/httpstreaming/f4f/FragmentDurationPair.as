@@ -36,6 +36,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * @param firstFragment The Id of the first of the list of consecutive fragments that have the same duration 
 		 * @param duration The duration of each fragment
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function FragmentDurationPair()
 		{
@@ -43,6 +48,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The Id of the first fragment of a list of consecutive fragments that have the same duration.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get firstFragment():uint
 		{
@@ -56,6 +66,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The duration of each fragment
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get duration():uint
 		{
@@ -69,6 +84,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * Accrued duration up to the point of the fragment.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get durationAccrued():Number
 		{
@@ -88,6 +108,11 @@ package org.osmf.net.httpstreaming.f4f
 		 *    0x01 indicates a discontinuity in Fragment numbering.
 		 *    0x02 indicates a discontinuity in timestamps.
 		 *    0x03 indicates a discontinuity in both timestamps and Fragment numbering.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get discontinuityIndicator():uint
 		{

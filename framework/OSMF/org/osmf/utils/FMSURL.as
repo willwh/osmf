@@ -30,6 +30,11 @@ package org.osmf.utils
 	 * Parses a URL into properties specific to Flash Media Server.
 	 * 
 	 * @see URL
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class FMSURL extends URL
 	{						

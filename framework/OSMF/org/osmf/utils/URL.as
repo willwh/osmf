@@ -30,6 +30,11 @@ package org.osmf.utils
 	 * To use rtmp:// urls with an instance name, use the FMSURL class instead of URL.
 	 * 
 	 * @see FMSURL
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class URL
 	{		
@@ -286,6 +291,11 @@ package org.osmf.utils
 		
 		/**
 		 * The url is fully qualified.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get absolute():Boolean
 		{

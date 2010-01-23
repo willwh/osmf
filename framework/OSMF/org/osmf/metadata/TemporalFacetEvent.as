@@ -65,7 +65,7 @@ package org.osmf.metadata
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new TemporalFacetEvent(type, _value, bubbles, cancelable);

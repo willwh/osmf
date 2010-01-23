@@ -29,6 +29,11 @@ package org.osmf.events
 	 * The MediaErrorCodes class provides static constants for error IDs,
 	 * as well as a means for retrieving a message for a particular error
 	 * ID.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public final class MediaErrorCodes
 	{
@@ -80,7 +85,12 @@ package org.osmf.events
 		 * @param errorID The ID for the error.
 		 * 
 		 * @return The message for the error with the specified ID.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static function getMessageForErrorID(errorID:int):String
 		{
 			var message:String = "";

@@ -28,7 +28,12 @@ package org.osmf.media
 	
 	/**
 	 * Default implementation of IURLResource.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class URLResource extends MediaResourceBase
 	{		
 		// Public interface
@@ -38,7 +43,12 @@ package org.osmf.media
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function URLResource(url:URL)
 		{
 			_url = (url == null) ? new URL(null) : url;	
@@ -46,6 +56,11 @@ package org.osmf.media
 		
 		/**
 		 * Required by the IURLResource interface, returns a URL object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get url():URL
 		{

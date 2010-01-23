@@ -30,6 +30,11 @@ package org.osmf.events
 	/**
 	 * An ILoader dispatches a LoaderEvent when a LoadTrait that it's loading
 	 * or unloading has undergone a notable load-oriented change.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class LoaderEvent extends Event
 	{
@@ -38,7 +43,12 @@ package org.osmf.events
 		 * property of the event object for a loadStateChange event.
 		 * 
 		 * @eventType LOAD_STATE_CHANGE
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const LOAD_STATE_CHANGE:String = "loadStateChange";
 		
 		/**
@@ -52,7 +62,12 @@ package org.osmf.events
 		 * @param oldState The previous state of the loadTrait.
 		 * @param newState The new state of the loadTrait.
 		 * @param loadedContext The loaded context (if any) of the loadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function LoaderEvent
 							( type:String
 							, bubbles:Boolean=false
@@ -75,7 +90,12 @@ package org.osmf.events
 		
 		/**
 		 * The loader for this event.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get loader():ILoader
 		{
 			return _loader;
@@ -83,7 +103,12 @@ package org.osmf.events
 
 		/**
 		 * The LoadTrait for this event.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get loadTrait():LoadTrait
 		{
 			return _loadTrait;
@@ -91,7 +116,12 @@ package org.osmf.events
 
 		/**
 		 * The previous state of the LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get oldState():String
 		{
 			return _oldState;
@@ -99,7 +129,12 @@ package org.osmf.events
 
 		/**
 		 * The new state of the LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get newState():String
 		{
 			return _newState;
@@ -107,7 +142,12 @@ package org.osmf.events
 		
 		/**
 		 * The loaded context (if any) of the LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get loadedContext():ILoadedContext
 		{
 			return _loadedContext;
@@ -115,7 +155,7 @@ package org.osmf.events
 
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new LoaderEvent(type, bubbles, cancelable, loader, loadTrait, oldState, newState, loadedContext);

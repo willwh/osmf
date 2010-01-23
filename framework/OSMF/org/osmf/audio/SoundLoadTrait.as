@@ -36,7 +36,7 @@ package org.osmf.audio
 	
 	/**
 	 * @private
-	 **/
+	 */
 	internal class SoundLoadTrait extends LoadTrait
 	{
 		public function SoundLoadTrait(loader:ILoader, resource:MediaResourceBase)
@@ -61,11 +61,6 @@ package org.osmf.audio
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesLoaded():Number
 		{
@@ -74,11 +69,6 @@ package org.osmf.audio
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		override public function get bytesTotal():Number
 		{

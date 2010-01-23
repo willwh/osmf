@@ -36,6 +36,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * @param firstSegment The Id of the segment of a list of consecutive segments that have the same number of fragments
 		 * @param fragmentsPerSegement The number of fragments that each segment contains
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function SegmentFragmentPair(firstSegment:uint, fragmentsPerSegment:uint)
 		{
@@ -45,6 +50,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The Id of the segment of a list of consecutive segments that have the same number of fragments
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get firstSegment():uint
 		{
@@ -53,6 +63,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The number of fragments that each segment contains
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get fragmentsPerSegment():uint
 		{
@@ -61,6 +76,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The number of fragments accrued up to the current segment
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function set fragmentsAccrued(v:uint):void
 		{

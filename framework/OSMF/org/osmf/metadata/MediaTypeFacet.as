@@ -27,7 +27,12 @@ package org.osmf.metadata
 
 	/**
 	 * Facet class for representing media and MIME types.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MediaTypeFacet extends Facet
 	{
 		public function MediaTypeFacet(mediaType:String = null, mimeType:String = null)
@@ -40,6 +45,11 @@ package org.osmf.metadata
 		/**
 		 * The type of media, corresponding to the enumeration
 		 * org.osmf.metadata.MediaType. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get mediaType():String
 		{
@@ -48,6 +58,11 @@ package org.osmf.metadata
 		
 		/**
 		 * The IANA mime type as defined in the constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public function get mimeType():String
 		{

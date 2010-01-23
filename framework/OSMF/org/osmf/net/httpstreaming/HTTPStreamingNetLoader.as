@@ -32,11 +32,21 @@ package org.osmf.net.httpstreaming
 
 	/**
 	 * A NetLoader subclass which adds support for HTTP streaming.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class HTTPStreamingNetLoader extends NetLoader
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingNetLoader()
 		{

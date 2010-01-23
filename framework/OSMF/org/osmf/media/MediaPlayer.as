@@ -36,6 +36,11 @@ package org.osmf.media
 	 * Dispatched when the <code>duration</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="durationChange", type="org.osmf.events.TimeEvent")]
 	 
@@ -154,7 +159,12 @@ package org.osmf.media
 	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
 	 *
 	 * @eventType org.osmf.events.TimeEvent.CURRENT_TIME_CHANGE
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
     [Event(name="currentTimeChange",type="org.osmf.events.TimeEvent")]  
     
 	/**
@@ -342,7 +352,12 @@ package org.osmf.media
 	 * player occurs.
 	 *
 	 * @eventType org.osmf.events.MediaErrorEvent.MEDIA_ERROR
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event(name="mediaError",type="org.osmf.events.MediaErrorEvent")]
 
 	/**
@@ -480,8 +495,8 @@ package org.osmf.media
 		 * Indicates whether the MediaPlayer starts playing the media as soon as its
 		 * load operation has successfully completed.
 		 * The default is <code>true</code>.
-		 * 
- 		 *  @langversion 3.0
+		 *  
+		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -717,7 +732,7 @@ package org.osmf.media
 		 * Ranges from 0 (silent) to 1 (full volume). 
 		 * <p>If the MediaElement doesn't have audio, then the volume will be set to
 		 * this value as soon as the MediaElement has audio.</p>
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -792,7 +807,7 @@ package org.osmf.media
 		 * Ranges from -1 (full pan left) to 1 (full pan right).
 		 * <p>If the MediaElement doesn't have audio, then the pan property will be set to
 		 * this value as soon as the MediaElement has audio.</p>
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -855,8 +870,8 @@ package org.osmf.media
 		/**
 		 * Indicates whether the media is currently playing.
 		 * <p>The MediaElement must be playable to support this property.</p>
-		 * 
- 		 *  @langversion 3.0
+		 *  
+		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -882,8 +897,8 @@ package org.osmf.media
 		
 		/**
 		 * Indicates whether the media is currently seeking.
-		 * 
- 		 *  @langversion 3.0
+		 *  
+		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -933,7 +948,12 @@ package org.osmf.media
 	     * 
 	     * @throws IllegalOperationError If the media cannot be played (and therefore
 	     * cannot be stopped).
-	     **/
+	     *  
+	     *  @langversion 3.0
+	     *  @playerversion Flash 10
+	     *  @playerversion AIR 1.5
+	     *  @productversion OSMF 1.0
+	     */
 	    public function stop():void
 	    {
 	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
@@ -984,12 +1004,12 @@ package org.osmf.media
 		 * method can be used to manually switch to a specific stream.
 		 * 
 		 * <p>The default is true.</p>
-		 *
+		 *		 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 *		 
 		 */
 		public function get autoDynamicStreamSwitch():Boolean
 		{
@@ -1115,7 +1135,7 @@ package org.osmf.media
 	
 		/**
 		 * DisplayObject for the media.
-		 * 
+         *  
          *  @langversion 3.0
          *  @playerversion Flash 10
          *  @playerversion AIR 1.5
@@ -1128,7 +1148,7 @@ package org.osmf.media
 	
 		 /**
 		 * Duration of the media's playback, in seconds.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -1141,7 +1161,7 @@ package org.osmf.media
 	  	  
     	/**
 		 * Current time of the playhead in seconds.
-		 *   
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

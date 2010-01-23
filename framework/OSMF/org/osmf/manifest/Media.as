@@ -27,21 +27,41 @@ package org.osmf.manifest
 	
 	/**
 	 * Describes a specific piece of media.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	internal class Media
 	{
 		/**
 		 * Information about the drm used with the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var drmMetadata:ByteArray;
 		
 		/**
 		 * The URL that points to the drmMetadata.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
  		public var drmMetadataURL:URL;
 		
 		/**
 		 * The Identifier used to associate with the DRMMetadata.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public var drmMetadataId:String;
 		
@@ -50,11 +70,21 @@ package org.osmf.manifest
 		 * HTTP streamed media. It contains either a byte array
 		 * of, or a URL to, the bootstrap information in the format that corresponds 
 		 * to the bootstrap profile. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapInfo:ByteArray;
  		
  		/**
 		 * The URL that points to the bootstrap info.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapInfoURL:URL;
  		
@@ -63,6 +93,11 @@ package org.osmf.manifest
 		 * For the Named Access profile, use "named". For the Range Access Profile, 
 		 * use "range". For other bootstrapping profiles, use some other string (i.e. 
 		 * the field is extensible). It is required.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
  		public var bootstrapProfile:String;
 		
@@ -71,32 +106,62 @@ package org.osmf.manifest
 		 * then this bootstrapping block will apply to all &lt;media&gt; elements that don't have a 
 		 * bootstrapInfoId property. If it is specified, then this bootstrapping block will apply 
 		 * only to those &lt;media&gt; elements that use the same ID in their bootstrapInfoId property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public var bootstrapInfoId:String;
 				
 		/**
 		 * Location of the media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 		
 		public var url:URL;
 		
 		/**
 		 * The bitrate of the media in kilobits per second.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var bitrate:Number;
 		
 		/**
 		 * Represents the Movie Box, or "moov" atom, for one representation of 
 		 * the piece of media. It is an optional child element of &lt;media&gt;.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public var moov:ByteArray;
 		
 		/**
 		 * Width of the resource in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var width:Number;
 		
 		/**
 		 * Height of the resource in pixels.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var height:Number;
 				

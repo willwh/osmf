@@ -42,6 +42,11 @@ package org.osmf.layout
 	 * Dispatched when a layout child's displayObject has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 	
@@ -99,11 +104,6 @@ package org.osmf.layout
 
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get layoutRenderer():LayoutRenderer
 		{
@@ -120,11 +120,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get metadata():Metadata
 		{
@@ -133,11 +128,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get displayObject():DisplayObject
 		{
@@ -146,11 +136,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get container():DisplayObjectContainer
 		{
@@ -159,11 +144,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get firstChildIndex():uint
 		{
@@ -172,11 +152,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get intrinsicWidth():Number
 		{
@@ -189,11 +164,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function get intrinsicHeight():Number
 		{
@@ -206,11 +176,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function updateIntrinsicDimensions():void
 		{
@@ -222,11 +187,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 	 	public function set calculatedWidth(value:Number):void
 	 	{
@@ -249,11 +209,6 @@ package org.osmf.layout
 	 	
 	 	/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function set calculatedHeight(value:Number):void
 		{
@@ -272,11 +227,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function set projectedWidth(value:Number):void
 	 	{
@@ -298,11 +248,6 @@ package org.osmf.layout
 	 	
 	 	/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */
 		public function set projectedHeight(value:Number):void
 		{

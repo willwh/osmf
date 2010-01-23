@@ -44,6 +44,11 @@ package org.osmf.external
 	 * Internally, an HTMLElement holds switchable playable, pausible,
 	 * temporal and audible traits that HTMLGateway uses to bridge between 
 	 * HTML and Flash.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class HTMLElement extends MediaElement
 	{
@@ -274,7 +279,7 @@ package org.osmf.external
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function set resource(value:MediaResourceBase):void
 		{
 			if (resource != value)

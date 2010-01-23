@@ -38,6 +38,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * @param bi The box info that contains the size and type of the box
 		 * @param parser The box parser to be used to assist constructing the box
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function AdobeFragmentRunTable()
 		{
@@ -48,7 +53,12 @@ package org.osmf.net.httpstreaming.f4f
 		
 		/**
 		 * The time scale for this run table.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get timeScale():uint
 		{
 			return _timeScale;
@@ -61,6 +71,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * The quality segment URL modifiers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get qualitySegmentURLModifiers():Vector.<String>
 		{
@@ -74,6 +89,11 @@ package org.osmf.net.httpstreaming.f4f
 
 		/**
 		 * A list of <first fragment, duration> pairs.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get fragmentDurationPairs():Vector.<FragmentDurationPair>
 		{
@@ -86,6 +106,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * time spot that the newly appended fragment duration pair represents.
 		 * 
 		 * @param fdp The <first fragment, duration> pair to be appended to the list.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function addFragmentDurationPair(fdp:FragmentDurationPair):void
 		{
@@ -96,6 +121,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * The total duration of the movie in terms of the time scale used. It is basically
 		 * the duration accrued until the last fragment duration pair plus the duration for the
 		 * last fragment duration pair.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get totalDuration():uint
 		{
@@ -110,6 +140,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * Id of the fragment that contains the time spot.
 		 * 
 		 * @return the Id of the fragment that contains the time spot.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function findFragmentIdByTime(time:Number):uint
 		{

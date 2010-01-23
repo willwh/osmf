@@ -34,6 +34,11 @@ package org.osmf.traits
 	 * Dispatched when a stream switch is requested, completed, or failed.
 	 * 
 	 * @eventType org.osmf.events.DynamicStreamEvent.SWITCHING_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="switchingChange",type="org.osmf.events.DynamicStreamEvent")]
 	
@@ -285,7 +290,7 @@ package org.osmf.traits
 		/**
 		 * Invoking this setter will result in the trait's numDynamicStreams
 		 * property changing.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -311,7 +316,7 @@ package org.osmf.traits
 		/**
 		 * Invoking this setter will result in the trait's currentIndex
 		 * property changing.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -374,7 +379,7 @@ package org.osmf.traits
 		 * 
 		 * <p>Subclasses that override should call this method to
 		 * dispatch the change event.</p>
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -391,8 +396,8 @@ package org.osmf.traits
          * @param newSwitching New value for the <code>switching</code> property.
          * @param index The index of the stream to switch to.
          * @param detail Optional detail associated with the switching change.
-         * 
-         *  @langversion 3.0
+		 *  
+		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -410,7 +415,7 @@ package org.osmf.traits
 		 * 
 		 * @param index The index of the switched-to stream.
 		 * @param detail Optional detail associated with the switching change.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -433,8 +438,8 @@ package org.osmf.traits
 		 * Called immediately before the <code>maxAllowedIndex</code> property is changed.
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param newIndex New value for the <code>maxAllowedIndex</code> property.
-         * 
-         *  @langversion 3.0
+		 *  
+		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
@@ -445,7 +450,7 @@ package org.osmf.traits
 		
 		/**
 		 * Called just after the <code>maxAllowedIndex</code> property has changed.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

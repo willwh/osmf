@@ -38,6 +38,11 @@ package org.osmf.plugin
 	 * loading support for plugins.
 	 * It is the base class
 	 * for creating static and dynamic plugin loaders.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	internal class PluginLoader extends LoaderBase
 	{
@@ -57,7 +62,12 @@ package org.osmf.plugin
 		
 		/**
 		 * Unloads the given PluginInfo.
-		 **/ 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
 		protected function unloadFromPluginInfo(pluginInfo:PluginInfo):void
 		{
 			if (pluginInfo != null)

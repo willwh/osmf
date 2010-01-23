@@ -33,7 +33,7 @@ package org.osmf.net.httpstreaming.f4f
 	 * @private
 	 * 
 	 * Info object which is used to initialize the F4F index.
-	 **/
+	 */
 	public class HTTPStreamingF4FIndexInfo extends HTTPStreamingIndexInfoBase
 	{
 		public function HTTPStreamingF4FIndexInfo

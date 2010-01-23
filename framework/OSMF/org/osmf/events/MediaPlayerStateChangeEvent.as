@@ -26,6 +26,11 @@ package org.osmf.events
 	/**
 	 * A MediaPlayer dispatches this event when its state  
 	 * has changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */		
 	public class MediaPlayerStateChangeEvent extends Event
 	{
@@ -35,7 +40,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType MEDIA_PLAYER_STATE_CHANGE
-		 **/		
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public static const MEDIA_PLAYER_STATE_CHANGE:String = "mediaPlayerStateChange";
 
  		/**
@@ -45,7 +55,12 @@ package org.osmf.events
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param state New MediaPlayerState of the MediaPlayer.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
         public function MediaPlayerStateChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, state:String=null)
         {
         	super(type, bubbles, cancelable);
@@ -68,7 +83,7 @@ package org.osmf.events
         
         /**
          * @private
-         **/
+         */
         override public function clone():Event
         {
         	return new MediaPlayerStateChangeEvent(type, bubbles, cancelable, _state);

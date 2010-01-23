@@ -34,12 +34,22 @@ package org.osmf.metadata
 	 * Dispatched when the facet group changes as a result of either
 	 * a value being added, removed, or changed on a facet, or when
 	 * a facet is begin added to, or removed from the group.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="change", type="flash.events.Event")]
 	
 	/**
 	 * Defines a group of facets that share one and the same name
 	 * space.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class FacetGroup extends EventDispatcher
 	{
@@ -51,7 +61,7 @@ package org.osmf.metadata
 		 *  
 		 * @param nameSpace The namespace of the facets that all children of
 		 * this group have in common.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -67,7 +77,7 @@ package org.osmf.metadata
 		/**
 		 * Defines the namespace of the facets that all children of this group
 		 * have in common.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -85,7 +95,7 @@ package org.osmf.metadata
 		 * in relation to. This relation is tracked because one facet may be the
 		 * child of multiple metadata instances.
 		 * @param facet The facet to add.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -117,7 +127,7 @@ package org.osmf.metadata
 		 * child of multiple metadata instances.
 		 * @param facet The facet to remove.
 		 * @returns The remove facet, or null if the specified item wasn't listed.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -140,6 +150,11 @@ package org.osmf.metadata
 	
 		/**
 		 * Defines the number of facets that are in the group.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public function get length():int
 		{
@@ -152,7 +167,7 @@ package org.osmf.metadata
 		 * @param index The index of the metadata reference to return.
 		 * @return The metadata reference at the specified index.
 		 * @throws RangeError if the specified index is out of bounds. 
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -174,7 +189,7 @@ package org.osmf.metadata
 		 * @param index The index of the facet to return.
 		 * @return The facet at the specified index.
 		 * @throws RangeError if the specified index is out of bounds. 
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -196,7 +211,7 @@ package org.osmf.metadata
 		 * @param metadata The metadata reference to localize.
 		 * @param facet The facet to localize.
 		 * @return -1 if the pair was not found, or the requested index.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

@@ -29,12 +29,17 @@ package org.osmf.net
 	 * @private
 	 * 
 	 * TimeTrait which allows the client to modify the duration.
-	 **/
+	 */
 	public class ModifiableTimeTrait extends TimeTrait
 	{
 		/**
 		 * Constructor.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function ModifiableTimeTrait(duration:Number=NaN)
 		{
 			super(duration);
@@ -42,7 +47,7 @@ package org.osmf.net
 
 		/**
 		 * @private
-		 **/
+		 */
 		public function set duration(value:Number):void
 		{
 			super.setDuration(value);

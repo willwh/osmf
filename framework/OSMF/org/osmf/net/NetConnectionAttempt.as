@@ -25,6 +25,11 @@ package org.osmf.net
 {
 	/**
 	* NetConnectionAttempt is a utility class for defining the data structure for a connection attempt.
+	*  
+	*  @langversion 3.0
+	*  @playerversion Flash 10
+	*  @playerversion AIR 1.5
+	*  @productversion OSMF 1.0
 	*/
 	public class NetConnectionAttempt
 	{

@@ -29,6 +29,11 @@ package org.osmf.metadata
 	 * from any number of facet values of a given namespace, in
 	 * the context of a parent MetaData, FacetGroup, CompositionMode, 
 	 * and active MetaData context.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class FacetSynthesizer
 	{
@@ -37,7 +42,7 @@ package org.osmf.metadata
 		 * 
 		 * @param nameSpace Defines the namespace of the facet values
 		 * that the synthesizer can interpret.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -52,7 +57,7 @@ package org.osmf.metadata
 		/**
 		 * Defines the namespace of the facet values that the synthesizer
 		 * can interpret.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -79,7 +84,7 @@ package org.osmf.metadata
 		 * @param activeMetadata If the targetMetadata value belongs to a SerialElement this value
 		 * references the metadata of its currently active child.
 		 * @return The synthesized value.
-		 * 
+		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5

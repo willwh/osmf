@@ -38,7 +38,12 @@ package org.osmf.composition
 	 * <ul> seek within the current child
 	 * <ul> seek out of the current child and seek backward
 	 * <ul> seek out of the current child and seek forward
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class SerialSeekTrait extends CompositeSeekTrait
 	{
 		public function SerialSeekTrait(traitAggregator:TraitAggregator, owner:MediaElement)
@@ -51,7 +56,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function doSeek(seekOp:CompositeSeekOperationInfo):void
 		{
 			var serialSeek:SerialSeekOperationInfo = seekOp as SerialSeekOperationInfo;
@@ -110,7 +115,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function prepareSeekOperationInfo(time:Number):CompositeSeekOperationInfo
 		{
 			var serialSegments:Vector.<SerialElementSegment> = prepareSerialSegments();
@@ -153,7 +158,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override protected function checkSeeking():Boolean
 		{
 			// Serail composite seekable is only in seeking state when the current child is in

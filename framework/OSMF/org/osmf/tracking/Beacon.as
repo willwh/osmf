@@ -36,6 +36,11 @@ package org.osmf.tracking
 	 * Dispatched when the Beacon's HTTP request has succeeded.
 	 * 
 	 * @eventType org.osmf.events.BeaconEvent.PING_COMPLETE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="pingComplete",type="org.osmf.events.BeaconEvent")]
 
@@ -54,7 +59,12 @@ package org.osmf.tracking
 	/**
 	 * A Beacon encapsulates an HTTP request to a resource, in which
 	 * the response is irrelevant.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class Beacon extends EventDispatcher
 	{
 		/**
@@ -65,7 +75,12 @@ package org.osmf.tracking
 		 * null, then a default HTTPLoader will be used.
 		 * 
 		 * @throws ArgumentError If url is null.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function Beacon(url:URL, httpLoader:HTTPLoader=null)
 		{
 			if (url == null)
@@ -80,7 +95,12 @@ package org.osmf.tracking
 		/**
 		 * Pings the URL of this beacon.  Will dispatch a BeaconEvent when
 		 * the ping either succeeds or fails.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function ping():void
 		{
 			var urlResource:URLResource = new URLResource(url);

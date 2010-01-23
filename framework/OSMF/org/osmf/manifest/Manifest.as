@@ -30,11 +30,21 @@ package org.osmf.manifest
 	
 	/**
 	 * The Manifest Object represents the Manifest 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	internal class Manifest
 	{			
 		/**
 		 * The id element represents a unique identifier for the media. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public var id:String;
 		
@@ -44,6 +54,11 @@ package org.osmf.manifest
 		 * relative URLs (i.e. those URLs that don't begin with "http://" or "https://" 
 		 * within the manifest file. (Such URLs may include &lt;media&gt; URLs, &lt;bootstrapInfo&gt; 
 		 * URLs, and &lt;drmMetadata&gt; URLs.) 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var baseURL:URL;
 				
@@ -51,6 +66,11 @@ package org.osmf.manifest
 		 * The &lt;duration&gt; element represents the duration of the media, in seconds. 
 		 * It is assumed that all representations of the media have the same duration, 
 		 * hence its placement under the document root. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var duration:Number;
 		
@@ -58,6 +78,11 @@ package org.osmf.manifest
 		 * The &lt;mimeType&gt; element represents the MIME type of the media file. It is assumed 
 		 * that all representations of the media have the same MIME type, hence its 
 		 * placement under the document root. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var mimeType:String;
 		
@@ -66,6 +91,11 @@ package org.osmf.manifest
 		 * Valid values include "live", "recorded", and "any". It is assumed that all representations 
 		 * of the media have the same stream type, hence its placement under the document root. 
 		 * It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public var streamType:String;
 			
@@ -76,6 +106,11 @@ package org.osmf.manifest
 		 * the default deliveryType is "streaming". For media with an HTTP protocol, the default 
 		 * deliveryType is also "streaming". In the latter case, the &lt;bootstrapInfo&gt; field must be 
 		 * present.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var deliveryType:String;
 		
@@ -84,11 +119,21 @@ package org.osmf.manifest
 		 * It is assumed that all representations of the media have the same start time, hence its 
 		 * placement under the document root. The start time must conform to the "date-time" production 
 		 * in RFC3339. It is optional.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var startTime:Date;
 			
 		/**
 		 * The set of different bitrate streams associated with this media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */ 
 		public var media:Vector.<Media> = new Vector.<Media>();
 	}

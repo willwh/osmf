@@ -27,19 +27,34 @@ package org.osmf.media
 	 * <p>Most MediaInfos encapsulate media with a standard creation policy,
 	 * but in some cases a MediaInfo needs some additional, custom setup.
 	 * This class enables the distinction between these types.</p> 
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class MediaInfoType
 	{
 		/**
 		 * The default type.  Represents MediaInfos for standard, creatable
 		 * MediaElements.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const STANDARD:MediaInfoType = new MediaInfoType("standard");
 		
 		/**
 		 * Represents MediaInfos for ProxyElements that should wrap created
 		 * MediaElements.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const PROXY:MediaInfoType = new MediaInfoType("proxy");
 		
 		/**
@@ -47,14 +62,19 @@ package org.osmf.media
 		 * No resource will be set when the plugin's element is created after loaded.
 		 * This type of plugin is meant to be used as a reference plugin without 
 		 * the need to create the plugin's MediaElement explicitly.  
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const CREATE_ON_LOAD:MediaInfoType = new MediaInfoType("createOnLoad");
 		
 		/**
 		 * @private
 		 * 
 		 * Constructor.  Shouldn't need to be called by clients.
-		 **/
+		 */
 		public function MediaInfoType(name:String)
 		{
 			this.name = name;
@@ -64,7 +84,7 @@ package org.osmf.media
 		 * @private
 		 * 
 		 * All available types should be included in this array.
-		 **/
+		 */
 		internal static const ALL_TYPES:Array = [STANDARD, PROXY, CREATE_ON_LOAD];
 
 		private var name:String;

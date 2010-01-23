@@ -40,6 +40,11 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPStreamingF4FFileHandler(indexHandler:HTTPStreamingIndexHandlerBase)
 		{
@@ -236,6 +241,11 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * For the seek case, segment duration is the duration of the whole segment minus
 		 * the portion to be skipped.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		private function processSeekToTime():void
 		{

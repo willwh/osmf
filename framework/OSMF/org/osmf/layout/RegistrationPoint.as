@@ -24,6 +24,11 @@ package org.osmf.layout
 	/**
 	 * Defines an enumeration of registration point values as supported by the
 	 * default layour renderer.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class RegistrationPoint
 	{
@@ -129,11 +134,6 @@ package org.osmf.layout
 		
 		/**
 		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */		
 		public function toString():String
 		{

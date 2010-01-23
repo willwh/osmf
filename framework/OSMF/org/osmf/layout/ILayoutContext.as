@@ -31,6 +31,11 @@ package org.osmf.layout
 	 * An ILayoutContext exposes a container property of type DisplayObjectContainer
 	 * that LayoutRenderer implementing classes may use to stage and unstage their
 	 * targets, as well as to manage the z-ordering of their targets.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public interface ILayoutContext extends ILayoutTarget
 	{

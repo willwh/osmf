@@ -78,7 +78,12 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Vector of DynamicStreamingItems.  Each item represents a
 		 * different bitrate stream.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get streamItems():Vector.<DynamicStreamingItem>
 		{
 			if (_streamItems == null)

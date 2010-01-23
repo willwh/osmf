@@ -32,6 +32,11 @@ package org.osmf.events
 	/**
 	 * A NetConnectionFactory dispatches this event when it has either succeeded or failed at
 	 * establishing a NetConnection. 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */	
 	public class NetConnectionFactoryEvent extends Event 
 	{
@@ -72,7 +77,12 @@ package org.osmf.events
  		 * @param netConnection NetConnection to which this event refers.
  		 * @param loadTrait LoadTrait to which this event refers.
  		 * @param shareable Specifies if this NetConnection may be shared between LoadTraits.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function NetConnectionFactoryEvent
 			( type:String
 			, bubbles:Boolean=false

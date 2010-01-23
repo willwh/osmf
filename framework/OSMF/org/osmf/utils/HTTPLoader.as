@@ -40,11 +40,21 @@ package org.osmf.utils
 
 	/**
 	 * Implementation of ILoader that can retrieve an URLResource using HTTP.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	public class HTTPLoader extends LoaderBase
 	{
 		/**
 		 * Constructor.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function HTTPLoader()
 		{
@@ -53,7 +63,12 @@ package org.osmf.utils
 				
 		/**
 		 * Returns true for any resource using the HTTP(S) protocol.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			// Rule out protocols other than http(s).
@@ -208,7 +223,12 @@ package org.osmf.utils
 		 * 
 		 * Subclasses can override this method to set specific properties on
 		 * the URLLoader.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		protected function createURLLoader():URLLoader
 		{
 			return new URLLoader();

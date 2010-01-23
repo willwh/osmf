@@ -42,7 +42,12 @@ package org.osmf.composition
 	 * the durations of all children.  Its currentTime is the sum of the currentTimes
 	 * of the first N fully complete children, plus the currentTime of the next
 	 * child.
-	 **/
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	internal class CompositeTimeTrait extends TimeTrait
 	{
 		/**
@@ -52,7 +57,12 @@ package org.osmf.composition
 		 * of the TimeTrait within this composite trait.
 		 * @param mode The composition mode to which this composite trait
 		 * should adhere.  See CompositionMode for valid values.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function CompositeTimeTrait(traitAggregator:TraitAggregator, mode:CompositionMode, owner:MediaElement)
 		{
 			super();
@@ -109,7 +119,7 @@ package org.osmf.composition
 		
 		/**
 		 * @private
-		 **/
+		 */
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
 			child.addEventListener(TimeEvent.DURATION_CHANGE,  	onDurationChanged, 	false, 0, true);
@@ -121,7 +131,7 @@ package org.osmf.composition
 
 		/**
 		 * @private
-		 **/
+		 */
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
 			child.removeEventListener(TimeEvent.DURATION_CHANGE, 	onDurationChanged);

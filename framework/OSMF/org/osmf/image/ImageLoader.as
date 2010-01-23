@@ -40,6 +40,11 @@ package org.osmf.image
 	 * @see ImageElement
 	 * @see org.osmf.traits.LoadTrait
 	 * @see flash.display.Loader
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public class ImageLoader extends ContentLoader
 	{
@@ -62,11 +67,6 @@ package org.osmf.image
 		 * Indicates whether this ImageLoader is capable of handling the specified resource.
 		 * Returns <code>true</code> for URLResources with GIF, JPG, or PNG extensions.
 		 * @param resource Resource proposed to be loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{

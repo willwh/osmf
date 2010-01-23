@@ -25,6 +25,11 @@ package org.osmf.events
 	
 	/**
 	 * A LoadEvent is dispatched when properties of a LoadTrait have changed.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public class LoadEvent extends Event
 	{
@@ -34,7 +39,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType loadStateChange
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const LOAD_STATE_CHANGE:String = "loadStateChange";
 
 		/**
@@ -43,7 +53,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType bytesLoadedChange
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const BYTES_LOADED_CHANGE:String = "bytesLoadedChange";
 		
 		/**
@@ -52,7 +67,12 @@ package org.osmf.events
 		 * event.
 		 * 
 		 * @eventType bytesTotalChange
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const BYTES_TOTAL_CHANGE:String = "bytesTotalChange";
 		
 		/**
@@ -63,7 +83,12 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param loadState New LoadState of the LoadTrait.
 		 * @param bytes New value of bytesLoaded or bytesTotal.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function LoadEvent
 							( type:String,
 							  bubbles:Boolean=false,
@@ -80,7 +105,7 @@ package org.osmf.events
 		
 		/**
 		 * @private
-		 **/
+		 */
 		override public function clone():Event
 		{
 			return new LoadEvent(type, bubbles, cancelable, loadState, bytes);
@@ -88,7 +113,12 @@ package org.osmf.events
 
 		/**
 		 * New LoadState of the LoadTrait.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get loadState():String
 		{
 			return _loadState;
@@ -96,7 +126,12 @@ package org.osmf.events
 
 		/**
 		 * New value of bytesLoaded or bytesTotal.
-		 **/
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function get bytes():Number
 		{
 			return _bytes;

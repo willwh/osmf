@@ -27,6 +27,11 @@ package org.osmf.media
 	 * When multiple MediaInfo can handle a media resource, an arbitration is needed to 
 	 * pick the most suitable MediaInfo. This class encapsulates the details of how to 
 	 * pick the right resource handler out of a list of candidates.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */
 	public interface IMediaResourceHandlerResolver
 	{
