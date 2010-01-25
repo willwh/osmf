@@ -27,7 +27,7 @@ package org.osmf.media
 	import org.osmf.utils.URL;
 	
 	/**
-	 * Default implementation of IURLResource.
+	 * URLResource is a media resource that has a URL. It serves as a context object for MediaElements that expect a URL as input.	 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -55,7 +55,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Required by the IURLResource interface, returns a URL object.
+		 * Required by the URLResource constructor, returns a URL object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

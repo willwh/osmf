@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -35,21 +35,50 @@ package org.osmf.media
 	import org.osmf.video.VideoElement;
 	
 	/**
-	 * Defines a default media factory.
-	 * 
-	 * The default media factory can construct media elements of
+	 * <p>Defines a default media factory.</p>
+	 * <p/>
+	 * <p>
+         * The default media factory can construct media elements of
 	 * the following types:
 	 * 
-	 *  - VideoElement, using either:
-	 *  	- NetLoader (streaming or progressive)
-	 * 		- DynamicStreamingNetLoader (MBR streaming)
-	 * 		- HTTPStreamingNetLoader (HTTP streaming)
-	 * 		- F4MLoader (Flash Media Manifest files)
-	 *  - SoundElement, using either:
-	 * 		- SoundLoader (progressive)
-	 * 		- NetLoader (streaming)
-	 * 	- ImageElement
-	 * 	- SWFElement
+	 * <ul>
+	 * <li>
+	 * VideoElement, using either:
+	 * <ul>
+	 * <li>
+	 *   NetLoader (streaming or progressive)
+	 * </li>
+	 * <li>
+	 * 	 DynamicStreamingNetLoader (MBR streaming)
+	 * </li>
+	 * <li>
+	 * 	 HTTPStreamingNetLoader (HTTP streaming)
+	 * </li>
+	 * <li>
+	 * 	 F4MLoader (Flash Media Manifest files)
+	 * </li>
+	 * </ul>
+	 * </li>
+	 * <li>
+	 * SoundElement, using either:
+	 * <ul>
+	 * <li>
+	 * 	 SoundLoader (progressive)
+	 * </li>
+	 * <li>
+	 * 	 NetLoader (streaming)
+	 * </li>
+	 * </ul>
+	 * </li>
+	 * <li>
+	 *  ImageElement
+	 * </li>
+	 * <li>
+	 *  SWFElement
+	 * </li>
+	 * </ul>
+	 * </p>
+	 *   
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

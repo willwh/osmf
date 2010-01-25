@@ -34,9 +34,9 @@ package org.osmf.image
 	 * These loaders should subclass ImageLoader.</p>
 	 * <p>The basic steps for creating and using an ImageElement are:
 	 * <ol>
-	 * <li>Create a new IURLResource pointing to the URL of image to be loaded.</li>
+	 * <li>Create a new URLResource pointing to the URL of image to be loaded.</li>
 	 * <li>Create a new ImageLoader.</li>
-	 * <li>Create the new ImageElement, passing the ImageLoader and IURLResource
+	 * <li>Create the new ImageElement, passing the ImageLoader and URLResource
 	 * as parameters.</li>
 	 * <li>Get the ImageElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
@@ -52,7 +52,7 @@ package org.osmf.image
 	 * </p>
 	 * 
 	 * @see ImageLoader
-	 * @see org.osmf.media.IURLResource
+	 * @see org.osmf.media.URLResource
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.traits
 	 * @see flash.display.DisplayObjectContainer#addChild()

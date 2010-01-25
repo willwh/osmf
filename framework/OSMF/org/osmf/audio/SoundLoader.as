@@ -78,7 +78,7 @@ package org.osmf.audio
 		 * @private
 		 * 
 		 * Indicates whether this SoundLoader is capable of handling the specified resource.
-		 * Returns <code>true</code> for IURLResources with MP3 extensions or media/mime
+		 * Returns <code>true</code> for URLResources with MP3 extensions or media/mime
 		 * types that match MP3.
 		 * @param resource Resource proposed to be loaded.
 		 */ 

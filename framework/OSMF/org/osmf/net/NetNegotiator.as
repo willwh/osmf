@@ -78,7 +78,7 @@ package org.osmf.net
 	 * The NetNegotiator class attempts to negotiate its way through firewalls and proxy
 	 * servers, by trying multiple parallel connection attempts on differing port and protocol combinations.
 	 * The first connection to succeed is kept and those still pending are shut down. In the connect() method, 
-	 * the class can accept any resource that extends IURLResource although it would expect to receive a FMSURL since
+	 * the class can accept any resource that extends URLResource although it would expect to receive a FMSURL since
 	 * its purpose is specifically connecting to Flash Media Server. 
 	 * 
 	 *  
@@ -105,9 +105,9 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Accepts a IURLResource and begins the process of finding a good connection. 
+		 * Accepts a URLResource and begins the process of finding a good connection. 
 		 * 
-		 * @param urlResource a IURLResource, usually a FMSURL
+		 * @param urlResource a URLResource, usually a FMSURL
 		 * 
 		 * @see org.osmf.utils.FMSURL
 		 *  

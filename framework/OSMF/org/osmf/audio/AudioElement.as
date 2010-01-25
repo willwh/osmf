@@ -42,12 +42,12 @@ package org.osmf.audio
 	 * Flash Media Server.</p>
 	 * <p>The basic steps for creating and using an AudioElement are:
 	 * <ol>
-	 * <li>Create a new IURLResource pointing to the URL of the audio stream or file
+	 * <li>Create a new URLResource pointing to the URL of the audio stream or file
 	 * containing the sound to be loaded.</li>
 	 * <li>Create a new NetLoader or SoundLoader.  NetLoader is used for streaming
 	 * audio, SoundLoader for progressive audio.</li>
 	 * <li>Create the new AudioElement, 
-	 * passing the ILoader and IURLResource
+	 * passing the ILoader and URLResource
 	 * as parameters.</li>
 	 * <li>Get the AudioElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
@@ -61,7 +61,7 @@ package org.osmf.audio
 	 * 
 	 * @see org.osmf.net.NetLoader
 	 * @see org.osmf.audio.SoundLoader
-	 * @see org.osmf.media.IURLResource
+	 * @see org.osmf.media.URLResource
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.traits
 	 *  

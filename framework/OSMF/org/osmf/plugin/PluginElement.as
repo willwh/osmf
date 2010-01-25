@@ -42,9 +42,9 @@ package org.osmf.plugin
 		 * 
 		 * @param resource Resource for the plugin code. For static plugins, 
 		 * this is a PluginClassResource. 
-		 * For dynamic plugins it is a IURLResource.
+		 * For dynamic plugins it is a URLResource.
 		 * @see PluginClassResource
-		 * @see org.osmf.media.IURLResource
+		 * @see org.osmf.media.URLResource
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

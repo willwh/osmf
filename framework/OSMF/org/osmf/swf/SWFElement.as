@@ -37,9 +37,9 @@ package org.osmf.swf
 	 * These loaders should subclass SWFLoader.</p>
 	 * <p>The basic steps for creating and using a SWFElement are:
 	 * <ol>
-	 * <li>Create a new IURLResource pointing to the URL of the SWF to be loaded.</li>
+	 * <li>Create a new URLResource pointing to the URL of the SWF to be loaded.</li>
 	 * <li>Create a new SWFLoader.</li>
-	 * <li>Create the new SWFElement, passing the SWFLoader and IURLResource
+	 * <li>Create the new SWFElement, passing the SWFLoader and URLResource
 	 * as parameters.</li>
 	 * <li>Get the SWFElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
@@ -55,7 +55,7 @@ package org.osmf.swf
 	 * </p>
 	 * 
 	 * @see SWFLoader
-	 * @see org.osmf.media.IURLResource
+	 * @see org.osmf.media.URLResource
 	 * @see org.osmf.media.MediaElement
 	 * @see org.osmf.traits
 	 * @see flash.display.DisplayObjectContainer#addChild()

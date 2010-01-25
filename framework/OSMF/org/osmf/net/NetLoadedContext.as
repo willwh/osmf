@@ -114,7 +114,7 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-		 * The IURLResource used to generate the NetConnection
+		 * The URLResource used to generate the NetConnection
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
