@@ -97,7 +97,7 @@ package org.osmf.content
 				// overdraw its bounds, while maintaining scale, and size
 				// with the layout system.
 				//
-				// Note that it's critical that the DisplayObjectTriat's
+				// Note that it's critical that the DisplayObjectTrait's
 				// displayObject be set to the Loader's content property (and
 				// not to a container Sprite,as was the case with a previous fix),
 				// since player-to-SWF communication is based on the player's
@@ -105,7 +105,7 @@ package org.osmf.content
 				var info:LoaderInfo = context.loader.contentLoaderInfo;  
 				context.loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
 				
-				displayObject = context.loader.content;	
+				displayObject = context.loader.content;
 				mediaWidth = info.width;
 				mediaHeight = info.height;
 			}
