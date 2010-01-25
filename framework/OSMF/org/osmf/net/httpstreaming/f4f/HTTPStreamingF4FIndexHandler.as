@@ -88,21 +88,22 @@ package org.osmf.net.httpstreaming.f4f
 							, false 
 							, null 
 							, 0
-							, new URLRequest(f4fIndexInfo.bootstrapInfoURL) 
+							, new URLRequest(f4fIndexInfo.bootstrapInfoURL)
+							, null
 							, true
 							)
 					);
 			}
 			else
 			{
-				processIndexData(f4fIndexInfo.bootstrapInfoData);
+				processIndexData(f4fIndexInfo.bootstrapInfoData, null);
 			}
 		}
 		
 		/**
 		 * @private
 		 */
-		override public function processIndexData(data:*):void
+		override public function processIndexData(data:*, indexContext:Object):void
 		{
 			var parser:BoxParser = new BoxParser();
 			parser.init(data);
@@ -312,6 +313,7 @@ package org.osmf.net.httpstreaming.f4f
 							, false
 							, null
 							, 0
+							, null
 							, null
 							, true
 							, streamInfos[currentQuality].additionalHeader

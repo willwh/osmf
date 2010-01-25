@@ -26,10 +26,12 @@
     <classEntry path="org.osmf.composition.CompositionMode"/>
     <classEntry path="org.osmf.composition.IReusable"/>
     <classEntry path="org.osmf.composition.ParallelDisplayObjectTrait"/>
+    <classEntry path="org.osmf.composition.ParallelDynamicStreamTrait"/>
     <classEntry path="org.osmf.composition.ParallelElement"/>
     <classEntry path="org.osmf.composition.ParallelSeekOperationInfo"/>
     <classEntry path="org.osmf.composition.ParallelSeekTrait"/>
     <classEntry path="org.osmf.composition.SerialDisplayObjectTrait"/>
+    <classEntry path="org.osmf.composition.SerialDynamicStreamTrait"/>
     <classEntry path="org.osmf.composition.SerialElement"/>
     <classEntry path="org.osmf.composition.SerialElementSegment"/>
     <classEntry path="org.osmf.composition.SerialElementTransitionManager"/>
@@ -189,7 +191,6 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingUtils"/>
-    <classEntry path="org.osmf.net.httpstreaming.URLLoaderWithContext"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeFragmentRandomAccessBox"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeFragmentRunTable"/>

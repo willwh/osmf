@@ -45,7 +45,8 @@ package org.osmf.events
 			cancelable:Boolean=false, 
 			rates:Array = null, 
 			totalDuration:Number = 0,
-			request:URLRequest = null, 
+			request:URLRequest = null,
+			requestContext:Object = null,
 			binaryData:Boolean = true,
 			additionalHeader:ByteArray = null)
 		{
@@ -54,6 +55,7 @@ package org.osmf.events
 			_rates = rates;
 			_totalDuration = totalDuration;
 			_request = request;
+			_requestContext = requestContext;
 			_binaryData = binaryData;
 			_additionalHeader = additionalHeader;
 		}
@@ -71,6 +73,11 @@ package org.osmf.events
 		public function get request():URLRequest
 		{
 			return _request;
+		}
+
+		public function get requestContext():Object
+		{
+			return _requestContext;
 		}
 		
 		public function get binaryData():Boolean
@@ -92,6 +99,7 @@ package org.osmf.events
 				, rates
 				, totalDuration
 				, request
+				, requestContext
 				, binaryData
 				, additionalHeader
 				);
@@ -103,6 +111,7 @@ package org.osmf.events
 		private var _rates:Array;
 		private var _totalDuration:Number;
 		private var _request:URLRequest;
+		private var _requestContext:Object;
 		private var _binaryData:Boolean;
 		private var _additionalHeader:ByteArray;	
 	}

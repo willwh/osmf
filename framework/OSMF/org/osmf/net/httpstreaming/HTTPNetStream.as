@@ -32,6 +32,7 @@ package org.osmf.net.httpstreaming
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.net.NetStreamPlayOptions;
+	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLStream;
 	import flash.utils.ByteArray;
@@ -1001,19 +1002,10 @@ package org.osmf.net.httpstreaming
 			_loadComplete = true;
 		}
 
-		private function onIndexLoadComplete(event:Event):void
-		{
-			// TODO: Do we even need URLLoaderWithContext anymore?
-			var urlLoader:URLLoaderWithContext = URLLoaderWithContext(event.target);
-			
-			indexHandler.processIndexData(urlLoader.data);
-		}
-		
 		private function onRequestLoadIndexFile(event:HTTPStreamingIndexHandlerEvent):void
 		{
-			var urlLoader:URLLoaderWithContext;
-			
-			urlLoader = new URLLoaderWithContext(event.request, null);
+			var urlLoader:URLLoader = new URLLoader(event.request);
+			var requestContext:Object = event.requestContext;
 			if (event.binaryData)
 			{
 				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
@@ -1024,8 +1016,26 @@ package org.osmf.net.httpstreaming
 			}
 			
 			urlLoader.addEventListener(Event.COMPLETE, onIndexLoadComplete);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onURLError);
-			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onURLError);
+			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIndexURLError);
+			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLError);
+
+			function onIndexLoadComplete(innerEvent:Event):void
+			{
+				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadComplete);
+				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLError);
+				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLError);
+
+				indexHandler.processIndexData(urlLoader.data, requestContext);
+			}
+			
+			function onIndexURLError(errorEvent:Event):void
+			{
+				urlLoader.removeEventListener(Event.COMPLETE, onIndexLoadComplete);
+				urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIndexURLError);
+				urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onIndexURLError);
+
+				handleURLError();
+			}
 		}
 
 		private function onSegmentDuration(event:HTTPStreamingFileHandlerEvent):void
@@ -1062,17 +1072,22 @@ package org.osmf.net.httpstreaming
 			{
 				_urlStreamVideo = new URLStream();
 			
-				_urlStreamVideo.addEventListener(ProgressEvent.PROGRESS, onURLStatus);	
-				_urlStreamVideo.addEventListener(Event.COMPLETE, onURLComplete);
-				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR, onURLError);
-				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onURLError);
+				_urlStreamVideo.addEventListener(ProgressEvent.PROGRESS				, onURLStatus		, false, 0, true);	
+				_urlStreamVideo.addEventListener(Event.COMPLETE						, onURLComplete		, false, 0, true);
+				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLError	, false, 0, true);
+				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLError	, false, 0, true);
 	
 				setState(HTTPStreamingState.LOAD_SEEK);
 				indexIsReady = true;
 			}
 		}
 		
-		private function onURLError(error:Event):void
+		private function onVideoURLError(event:Event):void
+		{
+			handleURLError();
+		}
+		
+		private function handleURLError():void
 		{
 			// We map all URL errors to Play.StreamNotFound.
 			dispatchEvent

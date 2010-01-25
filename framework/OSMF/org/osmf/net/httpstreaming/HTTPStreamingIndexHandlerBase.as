@@ -127,16 +127,19 @@ package org.osmf.net.httpstreaming
 		 * index file is processed, that implementation should dispatch the
 		 * notifyIndexReady event.
 		 * 
-		 * @param data The data from the index file.
+		 * @param data The data from the loaded index file.
+		 * @param indexContext An arbitrary context object which describes the loaded
+		 * index file.  Useful for index handlers which load multiple index files
+		 * (and thus need to know which one to process).
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function processIndexData(data:*):void
+		public function processIndexData(data:*, indexContext:Object):void
 		{
-			throw new IllegalOperationError("The onIndexLoaded() method must be overridden by the derived class.");
+			throw new IllegalOperationError("The processIndexData() method must be overridden by the derived class.");
 		}
 		
 		/**
