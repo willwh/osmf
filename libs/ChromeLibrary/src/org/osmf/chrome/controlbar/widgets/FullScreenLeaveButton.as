@@ -67,7 +67,10 @@ package org.osmf.chrome.controlbar.widgets
 		
 		override protected function processRequiredTraitsAvailable(element:MediaElement):void
 		{
-			visible = stage && stage.displayState != StageDisplayState.NORMAL;
+			visible
+				=	element != null
+				&&	stage != null
+				&&	stage.displayState != StageDisplayState.NORMAL;
 		}
 		
 		override protected function onMouseClick(event:MouseEvent):void
@@ -81,12 +84,12 @@ package org.osmf.chrome.controlbar.widgets
 		private function onAddedToStage(event:Event):void
 		{
 			stage.addEventListener(FullScreenEvent.FULL_SCREEN, onFullScreenEvent);
-			processRequiredTraitsAvailable(null);
+			processRequiredTraitsAvailable(element);
 		}
 		
 		private function onFullScreenEvent(event:FullScreenEvent):void
 		{
-			processRequiredTraitsAvailable(null);
+			processRequiredTraitsAvailable(element);
 		}
 		
 		/* static */

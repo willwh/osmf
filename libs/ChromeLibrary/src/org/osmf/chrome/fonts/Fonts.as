@@ -28,7 +28,7 @@ package org.osmf.chrome.fonts
 	
 	public class Fonts
 	{
-		[Embed(source="../assets/fonts/UNI05_53.swf#Uni05_53_Font")]
+		[Embed(source="../assets/fonts/Standard0755.swf#Font1")]
 		private static var DEFAULT_FONT:Class;
 		
 		public static function defaultTextFormat(alignment:String = null):TextFormat

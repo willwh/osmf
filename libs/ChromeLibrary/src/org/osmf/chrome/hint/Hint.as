@@ -1,17 +1,16 @@
 package org.osmf.chrome.hint
 {
-	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.errors.IllegalOperationError;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.filters.DropShadowFilter;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.Timer;
 	
 	import org.osmf.chrome.fonts.Fonts;
+	import org.osmf.chrome.utils.FadingSprite;
 
 	public class Hint
 	{
@@ -22,7 +21,7 @@ package org.osmf.chrome.hint
 				throw new IllegalOperationError("Hint is a singleton. Please use the getInstance method");
 			}
 			
-			view = new Sprite();
+			view = new FadingSprite();
 			view.mouseChildren = false;
 			view.mouseEnabled = false;
 			
