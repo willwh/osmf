@@ -238,8 +238,12 @@ package org.osmf.net
 			{
 				var drmFacet:KeyValueFacet 
 					= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
-				var additionalHeader:ByteArray 
-					= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
+				var additionalHeader:ByteArray = null;
+				if (drmFacet != null)
+				{
+					additionalHeader 
+						= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
+				}
 				
 				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
 				streamInfos.push(new HTTPStreamingF4FStreamInfo(streamName, NaN, additionalHeader));
