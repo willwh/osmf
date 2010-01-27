@@ -311,6 +311,7 @@ package org.osmf.manifest
 			var media:Media;
 			var serverBaseURLs:Vector.<String>
 			var url:URL;
+			var bootstrapInfoURLString:String;
 			
 			var cleanedPath:String = "/" + manifestLocation.path;
 			cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/"));
@@ -363,7 +364,7 @@ package org.osmf.manifest
 					serverBaseURLs = new Vector.<String>();
 					serverBaseURLs.push(baseURLString);
 					
-					var bootstrapInfoURLString:String = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
+					bootstrapInfoURLString = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
 					if (media.bootstrapInfoURL != null &&
 						media.bootstrapInfoURL.absolute == false)
 					{
@@ -423,7 +424,14 @@ package org.osmf.manifest
 					{
 						serverBaseURLs = new Vector.<String>();
 						serverBaseURLs.push(baseURL.rawUrl);
-						dynResource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null, media.bootstrapInfo, serverBaseURLs));
+						
+						bootstrapInfoURLString = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
+						if (media.bootstrapInfoURL != null &&
+							media.bootstrapInfoURL.absolute == false)
+						{
+							bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
+						}
+						dynResource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(bootstrapInfoURLString, media.bootstrapInfo, serverBaseURLs));
 					}
 				}
 				resource = dynResource;
