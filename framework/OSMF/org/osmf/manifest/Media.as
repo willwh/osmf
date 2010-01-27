@@ -43,7 +43,7 @@ package org.osmf.manifest
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var drmMetadata:ByteArray;
+		public var drmAdditionalHeader:ByteArray;
 		
 		/**
 		 * The URL that points to the drmMetadata.
@@ -53,7 +53,7 @@ package org.osmf.manifest
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
- 		public var drmMetadataURL:URL;
+ 		public var drmAdditionalHeaderURL:URL;
 		
 		/**
 		 * The Identifier used to associate with the DRMMetadata.
@@ -63,7 +63,7 @@ package org.osmf.manifest
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public var drmMetadataId:String;
+		public var drmAdditionalHeaderId:String;
 		
 		/**
 		 * Represents all information needed to bootstrap playback of 

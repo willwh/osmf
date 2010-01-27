@@ -160,7 +160,7 @@ package org.osmf.manifest
 					for each (var item:Media in manifest.media)
 					{										
 						// DRM Metadata  - we may make this load on demand in the future.					
-						if (item.drmMetadataURL != null)
+						if (item.drmAdditionalHeaderURL != null)
 						{												
 							var drmLoader:URLLoader = new URLLoader();
 							drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
@@ -175,13 +175,13 @@ package org.osmf.manifest
 								event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
 								event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 								unfinishedLoads--;
-								item.drmMetadata = URLLoader(event.target).data;
+								item.drmAdditionalHeader = URLLoader(event.target).data;
 								if (unfinishedLoads == 0)
 								{
 									finishLoad();
 								}
 							}
-							drmLoader.load(new URLRequest(item.drmMetadataURL.rawUrl));
+							drmLoader.load(new URLRequest(item.drmAdditionalHeaderURL.rawUrl));
 						}					
 					}
 				}

@@ -33,16 +33,16 @@ package org.osmf.net
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
 
 	[ExcludeClass]
@@ -236,8 +236,13 @@ package org.osmf.net
 			}
 			else
 			{
+				var drmFacet:KeyValueFacet 
+					= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
+				var additionalHeader:ByteArray 
+					= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
+				
 				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
-				streamInfos.push(new HTTPStreamingF4FStreamInfo(streamName));
+				streamInfos.push(new HTTPStreamingF4FStreamInfo(streamName, NaN, additionalHeader));
 			}
 
 			return streamInfos;

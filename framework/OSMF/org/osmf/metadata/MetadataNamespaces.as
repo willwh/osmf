@@ -54,6 +54,7 @@ package org.osmf.metadata
 		
 		public static const DRM_METADATA:URL					= new URL("http://www.osmf.org/drm/default");
 		public static const DRM_CONTENT_METADATA_KEY:String		= "DRMContentMetadata";
+		public static const DRM_ADDITIONAL_HEADER_KEY:String	= "DRMAdditionalHeader";
 		
 		public static const REGION_TARGET:URL					= new URL("http://www.osmf.org/region/target");
 		

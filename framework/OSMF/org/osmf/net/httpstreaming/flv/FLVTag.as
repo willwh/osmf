@@ -175,7 +175,8 @@ package org.osmf.net.httpstreaming.flv
 		public function set data(value:ByteArray):void
 		{
 			bytes.length = TAG_HEADER_BYTE_COUNT + value.length;	// resize first
-			bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT, value.length); // copy in
+			bytes.position = TAG_HEADER_BYTE_COUNT;
+			bytes.writeBytes(value, 0, value.length); // copy in
 			dataSize = value.length;	// set dataSize field to new payload length
 		}
 		protected var bytes:ByteArray = null;
