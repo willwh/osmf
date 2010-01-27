@@ -43,8 +43,7 @@ package org.osmf.smil
 		{
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.smil.SMILPluginInfo", new SMILLoader(new DefaultMediaFactory()), 
-													createSMILProxyElement);
+			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.smil.SMILPluginInfo", new SMILLoader(), createSMILProxyElement);
 			mediaInfos.push(mediaInfo);
 			
 			super(mediaInfos, FRAMEWORK_VERSION_SUPPORTED);
@@ -52,7 +51,7 @@ package org.osmf.smil
 		
 		private function createSMILProxyElement():MediaElement
 		{
-			return new LoadableProxyElement(new SMILLoader(new DefaultMediaFactory()));
+			return new LoadableProxyElement(new SMILLoader());
 		}
 		
 		private var mediaInfos:Vector.<MediaInfo>;

@@ -37,7 +37,10 @@ package org.osmf.smil.loader
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.proxies.MediaElementLoadedContext;
 	import org.osmf.proxies.MediaElementLoader;
 	import org.osmf.smil.media.SMILMediaGenerator;
@@ -70,15 +73,7 @@ package org.osmf.smil.loader
 			super();
 			
 			supportedMimeTypes.push(SMIL_MIME_TYPE);
-			
-			if (mediaFactory == null)
-			{
-				factory = new DefaultMediaFactory();
-			}
-			else
-			{
-				factory = mediaFactory;			
-			}
+			factory = mediaFactory;
 		}
 
 		/**
@@ -183,6 +178,23 @@ package org.osmf.smil.loader
 		
 		private function finishLoad(loadTrait:LoadTrait, smilDocument:SMILDocument):void
 		{
+			// If we have no media factory, see if one was specified on the resource metadata, if not
+			// we'll create a DefaultMediaFactory
+			if (factory == null)
+			{
+				// Look at the resource metadata
+				var facet:Facet = loadTrait.resource.metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
+				if (facet != null)
+				{
+					factory = facet.getValue(new ObjectIdentifier(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY)) as MediaFactory;
+				}
+				
+				if (factory == null)
+				{
+					factory = new DefaultMediaFactory();
+				}
+			}
+			
 			var mediaGenerator:SMILMediaGenerator = createMediaGenerator();
 			var loadedElement:MediaElement = mediaGenerator.createMediaElement(smilDocument, factory);
 			
