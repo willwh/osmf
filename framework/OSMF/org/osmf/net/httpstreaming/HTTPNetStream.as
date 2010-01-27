@@ -1102,6 +1102,11 @@ package org.osmf.net.httpstreaming
 
 		private function onAdditionalHeader(event:HTTPStreamingIndexHandlerEvent):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug("onAdditionalHeader called");
+			}
+			
 			var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
 			flvTag.data = event.additionalHeader;
 			insertScriptDataTag(flvTag);

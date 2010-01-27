@@ -306,15 +306,16 @@ package org.osmf.video
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
-    				setupDRMTrait(metadata);
-    				drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	   
-    				return;  //Don't finishLoad() until the "auth" has completed. 			
+    				if (metadata != null)
+    				{
+    					setupDRMTrait(metadata);
+    					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	   
+    					return;  //Don't finishLoad() until the "auth" has completed.
+    				} 			
 	    		}
-	    		else
-	    		{
-	    			// Non sidecar, we need to play before getting access to the DRMTrait.
-    				stream.addEventListener(StatusEvent.STATUS, onStatus);
-	    		}			
+
+    			// Non sidecar, we need to play before getting access to the DRMTrait.
+   				stream.addEventListener(StatusEvent.STATUS, onStatus);
     		}
 			finishLoad();			
 		}

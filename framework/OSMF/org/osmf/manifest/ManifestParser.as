@@ -414,7 +414,8 @@ package org.osmf.manifest
 							drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 							dynResource.metadata.addFacet(drmFacet);
 						}						
-						drmFacet.addValue(new ObjectIdentifier(item), extractDRMMetadata(media.drmAdditionalHeader));							
+						drmFacet.addValue(new ObjectIdentifier(item), extractDRMMetadata(media.drmAdditionalHeader));	
+						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader); 						
 					}
 					
 					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.

@@ -24,6 +24,7 @@ package org.osmf.net.httpstreaming.f4f
 	import __AS3__.vec.Vector;
 	
 	import flash.net.URLRequest;
+	import flash.utils.ByteArray;
 	
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
@@ -303,8 +304,14 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (currentQuality != quality)
 			{
+				var prevAdditionalHeader:ByteArray = (currentQuality < 0)? null : streamInfos[currentQuality].additionalHeader;
 				currentQuality = quality;
-				if (streamInfos[currentQuality].additionalHeader != null)
+				var newAdditionalHeader:ByteArray = streamInfos[currentQuality].additionalHeader;
+				
+				// Strictly speaking, the != comparison of additional header is not enough. 
+				// Ideally, we need to do bytewise comparison, however there might be a performance
+				// hit considering the size of the additional header.
+				if (newAdditionalHeader != prevAdditionalHeader && newAdditionalHeader != null)
 				{
 					dispatchEvent
 						( new HTTPStreamingIndexHandlerEvent

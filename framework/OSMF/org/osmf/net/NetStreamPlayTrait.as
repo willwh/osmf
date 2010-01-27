@@ -226,19 +226,25 @@ package org.osmf.net
 		{
 			var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = new Vector.<HTTPStreamingF4FStreamInfo>();
 			
+			var drmFacet:KeyValueFacet 
+				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
+			var additionalHeader:ByteArray = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
 				for each (var streamItem:DynamicStreamingItem in dsResource.streamItems)
 				{
-					streamInfos.push(new HTTPStreamingF4FStreamInfo(streamItem.streamName, streamItem.bitrate));
+					if (drmFacet != null)
+					{
+						additionalHeader = drmFacet.getValue(
+							new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
+					}
+					
+					streamInfos.push(new HTTPStreamingF4FStreamInfo(streamItem.streamName, streamItem.bitrate, additionalHeader));
 				}
 			}
 			else
 			{
-				var drmFacet:KeyValueFacet 
-					= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
-				var additionalHeader:ByteArray = null;
 				if (drmFacet != null)
 				{
 					additionalHeader 

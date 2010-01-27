@@ -252,7 +252,7 @@ package org.osmf.manifest
 			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
 			var keys:Vector.<ObjectIdentifier> = facet.keys;
-			assertEquals(3, keys.length);
+			assertEquals(6, keys.length);
 			
 			assertTrue(facet.getValue(keys[0]) != null);
 			assertTrue(facet.getValue(keys[1]) != null);
@@ -293,7 +293,7 @@ package org.osmf.manifest
 			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
 			var keys:Vector.<ObjectIdentifier> = facet.keys;
-			assertEquals(3, keys.length);
+			assertEquals(6, keys.length);
 
 			assertTrue(facet.getValue(keys[0]) != null);
 			assertTrue(facet.getValue(keys[1]) != null);
