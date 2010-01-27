@@ -86,9 +86,9 @@ package org.osmf.swf
 					break;
 				case 2:
 					assertTrue(event.oldState == LoadState.LOADING);
-					assertTrue(event.newState == LoadState.LOAD_ERROR);
+					assertTrue(event.newState == LoadState.READY);
 					
-					assertTrue(event.loadedContext == null);
+					assertTrue(event.loadedContext != null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;

@@ -129,7 +129,6 @@ package org.osmf.utils
 		
 		public static const CONTENT_IO_LOAD_ERROR:String				= "contentIOLoadError";
 		public static const CONTENT_SECURITY_LOAD_ERROR:String			= "contentSecurityLoadError";
-		public static const INVALID_SWF_AS_VERSION:String				= "invalidSwfASVersion"
 		public static const SWF_IO_LOAD_ERROR:String					= "swfIOLoadError";
 		public static const SWF_SECURITY_LOAD_ERROR:String				= "swfSecurityError";
 		public static const INVALID_PLUGIN_VERSION:String				= "invalidPluginVersion";
@@ -250,7 +249,6 @@ package org.osmf.utils
 			
 			resourceDict[CONTENT_IO_LOAD_ERROR]						= "I/O error when loading image or SWF";
 			resourceDict[CONTENT_SECURITY_LOAD_ERROR]				= "Security error when loading image or SWF";
-			resourceDict[INVALID_SWF_AS_VERSION]					= "Loading pre-AS3 (AVM1) content is not supported"
 			resourceDict[SWF_IO_LOAD_ERROR]							= "I/O error when loading SWF";
 			resourceDict[SWF_SECURITY_LOAD_ERROR]					= "Security error when loading SWF";
 			resourceDict[INVALID_PLUGIN_VERSION]					= "Plugin failed to load due to version mismatch";

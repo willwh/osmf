@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.content
 {
+	import flash.display.ActionScriptVersion;
 	import flash.display.DisplayObject;
 	import flash.display.LoaderInfo;
 	import flash.geom.Rectangle;
@@ -99,13 +100,23 @@ package org.osmf.content
 				//
 				// Note that it's critical that the DisplayObjectTrait's
 				// displayObject be set to the Loader's content property (and
-				// not to a container Sprite,as was the case with a previous fix),
+				// not to a container Sprite, as was the case with a previous fix),
 				// since player-to-SWF communication is based on the player's
 				// ability to reference the SWF's API.
 				var info:LoaderInfo = context.loader.contentLoaderInfo;  
 				context.loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
 				
-				displayObject = context.loader.content;
+				if (info.contentType == SWF_MIME_TYPE &&
+					info.actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
+				{
+					// You can't change the parent of an AVM1 SWF, instead you have
+					// to add the Loader directly. 
+					displayObject = context.loader;
+				}
+				else
+				{
+					displayObject = context.loader.content;
+				}
 				mediaWidth = info.width;
 				mediaHeight = info.height;
 			}
@@ -137,5 +148,7 @@ package org.osmf.content
 		{
 			removeTrait(MediaTraitType.DISPLAY_OBJECT);	
 		}
+		
+		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
 	}
 }

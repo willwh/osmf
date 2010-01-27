@@ -39,7 +39,6 @@ package org.osmf.events
 	{
 		public static const CONTENT_IO_LOAD_ERROR:int 					= 1;
 		public static const CONTENT_SECURITY_LOAD_ERROR:int				= 2;
-		public static const INVALID_SWF_AS_VERSION:int					= 3;
 
 		public static const INVALID_PLUGIN_VERSION:int					= 61;
 		public static const INVALID_PLUGIN_IMPLEMENTATION:int			= 62;
@@ -111,7 +110,6 @@ package org.osmf.events
 		[
 			  {errorID:CONTENT_IO_LOAD_ERROR,					message:OSMFStrings.CONTENT_IO_LOAD_ERROR}
 			, {errorID:CONTENT_SECURITY_LOAD_ERROR,				message:OSMFStrings.CONTENT_SECURITY_LOAD_ERROR}
-			, {errorID:INVALID_SWF_AS_VERSION,					message:OSMFStrings.INVALID_SWF_AS_VERSION}
 			, {errorID:INVALID_PLUGIN_VERSION,					message:OSMFStrings.INVALID_PLUGIN_VERSION}
 			, {errorID:INVALID_PLUGIN_IMPLEMENTATION,			message:OSMFStrings.INVALID_PLUGIN_IMPLEMENTATION}
 			, {errorID:INVALID_URL_PROTOCOL,					message:OSMFStrings.INVALID_URL_PROTOCOL}

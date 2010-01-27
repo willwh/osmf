@@ -148,30 +148,7 @@ package org.osmf.content
 			{
 				toggleLoaderListeners(loader, false);
 				
-				if (LoaderInfo(event.target).contentType == SWF_MIME_TYPE &&
-					LoaderInfo(event.target).actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
-				{
-					// The SWF's version is unsupported.  Force an unload
-					// and dispatch an error event.
-					
-					loader.unloadAndStop();
-					loader = null;
-					loadedContext = null;
-					
-					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, loadedContext);
-					loadTrait.dispatchEvent
-						( new MediaErrorEvent
-							( MediaErrorEvent.MEDIA_ERROR
-							, false
-							, false
-							, new MediaError(MediaErrorCodes.INVALID_SWF_AS_VERSION)
-							)
-						);
-				}
-				else
-				{
-					updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
-				}
+				updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -242,7 +219,5 @@ package org.osmf.content
 		//
 		
 		private var useCurrentSecurityDomain:Boolean;
-		
-		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
 	}
 }
