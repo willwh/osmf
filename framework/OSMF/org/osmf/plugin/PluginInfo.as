@@ -68,26 +68,6 @@ package org.osmf.plugin
 	 * 		{
 	 * 		}
 	 * 
-	 * 		// Returns the number of MediaInfo objects the plugin exposes.
-	 * 		override public function get numMediaInfos():int
-	 * 		{
-	 * 			return 1;
-	 * 		}
-	 * 
-	 * 		// Returns the MediaInfo object at the specified index position.
-	 * 		override public function getMediaInfoAt(index:int):MediaInfo
-	 * 		{
-	 * 			var netLoader:NetLoader = new NetLoader();
-	 * 			return new MediaInfo("org.osmf.video.Video", netLoader,
-	 * 				 createVideoElement);
-	 * 		}
-	 * 
-	 * 		// Return if the plugin supports the specified version of the framework.
-	 * 		override public function isFrameworkVersionSupported(version:String):Boolean
-	 * 		{
-	 * 			return true;
-	 * 		}
-	 * 
 	 * 		private function createVideoElement():MediaElement
 	 * 		{
 	 * 			return new VideoElement(new NetLoader());

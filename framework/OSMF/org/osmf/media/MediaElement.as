@@ -73,9 +73,9 @@ package org.osmf.media
 	[Event(name="mediaError",type="org.osmf.events.MediaErrorEvent")]
 	
 	/**
-	 * Dispatched when the element's gateway property changed.
+	 * Dispatched when the element's container property changed.
 	 * 
-	 * @eventType org.osmf.events.GatewayChangeEvent.CONTAINER_CHANGE
+	 * @eventType org.osmf.events.ContainerChangeEvent.CONTAINER_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

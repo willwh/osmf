@@ -42,14 +42,14 @@ package org.osmf.layout
 	/**
 	 * Dispatched when a layout target's intrinsical width and/or height changed.
 	 * 
-	 * @eventType org.osmf.events.DimensionEvent.MEDIA_SIZE_CHANGE
+	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="mediaSizeChange",type="org.osmf.events.DimensionEvent")]
+	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
 	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer

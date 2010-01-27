@@ -132,7 +132,7 @@ package org.osmf.plugin
 		 * @param resource MediaResourceBase at which the plugin (swf file or class) is hosted. It is assumed that 
 		 * it is sufficient to identify a plugin using the MediaResourceBase.  
 		 *
-		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginClassResource
+		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginInfoResource 
 		 *
 		 *  
 		 *  @langversion 3.0
@@ -223,7 +223,7 @@ package org.osmf.plugin
 		 * @param url URL that is used to identify the plugin.Upon successful loading,
 		 * a PluginLoadEvent.PLUGIN_UNLOADED event will be dispatched. 
 		 * 
-		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginClassResource
+		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginInfoResource 
 		 *
 		 *  
 		 *  @langversion 3.0

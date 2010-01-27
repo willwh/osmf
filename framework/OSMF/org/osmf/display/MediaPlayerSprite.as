@@ -30,8 +30,8 @@ package org.osmf.display
 	import org.osmf.media.MediaPlayer;
 	
 	/**
-	 * <code>MediaPlayerSprite</code> allows a <code>MediaElement</code> with a ViewTrait to be placed on the display list.  
-	 * It supports the <code>scaleMode</code> of the <code>ScalableSprite</code>, as well as the creation of a <code>MediaPlayer</code> controller class.
+	 * MediaPlayerSprite allows a MediaElement with a DisplayObjectTrait to be placed on the display list.  
+	 * It supports the <code>scaleMode</code>, as well as the creation of a MediaPlayer controller class.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -93,8 +93,8 @@ package org.osmf.display
 		}
 		
 		/**
-		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's element set either 
-		 * on the MediaPlayer or on this object (see element) after this property is set.
+		 * The MediaPlayer that controls this media element.  Defaults to an instance of org.osmf.MediaPlayer.  The player needs to have it's mediaElement set either 
+		 * on the MediaPlayer or on this object (see mediaElement) after this property is set.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

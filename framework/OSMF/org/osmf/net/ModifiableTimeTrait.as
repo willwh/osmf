@@ -23,7 +23,7 @@ package org.osmf.net
 {
 	import org.osmf.traits.TimeTrait;
 	
-	[ExcludeClass]
+	  [ExcludeClass]
 	
 	/**
 	 * @private

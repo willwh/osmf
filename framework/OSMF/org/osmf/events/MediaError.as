@@ -27,7 +27,7 @@ package org.osmf.events
 	 * are reserved for use by the framework.
 	 * 
 	 * <p>A list of all possible framework-level errors can be found in the
-	 * <code>MediaErrorCodes</code> class.</p>
+	 * MediaErrorCodes class.</p>
 	 * 
 	 * <p>For custom errors, clients should subclass MediaError and override
 	 * <code>getMessageForErrorID</code> to return messages for the custom

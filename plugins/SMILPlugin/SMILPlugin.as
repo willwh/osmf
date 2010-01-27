@@ -45,7 +45,7 @@ package
 		}
 		
 		/**
-		 * Gives the player the object which implements the OSMF IPluginInfo interface.
+		 * Gives the player the PluginInfo object.
 		 */
 		public function get pluginInfo():PluginInfo
 		{

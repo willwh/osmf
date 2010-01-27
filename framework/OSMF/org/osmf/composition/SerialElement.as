@@ -89,7 +89,7 @@ package org.osmf.composition
 	 * child.
 	 * </li>
 	 * <li>
-	 * ViewTrait - The composite trait represents the ViewTrait of the
+	 * DisplayObjectTrait - The composite trait represents the DisplayObjectTrait of the
 	 * current child in the sequence.
 	 * </li>
 	 * <li>

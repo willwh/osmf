@@ -40,13 +40,13 @@ package org.osmf.traits
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
 				
 	/**
-	 * ContentProtectionTrait defines the trait interface for media which can be
+	 * DRMTrait defines the trait interface for media which can be
 	 * protected by digital rights management (DRM) technology.  It can also be
-	 * used as the base class for a more specific ContentProtectionTrait subclass.
+	 * used as the base class for a more specific DRMTrait subclass.
 	 * 
 	 * Both anonymous and credential-based authentication are supported.
 	 * 
-	 * The workflow for media which has a ContentProtectionTrait is that the media undergoes
+	 * The workflow for media which has a DRMTrait is that the media undergoes
 	 * some type of authentication, after which it is valid (i.e. able to be played)
 	 * for a specific time window.
 	 *  

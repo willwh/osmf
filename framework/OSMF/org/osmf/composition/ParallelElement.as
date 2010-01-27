@@ -81,11 +81,11 @@ package org.osmf.composition
 	 * that same seek. 
 	 * </li>
 	 * <li>
-	 * ViewTrait - If one or more of the composite’s children has the ViewTrait,
+	 * DisplayObjectTrait - If one or more of the composite’s children has the DisplayObjectTrait,
 	 * the composite trait’s spatial dimensions are defined by the bounding box
 	 * of the DisplayObject referenced by
-	 * the <code>view</code> property of the composite's ViewTrait.
-	 * If none of the composite’s children have the ViewTrait,
+	 * the <code>view</code> property of the composite's DisplayObjectTrait.
+	 * If none of the composite’s children have the DisplayObjectTrait,
 	 * the composite trait's <code>mediaWidth</code> is the width of its widest child and its
 	 * <code>mediaHeight</code> is the height of its tallest child.
 	 * </li>

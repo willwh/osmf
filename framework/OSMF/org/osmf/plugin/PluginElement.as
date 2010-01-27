@@ -41,9 +41,9 @@ package org.osmf.plugin
 		 * Constructor.
 		 * 
 		 * @param resource Resource for the plugin code. For static plugins, 
-		 * this is a PluginClassResource. 
+		 * this is a PluginInfoResource. 
 		 * For dynamic plugins it is a URLResource.
-		 * @see PluginClassResource
+		 * @see PluginInfoResource
 		 * @see org.osmf.media.URLResource
 		 *  
 		 *  @langversion 3.0

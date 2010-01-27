@@ -42,7 +42,7 @@ package org.osmf.external
 	 * HTML, and that (by contract) has its resource pointing to a URL.
 	 * 
 	 * Internally, an HTMLElement holds switchable playable, pausible,
-	 * temporal and audible traits that HTMLGateway uses to bridge between 
+	 * temporal and audible traits that HTMLMediaContainer uses to bridge between 
 	 * HTML and Flash.
 	 *  
 	 *  @langversion 3.0

@@ -53,7 +53,7 @@ package org.osmf.net.httpstreaming
 		 * 
 		 * If all three criteria are satisfied, the Facet will be returned. Otherwise, null.
 		 * 
-		 * @param resource The IMediaResource to be loaded
+		 * @param resource The MediaResourceBase to be loaded
 		 * 
 		 * @return The Facet if the resource can be loaded for HTTP streaming, null otherwise.
 		 *  
