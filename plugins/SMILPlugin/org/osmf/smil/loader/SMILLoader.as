@@ -186,7 +186,7 @@ package org.osmf.smil.loader
 				var facet:Facet = loadTrait.resource.metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
 				if (facet != null)
 				{
-					factory = facet.getValue(new ObjectIdentifier(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY)) as MediaFactory;
+					factory = facet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY) as MediaFactory;
 				}
 				
 				if (factory == null)

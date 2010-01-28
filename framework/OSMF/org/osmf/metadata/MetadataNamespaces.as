@@ -71,7 +71,8 @@ package org.osmf.metadata
 		public static const TEMPORAL_METADATA_DYNAMIC:URL		= new URL("http://www.osmf.org/temporal/dynamic");
 
 		public static const PLUGIN_PARAMETERS:URL				= new URL("http://www.osmf.org/plugin/parameters");
-		public static const PLUGIN_METADATA_MEDIAFACTORY_KEY:String	= "pluginMediaFactory";
+		public static const PLUGIN_METADATA_MEDIAFACTORY_KEY:ObjectIdentifier
+																= new ObjectIdentifier("pluginMediaFactory");
 		
 		public static const HTTP_STREAMING_METADATA:URL			= new URL("http://www.osmf.org/httpstreaming/1.0");
 		public static const HTTP_STREAMING_ABST_URL_KEY:String	= "abstUrl";
