@@ -21,13 +21,9 @@
 *****************************************************/
 package org.osmf.smil.media
 {
-	import org.osmf.audio.AudioElement;
-	import org.osmf.audio.SoundLoader;
 	import org.osmf.composition.CompositeElement;
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.media.MediaElement;
@@ -36,8 +32,6 @@ package org.osmf.smil.media
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.NetLoader;
-	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.proxies.TemporalProxyElement;
@@ -104,8 +98,8 @@ package org.osmf.smil.media
 					mediaElement = serialElement;
 					break;
 				case SMILElementType.VIDEO:
-					var videoElement:VideoElement = new VideoElement(new NetLoader());
 					var resource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var videoElement:MediaElement = factory.createMediaElement(resource);
 					var smilVideoElement:SMILMediaElement = smilElement as SMILMediaElement;
 					
 					if (!isNaN(smilVideoElement.clipBegin) && smilVideoElement.clipBegin > 0 &&
@@ -116,25 +110,24 @@ package org.osmf.smil.media
 						kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, smilVideoElement.clipEnd);
 						resource.metadata.addFacet(kvFacet);
 					}
-					videoElement.resource = resource;
+										
 					var duration:Number = (smilElement as SMILMediaElement).duration;
 					if (!isNaN(duration) && duration > 0)
 					{
-						videoElement.defaultDuration = duration;
+						(videoElement as VideoElement).defaultDuration = duration;
 					}
 					(parentMediaElement as CompositeElement).addChild(videoElement);
 					break;
 				case SMILElementType.IMAGE:
-					var imageElement:ImageElement = new ImageElement(new ImageLoader());
-					imageElement.resource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var imageResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src)); 
+					var imageElement:MediaElement = factory.createMediaElement(imageResource);
 					var dur:Number = (smilElement as SMILMediaElement).duration;
 					var temporalProxyElement:TemporalProxyElement = new TemporalProxyElement(dur, imageElement);
 					(parentMediaElement as CompositeElement).addChild(temporalProxyElement);
 					break;
 				case SMILElementType.AUDIO:
 					var audioResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
-					var loader:ILoader = NetStreamUtils.isStreamingResource(audioResource) ? new NetLoader() : new SoundLoader();
-					var audioElement:AudioElement = new AudioElement(loader, audioResource);
+					var audioElement:MediaElement = factory.createMediaElement(audioResource);
 					(parentMediaElement as CompositeElement).addChild(audioElement);
 					break;
 			}
