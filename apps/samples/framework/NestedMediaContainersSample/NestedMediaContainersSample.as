@@ -36,6 +36,7 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.net.NetLoader;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.utils.URL;
@@ -86,23 +87,27 @@ package
 			// Consruct a tree of containers:
 
 			var mainGroup:MediaContainerGroup = new MediaContainerGroup();
-			LayoutUtils.setAbsoluteLayout(mainGroup.metadata, 800, 450);
+			mainGroup.width = 640;
+			mainGroup.height = 352;
 			mainGroup.mediaContainer.backgroundColor = 0xFFFFFF;
 			mainGroup.mediaContainer.backgroundAlpha = .2;
+			MetadataUtils.setElementId(mainGroup.metadata, "mainGroup");
 			addChild(mainGroup);
 			
 				var bannerGroup:MediaContainerGroup = new MediaContainerGroup();
 				bannerGroup.mediaContainer.backgroundColor = 0xFF;
 				bannerGroup.mediaContainer.backgroundAlpha = .2;
+				bannerGroup.height = 60;
 				LayoutUtils.setAnchorLayout(bannerGroup.metadata, 5, 5, 5, NaN);
-				LayoutUtils.setAbsoluteLayout(bannerGroup.metadata, NaN, 60);
+				MetadataUtils.setElementId(bannerGroup.metadata, "bannerGroup");
 				mainGroup.addChildGroup(bannerGroup);
 				
 				var skyScraperGroup:MediaContainerGroup = new MediaContainerGroup();
 				skyScraperGroup.mediaContainer.backgroundColor = 0xFF00;
 				skyScraperGroup.mediaContainer.backgroundAlpha = .2;
+				skyScraperGroup.width = 120;
 				LayoutUtils.setAnchorLayout(skyScraperGroup.metadata, NaN, 5, 5, 5);
-				LayoutUtils.setAbsoluteLayout(skyScraperGroup.metadata, 120, NaN);
+				MetadataUtils.setElementId(skyScraperGroup.metadata, "skyScraperGroup");
 				mainGroup.addChildGroup(skyScraperGroup);
 				
 			// Bind media elements to their target containers:

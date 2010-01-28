@@ -42,6 +42,7 @@ package org.osmf.examples
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.layout.AbsoluteLayoutFacet;
+	import org.osmf.layout.LayoutUtils;
 	import org.osmf.layout.RelativeLayoutFacet;
 	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaElement;
@@ -361,7 +362,9 @@ package org.osmf.examples
 							var mediaElement2:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
 							parallelElement.addChild(mediaElement2);
 							
-							applyAdjacentLayout(parallelElement, mediaElement1, mediaElement2);
+							LayoutUtils.setRelativeLayout(mediaElement1.metadata, 50, 50);
+							LayoutUtils.setRelativeLayout(mediaElement2.metadata, 50, 50, 50);
+							LayoutUtils.setAbsoluteLayout(parallelElement.metadata, 640, 358);
 							
 							return parallelElement;
 				  	   	} 
@@ -578,22 +581,17 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
+							
 							var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
 							var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))); 
 							parallelElement.addChild(video1);
 							parallelElement.addChild(video2);
 				  	   		
-				  	   		applyAdjacentLayout(parallelElement, video1, video2);
-				  	   		
 				  	   		var relativeLayout1:RelativeLayoutFacet
-				  	   			= video1.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
-				  	   			as RelativeLayoutFacet;
-				  	   			
+				  	   			= LayoutUtils.setRelativeLayout(video1.metadata, 50, 50);
 				  	   		var relativeLayout2:RelativeLayoutFacet
-				  	   			= video2.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
-				  	   			as RelativeLayoutFacet;
-				  	   		
-				  	   		relativeLayout2.y = 0;
+								= LayoutUtils.setRelativeLayout(video2.metadata, 50, 50, 50, 25);
+							LayoutUtils.setAbsoluteLayout(parallelElement.metadata, 640, 358);
 				  	   		
 				  	   		var delta:int = 1;
 							
@@ -849,28 +847,6 @@ package org.osmf.examples
 			return examples;
 		}
 		
-		private static function applyAdjacentLayout(parent:MediaElement, left:MediaElement, right:MediaElement):void
-		{
-			var relativeLayout:RelativeLayoutFacet = new RelativeLayoutFacet();
-			relativeLayout.width = 50;
-			relativeLayout.height = 50;
-			
-			left.metadata.addFacet(relativeLayout);
-			
-			relativeLayout = new RelativeLayoutFacet();
-			relativeLayout.width = 50;
-			relativeLayout.height = 50;
-			relativeLayout.x = 50;
-			
-			right.metadata.addFacet(relativeLayout);
-			
-			var absoluteLayout:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
-			absoluteLayout.width = 640
-			absoluteLayout.height = 358;
-			
-			parent.metadata.addFacet(absoluteLayout);
-		}
-
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";

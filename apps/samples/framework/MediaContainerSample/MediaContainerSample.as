@@ -66,17 +66,16 @@ package
 			
 				var mainContent:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
 				rootElement.addChild(mainContent);
-				
 				var banners:SerialElement = new SerialElement();
 					banners.addChild(constructBanner(BANNER_1));
 					banners.addChild(constructBanner(BANNER_2));
 					banners.addChild(constructBanner(BANNER_3));
 				rootElement.addChild(banners);
-					
 				var skyScraper:MediaElement = constructImage(SKY_SCRAPER_1);
 				rootElement.addChild(skyScraper);
 				
-			// DEBUG: add id's to the elements at hand:
+			// DEBUG: add id's to the elements at hand (these IDs will show in the logger
+			// traces, if the LOGGING conditional is set to 'true' on the OSMF project):
 			MetadataUtils.setElementId(rootElement.metadata, "rootElement");
 			MetadataUtils.setElementId(banners.metadata, "banners");
 			MetadataUtils.setElementId(skyScraper.metadata, "skyScraper");
@@ -99,7 +98,7 @@ package
 			bannerContainer.backgroundColor = 0xFF0000;
 			bannerContainer.backgroundAlpha = .2;
 			addChild(bannerContainer);
-			
+
 			var mainContainer:MediaContainer = new MediaContainer();
 			LayoutUtils.setAbsoluteLayout(mainContainer.metadata, 600, 400);
 			mainContainer.backgroundColor = 0xFFFFFF;
@@ -162,7 +161,6 @@ package
 				);
 				
 			// Let's link to the IAB site on the sky-scraper being clicked:
-			
 			skyScraperContainer.addEventListener
 				( MouseEvent.CLICK
 				, function (event:MouseEvent):void	
