@@ -89,16 +89,34 @@ package org.osmf.audio
 			{
 				return rt == MetadataUtils.METADATA_MATCH_FOUND;
 			}			
-			
-			// If no metadata matches, then we can only handle if the URL
-			// extension matches.
+					
+			/*
+			 * The rules for URL checking is outlined as below:
+			 * 
+			 * If the URL is null or empty, we assume being unable to handle the resource
+			 * If the URL has no protocol, we check for file extensions
+			 * 		If the protocol is progressive (file, http, https), we check for file extension
+			 *
+			 * We assume being unable to handle the resource for conditions not mentioned above
+			 */
+			 
 			var urlResource:URLResource = resource as URLResource;
-			if (urlResource != null && 
-				urlResource.url != null)
+			if (urlResource == null || urlResource.url == null || urlResource.url.rawUrl == null || urlResource.url.rawUrl.length <= 0)
+			{
+				return false;
+			}
+			if (urlResource.url.protocol == "")
 			{
 				return urlResource.url.path.search(/\.mp3$/i) != -1;
+			}		
+			if (urlResource.url.protocol.search(/file$|http$|https$/i) != -1)
+			{
+				return (urlResource.url.path == null ||
+						urlResource.url.path.length <= 0 ||
+						urlResource.url.path.indexOf(".") == -1 ||
+						urlResource.url.path.search(/\.mp3$/i) != -1);
 			}
-
+			
 			return false;
 		}
 		
