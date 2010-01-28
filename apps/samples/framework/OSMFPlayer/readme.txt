@@ -30,3 +30,7 @@ By leveraging the DefaultMediaFactory class, the player can distill the followin
 Usage:
 
 The project's html-template\index.template.html file shows how the produced SWF can be embedded (using SWFObject), as well as the properties that can be set on the player SWF.
+
+Notes:
+
+OSMFPlayer uses the Standard 07_55 font by Craig Kroeger. Please note that this is *not* a free font. Please visit http://www.miniml.com for more licensing information. 

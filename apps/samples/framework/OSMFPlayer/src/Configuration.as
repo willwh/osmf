@@ -39,6 +39,13 @@ package
 					: parameters.autoHideControlBar.toString().toLowerCase() == "false" 
 						? false
 						: true;
+						
+			_autoSwitchQuality
+				= parameters.autoSwitchQuality == undefined
+					? true
+					: parameters.autoSwitchQuality.toString().toLowerCase() == "false" 
+						? false
+						: true;
 		}
 
 		public function get url():String
@@ -56,6 +63,11 @@ package
 			return _autoHideControlBar;
 		}
 		
+		public function get autoSwitchQuality():Boolean
+		{
+			return _autoSwitchQuality;
+		}
+		
 		// Internals
 		//
 		
@@ -63,5 +75,6 @@ package
 		private var _backgroundColor:Number;
 		private var _showStopButton:Boolean;
 		private var _autoHideControlBar:Boolean;
+		private var _autoSwitchQuality:Boolean;
 	}
 }

@@ -17,6 +17,7 @@
     			,	url: "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv"
     			,	backgroundColor: "0x000000"
     			,	autoHideControlBar: "false"
+    			,	autoSwitchQuality: "true"
     			};
     		
     		for (var i=0; i<parameterNames.length; i++)
@@ -39,6 +40,16 @@
 				, { allowFullScreen: "true" }
 				, { name: "OSMFPlayer" }
 				);
+				
+			// Listen to the player signaling errors
+			function onOSMFPlayerMediaError(message, detail)
+			{
+				setTimeout
+					( function(){ alert("The OSMFPlayer encountered an error:"+"\n\n"+message+"\n\n"+detail); }
+					, 1
+					);
+			}
+			
      </script>
   	<style type="text/css">
 	<!--

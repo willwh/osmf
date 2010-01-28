@@ -31,6 +31,7 @@ package
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.ui.ContextMenu;
@@ -39,18 +40,14 @@ package
 	import org.osmf.chrome.controlbar.*;
 	import org.osmf.chrome.controlbar.widgets.*;
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.display.ScaleMode;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.layout.LayoutUtils;
-	import org.osmf.layout.RegistrationPoint;
-	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
-	import org.osmf.media.MediaInfoType;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
@@ -82,6 +79,8 @@ package
 			// Construct a media player instance. This will help in loading
 			// the element that the factory will construct:
 			player = new MediaPlayer();
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
 			
 			setupMediaContainer();
 			
@@ -193,14 +192,6 @@ package
 					
 				if (element)
 				{
-					// Set the element to occupy 100% of the container's available
-					// width, and height:
-					LayoutUtils.setRelativeLayout(element.metadata, 100, 100);
-					// Set the element to scale "LETTERBOX" style, meaning that the
-					// media's original width:height ratio will be respected. If there's
-					// surplus space, then the content will be shown centered:
-					LayoutUtils.setLayoutAttributes(element.metadata, ScaleMode.LETTERBOX, RegistrationPoint.CENTER);
-					
 					// Add the element to the media container:
 					container.addMediaElement(element);
 				}
@@ -243,6 +234,22 @@ package
 		private function onOSMFContextMenuItemSelect(event:ContextMenuEvent):void
 		{
 			flash.net.navigateToURL(new URLRequest("http://www.osmf.org"), "_blank");
+		}
+		
+		private function onMediaError(event:MediaErrorEvent):void
+		{
+			if (ExternalInterface.available)
+			{
+				ExternalInterface.call("onOSMFPlayerMediaError", event.error.message, event.error.detail);
+			}
+		}
+		
+		private function onIsDynamicStreamChange(event:MediaPlayerCapabilityChangeEvent):void
+		{
+			if (player.isDynamicStream)
+			{
+				player.autoDynamicStreamSwitch = configuration.autoSwitchQuality;
+			}
 		}
 		
 		private var preloader:Preloader;
