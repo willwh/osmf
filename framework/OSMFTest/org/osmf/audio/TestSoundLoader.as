@@ -57,7 +57,7 @@ package org.osmf.audio
 
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource(new URL("http://example.com/blah.xml"));
 		}
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
@@ -74,13 +74,14 @@ package org.osmf.audio
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3?param=value"))));
 			assertTrue(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
+			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio"))));
+			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio?param=.mp3"))));
+			
 			
 			// And some invalid ones.
 			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp31"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio?param=.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
+			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp31"))));	
+			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));		
 			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
