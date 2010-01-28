@@ -108,7 +108,7 @@ package org.osmf.layout
 		public function LayoutAttributesFacet()
 		{
 			_registrationPoint = RegistrationPoint.TOP_LEFT;
-			_alignment = RegistrationPoint.TOP_LEFT;
+			_alignment = null;
 			_scaleMode = null;
 		}
 		
@@ -200,11 +200,11 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get registrationPoint():RegistrationPoint
+		public function get registrationPoint():String
 		{
 			return _registrationPoint;
 		}
-		public function set registrationPoint(value:RegistrationPoint):void
+		public function set registrationPoint(value:String):void
 		{
 			if (_registrationPoint != value)
 			{
@@ -255,11 +255,11 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get alignment():RegistrationPoint
+		public function get alignment():String
 		{
 			return _alignment;
 		}
-		public function set alignment(value:RegistrationPoint):void
+		public function set alignment(value:String):void
 		{
 			if (_alignment != value)
 			{
@@ -304,9 +304,9 @@ package org.osmf.layout
 		//
 		
 		private var _order:Number = NaN;
-		private var _registrationPoint:RegistrationPoint;
-		private var _scaleMode:String; // ScaleMode
-		private var _alignment:RegistrationPoint;
+		private var _registrationPoint:String;
+		private var _scaleMode:String;
+		private var _alignment:String;
 		private var _snapToPixel:Boolean;
 	}
 }

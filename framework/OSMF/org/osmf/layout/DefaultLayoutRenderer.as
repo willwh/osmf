@@ -23,11 +23,11 @@ package org.osmf.layout
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.display.ScaleMode;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
@@ -61,14 +61,6 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
-		{
-			_context = newContext;
-		}
-		
-		/**
-		 * @private
-		 */
 		override protected function get usedMetadataFacets():Vector.<URL>
 		{
 			return USED_METADATA_FACETS;
@@ -76,6 +68,97 @@ package org.osmf.layout
 		
 		/**
 		 * @private
+		 */
+		override protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
+		{
+			var watcher:MetadataWatcher = metaDataWatchers[oldContext]; 
+			if (watcher)
+			{
+				watcher.unwatch();
+				delete metaDataWatchers[oldContext];
+			}
+			
+			if (newContext)
+			{
+				watcher = metaDataWatchers[newContext]
+					= MetadataUtils.watchFacet
+						( newContext.metadata
+						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
+						, function (..._):void
+							{
+								invalidate();
+							}
+						);
+			}
+			
+			invalidate();
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function processTargetAdded(target:ILayoutTarget):void
+		{
+			// Set targets to take 100% of their context's width and height, but only
+			// if no relative facet is present all together:
+			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
+			if	(	relative == null
+				&&	target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) == null
+				&&	target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
+				&&	target.metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) == null
+				)
+			{
+				relative = new RelativeLayoutFacet();
+				target.metadata.addFacet(relative);
+				
+				relative.width = 100;
+				relative.height = 100;
+			
+				// Set targets to scale letter box mode, centered, by default:
+				
+				var attributes:LayoutAttributesFacet = target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet;
+				if (attributes == null)
+				{
+					attributes = new LayoutAttributesFacet();
+					target.metadata.addFacet(attributes);
+				}
+				attributes.scaleMode ||= ScaleMode.LETTERBOX;
+				attributes.alignment ||= RegistrationPoint.CENTER;
+			}
+			
+			// Watch the order metadata attribute for change:
+			//
+			
+			metaDataWatchers[target] = MetadataUtils.watchFacetValue
+				( target.metadata
+				, MetadataNamespaces.LAYOUT_ATTRIBUTES
+				, LayoutAttributesFacet.ORDER
+				, function(..._):void 
+					{
+						updateTargetOrder(target);
+					}
+				);
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function processTargetRemoved(target:ILayoutTarget):void
+		{
+			var watcher:MetadataWatcher = metaDataWatchers[target];
+			delete metaDataWatchers[target];
+			
+			watcher.unwatch();
+			watcher = null;
+		}
+		
+		/**
+		 * @private
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		override protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{
@@ -102,71 +185,17 @@ package org.osmf.layout
 					);
 		}
 		
-		// Overrides
-		//
-		
-		override protected function processTargetAdded(target:ILayoutTarget):void
+		/**
+		 * @private
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		override protected function calculateTargetBounds(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			metaDataWatchers[target] = MetadataUtils.watchFacetValue
-				( target.metadata
-				, MetadataNamespaces.LAYOUT_ATTRIBUTES
-				, LayoutAttributesFacet.ORDER
-				, function(..._):void 
-					{
-						updateTargetOrder(target);
-					}
-				);
-		}
-		
-		override protected function processTargetRemoved(target:ILayoutTarget):void
-		{
-			var watcher:MetadataWatcher = metaDataWatchers[target];
-			delete metaDataWatchers[target];
-			
-			watcher.unwatch();
-			watcher = null;
-		}
-	
-		
-		override protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
-		{
-			return calculatePositionAndDimensions(target, NaN, NaN, false);
-		}
-		
-		override protected function applyTargetLayout(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
-		{
-			var rect:Rectangle 
-				= calculatePositionAndDimensions
-					( target
-					, availableWidth
-					, availableHeight
-					, true
-					)
-					;
-			var displayObject:DisplayObject = target.displayObject;
-			if (displayObject)
-			{
-				displayObject.x = rect.x;
-				displayObject.y = rect.y;
-				displayObject.width = isNaN(rect.width) ? displayObject.width : rect.width;
-				displayObject.height = isNaN(rect.height) ? displayObject.height : rect.height;
-			}
-			
-			return rect;
-		}
-		
-		// Internals
-		//
-		
-		private function calculatePositionAndDimensions
-								( target:ILayoutTarget
-								, availableWidth:Number
-								, availableHeight:Number
-								, layoutPass:Boolean
-								):Rectangle
-		{
-			var targetContext:ILayoutContext = target as ILayoutContext;
-			var rect:Rectangle = new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
+			var rect:Rectangle = new Rectangle(0, 0, target.mediaWidth, target.mediaHeight);
 			
 			var attributes:LayoutAttributesFacet
 				= target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet
@@ -299,40 +328,8 @@ package org.osmf.layout
 				}
 			}
 			
-			if (layoutPass)
-			{
-				if (targetContext)
-				{
-					if (toDo & WIDTH)
-					{
-						rect.width = targetContext.calculatedWidth;
-						toDo ^= WIDTH;
-					}
-					
-					if (toDo & HEIGHT)
-					{
-						rect.height = targetContext.calculatedHeight;
-						toDo ^= HEIGHT;
-					}
-				}
-			}
-			else
-			{
-				if (toDo & WIDTH)
-				{
-					rect.width = target.intrinsicWidth;
-					toDo ^= WIDTH;	
-				}
-				
-				if (toDo & HEIGHT)
-				{
-					rect.height = target.intrinsicHeight;
-					toDo ^= HEIGHT;
-				}
-			}
-			
 			// Apply padding, if set. Note the bottom and right padding can only be
-			// applied when a calculated height and width value are available!
+			// applied when a height and width value are available!
 			
 			var padding:PaddingLayoutFacet
 				= target.metadata.getFacet(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS)
@@ -361,31 +358,17 @@ package org.osmf.layout
 			// Apply scaling mode:
 			if (attributes.scaleMode)
 			{
-				var intrinsicOrCalculatedWidth:Number
-					=	target.intrinsicWidth
-					|| 	( targetContext
-							? targetContext.calculatedWidth
-							: NaN
-						);
-							
-				var intrinsicOrCalculatedHeight:Number
-					=	target.intrinsicHeight
-					||	( targetContext
-							? targetContext.calculatedHeight
-							: 0
-						);
-				  
 				if	(!	( toDo & WIDTH || toDo & HEIGHT)					
-					&&	intrinsicOrCalculatedWidth
-					&&	intrinsicOrCalculatedHeight
+					&&	target.mediaWidth
+					&&	target.mediaHeight
 					)
 				{
 					var size:Point = ScaleModeUtils.getScaledSize
 						( attributes.scaleMode
 						, rect.width
 						, rect.height
-						, intrinsicOrCalculatedWidth
-						, intrinsicOrCalculatedHeight
+						, target.mediaWidth
+						, target.mediaHeight
 						);
 					
 					deltaX = rect.width - size.x;
@@ -408,6 +391,7 @@ package org.osmf.layout
 				
 				switch (attributes.alignment)
 				{
+					case null:
 					case RegistrationPoint.TOP_LEFT:
 						// all set.
 						break;
@@ -454,6 +438,7 @@ package org.osmf.layout
 			
 			switch (attributes.registrationPoint)
 			{ 
+				case null:
 				case RegistrationPoint.TOP_LEFT:
 					// all set.
 					break;
@@ -507,21 +492,67 @@ package org.osmf.layout
 			CONFIG::LOGGING
 			{
 				logger.debug
-					( "{0} {1} dimensions: {2} available: {3}, {4}"
+					( "{0} dimensions: {1} available: ({2}, {3}), media: ({4},{5})"
 					, target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
-					, layoutPass ? "layout":"calculated"
 					, rect
-					, availableWidth,availableHeight
+					, availableWidth, availableHeight
+					, target.mediaWidth, target.mediaHeight
 					);
 			}
 			
 			return rect;
 		}
 		
+		override protected function calculateContextSize(targets:Vector.<ILayoutTarget>):Point
+		{
+			var size:Point = new Point(NaN, NaN);
+			
+			var absolute:AbsoluteLayoutFacet
+				= context.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+				as AbsoluteLayoutFacet;
+			
+			if (absolute)
+			{
+				size.x = absolute.width;
+				size.y = absolute.height;
+			}
+			
+			if (isNaN(size.x) || isNaN(size.y))
+			{
+				// Iterrate over all targets, calculating their bounds, combining the results
+				// into a bounds rectangle:
+				var contextBounds:Rectangle = new Rectangle();
+				var targetBounds:Rectangle;
+				
+				for each (var target:ILayoutTarget in targets)
+				{
+					targetBounds = calculateTargetBounds(target, size.x, size.y);
+					targetBounds.x ||= 0;
+					targetBounds.y ||= 0;
+					targetBounds.width ||= target.mediaWidth || 0;
+					targetBounds.height ||= target.mediaHeight || 0;
+					contextBounds = contextBounds.union(targetBounds);
+				}
+				
+				size.x ||= contextBounds.width;
+				size.y ||= contextBounds.height;	
+			}
+			
+			CONFIG::LOGGING
+			{
+				logger.debug
+					( "{0} calculated context size ({1}, {2}) (bounds: {3})"
+					, context.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
+					, size.x, size.y
+					, contextBounds
+					);
+			}
+			
+			return size;
+		}
+		
 		// Internals
 		//
-		
-		private var _context:ILayoutTarget;
 		
 		private static const USED_METADATA_FACETS:Vector.<URL> = new Vector.<URL>(5, true);
 		

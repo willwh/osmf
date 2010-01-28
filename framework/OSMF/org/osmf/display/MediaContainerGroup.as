@@ -21,13 +21,15 @@
 *****************************************************/
 package org.osmf.display
 {
+	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutContextSprite;
+	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 
@@ -40,7 +42,7 @@ package org.osmf.display
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class MediaContainerGroup extends LayoutContextSprite
+	public class MediaContainerGroup extends LayoutTargetSprite
 	{
 		/**
 		 * Constructor
@@ -74,11 +76,14 @@ package org.osmf.display
 			
 			// Setup a MediaContainer to hold media elements:
 			_mediaContainer = new MediaContainer(this.metadata, containerLayoutRenderer);
-			addChild(_mediaContainer);
+			super.addChild(_mediaContainer);
 			
 			// Setup the layout renderer that will govern the layout of child
 			// groups:
-			layoutRenderer = groupsLayoutRenderer || new DefaultLayoutRenderer();
+			var layoutRenderer:LayoutRenderer
+				=	groupsLayoutRenderer
+				||	new DefaultLayoutRenderer();
+				
 			layoutRenderer.context = this; 
 		}
 		
@@ -106,7 +111,7 @@ package org.osmf.display
 			
 			if (value && scrollRect == null)
 			{
-				scrollRect = new Rectangle(0, 0, width, height);
+				scrollRect = new Rectangle(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
 			}
 			else if (value == false && scrollRect)
 			{
@@ -118,92 +123,6 @@ package org.osmf.display
 		{
 			return scrollRect != null;
 		}
-		
-		// Overrides
-		//
-		
-		/**
-		 * Returns 1, for index 0 is occupied by the LayoutContextSprite instance
-		 * that holds child groups.
-		 * 
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get firstChildIndex():uint
-		{
-			// The _mediaContainer sprite is at index 0, add child groups
-			// at index 1 and up:
-			return 1;
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set calculatedWidth(value:Number):void
-		{
-			_mediaContainer.calculatedWidth = value;
-			super.calculatedWidth = value;
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set calculatedHeight(value:Number):void
-		{
-			_mediaContainer.calculatedHeight = value;
-			super.calculatedHeight = value;
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set projectedWidth(value:Number):void
-		{
-			_mediaContainer.projectedWidth = value;
-			super.projectedWidth = value;
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set projectedHeight(value:Number):void
-		{
-			_mediaContainer.projectedHeight = value;
-			super.projectedHeight = value;
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set width(value:Number):void
-		{
-			super.width = _mediaContainer.width = value;
-			
-			if (scrollRect)
-			{
-				scrollRect = new Rectangle(0, 0, width, height);
-			}
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function set height(value:Number):void
-		{
-			super.height = _mediaContainer.height = value;
-			
-			if (scrollRect)
-			{
-				scrollRect = new Rectangle(0, 0, width, height);
-			}
-		}
-		
-		// Public Interface
-		//
 		
 		/**
 		 * Adds the specified group group as a child group.
@@ -298,6 +217,51 @@ package org.osmf.display
 		{
 			layoutRenderer.validateNow();
 			_mediaContainer.validateNow();
+		}
+		
+		// Overrides
+		//
+		
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
+		{
+			return super.addChildAt(child, index + 1);
+		}
+		
+		override public function setChildIndex(child:DisplayObject, index:int):void
+		{
+			super.setChildIndex(child, index + 1);
+		}
+		
+		override public function removeChildAt(index:int):DisplayObject
+		{
+			return super.removeChildAt(index + 1);
+		}
+		
+		override public function measureMedia():void
+		{
+			_mediaContainer.measureMedia();
+			
+			super.measureMedia();
+		}
+		
+		override public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		{
+			if (availableWidth)
+			{
+				_mediaContainer.width = availableWidth;
+			}
+			
+			if (availableHeight)
+			{
+				_mediaContainer.height = availableHeight;
+			}
+			
+			if (scrollRect)
+			{
+				scrollRect = new Rectangle(0, 0, availableWidth, availableHeight);
+			}
+			
+			super.updateMediaDisplay(availableWidth, availableHeight);
 		}
 		
 		// Internals

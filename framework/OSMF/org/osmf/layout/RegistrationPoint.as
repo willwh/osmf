@@ -40,7 +40,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const TOP_LEFT:RegistrationPoint = new RegistrationPoint("topLeft");
+		public static const TOP_LEFT:String = "topLeft";
 		
 		/**
 		 * Defines the top-middle registration point.
@@ -50,7 +50,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const TOP_MIDDLE:RegistrationPoint = new RegistrationPoint("topMiddle");
+		public static const TOP_MIDDLE:String = "topMiddle";
 		
 		/**
 		 * Defines the top-right registration point.
@@ -60,7 +60,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const TOP_RIGHT:RegistrationPoint = new RegistrationPoint("topRight");
+		public static const TOP_RIGHT:String = "topRight";
 		
 		/**
 		 * Defines the middle-left registration point.
@@ -70,7 +70,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MIDDLE_LEFT:RegistrationPoint = new RegistrationPoint("middleLeft");
+		public static const MIDDLE_LEFT:String = "middleLeft";
 		
 		/**
 		 * Defines the center registration point.
@@ -80,7 +80,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const CENTER:RegistrationPoint = new RegistrationPoint("center");
+		public static const CENTER:String = "center";
 		
 		/**
 		 * Defines the middle-right registration point.
@@ -90,7 +90,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MIDDLE_RIGHT:RegistrationPoint = new RegistrationPoint("middleRight");
+		public static const MIDDLE_RIGHT:String = "middleRight";
 		
 		/**
 		 * Defines the bottom-left registration point.
@@ -100,7 +100,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BOTTOM_LEFT:RegistrationPoint = new RegistrationPoint("bottomLeft");
+		public static const BOTTOM_LEFT:String = "bottomLeft";
 		
 		/**
 		 * Defines the bottom-middle registration point.
@@ -110,7 +110,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BOTTOM_MIDDLE:RegistrationPoint = new RegistrationPoint("bottomMiddle");
+		public static const BOTTOM_MIDDLE:String = "bottomMiddle";
 		
 		/**
 		 * Defines the bottom-right registration point.
@@ -120,29 +120,6 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BOTTOM_RIGHT:RegistrationPoint = new RegistrationPoint("bottomRight");
-		
-		/**
-		 * Constructor.
-		 * 
-		 * @private
-		 */		
-		public function RegistrationPoint(token:String)
-		{
-			_token = token;
-		}
-		
-		/**
-		 * @private
-		 */		
-		public function toString():String
-		{
-			return _token;
-		}
-
-		// Internals
-		//
-		
-		private var _token:String
+		public static const BOTTOM_RIGHT:String = "bottomRight";
 	}
 }

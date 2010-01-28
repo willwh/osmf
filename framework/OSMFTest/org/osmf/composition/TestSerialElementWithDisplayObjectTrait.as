@@ -53,8 +53,8 @@ package org.osmf.composition
 			
 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
-			assertEquals(0, displayObjectTrait.mediaWidth);
-			assertEquals(0, displayObjectTrait.mediaHeight);
+			assertEquals(NaN, displayObjectTrait.mediaWidth);
+			assertEquals(NaN, displayObjectTrait.mediaHeight);
 			
 			displayObjectTrait1.setSize(10, 100);
 			

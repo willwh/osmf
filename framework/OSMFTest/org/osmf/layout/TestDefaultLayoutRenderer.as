@@ -27,8 +27,8 @@ package org.osmf.layout
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestDefaultLayoutRenderer extends TestCase
@@ -55,11 +55,10 @@ package org.osmf.layout
 			
 			// Container
 			
-			var container:LayoutContextSprite = new LayoutContextSprite();
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.invalidate();
@@ -68,20 +67,12 @@ package org.osmf.layout
 			
 			assertEquals(0, viewSprite.x);
 			assertEquals(0, viewSprite.y);
-			assertEquals(NaN, viewSprite.width);
-			assertEquals(NaN, viewSprite.height);
+			assertEquals(0, viewSprite.width);
+			assertEquals(0, viewSprite.height);
 			
-			container.projectedWidth = 300;
-			container.projectedHeight = 200;
+			container.width = 300;
+			container.height = 200;
 			layoutRenderer.validateNow();
-			
-			assertEquals(300, container.projectedWidth);
-			assertEquals(200, container.projectedHeight);
-			
-			// The container cannot have a calculated width: its sole
-			// child has relative dimenions:
-			assertEquals(NaN, container.calculatedWidth);
-			assertEquals(NaN, container.calculatedHeight);
 			
 			assertEquals(30, viewSprite.x);
 			assertEquals(20, viewSprite.y);
@@ -196,25 +187,25 @@ package org.osmf.layout
 			
 			// Container
 			
-			var container:LayoutContextSprite = new LayoutContextSprite();
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
-			var melt:ILayoutContext = layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement)) as ILayoutContext;
+			
+			var melt:ILayoutTarget = layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.invalidate();
 			
-			container.projectedWidth = 800;
-			container.projectedHeight = 600;
+			container.width = 800;
+			container.height = 600;
 			
 			layoutRenderer.validateNow();
 			
 			// Without any scaling, we'd expect the element to be at 80x60 - 640x480.
 			// However scaling is set to 'NONE' - meaning intrinsic width and height get bounced (50x50):
 			
-			assertEquals(50, melt.projectedWidth);
-			assertEquals(50, melt.projectedHeight);
+			assertEquals(50, melt.mediaWidth);
+			assertEquals(50, melt.mediaHeight);
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
@@ -282,30 +273,20 @@ package org.osmf.layout
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			
 			// Container without any dimenion settings: should bubble up from child element:
-			var container:LayoutContextSprite = new LayoutContextSprite();
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
 			
-			assertEquals(NaN, container.projectedWidth);
-			assertEquals(NaN, container.projectedHeight);
-			assertEquals(NaN, container.calculatedWidth);
-			assertEquals(NaN, container.calculatedHeight);
+			assertEquals(NaN, container.mediaWidth);
+			assertEquals(NaN, container.mediaHeight);
 			
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
-			assertEquals(400, container.calculatedWidth);
-			assertEquals(800, container.calculatedHeight);
-			
-			assertEquals(NaN, container.projectedWidth);
-			assertEquals(NaN, container.projectedHeight);
-			
-			// We have no real content:
-			assertEquals(0, container.intrinsicWidth);
-			assertEquals(0, container.intrinsicHeight);
+			assertEquals(400, container.mediaWidth);
+			assertEquals(800, container.mediaHeight);
 		}
 	
 		public function testBottomUpTwoLevels():void
@@ -322,64 +303,44 @@ package org.osmf.layout
 			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
 			
 			// Container without any dimenion settings: should bubble up from child element:
-			var container:LayoutContextSprite = new LayoutContextSprite();
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			container.layoutRenderer = layoutRenderer;
 			layoutRenderer.context = container;
 			
-			assertEquals(NaN, container.projectedWidth);
-			assertEquals(NaN, container.projectedHeight);
-			assertEquals(NaN, container.calculatedWidth);
-			assertEquals(NaN, container.calculatedHeight);
+			assertEquals(NaN, container.mediaWidth);
+			assertEquals(NaN, container.mediaHeight);
 			
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
-			assertEquals(400, container.calculatedWidth);
-			assertEquals(800, container.calculatedHeight);
-			
-			assertEquals(NaN, container.projectedWidth);
-			assertEquals(NaN, container.projectedHeight);
-			
-			// We have no real content:
-			assertEquals(0, container.intrinsicWidth);
-			assertEquals(0, container.intrinsicHeight);
+			assertEquals(400, container.mediaWidth);
+			assertEquals(800, container.mediaHeight);
 			
 			// Containter that holds the previous container: dimensions should 
 			// bubble up another level:
-			var container2:LayoutContextSprite = new LayoutContextSprite();
+			var container2:LayoutTargetSprite = new LayoutTargetSprite();
 			MetadataUtils.setElementId(container2.metadata,"container2");
 			
 			var layoutRenderer2:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			container2.layoutRenderer = layoutRenderer2;
 			layoutRenderer2.context = container2;
 			
-			assertEquals(NaN, container2.projectedWidth);
-			assertEquals(NaN, container2.projectedHeight);
-			assertEquals(NaN, container2.calculatedWidth);
-			assertEquals(NaN, container2.calculatedHeight);
+			assertEquals(NaN, container2.mediaWidth);
+			assertEquals(NaN, container2.mediaHeight);
 			
 			layoutRenderer2.addTarget(container);
 			layoutRenderer2.validateNow();
 			
-			assertEquals(400, container2.calculatedWidth);
-			assertEquals(800, container2.calculatedHeight);
-			
-			assertEquals(NaN, container2.projectedWidth);
-			assertEquals(NaN, container2.projectedHeight);
-			
-			// We have no real content:
-			assertEquals(0, container2.intrinsicWidth);
-			assertEquals(0, container2.intrinsicHeight);
+			assertEquals(400, container2.mediaWidth);
+			assertEquals(800, container2.mediaHeight);
 		}
 		
 		public function testOrdering():void
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			var container:LayoutContextSprite = new LayoutContextSprite();
-			container.layoutRenderer = renderer;
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
+			renderer.context = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			LayoutUtils.setLayoutAttributes(t1.metadata, null, null, 8);
@@ -417,8 +378,8 @@ package org.osmf.layout
 		public function testPaddingAndRounding():void
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			var container:LayoutContextSprite = new LayoutContextSprite();
-			container.layoutRenderer = renderer;
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
+			renderer.context = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			LayoutUtils.setAbsoluteLayout(t1.metadata,100,100);
@@ -447,8 +408,8 @@ package org.osmf.layout
 		public function testRegistrationPoint():void
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			var container:LayoutContextSprite = new LayoutContextSprite();
-			container.layoutRenderer = renderer;
+			var container:LayoutTargetSprite = new LayoutTargetSprite();
+			renderer.context = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			t1.setIntrinsicDimensions(100,100);

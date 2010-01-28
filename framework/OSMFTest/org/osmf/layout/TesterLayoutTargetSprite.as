@@ -22,14 +22,13 @@
 package org.osmf.layout
 {
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.NullResource;
+	import org.osmf.utils.ExternalProperty;
 
-	public class TesterLayoutTargetSprite extends Sprite implements ILayoutContext
+	public class TesterLayoutTargetSprite extends Sprite implements ILayoutTarget
 	{
 		// ILayoutTarget
 		//
@@ -44,114 +43,75 @@ package org.osmf.layout
 			return this;
 		}
 		
-		public function get container():DisplayObjectContainer
-		{
-			return this;
-		}
-		
-		public function get firstChildIndex():uint
-		{
-			return 0;
-		}
-		
 		public function get layoutRenderer():LayoutRenderer
 		{
-			return null;
+			return _layoutRenderer.value as LayoutRenderer;
 		}
 		
-		public function set layoutRenderer(value:LayoutRenderer):void
+		public function get parentLayoutRenderer():LayoutRenderer
 		{
+			return _parentLayoutRenderer.value as LayoutRenderer;
 		}
 		
-		public function get intrinsicWidth():Number
+		public function get mediaWidth():Number
 		{
-			return _intrinsicWidth;
+			return _mediaWidth;
 		}
 		
-		public function get intrinsicHeight():Number
+		public function get mediaHeight():Number
 		{
-			return _intrinsicHeight;
+			return _mediaHeight;
 		}
 		
-		public function updateIntrinsicDimensions():void
+		public function measureMedia():void
 		{
+			//
 		}
 		
-		public function get calculatedWidth():Number
+		public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
 		{
-			return _calculatedWidth;
-		}
-		
-		public function set calculatedWidth(value:Number):void
-		{
-			_calculatedWidth = value;
-		}
-		
-		public function get calculatedHeight():Number
-		{
-			return _calculatedHeight;
-		}
-		
-		public function set calculatedHeight(value:Number):void
-		{
-			_calculatedHeight = value;
-		}
-		
-		public function get projectedWidth():Number
-		{
-			return _projectedWidth;
-		}
-		
-		public function set projectedWidth(value:Number):void
-		{
-			_projectedWidth = value;
-		}
-		
-		public function get projectedHeight():Number
-		{
-			return _projectedHeight;
-		}
-		
-		public function set projectedHeight(value:Number):void
-		{
-			_projectedHeight = value;
+			width = availableWidth;
+			height = availableHeight;
 		}
 		
 		//  Public API
 		//
+		
+		public function TesterLayoutTargetSprite()
+		{
+			_layoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE);
+			_parentLayoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE);
+			
+			super();
+		}
 		
 		public function setIntrinsicDimensions(width:Number, height:Number):void
 		{
 			graphics.clear();
 			
 			graphics.beginFill(0xff0000);
-			graphics.drawRect(0,0,width,height);
+			graphics.drawRect(0, 0, width, height);
 			graphics.endFill();
 			
 			dispatchEvent
 				( new DisplayObjectEvent
 					( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 					, null, null
-					, _intrinsicWidth
-					, _intrinsicHeight
-					, _intrinsicWidth = width
-					, _intrinsicHeight = height
+					, _mediaWidth
+					, _mediaHeight
+					, _mediaWidth = width
+					, _mediaHeight = height
 					)
 				);	
 		}
 		
 		private var _metadata:Metadata = new Metadata();
 		
-		private var _layoutRenderer:LayoutRenderer;
+		private var _layoutRenderer:ExternalProperty;
+		private var _parentLayoutRenderer:ExternalProperty;
 		
-		private var _intrinsicWidth:Number;
-		private var _intrinsicHeight:Number;
-		
-		private var _calculatedWidth:Number;
-		private var _calculatedHeight:Number;
-		
-		private var _projectedWidth:Number;
-		private var _projectedHeight:Number;
+		private var _mediaWidth:Number;
+		private var _mediaHeight:Number;
 		
 	}
 }

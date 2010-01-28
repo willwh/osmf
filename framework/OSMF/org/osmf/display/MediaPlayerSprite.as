@@ -53,8 +53,8 @@ package org.osmf.display
 		{
 			super();	
 			mediaPlayer = player != null ? player : new MediaPlayer(); 		
-			_containerSprite = new MediaContainer();
-			addChild(_containerSprite);			
+			mediaContainer = new MediaContainer();
+			addChild(mediaContainer);			
 		}	
 		
  		/**
@@ -69,27 +69,26 @@ package org.osmf.display
 		public function set mediaElement(value:MediaElement):void
 		{
 			
-			if (_element != value)
+			if (_mediaElement != value)
 			{
-				if (_element != null && _element.container)
+				if (_mediaElement != null && _mediaElement.container)
 				{
-					_element.container.removeMediaElement(_element);
+					_mediaElement.container.removeMediaElement(_mediaElement);
 				}		
-				_element = value;	
-				if (_element != null)
+				_mediaElement = value;	
+				if (_mediaElement != null)
 				{
-					LayoutUtils.setLayoutAttributes(_element.metadata, 	_scaleMode, RegistrationPoint.CENTER);
-					LayoutUtils.setRelativeLayout(_element.metadata, 100, 100);
-					_containerSprite.addMediaElement(_element);
+					mediaContainer.addMediaElement(_mediaElement);
+					LayoutUtils.setLayoutAttributes(_mediaElement.metadata, _scaleMode, RegistrationPoint.CENTER);
 				}
-				_player.media = _element;
+				_mediaPlayer.media = _mediaElement;
 				
 			}
 		}
 		
 		public function get mediaElement():MediaElement
 		{			
-			return _element;
+			return _mediaElement;
 		}
 		
 		/**
@@ -103,19 +102,18 @@ package org.osmf.display
 		 */ 
 		public function set mediaPlayer(value:MediaPlayer):void
 		{
-			if (_player != value)
+			if (_mediaPlayer != value)
 			{
-				_player = value;
-				_player.media = _element;
+				_mediaPlayer = value;
+				_mediaPlayer.media = _mediaElement;
 			}
 			
 		}		
 		 
 		public function get mediaPlayer():MediaPlayer
 		{
-			return _player;
+			return _mediaPlayer;
 		}
-		
 								
 		/**
 		 * The <code>scaleMode</code> property describes different ways of laying out the media content within a this sprite.
@@ -135,13 +133,13 @@ package org.osmf.display
 		
 		public function set scaleMode(value:String):void
 		{
-			if(_scaleMode != value)
+			if (_scaleMode != value)
 			{				
 				_scaleMode = value;
-				if (_element != null)
+				if (_mediaElement != null)
 				{
-					LayoutUtils.setLayoutAttributes(_element.metadata, value, RegistrationPoint.CENTER);
-					_containerSprite.validateNow();
+					LayoutUtils.setLayoutAttributes(_mediaElement.metadata, value, RegistrationPoint.CENTER);
+					mediaContainer.validateNow();
 				}
 			}
 		}					
@@ -151,12 +149,8 @@ package org.osmf.display
 		 */ 
 		override public function set width(value:Number):void
 		{
-			_containerSprite.width = value;
-			if (_element != null)
-			{
-				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, value, height);
-				_containerSprite.validateNow();
-			}
+			mediaContainer.width = value;
+			mediaContainer.validateNow();
 		}
 				
 		/**
@@ -164,7 +158,7 @@ package org.osmf.display
 		 */ 
 		override public function get width():Number
 		{					
-			return _containerSprite.width;
+			return mediaContainer.width;
 		}
 		
 		/**
@@ -172,12 +166,8 @@ package org.osmf.display
 		 */ 
 		override public function set height(value:Number):void
 		{
-			_containerSprite.height = value;
-			if (_element != null)
-			{
-				LayoutUtils.setAbsoluteLayout(_containerSprite.metadata, width, value);
-				_containerSprite.validateNow();
-			}
+			mediaContainer.height = value;
+			mediaContainer.validateNow();
 		}
 				
 		/**
@@ -185,13 +175,13 @@ package org.osmf.display
 		 */ 
 		override public function get height():Number
 		{					
-			return _containerSprite.height;
+			return mediaContainer.height;
 		}
 						
-		private var _scaleMode:String = ScaleMode.LETTERBOX;
-		private var _element:MediaElement;
-		private var _containerSprite:MediaContainer;
-		private var _player:MediaPlayer;
+		private var mediaContainer:MediaContainer;
 		
+		private var _scaleMode:String = ScaleMode.LETTERBOX;
+		private var _mediaElement:MediaElement;
+		private var _mediaPlayer:MediaPlayer;
 	}
 }

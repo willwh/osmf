@@ -26,10 +26,11 @@ package org.osmf.composition
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
-	import org.osmf.layout.ILayoutContext;
-	import org.osmf.layout.LayoutContextSprite;
+	import org.osmf.layout.ILayoutTarget;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererFacet;
+	import org.osmf.layout.LayoutTargetSprite;
+	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -44,10 +45,10 @@ package org.osmf.composition
 	 * DisplayObjectContainer implementing instance, that holds each of the composite trait
 	 * children's display objects.
 	 * 
-	 * The bounds of the container determine the media size of the composition.
+	 * The bounds of the childrenContainer determine the media size of the composition.
 	 * 
 	 * The characteristics of a composite trait changing influence
-	 * the container's characteristics - hence the trait needs to watch these traits on
+	 * the childrenContainer's characteristics - hence the trait needs to watch these traits on
 	 * its children.
 	 *  
 	 *  @langversion 3.0
@@ -64,9 +65,9 @@ package org.osmf.composition
 			_traitAggregator = traitAggregator;
 			_owner = owner as CompositeElement;
 			
-			// Prepare a container to hold our viewable children:
-			_container = constructLayoutContext();
-			_container.addEventListener
+			// Prepare a childrenContainer to hold our viewable children:
+			_childrenContainer = constructChildrenContainer();
+			_childrenContainer.addEventListener
 				( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 				, onContainerDimensionChange
 				);
@@ -84,9 +85,9 @@ package org.osmf.composition
 		 */
 		override public function get displayObject():DisplayObject
 		{
-			// The aggregate displayObject is the container holding the composite
+			// The aggregate displayObject is the childrenContainer holding the composite
 			// trait's children:
-			return _container.displayObject;
+			return _childrenContainer.displayObject;
 		}
 
 		/**
@@ -94,7 +95,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaWidth():Number
 		{
-			return _container.intrinsicWidth;
+			return _childrenContainer.mediaWidth;
 		}
 		
 		/**
@@ -102,7 +103,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaHeight():Number
 		{
-			return _container.intrinsicHeight;
+			return _childrenContainer.mediaHeight;
 		}
 		
 		// Protected API
@@ -123,17 +124,17 @@ package org.osmf.composition
 			return _owner;
 		}
 		
-		protected function get container():ILayoutContext
+		protected function get childrenContainer():ILayoutTarget
 		{
-			return _container;
+			return _childrenContainer;
 		}
 		
 		// Internals
 		//
 		
-		private function constructLayoutContext():ILayoutContext
+		private function constructChildrenContainer():ILayoutTarget
 		{
-			return new LayoutContextSprite(_owner.metadata);
+			return new LayoutTargetSprite(_owner.metadata);
 		}
 
 		private function onContainerDimensionChange(event:DisplayObjectEvent):void
@@ -172,13 +173,14 @@ package org.osmf.composition
 				_layoutRenderer = new DefaultLayoutRenderer();
 			}
 			
-			_container.layoutRenderer = _layoutRenderer;
-			_layoutRenderer.context = _container;
+			_layoutRenderer.context = _childrenContainer;
 		}
 
 		private var _traitAggregator:TraitAggregator;		
 		private var _owner:CompositeElement;
-		private var _container:ILayoutContext;
+		private var _childrenContainer:ILayoutTarget;
 		private var _layoutRenderer:LayoutRenderer;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeDisplayObjectTrait");
 	}
 }

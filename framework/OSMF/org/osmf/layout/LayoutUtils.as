@@ -308,7 +308,7 @@ package org.osmf.layout
 		public static function setLayoutAttributes
 									( target:Metadata
 									, scaleMode:String
-									, alignment:RegistrationPoint = null
+									, alignment:String = null
 									, order:Number = NaN
 									, snapToPixel:Boolean = false
 									):LayoutAttributesFacet

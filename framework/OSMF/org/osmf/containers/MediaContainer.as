@@ -28,10 +28,13 @@ package org.osmf.containers
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutContextSprite;
+	import org.osmf.layout.LayoutRendererChangeEvent;
+	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
+	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -42,7 +45,7 @@ package org.osmf.containers
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class MediaContainer extends LayoutContextSprite implements IMediaContainer
+	public class MediaContainer extends LayoutTargetSprite implements IMediaContainer
 	{
 		/**
 		 * Constructor
@@ -68,10 +71,11 @@ package org.osmf.containers
 		{
 			super(metadata);
 			
-			this.layoutRenderer = layoutRenderer || new DefaultLayoutRenderer(); 
+			layoutRenderer ||= new DefaultLayoutRenderer()
+			layoutRenderer.context = this; 
 		}
 		
-		// IMediaContainer
+		// MediaContainer
 		//
 		
 		/**
@@ -86,25 +90,29 @@ package org.osmf.containers
 			
 			if (layoutTargets[element] == undefined)
 			{
+				// Media containers are under obligation to dispatch a container change event when
+				// they add a media element:
+				element.dispatchEvent
+					( new ContainerChangeEvent
+						( ContainerChangeEvent.CONTAINER_CHANGE
+						, false, false
+						, element.container, this
+						)
+					);
+					
+				CONFIG::LOGGING { logger.debug("addMediaElement: {0} to {1}", element.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				var contentTarget:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(element);
 				
 				layoutTargets[element] = contentTarget;
 				layoutRenderer.addTarget(contentTarget);
+				
+				element.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onElementContainerChange);
 			}
 			else
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			// Media containers are under obligation to dispatch a container change event when
-			// they add a media element:
-			element.dispatchEvent
-				( new ContainerChangeEvent
-					( ContainerChangeEvent.CONTAINER_CHANGE
-					, false, false
-					, element.container, this
-					)
-				);
 			
 			return element;
 		}
@@ -124,24 +132,30 @@ package org.osmf.containers
 			
 			if (contentTarget)
 			{
+				CONFIG::LOGGING { logger.debug("removeMediaElement {0} from {1}", element.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				element.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onElementContainerChange);
 				layoutRenderer.removeTarget(contentTarget);
 				delete layoutTargets[element];
 				result = element;
+				
+				// Media containers are under obligation to dispatch a container change event when
+				// they remove a media element. See if we're still the element's container, though.
+				// For if not, a change has already occured.
+				if (element.container == this)
+				{
+					element.dispatchEvent
+						( new ContainerChangeEvent
+							( ContainerChangeEvent.CONTAINER_CHANGE
+							, false, false
+							, element.container, null
+							)
+						);
+				}
 			}
 			else
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
-			
-			// Media containers are under obligation to dispatch a container change event when
-			// they remove a media element:
-			element.dispatchEvent
-				( new ContainerChangeEvent
-					( ContainerChangeEvent.CONTAINER_CHANGE
-					, false, false
-					, element.container, null
-					)
-				);
 			
 			return result;
 		}
@@ -171,7 +185,7 @@ package org.osmf.containers
 		{
 			if (value && scrollRect == null)
 			{
-				scrollRect = new Rectangle(0, 0, width, height);
+				scrollRect = new Rectangle(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
 			}
 			else if (value == false && scrollRect)
 			{
@@ -187,13 +201,8 @@ package org.osmf.containers
 		// Overrides
 		//
 		
-		/**
-		 * @private
-		 */
-		override public function set width(value:Number):void
+		override public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
 		{
-			super.width = value;
-			
 			if (!isNaN(backgroundColor))
 			{
 				drawBackground();
@@ -201,28 +210,10 @@ package org.osmf.containers
 			
 			if (scrollRect)
 			{
-				scrollRect = new Rectangle(0, 0, width, height);
+				scrollRect = new Rectangle(0, 0, availableWidth, availableHeight);
 			}
 		}
-		
-		/**
-		 * @private
-		 */
-		override public function set height(value:Number):void
-		{
-			super.height = value;
-			
-			if (!isNaN(backgroundColor))
-			{
-				drawBackground();
-			}
-			
-			if (scrollRect)
-			{
-				scrollRect = new Rectangle(0, 0, width, height);
-			}
-		}
-		
+				
 		/**
 		 * @private
 		 */
@@ -287,13 +278,21 @@ package org.osmf.containers
 			
 			if	(	!isNaN(_backgroundColor)
 				&& 	_backgroundAlpha != 0
-				&&	width
-				&&	height
+				&&	layoutRenderer.mediaWidth
+				&&	layoutRenderer.mediaHeight
 				)
 			{
 				graphics.beginFill(_backgroundColor,_backgroundAlpha);
-				graphics.drawRect(0, 0, width, height);
+				graphics.drawRect(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
 				graphics.endFill();
+			}
+		}
+		
+		private function onElementContainerChange(event:ContainerChangeEvent):void
+		{
+			if (event.oldValue == this)
+			{
+				removeMediaElement(event.target as MediaElement);
 			}
 		}
 		
@@ -307,5 +306,7 @@ package org.osmf.containers
 		
 		private var _backgroundColor:Number;
 		private var _backgroundAlpha:Number;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaContainer");
 	}
 }

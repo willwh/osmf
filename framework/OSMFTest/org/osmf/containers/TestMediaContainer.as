@@ -125,6 +125,7 @@ package org.osmf.containers
 			container.clipChildren = true;
 			assertTrue(container.clipChildren);
 			
+			container.validateNow();
 			assertEquals(500, container.width);
 			assertEquals(400, container.height);
 		}

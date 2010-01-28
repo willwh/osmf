@@ -19,28 +19,46 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
+
 package org.osmf.layout
 {
-	import flexunit.framework.TestCase;
+	import flash.events.Event;
 
-	public class TestLayoutContextSprite extends TestCase
+	public class LayoutRendererChangeEvent extends Event
 	{
-		public function testLayoutContextSprite():void
+		public static const LAYOUT_RENDERER_CHANGE:String = "layoutRendererChange";
+		public static const PARENT_LAYOUT_RENDERER_CHANGE:String = "parentLayoutRendererChange";
+		
+		public function LayoutRendererChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:LayoutRenderer = null, newValue:LayoutRenderer = null)
 		{
-			var lcs:LayoutContextSprite = new LayoutContextSprite();
-			var renderer:LayoutRenderer = new DefaultLayoutRenderer();
-			renderer.context = lcs;
+			super(type, bubbles, cancelable);
 			
-			var child1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			var child2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			
-			renderer.addTarget(child1);
-			renderer.addTarget(child2);
-			
-			assertEquals(0, lcs.intrinsicWidth);
-			assertEquals(0, lcs.intrinsicHeight);
-			
+			_oldValue = oldValue;
+			_newValue = newValue;
 		}
 		
+		public function get oldValue():LayoutRenderer
+		{
+			return _oldValue;
+		}
+		
+		public function get newValue():LayoutRenderer
+		{
+			return _newValue;
+		}
+		
+		// Overrides
+		//
+		
+		override public function clone():Event
+		{
+			return new(type, bubbles, cancelable, _oldValue, _newValue);
+		}
+		
+		// Internals
+		//
+		
+		private var _oldValue:LayoutRenderer;
+		private var _newValue:LayoutRenderer;
 	}
 }

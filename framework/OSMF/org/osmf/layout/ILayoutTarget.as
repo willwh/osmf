@@ -22,7 +22,6 @@
 package org.osmf.layout
 {
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
 	
 	import org.osmf.metadata.Metadata;
@@ -50,6 +49,30 @@ package org.osmf.layout
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
+	
+	/**
+	 * Dispatched when a layout target's layoutRenderer property changed.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.LAYOUT_RENDERER_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="layoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
+
+	/**
+	 * Dispatched when a layout target's parentLayoutRenderer property changed.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.PARENT_LAYOUT_RENDERER_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="parentLayoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
 
 	/**
 	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer
@@ -74,10 +97,10 @@ package org.osmf.layout
 		function get metadata():Metadata;
 	 
 		/**
-		 * A reference to the display object that represents the target. An
-		 * LayoutRenderer may use this reference to effect its calculated
-		 * values onto the target, as well as correctly parenting the target on
-		 * its context's display object container.
+		 * A reference to the display object that represents the target. A
+		 * LayoutRenderer object may use this reference to position the target,
+		 * as well as to correctly parent the target on its context's display
+		 * object container.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -85,6 +108,17 @@ package org.osmf.layout
 		 *  @productversion OSMF 1.0
 		 */		
 		function get displayObject():DisplayObject;
+		
+		/**
+	 	 * Defines the layout renderer that the implementing object uses to render
+	 	 * its children. Can be null.
+	 	 */	 	
+	 	function get layoutRenderer():LayoutRenderer;
+	 	
+	 	/**
+	 	 * Defines the layout renderer that lays out the implementing object.
+	 	 */	 	
+	 	function get parentLayoutRenderer():LayoutRenderer;
 		
 	 	/**
 	 	 * Defines the width of the element without any transformations being
@@ -97,7 +131,7 @@ package org.osmf.layout
 	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */	 	
-	 	function get intrinsicWidth():Number;
+	 	function get mediaWidth():Number;
 	 	
 	 	/**
 	 	 * Defines the width of the element without any transformations being
@@ -110,7 +144,30 @@ package org.osmf.layout
 	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
-	 	function get intrinsicHeight():Number;
+	 	function get mediaHeight():Number;
+	 	
+	 	/**
+		 * Method invoked by a LayoutRenderer object to inform the implementation
+		 * that it should reasses its mediaWidth and mediaHeight fields:
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+	 	function measureMedia():void;
+	 	
+	 	/**
+		 * Method invoked by a LayoutRenderer object to inform the implementation
+		 * that it should update its display to adjust to the given available
+		 * width and height.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+	 	function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void;
 	 	
 	 	
 	}

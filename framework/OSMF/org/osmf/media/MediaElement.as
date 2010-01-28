@@ -33,6 +33,7 @@ package org.osmf.media
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
+	import org.osmf.utils.ExternalProperty;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -82,7 +83,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	[Event(name="gatewayChange",type="org.osmf.events.ContainerChangeEvent")]
+	[Event(name="containerChange",type="org.osmf.events.ContainerChangeEvent")]
 		
 	/**
      * A MediaElement represents a unified media experience.
@@ -130,7 +131,8 @@ package org.osmf.media
 			_metadata = createMetadata();
 			setupTraitResolvers();		
 			setupTraits();
-			addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange, false, Number.MAX_VALUE);
+			
+			_container = new ExternalProperty(this, ContainerChangeEvent.CONTAINER_CHANGE);
 		}
 	
 		/**
@@ -225,7 +227,7 @@ package org.osmf.media
 		 */
 		public function get container():IMediaContainer
 		{
-			return _container;
+			return _container.value as IMediaContainer;
 		}
 		
 		/**
@@ -467,14 +469,6 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function onContainerChange(event:ContainerChangeEvent):void
-		{
-			if (event.oldValue == _container)
-			{
-				_container = event.newValue; 
-			}
-		}
-		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			dispatchEvent(event.clone());
@@ -546,6 +540,6 @@ package org.osmf.media
 		private var _resource:MediaResourceBase;
 		private var _metadata:Metadata;
 		
-		private var _container:IMediaContainer;
+		private var _container:ExternalProperty;
 	}
 }

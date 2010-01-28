@@ -35,10 +35,11 @@ package org.osmf.display
 		{
 			var player:MediaPlayerSprite = new MediaPlayerSprite();
 			var media:DynamicMediaElement = new DynamicMediaElement();
-			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(new Sprite(), 150, 150);
+			var sprite:Sprite = new Sprite;
+			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(sprite, 150, 150);
 						
-			Sprite(displayObjectTrait.displayObject).graphics.beginFill(0);
-			Sprite(displayObjectTrait.displayObject).graphics.drawRect(0,0,150,150);
+			sprite.graphics.beginFill(0);
+			sprite.graphics.drawRect(0,0,150,150);
 			
 			player.mediaElement = media;
 			
@@ -49,16 +50,16 @@ package org.osmf.display
 			player.width = 300;
 			player.height = 300;
 			
-			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 150);
+			assertEquals(sprite.width, sprite.height, 150);
 			
 			player.scaleMode = ScaleMode.STRETCH;
 			
-			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 300);
+			assertEquals(sprite.width, sprite.height, 300);
 						
 			player.width = 500;
 			player.height = 500;
 			
-			assertEquals( displayObjectTrait.displayObject.width, displayObjectTrait.displayObject.height, 500);
+			assertEquals( sprite.width, sprite.height, 500);
 			
 			player.scaleMode = ScaleMode.NONE;
 						

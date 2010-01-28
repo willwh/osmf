@@ -51,7 +51,7 @@ package org.osmf.layout
 			
 			assertEquals(1, eventCounter);
 			assertEquals(LayoutAttributesFacet.ALIGNMENT, lastEvent.identifier);
-			assertEquals(RegistrationPoint.TOP_LEFT, lastEvent.oldValue);
+			assertEquals(null, lastEvent.oldValue);
 			assertEquals(RegistrationPoint.BOTTOM_RIGHT, lastEvent.value);
 			assertEquals(facet.alignment, facet.getValue(LayoutAttributesFacet.ALIGNMENT), RegistrationPoint.BOTTOM_RIGHT);
 			

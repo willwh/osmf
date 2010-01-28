@@ -41,32 +41,26 @@ package org.osmf.display
 			
 			root.layoutRenderer.validateNow();
 			
-			assertEquals(NaN, root.width);
-			assertEquals(NaN, root.height);
-			assertEquals(NaN, root.calculatedWidth);
-			assertEquals(NaN, root.calculatedHeight);
-			assertEquals(NaN, root.projectedWidth);
-			assertEquals(NaN, root.projectedHeight);
+			assertEquals(0, root.width);
+			assertEquals(0, root.height);
+			assertEquals(0, root.mediaWidth);
+			assertEquals(0, root.mediaHeight);
 			
 			LayoutUtils.setAbsoluteLayout(childA1A.metadata,400,50);
 			root.layoutRenderer.validateNow();
 			
-			assertEquals(NaN, root.width);
-			assertEquals(NaN, root.height);
-			assertEquals(400, root.calculatedWidth);
-			assertEquals(50, root.calculatedHeight);
-			assertEquals(NaN, root.projectedWidth);
-			assertEquals(NaN, root.projectedHeight);
-			
 			assertEquals(400, childA1A.width);
 			assertEquals(50, childA1A.height);
-			assertEquals(400, childA1A.calculatedWidth);
-			assertEquals(50, childA1A.calculatedHeight);
-			assertEquals(400, childA1A.projectedWidth);
-			assertEquals(50, childA1A.projectedHeight);
+			assertEquals(400, childA1A.mediaWidth);
+			assertEquals(50, childA1A.mediaHeight);
 			
-			assertEquals(400, childA1.calculatedWidth);
-			assertEquals(50, childA1.calculatedHeight);
+			assertEquals(400, childA1.mediaWidth);
+			assertEquals(50, childA1.mediaHeight);
+			
+			assertEquals(400, root.width);
+			assertEquals(50, root.height);
+			assertEquals(400, root.mediaWidth);
+			assertEquals(50, root.mediaHeight);
 		}
 		
 		public function testContainerSubContainers():void

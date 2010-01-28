@@ -61,6 +61,61 @@ package org.osmf
 			// Uncomment this line to run all tests against the network.
 			//NetFactory.neverUseMockObjects = true;
 			
+			// Layout
+			//
+					
+			addTestSuite(TestAbsoluteLayoutFacet);
+			addTestSuite(TestAnchorLayoutFacet);
+			addTestSuite(TestLayoutRenderer);
+			addTestSuite(TestDefaultLayoutRenderer);
+			addTestSuite(TestLayoutAttributesFacet);
+			addTestSuite(TestLayoutRendererFacet);
+			addTestSuite(TestMediaElementLayoutTarget);
+			addTestSuite(TestPaddingLayoutFacet);
+			addTestSuite(TestRegistrationPoint);
+			addTestSuite(TestRelativeLayoutFacet);
+			addTestSuite(TestLayoutUtils);
+			
+			// Containers
+			//
+			
+			addTestSuite(TestMediaContainer);
+			addTestSuite(TestMediaContainerGroup);
+			addTestSuite(TestHTMLMediaContainer);
+			addTestSuite(TestMediaPlayerSprite);
+			
+			// Composition
+			//
+			
+			addTestSuite(TestTraitAggregator);
+			addTestSuite(TestTraitLoader);
+
+			addTestSuite(TestCompositeElement);
+			addTestSuite(TestParallelElement);
+			addTestSuite(TestSerialElement);
+
+			addTestSuite(TestParallelElementWithAudioTrait);
+			addTestSuite(TestParallelElementWithBufferTrait);
+			//addTestSuite(TestParallelElementWithContentProtectionTrait);
+			addTestSuite(TestParallelElementWithDynamicStreamTrait);
+			addTestSuite(TestParallelElementWithLoadTrait);
+			addTestSuite(TestParallelElementWithPlayTrait);
+			addTestSuite(TestParallelElementWithSeekTrait);
+			addTestSuite(TestParallelElementWithTimeTrait);
+			addTestSuite(TestParallelElementWithDisplayObjectTrait);
+			
+			addTestSuite(TestSerialElementWithAudioTrait);
+			addTestSuite(TestSerialElementWithBufferTrait);
+			//addTestSuite(TestSerialElementWithContentProtectionTrait);
+			addTestSuite(TestSerialElementWithDynamicStreamTrait);
+			addTestSuite(TestSerialElementWithLoadTrait);
+			addTestSuite(TestSerialElementWithPlayTrait);
+			addTestSuite(TestSerialElementWithSeekTrait);
+			addTestSuite(TestSerialElementWithTimeTrait);
+			addTestSuite(TestSerialElementWithDisplayObjectTrait);
+			
+			addTestSuite(TestCompositeAudioTrait);
+			
 			// Utils
 			//
 			addTestSuite(TestBinarySearch);
@@ -231,63 +286,6 @@ package org.osmf
 			addTestSuite(TestSWFLoader);
 			addTestSuite(TestSWFElement);
 			
-			// Composition
-			//
-			
-			addTestSuite(TestTraitAggregator);
-			addTestSuite(TestTraitLoader);
-
-			addTestSuite(TestCompositeElement);
-			addTestSuite(TestParallelElement);
-			addTestSuite(TestSerialElement);
-
-			addTestSuite(TestParallelElementWithAudioTrait);
-			addTestSuite(TestParallelElementWithBufferTrait);
-			//addTestSuite(TestParallelElementWithContentProtectionTrait);
-			addTestSuite(TestParallelElementWithDynamicStreamTrait);
-			addTestSuite(TestParallelElementWithLoadTrait);
-			addTestSuite(TestParallelElementWithPlayTrait);
-			addTestSuite(TestParallelElementWithSeekTrait);
-			addTestSuite(TestParallelElementWithTimeTrait);
-			addTestSuite(TestParallelElementWithDisplayObjectTrait);
-			
-			addTestSuite(TestSerialElementWithAudioTrait);
-			addTestSuite(TestSerialElementWithBufferTrait);
-			//addTestSuite(TestSerialElementWithContentProtectionTrait);
-			addTestSuite(TestSerialElementWithDynamicStreamTrait);
-			addTestSuite(TestSerialElementWithLoadTrait);
-			addTestSuite(TestSerialElementWithPlayTrait);
-			addTestSuite(TestSerialElementWithSeekTrait);
-			addTestSuite(TestSerialElementWithTimeTrait);
-			addTestSuite(TestSerialElementWithDisplayObjectTrait);
-			
-			addTestSuite(TestCompositeAudioTrait);
-			
-			// Layout
-			//
-					
-			addTestSuite(TestAbsoluteLayoutFacet);
-			addTestSuite(TestAnchorLayoutFacet);
-			addTestSuite(TestLayoutRendererBase);
-			addTestSuite(TestDefaultLayoutRenderer);
-			addTestSuite(TestLayoutAttributesFacet);
-			addTestSuite(TestLayoutRendererFacet);
-			addTestSuite(TestLayoutContextSprite);
-			addTestSuite(TestMediaElementLayoutTarget);
-			addTestSuite(TestPaddingLayoutFacet);
-			addTestSuite(TestRegistrationPoint);
-			addTestSuite(TestRelativeLayoutFacet);
-			addTestSuite(TestLayoutUtils);
-
-			addTestSuite(TestMediaPlayerSprite);
-			
-			// Containers
-			//
-			
-			addTestSuite(TestMediaContainer);
-			addTestSuite(TestMediaContainerGroup);
-			addTestSuite(TestHTMLMediaContainer);
-
 			// Plugins
 			//
 			

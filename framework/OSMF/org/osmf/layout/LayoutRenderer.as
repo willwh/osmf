@@ -25,9 +25,11 @@ package org.osmf.layout
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -96,6 +98,7 @@ package org.osmf.layout
 		}
 		final protected function setParent(value:LayoutRenderer):void
 		{
+			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getFacet(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "null");}
 			_parent = value;
 		}
 		
@@ -110,38 +113,58 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		final public function get context():ILayoutContext
+		final public function get context():ILayoutTarget
 		{
 			return _context;
 		}
-		final public function set context(value:ILayoutContext):void
+		final public function set context(value:ILayoutTarget):void
 		{
 			if (value != _context)
 			{
 				if (_context != null)
 				{
 					reset();
+					
+					if (_context.layoutRenderer == this)
+					{
+						_context.dispatchEvent
+							( new LayoutRendererChangeEvent
+								( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
+								, false, false
+								, this
+								, null
+								)
+							);
+							
+						_context.addEventListener
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
+							, invalidatingEventHandler
+							, false, 0, true
+							);
+					}
 				}
 			
-				var oldContext:ILayoutContext = _context;	
+				var oldContext:ILayoutTarget = _context;	
 				_context = value;
-				
+					
 				if (_context)
 				{
-					container = _context.container;
+					container = _context.displayObject as DisplayObjectContainer;
 					metadata = _context.metadata;
-					
-					absoluteLayoutWatcher
-						= MetadataUtils.watchFacet
-							( metadata
-							, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
-							, absoluteLayoutChangeCallback
-							);
 					
 					_context.addEventListener
 						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 						, invalidatingEventHandler
 						, false, 0, true
+						);
+
+					_context.dispatchEvent
+						( new LayoutRendererChangeEvent
+							( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
+							, false, false
+							, _context.layoutRenderer
+							, this
+							)
 						);
 						
 					invalidate();
@@ -179,6 +202,25 @@ package org.osmf.layout
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
+			// Dispatch a parentLayoutRendererChange event on the target. This is the cue for
+			// the currently owning rendering to remove the target from its listing:
+			target.dispatchEvent
+				( new LayoutRendererChangeEvent
+					( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
+					, false, false
+					, target.parentLayoutRenderer, this
+					)
+				);
+			
+			if 	(	String(target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)) == "banners"
+				&& 	String(metadata.getFacet(MetadataNamespaces.ELEMENT_ID)) == "rootElement"
+				)
+			{
+				trace("!");
+			}
+			
+			CONFIG::LOGGING { logger.debug("Adding target {0} to {1}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); } 
+			
 			// Get the index where the target should be inserted:
 			var index:int = Math.abs(BinarySearch.search(layoutTargets, compareTargets, target));
 			
@@ -186,10 +228,9 @@ package org.osmf.layout
 			layoutTargets.splice(index, 0, target);	
 			
 			// Parent the added layout renderer (if available):
-			var targetContext:ILayoutContext = target as ILayoutContext;
-			if (targetContext && targetContext.layoutRenderer)
+			if (target.layoutRenderer)
 			{
-				targetContext.layoutRenderer.setParent(this);
+				target.layoutRenderer.setParent(this);
 			}
 			
 			// Watch the facets on the target's metadata that we're interested in:
@@ -205,9 +246,11 @@ package org.osmf.layout
 					);
 			}
 			
-			// Watch the target's displayObject and dimenions change:
+			// Watch the target's displayObject, dimenions, and layoutRenderer change:
 			target.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
 			target.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
+			target.addEventListener(LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE, onTargetChildRendererChange);
+			target.addEventListener(LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE, onTargetParentRendererChange);
 			
 			invalidate();
 			
@@ -237,6 +280,8 @@ package org.osmf.layout
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
+			CONFIG::LOGGING { logger.debug("Removing target {0} from {1}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+			
 			var removedTarget:ILayoutTarget;
 			var index:Number = layoutTargets.indexOf(target);
 			if (index != -1)
@@ -248,15 +293,16 @@ package org.osmf.layout
 				removedTarget = layoutTargets.splice(index,1)[0];
 				
 				// Un-parent the target if it is a layout renderer:
-				var targetContext:ILayoutContext = target as ILayoutContext;
-				if (targetContext && targetContext.layoutRenderer)
+				if (target.layoutRenderer && target.layoutRenderer.parent == this)
 				{
-					targetContext.layoutRenderer.setParent(null);
+					target.layoutRenderer.setParent(null);
 				}
 				
 				// Un-watch the target's displayObject and dimenions change:
 				target.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
 				target.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
+				target.removeEventListener(LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE, onTargetChildRendererChange);
+				target.removeEventListener(LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE, onTargetParentRendererChange);
 								
 				// Remove the metadata change watchers that we added:
 				for each (var watcher:MetadataWatcher in metaDataWatchers[target])
@@ -268,6 +314,15 @@ package org.osmf.layout
 				
 				processTargetRemoved(target);
 				
+				target.dispatchEvent
+					( new LayoutRendererChangeEvent
+						( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
+						, false, false
+						, target.parentLayoutRenderer
+						, null
+						)
+					);
+					
 				invalidate();
 			}
 			else
@@ -292,6 +347,16 @@ package org.osmf.layout
 		final public function targets(target:ILayoutTarget):Boolean
 		{
 			return layoutTargets.indexOf(target) != -1;
+		}
+		
+		final public function get mediaWidth():Number
+		{
+			return _mediaWidth;
+		}
+		
+		final public function get mediaHeight():Number
+		{
+			return _mediaHeight;
 		}
 		
 		/**
@@ -322,7 +387,7 @@ package org.osmf.layout
 				{
 					// Since we don't have a parent, put us in the queue
 					// to be recalculated when the next frame exits:
-					flagDirty(this, _context.container);
+					flagDirty(this);
 				}
 			}
 		}
@@ -356,8 +421,8 @@ package org.osmf.layout
 			// This is a root-node. Flag that we're cleaning up:
 			cleaning = true;
 			
-			updateCalculatedBounds();
-			updateLayout();
+			measureMedia();
+			updateMediaDisplay(_mediaWidth, _mediaHeight);
 			
 			cleaning = false;
 		}
@@ -365,121 +430,56 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		protected function updateCalculatedBounds():Rectangle
+		protected function measureMedia():void
 		{
-			var bounds:Rectangle = calculateTargetBounds(_context);
-			var counter:int = 0;
-			
-			var targetContext:ILayoutContext
-			var targetRenderer:LayoutRenderer;
-			var targetBounds:Rectangle;
-			var unifiedTargetBounds:Rectangle;
+			// Take care of all targets being staged correctly:
+			prepareTargets();
 			
 			// Traverse, execute bottom-up:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
-				targetContext = target as ILayoutContext;
-				targetRenderer = null;
-				targetBounds = null;
-				
-				if (targetContext != null)
+				if (target.layoutRenderer)
 				{
-					// Reset the last calculations:
-					targetContext.calculatedWidth = NaN;
-					targetContext.calculatedHeight = NaN;
-					targetContext.projectedWidth = NaN;
-					targetContext.projectedHeight = NaN;
-					
-					targetRenderer = targetContext.layoutRenderer;
-				}
-						
-				if (targetRenderer != null) 
-				{
-					// Process another node (going in, top to bottom):
-					targetBounds = targetRenderer.updateCalculatedBounds();
-					flagClean(targetRenderer as LayoutRenderer);
-				}
-				else
-				{
-					// This is a leaf:
-					targetBounds = calculateTargetBounds(target);
+					target.layoutRenderer.measureMedia();
 				}
 				
-				if (targetBounds != null)
-				{
-					if (targetContext)
-					{
-						targetContext.calculatedWidth = targetBounds.width;
-						targetContext.calculatedHeight = targetBounds.height;
-					}
-					
-					// Set X and Y to zero: if they're NaN, then the union with the
-					// previously calculated bounds fails:
-					targetBounds.x ||= 0;
-					targetBounds.y ||= 0;
-				
-					unifiedTargetBounds
-						= unifiedTargetBounds
-							? unifiedTargetBounds.union(targetBounds)
-							: targetBounds;
-				}
+				target.measureMedia();
 			}
 			
-			_context.calculatedWidth
-				= (bounds && bounds.width)
-					? bounds.width
-					: unifiedTargetBounds
-						? unifiedTargetBounds.width
-						: NaN;
-						
-			_context.calculatedHeight
-				= (bounds && bounds.height)
-					? bounds.height
-					: unifiedTargetBounds
-						? unifiedTargetBounds.height
-						: NaN;
+			// Calculate our own size:
+			var size:Point = calculateContextSize(layoutTargets);
 			
-			bounds 
-				= (_context.calculatedWidth || _context.calculatedHeight)
-					? new Rectangle(0, 0, _context.calculatedWidth, _context.calculatedHeight) 
-					: null;
-					
-			return bounds;
+			_mediaWidth = size.x;
+			_mediaHeight = size.y;
+			
+			_context.measureMedia();	
 		}
 		
 		/**
 		 * @private
 		 */
-		protected function updateLayout():void
+		protected function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
 		{
-			// Take care of all targets being staged correctly:
-			prepareTargets();
+			_context.updateMediaDisplay(availableWidth, availableHeight);
 			
 			// Traverse, execute top-down:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
-				var targetContext:ILayoutContext = target as ILayoutContext;
-				var targetRenderer:LayoutRenderer = targetContext ? targetContext.layoutRenderer : null;
-				var targetBounds:Rectangle 
-					= applyTargetLayout
-						( target
-						, _context.projectedWidth || _context.calculatedWidth
-						, _context.projectedHeight || _context.calculatedHeight
-						);
+				var bounds:Rectangle = calculateTargetBounds(target, availableWidth, availableHeight);
 				
-				if (targetContext)
+				target.updateMediaDisplay(bounds.width, bounds.height);
+				
+				var displayObject:DisplayObject = target.displayObject;
+				if (displayObject)
 				{
-					targetContext.projectedWidth = targetBounds.width;
-					targetContext.projectedHeight = targetBounds.height;
+					displayObject.x = bounds.x;
+					displayObject.y = bounds.y;
 				}
-				
-				if (targetRenderer)
+				if (target.layoutRenderer)
 				{
-					targetRenderer.updateLayout();
+					target.layoutRenderer.updateMediaDisplay(bounds.width, bounds.height);
 				}
 			}
-			
-			_context.updateIntrinsicDimensions();
 			
 			dirty = false;
 		}
@@ -586,7 +586,7 @@ package org.osmf.layout
 		 */		
 		protected function processStagedTarget(target:ILayoutTarget):void
 		{	
-			CONFIG::LOGGING { logger.debug("staged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+			// CONFIG::LOGGING { logger.debug("staged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 		}
 		
 		/**
@@ -602,21 +602,15 @@ package org.osmf.layout
 		 */
 		protected function processUnstagedTarget(target:ILayoutTarget):void
 		{	
-			CONFIG::LOGGING { logger.debug("unstaged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+			// CONFIG::LOGGING { logger.debug("unstaged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 		}
 		
-		protected function calculateTargetBounds(target:ILayoutTarget):Rectangle
-		{
-			return target.displayObject.getBounds(target.displayObject);
-		}
-		
-		protected function applyTargetLayout(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
-		{
-			var displayObject:DisplayObject;
-			
-			return new Rectangle(0, 0, target.intrinsicWidth, target.intrinsicHeight);
-		}
-		
+		/**
+		 * Subclasses should override this method to implement the algorithm by
+		 * which the targets of the renderer get sorted.
+		 * 
+		 * @param target The element to order.
+		 */		
 		protected function updateTargetOrder(target:ILayoutTarget):void
 		{
 			var index:int = layoutTargets.indexOf(target);
@@ -629,17 +623,41 @@ package org.osmf.layout
 			}
 		}
 		
+		/**
+		 * Subclasses should override this method to implement the algorithm by which
+		 * the position and size of a target gets calculated.
+		 * 
+		 * @param target The target to calculate the bounds for.
+		 * @param availableWidth The width available to the target.
+		 * @param availableHeight The height available to the target.
+		 * @return The calculated bounds for the specified target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		protected function calculateTargetBounds(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
+		{
+			return new Rectangle();
+		}
+		
+		/**
+		 * Subclasses should override this method to implement the algorithm by which
+		 * the size of the renderer's context is calculated:
+		 * 
+		 * @return The calculated size of the renderer's context.
+		 */		
+		protected function calculateContextSize(targets:Vector.<ILayoutTarget>):Point
+		{
+			return new Point();
+		}
+		
 		// Internals
 		//
 		
 		private function reset():void
 		{
-			if (absoluteLayoutWatcher)
-			{
-				absoluteLayoutWatcher.unwatch();
-				absoluteLayoutWatcher = null;
-			}
-			
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				removeTarget(target);
@@ -669,6 +687,7 @@ package org.osmf.layout
 		
 		private function invalidatingEventHandler(event:Event):void
 		{
+			/*
 			CONFIG::LOGGING 
 			{
 				var targetMetadata:Metadata
@@ -683,27 +702,32 @@ package org.osmf.layout
 					, targetMetadata ? targetMetadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "?" 
 					); 
 			}
+			*/
 			invalidate();
 		}
 		
-		private function absoluteLayoutChangeCallback(absoluteLayout:AbsoluteLayoutFacet):void
+		private function onTargetChildRendererChange(event:LayoutRendererChangeEvent = null):void
 		{
-			if (_parent == null && absoluteLayout != null)
+			var target:ILayoutTarget = event ? event.target as ILayoutTarget : null;
+			if (target && target.layoutRenderer)
 			{
-				_context.projectedWidth = absoluteLayout.width;
-				_context.projectedHeight = absoluteLayout.height;
-				
-				_context.container.width = absoluteLayout.width;
-				_context.container.height = absoluteLayout.height;
-				
-				invalidate();
+				target.layoutRenderer.setParent(this);
+			}
+		}
+		
+		private function onTargetParentRendererChange(event:LayoutRendererChangeEvent = null):void
+		{
+			CONFIG::LOGGING { logger.debug("onTargetParentRendererChange: {0}, {1}", event.oldValue == this, event.newValue != this); }
+			if (event.oldValue == this && event.newValue != this)
+			{
+				removeTarget(event.target as ILayoutTarget);
 			}
 		}
 		
 		private function prepareTargets():void
 		{
 			// Setup a displayObject counter:
-			var displayListCounter:int = _context.firstChildIndex;
+			var displayListCounter:int = 0;
 			
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
@@ -727,7 +751,7 @@ package org.osmf.layout
 			{
 				// Make sure that the object is at the right position in the display list:
 				container.setChildIndex(object, Math.min(Math.max(0,container.numChildren-1), index));
-				CONFIG::LOGGING { logger.debug("setChildIndex, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				CONFIG::LOGGING { logger.debug("[.] setChildIndex, {0} on {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			}
 			else
 			{
@@ -735,13 +759,13 @@ package org.osmf.layout
 				{
 					// Remove the current object:
 					container.removeChild(currentObject);
-					CONFIG::LOGGING { logger.debug("removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+					CONFIG::LOGGING { logger.debug("[-] removeChild, {0} from {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				}
 				
 				// Add the new object:
 				container.addChildAt(object, index);
 				stagedDisplayObjects[target] = object;
-				CONFIG::LOGGING { logger.debug("addChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				CONFIG::LOGGING { logger.debug("[+] addChild, {0} to {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				
 				// If there wasn't an old object, then trigger the staging processor:
 				if (currentObject == null)
@@ -756,20 +780,23 @@ package org.osmf.layout
 			var currentObject:DisplayObject = stagedDisplayObjects[target];
 			if (currentObject != null)
 			{
-				container.removeChild(currentObject);
 				delete stagedDisplayObjects[target];
-				CONFIG::LOGGING { logger.debug("removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				container.removeChild(currentObject);
+				
+				CONFIG::LOGGING { logger.debug("[-] removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			}
 		}
 		
 		private var _parent:LayoutRenderer;
-		private var _context:ILayoutContext;		
+		private var _context:ILayoutTarget;		
 		private var container:DisplayObjectContainer;
 		private var metadata:Metadata;
-		private var absoluteLayoutWatcher:MetadataWatcher;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
 		private var stagedDisplayObjects:Dictionary = new Dictionary(true);
+		
+		private var _mediaWidth:Number;
+		private var _mediaHeight:Number;
 		
 		private var dirty:Boolean;
 		private var cleaning:Boolean;
@@ -779,7 +806,7 @@ package org.osmf.layout
 		// Private Static
 		//
 		
-		private static function flagDirty(renderer:LayoutRenderer, displayObject:DisplayObject):void
+		private static function flagDirty(renderer:LayoutRenderer):void
 		{
 			if (renderer == null || dirtyRenderers.indexOf(renderer) != -1)
 			{
@@ -787,18 +814,10 @@ package org.osmf.layout
 				return;
 			}
 			
-			if (displayObject == null)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			}
-			
 			dirtyRenderers.push(renderer);
 			
-			if	(	cleaningRenderers == false
-				&&	dispatcher == null
-				)
+			if (cleaningRenderers == false)
 			{
-				dispatcher = displayObject;
 				dispatcher.addEventListener(Event.EXIT_FRAME, onExitFrame);
 			}
 		}
@@ -815,28 +834,34 @@ package org.osmf.layout
 		private static function onExitFrame(event:Event):void
 		{
 			dispatcher.removeEventListener(Event.EXIT_FRAME, onExitFrame);
-			dispatcher = null;
 			
 			cleaningRenderers = true;
+			
+			CONFIG::LOGGING { logger.debug("------------ ON EXIT FRAME ------------"); }
 			
 			while (dirtyRenderers.length != 0)
 			{
 				var renderer:LayoutRenderer = dirtyRenderers.shift();
-				if 	(	renderer.parent == null
-					||	dirtyRenderers.indexOf(renderer.parent) == -1
-					)
+				if (renderer.parent == null)
 				{
+					CONFIG::LOGGING { logger.debug("---------- VALIDATING LAYOUT ---------- {0}", renderer.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					renderer.validateNow();
+					CONFIG::LOGGING { logger.debug("---------- LAYOUT VALIDATED -----------"); }
+				}
+				else
+				{
+					renderer.dirty = false;
 				}
 			}
+			CONFIG::LOGGING { logger.debug("--------------------------------------"); }
 			
 			cleaningRenderers = false;
 		}
 		
-		private static var dispatcher:DisplayObject;
+		private static var dispatcher:DisplayObject = new Sprite();
 		private static var cleaningRenderers:Boolean;
 		private static var dirtyRenderers:Vector.<LayoutRenderer> = new Vector.<LayoutRenderer>;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRendererBase");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRenderer");
 	}
 }

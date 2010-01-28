@@ -29,9 +29,8 @@ package org.osmf.layout
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicDisplayObjectTrait;
+	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestMediaElementLayoutTarget extends TestCase
 	{
@@ -42,42 +41,39 @@ package org.osmf.layout
 			var me:MediaElement = new MediaElement();
 			var melt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
-			melt.updateIntrinsicDimensions();
+			melt.measureMedia();
 			
 			assertNull(melt.displayObject);
 			assertEquals(melt.metadata, me.metadata);
-			assertNull(melt.container);
-			assertEquals(NaN, melt.calculatedWidth);
-			assertEquals(NaN, melt.calculatedHeight);
-			assertEquals(NaN, melt.projectedWidth);
-			assertEquals(NaN, melt.projectedHeight);
-			assertEquals(0, melt.firstChildIndex);
+			assertEquals(NaN, melt.mediaWidth);
+			assertEquals(NaN, melt.mediaHeight);
+			assertNull(null, melt.layoutRenderer);
+			assertNull(null, melt.parentLayoutRenderer);
 		}
 		
 		public function testMediaElementLayoutTargetWithDisplayObjectTrait():void
 		{
 			var me:DynamicMediaElement = new DynamicMediaElement();
 				
-			var sprite:Sprite = new Sprite();
-			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(sprite, 100, 200);
+			var lts:LayoutTargetSprite = new LayoutTargetSprite(me.metadata);
+			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(lts, 100, 200);
 			me.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
 			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
-			lt.updateIntrinsicDimensions();
+			lt.measureMedia();
 			
 			assertEquals(lt.metadata, me.metadata);
-			assertEquals(lt.displayObject, sprite);
-			assertEquals(lt.intrinsicWidth, 100);
-			assertEquals(lt.intrinsicHeight, 200); 
-			assertNull(lt.container);
-			assertFalse(isNaN(lt.firstChildIndex));
+			assertEquals(lt.displayObject, lts);
+			assertEquals(lt.mediaWidth, 100);
+			assertEquals(lt.mediaHeight, 200); 
+			assertNull(null, lt.layoutRenderer);
+			assertNull(null, lt.parentLayoutRenderer);
 			
 			var renderer:LayoutRenderer = new DefaultLayoutRenderer();
-			lt.layoutRenderer = renderer;
+			renderer.context = lts;
 			
-			// Without a context, the renderer cannot stick:
-			assertNull(lt.layoutRenderer);
+			assertEquals(renderer, lt.layoutRenderer);
 				
 			var lastEvent:Event;
 			var eventCounter:int = 0;
@@ -97,7 +93,7 @@ package org.osmf.layout
 			assertEquals(1, eventCounter);
 			var vce:DisplayObjectEvent = lastEvent as DisplayObjectEvent;
 			assertNotNull(vce);
-			assertEquals(vce.oldDisplayObject, sprite);
+			assertEquals(vce.oldDisplayObject, lts);
 			assertEquals(vce.newDisplayObject, sprite2);
 			
 			displayObjectTrait.setSize(300,400);

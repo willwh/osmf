@@ -29,11 +29,12 @@ package org.osmf.composition
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.AbsoluteLayoutFacet;
 	import org.osmf.layout.AnchorLayoutFacet;
+	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDisplayObjectTrait;
+	import org.osmf.utils.DynamicMediaElement;
 
 	public class TestParallelElementWithDisplayObjectTrait extends TestCase
 	{
@@ -52,8 +53,11 @@ package org.osmf.composition
 			
 			var displayObjectTrait:DisplayObjectTrait = parallel.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			assertTrue(displayObjectTrait != null);
-			assertTrue(displayObjectTrait.mediaWidth == displayObjectTrait1.mediaWidth);
-			assertTrue(displayObjectTrait.mediaHeight == displayObjectTrait1.mediaHeight);
+			assertEquals(NaN, displayObjectTrait.mediaWidth);
+			assertEquals(NaN, displayObjectTrait.mediaHeight);
+			assertEquals(0, displayObjectTrait1.mediaWidth);
+			assertEquals(0, displayObjectTrait1.mediaHeight);
+			
 			
 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
@@ -63,7 +67,8 @@ package org.osmf.composition
 			
 			// TODO: Fix the rest of this test.  For some reason, setting the dimensions
 			// doesn't propagate to the container, it only affects the underlying trait. 
-			if (true) return;
+			
+			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
 			
 			assertEquals(50, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
@@ -75,16 +80,20 @@ package org.osmf.composition
 			assertEquals(50, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
 			
-			displayObjectTrait2.setDimensions(100, 50);
+			displayObjectTrait2.setSize(100, 50);
 			
-			assertEquals(2, dimensionsChangeEventCount);
+			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			
+			assertEquals(4, sizeChangeEventCount);
 			
 			assertEquals(100, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
 			
-			displayObjectTrait2.setDimensions(100, 100);
+			displayObjectTrait2.setSize(100, 100);
 			
-			assertEquals(3, dimensionsChangeEventCount);
+			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			
+			assertEquals(6, sizeChangeEventCount);
 			
 			assertEquals(displayObjectTrait.mediaWidth, 100);
 			assertEquals(displayObjectTrait.mediaHeight, 100);
@@ -99,14 +108,26 @@ package org.osmf.composition
 			displayObjectTrait = parallel.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			assertNotNull(displayObjectTrait);
 			
-			assertEquals(4, sizeChangeEventCount);
+			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
 			
-			assertEquals(0, displayObjectTrait.mediaWidth);
-			assertEquals(0, displayObjectTrait.mediaHeight);
+			assertEquals(6, sizeChangeEventCount);
+			
+			assertEquals(100, displayObjectTrait.mediaWidth);
+			assertEquals(100, displayObjectTrait.mediaHeight);
 			
 			var view3:Sprite = new Sprite();
 			view3.graphics.drawRect(0, 0, 600, 600);
-			displayObjectTrait3.view = view3;
+			displayObjectTrait3.displayObject = view3;
+			
+			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			
+			assertEquals(6, sizeChangeEventCount);
+			
+			// It is the set media width and height that counts: if a sprite's bounds
+			// simply change, than that doesn't constitute for a mediaWidth and height
+			// change too: the LayoutTarget should update that manually:
+			assertEquals(100, displayObjectTrait.mediaWidth);
+			assertEquals(100, displayObjectTrait.mediaHeight);
 			
 			parallel.removeChild(mediaElement3);
 			parallel.removeChild(mediaElement2);
