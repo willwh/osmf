@@ -58,6 +58,7 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function beginProcessFile(seek:Boolean, seekTime:Number):void
 		{
+			_processRequestWasSeek = seek;
 			_seekToTime = seek ? seekTime : 0;
 			_bytesNeeded = F4FConstants.FIELD_SIZE_LENGTH + F4FConstants.FIELD_TYPE_LENGTH + F4FConstants.FIELD_LARGE_SIZE_LENGTH + F4FConstants.FIELD_EXTENDED_TYPE_LENGTH;
 			_bytesReadSinceAfraStart = 0;
@@ -279,7 +280,11 @@ package org.osmf.net.httpstreaming.f4f
 				HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, false, false, 0, duration / _afra.timeScale); 
 			dispatchEvent(event);
 			
-			if (entry != null)
+			// We also update the timeBias if the request was an explicit seek to
+			// position zero.
+			if (	entry != null
+				|| (_processRequestWasSeek && _seekToTime <= 0)
+			   )
 			{
 				event = new HTTPStreamingFileHandlerEvent(
 					HTTPStreamingFileHandlerEvent.NOTIFY_TIME_BIAS, false, false, timeBias / _afra.timeScale);
@@ -304,6 +309,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var _seekToTime:Number;
 		private var _mdatBytesOffset:Number;
 		private var _indexHandler:HTTPStreamingF4FIndexHandler;
+		private var _processRequestWasSeek:Boolean = false;
 		
 		private static const MAX_BYTES_PER_MDAT_READ:uint = 5*1024;
 	}
