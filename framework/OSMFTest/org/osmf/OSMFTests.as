@@ -205,14 +205,6 @@ package org.osmf
 			//
 			
 			addTestSuite(TestMediaPlayer);
-			addTestSuite(TestMediaPlayerWithAudioElement);
-			addTestSuite(TestMediaPlayerWithVideoElement);
-			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
-			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
-			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
-			addTestSuite(TestMediaPlayerWithProxyElement);
-			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);
 			
 			// This test fails intermittently on the build machine.
 			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
@@ -322,6 +314,18 @@ package org.osmf
 			addTestSuite(TestVASTImpressionProxyElement);
 			addTestSuite(TestVASTMediaGenerator);
 			addTestSuite(TestVASTTrackingProxyElement);
+			
+			// Additional MediaPlayer tests
+			//
+			
+			addTestSuite(TestMediaPlayerWithAudioElement);
+			addTestSuite(TestMediaPlayerWithVideoElement);
+			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
+			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
+			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
+			addTestSuite(TestMediaPlayerWithProxyElement);
+			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);
 		}
 	}
 }
