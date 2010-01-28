@@ -73,7 +73,7 @@ package org.osmf.composition
 				var target:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(child);
 				target.addEventListener
 					( ContainerChangeEvent.CONTAINER_CHANGE
-					, onLayoutTargetGatewayChange
+					, onLayoutTargetContainerChange
 					);
 				
 				mediaElementLayoutTargets[child] = target;
@@ -108,7 +108,7 @@ package org.osmf.composition
 				
 				child.addEventListener
 					( ContainerChangeEvent.CONTAINER_CHANGE
-					, onLayoutTargetGatewayChange
+					, onLayoutTargetContainerChange
 					);
 				
 				mediaElementLayoutTargets[child] = target;
@@ -125,7 +125,7 @@ package org.osmf.composition
 				
 			child.removeEventListener
 				( ContainerChangeEvent.CONTAINER_CHANGE
-				, onLayoutTargetGatewayChange
+				, onLayoutTargetContainerChange
 				);
 			
 			if (layoutRenderer.targets(target))
@@ -138,13 +138,12 @@ package org.osmf.composition
 		
 		private function setupLayoutTarget(target:MediaElementLayoutTarget):void
 		{
-			var gateway:IMediaContainer = target.mediaElement.container; 
-			
-			if (gateway && gateway != owner.container)
+			var container:IMediaContainer = target.mediaElement.container; 
+			if (container && container != owner.container)
 			{
 				if (layoutRenderer.targets(target))
 				{
-					layoutRenderer.removeTarget(target);
+					layoutRenderer.removeTarget(target);	
 				}
 			}
 			else
@@ -156,7 +155,7 @@ package org.osmf.composition
 			}
 		}
 		
-		private function onLayoutTargetGatewayChange(event:ContainerChangeEvent):void
+		private function onLayoutTargetContainerChange(event:ContainerChangeEvent):void
 		{
 			var mediaElement:MediaElement = event.target as MediaElement;
 			
