@@ -255,7 +255,7 @@ package org.osmf.metadata
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			var idFacet:ObjectFacet = new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id);
+			var idFacet:ObjectFacet = new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id, NullFacetSynthesizer);
 			
 			target.addFacet(idFacet);
 			
