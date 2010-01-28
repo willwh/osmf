@@ -28,10 +28,12 @@ package org.osmf.composition
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
+	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 
@@ -692,10 +694,14 @@ package org.osmf.composition
 			if (synthesizedFacet == null)
 			{
 				// If the synthesized value is null, then we might need to clear
-				// out a previously set value:
+				// out a previously set value. Don't clear out the value if the
+				// current synthesizer is a null synthesizer.
 				var currentFacet:Facet = getFacet(facetGroup.namespaceURL);
-				if (currentFacet != null)
+				if	(	currentFacet != null
+					&&	currentFacet.synthesizer is NullFacetSynthesizer == false
+					)
 				{
+					CONFIG::LOGGING { logger.debug("removing facet {0}", facetGroup.namespaceURL); }
 					removeFacet(currentFacet);
 				}
 			}
@@ -712,5 +718,7 @@ package org.osmf.composition
 		
 		private var _mode:CompositionMode;
 		private var _activeChild:Metadata;
+		
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeMetadata");
 	}
 }
