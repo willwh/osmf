@@ -28,6 +28,7 @@ package org.osmf.plugin
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.utils.*;
 
@@ -242,7 +243,7 @@ package org.osmf.plugin
 			assertFalse(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
 		}
 		
-		public function testPluginMetadata():void
+		public function testLoadPluginWithCustomMetadata():void
 		{
 			var metadataNS:String = "http://sentinel/namespace";
 			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
@@ -258,7 +259,25 @@ package org.osmf.plugin
 			assertNotNull(pluginInfo.pluginMetadata.getFacet(new URL(metadataNS)));
 		}
 		
-		public function testPluginCreateOnLoad():void
+		public function testLoadPluginWithDefaultMetadata():void
+		{
+			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
+			
+			assertNull(pluginInfo.pluginMetadata);
+			
+			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
+			
+			pluginManager.loadPlugin(resource);
+			
+			assertNotNull(pluginInfo.pluginMetadata);
+			var defaultFacet:KeyValueFacet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS) as KeyValueFacet;
+			assertNotNull(defaultFacet);
+			var injectedFactory:MediaFactory = defaultFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY);
+			assertNotNull(injectedFactory);
+			assertEquals(injectedFactory, mediaFactory);
+		}
+		
+		public function testLoadCreateOnLoadPlugin():void
 		{
 			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
 			assertEquals(0, pluginInfo.createCount);
