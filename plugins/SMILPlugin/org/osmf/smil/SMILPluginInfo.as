@@ -23,9 +23,12 @@ package org.osmf.smil
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.smil.loader.SMILLoader;
@@ -51,10 +54,21 @@ package org.osmf.smil
 		
 		private function createSMILProxyElement():MediaElement
 		{
-			return new LoadableProxyElement(new SMILLoader());
+			return new LoadableProxyElement(new SMILLoader(mediaFactory));
+		}
+		
+		override public function initializePlugin(metadata:Metadata):void
+		{
+			// We'll use the player-supplied MediaFactory for creating all MediaElements.
+			var pluginFacet:KeyValueFacet = metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS) as KeyValueFacet;
+			if (pluginFacet != null)
+			{
+				mediaFactory = pluginFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY) as MediaFactory;
+			}
 		}
 		
 		private var mediaInfos:Vector.<MediaInfo>;
+		private var mediaFactory:MediaFactory;
 		
 		private const FRAMEWORK_VERSION_SUPPORTED:String = "0.9.0";
 	}
