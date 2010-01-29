@@ -97,6 +97,10 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			else
 			{
+				if (f4fIndexInfo.bootstrapInfoData != null)
+				{
+					f4fIndexInfo.bootstrapInfoData.position = 0;
+				}
 				processIndexData(f4fIndexInfo.bootstrapInfoData, null);
 			}
 		}
