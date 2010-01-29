@@ -78,7 +78,7 @@ package org.osmf.video
 		
 		public function testDefaultDuration():void
 		{
-			var element:VideoElement = new VideoElement(new NetLoader());
+			var element:VideoElement = new VideoElement();
 			assertEquals(NaN, element.defaultDuration);
 			
 			element.defaultDuration = 100;
@@ -307,7 +307,7 @@ package org.osmf.video
 				}
 			}
 
-			return new VideoElement(loader); 
+			return new VideoElement(null, loader); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean

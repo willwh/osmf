@@ -141,7 +141,7 @@ package
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 		
    		private function onMediaError(event:MediaErrorEvent):void

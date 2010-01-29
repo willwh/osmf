@@ -27,10 +27,11 @@ package org.osmf.plugin
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.PluginLoadEvent;
-	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -99,10 +100,9 @@ package org.osmf.plugin
 		/**
 		 * Constructor
 		 *
-		 * @param mediaFactory MediaFactory with which the plugins will register its
-		 * supported MediaInfo objects. The best practice is to use a single instance of
-		 * MediaFactory across the MediaPlayer application such that all MediaInfo can be 
-		 * accessed from the same MediaFactory.
+		 * @param mediaFactory MediaFactory within which the PluginManager will place the
+		 * information from loaded plugins.  If null, the PluginManager will create a
+		 * DefaultMediaFactory.
 		 * @param minimumSupportedFrameworkVersion  The minimum version number of the
 		 * framework that a loaded plugin must be compiled against in order to load.
 		 * Version numbers are defined in the org.osmf.utils.Version class.  The default
@@ -114,9 +114,9 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginManager(mediaFactory:MediaFactory, minimumSupportedFrameworkVersion:String=null)
+		public function PluginManager(mediaFactory:MediaFactory=null, minimumSupportedFrameworkVersion:String=null)
 		{
-			_mediaFactory = mediaFactory;
+			_mediaFactory = mediaFactory != null ? mediaFactory : new DefaultMediaFactory();
 			this.minimumSupportedFrameworkVersion = minimumSupportedFrameworkVersion != null ? minimumSupportedFrameworkVersion : Version.lastAPICompatibleVersion ;
 			initPluginFactory();
 			_pluginMap = new Dictionary();

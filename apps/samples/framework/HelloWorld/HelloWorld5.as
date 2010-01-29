@@ -43,8 +43,7 @@ package
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
 			mediaPlayer.media = new VideoElement
-				( new NetLoader
-				, new URLResource(new URL(REMOTE_PROGRESSIVE))
+				( new URLResource(new URL(REMOTE_PROGRESSIVE))
 				);
 				
 			if (mediaPlayer.displayObject != null)

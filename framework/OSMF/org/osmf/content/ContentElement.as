@@ -56,16 +56,14 @@ package org.osmf.content
 		 * @param loader ContentLoader used to load the content.
 		 * @param resource Url that points to the content that the ContentElement will use.
 		 * 
-		 * @throws ArgumentError If loader is null.
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ContentElement(loader:ContentLoader, resource:URLResource = null)
+		public function ContentElement(resource:URLResource=null, loader:ContentLoader=null, loaderClasses:Array=null)
 		{
-			super(loader, resource);
+			super(resource, loader, loaderClasses);
 		}
 		
 		// Overrides
@@ -74,7 +72,7 @@ package org.osmf.content
 		/**
 		 * @private 
 		 */ 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
 		{
 			return new ContentLoadTrait(loader, resource);
 		}

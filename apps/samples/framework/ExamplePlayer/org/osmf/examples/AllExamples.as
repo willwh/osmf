@@ -91,7 +91,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a progressive video using VideoElement and NetLoader."
 				  	,  	function():MediaElement
 				  	   	{
-				  	    	return new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+				  	    	return new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
 				  	   	}
 				  	)
 				);
@@ -102,7 +102,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a streaming video using VideoElement and NetLoader."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		return new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+				  	   		return new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
 				  	   	}
 				  	)
 				);
@@ -119,7 +119,7 @@ package org.osmf.examples
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
 							
-				  	   		return new VideoElement(new DynamicStreamingNetLoader(), dsResource)
+				  	   		return new VideoElement(dsResource);
 				  	   	}
 					)
 				);
@@ -130,7 +130,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a streaming video with a dual-threshold buffer.  The buffer starts small, but increases once we've buffered enough data to enable playback.  The larger buffer reduces the chance that a rebuffer will need to occur."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM)));
+				  	   		var videoElement:VideoElement = new VideoElement(new URLResource(new URL(REMOTE_STREAM)));
 				  	   		return new DualThresholdBufferingProxyElement(2, 15, videoElement);
 				  	   	}
 				  	)
@@ -143,7 +143,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a progressive video with a dynamic buffer.  The size of the buffer grows slowly as the video plays, then shrinks back down again."
 				  	,  	function():MediaElement
 				  	   	{
-							var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							var videoElement:VideoElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
 
 							// Trigger the timer every second.
 				  	   		timer.delay = 1000;
@@ -189,7 +189,7 @@ package org.osmf.examples
 					, 	"Demonstrates display of an image using ImageElement and ImageLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE)));
+							return new ImageElement(new URLResource(new URL(REMOTE_IMAGE)));
 				  	   	}
 				  	)
 				);
@@ -200,7 +200,7 @@ package org.osmf.examples
 					, 	"Demonstrates display of a SWF using SWFElement and SWFLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new SWFElement(new SWFLoader(), new URLResource(new URL(REMOTE_SWF)));
+							return new SWFElement(new URLResource(new URL(REMOTE_SWF)));
 				  	   	}
 				  	)
 				);
@@ -211,7 +211,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a progressive audio file using AudioElement and SoundLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new SoundLoader(), new URLResource(new URL(REMOTE_MP3)));
+							return new AudioElement(new URLResource(new URL(REMOTE_MP3)));
 				  	   	}
 				  	)
 				);
@@ -222,7 +222,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a streaming audio file using AudioElement and NetLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new NetLoader(), new URLResource(new URL(REMOTE_AUDIO_STREAM)));
+							return new AudioElement(new URLResource(new URL(REMOTE_AUDIO_STREAM)));
 				  	   	}
 				  	)
 				);
@@ -233,7 +233,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for a progressive video with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_INVALID_PROGRESSIVE)));
+							return new VideoElement(new URLResource(new URL(REMOTE_INVALID_PROGRESSIVE)));
 				  	   	}
 				  	)
 				);
@@ -244,7 +244,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for a streaming video with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_INVALID_STREAM)));
+							return new VideoElement(new URLResource(new FMSURL(REMOTE_INVALID_STREAM)));
 				  	   	}
 				  	)
 				);
@@ -255,7 +255,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for an image with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_INVALID_IMAGE)));
+							return new ImageElement(new URLResource(new URL(REMOTE_INVALID_IMAGE)));
 				  	   	}
 				  	)
 				);
@@ -266,7 +266,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for a progressive audio file with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new SoundLoader(), new URLResource(new URL(REMOTE_INVALID_MP3)));
+							return new AudioElement(new URLResource(new URL(REMOTE_INVALID_MP3)));
 				  	   	}
 				  	)
 				);
@@ -277,7 +277,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for a streaming audio file with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new NetLoader(), new URLResource(new URL(REMOTE_INVALID_STREAM)));
+							return new AudioElement(new URLResource(new URL(REMOTE_INVALID_STREAM)));
 				  	   	}
 				  	)
 				);
@@ -289,8 +289,8 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							serialElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE))));
+							serialElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 							return serialElement; 
 				  	   	} 
 				  	)
@@ -322,10 +322,10 @@ package org.osmf.examples
 				  	   		}
 				  	   		
 							var serialElement:SerialElement = new SerialElement();
-							var videoElement:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							var videoElement:VideoElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
 							preload(videoElement);
 							serialElement.addChild(videoElement);
-							videoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+							videoElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
 							preload(videoElement);
 							serialElement.addChild(videoElement);
 							return serialElement;
@@ -340,8 +340,8 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
-							parallelElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
-							parallelElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							parallelElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE))));
+							parallelElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 							return parallelElement;
 				  	   	}
 				  	)
@@ -356,10 +356,10 @@ package org.osmf.examples
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
 							
-							var mediaElement1:MediaElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							var mediaElement1:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
 							parallelElement.addChild(mediaElement1);
 							
-							var mediaElement2:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
+							var mediaElement2:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
 							parallelElement.addChild(mediaElement2);
 							
 							LayoutUtils.setRelativeLayout(mediaElement1.metadata, 50, 50);
@@ -378,8 +378,8 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)))); 
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_INVALID_STREAM))));
+							serialElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)))); 
+							serialElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_INVALID_STREAM))));
 							return serialElement;
 				  	   	} 
 				  	)
@@ -394,7 +394,7 @@ package org.osmf.examples
 				  	, 	"Demonstrates playback of a local video file."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		return new VideoElement(new NetLoader(), new URLResource(new URL(LOCAL_PROGRESSIVE)));
+				  	   		return new VideoElement(new URLResource(new URL(LOCAL_PROGRESSIVE)));
 				  	   	} 
 				  	)
 				);
@@ -406,8 +406,8 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new PosterFrameElement(new ImageLoader(), new URLResource(new URL(REMOTE_IMAGE2))));
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							serialElement.addChild(new PosterFrameElement(new URLResource(new URL(REMOTE_IMAGE2))));
+							serialElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 							return serialElement; 
 				  	   	} 
 				  	)
@@ -422,8 +422,8 @@ package org.osmf.examples
 				  	   		var netLoader:NetLoader = new NetLoader();
 				  	   		
 							var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new RTMPPosterFrameElement(netLoader, new URLResource(new FMSURL(REMOTE_STREAM)), 5));
-							serialElement.addChild(new VideoElement(netLoader, new URLResource(new FMSURL(REMOTE_STREAM))));
+				  	   		serialElement.addChild(new RTMPPosterFrameElement(new URLResource(new FMSURL(REMOTE_STREAM)), 5, netLoader));
+							serialElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)), netLoader));
 							return serialElement; 
 				  	   	} 
 				  	)
@@ -436,9 +436,9 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE3)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE3)))));
 							
 							return serialElement;
 				  	   	}
@@ -493,7 +493,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a chromeless, AS3 SWF.  The SWF exposes an API that a custom MediaElement uses to control the video."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		return new ChromelessPlayerElement(new SWFLoader(), new URLResource(new URL(CHROMELESS_SWF_AS3)));
+				  	   		return new ChromelessPlayerElement(new URLResource(new URL(CHROMELESS_SWF_AS3)));
 				  	   	} 
 				  	)
 				);
@@ -504,7 +504,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a chromeless, Flex-based SWF.  The SWF exposes an API that a custom MediaElement uses to control the video.  Note that the SWF also exposes some simple controls for playback (Play, Pause, Mute).  These buttons are included to demonstrate how the loaded SWF and the player can stay in sync."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		return new ChromelessPlayerElement(new SWFLoader(), new URLResource(new URL(CHROMELESS_SWF_FLEX)));
+				  	   		return new ChromelessPlayerElement(new URLResource(new URL(CHROMELESS_SWF_FLEX)));
 				  	   	} 
 				  	)
 				);
@@ -515,7 +515,7 @@ package org.osmf.examples
 					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the URL of the video is changed during the load operation, so that instead of playing a streaming video, we play a progressive video."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		return new VideoProxyElement(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+				  	   		return new VideoProxyElement(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 				  	   	} 
 				  	)
 				);
@@ -526,7 +526,7 @@ package org.osmf.examples
 					, 	"Demonstrates the use of a custom ProxyElement to prevent the user from seeking another MediaElement, in this case a progressive VideoElement."
 					,	function():MediaElement
 				  	   	{
-				  	  		return new UnseekableProxyElement(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+				  	  		return new UnseekableProxyElement(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 				  	   	}
 				  	)
 				);
@@ -537,8 +537,8 @@ package org.osmf.examples
 					, 	"Demonstrates the use of a custom ProxyElement to provide a means to seamlessly switch between two MediaElements.  In this case, we switch from one video to another every five seconds."
 					,	function():MediaElement
 				  	   	{
-				  	   		var firstElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM)));
-				  	   		var secondElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_PROGRESSIVE)));
+				  	   		var firstElement:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
+				  	   		var secondElement:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_PROGRESSIVE)));
 				  	  		return new SwitchingProxyElement(firstElement, secondElement, 5, 10);
 				  	   	}
 				  	)
@@ -555,7 +555,7 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-				  	  		return new TraceListenerProxyElement(new VideoElement(new DynamicStreamingNetLoader(), dsResource));
+				  	  		return new TraceListenerProxyElement(new VideoElement(dsResource));
 				  	   	}
 				  	)
 				);
@@ -567,8 +567,8 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)))); 
-							serialElement.addChild(new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))));
+							serialElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)))); 
+							serialElement.addChild(new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))));
 				  	   		return new TraceListenerProxyElement(serialElement);
 				  	   	}
 				  	)
@@ -582,8 +582,8 @@ package org.osmf.examples
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
 							
-							var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE)));
-							var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(REMOTE_STREAM))); 
+							var video1:VideoElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							var video2:VideoElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM))); 
 							parallelElement.addChild(video1);
 							parallelElement.addChild(video2);
 				  	   		
@@ -659,7 +659,7 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var parallelElement:ParallelElement = new ParallelElement();
-				  	   		parallelElement.addChild(new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_PROGRESSIVE))));
+				  	   		parallelElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE))));
 				  	   		var serialElement:SerialElement = new SerialElement();
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
 				  	   		serialElement.addChild(new TemporalProxyElement(5));
@@ -685,7 +685,7 @@ package org.osmf.examples
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 25);
 							resource.metadata.addFacet(kvFacet);
-				  	   		return new VideoElement(new NetLoader(), resource);
+				  	   		return new VideoElement(resource);
 				  	   	}
 				  	)
 				);
@@ -704,24 +704,24 @@ package org.osmf.examples
 							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
 							resource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
 
 				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
 							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 15);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 22);
 							resource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
 
 				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
 							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 22);
 							resource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, resource));
+				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 				  	   		
 							return serialElement; 
 				  	   	} 
@@ -746,9 +746,9 @@ package org.osmf.examples
 							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 10);
 							dsResource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
 
 							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (i = 0; i < 5; i++)
@@ -759,9 +759,9 @@ package org.osmf.examples
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 150);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 172);
 							dsResource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new ImageLoader(), new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
 
 							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (i = 0; i < 5; i++)
@@ -771,7 +771,7 @@ package org.osmf.examples
 							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 640);
 							dsResource.metadata.addFacet(kvFacet);
-				  	   		serialElement.addChild(new VideoElement(netLoader, dsResource));
+				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 				  	   		
 							return new TraceListenerProxyElement(serialElement); 
 				  	   	} 
@@ -789,9 +789,9 @@ package org.osmf.examples
 							
 							var serial:SerialElement = new SerialElement();
 							
-							var video1:VideoElement = new VideoElement(new NetLoader(), resource);
+							var video1:VideoElement = new VideoElement(resource);
 							video1.defaultDuration = 32;
-							var video2:VideoElement = new VideoElement(new NetLoader(), resource2);
+							var video2:VideoElement = new VideoElement(resource2);
 							video2.defaultDuration = 27;
 														
 							serial.addChild(video1);
@@ -838,7 +838,7 @@ package org.osmf.examples
 				  	   	{
 				  	   		var urls:Vector.<VASTUrl> = new Vector.<VASTUrl>();
 				  	   		urls.push(new VASTUrl(BEACON_URL + "?random=" + Math.random()));
-				  	   		return new VASTImpressionProxyElement(urls, null, new BufferingProxyElement(20, new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM)))));
+				  	   		return new VASTImpressionProxyElement(urls, null, new BufferingProxyElement(20, new VideoElement(new URLResource(new URL(REMOTE_STREAM)))));
 				  	   	}
 				  	)
 				);

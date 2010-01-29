@@ -127,7 +127,7 @@ package org.osmf.media
 					, new HTTPStreamingNetLoader()
 					, function():MediaElement
 						{
-							return new VideoElement(new HTTPStreamingNetLoader());
+							return new VideoElement();
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -139,7 +139,7 @@ package org.osmf.media
 					, new DynamicStreamingNetLoader()
 					, function():MediaElement
 						{
-							return new VideoElement(new DynamicStreamingNetLoader())
+							return new VideoElement()
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -151,7 +151,7 @@ package org.osmf.media
 					, new NetLoader()
 					, function():MediaElement
 						{
-							return new VideoElement(new NetLoader())
+							return new VideoElement()
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -163,7 +163,7 @@ package org.osmf.media
 					, new SoundLoader()
 					, function():MediaElement
 						{
-							return new AudioElement(new SoundLoader())
+							return new AudioElement()
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -175,7 +175,7 @@ package org.osmf.media
 					, new NetLoader()
 					, function():MediaElement
 						{
-							return new AudioElement(new NetLoader())
+							return new AudioElement()
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -187,7 +187,7 @@ package org.osmf.media
 					, new ImageLoader()
 					, function():MediaElement
 						{
-							return new ImageElement(new ImageLoader())
+							return new ImageElement()
 						}
 					, MediaInfoType.STANDARD
 					)
@@ -199,7 +199,7 @@ package org.osmf.media
 					, new SWFLoader()
 					, function():MediaElement
 						{
-							return new SWFElement(new SWFLoader())
+							return new SWFElement()
 						}
 					, MediaInfoType.STANDARD
 					)

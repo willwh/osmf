@@ -116,7 +116,7 @@ package org.osmf.test.mast.managers
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 
 		private function onTimer(event:TimerEvent):void

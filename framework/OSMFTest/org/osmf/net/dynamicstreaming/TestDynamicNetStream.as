@@ -123,7 +123,7 @@ package org.osmf.net.dynamicstreaming
 
 			_dsr.initialIndex = 1;
 			
-			_mediaElement = new VideoElement(_loader, _dsr);
+			_mediaElement = new VideoElement(_dsr, _loader);
 			_mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			
 			_loadTrait = _mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;

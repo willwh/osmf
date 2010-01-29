@@ -46,8 +46,7 @@ package
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
 			sprite.mediaElement = new VideoElement
-				( new NetLoader
-				, new URLResource(new URL(REMOTE_PROGRESSIVE))
+				( new URLResource(new URL(REMOTE_PROGRESSIVE))
 				);
 		}
 		

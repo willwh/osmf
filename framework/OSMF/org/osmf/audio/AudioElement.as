@@ -24,8 +24,8 @@ package org.osmf.audio
 	import flash.net.NetStream;
 	
 	import org.osmf.media.DefaultTraitResolver;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
 	import org.osmf.traits.ILoader;
@@ -74,31 +74,34 @@ package org.osmf.audio
 	{
 		/**
 		 * Constructor.  
+		 * @param resource URLResource that points to the audio source that the AudioElement
+		 * will use.
 		 * @param loader Loader used to load the sound. This must be either a
 		 * NetLoader (for streaming audio) or a SoundLoader (for progressive audio).
-		 * @param resource URL that points to the audio source that the AudioElement will use.  
+		 * If null, the appropriate Loader will be created based on the type of the
+		 * resource.
 		 * @see org.osmf.net.NetLoader
 		 * 
-		 * @throws ArgumentError If loader is null, or neither a NetLoader nor a SoundLoader.
+		 * @throws ArgumentError If loader is neither a NetLoader nor a SoundLoader.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function AudioElement(loader:ILoader, resource:URLResource=null)
+		public function AudioElement(resource:URLResource=null, loader:ILoader=null)
 		{
-			super(loader, resource);
+			super(resource, loader, [SoundLoader, NetLoader]);
 			
-			if (!(loader is NetLoader || loader is SoundLoader))
+			if (!(loader == null || loader is NetLoader || loader is SoundLoader))
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		
 		/**
-       	 * Defines the duration that the element's TimeTrait will expose when the
-       	 * element's content is unloaded.
+       	 * Defines the duration that the element's TimeTrait will expose until the
+       	 * element's content is loaded.
        	 * 
        	 * Setting this property to a positive value results in the element becoming
        	 * temporal. Any other value will remove the element's TimeTrait, unless the
@@ -149,7 +152,7 @@ package org.osmf.audio
 		/**
 		 * @private
 		 */
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
 		{
 			return 	loader is NetLoader
 				  ? new NetStreamLoadTrait(loader, resource)

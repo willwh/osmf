@@ -41,9 +41,9 @@ package org.osmf.model
 	 **/ 
 	public class ReferenceSWFElement extends SWFElement implements IMediaReferrer
 	{
-		public function ReferenceSWFElement(loader:SWFLoader=null, resource:URLResource=null)
+		public function ReferenceSWFElement(resource:URLResource=null, loader:SWFLoader=null)
 		{
-			super(loader, resource);
+			super(resource, loader);
 			
 			handler = new NetLoader() as IMediaResourceHandler;
 		}

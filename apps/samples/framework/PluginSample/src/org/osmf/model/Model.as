@@ -136,17 +136,17 @@ package org.osmf.model
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 		
 		private function createAudioElement():MediaElement
 		{
-			return new AudioElement(new SoundLoader());
+			return new AudioElement();
 		}
 		
 		private function createSWFElement():MediaElement
 		{
-			return new SWFElement(new SWFLoader());
+			return new SWFElement();
 		}
 
 		private function initResourceHandlers():void

@@ -35,7 +35,7 @@ package org.osmf.audio
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new AudioElement(new SoundLoader());
+			return new AudioElement(null, new SoundLoader());
 		}
 		
 		override protected function get hasLoadTrait():Boolean

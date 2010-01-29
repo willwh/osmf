@@ -1,22 +1,21 @@
-Sample Application: Regions
+Sample Application: MediaContainerSample
 
 A. Overview
 
-This sample application demonstrates part of the framework's gateway feature, that allows media
-elements to be routed. Gateway objects are of type IMediaGateway. A specialized interface is
-IContainerGateway, that specifies gateways that may contain one or more media element children.
-The RegionSprite class implements this interface, but derives from Sprite. This constitutes a
-media element container that can be staged in Flash. This allows for sending parts of a
-composition to predefined regions within a Flash experience.   
+This sample application demonstrates part of the framework's containers feature, that allows media
+elements to be routed. Container objects are of type IMediaContainer.  The MediaContainer class
+implements this interface, but derives from Sprite. This constitutes a media element container that
+can be staged in Flash. This allows for sending parts of a composition to predefined regions within
+a Flash experience.   
 
 B. Installation Instructions (Flex Builder)
 
-1. Unzip/copy the RegionsSample project into your Flex Builder workspace folder. 
+1. Unzip/copy the MediaContainerSample project into your Flex Builder workspace folder. 
 2. In Flex Builder, go to the File menu and select "Import".
 3. Select "General", then "Existing Projects into Workspace", and click "Next".
 4. Choose "Select root directory" and "Browse".
 5. Browse to your Flex Builder workspace folder.
-6. Select the checkbox next to "RegionSample", and click "Finish".  This will import the project.
+6. Select the checkbox next to "MediaContainerSample", and click "Finish".  This will import the project.
 7. Build the project.
 8. Launch the application from the Run menu.
 

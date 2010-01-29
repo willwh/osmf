@@ -70,7 +70,7 @@ package org.osmf.test.mast.media
 		
 		public function testWithMetadata():void
 		{
-			var mediaElement:VideoElement = new VideoElement(new NetLoader());
+			var mediaElement:VideoElement = new VideoElement();
 			mediaElement.resource = createResourceWithMetadata();
 
 			try
@@ -85,7 +85,7 @@ package org.osmf.test.mast.media
 		
 		public function testLoad():void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			mediaElement.resource = createResourceWithMetadata();
 
 			var proxyElement:MASTProxyElement = null;
@@ -111,7 +111,7 @@ package org.osmf.test.mast.media
 
 		public function testLoadFailure():void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
@@ -153,7 +153,7 @@ package org.osmf.test.mast.media
 		
 		private function doLoadAndPlay(preroll:Boolean=true):void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			mediaElement.resource = createResourceWithMetadata(preroll);
 
 			var proxyElement:MASTProxyElement = null;

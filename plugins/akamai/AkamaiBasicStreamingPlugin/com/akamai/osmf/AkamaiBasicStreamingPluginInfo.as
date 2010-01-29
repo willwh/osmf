@@ -57,12 +57,12 @@ package com.akamai.osmf
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(netLoader);
+			return new VideoElement(null, netLoader);
 		}
 		
 		private function createAudioElement():MediaElement
 		{
-			return new AudioElement(netLoader);
+			return new AudioElement(null, netLoader);
 		}
 		
 		private var netLoader:NetLoader;

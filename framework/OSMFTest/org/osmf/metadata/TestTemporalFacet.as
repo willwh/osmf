@@ -80,14 +80,14 @@ package org.osmf.metadata
 			}
 			
 			// Test passing valid arguments
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement(new NetLoader()));
+			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
 			assertTrue(facet != null);
 			assertEquals(NAMESPACE, facet.namespaceURL.rawUrl);
 		}
 		
 		public function testAddValue():void
 		{
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement(new NetLoader()));
+			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
 			
 			for each(var value:TemporalIdentifier in _testValues)
 			{
@@ -127,7 +127,7 @@ package org.osmf.metadata
 		
 		public function testGetValue():void
 		{
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement(new NetLoader()));
+			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
 
 			facet.addValue(new TemporalIdentifier(500, 5));
 			
@@ -287,7 +287,7 @@ package org.osmf.metadata
 				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
 			}
 
-			return new VideoElement(loader); 
+			return new VideoElement(null, loader); 
 		}
 		
 		private function createDynamicMediaElement():DynamicMediaElement

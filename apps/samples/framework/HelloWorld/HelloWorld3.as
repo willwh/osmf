@@ -81,8 +81,7 @@ package
 			// First child is a progressive video.
 			serialElement.addChild
 				( new VideoElement
-					( new NetLoader
-					, new URLResource(new URL(REMOTE_PROGRESSIVE))
+					( new URLResource(new URL(REMOTE_PROGRESSIVE))
 					)
 				);
 
@@ -91,8 +90,7 @@ package
 				( new TemporalProxyElement
 					( 3
 					, new SWFElement
-						( new SWFLoader()
-						, new URLResource(new URL(REMOTE_SWF))
+						( new URLResource(new URL(REMOTE_SWF))
 						)
 					)
 				);
@@ -100,8 +98,7 @@ package
 			// Third child is a progressive video.
 			serialElement.addChild
 				( new VideoElement
-					( new NetLoader
-					, new URLResource(new URL(REMOTE_STREAM))
+					( new URLResource(new URL(REMOTE_STREAM))
 					)
 				);
 				

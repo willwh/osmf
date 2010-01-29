@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.content
 {
-	import flash.display.Loader;
-	
 	import flexunit.framework.TestCase;
 
 	/**
@@ -37,10 +35,18 @@ package org.osmf.content
 	 **/
 	public class TestContentElement extends TestCase
 	{
-		public function testVoid():void
+		public function testConstructor():void
 		{
-			var contentElement:ContentElement = new ContentElement(new ContentLoader());
-			assertNotNull(contentElement);
+			try
+			{
+				var contentElement:ContentElement = new ContentElement();
+				assertNotNull(contentElement);
+				
+				fail();
+			}
+			catch (e:ArgumentError)
+			{
+			}
 			
 			// See TestContentElementIntegration for more actual tests.
 		}

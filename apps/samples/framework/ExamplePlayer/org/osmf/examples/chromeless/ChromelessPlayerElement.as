@@ -37,9 +37,9 @@ package org.osmf.examples.chromeless
 	 **/
 	public class ChromelessPlayerElement extends SWFElement
 	{
-		public function ChromelessPlayerElement(loader:SWFLoader=null, resource:URLResource=null)
+		public function ChromelessPlayerElement(resource:URLResource=null, loader:SWFLoader=null)
 		{
-			super(loader, resource);		
+			super(resource, loader)
 		}
 		
 		override protected function processReadyState():void

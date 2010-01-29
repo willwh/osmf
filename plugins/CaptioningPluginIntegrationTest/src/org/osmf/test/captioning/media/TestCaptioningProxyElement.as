@@ -52,7 +52,7 @@ package org.osmf.test.captioning.media
 		 */
 		public function testLoadWithValidMetadata():void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			mediaElement.resource = createResource(CaptioningTestConstants.CAPTIONING_DOCUMENT_URL);
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
@@ -107,7 +107,7 @@ package org.osmf.test.captioning.media
 		
 		private function doLoadWithInvalidMetadataAndDoNotContinueLoadingMedia(metadataURL:String, nullFacet:Boolean=false):void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			
 			mediaElement.resource = nullFacet ? createResourceWithBadFacet() : createResource(metadataURL);
 
@@ -137,7 +137,7 @@ package org.osmf.test.captioning.media
 
 		private function doLoadWithInvalidMetadataAndContinueLoadingMedia(metadataURL:String):void
 		{
-			var mediaElement:MediaElement = new VideoElement(new NetLoader());
+			var mediaElement:MediaElement = new VideoElement();
 			mediaElement.resource = createResource(metadataURL);
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));

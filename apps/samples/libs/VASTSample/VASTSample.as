@@ -114,8 +114,7 @@ package
 			// Add the main video.
 			serialElement.addChild
 				( new VideoElement
-					( new NetLoader
-					, new URLResource(new URL(REMOTE_STREAM))
+					( new URLResource(new URL(REMOTE_STREAM))
 					)
 				);
 			

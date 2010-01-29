@@ -167,7 +167,7 @@
 			
 			private function createVideoElement():MediaElement
 			{
-				return new VideoElement(new NetLoader());
+				return new VideoElement();
 			}
 
 			private function loadPlugin(source:String, load:Boolean=true):void

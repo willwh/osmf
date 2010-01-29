@@ -26,6 +26,7 @@ package org.osmf.audio
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.NetFactory;
@@ -51,7 +52,7 @@ package org.osmf.audio
 
 		override protected function createMediaElement():MediaElement
 		{
-			return new AudioElement(netFactory.createNetLoader()); 
+			return new AudioElement(null, netFactory.createNetLoader()); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -87,19 +88,27 @@ package org.osmf.audio
 		
 		public function testConstructor():void
 		{
-			new AudioElement(new NetLoader());
-			new AudioElement(new SoundLoader());
+			new AudioElement(null, new NetLoader());
+			new AudioElement(null, new SoundLoader());
 			
 			// Loader must be a NetLoader or a SoundLoader.
 			try
 			{
-				new AudioElement(new SimpleLoader());
+				new AudioElement(null, new SimpleLoader());
 				
 				fail();
 			}
 			catch (error:ArgumentError)
 			{
 			}
+
+			// Verify that the appropriate loader eventually gets set if we don't supply one.
+			var audioElement:AudioElement = new AudioElement();
+			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) == null);
+			audioElement.resource = new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) is SoundLoadTrait);
+			audioElement.resource = new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) is NetStreamLoadTrait);
 		}
 		
 		public function testDefaultDuration():void

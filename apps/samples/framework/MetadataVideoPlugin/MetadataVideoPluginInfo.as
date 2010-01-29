@@ -54,7 +54,7 @@ package
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 	}
 }

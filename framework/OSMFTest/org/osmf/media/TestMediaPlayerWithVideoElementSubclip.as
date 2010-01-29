@@ -70,9 +70,7 @@ package org.osmf.media
 				}
 			}
 
-			var videoElement:VideoElement = new VideoElement(loader);
-			videoElement.resource = resource;
-			return videoElement; 
+			return new VideoElement(resource, loader);
 		}
 		
 		override protected function get hasLoadTrait():Boolean

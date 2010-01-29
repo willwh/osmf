@@ -32,7 +32,7 @@ package org.osmf.image
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new ImageElement(new ImageLoader()); 
+			return new ImageElement(null, new ImageLoader()); 
 		}
 		
 		override protected function get resourceForMediaElement():MediaResourceBase

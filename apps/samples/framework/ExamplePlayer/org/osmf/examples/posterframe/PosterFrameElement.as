@@ -32,9 +32,9 @@ package org.osmf.examples.posterframe
 	 **/
 	public class PosterFrameElement extends ImageElement
 	{
-		public function PosterFrameElement(loader:ImageLoader, resource:URLResource=null)
+		public function PosterFrameElement(resource:URLResource=null, loader:ImageLoader=null)
 		{
-			super(loader, resource);
+			super(resource, loader);
 		}
 		
 		/**

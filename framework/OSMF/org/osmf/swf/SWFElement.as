@@ -70,19 +70,18 @@ package org.osmf.swf
 		/**
 		 * Constructor.
 		 * 
-		 * @param loader Loader used to load the SWF.
-		 * @param resource Url that points to the SWF that the SWFElement will use.
-		 * 
-		 * @throws ArgumentError If loader is null.
+		 * @param resource URLResource that points to the SWF source that the SWFElement
+		 * will use.
+		 * @param loader Loader used to load the SWF.  If null, the Loader will be created.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function SWFElement(loader:SWFLoader, resource:URLResource = null)
+		public function SWFElement(resource:URLResource=null, loader:SWFLoader=null)
 		{
-			super(loader, resource);		
+			super(resource, loader, [SWFLoader]);
 		}
 		
 		/**

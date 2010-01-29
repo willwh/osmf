@@ -97,12 +97,12 @@ package org.osmf.view
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 		
 		private function createReferenceSWFElement():MediaElement
 		{
-			return new ReferenceSWFElement(new SWFLoader());
+			return new ReferenceSWFElement();
 		}
 		
 		private function loadMedia():void

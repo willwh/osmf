@@ -64,7 +64,7 @@ package org.osmf.media
 				}
 			}
 
-			return new AudioElement(loader, resource as URLResource);
+			return new AudioElement(resource as URLResource, loader);
 		}
 		
 		override protected function get hasLoadTrait():Boolean

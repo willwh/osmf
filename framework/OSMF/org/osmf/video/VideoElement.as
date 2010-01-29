@@ -37,9 +37,9 @@ package org.osmf.video
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultTraitResolver;
+	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
@@ -60,11 +60,13 @@ package org.osmf.video
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.dynamicstreaming.DynamicNetStream;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.ILoader;
 	import org.osmf.traits.LoadState;
@@ -120,33 +122,25 @@ package org.osmf.video
 		/**
 		 * Constructor.
 		 * 
-		 * @param loader Loader used to load the video.
-		 * @param resource An object implementing MediaResourceBase that points to the video 
-		 * the VideoElement will use.
+		 * @param resource URLResource that points to the video source that the VideooElement
+		 * will use.  For dynamic streaming content, use a DynamicStreamingResource.
+		 * @param loader NetLoader used to load the video.  If null, the appropriate NetLoader
+		 * will be created based on the resource type.
 		 * 
-		 * @throws ArgumentError If loader is null, or resource is neither an
-		 * URLResource nor a DynamicStreamingResource.
+		 * @throws ArgumentError If resource is not an URLResource. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function VideoElement(loader:NetLoader, resource:MediaResourceBase=null)
+		public function VideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{	
-			super(loader, resource);
+			super(resource, loader, [HTTPStreamingNetLoader, DynamicStreamingNetLoader, NetLoader]);
 			
-			// The resource argument must either implement URLResource or be
-			// a DynamicStreamingResource object			
-			if (resource != null)
+			if (!(resource == null || resource is URLResource))			
 			{
-				var urlResource:URLResource = resource as URLResource;
-				var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-				
-				if (urlResource == null && dsResource == null) 
-				{
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
-				}
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 		}
 		       	
@@ -165,8 +159,8 @@ package org.osmf.video
        	}
        	
        	/**
-       	 * Defines the duration that the element's TimeTrait will expose when the
-       	 * element's content is unloaded.
+       	 * Defines the duration that the element's TimeTrait will expose until the
+       	 * element's content is loaded.
        	 * 
        	 * Setting this property to a positive value results in the element becoming
        	 * temporal. Any other value will remove the element's TimeTrait, unless the
@@ -217,10 +211,15 @@ package org.osmf.video
 		/**
 		 * Specifies whether the video should be smoothed (interpolated) when it is scaled. 
 		 * For smoothing to work, the runtime must be in high-quality mode (the default). 
-		 * The default value is false (no smoothing).  For video playback using Flash Player
-		 * 9.0.115.0 and later versions, set this property to true to take advantage of mipmapping image optimization.
+		 * The default value is false (no smoothing).  Set this property to true to take
+		 * advantage of mipmapping image optimization.
 		 * 
 		 * @see flash.media.Video
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		**/
 		public function set smoothing(value:Boolean):void
 		{
@@ -237,8 +236,9 @@ package org.osmf.video
 		}
 		
 		/**
-		 * Indicates the type of filter applied to decoded video as part of post-processing. The default value is 0, which lets the video compressor apply a deblocking filter as needed.
-		 * see flash.media.Video for more information on deblocking modes.
+		 * Indicates the type of filter applied to decoded video as part of post-processing. The
+		 * default value is 0, which lets the video compressor apply a deblocking filter as needed.
+		 * See flash.media.Video for more information on deblocking modes.
 		 * 
 		 * @see flash.media.Video
 		 *  
@@ -267,7 +267,7 @@ package org.osmf.video
       	/**
 		 * @private
 		 */
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
 		{
 			return new NetStreamLoadTrait(loader, resource);
 		}
@@ -310,7 +310,7 @@ package org.osmf.video
     				{
     					setupDRMTrait(metadata);
     					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	   
-    					return;  //Don't finishLoad() until the "auth" has completed.
+    					return;  // Don't finishLoad() until the "auth" has completed.
     				} 			
 	    		}
 
@@ -398,16 +398,16 @@ package org.osmf.video
 	    		addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
 	  		}
 	    	
-			var dynRes:DynamicStreamingResource = resource as DynamicStreamingResource;
-			if (dynRes != null)
+			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			if (dsResource != null)
 			{
-				if (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(dynRes) != null)
+				if (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(dsResource) != null)
 				{
-					addTrait(MediaTraitType.DYNAMIC_STREAM, new HTTPStreamingNetStreamDynamicStreamTrait(stream as HTTPNetStream, dynRes));
+					addTrait(MediaTraitType.DYNAMIC_STREAM, new HTTPStreamingNetStreamDynamicStreamTrait(stream as HTTPNetStream, dsResource));
 				}
 				else
 				{
-					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dynRes));
+					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dsResource));
 				}
 			}	    	
 		}
@@ -545,6 +545,5 @@ package org.osmf.video
 		{
 		private var drmTrait:NetStreamDRMTrait;	
 		}
-		
 	}
 }

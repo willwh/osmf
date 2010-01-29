@@ -35,7 +35,7 @@ package org.osmf.examples.posterframe
 	 **/
 	public class RTMPPosterFrameElement extends VideoElement
 	{
-		public function RTMPPosterFrameElement(loader:NetLoader, resource:MediaResourceBase, posterFrameTime:Number)
+		public function RTMPPosterFrameElement(resource:MediaResourceBase, posterFrameTime:Number, loader:NetLoader=null)
 		{
 			// Add metadata to our resource so that it's treated as a zero-length
 			// subclip.
@@ -44,7 +44,7 @@ package org.osmf.examples.posterframe
 			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, posterFrameTime);
 			resource.metadata.addFacet(kvFacet);
 	
-			super(loader, resource);
+			super(resource, loader);
 		}
 		
 		/**

@@ -37,7 +37,7 @@ package org.osmf.composition
 		public function testListenedChild():void
 		{			
 			var aggr:TraitAggregator = new TraitAggregator();
-			var video:VideoElement = new VideoElement(new NetLoader());
+			var video:VideoElement = new VideoElement();
 			aggr.listenedChild = video;
 			
 			assertEquals(aggr.listenedChild, video);			
@@ -46,11 +46,11 @@ package org.osmf.composition
 		public function testGetNextChildWithTrait():void
 		{			
 			var aggr:TraitAggregator = new TraitAggregator();
-			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
+			var video1:VideoElement = new VideoElement(new URLResource(new URL('http://test1.com/')));
 			aggr.addChild(video1);
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test2.com/')));
 			aggr.addChild(video2);
-			var video3:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
+			var video3:VideoElement = new VideoElement(new URLResource(new URL('http://test3.com/')));
 			aggr.addChild(video3);
 			
 			assertEquals(aggr.getNextChildWithTrait(null, MediaTraitType.LOAD), video1);			
@@ -62,7 +62,7 @@ package org.osmf.composition
 		public function testForEachChildTrait():void
 		{			
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(null));
+			var video:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			var loadableTrait:LoadTrait = video.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			
 			aggr.addChild(video);
@@ -88,8 +88,8 @@ package org.osmf.composition
 		public function testInvokeOnEachChildTrait():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test2.com/')));
+			var video1:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test2.com/')));
 			aggr.addChild(video1);
 			aggr.addChild(video2);
 			
@@ -113,8 +113,8 @@ package org.osmf.composition
 		public function testHasTrait():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video1:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			aggr.addChild(video1);
 			aggr.addChild(video2);
 			
@@ -132,8 +132,8 @@ package org.osmf.composition
 		public function testGetNumTraits():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video1:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			assertEquals( aggr.getNumTraits(MediaTraitType.LOAD), 0);
 			
@@ -154,8 +154,8 @@ package org.osmf.composition
 		public function testGetChildIndex():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video1:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video1:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			assertEquals(aggr.getChildIndex(null), -1);
 			assertEquals(aggr.getChildIndex(video1), -1);
@@ -181,7 +181,7 @@ package org.osmf.composition
 		public function testAddChild():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			var loadTraitSeen:Boolean = false;
 			var playTraitSeen:Boolean = false;
@@ -215,7 +215,7 @@ package org.osmf.composition
 		public function testAddChildAt():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			var loadTraitSeen:Boolean = false;
 			var playTraitSeen:Boolean = false;
@@ -244,7 +244,7 @@ package org.osmf.composition
 			assertTrue(loadTraitSeen);
 			assertTrue(playTraitSeen);
 			
-			var video2:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/2')));
+			var video2:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/2')));
 			
 			aggr.addChildAt(video2, 0);
 			
@@ -254,7 +254,7 @@ package org.osmf.composition
 		public function testRemoveChild():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			var loadTraitSeen:Boolean = false;
 			var playTraitSeen:Boolean = false;
@@ -293,7 +293,7 @@ package org.osmf.composition
 		public function testRemoveChildAt():void
 		{	
 			var aggr:TraitAggregator = new TraitAggregator();			
-			var video:VideoElement = new VideoElement(new NetLoader(), new URLResource(new URL('http://test.com/')));
+			var video:VideoElement = new VideoElement(new URLResource(new URL('http://test.com/')));
 			
 			var loadTraitSeen:Boolean = false;
 			var playTraitSeen:Boolean = false;

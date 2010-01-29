@@ -77,8 +77,7 @@ package
 		private function constructVideo(url:String):VideoElement
 		{
 			return new VideoElement
-					( new NetLoader
-					, new URLResource(new URL(url))
+					( new URLResource(new URL(url))
 					);
 		}
 		

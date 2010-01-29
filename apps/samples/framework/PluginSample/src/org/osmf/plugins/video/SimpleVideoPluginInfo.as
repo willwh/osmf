@@ -42,7 +42,7 @@ package org.osmf.plugins.video
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 	}
 }

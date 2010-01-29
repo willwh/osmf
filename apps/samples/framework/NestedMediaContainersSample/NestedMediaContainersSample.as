@@ -138,8 +138,7 @@ package
 		private function constructImage(url:String):MediaElement
 		{
 			return new ImageElement
-					( new ImageLoader()
-					, new URLResource(new URL(url))
+					( new URLResource(new URL(url))
 					) 
 				
 		}
@@ -147,8 +146,7 @@ package
 		private function constructVideo(url:String):VideoElement
 		{
 			return new VideoElement
-					( new NetLoader
-					, new URLResource(new URL(url))
+					( new URLResource(new URL(url))
 					);
 		}
 		

@@ -114,7 +114,7 @@
 				waitForSeek = false;
 				ignoreDynamicCuePoints = false;
 
-				videoElement = new VideoElement(new NetLoader(), new URLResource(new URL(REMOTE_STREAM_WITH_NAV)));
+				videoElement = new VideoElement(new URLResource(new URL(REMOTE_STREAM_WITH_NAV)));
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
 				// when ISeekable is added

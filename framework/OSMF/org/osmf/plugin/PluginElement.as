@@ -53,7 +53,7 @@ package org.osmf.plugin
 		 */
 		public function PluginElement(loader:PluginLoader, resource:MediaResourceBase=null)
 		{
-			super(loader, resource);			
+			super(resource, loader);			
 		}
 	}
 }

@@ -32,7 +32,7 @@ package org.osmf.swf
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new SWFElement(new SWFLoader()); 
+			return new SWFElement(null, new SWFLoader()); 
 		}
 		
 		override protected function get resourceForMediaElement():MediaResourceBase

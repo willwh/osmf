@@ -78,17 +78,17 @@
 			
 			private function createAudioElement():MediaElement
 			{
-				return new AudioElement(sharedNetLoader);
+				return new AudioElement(null, sharedNetLoader);
 			}
 
 			private function createVideoElement():MediaElement
 			{
-				return new VideoElement(sharedNetLoader);
+				return new VideoElement(null, sharedNetLoader);
 			}
 
 			private function createImageElement():MediaElement
 			{
-				return new ImageElement(sharedLoader);
+				return new ImageElement(null, sharedLoader);
 			}
 
 	 		protected function createVideoComposition(serial:Boolean = false):void

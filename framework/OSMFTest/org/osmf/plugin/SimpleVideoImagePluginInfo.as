@@ -50,12 +50,12 @@ package org.osmf.plugin
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 
 		private function createImageElement():MediaElement
 		{
-			return new ImageElement(new ImageLoader());
+			return new ImageElement();
 		}
 	}
 }

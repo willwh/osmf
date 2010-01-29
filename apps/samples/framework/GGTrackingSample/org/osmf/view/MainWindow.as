@@ -99,7 +99,7 @@ package org.osmf.view
 		
 		private function createVideoElement():MediaElement
 		{
-			return new VideoElement(new NetLoader());
+			return new VideoElement();
 		}
 		
 		private function onPluginLoaded(event:PluginLoadEvent):void

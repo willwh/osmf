@@ -38,7 +38,7 @@ package org.osmf.plugin
 		private function createElement():MediaElement
 		{
 			_createCount++;
-			return new VideoElement(new NetLoader());			
+			return new VideoElement();			
 		}
 		
 		private var _createCount:Number = 0;

@@ -41,27 +41,37 @@ package org.osmf.media
 		/**
 		 * Constructor.
 		 * 
-		 * @param loader Loader used to load the media.
 		 * @param resource The MediaResourceBase that represents the piece of
 		 * media to load into this media element.
+		 * @param loader Loader used to load the media.  If null, the loader will
+		 * be dynamically generated from the loaderClasses Array based on the type
+		 * of the resource.
+		 * @param loaderClasses An Array of Class objects representing all possible
+		 * ILoader classes that this MediaElement can use to load media.  If null,
+		 * then loader must be specified (and will be used for all resources).  When
+		 * the appropriate loader to use is unknown (e.g. because loader is null),
+		 * this list will be used to locate and set the appropriate loader.  Note
+		 * that multiple loaders in the list might be able to handle a resource,
+		 * in which case the first loader in the list to do so will be selected.
 		 * 
-		 * @throws ArgumentError If loader is null.
+		 * @throws ArgumentError If both loader and loaderClasses are null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function LoadableMediaElement(loader:ILoader, resource:MediaResourceBase=null)
+		public function LoadableMediaElement(resource:MediaResourceBase=null, loader:ILoader=null, loaderClasses:Array=null)
 		{
 			super();
 			
-			if (loader == null)
+			if (loader == null && loaderClasses == null)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
 			this.loader = loader;
+			this.loaderClasses = loaderClasses || [];
 			this.resource = resource;
 		}
 		
@@ -71,6 +81,8 @@ package org.osmf.media
 		override public function set resource(value:MediaResourceBase):void
 	    {
 			super.resource = value;
+			
+			setLoaderForResource(value);
 			
 			updateLoadTrait();
 		}
@@ -87,11 +99,11 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
-		
+				
 		/**
 		 * 
 		 * Subclasses can override this method to do processing when the media
@@ -160,6 +172,34 @@ package org.osmf.media
 			}
 		}
 
+		/**
+		 * Given a resource, this method will locate the first ILoader which can handle
+		 * the resource and set it as the ILoader for this class.  Gives precedence to
+		 * the current loader first, then the constructor-supplied loaderClasses, in order.
+		 **/
+		private function setLoaderForResource(resource:MediaResourceBase):void
+		{
+			if (resource != null && (loader == null || loader.canHandleResource(resource) == false))
+			{
+				// Don't call canHandleResource twice on the same loader.
+				var loaderFound:Boolean = false;
+				
+				for each (var loaderClass:Class in loaderClasses)
+				{
+					// Skip this one if it's the same type as the current loader.
+					if (loader == null || !(loader is loaderClass))
+					{
+						var iterLoader:ILoader = new loaderClass() as ILoader;
+						if (iterLoader.canHandleResource(resource))
+						{
+							loader = iterLoader;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		private function updateLoadTrait():void
 		{
 			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
@@ -179,16 +219,20 @@ package org.osmf.media
 				removeTrait(MediaTraitType.LOAD);
 			}
 			
-			// Add a new LoadTrait for the current resource.
-			loadTrait = createLoadTrait(loader, resource);
-			loadTrait.addEventListener
-				( LoadEvent.LOAD_STATE_CHANGE
-				, onLoadStateChange, false, 10 // Using a higher priority event listener in order to process load state changes before clients.
-				);
-			
-			addTrait(MediaTraitType.LOAD, loadTrait);
+			if (loader != null)
+			{
+				// Add a new LoadTrait for the current resource.
+				loadTrait = createLoadTrait(resource, loader);
+				loadTrait.addEventListener
+					( LoadEvent.LOAD_STATE_CHANGE
+					, onLoadStateChange, false, 10 // Using a higher priority event listener in order to process load state changes before clients.
+					);
+				
+				addTrait(MediaTraitType.LOAD, loadTrait);
+			}
 		}
 
 		private var loader:ILoader;
+		private var loaderClasses:Array;
 	}
 }

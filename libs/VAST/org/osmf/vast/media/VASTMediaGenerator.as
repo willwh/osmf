@@ -124,7 +124,7 @@ package org.osmf.vast.media
 								mediaURL = mediaURL.replace(/\.flv$|\.f4v$/i, "");
 							}
 
-							var rootElement:MediaElement = new VideoElement(new NetLoader(), new URLResource(new FMSURL(mediaURL)));
+							var rootElement:MediaElement = new VideoElement(new URLResource(new FMSURL(mediaURL)));
 							
 							// Resolve the chain of ProxyElements, ensuring that
 							// the VideoElement is at the deepest point. 

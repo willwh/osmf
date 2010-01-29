@@ -45,8 +45,7 @@ package
 		public function HelloWorld4()
 		{
 			var element:MediaElement = new VideoElement
-				( new NetLoader
-				, new URLResource(new URL(REMOTE_PROGRESSIVE))
+				( new URLResource(new URL(REMOTE_PROGRESSIVE))
 				);
 			
 			var loadTrait:LoadTrait = element.getTrait(MediaTraitType.LOAD) as LoadTrait;

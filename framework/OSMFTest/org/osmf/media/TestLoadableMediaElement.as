@@ -27,14 +27,17 @@ package org.osmf.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.SimpleLoader;
+	import org.osmf.utils.SimpleResource;
+	import org.osmf.utils.URL;
 	
 	public class TestLoadableMediaElement extends TestMediaElement
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new LoadableMediaElement(new SimpleLoader()); 
+			return new LoadableMediaElement(null, new SimpleLoader()); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -59,9 +62,12 @@ package org.osmf.media
 		
 		public function testConstructor():void
 		{
+			new LoadableMediaElement(null, new SimpleLoader(), null);
+			new LoadableMediaElement(null, null, [SimpleLoader]);
+			
 			try
 			{
-				var mediaElement:MediaElement = new LoadableMediaElement(null);
+				var mediaElement:MediaElement = new LoadableMediaElement();
 				
 				fail();
 			}
@@ -102,6 +108,17 @@ package org.osmf.media
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
 			}
+		}
+		
+		public function testSetResourceSetsLoader():void
+		{
+			var mediaElement:MediaElement = new LoadableMediaElement(null, null, [MockHTTPLoader, SimpleLoader]);
+			
+			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) == null);
+			mediaElement.resource = new URLResource(new URL("http://example.com"));
+			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);
+			mediaElement.resource = new SimpleResource("foo");
+			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);
 		}
 	}
 }
