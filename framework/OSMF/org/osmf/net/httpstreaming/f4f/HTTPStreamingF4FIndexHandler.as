@@ -323,7 +323,7 @@ package org.osmf.net.httpstreaming.f4f
 							, null
 							, null
 							, true
-							, streamInfos[currentQuality].additionalHeader
+							, newAdditionalHeader
 							)
 						);
 				}
