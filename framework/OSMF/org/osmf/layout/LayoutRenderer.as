@@ -212,13 +212,6 @@ package org.osmf.layout
 					)
 				);
 			
-			if 	(	String(target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)) == "banners"
-				&& 	String(metadata.getFacet(MetadataNamespaces.ELEMENT_ID)) == "rootElement"
-				)
-			{
-				trace("!");
-			}
-			
 			CONFIG::LOGGING { logger.debug("Adding target {0} to {1}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); } 
 			
 			// Get the index where the target should be inserted:
