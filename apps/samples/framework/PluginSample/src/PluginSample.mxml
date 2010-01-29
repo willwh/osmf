@@ -29,7 +29,6 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.content.ContentElement;
 			import org.osmf.audio.AudioElement;
 			import org.osmf.metadata.*;
 			import org.osmf.logging.flex.FlexLogWrapper;
