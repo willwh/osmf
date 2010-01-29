@@ -23,11 +23,11 @@ package org.osmf.plugin
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.content.ContentLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.swf.LoaderLoadedContext;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -86,7 +86,7 @@ package org.osmf.plugin
 					swfLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onSWFLoaderStateChange);
 					swfLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 	
-					var loadedContext:ContentLoadedContext = event.loadedContext as ContentLoadedContext;
+					var loadedContext:LoaderLoadedContext = event.loadedContext as LoaderLoadedContext;
 					var root:DisplayObject = loadedContext.loader.content;
 					var pluginInfo:PluginInfo = root[PLUGININFO_PROPERTY_NAME] as PluginInfo;
 					

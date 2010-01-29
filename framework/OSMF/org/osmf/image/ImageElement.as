@@ -21,8 +21,15 @@
 *****************************************************/
 package org.osmf.image
 {
-	import org.osmf.content.ContentElement;
+	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.swf.LoaderLoadTrait;
+	import org.osmf.swf.LoaderLoadedContext;
+	import org.osmf.swf.LoaderUtils;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * ImageElement is a media element specifically created for
@@ -62,7 +69,7 @@ package org.osmf.image
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class ImageElement extends ContentElement
+	public class ImageElement extends LoadableMediaElement
 	{
 		/**
 		 * Constructor.
@@ -79,6 +86,33 @@ package org.osmf.image
 		public function ImageElement(resource:URLResource=null, loader:ImageLoader=null)
 		{
 			super(resource, loader, [ImageLoader]);
+		}
+		
+		/**
+		 * @private 
+		 */ 		
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		{
+			return new LoaderLoadTrait(loader, resource);
+		}
+
+		/**
+		 * @private 
+		 */ 		
+		override protected function processReadyState():void
+		{
+			var context:LoaderLoadedContext
+				= (getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext as LoaderLoadedContext;
+			
+			addTrait(MediaTraitType.DISPLAY_OBJECT, LoaderUtils.createDisplayObjectTrait(context.loader, this));
+		}
+		
+		/**
+		 *  @private 
+		 */ 
+		override protected function processUnloadingState():void
+		{
+			removeTrait(MediaTraitType.DISPLAY_OBJECT);	
 		}
 	}
 }

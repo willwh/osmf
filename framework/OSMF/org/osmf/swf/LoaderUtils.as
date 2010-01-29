@@ -19,15 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.content
+package org.osmf.swf
 {
 	import flash.display.ActionScriptVersion;
+	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
@@ -35,75 +37,85 @@ package org.osmf.content
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
 
-
+	[ExcludeClass]
+	
 	/**
-	 * The ContentLoader class creates a flash.display.Loader object, 
-	 * which it uses to load and unload content.
-	 *
-	 * @see ContentElement
-	 * @see org.osmf.traits.LoadTrait
-	 * @see flash.display.Loader
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */ 
-	public class ContentLoader extends LoaderBase
+	 * @private
+	 **/
+	public class LoaderUtils
 	{
 		/**
-		 * Constructor.
-		 * 
-		 * @param useCurrentSecurityDomain Indicates whether to load the SWF
-		 * into the current security domain, or its natural security domain.
-		 * If the loaded SWF does not live in the same security domain as the
-		 * loading SWF, Flash Player will not merge the types defined in the two
-		 * domains.  Even if it happens that there are two types with identical
-		 * names, Flash Player will still consider them different by tagging them
-		 * with different versions.  Therefore, it is mandatory to have the
-		 * loaded SWF and loading SWF live in the same security domain if the
-		 * types need to be merged.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function ContentLoader(useCurrentSecurityDomain:Boolean=false)
+		 * Creates a DisplayObjectTrait for the content in the given
+		 * flash.display.Loader.
+		 **/
+		public static function createDisplayObjectTrait(loader:Loader, mediaElement:MediaElement):DisplayObjectTrait
 		{
-			super();
+			var displayObject:DisplayObject = null;
+			var mediaWidth:Number = 0;
+			var mediaHeight:Number = 0;
 			
-			this.useCurrentSecurityDomain = useCurrentSecurityDomain;
+			try
+			{
+				// Add a scroll rect, to allow the loaded content to
+				// overdraw its bounds, while maintaining scale, and size
+				// with the layout system.
+				//
+				// Note that it's critical that the DisplayObjectTrait's
+				// displayObject be set to the Loader's content property (and
+				// not to a container Sprite, as was the case with a previous fix),
+				// since player-to-SWF communication is based on the player's
+				// ability to reference the SWF's API.
+				var info:LoaderInfo = loader.contentLoaderInfo;  
+				loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
+				
+				if (info.contentType == SWF_MIME_TYPE &&
+					info.actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
+				{
+					// You can't change the parent of an AVM1 SWF, instead you have
+					// to add the Loader directly. 
+					displayObject = loader;
+				}
+				else
+				{
+					displayObject = loader.content;
+				}
+				mediaWidth = info.width;
+				mediaHeight = info.height;
+			}
+			catch (error:SecurityError)
+			{
+				mediaElement.dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError
+							( MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR
+							, error.message
+							)
+						)
+					);
+			}
+
+			return new DisplayObjectTrait(displayObject, mediaWidth, mediaHeight);
 		}
 		
-		// Overrides
-		//
-		
 		/**
-		 * @private
-		 * 
-		 * Loads content using a flash.display.Loader object. 
-		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
-		 * while loading and to READY upon completing a successful load.</p> 
-		 * 
-		 * @see org.osmf.traits.LoadState
-		 * @see flash.display.Loader#load()
-		 * @param loadTrait LoadTrait to be loaded.
-		 */ 
-		override public function load(loadTrait:LoadTrait):void
+		 * Loads the given LoadTrait.
+		 **/
+		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function, useCurrentSecurityDomain:Boolean):void
 		{
-			super.load(loadTrait);
-			
 			var loader:Loader = new Loader();
-			var loadedContext:ContentLoadedContext = new ContentLoadedContext(loader);
+			var loadedContext:LoaderLoadedContext = new LoaderLoadedContext(loader);
 			
-			updateLoadTrait(loadTrait, LoadState.LOADING, loadedContext);
+			updateLoadTraitCallback(loadTrait, LoadState.LOADING, loadedContext);
 			
 			var context:LoaderContext 	= new LoaderContext();
 			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as URLResource).url.toString());
@@ -148,7 +160,7 @@ package org.osmf.content
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
+				updateLoadTraitCallback(loadTrait, LoadState.READY, loadedContext);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -157,7 +169,7 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, null);
+				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR, null);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -177,7 +189,7 @@ package org.osmf.content
 				loader = null;
 				loadedContext = null;
 				
-				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR, loadedContext);
+				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR, loadedContext);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -191,33 +203,19 @@ package org.osmf.content
 					);
 			}
 		}
-
 		
 		/**
-		 * @private
-		 * 
-		 * Unloads content using a flash.display.Loader object.  
-		 * 
-		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
-		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
-		 *
-		 * @param loadTrait LoadTrait to be unloaded.
-		 * @see org.osmf.traits.LoadState
-		 * @see flash.display.Loader#unload()
-		 */ 
-		override public function unload(loadTrait:LoadTrait):void
+		 * Unloads the given LoadTrait.
+		 **/
+		public static function unloadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function):void
 		{
-			super.unload(loadTrait);
-
-			var context:ContentLoadedContext = loadTrait.loadedContext as ContentLoadedContext;
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);			
+			var context:LoaderLoadedContext = loadTrait.loadedContext as LoaderLoadedContext;
+			updateLoadTraitCallback(loadTrait, LoadState.UNLOADING, context);			
 			context.loader.unloadAndStop();
-			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
+			updateLoadTraitCallback(loadTrait, LoadState.UNINITIALIZED);
+
 		}
 		
-		// Internals
-		//
-		
-		private var useCurrentSecurityDomain:Boolean;
+		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
 	}
 }

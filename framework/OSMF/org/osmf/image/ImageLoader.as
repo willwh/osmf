@@ -23,11 +23,13 @@ package org.osmf.image
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.content.ContentLoader;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.swf.LoaderUtils;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
 
 	/**
@@ -46,7 +48,7 @@ package org.osmf.image
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class ImageLoader extends ContentLoader
+	public class ImageLoader extends LoaderBase
 	{
 		/**
 		 * Constructs a new ImageLoader.
@@ -85,11 +87,47 @@ package org.osmf.image
 			return false;
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Loads content using a flash.display.Loader object. 
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
+		 * while loading and to READY upon completing a successful load.</p> 
+		 * 
+		 * @see org.osmf.traits.LoadState
+		 * @see flash.display.Loader#load()
+		 * @param loadTrait LoadTrait to be loaded.
+		 */ 
+		override public function load(loadTrait:LoadTrait):void
+		{
+			super.load(loadTrait);
+			
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, false);
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Unloads content using a flash.display.Loader object.  
+		 * 
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
+		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
+		 *
+		 * @param loadTrait LoadTrait to be unloaded.
+		 * @see org.osmf.traits.LoadState
+		 * @see flash.display.Loader#unload()
+		 */ 
+		override public function unload(loadTrait:LoadTrait):void
+		{
+			super.unload(loadTrait);
+
+			LoaderUtils.unloadLoadTrait(loadTrait, updateLoadTrait);
+		}
+		
 		// Internals
 		//
 
-		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["image/png", "image/gif", "image/jpeg"]);
-			
+		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["image/png", "image/gif", "image/jpeg"]);	
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.IMAGE]);
 	}
 }

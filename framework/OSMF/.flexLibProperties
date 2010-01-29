@@ -45,10 +45,6 @@
     <classEntry path="org.osmf.containers.HTMLMediaContainer"/>
     <classEntry path="org.osmf.containers.IMediaContainer"/>
     <classEntry path="org.osmf.containers.MediaContainer"/>
-    <classEntry path="org.osmf.content.ContentElement"/>
-    <classEntry path="org.osmf.content.ContentLoadTrait"/>
-    <classEntry path="org.osmf.content.ContentLoadedContext"/>
-    <classEntry path="org.osmf.content.ContentLoader"/>
     <classEntry path="org.osmf.display.MediaContainerGroup"/>
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
@@ -235,6 +231,9 @@
     <classEntry path="org.osmf.proxies.TemporalProxyElement"/>
     <classEntry path="org.osmf.proxies.TemporalProxySeekTrait"/>
     <classEntry path="org.osmf.proxies.TemporalProxyTimeTrait"/>
+    <classEntry path="org.osmf.swf.LoaderLoadTrait"/>
+    <classEntry path="org.osmf.swf.LoaderLoadedContext"/>
+    <classEntry path="org.osmf.swf.LoaderUtils"/>
     <classEntry path="org.osmf.swf.SWFElement"/>
     <classEntry path="org.osmf.swf.SWFLoader"/>
     <classEntry path="org.osmf.tracking.Beacon"/>

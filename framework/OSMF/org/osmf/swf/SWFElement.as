@@ -21,12 +21,13 @@
 *****************************************************/
 package org.osmf.swf
 {
-	import flash.display.DisplayObject;
-	
-	import org.osmf.content.ContentElement;
+	import org.osmf.media.LoadableMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.media.MediaResourceBase;
 	
 	/**
 	 * SWFElement is a media element specifically created for
@@ -65,7 +66,7 @@ package org.osmf.swf
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class SWFElement extends ContentElement
+	public class SWFElement extends LoadableMediaElement
 	{
 		/**
 		 * Constructor.
@@ -82,6 +83,33 @@ package org.osmf.swf
 		public function SWFElement(resource:URLResource=null, loader:SWFLoader=null)
 		{
 			super(resource, loader, [SWFLoader]);
+		}
+		
+		/**
+		 * @private 
+		 */ 		
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		{
+			return new LoaderLoadTrait(loader, resource);
+		}
+
+		/**
+		 * @private 
+		 */ 		
+		override protected function processReadyState():void
+		{
+			var context:LoaderLoadedContext
+				= (getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext as LoaderLoadedContext;
+			
+			addTrait(MediaTraitType.DISPLAY_OBJECT, LoaderUtils.createDisplayObjectTrait(context.loader, this));
+		}
+		
+		/**
+		 *  @private 
+		 */ 
+		override protected function processUnloadingState():void
+		{
+			removeTrait(MediaTraitType.DISPLAY_OBJECT);	
 		}
 	}
 }

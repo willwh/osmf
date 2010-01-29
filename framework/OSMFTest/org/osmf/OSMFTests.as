@@ -25,7 +25,6 @@ package org.osmf
 	
 	import org.osmf.audio.*;
 	import org.osmf.composition.*;
-	import org.osmf.content.*;
 	import org.osmf.display.*;
 	import org.osmf.events.*;
 	import org.osmf.external.*;
@@ -268,9 +267,6 @@ package org.osmf
 
 			// Images & SWFs
 			//
-			
-			addTestSuite(TestContentLoader);
-			addTestSuite(TestContentElement);
 			
 			addTestSuite(TestImageLoader);
 			addTestSuite(TestImageElement);

@@ -31,7 +31,7 @@ package org.osmf.content
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 
-	public class TestContentElementIntegration extends TestMediaElement
+	public class TestImageOrSWFElementIntegration extends TestMediaElement
 	{
 		override protected function get hasLoadTrait():Boolean
 		{
@@ -60,10 +60,7 @@ package org.osmf.content
 			return NaN;
 		}
 		
-		// Add some IDownloadable testing:
-		//
-		
-		public function testDownloadable():void
+		public function testBytesLoaded():void
 		{
 			var eventDispatcher:EventDispatcher = new EventDispatcher();
 			var count:int = 0;

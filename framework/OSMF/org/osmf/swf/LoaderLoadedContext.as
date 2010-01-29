@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.content
+package org.osmf.swf
 {
 	import flash.display.Loader;
 	
@@ -30,10 +30,10 @@ package org.osmf.content
 	/**
 	 * @private
 	 * 
-	 * The ContentLoadedContext contains information about the output of the
+	 * The LoaderLoadedContext contains information about the output of the
 	 * ContentLoader's load operation.
 	 */
-	public class ContentLoadedContext implements ILoadedContext
+	public class LoaderLoadedContext implements ILoadedContext
 	{
 		/**
 		 *  Constructor.
@@ -45,7 +45,7 @@ package org.osmf.content
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function ContentLoadedContext(loader:Loader)
+		public function LoaderLoadedContext(loader:Loader)
 		{
 			_loader = loader;
 		}

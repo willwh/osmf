@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.content
+package org.osmf.swf
 {
 	import flash.events.ProgressEvent;
 	
@@ -29,9 +29,14 @@ package org.osmf.content
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	
-	internal class ContentLoadTrait extends LoadTrait
+	[ExcludeClass]
+	
+	/**
+	 * @private
+	 **/
+	public class LoaderLoadTrait extends LoadTrait
 	{
-		public function ContentLoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function LoaderLoadTrait(loader:ILoader, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 		}
@@ -40,7 +45,7 @@ package org.osmf.content
 		{
 			if (newState == LoadState.READY)
 			{
-				var context:ContentLoadedContext = newContext as ContentLoadedContext;
+				var context:LoaderLoadedContext = newContext as LoaderLoadedContext;
 
 				// Update to current values.
 				setBytesTotal(context.loader.contentLoaderInfo.bytesTotal);

@@ -21,19 +21,28 @@
 *****************************************************/
 package org.osmf.image
 {
-	import org.osmf.content.TestContentLoaderIntegration;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.TestILoader;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
-	public class TestImageLoaderIntegration extends TestContentLoaderIntegration
+	public class TestImageLoaderIntegration extends TestILoader
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
 			return new ImageLoader();
 		}
 		
+		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		{
+			return new LoadTrait(loader, resource);
+		}
+
 		override protected function get successfulResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
@@ -42,6 +51,17 @@ package org.osmf.image
 		override protected function get failedResource():MediaResourceBase
 		{
 			return new URLResource(new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE));
+		}
+
+		override protected function get unhandledResource():MediaResourceBase
+		{
+			return new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
+		}
+		
+		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
+		{
+			assertTrue(error.errorID == MediaErrorCodes.CONTENT_IO_LOAD_ERROR ||
+					   error.errorID == MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR);
 		}
 	}
 }

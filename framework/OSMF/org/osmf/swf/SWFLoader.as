@@ -23,11 +23,12 @@ package org.osmf.swf
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.content.ContentLoader;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	
 	/**
 	 * The SWFLoader class creates a flash.display.Loader object, 
@@ -44,7 +45,7 @@ package org.osmf.swf
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class SWFLoader extends ContentLoader
+	public class SWFLoader extends LoaderBase
 	{
 		/**
 		 * Constructor.
@@ -66,7 +67,9 @@ package org.osmf.swf
 		 */ 
 		public function SWFLoader(useCurrentSecurityDomain:Boolean=false)
 		{
-			super(useCurrentSecurityDomain);
+			super();
+			
+			this.useCurrentSecurityDomain = useCurrentSecurityDomain;
 		}
 		
 		/**
@@ -93,11 +96,49 @@ package org.osmf.swf
 			return false;
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Loads content using a flash.display.Loader object. 
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to LOADING
+		 * while loading and to READY upon completing a successful load.</p> 
+		 * 
+		 * @see org.osmf.traits.LoadState
+		 * @see flash.display.Loader#load()
+		 * @param loadTrait LoadTrait to be loaded.
+		 */ 
+		override public function load(loadTrait:LoadTrait):void
+		{
+			super.load(loadTrait);
+			
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain);
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Unloads content using a flash.display.Loader object.  
+		 * 
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
+		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
+		 *
+		 * @param loadTrait LoadTrait to be unloaded.
+		 * @see org.osmf.traits.LoadState
+		 * @see flash.display.Loader#unload()
+		 */ 
+		override public function unload(loadTrait:LoadTrait):void
+		{
+			super.unload(loadTrait);
+			
+			LoaderUtils.unloadLoadTrait(loadTrait, updateLoadTrait);
+		}
+
 		// Internals
 		//
+		
+		private var useCurrentSecurityDomain:Boolean = false;
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["application/x-shockwave-flash"]);
-			
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.SWF]);
 	}
 }

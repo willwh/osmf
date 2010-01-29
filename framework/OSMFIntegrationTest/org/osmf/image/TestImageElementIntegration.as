@@ -21,14 +21,14 @@
 *****************************************************/
 package org.osmf.image
 {
-	import org.osmf.content.TestContentElementIntegration;
+	import org.osmf.content.TestImageOrSWFElementIntegration;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 
-	public class TestImageElementIntegration extends TestContentElementIntegration
+	public class TestImageElementIntegration extends TestImageOrSWFElementIntegration
 	{
 		override protected function createMediaElement():MediaElement
 		{
