@@ -72,17 +72,17 @@ package org.osmf.examples.switchingproxy
 		private function onSwitchTimer(event:TimerEvent):void
 		{
 			// First pause the current one.
-			var currentPlayTrait:PlayTrait = wrappedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var currentPlayTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (currentPlayTrait != null && currentPlayTrait.playState == PlayState.PLAYING)
 			{
 				currentPlayTrait.pause();
 			}
 			
 			// Then switch wrapped elements.
-			wrappedElement = (wrappedElement == firstElement ? secondElement : firstElement);
+			proxiedElement = (proxiedElement == firstElement ? secondElement : firstElement);
 			
 			// Then play the new current one.
-			currentPlayTrait = wrappedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			currentPlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (currentPlayTrait != null && currentPlayTrait.playState != PlayState.PLAYING)
 			{
 				currentPlayTrait.play();

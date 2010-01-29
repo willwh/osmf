@@ -130,7 +130,7 @@ package org.osmf.vast.media
 							// the VideoElement is at the deepest point. 
 							for each (var proxyElement:ProxyElement in proxyChain)
 							{
-								proxyElement.wrappedElement = rootElement;
+								proxyElement.proxiedElement = rootElement;
 								rootElement = proxyElement;
 							}
 							

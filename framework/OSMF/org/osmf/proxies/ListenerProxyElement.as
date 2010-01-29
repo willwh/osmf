@@ -64,39 +64,39 @@ package org.osmf.proxies
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function ListenerProxyElement(wrappedElement:MediaElement)
+		public function ListenerProxyElement(proxiedElement:MediaElement)
 		{
-			super(wrappedElement);
+			super(proxiedElement);
 		}
 		
 		/**
 		 * @private
 		 */
-		override public function set wrappedElement(value:MediaElement):void
+		override public function set proxiedElement(value:MediaElement):void
 		{
 			var traitType:String;
 			
-			if (wrappedElement != null)
+			if (proxiedElement != null)
 			{
 				// Clear our old listeners.
-				wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 
-				for each (traitType in wrappedElement.traitTypes)
+				for each (traitType in proxiedElement.traitTypes)
 				{
 					processTrait(traitType, false);
 				}
 			}
 			
-			super.wrappedElement = value;
+			super.proxiedElement = value;
 			
 			if (value != null)
 			{
 				// Listen for traits being added and removed.
-				wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				proxiedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
-				for each (traitType in wrappedElement.traitTypes)
+				for each (traitType in proxiedElement.traitTypes)
 				{
 					processTrait(traitType, true);
 				}
@@ -488,7 +488,7 @@ package org.osmf.proxies
 					// DisplayObjectTrait is the one trait where the change event is
 					// merged with the trait addition/removal event.  So we
 					// forcibly signal a view change event.
-					var displayObjectTrait:DisplayObjectTrait = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+					var displayObjectTrait:DisplayObjectTrait = proxiedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 					if (displayObjectTrait != null && displayObjectTrait.displayObject != null)
 					{
 						processDisplayObjectChange(added ? null : displayObjectTrait.displayObject, added ? displayObjectTrait.displayObject : null);
@@ -499,7 +499,7 @@ package org.osmf.proxies
 		
 		private function toggleAudioTraitListeners(added:Boolean):void
 		{
-			var audioTrait:AudioTrait = wrappedElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
+			var audioTrait:AudioTrait = proxiedElement.getTrait(MediaTraitType.AUDIO) as AudioTrait;
 			if (audioTrait)
 			{
 				if (added)
@@ -519,7 +519,7 @@ package org.osmf.proxies
 
 		private function toggleBufferTraitListeners(added:Boolean):void
 		{
-			var bufferTrait:BufferTrait = wrappedElement.getTrait(MediaTraitType.BUFFER) as BufferTrait;
+			var bufferTrait:BufferTrait = proxiedElement.getTrait(MediaTraitType.BUFFER) as BufferTrait;
 			if (bufferTrait)
 			{
 				if (added)
@@ -537,7 +537,7 @@ package org.osmf.proxies
 		
 		private function toggleLoadTraitListeners(added:Boolean):void
 		{
-			var loadTrait:LoadTrait = wrappedElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var loadTrait:LoadTrait = proxiedElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			if (loadTrait)
 			{
 				if (added)
@@ -555,7 +555,7 @@ package org.osmf.proxies
 
 		private function togglePlayTraitListeners(added:Boolean):void
 		{
-			var playTrait:PlayTrait = wrappedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var playTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (playTrait)
 			{
 				if (added)
@@ -573,7 +573,7 @@ package org.osmf.proxies
 		
 		private function toggleSeekTraitListeners(added:Boolean):void
 		{
-			var seekTrait:SeekTrait = wrappedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			var seekTrait:SeekTrait = proxiedElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			if (seekTrait)
 			{
 				if (added)
@@ -591,7 +591,7 @@ package org.osmf.proxies
 		
 		private function toggleDynamicStreamTraitListeners(added:Boolean):void
 		{
-			var dynamicStreamTrait:DynamicStreamTrait = wrappedElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+			var dynamicStreamTrait:DynamicStreamTrait = proxiedElement.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 			if (dynamicStreamTrait)
 			{
 				if (added)
@@ -610,7 +610,7 @@ package org.osmf.proxies
 		}
 		private function toggleTimeTraitListeners(added:Boolean):void
 		{
-			var timeTrait:TimeTrait = wrappedElement.getTrait(MediaTraitType.TIME) as TimeTrait;
+			var timeTrait:TimeTrait = proxiedElement.getTrait(MediaTraitType.TIME) as TimeTrait;
 			if (timeTrait)
 			{
 				if (added)
@@ -628,7 +628,7 @@ package org.osmf.proxies
 		
 		private function toggleDisplayObjectTraitListeners(added:Boolean):void
 		{
-			var displayObjectTrait:DisplayObjectTrait = wrappedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			var displayObjectTrait:DisplayObjectTrait = proxiedElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			if (displayObjectTrait)
 			{
 				if (added)

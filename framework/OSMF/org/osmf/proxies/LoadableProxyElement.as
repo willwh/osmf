@@ -63,8 +63,8 @@ package org.osmf.proxies
 			{
 				removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
 				var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
-				wrappedElement =  context.element;
-				_metadata.metadata = wrappedElement.metadata;
+				proxiedElement =  context.element;
+				_metadata.metadata = proxiedElement.metadata;
 			}
 		}
 		

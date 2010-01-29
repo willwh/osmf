@@ -64,26 +64,26 @@ package org.osmf.proxies
 		public function testProcessTraitChanges():void
 		{
 			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events, true);
-			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([], new SimpleLoader());
-			proxyElement.wrappedElement = wrappedElement;
+			var proxiedElement:DynamicMediaElement = new DynamicMediaElement([], new SimpleLoader());
+			proxyElement.proxiedElement = proxiedElement;
 			
 			assertTrue(events.length == 0);
 						
-			wrappedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+			proxiedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
 			
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["traitTypeAdded"] == MediaTraitType.PLAY);
 			
-			wrappedElement.doRemoveTrait(MediaTraitType.PLAY);
+			proxiedElement.doRemoveTrait(MediaTraitType.PLAY);
 			
 			assertTrue(events.length == 2);
 			assertTrue(events[1]["traitTypeRemoved"] == MediaTraitType.PLAY);
 			
-			wrappedElement.doAddTrait(MediaTraitType.LOAD, new LoadTrait(null, null));
+			proxiedElement.doAddTrait(MediaTraitType.LOAD, new LoadTrait(null, null));
 			assertTrue(events.length == 3);
 			assertTrue(events[2]["traitTypeAdded"] == MediaTraitType.LOAD);
 			
-			wrappedElement.doRemoveTrait(MediaTraitType.LOAD);
+			proxiedElement.doRemoveTrait(MediaTraitType.LOAD);
 			
 			assertTrue(events.length == 4);
 			assertTrue(events[3]["traitTypeRemoved"] == MediaTraitType.LOAD);
@@ -92,10 +92,10 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
-			wrappedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
-			wrappedElement.doRemoveTrait(MediaTraitType.PLAY);
+			proxiedElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+			proxiedElement.doRemoveTrait(MediaTraitType.PLAY);
 			
 			assertTrue(events.length == 4);
 		}
@@ -127,7 +127,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			audible.volume = 0.27;
 			audible.muted = false;
@@ -163,7 +163,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			bufferTrait.bufferLength = 1;
 			bufferTrait.bufferTime = 1;
@@ -205,7 +205,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			loadTrait.load();
 			loadTrait.bytesLoaded = 40;
@@ -241,7 +241,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			playTrait.play();
 			playTrait.pause();
@@ -254,7 +254,7 @@ package org.osmf.proxies
 		{
 			var proxyElement:DynamicListenerProxyElement = createProxyWithTrait(null) as DynamicListenerProxyElement;
 			var seekTrait:SeekTrait = new SeekTrait(new TimeTrait(3));
-			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.SEEK, seekTrait);
+			DynamicMediaElement(proxyElement.proxiedElement).doAddTrait(MediaTraitType.SEEK, seekTrait);
 			
 			assertTrue(events.length == 0);
 			
@@ -270,7 +270,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			seekTrait.seek(0);
 			
@@ -303,7 +303,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			timeTrait.currentTime = 2;
 			timeTrait.duration = 2;
@@ -345,7 +345,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			dsTrait.bitrates = [300, 400, 500];
 			dsTrait.autoSwitch = false;
@@ -390,7 +390,7 @@ package org.osmf.proxies
 			// wrapped element.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
 			displayObjectTrait.displayObject = aView;
 			displayObjectTrait.setSize(0, 0);
@@ -409,7 +409,7 @@ package org.osmf.proxies
 			
 			// DISPLAY_OBJECT is the one trait where adding the trait to the
 			// MediaElement can trigger a ListenerProxyElement event.
-			DynamicMediaElement(proxyElement.wrappedElement).doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
+			DynamicMediaElement(proxyElement.proxiedElement).doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
 			assertTrue(events.length == 1);
 			assertTrue(events[0]["oldDisplayObject"] == null);
@@ -419,8 +419,8 @@ package org.osmf.proxies
 		private function createProxyWithTrait(traitType:String):ProxyElement
 		{
 			var proxyElement:DynamicListenerProxyElement = new DynamicListenerProxyElement(events);
-			var wrappedElement:DynamicMediaElement = new DynamicMediaElement([traitType], new SimpleLoader(), null, true);
-			proxyElement.wrappedElement = wrappedElement;
+			var proxiedElement:DynamicMediaElement = new DynamicMediaElement([traitType], new SimpleLoader(), null, true);
+			proxyElement.proxiedElement = proxiedElement;
 			return proxyElement;
 		}
 		

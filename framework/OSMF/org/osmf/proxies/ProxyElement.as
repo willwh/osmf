@@ -87,11 +87,11 @@ package org.osmf.proxies
 		/**
 		 * Constructor.
 		 * 
-		 * @param wrappedElement MediaElement to wrap.  Changes to the wrapped
+		 * @param proxiedElement MediaElement to proxy.  Changes to the proxied
 		 * element are reflected in the proxy element's properties and events,
 		 * with the exception of those changes for which an override takes
 		 * precedence.  If the param is null, then it must be set (via the
-		 * wrappedElement setter) immediately after this constructor call, and
+		 * proxiedElement setter) immediately after this constructor call, and
 		 * before any other methods on this ProxyElement are called, or an
 		 * IllegalOperationError will be thrown.
 		 *  
@@ -100,11 +100,11 @@ package org.osmf.proxies
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function ProxyElement(wrappedElement:MediaElement)
+		public function ProxyElement(proxiedElement:MediaElement=null)
 		{
 			super();
 			
-			this.wrappedElement = wrappedElement;
+			this.proxiedElement = proxiedElement;
 		}
 		
 		/**
@@ -116,20 +116,20 @@ package org.osmf.proxies
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function set wrappedElement(value:MediaElement):void
+		public function set proxiedElement(value:MediaElement):void
 		{
 			var traitType:String;
 			
-			if (value != _wrappedElement)
+			if (value != _proxiedElement)
 			{
-				if (_wrappedElement != null)
+				if (_proxiedElement != null)
 				{
 					// Clear the listeners for the old wrapped element.
-					toggleMediaElementListeners(_wrappedElement, false);
+					toggleMediaElementListeners(_proxiedElement, false);
 
 					// The wrapped element is changing, signal trait removal
 					// for all traits.
-					for each (traitType in _wrappedElement.traitTypes)
+					for each (traitType in _proxiedElement.traitTypes)
 					{
 						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
 					}
@@ -139,14 +139,14 @@ package org.osmf.proxies
 					removeOverriddenTraits();
 				}
 				
-				_wrappedElement = value;
+				_proxiedElement = value;
 				
-				if (_wrappedElement != null)
+				if (_proxiedElement != null)
 				{
 					// Add listeners for the new wrapped element, so that
 					// events from the wrapped element are also dispatched by
 					// the proxy.
-					toggleMediaElementListeners(_wrappedElement, true);
+					toggleMediaElementListeners(_proxiedElement, true);
 					
 					// Set up the traits for the proxy, now that we're prepared
 					// to respond to change events.  (Note that this class's
@@ -155,23 +155,17 @@ package org.osmf.proxies
 					
 					// The wrapped element has changed, signal trait addition
 					// for all traits.
-					for each (traitType in _wrappedElement.traitTypes)
+					for each (traitType in _proxiedElement.traitTypes)
 					{
 						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
-					}
-
-					// Forward our gateway (if any) to the wrapped element:
-					if (outerGateway)
-					{
-						outerGateway.addMediaElement(_wrappedElement);
 					}
 				}
 			}
 		}
 		
-		public function get wrappedElement():MediaElement
+		public function get proxiedElement():MediaElement
 		{
-			return _wrappedElement;
+			return _proxiedElement;
 		}
 		
 		/**
@@ -222,7 +216,7 @@ package org.osmf.proxies
 			if (blocksTrait(type) == false)
 			{				
 				// Give precedence to a trait on the proxy.
-				trait = super.getTrait(type) ||	(wrappedElement != null ? wrappedElement.getTrait(type) : null);
+				trait = super.getTrait(type) ||	(proxiedElement != null ? proxiedElement.getTrait(type) : null);
 			}
 			
 			return trait;
@@ -233,7 +227,7 @@ package org.osmf.proxies
 		 */
 		override public function get resource():MediaResourceBase
 		{		
-			return wrappedElement ? wrappedElement.resource : null;
+			return proxiedElement ? proxiedElement.resource : null;
 		}
 		
 		/**
@@ -241,29 +235,11 @@ package org.osmf.proxies
 		 */		
 		override public function set resource(value:MediaResourceBase):void
 		{	
-			if (wrappedElement != null)
+			if (proxiedElement != null)
 			{
-				wrappedElement.resource = value;
+				proxiedElement.resource = value;
 			}
 		}
-		
-		/**
-		override public function get gateway():IMediaContainer
-		{
-			return wrappedElement ? wrappedElement.container : outerGateway;
-		}
-		
-		override public function set gateway(value:IMediaContainer):void
-		{	
-			// Retain the value as the gateway that was set from the outside
-			// of the wrapped element:
-			outerGateway = value;
-			
-			if (wrappedElement != null)
-			{		
-				wrappedElement.container = value;
-			}
-		}*/
 		
 		/**
 		 * @private
@@ -278,8 +254,8 @@ package org.osmf.proxies
 			var traitEvent:MediaElementEvent = event as MediaElementEvent;
 			if  (  traitEvent != null
 				&& blocksTrait(traitEvent.traitType) == false
-				&& wrappedElement != null
-				&& wrappedElement.hasTrait(traitEvent.traitType) == true
+				&& proxiedElement != null
+				&& proxiedElement.hasTrait(traitEvent.traitType) == true
 				)
 			{
 				doDispatchEvent = false;
@@ -298,7 +274,7 @@ package org.osmf.proxies
 		 */
 		override public function get metadata():Metadata
 		{
-			return wrappedElement.metadata;
+			return proxiedElement.metadata;
 		}
 		
 		/**
@@ -379,17 +355,17 @@ package org.osmf.proxies
 		{
 			if (add)
 			{
-				_wrappedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				_wrappedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				_wrappedElement.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
+				_proxiedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_proxiedElement.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 			else
 			{
-				_wrappedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				_wrappedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-				_wrappedElement.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
+				_proxiedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				_proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				_proxiedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_proxiedElement.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 		}
 		
@@ -425,7 +401,6 @@ package org.osmf.proxies
 			}
 		}
 		
-		private var _wrappedElement:MediaElement;
-		private var outerGateway:IMediaContainer;
+		private var _proxiedElement:MediaElement;
 	}
 }

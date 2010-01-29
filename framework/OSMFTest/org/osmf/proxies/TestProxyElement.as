@@ -70,12 +70,12 @@ package org.osmf.proxies
 			
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 			
-			var wrappedElement:DynamicMediaElement
+			var proxiedElement:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
-			proxyElement.wrappedElement = wrappedElement;
+			proxyElement.proxiedElement = proxiedElement;
 			
 			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY) == false);
@@ -88,7 +88,7 @@ package org.osmf.proxies
 			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
-			var wrappedElement2:DynamicMediaElement
+			var proxiedElement2:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
@@ -96,7 +96,7 @@ package org.osmf.proxies
 			assertTrue(traitsAddedCount == 0);
 			assertTrue(traitsRemovedCount == 0);
 			
-			proxyElement.wrappedElement = wrappedElement2;
+			proxyElement.proxiedElement = proxiedElement2;
 			
 			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME) == false);
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
@@ -108,9 +108,9 @@ package org.osmf.proxies
 			// clear out the traits, and make many operations invalid.
 			//
 			
-			proxyElement.wrappedElement = null;
+			proxyElement.proxiedElement = null;
 			
-			assertTrue(proxyElement.wrappedElement == null);
+			assertTrue(proxyElement.proxiedElement == null);
 
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 
@@ -121,7 +121,7 @@ package org.osmf.proxies
 		override public function testGateway():void
 		{
 			var mediaElement:ProxyElement = createMediaElement() as ProxyElement;
-			mediaElement.wrappedElement = new MediaElement();
+			mediaElement.proxiedElement = new MediaElement();
 			
 			var gatewayA:MediaContainer = new MediaContainer();
 			var gatewayB:MediaContainer = new MediaContainer();

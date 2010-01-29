@@ -43,7 +43,7 @@ package org.osmf.test.mast.media
 			// Should not throw an exception
 			try
 			{
-				proxyElement.wrappedElement = null;
+				proxyElement.proxiedElement = null;
 			}
 			catch(error:IllegalOperationError)
 			{	

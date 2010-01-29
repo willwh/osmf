@@ -67,7 +67,7 @@ package org.osmf.examples.loaderproxy
 				var loadedContext:VideoProxyLoadedContext = loadTrait.loadedContext as VideoProxyLoadedContext
 				
 				// Replace the resource with the new URL.
-				wrappedElement.resource = new URLResource(loadedContext.url);
+				proxiedElement.resource = new URLResource(loadedContext.url);
 				
 				// Our work is done, remove the custom LoadTrait.  This will
 				// expose the base LoadTrait, which we can then use to do

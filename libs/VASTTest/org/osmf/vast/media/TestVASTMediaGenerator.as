@@ -200,7 +200,7 @@ package org.osmf.vast.media
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
 			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
-			assertTrue(impressionProxy.wrappedElement is VideoElement);
+			assertTrue(impressionProxy.proxiedElement is VideoElement);
 		}
 		
 		public function testCreateMediaElementsWithTrackingProxy():void
@@ -237,7 +237,7 @@ package org.osmf.vast.media
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
 			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
-			assertTrue(trackingProxy.wrappedElement is VideoElement);
+			assertTrue(trackingProxy.proxiedElement is VideoElement);
 		}
 		
 		public function testCreateMediaElementsWithProxyChain():void
@@ -277,13 +277,13 @@ package org.osmf.vast.media
 			assertTrue(resource.url != null);
 			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 
-			var impressionProxy:VASTImpressionProxyElement = trackingProxy.wrappedElement as VASTImpressionProxyElement;
+			var impressionProxy:VASTImpressionProxyElement = trackingProxy.proxiedElement as VASTImpressionProxyElement;
 			assertTrue(impressionProxy != null);
 			resource = impressionProxy.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
 			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
-			assertTrue(impressionProxy.wrappedElement is VideoElement);
+			assertTrue(impressionProxy.proxiedElement is VideoElement);
 		}
 	}
 }

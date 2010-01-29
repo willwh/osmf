@@ -76,7 +76,7 @@ package org.osmf.mast.media
 		/**
 		 * @inheritDoc
 		 */
-		override public function set wrappedElement(value:MediaElement):void
+		override public function set proxiedElement(value:MediaElement):void
 		{
 			if (value != null &&
 				!(value is SerialElement))
@@ -88,7 +88,7 @@ package org.osmf.mast.media
 				value = serialElement;
 			}
 			
-			super.wrappedElement = value;
+			super.proxiedElement = value;
 		}
 		
 		/**
@@ -105,7 +105,7 @@ package org.osmf.mast.media
 			
 			// Get the MAST url resource from the metadata of the element
 			// that is wrapped.
-			var serialElement:SerialElement = super.wrappedElement as SerialElement;
+			var serialElement:SerialElement = super.proxiedElement as SerialElement;
 			var mediaElement:MediaElement = serialElement.getChildAt(0);
 			
 			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
@@ -185,7 +185,7 @@ package org.osmf.mast.media
 				
 				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
-				var mediaElement:MediaElement = (wrappedElement as SerialElement).getChildAt(0);
+				var mediaElement:MediaElement = (proxiedElement as SerialElement).getChildAt(0);
 				var causesPendingPlayRequest:Boolean = processor.processDocument(loadedContext.document, mediaElement);
 
 				// If there was no condition that causes a pending play request
@@ -213,7 +213,7 @@ package org.osmf.mast.media
 		
 		private function onDocumentProcessed(event:MASTDocumentProcessedEvent):void
 		{
-			var serialElement:SerialElement = wrappedElement as SerialElement;
+			var serialElement:SerialElement = proxiedElement as SerialElement;
 			
 			// Each inline element needs to be inserted into the location that
 			// will cause it to be the current (or next) item.

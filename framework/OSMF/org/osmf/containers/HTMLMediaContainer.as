@@ -319,7 +319,7 @@ package org.osmf.containers
 			{
 				if (element is ProxyElement)
 				{
-					return arguments.callee(ProxyElement(element).wrappedElement)
+					return arguments.callee(ProxyElement(element).proxiedElement)
 				}
 				else
 				{

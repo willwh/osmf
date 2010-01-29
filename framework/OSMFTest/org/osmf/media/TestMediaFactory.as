@@ -272,7 +272,7 @@ package org.osmf.media
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
 			assertTrue(mediaElement is ProxyElement);
-			assertTrue((mediaElement as ProxyElement).wrappedElement is DynamicMediaElement);
+			assertTrue((mediaElement as ProxyElement).proxiedElement is DynamicMediaElement);
 			
 			// Proxies can go many levels deep.
 			var deepProxyInfo:MediaInfo = createProxyMediaInfo("deepProxyInfo", "http://www.example.com/standardInfo");
@@ -280,8 +280,8 @@ package org.osmf.media
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
 			assertTrue(mediaElement is ProxyElement);
-			assertTrue((mediaElement as ProxyElement).wrappedElement is ProxyElement);
-			assertTrue(((mediaElement as ProxyElement).wrappedElement as ProxyElement).wrappedElement is DynamicMediaElement);
+			assertTrue((mediaElement as ProxyElement).proxiedElement is ProxyElement);
+			assertTrue(((mediaElement as ProxyElement).proxiedElement as ProxyElement).proxiedElement is DynamicMediaElement);
 		}
 		
 		public function testCreateMediaElementWithReference():void

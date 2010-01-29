@@ -79,7 +79,7 @@ package org.osmf.gg
 						// The call to UNLOAD_VIDEO has two optional params.
 						//
 						
-						videoType = getContentTypeFromMetadata(wrappedElement.resource.metadata);
+						videoType = getContentTypeFromMetadata(proxiedElement.resource.metadata);
 						
 						sendEvent(UNLOAD_VIDEO, currentTime, videoType);
 					}
@@ -89,14 +89,14 @@ package org.osmf.gg
 					//
 					
 					// URL of the video:
-					var urlResource:URLResource = wrappedElement.resource as URLResource; 
+					var urlResource:URLResource = proxiedElement.resource as URLResource; 
 					var url:String = urlResource != null ? urlResource.url.rawUrl : null;
 					
 					// Type of the video:
-					videoType = getContentTypeFromMetadata(wrappedElement.resource.metadata);
+					videoType = getContentTypeFromMetadata(proxiedElement.resource.metadata);
 					
 					// Metadata about the video:
-					var videoInfo:String = getVideoInfoFromMetadata(wrappedElement.resource.metadata);
+					var videoInfo:String = getVideoInfoFromMetadata(proxiedElement.resource.metadata);
 					
 					sendEvent(LOAD_VIDEO, url, videoType, videoInfo);
 					break;

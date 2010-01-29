@@ -395,7 +395,7 @@ package org.osmf.media
 					var proxyElement:ProxyElement = proxyInfo.mediaElementCreationFunction.call() as ProxyElement;
 					if (proxyElement != null)
 					{
-						proxyElement.wrappedElement = nextElementToWrap;
+						proxyElement.proxiedElement = nextElementToWrap;
 					
 						nextElementToWrap = proxyElement;
 					}

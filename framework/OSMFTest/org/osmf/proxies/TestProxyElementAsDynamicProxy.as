@@ -67,12 +67,12 @@ package org.osmf.proxies
 			// though the blocked traits should remain the same.
 			//
 			
-			var wrappedElement2:DynamicMediaElement
+			var proxiedElement2:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.SEEK, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
-			proxyElement.wrappedElement = wrappedElement2;
+			proxyElement.proxiedElement = proxiedElement2;
 
 			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAY));
 			assertTrue(proxyElement.hasTrait(MediaTraitType.SEEK));
@@ -112,12 +112,12 @@ package org.osmf.proxies
 			// won't be readded since we don't call doAddTrait again.)
 			//
 			
-			var wrappedElement2:DynamicMediaElement
+			var proxiedElement2:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
-			proxyElement.wrappedElement = wrappedElement2;
+			proxyElement.proxiedElement = proxiedElement2;
 
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
 			assertTrue(proxyElement.hasTrait(MediaTraitType.LOAD));
@@ -126,7 +126,7 @@ package org.osmf.proxies
 			// The TimeTrait should now come from the wrapped element,
 			// not the proxy.
 			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) != overriddenTimeTrait);
-			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == wrappedElement2.getTrait(MediaTraitType.TIME));
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == proxiedElement2.getTrait(MediaTraitType.TIME));
 		}
 		
 		public function testDispatchEvent():void

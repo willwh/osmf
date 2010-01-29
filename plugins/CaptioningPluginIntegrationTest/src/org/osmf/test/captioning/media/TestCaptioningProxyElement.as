@@ -30,14 +30,14 @@ package org.osmf.test.captioning.media
 		}
 		
 		
-		public function testSetWrappedElement():void
+		public function testSetProxiedElement():void
 		{
 			var proxyElement:CaptioningProxyElement = new CaptioningProxyElement();
 			
 			// Should not throw an exception
 			try
 			{
-				proxyElement.wrappedElement = null;
+				proxyElement.proxiedElement = null;
 			}
 			catch(error:Error)
 			{	
@@ -115,7 +115,7 @@ package org.osmf.test.captioning.media
 
 			var proxyElement:CaptioningProxyElement = new CaptioningProxyElement(null, false);
 			proxyElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			proxyElement.wrappedElement = mediaElement;
+			proxyElement.proxiedElement = mediaElement;
 						
 			var loadTrait:LoadTrait = proxyElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);

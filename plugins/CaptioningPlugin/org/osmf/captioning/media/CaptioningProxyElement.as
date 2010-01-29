@@ -67,9 +67,9 @@ package org.osmf.captioning.media
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		public function CaptioningProxyElement(wrappedElement:MediaElement=null, continueLoadOnFailure:Boolean=true)
+		public function CaptioningProxyElement(proxiedElement:MediaElement=null, continueLoadOnFailure:Boolean=true)
 		{
-			super(wrappedElement);
+			super(proxiedElement);
 			_continueLoadOnFailure = continueLoadOnFailure;
 		}
 		
@@ -101,7 +101,7 @@ package org.osmf.captioning.media
 			
 			// Get the Timed Text url resource from the metadata of the element
 			// that is wrapped.
-			var mediaElement:MediaElement = super.wrappedElement;
+			var mediaElement:MediaElement = super.proxiedElement;
 			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
 			if (tempResource == null)
 			{
@@ -145,11 +145,11 @@ package org.osmf.captioning.media
 			{
 				var loadedContext:CaptioningLoadedContext = loadTrait.loadedContext as CaptioningLoadedContext
 				var document:CaptioningDocument = loadedContext.document;
-				var mediaElement:MediaElement = super.wrappedElement;
+				var mediaElement:MediaElement = super.proxiedElement;
 				
 				// Create a new TemporalFacet, add it to the metadata for the mediaelement
 				var temporalFacetDynamic:TemporalFacet = 
-						new TemporalFacet(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, super.wrappedElement);
+						new TemporalFacet(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, super.proxiedElement);
 				
 				for (var i:int = 0; i < document.numCaptions; i++)
 				{
