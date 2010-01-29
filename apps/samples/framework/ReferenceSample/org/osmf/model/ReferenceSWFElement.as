@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.model
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -31,6 +32,7 @@ package org.osmf.model
 	import org.osmf.net.NetLoader;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
@@ -85,6 +87,12 @@ package org.osmf.model
 			}
 		}
 		
+		private function get swfRoot():DisplayObject
+		{
+			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			return displayObjectTrait != null ? displayObjectTrait.displayObject : null;
+		}
+
 		private var handler:IMediaResourceHandler;
 		private var reference:MediaElement;
 	}

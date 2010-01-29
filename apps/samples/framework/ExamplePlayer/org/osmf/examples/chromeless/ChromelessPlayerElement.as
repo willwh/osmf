@@ -98,6 +98,12 @@ package org.osmf.examples.chromeless
 			}
 		}
 		
+		private function get swfRoot():DisplayObject
+		{
+			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			return displayObjectTrait != null ? displayObjectTrait.displayObject : null;
+		}
+		
 		override protected function processUnloadingState():void
 		{
 			super.processUnloadingState();

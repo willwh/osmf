@@ -83,42 +83,5 @@ package org.osmf.swf
 		{
 			super(resource, loader, [SWFLoader]);
 		}
-		
-		/**
-		 * @private 
-		 */ 		
-		override protected function processReadyState():void
-		{
-			super.processReadyState();
-			
-			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-			_swfRoot = displayObjectTrait != null ? displayObjectTrait.displayObject : null;
-		}
-		
-		/**
-		 * @private 
-		 */ 		
-		override protected function processUnloadingState():void
-		{
-			super.processUnloadingState();
-			
-			_swfRoot = null;
-		}
-
-		/**
-		 * The root DisplayObject of the loaded SWF.  Null until the SWF is in
-		 * the loaded state, or after it enters the unloading state.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function get swfRoot():DisplayObject
-		{
-			return _swfRoot;
-		}
-		
-		private var _swfRoot:DisplayObject;
 	}
 }
