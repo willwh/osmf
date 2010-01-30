@@ -43,6 +43,7 @@ package org.osmf.manifest
 	import org.osmf.proxies.MediaElementLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * The F4MLoader is a LoaderBase that's capable of loading files of the Flash
@@ -143,7 +144,7 @@ package org.osmf.manifest
 				manifestLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);		
 				try
 				{					
-					manifest = parser.parse(event.target.data);
+					manifest = parser.parse(event.target.data, getRootUrl(URLResource(loadTrait.resource).url));
 				}
 				catch (parseError:Error)
 				{					
@@ -161,27 +162,22 @@ package org.osmf.manifest
 					{										
 						// DRM Metadata  - we may make this load on demand in the future.					
 						if (item.drmAdditionalHeaderURL != null)
-						{												
-							var drmLoader:URLLoader = new URLLoader();
-							drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
-							unfinishedLoads++;
-							drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
-							drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-							drmLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-						
-							function onDRMLoadComplete(event:Event):void
+						{		
+							function completionCallback(success:Boolean):void
 							{
-								event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
-								event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
-								event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-								unfinishedLoads--;
-								item.drmAdditionalHeader = URLLoader(event.target).data;
+								if (success)
+								{
+									unfinishedLoads--;					
+								}
+								
 								if (unfinishedLoads == 0)
 								{
 									finishLoad();
 								}
 							}
-							drmLoader.load(new URLRequest(item.drmAdditionalHeaderURL.rawUrl));
+
+							unfinishedLoads++;
+							loadAdditionalHeader(item, completionCallback, onError);										
 						}					
 					}
 				}
@@ -190,6 +186,7 @@ package org.osmf.manifest
 					finishLoad();
 				}														
 			}	
+
 			
 			function finishLoad():void
 			{			
@@ -222,7 +219,34 @@ package org.osmf.manifest
 			super.unload(loadTrait);	
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
-				
+		
+		private function loadAdditionalHeader(item:Media, completionCallback:Function, onError:Function):void
+		{
+			var drmLoader:URLLoader = new URLLoader();
+			drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
+			drmLoader.addEventListener(Event.COMPLETE, onDRMLoadComplete);
+			drmLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			drmLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+		
+			function onDRMLoadComplete(event:Event):void
+			{
+				event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
+				event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+				event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+				item.drmAdditionalHeader = URLLoader(event.target).data;
+				completionCallback(true);
+			}
+			
+			drmLoader.load(new URLRequest(item.drmAdditionalHeaderURL.rawUrl));
+		}	
+			
+		private function getRootUrl(url:URL):URL
+		{
+			var path:String = url.rawUrl.substr(0, url.rawUrl.lastIndexOf("/"));
+			
+			return new URL(path);
+		}
+		
 		private static const F4M_EXTENSION:String = "f4m";
 		
 		private var supportedMimeTypes:Vector.<String> = new Vector.<String>();		

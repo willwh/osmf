@@ -99,15 +99,15 @@ package org.osmf.net.httpstreaming.flv
 							{
 								case FLVTag.TAG_TYPE_AUDIO:
 								case FLVTag.TAG_TYPE_ENCRYPTED_AUDIO:
-									currentTag = new FLVTagAudio();
+									currentTag = new FLVTagAudio(type);
 									break;
 								case FLVTag.TAG_TYPE_VIDEO:
 								case FLVTag.TAG_TYPE_ENCRYPTED_VIDEO:
-									currentTag = new FLVTagVideo();
+									currentTag = new FLVTagVideo(type);
 									break;
 								case FLVTag.TAG_TYPE_SCRIPTDATAOBJECT:
 								case FLVTag.TAG_TYPE_ENCRYPTED_SCRIPTDATAOBJECT:
-									currentTag = new FLVTagScriptDataObject();
+									currentTag = new FLVTagScriptDataObject(type);
 									break;
 								default:
 									currentTag = new FLVTag(type);	// the generic case
