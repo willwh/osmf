@@ -42,13 +42,14 @@ package org.osmf.drm
 		import flash.system.SystemUpdater;
 		import flash.system.SystemUpdaterType;
 		import org.osmf.events.DRMEvent;
+		import flash.net.drm.VoucherAccessInfo;
 	}
 		
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.events.DRMEvent;
-	import flash.net.drm.VoucherAccessInfo;
+
 	
 	
 	/**
