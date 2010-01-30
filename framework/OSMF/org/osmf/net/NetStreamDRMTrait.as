@@ -106,6 +106,14 @@ package org.osmf.net
 		
 		/**
 		 * @private
+		 */ 
+		override public function get serverURL():String
+		{
+			return drmServices.serverURL;
+		}
+		
+		/**
+		 * @private
 		 * Signals failures from the DRMsubsystem not captured though the 
 		 * DRMServices class.
 	

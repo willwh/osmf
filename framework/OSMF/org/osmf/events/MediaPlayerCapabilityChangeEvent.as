@@ -46,20 +46,6 @@ package org.osmf.events
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const CAN_PLAY_CHANGE:String = "canPlayChange";
-
-		/**
-		 * The MediaPlayerCapabilityChangeEvent.CAN_PAUSE_CHANGE constant defines
-		 * the value of the type property of the event object for a canPauseChange
-		 * event.
-		 * 
-		 * @eventType canPauseChange 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const CAN_PAUSE_CHANGE:String = "canPauseChange";
 		
 		/**
 		 * The MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE constant defines
@@ -144,6 +130,34 @@ package org.osmf.events
 		 *  @productversion OSMF 1.0
 		 */	
 		public static const CAN_BUFFER_CHANGE:String = "canBufferChange";
+		
+		/**
+		 * The MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE constant defines
+		 * the value of the type property of the event object for a hasDRMChange
+		 * event.
+		 * 
+		 * @eventType hasDRMChange 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const HAS_DRM_CHANGE:String = "hasDRMChange";
+		
+		/**
+		 * The MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT constant defines
+		 * the value of the type property of the event object for a hasDisplayObjectChange
+		 * event.
+		 * 
+		 * @eventType hasDisplayObjectChange 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public static const HAS_DISPLAY_OBJECT:String = "hasDisplayObjectChange";
 						
 		/**
 		 * Constructor.

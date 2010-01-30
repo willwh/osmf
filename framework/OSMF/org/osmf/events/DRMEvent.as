@@ -56,7 +56,8 @@ package org.osmf.events
 		 * @param type The type of the event.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
-		 * @param token The token returned as a result of a successful authentication.
+ 		 * @param licenseID Specified the unique identifier for this content
+ 		 * @param prompt The authentication prompt associated with this content.
 		 * @param error The error that describes an authentication failure.
 		 *  
 		 *  @langversion 3.0
@@ -64,7 +65,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DRMEvent(type:String, state:String, bubbles:Boolean=false, cancelable:Boolean=false, start:Date = null, end:Date = null, period:Number = 0 ,token:Object=null, error:MediaError=null)
+		public function DRMEvent(type:String, state:String, bubbles:Boolean=false, cancelable:Boolean=false, start:Date=null, end:Date=null, period:Number=0, serverURL:String=null, token:Object=null, error:MediaError=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -74,6 +75,7 @@ package org.osmf.events
 			_startDate = start;
 			_endDate = end;
 			_period = period;
+			_serverURL = serverURL;
 		}
 		
 		/**
@@ -162,19 +164,30 @@ package org.osmf.events
 		{
 			return _drmState;
 		}	
+						
+		/**
+		 * The authentication prompt for the DRM content associated with this DRMEvent.  For
+		 * localized authentication, this may be an id.
+		 */ 
+		public function get serverURL():String
+		{
+			return _serverURL;
+		}	
+					
 				
 		/**
 		 * @private
 		 */
 		override public function clone():Event
 		{
-			return new DRMEvent(type, _drmState, bubbles, cancelable, _startDate, _endDate, _period, _token, _error);
+			return new DRMEvent(type, _drmState, bubbles, cancelable, _startDate, _endDate, _period, _serverURL, _token, _error);
 		}
 		
 		private var _drmState:String;
 		private var _startDate:Date;
 		private var _endDate:Date;
 		private var _period:Number;
+		private var _serverURL:String;		
 		private var _token:Object;
 		private var _error:MediaError;
 	}

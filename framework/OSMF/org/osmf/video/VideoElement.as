@@ -25,6 +25,7 @@ package org.osmf.video
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
 	import flash.media.Video;
@@ -64,8 +65,10 @@ package org.osmf.video
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait;
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.ILoader;
@@ -363,11 +366,20 @@ package org.osmf.video
 				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  // Needs authentication
 				{					
 					drmTrait.drmMetadata = event.contentData;
+				}	
+				else if (event.drmUpdateNeeded)
+				{
+					update(SystemUpdaterType.DRM);
 				}
+				else if (event.systemUpdateNeeded)
+				{
+					update(SystemUpdaterType.SYSTEM);
+				}					
 				else // Inline DRM - Errors need to be forwarded
 				{						
 					drmTrait.inlineDRMFailed(new MediaError(event.errorID));
-				}				
+				}
+						
 			}	
 			
 			private function onMetadataAuth(event:DRMEvent):void
@@ -433,8 +445,13 @@ package org.osmf.video
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
-    			removeTrait(MediaTraitType.DRM);  
-    			drmTrait = null;  					
+    			if (drmTrait != null)
+    			{    			
+	    			drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onMetadataAuth);	  
+	    			drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	 
+	    			removeTrait(MediaTraitType.DRM);  
+	    			drmTrait = null;
+	    		}  					
     		}
     		
 	    	// Null refs to garbage collect.	    	
@@ -487,6 +504,11 @@ package org.osmf.video
      		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
      		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
      	}
+     	
+     	private function onUpdateProgress(event:ProgressEvent):void
+     	{
+     		dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, event.bytesLoaded, event.bytesTotal));
+     	}
      	     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
      	{
@@ -510,17 +532,10 @@ package org.osmf.video
 			
 			CONFIG::FLASH_10_1
 			{
-				switch (event.info.code)
-				{
-					case NetStreamCodes.NETSTREAM_DRM_UPDATE:
-		     			var drmUpdater:SystemUpdater = new SystemUpdater();
-		     			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
-		     			drmUpdater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
-		     			drmUpdater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
-		     			drmUpdater.addEventListener(Event.CANCEL, onUpdateError);
-		     			drmUpdater.update(SystemUpdaterType.DRM);   
-		     			break;				
-	    		}
+			if (event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
+			{
+	     		update(SystemUpdaterType.DRM);
+	     	}
 			}
 						
 			if (error != null)
@@ -528,6 +543,21 @@ package org.osmf.video
 				dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, error));
 			}
      	}
+     	
+     	CONFIG::FLASH_10_1
+		{
+     	private function update(type:String):void
+     	{
+     		var drmUpdater:SystemUpdater = new SystemUpdater();
+ 			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
+ 			drmUpdater.addEventListener(ProgressEvent.PROGRESS, onUpdateProgress);
+ 			drmUpdater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
+ 			drmUpdater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
+ 			drmUpdater.addEventListener(Event.CANCEL, onUpdateError);
+ 			drmUpdater.update(type);
+     	}
+     	}
+     	
      	
      	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
      	

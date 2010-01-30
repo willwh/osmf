@@ -108,6 +108,10 @@ package org.osmf.composition
 							: new SerialDisplayObjectTrait(traitAggregator, owner);
 					break;
 					
+				case MediaTraitType.DRM:
+					compositeTrait = new CompositeDRMTrait(traitAggregator, owner, mode);
+					break;	
+					
 				default:
 					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
 					break;

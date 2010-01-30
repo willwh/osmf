@@ -48,6 +48,7 @@ package org.osmf.drm
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.events.DRMEvent;
+	import flash.net.drm.VoucherAccessInfo;
 	
 	
 	/**
@@ -314,6 +315,27 @@ package org.osmf.drm
 		}
 		
 		/**
+		 * Returns the URL of the server used to manage this content's DRM.  Returns "" if
+		 * the server is unknown.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get serverURL():String
+		{
+			if (drmContentData != null)
+			{
+				return drmContentData.serverURL;	
+			}
+			else
+			{
+				return "";
+			}		
+		}
+		
+		/**
 		 * @private
 		 * 
 		 * Signals failures from the DRMsubsystem not captured though the 
@@ -350,30 +372,33 @@ package org.osmf.drm
 		
 		private function onVoucherLoaded(event:DRMStatusEvent):void
 		{	
-			var now:Date = new Date();
-			this.voucher = event.voucher;		
-			if (	voucher
-				 && voucher.voucherEndDate != null
-				 && voucher.voucherEndDate.time >= now.time
-				 && voucher.voucherStartDate != null
-				 && voucher.voucherStartDate.time <= now.time
-			    )
+			if (event.contentData == drmContentData)
 			{
-				removeEventListeners();
-							
-				if (voucher.playbackTimeWindow == null)
-				{					
-					updateDRMState(DRMState.AUTHENTICATED, null, voucher.voucherStartDate, voucher.voucherEndDate, period, lastToken);
-				} 
+				var now:Date = new Date();
+				this.voucher = event.voucher;		
+				if (	voucher
+					 && voucher.voucherEndDate != null
+					 && voucher.voucherEndDate.time >= now.time
+					 && voucher.voucherStartDate != null
+					 && voucher.voucherStartDate.time <= now.time
+				    )
+				{
+					removeEventListeners();
+								
+					if (voucher.playbackTimeWindow == null)
+					{					
+						updateDRMState(DRMState.AUTHENTICATED, null, voucher.voucherStartDate, voucher.voucherEndDate, period, lastToken);
+					} 
+					else
+					{
+						updateDRMState(DRMState.AUTHENTICATED, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
+					}								
+				}
 				else
 				{
-					updateDRMState(DRMState.AUTHENTICATED, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
-				}								
-			}
-			else
-			{
-				forceRefreshVoucher();
-			}		
+					forceRefreshVoucher();
+				}	
+			}	
 		}
 					
 		private function forceRefreshVoucher():void
@@ -383,18 +408,22 @@ package org.osmf.drm
 			
 		private function onDRMError(event:DRMErrorEvent):void
 		{
-			switch(event.errorID)
+			if (event.contentData == drmContentData) //Ensure this event is for our data.
 			{
-				case MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
-					forceRefreshVoucher();
-					break;
-				case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
-					updateDRMState(DRMState.AUTHENTICATION_NEEDED);
-					break;
-				default:
-					removeEventListeners();							
-					updateDRMState(DRMState.AUTHENTICATE_FAILED,  new MediaError(event.errorID, event.text));	
-					break;
+				switch(event.errorID)
+				{
+					case MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
+						forceRefreshVoucher();
+						break;
+					case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
+						var voucherInfo:VoucherAccessInfo = event.contentData.getVoucherAccessInfo()[0];
+						updateDRMState(DRMState.AUTHENTICATION_NEEDED, null, null, null, 0, null, voucherInfo.displayName );
+						break;
+					default:
+						removeEventListeners();							
+						updateDRMState(DRMState.AUTHENTICATE_FAILED,  new MediaError(event.errorID, event.text));	
+						break;
+				}
 			}	
 		}
 					
@@ -426,7 +455,7 @@ package org.osmf.drm
 				);
 		}
 		
-		private function updateDRMState(newState:String,  error:MediaError = null,  start:Date = null, end:Date = null, period:Number = 0 , token:Object=null):void
+		private function updateDRMState(newState:String,  error:MediaError = null,  start:Date = null, end:Date = null, period:Number = 0 , token:Object=null, prompt:String = null ):void
 		{
 			_drmState = newState;
 			dispatchEvent
@@ -435,10 +464,11 @@ package org.osmf.drm
 					newState,
 					false,
 					false,
-					null,
-					null,
-					0,
-					null,
+					start,
+					end,
+					period,
+					prompt,
+					token,
 					error
 					)
 				);

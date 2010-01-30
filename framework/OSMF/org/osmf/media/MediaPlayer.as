@@ -28,6 +28,7 @@ package org.osmf.media
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
+	import org.osmf.drm.DRMState;
 	import org.osmf.events.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
@@ -36,6 +37,11 @@ package org.osmf.media
 	 * Dispatched when the <code>duration</code> property of the media has changed.
 	 * 
 	 * @eventType org.osmf.events.TimeEvent.DURATION_CHANGE
+	 * 
+	 * 	@langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -103,6 +109,19 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	 	 	 		
 	[Event(name="playStateChange", type="org.osmf.events.PlayEvent")]
+	
+	/**
+	 * Dispatched when the canPause property has changed.
+	 * 
+	 * @eventType org.osmf.events.PlayEvent.CAN_PAUSE_CHANGE
+	 * 
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 * 
+	 */
+	[Event(name="canPauseChange",type="org.osmf.events.PlayEvent")]	
 		
 	/**
 	 * Dispatched when the <code>displayObject</code> property of the media has changed.
@@ -159,12 +178,12 @@ package org.osmf.media
 	 * the MediaPlayer's <code>currentTimeUpdateInterval</code> property.
 	 *
 	 * @eventType org.osmf.events.TimeEvent.CURRENT_TIME_CHANGE
-	 *  
-	 *  @langversion 3.0
+	 * 
+	 * 	@langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */
+	 **/
     [Event(name="currentTimeChange",type="org.osmf.events.TimeEvent")]  
     
 	/**
@@ -251,6 +270,19 @@ package org.osmf.media
 	 */
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
 
+	/**
+	 * Dispatched when either anonymous or credential-based authentication is needed in order
+	 * to playback the media.
+	 *
+	 * @eventType org.osmf.events.DRMEvent.DRM_STATE_CHANGE
+ 	 *  
+ 	 *  @langversion 3.0
+ 	 *  @playerversion Flash 10.1
+ 	 *  @playerversion AIR 1.5
+ 	 *  @productversion OSMF 1.0
+ 	 */ 
+	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
+
     /**
 	 * Dispatched when the <code>canPlay</code> property has changed.
 	 * 
@@ -274,19 +306,7 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */    
 	[Event(name="canBufferChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-		
-	/**
-	 * Dispatched when the <code>canPause</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.CAN_PAUSE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="canPauseChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
+			
 	/**
 	 * Dispatched when the <code>canSeek</code> property has changed.
 	 * 
@@ -346,18 +366,42 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="canLoadChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	
+	/**
+	 * Dispatched when the <code>hasDRM</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="hasDRMChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	
+	/**
+	 * Dispatched when the <code>hasDisplayObject</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="hasDisplayObjectChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 				
 	/**
 	 * Dispatched when an error which impacts the operation of the media
 	 * player occurs.
 	 *
 	 * @eventType org.osmf.events.MediaErrorEvent.MEDIA_ERROR
-	 *  
-	 *  @langversion 3.0
+	 * 
+	 * 	@langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */
+	 **/
 	[Event(name="mediaError",type="org.osmf.events.MediaErrorEvent")]
 
 	/**
@@ -726,6 +770,19 @@ package org.osmf.media
 		{
 			return _canBuffer;
 		}
+						
+		/**
+		 *  Return if the the media element has the DRMTrait.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get hasDRM():Boolean
+		{
+			return _hasDRM;
+		}	
 				
 		/**
 		 * Volume of the media.
@@ -1274,6 +1331,142 @@ package org.osmf.media
 			
 			return bytes;
 		}
+		
+		/**
+		 * The required method of authentication.  Possible values are "anonymous"
+		 * and "usernameAndPassword".  The default is "". 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function get authenticationMethod():String
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticationMethod : "";
+		}
+		
+		/**
+		 * Authenticates the media.  Can be used for both anonymous and credential-based
+		 * authentication.  If the media has already been authenticated or authentication 
+		 * is anonymous, this is a no-op.
+		 * 
+		 * @param username The username.
+		 * @param password The password.
+		 * 
+		 * @throws IllegalOperationError If the media is not initialized yet.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function authenticate(username:String = null, password:String = null):void
+		{
+			if (hasDRM)
+			{
+				DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticate(username, password);
+			}			
+		}
+		
+		
+		/**
+		 * Authenticates the media using an object which serves as a token.  Can be used
+		 * for both anonymous and credential-based authentication.  If the media has
+		 * already been authenticated or if the media isn't drm protected, this is a no-op.
+		 * 
+		 * @param token The token to use for authentication.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function authenticateWithToken(token:Object):void
+		{	
+			if (hasDRM)
+			{
+				DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticateWithToken(token);
+			}							
+		}
+		
+		/**
+		 * The current state of the DRM for this media.  The states are explained
+		 * in the DRMState enumeration in the org.osmf.drm package.  Returns 
+		 * "" if the DRM system sis unavailable.
+		 * @see DRMState
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get drmState():String
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).drmState : "";
+		}  
+
+		/**
+		 * Returns the start date for the playback window.  Returns null if authentication 
+		 * hasn't taken place or if the DRM system isn't available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get drmStartDate():Date
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).startDate : null;
+		}
+		
+		/**
+		 * Returns the end date for the playback window.  Returns null if authentication 
+		 * hasn't taken place or if the DRM system isn't available.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get drmEndDate():Date
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).endDate : null;
+		}
+		
+		/**
+		 * Returns the length of the playback window, in seconds.  Returns NaN if
+		 * authentication hasn't taken place or the DRM system isn't initialized.
+		 * 
+		 * Note that this property will generally be the difference between startDate
+		 * and endDate, but is included as a property because there may be times where
+		 * the duration is known up front, but the start or end dates are not (e.g. a
+		 * one week rental).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		public function get drmPeriod():Number
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).period : NaN;
+		}	
+		
+		/**
+		 * Returns the length of the playback window, in seconds.  Returns "" if
+		 * the DRM system isn't initialized yet.
+		 * 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get drmServerURL():String
+		{
+			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).serverURL : "";
+		}
 
 		// Internals
 		//
@@ -1396,7 +1589,8 @@ package org.osmf.media
 							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObjectTrait.displayObject));
 						}
 						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, NaN, NaN, displayObjectTrait.mediaWidth, displayObjectTrait.mediaHeight));
-					}				
+					}	
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;		
 					break;	
 				case MediaTraitType.LOAD:					
 					changeListeners(add, _media, traitType, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);
@@ -1431,7 +1625,12 @@ package org.osmf.media
 					changeListeners(add, _media, traitType, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
 					_canBuffer = add;
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;									
-					break;						
+					break;	
+				case MediaTraitType.DRM:
+					changeListeners(add, _media, traitType, DRMEvent.DRM_STATE_CHANGE, [redispatchEvent]);	
+					_hasDRM	= add;
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;	
+					break;				
 			}					 
 			if (eventType != null)
 			{
@@ -1678,5 +1877,6 @@ package org.osmf.media
 		private var _canLoad:Boolean;
 		private var _canBuffer:Boolean;
 		private var _isDynamicStream:Boolean;
+		private var _hasDRM:Boolean;
 	}
 }

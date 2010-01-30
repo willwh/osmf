@@ -181,6 +181,20 @@ package org.osmf.traits
 			return _period;
 		}
 		
+		/**
+		 * Returns the URL of the server used to manage this content's DRM.  Returns "" if
+		 * the server is unknown.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
+		public function get serverURL():String
+		{
+			return _serverURL;
+		}
+				
 		// Internals
 		//
 		
@@ -194,9 +208,10 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function drmStateChange(newState:String, token:Object, error:MediaError, start:Date = null, end:Date = null, period:Number = 0):void
+		protected final function drmStateChange(newState:String, token:Object, error:MediaError, start:Date=null, end:Date=null, period:Number=0, serverURL:String = null):void
 		{
 			_drmState = newState;
+			_serverURL = serverURL;
 			_period = period;	
 			_endDate = end;	
 			_startDate = start;
@@ -209,12 +224,14 @@ package org.osmf.traits
 					_startDate,
 					_endDate,
 					_period,
+					_serverURL,
 					token,
 					error					
 					)
 				);
 		}
 		
+		private var _serverURL:String;
 		private var _drmState:String = DRMState.INITIALIZING;	
 		private var _period:Number = 0;	
 		private var _endDate:Date;	
