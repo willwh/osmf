@@ -8,6 +8,7 @@ package org.osmf.plugin
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
+	import org.osmf.utils.Version;
 
 	public class CreateOnLoadPluginInfo extends PluginInfo
 	{
@@ -17,7 +18,7 @@ package org.osmf.plugin
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		override public function initializePlugin(metadata:Metadata):void

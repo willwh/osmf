@@ -52,7 +52,7 @@ package com.akamai.osmf
 			mediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingAudioElement", netLoader, createAudioElement);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createVideoElement():MediaElement

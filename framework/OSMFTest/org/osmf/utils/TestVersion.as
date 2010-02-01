@@ -32,7 +32,7 @@ package org.osmf.utils
 		
 		public function testVersion():void
 		{
-			var v:String = Version.version();
+			var v:String = Version.version;
 			assertTrue(v != null && v.length > 0);
 		}
 	}

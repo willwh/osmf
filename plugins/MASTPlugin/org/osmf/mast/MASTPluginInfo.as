@@ -52,7 +52,7 @@ package org.osmf.mast
 				);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createMASTProxyElement():MediaElement

@@ -29,6 +29,7 @@ package org.osmf.plugin
 	import org.osmf.media.MediaInfo;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
+	import org.osmf.utils.Version;
 	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoImagePluginInfo extends PluginInfo
@@ -45,7 +46,7 @@ package org.osmf.plugin
 			mediaInfos.push(new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, createVideoElement));
 			mediaInfos.push(new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, createImageElement));
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createVideoElement():MediaElement

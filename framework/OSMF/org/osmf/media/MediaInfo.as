@@ -60,7 +60,7 @@ package org.osmf.media
 							( id:String,
 							  resourceHandler:IMediaResourceHandler,
 							  mediaElementCreationFunction:Function,
-							  type:MediaInfoType=null
+							  type:String=null
 							)
 		{
 			if (	id == null
@@ -122,14 +122,14 @@ package org.osmf.media
 		}
 
 		/**
-		 * The type of this MediaInfo.
+		 * The MediaInfoType for this MediaInfo.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get type():MediaInfoType
+		public function get type():String
 		{
 			return _type;
 		}
@@ -148,6 +148,6 @@ package org.osmf.media
 		private var _id:String;
 		private var _resourceHandler:IMediaResourceHandler;
 		private var _mediaElementCreationFunction:Function;
-		private var _type:MediaInfoType;
+		private var _type:String;
 	}
 }

@@ -68,7 +68,7 @@ package org.osmf.captioning
 													MediaInfoType.PROXY);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createCaptioningProxyElement():MediaElement

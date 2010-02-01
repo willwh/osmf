@@ -104,7 +104,7 @@ package org.osmf.plugin
 			
 			if (pluginInfo != null)
 			{				
-				if (pluginInfo.isFrameworkVersionSupported(Version.version()) &&
+				if (pluginInfo.isFrameworkVersionSupported(Version.version) &&
 					isPluginVersionSupported(pluginInfo.frameworkVersion))
 				{
 					try

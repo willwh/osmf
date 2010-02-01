@@ -32,7 +32,12 @@ package org.osmf.plugin
 		public function InvalidVersionPluginInfo()
 		{
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			super(mediaInfos, "99.0.0");
+			super(mediaInfos);
+		}
+		
+		override public function isFrameworkVersionSupported(version:String):Boolean
+		{
+			return false;
 		}
 	}
 }

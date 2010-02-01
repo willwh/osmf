@@ -24,6 +24,7 @@ package org.osmf.plugin
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.media.MediaInfo;
+	import org.osmf.utils.Version;
 	
 	public class InvalidImplementationPluginInfo extends PluginInfo
 	{
@@ -32,7 +33,7 @@ package org.osmf.plugin
 		public function InvalidImplementationPluginInfo()
 		{
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		/**

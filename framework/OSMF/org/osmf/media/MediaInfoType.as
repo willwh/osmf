@@ -44,7 +44,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const STANDARD:MediaInfoType = new MediaInfoType("standard");
+		public static const STANDARD:String = "standard";
 		
 		/**
 		 * Represents MediaInfos for ProxyElements that should wrap created
@@ -55,7 +55,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const PROXY:MediaInfoType = new MediaInfoType("proxy");
+		public static const PROXY:String = "proxy";
 		
 		/**
 		 * A create on load plugin is created once it is added to a media factory. 
@@ -68,25 +68,13 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const CREATE_ON_LOAD:MediaInfoType = new MediaInfoType("createOnLoad");
-		
-		/**
-		 * @private
-		 * 
-		 * Constructor.  Shouldn't need to be called by clients.
-		 */
-		public function MediaInfoType(name:String)
-		{
-			this.name = name;
-		}
-		
+		public static const CREATE_ON_LOAD:String = "createOnLoad";
+
 		/**
 		 * @private
 		 * 
 		 * All available types should be included in this array.
 		 */
 		internal static const ALL_TYPES:Array = [STANDARD, PROXY, CREATE_ON_LOAD];
-
-		private var name:String;
 	}
 }

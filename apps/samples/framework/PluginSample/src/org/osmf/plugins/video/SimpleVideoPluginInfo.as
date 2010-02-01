@@ -37,7 +37,7 @@ package org.osmf.plugins.video
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0")
+			super(mediaInfos)
 		}
 		
 		private function createVideoElement():MediaElement

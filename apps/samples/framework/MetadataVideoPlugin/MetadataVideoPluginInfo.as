@@ -49,7 +49,7 @@ package
 			var mediaInfo:MediaInfo = new MediaInfo("my.example", metadataResourceHandler, createVideoElement);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createVideoElement():MediaElement

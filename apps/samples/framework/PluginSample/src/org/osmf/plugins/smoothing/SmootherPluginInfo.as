@@ -20,7 +20,7 @@ package  org.osmf.plugins.smoothing
 			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0")
+			super(mediaInfos)
 		}
 				
 		override public function initializePlugin(metadata:Metadata):void

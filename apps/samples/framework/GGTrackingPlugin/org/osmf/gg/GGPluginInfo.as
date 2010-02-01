@@ -49,7 +49,7 @@ package org.osmf.gg
 				);
 			mediaInfos.push(mediaInfo);
 			
-			super(mediaInfos, "0.9.0");
+			super(mediaInfos);
 		}
 		
 		private function createGGVideoProxyElement():MediaElement

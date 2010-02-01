@@ -373,7 +373,7 @@ package org.osmf.media
 
 		//---------------------------------------------------------------------
 		
-		private function createMediaInfo(id:String, urlToMatch:String=null, args:Array=null, type:MediaInfoType=null):MediaInfo
+		private function createMediaInfo(id:String, urlToMatch:String=null, args:Array=null, type:String=null):MediaInfo
 		{
 			return new MediaInfo
 					( id
@@ -403,7 +403,7 @@ package org.osmf.media
 			return new ProxyElement(null);
 		}
 		
-		private function createReferenceMediaInfo(id:String, urlToMatch:String=null, referenceUrlToMatch:String=null, type:MediaInfoType=null):MediaInfo
+		private function createReferenceMediaInfo(id:String, urlToMatch:String=null, referenceUrlToMatch:String=null, type:String=null):MediaInfo
 		{
 			function createDynamicReferenceMediaElement():MediaElement
 			{

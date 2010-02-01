@@ -100,7 +100,7 @@ package org.osmf.view
 			
 			updateControls();
 
-			version.text = "OSMF Version: " + Version.version();
+			version.text = "OSMF Version: " + Version.version;
 		}
 					
 		// UI Event Handlers

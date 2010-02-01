@@ -57,7 +57,7 @@ package org.osmf.plugin
 				
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new StaticPluginLoader(mediaFactory, Version.version());
+			return new StaticPluginLoader(mediaFactory, Version.version);
 		}
 
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait

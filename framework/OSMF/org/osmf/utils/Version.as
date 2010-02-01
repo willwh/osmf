@@ -23,17 +23,17 @@ package org.osmf.utils
 {
 	/**
 	 * Class that contains Open Source Media Framework version information. There are three fields:
-	 * major, minor and changelist. The version comparison rules are
+	 * major, minor and subminor. The version comparison rules are
 	 * as follows, assume there are v1 and v2:
 	 * <listing>
 	 * v1 &#62; v2, if ((v1.major &#62; v2.major) || 
 	 *              (v1.major == v2.major &#38;&#38; v1.minor &#62; v2.minor) || 
 	 *              (v1.major == v2.major &#38;&#38; v1.minor == v2.minor &#38;&#38; 
-	 *               v1.changelist &#62; v2.changelist)) 
+	 *               v1.subminor &#62; v2.subminor)) 
 	 * 
 	 * v1 = v2, if (v1.major == v2.major &#38;&#38; 
 	 *              v1.minor == v2.minor &#38;&#38; 
-	 *              v1.changelist == v2.changelist) 
+	 *              v1.subminor == v2.subminor) 
 	 * 
 	 * v1 &#60; v2 //otherwise
 	 * </listing>
@@ -47,16 +47,16 @@ package org.osmf.utils
 	{
 		/**
 		 * returns the version string in the format of 
-		 * 	[major][FIELD_SEPARATOR][minor][FIELD_SEPARATOR][changelist]
+		 * 	[major][FIELD_SEPARATOR][minor][FIELD_SEPARATOR][subminor]
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function version():String
+		public static function get version():String
 		{
-			return _major + FIELD_SEPARATOR + _minor + FIELD_SEPARATOR + _changelist;
+			return _major + FIELD_SEPARATOR + _minor + FIELD_SEPARATOR + _subminor;
 		}
 		
 		/**
@@ -69,21 +69,13 @@ package org.osmf.utils
 		 */
 		public static function get lastAPICompatibleVersion():String
 		{
-			return "0.9.0";
+			// TODO: This should probably be set to "1.0.0" for final release. 
+			return Version.version;
 		}
 				
-		/**
-		 * The actual string values of major, minor and changelist will be
-		 * dynamically generated at build time.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
 		private static const _major:String = "0";
 		private static const _minor:String = "9";
-		private static const _changelist:String = "0";	
+		private static const _subminor:String = "1";	
 		
 		private static const FIELD_SEPARATOR:String = ".";	
 	}

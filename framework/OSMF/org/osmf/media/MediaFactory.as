@@ -167,7 +167,7 @@ package org.osmf.media
 		{
 			var numInfos:int = 0;
 			
-			for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
+			for each (var type:String in MediaInfoType.ALL_TYPES)
 			{
 				var infos:Vector.<MediaInfo> = allInfos[type];
 				if (infos != null)
@@ -197,7 +197,7 @@ package org.osmf.media
 			
 			if (index >= 0)
 			{
-				for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
+				for each (var type:String in MediaInfoType.ALL_TYPES)
 				{
 					var infos:Vector.<MediaInfo> = allInfos[type];
 					if (infos != null)
@@ -237,7 +237,7 @@ package org.osmf.media
 		{
 			var result:MediaInfo = null;
 			
-			for each (var type:MediaInfoType in MediaInfoType.ALL_TYPES)
+			for each (var type:String in MediaInfoType.ALL_TYPES)
 			{
 				var infos:Vector.<MediaInfo> = allInfos[type];
 				if (infos != null)
@@ -343,7 +343,7 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function findOrCreateInfos(type:MediaInfoType):Vector.<MediaInfo>
+		private function findOrCreateInfos(type:String):Vector.<MediaInfo>
 		{
 			if (allInfos[type] == null)
 			{
@@ -355,7 +355,7 @@ package org.osmf.media
 		
 		private function createMediaElementByResource
 			( resource:MediaResourceBase
-			, mediaInfoType:MediaInfoType
+			, mediaInfoType:String
 			, wrappedElement:MediaElement=null
 			):MediaElement
 		{
@@ -466,7 +466,7 @@ package org.osmf.media
 		private var handlerResolver:IMediaResourceHandlerResolver;
 		
 		private var allInfos:Dictionary;
-			// Keys are: MediaInfoType
+			// Keys are: String (MediaInfoType)
 			// Values are: Vector.<MediaInfo>
 		
 		private var createdElements:Dictionary;

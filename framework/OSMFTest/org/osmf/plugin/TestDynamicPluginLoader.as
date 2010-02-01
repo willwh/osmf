@@ -44,7 +44,7 @@ package org.osmf.plugin
 	{
 		public function testCanHandleResource():void
 		{
-			var loader:DynamicPluginLoader = new DynamicPluginLoader(new MediaFactory(), Version.version());
+			var loader:DynamicPluginLoader = new DynamicPluginLoader(new MediaFactory(), Version.version);
 
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.SWF);

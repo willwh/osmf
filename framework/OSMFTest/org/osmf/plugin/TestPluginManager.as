@@ -300,7 +300,7 @@ package org.osmf.plugin
 			var loadedFailed:Boolean = false;
 			
 			
-			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaInfo>, "0.5.0");
+			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaInfo>);
 			
 			pluginManager = new PluginManager(mediaFactory, "0.5.0");
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onLoaded);
@@ -362,9 +362,9 @@ import org.osmf.media.MediaInfo;
 		
 class OldPluginInfo extends org.osmf.plugin.PluginInfo
 {
-	public function OldPluginInfo(mediaInfos:Vector.<MediaInfo>, supportedFrameworkVersion:String)
+	public function OldPluginInfo(mediaInfos:Vector.<MediaInfo>)
 	{
-		super(mediaInfos, supportedFrameworkVersion);
+		super(mediaInfos);
 	}
 	
 	override public function get frameworkVersion():String

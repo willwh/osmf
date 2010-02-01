@@ -26,6 +26,7 @@ package org.osmf.plugin
 	import org.osmf.media.MediaInfo;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.Version;
 	
 	/**
 	 * PluginInfo is the encapsulation of the set of MediaInfo objects
@@ -89,20 +90,17 @@ package org.osmf.plugin
 		 * 
 		 * @param mediaInfos Vector of MediaInfo objects that this plugin
 		 * exposes.
-		 * @param supportedFrameworkVersion The version of the framework
-		 * that this plugin supports.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginInfo(mediaInfos:Vector.<MediaInfo>, supportedFrameworkVersion:String)
+		public function PluginInfo(mediaInfos:Vector.<MediaInfo>)
 		{
 			super();
 			
 			this.mediaInfos = mediaInfos;
-			this.supportedFrameworkVersion = supportedFrameworkVersion;
 		}
 		
 		/**
@@ -130,7 +128,7 @@ package org.osmf.plugin
 		 */
 		public function get frameworkVersion():String
 		{
-			return "0.9.0";
+			return Version.version;
 		}
 
 
@@ -189,14 +187,14 @@ package org.osmf.plugin
 				return false;
 			}
 
-			var inputVersion:Object = parseVersionString(version);
-			var pluginVersion:Object = parseVersionString(supportedFrameworkVersion);
+			var playerFrameworkVersion:Object = parseVersionString(version);
+			var pluginFrameworkVersion:Object = parseVersionString(frameworkVersion);
 			
-			return 		inputVersion.major > pluginVersion.major
-					||	(	inputVersion.major == pluginVersion.major
-						&&	( 	inputVersion.minor > pluginVersion.minor
-							||	(	inputVersion.minor == pluginVersion.minor
-								&&	inputVersion.subMinor >= pluginVersion.subMinor
+			return 		playerFrameworkVersion.major > pluginFrameworkVersion.major
+					||	(	playerFrameworkVersion.major == pluginFrameworkVersion.major
+						&&	( 	playerFrameworkVersion.minor > pluginFrameworkVersion.minor
+							||	(	playerFrameworkVersion.minor == pluginFrameworkVersion.minor
+								&&	playerFrameworkVersion.subMinor >= pluginFrameworkVersion.subMinor
 								)
 							)
 						);
@@ -245,6 +243,5 @@ package org.osmf.plugin
 		}
 		
 		private var mediaInfos:Vector.<MediaInfo>;
-		private var supportedFrameworkVersion:String;
 	}
 }

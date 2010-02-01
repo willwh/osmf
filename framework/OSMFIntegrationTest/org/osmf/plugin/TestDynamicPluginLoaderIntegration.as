@@ -49,7 +49,7 @@ package org.osmf.plugin
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new DynamicPluginLoader(mediaFactory, Version.version());
+			return new DynamicPluginLoader(mediaFactory, Version.version);
 		}
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
