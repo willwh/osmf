@@ -24,7 +24,7 @@ package org.osmf.audio
 	import flash.net.NetStream;
 	
 	import org.osmf.media.DefaultTraitResolver;
-	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
@@ -70,7 +70,7 @@ package org.osmf.audio
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class AudioElement extends LoadableMediaElement
+	public class AudioElement extends LoadableElementBase
 	{
 		/**
 		 * Constructor.  

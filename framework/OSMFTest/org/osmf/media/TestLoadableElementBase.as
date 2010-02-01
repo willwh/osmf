@@ -33,11 +33,11 @@ package org.osmf.media
 	import org.osmf.utils.SimpleResource;
 	import org.osmf.utils.URL;
 	
-	public class TestLoadableMediaElement extends TestMediaElement
+	public class TestLoadableElementBase extends TestMediaElement
 	{
 		override protected function createMediaElement():MediaElement
 		{
-			return new LoadableMediaElement(null, new SimpleLoader()); 
+			return new LoadableElementBase(null, new SimpleLoader()); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -62,12 +62,12 @@ package org.osmf.media
 		
 		public function testConstructor():void
 		{
-			new LoadableMediaElement(null, new SimpleLoader(), null);
-			new LoadableMediaElement(null, null, [SimpleLoader]);
+			new LoadableElementBase(null, new SimpleLoader(), null);
+			new LoadableElementBase(null, null, [SimpleLoader]);
 			
 			try
 			{
-				var mediaElement:MediaElement = new LoadableMediaElement();
+				var mediaElement:MediaElement = new LoadableElementBase();
 				
 				fail();
 			}
@@ -112,7 +112,7 @@ package org.osmf.media
 		
 		public function testSetResourceSetsLoader():void
 		{
-			var mediaElement:MediaElement = new LoadableMediaElement(null, null, [MockHTTPLoader, SimpleLoader]);
+			var mediaElement:MediaElement = new LoadableElementBase(null, null, [MockHTTPLoader, SimpleLoader]);
 			
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) == null);
 			mediaElement.resource = new URLResource(new URL("http://example.com"));

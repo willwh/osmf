@@ -22,7 +22,7 @@
 package org.osmf.plugin
 {
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.LoadableElementBase;
 	
 	/**
 	 * PluginElement is a MediaElement used for integrating
@@ -35,7 +35,7 @@ package org.osmf.plugin
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	internal class PluginElement extends LoadableMediaElement
+	internal class PluginElement extends LoadableElementBase
 	{
 		/**
 		 * Constructor.

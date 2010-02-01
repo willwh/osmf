@@ -115,7 +115,7 @@
     <classEntry path="org.osmf.media.IMediaReferrer"/>
     <classEntry path="org.osmf.media.IMediaResourceHandler"/>
     <classEntry path="org.osmf.media.IMediaResourceHandlerResolver"/>
-    <classEntry path="org.osmf.media.LoadableMediaElement"/>
+    <classEntry path="org.osmf.media.LoadableElementBase"/>
     <classEntry path="org.osmf.media.MediaElement"/>
     <classEntry path="org.osmf.media.MediaFactory"/>
     <classEntry path="org.osmf.media.MediaInfo"/>

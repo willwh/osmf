@@ -163,7 +163,7 @@ package org.osmf
 			addTestSuite(TestURLResource);
 			addTestSuite(TestMediaElement);
 			addTestSuite(TestMediaElementAsSubclass);
-			addTestSuite(TestLoadableMediaElement);
+			addTestSuite(TestLoadableElementBase);
 			addTestSuite(TestMediaTraitResolver);
 			addTestSuite(TestDefaultTraitResolver);
 			addTestSuite(TestMediaInfo);

@@ -36,7 +36,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class LoadableMediaElement extends MediaElement
+	public class LoadableElementBase extends MediaElement
 	{
 		/**
 		 * Constructor.
@@ -61,7 +61,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function LoadableMediaElement(resource:MediaResourceBase=null, loader:LoaderBase=null, loaderClasses:Array=null)
+		public function LoadableElementBase(resource:MediaResourceBase=null, loader:LoaderBase=null, loaderClasses:Array=null)
 		{
 			super();
 			

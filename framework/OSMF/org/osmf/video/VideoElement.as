@@ -38,7 +38,7 @@ package org.osmf.video
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultTraitResolver;
-	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
@@ -120,7 +120,7 @@ package org.osmf.video
 	* @see org.osmf.traits
 	**/
 
-	public class VideoElement extends LoadableMediaElement
+	public class VideoElement extends LoadableElementBase
 	{
 		/**
 		 * Constructor.

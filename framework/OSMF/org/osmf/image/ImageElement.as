@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.image
 {
-	import org.osmf.media.LoadableMediaElement;
+	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.swf.LoaderLoadTrait;
@@ -69,7 +69,7 @@ package org.osmf.image
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class ImageElement extends LoadableMediaElement
+	public class ImageElement extends LoadableElementBase
 	{
 		/**
 		 * Constructor.
