@@ -31,6 +31,9 @@
 	 horizontalAlign="center">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import org.osmf.metadata.StringIdentifier;
+	 		import org.osmf.metadata.ObjectFacet;
+	 		import org.osmf.layout.LayoutProperties;
 	 		import org.osmf.metadata.Facet;
 			import org.osmf.audio.AudioElement;
 			import org.osmf.composition.CompositeElement;
@@ -111,32 +114,31 @@
 	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource0))));
 	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource1))));			
 	 			
-	 			var layout:RelativeLayoutFacet;
+	 			var layout:LayoutProperties
 	 			if(serial)
 	 			{
-		 			layout = new RelativeLayoutFacet();					
-					layout.width = 100;
-					layout.height = 100;
-					comp.getChildAt(0).metadata.addFacet(layout);
-					comp.getChildAt(1).metadata.addFacet(layout);
-					comp.getChildAt(2).metadata.addFacet(layout);
+	 				for (var i:int = 0; i<3; i++)
+	 				{
+	 					layout = new LayoutProperties(comp.getChildAt(i));
+	 					layout.percentWidth = 100;
+						layout.percentHeight = 100;
+	 				}
 				}
 				else //Parallel
 				{
-					layout = new RelativeLayoutFacet();					
-					layout.width = 100/3;
-					layout.height = 100;
-					var layout2:RelativeLayoutFacet  = new RelativeLayoutFacet();	
-					layout2.x = 100/3;
-					layout2.width = 100/3;
-					layout2.height = 100;
-					var layout3:RelativeLayoutFacet  = new RelativeLayoutFacet();	
-					layout3.x = 2/3*100;	
-					layout3.width = 100/3;
-					layout3.height = 100;			
-					comp.getChildAt(0).metadata.addFacet(layout);
-					comp.getChildAt(1).metadata.addFacet(layout2);
-					comp.getChildAt(2).metadata.addFacet(layout3);
+					layout = new LayoutProperties(comp.getChildAt(0));				
+					layout.percentWidth = 100/3;
+					layout.percentHeight = 100;
+					
+					layout = new LayoutProperties(comp.getChildAt(1));	
+					layout.percentX = 100/3;
+					layout.percentWidth = 100/3;
+					layout.percentHeight = 100;
+					
+					layout = new LayoutProperties(comp.getChildAt(2));	
+					layout.percentX = 2/3*100;	
+					layout.percentWidth = 100/3;
+					layout.percentHeight = 100;			
 				}
 	 			wrapper.scaleMode = ScaleMode.STRETCH;
 	 				 				 				 			
@@ -195,6 +197,7 @@
 	 		protected function getValues():void
 	 		{	 			
 	 			metadataItemProvider.removeAll();
+	 			
 	 			if (metadataFacets.selectedItem && metadataFacets.selectedItem is KeyValueFacet )
 				{					
 					var kvMetadata:KeyValueFacet = metadataFacets.selectedItem as KeyValueFacet;
@@ -205,52 +208,45 @@
 						metadataItemProvider.addItem({data:data, key:keys[itr]});
 					}									
 				}	
-				else if(metadataFacets.selectedItem is AbsoluteLayoutFacet	)	
+				else if (metadataFacets.selectedItem)
 				{
-					var absFacet:AbsoluteLayoutFacet = AbsoluteLayoutFacet(metadataFacets.selectedItem);
-					metadataItemProvider.addItem({data:absFacet.x, key:new ObjectIdentifier('x')});
-					metadataItemProvider.addItem({data:absFacet.y, key:new ObjectIdentifier('y')});
-					metadataItemProvider.addItem({data:absFacet.width, key:new ObjectIdentifier('width')});
-					metadataItemProvider.addItem({data:absFacet.height, key:new ObjectIdentifier('height')});					
+					var facet:Facet = Facet(metadataFacets.selectedItem);
+					
+					function addItems(keys:Array):void
+					{
+						for each (var key:String in keys)
+						{
+							var id:StringIdentifier = new StringIdentifier(key);
+							metadataItemProvider.addItem
+								(	{ data: facet.getValue(id)
+									, key: id
+									}
+								);
+						}	
+					}
+					
+					switch (facet.namespaceURL.rawUrl)
+					{
+						case MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS.rawUrl:
+						case MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS.rawUrl:
+							addItems(["x","y","width","height"]);
+							break;					
+						case MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS.rawUrl:
+						case MetadataNamespaces.PADDING_LAYOUT_PARAMETERS.rawUrl:
+							addItems(["top","left","bottom","right"]);
+							break;	
+						case MetadataNamespaces.LAYOUT_ATTRIBUTES.rawUrl:
+							addItems(["alignment", "order", "snapToPixel", "scaleMode", "registrationPoint", "mode"]);
+							break;
+					}
 				}	
-				else if(metadataFacets.selectedItem is AnchorLayoutFacet	)	
-				{
-					var ancFacet:AnchorLayoutFacet = AnchorLayoutFacet(metadataFacets.selectedItem);
-					metadataItemProvider.addItem({data:ancFacet.bottom, key:new ObjectIdentifier('bottom')});
-					metadataItemProvider.addItem({data:ancFacet.top, key:new ObjectIdentifier('top')});
-					metadataItemProvider.addItem({data:ancFacet.left, key:new ObjectIdentifier('left')});
-					metadataItemProvider.addItem({data:ancFacet.right, key:new ObjectIdentifier('right')});					
-				}	
-				else if(metadataFacets.selectedItem is PaddingLayoutFacet	)	
-				{
-					var padFacet:PaddingLayoutFacet = PaddingLayoutFacet(metadataFacets.selectedItem);
-					metadataItemProvider.addItem({data:padFacet.bottom, key:new ObjectIdentifier('bottom')});
-					metadataItemProvider.addItem({data:padFacet.top, key:new ObjectIdentifier('top')});
-					metadataItemProvider.addItem({data:padFacet.left, key:new ObjectIdentifier('left')});
-					metadataItemProvider.addItem({data:padFacet.right, key:new ObjectIdentifier('right')});					
-				}	
-				else if(metadataFacets.selectedItem is RelativeLayoutFacet	)	
-				{
-					var relFacet:RelativeLayoutFacet = RelativeLayoutFacet(metadataFacets.selectedItem);
-					metadataItemProvider.addItem({data:relFacet.x, key:new ObjectIdentifier('x')});
-					metadataItemProvider.addItem({data:relFacet.y, key:new ObjectIdentifier('y')});
-					metadataItemProvider.addItem({data:relFacet.width, key:new ObjectIdentifier('width')});
-					metadataItemProvider.addItem({data:relFacet.height, key:new ObjectIdentifier('height')});					
-				}	
-				else if(metadataFacets.selectedItem is LayoutAttributesFacet	)	
-				{
-					var attribFacet:LayoutAttributesFacet = LayoutAttributesFacet(metadataFacets.selectedItem);
-					metadataItemProvider.addItem({data:attribFacet.alignment, key:new ObjectIdentifier('alignment')});
-					metadataItemProvider.addItem({data:attribFacet.order, key:new ObjectIdentifier('order')});
-					metadataItemProvider.addItem({data:attribFacet.snapToPixel, key:new ObjectIdentifier('snapToPixel')});	
-					metadataItemProvider.addItem({data:attribFacet.scaleMode, key:new ObjectIdentifier('scaleMode')});	
-					metadataItemProvider.addItem({data:attribFacet.registrationPoint, key:new ObjectIdentifier('registrationPoint')});															
-				}				
 	 		}
 	 		
 	 		protected function keyLabel(item:Object, column:DataGridColumn):String
 	 		{
-	 			return item.key.key.toString();
+	 			return item.key is StringIdentifier
+	 				? item.key.string
+	 				: item.key.key.toString();
 	 		}
 	 		
 	 		//Adds a new KeyValueFacet to the metadata list
@@ -281,7 +277,9 @@
 				if (keyValueList.selectedItem)
 				{					
 					value.text = keyValueList.selectedItem.data;
-					key.text = keyValueList.selectedItem.key.key;					
+					key.text = keyValueList.selectedItem.key is StringIdentifier
+								? keyValueList.selectedItem.key.string
+								: keyValueList.selectedItem.key.key;					
 				}
 			}	
 			
