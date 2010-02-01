@@ -45,11 +45,6 @@
 			import org.osmf.events.MetadataEvent;
 			import org.osmf.image.ImageLoader;
 			import org.osmf.image.ImageElement;
-			import org.osmf.layout.AbsoluteLayoutFacet;
-			import org.osmf.layout.AnchorLayoutFacet;
-			import org.osmf.layout.LayoutAttributesFacet;
-			import org.osmf.layout.PaddingLayoutFacet;
-			import org.osmf.layout.RelativeLayoutFacet;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaInfo;
