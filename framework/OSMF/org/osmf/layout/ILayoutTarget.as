@@ -24,6 +24,7 @@ package org.osmf.layout
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 	
+	import org.osmf.metadata.IMetadataProvider;
 	import org.osmf.metadata.Metadata;
 	
 	/**
@@ -83,19 +84,8 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public interface ILayoutTarget extends IEventDispatcher
+	public interface ILayoutTarget extends IEventDispatcher, IMetadataProvider
 	{
-		/**
-		 * A reference to the metadata that is to be used by the LayoutRenderer
-		 * on determining its size and position.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		function get metadata():Metadata;
-	 
 		/**
 		 * A reference to the display object that represents the target. A
 		 * LayoutRenderer object may use this reference to position the target,

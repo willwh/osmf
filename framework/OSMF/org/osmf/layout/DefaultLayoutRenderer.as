@@ -71,21 +71,31 @@ package org.osmf.layout
 		 */
 		override protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
 		{
-			var watcher:MetadataWatcher = metaDataWatchers[oldContext]; 
-			if (watcher)
+			if (oldContext)
 			{
-				watcher.unwatch();
-				delete metaDataWatchers[oldContext];
+				contextAbsoluteWatcher.unwatch();
+				contextAttributesWatcher.unwatch();
 			}
 			
 			if (newContext)
 			{
-				watcher = metaDataWatchers[newContext]
+				contextAbsoluteWatcher
 					= MetadataUtils.watchFacet
 						( newContext.metadata
 						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
 						, function (..._):void
 							{
+								invalidate();
+							}
+						);
+						
+				contextAttributesWatcher
+					= MetadataUtils.watchFacet
+						( newContext.metadata
+						, MetadataNamespaces.LAYOUT_ATTRIBUTES
+						, function (facet:LayoutAttributesFacet):void
+							{
+								mode = facet ? facet.mode : LayoutRendererMode.CANVAS
 								invalidate();
 							}
 						);
@@ -97,12 +107,29 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
+		override protected function processUpdateMediaDisplayBegin(targets:Vector.<ILayoutTarget>):void
+		{
+			lastCalculatedBounds = null;
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function processUpdateMediaDisplayEnd():void
+		{
+			lastCalculatedBounds = null;
+		}
+		
+		/**
+		 * @private
+		 */
 		override protected function processTargetAdded(target:ILayoutTarget):void
 		{
 			// Set targets to take 100% of their context's width and height, but only
 			// if no relative facet is present all together:
 			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
-			if	(	relative == null
+			if	(	mode == LayoutRendererMode.CANVAS
+				&&	relative == null
 				&&	target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) == null
 				&&	target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
 				&&	target.metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) == null
@@ -129,7 +156,7 @@ package org.osmf.layout
 			// Watch the order metadata attribute for change:
 			//
 			
-			metaDataWatchers[target] = MetadataUtils.watchFacetValue
+			targetMetadataWatchers[target] = MetadataUtils.watchFacetValue
 				( target.metadata
 				, MetadataNamespaces.LAYOUT_ATTRIBUTES
 				, LayoutAttributesFacet.ORDER
@@ -145,8 +172,8 @@ package org.osmf.layout
 		 */
 		override protected function processTargetRemoved(target:ILayoutTarget):void
 		{
-			var watcher:MetadataWatcher = metaDataWatchers[target];
-			delete metaDataWatchers[target];
+			var watcher:MetadataWatcher = targetMetadataWatchers[target];
+			delete targetMetadataWatchers[target];
 			
 			watcher.unwatch();
 			watcher = null;
@@ -489,6 +516,26 @@ package org.osmf.layout
 			 	rect.height = Math.round(rect.height);
 			}
 			
+			if	(mode == LayoutRendererMode.HBOX || mode == LayoutRendererMode.VBOX)
+			{ 
+				if (lastCalculatedBounds != null)
+				{
+					// Apply either the x or y coordinate to apply the desired boxing
+					// behavior:
+					
+					if (mode == LayoutRendererMode.HBOX)
+					{
+						rect.x = lastCalculatedBounds.x + lastCalculatedBounds.width;
+					}
+					else // mode == DefaultRendererMode.VBOX
+					{
+						rect.y = lastCalculatedBounds.y + lastCalculatedBounds.height;
+					}
+				}
+				
+				lastCalculatedBounds = rect;
+			}
+			
 			CONFIG::LOGGING
 			{
 				logger.debug
@@ -523,6 +570,7 @@ package org.osmf.layout
 				// into a bounds rectangle:
 				var contextBounds:Rectangle = new Rectangle();
 				var targetBounds:Rectangle;
+				var lastBounds:Rectangle;
 				
 				for each (var target:ILayoutTarget in targets)
 				{
@@ -531,6 +579,24 @@ package org.osmf.layout
 					targetBounds.y ||= 0;
 					targetBounds.width ||= target.mediaWidth || 0;
 					targetBounds.height ||= target.mediaHeight || 0;
+					
+					if (mode == LayoutRendererMode.HBOX || mode == LayoutRendererMode.VBOX)
+					{
+						if (lastBounds)
+						{
+							if (mode == LayoutRendererMode.HBOX)
+							{
+								targetBounds.x = lastBounds.x + lastBounds.width;
+							}
+							else // mode == DefaultRendererMode.VBOX
+							{
+								targetBounds.y = lastBounds.y + lastBounds.height;
+							}
+						}
+						
+						lastBounds = targetBounds;
+					}
+					
 					contextBounds = contextBounds.union(targetBounds);
 				}
 				
@@ -574,7 +640,12 @@ package org.osmf.layout
 		private static const DIMENSIONS:int = WIDTH + HEIGHT;
 		private static const ALL:int = POSITION + DIMENSIONS;
 		
-		private var metaDataWatchers:Dictionary = new Dictionary();
+		private var mode:String = LayoutRendererMode.CANVAS;
+		private var lastCalculatedBounds:Rectangle;
+		
+		private var targetMetadataWatchers:Dictionary = new Dictionary();
+		private var contextAbsoluteWatcher:MetadataWatcher;
+		private var contextAttributesWatcher:MetadataWatcher;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultLayoutRenderer");
 	}

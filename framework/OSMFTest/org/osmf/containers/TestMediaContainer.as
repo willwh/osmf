@@ -27,7 +27,7 @@ package org.osmf.containers
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.LayoutProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.metadata.MetadataUtils;
@@ -90,11 +90,13 @@ package org.osmf.containers
 			var viewSprite:Sprite = new TesterSprite();
 			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
+			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			layout.scaleMode = ScaleMode.NONE;
+			layout.alignment = RegistrationPoint.CENTER;
 			
-			LayoutUtils.setLayoutAttributes(mediaElement.metadata, ScaleMode.NONE, RegistrationPoint.CENTER);
-
 			var container:MediaContainer = constructContainer();
-			LayoutUtils.setAbsoluteLayout(container.metadata, 800, 80);
+			container.width = 800;
+			container.height = 80;
 			
 			container.addMediaElement(mediaElement);
 			
@@ -110,7 +112,8 @@ package org.osmf.containers
 		public function testContainerAttributes():void
 		{
 			var container:MediaContainer = constructContainer();
-			LayoutUtils.setAbsoluteLayout(container.metadata, 500, 400);
+			container.width = 500;
+			container.height = 400;
 			
 			assertEquals(NaN,container.backgroundColor);
 			assertEquals(NaN,container.backgroundAlpha);

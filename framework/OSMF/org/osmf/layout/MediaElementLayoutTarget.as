@@ -201,6 +201,10 @@ package org.osmf.layout
 				_displayObject.width = availableWidth;
 				_displayObject.height = availableHeight;
 			}
+			else
+			{
+				
+			}
 		}
 		
 		// Public interface

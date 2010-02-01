@@ -22,7 +22,6 @@
 
 package
 {
-	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.display.StageAlign;
@@ -42,7 +41,9 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutTargetSprite;
+	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -122,6 +123,7 @@ package
 			// Construct a MediaContainer that will be used to show the media
 			// on screen once it has loaded.
 			container = new MediaContainer();
+			containerLayout = new LayoutProperties(container);
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
@@ -130,8 +132,17 @@ package
 			// Create a transparent overlay. This is a work-around for the
 			// context menu otherwise not triggering MENU_ITEM_SELECT when being
 			// invoked while over a Video object:
-			overlay = new Sprite();
-			addChild(overlay);
+			overlay = new LayoutTargetSprite();
+			overlay.graphics.beginFill(0, 0);
+			overlay.graphics.drawRect(0, 0, 100, 100);
+			overlay.graphics.endFill();
+			
+			var overlayLayout:LayoutProperties = new LayoutProperties(overlay);
+			overlayLayout.percentWidth = 100;
+			overlayLayout.percentHeight = 100;
+			overlayLayout.order = 1;
+			
+			container.layoutRenderer.addTarget(overlay);
 		}
 		
 		private function setupUserInterface():void
@@ -141,8 +152,13 @@ package
 			
 			controlBar = new ControlBar();
 			controlBar.autoHide = configuration.autoHideControlBar;
-			controlBar.container = container;
-			addChild(controlBar);
+			
+			var controlBarLayout:LayoutProperties = new LayoutProperties(controlBar);
+			controlBarLayout.order = 2;
+			controlBarLayout.bottom = 25;
+			controlBarLayout.alignment = RegistrationPoint.TOP_MIDDLE;
+			
+			container.layoutRenderer.addTarget(controlBar);
 			
 			var urlInput:URLInput = controlBar.getWidget(ControlBar.URL_INPUT) as URLInput;
 			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
@@ -203,17 +219,9 @@ package
 		
 		private function onStageResize(event:Event = null):void
 		{
-			LayoutUtils.setAbsoluteLayout(container.metadata, _stage.stageWidth, _stage.stageHeight);
-			
-			var g:Graphics = overlay.graphics; 
-			g.clear();
-			g.beginFill(0xffffff, 0);
-			g.drawRect(0, 0, _stage.stageWidth, _stage.stageHeight);
-			
-			CONFIG::DEBUG
-			{
-				preloader.debugger.send("stage resize", _stage.stageWidth, _stage.stageHeight);
-			}
+			// Propagate dimensions to the main container:
+			containerLayout.width = _stage.stageWidth;
+			containerLayout.height = _stage.stageHeight;
 		}
 		
 		private function onEjectButtonClick(event:MouseEvent):void
@@ -265,8 +273,9 @@ package
 		private var element:MediaElement;
 		
 		private var container:MediaContainer;
+		private var containerLayout:LayoutProperties;
 		private var controlBar:ControlBarBase;
 		
-		private var overlay:Sprite;
+		private var overlay:LayoutTargetSprite;
 	}
 }            

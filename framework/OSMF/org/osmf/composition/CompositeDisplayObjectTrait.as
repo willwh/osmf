@@ -28,13 +28,13 @@ package org.osmf.composition
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.ILayoutTarget;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutRendererFacet;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -75,7 +75,7 @@ package org.osmf.composition
 			// Watch our owner's metadata for a layout class being set:
 			MetadataUtils.watchFacet
 				( owner.metadata
-				, MetadataNamespaces.LAYOUT_RENDERER
+				, MetadataNamespaces.LAYOUT_RENDERER_TYPE
 				, layoutRendererFacetChangeCallback
 				);
 		}
@@ -151,15 +151,14 @@ package org.osmf.composition
 				_layoutRenderer = null;
 			}
 			
-			var layoutRendererFacet:LayoutRendererFacet
-				= facet as LayoutRendererFacet;
+			var layoutRendererFacet:ObjectFacet	= facet as ObjectFacet;
 				
 			if (layoutRendererFacet)
 			{
 				try
 				{
 					_layoutRenderer
-						= new layoutRendererFacet.rendererType()
+						= new (Class(layoutRendererFacet.object))()
 						as LayoutRenderer;
 				}
 				catch (e:*)

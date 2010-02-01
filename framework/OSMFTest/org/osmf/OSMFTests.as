@@ -68,12 +68,11 @@ package org.osmf
 			addTestSuite(TestLayoutRenderer);
 			addTestSuite(TestDefaultLayoutRenderer);
 			addTestSuite(TestLayoutAttributesFacet);
-			addTestSuite(TestLayoutRendererFacet);
 			addTestSuite(TestMediaElementLayoutTarget);
 			addTestSuite(TestPaddingLayoutFacet);
 			addTestSuite(TestRegistrationPoint);
 			addTestSuite(TestRelativeLayoutFacet);
-			addTestSuite(TestLayoutUtils);
+			addTestSuite(TestLayoutProperties);
 			
 			// Containers
 			//

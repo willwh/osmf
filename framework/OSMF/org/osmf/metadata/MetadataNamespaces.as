@@ -58,7 +58,7 @@ package org.osmf.metadata
 		
 		public static const REGION_TARGET:URL					= new URL("http://www.osmf.org/region/target");
 		
-		public static const LAYOUT_RENDERER:URL					= new URL("http://www.osmf.org/layout/renderer");
+		public static const LAYOUT_RENDERER_TYPE:URL			= new URL("http://www.osmf.org/layout/renderer_type");
 		public static const ABSOLUTE_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/absolute");
 		public static const RELATIVE_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/relative");
 		public static const ANCHOR_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/anchor");

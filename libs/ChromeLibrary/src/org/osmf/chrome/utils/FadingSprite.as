@@ -22,10 +22,11 @@
 
 package org.osmf.chrome.utils
 {
-	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	public class FadingSprite extends Sprite
+	import org.osmf.layout.LayoutTargetSprite;
+	
+	public class FadingSprite extends LayoutTargetSprite
 	{
 		public function FadingSprite()
 		{

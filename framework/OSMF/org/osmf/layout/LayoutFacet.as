@@ -28,6 +28,8 @@ package org.osmf.layout
 	import org.osmf.utils.URL;
 
 	/**
+	 * @private
+	 *
 	 * Base class for the default renderer's layout facets.
 	 *  
 	 *  @langversion 3.0
@@ -35,9 +37,11 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class LayoutFacet extends Facet
+	internal class LayoutFacet extends Facet
 	{
 		/**
+		 * @private
+		 *
 		 * Constructor
 		 *  
 		 *  @langversion 3.0

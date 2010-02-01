@@ -127,6 +127,8 @@ package org.osmf.chrome.hint
 			stage.addChild(view);
 			view.x = stage.mouseX - 13;
 			view.y = stage.mouseY - view.height - 2;
+			
+			trace(stage.mouseX, stage.mouseY, view.height);
 		}
 			
 	}

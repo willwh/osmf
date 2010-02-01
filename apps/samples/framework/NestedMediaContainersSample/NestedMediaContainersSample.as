@@ -30,14 +30,12 @@ package
 	import org.osmf.display.MediaContainerGroup;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
-	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.LayoutProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.net.NetLoader;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
@@ -75,14 +73,24 @@ package
 			
 			// Next, decorate the content tree with attributes:
 			
-			LayoutUtils.setRelativeLayout(banners.metadata, 100, 100);
-			LayoutUtils.setLayoutAttributes(banners.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
+			var bannersLayout:LayoutProperties = new LayoutProperties(banners);
+			bannersLayout.percentWidth = 100;
+			bannersLayout.percentHeight = 100;
+			bannersLayout.scaleMode = ScaleMode.LETTERBOX;
+			bannersLayout.alignment = RegistrationPoint.TOP_MIDDLE;
 			
-			LayoutUtils.setRelativeLayout(skyScraper.metadata, 100, 100);
-			LayoutUtils.setLayoutAttributes(skyScraper.metadata, ScaleMode.LETTERBOX, RegistrationPoint.MIDDLE_RIGHT);
+			var skyScraperLayout:LayoutProperties = new LayoutProperties(skyScraper);
+			skyScraperLayout.percentWidth = 100;
+			skyScraperLayout.percentHeight = 100;
+			skyScraperLayout.scaleMode = ScaleMode.LETTERBOX;
+			skyScraperLayout.alignment = RegistrationPoint.MIDDLE_RIGHT;
 			
-			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
-			LayoutUtils.setLayoutAttributes(mainContent.metadata, ScaleMode.STRETCH, RegistrationPoint.TOP_MIDDLE);
+			var mainLayout:LayoutProperties = new LayoutProperties(mainContent);
+			mainLayout.percentWidth = 100;
+			mainLayout.percentHeight = 100;
+			mainLayout.scaleMode = ScaleMode.STRETCH;
+			mainLayout.alignment = RegistrationPoint.TOP_MIDDLE;
+			
 			
 			// Consruct a tree of containers:
 
@@ -98,7 +106,9 @@ package
 				bannerGroup.mediaContainer.backgroundColor = 0xFF;
 				bannerGroup.mediaContainer.backgroundAlpha = .2;
 				bannerGroup.height = 60;
-				LayoutUtils.setAnchorLayout(bannerGroup.metadata, 5, 5, 5, NaN);
+				
+				var bannerGroupLayout:LayoutProperties = new LayoutProperties(bannerGroup);
+				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
 				MetadataUtils.setElementId(bannerGroup.metadata, "bannerGroup");
 				mainGroup.addChildGroup(bannerGroup);
 				
@@ -106,7 +116,9 @@ package
 				skyScraperGroup.mediaContainer.backgroundColor = 0xFF00;
 				skyScraperGroup.mediaContainer.backgroundAlpha = .2;
 				skyScraperGroup.width = 120;
-				LayoutUtils.setAnchorLayout(skyScraperGroup.metadata, NaN, 5, 5, 5);
+				
+				var skyScraperGroupLayout:LayoutProperties = new LayoutProperties(skyScraperGroup);
+				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
 				MetadataUtils.setElementId(skyScraperGroup.metadata, "skyScraperGroup");
 				mainGroup.addChildGroup(skyScraperGroup);
 				

@@ -27,8 +27,7 @@ package org.osmf.composition
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.layout.AbsoluteLayoutFacet;
-	import org.osmf.layout.AnchorLayoutFacet;
+	import org.osmf.layout.LayoutProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -188,21 +187,16 @@ package org.osmf.composition
 		public function testDisplayObjectTraitLayout():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
-			var absolute:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
-			absolute.width = 300;
-			absolute.height = 200;
-			parallel.metadata.addFacet(absolute);
+			var layout:LayoutProperties = new LayoutProperties(parallel);
+			layout.width = 300;
+			layout.height = 200;
 			
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
-			absolute = new AbsoluteLayoutFacet();
-			absolute.x = 10;
-			absolute.y = 10;
-			mediaElement1.metadata.addFacet(absolute);
-			
-			var anchor:AnchorLayoutFacet = new AnchorLayoutFacet();
-			anchor.bottom = 10;
-			anchor.right = 10;
-			mediaElement1.metadata.addFacet(anchor);
+			layout = new LayoutProperties(mediaElement1);
+			layout.x = 10;
+			layout.y = 10;
+			layout.bottom = 10;
+			layout.right = 10;
 			
 			DynamicDisplayObjectTrait(mediaElement1.getTrait(MediaTraitType.DISPLAY_OBJECT)).displayObject = new Sprite();
 			

@@ -29,18 +29,8 @@ package org.osmf.layout
 	import org.osmf.utils.URL;
 
 	/**
-	 * Signals that one of Facets's values has changed.
+	 * @private
 	 * 
-	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-    [Event(name='facetValueChange', type='org.osmf.events.FacetChangeEvent')]
-     
-	/**
 	 * Defines a metadata facet that defines left, top, right and bottom values.
 	 * 
 	 * On encountering this facet on a target, the default layout renderer
@@ -55,9 +45,11 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class AnchorLayoutFacet extends LayoutFacet
+	internal class AnchorLayoutFacet extends LayoutFacet
 	{
 		/**
+		 * @private
+		 * 
 		 * Identifier for the facet's left property.
 		 *  
 		 *  @langversion 3.0
@@ -68,6 +60,8 @@ package org.osmf.layout
 		public static const LEFT:StringIdentifier = new StringIdentifier("left");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's top property.
 		 *  
 		 *  @langversion 3.0
@@ -78,6 +72,8 @@ package org.osmf.layout
 		public static const TOP:StringIdentifier = new StringIdentifier("top");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's right property.
 		 *  
 		 *  @langversion 3.0
@@ -88,6 +84,8 @@ package org.osmf.layout
 		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's bottom property.
 		 *  
 		 *  @langversion 3.0
@@ -153,15 +151,8 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired horizontal offset of the target in pixels. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
+		 * @private
+		 */
 		public function get left():Number
 		{
 			return _left;
@@ -180,15 +171,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired vertical offset of the target in pixels.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
+		 * @private
+		 */
 		public function get top():Number
 		{
 			return _top;
@@ -207,17 +191,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines how many pixels should be present between the right-hand 
-		 * side border of the target's bounding box, and the right-hand side
-		 * border of its context.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
+		 * @private
+		 */	
 		public function get right():Number
 		{
 			return _right;
@@ -236,16 +211,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines how many pixels should be present between the bottom
-		 * side border of the target's bounding box, and the bottom side
-		 * border of its context.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
 		public function get bottom():Number
 		{

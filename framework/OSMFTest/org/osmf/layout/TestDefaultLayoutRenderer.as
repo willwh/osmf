@@ -177,13 +177,11 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 50, 50);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-
-			LayoutUtils.setRelativeLayout(mediaElement.metadata, 80, 80 /* width, height */, 10, 10 /* x,y */);
-			var meAttr:LayoutAttributesFacet
-				= LayoutUtils.setLayoutAttributes
-					( mediaElement.metadata
-					, ScaleMode.NONE, RegistrationPoint.MIDDLE_RIGHT
-					);
+			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			layout.percentWidth = layout.percentHeight = 80;
+			layout.percentX = layout.percentY = 10;
+			layout.scaleMode = ScaleMode.NONE; // this is the default, actually.
+			layout.alignment = RegistrationPoint.MIDDLE_RIGHT;
 			
 			// Container
 			
@@ -210,49 +208,49 @@ package org.osmf.layout
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.CENTER;
+			layout.alignment = RegistrationPoint.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.MIDDLE_LEFT;
+			layout.alignment = RegistrationPoint.MIDDLE_LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.TOP_LEFT;
+			layout.alignment = RegistrationPoint.TOP_LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.TOP_MIDDLE;
+			layout.alignment = RegistrationPoint.TOP_MIDDLE;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.TOP_RIGHT;
+			layout.alignment = RegistrationPoint.TOP_RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);	
 			
-			meAttr.alignment = RegistrationPoint.BOTTOM_LEFT;
+			layout.alignment = RegistrationPoint.BOTTOM_LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.BOTTOM_MIDDLE;
+			layout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			meAttr.alignment = RegistrationPoint.BOTTOM_RIGHT;
+			layout.alignment = RegistrationPoint.BOTTOM_RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
@@ -269,8 +267,9 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			
-			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
+			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			layout.width = 400;
+			layout.height = 800;
 			
 			// Container without any dimenion settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
@@ -299,8 +298,10 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-
-			LayoutUtils.setAbsoluteLayout(mediaElement.metadata, 400, 800);
+			
+			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			layout.width = 400;
+			layout.height = 800;
 			
 			// Container without any dimenion settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
@@ -342,14 +343,19 @@ package org.osmf.layout
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			renderer.context = container;
 			
+			var layout:LayoutProperties;
+			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			LayoutUtils.setLayoutAttributes(t1.metadata, null, null, 8);
+			layout = new LayoutProperties(t1);
+			layout.order = 8;
 			
 			var t2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			LayoutUtils.setLayoutAttributes(t2.metadata, null, null, 2);
+			layout = new LayoutProperties(t2);
+			layout.order = 2;
 			
 			var t3:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			LayoutUtils.setLayoutAttributes(t3.metadata, null, null, 2);
+			layout = new LayoutProperties(t3);
+			layout.order = 2;
 			
 			var t4:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			
@@ -365,7 +371,8 @@ package org.osmf.layout
 			assertEquals(t2, container.getChildAt(2));
 			assertEquals(t1, container.getChildAt(3));
 			
-			LayoutUtils.setLayoutAttributes(t4.metadata, null, null, 4);
+			layout = new LayoutProperties(t4);
+			layout.order = 4;
 			
 			renderer.validateNow();
 			
@@ -382,9 +389,13 @@ package org.osmf.layout
 			renderer.context = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			LayoutUtils.setAbsoluteLayout(t1.metadata,100,100);
-			LayoutUtils.setPaddingLayout(t1.metadata,9.6,8.4,5.6,3.8);
-			LayoutUtils.setLayoutAttributes(t1.metadata,null,null,NaN,true);
+			var layout:LayoutProperties = new LayoutProperties(t1);
+			layout.width = layout.height = 100;
+			layout.paddingLeft = 9.6;
+			layout.paddingTop = 8.4;
+			layout.paddingRight = 5.6;
+			layout.paddingBottom = 3.8;
+			layout.snapToPixel = true;
 			t1.setIntrinsicDimensions(100,100);
 			
 			renderer.addTarget(t1);
@@ -395,7 +406,10 @@ package org.osmf.layout
 			assertEquals(85, t1.width);
 			assertEquals(88, t1.height);
 			
-			LayoutUtils.setPaddingLayout(t1.metadata,NaN,NaN,NaN,NaN);
+			layout.paddingLeft = NaN;
+			layout.paddingTop = NaN;
+			layout.paddingRight = NaN;
+			layout.paddingBottom = NaN;
 			
 			renderer.validateNow();
 			
@@ -415,51 +429,50 @@ package org.osmf.layout
 			t1.setIntrinsicDimensions(100,100);
 			
 			renderer.addTarget(t1);
-			
-			var attributes:LayoutAttributesFacet
-				= LayoutUtils.setLayoutAttributes(t1.metadata,null,null,NaN,true);
+			var layout:LayoutProperties = new LayoutProperties(t1);
+			layout.snapToPixel = true;
 				
-			attributes.registrationPoint = RegistrationPoint.TOP_LEFT;
+			layout.registrationPoint = RegistrationPoint.TOP_LEFT;
 			renderer.validateNow();
 			assertEquals(0, t1.x);
 			assertEquals(0, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.TOP_MIDDLE;
+			layout.registrationPoint = RegistrationPoint.TOP_MIDDLE;
 			renderer.validateNow();
 			assertEquals(-50, t1.x);
 			assertEquals(0, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.TOP_RIGHT;
+			layout.registrationPoint = RegistrationPoint.TOP_RIGHT;
 			renderer.validateNow();
 			assertEquals(-100, t1.x);
 			assertEquals(0, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.BOTTOM_LEFT;
+			layout.registrationPoint = RegistrationPoint.BOTTOM_LEFT;
 			renderer.validateNow();
 			assertEquals(0, t1.x);
 			assertEquals(-100, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.BOTTOM_MIDDLE;
+			layout.registrationPoint = RegistrationPoint.BOTTOM_MIDDLE;
 			renderer.validateNow();
 			assertEquals(-50, t1.x);
 			assertEquals(-100, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.BOTTOM_RIGHT;
+			layout.registrationPoint = RegistrationPoint.BOTTOM_RIGHT;
 			renderer.validateNow();
 			assertEquals(-100, t1.x);
 			assertEquals(-100, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.MIDDLE_LEFT;
+			layout.registrationPoint = RegistrationPoint.MIDDLE_LEFT;
 			renderer.validateNow();
 			assertEquals(0, t1.x);
 			assertEquals(-50, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.CENTER;
+			layout.registrationPoint = RegistrationPoint.CENTER;
 			renderer.validateNow();
 			assertEquals(-50, t1.x);
 			assertEquals(-50, t1.y);
 			
-			attributes.registrationPoint = RegistrationPoint.MIDDLE_RIGHT;
+			layout.registrationPoint = RegistrationPoint.MIDDLE_RIGHT;
 			renderer.validateNow();
 			assertEquals(-100, t1.x);
 			assertEquals(-50, t1.y);

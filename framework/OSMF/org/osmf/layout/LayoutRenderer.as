@@ -445,7 +445,7 @@ package org.osmf.layout
 			_mediaWidth = size.x;
 			_mediaHeight = size.y;
 			
-			_context.measureMedia();	
+			_context.measureMedia();
 		}
 		
 		/**
@@ -453,6 +453,8 @@ package org.osmf.layout
 		 */
 		protected function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
 		{
+			processUpdateMediaDisplayBegin(layoutTargets);
+			
 			_context.updateMediaDisplay(availableWidth, availableHeight);
 			
 			// Traverse, execute top-down:
@@ -475,6 +477,8 @@ package org.osmf.layout
 			}
 			
 			dirty = false;
+			
+			processUpdateMediaDisplayEnd();
 		}
 		
 		// Subclass stubs
@@ -597,6 +601,34 @@ package org.osmf.layout
 		{	
 			// CONFIG::LOGGING { logger.debug("unstaged: {0}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 		}
+		
+		/**
+		 * Subclasses may override this method should they require special
+		 * processing on the updateMediaDisplay routine starting it execution.
+		 *  
+		 * @param targets The targets that are about to be measured.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function processUpdateMediaDisplayBegin(targets:Vector.<ILayoutTarget>):void
+		{	
+		}
+		
+		/**
+		 * Subclasses may override this method should they require special
+		 * processing on the updateMediaDisplay routine completing its execution.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function processUpdateMediaDisplayEnd():void
+		{
+		}	
 		
 		/**
 		 * Subclasses should override this method to implement the algorithm by

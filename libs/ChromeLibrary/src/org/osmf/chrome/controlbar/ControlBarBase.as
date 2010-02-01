@@ -22,18 +22,15 @@
 
 package org.osmf.chrome.controlbar
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
 	import org.osmf.chrome.utils.FadingSprite;
-	import org.osmf.containers.MediaContainer;
-	import org.osmf.layout.AbsoluteLayoutFacet;
+	import org.osmf.layout.LayoutProperties;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.utils.URL;
 	
@@ -42,7 +39,8 @@ package org.osmf.chrome.controlbar
 		[Embed("../assets/images/controlBarBackdrop.png")]
 		public var backdropType:Class;
 		
-		public static const METADATA_AUTO_HIDE_URL:URL = new URL("http://www.osmf.org.chrome/controlbar/autoHide");
+		public static const METADATA_AUTO_HIDE_URL:URL
+			= new URL("http://www.osmf.org.chrome/controlbar/autoHide");
 		 
 		public function ControlBarBase(backdrop:Class = null)
 		{
@@ -53,23 +51,18 @@ package org.osmf.chrome.controlbar
 			mouseChildren = true;
 			mouseEnabled = true;
 			
-			addChild(new backdropType());
+			var backdropObject:DisplayObject = new backdropType();
+			addChild(backdropObject);
+			
+			var layout:LayoutProperties = new LayoutProperties(this);
+			layout.width = backdropObject.width;
+			layout.height = backdropObject.height;
+			measureMedia();
 			
 			addEventListener
 				( Event.ADDED_TO_STAGE
-				, function ():void
-					{
-						stage.addEventListener
-							( MouseEvent.MOUSE_OVER
-							, visibilityDeterminingEventHandler
-							);
-							
-						stage.addEventListener
-							( MouseEvent.MOUSE_OUT
-							, visibilityDeterminingEventHandler
-							);
-					}
-				)
+				, onAddedToStage
+				);
 		}
 		
 		public function set element(value:MediaElement):void
@@ -86,31 +79,6 @@ package org.osmf.chrome.controlbar
 		public function get element():MediaElement
 		{
 			return _element;
-		}
-		
-		public function set container(value:MediaContainer):void
-		{
-			if (_container != value)
-			{
-				if (regionSizeWatcher != null)
-				{
-					regionSizeWatcher.unwatch();
-					regionSizeWatcher = null;
-				}
-				
-				_container = value;
-				
-				if (_container != null)
-				{
-					regionSizeWatcher = MetadataUtils.watchFacet
-						( _container.metadata
-						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
-						, onRegionAbsoluteLayoutChange
-						);
-				}
-				
-				visibilityDeterminingEventHandler();
-			}
 		}
 		
 		public function set autoHide(value:Boolean):void
@@ -149,24 +117,7 @@ package org.osmf.chrome.controlbar
 		{
 			return widgets[id];
 		}
-		
-		// Protected
-		//
-		
-		protected function onRegionAbsoluteLayoutChange(parameters:AbsoluteLayoutFacet):void
-		{
-			if (parameters)
-			{
-				x = (parameters.width - width) / 2;
-				y = (parameters.height - height) - BOTTOM_OFFSET;
-			}
-			else
-			{
-				x = 0;
-				y = 0;
-			}
-		}
-		
+				
 		// Internals
 		//
 		
@@ -175,11 +126,21 @@ package org.osmf.chrome.controlbar
 		private var _element:MediaElement;
 		private var widgets:Dictionary = new Dictionary();
 		
-		private var _container:MediaContainer
-		private var regionSizeWatcher:MetadataWatcher;
-		
 		private var _autoHide:Boolean = true;
 		private var mouseOver:Boolean = false;
+	
+		private function onAddedToStage(event:Event):void
+		{
+			stage.addEventListener
+				( MouseEvent.MOUSE_OVER
+				, visibilityDeterminingEventHandler
+				);
+				
+			stage.addEventListener
+				( MouseEvent.MOUSE_OUT
+				, visibilityDeterminingEventHandler
+				);
+		}
 	
 		private function updateWidgets():void
 		{

@@ -24,7 +24,6 @@ package org.osmf.display
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.layout.LayoutUtils;
 	
 	public class TestMediaContainerGroup extends TestCaseEx
 	{
@@ -46,7 +45,8 @@ package org.osmf.display
 			assertEquals(0, root.mediaWidth);
 			assertEquals(0, root.mediaHeight);
 			
-			LayoutUtils.setAbsoluteLayout(childA1A.metadata,400,50);
+			childA1A.width = 400;
+			childA1A.height = 50;
 			root.layoutRenderer.validateNow();
 			
 			assertEquals(400, childA1A.width);

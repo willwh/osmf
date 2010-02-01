@@ -13,6 +13,7 @@
     <classEntry path="org.osmf.composition.ChildSeekOperation"/>
     <classEntry path="org.osmf.composition.CompositeAudioTrait"/>
     <classEntry path="org.osmf.composition.CompositeBufferTrait"/>
+    <classEntry path="org.osmf.composition.CompositeDRMTrait"/>
     <classEntry path="org.osmf.composition.CompositeDisplayObjectTrait"/>
     <classEntry path="org.osmf.composition.CompositeElement"/>
     <classEntry path="org.osmf.composition.CompositeLoadTrait"/>
@@ -89,11 +90,11 @@
     <classEntry path="org.osmf.layout.ILayoutTarget"/>
     <classEntry path="org.osmf.layout.LayoutAttributesFacet"/>
     <classEntry path="org.osmf.layout.LayoutFacet"/>
+    <classEntry path="org.osmf.layout.LayoutProperties"/>
     <classEntry path="org.osmf.layout.LayoutRenderer"/>
     <classEntry path="org.osmf.layout.LayoutRendererChangeEvent"/>
-    <classEntry path="org.osmf.layout.LayoutRendererFacet"/>
+    <classEntry path="org.osmf.layout.LayoutRendererMode"/>
     <classEntry path="org.osmf.layout.LayoutTargetSprite"/>
-    <classEntry path="org.osmf.layout.LayoutUtils"/>
     <classEntry path="org.osmf.layout.MediaElementLayoutTarget"/>
     <classEntry path="org.osmf.layout.PaddingLayoutFacet"/>
     <classEntry path="org.osmf.layout.RegistrationPoint"/>
@@ -128,6 +129,7 @@
     <classEntry path="org.osmf.metadata.FacetGroup"/>
     <classEntry path="org.osmf.metadata.FacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.IIdentifier"/>
+    <classEntry path="org.osmf.metadata.IMetadataProvider"/>
     <classEntry path="org.osmf.metadata.KeyValueFacet"/>
     <classEntry path="org.osmf.metadata.MediaType"/>
     <classEntry path="org.osmf.metadata.MediaTypeFacet"/>

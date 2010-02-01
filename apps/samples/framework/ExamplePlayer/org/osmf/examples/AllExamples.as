@@ -26,9 +26,9 @@ package org.osmf.examples
 	import flash.utils.Timer;
 	
 	import org.osmf.audio.AudioElement;
-	import org.osmf.audio.SoundLoader;
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
+	import org.osmf.display.ScaleMode;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
@@ -40,10 +40,9 @@ package org.osmf.examples
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
-	import org.osmf.layout.AbsoluteLayoutFacet;
-	import org.osmf.layout.LayoutUtils;
-	import org.osmf.layout.RelativeLayoutFacet;
+	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererMode;
+	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -56,7 +55,6 @@ package org.osmf.examples
 	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.swf.SWFElement;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.tracking.Beacon;
 	import org.osmf.tracking.BeaconElement;
 	import org.osmf.traits.BufferTrait;
@@ -355,16 +353,24 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
+							var layout:LayoutProperties = new LayoutProperties(parallelElement);
+							layout.mode = LayoutRendererMode.HBOX;
+							layout.width = 640
+							layout.height = 352;
 							
 							var mediaElement1:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							layout = new LayoutProperties(mediaElement1);
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
 							parallelElement.addChild(mediaElement1);
 							
 							var mediaElement2:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
+							layout = new LayoutProperties(mediaElement2);
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
 							parallelElement.addChild(mediaElement2);
-							
-							LayoutUtils.setRelativeLayout(mediaElement1.metadata, 50, 50);
-							LayoutUtils.setRelativeLayout(mediaElement2.metadata, 50, 50, 50);
-							LayoutUtils.setAbsoluteLayout(parallelElement.metadata, 640, 358);
 							
 							return parallelElement;
 				  	   	} 
@@ -587,11 +593,19 @@ package org.osmf.examples
 							parallelElement.addChild(video1);
 							parallelElement.addChild(video2);
 				  	   		
-				  	   		var relativeLayout1:RelativeLayoutFacet
-				  	   			= LayoutUtils.setRelativeLayout(video1.metadata, 50, 50);
-				  	   		var relativeLayout2:RelativeLayoutFacet
-								= LayoutUtils.setRelativeLayout(video2.metadata, 50, 50, 50, 25);
-							LayoutUtils.setAbsoluteLayout(parallelElement.metadata, 640, 358);
+				  	   		var layoutVideo1:LayoutProperties = new LayoutProperties(video1);
+							layoutVideo1.percentWidth = 50;
+							layoutVideo1.percentHeight = 50;
+							
+							var layoutVideo2:LayoutProperties = new LayoutProperties(video2);
+							layoutVideo2.percentWidth = 50;
+							layoutVideo2.percentHeight = 50;
+							layoutVideo2.percentX = 50;
+							layoutVideo2.percentY = 25;
+							
+							var layoutParallelElement:LayoutProperties = new LayoutProperties(parallelElement);
+							layoutParallelElement.width = 640;
+							layoutParallelElement.height = 358;
 				  	   		
 				  	   		var delta:int = 1;
 							
@@ -604,13 +618,13 @@ package org.osmf.examples
 								
 							function onTimer(event:Event):void
 							{
-								relativeLayout1.width += delta;
-								relativeLayout1.height += delta;
+								layoutVideo1.percentWidth += delta;
+								layoutVideo1.percentHeight += delta;
 								
-								relativeLayout2.y += delta / 2;
+								layoutVideo2.percentY += delta / 2;
 									
-								if 	(	relativeLayout1.width < 25
-									||	relativeLayout1.width > 75
+								if 	(	layoutVideo1.percentWidth < 25
+									||	layoutVideo1.percentWidth > 75
 									)
 								{
 									delta = -delta;

@@ -93,6 +93,11 @@ package org.osmf.layout
 			
 			_layoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE);
 			_parentLayoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE);
+			
+			super();
+			
+			mouseEnabled = true;
+			mouseChildren = true;
 		}
 		
 		// ILayoutTarget
@@ -143,8 +148,17 @@ package org.osmf.layout
 			
 			if (layoutRenderer)
 			{
+				// The measured dimensions can be fetched from the sprite's own
+				// layout renderer. Since measurement takes place bottom to top,
+				// the renderer should already be up to date for this pass:
 				newMediaWidth = layoutRenderer.mediaWidth;
 				newMediaHeight = layoutRenderer.mediaHeight;
+			}
+			else
+			{
+				// The sprite is a leaf. Fetch the size from the sprite itself:
+				newMediaWidth = super.width / scaleX;
+				newMediaHeight = super.height / scaleY;
 			}
 				
 			if 	(	newMediaWidth != _mediaWidth
@@ -171,7 +185,15 @@ package org.osmf.layout
 		 */
 	 	public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
 	 	{
-	 		// Nothing to do: our children get resized by the layout renderer.
+	 		if (_layoutRenderer.value == null)
+	 		{
+	 			super.width = availableWidth;
+	 			super.height = availableHeight;
+	 		}
+	 		else
+	 		{
+	 			// Nothing to do: our children get resized by the layout renderer.
+	 		}
 	 	}
 	 	
 	 	/**
@@ -195,20 +217,7 @@ package org.osmf.layout
 		
 		override public function set width(value:Number):void
 		{
-			var absoluteLayout:AbsoluteLayoutFacet
-				=	_metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
-				as	AbsoluteLayoutFacet;
-			
-			if (absoluteLayout == null)
-			{
-				absoluteLayout = new AbsoluteLayoutFacet();
-				absoluteLayout.width = value;
-				_metadata.addFacet(absoluteLayout);
-			}
-			else
-			{
-				absoluteLayout.width = value;
-			} 
+			new LayoutProperties(this).width = value; 
 		}
 		override public function get width():Number
 		{
@@ -217,20 +226,7 @@ package org.osmf.layout
 		
 		override public function set height(value:Number):void
 		{
-			var absoluteLayout:AbsoluteLayoutFacet
-				=	_metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
-				as	AbsoluteLayoutFacet;
-			
-			if (absoluteLayout == null)
-			{
-				absoluteLayout = new AbsoluteLayoutFacet();
-				absoluteLayout.height = value;
-				_metadata.addFacet(absoluteLayout);
-			}
-			else
-			{
-				absoluteLayout.height = value;
-			} 
+			new LayoutProperties(this).height = value; 
 		}
 		override public function get height():Number
 		{

@@ -29,18 +29,8 @@ package org.osmf.layout
 	import org.osmf.utils.URL;
 
 	/**
-	 * Signals that one of Facets's values has changed.
-	 * 
-	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-    [Event(name='facetValueChange', type='org.osmf.events.FacetChangeEvent')]
-
-	/**
+	 * @private
+	 *
 	 * Defines a metadata facet that defines left, top, right and bottom values.
 	 * 
 	 * On encountering this facet on a target, the default layout renderer
@@ -56,9 +46,11 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class PaddingLayoutFacet extends LayoutFacet
+	internal class PaddingLayoutFacet extends LayoutFacet
 	{
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's left property.
 		 *  
 		 *  @langversion 3.0
@@ -69,6 +61,8 @@ package org.osmf.layout
 		public static const LEFT:StringIdentifier = new StringIdentifier("left");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's top property.
 		 *  
 		 *  @langversion 3.0
@@ -79,6 +73,8 @@ package org.osmf.layout
 		public static const TOP:StringIdentifier = new StringIdentifier("top");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's right property.
 		 *  
 		 *  @langversion 3.0
@@ -89,6 +85,8 @@ package org.osmf.layout
 		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
 		
 		/**
+		 * @private
+		 *
 		 * Identifier for the facet's bottom property.
 		 *  
 		 *  @langversion 3.0
@@ -141,16 +139,8 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the thickness of the blank space that is to be placed
-		 * at the target's left-hand side.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */					
+		 * @private
+		 */
 		public function get left():Number
 		{
 			return _left;
@@ -169,16 +159,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the thickness of the blank space that is to be placed
-		 * at the target's top side.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
+		 * @private
+		 */
 		public function get top():Number
 		{
 			return _top;
@@ -197,16 +179,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the thickness of the blank space that is to be placed
-		 * at the target's right-hand side.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
+		 * @private
+		 */
 		public function get right():Number
 		{
 			return _right;
@@ -226,16 +200,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the thickness of the blank space that is to be placed
-		 * at the target's bottom side.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
+		 * @private
+		 */
 		public function get bottom():Number
 		{
 			return _bottom;

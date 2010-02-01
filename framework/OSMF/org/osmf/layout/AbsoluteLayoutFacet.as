@@ -29,19 +29,9 @@ package org.osmf.layout
 	import org.osmf.utils.URL;
 
 	/**
-	 * Signals that one of Facets's values has changed.
-	 * 
-	 * @eventType org.osmf.events.FacetChangeEvent.VALUE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-    [Event(name='facetValueChange', type='org.osmf.events.FacetChangeEvent')]
-
-	/**
-	 * Defines a metadata facet that defines x, y, width and height values.
+	 * @private
+	 *
+	 *  Defines a metadata facet that defines x, y, width and height values.
 	 * 
 	 * On encountering this facet on a target, the default layout renderer
 	 * will use the set values to position and size the target according to
@@ -52,9 +42,11 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class AbsoluteLayoutFacet extends LayoutFacet
+	internal class AbsoluteLayoutFacet extends LayoutFacet
 	{
 		/**
+		 * @private
+		 * 
 		 * Identifier for the facet's x property.
 		 *  
 		 *  @langversion 3.0
@@ -65,6 +57,8 @@ package org.osmf.layout
 		public static const X:StringIdentifier = new StringIdentifier("x");
 		
 		/**
+		 * @private
+		 * 
 		 * Identifier for the facet's y property.
 		 *  
 		 *  @langversion 3.0
@@ -75,6 +69,8 @@ package org.osmf.layout
 		public static const Y:StringIdentifier = new StringIdentifier("y");
 		
 		/**
+		 * @private
+		 * 
 		 * Identifier for the facet's width property.
 		 *  
 		 *  @langversion 3.0
@@ -85,6 +81,8 @@ package org.osmf.layout
 		public static const WIDTH:StringIdentifier = new StringIdentifier("width");
 		
 		/**
+		 * @private
+		 * 
 		 * Identifier for the facet's height property.
 		 *  
 		 *  @langversion 3.0
@@ -140,15 +138,7 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired horizontal offset of a target expressed in
-		 * pixels.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */		
 		public function get x():Number
 		{
@@ -168,16 +158,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired vertical offset of a target expressed in
-		 * pixels.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
+		 * @private
+		 */	
 		public function get y():Number
 		{
 			return _y;
@@ -196,16 +178,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired horizontal size of a target expressed in
-		 * pixels.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
+		 * @private
+		 */	
 		public function get width():Number
 		{
 			return _width;
@@ -224,16 +198,8 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
-		 * Defines the desired vertical offset of a target expressed in
-		 * pixels.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
+		 * @private
+		 */	
 		public function get height():Number
 		{
 			return _height;

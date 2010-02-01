@@ -30,17 +30,15 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.composition.SerialElement;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
-	import org.osmf.layout.LayoutUtils;
+	import org.osmf.layout.LayoutProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.net.NetLoader;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
@@ -85,29 +83,38 @@ package
 			
 			// Next, decorate the content tree with attributes:
 			
-			LayoutUtils.setRelativeLayout(banners.metadata, 100, 100);
-			LayoutUtils.setLayoutAttributes(banners.metadata, ScaleMode.NONE, RegistrationPoint.BOTTOM_MIDDLE);
+			var bannersLayout:LayoutProperties = new LayoutProperties(banners);
+			bannersLayout.percentWidth = 100;
+			bannersLayout.percentHeight = 100;
+			bannersLayout.scaleMode = ScaleMode.NONE;
+			bannersLayout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
 			
-			LayoutUtils.setRelativeLayout(mainContent.metadata, 100, 100);
-			LayoutUtils.setLayoutAttributes(mainContent.metadata, ScaleMode.LETTERBOX, RegistrationPoint.TOP_MIDDLE);
+			var mainLayout:LayoutProperties = new LayoutProperties(mainContent);
+			mainLayout.percentWidth = 100;
+			mainLayout.percentHeight = 100;
+			mainLayout.scaleMode = ScaleMode.LETTERBOX;
+			mainLayout.alignment = RegistrationPoint.TOP_MIDDLE;
 			
 			// Consruct 3 regions:
 
 			var bannerContainer:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(bannerContainer.metadata, 600, 70);
+			bannerContainer.width = 600;
+			bannerContainer.height = 70;
 			bannerContainer.backgroundColor = 0xFF0000;
 			bannerContainer.backgroundAlpha = .2;
 			addChild(bannerContainer);
 
 			var mainContainer:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(mainContainer.metadata, 600, 400);
+			mainContainer.width = 600;
+			mainContainer.height = 400;
 			mainContainer.backgroundColor = 0xFFFFFF;
 			mainContainer.backgroundAlpha = .2;
 			mainContainer.y = 80;
 			addChild(mainContainer);
 			
 			var skyScraperContainer:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(skyScraperContainer.metadata, 120, 600);
+			skyScraperContainer.width = 120;
+			skyScraperContainer.height = 600;
 			skyScraperContainer.backgroundColor = 0xFF00;
 			skyScraperContainer.backgroundAlpha = .2;
 			skyScraperContainer.x = 610;
@@ -138,7 +145,8 @@ package
 			// vice-versa:
 			
 			var bottomBannerContainer:MediaContainer = new MediaContainer();
-			LayoutUtils.setAbsoluteLayout(bottomBannerContainer.metadata, 600, 70);
+			bottomBannerContainer.width = 600;
+			bottomBannerContainer.height = 70;
 			bottomBannerContainer.backgroundColor = 0xFF;
 			bottomBannerContainer.backgroundAlpha = .2;
 			bottomBannerContainer.y = 490;
