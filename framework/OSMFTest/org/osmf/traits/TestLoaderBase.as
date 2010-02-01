@@ -22,110 +22,408 @@
 package org.osmf.traits
 {
 	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
-	import org.osmf.media.IMediaResource;
-	import org.osmf.media.URLResource;
-	import org.osmf.utils.OSMFStrings;
+	import flexunit.framework.TestCase;
+	
+	import org.osmf.events.LoaderEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.SimpleResource;
-	import org.osmf.utils.URL;
 	
 	// TODO:
-	// - Merge ILoader and LoaderBase
 	// - Modify merged class to make load/unload methods final, and use process/postProcess metaphor.
-	// - Modify TestLoaderBase to include logic from TestILoader, but to match the pattern for base
-	//   trait classes.
-	public class TestLoaderBase extends TestILoader
+	public class TestLoaderBase extends TestCase
 	{
-		override protected function createInterfaceObject(... args):Object
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			_loader = createLoader();
+			
+			eventDispatcher = new EventDispatcher();
+			eventCount = 0;
+			mediaErrors = [];
+			doTwice = false;
+		}
+		
+		override public function tearDown():void
+		{
+			super.tearDown();
+			
+			_loader = null;
+			eventDispatcher = null;
+		}
+		
+		protected function createInterfaceObject(... args):Object
 		{
 			return new LoaderBase();
 		}
 
-		/**
-		 * Subclasses can override to specify their own resource.
-		 **/
-		override protected function get successfulResource():IMediaResource
+		//---------------------------------------------------------------------
+		
+		public function testCanHandleResource():void
 		{
-			return new SimpleResource(SimpleResource.SUCCESSFUL);
+			assertTrue(loader.canHandleResource(successfulResource) == true);
+			assertTrue(loader.canHandleResource(failedResource) == true);
+			assertTrue(loader.canHandleResource(unhandledResource) == false);
 		}
 
-		override protected function get failedResource():IMediaResource
+		public function testLoad():void
 		{
-			return new SimpleResource(SimpleResource.FAILED);
+			doTestLoad();
 		}
 
-		override protected function get unhandledResource():IMediaResource
+		public function testLoadTwice():void
 		{
-			return new SimpleResource(SimpleResource.UNHANDLED);
+			doTwice = true;
+			doTestLoad();
 		}
-
-		/*
-		public function testLoadValidation():void
+		
+		private function doTestLoad():void
 		{
-			var loader:LoaderBase = new LoaderBase();
-			var loadTrait:LoadTrait = createLoadTrait(loader, null);
-				
-			shouldThrowLoad(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			loadTrait.loadState = LoadState.READY;
-			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_READY));
-			loadTrait.loadState = LoadState.LOADING;
-			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_LOADING));	
-			loadTrait.loadState = LoadState.UNINITIALIZED;		
-			shouldThrowLoad(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 						
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoad);
+			loader.load(createLoadTrait(loader, successfulResource));
 		}
 		
-		public function testUnloadValidation():void
+		private function onTestLoad(event:LoaderEvent):void
 		{
-			var loader:LoaderBase = new LoaderBase();
-			var loadTrait:LoadTrait = createLoadTrait(loader, null);
+			assertTrue(event.loader == loader);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
 			
-			shouldThrowUnload(loader, null, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			loadTrait.loadState = LoadState.UNINITIALIZED;
-			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADED));
-			loadTrait.loadState = LoadState.UNLOADING;
-			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ALREADY_UNLOADING));			
-			loadTrait.loadState = LoadState.READY;		
-			shouldThrowUnload(loader, loadTrait, OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));						
+			var reload:Boolean = false;
+			
+			switch (eventCount)
+			{
+				case 0:
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
+					assertTrue(event.newState == LoadState.LOADING);
+					break;
+				case 1:
+					assertTrue(event.oldState == LoadState.LOADING);
+					assertTrue(event.newState == LoadState.READY);
+					
+					assertTrue(event.loadedContext != null);
+					
+					if (doTwice)
+					{
+						reload = true;
+					}
+					else
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+					break;
+				default:
+					fail();
+			}
+			
+			eventCount++;
+			
+			if (reload)
+			{
+				// Calling load a second time should throw an exception.
+				try
+				{
+					event.loader.load(event.loadTrait);
+					
+					fail();
+				}
+				catch (error:IllegalOperationError)
+				{
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+
+		public function testLoadWithFailure():void
+		{
+			doTestLoadWithFailure();
 		}
 		
-		private function shouldThrowLoad(loader:ILoader, loadTrait:LoadTrait, message:String):void
+		public function testLoadWithFailureThenReload():void
 		{
-			var caught:Boolean = false;
+			doTwice = true;
+			doTestLoadWithFailure();
+		}
+		
+		private function doTestLoadWithFailure():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
+			
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithFailure);
+			var loadTrait:LoadTrait = createLoadTrait(loader, failedResource);
+			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError); 
+			loader.load(loadTrait);
+		}
+		
+		private function onTestLoadWithFailure(event:LoaderEvent):void
+		{
+			assertTrue(event.loader == loader);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
+			
+			var reload:Boolean = false;
+			
+			switch (eventCount)
+			{
+				case 0:
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
+					assertTrue(event.newState == LoadState.LOADING);
+					break;
+				case 1:
+					assertTrue(event.oldState == LoadState.LOADING);
+					assertTrue(event.newState == LoadState.LOAD_ERROR);
+					
+					assertTrue(event.loadedContext == null);
+					
+					if (eventCount == 1 && doTwice)
+					{
+						reload = true;
+					}
+					else
+					{
+						markCompleteOnMediaError(1);
+					}
+					break;
+				case 2:
+					assertTrue(doTwice);
+										
+					assertTrue(event.oldState == LoadState.LOAD_ERROR);
+					assertTrue(event.newState == LoadState.LOADING);
+					break;
+				case 3:
+					assertTrue(doTwice);
+					
+					assertTrue(event.oldState == LoadState.LOADING);
+					assertTrue(event.newState == LoadState.LOAD_ERROR);
+					
+					assertTrue(event.loadedContext == null);
+					
+					markCompleteOnMediaError(2);
+					break;
+				default:
+					fail();
+			}
+			
+			eventCount++;
+			
+			if (reload)
+			{
+				// Reloading should repeat the failure.
+				event.loader.load(event.loadTrait);
+			}
+		}
+		
+		private function markCompleteOnMediaError(numExpected:int):void
+		{
+			if (numExpected == mediaErrors.length)
+			{
+				// Just verify one of them.
+				verifyMediaErrorOnLoadFailure(mediaErrors[0] as MediaError);
+
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+			else
+			{
+				// Wait a bit, then check again.
+				var timer:Timer = new Timer(400);
+				timer.addEventListener(TimerEvent.TIMER, onTimer);
+				timer.start();
+				
+				function onTimer(event:TimerEvent):void
+				{
+					timer.stop();
+					timer.removeEventListener(TimerEvent.TIMER, onTimer);
+					
+					markCompleteOnMediaError(numExpected);
+				}
+			}
+		}
+
+		public function testLoadWithInvalidResource():void
+		{
 			try
 			{
-				loader.load(loadTrait);
+				loader.load(createLoadTrait(loader, unhandledResource));
+				
+				fail();
 			}
 			catch (error:IllegalOperationError)
 			{
-				assertEquals(error.message, message);
-				caught = true;
 			}
-			assertTrue(caught);
+		}
+
+		public function testUnload():void
+		{
+			doTestUnload();
+		}
+
+		public function testUnloadTwice():void
+		{
+			doTwice = true;
+			doTestUnload();
 		}
 		
-		private function shouldThrowUnload(loader:ILoader, loadTrait:LoadTrait, message:String):void
+		private function doTestUnload():void
 		{
-			var caught:Boolean = false;
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
+			
+			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE,onTestUnload);
+			loader.load(createLoadTrait(loader, successfulResource));
+		}
+		
+		private function onTestUnload(event:LoaderEvent):void
+		{
+			assertTrue(event.loader == loader);
+			assertTrue(event.loadTrait != null);
+			assertTrue(event.type == LoaderEvent.LOAD_STATE_CHANGE);
+			
+			var doUnload:Boolean = false;
+			
+			switch (eventCount)
+			{
+				case 0:
+					assertTrue(event.oldState == LoadState.UNINITIALIZED);
+					assertTrue(event.newState == LoadState.LOADING);
+					break;
+				case 1:
+					assertTrue(event.oldState == LoadState.LOADING);
+					assertTrue(event.newState == LoadState.READY);
+					
+					assertTrue(event.loadedContext != null);
+					
+					// Now unload.
+					doUnload = true;
+					
+					break;
+				case 2:
+					assertTrue(event.oldState == LoadState.READY);
+					assertTrue(event.newState == LoadState.UNLOADING);
+					
+					assertTrue(event.loadedContext != null);
+					break;
+				case 3:
+					assertTrue(event.oldState == LoadState.UNLOADING);
+					assertTrue(event.newState == LoadState.UNINITIALIZED);
+					
+					assertTrue(event.loadedContext == null);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+					break;
+					
+				default:
+					fail();
+			}
+			
+			eventCount++;
+			
+			if (doUnload)
+			{
+				event.loader.unload(event.loadTrait);
+				
+				if (doTwice)
+				{
+					// Unloading a second time should throw an exception
+					// (but the first unload will complete).
+					try
+					{
+						event.loader.unload(event.loadTrait);
+						
+						fail();
+					}
+					catch (error:IllegalOperationError)
+					{
+					}
+				}
+			}
+		}
+		
+		public function testUnloadWithInvalidResource():void
+		{
 			try
 			{
-				loader.unload(loadTrait);
+				loader.unload(createLoadTrait(loader, unhandledResource));
+				
+				fail();
 			}
 			catch (error:IllegalOperationError)
 			{
-				assertEquals(error.message, message);
-				caught = true;
 			}
-			assertTrue(caught);
 		}
 		
-		override public function testCanHandleResource():void
+		//---------------------------------------------------------------------
+		
+		protected final function createLoader():LoaderBase
 		{
-			super.testCanHandleResource();
-			
-			var loader:LoaderBase = new LoaderBase();
-			assertFalse(loader.canHandleResource(null));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://test.com"))));
-		}*/
+			return createInterfaceObject() as LoaderBase; 
+		}
+		
+		protected function setOverriddenLoader(value:LoaderBase):void
+		{
+			_loader = value;
+		}
+		
+		protected final function get loader():LoaderBase
+		{
+			return _loader;
+		}
+		
+		protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
+		{
+			return new LoadTrait(loader, resource);
+		}
+		
+
+		protected function get successfulResource():MediaResourceBase
+		{
+			throw new Error("Subclass must override get successfulResource!");
+		}
+
+		protected function get failedResource():MediaResourceBase
+		{
+			throw new Error("Subclass must override get failedResource!");
+		}
+
+		protected function get unhandledResource():MediaResourceBase
+		{
+			throw new Error("Subclass must override get unhandledResource!");
+		}
+		
+		protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
+		{
+			// Subclasses can override to check the error's properties.
+		}
+
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is received.
+		}
+
+		private function mustNotReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is NOT received.
+			fail();
+		}
+		
+		private function onMediaError(event:MediaErrorEvent):void
+		{
+			mediaErrors.push(event.error);
+		}
+		
+		private static const TEST_TIME:int = 8000;
+		
+		private var eventDispatcher:EventDispatcher;
+		private var eventCount:int = 0;
+		private var mediaErrors:Array;
+		private var _loader:LoaderBase;
+		private var doTwice:Boolean;
 	}
 }

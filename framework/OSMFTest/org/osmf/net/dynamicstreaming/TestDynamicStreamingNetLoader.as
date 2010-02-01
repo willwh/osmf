@@ -66,7 +66,7 @@ package org.osmf.net.dynamicstreaming
 			return netFactory.createNetLoader();
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockDynamicStreamingNetLoader = loader as MockDynamicStreamingNetLoader;
 			if (mockLoader)

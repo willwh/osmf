@@ -80,7 +80,7 @@ package org.osmf.traits
 		/**
 		 * Constructor.
 		 * 
-		 * @param loader The ILoader instance that will be used to load the
+		 * @param loader The LoaderBase instance that will be used to load the
 		 * media for the media element that owns this trait.
 		 * @param resource The MediaResourceBase instance that represents the media resource 
 		 * to be loaded.
@@ -91,7 +91,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function LoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function LoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
 			super(MediaTraitType.LOAD);
 			
@@ -102,10 +102,10 @@ package org.osmf.traits
 			if (loader != null)
 			{
 				// We set the highest possible priority to ensure that our handler
-				// is the first to process the ILoader's event.  The reason for this
-				// is to ensure that clients that work with both an ILoader and a
+				// is the first to process the loader's event.  The reason for this
+				// is to ensure that clients that work with both a loader and a
 				// LoadTrait always perceive a consistent state between the two (which
-				// could be subverted if the ILoader updates its state, then the client
+				// could be subverted if the loader updates its state, then the client
 				// gets the event, then the LoadTrait updates its state).
 				loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, int.MAX_VALUE, true);
 			}
@@ -198,7 +198,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_ILOADER_FOR_LOAD));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER_FOR_LOAD));
 			}
 		}
 		
@@ -240,7 +240,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_ILOADER_FOR_UNLOAD));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER_FOR_UNLOAD));
 			}
 		}
 		
@@ -446,7 +446,7 @@ package org.osmf.traits
 			}
 		}
 
-		private var loader:ILoader;
+		private var loader:LoaderBase;
 		private var _resource:MediaResourceBase;
 		
 		private var _loadState:String;

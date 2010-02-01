@@ -24,11 +24,11 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
-	 * An ILoader dispatches a LoaderEvent when a LoadTrait that it's loading
+	 * A LoaderBase dispatches a LoaderEvent when a LoadTrait that it's loading
 	 * or unloading has undergone a notable load-oriented change.
 	 *  
 	 *  @langversion 3.0
@@ -57,7 +57,7 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
-		 * @param loader The ILoader for this event.
+		 * @param loader The LoaderBase for this event.
 		 * @param loadTrait The LoadTrait for this event.
 		 * @param oldState The previous state of the loadTrait.
 		 * @param newState The new state of the loadTrait.
@@ -72,7 +72,7 @@ package org.osmf.events
 							( type:String
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
-							, loader:ILoader=null
+							, loader:LoaderBase=null
 							, loadTrait:LoadTrait=null
 							, oldState:String=null
 							, newState:String=null
@@ -96,7 +96,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get loader():ILoader
+		public function get loader():LoaderBase
 		{
 			return _loader;
 		}
@@ -164,7 +164,7 @@ package org.osmf.events
 		// Internals
 		//
 		
-		private var _loader:ILoader;
+		private var _loader:LoaderBase;
 		private var _loadTrait:LoadTrait;
 		private var _oldState:String;
 		private var _newState:String;

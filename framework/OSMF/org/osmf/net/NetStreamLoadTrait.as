@@ -27,7 +27,7 @@ package org.osmf.net
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 
@@ -39,7 +39,7 @@ package org.osmf.net
 	 */
 	public class NetStreamLoadTrait extends LoadTrait
 	{
-		public function NetStreamLoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function NetStreamLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 			

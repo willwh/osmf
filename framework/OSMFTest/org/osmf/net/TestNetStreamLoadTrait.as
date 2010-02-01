@@ -32,7 +32,7 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestLoadTrait;
@@ -61,7 +61,7 @@ package org.osmf.net
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			var loader:ILoader = args.length > 0 ? args[0] : null;
+			var loader:LoaderBase = args.length > 0 ? args[0] : null;
 			var resource:MediaResourceBase = args.length > 1 ? args[1] : null;
 			
 			var mockLoader:MockNetLoader = loader as MockNetLoader;
@@ -87,7 +87,7 @@ package org.osmf.net
 			return new NetStreamLoadTrait(loader, resource);
 		}
 		
-		override protected function createLoader():ILoader
+		override protected function createLoader():LoaderBase
 		{
 			return netFactory.createNetLoader();
 		}

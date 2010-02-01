@@ -36,17 +36,17 @@ package org.osmf.net
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.MockNetNegotiator;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 
-	public class TestNetLoader extends TestILoader
+	public class TestNetLoader extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -466,7 +466,7 @@ package org.osmf.net
 			return netFactory.createNetLoader();
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockNetLoader = loader as MockNetLoader;
 			if (mockLoader)

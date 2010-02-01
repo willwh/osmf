@@ -44,7 +44,7 @@ package org.osmf.traits
 		/**
 		 * Subclasses can override to specify their own loader.
 		 **/
-		protected function createLoader():ILoader
+		protected function createLoader():LoaderBase
 		{
 			return useNullLoader ? null : new SimpleLoader();
 		}

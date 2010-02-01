@@ -71,7 +71,7 @@ package org.osmf.video
 
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -270,7 +270,7 @@ package org.osmf.video
       	/**
 		 * @private
 		 */
-		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
 		{
 			return new NetStreamLoadTrait(loader, resource);
 		}

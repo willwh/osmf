@@ -26,7 +26,7 @@ package org.osmf.audio
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoadTrait;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
@@ -36,7 +36,7 @@ package org.osmf.audio
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
-			var loader:ILoader = args.length > 0 ? args[0] : null;
+			var loader:LoaderBase = args.length > 0 ? args[0] : null;
 			var resource:MediaResourceBase = args.length > 1 ? args[1] : null;
 
 			var sound:Sound = new Sound(new URLRequest(TestConstants.LOCAL_SOUND_FILE));
@@ -44,7 +44,7 @@ package org.osmf.audio
 			return new SoundLoadTrait(loader, resource);
 		}
 		
-		override protected function createLoader():ILoader
+		override protected function createLoader():LoaderBase
 		{
 			return new SoundLoader();
 		}

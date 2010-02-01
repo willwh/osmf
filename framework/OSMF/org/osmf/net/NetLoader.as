@@ -42,7 +42,7 @@ package org.osmf.net
 	import org.osmf.traits.LoaderBase;
 
 	/**
-	 * The NetLoader class implements ILoader to provide
+	 * The NetLoader class extends LoaderBase to provide
 	 * loading support to the AudioElement and VideoElement classes.
 	 * <p>Supports both streaming and progressive media resources.
 	 * If the resource URL is RTMP, connects to an RTMP server by invoking a NetConnectionFactory. 

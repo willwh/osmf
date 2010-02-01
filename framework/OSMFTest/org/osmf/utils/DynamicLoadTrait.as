@@ -22,12 +22,12 @@
 package org.osmf.utils
 {
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.media.MediaResourceBase;
 	
 	public class DynamicLoadTrait extends LoadTrait
 	{
-		public function DynamicLoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function DynamicLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 		}

@@ -27,7 +27,7 @@ package org.osmf.image
 	import org.osmf.swf.LoaderLoadTrait;
 	import org.osmf.swf.LoaderLoadedContext;
 	import org.osmf.swf.LoaderUtils;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	
@@ -91,7 +91,7 @@ package org.osmf.image
 		/**
 		 * @private 
 		 */ 		
-		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
 		{
 			return new LoaderLoadTrait(loader, resource);
 		}

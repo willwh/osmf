@@ -33,11 +33,11 @@ package org.osmf.test.smil.loader
 	import org.osmf.smil.model.*;
 	import org.osmf.test.smil.SMILTestConstants;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
 	
-	public class TestSMILLoader extends TestILoader
+	public class TestSMILLoader extends TestLoaderBase
 	{
 		override public function setUp():void
 		{

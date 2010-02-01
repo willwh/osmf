@@ -58,7 +58,7 @@ package org.osmf.external
 			}
 			if (resource is URLResource == false)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADER_CANT_HANDLE_RESOURCE));
 			}
 			
 			loadState = LoadState.LOADING;

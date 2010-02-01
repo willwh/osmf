@@ -140,7 +140,7 @@ package org.osmf
 			addTestSuite(TestDRMTrait);
 			addTestSuite(TestDynamicStreamTrait);
 			addTestSuite(TestLoadTrait);
-			//addTestSuite(TestLoaderBase);
+			addTestSuite(TestLoaderBaseAsSubclass);
 			addTestSuite(TestLoadTraitAsSubclass);
 			addTestSuite(TestPlayTrait);
 			addTestSuite(TestPlayTraitAsSubclass);

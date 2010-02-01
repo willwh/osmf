@@ -31,10 +31,10 @@ package org.osmf.vast.loader
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
@@ -46,7 +46,7 @@ package org.osmf.vast.loader
 	import org.osmf.vast.model.VASTTrackingEventType;
 	import org.osmf.vast.model.VASTUrl;
 		
-	public class TestVASTLoader extends TestILoader
+	public class TestVASTLoader extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -280,7 +280,7 @@ package org.osmf.vast.loader
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			setOverriddenLoader(createInterfaceObject(0) as ILoader);
+			setOverriddenLoader(createInterfaceObject(0) as LoaderBase);
 			
 			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithZeroMaxNumWrapperRedirects);
 			loader.load(createLoadTrait(loader, OUTER_WRAPPER_RESOURCE));
@@ -375,7 +375,7 @@ package org.osmf.vast.loader
 				);
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockHTTPLoader = httpLoader as MockHTTPLoader;
 			if (mockLoader)

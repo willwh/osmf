@@ -22,7 +22,7 @@
 package org.osmf.media
 {
 	import org.osmf.events.LoadEvent;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -47,7 +47,7 @@ package org.osmf.media
 		 * be dynamically generated from the loaderClasses Array based on the type
 		 * of the resource.
 		 * @param loaderClasses An Array of Class objects representing all possible
-		 * ILoader classes that this MediaElement can use to load media.  If null,
+		 * LoaderBase classes that this MediaElement can use to load media.  If null,
 		 * then loader must be specified (and will be used for all resources).  When
 		 * the appropriate loader to use is unknown (e.g. because loader is null),
 		 * this list will be used to locate and set the appropriate loader.  Note
@@ -61,7 +61,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function LoadableMediaElement(resource:MediaResourceBase=null, loader:ILoader=null, loaderClasses:Array=null)
+		public function LoadableMediaElement(resource:MediaResourceBase=null, loader:LoaderBase=null, loaderClasses:Array=null)
 		{
 			super();
 			
@@ -99,7 +99,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}
@@ -173,8 +173,8 @@ package org.osmf.media
 		}
 
 		/**
-		 * Given a resource, this method will locate the first ILoader which can handle
-		 * the resource and set it as the ILoader for this class.  Gives precedence to
+		 * Given a resource, this method will locate the first LoaderBase which can handle
+		 * the resource and set it as the LoaderBase for this class.  Gives precedence to
 		 * the current loader first, then the constructor-supplied loaderClasses, in order.
 		 **/
 		private function setLoaderForResource(resource:MediaResourceBase):void
@@ -189,7 +189,7 @@ package org.osmf.media
 					// Skip this one if it's the same type as the current loader.
 					if (loader == null || !(loader is loaderClass))
 					{
-						var iterLoader:ILoader = new loaderClass() as ILoader;
+						var iterLoader:LoaderBase = new loaderClass() as LoaderBase;
 						if (iterLoader.canHandleResource(resource))
 						{
 							loader = iterLoader;
@@ -232,7 +232,7 @@ package org.osmf.media
 			}
 		}
 
-		private var loader:ILoader;
+		private var loader:LoaderBase;
 		private var loaderClasses:Array;
 	}
 }

@@ -29,16 +29,16 @@ package org.osmf.swf
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 
 	
-	public class TestSWFLoaderIntegration extends TestILoader
+	public class TestSWFLoaderIntegration extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -60,7 +60,7 @@ package org.osmf.swf
 			return new SWFLoader();
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}

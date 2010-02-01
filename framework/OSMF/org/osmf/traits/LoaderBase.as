@@ -25,35 +25,39 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoaderEvent;
+	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Dispatched when the state of an LoadTrait being loaded or unloaded by
-	 * the ILoader has changed.
+	 * Dispatched when the state of a LoadTrait being loaded or unloaded by
+	 * the LoaderBase has changed.
 	 *
-	 * @eventType org.osmf.events.LoaderEvent.STATE_CHANGE
+	 * @eventType org.osmf.events.LoaderEvent.LOAD_STATE_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="loaderStateChange", type="org.osmf.events.LoaderEvent")]
+	[Event(name="loadStateChange", type="org.osmf.events.LoaderEvent")]
 	
 	/**
-	 * Default implementation of ILoader.
+	 * A LoaderBase is the base class for objects that are capable of loading
+	 * and unloading LoadTraits.
+	 * 
+	 * <p>A MediaElement that has the LoadTrait uses a LoaderBase to perform the
+	 * actual load operation.
+	 * This decoupling of the loading and unloading from the media allows a 
+	 * MediaElement to use different loaders for different circumstances.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */	 
-	public class LoaderBase extends EventDispatcher implements ILoader
+	 */	
+	public class LoaderBase extends EventDispatcher implements IMediaResourceHandler
 	{
-		// MediaResourceBaseHandler
-		//
-		
 		/**
 		 * @private
 		 */
@@ -62,13 +66,31 @@ package org.osmf.traits
 			return false;
 		}
 
-		// ILoader
-		//
-						
 		/**
-		 * If this method is overridden, the subclass must call super.load() in order
-		 * to validate the load.
-		 *  
+         * Loads the specified LoadTrait. Changes the load state of the LoadTrait.
+         * Dispatches the <code>loadStateChange</code> event with every state change.
+		 * 
+         * <p>Typical states are <code>LOADING</code> while the LoadTrait is loading,
+         * <code>READY</code> after it has successfully completed loading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete loading.</p>
+         * 
+         * <p>If the LoadTrait's LoadState is <code>LOADING</code> or
+         * <code>READY</code> when the method is called, this method throws
+         * an error.</p>
+         * 
+         * <p>Subclasses should override this method to perform the actual load operation.
+         * Subclasses must call super.load() prior to performing the load operation.</p>
+         * 
+         * @see org.osmf.traits.LoadState
+		 * 
+		 * @param loadTrait The LoadTrait to load.
+		 * 
+		 * @throws IllegalOperationError <code>IllegalOperationError</code>
+		 * If this loader cannot load the given LoadTrait (as determined by
+         * the <code>IMediaResourceHandler.canHandleResource()</code> method),
+         * or if the LoadTrait's LoadState is <code>LOADING</code> or
+         * <code>READY</code>.
+  		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -80,8 +102,27 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * If this method is overridden, the subclass must call super.unload() in order
-		 * to validate the unload.  The LoadTrait's loadState is set to LoadState.UNINITIALIZED.
+         * Unloads the specified LoadTrait. Changes the load state of the LoadTrait.
+         * Dispatches the <code>loaderStateChange</code> event with every state change.
+		 * 
+         * <p>Typical states are <code>UNLOADING</code> while the LoadTrait is unloading,
+         * <code>UNINITIALIZED</code> after it has successfully completed unloading, 
+         * and <code>LOAD_ERROR</code> if it fails to complete unloading.</p>
+         * 
+         * <p>If the LoadTrait's LoadState is not <code>READY</code> when the method
+         * is called, this method throws an error.</p>
+         * 
+         * <p>Subclasses should override this method to perform the actual unload operation.
+         * Subclasses must call super.unload() prior to performing the unload operation.</p>
+         * 
+         * @see org.osmf.traits.LoadState
+		 * 
+		 * @param loadTrait The LoadTrait to unload.
+		 * 
+		 * @throws IllegalOperationError <code>IllegalOperationError</code>
+		 * If this loader cannot unload the specified LoadTrait (as determined by
+         * the <code>IMediaResourceHandler.canHandleResource()</code> method),
+         * or if the LoadTrait's LoadState is not <code>READY</code>.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -98,6 +139,8 @@ package org.osmf.traits
 		/**
 		 * Updates the given LoadTrait with the given info, dispatching the
 		 * appropriate events.
+		 * 
+		 * TODO: Make this final.
 		 * 
 		 * @param loadTrait The LoadTrait to update.
 		 * @param newState The new LoadState of the LoadTrait.
@@ -162,7 +205,7 @@ package org.osmf.traits
 			}
 			if (canHandleResource(loadTrait.resource) == false)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADER_CANT_HANDLE_RESOURCE));
 			}
 		}
 
@@ -191,7 +234,7 @@ package org.osmf.traits
 			}
 			if (canHandleResource(loadTrait.resource) == false)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILOADER_CANT_HANDLE_RESOURCE));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADER_CANT_HANDLE_RESOURCE));
 			}
 		}
 	}

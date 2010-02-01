@@ -24,7 +24,7 @@ package org.osmf.proxies
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -105,6 +105,6 @@ package org.osmf.proxies
 		private var _metadata:MetadataProxy;
 		private var _resource:MediaResourceBase;
 		private var loadTrait:LoadTrait;
-		private var loader:ILoader;
+		private var loader:LoaderBase;
 	}
 }

@@ -57,7 +57,7 @@ package org.osmf.model
 			mediaFactory = new MediaFactory(new AppResourceHandlerResolver());
 			pluginManager = new PluginManager(mediaFactory);
 			
-			var loader:ILoader = new NetLoader();
+			var loader:LoaderBase = new NetLoader();
 			mediaFactory.addMediaInfo
 				( new MediaInfo
 					( "Standard video element"

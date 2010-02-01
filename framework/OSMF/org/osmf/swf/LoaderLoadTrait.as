@@ -25,7 +25,7 @@ package org.osmf.swf
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	
@@ -36,7 +36,7 @@ package org.osmf.swf
 	 **/
 	public class LoaderLoadTrait extends LoadTrait
 	{
-		public function LoaderLoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function LoaderLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 		}

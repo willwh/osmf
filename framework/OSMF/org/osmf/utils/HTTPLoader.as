@@ -39,7 +39,7 @@ package org.osmf.utils
 	import org.osmf.traits.LoaderBase;
 
 	/**
-	 * Implementation of ILoader that can retrieve an URLResource using HTTP.
+	 * Implementation of LoaderBase that can retrieve an URLResource using HTTP.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

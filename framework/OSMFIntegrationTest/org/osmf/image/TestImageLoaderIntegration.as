@@ -23,22 +23,22 @@ package org.osmf.image
 {
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
-	public class TestImageLoaderIntegration extends TestILoader
+	public class TestImageLoaderIntegration extends TestLoaderBase
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
 			return new ImageLoader();
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}

@@ -24,14 +24,14 @@ package org.osmf.plugin
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
-	public class TestDynamicPluginLoaderIntegration extends TestILoader
+	public class TestDynamicPluginLoaderIntegration extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -52,7 +52,7 @@ package org.osmf.plugin
 			return new DynamicPluginLoader(mediaFactory, Version.version());
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			return new LoadTrait(loader, resource);
 		}

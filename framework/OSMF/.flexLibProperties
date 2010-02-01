@@ -247,7 +247,6 @@
     <classEntry path="org.osmf.traits.DisplayObjectTrait"/>
     <classEntry path="org.osmf.traits.DynamicStreamTrait"/>
     <classEntry path="org.osmf.traits.ILoadedContext"/>
-    <classEntry path="org.osmf.traits.ILoader"/>
     <classEntry path="org.osmf.traits.LoadState"/>
     <classEntry path="org.osmf.traits.LoadTrait"/>
     <classEntry path="org.osmf.traits.LoaderBase"/>

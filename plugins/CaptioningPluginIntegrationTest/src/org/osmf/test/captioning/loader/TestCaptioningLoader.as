@@ -31,16 +31,16 @@ package org.osmf.test.captioning.loader
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.test.captioning.CaptioningTestConstants;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
 	
-	public class TestCaptioningLoader extends TestILoader
+	public class TestCaptioningLoader extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -91,7 +91,7 @@ package org.osmf.test.captioning.loader
 			return new CaptioningLoader(httpLoader);
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockHTTPLoader = httpLoader as MockHTTPLoader;
 			if (mockLoader)

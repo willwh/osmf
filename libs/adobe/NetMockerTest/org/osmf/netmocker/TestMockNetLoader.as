@@ -23,14 +23,14 @@ package org.osmf.netmocker
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
 	
-	public class TestMockNetLoader extends TestILoader
+	public class TestMockNetLoader extends TestLoaderBase
 	{
 		override public function setUp():void
 		{
@@ -60,7 +60,7 @@ package org.osmf.netmocker
 			return netLoader;
 		}
 		
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			if (resource == successfulResource)
 			{

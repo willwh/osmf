@@ -28,7 +28,7 @@ package org.osmf.utils
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.DynamicStreamTrait;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -39,7 +39,7 @@ package org.osmf.utils
 	
 	public class DynamicMediaElement extends MediaElement
 	{
-		public function DynamicMediaElement(traitTypes:Array=null, loader:ILoader=null, resource:MediaResourceBase=null, useDynamicTraits:Boolean=false)
+		public function DynamicMediaElement(traitTypes:Array=null, loader:LoaderBase=null, resource:MediaResourceBase=null, useDynamicTraits:Boolean=false)
 		{
 			this.resource = resource;
 			

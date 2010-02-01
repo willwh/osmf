@@ -36,7 +36,7 @@ package org.osmf.plugin
 	import org.osmf.utils.Version;
 	
 	/**
-	 * The PluginLoader class implements ILoader to provide
+	 * The PluginLoader class extends LoaderBase to provide
 	 * loading support for plugins.
 	 * It is the base class
 	 * for creating static and dynamic plugin loaders.

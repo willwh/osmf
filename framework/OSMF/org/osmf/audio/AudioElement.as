@@ -28,7 +28,7 @@ package org.osmf.audio
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.*;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
@@ -47,7 +47,7 @@ package org.osmf.audio
 	 * <li>Create a new NetLoader or SoundLoader.  NetLoader is used for streaming
 	 * audio, SoundLoader for progressive audio.</li>
 	 * <li>Create the new AudioElement, 
-	 * passing the ILoader and URLResource
+	 * passing the LoaderBase and URLResource
 	 * as parameters.</li>
 	 * <li>Get the AudioElement's LoadTrait using the 
 	 * <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
@@ -89,7 +89,7 @@ package org.osmf.audio
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function AudioElement(resource:URLResource=null, loader:ILoader=null)
+		public function AudioElement(resource:URLResource=null, loader:LoaderBase=null)
 		{
 			super(resource, loader, [SoundLoader, NetLoader]);
 			
@@ -152,7 +152,7 @@ package org.osmf.audio
 		/**
 		 * @private
 		 */
-		override protected function createLoadTrait(resource:MediaResourceBase, loader:ILoader):LoadTrait
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
 		{
 			return 	loader is NetLoader
 				  ? new NetStreamLoadTrait(loader, resource)

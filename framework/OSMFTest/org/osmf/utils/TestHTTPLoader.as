@@ -25,11 +25,11 @@ package org.osmf.utils
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	
-	public class TestHTTPLoader extends TestILoader
+	public class TestHTTPLoader extends TestLoaderBase
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
@@ -47,7 +47,7 @@ package org.osmf.utils
 			return loader;
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			var mockLoader:MockHTTPLoader = loader as MockHTTPLoader;
 			if (mockLoader)

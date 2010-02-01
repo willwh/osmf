@@ -26,21 +26,21 @@ package org.osmf.audio
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestILoader;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
-	public class TestSoundLoader extends TestILoader
+	public class TestSoundLoader extends TestLoaderBase
 	{
 		override protected function createInterfaceObject(... args):Object
 		{
 			return new SoundLoader();
 		}
 
-		override protected function createLoadTrait(loader:ILoader, resource:MediaResourceBase):LoadTrait
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
 			return new SoundLoadTrait(loader, resource);
 		}

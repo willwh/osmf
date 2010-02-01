@@ -28,7 +28,7 @@ package org.osmf.audio
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.ILoader;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	
@@ -39,7 +39,7 @@ package org.osmf.audio
 	 */
 	internal class SoundLoadTrait extends LoadTrait
 	{
-		public function SoundLoadTrait(loader:ILoader, resource:MediaResourceBase)
+		public function SoundLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
 			super(loader, resource);
 		}
