@@ -29,7 +29,7 @@ package org.osmf.view
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginManager;
@@ -88,10 +88,10 @@ package org.osmf.view
 		{
 			var netLoader:NetLoader = new NetLoader();
 			
-			mediaFactory.addMediaInfo
-				( new MediaInfo
+			mediaFactory.addItem
+				( new MediaFactoryItem
 					( "org.osmf.video"
-					, netLoader
+					, netLoader.canHandleResource
 					, createVideoElement
 					)
 				);
