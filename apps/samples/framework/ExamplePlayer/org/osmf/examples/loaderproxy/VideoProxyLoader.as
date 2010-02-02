@@ -42,21 +42,14 @@ package org.osmf.examples.loaderproxy
 			return true;
 		}
 		
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-			
 			// Here's a new URL, this will replace the previous URL.
 			// Note that this class could do other preflight activities
 			// (we just rewrite the URL as an example).
 			var url:URL = new URL("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
 			updateLoadTrait(loadTrait, LoadState.READY, new VideoProxyLoadedContext(url));
-		}
-		
-		override public function unload(loadTrait:LoadTrait):void
-		{
-			super.unload(loadTrait);
 		}
 	}
 }
