@@ -216,10 +216,9 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function play(...args):void 
 		{
-			if (args.length < 1 ||
-				!(args[0] is HTTPStreamingIndexInfoBase))
+			if (args.length < 1)
 			{
-				throw new Error("HTTPStream.play() requires a first argument of type HTTPStreamingIndexInfoBase");
+				throw new Error("HTTPStream.play() requires at least one argument");
 			}
 						
 			// Signal to the base class that we're entering Data Generation Mode.
@@ -252,7 +251,7 @@ package org.osmf.net.httpstreaming
 			setState(HTTPStreamingState.INIT);
 						
 			indexIsReady = false;
-			indexHandler.initialize(args[0] as HTTPStreamingIndexInfoBase);
+			indexHandler.initialize(args[0]);
 		
 			if (args.length >= 2)
 			{

@@ -115,7 +115,7 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function initialize(indexInfo:HTTPStreamingIndexInfoBase):void
+		public function initialize(indexInfo:Object):void
 		{	
 			throw new IllegalOperationError("The initialize() method must be overridden by the derived class.");
 		}

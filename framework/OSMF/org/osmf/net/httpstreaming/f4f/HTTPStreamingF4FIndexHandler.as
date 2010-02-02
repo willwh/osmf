@@ -64,7 +64,7 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * @private
 		 */
-		override public function initialize(indexInfo:HTTPStreamingIndexInfoBase):void
+		override public function initialize(indexInfo:Object):void
 		{
 			// Make sure we have an info object of the expected type.
 			var f4fIndexInfo:HTTPStreamingF4FIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
