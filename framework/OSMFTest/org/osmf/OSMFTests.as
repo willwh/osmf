@@ -95,7 +95,7 @@ package org.osmf
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
-			addTestSuite(TestParallelElementDRMTrait);	
+			CONFIG::FLASH_10_1 { addTestSuite(TestParallelElementDRMTrait); }	
 			addTestSuite(TestParallelElementWithDynamicStreamTrait);
 			addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
@@ -105,7 +105,7 @@ package org.osmf
 			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
-			addTestSuite(TestSerialElementDRMTrait);	
+			CONFIG::FLASH_10_1 { addTestSuite(TestSerialElementDRMTrait); }	
 			addTestSuite(TestSerialElementWithDynamicStreamTrait);
 			addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
