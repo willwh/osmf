@@ -795,7 +795,7 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"DefaultDuration Serial"
-					, 	"Demonstrates the Video.defaultDuration feature on VideoElementm, in a Serial Composition."
+					, 	"Demonstrates the defaultDuration feature on VideoElement, in a Serial Composition."
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var resource:URLResource = new URLResource(new FMSURL(REMOTE_PROGRESSIVE));
