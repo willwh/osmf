@@ -42,7 +42,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class AbsoluteLayoutFacet extends LayoutFacet
+	public class AbsoluteLayoutFacet extends LayoutFacet
 	{
 		/**
 		 * @private

@@ -23,13 +23,13 @@ package org.osmf.plugin
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.Version;
 	
 	/**
-	 * PluginInfo is the encapsulation of the set of MediaInfo objects
+	 * PluginInfo is the encapsulation of the set of MediaFactoryItem objects
 	 * that will be available to the application after the plugin has been
 	 * successfully loaded.
 	 * Every Open Source Media Framework plugin must define a subclass of PluginInfo
@@ -37,9 +37,9 @@ package org.osmf.plugin
 	 * to create and load the plugin's MediaElement.
 	 * <p>
 	 * From the point of view of the Open Source Media Framework,
-	 * the plugin's purpose is to expose the MediaInfo
+	 * the plugin's purpose is to expose the MediaFactoryItem
 	 * objects that represent the media that the plugin handles.
-	 * These MediaInfo objects could describe standard media types such as
+	 * These MediaFactoryItem objects could describe standard media types such as
 	 * video, audio, or image that can be represented by the built-in Open Source Media Framework
 	 * MediaElements: VideoElement, AudioElement, or ImageElement.
 	 * More likely, a plugin provides some type of specialized processing,
@@ -61,22 +61,9 @@ package org.osmf.plugin
 	 * the plugin is not loaded.
 	 * An application attempting to load a static plugin accesses the PluginInfo
 	 * exposed by the PluginInfoResource object.</p>
-	 * <p>The following code illustrates a very simple PluginInfo implementation:</p>
-	 * <listing>
-	 * public class SimpleVideoPluginInfo extends PluginInfo
-	 * {
-	 * 		public function SimpleVideoPluginInfo()
-	 * 		{
-	 * 		}
 	 * 
-	 * 		private function createVideoElement():MediaElement
-	 * 		{
-	 * 			return new VideoElement(new NetLoader());
-	 * 		}
-	 * }
-	 * </listing>
 	 * @see PluginInfoResource
-	 * @see org.osmf.media.MediaInfo
+	 * @see org.osmf.media.MediaFactoryItem
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -88,7 +75,7 @@ package org.osmf.plugin
 		/**
 		 * Constructor.
 		 * 
-		 * @param mediaInfos Vector of MediaInfo objects that this plugin
+		 * @param mediaFactoryItems Vector of MediaFactoryItem objects that this plugin
 		 * exposes.
 		 *  
 		 *  @langversion 3.0
@@ -96,15 +83,15 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginInfo(mediaInfos:Vector.<MediaInfo>)
+		public function PluginInfo(mediaFactoryItems:Vector.<MediaFactoryItem>)
 		{
 			super();
 			
-			this.mediaInfos = mediaInfos;
+			this.mediaFactoryItems = mediaFactoryItems;
 		}
 		
 		/**
-		 * Returns the number of MediaInfo objects that the plugin
+		 * Returns the number of MediaFactoryItem objects that the plugin
 		 * exposes to the loading application.
 		 *  
 		 *  @langversion 3.0
@@ -112,9 +99,9 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get numMediaInfos():int
+		public function get numMediaFactoryItems():int
 		{
-			return mediaInfos.length;
+			return mediaFactoryItems.length;
 		}
 		
 		/**
@@ -133,23 +120,11 @@ package org.osmf.plugin
 
 
 		/**
-		 * Used by the application to get the MediaInfo object at the specified index.
+		 * Returns the MediaFactoryItem object at the specified index.
 		 * <p>If the index is out of range, throws a
 		 * RangeError.</p>
-		 * <p>	
-		 * The following code shows how an application that uses plugins
-		 * could request the MediaInfo objects for the plugins' media.
-		 * </p>
-		 * <listing>
-		 * for (var i:int = 0; i &lt; pluginInfo.numMediaInfos; i++)
-		 * {
-		 * 	  var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
-		 * 
-		 * 	  // process the MediaInfo 
-		 * }
-		 * </listing>
-		 * @param index Zero-based index position of the requested MediaInfo.
-		 * @return A MediaInfo object representing media to be loaded.
+		 * @param index Zero-based index position of the requested MediaFactoryItem.
+		 * @return A MediaFactoryItem object representing media to be loaded.
 		 * @see RangeError
 		 *  
 		 *  @langversion 3.0
@@ -157,14 +132,14 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getMediaInfoAt(index:int):MediaInfo
+		public function getMediaFactoryItemAt(index:int):MediaFactoryItem
 		{
-			if (index < 0 || index >= mediaInfos.length)
+			if (index < 0 || index >= mediaFactoryItems.length)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			return mediaInfos[index] as MediaInfo;
+			return mediaFactoryItems[index] as MediaFactoryItem;
 		}
 		
 		/**
@@ -202,7 +177,7 @@ package org.osmf.plugin
 		
 		/**
 		 * Data from the player passed to the plugin to initialize the plugin.
-		 * This method is called before getMediaInfoAt or get numMediaInfos.
+		 * This method is called before getMediaFactoryItemAt or get numMediaFactoryItems.
 		 * 
 		 * Subclasses can override this method to do custom initialization.
 		 *  
@@ -242,6 +217,6 @@ package org.osmf.plugin
 			return {major:major, minor:minor, subMinor:subMinor};
 		}
 		
-		private var mediaInfos:Vector.<MediaInfo>;
+		private var mediaFactoryItems:Vector.<MediaFactoryItem>;
 	}
 }

@@ -47,7 +47,7 @@
 			import org.osmf.image.ImageElement;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaFactory;
-			import org.osmf.media.MediaInfo;
+			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.media.URLResource;
 			import org.osmf.metadata.Facet;
 			import org.osmf.metadata.KeyValueFacet;
@@ -69,9 +69,9 @@
 	 			factory = new MediaFactory();
 	 			sharedNetLoader = new NetLoader();
 	 			sharedLoader = new ImageLoader();
-	 			factory.addMediaInfo(new MediaInfo(MediaType.AUDIO, new MetadataResourceHandler(MediaType.AUDIO), createAudioElement));
-	 			factory.addMediaInfo(new MediaInfo(MediaType.IMAGE, sharedLoader, createImageElement));	 			
-	 			factory.addMediaInfo(new MediaInfo(MediaType.VIDEO, new MetadataResourceHandler(MediaType.VIDEO), createVideoElement));	 			
+	 			factory.addItem(new MediaFactoryItem(MediaType.AUDIO, new MetadataResourceHandler(MediaType.AUDIO).canHandleResource, createAudioElement));
+	 			factory.addItem(new MediaFactoryItem(MediaType.IMAGE, sharedLoader.canHandleResource, createImageElement));	 			
+	 			factory.addItem(new MediaFactoryItem(MediaType.VIDEO, new MetadataResourceHandler(MediaType.VIDEO).canHandleResource, createVideoElement));	 			
 	 		}
 			
 			private function createAudioElement():MediaElement

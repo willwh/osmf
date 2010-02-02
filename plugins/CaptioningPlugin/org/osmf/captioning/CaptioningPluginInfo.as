@@ -24,10 +24,9 @@ package org.osmf.captioning
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.captioning.media.CaptioningProxyElement;
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
-	import org.osmf.media.MediaInfoType;
+	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.utils.URL;
@@ -59,16 +58,16 @@ package org.osmf.captioning
 		 */
 		public function CaptioningPluginInfo()
 		{
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			var resourceHandler:IMediaResourceHandler = new NetLoader();
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.captioning.CaptioningPluginInfo",
-													resourceHandler,
+			var loader:NetLoader = new NetLoader();
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.captioning.CaptioningPluginInfo",
+													loader.canHandleResource,
 													createCaptioningProxyElement,
-													MediaInfoType.PROXY);
-			mediaInfos.push(mediaInfo);
+													MediaFactoryItemType.PROXY);
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		private function createCaptioningProxyElement():MediaElement

@@ -121,9 +121,8 @@ package org.osmf.manifest
 		/**
 		 * @private
 		 */
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
 			var manifest:Manifest;
@@ -214,9 +213,8 @@ package org.osmf.manifest
 		/**
 		 * @private
 		 */
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);	
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 		

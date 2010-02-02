@@ -23,32 +23,30 @@ package org.osmf.plugin
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.utils.Version;
 	
 	public class InvalidImplementationPluginInfo extends PluginInfo
 	{
-		public static const MEDIA_INFO_ID:String = "InvalidImplementationPluginInfo";
-		
 		public function InvalidImplementationPluginInfo()
 		{
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			super(mediaInfos);
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			super(items);
 		}
 		
 		/**
-		 * Returns the number of <code>MediaInfo</code> objects the plugin wants
+		 * Returns the number of <code>MediaFactoryItem</code> objects the plugin wants
 		 * to register
 		 */
-		override public function get numMediaInfos():int
+		override public function get numMediaFactoryItems():int
 		{
 			return 1;
 		}
 
 		/**
-		 * Returns a <code>MediaInfo</code> object at the supplied index position
+		 * Returns a <code>MediaFactoryItem</code> object at the supplied index position
 		 */
-		override public function getMediaInfoAt(index:int):MediaInfo
+		override public function getMediaFactoryItemAt(index:int):MediaFactoryItem
 		{
 			return null;
 		}

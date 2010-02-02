@@ -26,7 +26,6 @@ package org.osmf.model
 	import flash.events.MouseEvent;
 	
 	import org.osmf.media.IMediaReferrer;
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -47,13 +46,13 @@ package org.osmf.model
 		{
 			super(resource, loader);
 			
-			handler = new NetLoader() as IMediaResourceHandler;
+			netLoader = new NetLoader();
 		}
 
 		public function canReferenceMedia(target:MediaElement):Boolean
 		{
 			// This object can reference any video media.
-			return target != null && handler.canHandleResource(target.resource);
+			return target != null && netLoader.canHandleResource(target.resource);
 		}
 
 		public function addReference(target:MediaElement):void
@@ -93,7 +92,7 @@ package org.osmf.model
 			return displayObjectTrait != null ? displayObjectTrait.displayObject : null;
 		}
 
-		private var handler:IMediaResourceHandler;
+		private var netLoader:NetLoader;
 		private var reference:MediaElement;
 	}
 }

@@ -300,7 +300,7 @@ package org.osmf.plugin
 			var loadedFailed:Boolean = false;
 			
 			
-			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaInfo>);
+			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaFactoryItem>);
 			
 			pluginManager = new PluginManager(mediaFactory, "0.5.0");
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onLoaded);
@@ -358,13 +358,13 @@ package org.osmf.plugin
 }
 	
 import __AS3__.vec.Vector;
-import org.osmf.media.MediaInfo;
+import org.osmf.media.MediaFactoryItem;
 		
 class OldPluginInfo extends org.osmf.plugin.PluginInfo
 {
-	public function OldPluginInfo(mediaInfos:Vector.<MediaInfo>)
+	public function OldPluginInfo(items:Vector.<MediaFactoryItem>)
 	{
-		super(mediaInfos);
+		super(items);
 	}
 	
 	override public function get frameworkVersion():String

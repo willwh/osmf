@@ -26,7 +26,7 @@ package org.osmf.plugin
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.utils.Version;
@@ -34,19 +34,19 @@ package org.osmf.plugin
 	
 	public class SimpleVideoImagePluginInfo extends PluginInfo
 	{
-		public static const VIDEO_MEDIA_INFO_ID:String = "org.osmf.video.Video2";
-		public static const IMAGE_MEDIA_INFO_ID:String = "org.osmf.video.Image2";
+		public static const VIDEO_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.video.simplevideo";
+		public static const IMAGE_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.image.simplemage";
 
 		public function SimpleVideoImagePluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
 			var imageLoader:ImageLoader = new ImageLoader();
 
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			mediaInfos.push(new MediaInfo(VIDEO_MEDIA_INFO_ID, netLoader, createVideoElement));
-			mediaInfos.push(new MediaInfo(IMAGE_MEDIA_INFO_ID, imageLoader, createImageElement));
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			items.push(new MediaFactoryItem(VIDEO_MEDIA_FACTORY_ITEM_ID, netLoader.canHandleResource, createVideoElement));
+			items.push(new MediaFactoryItem(IMAGE_MEDIA_FACTORY_ITEM_ID, imageLoader.canHandleResource, createImageElement));
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		private function createVideoElement():MediaElement

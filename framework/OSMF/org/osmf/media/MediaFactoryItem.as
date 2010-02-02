@@ -25,29 +25,30 @@ package org.osmf.media
 	
 	/**
 	 * Encapsulation of all information needed to dynamically create and
-	 * initialize a MediaElement.
+	 * initialize a MediaElement from a MediaFactory.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MediaInfo implements IMediaResourceHandler
+	public class MediaFactoryItem
 	{
 		// Public interface
 		//
 		
 		/**
 		 * Constructor.
-		 * @param id An identifier that represents this MediaInfo.
-		 * @param resourceHandler The handler that will be used to determine
-		 * whether this MediaInfo can handle a particular resource.
+		 * @param id An identifier that represents this MediaFactoryItem.
+		 * @param canHandleResourceFunction Function which is used to determine
+		 * whether this MediaFactoryItem can handle a particular resource.  The
+		 * function must take a single parameter of type MediaResourceBase, and
+		 * return a Boolean.
 		 * @param mediaElementCreationFunction Function which creates a new instance
 		 * of the desired MediaElement.  The function must take no params, and
 		 * return a MediaElement.
-		 * a default (empty) constructor.
-		 * @param type The type of this MediaInfo.  If null, the default is
-		 * <code>MediaInfoType.STANDARD</code>.
+		 * @param type The type of this MediaFactoryItem.  If null, the default is
+		 * <code>MediaFactoryItemType.STANDARD</code>.
 		 * 
 		 * @throws ArgumentError If any argument (except type) is null.
 		 *  
@@ -56,15 +57,15 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function MediaInfo
+		public function MediaFactoryItem
 							( id:String,
-							  resourceHandler:IMediaResourceHandler,
+							  canHandleResourceFunction:Function,
 							  mediaElementCreationFunction:Function,
 							  type:String=null
 							)
 		{
 			if (	id == null
-			     || resourceHandler == null
+			     || canHandleResourceFunction == null
 			     || mediaElementCreationFunction == null
 			   )
 			{
@@ -72,16 +73,16 @@ package org.osmf.media
 			}
 			
 			// Make sure our type field has a valid value. 
-			type ||= MediaInfoType.STANDARD;
+			type ||= MediaFactoryItemType.STANDARD;
 			
 			_id = id;
-			_resourceHandler = resourceHandler;
+			_canHandleResourceFunction = canHandleResourceFunction;
 			_mediaElementCreationFunction = mediaElementCreationFunction;
 			_type = type;
 		}
 		
 		/**
-		 *  An identifier that represents this MediaInfo.
+		 *  An identifier that represents this MediaFactoryItem.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -94,17 +95,18 @@ package org.osmf.media
 		}
 		
 		/**
-		 * The handler that determines whether this MediaInfo can handle a
-		 * particular resource.
+		 * Function which is used to determine whether this MediaFactoryItem can handle
+		 * a particular resource.  The function must take a single parameter of
+		 * type MediaResourceBase, and return a Boolean.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get resourceHandler():IMediaResourceHandler
+		public function get canHandleResourceFunction():Function
 		{
-			return _resourceHandler;
+			return _canHandleResourceFunction;
 		}
 
 		/**
@@ -122,7 +124,7 @@ package org.osmf.media
 		}
 
 		/**
-		 * The MediaInfoType for this MediaInfo.
+		 * The MediaFactoryItemType for this MediaFactoryItem.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -134,19 +136,11 @@ package org.osmf.media
 			return _type;
 		}
 		
-		/**
-		 * @private
-		 */
-		public function canHandleResource(resource:MediaResourceBase):Boolean
-		{
-			return _resourceHandler != null ? _resourceHandler.canHandleResource(resource) : false;
-		}
-		
 		// Internals
 		//
 		
 		private var _id:String;
-		private var _resourceHandler:IMediaResourceHandler;
+		private var _canHandleResourceFunction:Function;
 		private var _mediaElementCreationFunction:Function;
 		private var _type:String;
 	}

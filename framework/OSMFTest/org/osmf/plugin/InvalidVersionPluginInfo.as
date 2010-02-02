@@ -23,16 +23,14 @@ package org.osmf.plugin
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	
 	public class InvalidVersionPluginInfo extends PluginInfo
 	{
-		public static const MEDIA_INFO_ID:String = "InvalidVersionPluginInfo";
-		
 		public function InvalidVersionPluginInfo()
 		{
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			super(mediaInfos);
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			super(items);
 		}
 		
 		override public function isFrameworkVersionSupported(version:String):Boolean

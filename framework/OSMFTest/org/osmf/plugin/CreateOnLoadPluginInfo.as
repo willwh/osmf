@@ -3,8 +3,8 @@ package org.osmf.plugin
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
-	import org.osmf.media.MediaInfoType;
+	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.video.VideoElement;
@@ -14,11 +14,11 @@ package org.osmf.plugin
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader(), createElement, MediaInfoType.CREATE_ON_LOAD);
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			mediaInfos.push(mediaInfo);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement, MediaFactoryItemType.CREATE_ON_LOAD);
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		override public function initializePlugin(metadata:Metadata):void
@@ -44,7 +44,5 @@ package org.osmf.plugin
 		
 		private var _createCount:Number = 0;
 		private var _pluginMetadata:Metadata;
-		private var _mediaInfo:MediaInfo;
-		
 	}
 }

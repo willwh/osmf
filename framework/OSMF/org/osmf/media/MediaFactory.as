@@ -33,17 +33,17 @@ package org.osmf.media
 	 * 
 	 * <p>The factory operation takes an MediaResourceBase as input and produces a MediaElement
 	 * as output.</p>
-	 * <p>The MediaFactory maintains a list of MediaInfo objects,
+	 * <p>The MediaFactory maintains a list of MediaFactoryItem objects,
 	 * each of which encapsulates all the information necessary to create 
 	 * a specific MediaElement. The MediaFactory relies on
-	 * the <code>MediaResourceBaseHandler.canHandleResource()</code> method to find a MediaInfo
-	 * object than can handle the specified MediaResourceBase.</p>
+	 * the canHandleResourceFunction method on each MediaFactoryItem to find a
+	 * MediaFactoryItem object than can handle the specified MediaResourceBase.</p>
 	 *
-	 * <p>The factory interface also exposes methods for querying for specific MediaInfo 
+	 * <p>The factory interface also exposes methods for querying for specific MediaFactoryItem 
 	 * objects.</p>
-	 * @see MediaInfo
+	 * 
+	 * @see MediaFactoryItem
 	 * @see MediaResourceBase
-	 * @see MediaResourceBaseHandler    
 	 * @see MediaElement
 	 *  
 	 *  @langversion 3.0
@@ -61,9 +61,9 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function MediaFactory(handlerResolver:IMediaResourceHandlerResolver=null)
+		public function MediaFactory(itemResolver:MediaFactoryItemResolver=null)
 		{
-			allInfos = new Dictionary();
+			allItems = new Dictionary();
 			
 			// Our two dictionaries are set to store with weak keys, so that
 			// if this object is the only object that references either a
@@ -72,20 +72,20 @@ package org.osmf.media
 			createdElements = new Dictionary(false);
 			referrers = new Dictionary(false);
 			
-			this.handlerResolver
-				= (handlerResolver == null)? new DefaultMediaResourceHandlerResolver() : handlerResolver;
+			this.itemResolver
+				= (itemResolver == null)? new MediaFactoryItemResolver() : itemResolver;
 		}
 		
 		/**
-		 * Adds the specified MediaInfo to the factory.
-		 * After the MediaInfo has been added, for any MediaResourceBase
-		 * that this MediaInfo can handle, the factory will be able to create
+		 * Adds the specified MediaFactoryItem to the factory.
+		 * After the MediaFactoryItem has been added, for any MediaResourceBase
+		 * that this MediaFactoryItem can handle, the factory will be able to create
 		 * the corresponding media element.
 		 * 
-		 * If a MediaInfo with the same ID already exists in this
-		 * factory, the new MediaInfo object replaces it.
+		 * If a MediaFactoryItem with the same ID already exists in this
+		 * factory, the new MediaFactoryItem object replaces it.
 		 * 
-		 * @param info The MediaInfo to add.
+		 * @param item The MediaFactoryItem to add.
 		 * 
 		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
 		 * has a <code>null</code> ID field.
@@ -95,39 +95,39 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function addMediaInfo(info:MediaInfo):void
+		public function addItem(item:MediaFactoryItem):void
 		{
-			if (info == null || info.id == null)
+			if (item == null || item.id == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			var infos:Vector.<MediaInfo> = findOrCreateInfos(info.type);
+			var items:Vector.<MediaFactoryItem> = findOrCreateItems(item.type);
 			
 			// Make sure to overwrite any duplicate.
-			var existingIndex:int = getIndexOfMediaInfo(info.id, infos);
+			var existingIndex:int = getIndexOfItem(item.id, items);
 			if (existingIndex != -1)
 			{
-				infos[existingIndex] = info;
+				items[existingIndex] = item;
 			}
 			else
 			{
-				infos.push(info);		
+				items.push(item);		
 			}
 			
-			if (info.type == MediaInfoType.CREATE_ON_LOAD)
+			if (item.type == MediaFactoryItemType.CREATE_ON_LOAD)
 			{
-				var autoElem:MediaElement = info.mediaElementCreationFunction();	
+				var autoElem:MediaElement = item.mediaElementCreationFunction();	
 				registerReferrer(autoElem as IMediaReferrer);														
 			}			
 		}
 		
 		/**
-		 * Removes the specified MediaInfo from the factory.
+		 * Removes the specified MediaFactoryItem from the factory.
 		 * 
-		 * If no such MediaInfo exists in this factory, does nothing.
+		 * If no such MediaFactoryItem exists in this factory, does nothing.
 		 * 
-		 * @param info The MediaInfo to remove.
+		 * @param item The MediaFactoryItem to remove.
 		 * 
 		 * @throws ArgumentError If the argument is <code>null</code> or if the argument
 		 * has a <code>null</code> ID field.
@@ -137,80 +137,80 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function removeMediaInfo(info:MediaInfo):void
+		public function removeItem(item:MediaFactoryItem):void
 		{
-			if (info == null || info.id == null)
+			if (item == null || item.id == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			var infos:Vector.<MediaInfo> = allInfos[info.type];
-			if (infos != null)
+			var items:Vector.<MediaFactoryItem> = allItems[item.type];
+			if (items != null)
 			{
-				var existingIndex:int = infos.indexOf(info);
+				var existingIndex:int = items.indexOf(item);
 				if (existingIndex != -1)
 				{
-					infos.splice(existingIndex, 1);
+					items.splice(existingIndex, 1);
 				}
 			}
 		}
 
 		/**
-		 * The number of MediaInfos managed by the factory.
+		 * The number of MediaFactoryItems managed by the factory.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get numMediaInfos():int
+		public function get numItems():int
 		{
-			var numInfos:int = 0;
+			var numItems:int = 0;
 			
-			for each (var type:String in MediaInfoType.ALL_TYPES)
+			for each (var type:String in MediaFactoryItemType.ALL_TYPES)
 			{
-				var infos:Vector.<MediaInfo> = allInfos[type];
-				if (infos != null)
+				var items:Vector.<MediaFactoryItem> = allItems[type];
+				if (items != null)
 				{
-					numInfos += infos.length;
+					numItems += items.length;
 				}
 			}
 			
-			return numInfos;
+			return numItems;
 		}
 		
 		/**
-		 * Gets the MediaInfo at the specified index.
+		 * Gets the MediaFactoryItem at the specified index.
 		 * 
-		 * @param index The index in the list from which to retrieve the MediaInfo.
+		 * @param index The index in the list from which to retrieve the MediaFactoryItem.
 		 * 
-		 * @return The MediaInfo at that index or <code>null</code> if there is none.
+		 * @return The MediaFactoryItem at that index or <code>null</code> if there is none.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getMediaInfoAt(index:int):MediaInfo
+		public function getItemAt(index:int):MediaFactoryItem
 		{
-			var result:MediaInfo = null;
+			var result:MediaFactoryItem = null;
 			
 			if (index >= 0)
 			{
-				for each (var type:String in MediaInfoType.ALL_TYPES)
+				for each (var type:String in MediaFactoryItemType.ALL_TYPES)
 				{
-					var infos:Vector.<MediaInfo> = allInfos[type];
-					if (infos != null)
+					var items:Vector.<MediaFactoryItem> = allItems[type];
+					if (items != null)
 					{
-						if (index < infos.length)
+						if (index < items.length)
 						{
-							result = infos[index];
+							result = items[index];
 							break;
 						}
 						else
 						{
 							// Not in this list, try the next.
-							index -= infos.length;
+							index -= items.length;
 						}
 					}
 				}
@@ -220,32 +220,32 @@ package org.osmf.media
 		}
 
 		/**
-		 * Returns the MediaInfo with the specified ID or <code>null</code> if the
-		 * specified MediaInfo does not exist in this factory.
+		 * Returns the MediaFactoryItem with the specified ID or <code>null</code> if the
+		 * specified MediaFactoryItem does not exist in this factory.
 		 * 
-		 * @param The ID of the MediaInfo to retrieve.
+		 * @param The ID of the MediaFactoryItem to retrieve.
 		 * 
-		 * @return The MediaInfo with the specified ID or <code>null</code> if the specified
-		 * MediaInfo does not exist in this factory. 
+		 * @return The MediaFactoryItem with the specified ID or <code>null</code> if the specified
+		 * MediaFactoryItem does not exist in this factory. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getMediaInfoById(id:String):MediaInfo
+		public function getItemById(id:String):MediaFactoryItem
 		{
-			var result:MediaInfo = null;
+			var result:MediaFactoryItem = null;
 			
-			for each (var type:String in MediaInfoType.ALL_TYPES)
+			for each (var type:String in MediaFactoryItemType.ALL_TYPES)
 			{
-				var infos:Vector.<MediaInfo> = allInfos[type];
-				if (infos != null)
+				var items:Vector.<MediaFactoryItem> = allItems[type];
+				if (items != null)
 				{
-					var existingIndex:int = getIndexOfMediaInfo(id, infos);
+					var existingIndex:int = getIndexOfItem(id, items);
 					if (existingIndex != -1)
 					{
-						result = infos[existingIndex];
+						result = items[existingIndex];
 						break;
 					}
 				}
@@ -257,18 +257,15 @@ package org.osmf.media
 		/**
 		 * Returns a MediaElement that can be created based on the specified
 		 * MediaResourceBase.
-		 * <p>Returns <code>null</code> if the
-		 * <code>MediaResourceBaseHandler.canHandleResource()</code> method cannot         
-		 * find a MediaInfo object
+		 * <p>Returns <code>null</code> if the factory cannot         
+		 * find a MediaFactoryItem object
 		 * capable of creating such a MediaElement in this factory.</p>
 		 * 
-		 * @see MediaResourceBaseHandler#canHandleResource()
-		 *
 		 * @param resource The MediaResourceBase for which a corresponding
 		 * MediaElement should be created.
 		 * 
 		 * @return The MediaElement that was created or <code>null</code> if no such
-		 * MediaElement could be created from the MediaResourceBase.
+		 * MediaElement could be created from the resource.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -283,13 +280,13 @@ package org.osmf.media
 			// 
 
 			// We attempt to create a MediaElement of the STANDARD type.
-			var mediaElement:MediaElement = createMediaElementByResource(resource, MediaInfoType.STANDARD);
+			var mediaElement:MediaElement = createMediaElementByResource(resource, MediaFactoryItemType.STANDARD);
 			if (mediaElement != null)
 			{
 				var proxyElement:MediaElement = 
 						createMediaElementByResource
 							( mediaElement.resource
-							, MediaInfoType.PROXY
+							, MediaFactoryItemType.PROXY
 							, mediaElement			/* element to wrap */
 							);
 				
@@ -316,9 +313,7 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Registers a media element as a referrer.  This is automatically 
-		 * called for elements creaed with this factory create MediaElement 
-		 * is called.
+		 * Registers a media element as a referrer.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -343,34 +338,34 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private function findOrCreateInfos(type:String):Vector.<MediaInfo>
+		private function findOrCreateItems(type:String):Vector.<MediaFactoryItem>
 		{
-			if (allInfos[type] == null)
+			if (allItems[type] == null)
 			{
-				allInfos[type] = new Vector.<MediaInfo>();
+				allItems[type] = new Vector.<MediaFactoryItem>();
 			}
 			
-			return allInfos[type] as Vector.<MediaInfo>;
+			return allItems[type] as Vector.<MediaFactoryItem>;
 		}
 		
 		private function createMediaElementByResource
 			( resource:MediaResourceBase
-			, mediaInfoType:String
+			, itemType:String
 			, wrappedElement:MediaElement=null
 			):MediaElement
 		{
 			var mediaElement:MediaElement = null;
 			
-			var infos:Vector.<MediaInfo> = getMediaInfosByResource(resource, allInfos[mediaInfoType]);
+			var items:Vector.<MediaFactoryItem> = getItemsByResource(resource, allItems[itemType]);
 			
-			if (mediaInfoType == MediaInfoType.STANDARD)
+			if (itemType == MediaFactoryItemType.STANDARD)
 			{
-				var info:MediaInfo = handlerResolver.resolveHandlers(resource, Vector.<IMediaResourceHandler>(infos)) as MediaInfo;
-				if (info != null)
+				var item:MediaFactoryItem = itemResolver.resolveItems(resource, items) as MediaFactoryItem;
+				if (item != null)
 				{
 					try
 					{
-						mediaElement = info.mediaElementCreationFunction.call();
+						mediaElement = item.mediaElementCreationFunction.call();
 					}
 					catch (error:Error)
 					{
@@ -379,7 +374,7 @@ package org.osmf.media
 					}
 				}
 			}
-			else if (mediaInfoType == MediaInfoType.PROXY)
+			else if (itemType == MediaFactoryItemType.PROXY)
 			{
 				var nextElementToWrap:MediaElement = wrappedElement;
 				
@@ -389,10 +384,10 @@ package org.osmf.media
 				// it easier to assign the wrappedElement in our for loop.
 				// In the future, we may want to provide control for the
 				// ordering to the client through some type of resolver.
-				for (var i:int = infos.length; i > 0; i--)
+				for (var i:int = items.length; i > 0; i--)
 				{
-					var proxyInfo:MediaInfo = infos[i-1] as MediaInfo;
-					var proxyElement:ProxyElement = proxyInfo.mediaElementCreationFunction.call() as ProxyElement;
+					var proxyItem:MediaFactoryItem = items[i-1] as MediaFactoryItem;
+					var proxyElement:ProxyElement = proxyItem.mediaElementCreationFunction.call() as ProxyElement;
 					if (proxyElement != null)
 					{
 						proxyElement.proxiedElement = nextElementToWrap;
@@ -412,27 +407,27 @@ package org.osmf.media
 			return mediaElement;
 		}
 				
-		private static function getMediaInfosByResource(resource:MediaResourceBase, infos:Vector.<MediaInfo>):Vector.<MediaInfo>
+		private static function getItemsByResource(resource:MediaResourceBase, items:Vector.<MediaFactoryItem>):Vector.<MediaFactoryItem>
 		{
-			var results:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var results:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			for each (var info:MediaInfo in infos)
+			for each (var item:MediaFactoryItem in items)
 			{
-				if (info.canHandleResource(resource) == true)
+				if (item.canHandleResourceFunction.call(item, resource) == true)
 				{
-					results.push(info);
+					results.push(item);
 				}
 			}
 			
 			return results;
 		}
 		
-		private static function getIndexOfMediaInfo(id:String, infos:Vector.<MediaInfo>):int
+		private static function getIndexOfItem(id:String, items:Vector.<MediaFactoryItem>):int
 		{
-			for (var i:int = 0; i < infos.length; i++)
+			for (var i:int = 0; i < items.length; i++)
 			{
-				var info:MediaInfo = infos[i] as MediaInfo;
-				if (info.id == id)
+				var item:MediaFactoryItem = items[i] as MediaFactoryItem;
+				if (item.id == id)
 				{
 					return i;
 				}
@@ -463,11 +458,11 @@ package org.osmf.media
 			}
 		}
 
-		private var handlerResolver:IMediaResourceHandlerResolver;
+		private var itemResolver:MediaFactoryItemResolver
 		
-		private var allInfos:Dictionary;
-			// Keys are: String (MediaInfoType)
-			// Values are: Vector.<MediaInfo>
+		private var allItems:Dictionary;
+			// Keys are: String (MediaFactoryItemType)
+			// Values are: Vector.<MediaFactoryItem>
 		
 		private var createdElements:Dictionary;
 			// Keys are: MediaElement

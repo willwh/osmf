@@ -22,10 +22,10 @@
 package org.osmf.media
 {
 	/**
-	 * Enumeration of different types of MediaInfos.
+	 * Enumeration of different types of MediaFactoryItems.
 	 * 
-	 * <p>Most MediaInfos encapsulate media with a standard creation policy,
-	 * but in some cases a MediaInfo needs some additional, custom setup.
+	 * <p>Most MediaFactoryItems encapsulate media with a standard creation policy,
+	 * but in some cases a MediaFactoryItem needs some additional, custom setup.
 	 * This class enables the distinction between these types.</p> 
 	 *  
 	 *  @langversion 3.0
@@ -33,10 +33,10 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MediaInfoType
+	public class MediaFactoryItemType
 	{
 		/**
-		 * The default type.  Represents MediaInfos for standard, creatable
+		 * The default type.  Represents MediaFactoryItems for standard, creatable
 		 * MediaElements.
 		 *  
 		 *  @langversion 3.0
@@ -47,7 +47,7 @@ package org.osmf.media
 		public static const STANDARD:String = "standard";
 		
 		/**
-		 * Represents MediaInfos for ProxyElements that should wrap created
+		 * Represents MediaFactoryItems for ProxyElements that should wrap created
 		 * MediaElements.
 		 *  
 		 *  @langversion 3.0
@@ -58,10 +58,10 @@ package org.osmf.media
 		public static const PROXY:String = "proxy";
 		
 		/**
-		 * A create on load plugin is created once it is added to a media factory. 
-		 * No resource will be set when the plugin's element is created after loaded.
-		 * This type of plugin is meant to be used as a reference plugin without 
-		 * the need to create the plugin's MediaElement explicitly.  
+		 * Represents MediaFactoryItems for MediaElements that should be created
+		 * as soon as they are added to the MediaFactory.  Typically these types
+		 * of items are reference items (i.e. implement the IMediaReferrer interface)
+		 * so that they can monitor other created MediaElements.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

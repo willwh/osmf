@@ -21,11 +21,10 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	
-	public class SampleResourceHandler implements IMediaResourceHandler
+	public class SampleResourceHandler
 	{
 		/**
 		 * Either pass in a handler, or give this handler a URL to match.

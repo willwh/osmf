@@ -37,10 +37,8 @@ package org.osmf.utils
 				   simpleResource.type != SimpleResource.UNHANDLED;
 		}
 		
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-			
 			doUpdateLoadTrait(loadTrait, LoadState.LOADING);
 			
 			if (SimpleResource(loadTrait.resource).type == SimpleResource.SUCCESSFUL)
@@ -54,10 +52,8 @@ package org.osmf.utils
 			}
 		}
 
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-			
 			doUpdateLoadTrait(loadTrait, LoadState.UNLOADING, new SimpleLoadedContext());
 			doUpdateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}

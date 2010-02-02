@@ -107,10 +107,8 @@ package org.osmf.swf
 		 * @see flash.display.Loader#load()
 		 * @param loadTrait LoadTrait to be loaded.
 		 */ 
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-			
 			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain);
 		}
 
@@ -126,10 +124,8 @@ package org.osmf.swf
 		 * @see org.osmf.traits.LoadState
 		 * @see flash.display.Loader#unload()
 		 */ 
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-			
 			LoaderUtils.unloadLoadTrait(loadTrait, updateLoadTrait);
 		}
 

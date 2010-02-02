@@ -92,40 +92,40 @@ package org.osmf.plugin
 		{
 			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoPluginInfo));
 			
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 			
 			loader.load(loadTrait);
 
-			// Ensure the MediaInfo object has been registered with the media factory.
-			assertTrue(mediaFactory.getMediaInfoById(SimpleVideoPluginInfo.MEDIA_INFO_ID) != null);
-			assertTrue(mediaFactory.numMediaInfos == 1);
+			// Ensure the MediaFactoryItem object has been registered with the media factory.
+			assertTrue(mediaFactory.getItemById(SimpleVideoPluginInfo.MEDIA_FACTORY_ITEM_ID) != null);
+			assertTrue(mediaFactory.numItems == 1);
 		}
 
-		public function testLoadOfPluginWithMultipleMediaInfos():void
+		public function testLoadOfPluginWithMultipleMediaFactoryItems():void
 		{
 			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoImagePluginInfo));
 			
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 			
 			loader.load(loadTrait);
 
-			// Ensure the MediaInfo object has been registered with the media factory.
-			assertTrue(mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.IMAGE_MEDIA_INFO_ID) != null);
-			assertTrue(mediaFactory.getMediaInfoById(SimpleVideoImagePluginInfo.VIDEO_MEDIA_INFO_ID) != null);
-			assertTrue(mediaFactory.numMediaInfos == 2);
+			// Ensure the MediaFactoryItem object has been registered with the media factory.
+			assertTrue(mediaFactory.getItemById(SimpleVideoImagePluginInfo.IMAGE_MEDIA_FACTORY_ITEM_ID) != null);
+			assertTrue(mediaFactory.getItemById(SimpleVideoImagePluginInfo.VIDEO_MEDIA_FACTORY_ITEM_ID) != null);
+			assertTrue(mediaFactory.numItems == 2);
 		}
 
 		public function testUnloadOfPlugin():void
 		{
 			var loadTrait:LoadTrait = createLoadTrait(loader, new PluginInfoResource(new SimpleVideoPluginInfo()));
 			
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 			
 			loader.load(loadTrait);
-			assertTrue(mediaFactory.numMediaInfos > 0);
+			assertTrue(mediaFactory.numItems > 0);
 			
 			loader.unload(loadTrait);
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 		}
 		
 		public function testLoadOfInvalidVersionPlugin():void
@@ -142,7 +142,7 @@ package org.osmf.plugin
 		{
 			var loadTrait:LoadTrait = createLoadTrait(loader, pluginResource);
 			
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 			

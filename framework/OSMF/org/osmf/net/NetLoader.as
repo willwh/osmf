@@ -127,9 +127,8 @@ package org.osmf.net
 	     * @see org.osmf.events.MediaErrorEvent
 		 * @inheritDoc
 		**/
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{	
-			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			switch ((loadTrait.resource as URLResource).url.protocol)
 			{
@@ -171,10 +170,8 @@ package org.osmf.net
 	     * @param loadTrait LoadTrait to be unloaded.
 	     * @see org.osmf.loaders.LoaderBase#event:loaderStateChange	
 		**/
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-			
 			var netLoadedContext:NetLoadedContext = loadTrait.loadedContext as NetLoadedContext;			
 			
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext); 			

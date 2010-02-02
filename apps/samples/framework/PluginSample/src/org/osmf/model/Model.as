@@ -54,53 +54,25 @@ package org.osmf.model
 		public function Model()
 		{
 			// initialization						
-			mediaFactory = new MediaFactory(new AppResourceHandlerResolver());
+			mediaFactory = new DefaultMediaFactory(new AppResourceHandlerResolver());
 			pluginManager = new PluginManager(mediaFactory);
-			
-			var loader:LoaderBase = new NetLoader();
-			mediaFactory.addMediaInfo
-				( new MediaInfo
-					( "Standard video element"
-					, loader as IMediaResourceHandler
-					, createVideoElement
-					)
-				);
-				
-			loader = new SoundLoader();
-			mediaFactory.addMediaInfo
-				( new MediaInfo
-					( "Standard audio element"
-					, loader as IMediaResourceHandler
-					, createAudioElement
-					)
-				);
-				
-			loader = new SWFLoader();
-			mediaFactory.addMediaInfo
-				( new MediaInfo
-					( "Standard SWF element"
-					, loader as IMediaResourceHandler
-					, createSWFElement
-					)
-				);
 			
 			initResourceHandlers();
 		}
 		
-		public function updatePriorityByMediaInfoId(mediaInfoId:String, priority:int):void
+		public function updatePriorityByMediaFactoryItemId(itemId:String, priority:int):void
 		{
-			getResourceHandlerByMediaInfoId(mediaInfoId).priority = priority;
+			getResourceHandlerByMediaFactoryItemId(itemId).priority = priority;
 		}
 		
-		public function getResourceHandlerByMediaInfoId(mediaInfoId:String):ResourceHandlerDescriptor
+		public function getResourceHandlerByMediaFactoryItemId(itemId:String):ResourceHandlerDescriptor
 		{
 			for (var i:int = 0; i < resourceHandlers.length; i++)
 			{
-				var handler:ResourceHandlerDescriptor 
-					= resourceHandlers.getItemAt(i) as ResourceHandlerDescriptor;
-				if (handler.mediaInfoId == mediaInfoId)
+				var descriptor:ResourceHandlerDescriptor = resourceHandlers.getItemAt(i) as ResourceHandlerDescriptor;
+				if (descriptor.itemId == itemId)
 				{
-					return handler;
+					return descriptor;
 				}
 			}
 			
@@ -124,9 +96,8 @@ package org.osmf.model
 		{
 			for (var i:int = 0; i < handlers.length; i++)
 			{
-				var item:ResourceHandlerDescriptor 
-					= handlers.getItemAt(i) as ResourceHandlerDescriptor;
-				if (item.mediaInfoId == handler.mediaInfoId)
+				var item:ResourceHandlerDescriptor = handlers.getItemAt(i) as ResourceHandlerDescriptor;
+				if (item.itemId == handler.itemId)
 				{
 					handler.priority = item.priority;
 					break;
@@ -152,12 +123,12 @@ package org.osmf.model
 		private function initResourceHandlers():void
 		{
 			resourceHandlers = new ArrayCollection();
-			for (var i:int = 0; i < mediaFactory.numMediaInfos; i++)
+			for (var i:int = 0; i < mediaFactory.numItems; i++)
 			{
-				var mediaInfo:MediaInfo = mediaFactory.getMediaInfoAt(i);
-				if (mediaInfo != null)
+				var item:MediaFactoryItem = mediaFactory.getItemAt(i);
+				if (item != null)
 				{
-					resourceHandlers.addItem(new ResourceHandlerDescriptor(mediaInfo));
+					resourceHandlers.addItem(new ResourceHandlerDescriptor(item));
 				}
 			}
 		}

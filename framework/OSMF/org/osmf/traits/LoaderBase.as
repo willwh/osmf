@@ -25,7 +25,6 @@ package org.osmf.traits
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -56,10 +55,20 @@ package org.osmf.traits
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class LoaderBase extends EventDispatcher implements IMediaResourceHandler
+	public class LoaderBase extends EventDispatcher
 	{
 		/**
-		 * @private
+		 * Indicates whether this loader is capable of handling (i.e. loading)
+		 * the given MediaResourceBase.
+		 * 
+		 * @param resource The media resource in question.
+		 * 
+		 * @return True if this loader can handle the given resource.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -78,8 +87,8 @@ package org.osmf.traits
          * <code>READY</code> when the method is called, this method throws
          * an error.</p>
          * 
-         * <p>Subclasses should override this method to perform the actual load operation.
-         * Subclasses must call super.load() prior to performing the load operation.</p>
+         * <p>Subclasses should override the <code>executeLoad</code> method to perform
+         * the actual load operation.</p>
          * 
          * @see org.osmf.traits.LoadState
 		 * 
@@ -87,7 +96,7 @@ package org.osmf.traits
 		 * 
 		 * @throws IllegalOperationError <code>IllegalOperationError</code>
 		 * If this loader cannot load the given LoadTrait (as determined by
-         * the <code>IMediaResourceHandler.canHandleResource()</code> method),
+         * the <code>canHandleResource()</code> method),
          * or if the LoadTrait's LoadState is <code>LOADING</code> or
          * <code>READY</code>.
   		 *  
@@ -96,9 +105,10 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function load(loadTrait:LoadTrait):void
+		public final function load(loadTrait:LoadTrait):void
 		{
 			validateLoad(loadTrait);
+			executeLoad(loadTrait);
 		}
 		
 		/**
@@ -112,8 +122,8 @@ package org.osmf.traits
          * <p>If the LoadTrait's LoadState is not <code>READY</code> when the method
          * is called, this method throws an error.</p>
          * 
-         * <p>Subclasses should override this method to perform the actual unload operation.
-         * Subclasses must call super.unload() prior to performing the unload operation.</p>
+         * <p>Subclasses should override the <code>executeUnload</code> method to perform
+         * the actual unload operation.</p>
          * 
          * @see org.osmf.traits.LoadState
 		 * 
@@ -121,7 +131,7 @@ package org.osmf.traits
 		 * 
 		 * @throws IllegalOperationError <code>IllegalOperationError</code>
 		 * If this loader cannot unload the specified LoadTrait (as determined by
-         * the <code>IMediaResourceHandler.canHandleResource()</code> method),
+         * the <code>canHandleResource()</code> method),
          * or if the LoadTrait's LoadState is not <code>READY</code>.
 		 *  
 		 *  @langversion 3.0
@@ -129,12 +139,45 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function unload(loadTrait:LoadTrait):void
+		public final function unload(loadTrait:LoadTrait):void
 		{
-			validateUnload(loadTrait);		
+			validateUnload(loadTrait);
+			executeUnload(loadTrait);
 		}
 				
 		// Protected
+		
+		/**
+		 * Executes the load of the given LoadTrait.
+		 * 
+		 * <p>This method is invoked by <code>load()</code>.
+		 * Subclasses should override this method to provide their
+		 * own implementation of the load operation.</p>
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function executeLoad(loadTrait:LoadTrait):void
+		{
+		}
+
+		/**
+		 * Executes the unload of the given LoadTrait.
+		 * 
+		 * <p>This method is invoked by <code>unload()</code>.
+		 * Subclasses should override this method to provide their
+		 * own implementation of the unload operation.</p>
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function executeUnload(loadTrait:LoadTrait):void
+		{
+		}
 		
 		/**
 		 * Updates the given LoadTrait with the given info, dispatching the

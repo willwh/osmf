@@ -27,7 +27,7 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.LoadState;
@@ -74,14 +74,14 @@ package org.osmf.plugin
 		{
 			if (pluginInfo != null)
 			{
-				for (var i:int = 0; i < pluginInfo.numMediaInfos; i++)
+				for (var i:int = 0; i < pluginInfo.numMediaFactoryItems; i++)
 				{
-					var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
+					var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(i);
 					
-					var actualMediaInfo:MediaInfo = mediaFactory.getMediaInfoById(mediaInfo.id);
-					if (actualMediaInfo != null)
+					var actualItem:MediaFactoryItem = mediaFactory.getItemById(item.id);
+					if (actualItem != null)
 					{
-						mediaFactory.removeMediaInfo(actualMediaInfo);
+						mediaFactory.removeItem(actualItem);
 					}
 				}
 			}
@@ -121,17 +121,17 @@ package org.osmf.plugin
 						
 						pluginInfo.initializePlugin(loadTrait.resource.metadata);
 					
-						for (var i:int = 0; i < pluginInfo.numMediaInfos; i++)
+						for (var i:int = 0; i < pluginInfo.numMediaFactoryItems; i++)
 						{
 							// Range error usually comes from this method call.  But
 							// we generate an error if the returned value is null.
-							var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(i);
-							if (mediaInfo == null)
+							var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(i);
+							if (item == null)
 							{
 								throw new RangeError();
 							}
 							
-							mediaFactory.addMediaInfo(mediaInfo);							
+							mediaFactory.addItem(item);							
 						}
 						
 						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 

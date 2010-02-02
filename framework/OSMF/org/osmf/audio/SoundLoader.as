@@ -123,17 +123,15 @@ package org.osmf.audio
 		/**
 		 * @private
 		 * 
-		 * Loads the Sound object.. 
+		 * Loads the Sound object.
 		 * <p>Updates the LoadTrait's <code>loadedState</code> property to LOADING
 		 * while loading and to READY upon completing a successful load.</p> 
 		 * 
 		 * @see org.osmf.traits.LoadState
 		 * @param loadTrait LoadTrait to be loaded.
 		 */ 
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-						
 			var sound:Sound = new Sound();
 			var context:SoundLoadedContext = new SoundLoadedContext(sound);
 			updateLoadTrait(loadTrait, LoadState.LOADING, context);
@@ -230,10 +228,8 @@ package org.osmf.audio
 		 * @param loadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 */ 
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-
 			var context:SoundLoadedContext = loadTrait.loadedContext as SoundLoadedContext;
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
 			try

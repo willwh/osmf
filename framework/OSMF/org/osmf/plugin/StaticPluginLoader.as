@@ -54,10 +54,8 @@ package org.osmf.plugin
 	    	return (resource is PluginInfoResource);
 	    }
 	    
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
 			var classResource:PluginInfoResource = loadTrait.resource as PluginInfoResource; 	
@@ -66,10 +64,8 @@ package org.osmf.plugin
 			loadFromPluginInfo(loadTrait, pluginInfo);
 		}
 		
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-			
 			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
 			var pluginInfo:PluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
 

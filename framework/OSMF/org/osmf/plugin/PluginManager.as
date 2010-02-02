@@ -30,7 +30,7 @@ package org.osmf.plugin
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
@@ -391,19 +391,19 @@ package org.osmf.plugin
 			// Add MediaInfo objects for the static and dynamic plugin loaders.
 			//
 			
-			var staticPluginMediaInfo:MediaInfo = new MediaInfo
+			var staticPluginItem:MediaFactoryItem = new MediaFactoryItem
 					( STATIC_PLUGIN_MEDIA_INFO_ID
-					, staticPluginLoader
+					, staticPluginLoader.canHandleResource
 					, createStaticPluginElement
 					);
-			_pluginFactory.addMediaInfo(staticPluginMediaInfo);
+			_pluginFactory.addItem(staticPluginItem);
 			
-			var dynamicPluginMediaInfo:MediaInfo = new MediaInfo
+			var dynamicPluginItem:MediaFactoryItem = new MediaFactoryItem
 					( DYNAMIC_PLUGIN_MEDIA_INFO_ID
-					, dynamicPluginLoader
+					, dynamicPluginLoader.canHandleResource
 					, createDynamicPluginElement
 					);
-			_pluginFactory.addMediaInfo(dynamicPluginMediaInfo);
+			_pluginFactory.addItem(dynamicPluginItem);
 		}
 		
 		private function createStaticPluginElement():MediaElement

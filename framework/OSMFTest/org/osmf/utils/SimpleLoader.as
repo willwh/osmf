@@ -58,10 +58,8 @@ package org.osmf.utils
 		/**
 		 * @inheritDoc
 		 **/
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
 			if (forceFail(loadTrait))
@@ -77,9 +75,8 @@ package org.osmf.utils
 		/**
 		 * @inheritDoc
 		 **/
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
 			if (loadTrait.loadState == LoadState.LOADING ||
 				loadTrait.loadState == LoadState.READY)
 			{

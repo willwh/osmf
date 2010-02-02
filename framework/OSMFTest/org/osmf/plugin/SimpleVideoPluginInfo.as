@@ -23,24 +23,24 @@ package org.osmf.plugin
 {
 	import org.osmf.image.ImageLoader;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.net.NetLoader;
 	import org.osmf.utils.Version;
 	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoPluginInfo extends PluginInfo
 	{
-		public static const MEDIA_INFO_ID:String = "org.osmf.video.Video";
+		public static const MEDIA_FACTORY_ITEM_ID:String = "org.osmf.video.simplevideo2";
 
 		public function SimpleVideoPluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
 			var imageLoader:ImageLoader = new ImageLoader();
 
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			mediaInfos.push(new MediaInfo(MEDIA_INFO_ID, netLoader, createVideoElement));
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			items.push(new MediaFactoryItem(MEDIA_FACTORY_ITEM_ID, netLoader.canHandleResource, createVideoElement));
 			
-			super(mediaInfos);
+			super(items);
 		}
 
 		private function createVideoElement():MediaElement

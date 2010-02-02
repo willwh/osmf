@@ -50,7 +50,7 @@
 
 			import org.osmf.events.*;
 
-			import org.osmf.media.MediaInfo;
+			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;			

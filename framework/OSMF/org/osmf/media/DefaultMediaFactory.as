@@ -95,9 +95,9 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DefaultMediaFactory(handlerResolver:IMediaResourceHandlerResolver=null)
+		public function DefaultMediaFactory(itemResolver:MediaFactoryItemResolver=null)
 		{
-			super(handlerResolver);
+			super(itemResolver);
 			
 			init();
 		}
@@ -109,102 +109,93 @@ package org.osmf.media
 		{
 			var f4mLoader:F4MLoader = new F4MLoader(this);
 			
-			addMediaInfo     
-				( new MediaInfo
+			addItem 
+				( new MediaFactoryItem
 					( "org.osmf.f4m"
-					, f4mLoader
+					, f4mLoader.canHandleResource
 					, function():MediaElement
 						{
 							return new LoadableProxyElement(f4mLoader);
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 				
-			addMediaInfo     
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.video.httpstreaming"
-					, new HTTPStreamingNetLoader()
+					, new HTTPStreamingNetLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new VideoElement();
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 
-			addMediaInfo            
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.video.dynamicStreaming"
-					, new DynamicStreamingNetLoader()
+					, new DynamicStreamingNetLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new VideoElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 			
-			addMediaInfo
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.omsf.video"
-					, new NetLoader()
+					, new NetLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new VideoElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);		
 			
-			addMediaInfo
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.audio"
-					, new SoundLoader()
+					, new SoundLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new AudioElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 				
-			addMediaInfo
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.audio.streaming"
-					, new NetLoader()
+					, new NetLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new AudioElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 				
-			addMediaInfo
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.image"
-					, new ImageLoader()
+					, new ImageLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new ImageElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 				
-			addMediaInfo
-				( new MediaInfo
+			addItem
+				( new MediaFactoryItem
 					( "org.osmf.swf"
-					, new SWFLoader()
+					, new SWFLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new SWFElement()
 						}
-					, MediaInfoType.STANDARD
 					)
 				);
 		}
-		
 	}
 }

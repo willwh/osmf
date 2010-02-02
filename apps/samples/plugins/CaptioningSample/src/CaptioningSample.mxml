@@ -33,7 +33,7 @@
 
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.DisplayObjectEvent;
-			import org.osmf.media.MediaInfo;
+			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.metadata.ObjectIdentifier;
 			import org.osmf.utils.FMSURL;
 			import org.osmf.events.MediaErrorEvent;
@@ -122,7 +122,7 @@
 
 				var netLoader:NetLoader = new NetLoader();
 
-				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar

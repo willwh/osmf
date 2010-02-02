@@ -24,10 +24,9 @@ package org.osmf.mast
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.mast.media.MASTProxyElement;
-	import org.osmf.media.IMediaResourceHandler;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
-	import org.osmf.media.MediaInfoType;
+	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
 
@@ -41,18 +40,18 @@ package org.osmf.mast
 		 */	
 		public function MASTPluginInfo()
 		{		
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			var resourceHandler:IMediaResourceHandler = new NetLoader();
-			var mediaInfo:MediaInfo = new MediaInfo
+			var loader:NetLoader = new NetLoader();
+			var item:MediaFactoryItem = new MediaFactoryItem
 				( "org.osmf.mast.MASTPluginInfo"
-				, resourceHandler
+				, loader.canHandleResource
 				, createMASTProxyElement
-				, MediaInfoType.PROXY
+				, MediaFactoryItemType.PROXY
 				);
-			mediaInfos.push(mediaInfo);
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		private function createMASTProxyElement():MediaElement

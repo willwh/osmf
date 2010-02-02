@@ -27,7 +27,7 @@ package com.akamai.osmf
 	
 	import org.osmf.audio.AudioElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.video.VideoElement;
@@ -43,16 +43,16 @@ package com.akamai.osmf
 		 */	
 		public function AkamaiBasicStreamingPluginInfo()
 		{		
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			netLoader = new AkamaiNetLoader(true, new AkamaiNetConnectionFactory());
 			
-			var mediaInfo:MediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingVideoElement", netLoader, createVideoElement);
-			mediaInfos.push(mediaInfo);
+			var item:MediaFactoryItem = new MediaFactoryItem("com.akamai.osmf.BasicStreamingVideoElement", netLoader.canHandleResource, createVideoElement);
+			items.push(item);
 
-			mediaInfo = new MediaInfo("com.akamai.osmf.BasicStreamingAudioElement", netLoader, createAudioElement);
-			mediaInfos.push(mediaInfo);
+			item = new MediaFactoryItem("com.akamai.osmf.BasicStreamingAudioElement", netLoader.canHandleResource, createAudioElement);
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		private function createVideoElement():MediaElement

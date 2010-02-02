@@ -23,24 +23,24 @@
 *****************************************************/
 package org.osmf.model
 {
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	
 	public class ResourceHandlerDescriptor
 	{
-		public function ResourceHandlerDescriptor(mediaInfo:MediaInfo, priority:int = 10)
+		public function ResourceHandlerDescriptor(item:MediaFactoryItem, priority:int = 10)
 		{
-			_mediaInfo = mediaInfo;
+			_item = item;
 			_priority = priority;
 		}
 		
-		public function get mediaInfo():MediaInfo
+		public function get item():MediaFactoryItem
 		{
-			return _mediaInfo;
+			return _item;
 		}
 		
-		public function get mediaInfoId():String
+		public function get itemId():String
 		{
-			return _mediaInfo.id;
+			return _item.id;
 		}
 		
 		public function get priority():int
@@ -53,7 +53,7 @@ package org.osmf.model
 			_priority = value;
 		}
 		
-		private var _mediaInfo:MediaInfo;
+		private var _item:MediaFactoryItem;
 		private var _priority:int;
 	}
 }

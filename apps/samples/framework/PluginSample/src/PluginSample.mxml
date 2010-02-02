@@ -201,7 +201,7 @@
 					var resourceHandlerDescriptor:ResourceHandlerDescriptor 
 						= resourceHandlers.getItemAt(0) as ResourceHandlerDescriptor;
 						
-					resourceHandlerId.label = resourceHandlerDescriptor.mediaInfoId;
+					resourceHandlerId.label = resourceHandlerDescriptor.itemId;
 					resourceHandlerPriority.text = new Number(resourceHandlerDescriptor.priority).toString();
 					resourceHandlerList.selectedIndex = 0;
 				}
@@ -219,7 +219,7 @@
 			
 			private function onUpdateClicked(event:MouseEvent):void
 			{
-				Model.getInstance().updatePriorityByMediaInfoId(
+				Model.getInstance().updatePriorityByMediaFactoryItemId(
 					resourceHandlerId.label, int(resourceHandlerPriority.text));
 				
 				refreshResourceHandlerList();
@@ -231,7 +231,7 @@
 				var resourceHandlerDescriptor:ResourceHandlerDescriptor 
 					= resourceHandlers.getItemAt(resourceHandlerList.selectedIndex) as ResourceHandlerDescriptor;
 				
-				resourceHandlerId.label = resourceHandlerDescriptor.mediaInfoId;
+				resourceHandlerId.label = resourceHandlerDescriptor.itemId;
 				resourceHandlerPriority.text = new Number(resourceHandlerDescriptor.priority).toString();
 			}
 			

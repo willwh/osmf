@@ -3,7 +3,7 @@ package org.osmf.test.captioning
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.plugin.PluginInfo;
 
 	public class TestCaptioningPluginInfo extends TestCase
@@ -14,9 +14,9 @@ package org.osmf.test.captioning
 			
 			assertNotNull(pluginInfo);
 			
-			var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(0);
+			var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(0);
 			
-			assertNotNull(mediaInfo);
+			assertNotNull(item);
 		}
 		
 		public function testGetMediaInfoAtWithBadIndex():void
@@ -27,7 +27,7 @@ package org.osmf.test.captioning
 
 			try
 			{			
-				var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(10);
+				var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(10);
 				fail();
 			}
 			catch(error:RangeError)
@@ -57,7 +57,7 @@ package org.osmf.test.captioning
 			var pluginInfo:PluginInfo = new CaptioningPluginInfo();
 			assertNotNull(pluginInfo);
 
-			assertTrue(pluginInfo.numMediaInfos > 0);			
+			assertTrue(pluginInfo.numMediaFactoryItems > 0);			
 		}
 	}
 }

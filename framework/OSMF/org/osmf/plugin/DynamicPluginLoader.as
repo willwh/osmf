@@ -58,10 +58,8 @@ package org.osmf.plugin
 		/**
 		 * @private
 		 */
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-			
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
 			// We'll use a SWFLoader to do the loading.  Make sure we load the
@@ -120,10 +118,8 @@ package org.osmf.plugin
 		/**
 		 * @private
 		 */
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-			
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
 			
 			// First unload the PluginInfo.

@@ -73,12 +73,10 @@ package org.osmf.mast.loader
 		 * MAST document.</p>
 		 * 
 		 * @see org.osmf.traits.LoadState
-		 * @param loadable The LoadTrait to be loaded.
+		 * @param LoadTrait The LoadTrait to be loaded.
 		 */
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
-			
 			updateLoadTrait(loadTrait, LoadState.LOADING);			
 						
 			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
@@ -144,16 +142,14 @@ package org.osmf.mast.loader
 		/**
 		 * Unloads the document.  
 		 * 
-		 * <p>Updates the ILoadable's <code>loadedState</code> property to UNLOADING
+		 * <p>Updates the LoadTrait's <code>loadState</code> property to UNLOADING
 		 * while unloading and to UNINITIALIZED upon completing a successful unload.</p>
 		 *
-		 * @param ILoadable ILoadable to be unloaded.
+		 * @param LoadTrait LoadTrait to be unloaded.
 		 * @see org.osmf.traits.LoadState
 		 */ 
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-
 			// Nothing to do.
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);

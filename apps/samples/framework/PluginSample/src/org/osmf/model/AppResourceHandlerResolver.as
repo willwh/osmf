@@ -25,38 +25,37 @@ package org.osmf.model
 	
 	import org.osmf.media.*;
 	
-	public class AppResourceHandlerResolver implements IMediaResourceHandlerResolver
+	public class AppResourceHandlerResolver extends MediaFactoryItemResolver
 	{
 		public function AppResourceHandlerResolver()
 		{
-			defaultResolver = new DefaultMediaResourceHandlerResolver();
 		}
 
-		public function resolveHandlers(
-			resource:MediaResourceBase, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler
+		override public function resolveItems(
+			resource:MediaResourceBase, items:Vector.<MediaFactoryItem>):MediaFactoryItem
 		{
-			if (handlers == null || handlers.length <= 0)
+			if (items == null || items.length <= 0)
 			{
 				return null;
 			}
 			
-			var handler:ResourceHandlerDescriptor 
-				= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[0] as MediaInfo).id);
-				
-			for (var i:int = 1; i < handlers.length; i++)
+			var descriptor:ResourceHandlerDescriptor 
+				= Model.getInstance().getResourceHandlerByMediaFactoryItemId((items[0] as MediaFactoryItem).id);
+			
+			var item:MediaFactoryItem = null;
+			
+			for (var i:int = 1; i < items.length; i++)
 			{
-				var item:ResourceHandlerDescriptor
-					= Model.getInstance().getResourceHandlerByMediaInfoId((handlers[i] as MediaInfo).id);
+				var iterDescriptor:ResourceHandlerDescriptor
+					= Model.getInstance().getResourceHandlerByMediaFactoryItemId((items[i] as MediaFactoryItem).id);
 				
-				if (item.priority > handler.priority)
+				if (iterDescriptor.priority > descriptor.priority)
 				{
-					handler = item;
+					item = iterDescriptor.item;
 				}
 			}
 			
-			return handler.mediaInfo;
+			return item;
 		}
-		
-		private var defaultResolver:DefaultMediaResourceHandlerResolver;
 	}
 }

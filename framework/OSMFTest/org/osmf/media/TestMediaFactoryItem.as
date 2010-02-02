@@ -27,25 +27,25 @@ package org.osmf.media
 	import org.osmf.utils.SampleResourceHandler;
 	import org.osmf.utils.URL;
 	
-	public class TestMediaInfo extends TestCase
+	public class TestMediaFactoryItem extends TestCase
 	{
 		public function testConstructor():void
 		{
-			var mediaInfo:MediaInfo = new MediaInfo
+			var item:MediaFactoryItem = new MediaFactoryItem
 										( "foo"
-										, new SampleResourceHandler(canHandleResource)
+										, new SampleResourceHandler(canHandleResource).canHandleResource
 										, function ():MediaElement { return null; }
 										);
-			assertTrue(mediaInfo != null);
+			assertTrue(item != null);
 			
 			// Verify that any null param triggers an exception.
 			//
 			
 			try
 			{
-				mediaInfo = new MediaInfo
+				item = new MediaFactoryItem
 								( null
-								, new SampleResourceHandler(canHandleResource)
+								, new SampleResourceHandler(canHandleResource).canHandleResource
 								, function ():MediaElement { return null; }
 								);
 				fail();
@@ -56,7 +56,7 @@ package org.osmf.media
 
 			try
 			{
-				mediaInfo = new MediaInfo
+				item = new MediaFactoryItem
 								( "foo"
 								, null
 								, function ():MediaElement { return null; }
@@ -69,9 +69,9 @@ package org.osmf.media
 
 			try
 			{
-				mediaInfo = new MediaInfo
+				item = new MediaFactoryItem
 								( "foo"
-								, new SampleResourceHandler(canHandleResource)
+								, new SampleResourceHandler(canHandleResource).canHandleResource
 								, null
 								);
 				fail();
@@ -83,24 +83,24 @@ package org.osmf.media
 		
 		public function testGetId():void
 		{
-			var mediaInfo:MediaInfo = createMediaInfo("anId");
-			assertTrue(mediaInfo.id == "anId");
+			var item:MediaFactoryItem = createMediaFactoryItem("anId");
+			assertTrue(item.id == "anId");
 		}
 		
-		public function testGetResourceHandler():void
+		public function testGetCanHandleResourceFunction():void
 		{
-			var mediaInfo:MediaInfo = createMediaInfo("id");
-			var handler:IMediaResourceHandler = mediaInfo.resourceHandler;
-			assertTrue(handler != null);
+			var item:MediaFactoryItem = createMediaFactoryItem("id");
+			var func:Function = item.canHandleResourceFunction;
+			assertTrue(func != null);
 			
-			assertTrue(handler.canHandleResource(VALID_RESOURCE) == true);
-			assertTrue(handler.canHandleResource(INVALID_RESOURCE) == false);
+			assertTrue(func.call(null, VALID_RESOURCE) == true);
+			assertTrue(func.call(null, INVALID_RESOURCE) == false);
 		}
 		
 		public function testGetMediaElementCreationFunction():void
 		{
-			var mediaInfo:MediaInfo = createMediaInfo("id");
-			var func:Function = mediaInfo.mediaElementCreationFunction;
+			var item:MediaFactoryItem = createMediaFactoryItem("id");
+			var func:Function = item.mediaElementCreationFunction;
 			assertTrue(func != null);
 			
 			var element1:MediaElement = func.call();
@@ -114,15 +114,15 @@ package org.osmf.media
 		
 		public function testGetType():void
 		{
-			var mediaInfo:MediaInfo = createMediaInfo("id");
-			assertTrue(mediaInfo.type == MediaInfoType.STANDARD);
+			var item:MediaFactoryItem = createMediaFactoryItem("id");
+			assertTrue(item.type == MediaFactoryItemType.STANDARD);
 		}
 		
-		private function createMediaInfo(id:String):MediaInfo
+		private function createMediaFactoryItem(id:String):MediaFactoryItem
 		{
-			return new MediaInfo
+			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler(canHandleResource)
+					, new SampleResourceHandler(canHandleResource).canHandleResource
 					, createDynamicMediaElement
 					);
 		}

@@ -100,7 +100,7 @@ package org.osmf.test.mast.managers
 				var netLoader:NetLoader = new NetLoader();
 				
 				// Add a default VideoElement
-				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			

@@ -105,9 +105,8 @@ package org.osmf.smil.loader
 		/**
 		 * @private
 		 */
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
 			var urlLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
@@ -157,9 +156,8 @@ package org.osmf.smil.loader
 		/**
 		 * @private
 		 */
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);	
 			var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					

@@ -38,31 +38,31 @@ package org.osmf.media
 			this.mediaFactory = new MediaFactory();
 		}
 		
-		public function testAddMediaInfo():void
+		public function testAddMediaFactoryItem():void
 		{
 			var id:String = "a1";
 			
-			var mediaInfo1:MediaInfo = createMediaInfo(id);
+			var item1:MediaFactoryItem = createMediaFactoryItem(id);
 			
-			assertTrue(mediaFactory.getMediaInfoById(id) == null);
+			assertTrue(mediaFactory.getItemById(id) == null);
 			
-			mediaFactory.addMediaInfo(mediaInfo1);
-			assertTrue(mediaFactory.getMediaInfoById(id) == mediaInfo1);
-			assertTrue(mediaFactory.numMediaInfos == 1);
+			mediaFactory.addItem(item1);
+			assertTrue(mediaFactory.getItemById(id) == item1);
+			assertTrue(mediaFactory.numItems == 1);
 			
 			// Adding a second one with the same ID should cause the first
 			// to be replaced.
-			var mediaInfo2:MediaInfo = createMediaInfo(id);
-			mediaFactory.addMediaInfo(mediaInfo2);
-			assertTrue(mediaFactory.getMediaInfoById(id) == mediaInfo2);
-			assertTrue(mediaFactory.numMediaInfos == 1);
+			var item2:MediaFactoryItem = createMediaFactoryItem(id);
+			mediaFactory.addItem(item2);
+			assertTrue(mediaFactory.getItemById(id) == item2);
+			assertTrue(mediaFactory.numItems == 1);
 		}
 
-		public function testAddMediaInfoWithInvalidParam():void
+		public function testAddItemWithInvalidParam():void
 		{
 			try
 			{
-				mediaFactory.addMediaInfo(null);
+				mediaFactory.addItem(null);
 				
 				fail();
 			}
@@ -71,30 +71,30 @@ package org.osmf.media
 			}
 		}
 
-		public function testRemoveMediaInfo():void
+		public function testRemoveItem():void
 		{
 			var id:String = "a1";
 			
-			var mediaInfo:MediaInfo = createMediaInfo(id);
+			var item:MediaFactoryItem = createMediaFactoryItem(id);
 
 			// Calling it on an empty factory is a no-op.
-			mediaFactory.removeMediaInfo(mediaInfo);
+			mediaFactory.removeItem(item);
 			
-			mediaFactory.addMediaInfo(mediaInfo);
-			assertTrue(mediaFactory.getMediaInfoById(id) == mediaInfo);
+			mediaFactory.addItem(item);
+			assertTrue(mediaFactory.getItemById(id) == item);
 			
-			mediaFactory.removeMediaInfo(mediaInfo);
-			assertTrue(mediaFactory.getMediaInfoById(id) == null);
+			mediaFactory.removeItem(item);
+			assertTrue(mediaFactory.getItemById(id) == null);
 			
 			// Calling it twice is a no-op.
-			mediaFactory.removeMediaInfo(mediaInfo);
+			mediaFactory.removeItem(item);
 		}
 
-		public function testRemoveMediaInfoWithInvalidParam():void
+		public function testRemoveItemWithInvalidParam():void
 		{
 			try
 			{
-				mediaFactory.removeMediaInfo(null);
+				mediaFactory.removeItem(null);
 				
 				fail();
 			}
@@ -103,86 +103,86 @@ package org.osmf.media
 			}
 		}
 		
-		public function testGetNumMediaInfos():void
+		public function testGetNumItems():void
 		{
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			assertTrue(mediaFactory.numItems == 0);
 			
-			var info1:MediaInfo = createMediaInfo("a1");
-			var info2:MediaInfo = createMediaInfo("a2");
-			var info3:MediaInfo = createMediaInfo("b3", null, null, MediaInfoType.PROXY);
-			var info4:MediaInfo = createMediaInfo("b4", null, null, MediaInfoType.PROXY);
+			var info1:MediaFactoryItem = createMediaFactoryItem("a1");
+			var info2:MediaFactoryItem = createMediaFactoryItem("a2");
+			var info3:MediaFactoryItem = createMediaFactoryItem("b3", null, null, MediaFactoryItemType.PROXY);
+			var info4:MediaFactoryItem = createMediaFactoryItem("b4", null, null, MediaFactoryItemType.PROXY);
 			
-			mediaFactory.addMediaInfo(info1);
-			assertTrue(mediaFactory.numMediaInfos == 1);
-			mediaFactory.addMediaInfo(info2);
-			assertTrue(mediaFactory.numMediaInfos == 2);
+			mediaFactory.addItem(info1);
+			assertTrue(mediaFactory.numItems == 1);
+			mediaFactory.addItem(info2);
+			assertTrue(mediaFactory.numItems == 2);
 
-			mediaFactory.addMediaInfo(info3);
-			assertTrue(mediaFactory.numMediaInfos == 3);
-			mediaFactory.addMediaInfo(info4);
-			assertTrue(mediaFactory.numMediaInfos == 4);
+			mediaFactory.addItem(info3);
+			assertTrue(mediaFactory.numItems == 3);
+			mediaFactory.addItem(info4);
+			assertTrue(mediaFactory.numItems == 4);
 
-			mediaFactory.removeMediaInfo(info1);
-			assertTrue(mediaFactory.numMediaInfos == 3);
-			mediaFactory.removeMediaInfo(info2);
-			assertTrue(mediaFactory.numMediaInfos == 2);
+			mediaFactory.removeItem(info1);
+			assertTrue(mediaFactory.numItems == 3);
+			mediaFactory.removeItem(info2);
+			assertTrue(mediaFactory.numItems == 2);
 			
-			mediaFactory.removeMediaInfo(info3);
-			assertTrue(mediaFactory.numMediaInfos == 1);
-			mediaFactory.removeMediaInfo(info4);
-			assertTrue(mediaFactory.numMediaInfos == 0);
+			mediaFactory.removeItem(info3);
+			assertTrue(mediaFactory.numItems == 1);
+			mediaFactory.removeItem(info4);
+			assertTrue(mediaFactory.numItems == 0);
 		}
 		
-		public function testGetMediaInfoAt():void
+		public function testGetItemAt():void
 		{
-			var a1:MediaInfo = createMediaInfo("a1","http://www.example.com/a1");
-			var a2:MediaInfo = createMediaInfo("a2","http://www.example.com/a2");
-			var a3:MediaInfo = createMediaInfo("a3","http://www.example.com/a3");
-			var b1:MediaInfo = createMediaInfo("b1","http://www.example.com/b1", null, MediaInfoType.PROXY);
-			var b2:MediaInfo = createMediaInfo("b2","http://www.example.com/b2", null, MediaInfoType.PROXY);
-			var b3:MediaInfo = createMediaInfo("b3","http://www.example.com/b3", null, MediaInfoType.PROXY);
+			var a1:MediaFactoryItem = createMediaFactoryItem("a1","http://www.example.com/a1");
+			var a2:MediaFactoryItem = createMediaFactoryItem("a2","http://www.example.com/a2");
+			var a3:MediaFactoryItem = createMediaFactoryItem("a3","http://www.example.com/a3");
+			var b1:MediaFactoryItem = createMediaFactoryItem("b1","http://www.example.com/b1", null, MediaFactoryItemType.PROXY);
+			var b2:MediaFactoryItem = createMediaFactoryItem("b2","http://www.example.com/b2", null, MediaFactoryItemType.PROXY);
+			var b3:MediaFactoryItem = createMediaFactoryItem("b3","http://www.example.com/b3", null, MediaFactoryItemType.PROXY);
 			
-			mediaFactory.addMediaInfo(a1);
-			mediaFactory.addMediaInfo(b1);
-			mediaFactory.addMediaInfo(a2);
-			mediaFactory.addMediaInfo(b2);
-			mediaFactory.addMediaInfo(a3);
-			mediaFactory.addMediaInfo(b3);
+			mediaFactory.addItem(a1);
+			mediaFactory.addItem(b1);
+			mediaFactory.addItem(a2);
+			mediaFactory.addItem(b2);
+			mediaFactory.addItem(a3);
+			mediaFactory.addItem(b3);
 			
-			assertTrue(mediaFactory.getMediaInfoAt(-1) == null);
-			assertTrue(mediaFactory.getMediaInfoAt(0) == a1);
-			assertTrue(mediaFactory.getMediaInfoAt(1) == a2);
-			assertTrue(mediaFactory.getMediaInfoAt(2) == a3);
-			assertTrue(mediaFactory.getMediaInfoAt(3) == b1);
-			assertTrue(mediaFactory.getMediaInfoAt(4) == b2);
-			assertTrue(mediaFactory.getMediaInfoAt(5) == b3);
-			assertTrue(mediaFactory.getMediaInfoAt(6) == null);
+			assertTrue(mediaFactory.getItemAt(-1) == null);
+			assertTrue(mediaFactory.getItemAt(0) == a1);
+			assertTrue(mediaFactory.getItemAt(1) == a2);
+			assertTrue(mediaFactory.getItemAt(2) == a3);
+			assertTrue(mediaFactory.getItemAt(3) == b1);
+			assertTrue(mediaFactory.getItemAt(4) == b2);
+			assertTrue(mediaFactory.getItemAt(5) == b3);
+			assertTrue(mediaFactory.getItemAt(6) == null);
 		}
 		
-		public function testGetMediaInfoById():void
+		public function testGetItemById():void
 		{
-			mediaFactory.addMediaInfo(createMediaInfo("a1"));
-			mediaFactory.addMediaInfo(createMediaInfo("a2"));
-			mediaFactory.addMediaInfo(createMediaInfo("a3"));
-			mediaFactory.addMediaInfo(createMediaInfo("b1", null, null, MediaInfoType.PROXY));
-			mediaFactory.addMediaInfo(createMediaInfo("b2", null, null, MediaInfoType.PROXY));
-			mediaFactory.addMediaInfo(createMediaInfo("b3", null, null, MediaInfoType.PROXY));
+			mediaFactory.addItem(createMediaFactoryItem("a1"));
+			mediaFactory.addItem(createMediaFactoryItem("a2"));
+			mediaFactory.addItem(createMediaFactoryItem("a3"));
+			mediaFactory.addItem(createMediaFactoryItem("b1", null, null, MediaFactoryItemType.PROXY));
+			mediaFactory.addItem(createMediaFactoryItem("b2", null, null, MediaFactoryItemType.PROXY));
+			mediaFactory.addItem(createMediaFactoryItem("b3", null, null, MediaFactoryItemType.PROXY));
 			
-			assertTrue(mediaFactory.getMediaInfoById("a1") != null);
-			assertTrue(mediaFactory.getMediaInfoById("a2") != null);
-			assertTrue(mediaFactory.getMediaInfoById("a3") != null);
-			assertTrue(mediaFactory.getMediaInfoById("a4") == null);
-			assertTrue(mediaFactory.getMediaInfoById("b1") != null);
-			assertTrue(mediaFactory.getMediaInfoById("b2") != null);
-			assertTrue(mediaFactory.getMediaInfoById("b3") != null);
-			assertTrue(mediaFactory.getMediaInfoById("b4") == null);
-			assertTrue(mediaFactory.getMediaInfoById(null) == null);
+			assertTrue(mediaFactory.getItemById("a1") != null);
+			assertTrue(mediaFactory.getItemById("a2") != null);
+			assertTrue(mediaFactory.getItemById("a3") != null);
+			assertTrue(mediaFactory.getItemById("a4") == null);
+			assertTrue(mediaFactory.getItemById("b1") != null);
+			assertTrue(mediaFactory.getItemById("b2") != null);
+			assertTrue(mediaFactory.getItemById("b3") != null);
+			assertTrue(mediaFactory.getItemById("b4") == null);
+			assertTrue(mediaFactory.getItemById(null) == null);
 		}
 
 		public function testCreateMediaElement():void
 		{
-			var a1:MediaInfo = createMediaInfo("a1","http://www.example.com/a1");
-			mediaFactory.addMediaInfo(a1);
+			var a1:MediaFactoryItem = createMediaFactoryItem("a1","http://www.example.com/a1");
+			mediaFactory.addItem(a1);
 			
 			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com"))) == null);
 			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a2"))) == null);
@@ -197,12 +197,12 @@ package org.osmf.media
 		
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionReturnType():void
 		{
-			var a1:MediaInfo = new MediaInfo
+			var a1:MediaFactoryItem = new MediaFactoryItem
 				( "a1"
-				, new SampleResourceHandler(null, "http://www.example.com/a1") 
+				, new SampleResourceHandler(null, "http://www.example.com/a1").canHandleResource
 				, invalidReturnType
 				);
-			mediaFactory.addMediaInfo(a1);
+			mediaFactory.addItem(a1);
 			
 			function invalidReturnType():String
 			{
@@ -214,12 +214,12 @@ package org.osmf.media
 		
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionParams():void
 		{
-			var a1:MediaInfo = new MediaInfo
+			var a1:MediaFactoryItem = new MediaFactoryItem
 				( "a1"
-					, new SampleResourceHandler(null, "http://www.example.com/a1") 
+					, new SampleResourceHandler(null, "http://www.example.com/a1").canHandleResource
 					, invalidParams
 				);
-			mediaFactory.addMediaInfo(a1);
+			mediaFactory.addItem(a1);
 			
 			function invalidParams(i:int,s:String):MediaElement
 			{
@@ -231,12 +231,12 @@ package org.osmf.media
 			
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionNullReturnValue():void
 		{
-			var a1:MediaInfo = new MediaInfo
+			var a1:MediaFactoryItem = new MediaFactoryItem
 				( "a1"
-				, new SampleResourceHandler(null, "http://www.example.com/a1") 
+				, new SampleResourceHandler(null, "http://www.example.com/a1").canHandleResource
 				, nullReturnValue
 				);
-			mediaFactory.addMediaInfo(a1);
+			mediaFactory.addItem(a1);
 			
 			function nullReturnValue():MediaElement
 			{
@@ -248,8 +248,8 @@ package org.osmf.media
 
 		public function testCreateMediaElementWithProxy():void
 		{
-			var standardInfo:MediaInfo = createMediaInfo("standardInfo", "http://www.example.com/standardInfo");
-			mediaFactory.addMediaInfo(standardInfo);
+			var standardInfo:MediaFactoryItem = createMediaFactoryItem("standardInfo", "http://www.example.com/standardInfo");
+			mediaFactory.addItem(standardInfo);
 						
 			// By default, createMediaElement creates standard media elements.
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
@@ -258,8 +258,8 @@ package org.osmf.media
 
 			// If we add a proxy media info whose media element is not a proxy,
 			// then createMediaElement should return the standard media element.
-			var invalidProxyInfo:MediaInfo = createMediaInfo("invalidProxyInfo", "http://www.example.com/standardInfo", null, MediaInfoType.PROXY);
-			mediaFactory.addMediaInfo(invalidProxyInfo);
+			var invalidProxyInfo:MediaFactoryItem = createMediaFactoryItem("invalidProxyInfo", "http://www.example.com/standardInfo", null, MediaFactoryItemType.PROXY);
+			mediaFactory.addItem(invalidProxyInfo);
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
 			assertTrue(!(mediaElement is ProxyElement));
@@ -267,16 +267,16 @@ package org.osmf.media
 			// If we add a proxy media info whose media element is a proxy, then
 			// createMediaElement should return a proxy that wraps the standard
 			// media element.
-			var validProxyInfo:MediaInfo = createProxyMediaInfo("validProxyInfo", "http://www.example.com/standardInfo");
-			mediaFactory.addMediaInfo(validProxyInfo);
+			var validProxyInfo:MediaFactoryItem = createProxyMediaFactoryItem("validProxyInfo", "http://www.example.com/standardInfo");
+			mediaFactory.addItem(validProxyInfo);
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
 			assertTrue(mediaElement is ProxyElement);
 			assertTrue((mediaElement as ProxyElement).proxiedElement is DynamicMediaElement);
 			
 			// Proxies can go many levels deep.
-			var deepProxyInfo:MediaInfo = createProxyMediaInfo("deepProxyInfo", "http://www.example.com/standardInfo");
-			mediaFactory.addMediaInfo(deepProxyInfo);
+			var deepProxyInfo:MediaFactoryItem = createProxyMediaFactoryItem("deepProxyInfo", "http://www.example.com/standardInfo");
+			mediaFactory.addItem(deepProxyInfo);
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
 			assertTrue(mediaElement is ProxyElement);
@@ -286,10 +286,10 @@ package org.osmf.media
 		
 		public function testCreateMediaElementWithReference():void
 		{
-			var standardInfo:MediaInfo = createMediaInfo("standardInfo","http://www.example.com/standardInfo");
-			mediaFactory.addMediaInfo(standardInfo);
-			var otherStandardInfo:MediaInfo = createMediaInfo("otherStandardInfo","http://www.example.com/otherStandardInfo");
-			mediaFactory.addMediaInfo(otherStandardInfo);
+			var standardInfo:MediaFactoryItem = createMediaFactoryItem("standardInfo","http://www.example.com/standardInfo");
+			mediaFactory.addItem(standardInfo);
+			var otherStandardInfo:MediaFactoryItem = createMediaFactoryItem("otherStandardInfo","http://www.example.com/otherStandardInfo");
+			mediaFactory.addItem(otherStandardInfo);
 			
 			// Create some standard media elements through the factory so that we
 			// have things to reference.
@@ -302,8 +302,8 @@ package org.osmf.media
 
 			// If we add a media info whose media element is not a reference,
 			// then createMediaElement should return an unreferencing element.
-			var invalidReferenceInfo:MediaInfo = createMediaInfo("invalidReferenceInfo", "http://www.example.com/invalidReferenceInfo");
-			mediaFactory.addMediaInfo(invalidReferenceInfo);
+			var invalidReferenceInfo:MediaFactoryItem = createMediaFactoryItem("invalidReferenceInfo", "http://www.example.com/invalidReferenceInfo");
+			mediaFactory.addItem(invalidReferenceInfo);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/invalidReferenceInfo")));
 			assertTrue(mediaElement != null);
@@ -311,8 +311,8 @@ package org.osmf.media
 			
 			// Now create a referencing element that should match a previously
 			// created one.
-			var referenceInfo:MediaInfo = createReferenceMediaInfo("referenceInfo1","http://www.example.com/referenceInfo1", "http://www.example.com/standardInfo");
-			mediaFactory.addMediaInfo(referenceInfo);
+			var referenceInfo:MediaFactoryItem = createReferenceMediaFactoryItem("referenceInfo1","http://www.example.com/referenceInfo1", "http://www.example.com/standardInfo");
+			mediaFactory.addItem(referenceInfo);
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo1")));
 			assertTrue(mediaElement != null);
@@ -323,8 +323,8 @@ package org.osmf.media
 			assertTrue(dynamicElement.references[0] == createdElement1);
 			
 			// It's possible to have multiple references too.
-			referenceInfo = createReferenceMediaInfo("referenceInfo2","http://www.example.com/referenceInfo2", "http://www.example.com/otherStandardInfo");
-			mediaFactory.addMediaInfo(referenceInfo);
+			referenceInfo = createReferenceMediaFactoryItem("referenceInfo2","http://www.example.com/referenceInfo2", "http://www.example.com/otherStandardInfo");
+			mediaFactory.addItem(referenceInfo);
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo2")));
 			assertTrue(mediaElement != null);
@@ -342,8 +342,8 @@ package org.osmf.media
 			
 			// It's possible for a reference element to reference another
 			// reference element.
-			referenceInfo = createReferenceMediaInfo("referenceInfo3","http://www.example.com/referenceInfo3", "http://www.example.com/referenceInfo2");
-			mediaFactory.addMediaInfo(referenceInfo);
+			referenceInfo = createReferenceMediaFactoryItem("referenceInfo3","http://www.example.com/referenceInfo3", "http://www.example.com/referenceInfo2");
+			mediaFactory.addItem(referenceInfo);
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo3")));
 			assertTrue(mediaElement != null);
@@ -363,8 +363,8 @@ package org.osmf.media
 					   referenceElement.references[2] == createdElement4);
 			
 			// Creating a non-matching element will not add a new reference.
-			var yetAnotherStandardInfo:MediaInfo = createMediaInfo("yetAnotherStandardInfo","http://www.example.com/yetAnotherStandardInfo");
-			mediaFactory.addMediaInfo(yetAnotherStandardInfo);
+			var yetAnotherStandardInfo:MediaFactoryItem = createMediaFactoryItem("yetAnotherStandardInfo","http://www.example.com/yetAnotherStandardInfo");
+			mediaFactory.addItem(yetAnotherStandardInfo);
 			
 			var createdElement5:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/yetAnotherStandardInfo")));
 			assertTrue(createdElement5 is DynamicMediaElement);
@@ -373,13 +373,13 @@ package org.osmf.media
 
 		//---------------------------------------------------------------------
 		
-		private function createMediaInfo(id:String, urlToMatch:String=null, args:Array=null, type:String=null):MediaInfo
+		private function createMediaFactoryItem(id:String, urlToMatch:String=null, args:Array=null, type:String=null):MediaFactoryItem
 		{
-			return new MediaInfo
+			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch) 
+					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
 					, createDynamicMediaElement
-					, type != null ? type : MediaInfoType.STANDARD
+					, type != null ? type : MediaFactoryItemType.STANDARD
 					);
 		}
 		
@@ -388,13 +388,13 @@ package org.osmf.media
 			return new DynamicMediaElement();
 		}
 
-		private function createProxyMediaInfo(id:String, urlToMatch:String=null, args:Array=null):MediaInfo
+		private function createProxyMediaFactoryItem(id:String, urlToMatch:String=null, args:Array=null):MediaFactoryItem
 		{
-			return new MediaInfo
+			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch) 
+					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
 					, createProxyElement
-					, MediaInfoType.PROXY
+					, MediaFactoryItemType.PROXY
 					);
 		}
 		
@@ -403,18 +403,18 @@ package org.osmf.media
 			return new ProxyElement(null);
 		}
 		
-		private function createReferenceMediaInfo(id:String, urlToMatch:String=null, referenceUrlToMatch:String=null, type:String=null):MediaInfo
+		private function createReferenceMediaFactoryItem(id:String, urlToMatch:String=null, referenceUrlToMatch:String=null, type:String=null):MediaFactoryItem
 		{
 			function createDynamicReferenceMediaElement():MediaElement
 			{
 				return new DynamicReferenceMediaElement(referenceUrlToMatch);
 			}
 
-			return new MediaInfo
+			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch) 
+					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
 					, createDynamicReferenceMediaElement
-					, type != null ? type : MediaInfoType.STANDARD
+					, type != null ? type : MediaFactoryItemType.STANDARD
 					);
 		}
 

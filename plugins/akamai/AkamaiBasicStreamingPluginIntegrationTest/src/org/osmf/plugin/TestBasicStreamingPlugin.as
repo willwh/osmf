@@ -132,8 +132,8 @@ package org.osmf.plugin
 
 		private function callAfterLoad(callback:Function):void
 		{
-			assertTrue(mediaFactory.getMediaInfoById(AKAMAI_VIDEO_MEDIA_INFO_ID) == null);
-			assertTrue(mediaFactory.getMediaInfoById(AKAMAI_AUDIO_MEDIA_INFO_ID) == null);
+			assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) == null);
+			assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) == null);
 			
 			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
 			
@@ -143,8 +143,8 @@ package org.osmf.plugin
 			
 			function onPluginLoaded(event:PluginLoadEvent):void
 			{
-				assertTrue(mediaFactory.getMediaInfoById(AKAMAI_VIDEO_MEDIA_INFO_ID) != null);
-				assertTrue(mediaFactory.getMediaInfoById(AKAMAI_AUDIO_MEDIA_INFO_ID) != null);
+				assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) != null);
+				assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) != null);
 				
 				callback.apply(this);
 			}

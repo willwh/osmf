@@ -22,13 +22,16 @@
 package
 {
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
+	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
-	
+
 	/**
-	 * Implementation of PluginInfo for a plugin that exposes a MediaInfo
+	 * Implementation of PluginInfo for a plugin that exposes a MediaFactoryItem
 	 * which can only handle input resources that have a specific piece of
 	 * metadata.
 	 **/ 
@@ -36,25 +39,51 @@ package
 	{
 		public function MetadataVideoPluginInfo()
 		{		
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			// Here is the IMediaResourceHandler that checks for the presence
-			// of the piece of metadata.  By passing it into the MediaInfo, we
-			// ensure that when this plugin is loaded into a player app, and
-			// the player app attempts to dynamically instantiate a MediaElement,
-			// then this plugin will create the MediaElement if the input resource
-			// has the specific piece of metadata.
-			var metadataResourceHandler:MetadataResourceHandler = new MetadataResourceHandler();
+			// Here is the function that checks for the presence of the piece of
+			// metadata.  By passing it into the MediaFactoryItem, we ensure
+			// that when this plugin is loaded into a player app, and the player
+			// app attempts to dynamically instantiate a MediaElement, then this
+			// plugin will create the MediaElement if the input resource has the
+			// specific piece of metadata.
+			var checkForMetadataFunction:Function = canHandleResource;
 			
-			var mediaInfo:MediaInfo = new MediaInfo("my.example", metadataResourceHandler, createVideoElement);
-			mediaInfos.push(mediaInfo);
+			var item:MediaFactoryItem = new MediaFactoryItem("my.example", checkForMetadataFunction, createVideoElement);
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
+		private function canHandleResource(resource:MediaResourceBase):Boolean
+		{
+			var canHandle:Boolean = false;
+			
+			// Use a NetLoader to make sure we can handle the resource.
+			var netLoader:NetLoader = new NetLoader();
+			if (netLoader.canHandleResource(resource))
+			{
+				// Now check for the metadata.  We only want to handle the
+				// resource if it has a specific piece of metadata.
+				var kvFacet:KeyValueFacet = resource.metadata.getFacet(CUSTOM_NS) as KeyValueFacet;
+				if (kvFacet != null)
+				{
+					// We could check that a specific key on the facet exists,
+					// and that that key has a specific value.  But to keep
+					// it simple, we return true based solely on the facet's
+					// existence.
+					canHandle = true; 
+				}
+			}
+			
+			return canHandle;
+		}
+
 		private function createVideoElement():MediaElement
 		{
 			return new VideoElement();
 		}
+		
+		private static const CUSTOM_NS:URL = new URL("http://example.com/myCustomNS");
 	}
 }

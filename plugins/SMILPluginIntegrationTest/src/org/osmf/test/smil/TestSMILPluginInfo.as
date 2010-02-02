@@ -25,7 +25,7 @@ package org.osmf.test.smil
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.URLResource;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.smil.SMILPluginInfo;
@@ -33,22 +33,22 @@ package org.osmf.test.smil
 
 	public class TestSMILPluginInfo extends TestCase
 	{
-		public function testGetMediaInfoAt():void
+		public function testGetMediaFactoryItemAt():void
 		{
 			var pluginInfo:PluginInfo = new SMILPluginInfo();
 			
 			assertNotNull(pluginInfo);
 			
-			var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(0);
-			assertNotNull(mediaInfo);
+			var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(0);
+			assertNotNull(item);
 
 			var mediaFactory:MediaFactory = new MediaFactory();
-			mediaFactory.addMediaInfo(mediaInfo);
+			mediaFactory.addItem(item);
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL)));
 			assertNotNull(mediaElement);						
 		}
 		
-		public function testGetMediaInfoAtWithBadIndex():void
+		public function testGetMediaFactoryItemAtWithBadIndex():void
 		{
 			var pluginInfo:PluginInfo = new SMILPluginInfo();
 			
@@ -56,7 +56,7 @@ package org.osmf.test.smil
 
 			try
 			{			
-				var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(10);
+				var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(10);
 				fail();
 			}
 			catch(error:RangeError)
@@ -86,7 +86,7 @@ package org.osmf.test.smil
 			var pluginInfo:PluginInfo = new SMILPluginInfo();
 			assertNotNull(pluginInfo);
 
-			assertTrue(pluginInfo.numMediaInfos > 0);			
+			assertTrue(pluginInfo.numMediaFactoryItems > 0);			
 		}
 	}
 }

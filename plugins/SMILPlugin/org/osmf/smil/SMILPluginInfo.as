@@ -25,7 +25,7 @@ package org.osmf.smil
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -43,12 +43,12 @@ package org.osmf.smil
 		 */
 		public function SMILPluginInfo()
 		{
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.smil.SMILPluginInfo", new SMILLoader(), createSMILProxyElement);
-			mediaInfos.push(mediaInfo);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.smil.SMILPluginInfo", new SMILLoader().canHandleResource, createSMILProxyElement);
+			items.push(item);
 			
-			super(mediaInfos);
+			super(items);
 		}
 		
 		private function createSMILProxyElement():MediaElement
@@ -66,7 +66,6 @@ package org.osmf.smil
 			}
 		}
 		
-		private var mediaInfos:Vector.<MediaInfo>;
 		private var mediaFactory:MediaFactory;
 	}
 }

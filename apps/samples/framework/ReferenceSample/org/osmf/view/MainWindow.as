@@ -27,7 +27,7 @@ package org.osmf.view
 	import org.osmf.events.PlayEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.URLResource;
 	import org.osmf.model.ReferenceSWFElement;
 	import org.osmf.net.NetLoader;
@@ -74,10 +74,10 @@ package org.osmf.view
 			var netLoader:NetLoader = new NetLoader();
 			
 			// The default VideoElement.
-			mediaFactory.addMediaInfo
-				( new MediaInfo
+			mediaFactory.addItem
+				( new MediaFactoryItem
 					( "org.osmf.video"
-					, netLoader
+					, netLoader.canHandleResource
 					, createVideoElement
 					)
 				);
@@ -86,10 +86,10 @@ package org.osmf.view
 			
 			// A referencing SWFElement.  Typically this would be loaded from
 			// a plugin, but we add it manually to keep this case simple.
-			mediaFactory.addMediaInfo
-				( new MediaInfo
+			mediaFactory.addItem
+				( new MediaFactoryItem
 					( "com.example.custom.referencing.swf"
-					, swfLoader
+					, swfLoader.canHandleResource
 					, createReferenceSWFElement
 					)
 				);

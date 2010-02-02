@@ -22,7 +22,7 @@
 package org.osmf.plugins.video
 {
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
@@ -33,11 +33,11 @@ package org.osmf.plugins.video
 		public function SimpleVideoPluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
-			var mediaInfo:MediaInfo = new MediaInfo("org.osmf.video.SimpleVideoPlugin", netLoader, createVideoElement);
-			var mediaInfos:Vector.<MediaInfo> = new Vector.<MediaInfo>();
-			mediaInfos.push(mediaInfo);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.video.SimpleVideoPlugin", netLoader.canHandleResource, createVideoElement);
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			items.push(item);
 			
-			super(mediaInfos)
+			super(items);
 		}
 		
 		private function createVideoElement():MediaElement

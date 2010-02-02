@@ -3,7 +3,7 @@ package org.osmf.test.mast
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.plugin.PluginInfo;
 
 	public class TestMASTPluginInfo extends TestCase
@@ -14,12 +14,12 @@ package org.osmf.test.mast
 			
 			assertNotNull(pluginInfo);
 			
-			var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(0);
+			var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(0);
 			
-			assertNotNull(mediaInfo);
+			assertNotNull(item);
 		}
 		
-		public function testGetMediaInfoAtWithBadIndex():void
+		public function testGetMediaFactoryItemAtWithBadIndex():void
 		{
 			var pluginInfo:PluginInfo = new MASTPluginInfo();
 			
@@ -27,7 +27,7 @@ package org.osmf.test.mast
 
 			try
 			{			
-				var mediaInfo:MediaInfo = pluginInfo.getMediaInfoAt(10);
+				var item:MediaFactoryItem = pluginInfo.getMediaFactoryItemAt(10);
 				fail();
 			}
 			catch(error:RangeError)
@@ -58,7 +58,7 @@ package org.osmf.test.mast
 			var pluginInfo:PluginInfo = new MASTPluginInfo();
 			assertNotNull(pluginInfo);
 
-			assertTrue(pluginInfo.numMediaInfos > 0);			
+			assertTrue(pluginInfo.numMediaFactoryItems > 0);			
 		}
 	}
 }

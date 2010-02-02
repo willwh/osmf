@@ -36,7 +36,7 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaInfo;
+	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
@@ -130,7 +130,7 @@ package
 				var netLoader:NetLoader = new NetLoader();
 				
 				// Add a default VideoElement
-				mediaFactory.addMediaInfo(new MediaInfo("org.osmf.video", netLoader, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			

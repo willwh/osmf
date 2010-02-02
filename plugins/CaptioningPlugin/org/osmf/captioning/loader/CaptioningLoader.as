@@ -90,9 +90,8 @@ package org.osmf.captioning.loader
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */
-		override public function load(loadTrait:LoadTrait):void
+		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			super.load(loadTrait);
 			updateLoadTrait(loadTrait, LoadState.LOADING);			
 						
 			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
@@ -190,10 +189,8 @@ package org.osmf.captioning.loader
 		 *  @playerversion AIR 1.0
 		 *  @productversion OSMF 1.0
 		 */ 
-		override public function unload(loadTrait:LoadTrait):void
+		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			super.unload(loadTrait);
-
 			// Nothing to do.
 			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);

@@ -24,22 +24,36 @@ package org.osmf.media
 	import __AS3__.vec.Vector;
 	
 	/**
-	 * When multiple MediaInfo can handle a media resource, an arbitration is needed to 
-	 * pick the most suitable MediaInfo. This class encapsulates the details of how to 
-	 * pick the right resource handler out of a list of candidates.
+	 * Resolver class used by a MediaFactory to select one of out multiple possible
+	 * MediaFactoryItems.
+	 * 
+	 * <p>When multiple MediaFactoryItems can handle a media resource, an arbitration
+	 * is needed to pick the most suitable one.  This class encapsulates the details
+	 * of how to pick the right item out of a list of candidates.</p>
+	 * 
+	 * <p>By default, this class selects the first one.  Clients can subclass this
+	 * to provide their own selection logic.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public interface IMediaResourceHandlerResolver
+	public class MediaFactoryItemResolver
 	{
 		/**
-		* Given a resource and a Vector of IMediaResourceHandlers, returns the handler 
-		* that has the highest relevance/priority for the given resource.
-		**/
-		function resolveHandlers(
-			resource:MediaResourceBase, handlers:Vector.<IMediaResourceHandler>):IMediaResourceHandler;
+		 * Returns the most appropriate MediaFactoryItem for the specified resource
+		 * out of the MediaFactoryItems in the specified list.
+		 */
+		public function resolveItems(resource:MediaResourceBase, items:Vector.<MediaFactoryItem>):MediaFactoryItem
+		{
+			if (resource == null || items == null)
+			{
+				return null;
+			}
+			
+			// Select the first item in the list
+			return items.length > 0 ? items[0] : null;		
+		}
 	}
 }
