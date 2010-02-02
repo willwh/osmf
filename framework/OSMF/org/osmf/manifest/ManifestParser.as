@@ -59,7 +59,7 @@ package org.osmf.manifest
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function parse(value:String):Manifest
+		public function parse(value:String, rootUrl:URL=null):Manifest
 		{
 			var manifest:Manifest = new Manifest();
 			
@@ -100,13 +100,15 @@ package org.osmf.manifest
 				manifest.baseURL = new URL(root.xmlns::baseURL.text());
 			}
 			
+			var baseUrl:URL = (manifest.baseURL != null)? manifest.baseURL :  rootUrl;
+			
 			// Media	
 			
 			var bitrateMissing:Boolean = false;
 			
 			for each (var media:XML in root.xmlns::media)
 			{
-				var newMedia:Media = parseMedia(media);
+				var newMedia:Media = parseMedia(media, baseUrl);
 				manifest.media.push(newMedia);
 				bitrateMissing ||= isNaN(newMedia.bitrate);
 			}	
@@ -120,14 +122,14 @@ package org.osmf.manifest
 			
 			for each (var data:XML in root.xmlns::drmAdditionalHeader)
 			{
-				parseDRMAdditionalHeader(data, manifest.media);
+				parseDRMAdditionalHeader(data, manifest.media, baseUrl);
 			}	
 			
 			// Bootstrap	
 			
 			for each (var info:XML in root.xmlns::bootstrapInfo)
 			{
-				parseBootstrapInfo(info, manifest.media);
+				parseBootstrapInfo(info, manifest.media, baseUrl);
 			}	
 			
 			// Required if base URL is omitted from Manifest
@@ -136,7 +138,7 @@ package org.osmf.manifest
 			return manifest;
 		}
 		
-		private function parseMedia(value:XML):Media
+		private function parseMedia(value:XML, baseUrl:URL):Media
 		{
 			var media:Media = new Media();
 			
@@ -184,7 +186,7 @@ package org.osmf.manifest
 			return media;
 		}
 		
-		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>):void
+		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:URL):void
 		{
 			var id:String = null;
 			var url:URL = null;
@@ -199,6 +201,10 @@ package org.osmf.manifest
 			if (value.attribute("url").length() > 0)
 			{
 				url = new URL(value.@url);
+				if (!url.absolute)
+				{
+					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
+				}
 			}
 			else
 			{			
@@ -224,7 +230,7 @@ package org.osmf.manifest
 			}
 		}		
 		
-		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>):void
+		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:URL):void
 		{			
 			var id:String = null;								
 			var url:URL = null;
@@ -249,6 +255,10 @@ package org.osmf.manifest
 			if (value.attribute("url").length() > 0)
 			{
 				url = new URL(value.@url);
+				if (!url.absolute && baseUrl != null)
+				{
+					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
+				}
 			}
 			else
 			{			
