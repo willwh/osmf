@@ -167,7 +167,7 @@ package org.osmf
 			addTestSuite(TestLoadableElementBase);
 			addTestSuite(TestMediaTraitResolver);
 			addTestSuite(TestDefaultTraitResolver);
-			addTestSuite(TestMediaInfo);
+			addTestSuite(TestMediaFactoryItem);
 			addTestSuite(TestMediaFactory);
 			
 			// Video
