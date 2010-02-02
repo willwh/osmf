@@ -194,7 +194,13 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
-				currentFragmentNumber = frt.findFragmentIdByTime(time * abst.timeScale);
+				var fragId:Number = frt.findFragmentIdByTime(time * abst.timeScale);
+				if (isNaN(fragId))
+				{
+					return null;
+				}
+				
+				currentFragmentNumber = fragId;
 				var segId:uint = abst.findSegmentId(currentFragmentNumber);
 				
 				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFragmentNumber;
@@ -232,6 +238,15 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
+				var frt:AdobeFragmentRunTable = getFragmentRunTable();
+				var fragId:Number = frt.validateFragment(currentFragmentNumber);
+				if (isNaN(fragId))
+				{
+					return null;
+				}
+				
+				currentFragmentNumber = fragId;
+				
 				var segId:uint = abst.findSegmentId(currentFragmentNumber);
 				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFragmentNumber;
 				currentFragmentNumber++;

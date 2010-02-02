@@ -146,7 +146,7 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function findFragmentIdByTime(time:Number):uint
+		public function findFragmentIdByTime(time:Number):Number
 		{
 			if (_fragmentDurationPairs.length <= 0)
 			{
@@ -160,15 +160,62 @@ package org.osmf.net.httpstreaming.f4f
 				fdp = _fragmentDurationPairs[i];
 				if (fdp.durationAccrued >= time)
 				{
-					return calculateFragmentId(_fragmentDurationPairs[i - 1], time);
+					return validateFragment(calculateFragmentId(_fragmentDurationPairs[i - 1], time));
 				}
 			}
 			
-			return calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time);
+			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time));
+		}
+		
+		public function validateFragment(fragId:uint):Number
+		{
+			var size:uint = _fragmentDurationPairs.length - 1;
+			for (var i:uint = 0; i < size; i++)
+			{
+				var curFdp:FragmentDurationPair = _fragmentDurationPairs[i];
+				var nextFdp:FragmentDurationPair = _fragmentDurationPairs[i+1];
+				
+				if (curFdp.firstFragment <= fragId && fragId < nextFdp.firstFragment)
+				{
+					if (curFdp.duration > 0)
+					{
+						return fragId;
+					}
+					
+					curFdp = findValidFragmentDurationPair(i + 1);
+					if (curFdp == null)
+					{
+						return NaN;
+					}
+					
+					return curFdp != null? curFdp.firstFragment : NaN;
+				}
+			}
+			
+			if (fragId >= _fragmentDurationPairs[size].firstFragment)
+			{
+				return _fragmentDurationPairs[size].duration > 0 ? fragId : NaN;
+			}
+			
+			return NaN;
 		}
 		
 		// Internal
 		//
+		
+		private function findValidFragmentDurationPair(index:uint):FragmentDurationPair
+		{
+			for (var i:uint = index; index < _fragmentDurationPairs.length; i++)
+			{
+				var fdp:FragmentDurationPair = _fragmentDurationPairs[i];
+				if (fdp.duration > 0)
+				{
+					return fdp;
+				}
+			}
+			
+			return null;
+		}
 		
 		private function calculateFragmentId(fdp:FragmentDurationPair, time:Number):uint
 		{

@@ -216,10 +216,10 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function play(...args):void 
 		{
-			if (args.length != 1 ||
+			if (args.length < 1 ||
 				!(args[0] is HTTPStreamingIndexInfoBase))
 			{
-				throw new Error("HTTPStream.play() requires a single argument of type HTTPStreamingIndexInfoBase");
+				throw new Error("HTTPStream.play() requires a first argument of type HTTPStreamingIndexInfoBase");
 			}
 						
 			// Signal to the base class that we're entering Data Generation Mode.
@@ -254,9 +254,21 @@ package org.osmf.net.httpstreaming
 			indexIsReady = false;
 			indexHandler.initialize(args[0] as HTTPStreamingIndexInfoBase);
 		
-			// This is the start of playback, so no seek.
-			_seekTarget = 0;
+			if (args.length >= 2)
+			{
+				_seekTarget = Number(args[1]);
+			}
+			else
+			{
+				// This is the start of playback, so no seek.
+				_seekTarget = 0;
+			}
 			_timeBias = _seekTarget;
+			
+			if (args.length >= 3)
+			{
+				// TODO: handle playback duration
+			}
 		}
 		
 		/**
@@ -473,12 +485,19 @@ package org.osmf.net.httpstreaming
 					attemptAppendBytes(bytes);
 					return false;	// immediate end of parsing (caller must dump rest, unparsed)
 					
-				}
+				} // past enhanced seek target
 				else
 				{
 					_enhancedSeekTags.push(tag);
 				}
-			} 
+			} // is video
+			else if (tag is FLVTagScriptDataObject)
+			{
+				// ScriptDataObject tags simply pass through with unadjusted timestamps rather than discarding or saving for later
+				bytes = new ByteArray();
+				tag.write(bytes);
+				attemptAppendBytes(bytes);
+			} // else tag is FLVTagAudio, which we discard
 			return true;
 		}
 	
