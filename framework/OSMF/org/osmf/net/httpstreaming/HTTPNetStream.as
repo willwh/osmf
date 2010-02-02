@@ -123,12 +123,14 @@ package org.osmf.net.httpstreaming
 			mainTimer.start();
 			
 			// Just like DynamicStream... we need to use onPlayStatus.  This is part of remapping code.
+/*			
 			_ownerClientObject = new Object();
 			_ownerClientObject.onPlayStatus = function(... rest):void {};
 			
 			_trampolineObject = new NetClient();
 			_trampolineObject.addHandler("onPlayStatus", onPlayStatusHS);
 			super.client = _trampolineObject;
+*/			
 		}
 		
 		/**
@@ -338,6 +340,7 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 */
+/*
 		override public function set client(object:Object):void 
 		{
 			// and just like DS, we override the client setter to get in between for onPlayStatus (and maybe more in the future)
@@ -377,6 +380,7 @@ package org.osmf.net.httpstreaming
 				super.client = _trampolineObject;
 			}
 		}	
+*/		
 		
 		// Internal
 		//
@@ -1004,7 +1008,7 @@ package org.osmf.net.httpstreaming
 		private function onPlayStatusHS(info:Object):void
 		{ 
 			// just like DS, call back the owner's onPlayStatus
-			_ownerClientObject.onPlayStatus(info);
+//			_ownerClientObject.onPlayStatus(info);
 		}
 		
 		private function onURLStatus(progressEvent:ProgressEvent):void
@@ -1078,9 +1082,15 @@ package org.osmf.net.httpstreaming
 			
 			var object:Object = new Object();
 			object["duration"] = _totalDuration;
+/*			
 			if (_trampolineObject.hasOwnProperty("onMetaData"))
 			{
 				_trampolineObject.onMetaData(object);
+			}
+*/			
+			if (super.client != null && super.client.hasOwnProperty("onMetaData"))
+			{
+				super.client.onMetaData(object);
 			}
 		}
 
@@ -1202,10 +1212,10 @@ package org.osmf.net.httpstreaming
 		private var _lastDownloadStartTime:Number = -1;
 		private var _lastDownloadDuration:Number;
 		private var _lastDownloadRatio:Number = 0;
-		private var _manualSwitchMode:Boolean = true;
+		private var _manualSwitchMode:Boolean = false;
 		private var _aggressiveUpswitch:Boolean = true;	// XXX needs a getter and setter, or to be part of a pluggable rate-setter
-		private var _ownerClientObject:Object;
-		private var _trampolineObject:NetClient;
+//		private var _ownerClientObject:Object;
+//		private var _trampolineObject:NetClient;
 		private var indexHandler:HTTPStreamingIndexHandlerBase;
 		private var fileHandler:HTTPStreamingFileHandlerBase;
 		private var _totalDuration:Number = -1;
