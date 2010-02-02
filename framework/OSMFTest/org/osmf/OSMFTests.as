@@ -321,7 +321,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);*/
+			addTestSuite(TestMediaPlayerWithBeaconElement);
 		}
 	}
 }
