@@ -23,10 +23,12 @@ package org.osmf.utils
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.DRMTrait;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
@@ -35,7 +37,6 @@ package org.osmf.utils
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.DisplayObjectTrait;
 	
 	public class DynamicMediaElement extends MediaElement
 	{
@@ -78,6 +79,9 @@ package org.osmf.utils
 						case MediaTraitType.DISPLAY_OBJECT:
 							trait = useDynamicTraits ? new DynamicDisplayObjectTrait(new Sprite()) : new DisplayObjectTrait(new Sprite());
 							break;
+						case MediaTraitType.DRM:
+							trait = useDynamicTraits ? new DynamicDRMTrait() : new DRMTrait();
+							break;	
 						default:
 							break;
 					}

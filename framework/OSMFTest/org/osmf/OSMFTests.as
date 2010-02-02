@@ -25,10 +25,10 @@ package org.osmf
 	
 	import org.osmf.audio.*;
 	import org.osmf.composition.*;
+	import org.osmf.containers.*;
 	import org.osmf.display.*;
 	import org.osmf.events.*;
 	import org.osmf.external.*;
-	import org.osmf.containers.*;
 	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
@@ -63,6 +63,7 @@ package org.osmf
 			// Layout
 			//
 					
+					
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
 			addTestSuite(TestLayoutRenderer);
@@ -94,7 +95,7 @@ package org.osmf
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
-			//addTestSuite(TestParallelElementWithContentProtectionTrait);
+			addTestSuite(TestParallelElementDRMTrait);	
 			addTestSuite(TestParallelElementWithDynamicStreamTrait);
 			addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
@@ -104,7 +105,7 @@ package org.osmf
 			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
-			//addTestSuite(TestSerialElementWithContentProtectionTrait);
+			addTestSuite(TestSerialElementDRMTrait);	
 			addTestSuite(TestSerialElementWithDynamicStreamTrait);
 			addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
@@ -320,7 +321,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);*/
 		}
 	}
 }

@@ -27,7 +27,11 @@ package org.osmf.composition
 				, traitAggregator
 				, processAggregatedChild
 				, processUnaggregatedChild
-				);			
+				);		
+			if (mode == CompositionMode.SERIAL)
+			{
+				traitAggregator.addEventListener(TraitAggregatorEvent.LISTENED_CHILD_CHANGE, listenedChildChange);		
+			}
 		}		
 		
 		/**
@@ -35,7 +39,10 @@ package org.osmf.composition
 		 */
 		public function attach():void
 		{
-			traitAggregationHelper.attach();
+			if (traitAggregationHelper)
+			{
+				traitAggregationHelper.attach();
+			}
 		}
 		
 		/**
@@ -43,7 +50,10 @@ package org.osmf.composition
 		 */
 		public function detach():void
 		{
-			traitAggregationHelper.detach();
+			if (traitAggregationHelper)
+			{
+				traitAggregationHelper.detach();
+			}
 		}
 		
 		/**
@@ -51,28 +61,35 @@ package org.osmf.composition
 		 */ 
 		override public function get authenticationMethod():String
 		{
-			var authMethod:String = null;
-			traitAggregator.forEachChildTrait(
-			function(trait:DRMTrait):void
+			var authMethod:String = null;			
+			if (mode == CompositionMode.SERIAL)
 			{
-				if (authMethod == "" || trait.authenticationMethod == "")
+				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
+				authMethod = listenedTrait ? listenedTrait.authenticationMethod : "";		
+			}
+			else //Parallel
+			{					
+				traitAggregator.forEachChildTrait(
+				function(trait:DRMTrait):void
 				{
-					authMethod = "";
-				}
-				else
-				{					
-					if (!authMethod)
+					if (authMethod == "" || trait.authenticationMethod == "")
 					{
-						authMethod = trait.authenticationMethod;
-					} 
-					else if (authMethod != trait.authenticationMethod)
-					{
-						authMethod = "Both";
+						authMethod = "";
 					}
-				}
-				
-			},MediaTraitType.DRM);
-			
+					else
+					{					
+						if (!authMethod)
+						{
+							authMethod = trait.authenticationMethod;
+						} 
+						else if (authMethod != trait.authenticationMethod)
+						{
+							authMethod = "Both";
+						}
+					}
+					
+				},MediaTraitType.DRM);
+			}
 			return authMethod;
 		}
 
@@ -82,13 +99,21 @@ package org.osmf.composition
 		override public function get endDate():Date
 		{
 			var end:Date = null;
-			traitAggregator.forEachChildTrait(
-			function(trait:DRMTrait):void
+			if (mode == CompositionMode.SERIAL)
 			{
-				end = end ? (end.time < trait.endDate.time ? end : trait.endDate ) : trait.endDate;			
-			},MediaTraitType.DRM);
+				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
+				end = listenedTrait ? listenedTrait.endDate : null;		
+			}
+			else //Parallel
+			{				
+				traitAggregator.forEachChildTrait(
+				function(trait:DRMTrait):void
+				{
+					end = end && trait.endDate ? (end.time < trait.endDate.time ? end : trait.endDate ) : trait.endDate;					
+				},MediaTraitType.DRM);
+			}
 			
-			return end;
+			return end;			
 		}
 		
 		/**
@@ -97,11 +122,19 @@ package org.osmf.composition
 		override public function get startDate():Date
 		{
 			var start:Date = null;
-			traitAggregator.forEachChildTrait(
-			function(trait:DRMTrait):void
+			if (mode == CompositionMode.SERIAL)
 			{
-				start = start ? (start.time < trait.startDate.time ? start : trait.startDate ) : trait.startDate;			
-			},MediaTraitType.DRM);
+				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
+				start = listenedTrait ? listenedTrait.startDate : null;		
+			}
+			else //Parallel
+			{				
+				traitAggregator.forEachChildTrait(
+				function(trait:DRMTrait):void
+				{
+					start = start && trait.startDate ? (start.time > trait.startDate.time ? start : trait.startDate) : trait.startDate;			
+				},MediaTraitType.DRM);
+			}
 			
 			return start;
 		}
@@ -111,14 +144,22 @@ package org.osmf.composition
 		 */ 
 		override public function get period():Number
 		{
-			var smallestPeriod:Number = NaN;
-			traitAggregator.forEachChildTrait(
-			function(trait:DRMTrait):void
+			var calculatedPeriod:Number = NaN;
+			if (mode == CompositionMode.SERIAL)
 			{
-				smallestPeriod = (smallestPeriod < trait.period) ? smallestPeriod : trait.period;			
-			},MediaTraitType.DRM);
+				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
+				calculatedPeriod = listenedTrait ? listenedTrait.period : NaN;		
+			}
+			else //Parallel
+			{					
+				traitAggregator.forEachChildTrait(
+				function(trait:DRMTrait):void
+				{
+					calculatedPeriod = (calculatedPeriod < trait.period) ? calculatedPeriod : trait.period;			
+				},MediaTraitType.DRM);
+			}
 			
-			return smallestPeriod;
+			return calculatedPeriod;
 		}
 	
 		/**
@@ -132,38 +173,55 @@ package org.osmf.composition
 		private function recalculateDRMState():void
 		{
 			calculatedDrmState = "";
-			traitAggregator.forEachChildTrait(
-			function(trait:DRMTrait):void
+			if (mode == CompositionMode.SERIAL)
 			{
-				switch(trait.drmState)
-				{
-					case DRMState.AUTHENTICATE_FAILED:
-						calculatedDrmState = trait.drmState;
-						break;
-					case DRMState.AUTHENTICATION_NEEDED:
-						if (calculatedDrmState != DRMState.AUTHENTICATE_FAILED)
-						{
+				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
+				calculatedDrmState = listenedTrait ? listenedTrait.drmState : DRMState.INITIALIZING;		
+			}
+			else //Parallel
+			{			
+				function nextChildTrait(trait:DRMTrait):void
+				{												
+					switch(trait.drmState)
+					{
+						
+						case DRMState.AUTHENTICATE_FAILED:
 							calculatedDrmState = trait.drmState;
-						}
-						break;
-					case DRMState.INITIALIZING:
-						calculatedDrmState = trait.drmState;
-						break;
-					case DRMState.AUTHENTICATING:
-						if (calculatedDrmState != DRMState.INITIALIZING)
-						{
-							calculatedDrmState = trait.drmState;
-						}
-						break;						
-					case DRMState.AUTHENTICATED:
-						if (calculatedDrmState != DRMState.INITIALIZING &&
-							calculatedDrmState != DRMState.AUTHENTICATING)
-						{
-							calculatedDrmState = trait.drmState;
-						}
-						break;
-				}			
-			},MediaTraitType.DRM);
+							break;
+						case DRMState.AUTHENTICATION_NEEDED:
+							if (calculatedDrmState != DRMState.AUTHENTICATE_FAILED)
+							{
+								calculatedDrmState = trait.drmState;
+							}
+							break;
+						case DRMState.INITIALIZING:
+							if (calculatedDrmState != DRMState.AUTHENTICATE_FAILED &&
+								calculatedDrmState != DRMState.AUTHENTICATION_NEEDED)
+							{
+								calculatedDrmState = trait.drmState;
+							}
+							break;
+						case DRMState.AUTHENTICATING:
+							if (calculatedDrmState != DRMState.AUTHENTICATE_FAILED &&
+								calculatedDrmState != DRMState.AUTHENTICATION_NEEDED &&
+								calculatedDrmState != DRMState.INITIALIZING)
+							{
+								calculatedDrmState = trait.drmState;
+							}
+							break;						
+						case DRMState.AUTHENTICATED:
+							if (calculatedDrmState != DRMState.AUTHENTICATE_FAILED &&
+								calculatedDrmState != DRMState.AUTHENTICATION_NEEDED &&
+								calculatedDrmState != DRMState.INITIALIZING &&
+								calculatedDrmState != DRMState.AUTHENTICATING)
+							{
+								calculatedDrmState = trait.drmState;
+							}
+							break;
+					}			
+				}					
+				traitAggregator.forEachChildTrait(nextChildTrait, MediaTraitType.DRM);
+			}
 		}
 		
 		/**
@@ -181,7 +239,7 @@ package org.osmf.composition
 				{
 					return drmTrait.serverURL;
 				}			
-				child = traitAggregator.getNextChildWithTrait(null, MediaTraitType.DRM);
+				child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.DRM);
 			}			
 			return drmTrait.serverURL;
 		}
@@ -237,23 +295,37 @@ package org.osmf.composition
 		
 		private function processAggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
+			trace('processAggregatedChild');
 			DRMTrait(childTrait).addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);							
 			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, calculatedDrmState));
 		}
 		
 		private function processUnaggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
 		{
+			trace('processUnaggregatedChild');
 			DRMTrait(childTrait).removeEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);	
 			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, calculatedDrmState));
 		}
 		
-		private function onDRMStateChange(event:DRMEvent):void
+		private function onDRMStateChange(event:DRMEvent = null):void
 		{		
 			var oldState:String = calculatedDrmState;
 			recalculateDRMState();		
 			if (oldState != calculatedDrmState)
 			{
 				drmStateChange(calculatedDrmState, event.token, event.error, startDate, endDate, period, event.serverURL);
+			}
+		}
+		
+		private function listenedChildChange(event:TraitAggregatorEvent):void
+		{
+			trace('listeneded child change');
+			var oldState:String = calculatedDrmState;
+			recalculateDRMState();	
+				
+			if (oldState != calculatedDrmState)
+			{
+				drmStateChange(calculatedDrmState, null, null, null, null, NaN, "");
 			}
 		}
 		
