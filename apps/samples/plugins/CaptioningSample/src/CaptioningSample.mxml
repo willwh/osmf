@@ -42,7 +42,7 @@
 			import org.osmf.media.MediaElement;
 			import org.osmf.metadata.KeyValueFacet;
 			import org.osmf.media.URLResource;
-			import org.osmf.events.PluginLoadEvent;
+			import org.osmf.events.PluginManagerEvent;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
@@ -174,14 +174,14 @@
 			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
-				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
-				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 				pluginManager.loadPlugin(pluginResource);
 			}
 			
 			private function unloadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
-				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_UNLOADED, onPluginUnloaded);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_UNLOAD, onPluginUnloaded);
 				pluginManager.unloadPlugin(pluginResource);
 			}
 			
@@ -190,18 +190,18 @@
 				loadPlugin(source, false);
 			}
 			
-			private function onPluginLoaded(event:PluginLoadEvent):void
+			private function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				trace("Plugin LOADED!"); 
 			}
 
-			private function onPluginUnloaded(event:PluginLoadEvent):void
+			private function onPluginUnloaded(event:PluginManagerEvent):void
 			{
 				trace("Plugin UNLOADED!");
 			}
 			
 			
-			private function onPluginLoadFailed(event:PluginLoadEvent):void
+			private function onPluginLoadFailed(event:PluginManagerEvent):void
 			{
 				trace("Plugin LOAD FAILED!");
 			}

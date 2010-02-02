@@ -135,13 +135,13 @@ package org.osmf.plugin
 			assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) == null);
 			assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) == null);
 			
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 			
 			var pluginInfoRef:Class = flash.utils.getDefinitionByName(AKAMAI_BASIC_STREAMING_PLUGIN_INFO) as Class;
 			var pluginResource:MediaResourceBase = new PluginInfoResource(new pluginInfoRef);
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoaded(event:PluginLoadEvent):void
+			function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) != null);
 				assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) != null);

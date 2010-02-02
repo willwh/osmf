@@ -25,7 +25,7 @@ package org.osmf.view
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.PlayEvent;
-	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -69,8 +69,8 @@ package org.osmf.view
 			if (usePlugin)
 			{
 				pluginManager = new PluginManager(mediaFactory);
-				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
-				pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 			
 				var pluginResource:MediaResourceBase = new URLResource(new URL(GG_PLUGIN_URL));
 				pluginManager.loadPlugin(pluginResource);
@@ -102,12 +102,12 @@ package org.osmf.view
 			return new VideoElement();
 		}
 		
-		private function onPluginLoaded(event:PluginLoadEvent):void
+		private function onPluginLoaded(event:PluginManagerEvent):void
 		{
 			loadMedia();
 		}
 
-		private function onPluginLoadFailed(event:PluginLoadEvent):void
+		private function onPluginLoadFailed(event:PluginManagerEvent):void
 		{
 			trace("Plugin load failed");
 		}

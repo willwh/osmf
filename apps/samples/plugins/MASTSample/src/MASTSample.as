@@ -97,18 +97,18 @@ package
 		
 		private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 		{
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 			pluginManager.loadPlugin(pluginResource);
 		}
 		
-		private function onPluginLoaded(event:PluginLoadEvent):void
+		private function onPluginLoaded(event:PluginManagerEvent):void
 		{
 			trace(">>> Plugin successfully loaded.");
 			loadMainVideo(REMOTE_STREAM);
 		}
 		
-		private function onPluginLoadFailed(event:PluginLoadEvent):void
+		private function onPluginLoadFailed(event:PluginManagerEvent):void
 		{
 			trace(">>> Plugin failed to load.");
 		}

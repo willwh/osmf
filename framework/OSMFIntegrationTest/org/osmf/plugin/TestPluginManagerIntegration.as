@@ -23,7 +23,7 @@ package org.osmf.plugin
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.IntegrationTestUtils;
@@ -48,13 +48,13 @@ package org.osmf.plugin
 		{
 			var pluginResource:URLResource 
 				= new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(pluginManager.numLoadedPlugins == 1);
@@ -71,19 +71,19 @@ package org.osmf.plugin
 		{
 			var pluginResource:URLResource 
 				= new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(pluginManager.numLoadedPlugins == 1);
 					assertTrue(pluginManager.getLoadedPluginAt(0) == pluginResource);
-					pluginManager.removeEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-					pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent2);
+					pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
+					pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent2);
 					pluginManager.loadPlugin(pluginResource);
 				}
 				else
@@ -92,9 +92,9 @@ package org.osmf.plugin
 				}
 			}
 			
-			function onPluginLoadEvent2(event:PluginLoadEvent):void
+			function onPluginLoadEvent2(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(pluginManager.numLoadedPlugins == 1);
@@ -111,13 +111,13 @@ package org.osmf.plugin
 		{
 			var pluginResource:URLResource 
 				= new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginLoadEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					assertTrue(false);
 				}

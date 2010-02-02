@@ -24,7 +24,7 @@ package
 	import mx.controls.Alert;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -61,21 +61,21 @@ package
 			var loadedCount:int = 0;
 			
 			pluginManager = new PluginManager(mediaFactory);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 			
 			for each (var pluginResource:MediaResourceBase in pluginResources)
 			{
 				pluginManager.loadPlugin(pluginResource);
 			}
 		
-			function onPluginLoaded(event:PluginLoadEvent):void
+			function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				loadedCount++;
 
 				// Wait until the last one is loaded, then load the media.				
 				if (loadedCount == pluginResources.length)
 				{
-					pluginManager.removeEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
+					pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 					
 					loadMedia();
 				}

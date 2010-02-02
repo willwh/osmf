@@ -55,13 +55,13 @@ package org.osmf.plugin
 		public function testLoadPluginWithValidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginManagerEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginManagerEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(event.resource != null);
@@ -76,14 +76,14 @@ package org.osmf.plugin
 		public function testUnloadStaticPluginWithValidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_UNLOADED, addAsync(onPluginUnloadedEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_UNLOAD, addAsync(onPluginUnloadedEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(event.resource != null);
@@ -95,9 +95,9 @@ package org.osmf.plugin
 				}
 			}
 			
-			function onPluginUnloadedEvent(event:PluginLoadEvent):void
+			function onPluginUnloadedEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_UNLOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_UNLOAD)
 				{
 					// expected
 					assertTrue(pluginManager.numLoadedPlugins == 0);
@@ -112,13 +112,13 @@ package org.osmf.plugin
 		public function testCheckLoadStatusOfStaticPluginWithValidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, addAsync(onPluginLoadEvent, 500));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginManagerEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginManagerEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					// expected
 					assertTrue(pluginManager.isPluginLoaded(pluginResource));
@@ -135,13 +135,13 @@ package org.osmf.plugin
 		public function testLoadStatusOfStaticPluginWithInvalidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new InvalidVersionPluginInfo);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					assertTrue(false);
 				}
@@ -156,13 +156,13 @@ package org.osmf.plugin
 		public function testLoadStaticPluginWithInvalidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new InvalidVersionPluginInfo);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					assertTrue(false);
 				}
@@ -176,13 +176,13 @@ package org.osmf.plugin
 		public function testLoadDynamicPluginWithInvalidURLResource():void
 		{
 			var pluginResource:URLResource = new URLResource(new URL("http://myinvalidurl.com/foo.swf"));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					assertTrue(false);
 				}
@@ -196,13 +196,13 @@ package org.osmf.plugin
 		public function testCheckLoadStatusOfDynamicPluginWithInvalidURLResource():void
 		{
 			var pluginResource:URLResource = new URLResource(new URL("http://myinvalidurl.com/foo.swf"));
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
 			
-			function onPluginLoadEvent(event:PluginLoadEvent):void
+			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginLoadEvent.PLUGIN_LOADED)
+				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
 				{
 					assertTrue(false);
 				}
@@ -303,20 +303,20 @@ package org.osmf.plugin
 			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaFactoryItem>);
 			
 			pluginManager = new PluginManager(mediaFactory, "0.5.0");
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onLoaded);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onLoaded);
 			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
 			assertTrue(loaded);
 			
 			pluginManager = new PluginManager(mediaFactory, "0.6.0");
-			pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onFailed);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onFailed);
 			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
 			assertTrue(loadedFailed);
 			
-			function onLoaded(event:PluginLoadEvent):void
+			function onLoaded(event:PluginManagerEvent):void
 			{
 				loaded = true;
 			}	
-			function onFailed(event:PluginLoadEvent):void
+			function onFailed(event:PluginManagerEvent):void
 			{
 				loadedFailed = true;
 			}			

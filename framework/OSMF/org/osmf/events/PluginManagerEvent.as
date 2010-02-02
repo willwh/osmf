@@ -26,54 +26,53 @@ package org.osmf.events
 	import org.osmf.media.MediaResourceBase;
 
 	/**
-	 * This class represents the events when a plugin is loaded, unloaded or fail to load. The 
-	 * event is dispatched by the PluginManager.
+	 * Event class for event dispatched by a PluginManager.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class PluginLoadEvent extends Event
+	public class PluginManagerEvent extends Event
 	{
 		/**
-		 * The PluginLoadEvent.PLUGIN_LOADED constant defines the value of the
-		 * type property of the event object for a pluginLoaded event.
+		 * The PluginManagerEvent.PLUGIN_LOAD constant defines the value of the
+		 * type property of the event object for a pluginLoad event.
 		 * 
-		 * @eventType pluginLoaded
+		 * @eventType pluginLoad
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PLUGIN_LOADED:String		= "pluginLoaded";
+		public static const PLUGIN_LOAD:String		= "pluginLoad";
 		
 		/**
-		 * The PluginLoadEvent.PLUGIN_LOAD_FAILED constant defines the value of the
-		 * type property of the event object for a pluginLoadFailed event.
+		 * The PluginManagerEvent.PLUGIN_LOAD_ERROR constant defines the value of the
+		 * type property of the event object for a pluginLoadError event.
 		 * 
-		 * @eventType pluginLoadFailed
+		 * @eventType pluginLoadError
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PLUGIN_LOAD_FAILED:String	= "pluginLoadFailed";
+		public static const PLUGIN_LOAD_ERROR:String	= "pluginLoadError";
 
 		/**
-		 * The PluginLoadEvent.PLUGIN_UNLOADED constant defines the value of the
-		 * type property of the event object for a pluginUnloaded event.
+		 * The PluginManagerEvent.PLUGIN_UNLOAD constant defines the value of the
+		 * type property of the event object for a pluginUnload event.
 		 * 
-		 * @eventType pluginUnloaded
+		 * @eventType pluginUnload
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PLUGIN_UNLOADED:String		= "pluginUnloaded";
+		public static const PLUGIN_UNLOAD:String		= "pluginUnload";
 		
 		/**
 		 * Constructor.
@@ -88,7 +87,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginLoadEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:MediaResourceBase=null)
+		public function PluginManagerEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, resource:MediaResourceBase=null)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -113,7 +112,7 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new PluginLoadEvent(type, bubbles, cancelable, _resource);
+			return new PluginManagerEvent(type, bubbles, cancelable, _resource);
 		}
 		
 		// Internals

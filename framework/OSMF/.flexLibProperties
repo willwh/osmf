@@ -74,7 +74,7 @@
     <classEntry path="org.osmf.events.NetConnectionFactoryEvent"/>
     <classEntry path="org.osmf.events.NetNegotiatorEvent"/>
     <classEntry path="org.osmf.events.PlayEvent"/>
-    <classEntry path="org.osmf.events.PluginLoadEvent"/>
+    <classEntry path="org.osmf.events.PluginManagerEvent"/>
     <classEntry path="org.osmf.events.SeekEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.external.HTMLAudioTrait"/>

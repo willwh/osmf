@@ -277,8 +277,8 @@
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
 				var model:Model = Model.getInstance();
-				model.pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOADED, onPluginLoaded);
-				model.pluginManager.addEventListener(PluginLoadEvent.PLUGIN_LOAD_FAILED, onPluginLoadFailed);
+				model.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
+				model.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 				model.pluginManager.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				model.pluginManager.loadPlugin(pluginResource);				
 			}
@@ -288,7 +288,7 @@
 				Alert.show("media error");
 			}
 			
-			private function onPluginLoaded(event:PluginLoadEvent):void
+			private function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				if (_logger != null && _logger.debugEnabled)
 				{
@@ -301,7 +301,7 @@
 				refreshResourceHandlerList();
 			}
 			
-			private function onPluginLoadFailed(event:PluginLoadEvent):void
+			private function onPluginLoadFailed(event:PluginManagerEvent):void
 			{
 				if (_logger != null && _logger.debugEnabled)
 				{

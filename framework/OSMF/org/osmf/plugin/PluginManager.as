@@ -26,7 +26,7 @@ package org.osmf.plugin
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.PluginLoadEvent;
+	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -42,38 +42,38 @@ package org.osmf.plugin
 	/**
 	 * Dispatched when the PluginManager has successfully loaded a plugin.
 	 *
-	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_LOADED
+	 * @eventType org.osmf.events.PluginManagerEvent.PLUGIN_LOAD
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="pluginLoaded", type="org.osmf.events.PluginLoadEvent")]
+	[Event(name="pluginLoad", type="org.osmf.events.PluginManagerEvent")]
 
 	/**
-	 * Dispatched when the PluginManager has failed to load a plugin.
+	 * Dispatched when the PluginManager has failed to load a plugin due to an error.
 	 *
-	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_LOAD_FAILED
+	 * @eventType org.osmf.events.PluginManagerEvent.PLUGIN_LOAD_ERROR
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="pluginLoadFailed", type="org.osmf.events.PluginLoadEvent")]
+	[Event(name="pluginLoadError", type="org.osmf.events.PluginManagerEvent")]
 
 	/**
 	 * Dispatched when the PluginManager has successfully unloaded a plugin.
 	 *
-	 * @eventType org.osmf.events.PluginLoadEvent.PLUGIN_UNLOADED
+	 * @eventType org.osmf.events.PluginManagerEvent.PLUGIN_UNLOAD
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="pluginUnloaded", type="org.osmf.events.PluginLoadEvent")]
+	[Event(name="pluginUnload", type="org.osmf.events.PluginManagerEvent")]
 
 	/**
 	 * <p>
@@ -125,8 +125,8 @@ package org.osmf.plugin
 		
 		/**
 		 * Load a plugin identified by resource. The PluginManager will not reload the plugin
-		 * if it has been loaded. Upon successful loading, a PluginLoadEvent.PLUGIN_LOADED 
-		 * event will be dispatched. Otherwise, a PluginLoadEvent.PLUGIN_LOAD_FAILED
+		 * if it has been loaded. Upon successful loading, a PluginManagerEvent.PLUGIN_LOAD
+		 * event will be dispatched. Otherwise, a PluginManagerEvent.PLUGIN_LOAD_ERROR
 		 * event will be dispatched.
 		 *
 		 * @param resource MediaResourceBase at which the plugin (swf file or class) is hosted. It is assumed that 
@@ -152,8 +152,8 @@ package org.osmf.plugin
 			if (pluginEntry != null)
 			{
 				dispatchEvent
-					( new PluginLoadEvent
-						( PluginLoadEvent.PLUGIN_LOADED
+					( new PluginManagerEvent
+						( PluginManagerEvent.PLUGIN_LOAD
 						, false
 						, false
 						, resource
@@ -179,7 +179,7 @@ package org.osmf.plugin
 					}
 					else
 					{
-						dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOAD_FAILED));
+						dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR));
 					}
 				}
 				else
@@ -196,8 +196,8 @@ package org.osmf.plugin
 					_pluginList.push(pluginEntry);
 					
 					dispatchEvent
-						( new PluginLoadEvent
-							( PluginLoadEvent.PLUGIN_LOADED
+						( new PluginManagerEvent
+							( PluginManagerEvent.PLUGIN_LOAD
 							, false
 							, false
 							, resource
@@ -208,7 +208,7 @@ package org.osmf.plugin
 				{
 					// Remove from the pluginMap when the load failed!!!!
 					delete _pluginMap[identifier];
-					dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_LOAD_FAILED));
+					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR));
 				}
 			}
 			function onMediaError(event:MediaErrorEvent):void
@@ -221,7 +221,7 @@ package org.osmf.plugin
 		 * Unload a plugin identified by url.
 		 * 
 		 * @param url URL that is used to identify the plugin.Upon successful loading,
-		 * a PluginLoadEvent.PLUGIN_UNLOADED event will be dispatched. 
+		 * a PluginManagerEvent.PLUGIN_UNLOAD event will be dispatched. 
 		 * 
 		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginInfoResource 
 		 *
@@ -252,7 +252,7 @@ package org.osmf.plugin
 			}
 			else
 			{
-				dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_UNLOADED));
+				dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_UNLOAD));
 			}
 			
 			function onLoadStateChange(event:LoadEvent):void
@@ -263,7 +263,7 @@ package org.osmf.plugin
 					// is finished.
 					removePluginEntry(pluginEntry);
 					delete _pluginMap[identifier];
-					dispatchEvent(new PluginLoadEvent(PluginLoadEvent.PLUGIN_UNLOADED));
+					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_UNLOAD));
 				}
 			}
 		}
