@@ -32,6 +32,8 @@ package org.osmf.net.httpstreaming.flv
 	 */ 
 	public class FLVHeader
 	{
+		public static const MIN_FILE_HEADER_BYTE_COUNT:int = 9;
+
 		public function FLVHeader(input:IDataInput=null)
 		{
 			super();
@@ -173,7 +175,6 @@ package org.osmf.net.httpstreaming.flv
 		/**
 		 * @private
 		 */
-		internal static const MIN_FILE_HEADER_BYTE_COUNT:int = 9;
 		
 		private var _hasVideoTags:Boolean = true;
 		private var _hasAudioTags:Boolean = true;
