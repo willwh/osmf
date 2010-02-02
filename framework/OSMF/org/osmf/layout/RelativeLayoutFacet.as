@@ -45,7 +45,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class RelativeLayoutFacet extends LayoutFacet
+	internal class RelativeLayoutFacet extends LayoutFacet
 	{
 		/**
 		 * @private
