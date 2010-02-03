@@ -94,7 +94,7 @@ package org.osmf.net.httpstreaming
 		internal static const LOAD_NEXT:String = "loadNext";
 		
 		/**
-		 * Indicates the HTTPNetStream is about to play a new file in
+		 * Indicates the HTTPNetStream is preparing to play a new file in
 		 * response to a seek (or upon startup).
 		 *  
 		 *  @langversion 3.0
@@ -105,7 +105,7 @@ package org.osmf.net.httpstreaming
 		internal static const PLAY_START_SEEK:String = "playStartSeek";
 		
 		/**
-		 * Indicates the HTTPNetStream is about to play a new file as
+		 * Indicates the HTTPNetStream is preparing to play a new file as
 		 * a result of completing playback of the previous file.
 		 *  
 		 *  @langversion 3.0
@@ -114,6 +114,17 @@ package org.osmf.net.httpstreaming
 		 *  @productversion OSMF 1.0
 		 */
 		internal static const PLAY_START_NEXT:String = "playStartNext";
+	
+		/**
+		 * Indicates the HTTPNetStream is about to play a new file.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		internal static const PLAY_START_COMMON:String = "playStartCommon";	
+		
 		
 		/**
 		 * Indicates the HTTPNetStream is playing the current file.
@@ -146,7 +157,7 @@ package org.osmf.net.httpstreaming
 		internal static const SEEK:String = "seek";
 
 		/**
-		 * Indicates the HTTPNetStream has stopped playing.
+		 * Indicates the HTTPNetStream is stopping playback.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -154,5 +165,15 @@ package org.osmf.net.httpstreaming
 		 *  @productversion OSMF 1.0
 		 */
 		internal static const STOP:String = "stop";
+		
+		/**
+		 * Indicates the HTTPNetStream is not playing back.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		internal static const HALT:String = "halt";	
 	}
 }

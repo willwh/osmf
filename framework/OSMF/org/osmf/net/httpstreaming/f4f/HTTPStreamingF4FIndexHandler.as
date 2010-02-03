@@ -353,7 +353,7 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var rates:Array = [];
 			
-			if (streamInfos.length > 1)
+			if (streamInfos.length >= 1)
 			{
 				for (var i:int = 0; i < streamInfos.length; i++)
 				{

@@ -115,22 +115,12 @@ package org.osmf.net.httpstreaming
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ADDITIONAL_HEADER, onAdditionalHeader);
 			
-			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_TIME_BIAS, onTimeBias);
+			// removed NOTIFY_TIME_BIAS
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDuration);
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
 			mainTimer.start();
-			
-			// Just like DynamicStream... we need to use onPlayStatus.  This is part of remapping code.
-/*			
-			_ownerClientObject = new Object();
-			_ownerClientObject.onPlayStatus = function(... rest):void {};
-			
-			_trampolineObject = new NetClient();
-			_trampolineObject.addHandler("onPlayStatus", onPlayStatusHS);
-			super.client = _trampolineObject;
-*/			
 		}
 		
 		/**
@@ -251,24 +241,33 @@ package org.osmf.net.httpstreaming
 			//
 			
 			setState(HTTPStreamingState.INIT);
-						
+			_initialTime = -1;
+			_seekTime = -1;
+									
 			indexIsReady = false;
 			indexHandler.initialize(args[0]);
 		
 			if (args.length >= 2)
 			{
 				_seekTarget = Number(args[1]);
+				if (_seekTarget < 0)
+				{
+					_seekTarget = 0;	// FMS behavior, mimic -1 or -2 being passed in
+				}
 			}
 			else
 			{
 				// This is the start of playback, so no seek.
 				_seekTarget = 0;
 			}
-			_timeBias = _seekTarget;
 			
 			if (args.length >= 3)
 			{
-				// TODO: handle playback duration
+				_playForDuration = Number(args[2]);
+			}
+			else
+			{
+				_playForDuration = -1;
 			}
 		}
 		
@@ -292,9 +291,23 @@ package org.osmf.net.httpstreaming
 			//  can't do this unless you're already playing (for instance, you can't leave INIT to go to SEEK)! 
 			// XXX need to double-check to see if there's more guards needed here
 					
-			if (_state != HTTPStreamingState.INIT)
+			if(offset < 0)
 			{
-				_seekTarget = offset;
+				offset = 0;		// FMS rule. Seek to <0 is same as seeking to zero.
+			}
+			
+			if (_state != HTTPStreamingState.INIT && _state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)	// can't seek before playback starts, and can't seek once playback ends
+			{
+				if(_initialTime < 0)
+				{
+					_seekTarget = offset + 0;	// this covers the "don't know initial time" case, rare
+				}
+				else
+				{
+					_seekTarget = offset + _initialTime;
+				}
+				
+				_seekTime = -1;		// but _initialTime stays known
 				setState(HTTPStreamingState.SEEK);		
 				super.seek(offset);
 			}
@@ -312,7 +325,7 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_SEEK:
 					_urlStreamVideo.close();	// immediate abort
 			}
-			setState(HTTPStreamingState.STOP);
+			setState(HTTPStreamingState.HALT);
 			
 			mainTimer.stop();
 			
@@ -334,54 +347,17 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function get time():Number
 		{
-			return super.time + _timeBias;
-		}
-		
-		/**
-		 * @private
-		 */
-/*
-		override public function set client(object:Object):void 
-		{
-			// and just like DS, we override the client setter to get in between for onPlayStatus (and maybe more in the future)
-			var description:XML = flash.utils.describeType(object);
-			
-			// handle serialized types		
-			if (description.@name == "org.osmf.net::NetClient")
+			if(_seekTime >= 0 && _initialTime >= 0)
 			{
-				var methodList:XMLList = description..method;
-				
-				// loop thru all the methods on the object, assign any that aren't reserved on NetStream already (e.g. addEventListener)
-				for (var i:int; i < methodList.length(); i++)
-				{
-					if (!this.hasOwnProperty(methodList[i].@name)) 
-					{
-						if (methodList[i].@name == "onPlayStatus") 
-						{
-							_ownerClientObject.onPlayStatus = object.onPlayStatus;	
-						} 
-						else 
-						{
-							try 
-							{
-								_trampolineObject[methodList[i].@name] = object[methodList[i].@name];
-							} 
-							catch(e:Error) 
-							{
-							}
-						}
-					}
-					
-				}
-				
-				_trampolineObject.addHandler("onPlayStatus", onPlayStatusHS);
-				
-				// send remapping to the base class property
-				super.client = _trampolineObject;
+				_lastValidTimeTime = (super.time + _seekTime) - _initialTime; 
+					//  we remember what we say when time is valid, and just spit that back out any time we don't have valid data. This is probably the right answer.
+					//  the only thing we could do better is also run a timer to ask ourselves what it is whenever it might be valid and save that, just in case the
+					//  user doesn't ask... but it turns out most consumers poll this all the time in order to update playback position displays
 			}
-		}	
-*/		
-		
+			
+			return _lastValidTimeTime;
+		}
+				
 		// Internal
 		//
 		
@@ -396,112 +372,170 @@ package org.osmf.net.httpstreaming
 			if (!_insertScriptDataTags)
 			{
 				_insertScriptDataTags = new Vector.<FLVTagScriptDataObject>();
-				_flvParserISD = new FLVParser(false);
 			}
 			_insertScriptDataTags.push(tag);
 		}
 		
-		private function flvTagHandlerISD(tag:FLVTag):Boolean
+		private function flvTagHandler(tag:FLVTag):Boolean
 		{
-			for (var i:int = 0; i < _insertScriptDataTags.length; i++)
-			{
-				var t:FLVTagScriptDataObject;
-				var bytes:ByteArray;
-				
-				t = _insertScriptDataTags[i];
-				t.timestamp = tag.timestamp;
-				
-				bytes = new ByteArray();
-				t.write(bytes);
-				attemptAppendBytes(bytes);
-			}
-			_insertScriptDataTags = null;	
-			_isdTag = tag;	// can't append this, as we might be sending it to enhanced seek or something... holding it here is a little ugly. need a context to put it in.
-			return false;   // always just parse exactly the one first thing
-		}	
-
-		private function flvTagHandlerES(tag:FLVTag):Boolean
-		{
-			var bytes:ByteArray;
+			// this is the new common FLVTag Parser's tag handler
+			var i:int;
 			
-			if (tag is FLVTagVideo)
-			{	
-				if (_enhancedSeekStartSegment)	
+			if (_playForDuration > 0)
+			{
+				if (_initialTime >= 0)	// until we know this, we don't know where to stop, and if we're enhanced-seeking then we need that logic to be what sets this up
 				{
-					var _muteTag:FLVTagVideo = new FLVTagVideo();
-					_muteTag.timestamp = tag.timestamp; // may get overwritten, ok
-					_muteTag.codecID = FLVTagVideo(tag).codecID; // same as in use
-					_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
-					_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
-					// and start saving, with this as the first...
-					_enhancedSeekTags = new Vector.<FLVTagVideo>();
-					_enhancedSeekTags.push(_muteTag);
-					_enhancedSeekStartSegment = false;
-				}	
-				
-				if (tag.timestamp >= _enhancedSeekTarget)
-				{
-					_enhancedSeekTarget = -1;
-					_timeBias = tag.timestamp / 1000.0;
-					
-					var _unmuteTag:FLVTagVideo = new FLVTagVideo();
-					_unmuteTag.timestamp = tag.timestamp;  // may get overwritten, ok
-					_unmuteTag.codecID = (_enhancedSeekTags[0]).codecID;	// take the codec ID of the corresponding SEEK_START
-					_unmuteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
-					_unmuteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_END;
-
-					_enhancedSeekTags.push(_unmuteTag);	
-					
-					// twiddle and dump
-				
-					var i:int;
-					for (i=0; i<_enhancedSeekTags.length; i++)
+					var currentTime:Number = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+					if (currentTime > (_initialTime + _playForDuration))
 					{
-						var vTag:FLVTagVideo;
-						
-						vTag = _enhancedSeekTags[i];
-						//vTag.timestamp = tag.timestamp;
-						if (vTag.codecID == FLVTagVideo.CODEC_ID_AVC && vTag.avcPacketType == FLVTagVideo.AVC_PACKET_TYPE_NALU)
+						setState(HTTPStreamingState.STOP);
+						_flvParserDone = true;
+						if (_seekTime < 0)
 						{
-							// for H.264 we need to move the timestamp forward but the composition time offset backwards to compensate
-							var adjustment:int = tag.timestamp - vTag.timestamp; // how far we are adjusting
-							var compTime:int = vTag.avcCompositionTimeOffset;
-							compTime = vTag.avcCompositionTimeOffset;
-							compTime -= adjustment; // do the adjustment
-							vTag.avcCompositionTimeOffset = compTime;	// save adjustment
-							vTag.timestamp = tag.timestamp; // and adjust the timestamp forward
+							_seekTime = _playForDuration + _initialTime;	// FMS behavior... the time is always the final time, even if we seek to past it
+									// XXX actually, FMS  actually lets exactly one frame though at that point and that's why the time gets to be what it is
+									// XXX that we don't exactly mimic that is also why setting a duration of zero doesn't do what FMS does (plays exactly that one still frame)
 						}
-						else
-						{
-							// the simple case
-							vTag.timestamp = tag.timestamp;
-						}
-						bytes = new ByteArray();
-						vTag.write(bytes);
-						attemptAppendBytes(bytes);
+						return false;
 					}
-					_enhancedSeekTags = null;
+				}
+			}
+			
+			if (_insertScriptDataTags)
+			{
+				for (i = 0; i < _insertScriptDataTags.length; i++)
+				{
+					var t:FLVTagScriptDataObject;
+					var bytes:ByteArray;
 					
-					// and dump this one
+					t = _insertScriptDataTags[i];
+					t.timestamp = tag.timestamp;
+					
+					bytes = new ByteArray();
+					t.write(bytes);
+					_flvParserProcessed += bytes.length;
+					attemptAppendBytes(bytes);
+				}
+				_insertScriptDataTags = null;			
+			}
+				
+			if (_enhancedSeekTarget < 0)
+			{
+				if (_initialTime < 0)
+				{
+					_initialTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+				}
+				
+				if (_seekTime < 0)
+				{
+					_seekTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+				}
+			}		
+			else
+			{
+				if (tag is FLVTagVideo)
+				{	
+					if (_flvParserIsSegmentStart)	
+					{
+						var _muteTag:FLVTagVideo = new FLVTagVideo();
+						_muteTag.timestamp = tag.timestamp; // may get overwritten, ok
+						_muteTag.codecID = FLVTagVideo(tag).codecID; // same as in use
+						_muteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
+						_muteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_START;
+						// and start saving, with this as the first...
+						_enhancedSeekTags = new Vector.<FLVTagVideo>();
+						_enhancedSeekTags.push(_muteTag);
+						_flvParserIsSegmentStart = false;
+					}	
+					
+					if ((tag.timestamp / 1000.0) + _fileTimeAdjustment >= _enhancedSeekTarget)
+					{
+						_enhancedSeekTarget = -1;
+						_seekTime = (tag.timestamp  / 1000.0) + _fileTimeAdjustment;
+						if(_initialTime < 0)
+						{
+							_initialTime = _seekTime;
+						}
+						
+						var _unmuteTag:FLVTagVideo = new FLVTagVideo();
+						_unmuteTag.timestamp = tag.timestamp;  // may get overwritten, ok
+						_unmuteTag.codecID = (_enhancedSeekTags[0]).codecID;	// take the codec ID of the corresponding SEEK_START
+						_unmuteTag.frameType = FLVTagVideo.FRAME_TYPE_INFO;
+						_unmuteTag.infoPacketValue = FLVTagVideo.INFO_PACKET_SEEK_END;
+	
+						_enhancedSeekTags.push(_unmuteTag);	
+						
+						// twiddle and dump
+					
+						for (i=0; i<_enhancedSeekTags.length; i++)
+						{
+							var vTag:FLVTagVideo;
+							
+							vTag = _enhancedSeekTags[i];
+							//vTag.timestamp = tag.timestamp;
+							if (vTag.codecID == FLVTagVideo.CODEC_ID_AVC && vTag.avcPacketType == FLVTagVideo.AVC_PACKET_TYPE_NALU)
+							{
+								// for H.264 we need to move the timestamp forward but the composition time offset backwards to compensate
+								var adjustment:int = tag.timestamp - vTag.timestamp; // how far we are adjusting
+								var compTime:int = vTag.avcCompositionTimeOffset;
+								compTime = vTag.avcCompositionTimeOffset;
+								compTime -= adjustment; // do the adjustment
+								vTag.avcCompositionTimeOffset = compTime;	// save adjustment
+								vTag.timestamp = tag.timestamp; // and adjust the timestamp forward
+							}
+							else
+							{
+								// the simple case
+								vTag.timestamp = tag.timestamp;
+							}
+							bytes = new ByteArray();
+							vTag.write(bytes);
+							_flvParserProcessed += bytes.length;
+							attemptAppendBytes(bytes);
+						}
+						_enhancedSeekTags = null;
+						
+						// and append this one
+						bytes = new ByteArray();
+						tag.write(bytes);
+						_flvParserProcessed += bytes.length;
+						attemptAppendBytes(bytes);
+						if (_playForDuration > 0)
+						{
+							return true;	// need to continue seeing the tags
+						}
+						_flvParserDone = true;
+						return false;	// and end of parsing (caller must dump rest, unparsed)
+						
+					} // past enhanced seek target
+					else
+					{
+						_enhancedSeekTags.push(tag);
+					}
+				} // is video
+				else if (tag is FLVTagScriptDataObject)
+				{
+					// ScriptDataObject tags simply pass through with unadjusted timestamps rather than discarding or saving for later
 					bytes = new ByteArray();
 					tag.write(bytes);
+					_flvParserProcessed += bytes.length;
 					attemptAppendBytes(bytes);
-					return false;	// immediate end of parsing (caller must dump rest, unparsed)
-					
-				} // past enhanced seek target
-				else
-				{
-					_enhancedSeekTags.push(tag);
-				}
-			} // is video
-			else if (tag is FLVTagScriptDataObject)
+				} // else tag is FLVTagAudio, which we discard
+				return true;
+			} // enhanced seek
+			
+			// finally, pass this one on to appendBytes...
+			
+			bytes = new ByteArray();
+			_flvParserProcessed += bytes.length;
+			tag.write(bytes);
+			attemptAppendBytes(bytes);
+			if (_playForDuration > 0)
 			{
-				// ScriptDataObject tags simply pass through with unadjusted timestamps rather than discarding or saving for later
-				bytes = new ByteArray();
-				tag.write(bytes);
-				attemptAppendBytes(bytes);
-			} // else tag is FLVTagAudio, which we discard
-			return true;
+				return true;	// need to continue seeing the tags
+			}
+			_flvParserDone = true;
+			return false; // until we do anything more, we always do one and only one
 		}
 	
 		/**
@@ -655,26 +689,24 @@ package org.osmf.net.httpstreaming
 			{
 				return 0;
 			}
-
-			// XXX it is possible to put a guard on _insertScriptDataTags testing to ensure that this is only done at start-of-segment (FLV tags are in alignment)
-			// XXX right now that's not a problem because the contract is that putting them on the queue only happens when safe, but you never know how it'll be used later...
 			
-			if (_insertScriptDataTags)	// are we starting or midway through parsing a single tag in order to know the timestamps to put on ISD tags that need to be appended?
-			{	
-				inBytes.position = 0; // ensure rewould
-				_flvParserISD.parse(inBytes, true, flvTagHandlerISD); // appends the ISD tags, assuming it gets one whole tag in
-				
-				if (_insertScriptDataTags)	// should now be nulled out if we got a whole tag and appended the vector so...
+			if (_flvParser)
+			{
+				inBytes.position = 0;	// rewind
+				_flvParserProcessed = 0;
+				_flvParser.parse(inBytes, true, flvTagHandler);	// common handler for FLVTags, parser consumes everything each time just as appendBytes does when in pass-through
+				processed += _flvParserProcessed;
+				if(!_flvParserDone)
 				{
-					// we didn't get a whole tag in. the saved _isdTag isn't even set, and there's not enough in the parser to dump forwards
-					return processed;	// 0
+					// the common parser has more work to do in-path
+					return processed;
 				}
 				else
 				{
+					// the common parser is done, so flush whatever is left and then pass through the rest of the segment
 					bytes = new ByteArray();
-					_isdTag.write(bytes);		// write back out the one tag we had to parse in order to get the timestamp
-					_flvParserISD.flush(bytes);	// and flush the rest of the parser into the bytes that go downstream here
-					_flvParserISD = null; // done with that
+					_flvParser.flush(bytes);
+					_flvParser = null;	// and now we're done with it
 				}
 			}
 			else
@@ -682,26 +714,14 @@ package org.osmf.net.httpstreaming
 				bytes = inBytes;
 			}
 
-			// now, 'bytes' is either what came in or what we massaged above in order to appendBytes some script data objects first...
-				
-			if (_enhancedSeekTarget >= 0) 
+			// now, 'bytes' is either what came in or what we massaged above 
+			
+			// (ES is now part of unified parser)
+			
+			processed += bytes.length;
+			
+			if (_state == HTTPStreamingState.PLAY)	// we might exit this state
 			{
-				bytes.position = 0; // parser works on IDataInput, ensure the array is rewound
-				_flvParserES.parse(bytes, true, flvTagHandlerES); //  doesn't count towards progress, but that's ok because we are in ES mode
-				if (_enhancedSeekTarget < 0)
-				{
-					
-					// dump the rest time
-					var remainingBytes:ByteArray = new ByteArray();
-					_flvParserES.flush(remainingBytes);
-					_flvParserES = null;
-					processed += remainingBytes.length;
-					attemptAppendBytes(remainingBytes);
-				}
-			}
-			else
-			{
-				processed += bytes.length;
 				attemptAppendBytes(bytes);
 			}
 			
@@ -749,9 +769,8 @@ package org.osmf.net.httpstreaming
 					
 					if (_enhancedSeekEnabled)
 					{						
-						// XXX could skip this in the case where _seekTarget * 1000 is an exact match (also note that we should pick seconds or milliseconds for the targets) XXX
-						_enhancedSeekTarget = _seekTarget * 1000;
-						// XXX can just reuse seek target now *and* should make ES state part of play states somehow
+						_enhancedSeekTarget = _seekTarget;
+						// XXX perhaps could just reuse _seekTarget?
 						// XXX there is potentially an H.264 depth issue here, where we need to do a --i to pick up enough more frames to render. must revisit.
 					}
 					setState(HTTPStreamingState.LOAD_SEEK);
@@ -864,26 +883,7 @@ package org.osmf.net.httpstreaming
 					}
 					else
 					{
-						// XXX need to append EOS in this case for sure, even if we don't do it for some of the seek-paused cases
-						// (need to update playerglobal.swc to pick that up and switch to latest build in order to have the action)
 						setState(HTTPStreamingState.STOP);
-						
-			            var playCompleteInfo:Object = new Object();
-			            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
-			            playCompleteInfo.level = "status";
-			                                    
-			            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
-			
-			            var tagBytes:ByteArray = new ByteArray();
-			            playCompleteInfoSDOTag.write(tagBytes);
-
-       					CONFIG::FLASH_10_1
-						{
-							appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
-							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
-						}
-			            attemptAppendBytes(tagBytes);
 					}
 					
 					break;
@@ -891,27 +891,29 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_NEXT:
 
 					fileHandler.beginProcessFile(false, 0);
-					setState(HTTPStreamingState.PLAY);
-					
-					if (_enhancedSeekTarget >= 0)	// XXX REFACTOR ME
-					{
-						_flvParserES = new FLVParser(false);
-						_enhancedSeekStartSegment = true;
-					}
+					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;
 					
 				case HTTPStreamingState.PLAY_START_SEEK:		
 
 					fileHandler.beginProcessFile(true, _seekTarget);
-					setState(HTTPStreamingState.PLAY);
-					
-					if (_enhancedSeekTarget >= 0)	// XXX REFACTOR ME
-					{
-						_flvParserES = new FLVParser(false);
-						_enhancedSeekStartSegment = true;
-					}
+					setState(HTTPStreamingState.PLAY_START_COMMON);
 					break;		
 				
+				case HTTPStreamingState.PLAY_START_COMMON:
+					
+					// need to run the common FLVParser?
+					if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags || _enhancedSeekTarget >= 0)
+					{
+						if (_enhancedSeekTarget >= 0)
+						{
+							_flvParserIsSegmentStart = true;
+						}
+						_flvParser = new FLVParser(false);
+						_flvParserDone = false;
+					}
+					setState(HTTPStreamingState.PLAY);
+					break;
 							
 				case HTTPStreamingState.PLAY:
 
@@ -938,7 +940,7 @@ package org.osmf.net.httpstreaming
 						
 						var input:IDataInput = null;
 						_dataAvailable = false;
-						while ((input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)))
+						while (_state == HTTPStreamingState.PLAY && (input = byteSource(_urlStreamVideo, fileHandler.inputBytesNeeded)))
 						{
 							bytes = fileHandler.processFileSegment(input);
 		
@@ -951,6 +953,9 @@ package org.osmf.net.httpstreaming
 								break;
 							}
 						}
+						
+						if(_state != HTTPStreamingState.PLAY)
+							break;
 						
 						// XXX if the reason we bailed is that we didn't have enough bytes, then if loadComplete we need to consume the rest into our save buffer
 						// OR, if we don't do cross-segment saving then we simply need to ensure that we don't return but simply fall through to a later case
@@ -996,6 +1001,27 @@ package org.osmf.net.httpstreaming
 					break;
 
 				case HTTPStreamingState.STOP:
+						var playCompleteInfo:Object = new Object();
+			            playCompleteInfo.code = NetStreamCodes.NETSTREAM_PLAY_COMPLETE;
+			            playCompleteInfo.level = "status";
+			                                    
+			            var playCompleteInfoSDOTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			            playCompleteInfoSDOTag.objects = ["onPlayStatus", playCompleteInfo];
+			
+			            var tagBytes:ByteArray = new ByteArray();
+			            playCompleteInfoSDOTag.write(tagBytes);
+
+       					CONFIG::FLASH_10_1
+						{
+							appendBytesAction(NetStreamAppendBytesAction.END_SEQUENCE);
+							appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+						}
+			            attemptAppendBytes(tagBytes);
+			            
+			            setState(HTTPStreamingState.HALT);
+			            break;
+			            
+				case HTTPStreamingState.HALT:
 					// do nothing. timer could run slower in this state.
 					break;
 
@@ -1003,12 +1029,6 @@ package org.osmf.net.httpstreaming
 					throw new Error("HTTPStream cannot run undefined _state "+_state);
 					break;
 			}
-		}
-		
-		private function onPlayStatusHS(info:Object):void
-		{ 
-			// just like DS, call back the owner's onPlayStatus
-//			_ownerClientObject.onPlayStatus(info);
 		}
 		
 		private function onURLStatus(progressEvent:ProgressEvent):void
@@ -1071,23 +1091,12 @@ package org.osmf.net.httpstreaming
 			_numQualityLevels = _qualityRates.length;
 		}	
 
-		private function onTimeBias(event:HTTPStreamingFileHandlerEvent):void
-		{
-			_timeBias = event.timeBias;
-		}		
-
 		private function onTotalDuration(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			_totalDuration = event.totalDuration;
 			
 			var object:Object = new Object();
 			object["duration"] = _totalDuration;
-/*			
-			if (_trampolineObject.hasOwnProperty("onMetaData"))
-			{
-				_trampolineObject.onMetaData(object);
-			}
-*/			
 			if (super.client != null && super.client.hasOwnProperty("onMetaData"))
 			{
 				super.client.onMetaData(object);
@@ -1105,7 +1114,7 @@ package org.osmf.net.httpstreaming
 				_urlStreamVideo.addEventListener(IOErrorEvent.IO_ERROR				, onVideoURLError	, false, 0, true);
 				_urlStreamVideo.addEventListener(SecurityErrorEvent.SECURITY_ERROR	, onVideoURLError	, false, 0, true);
 	
-				setState(HTTPStreamingState.LOAD_SEEK);
+				setState(HTTPStreamingState.SEEK);	// was LOAD_SEEK, now want to pick up enhanced seek setup, if applicable. in the future, might want to change back?
 				indexIsReady = true;
 			}
 		}
@@ -1208,30 +1217,34 @@ package org.osmf.net.httpstreaming
 		private var _qualityLevel:int = 0;
 		private var qualityLevelHasChanged:Boolean = false;
 		private var _seekTarget:Number = -1;
-		private var _timeBias:Number = 0;
 		private var _lastDownloadStartTime:Number = -1;
 		private var _lastDownloadDuration:Number;
 		private var _lastDownloadRatio:Number = 0;
 		private var _manualSwitchMode:Boolean = false;
 		private var _aggressiveUpswitch:Boolean = true;	// XXX needs a getter and setter, or to be part of a pluggable rate-setter
-//		private var _ownerClientObject:Object;
-//		private var _trampolineObject:NetClient;
 		private var indexHandler:HTTPStreamingIndexHandlerBase;
 		private var fileHandler:HTTPStreamingFileHandlerBase;
 		private var _totalDuration:Number = -1;
-		private var _flvParserES:FLVParser = null;
-		private var _enhancedSeekTarget:Number = -1;
+		private var _enhancedSeekTarget:Number = -1;	// now in seconds, just like everything else
 		private var _enhancedSeekEnabled:Boolean = false;
 		private var _enhancedSeekTags:Vector.<FLVTagVideo>;
-		private var _enhancedSeekStartSegment:Boolean = false;
+		private var _flvParserIsSegmentStart:Boolean = false;
 		private var _savedBytes:ByteArray = null;
 		private var _state:String = HTTPStreamingState.INIT;
 		private var _prevState:String = null;
 		private var _seekAfterInit:Boolean;
 		private var indexIsReady:Boolean = false;
 		private var _insertScriptDataTags:Vector.<FLVTagScriptDataObject> = null;
-		private var _flvParserISD:FLVParser = null;
-		private var _isdTag:FLVTag = null;	// using a member var like this is a little ugly
+		private var _flvParser:FLVParser = null;	// this is the new common FLVTag Parser
+		private var _flvParserDone:Boolean = true;	// signals that common parser has done everything and can be removed from path
+		private var _flvParserProcessed:uint;
+		private var _initialTime:Number = -1;	// this is the timestamp derived at start-of-play (offset or not)... what FMS would call "0"
+		private var _seekTime:Number = -1;		// this is the timestamp derived at end-of-seek (enhanced or not)... what we need to add to super.time (assuming play started at zero)
+		private var _fileTimeAdjustment:Number = 0;	// this is what must be added (IN SECONDS) to the timestamps that come in FLVTags from the file handler to get to the index handler timescale
+													// XXX an event to set the _fileTimestampAdjustment is needed
+		private var _playForDuration:Number = -1;
+		private var _lastValidTimeTime:Number = 0;
+
 		
 		CONFIG::LOGGING
 		{
