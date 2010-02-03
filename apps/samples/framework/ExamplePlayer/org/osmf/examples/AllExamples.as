@@ -42,7 +42,7 @@ package org.osmf.examples
 	import org.osmf.image.ImageElement;
 	import org.osmf.layout.LayoutProperties;
 	import org.osmf.layout.LayoutRendererMode;
-	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.manifest.F4MElement;
 	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -52,7 +52,6 @@ package org.osmf.examples
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.tracking.Beacon;
@@ -822,7 +821,7 @@ package org.osmf.examples
 					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for a progressive video."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
+				  	   		var elem:F4MElement = new F4MElement();
 				  	   		elem.resource = new URLResource(new URL(REMOTE_MANIFEST));																
 				  	   		return elem; 
 				  	   	}
@@ -835,7 +834,7 @@ package org.osmf.examples
 					, 	"Demonstrates the use of a Flash Media Manifest file (F4M) for dynamic streaming video."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var elem:LoadableProxyElement = new LoadableProxyElement(new F4MLoader());
+				  	   		var elem:F4MElement = new F4MElement();
 				  	   		elem.resource = new URLResource(new URL(REMOTE_MBR_MANIFEST));																
 				  	   		return elem; 
 				  	   	}
