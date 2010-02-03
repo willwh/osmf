@@ -21,7 +21,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import mx.automation.codec.ArrayPropertyCodec;
+			
 			private function init():void
 			{
 				log = new ArrayCollection();
