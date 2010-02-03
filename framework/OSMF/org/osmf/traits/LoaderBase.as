@@ -198,10 +198,12 @@ package org.osmf.traits
 		{
 			if (newState != loadTrait.loadState)
 			{
-				if (newState == LoadState.READY && loadedContext == null)
+				/**  Removed in order to facilitate the removal of LoadedCentext, per PARB feedback.
+				 * if (newState == LoadState.READY && loadedContext == null)
 				{
 					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NULL));
 				}
+				 */ 
 				if (newState == LoadState.UNINITIALIZED && loadedContext != null)
 				{
 					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NOT_NULL));

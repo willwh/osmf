@@ -24,9 +24,8 @@ package org.osmf.proxies
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 
 	/**
@@ -40,21 +39,22 @@ package org.osmf.proxies
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class LoadableProxyElement extends ProxyElement
+	public class FactoryElement extends ProxyElement
 	{
 		/**
-		 * Creates a new LoadableProxyElement.  The Loader needs to return a MediaElementLoadedContext.
+		 * Creates a new FactoryElement.  This is an abstract base class, and should be subclassed.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function LoadableProxyElement(loader:MediaElementLoader)
+		public function FactoryElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
 		{	
 			super(null);		
 			_metadata = new MetadataProxy();
 			this.loader = loader;			
+			this.resource = resource;
 		}
 	
 		private function onLoaderStateChange(event:LoadEvent):void
@@ -62,8 +62,7 @@ package org.osmf.proxies
 			if (event.loadState == LoadState.READY)
 			{
 				removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
-				var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
-				proxiedElement =  context.element;
+				proxiedElement =  loadTrait.mediaElement;
 				_metadata.metadata = proxiedElement.metadata;
 			}
 		}
@@ -77,12 +76,16 @@ package org.osmf.proxies
 			if (_resource != value && value != null)
 			{
 				_resource = value;
-				loadTrait = new LoadTrait(loader, resource);
+				loadTrait = new FactoryLoadTrait(loader, resource);
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
+				if (super.getTrait(MediaTraitType.LOAD) != null)
+				{
+					super.removeTrait(MediaTraitType.LOAD);
+				}
 				super.addTrait(MediaTraitType.LOAD, loadTrait);			
 			}						
 		}
-		
+			
 		/**
 		 * @private
 		 */
@@ -104,7 +107,7 @@ package org.osmf.proxies
 
 		private var _metadata:MetadataProxy;
 		private var _resource:MediaResourceBase;
-		private var loadTrait:LoadTrait;
+		private var loadTrait:FactoryLoadTrait;
 		private var loader:LoaderBase;
 	}
 }

@@ -37,24 +37,21 @@ package org.osmf.smil.loader
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.proxies.MediaElementLoadedContext;
-	import org.osmf.proxies.MediaElementLoader;
+	import org.osmf.proxies.FactoryLoadTrait;
 	import org.osmf.smil.media.SMILMediaGenerator;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.parser.SMILParser;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 
 	/**
 	 * The SMILLoader class will load a SMIL (Synchronized 
 	 * Multimedia Integration Language) file and generate
 	 * a loaded context.
 	 */
-	public class SMILLoader extends MediaElementLoader
+	public class SMILLoader extends LoaderBase
 	{
 		/**
 		 * The SMIL mime type as of SMIL 3.0.
@@ -106,7 +103,7 @@ package org.osmf.smil.loader
 		 * @private
 		 */
 		override protected function executeLoad(loadTrait:LoadTrait):void
-		{
+		{			
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
 			var urlLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
@@ -157,9 +154,8 @@ package org.osmf.smil.loader
 		 * @private
 		 */
 		override protected function executeUnload(loadTrait:LoadTrait):void
-		{
-			var context:MediaElementLoadedContext = loadTrait.loadedContext as MediaElementLoadedContext;
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
+		{			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, null);
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 		
@@ -190,8 +186,9 @@ package org.osmf.smil.loader
 			}
 			else
 			{
-				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElement);
-				updateLoadTrait(loadTrait, LoadState.READY, context);
+				var elementLoadTrait:FactoryLoadTrait = loadTrait as FactoryLoadTrait;
+				elementLoadTrait.mediaElement = loadedElement;
+				updateLoadTrait(loadTrait, LoadState.READY, null);
 			}		
 		}
 				

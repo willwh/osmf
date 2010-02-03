@@ -31,6 +31,11 @@ package org.osmf.proxies
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.URL;
 	
+	/**
+	 * @private
+	 * 
+	 * Internal class used by the FactoryElement to proxy metadata.
+	 */ 
 	internal class MetadataProxy extends Metadata
 	{
 		public function MetadataProxy()
@@ -63,10 +68,7 @@ package org.osmf.proxies
 		 */ 
 		override public function addFacet(data:Facet):void
 		{
-			if (wrapped != null)
-			{
-				wrapped.addFacet(data);		
-			}				
+			wrapped.addFacet(data);						
 		}
 		
 		/** 

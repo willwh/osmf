@@ -25,11 +25,11 @@ package org.osmf.media
 	import org.osmf.audio.SoundLoader;
 	import org.osmf.image.ImageElement;
 	import org.osmf.image.ImageLoader;
+	import org.osmf.manifest.F4MElement;
 	import org.osmf.manifest.F4MLoader;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
-	import org.osmf.proxies.LoadableProxyElement;
 	import org.osmf.swf.SWFElement;
 	import org.osmf.swf.SWFLoader;
 	import org.osmf.video.VideoElement;
@@ -115,7 +115,7 @@ package org.osmf.media
 					, f4mLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new LoadableProxyElement(f4mLoader);
+							return new F4MElement(null, f4mLoader);
 						}
 					)
 				);

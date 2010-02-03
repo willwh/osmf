@@ -39,10 +39,10 @@ package org.osmf.manifest
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.proxies.MediaElementLoadedContext;
-	import org.osmf.proxies.MediaElementLoader;
+	import org.osmf.proxies.FactoryLoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -58,7 +58,7 @@ package org.osmf.manifest
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class F4MLoader extends MediaElementLoader
+	public class F4MLoader extends LoaderBase
 	{
 		/**
 		 * The MIME type for F4M files.
@@ -205,8 +205,9 @@ package org.osmf.manifest
 				{
 					loadedElem["defaultDuration"] = manifest.duration;	
 				}									
-				var context:MediaElementLoadedContext = new MediaElementLoadedContext(loadedElem);																		
-				updateLoadTrait(loadTrait, LoadState.READY, context);		
+				
+				FactoryLoadTrait(loadTrait).mediaElement = loadedElem;																		
+				updateLoadTrait(loadTrait, LoadState.READY);		
 			}				
 		}
 		

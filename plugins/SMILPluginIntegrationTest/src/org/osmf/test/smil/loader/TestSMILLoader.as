@@ -28,7 +28,7 @@ package org.osmf.test.smil.loader
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.proxies.MediaElementLoadedContext;
+	import org.osmf.proxies.FactoryLoadTrait;
 	import org.osmf.smil.loader.*;
 	import org.osmf.smil.model.*;
 	import org.osmf.test.smil.SMILTestConstants;
@@ -80,11 +80,12 @@ package org.osmf.test.smil.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:MediaElementLoadedContext = event.loadedContext as MediaElementLoadedContext;
-				assertTrue(loadedContext != null);
+				var trait:FactoryLoadTrait = event.loadTrait as FactoryLoadTrait;
+				//var loadedContext = event.loadedContext as MediaElementLoadedContext;
+				assertTrue(trait != null);
 				
 				// Just check that we got a valid MediaElement
-				var element:MediaElement = loadedContext.element;
+				var element:MediaElement = trait.mediaElement;
 				assertTrue(element != null);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));

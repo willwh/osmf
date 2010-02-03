@@ -30,7 +30,7 @@ package org.osmf.smil
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.plugin.PluginInfo;
-	import org.osmf.proxies.LoadableProxyElement;
+	import org.osmf.smil.elements.SMILElement;
 	import org.osmf.smil.loader.SMILLoader;
 
 	/**
@@ -53,7 +53,7 @@ package org.osmf.smil
 		
 		private function createSMILProxyElement():MediaElement
 		{
-			return new LoadableProxyElement(new SMILLoader(mediaFactory));
+			return new SMILElement(null, new SMILLoader(mediaFactory));
 		}
 		
 		override public function initializePlugin(metadata:Metadata):void

@@ -62,7 +62,7 @@ package org.osmf
 			
 			// Layout
 			//
-					
+			/*		
 					
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
@@ -291,10 +291,10 @@ package org.osmf
 			addTestSuite(TestProxyElementAsDynamicProxy);
 			addTestSuite(TestTemporalProxyElement);
 			addTestSuite(TestListenerProxyElement);
-			addTestSuite(TestListenerProxyElementAsSubclass);
-			addTestSuite(TestLoadableProxyElement);
-			addTestSuite(TestMediaElementLoadedContext);
-			
+			addTestSuite(TestListenerProxyElementAsSubclass);*/
+			addTestSuite(TestFactoryElement);
+			addTestSuite(TestFactoryLoadTrait);
+			/*
 			// Tracking
 			//
 			
@@ -321,7 +321,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);*/
 		}
 	}
 }
