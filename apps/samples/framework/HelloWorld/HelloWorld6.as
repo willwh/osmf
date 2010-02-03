@@ -23,50 +23,34 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.display.MediaElementSprite;
-	import org.osmf.events.LoadEvent;
+	import org.osmf.containers.MediaContainer;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.LoadState;
-	import org.osmf.traits.PlayTrait;
-	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 
 	/**
-	 * Variation on HelloWorld, using MediaElementSprite
-	 * rather than MediaPlayerSprite.
+	 * Variation on HelloWorld, using MediaContainer.
 	 **/
 	[SWF(width="640", height="352")]
 	public class HelloWorld6 extends Sprite
 	{
 		public function HelloWorld6()
-		{
- 			var sprite:MediaElementSprite = new MediaElementSprite();
-			addChild(sprite);
+		{			
+			// Create the container class that holds our media.
+ 			var container:MediaContainer = new MediaContainer();
+			addChild(container);
+
+			// Set the MediaElement on the MediaPlayer.  Because
+			// autoPlay defaults to true, playback begins immediately.
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.media = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
 			
-			sprite.element = new VideoElement
-				( new NetLoader
-				, new URLResource(new URL(REMOTE_PROGRESSIVE))
-				);
-			
-			var loadTrait:LoadTrait = sprite.element.getTrait(MediaTraitType.LOAD) as LoadTrait;
-			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
-			loadTrait.load();
-			
-			function onReady(event:LoadEvent):void
-			{
-				if (event.loadState == LoadState.READY)
-				{
-					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
-					
-					var playTrait:PlayTrait = sprite.element.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					playTrait.play();
-				}
-			}
+			// Add the MediaElement to the container.
+			container.addMediaElement(mediaPlayer.media);
 		}
-		
+				
 		private static const REMOTE_PROGRESSIVE:String
 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 	}
