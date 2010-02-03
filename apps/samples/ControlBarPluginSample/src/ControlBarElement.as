@@ -84,7 +84,6 @@ package
 			var layoutProperties:LayoutProperties = new LayoutProperties(this);
 			layoutProperties.width = controlBar.mediaWidth;
 			layoutProperties.height = controlBar.mediaHeight;
-			trace(controlBar.mediaWidth, controlBar.mediaHeight);
 			
 			super.setupTraits();	
 		}
