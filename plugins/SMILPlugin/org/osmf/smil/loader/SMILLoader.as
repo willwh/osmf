@@ -137,17 +137,17 @@ package org.osmf.smil.loader
 			{	
 				setupListeners(false);
 				
-				//try
-				//{
+				try
+				{
 					var parser:SMILParser = createParser();
 					var smilDocument:SMILDocument = parser.parse(event.target.data);
 					finishLoad(loadTrait, smilDocument);
-				//}
-				/*catch (parseError:Error)
+				}
+				catch (parseError:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
-				}*/
+				}
 			}	
 		}
 		
