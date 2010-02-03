@@ -37,18 +37,18 @@ package
 	public class HelloWorld6 extends Sprite
 	{
 		public function HelloWorld6()
-		{			
+		{
+			// Create the MediaElement.
+			var mediaElement:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+			
 			// Create the container class that holds our media.
  			var container:MediaContainer = new MediaContainer();
+			container.addMediaElement(mediaElement);
 			addChild(container);
 
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			var mediaPlayer:MediaPlayer = new MediaPlayer();
-			mediaPlayer.media = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
-			
-			// Add the MediaElement to the container.
-			container.addMediaElement(mediaPlayer.media);
+			var mediaPlayer:MediaPlayer = new MediaPlayer(mediaElement);
 		}
 				
 		private static const REMOTE_PROGRESSIVE:String
