@@ -33,6 +33,8 @@ package org.osmf.test.smil.loader
 	import org.osmf.smil.model.*;
 	import org.osmf.test.smil.SMILTestConstants;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.URL;
@@ -51,6 +53,12 @@ package org.osmf.test.smil.loader
 			super.tearDown();
 			
 			eventDispatcher = null;
+		}
+		
+		
+		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
+		{
+			return new FactoryLoadTrait(loader, resource);
 		}
 		
 		public function testLoadWithValidSMILDocument():void

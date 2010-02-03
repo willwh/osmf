@@ -45,6 +45,7 @@ package org.osmf.smil.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.HTTPLoadedContext;
 
 	/**
 	 * The SMILLoader class will load a SMIL (Synchronized 
@@ -136,17 +137,17 @@ package org.osmf.smil.loader
 			{	
 				setupListeners(false);
 				
-				try
-				{
+				//try
+				//{
 					var parser:SMILParser = createParser();
 					var smilDocument:SMILDocument = parser.parse(event.target.data);
 					finishLoad(loadTrait, smilDocument);
-				}
-				catch (parseError:Error)
+				//}
+				/*catch (parseError:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
-				}
+				}*/
 			}	
 		}
 		
@@ -155,7 +156,7 @@ package org.osmf.smil.loader
 		 */
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{			
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, null);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING, new HTTPLoadedContext(null));
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 		
@@ -185,10 +186,14 @@ package org.osmf.smil.loader
 				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 			}
 			else
-			{
+			{				
 				var elementLoadTrait:FactoryLoadTrait = loadTrait as FactoryLoadTrait;
-				elementLoadTrait.mediaElement = loadedElement;
-				updateLoadTrait(loadTrait, LoadState.READY, null);
+				if (elementLoadTrait)
+				{
+					elementLoadTrait.mediaElement = loadedElement;
+				}
+				//TODO Remove the HTTPLOadedContext (which is a place holder) Once we remove the LoadedContext.
+				updateLoadTrait(loadTrait, LoadState.READY, new HTTPLoadedContext(null));
 			}		
 		}
 				
