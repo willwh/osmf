@@ -126,7 +126,27 @@ package org.osmf.manifest
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var startTime:Date;
+		
+		/**
+		 * The set of different bootstrap information objects associated with this manifest.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var bootstrapInfos:Vector.<BootstrapInfo> = new Vector.<BootstrapInfo>();
 			
+		/**
+		 * The set of different |AddionalHeader objects associated with this manifest.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var drmAdditionalHeaders:Vector.<DRMAdditionalHeader> = new Vector.<DRMAdditionalHeader>();
+
 		/**
 		 * The set of different bitrate streams associated with this media.
 		 *  

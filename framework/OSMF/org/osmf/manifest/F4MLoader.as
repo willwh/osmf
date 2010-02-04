@@ -157,10 +157,10 @@ package org.osmf.manifest
 				
 				if (manifest != null)
 				{
-					for each (var item:Media in manifest.media)
+					for each (var item:DRMAdditionalHeader in manifest.drmAdditionalHeaders)
 					{										
 						// DRM Metadata  - we may make this load on demand in the future.					
-						if (item.drmAdditionalHeaderURL != null)
+						if (item.url != null)
 						{		
 							function completionCallback(success:Boolean):void
 							{
@@ -219,7 +219,7 @@ package org.osmf.manifest
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
 		}
 		
-		private function loadAdditionalHeader(item:Media, completionCallback:Function, onError:Function):void
+		private function loadAdditionalHeader(item:DRMAdditionalHeader, completionCallback:Function, onError:Function):void
 		{
 			var drmLoader:URLLoader = new URLLoader();
 			drmLoader.dataFormat = URLLoaderDataFormat.BINARY;
@@ -232,11 +232,11 @@ package org.osmf.manifest
 				event.target.removeEventListener(Event.COMPLETE, onDRMLoadComplete);
 				event.target.removeEventListener(IOErrorEvent.IO_ERROR, onError);
 				event.target.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-				item.drmAdditionalHeader = URLLoader(event.target).data;
+				item.data = URLLoader(event.target).data;
 				completionCallback(true);
 			}
 			
-			drmLoader.load(new URLRequest(item.drmAdditionalHeaderURL.rawUrl));
+			drmLoader.load(new URLRequest(item.url.rawUrl));
 		}	
 			
 		private function getRootUrl(url:URL):URL

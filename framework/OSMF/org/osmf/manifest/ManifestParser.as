@@ -122,7 +122,7 @@ package org.osmf.manifest
 			
 			for each (var data:XML in root.xmlns::drmAdditionalHeader)
 			{
-				parseDRMAdditionalHeader(data, manifest.media, baseUrl);
+				parseDRMAdditionalHeader(data, manifest.media, baseUrl, manifest);
 			}	
 			
 			// Bootstrap	
@@ -158,7 +158,7 @@ package org.osmf.manifest
 				
 			if (value.attribute('drmAdditionalHeaderId').length() > 0)
 			{
-				media.drmAdditionalHeaderId = value.@drmAdditionalHeaderId;
+				media.drmAdditionalHeader.id = value.@drmAdditionalHeaderId;
 			}
 			
 			if (value.attribute('bootstrapInfoId').length() > 0)
@@ -186,16 +186,16 @@ package org.osmf.manifest
 			return media;
 		}
 		
-		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:URL):void
+		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:URL, manifest:Manifest):void
 		{
-			var id:String = null;
 			var url:URL = null;
-			var data:ByteArray;
-			var media:Media;	
+			var media:Media;
+			
+			var drmAdditionalHeader:DRMAdditionalHeader = new DRMAdditionalHeader();	
 			
 			if (value.attribute("id").length() > 0)
 			{
-				id = value.@id;
+				drmAdditionalHeader.id = value.@id; 
 			}
 			
 			if (value.attribute("url").length() > 0)
@@ -205,27 +205,23 @@ package org.osmf.manifest
 				{
 					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
 				}
+				drmAdditionalHeader.url = url;
 			}
 			else
 			{			
 				var metadata:String = value.text();
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(metadata);
-				data = decoder.drain();
+				drmAdditionalHeader.data = decoder.drain();
 			}
+			
+			manifest.drmAdditionalHeaders.push(drmAdditionalHeader);
 								
 			for each (media in allMedia)
 			{
-				if (media.drmAdditionalHeaderId == id)
+				if (media.drmAdditionalHeader.id == drmAdditionalHeader.id)
 				{
-					if (url != null)
-					{
-						media.drmAdditionalHeaderURL = url;
-					}
-					else
-					{
-						media.drmAdditionalHeader = data;
-					}
+					media.drmAdditionalHeader = drmAdditionalHeader;					
 				}
 			}
 		}		
@@ -386,8 +382,11 @@ package org.osmf.manifest
 				if (media.drmAdditionalHeader != null)
 				{					
 					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
-					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader);
-					drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader));
+					if (Media(value.media[0]).drmAdditionalHeader != null && Media(value.media[0]).drmAdditionalHeader.data != null)
+					{
+						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader.data);
+						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data));
+					}
 					resource.metadata.addFacet(drmFacet);
 				}
 			}
@@ -424,8 +423,11 @@ package org.osmf.manifest
 							drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 							dynResource.metadata.addFacet(drmFacet);
 						}						
-						drmFacet.addValue(new ObjectIdentifier(item), extractDRMMetadata(media.drmAdditionalHeader));	
-						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader); 						
+						if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
+						{
+							drmFacet.addValue(new ObjectIdentifier(item), extractDRMMetadata(media.drmAdditionalHeader.data));	
+							drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader.data);
+						} 						
 					}
 					
 					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.
