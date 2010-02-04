@@ -252,7 +252,7 @@ package org.osmf
 			addTestSuite(TestDynamicStreamingResource);
 			
 			addTestSuite(TestDynamicStreamingNetLoader);
-			addTestSuite(TestDynamicNetStream);
+			addTestSuite(TestNetStreamSwitchManager);
 			addTestSuite(TestNetStreamDynamicStreamTrait);
 			
 			// HTTP Streaming

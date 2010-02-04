@@ -60,7 +60,6 @@ package org.osmf.video
 	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
-	import org.osmf.net.dynamicstreaming.DynamicNetStream;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
@@ -379,7 +378,6 @@ package org.osmf.video
 				{						
 					drmTrait.inlineDRMFailed(new MediaError(event.errorID));
 				}
-						
 			}	
 			
 			private function onMetadataAuth(event:DRMEvent):void
@@ -411,17 +409,19 @@ package org.osmf.video
 	  		}
 	    	
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-			if (dsResource != null)
+			if (dsResource != null && context.switchManager != null)
 			{
+				// TODO: Merge the two DynamicStreamTraits into one.  Remove the HTTP-specific
+				// lines.
 				if (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(dsResource) != null)
 				{
 					addTrait(MediaTraitType.DYNAMIC_STREAM, new HTTPStreamingNetStreamDynamicStreamTrait(stream as HTTPNetStream, dsResource));
 				}
 				else
 				{
-					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dsResource));
+					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream, context.switchManager, dsResource));
 				}
-			}	    	
+			}
 		}
 		
 		/**

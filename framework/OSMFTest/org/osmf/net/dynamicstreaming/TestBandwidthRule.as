@@ -21,13 +21,28 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import flash.net.NetConnection;
+	
 	import flexunit.framework.TestCase;
+	
+	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.utils.NetFactory;
 
 	public class TestBandwidthRule extends TestCase
 	{
+		override public function setUp():void
+		{
+			super.setUp();
+
+			netFactory = new NetFactory();
+		}
+
 		public function testGetNewIndex():void
 		{
-			var metrics:MockNetStreamMetrics = new MockNetStreamMetrics(null);
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			
+			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
 			
 			var bwRule:InsufficientBandwidthRule = new InsufficientBandwidthRule(metrics);
 			
@@ -67,5 +82,7 @@ package org.osmf.net.dynamicstreaming
 			result = bwRule.getNewIndex();
 			assertEquals(-1, result);
 		}
+		
+		private var netFactory:NetFactory;
 	}
 }

@@ -37,6 +37,7 @@ package org.osmf.net
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MimeTypes;
+	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -256,6 +257,18 @@ package org.osmf.net
 		}
 
 		/**
+		 * The factory function for creating a NetStreamSwitchManager.  Allows third party plugins to
+		 * create custom switch managers.
+		 * 
+		 * Returns null if multi bitrate switching is not enabled for the NetStream returned by
+		 * createNetStream.
+		 **/
+		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		{
+			return null;
+		}
+
+		/**
 		 *  Function for creating a NetConnectionFactory  
 		 *
 		 *  @return An NetConnectionFactory
@@ -283,8 +296,9 @@ package org.osmf.net
 		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, shareable:Boolean = false, factory:NetConnectionFactory = null):void
 		{
 			var stream:NetStream = createNetStream(connection, loadTrait);				
-			stream.client = new NetClient();				
-			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, shareable, factory, loadTrait.resource as URLResource));		
+			stream.client = new NetClient();
+			var switchManager:NetStreamSwitchManager = createNetStreamSwitchManager(connection, stream, loadTrait);
+			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, switchManager, shareable, factory, loadTrait.resource as URLResource));		
 		}	
 		
 		/**

@@ -63,7 +63,7 @@ package org.osmf.net.dynamicstreaming
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return netFactory.createNetLoader();
+			return netFactory.createDynamicStreamingNetLoader();
 		}
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
@@ -123,11 +123,6 @@ package org.osmf.net.dynamicstreaming
 					   error.errorID == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
 		}
 		
-		override protected function createNetFactory():NetFactory
-		{
-			return new DynamicNetFactory();
-		}
-
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.

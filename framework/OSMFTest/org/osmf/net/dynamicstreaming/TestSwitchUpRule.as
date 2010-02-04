@@ -21,13 +21,22 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import flash.net.NetConnection;
+	
 	import flexunit.framework.TestCase;
+	
+	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.utils.NetFactory;
 
 	public class TestSwitchUpRule extends TestCase
 	{
 		public function testGetNewIndex():void
 		{
-			var metrics:MockNetStreamMetrics = new MockNetStreamMetrics(null);
+			var netFactory:NetFactory = new NetFactory();
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			
+			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
 			
 			var suRule:SufficientBandwidthRule = new SufficientBandwidthRule(metrics);
 			

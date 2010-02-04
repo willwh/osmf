@@ -1,0 +1,274 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+package org.osmf.net.dynamicstreaming
+{
+	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.NetStatusEvent;
+	import flash.net.NetConnection;
+	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
+	
+	import flexunit.framework.TestCase;
+	
+	import org.osmf.net.NetClient;
+	import org.osmf.net.NetStreamCodes;
+	import org.osmf.netmocker.MockNetStream;
+	import org.osmf.utils.DynamicNetStreamSwitchManager;
+	import org.osmf.utils.DynamicSwitchingRule;
+	import org.osmf.utils.NetFactory;
+	import org.osmf.utils.URL;
+	
+	public class TestNetStreamSwitchManager extends TestCase
+	{
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			eventDispatcher = new EventDispatcher();
+			
+			dsResource = new DynamicStreamingResource(new URL("rtmp://www.example.com/ondemand"));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream_500kbps", 500));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream_800kbps", 800));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream_3000kbps", 3000));
+			
+			netFactory = new NetFactory();
+			
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			stream = netFactory.createNetStream(connection);
+			stream.client = new NetClient();
+			
+			if (stream is MockNetStream)
+			{
+				(stream as MockNetStream).expectedDuration = 2;
+			}
+
+			switchManager = new DynamicNetStreamSwitchManager(connection, stream, dsResource);
+		}
+		
+		override public function tearDown():void
+		{
+			super.tearDown();
+			
+			dsResource = null;
+			switchManager = null;
+			netFactory = null;
+			eventDispatcher = null;
+			stream.close();
+			stream = null;
+		}
+		
+		public function testMaxAllowedIndexToWithInvalidValue():void
+		{
+			try
+			{
+				switchManager.maxAllowedIndex = 5;
+				
+				fail();
+			}
+			catch (e:RangeError)
+			{
+			}
+		}
+
+		
+		public function testSwitchTo():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			
+			assertTrue(switchManager.autoSwitch);
+			
+			stream.addEventListener(NetStatusEvent.NET_STATUS, onTestSwitchTo1);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestSwitchTo2);
+			
+			switchManager.autoSwitch = false;
+			
+			playStream();
+			switchManager.switchTo(2);
+		}
+
+		private function onTestSwitchTo1(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION)
+			{
+				assertTrue(switchManager.currentIndex == 0);
+			}
+		}
+
+		private function onTestSwitchTo2(info:Object):void
+		{
+			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				assertTrue(switchManager.currentIndex == 2);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
+		public function testSwitchToWithInvalidParams():void
+		{
+			// Switching when autoSwitch is true is illegal.
+			switchManager.autoSwitch = true;
+			try
+			{
+				switchManager.switchTo(2);
+				
+				fail();
+			}
+			catch (e:IllegalOperationError)
+			{
+			}
+			
+			// Switching to too high an index is illegal.
+			switchManager.autoSwitch = false;
+			try
+			{
+				switchManager.switchTo(100);
+				
+				fail();
+			}
+			catch (e:RangeError)
+			{
+			}
+			
+			// Switching to a valid index but one that's above
+			// maxAllowedIndex is illegal.
+			switchManager.maxAllowedIndex = 1; 
+			try
+			{
+				switchManager.switchTo(2);
+				
+				fail();
+			}
+			catch (e:RangeError)
+			{
+			}
+		}
+		
+		public function testAutoSwitchWithNoSwitch():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			
+			assertTrue(switchManager.autoSwitch);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithNoSwitch);
+
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			switchManager.addRule(switchingRule);
+			
+			playStream(1);
+		}
+		
+		private function onTestAutoSwitchWithNoSwitch(info:Object):void
+		{
+			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				// There should be no switch.
+				fail();
+			}
+			else if (info.code == NetStreamCodes.NETSTREAM_PLAY_COMPLETE)
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+
+		public function testAutoSwitchWithSwitchDown():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			
+			assertTrue(switchManager.autoSwitch);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchDown);
+			
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			switchManager.addRule(switchingRule);
+			
+			playStream(2);
+			
+			// Suggest a down-switch.
+			switchingRule.newIndex = 1;
+		}
+		
+		private function onTestAutoSwitchWithSwitchDown(info:Object):void
+		{
+			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				assertTrue(switchManager.currentIndex == 1);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+
+		public function testAutoSwitchWithSwitchUp():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			
+			assertTrue(switchManager.autoSwitch);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
+			
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			switchManager.addRule(switchingRule);
+			
+			playStream(1);
+			
+			// Suggest an up-switch.
+			switchingRule.newIndex = 2;
+		}
+		
+		private function onTestAutoSwitchWithSwitchUp(info:Object):void
+		{
+			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				assertTrue(switchManager.currentIndex == 2);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is received.
+		}
+		
+		private function playStream(index:int=0):void
+		{
+			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
+
+			nso.start = -2;
+			nso.len = -1;
+			nso.streamName = dsResource.streamItems[index].streamName;
+			nso.transition = NetStreamPlayTransitions.RESET;
+
+			stream.play2(nso);
+		}
+		
+		private static const ASYNC_DELAY:Number = 90000;
+
+		private var eventDispatcher:EventDispatcher;
+		private var netFactory:NetFactory;
+		private var switchManager:DynamicNetStreamSwitchManager;
+		private var stream:NetStream;
+		private var dsResource:DynamicStreamingResource;
+	}
+}

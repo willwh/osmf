@@ -25,6 +25,8 @@ package org.osmf.net
 	
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.MediaError;
@@ -97,6 +99,8 @@ package org.osmf.net
 		{
 			if (newPlayState == PlayState.PLAYING)
 			{
+				var playArgs:Object;
+				
 				if (streamStarted)
 				{				
 					netStream.resume();						
@@ -109,13 +113,25 @@ package org.osmf.net
 				// base NetStream API (play2).
 				else if (urlResource is DynamicStreamingResource)
 				{
-					doPlay(urlResource);
+					var dsResource:DynamicStreamingResource = urlResource as DynamicStreamingResource;
+					var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
+
+					playArgs = NetStreamUtils.getPlayArgsForResource(urlResource);
+
+					nso.start = playArgs.start;
+					nso.len = playArgs.len;
+					nso.streamName = dsResource.streamItems[dsResource.initialIndex].streamName;
+					nso.transition = NetStreamPlayTransitions.RESET;
+					
+					doPlay2(nso);
 				}
 				else if (urlResource != null) 
 				{
 					// Map the resource to the NetStream.play arguments.
 					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url);
-					var playArgs:Object = NetStreamUtils.getPlayArgsForResource(urlResource);
+					
+					playArgs = NetStreamUtils.getPlayArgsForResource(urlResource);
+					
 					var startTime:Number = playArgs.start;
 					var len:Number = playArgs.len;
 					
@@ -169,7 +185,7 @@ package org.osmf.net
 			}
 		}
 
-		protected function doPlay(...args):void
+		private function doPlay(...args):void
 		{
 			try
 			{
@@ -198,6 +214,13 @@ package org.osmf.net
 						)
 					);
 			}
+		}
+		
+		private function doPlay2(nspo:NetStreamPlayOptions):void
+		{
+			netStream.play2(nspo);
+				
+			streamStarted = true;
 		}
 		
 		private function doPlayHTTPStream():void

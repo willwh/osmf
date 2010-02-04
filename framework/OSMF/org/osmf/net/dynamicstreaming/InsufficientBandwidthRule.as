@@ -55,7 +55,7 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor
 		 * 
-		 * @param nsMetrics A metrics provider which implements the INetStreamMetrics interface
+		 * @param metrics The provider of NetStream metrics.
 		 * @param safteyMultiple A multiplier that is used when the stream bitrate is compared against available
 		 * bandwidth. The stream bitrate is multiplied by this amount. The default is 1.15.
 		 *  
@@ -64,9 +64,10 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function InsufficientBandwidthRule(nsMetrics:INetStreamMetrics, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
+		public function InsufficientBandwidthRule(metrics:MetricsProvider, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
 		{
-			super(nsMetrics)
+			super(metrics);
+			
 			_safetyMultiple = safetyMultiple;
 		}
 

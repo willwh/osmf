@@ -27,6 +27,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamUtils;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
@@ -56,18 +57,39 @@ package org.osmf.net.dynamicstreaming
 		{
 			super(allowConnectionSharing, factory);
 		}
+		
+		/**
+		 * @private
+		 */
+		override public function canHandleResource(resource:MediaResourceBase):Boolean
+		{
+			// We can handle DynamicStreamingResources, or anything the base class
+			// can handle.
+			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			return 		(	dsResource != null
+						&& 	NetStreamUtils.isRTMPStream(dsResource.host)
+						)
+					||  super.canHandleResource(resource);
+		}
 				
 		/**
-		 * Overridden to allow the creation of a DynamicNetStream object.
+		 * Overridden to allow the creation of a NetStreamSwitchManager object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
-		{			
-			return new DynamicNetStream(connection);
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		{
+			// Only generate the switching manager if the resource is truly
+			// switchable.
+			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
+			if (dsResource != null)
+			{
+				return new NetStreamSwitchManager(connection, netStream, dsResource);
+			}
+			return null;
 		}
 	}
 }

@@ -1103,11 +1103,7 @@ package org.osmf.media
 					else if (eventCount == 2)
 					{
 						assertTrue(mediaPlayer.autoDynamicStreamSwitch == false);
-						// TODO: Fix this, then reenable.  For some reason
-						// MockDynamicNetStream isn't dispatching the correct
-						// series of events.
-						//assertTrue(mediaPlayer.currentDynamicStreamIndex == 1);
-						assertTrue(mediaPlayer.currentDynamicStreamIndex == 0);
+						assertTrue(mediaPlayer.currentDynamicStreamIndex == 1);
 						assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == 2);
 						assertTrue(mediaPlayer.dynamicStreamSwitching == false);
 						

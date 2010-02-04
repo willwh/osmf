@@ -35,7 +35,7 @@ package org.osmf.net.dynamicstreaming
 		
 	/**
 	 * The purpose of the MetricsProvider class is to provide run-time metrics to the switching rules. It 
-	 * makes use of the metrics offered by netstream.info, but more importantly it calculates running averages, which we feel
+	 * makes use of the metrics offered by NetStream.info, but more importantly it calculates running averages, which we feel
 	 * are more robust metrics on which to make switching decisions. It's goal is to be the one-stop shop for all the info you
 	 * need about the health of the stream.
 	 *  
@@ -44,7 +44,7 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MetricsProvider extends EventDispatcher implements INetStreamMetrics
+	public class MetricsProvider extends EventDispatcher
 	{		
 		/**
 		 * Constructor
@@ -63,12 +63,13 @@ package org.osmf.net.dynamicstreaming
 		public function MetricsProvider(ns:NetStream)
 		{
 			super(null);
+			
 			_frameDropRate = 0;
 			_reachedTargetBufferFull = false;
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFrameRate = 0;
-			_optimizeForLivebandwidthEstimate = false;
+			_optimizeForLiveBandwidthEstimate = false;
 			_avgMaxBitrateArray = new Array();
 			_avgDroppedFrameRateArray = new Array();
 			_enabled = true;
@@ -113,7 +114,7 @@ package org.osmf.net.dynamicstreaming
 		}
 				
 		/**
-		 * The current stream item index.
+		 * The current stream index.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -131,7 +132,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the maximum index value 
+		 * The maximum index value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -175,7 +176,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the current bufferlength of the NetStream
+		 * The current buffer length of the NetStream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -188,7 +189,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the current bufferTime of the NetStream
+		 * The current buffer time of the NetStream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -231,18 +232,18 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get optimizeForLivebandwidthEstimate ():Boolean
+		public function get optimizeForLiveBandwidthEstimate ():Boolean
 		{
-			return _optimizeForLivebandwidthEstimate 
+			return _optimizeForLiveBandwidthEstimate; 
 		}
 		
-		public function set optimizeForLivebandwidthEstimate (optimizeForLivebandwidthEstimate :Boolean):void 
+		public function set optimizeForLiveBandwidthEstimate(value:Boolean):void 
 		{
-			_optimizeForLivebandwidthEstimate  = optimizeForLivebandwidthEstimate ;
+			_optimizeForLiveBandwidthEstimate = value;
 		}
 		
 		/**
-		 * Returns the expected frame rate for this NetStream. 
+		 * The expected frame rate for this NetStream. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -255,7 +256,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the frame drop rate calculated over the last interval.
+		 * The frame drop rate calculated over the last interval.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -268,7 +269,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the average frame-drop rate
+		 * The average frame-drop rate.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -282,7 +283,7 @@ package org.osmf.net.dynamicstreaming
 		
 		
 		/**
-		 * Returns the last maximum bandwidth measurement, in kbps
+		 * The last maximum bandwidth measurement, in kbps
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -295,7 +296,7 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the average max bandwidth value, in kbps
+		 * The average max bandwidth value, in kbps
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -349,6 +350,9 @@ package org.osmf.net.dynamicstreaming
 			_timer.stop();
 		}
 		
+		// Internals
+		//
+		
 		private function netStatus(e:NetStatusEvent):void 
 		{
 			switch (e.info.code) 
@@ -401,7 +405,7 @@ package org.osmf.net.dynamicstreaming
 					peakMaxBitrate = _avgMaxBitrateArray[b] > peakMaxBitrate ? _avgMaxBitrateArray[b]: peakMaxBitrate;
 				}
 				
-				_avgMaxBitrate = _avgMaxBitrateArray.length < DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE ? 0:_optimizeForLivebandwidthEstimate ? peakMaxBitrate:totalMaxBitrate/_avgMaxBitrateArray.length;
+				_avgMaxBitrate = _avgMaxBitrateArray.length < DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE ? 0 : _optimizeForLiveBandwidthEstimate ? peakMaxBitrate:totalMaxBitrate/_avgMaxBitrateArray.length;
 				
 				// Estimate max (true) framerate
 				_maxFrameRate = _ns.currentFPS > _maxFrameRate ? _ns.currentFPS:_maxFrameRate;
@@ -465,7 +469,7 @@ package org.osmf.net.dynamicstreaming
 		private var _dsResource:DynamicStreamingResource;
 		private var _targetBufferTime:Number;
 		private var _enabled:Boolean;
-		private var _optimizeForLivebandwidthEstimate:Boolean;
+		private var _optimizeForLiveBandwidthEstimate:Boolean;
 		
 		private var _qualityRating:Number;
 		

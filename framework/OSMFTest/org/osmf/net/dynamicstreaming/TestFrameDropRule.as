@@ -22,19 +22,24 @@
 package org.osmf.net.dynamicstreaming
 {
 	import flash.net.NetConnection;
+	import flash.net.NetStream;
 	
 	import flexunit.framework.TestCase;
+	
+	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.utils.NetFactory;
 
 	public class TestFrameDropRule extends TestCase
 	{
 		public function testGetNewIndex():void
 		{
-			var nc:NetConnection = new NetConnection();
-			nc.connect(null);
+			var netFactory:NetFactory = new NetFactory();
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
 			
-			var ns:DynamicNetStream = new DynamicNetStream(nc);
+			var ns:NetStream = netFactory.createNetStream(connection);
 			
-			var metrics:MockNetStreamMetrics = new MockNetStreamMetrics(ns);
+			var metrics:MockMetricsProvider = new MockMetricsProvider(ns);
 			
 			var fdRule:DroppedFramesRule = new DroppedFramesRule(metrics);
 			
@@ -77,11 +82,13 @@ package org.osmf.net.dynamicstreaming
 			result = fdRule.getNewIndex();
 			assertEquals(0, result);
 			
-			// Test droppping lots of frames
+			// Test dropping lots of frames
 			metrics.currentIndex = 3;
 			metrics.averageDroppedFPS = 40;
 			result = fdRule.getNewIndex();
 			assertEquals(0, result);
+			
+			// TODO: Add tests for the index locking behavior.
 		}		
 	}
 }

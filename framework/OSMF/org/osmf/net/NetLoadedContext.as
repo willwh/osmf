@@ -21,13 +21,13 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-
 package org.osmf.net
 {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
 	import org.osmf.media.URLResource;
+	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.traits.ILoadedContext;
 
 	[ExcludeClass]
@@ -55,15 +55,17 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function NetLoadedContext(	connection:NetConnection,
-											stream:NetStream,
-											shareable:Boolean = false,
-											netConnectionFactory:NetConnectionFactory = null,
-											resource:URLResource = null
+		public function NetLoadedContext( connection:NetConnection
+										, stream:NetStream
+										, switchManager:NetStreamSwitchManager = null
+										, shareable:Boolean = false
+										, netConnectionFactory:NetConnectionFactory = null
+										, resource:URLResource = null
 										)
 		{
 			_connection = connection;
 			_stream = stream;
+			_switchManager = switchManager;
 			_shareable = shareable;
 			_netConnectionFactory = netConnectionFactory;
 			_resource = resource;
@@ -96,6 +98,20 @@ package org.osmf.net
 	    {	   	
 	   		return _stream;
 	   	}
+
+        /**
+		 * Manager class for switching between different MBR renditions using
+		 * a NetStream.  Null if MBR switching is not enabled for the NetStream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+	    public function get switchManager():NetStreamSwitchManager
+	    {	   	
+	   		return _switchManager;
+	   	}
 	   	
 	   	/**
 		 * The NetConnectionFactory associated with the NetConnection.
@@ -114,7 +130,7 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-		 * The URLResource used to generate the NetConnection
+		 * The IURLResource used to generate the NetConnection
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -142,6 +158,7 @@ package org.osmf.net
 
 	   	private var _stream:NetStream;
 	   	private var _connection:NetConnection;
+	   	private var _switchManager:NetStreamSwitchManager;
 	   	private var _netConnectionFactory:NetConnectionFactory;
 	   	private var _resource:URLResource;
 	   	private var _shareable:Boolean;

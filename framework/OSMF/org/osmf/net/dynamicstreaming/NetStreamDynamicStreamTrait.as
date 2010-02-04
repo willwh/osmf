@@ -24,8 +24,10 @@
 package org.osmf.net.dynamicstreaming
 {
 	import flash.events.NetStatusEvent;
+	import flash.net.NetStream;
 	
 	import org.osmf.events.DynamicStreamEvent;
+	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.utils.OSMFStrings;
@@ -43,7 +45,8 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param netStream The DynamicNetStream object the class will work with.
+		 * @param netStream The NetStream object the class will work with.
+		 * @param switchingManager The NetStreamSwitchingManager which will perform MBR switches.
 		 * @param dsResource The DynamicStreamingResource the class will use.
 		 *  
 		 *  @langversion 3.0
@@ -51,15 +54,22 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetStreamDynamicStreamTrait(netStream:DynamicNetStream, dsResource:DynamicStreamingResource)
+		public function NetStreamDynamicStreamTrait(netStream:NetStream, switchManager:NetStreamSwitchManager, dsResource:DynamicStreamingResource)
 		{
-			super(netStream.autoSwitch, netStream.renderingIndex, dsResource.streamItems.length);	
+			super(switchManager.autoSwitch, switchManager.currentIndex, dsResource.streamItems.length);	
 			
 			this.netStream = netStream;
+			this.switchManager = switchManager;
 			this.dsResource = dsResource;
 									
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			netStream.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onNetStreamSwitchingChange);
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+		}
+		
+		override public function dispose():void
+		{
+			netStream = null;
+			switchManager = null;
 		}
 		
 		/**
@@ -98,7 +108,7 @@ package org.osmf.net.dynamicstreaming
 			
 			if (switching && !netStreamIsSwitching)
 			{
-				netStream.switchTo(indexToSwitchTo);
+				switchManager.switchTo(indexToSwitchTo);
 			}
 		}
 			
@@ -107,7 +117,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		override protected function autoSwitchChangeStart(value:Boolean):void
 		{
-			netStream.autoSwitch = value;
+			switchManager.autoSwitch = value;
 		}
 		
 		/**
@@ -115,48 +125,44 @@ package org.osmf.net.dynamicstreaming
 		 */ 
 		override protected function maxAllowedIndexChangeStart(value:int):void
 		{
-			netStream.maxAllowedIndex = value;
+			switchManager.maxAllowedIndex = value;
 		}
 						
 		private function onNetStatus(event:NetStatusEvent):void
 		{			
-			if (switching)
+			switch (event.info.code)
 			{
-				switch (event.info.code) 
-				{
-					case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
-						setSwitching(false, currentIndex);					
-						break;
-				}
-			}			
-		}
-		
-		private function onNetStreamSwitchingChange(event:DynamicStreamEvent):void
-		{
-			if (event.type == DynamicStreamEvent.SWITCHING_CHANGE)
-			{
-				// When a switch finishes, make sure our current index and switching
-				// state reflect the changes to the NetStream.
-				if (event.switching == false)
-				{
-					setSwitching(false, netStream.renderingIndex);
-				}
-				else
-				{
+				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					// This switch is driven by the NetStream, we set a member
 					// variable so that we don't assume it's being requested by
 					// the client (and thus trigger a second switch).
 					netStreamIsSwitching = true;
 					
 					// TODO: Fix the index, this is the wrong value.
-					setSwitching(true, netStream.renderingIndex);
+					setSwitching(true, switchManager.currentIndex);
 					
-					netStreamIsSwitching = false;
-				}
-			}
-		}				
+					netStreamIsSwitching = false;		
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
+					setSwitching(false, currentIndex);					
+					break;
+			}			
+		}
 		
-		private var netStream:DynamicNetStream;
+		private function onPlayStatus(event:Object):void
+		{
+			switch (event.code)
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
+					// When a switch finishes, make sure our current index and
+					// switching state reflect the changes to the NetStream.
+					setSwitching(false, switchManager.currentIndex);
+					break;
+			}
+		}
+		
+		private var netStream:NetStream;
+		private var switchManager:NetStreamSwitchManager;
 		private var netStreamIsSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
 		private var indexToSwitchTo:int;	

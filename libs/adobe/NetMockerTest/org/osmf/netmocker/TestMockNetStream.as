@@ -24,8 +24,6 @@ package org.osmf.netmocker
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.NetStatusEvent;
-	import flash.net.NetConnection;
-	import flash.net.NetStream;
 	
 	import flexunit.framework.TestCase;
 	
@@ -41,6 +39,7 @@ package org.osmf.netmocker
 			netConnection = new MockNetConnection();
 			netConnection.connect(null);
 			netStream = new MockNetStream(netConnection);
+			netStream.client = new NetClient();
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, netStatusEventHandler);
 			netStatusEvents = new Array();
 			eventDispatcher = new EventDispatcher();

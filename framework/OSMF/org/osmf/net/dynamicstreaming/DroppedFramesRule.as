@@ -22,12 +22,14 @@
 
 package org.osmf.net.dynamicstreaming
 {
+	import flash.utils.getTimer;
+	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 
 	/**
 	 * Switching rule for frame drop detection. Monitors frame drops using the data 
-	 * provided by the INetStreamMetrics object provided to the constructor and
+	 * provided by the MetricsProvider object provided to the constructor and
 	 * recommends switching down if necessary.
 	 *  
 	 *  @langversion 3.0
@@ -44,7 +46,7 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor.
 		 * 
-		 * @param nsMetrics A metrics provider which implements the INetStreamMetrics interface
+		 * @param metrics The provider of NetStream metrics.
 		 * @param dropOne The number of frame drops that need to occur to cause a switch down by one index.
 		 * The default is 10 frames per second.
 		 * @param dropTwo The number of frame drops that need to occur to cause a switch down by two indices.
@@ -57,15 +59,19 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function DroppedFramesRule(nsMetrics:INetStreamMetrics, dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
+		public function DroppedFramesRule(metrics:MetricsProvider, dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
 										dropPanic:int=PANIC_FRAMEDROP_FPS)
 		{
-			super(nsMetrics);
+			super(metrics);
+			
 			_dropOneFrameDropFPS = dropOne;
 			_dropTwoFrameDropFPS = dropTwo;
 			_panicFrameDropFPS = dropPanic;
+			
+			lastLockTime = 0;
+			lockLevel = int.MAX_VALUE;
 		}
-
+		
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
@@ -82,8 +88,8 @@ package org.osmf.net.dynamicstreaming
         	
         	if (metrics.averageDroppedFPS > _panicFrameDropFPS) 
         	{
-				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _panicFrameDropFPS;
         		newIndex = 0;
+				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _panicFrameDropFPS;
         	} 
         	else if (metrics.averageDroppedFPS > _dropTwoFrameDropFPS) 
         	{
@@ -95,18 +101,21 @@ package org.osmf.net.dynamicstreaming
         		newIndex = metrics.currentIndex -1 < 0 ? 0 : metrics.currentIndex - 1;
 				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _dropOneFrameDropFPS;
         	}
-  				
+  			
         	if (newIndex != -1 && newIndex < metrics.currentIndex) 
         	{
-        		var ns:DynamicNetStream = metrics.netStream as DynamicNetStream;
-        		
-        	 	if (!ns.isDSILocked(metrics.currentIndex)) 
-        	 	{
-        	 		ns.lockDSI(metrics.currentIndex);
-        	 		debug(".getNewIndex() - Frame drop rule locking at index level: " + metrics.currentIndex);
-        	 	}
-        	 	
+        		lockIndex(newIndex);
+ 				       	 	
         	 	updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE, moreDetail);
+			}
+			
+			// If the rule says no change, but we're locked at the current index,
+			// ensure that we stay locked by returning the current index.
+			if (newIndex == -1 && isLocked(metrics.currentIndex))
+			{
+				debug("getNewIndex() - locked at: " + metrics.currentIndex); 
+				
+				newIndex = metrics.currentIndex;
 			}
         	
         	if (newIndex != -1)
@@ -114,9 +123,30 @@ package org.osmf.net.dynamicstreaming
         		debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail); 
         	}
         	
-        	return newIndex;		
+        	return newIndex;
         }
         
+		/**
+		 * Sets the lock level at the provided index. Any item at this index or higher will be
+		 * unavailable until the LOCK_INTERVAL has passed.
+		 */	
+		private function lockIndex(index:int):void 
+		{
+			if (!isLocked(index))
+			{
+				lockLevel = index;
+				lastLockTime = getTimer();
+			}
+		}
+							
+		/**
+		 * Returns true if this index level is currently locked.
+		 */	
+		private function isLocked(index:int):Boolean 
+		{
+			return (index >= lockLevel) && (getTimer() - lastLockTime) < LOCK_INTERVAL;
+		}
+		
 		private function debug(...args):void
 		{
 			CONFIG::LOGGING
@@ -132,7 +162,12 @@ package org.osmf.net.dynamicstreaming
 		private var _dropOneFrameDropFPS:int;
 		private var _dropTwoFrameDropFPS:int;
 		private var _panicFrameDropFPS:int;
-				
+		
+		private var lockLevel:Number;
+		private var lastLockTime:Number;
+
+		private static const LOCK_INTERVAL:Number = 30000;	// Index levels can be locked for 30 seconds
+
 		CONFIG::LOGGING
 		{
 			private var _logger:ILogger;

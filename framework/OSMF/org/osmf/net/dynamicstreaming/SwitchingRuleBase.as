@@ -30,33 +30,48 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class SwitchingRuleBase implements ISwitchingRule
+	public class SwitchingRuleBase
 	{
 		/**
 		 * Constructor.
 		 * 
-		 * @param metrics The INetStreamMetrics implementation the class will use.
+		 * @param metrics The MetricsProvider implementation the class will use.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function SwitchingRuleBase(metrics:INetStreamMetrics)
+		public function SwitchingRuleBase(metrics:MetricsProvider)
 		{
 			_metrics = metrics;
 		}
 
 		/**
-		 * @private
+		 * Returns the index value in the active <code>DynamicStreamingResource</code> to which this 
+		 * heuristics implementation thinks the bitrate should shift.  It's up to the calling function 
+		 * to act on this. This index will range in value from -1 to n-1,where n is the number of bitrate items available.
+		 * A value of -1 means that this rule does not suggest a switch away from the current item. A
+		 * value from 0 to n-1 indicates that the caller should switch to that index immediately.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function getNewIndex():int
 		{
 			return -1;
 		}
-				
+		
 		/**
-		 * @private
+		 * Returns the SwitchingDetail object which contains the detail for why the rule is suggesting 
+		 * the new index.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		public function get detail():SwitchingDetail
 		{
@@ -83,12 +98,16 @@ package org.osmf.net.dynamicstreaming
 			}
 		}
 		
-		protected function get metrics():INetStreamMetrics
+		/**
+		 * The provider of metrics which the rule can use to determine
+		 * whether to suggest a switch.
+		 **/
+		protected function get metrics():MetricsProvider
 		{
 			return _metrics;
 		}
 		
-		private var _metrics:INetStreamMetrics;
+		private var _metrics:MetricsProvider;
 		private var _detail:SwitchingDetail;
 	}
 }

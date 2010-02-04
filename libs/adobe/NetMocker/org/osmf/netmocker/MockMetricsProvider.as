@@ -19,20 +19,25 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.netmocker
 {
 	import flash.net.NetStream;
+	
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.dynamicstreaming.MetricsProvider;
 
-	public class MockNetStreamMetrics implements INetStreamMetrics
+	public class MockMetricsProvider extends MetricsProvider
 	{
-		public function MockNetStreamMetrics(ns:NetStream)
+		public function MockMetricsProvider(ns:NetStream)
 		{
+			super(ns);
+			
 			_frameDropRate = 0;
 			_reachedTargetBufferFull = false;
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFrameRate = 0;
-			_optimizeForLivebandwidthEstimate = false;
+			_optimizeForLiveBandwidthEstimate = false;
 			_avgMaxBitrateArray = new Array();
 			_avgDroppedFrameRateArray = new Array();
 			_enabled = true;
@@ -44,7 +49,7 @@ package org.osmf.net.dynamicstreaming
 			_ns = ns;
 		}
 
-		public function get reachedTargetBufferFull():Boolean
+		override public function get reachedTargetBufferFull():Boolean
 		{
 			return this._reachedTargetBufferFull;
 		}
@@ -54,18 +59,18 @@ package org.osmf.net.dynamicstreaming
 			this._reachedTargetBufferFull = value;
 		}
 		
-		public function get targetBufferTime():Number
+		override public function get targetBufferTime():Number
 		{
 			return this._targetBufferTime;
 		}
 		
-		public function set targetBufferTime(value:Number):void
+		override public function set targetBufferTime(value:Number):void
 		{
 			this._targetBufferTime = value;
 		}
 		
 	
-		public function get expectedFPS():Number
+		override public function get expectedFPS():Number
 		{
 			return this._maxFrameRate;
 		}
@@ -75,7 +80,7 @@ package org.osmf.net.dynamicstreaming
 			this._maxFrameRate = value;
 		}
 		
-		public function get droppedFPS():Number
+		override public function get droppedFPS():Number
 		{
 			return this._frameDropRate;
 		}
@@ -85,7 +90,7 @@ package org.osmf.net.dynamicstreaming
 			this._frameDropRate = value;
 		}
 		
-		public function get averageDroppedFPS():Number
+		override public function get averageDroppedFPS():Number
 		{
 			return this._avgDroppedFrameRate;
 		}
@@ -95,7 +100,7 @@ package org.osmf.net.dynamicstreaming
 			this._avgDroppedFrameRate = value;
 		}
 		
-		public function get maxBandwidth():Number
+		override public function get maxBandwidth():Number
 		{
 			return this._lastMaxBitrate;
 		}
@@ -105,7 +110,7 @@ package org.osmf.net.dynamicstreaming
 			this._lastMaxBitrate = value;
 		}
 		
-		public function get averageMaxBandwidth():Number
+		override public function get averageMaxBandwidth():Number
 		{
 			return this._avgMaxBitrate;
 		}
@@ -115,32 +120,32 @@ package org.osmf.net.dynamicstreaming
 			this._avgMaxBitrate = value;
 		}
 		
-		public function get currentIndex():int
+		override public function get currentIndex():int
 		{
 			return this._currentIndex;
 		}
 		
-		public function set currentIndex(value:int):void
+		override public function set currentIndex(value:int):void
 		{
 			this._currentIndex = value;
 		}
 		
-		public function get maxIndex():int
+		override public function get maxIndex():int
 		{
 			return _dsResource.streamItems.length - 1;
 		}
 		
-		public function get dynamicStreamingResource():DynamicStreamingResource
+		override public function get dynamicStreamingResource():DynamicStreamingResource
 		{
 			return this._dsResource;
 		}
 		
-		public function set dynamicStreamingResource(value:DynamicStreamingResource):void
+		override public function set dynamicStreamingResource(value:DynamicStreamingResource):void
 		{
 			this._dsResource = value;
 		}
 		
-		public function get bufferLength():Number
+		override public function get bufferLength():Number
 		{
 			return this._bufferLength;
 		}
@@ -150,7 +155,7 @@ package org.osmf.net.dynamicstreaming
 			this._bufferLength = value;
 		}
 		
-		public function get bufferTime():Number
+		override public function get bufferTime():Number
 		{
 			return this._bufferTime;
 		}
@@ -160,26 +165,26 @@ package org.osmf.net.dynamicstreaming
 			this._bufferTime = value;
 		}
 		
-		public function get netStream():NetStream
+		override public function get netStream():NetStream
 		{
 			return _ns;
 		}
 		
-		public function get optimizeForLivebandwidthEstimate():Boolean
+		override public function get optimizeForLiveBandwidthEstimate():Boolean
 		{
-			return _optimizeForLivebandwidthEstimate;
+			return _optimizeForLiveBandwidthEstimate;
 		}
 		
-		public function set optimizeForLivebandwidthEstimate(value:Boolean):void
+		override public function set optimizeForLiveBandwidthEstimate(value:Boolean):void
 		{
-			_optimizeForLivebandwidthEstimate = value;
+			_optimizeForLiveBandwidthEstimate = value;
 		}
 		
-		public function enable():void
+		override public function enable():void
 		{
 		}
 		
-		public function disable():void
+		override public function disable():void
 		{
 		}
 		
@@ -199,7 +204,7 @@ package org.osmf.net.dynamicstreaming
 		private var _dsResource:DynamicStreamingResource;
 		private var _targetBufferTime:Number;
 		private var _enabled:Boolean;
-		private var _optimizeForLivebandwidthEstimate:Boolean;
+		private var _optimizeForLiveBandwidthEstimate:Boolean;
 		private var _bufferLength:Number;	
 		private var _bufferTime:Number;
 		private var _ns:NetStream;

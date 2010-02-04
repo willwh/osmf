@@ -24,11 +24,13 @@ package org.osmf.netmocker
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	import flash.utils.Timer;
 	
 	import org.osmf.net.NetStreamCodes;
 	
-	public class MockNetStream extends NetStream implements IMockNetStream
+	public class MockNetStream extends NetStream
 	{
 		/**
 		 * Constructor.
@@ -187,33 +189,6 @@ package org.osmf.netmocker
 		
 		override public function play(...arguments):void
 		{
-			if (expectedDuration > 0)
-			{
-				var info:Object = {};
-				if (expectedDuration > 0)
-				{
-					info["duration"] = expectedDuration;
-				}
-				if (expectedWidth > 0)
-				{
-					info["width"] = expectedWidth;
-				}
-				if (expectedHeight > 0)
-				{
-					info["height"] = expectedHeight;
-				}
-				
-				try
-				{
-					client.onMetaData(info);
-				}
-				catch (e:ReferenceError)
-				{
-					// Swallow, there's no such property on the client
-					// and that's OK.
-				}
-			}
-						
 			// The flash player sets the bufferTime to a 0.1 minimum for VOD (http://).
 			if (arguments != null && arguments.length > 0 && arguments[0].toString().substr(0,4) == "http")
 			{
@@ -227,18 +202,31 @@ package org.osmf.netmocker
 				
 				_expectedBytesTotal = 0;
 			}
-			
-			absoluteTimeAtLastPlay = flash.utils.getTimer();
-			playing = true;
-			
-			playheadTimer.start();
 
-			var infos:Array =
-					[ {"code":NetStreamCodes.NETSTREAM_PLAY_RESET, 	"level":LEVEL_STATUS}
-					, {"code":NetStreamCodes.NETSTREAM_PLAY_START, 	"level":LEVEL_STATUS}
-					, {"code":NetStreamCodes.NETSTREAM_BUFFER_FULL,	"level":LEVEL_STATUS}
-					];
-			eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+			commonPlay();
+		}
+
+		override public function play2(nso:NetStreamPlayOptions):void
+		{
+			if (nso.transition == NetStreamPlayTransitions.SWITCH)
+			{
+				var infos:Array =
+						[ {"code":NetStreamCodes.NETSTREAM_PLAY_TRANSITION, "details":nso.streamName, "level":LEVEL_STATUS}
+						];
+				eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+
+				var newTimer:Timer = new Timer(350, 1);
+				switchCompleteTimers.push(newTimer);
+				newTimer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSwitchCompleteMsg);
+				newTimer.start();				
+			}
+			else
+			{
+				isProgressive = false;
+				_expectedBytesTotal = 0;
+
+				commonPlay();
+			}
 		}
 
 		override public function pause():void
@@ -360,8 +348,6 @@ package org.osmf.netmocker
 					{
 						if ((time >= info.time) && (info.time > this.lastFiredCuePointTime))
 						{
-							trace(">>> calling onCuePoint : time="+time+", info.time="+info.time);
-
 							// This will throw a Reference error if onCuePoint is not
 							// implemented on the client object. No reason to eat that
 							// exception here because this is an error. It means the caller
@@ -404,6 +390,56 @@ package org.osmf.netmocker
 			return isNaN(expectedSubclipDuration) ? expectedDuration : expectedSubclipDuration;
 		}
 		
+		private function commonPlay():void
+		{
+			if (expectedDuration > 0)
+			{
+				var info:Object = {};
+				if (expectedDuration > 0)
+				{
+					info["duration"] = expectedDuration;
+				}
+				if (expectedWidth > 0)
+				{
+					info["width"] = expectedWidth;
+				}
+				if (expectedHeight > 0)
+				{
+					info["height"] = expectedHeight;
+				}
+				
+				try
+				{
+					client.onMetaData(info);
+				}
+				catch (e:ReferenceError)
+				{
+					// Swallow, there's no such property on the client
+					// and that's OK.
+				}
+			}
+			
+			absoluteTimeAtLastPlay = flash.utils.getTimer();
+			playing = true;
+			
+			playheadTimer.start();
+			
+			var infos:Array =
+					[ {"code":NetStreamCodes.NETSTREAM_PLAY_RESET, 	"level":LEVEL_STATUS}
+					, {"code":NetStreamCodes.NETSTREAM_PLAY_START, 	"level":LEVEL_STATUS}
+					, {"code":NetStreamCodes.NETSTREAM_BUFFER_FULL,	"level":LEVEL_STATUS}
+					];
+			eventInterceptor.dispatchNetStatusEvents(infos, EVENT_DELAY);
+		}
+		
+		private function sendSwitchCompleteMsg(event:TimerEvent):void
+		{
+			var oldTimer:Timer = switchCompleteTimers.shift();
+			oldTimer.removeEventListener(TimerEvent.TIMER, sendSwitchCompleteMsg);
+			
+			this.client.onPlayStatus({code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE});
+		}		
+
 		private var _connection:NetConnection;
 		private var eventInterceptor:NetStatusEventInterceptor;
 		private var _expectedDuration:Number = 0;
@@ -417,6 +453,7 @@ package org.osmf.netmocker
 		private var lastFiredCuePointTime:int = -1;
 		
 		private var playheadTimer:Timer;
+		private var switchCompleteTimers:Vector.<Timer> = new Vector.<Timer>;
 		
 		private var playing:Boolean = false;
 		private var elapsedTime:Number = 0; // seconds

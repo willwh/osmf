@@ -25,7 +25,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.*;
 	
 	import org.osmf.net.*;
-	import org.osmf.netmocker.MockDynamicNetStream;
+	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestDynamicStreamTrait;
 	import org.osmf.utils.*;
 	
@@ -67,25 +67,25 @@ package org.osmf.net.dynamicstreaming
 			dsr.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));
 			dsr.streamItems.push(new DynamicStreamingItem("stream_3000kbps", 3000));
 			
-			netFactory = new DynamicNetFactory();
+			netFactory = new NetFactory();
 			
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 			stream = netFactory.createNetStream(connection);
 			stream.client = new NetClient();
 			
-			if (stream is MockDynamicNetStream)
+			if (stream is MockNetStream)
 			{
-				(stream as MockDynamicNetStream).expectedDuration = 10;
+				(stream as MockNetStream).expectedDuration = 10;
 			}
 				
 			stream.play(dsr);
-			return new NetStreamDynamicStreamTrait(stream as DynamicNetStream, dsr);
+			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr), dsr);
 		}
 				
 		private static const TIMEOUT:int = 12000;
 		
-		private var netFactory:DynamicNetFactory;
+		private var netFactory:NetFactory;
 		private var stream:NetStream;
 	}
 }

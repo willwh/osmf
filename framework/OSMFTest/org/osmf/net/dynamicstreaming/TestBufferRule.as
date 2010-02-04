@@ -42,8 +42,8 @@ package org.osmf.net.dynamicstreaming
 			super.setUp();
 
 			_eventDispatcher = new EventDispatcher();
-			_netFactory = new DynamicNetFactory();
-			_loader = _netFactory.createNetLoader();
+			_netFactory = new NetFactory();
+			_loader = _netFactory.createDynamicStreamingNetLoader();
 			
 			if (_loader is MockDynamicStreamingNetLoader)
 			{
@@ -64,7 +64,9 @@ package org.osmf.net.dynamicstreaming
 		
 		public function testGetNewIndex():void
 		{
-			_loadTrait =  new LoadTrait(_loader, new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO)));
+			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
+			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
+			_loadTrait =  new LoadTrait(_loader, dsResource);
 			_loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
@@ -85,7 +87,7 @@ package org.osmf.net.dynamicstreaming
 					var stream:NetStream = (loadedContext as NetLoadedContext).stream;
 					assertNotNull(stream);
 					
-					var metrics:MockNetStreamMetrics = new MockNetStreamMetrics(stream);
+					var metrics:MockMetricsProvider = new MockMetricsProvider(stream);
 					_bufferRule = new InsufficientBufferRule(metrics);
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
@@ -143,7 +145,7 @@ package org.osmf.net.dynamicstreaming
 		private static const ASYNC_DELAY:int = 60000;
 		
 		private var _eventDispatcher:EventDispatcher;
-		private var _netFactory:DynamicNetFactory;
+		private var _netFactory:NetFactory;
 		private var _loader:NetLoader;
 		private var _loadTrait:LoadTrait;
 		private var _bufferRule:InsufficientBufferRule;	

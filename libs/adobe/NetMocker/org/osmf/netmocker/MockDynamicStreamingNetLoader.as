@@ -118,7 +118,7 @@ package org.osmf.netmocker
 	     **/
 	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
 	    {
-			var mockNetStream:MockDynamicNetStream = new MockDynamicNetStream(connection);			
+			var mockNetStream:MockNetStream = new MockNetStream(connection);			
 			mockNetStream.client = new NetClient();			
 			mockNetStream.expectedDuration = _netStreamExpectedDuration;
 			mockNetStream.expectedSubclipDuration = _netStreamExpectedSubclipDuration;

@@ -37,7 +37,7 @@ package org.osmf.net.dynamicstreaming
 	 */
 	public class SufficientBandwidthRule extends SwitchingRuleBase
 	{
-		public function SufficientBandwidthRule(nsMetrics:INetStreamMetrics)
+		public function SufficientBandwidthRule(nsMetrics:MetricsProvider)
 		{
 			super(nsMetrics);
 		}

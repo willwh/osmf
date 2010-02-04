@@ -53,7 +53,7 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * Constructor
 		 * 
-		 * @param metrics A metrics provider which implements the INetStreamMetrics interface
+		 * @param metrics The provider of NetStream metrics.
 		 * @param panicBufferLevel A Tunable parameter for this rule. The "panic" buffer level 
 		 * in seconds. This rule watches for the buffer length to fall below this level. The default
 		 * value is 2 seconds.
@@ -63,10 +63,11 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function InsufficientBufferRule(nsMetrics:INetStreamMetrics, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
+		public function InsufficientBufferRule(metrics:MetricsProvider, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
 		{
-			super(nsMetrics);
-			nsMetrics.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
+			super(metrics);
+			
+			metrics.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
 			_panic = false;
 			_panicBufferLevel = panicBufferLevel;
 		}
