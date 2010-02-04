@@ -6,7 +6,6 @@ package org.osmf.composition
 	import flexunit.framework.Assert;
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.drm.DRMAuthenticationMethod;
 	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
@@ -14,6 +13,7 @@ package org.osmf.composition
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDRMTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.drm.DRMAuthenticationMethod;
 	import org.osmf.utils.DynamicTimeTrait;
 
 	public class TestParallelElementDRMTrait extends TestCase
@@ -79,7 +79,7 @@ package org.osmf.composition
 			Assert.assertEquals(trait.authenticationMethod,  "Both");
 			
 			elem2Drm.invokeDrmStateChange(DRMState.INITIALIZING,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.authenticationMethod,  DRMAuthen.USERNAME_AND_PASSWORD);
+			Assert.assertEquals(trait.authenticationMethod,  DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
 			
 			
 			//Mixup drmStates:

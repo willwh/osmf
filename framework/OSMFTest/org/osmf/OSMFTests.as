@@ -61,11 +61,7 @@ package org.osmf
 			NetFactory.neverUseMockObjects = false;
 			
 			// Layout
-			//
-			
-			addTestSuite(TestTraitEventDispatcher);
-			
-			/*
+			//			
 				
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
@@ -324,7 +320,12 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);*/
+			addTestSuite(TestMediaPlayerWithBeaconElement);
+			
+			//TraitEventDispatcher
+			addTestSuite(TestTraitEventDispatcher);
+			
+			
 		}
 	}
 }
