@@ -45,6 +45,7 @@ package org.osmf.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayer extends TestCase
@@ -82,7 +83,7 @@ package org.osmf.media
 			
 			if (this.hasLoadTrait)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				var eventCount:int = 0;
 				
@@ -148,7 +149,7 @@ package org.osmf.media
 			
 			if (this.hasLoadTrait)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				var eventCount:int = 0;
 				var errorCount:int = 0;
@@ -202,7 +203,7 @@ package org.osmf.media
 		
 		public function testVolume():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -222,7 +223,7 @@ package org.osmf.media
 
 		public function testVolumeWithPreset():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			// Assign a volume up front.  This value will take precedence over
 			// any volume inherited from the MediaElement.
@@ -286,7 +287,7 @@ package org.osmf.media
 		
 		public function testMuted():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -306,7 +307,7 @@ package org.osmf.media
 
 		public function testMutedWithPreset():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			// Assign a muted value up front.  This value will take precedence over
 			// any muted value inherited from the MediaElement.
@@ -370,7 +371,7 @@ package org.osmf.media
 		
 		public function testPan():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 
 			if (hasLoadTrait)
 			{
@@ -390,7 +391,7 @@ package org.osmf.media
 
 		public function testPanWithPreset():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 
 			// Assign a pan value up front.  This value will take precedence
 			// over any pan value inherited from the MediaElement.
@@ -454,7 +455,7 @@ package org.osmf.media
 		
 		public function testPlay():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -495,7 +496,7 @@ package org.osmf.media
 		
 		public function testPause():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -586,7 +587,7 @@ package org.osmf.media
 		
 		public function testStop():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -601,7 +602,7 @@ package org.osmf.media
 		
 		public function testStopWithAutoRewind():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			mediaPlayer.autoRewind = true;
 			
@@ -713,7 +714,7 @@ package org.osmf.media
 		
 		public function testSeek():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -811,7 +812,7 @@ package org.osmf.media
 		
 		public function testCurrentTimeWithChangeEvents():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -826,7 +827,7 @@ package org.osmf.media
 		
 		public function testCurrentTimeWithNoChangeEvents():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -918,7 +919,7 @@ package org.osmf.media
 		
 		public function testWidthHeight():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -967,7 +968,7 @@ package org.osmf.media
 		
 		public function testDisplayObject():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -998,7 +999,7 @@ package org.osmf.media
 		
 		public function testBufferTime():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 
 			if (hasLoadTrait)
 			{
@@ -1050,7 +1051,7 @@ package org.osmf.media
 		
 		public function testDynamicStream():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -1144,7 +1145,7 @@ package org.osmf.media
 		
 		public function testLoop():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -1159,7 +1160,7 @@ package org.osmf.media
 		
 		public function testLoopWithAutoRewind():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			mediaPlayer.autoRewind = true;
 			
@@ -1225,7 +1226,7 @@ package org.osmf.media
 		
 		public function testAutoRewind():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -1288,7 +1289,7 @@ package org.osmf.media
 		{
 			if (hasLoadTrait)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 				mediaPlayer.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
@@ -1305,7 +1306,7 @@ package org.osmf.media
 					if (eventCount == 1)
 					{
 						assertTrue(event.state == MediaPlayerState.LOADING);
-					}
+					}				
 					else if (eventCount == 2)
 					{
 						assertTrue(event.state == MediaPlayerState.PLAYING);
@@ -1376,7 +1377,7 @@ package org.osmf.media
 		{
 			if (hasLoadTrait)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				var eventCount:int = 0;
 				
@@ -1445,7 +1446,7 @@ package org.osmf.media
 		
 		public function testBytesLoadedTotal():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			
 			if (hasLoadTrait)
 			{
@@ -1481,7 +1482,7 @@ package org.osmf.media
 		{
 			if (supportsSubclips)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				if (hasLoadTrait)
 				{
@@ -1677,7 +1678,7 @@ package org.osmf.media
 			
 			if (triggerTestCompleteEvent)
 			{
-				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 			}
 
 			var mediaElement:MediaElement = createMediaElement(requestedResource != null ? requestedResource : resourceForMediaElement);
@@ -1710,6 +1711,18 @@ package org.osmf.media
 				}
 			}
 		}
+		
+		private function get testDelay():Number
+		{
+			if (NetFactory.neverUseMockObjects) //Using real NetConnections 
+			{
+				return ASYNC_DELAY;
+			}
+			else //Mocked net connections have smaller tolerances, should fail quicker.
+			{	
+				return MOCKED_ASYNC_DELAY;
+			}
+		}
 
 		private function mustReceiveEvent(event:Event):void
 		{
@@ -1729,6 +1742,8 @@ package org.osmf.media
 		
 		// Large delay to accommodate non-mocked unit tests.
 		private static const ASYNC_DELAY:Number = 53000;
+		// Short delay to accommodate mocked unit tests.
+		private static const MOCKED_ASYNC_DELAY:Number = 25000;
 		
 		private var mediaPlayer:MediaPlayer;
 		private var eventDispatcher:EventDispatcher;

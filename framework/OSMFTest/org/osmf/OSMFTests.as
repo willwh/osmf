@@ -57,13 +57,16 @@ package org.osmf
 		{
 			super(param);
 			
-			// Uncomment this line to run all tests against the network.
-			//NetFactory.neverUseMockObjects = true;
+			// change to true to run all tests against the network.
+			NetFactory.neverUseMockObjects = false;
 			
 			// Layout
 			//
 			
-					
+			addTestSuite(TestTraitEventDispatcher);
+			
+			/*
+				
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
 			addTestSuite(TestLayoutRenderer);
@@ -95,7 +98,7 @@ package org.osmf
 
 			addTestSuite(TestParallelElementWithAudioTrait);
 			addTestSuite(TestParallelElementWithBufferTrait);
-			CONFIG::FLASH_10_1 { addTestSuite(TestParallelElementDRMTrait); }	
+			addTestSuite(TestParallelElementDRMTrait); 
 			addTestSuite(TestParallelElementWithDynamicStreamTrait);
 			addTestSuite(TestParallelElementWithLoadTrait);
 			addTestSuite(TestParallelElementWithPlayTrait);
@@ -105,7 +108,7 @@ package org.osmf
 			
 			addTestSuite(TestSerialElementWithAudioTrait);
 			addTestSuite(TestSerialElementWithBufferTrait);
-			CONFIG::FLASH_10_1 { addTestSuite(TestSerialElementDRMTrait); }	
+			addTestSuite(TestSerialElementDRMTrait);
 			addTestSuite(TestSerialElementWithDynamicStreamTrait);
 			addTestSuite(TestSerialElementWithLoadTrait);
 			addTestSuite(TestSerialElementWithPlayTrait);
@@ -321,7 +324,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
-			addTestSuite(TestMediaPlayerWithBeaconElement);
+			addTestSuite(TestMediaPlayerWithBeaconElement);*/
 		}
 	}
 }

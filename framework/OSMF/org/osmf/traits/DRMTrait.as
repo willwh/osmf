@@ -72,9 +72,11 @@ package org.osmf.traits
 		
 		/**
 		 * The required method of authentication.  Possible values are "anonymous"
-		 * and "usernameAndPassword".  The default is "".  This method should be override by
-		 * subclasses.
-		 *  
+		 * and "usernameAndPassword".  The default is "".  This method should be overriden by
+		 * subclasses.  The DRMAuthentication enumeration contains these values.
+		 * 
+		 * @see org.osmf.drm.DRMAuthenticationMethod 
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5

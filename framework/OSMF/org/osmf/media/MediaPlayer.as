@@ -23,15 +23,13 @@ package org.osmf.media
 {
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.utils.TraitEventDispatcher;
 	   
 	/**
 	 * Dispatched when the <code>duration</code> property of the media has changed.
@@ -423,7 +421,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MediaPlayer extends EventDispatcher
+	public class MediaPlayer extends TraitEventDispatcher
 	{
 		/**
 		 * Constructor.
@@ -456,16 +454,16 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function set media(value:MediaElement):void
-		{
-			if (value != _media)
+		override public function set media(value:MediaElement):void
+		{			
+			if (value != media)
 			{
 				var traitType:String;
-				if (_media != null)
+				if (media != null)
 				{											
 					if (canLoad)
 					{	 
-						var loadTrait:LoadTrait = _media.getTrait(MediaTraitType.LOAD) as LoadTrait;
+						var loadTrait:LoadTrait = media.getTrait(MediaTraitType.LOAD) as LoadTrait;
 						if (loadTrait.loadState == LoadState.READY) // Do a courtesy unload
 						{							
 							loadTrait.unload();
@@ -473,32 +471,32 @@ package org.osmf.media
 					}	
 					setState(MediaPlayerState.UNINITIALIZED);
 					
-					if (_media) //sometimes _media is null here due to unload nulling the element.
+					if (media) //sometimes media is null here due to unload nulling the element.
 					{
-						_media.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-						_media.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-						_media.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
-						for each (traitType in _media.traitTypes)
+						media.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						media.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+						media.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
+						for each (traitType in media.traitTypes)
 						{
 							updateTraitListeners(traitType, false);
 						}
 					}								
 				}	
-				_media = value;
-				if (_media != null)
+				super.media = value;
+				if (media != null)
 				{
-					_media.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);					
-					_media.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-					_media.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
+					media.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);					
+					media.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+					media.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);					
 
 					// If the media cannnot be loaded, then the MediaPlayer's state
 					// should represent the media as already ready.
-					if (_media.hasTrait(MediaTraitType.LOAD) == false)
+					if (media.hasTrait(MediaTraitType.LOAD) == false)
 					{
 						processReadyState();
 					}
 
-					for each (traitType  in _media.traitTypes)
+					for each (traitType  in media.traitTypes)
 					{
 						updateTraitListeners(traitType, true);
 					}
@@ -506,10 +504,6 @@ package org.osmf.media
 			}
 		}
 		
-        public function get media():MediaElement
-        {
-        	return _media;
-        }
             
         /**
 		 * Indicates whether media is returned to the beginning of playback after
@@ -1343,7 +1337,7 @@ package org.osmf.media
 		 */ 
 		public function get authenticationMethod():String
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticationMethod : "";
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticationMethod : "";
 		}
 		
 		/**
@@ -1365,7 +1359,7 @@ package org.osmf.media
 		{
 			if (hasDRM)
 			{
-				DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticate(username, password);
+				DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticate(username, password);
 			}			
 		}
 		
@@ -1386,7 +1380,7 @@ package org.osmf.media
 		{	
 			if (hasDRM)
 			{
-				DRMTrait(_media.getTrait(MediaTraitType.DRM)).authenticateWithToken(token);
+				DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticateWithToken(token);
 			}							
 		}
 		
@@ -1403,7 +1397,7 @@ package org.osmf.media
 		 */
 		public function get drmState():String
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).drmState : "";
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).drmState : "";
 		}  
 
 		/**
@@ -1417,7 +1411,7 @@ package org.osmf.media
 		 */	
 		public function get drmStartDate():Date
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).startDate : null;
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).startDate : null;
 		}
 		
 		/**
@@ -1431,7 +1425,7 @@ package org.osmf.media
 		 */	
 		public function get drmEndDate():Date
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).endDate : null;
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).endDate : null;
 		}
 		
 		/**
@@ -1450,7 +1444,7 @@ package org.osmf.media
 		 */		
 		public function get drmPeriod():Number
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).period : NaN;
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).period : NaN;
 		}	
 		
 		/**
@@ -1465,7 +1459,7 @@ package org.osmf.media
 		 */	
 		public function get drmServerURL():String
 		{
-			return hasDRM ? DRMTrait(_media.getTrait(MediaTraitType.DRM)).serverURL : "";
+			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).serverURL : "";
 		}
 
 		// Internals
@@ -1473,7 +1467,7 @@ package org.osmf.media
 	    
 	    private function getTraitOrThrow(traitType:String):MediaTraitBase
 	    {
-	    	if (!_media || !_media.hasTrait(traitType))
+	    	if (!media || !media.hasTrait(traitType))
 	    	{
 	    		var error:String = OSMFStrings.getString(OSMFStrings.TRAIT_NOT_SUPPORTED);
 	    		var traitName:String = traitType.replace("[class ", "");
@@ -1483,7 +1477,7 @@ package org.osmf.media
 	    			    		
 	    		throw new IllegalOperationError(error);		    		
 	    	}
-	    	return _media.getTrait(traitType);
+	    	return media.getTrait(traitType);
 	    }
 
 	    private function onMediaError(event:MediaErrorEvent):void
@@ -1513,8 +1507,7 @@ package org.osmf.media
 			switch (traitType)
 			{
 				case MediaTraitType.TIME:									
-					changeListeners(add, _media, traitType, TimeEvent.DURATION_CHANGE, [redispatchEvent]);							
-					changeListeners(add, _media, traitType, TimeEvent.COMPLETE, [redispatchEvent, onComplete] );								
+					changeListeners(add, traitType, TimeEvent.COMPLETE, onComplete);								
 					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
 					{
 						_currentTimeTimer.start();
@@ -1527,7 +1520,7 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
 					break;
 				case MediaTraitType.PLAY:						
-					changeListeners(add, _media, traitType, PlayEvent.PLAY_STATE_CHANGE, [redispatchEvent,onPlayStateChange] );			
+					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);			
 					_canPlay = add;							
 					if (autoPlay && canPlay && !playing)
 					{
@@ -1536,9 +1529,6 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIO:					
-					changeListeners(add, _media, traitType, AudioEvent.VOLUME_CHANGE, [redispatchEvent]);		
-					changeListeners(add, _media, traitType, AudioEvent.MUTED_CHANGE, [redispatchEvent]);
-					changeListeners(add, _media, traitType, AudioEvent.PAN_CHANGE, [redispatchEvent]);
 					_hasAudio = add;
 					if (hasAudio)
 					{
@@ -1562,28 +1552,23 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
 					break;
 				case MediaTraitType.SEEK:
-					changeListeners(add, _media, traitType, SeekEvent.SEEK_BEGIN, [redispatchEvent, onSeeking]);
-					changeListeners(add, _media, traitType, SeekEvent.SEEK_END, [redispatchEvent, onSeeking]);
+					changeListeners(add, traitType, SeekEvent.SEEK_BEGIN, onSeeking);
+					changeListeners(add, traitType, SeekEvent.SEEK_END, onSeeking);
 					_canSeek = add;					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;							
 					break;
-				case MediaTraitType.DYNAMIC_STREAM:	
-					changeListeners(add, _media, traitType, DynamicStreamEvent.SWITCHING_CHANGE, [redispatchEvent]);
-					changeListeners(add, _media, traitType, DynamicStreamEvent.AUTO_SWITCH_CHANGE, [redispatchEvent]);
-					changeListeners(add, _media, traitType, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, [redispatchEvent]);
+				case MediaTraitType.DYNAMIC_STREAM:						
 					_isDynamicStream = add;						
 					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;					
 					break;						
-				case MediaTraitType.DISPLAY_OBJECT:					
-					changeListeners(add, _media, traitType, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, [redispatchEvent]);											
-					changeListeners(add, _media, traitType, DisplayObjectEvent.MEDIA_SIZE_CHANGE, [redispatchEvent]);
+				case MediaTraitType.DISPLAY_OBJECT:							
 					_hasDisplayObject = add;
 					if (add)
 					{
 						// Force the dispatch of the DisplayObject events, so that clients
 						// will be notified.  This is particularly important when a MediaElement
 						// removes a DisplayObjectTrait and then re-adds it.
-						var displayObjectTrait:DisplayObjectTrait = _media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+						var displayObjectTrait:DisplayObjectTrait = media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 						if (displayObjectTrait.displayObject != null)
 						{
 							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObjectTrait.displayObject));
@@ -1593,12 +1578,11 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;		
 					break;	
 				case MediaTraitType.LOAD:					
-					changeListeners(add, _media, traitType, LoadEvent.LOAD_STATE_CHANGE, [redispatchEvent, onLoadState]);
-					changeListeners(add, _media, traitType, LoadEvent.BYTES_TOTAL_CHANGE, [redispatchEvent]);					
+					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);									
 					_canLoad = add;		
 					if (add)
 					{
-						var loadState:String = (_media.getTrait(traitType) as LoadTrait).loadState;
+						var loadState:String = (media.getTrait(traitType) as LoadTrait).loadState;
 						if (loadState != LoadState.READY && 
 							loadState != LoadState.LOADING)
 						{
@@ -1621,13 +1605,11 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
-					changeListeners(add, _media, traitType, BufferEvent.BUFFERING_CHANGE, [redispatchEvent, onBuffering]);	
-					changeListeners(add, _media, traitType, BufferEvent.BUFFER_TIME_CHANGE, [redispatchEvent]);						
+					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);						
 					_canBuffer = add;
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;									
 					break;	
-				case MediaTraitType.DRM:
-					changeListeners(add, _media, traitType, DRMEvent.DRM_STATE_CHANGE, [redispatchEvent]);	
+				case MediaTraitType.DRM:					
 					_hasDRM	= add;
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;	
 					break;				
@@ -1644,35 +1626,24 @@ package org.osmf.media
 					);	
 			}	
 		}
-				
+		
 		// Add any number of listeners to the trait, using the given event name.
-		private function changeListeners(add:Boolean, media:MediaElement, traitType:String, event:String, listeners:Array):void
-		{
-			for each (var item:Function in listeners)
+		private function changeListeners(add:Boolean, traitType:String, event:String, listener:Function):void
+		{			
+			if (add)
 			{
-				if (add)
-				{
-					// Make sure that the MediaPlayer gets to process the event
-					// before it gets redispatched to the client.  This will
-					// ensure that we present a consistent state to the client.
-					var priority:int = item == redispatchEvent ? 0 : 1;
-					
-					media.getTrait(traitType).addEventListener(event, item, false, priority);
-				}
-				else
-				{			
-					media.getTrait(traitType).removeEventListener(event, item);
-				}
+				// Make sure that the MediaPlayer gets to process the event
+				// before it gets redispatched to the client.  This will
+				// ensure that we present a consistent state to the client.
+				var priority:int = 1;				
+				media.getTrait(traitType).addEventListener(event, listener, false, priority);
 			}
+			else
+			{			
+				media.getTrait(traitType).removeEventListener(event, listener);
+			}		
 		}
 		
-		// Event Listeners will redispatch all of the ChangeEvents that correspond to trait 
-		// properties.
-		private function redispatchEvent(event:Event):void
-		{
-			dispatchEvent(event.clone());			
-		}	
-				
 		private function onSeeking(event:SeekEvent):void
 		{			
 			if (event.type == SeekEvent.SEEK_BEGIN)
@@ -1837,7 +1808,7 @@ package org.osmf.media
 		{
 			try
 			{
-				(_media.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
+				(media.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 			}
 			catch (error:Error)
 			{
@@ -1854,7 +1825,6 @@ package org.osmf.media
 		private var _loop:Boolean = false;		
 		private var _currentTimeUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _currentTimeTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
-		private var _media:MediaElement;
 		private var _state:String; // MediaPlayerState
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
