@@ -28,7 +28,6 @@ package org.osmf.containers
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutRendererChangeEvent;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.logging.ILogger;
