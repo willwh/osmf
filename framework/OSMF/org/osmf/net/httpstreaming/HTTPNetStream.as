@@ -720,7 +720,7 @@ package org.osmf.net.httpstreaming
 			
 			processed += bytes.length;
 			
-			if (_state == HTTPStreamingState.PLAY)	// we might exit this state
+			if (_state != HTTPStreamingState.STOP)	// we might exit this state
 			{
 				attemptAppendBytes(bytes);
 			}
@@ -883,6 +883,8 @@ package org.osmf.net.httpstreaming
 					}
 					else
 					{
+						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
+						processAndAppend(bytes);
 						setState(HTTPStreamingState.STOP);
 					}
 					
