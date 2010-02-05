@@ -72,7 +72,7 @@ package org.osmf
 			addTestSuite(TestPaddingLayoutFacet);
 			addTestSuite(TestRegistrationPoint);
 			addTestSuite(TestRelativeLayoutFacet);
-			addTestSuite(TestLayoutProperties);
+			addTestSuite(TestLayoutRendererProperties);
 			
 			// Containers
 			//

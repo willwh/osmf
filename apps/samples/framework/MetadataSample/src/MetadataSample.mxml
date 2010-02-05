@@ -33,7 +33,7 @@
 	 	<![CDATA[
 	 		import org.osmf.metadata.StringIdentifier;
 	 		import org.osmf.metadata.ObjectFacet;
-	 		import org.osmf.layout.LayoutProperties;
+	 		import org.osmf.layout.LayoutRendererProperties;
 	 		import org.osmf.metadata.Facet;
 			import org.osmf.audio.AudioElement;
 			import org.osmf.composition.CompositeElement;
@@ -109,28 +109,28 @@
 	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource0))));
 	 			comp.addChild(new MetadataProxy(VideoElement(factory.createMediaElement(resource1))));			
 	 			
-	 			var layout:LayoutProperties
+	 			var layout:LayoutRendererProperties
 	 			if(serial)
 	 			{
 	 				for (var i:int = 0; i<3; i++)
 	 				{
-	 					layout = new LayoutProperties(comp.getChildAt(i));
+	 					layout = new LayoutRendererProperties(comp.getChildAt(i));
 	 					layout.percentWidth = 100;
 						layout.percentHeight = 100;
 	 				}
 				}
 				else //Parallel
 				{
-					layout = new LayoutProperties(comp.getChildAt(0));				
+					layout = new LayoutRendererProperties(comp.getChildAt(0));				
 					layout.percentWidth = 100/3;
 					layout.percentHeight = 100;
 					
-					layout = new LayoutProperties(comp.getChildAt(1));	
+					layout = new LayoutRendererProperties(comp.getChildAt(1));	
 					layout.percentX = 100/3;
 					layout.percentWidth = 100/3;
 					layout.percentHeight = 100;
 					
-					layout = new LayoutProperties(comp.getChildAt(2));	
+					layout = new LayoutRendererProperties(comp.getChildAt(2));	
 					layout.percentX = 2/3*100;	
 					layout.percentWidth = 100/3;
 					layout.percentHeight = 100;			

@@ -41,7 +41,7 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.DefaultMediaFactory;
@@ -123,7 +123,7 @@ package
 			// Construct a MediaContainer that will be used to show the media
 			// on screen once it has loaded.
 			container = new MediaContainer();
-			containerLayout = new LayoutProperties(container);
+			containerLayout = new LayoutRendererProperties(container);
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
@@ -137,7 +137,7 @@ package
 			overlay.graphics.drawRect(0, 0, 100, 100);
 			overlay.graphics.endFill();
 			
-			var overlayLayout:LayoutProperties = new LayoutProperties(overlay);
+			var overlayLayout:LayoutRendererProperties = new LayoutRendererProperties(overlay);
 			overlayLayout.percentWidth = 100;
 			overlayLayout.percentHeight = 100;
 			overlayLayout.order = 1;
@@ -153,7 +153,7 @@ package
 			controlBar = new ControlBar();
 			controlBar.autoHide = configuration.autoHideControlBar;
 			
-			var controlBarLayout:LayoutProperties = new LayoutProperties(controlBar);
+			var controlBarLayout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
 			controlBarLayout.order = 2;
 			controlBarLayout.bottom = 25;
 			controlBarLayout.alignment = RegistrationPoint.TOP_MIDDLE;
@@ -273,7 +273,7 @@ package
 		private var element:MediaElement;
 		
 		private var container:MediaContainer;
-		private var containerLayout:LayoutProperties;
+		private var containerLayout:LayoutRendererProperties;
 		private var controlBar:ControlBarBase;
 		
 		private var overlay:LayoutTargetSprite;

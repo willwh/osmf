@@ -25,13 +25,13 @@ package org.osmf.layout
 	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.media.MediaElement;
 
-	public class TestLayoutProperties extends TestCaseEx
+	public class TestLayoutRendererProperties extends TestCaseEx
 	{
 		public function testLayoutUtils():void
 		{
-			assertThrows(function():void{ new LayoutProperties(null); });
+			assertThrows(function():void{ new LayoutRendererProperties(null); });
 			
-			var lp:LayoutProperties = new LayoutProperties(new MediaElement());
+			var lp:LayoutRendererProperties = new LayoutRendererProperties(new MediaElement());
 			assertNotNull(lp);
 			
 			assertEquals(NaN, lp.order);

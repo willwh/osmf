@@ -24,7 +24,7 @@ package org.osmf.display
 	import flash.display.Sprite;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -82,7 +82,7 @@ package org.osmf.display
 				{
 					mediaContainer.addMediaElement(_mediaElement);
 					
-					var layout:LayoutProperties = new LayoutProperties(_mediaElement);
+					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
 					layout.scaleMode = _scaleMode;
 					layout.alignment = RegistrationPoint.CENTER;
 				}
@@ -143,7 +143,7 @@ package org.osmf.display
 				_scaleMode = value;
 				if (_mediaElement != null)
 				{
-					var layout:LayoutProperties = new LayoutProperties(_mediaElement);
+					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
 					layout.scaleMode = _scaleMode;
 					layout.alignment = RegistrationPoint.CENTER;
 					

@@ -30,7 +30,7 @@ package
 	import org.osmf.display.MediaContainerGroup;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -73,19 +73,19 @@ package
 			
 			// Next, decorate the content tree with attributes:
 			
-			var bannersLayout:LayoutProperties = new LayoutProperties(banners);
+			var bannersLayout:LayoutRendererProperties = new LayoutRendererProperties(banners);
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.LETTERBOX;
 			bannersLayout.alignment = RegistrationPoint.TOP_MIDDLE;
 			
-			var skyScraperLayout:LayoutProperties = new LayoutProperties(skyScraper);
+			var skyScraperLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraper);
 			skyScraperLayout.percentWidth = 100;
 			skyScraperLayout.percentHeight = 100;
 			skyScraperLayout.scaleMode = ScaleMode.LETTERBOX;
 			skyScraperLayout.alignment = RegistrationPoint.MIDDLE_RIGHT;
 			
-			var mainLayout:LayoutProperties = new LayoutProperties(mainContent);
+			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.STRETCH;
@@ -107,7 +107,7 @@ package
 				bannerGroup.mediaContainer.backgroundAlpha = .2;
 				bannerGroup.height = 60;
 				
-				var bannerGroupLayout:LayoutProperties = new LayoutProperties(bannerGroup);
+				var bannerGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(bannerGroup);
 				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
 				MetadataUtils.setElementId(bannerGroup.metadata, "bannerGroup");
 				mainGroup.addChildGroup(bannerGroup);
@@ -117,7 +117,7 @@ package
 				skyScraperGroup.mediaContainer.backgroundAlpha = .2;
 				skyScraperGroup.width = 120;
 				
-				var skyScraperGroupLayout:LayoutProperties = new LayoutProperties(skyScraperGroup);
+				var skyScraperGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraperGroup);
 				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
 				MetadataUtils.setElementId(skyScraperGroup.metadata, "skyScraperGroup");
 				mainGroup.addChildGroup(skyScraperGroup);

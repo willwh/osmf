@@ -217,7 +217,7 @@ package org.osmf.layout
 		
 		override public function set width(value:Number):void
 		{
-			new LayoutProperties(this).width = value; 
+			new LayoutRendererProperties(this).width = value; 
 		}
 		override public function get width():Number
 		{
@@ -226,7 +226,7 @@ package org.osmf.layout
 		
 		override public function set height(value:Number):void
 		{
-			new LayoutProperties(this).height = value; 
+			new LayoutRendererProperties(this).height = value; 
 		}
 		override public function get height():Number
 		{

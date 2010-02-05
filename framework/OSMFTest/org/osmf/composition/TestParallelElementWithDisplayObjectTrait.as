@@ -27,7 +27,7 @@ package org.osmf.composition
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -187,12 +187,12 @@ package org.osmf.composition
 		public function testDisplayObjectTraitLayout():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
-			var layout:LayoutProperties = new LayoutProperties(parallel);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(parallel);
 			layout.width = 300;
 			layout.height = 200;
 			
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
-			layout = new LayoutProperties(mediaElement1);
+			layout = new LayoutRendererProperties(mediaElement1);
 			layout.x = 10;
 			layout.y = 10;
 			layout.bottom = 10;

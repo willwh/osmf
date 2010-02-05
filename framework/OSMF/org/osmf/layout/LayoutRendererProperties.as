@@ -28,9 +28,9 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 	
-	public class LayoutProperties
+	public class LayoutRendererProperties
 	{
-		public function LayoutProperties(target:IMetadataProvider)
+		public function LayoutRendererProperties(target:IMetadataProvider)
 		{
 			if (target == null)
 			{

@@ -33,7 +33,7 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -83,13 +83,13 @@ package
 			
 			// Next, decorate the content tree with attributes:
 			
-			var bannersLayout:LayoutProperties = new LayoutProperties(banners);
+			var bannersLayout:LayoutRendererProperties = new LayoutRendererProperties(banners);
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.NONE;
 			bannersLayout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
 			
-			var mainLayout:LayoutProperties = new LayoutProperties(mainContent);
+			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.LETTERBOX;

@@ -177,7 +177,7 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 50, 50);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
 			layout.percentWidth = layout.percentHeight = 80;
 			layout.percentX = layout.percentY = 10;
 			layout.scaleMode = ScaleMode.NONE; // this is the default, actually.
@@ -267,7 +267,7 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
 			layout.width = 400;
 			layout.height = 800;
 			
@@ -299,7 +299,7 @@ package org.osmf.layout
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
-			var layout:LayoutProperties = new LayoutProperties(mediaElement);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
 			layout.width = 400;
 			layout.height = 800;
 			
@@ -343,18 +343,18 @@ package org.osmf.layout
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			renderer.container = container;
 			
-			var layout:LayoutProperties;
+			var layout:LayoutRendererProperties;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutProperties(t1);
+			layout = new LayoutRendererProperties(t1);
 			layout.order = 8;
 			
 			var t2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutProperties(t2);
+			layout = new LayoutRendererProperties(t2);
 			layout.order = 2;
 			
 			var t3:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutProperties(t3);
+			layout = new LayoutRendererProperties(t3);
 			layout.order = 2;
 			
 			var t4:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
@@ -371,7 +371,7 @@ package org.osmf.layout
 			assertEquals(t2, container.getChildAt(2));
 			assertEquals(t1, container.getChildAt(3));
 			
-			layout = new LayoutProperties(t4);
+			layout = new LayoutRendererProperties(t4);
 			layout.order = 4;
 			
 			renderer.validateNow();
@@ -389,7 +389,7 @@ package org.osmf.layout
 			renderer.container = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			var layout:LayoutProperties = new LayoutProperties(t1);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(t1);
 			layout.width = layout.height = 100;
 			layout.paddingLeft = 9.6;
 			layout.paddingTop = 8.4;
@@ -429,7 +429,7 @@ package org.osmf.layout
 			t1.setIntrinsicDimensions(100,100);
 			
 			renderer.addTarget(t1);
-			var layout:LayoutProperties = new LayoutProperties(t1);
+			var layout:LayoutRendererProperties = new LayoutRendererProperties(t1);
 			layout.snapToPixel = true;
 				
 			layout.registrationPoint = RegistrationPoint.TOP_LEFT;

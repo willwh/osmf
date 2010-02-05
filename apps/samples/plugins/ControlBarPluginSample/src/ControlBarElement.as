@@ -25,7 +25,7 @@ package
 	import org.osmf.chrome.controlbar.ControlBarWidget;
 	import org.osmf.chrome.controlbar.Direction;
 	import org.osmf.chrome.controlbar.widgets.*;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
@@ -81,7 +81,7 @@ package
 			viewable = new DisplayObjectTrait(controlBar, controlBar.measuredWidth, controlBar.measuredHeight);
 			addTrait(MediaTraitType.DISPLAY_OBJECT, viewable);
 			
-			var layoutProperties:LayoutProperties = new LayoutProperties(this);
+			var layoutProperties:LayoutRendererProperties = new LayoutRendererProperties(this);
 			layoutProperties.width = controlBar.measuredWidth;
 			layoutProperties.height = controlBar.measuredHeight;
 			

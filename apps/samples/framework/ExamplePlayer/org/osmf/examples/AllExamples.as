@@ -40,7 +40,7 @@ package org.osmf.examples
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.image.ImageElement;
-	import org.osmf.layout.LayoutProperties;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutRendererMode;
 	import org.osmf.manifest.F4MElement;
 	import org.osmf.manifest.F4MLoader;
@@ -352,20 +352,20 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
-							var layout:LayoutProperties = new LayoutProperties(parallelElement);
+							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
 							layout.mode = LayoutRendererMode.HBOX;
 							layout.width = 640
 							layout.height = 352;
 							
 							var mediaElement1:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
-							layout = new LayoutProperties(mediaElement1);
+							layout = new LayoutRendererProperties(mediaElement1);
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
 							parallelElement.addChild(mediaElement1);
 							
 							var mediaElement2:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
-							layout = new LayoutProperties(mediaElement2);
+							layout = new LayoutRendererProperties(mediaElement2);
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
@@ -592,17 +592,17 @@ package org.osmf.examples
 							parallelElement.addChild(video1);
 							parallelElement.addChild(video2);
 				  	   		
-				  	   		var layoutVideo1:LayoutProperties = new LayoutProperties(video1);
+				  	   		var layoutVideo1:LayoutRendererProperties = new LayoutRendererProperties(video1);
 							layoutVideo1.percentWidth = 50;
 							layoutVideo1.percentHeight = 50;
 							
-							var layoutVideo2:LayoutProperties = new LayoutProperties(video2);
+							var layoutVideo2:LayoutRendererProperties = new LayoutRendererProperties(video2);
 							layoutVideo2.percentWidth = 50;
 							layoutVideo2.percentHeight = 50;
 							layoutVideo2.percentX = 50;
 							layoutVideo2.percentY = 25;
 							
-							var layoutParallelElement:LayoutProperties = new LayoutProperties(parallelElement);
+							var layoutParallelElement:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
 							layoutParallelElement.width = 640;
 							layoutParallelElement.height = 358;
 				  	   		
