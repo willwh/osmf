@@ -42,8 +42,8 @@ package org.osmf.display
 			
 			assertEquals(0, root.width);
 			assertEquals(0, root.height);
-			assertEquals(0, root.mediaWidth);
-			assertEquals(0, root.mediaHeight);
+			assertEquals(0, root.measuredWidth);
+			assertEquals(0, root.measuredHeight);
 			
 			childA1A.width = 400;
 			childA1A.height = 50;
@@ -51,16 +51,16 @@ package org.osmf.display
 			
 			assertEquals(400, childA1A.width);
 			assertEquals(50, childA1A.height);
-			assertEquals(400, childA1A.mediaWidth);
-			assertEquals(50, childA1A.mediaHeight);
+			assertEquals(400, childA1A.measuredWidth);
+			assertEquals(50, childA1A.measuredHeight);
 			
-			assertEquals(400, childA1.mediaWidth);
-			assertEquals(50, childA1.mediaHeight);
+			assertEquals(400, childA1.measuredWidth);
+			assertEquals(50, childA1.measuredHeight);
 			
 			assertEquals(400, root.width);
 			assertEquals(50, root.height);
-			assertEquals(400, root.mediaWidth);
-			assertEquals(50, root.mediaHeight);
+			assertEquals(400, root.measuredWidth);
+			assertEquals(50, root.measuredHeight);
 		}
 		
 		public function testContainerSubContainers():void

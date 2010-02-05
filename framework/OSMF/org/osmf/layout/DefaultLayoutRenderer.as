@@ -222,7 +222,7 @@ package org.osmf.layout
 		 */
 		override protected function calculateTargetBounds(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			var rect:Rectangle = new Rectangle(0, 0, target.mediaWidth, target.mediaHeight);
+			var rect:Rectangle = new Rectangle(0, 0, target.measuredWidth, target.measuredHeight);
 			
 			var attributes:LayoutAttributesFacet
 				= target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet
@@ -386,16 +386,16 @@ package org.osmf.layout
 			if (attributes.scaleMode)
 			{
 				if	(!	( toDo & WIDTH || toDo & HEIGHT)					
-					&&	target.mediaWidth
-					&&	target.mediaHeight
+					&&	target.measuredWidth
+					&&	target.measuredHeight
 					)
 				{
 					var size:Point = ScaleModeUtils.getScaledSize
 						( attributes.scaleMode
 						, rect.width
 						, rect.height
-						, target.mediaWidth
-						, target.mediaHeight
+						, target.measuredWidth
+						, target.measuredHeight
 						);
 					
 					deltaX = rect.width - size.x;
@@ -543,7 +543,7 @@ package org.osmf.layout
 					, target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
 					, rect
 					, availableWidth, availableHeight
-					, target.mediaWidth, target.mediaHeight
+					, target.measuredWidth, target.measuredHeight
 					);
 			}
 			
@@ -577,8 +577,8 @@ package org.osmf.layout
 					targetBounds = calculateTargetBounds(target, size.x, size.y);
 					targetBounds.x ||= 0;
 					targetBounds.y ||= 0;
-					targetBounds.width ||= target.mediaWidth || 0;
-					targetBounds.height ||= target.mediaHeight || 0;
+					targetBounds.width ||= target.measuredWidth || 0;
+					targetBounds.height ||= target.measuredHeight || 0;
 					
 					if (mode == LayoutRendererMode.HBOX || mode == LayoutRendererMode.VBOX)
 					{

@@ -165,7 +165,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get mediaWidth():Number
+		public function get measuredWidth():Number
 		{
 			return displayObjectTrait
 				 ? displayObjectTrait.mediaWidth
@@ -175,7 +175,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get mediaHeight():Number
+		public function get measuredHeight():Number
 		{
 			return displayObjectTrait
 				 ? displayObjectTrait.mediaHeight

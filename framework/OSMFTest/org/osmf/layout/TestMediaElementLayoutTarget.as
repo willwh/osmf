@@ -45,8 +45,8 @@ package org.osmf.layout
 			
 			assertNull(melt.displayObject);
 			assertEquals(melt.metadata, me.metadata);
-			assertEquals(NaN, melt.mediaWidth);
-			assertEquals(NaN, melt.mediaHeight);
+			assertEquals(NaN, melt.measuredWidth);
+			assertEquals(NaN, melt.measuredHeight);
 			assertNull(null, melt.layoutRenderer);
 			assertNull(null, melt.parentLayoutRenderer);
 		}
@@ -65,8 +65,8 @@ package org.osmf.layout
 			
 			assertEquals(lt.metadata, me.metadata);
 			assertEquals(lt.displayObject, lts);
-			assertEquals(lt.mediaWidth, 100);
-			assertEquals(lt.mediaHeight, 200); 
+			assertEquals(lt.measuredWidth, 100);
+			assertEquals(lt.measuredHeight, 200); 
 			assertNull(null, lt.layoutRenderer);
 			assertNull(null, lt.parentLayoutRenderer);
 			

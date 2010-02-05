@@ -121,7 +121,7 @@ package org.osmf.layout
 	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */	 	
-	 	function get mediaWidth():Number;
+	 	function get measuredWidth():Number;
 	 	
 	 	/**
 	 	 * Defines the width of the element without any transformations being
@@ -134,11 +134,11 @@ package org.osmf.layout
 	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */
-	 	function get mediaHeight():Number;
+	 	function get measuredHeight():Number;
 	 	
 	 	/**
 		 * Method invoked by a LayoutRenderer object to inform the implementation
-		 * that it should reasses its mediaWidth and mediaHeight fields:
+		 * that it should reasses its measuredWidth and measuredHeight fields:
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

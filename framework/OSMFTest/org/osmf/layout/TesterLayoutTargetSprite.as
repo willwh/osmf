@@ -53,14 +53,14 @@ package org.osmf.layout
 			return _parentLayoutRenderer.value as LayoutRenderer;
 		}
 		
-		public function get mediaWidth():Number
+		public function get measuredWidth():Number
 		{
-			return _mediaWidth;
+			return _measuredWidth;
 		}
 		
-		public function get mediaHeight():Number
+		public function get measuredHeight():Number
 		{
-			return _mediaHeight;
+			return _measuredHeight;
 		}
 		
 		public function measureMedia():void
@@ -97,10 +97,10 @@ package org.osmf.layout
 				( new DisplayObjectEvent
 					( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 					, null, null
-					, _mediaWidth
-					, _mediaHeight
-					, _mediaWidth = width
-					, _mediaHeight = height
+					, _measuredWidth
+					, _measuredHeight
+					, _measuredWidth = width
+					, _measuredHeight = height
 					)
 				);	
 		}
@@ -110,8 +110,8 @@ package org.osmf.layout
 		private var _layoutRenderer:ExternalProperty;
 		private var _parentLayoutRenderer:ExternalProperty;
 		
-		private var _mediaWidth:Number;
-		private var _mediaHeight:Number;
+		private var _measuredWidth:Number;
+		private var _measuredHeight:Number;
 		
 	}
 }

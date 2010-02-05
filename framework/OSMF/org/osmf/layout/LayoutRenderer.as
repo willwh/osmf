@@ -342,14 +342,14 @@ package org.osmf.layout
 			return layoutTargets.indexOf(target) != -1;
 		}
 		
-		final public function get mediaWidth():Number
+		final public function get measuredWidth():Number
 		{
-			return _mediaWidth;
+			return _measuredWidth;
 		}
 		
-		final public function get mediaHeight():Number
+		final public function get measuredHeight():Number
 		{
-			return _mediaHeight;
+			return _measuredHeight;
 		}
 		
 		/**
@@ -415,7 +415,7 @@ package org.osmf.layout
 			cleaning = true;
 			
 			measureMedia();
-			updateMediaDisplay(_mediaWidth, _mediaHeight);
+			updateMediaDisplay(_measuredWidth, _measuredHeight);
 			
 			cleaning = false;
 		}
@@ -442,8 +442,8 @@ package org.osmf.layout
 			// Calculate our own size:
 			var size:Point = calculateContainerSize(layoutTargets);
 			
-			_mediaWidth = size.x;
-			_mediaHeight = size.y;
+			_measuredWidth = size.x;
+			_measuredHeight = size.y;
 			
 			_container.measureMedia();
 		}
@@ -844,8 +844,8 @@ package org.osmf.layout
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
 		private var stagedDisplayObjects:Dictionary = new Dictionary(true);
 		
-		private var _mediaWidth:Number;
-		private var _mediaHeight:Number;
+		private var _measuredWidth:Number;
+		private var _measuredHeight:Number;
 		
 		private var dirty:Boolean;
 		private var cleaning:Boolean;

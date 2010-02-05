@@ -95,7 +95,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaWidth():Number
 		{
-			return _childrenContainer.mediaWidth;
+			return _childrenContainer.measuredWidth;
 		}
 		
 		/**
@@ -103,7 +103,7 @@ package org.osmf.composition
 		 */		
 		override public function get mediaHeight():Number
 		{
-			return _childrenContainer.mediaHeight;
+			return _childrenContainer.measuredHeight;
 		}
 		
 		// Protected API

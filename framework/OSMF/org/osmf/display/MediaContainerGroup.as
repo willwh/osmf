@@ -111,7 +111,7 @@ package org.osmf.display
 			
 			if (value && scrollRect == null)
 			{
-				scrollRect = new Rectangle(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
+				scrollRect = new Rectangle(0, 0, layoutRenderer.measuredWidth, layoutRenderer.measuredHeight);
 			}
 			else if (value == false && scrollRect)
 			{

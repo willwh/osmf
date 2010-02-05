@@ -45,15 +45,15 @@ package org.osmf.layout
 			
 			renderer.validateNow();
 			
-			assertEquals(50, l1.mediaWidth);
-			assertEquals(200, l1.mediaHeight);
+			assertEquals(50, l1.measuredWidth);
+			assertEquals(200, l1.measuredHeight);
 			
-			assertEquals(100, l2.mediaWidth);
-			assertEquals(150, l2.mediaHeight);
+			assertEquals(100, l2.measuredWidth);
+			assertEquals(150, l2.measuredHeight);
 			
 			// The base renderer does not calculate aggregate bounds:
-			assertEquals(NaN, c.mediaWidth);
-			assertEquals(NaN, c.mediaHeight);
+			assertEquals(NaN, c.measuredWidth);
+			assertEquals(NaN, c.measuredHeight);
 		}
 		
 	}

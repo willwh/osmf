@@ -184,7 +184,7 @@ package org.osmf.containers
 		{
 			if (value && scrollRect == null)
 			{
-				scrollRect = new Rectangle(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
+				scrollRect = new Rectangle(0, 0, layoutRenderer.measuredWidth, layoutRenderer.measuredHeight);
 			}
 			else if (value == false && scrollRect)
 			{
@@ -277,12 +277,12 @@ package org.osmf.containers
 			
 			if	(	!isNaN(_backgroundColor)
 				&& 	_backgroundAlpha != 0
-				&&	layoutRenderer.mediaWidth
-				&&	layoutRenderer.mediaHeight
+				&&	layoutRenderer.measuredWidth
+				&&	layoutRenderer.measuredHeight
 				)
 			{
 				graphics.beginFill(_backgroundColor,_backgroundAlpha);
-				graphics.drawRect(0, 0, layoutRenderer.mediaWidth, layoutRenderer.mediaHeight);
+				graphics.drawRect(0, 0, layoutRenderer.measuredWidth, layoutRenderer.measuredHeight);
 				graphics.endFill();
 			}
 		}

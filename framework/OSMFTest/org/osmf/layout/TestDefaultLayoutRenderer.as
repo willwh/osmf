@@ -202,8 +202,8 @@ package org.osmf.layout
 			// Without any scaling, we'd expect the element to be at 80x60 - 640x480.
 			// However scaling is set to 'NONE' - meaning intrinsic width and height get bounced (50x50):
 			
-			assertEquals(50, melt.mediaWidth);
-			assertEquals(50, melt.mediaHeight);
+			assertEquals(50, melt.measuredWidth);
+			assertEquals(50, melt.measuredHeight);
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
@@ -278,14 +278,14 @@ package org.osmf.layout
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			layoutRenderer.container = container;
 			
-			assertEquals(NaN, container.mediaWidth);
-			assertEquals(NaN, container.mediaHeight);
+			assertEquals(NaN, container.measuredWidth);
+			assertEquals(NaN, container.measuredHeight);
 			
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
-			assertEquals(400, container.mediaWidth);
-			assertEquals(800, container.mediaHeight);
+			assertEquals(400, container.measuredWidth);
+			assertEquals(800, container.measuredHeight);
 		}
 	
 		public function testBottomUpTwoLevels():void
@@ -310,14 +310,14 @@ package org.osmf.layout
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			layoutRenderer.container = container;
 			
-			assertEquals(NaN, container.mediaWidth);
-			assertEquals(NaN, container.mediaHeight);
+			assertEquals(NaN, container.measuredWidth);
+			assertEquals(NaN, container.measuredHeight);
 			
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.validateNow();
 			
-			assertEquals(400, container.mediaWidth);
-			assertEquals(800, container.mediaHeight);
+			assertEquals(400, container.measuredWidth);
+			assertEquals(800, container.measuredHeight);
 			
 			// Containter that holds the previous container: dimensions should 
 			// bubble up another level:
@@ -327,14 +327,14 @@ package org.osmf.layout
 			var layoutRenderer2:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			layoutRenderer2.container = container2;
 			
-			assertEquals(NaN, container2.mediaWidth);
-			assertEquals(NaN, container2.mediaHeight);
+			assertEquals(NaN, container2.measuredWidth);
+			assertEquals(NaN, container2.measuredHeight);
 			
 			layoutRenderer2.addTarget(container);
 			layoutRenderer2.validateNow();
 			
-			assertEquals(400, container2.mediaWidth);
-			assertEquals(800, container2.mediaHeight);
+			assertEquals(400, container2.measuredWidth);
+			assertEquals(800, container2.measuredHeight);
 		}
 		
 		public function testOrdering():void

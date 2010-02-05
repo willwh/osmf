@@ -123,17 +123,17 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get mediaWidth():Number
+		public function get measuredWidth():Number
 		{
-			return _mediaWidth;
+			return _measuredWidth;
 		}
 		
 		/**
 		 * @private
 		 */
-		public function get mediaHeight():Number
+		public function get measuredHeight():Number
 		{
-			return _mediaHeight;
+			return _measuredHeight;
 		}
 		
 		/**
@@ -151,8 +151,8 @@ package org.osmf.layout
 				// The measured dimensions can be fetched from the sprite's own
 				// layout renderer. Since measurement takes place bottom to top,
 				// the renderer should already be up to date for this pass:
-				newMediaWidth = layoutRenderer.mediaWidth;
-				newMediaHeight = layoutRenderer.mediaHeight;
+				newMediaWidth = layoutRenderer.measuredWidth;
+				newMediaHeight = layoutRenderer.measuredHeight;
 			}
 			else
 			{
@@ -161,20 +161,20 @@ package org.osmf.layout
 				newMediaHeight = super.height / scaleY;
 			}
 				
-			if 	(	newMediaWidth != _mediaWidth
-				||	newMediaHeight != _mediaHeight
+			if 	(	newMediaWidth != _measuredWidth
+				||	newMediaHeight != _measuredHeight
 				)
 			{
 				var event:DisplayObjectEvent
 						= new DisplayObjectEvent
 							( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 							, null			, null
-							, _mediaWidth	, _mediaHeight
+							, _measuredWidth	, _measuredHeight
 							, newMediaWidth	, newMediaHeight
 							);
 							
-				_mediaWidth = newMediaWidth;
-				_mediaHeight = newMediaHeight;
+				_measuredWidth = newMediaWidth;
+				_measuredHeight = newMediaHeight;
 				
 				dispatchEvent(event);
 			}
@@ -221,7 +221,7 @@ package org.osmf.layout
 		}
 		override public function get width():Number
 		{
-			return _mediaWidth;
+			return _measuredWidth;
 		}
 		
 		override public function set height(value:Number):void
@@ -230,7 +230,7 @@ package org.osmf.layout
 		}
 		override public function get height():Number
 		{
-			return _mediaHeight;
+			return _measuredHeight;
 		}
 		
 		// Internals
@@ -240,8 +240,8 @@ package org.osmf.layout
 		private var _layoutRenderer:ExternalProperty
 		private var _parentLayoutRenderer:ExternalProperty;
 		
-		private var _mediaWidth:Number = NaN;
-		private var _mediaHeight:Number = NaN;
+		private var _measuredWidth:Number = NaN;
+		private var _measuredHeight:Number = NaN;
 		
 		private var _width:Number;
 		private var _height:Number;
