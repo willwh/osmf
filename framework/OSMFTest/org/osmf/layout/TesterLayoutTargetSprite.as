@@ -63,12 +63,12 @@ package org.osmf.layout
 			return _measuredHeight;
 		}
 		
-		public function measureMedia():void
+		public function measure():void
 		{
 			//
 		}
 		
-		public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		public function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			width = availableWidth;
 			height = availableHeight;

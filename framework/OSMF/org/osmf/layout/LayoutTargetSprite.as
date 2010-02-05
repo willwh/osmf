@@ -139,7 +139,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */	
-		public function measureMedia():void
+		public function measure():void
 		{
 			var newMediaWidth:Number;
 			var newMediaHeight:Number;
@@ -183,7 +183,7 @@ package org.osmf.layout
 	 	/**
 		 * @private
 		 */
-	 	public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+	 	public function layout(availableWidth:Number, availableHeight:Number):void
 	 	{
 	 		if (_layoutRenderer.value == null)
 	 		{

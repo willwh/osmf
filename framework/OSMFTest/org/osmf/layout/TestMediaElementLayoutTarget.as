@@ -41,7 +41,7 @@ package org.osmf.layout
 			var me:MediaElement = new MediaElement();
 			var melt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
-			melt.measureMedia();
+			melt.measure();
 			
 			assertNull(melt.displayObject);
 			assertEquals(melt.metadata, me.metadata);
@@ -61,7 +61,7 @@ package org.osmf.layout
 
 			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 			
-			lt.measureMedia();
+			lt.measure();
 			
 			assertEquals(lt.metadata, me.metadata);
 			assertEquals(lt.displayObject, lts);

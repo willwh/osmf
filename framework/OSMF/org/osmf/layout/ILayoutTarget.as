@@ -145,7 +145,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-	 	function measureMedia():void;
+	 	function measure():void;
 	 	
 	 	/**
 		 * Method invoked by a LayoutRenderer object to inform the implementation
@@ -157,7 +157,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-	 	function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void;
+	 	function layout(availableWidth:Number, availableHeight:Number):void;
 	 	
 	 	
 	}

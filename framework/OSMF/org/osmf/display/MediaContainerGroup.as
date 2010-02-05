@@ -237,14 +237,14 @@ package org.osmf.display
 			return super.removeChildAt(index + 1);
 		}
 		
-		override public function measureMedia():void
+		override public function measure():void
 		{
-			_mediaContainer.measureMedia();
+			_mediaContainer.measure();
 			
-			super.measureMedia();
+			super.measure();
 		}
 		
-		override public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		override public function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			if (availableWidth)
 			{
@@ -261,7 +261,7 @@ package org.osmf.display
 				scrollRect = new Rectangle(0, 0, availableWidth, availableHeight);
 			}
 			
-			super.updateMediaDisplay(availableWidth, availableHeight);
+			super.layout(availableWidth, availableHeight);
 		}
 		
 		// Internals

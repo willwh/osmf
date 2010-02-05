@@ -200,7 +200,7 @@ package org.osmf.containers
 		// Overrides
 		//
 		
-		override public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		override public function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			if (!isNaN(backgroundColor))
 			{

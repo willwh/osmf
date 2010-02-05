@@ -185,7 +185,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function measureMedia():void
+		public function measure():void
 		{
 			// No action required. Layout renderers will invoke measurement
 			// directly via the layoutRenderer property.
@@ -194,7 +194,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		public function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			if (_displayObject != null && _layoutRenderer == null)
 			{

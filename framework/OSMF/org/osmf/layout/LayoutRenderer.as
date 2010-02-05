@@ -420,8 +420,8 @@ package org.osmf.layout
 			// This is a root-node. Flag that we're cleaning up:
 			cleaning = true;
 			
-			measureMedia();
-			updateMediaDisplay(_measuredWidth, _measuredHeight);
+			measure();
+			layout(_measuredWidth, _measuredHeight);
 			
 			cleaning = false;
 		}
@@ -429,7 +429,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		protected function measureMedia():void
+		protected function measure():void
 		{
 			// Take care of all targets being staged correctly:
 			prepareTargets();
@@ -439,10 +439,10 @@ package org.osmf.layout
 			{
 				if (target.layoutRenderer)
 				{
-					target.layoutRenderer.measureMedia();
+					target.layoutRenderer.measure();
 				}
 				
-				target.measureMedia();
+				target.measure();
 			}
 			
 			// Calculate our own size:
@@ -451,24 +451,24 @@ package org.osmf.layout
 			_measuredWidth = size.x;
 			_measuredHeight = size.y;
 			
-			_container.measureMedia();
+			_container.measure();
 		}
 		
 		/**
 		 * @private
 		 */
-		protected function updateMediaDisplay(availableWidth:Number, availableHeight:Number):void
+		protected function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			processUpdateMediaDisplayBegin(layoutTargets);
 			
-			_container.updateMediaDisplay(availableWidth, availableHeight);
+			_container.layout(availableWidth, availableHeight);
 			
 			// Traverse, execute top-down:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				var bounds:Rectangle = calculateTargetBounds(target, availableWidth, availableHeight);
 				
-				target.updateMediaDisplay(bounds.width, bounds.height);
+				target.layout(bounds.width, bounds.height);
 				
 				var displayObject:DisplayObject = target.displayObject;
 				if (displayObject)
@@ -478,7 +478,7 @@ package org.osmf.layout
 				}
 				if (target.layoutRenderer)
 				{
-					target.layoutRenderer.updateMediaDisplay(bounds.width, bounds.height);
+					target.layoutRenderer.layout(bounds.width, bounds.height);
 				}
 			}
 			
@@ -626,7 +626,7 @@ package org.osmf.layout
 		 * @private
 		 *
 		 * Subclasses may override this method should they require special
-		 * processing on the updateMediaDisplay routine starting it execution.
+		 * processing on the layout routine starting it execution.
 		 *  
 		 * @param targets The targets that are about to be measured.
 		 *  
@@ -643,7 +643,7 @@ package org.osmf.layout
 		 * @private
 		 *
 		 * Subclasses may override this method should they require special
-		 * processing on the updateMediaDisplay routine completing its execution.
+		 * processing on the layout routine completing its execution.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
