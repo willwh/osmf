@@ -128,7 +128,7 @@ package org.osmf.composition
 				, onLayoutTargetContainerChange
 				);
 			
-			if (layoutRenderer.targets(target))
+			if (layoutRenderer.hasTarget(target))
 			{
 				layoutRenderer.removeTarget(target);
 			}
@@ -141,14 +141,14 @@ package org.osmf.composition
 			var container:IMediaContainer = target.mediaElement.container; 
 			if (container && container != owner.container)
 			{
-				if (layoutRenderer.targets(target))
+				if (layoutRenderer.hasTarget(target))
 				{
 					layoutRenderer.removeTarget(target);	
 				}
 			}
 			else
 			{
-				if (layoutRenderer.targets(target) == false)
+				if (layoutRenderer.hasTarget(target) == false)
 				{
 					layoutRenderer.addTarget(target);
 				}

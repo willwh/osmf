@@ -147,7 +147,7 @@ package org.osmf.display
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (layoutRenderer.targets(group) == false)
+			if (layoutRenderer.hasTarget(group) == false)
 			{
 				layoutRenderer.addTarget(group);
 				result = group;
@@ -180,7 +180,7 @@ package org.osmf.display
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (layoutRenderer.targets(group))
+			if (layoutRenderer.hasTarget(group))
 			{
 				layoutRenderer.removeTarget(group);
 				result = group;
@@ -207,7 +207,7 @@ package org.osmf.display
 		 */		
 		public function containsChildGroup(group:MediaContainerGroup):Boolean
 		{
-			return layoutRenderer.targets(group);
+			return layoutRenderer.hasTarget(group);
 		}
 		
 		/**

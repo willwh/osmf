@@ -110,7 +110,7 @@ package org.osmf.composition
 			var element:MediaElement = layoutTarget.mediaElement;
 			
 			var targetInLayoutRenderer:Boolean
-				= layoutRenderer.targets(layoutTarget);
+				= layoutRenderer.hasTarget(layoutTarget);
 				
 			if (newContainer == null || newContainer == owner.container)
 			{
@@ -139,7 +139,7 @@ package org.osmf.composition
 				
 				var mediaElement:MediaElement = layoutTarget.mediaElement;
 					
-				if (layoutRenderer.targets(layoutTarget))
+				if (layoutRenderer.hasTarget(layoutTarget))
 				{
 					layoutRenderer.removeTarget(layoutTarget);
 				}

@@ -337,7 +337,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		final public function targets(target:ILayoutTarget):Boolean
+		final public function hasTarget(target:ILayoutTarget):Boolean
 		{
 			return layoutTargets.indexOf(target) != -1;
 		}
