@@ -2,7 +2,7 @@
 <actionScriptProperties mainApplicationPath="ControlBarPluginTest.as" version="3">
   <compiler additionalCompilerArguments="" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
     <compilerSourcePath>
-      <compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}/apps/samples/ControlBarPluginSample/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}/apps/samples/plugins/ControlBarPluginSample/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path="">
