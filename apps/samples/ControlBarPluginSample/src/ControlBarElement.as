@@ -78,12 +78,12 @@ package
 		{
 			setupControlBar();
 			
-			viewable = new DisplayObjectTrait(controlBar, controlBar.mediaWidth, controlBar.mediaHeight);
+			viewable = new DisplayObjectTrait(controlBar, controlBar.measuredWidth, controlBar.measuredHeight);
 			addTrait(MediaTraitType.DISPLAY_OBJECT, viewable);
 			
 			var layoutProperties:LayoutProperties = new LayoutProperties(this);
-			layoutProperties.width = controlBar.mediaWidth;
-			layoutProperties.height = controlBar.mediaHeight;
+			layoutProperties.width = controlBar.measuredWidth;
+			layoutProperties.height = controlBar.measuredHeight;
 			
 			super.setupTraits();	
 		}
