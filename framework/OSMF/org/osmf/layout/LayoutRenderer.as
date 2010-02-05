@@ -342,11 +342,17 @@ package org.osmf.layout
 			return layoutTargets.indexOf(target) != -1;
 		}
 		
+		/**
+		 * Defines the width that the layout renderer measured on its last rendering pass.
+		 */		
 		final public function get measuredWidth():Number
 		{
 			return _measuredWidth;
 		}
 		
+		/**
+		 * Defines the height that the layout renderer measured on its last rendering pass.
+		 */		
 		final public function get measuredHeight():Number
 		{
 			return _measuredHeight;
