@@ -141,6 +141,69 @@ package org.osmf.composition
 			assertTrue(traitFoundEvent.mediaElement == null);
 		}
 		
+		public function testFindOrLoadMediaElementWithTraitWhenLoadTraitIsRemoved():void
+		{
+			var traitLoader:TraitLoader = new TraitLoader();
+			traitLoader.addEventListener(TraitLoaderEvent.TRAIT_FOUND, addAsync(onTestFindOrLoadMediaElementWithTraitWhenLoadTraitIsRemoved, 1000));
+			
+			var mediaElements:Array = [];
+						
+			// Create a few media elements.
+			//
+
+			var mediaElement1:DynamicMediaElement =
+				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.DISPLAY_OBJECT]);
+
+			// Don't let the load complete immediately.
+			var loader2:SimpleLoader = new SimpleLoader(true);
+			var resource2:URLResource = new URLResource(new URL("http://www.example.com/loadable2"));
+			var mediaElement2:DynamicMediaElement =
+				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.TIME],
+										loader2,
+										resource2);
+			
+			var loader3:SimpleLoader = new SimpleLoader();
+			var mediaElement3:DynamicMediaElement =
+				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.DISPLAY_OBJECT, MediaTraitType.SEEK],
+										loader3,
+										new URLResource(new URL("http://www.example.com/loadable3")));
+
+			var mediaElement4:DynamicMediaElement =
+				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.AUDIO]);
+			
+			mediaElements = [mediaElement1, mediaElement2, mediaElement3, mediaElement4]; 
+
+			traitLoader.findOrLoadMediaElementWithTrait(mediaElements, MediaTraitType.SEEK);
+			
+			// The second child should be in the process of loading.
+			var loadTrait2:LoadTrait = mediaElement2.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			assertTrue(loadTrait2.loadState == LoadState.LOADING);
+			
+			// Remove the load trait and add another, making sure that the
+			// new trait gets the requested trait (SEEK) upon completion.
+			mediaElement2.doRemoveTrait(MediaTraitType.LOAD);
+			var newLoadTrait2:LoadTrait = new LoadTrait(loader2, resource2)
+			newLoadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 100);
+			
+			mediaElement2.doAddTrait(MediaTraitType.LOAD, newLoadTrait2);
+		
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					mediaElement2.doAddTrait(MediaTraitType.SEEK, new SeekTrait(null));
+				}
+			}
+			
+			function onTestFindOrLoadMediaElementWithTraitWhenLoadTraitIsRemoved(event:TraitLoaderEvent):void
+			{
+				// Here's the payoff:  the found element should be the second one, not
+				// the third one, because the second one's new LoadTrait caused the
+				// SEEK trait to get added.
+				assertTrue(event.mediaElement == mediaElement2);
+			}
+		}
+		
 		private function onTraitFound(event:TraitLoaderEvent):void
 		{
 			traitFoundEvents.push(event);

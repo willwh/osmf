@@ -21,6 +21,9 @@
 *****************************************************/
 package org.osmf.utils
 {
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -31,6 +34,14 @@ package org.osmf.utils
 	 **/
 	public class SimpleLoader extends LoaderBase
 	{
+		/**
+		 * Constructor.
+		 **/
+		public function SimpleLoader(delayLoadComplete:Boolean = false)
+		{
+			this.delayLoadComplete = delayLoadComplete;
+		}
+		
 		/**
 		 * Indicates that the load operation should be forced to
 		 * fail.
@@ -68,7 +79,23 @@ package org.osmf.utils
 			}
 			else
 			{
-				updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+				if (delayLoadComplete)
+				{
+					var timer:Timer = new Timer(500, 1);
+					timer.addEventListener(TimerEvent.TIMER, onTimer);
+					timer.start();
+					
+					function onTimer(event:TimerEvent):void
+					{
+						timer.removeEventListener(TimerEvent.TIMER, onTimer);
+						
+						updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+					}
+				}
+				else
+				{
+					updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+				}
 			}
 		}
 		
@@ -84,5 +111,7 @@ package org.osmf.utils
 				updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 			}
 		}
+		
+		private var delayLoadComplete:Boolean = false;
 	}
 }

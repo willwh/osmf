@@ -126,7 +126,7 @@ package org.osmf.captioning.media
 					{
 						loadTrait = new LoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
 						
-						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99);
 						addTrait(MediaTraitType.LOAD, loadTrait);
 					}
 					else if (!_continueLoadOnFailure)
@@ -181,7 +181,7 @@ package org.osmf.captioning.media
 			removeTrait(MediaTraitType.LOAD);
 			
 			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
-			if (loadTrait != null)
+			if (loadTrait != null && loadTrait.loadState == LoadState.UNINITIALIZED)
 			{
 				loadTrait.load();
 			}

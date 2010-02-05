@@ -24,9 +24,10 @@ package org.osmf.composition
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -94,8 +95,14 @@ package org.osmf.composition
 					
 					// We're not sure yet if there's a trait.
 					noSuchTrait = false;
-					
+
+					// We wait for the load to complete.
 					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
+					// It's possible the trait will be removed prior to the completion
+					// of the load.  In that case, we'll need to wait until a new
+					// trait gets added and listen to that.
+					mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 					
 					// If it's already loading, then we only need to wait for
 					// the event.
@@ -103,6 +110,8 @@ package org.osmf.composition
 					{
 						loadTrait.load();
 					}
+					
+					// Stop iterating, we need to wait until the load completes.
 					break;
 					
 					function onLoadStateChange(event:LoadEvent):void
@@ -110,6 +119,9 @@ package org.osmf.composition
 						var loadTrait:LoadTrait = event.target as LoadTrait;
 						if (loadTrait.loadState == LoadState.READY)
 						{
+							mediaElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+							loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+							
 							if (mediaElement.hasTrait(traitType))
 							{
 								dispatchFindOrLoadEvent(mediaElement);
@@ -124,6 +136,35 @@ package org.osmf.composition
 									( mediaElements.slice(mediaElements.indexOf(mediaElement)+1)
 									, traitType
 									);
+							}
+						}
+					}
+					
+					function onTraitRemove(event:MediaElementEvent):void
+					{
+						if (event.traitType == MediaTraitType.LOAD)
+						{
+							// Our trait got removed mid-stream, we need to wait
+							// until we get the new LoadTrait.
+							loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						
+							mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+						}
+					}
+					
+					function onTraitAdd(event:MediaElementEvent):void
+					{
+						if (event.traitType == MediaTraitType.LOAD)
+						{
+							// Our trait was re-added, now we should load it and
+							// wait for completion.
+							mediaElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+							
+							loadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+							loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+							if (loadTrait.loadState != LoadState.LOADING)
+							{
+								loadTrait.load();
 							}
 						}
 					}
