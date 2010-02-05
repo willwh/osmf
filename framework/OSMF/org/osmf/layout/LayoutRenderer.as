@@ -67,11 +67,11 @@ package org.osmf.layout
 	 *  * compareTargets, which is used to put the layoutTargets in a particular display
 	 *    list index order.
 	 * 
-	 *  * processContextChange, invoked when the renderer's context changed.
+	 *  * processContainerChange, invoked when the renderer's container changed.
 	 *  * processStagedTarget, invoked when a target is put on the stage of the
-	 *    context's container.
+	 *    container's displayObjectContainer.
 	 *  * processUnstagedTarget, invoked when a target is removed from the stage
-	 *    of the context's container.  
+	 *    of the container's displayObjectContainer.  
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -103,9 +103,9 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * Defines the context against which the renderer will calculate the size
+		 * Defines the container against which the renderer will calculate the size
 		 * and position values of its targets. The renderer additionally manages
-		 * targets being added and removed as children of the set context's
+		 * targets being added and removed as children of the set container's
 		 * display list.
 		 *  
 		 *  @langversion 3.0
@@ -113,21 +113,21 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		final public function get context():ILayoutTarget
+		final public function get container():ILayoutTarget
 		{
-			return _context;
+			return _container;
 		}
-		final public function set context(value:ILayoutTarget):void
+		final public function set container(value:ILayoutTarget):void
 		{
-			if (value != _context)
+			if (value != _container)
 			{
-				if (_context != null)
+				if (_container != null)
 				{
 					reset();
 					
-					if (_context.layoutRenderer == this)
+					if (_container.layoutRenderer == this)
 					{
-						_context.dispatchEvent
+						_container.dispatchEvent
 							( new LayoutRendererChangeEvent
 								( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
 								, false, false
@@ -136,7 +136,7 @@ package org.osmf.layout
 								)
 							);
 							
-						_context.addEventListener
+						_container.addEventListener
 							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 							, invalidatingEventHandler
 							, false, 0, true
@@ -144,25 +144,25 @@ package org.osmf.layout
 					}
 				}
 			
-				var oldContext:ILayoutTarget = _context;	
-				_context = value;
+				var oldContainer:ILayoutTarget = _container;	
+				_container = value;
 					
-				if (_context)
+				if (_container)
 				{
-					container = _context.displayObject as DisplayObjectContainer;
-					metadata = _context.metadata;
+					displayObjectContainer = _container.displayObject as DisplayObjectContainer;
+					metadata = _container.metadata;
 					
-					_context.addEventListener
+					_container.addEventListener
 						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 						, invalidatingEventHandler
 						, false, 0, true
 						);
 
-					_context.dispatchEvent
+					_container.dispatchEvent
 						( new LayoutRendererChangeEvent
 							( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
 							, false, false
-							, _context.layoutRenderer
+							, _container.layoutRenderer
 							, this
 							)
 						);
@@ -170,7 +170,7 @@ package org.osmf.layout
 					invalidate();
 				}
 				
-				processContextChange(oldContext, value);
+				processContainerChange(oldContainer, value);
 			}
 		}
 		
@@ -178,7 +178,7 @@ package org.osmf.layout
 		 * Method for adding a target to the layout renderer's list of objects
 		 * that it calculates the size and position for. Adding a target will
 		 * result the associated display object to be placed on the display
-		 * list of the renderer's context.
+		 * list of the renderer's container.
 		 * 
 		 * @param target The target to add.
 		 * @throws IllegalOperationError when the specified target is null, or 
@@ -203,7 +203,7 @@ package org.osmf.layout
 			}
 			
 			// Dispatch a parentLayoutRendererChange event on the target. This is the cue for
-			// the currently owning rendering to remove the target from its listing:
+			// the currently owning renderer to remove the target from its listing:
 			target.dispatchEvent
 				( new LayoutRendererChangeEvent
 					( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
@@ -279,7 +279,7 @@ package org.osmf.layout
 			var index:Number = layoutTargets.indexOf(target);
 			if (index != -1)
 			{
-				// Remove the target from the context stage:
+				// Remove the target from the container stage:
 				removeFromStage(target);
 				
 				// Remove the target from our listing:
@@ -398,7 +398,7 @@ package org.osmf.layout
 		 */
 		final public function validateNow():void
 		{
-			if (_context == null || container == null || cleaning == true)
+			if (_container == null || displayObjectContainer == null || cleaning == true)
 			{
 				// no-op:
 				return;	
@@ -440,12 +440,12 @@ package org.osmf.layout
 			}
 			
 			// Calculate our own size:
-			var size:Point = calculateContextSize(layoutTargets);
+			var size:Point = calculateContainerSize(layoutTargets);
 			
 			_mediaWidth = size.x;
 			_mediaHeight = size.y;
 			
-			_context.measureMedia();
+			_container.measureMedia();
 		}
 		
 		/**
@@ -455,7 +455,7 @@ package org.osmf.layout
 		{
 			processUpdateMediaDisplayBegin(layoutTargets);
 			
-			_context.updateMediaDisplay(availableWidth, availableHeight);
+			_container.updateMediaDisplay(availableWidth, availableHeight);
 			
 			// Traverse, execute top-down:
 			for each (var target:ILayoutTarget in layoutTargets)
@@ -485,6 +485,8 @@ package org.osmf.layout
 		//
 		
 		/**
+		 * @private
+		 * 
 		 * Subclasses may override this method to have it return the list
 		 * of URL namespaces that identify the metadata facets that the
 		 * renderer uses on its calculations.
@@ -506,6 +508,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method, providing the algorithm
 		 * by which the list of targets gets sorted.
 		 * 
@@ -524,11 +528,13 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * Subclasses may override this method to process the renderer's context
+		 * @private
+		 *
+		 * Subclasses may override this method to process the renderer's container
 		 * changing.
 		 * 
-		 * @param oldContext The old context.
-		 * @param newContext The new context.
+		 * @param oldContainer The old container.
+		 * @param newContainer The new container.
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -536,11 +542,13 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
+		protected function processContainerChange(oldContainer:ILayoutTarget, newContainer:ILayoutTarget):void
 		{	
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method to do processing on a target
 		 * item being added.
 		 *   
@@ -556,6 +564,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method to do processing on a target
 		 * item being removed.
 		 *   
@@ -571,6 +581,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method should they require special
 		 * processing on the displayObject of a target being staged.
 		 *  
@@ -587,6 +599,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method should they require special
 		 * processing on the displayObject of a target being unstaged.
 		 *  
@@ -603,6 +617,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method should they require special
 		 * processing on the updateMediaDisplay routine starting it execution.
 		 *  
@@ -618,6 +634,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses may override this method should they require special
 		 * processing on the updateMediaDisplay routine completing its execution.
 		 *  
@@ -631,6 +649,8 @@ package org.osmf.layout
 		}	
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses should override this method to implement the algorithm by
 		 * which the targets of the renderer get sorted.
 		 * 
@@ -649,6 +669,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses should override this method to implement the algorithm by which
 		 * the position and size of a target gets calculated.
 		 * 
@@ -668,12 +690,14 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 *
 		 * Subclasses should override this method to implement the algorithm by which
-		 * the size of the renderer's context is calculated:
+		 * the size of the renderer's container is calculated:
 		 * 
-		 * @return The calculated size of the renderer's context.
+		 * @return The calculated size of the renderer's container.
 		 */		
-		protected function calculateContextSize(targets:Vector.<ILayoutTarget>):Point
+		protected function calculateContainerSize(targets:Vector.<ILayoutTarget>):Point
 		{
 			return new Point();
 		}
@@ -688,20 +712,20 @@ package org.osmf.layout
 				removeTarget(target);
 			}
 			
-			if (_context)
+			if (_container)
 			{
-				_context.removeEventListener
+				_container.removeEventListener
 					( DisplayObjectEvent.MEDIA_SIZE_CHANGE
 					, invalidatingEventHandler
 					);
 						
-				// Make sure to update the existing context
+				// Make sure to update the existing container
 				// before we loose it:
 				validateNow();
 			}
 			
-			_context = null;
-			this.container = null;
+			_container = null;
+			this.displayObjectContainer = null;
 			this.metadata = null;
 		}
 		
@@ -775,7 +799,7 @@ package org.osmf.layout
 			if (currentObject == object)
 			{
 				// Make sure that the object is at the right position in the display list:
-				container.setChildIndex(object, Math.min(Math.max(0,container.numChildren-1), index));
+				displayObjectContainer.setChildIndex(object, Math.min(Math.max(0,displayObjectContainer.numChildren-1), index));
 				CONFIG::LOGGING { logger.debug("[.] setChildIndex, {0} on {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			}
 			else
@@ -783,12 +807,12 @@ package org.osmf.layout
 				if (currentObject != null)
 				{
 					// Remove the current object:
-					container.removeChild(currentObject);
+					displayObjectContainer.removeChild(currentObject);
 					CONFIG::LOGGING { logger.debug("[-] removeChild, {0} from {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				}
 				
 				// Add the new object:
-				container.addChildAt(object, index);
+				displayObjectContainer.addChildAt(object, index);
 				stagedDisplayObjects[target] = object;
 				CONFIG::LOGGING { logger.debug("[+] addChild, {0} to {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				
@@ -806,15 +830,15 @@ package org.osmf.layout
 			if (currentObject != null)
 			{
 				delete stagedDisplayObjects[target];
-				container.removeChild(currentObject);
+				displayObjectContainer.removeChild(currentObject);
 				
 				CONFIG::LOGGING { logger.debug("[-] removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			}
 		}
 		
 		private var _parent:LayoutRenderer;
-		private var _context:ILayoutTarget;		
-		private var container:DisplayObjectContainer;
+		private var _container:ILayoutTarget;		
+		private var displayObjectContainer:DisplayObjectContainer;
 		private var metadata:Metadata;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;

@@ -71,7 +71,7 @@ package org.osmf.containers
 			super(metadata);
 			
 			layoutRenderer ||= new DefaultLayoutRenderer()
-			layoutRenderer.context = this; 
+			layoutRenderer.container = this; 
 		}
 		
 		// MediaContainer

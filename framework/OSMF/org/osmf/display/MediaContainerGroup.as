@@ -84,7 +84,7 @@ package org.osmf.display
 				=	groupsLayoutRenderer
 				||	new DefaultLayoutRenderer();
 				
-			layoutRenderer.context = this; 
+			layoutRenderer.container = this; 
 		}
 		
 		// Public API

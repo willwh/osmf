@@ -69,19 +69,19 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override protected function processContextChange(oldContext:ILayoutTarget, newContext:ILayoutTarget):void
+		override protected function processContainerChange(oldContainer:ILayoutTarget, newContainer:ILayoutTarget):void
 		{
-			if (oldContext)
+			if (oldContainer)
 			{
-				contextAbsoluteWatcher.unwatch();
-				contextAttributesWatcher.unwatch();
+				containerAbsoluteWatcher.unwatch();
+				containerAttributesWatcher.unwatch();
 			}
 			
-			if (newContext)
+			if (newContainer)
 			{
-				contextAbsoluteWatcher
+				containerAbsoluteWatcher
 					= MetadataUtils.watchFacet
-						( newContext.metadata
+						( newContainer.metadata
 						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
 						, function (..._):void
 							{
@@ -89,9 +89,9 @@ package org.osmf.layout
 							}
 						);
 						
-				contextAttributesWatcher
+				containerAttributesWatcher
 					= MetadataUtils.watchFacet
-						( newContext.metadata
+						( newContainer.metadata
 						, MetadataNamespaces.LAYOUT_ATTRIBUTES
 						, function (facet:LayoutAttributesFacet):void
 							{
@@ -125,7 +125,7 @@ package org.osmf.layout
 		 */
 		override protected function processTargetAdded(target:ILayoutTarget):void
 		{
-			// Set targets to take 100% of their context's width and height, but only
+			// Set targets to take 100% of their container's width and height, but only
 			// if no relative facet is present all together:
 			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
 			if	(	mode == LayoutRendererMode.CANVAS
@@ -550,12 +550,12 @@ package org.osmf.layout
 			return rect;
 		}
 		
-		override protected function calculateContextSize(targets:Vector.<ILayoutTarget>):Point
+		override protected function calculateContainerSize(targets:Vector.<ILayoutTarget>):Point
 		{
 			var size:Point = new Point(NaN, NaN);
 			
 			var absolute:AbsoluteLayoutFacet
-				= context.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+				= container.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
 				as AbsoluteLayoutFacet;
 			
 			if (absolute)
@@ -568,7 +568,7 @@ package org.osmf.layout
 			{
 				// Iterrate over all targets, calculating their bounds, combining the results
 				// into a bounds rectangle:
-				var contextBounds:Rectangle = new Rectangle();
+				var containerBounds:Rectangle = new Rectangle();
 				var targetBounds:Rectangle;
 				var lastBounds:Rectangle;
 				
@@ -597,20 +597,20 @@ package org.osmf.layout
 						lastBounds = targetBounds;
 					}
 					
-					contextBounds = contextBounds.union(targetBounds);
+					containerBounds = containerBounds.union(targetBounds);
 				}
 				
-				size.x ||= contextBounds.width;
-				size.y ||= contextBounds.height;	
+				size.x ||= containerBounds.width;
+				size.y ||= containerBounds.height;	
 			}
 			
 			CONFIG::LOGGING
 			{
 				logger.debug
-					( "{0} calculated context size ({1}, {2}) (bounds: {3})"
-					, context.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
+					( "{0} calculated container size ({1}, {2}) (bounds: {3})"
+					, container.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
 					, size.x, size.y
-					, contextBounds
+					, containerBounds
 					);
 			}
 			
@@ -644,8 +644,8 @@ package org.osmf.layout
 		private var lastCalculatedBounds:Rectangle;
 		
 		private var targetMetadataWatchers:Dictionary = new Dictionary();
-		private var contextAbsoluteWatcher:MetadataWatcher;
-		private var contextAttributesWatcher:MetadataWatcher;
+		private var containerAbsoluteWatcher:MetadataWatcher;
+		private var containerAttributesWatcher:MetadataWatcher;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultLayoutRenderer");
 	}

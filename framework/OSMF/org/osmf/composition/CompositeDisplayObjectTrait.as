@@ -147,7 +147,7 @@ package org.osmf.composition
 		{
 			if (_layoutRenderer)
 			{
-				_layoutRenderer.context = null;
+				_layoutRenderer.container = null;
 				_layoutRenderer = null;
 			}
 			
@@ -172,7 +172,7 @@ package org.osmf.composition
 				_layoutRenderer = new DefaultLayoutRenderer();
 			}
 			
-			_layoutRenderer.context = _childrenContainer;
+			_layoutRenderer.container = _childrenContainer;
 		}
 
 		private var _traitAggregator:TraitAggregator;		

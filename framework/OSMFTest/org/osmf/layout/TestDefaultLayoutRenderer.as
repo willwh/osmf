@@ -59,7 +59,7 @@ package org.osmf.layout
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			layoutRenderer.context = container;
+			layoutRenderer.container = container;
 			layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.invalidate();
 			
@@ -189,7 +189,7 @@ package org.osmf.layout
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			layoutRenderer.context = container;
+			layoutRenderer.container = container;
 			
 			var melt:ILayoutTarget = layoutRenderer.addTarget(MediaElementLayoutTarget.getInstance(mediaElement));
 			layoutRenderer.invalidate();
@@ -276,7 +276,7 @@ package org.osmf.layout
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			layoutRenderer.context = container;
+			layoutRenderer.container = container;
 			
 			assertEquals(NaN, container.mediaWidth);
 			assertEquals(NaN, container.mediaHeight);
@@ -308,7 +308,7 @@ package org.osmf.layout
 			MetadataUtils.setElementId(container.metadata,"container");
 			
 			var layoutRenderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			layoutRenderer.context = container;
+			layoutRenderer.container = container;
 			
 			assertEquals(NaN, container.mediaWidth);
 			assertEquals(NaN, container.mediaHeight);
@@ -325,7 +325,7 @@ package org.osmf.layout
 			MetadataUtils.setElementId(container2.metadata,"container2");
 			
 			var layoutRenderer2:DefaultLayoutRenderer = new DefaultLayoutRenderer();
-			layoutRenderer2.context = container2;
+			layoutRenderer2.container = container2;
 			
 			assertEquals(NaN, container2.mediaWidth);
 			assertEquals(NaN, container2.mediaHeight);
@@ -341,7 +341,7 @@ package org.osmf.layout
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			renderer.context = container;
+			renderer.container = container;
 			
 			var layout:LayoutProperties;
 			
@@ -386,7 +386,7 @@ package org.osmf.layout
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			renderer.context = container;
+			renderer.container = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			var layout:LayoutProperties = new LayoutProperties(t1);
@@ -423,7 +423,7 @@ package org.osmf.layout
 		{
 			var renderer:DefaultLayoutRenderer = new DefaultLayoutRenderer();
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			renderer.context = container;
+			renderer.container = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			t1.setIntrinsicDimensions(100,100);

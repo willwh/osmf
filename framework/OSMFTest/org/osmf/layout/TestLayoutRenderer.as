@@ -38,7 +38,7 @@ package org.osmf.layout
 			var l2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			l2.setIntrinsicDimensions(100,150);
 			
-			renderer.context = c;
+			renderer.container = c;
 			
 			renderer.addTarget(l1);
 			renderer.addTarget(l2);
