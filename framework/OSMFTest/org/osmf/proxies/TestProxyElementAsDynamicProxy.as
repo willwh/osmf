@@ -179,32 +179,37 @@ package org.osmf.proxies
 			assertTrue(traitAddEventCount == 1);
 			assertTrue(traitRemoveEventCount == 1);
 			
-			// If we add or remove a trait to the proxy which the wrapped
-			// element already has, we should get no events.
+			// If we add a trait to the proxy which the wrapped element
+			// already has, we should get a remove event (for the wrapped
+			// element's trait) followed by an add event.
 			proxyElement.doAddTrait(MediaTraitType.LOAD, new LoadTrait(null,null));
-			assertTrue(traitAddEventCount == 1);
-			assertTrue(traitRemoveEventCount == 1);
-			proxyElement.doRemoveTrait(MediaTraitType.LOAD);
-			assertTrue(traitAddEventCount == 1);
-			assertTrue(traitRemoveEventCount == 1);
-
-			// But if we add or remove a trait to the proxy which the wrapped
-			// element doesn't have, then we should get events.
-			proxyElement.doAddTrait(MediaTraitType.BUFFER, new BufferTrait());
-			assertTrue(traitAddEventCount == 2);
-			assertTrue(traitRemoveEventCount == 1);
-			proxyElement.doRemoveTrait(MediaTraitType.BUFFER);
 			assertTrue(traitAddEventCount == 2);
 			assertTrue(traitRemoveEventCount == 2);
+			
+			// If we remove a trait from the proxy which the wrapped element
+			// already has, we should get a remove event (for the proxy's
+			// trait) followed by an add event.
+			proxyElement.doRemoveTrait(MediaTraitType.LOAD);
+			assertTrue(traitAddEventCount == 3);
+			assertTrue(traitRemoveEventCount == 3);
+
+			// If we add or remove a trait to the proxy which the wrapped
+			// element doesn't have, then we should get events.
+			proxyElement.doAddTrait(MediaTraitType.BUFFER, new BufferTrait());
+			assertTrue(traitAddEventCount == 4);
+			assertTrue(traitRemoveEventCount == 3);
+			proxyElement.doRemoveTrait(MediaTraitType.BUFFER);
+			assertTrue(traitAddEventCount == 4);
+			assertTrue(traitRemoveEventCount == 4);
 			
 			// Last, if we add or remove a trait to the proxy which the proxy
 			// also blocks, then we should get events. 
 			proxyElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
-			assertTrue(traitAddEventCount == 3);
-			assertTrue(traitRemoveEventCount == 2);
+			assertTrue(traitAddEventCount == 5);
+			assertTrue(traitRemoveEventCount == 4);
 			proxyElement.doRemoveTrait(MediaTraitType.PLAY);
-			assertTrue(traitAddEventCount == 3);
-			assertTrue(traitRemoveEventCount == 3);
+			assertTrue(traitAddEventCount == 5);
+			assertTrue(traitRemoveEventCount == 5);
 		}
 		
 		// Overrides

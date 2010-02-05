@@ -277,7 +277,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		final protected function addTrait(type:String, instance:MediaTraitBase):void
+		protected function addTrait(type:String, instance:MediaTraitBase):void
 		{
 			if (type == null || instance == null || type != instance.traitType)
 			{
@@ -312,7 +312,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		final protected function removeTrait(type:String):MediaTraitBase
+		protected function removeTrait(type:String):MediaTraitBase
 		{
 			if (type == null)
 			{

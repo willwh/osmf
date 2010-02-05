@@ -23,14 +23,11 @@ package org.osmf.proxies
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.events.Event;
-	
-	import org.osmf.containers.IMediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -241,32 +238,38 @@ package org.osmf.proxies
 			}
 		}
 		
-		/**
-		 * @private
-		 */
-		override public function dispatchEvent(event:Event):Boolean
-		{			
-			var doDispatchEvent:Boolean = true;
+		override protected function addTrait(type:String, instance:MediaTraitBase):void
+		{
+			// If we're adding a trait that already exists on the proxied
+			// element (and isn't blocked), then we need to signal removal
+			// of the base trait first.
+			if (	blocksTrait(type) == false
+				&&	proxiedElement != null
+				&& 	proxiedElement.hasTrait(type) == true
+			   )
+			{
+				super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, type));
+			}
+			
+			super.addTrait(type, instance);
+		}
 
-			// If the proxy is dispatching a MediaElementEvent for a trait
-			// that isn't blocked but which already exists on the wrapped
-			// element, then we swallow the event.
-			var traitEvent:MediaElementEvent = event as MediaElementEvent;
-			if  (  traitEvent != null
-				&& blocksTrait(traitEvent.traitType) == false
-				&& proxiedElement != null
-				&& proxiedElement.hasTrait(traitEvent.traitType) == true
-				)
+		override protected function removeTrait(type:String):MediaTraitBase
+		{
+			var result:MediaTraitBase = super.removeTrait(type);
+			
+			// If we're removing a trait that also exists on the proxied
+			// element (and isn't blocked), then we need to signal addition
+			// of the base trait immediately after the removal.
+			if (	blocksTrait(type) == false
+				&&	proxiedElement != null
+				&& 	proxiedElement.hasTrait(type) == true
+			   )
 			{
-				doDispatchEvent = false;
+				super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, type));
 			}
 			
-			if (doDispatchEvent)
-			{
-				super.dispatchEvent(event);
-			}
-			
-			return doDispatchEvent;
+			return result;
 		}
 		
 		/**
