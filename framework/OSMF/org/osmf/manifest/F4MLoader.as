@@ -207,7 +207,7 @@ package org.osmf.manifest
 				}									
 				
 				FactoryLoadTrait(loadTrait).mediaElement = loadedElem;																		
-				updateLoadTrait(loadTrait, LoadState.READY);		
+				updateLoadTrait(loadTrait, LoadState.READY, new F4MLoadedContext());		
 			}				
 		}
 		

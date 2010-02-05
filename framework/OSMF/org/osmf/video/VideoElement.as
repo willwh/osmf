@@ -63,16 +63,11 @@ package org.osmf.video
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
-	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
-
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
@@ -411,16 +406,7 @@ package org.osmf.video
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null && context.switchManager != null)
 			{
-				// TODO: Merge the two DynamicStreamTraits into one.  Remove the HTTP-specific
-				// lines.
-				if (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(dsResource) != null)
-				{
-					addTrait(MediaTraitType.DYNAMIC_STREAM, new HTTPStreamingNetStreamDynamicStreamTrait(stream as HTTPNetStream, dsResource));
-				}
-				else
-				{
-					addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream, context.switchManager, dsResource));
-				}
+				addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream, context.switchManager, dsResource));
 			}
 		}
 		

@@ -25,7 +25,10 @@ package org.osmf.net.httpstreaming
 	import flash.net.NetStream;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
 	import org.osmf.traits.LoadTrait;
@@ -71,7 +74,29 @@ package org.osmf.net.httpstreaming
 		{
 			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler();
 			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler(indexHandler);
-			return new HTTPNetStream(connection, indexHandler, fileHandler);
-		}		
+			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler);
+			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(loadTrait.resource as URLResource);
+			return httpNetStream;
+		}
+		
+		/**
+		 * Overridden to allow the creation of a NetStreamSwitchManager object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		{
+			// Only generate the switching manager if the resource is truly
+			// switchable.
+			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
+			if (dsResource != null)
+			{
+				return new NetStreamSwitchManager(connection, netStream, dsResource);
+			}
+			return null;
+		}
 	}
 }

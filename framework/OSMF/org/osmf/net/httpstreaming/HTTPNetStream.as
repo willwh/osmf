@@ -32,6 +32,7 @@ package org.osmf.net.httpstreaming
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.net.NetStreamPlayOptions;
+	import flash.net.NetStreamPlayTransitions;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLStream;
@@ -41,7 +42,6 @@ package org.osmf.net.httpstreaming
 	
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
-	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
@@ -183,6 +183,23 @@ package org.osmf.net.httpstreaming
 			_manualSwitchMode = value;
 		}
 		
+		/**
+		 * Initialization info for the HTTPStreamingIndexHandlerBase.
+		 * 
+		 * If specified, this will be passed to the index handler's
+		 * initialize method when playback is initiated.  Otherwise,
+		 * the argument to play (or play2) will be used.
+		 **/
+		public function get indexInfo():HTTPStreamingIndexInfoBase
+		{
+			return _indexInfo;
+		}
+		
+		public function set indexInfo(value:HTTPStreamingIndexInfoBase):void
+		{
+			_indexInfo = value;
+		}
+		
 		// Overrides
 		//
 		
@@ -195,9 +212,6 @@ package org.osmf.net.httpstreaming
 		 *		a) Subclips
 		 *		b) Live
 		 *		c) Resetting playlist
-		 * 
-		 * In all cases, the first param MUST be of type HTTPStreamingIndexInfoBase.
-		 * The index info object will be passed to the HTTPStreamingIndexHandler.
 		 * 
 		 * @inheritDoc
 		 *  
@@ -226,8 +240,6 @@ package org.osmf.net.httpstreaming
 					)
 				); 
 			
-			// TODO: Add subclip and live support here.
-			
 			// Before we feed any TCMessages to the Flash Player, we must feed
 			// an FLV header first.
 			//
@@ -245,7 +257,7 @@ package org.osmf.net.httpstreaming
 			_seekTime = -1;
 									
 			indexIsReady = false;
-			indexHandler.initialize(args[0]);
+			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
 		
 			if (args.length >= 2)
 			{
@@ -276,10 +288,26 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function play2(param:NetStreamPlayOptions):void
 		{
-			super.play2(param);
-			
-			// TODO: Add support for MBR here.  Playlist support is probably
-			// irrelevant for now.
+			if (param.transition == NetStreamPlayTransitions.RESET)
+			{
+				// XXX Need to reset playback if we're already playing.
+				// Is this done via seek?
+				
+				// The only difference between play and play2 for the RESET
+				// case is that play2 might start at a specific quality level.
+				setQualityLevelForStreamName(param.streamName);
+				
+				play(param.streamName, param.start, param.len);
+			}
+			else if (param.transition == NetStreamPlayTransitions.SWITCH)
+			{
+				setQualityLevelForStreamName(param.streamName);
+			}
+			else
+			{
+				// Not sure which other modes we should add support for.
+				super.play2(param);
+			}
 		} 
 		
 		/**
@@ -1090,6 +1118,7 @@ package org.osmf.net.httpstreaming
 		private function onRates(event:HTTPStreamingIndexHandlerEvent):void
 		{
 			_qualityRates = event.rates;
+			_streamNames = event.streamNames;
 			_numQualityLevels = _qualityRates.length;
 		}	
 
@@ -1187,7 +1216,7 @@ package org.osmf.net.httpstreaming
 							( NetStatusEvent.NET_STATUS
 							, false
 							, false
-							, {code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION, level:"status"}
+							, {code:NetStreamCodes.NETSTREAM_PLAY_TRANSITION, level:"status", details:_streamNames[value]}
 							)
 						); 
 				}
@@ -1195,6 +1224,28 @@ package org.osmf.net.httpstreaming
 			else
 			{
 				throw new Error("qualityLevel cannot be set to this value at this time");
+			}
+		}
+		
+		private function setQualityLevelForStreamName(streamName:String):void
+		{
+			var level:int = -1;
+			
+			if (_streamNames != null)
+			{
+				for (var i:int = 0; i < _streamNames.length; i++)
+				{
+					if (streamName == _streamNames[i])
+					{
+						level = i;
+						break;
+					}
+				}
+			}
+			
+			if (level != -1)
+			{
+				setQualityLevel(level);
 			}
 		}
 
@@ -1209,8 +1260,10 @@ package org.osmf.net.httpstreaming
 
 		private static const MAIN_TIMER_INTERVAL:int = 25;
 		
+		private var _indexInfo:HTTPStreamingIndexInfoBase = null;
 		private var _numQualityLevels:int = 0;
 		private var _qualityRates:Array; 	
+		private var _streamNames:Array;
 		private var _segmentDuration:Number;
 		private var _urlStreamVideo:URLStream = null;
 		private var _loadComplete:Boolean = false;
@@ -1222,7 +1275,7 @@ package org.osmf.net.httpstreaming
 		private var _lastDownloadStartTime:Number = -1;
 		private var _lastDownloadDuration:Number;
 		private var _lastDownloadRatio:Number = 0;
-		private var _manualSwitchMode:Boolean = false;
+		private var _manualSwitchMode:Boolean = true;
 		private var _aggressiveUpswitch:Boolean = true;	// XXX needs a getter and setter, or to be part of a pluggable rate-setter
 		private var indexHandler:HTTPStreamingIndexHandlerBase;
 		private var fileHandler:HTTPStreamingFileHandlerBase;

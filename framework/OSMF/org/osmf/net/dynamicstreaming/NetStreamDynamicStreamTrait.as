@@ -90,7 +90,7 @@ package org.osmf.net.dynamicstreaming
 		 */
 		override protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
 		{
-			if (newSwitching && !netStreamIsSwitching)
+			if (newSwitching && !inSetSwitching)
 			{
 				// Keep track of the target index, we don't want to begin
 				// the switch now since our switching state won't be
@@ -106,7 +106,7 @@ package org.osmf.net.dynamicstreaming
 		{
 			super.switchingChangeEnd(index, detail);
 			
-			if (switching && !netStreamIsSwitching)
+			if (switching && !inSetSwitching)
 			{
 				switchManager.switchTo(indexToSwitchTo);
 			}
@@ -136,12 +136,11 @@ package org.osmf.net.dynamicstreaming
 					// This switch is driven by the NetStream, we set a member
 					// variable so that we don't assume it's being requested by
 					// the client (and thus trigger a second switch).
-					netStreamIsSwitching = true;
+					inSetSwitching = true;
 					
-					// TODO: Fix the index, this is the wrong value.
-					setSwitching(true, switchManager.currentIndex);
+					setSwitching(true, dsResource.indexFromName(event.info.details));
 					
-					netStreamIsSwitching = false;		
+					inSetSwitching = false;		
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:					
 					setSwitching(false, currentIndex);					
@@ -163,7 +162,7 @@ package org.osmf.net.dynamicstreaming
 		
 		private var netStream:NetStream;
 		private var switchManager:NetStreamSwitchManager;
-		private var netStreamIsSwitching:Boolean;
+		private var inSetSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
 		private var indexToSwitchTo:int;	
 	}

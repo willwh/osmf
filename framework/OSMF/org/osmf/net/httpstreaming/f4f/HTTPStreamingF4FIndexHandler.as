@@ -85,9 +85,10 @@ package org.osmf.net.httpstreaming.f4f
 				dispatchEvent
 					(	new HTTPStreamingIndexHandlerEvent
 							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
-							, false 
-							, false 
-							, null 
+							, false
+							, false
+							, null
+							, null
 							, 0
 							, new URLRequest(f4fIndexInfo.bootstrapInfoURL)
 							, null
@@ -159,6 +160,7 @@ package org.osmf.net.httpstreaming.f4f
 					( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
 					, false
 					, false
+					, getStreamNames(streamInfos)
 					, getQualityRates(streamInfos)
 					)
 				);
@@ -168,6 +170,7 @@ package org.osmf.net.httpstreaming.f4f
 					( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
 					, false
 					, false
+					, null
 					, null
 					, abst.totalDuration / abst.timeScale
 					)
@@ -338,6 +341,7 @@ package org.osmf.net.httpstreaming.f4f
 							, false
 							, false
 							, null
+							, null
 							, 0
 							, null
 							, null
@@ -363,6 +367,22 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			
 			return rates;
+		}
+
+		private function getStreamNames(streamInfos:Vector.<HTTPStreamingF4FStreamInfo>):Array
+		{
+			var streamNames:Array = [];
+			
+			if (streamInfos.length >= 1)
+			{
+				for (var i:int = 0; i < streamInfos.length; i++)
+				{
+					var streamInfo:HTTPStreamingF4FStreamInfo = streamInfos[i] as HTTPStreamingF4FStreamInfo;
+					streamNames.push(streamInfo.streamName);
+				}
+			}
+			
+			return streamNames;
 		}
 
 		private function getFragmentRunTable():AdobeFragmentRunTable

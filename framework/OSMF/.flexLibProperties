@@ -109,6 +109,7 @@
     <classEntry path="org.osmf.manifest.BootstrapInfo"/>
     <classEntry path="org.osmf.manifest.DRMAdditionalHeader"/>
     <classEntry path="org.osmf.manifest.F4MElement"/>
+    <classEntry path="org.osmf.manifest.F4MLoadedContext"/>
     <classEntry path="org.osmf.manifest.F4MLoader"/>
     <classEntry path="org.osmf.manifest.Manifest"/>
     <classEntry path="org.osmf.manifest.ManifestParser"/>
@@ -186,7 +187,6 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetLoader"/>
-    <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetStreamDynamicStreamTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingUtils"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox"/>

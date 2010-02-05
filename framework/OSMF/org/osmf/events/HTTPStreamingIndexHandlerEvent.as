@@ -42,7 +42,8 @@ package org.osmf.events
 		public function HTTPStreamingIndexHandlerEvent(
 			type:String, 
 			bubbles:Boolean=false, 
-			cancelable:Boolean=false, 
+			cancelable:Boolean=false,
+			streamNames:Array = null, 
 			rates:Array = null, 
 			totalDuration:Number = 0,
 			request:URLRequest = null,
@@ -52,12 +53,18 @@ package org.osmf.events
 		{
 			super(type, bubbles, cancelable);
 			
+			_streamNames = streamNames;
 			_rates = rates;
 			_totalDuration = totalDuration;
 			_request = request;
 			_requestContext = requestContext;
 			_binaryData = binaryData;
 			_additionalHeader = additionalHeader;
+		}
+
+		public function get streamNames():Array
+		{
+			return _streamNames;
 		}
 		
 		public function get rates():Array
@@ -96,6 +103,7 @@ package org.osmf.events
 				( type
 				, bubbles
 				, cancelable
+				, streamNames
 				, rates
 				, totalDuration
 				, request
@@ -108,6 +116,7 @@ package org.osmf.events
 		// Internal
 		//
 		
+		private var _streamNames:Array;
 		private var _rates:Array;
 		private var _totalDuration:Number;
 		private var _request:URLRequest;
