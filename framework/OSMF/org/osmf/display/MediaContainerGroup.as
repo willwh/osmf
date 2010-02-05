@@ -27,8 +27,8 @@ package org.osmf.display
 	import flash.geom.Rectangle;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.LayoutRenderer;
+	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
@@ -68,8 +68,8 @@ package org.osmf.display
 		 */		
 		public function MediaContainerGroup
 							( metadata:Metadata=null
-							, groupsLayoutRenderer:LayoutRenderer=null
-							, containerLayoutRenderer:LayoutRenderer=null
+							, groupsLayoutRenderer:LayoutRendererBase=null
+							, containerLayoutRenderer:LayoutRendererBase=null
 							)
 		{
 			super(metadata);
@@ -80,9 +80,9 @@ package org.osmf.display
 			
 			// Setup the layout renderer that will govern the layout of child
 			// groups:
-			var layoutRenderer:LayoutRenderer
+			var layoutRenderer:LayoutRendererBase
 				=	groupsLayoutRenderer
-				||	new DefaultLayoutRenderer();
+				||	new LayoutRenderer();
 				
 			layoutRenderer.container = this; 
 		}

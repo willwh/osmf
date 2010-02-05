@@ -43,14 +43,14 @@ package org.osmf.layout
 			return this;
 		}
 		
-		public function get layoutRenderer():LayoutRenderer
+		public function get layoutRenderer():LayoutRendererBase
 		{
-			return _layoutRenderer.value as LayoutRenderer;
+			return _layoutRenderer.value as LayoutRendererBase;
 		}
 		
-		public function get parentLayoutRenderer():LayoutRenderer
+		public function get parentLayoutRenderer():LayoutRendererBase
 		{
-			return _parentLayoutRenderer.value as LayoutRenderer;
+			return _parentLayoutRenderer.value as LayoutRendererBase;
 		}
 		
 		public function get measuredWidth():Number

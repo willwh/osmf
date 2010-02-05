@@ -133,7 +133,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get layoutRenderer():LayoutRenderer
+		public function get layoutRenderer():LayoutRendererBase
 		{
 			return _layoutRenderer;
 		}
@@ -141,7 +141,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get parentLayoutRenderer():LayoutRenderer
+		public function get parentLayoutRenderer():LayoutRendererBase
 		{
 			return _parentLayoutRenderer;
 		}
@@ -240,8 +240,8 @@ package org.osmf.layout
 		private var _mediaElement:MediaElement;
 		private var displayObjectTrait:DisplayObjectTrait;
 		private var _displayObject:DisplayObject;
-		private var _layoutRenderer:LayoutRenderer;
-		private var _parentLayoutRenderer:LayoutRenderer;
+		private var _layoutRenderer:LayoutRendererBase;
+		private var _parentLayoutRenderer:LayoutRendererBase;
 		
 		// Event Handlers
 		//
@@ -361,11 +361,11 @@ package org.osmf.layout
 			setParentLayoutRenderer(event.newValue);
 		}
 		
-		private function setLayoutRenderer(value:LayoutRenderer):void
+		private function setLayoutRenderer(value:LayoutRendererBase):void
 		{
 			if (value != _layoutRenderer)
 			{
-				var oldRenderer:LayoutRenderer = _layoutRenderer;
+				var oldRenderer:LayoutRendererBase = _layoutRenderer;
 				_layoutRenderer = value;
 				dispatchEvent
 					( new LayoutRendererChangeEvent
@@ -378,11 +378,11 @@ package org.osmf.layout
 			} 
 		}
 		
-		private function setParentLayoutRenderer(value:LayoutRenderer):void
+		private function setParentLayoutRenderer(value:LayoutRendererBase):void
 		{
 			if (value != _parentLayoutRenderer)
 			{
-				var oldRenderer:LayoutRenderer = _parentLayoutRenderer;
+				var oldRenderer:LayoutRendererBase = _parentLayoutRenderer;
 				_parentLayoutRenderer = value;
 				dispatchEvent
 					( new LayoutRendererChangeEvent

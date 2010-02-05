@@ -19,46 +19,42 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.layout
 {
-	import flash.events.Event;
+	import flexunit.framework.TestCase;
 
-	public class LayoutRendererChangeEvent extends Event
+	public class TestLayoutRendererBase extends TestCase
 	{
-		public static const LAYOUT_RENDERER_CHANGE:String = "layoutRendererChange";
-		public static const PARENT_LAYOUT_RENDERER_CHANGE:String = "parentLayoutRendererChange";
-		
-		public function LayoutRendererChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:LayoutRendererBase = null, newValue:LayoutRendererBase = null)
+		public function testLayoutRenderer():void
 		{
-			super(type, bubbles, cancelable);
+			var renderer:LayoutRendererBase = new LayoutRendererBase();
+			assertNotNull(renderer);
 			
-			_oldValue = oldValue;
-			_newValue = newValue;
+			var c:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			
+			var l1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			l1.setIntrinsicDimensions(50,200);
+			
+			var l2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
+			l2.setIntrinsicDimensions(100,150);
+			
+			renderer.container = c;
+			
+			renderer.addTarget(l1);
+			renderer.addTarget(l2);
+			
+			renderer.validateNow();
+			
+			assertEquals(50, l1.measuredWidth);
+			assertEquals(200, l1.measuredHeight);
+			
+			assertEquals(100, l2.measuredWidth);
+			assertEquals(150, l2.measuredHeight);
+			
+			// The base renderer does not calculate aggregate bounds:
+			assertEquals(NaN, c.measuredWidth);
+			assertEquals(NaN, c.measuredHeight);
 		}
 		
-		public function get oldValue():LayoutRendererBase
-		{
-			return _oldValue;
-		}
-		
-		public function get newValue():LayoutRendererBase
-		{
-			return _newValue;
-		}
-		
-		// Overrides
-		//
-		
-		override public function clone():Event
-		{
-			return new(type, bubbles, cancelable, _oldValue, _newValue);
-		}
-		
-		// Internals
-		//
-		
-		private var _oldValue:LayoutRendererBase;
-		private var _newValue:LayoutRendererBase;
 	}
 }

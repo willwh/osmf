@@ -103,12 +103,12 @@ package org.osmf.layout
 	 	 * Defines the layout renderer that the implementing object uses to render
 	 	 * its children. Can be null.
 	 	 */	 	
-	 	function get layoutRenderer():LayoutRenderer;
+	 	function get layoutRenderer():LayoutRendererBase;
 	 	
 	 	/**
 	 	 * Defines the layout renderer that lays out the implementing object.
 	 	 */	 	
-	 	function get parentLayoutRenderer():LayoutRenderer;
+	 	function get parentLayoutRenderer():LayoutRendererBase;
 		
 	 	/**
 	 	 * Defines the width of the element without any transformations being

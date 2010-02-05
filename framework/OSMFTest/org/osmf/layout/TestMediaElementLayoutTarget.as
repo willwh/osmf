@@ -70,7 +70,7 @@ package org.osmf.layout
 			assertNull(null, lt.layoutRenderer);
 			assertNull(null, lt.parentLayoutRenderer);
 			
-			var renderer:LayoutRenderer = new DefaultLayoutRenderer();
+			var renderer:LayoutRendererBase = new LayoutRenderer();
 			renderer.container = lts;
 			
 			assertEquals(renderer, lt.layoutRenderer);

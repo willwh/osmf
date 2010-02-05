@@ -26,8 +26,8 @@ package org.osmf.containers
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.ContainerChangeEvent;
-	import org.osmf.layout.DefaultLayoutRenderer;
 	import org.osmf.layout.LayoutRenderer;
+	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.logging.ILogger;
@@ -66,11 +66,11 @@ package org.osmf.containers
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MediaContainer(metadata:Metadata=null, layoutRenderer:LayoutRenderer=null)
+		public function MediaContainer(metadata:Metadata=null, layoutRenderer:LayoutRendererBase=null)
 		{
 			super(metadata);
 			
-			layoutRenderer ||= new DefaultLayoutRenderer()
+			layoutRenderer ||= new LayoutRenderer()
 			layoutRenderer.container = this; 
 		}
 		

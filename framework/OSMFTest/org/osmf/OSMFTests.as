@@ -65,8 +65,8 @@ package org.osmf
 				
 			addTestSuite(TestAbsoluteLayoutFacet);
 			addTestSuite(TestAnchorLayoutFacet);
+			addTestSuite(TestLayoutRendererBase);
 			addTestSuite(TestLayoutRenderer);
-			addTestSuite(TestDefaultLayoutRenderer);
 			addTestSuite(TestLayoutAttributesFacet);
 			addTestSuite(TestMediaElementLayoutTarget);
 			addTestSuite(TestPaddingLayoutFacet);

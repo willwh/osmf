@@ -144,7 +144,7 @@ package org.osmf.layout
 			var newMediaWidth:Number;
 			var newMediaHeight:Number;
 			
-			var layoutRenderer:LayoutRenderer = _layoutRenderer.value as LayoutRenderer;
+			var layoutRenderer:LayoutRendererBase = _layoutRenderer.value as LayoutRendererBase;
 			
 			if (layoutRenderer)
 			{
@@ -199,17 +199,17 @@ package org.osmf.layout
 	 	/**
 		 * @private
 		 */		
-		public function get layoutRenderer():LayoutRenderer
+		public function get layoutRenderer():LayoutRendererBase
 		{
-			return _layoutRenderer.value as LayoutRenderer;
+			return _layoutRenderer.value as LayoutRendererBase;
 		}
 		
 		/**
 		 * @private
 		 */		
-		public function get parentLayoutRenderer():LayoutRenderer
+		public function get parentLayoutRenderer():LayoutRendererBase
 		{
-			return _parentLayoutRenderer.value as LayoutRenderer;
+			return _parentLayoutRenderer.value as LayoutRendererBase;
 		}
 		
 		// Overrides

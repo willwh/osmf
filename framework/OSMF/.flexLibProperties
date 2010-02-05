@@ -87,12 +87,12 @@
     <classEntry path="org.osmf.image.ImageLoader"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutFacet"/>
     <classEntry path="org.osmf.layout.AnchorLayoutFacet"/>
-    <classEntry path="org.osmf.layout.DefaultLayoutRenderer"/>
+    <classEntry path="org.osmf.layout.LayoutRenderer"/>
     <classEntry path="org.osmf.layout.ILayoutTarget"/>
     <classEntry path="org.osmf.layout.LayoutAttributesFacet"/>
     <classEntry path="org.osmf.layout.LayoutFacet"/>
     <classEntry path="org.osmf.layout.LayoutProperties"/>
-    <classEntry path="org.osmf.layout.LayoutRenderer"/>
+    <classEntry path="org.osmf.layout.LayoutRendererBase"/>
     <classEntry path="org.osmf.layout.LayoutRendererChangeEvent"/>
     <classEntry path="org.osmf.layout.LayoutRendererMode"/>
     <classEntry path="org.osmf.layout.LayoutTargetSprite"/>

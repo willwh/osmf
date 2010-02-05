@@ -25,9 +25,9 @@ package org.osmf.composition
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.layout.DefaultLayoutRenderer;
-	import org.osmf.layout.ILayoutTarget;
 	import org.osmf.layout.LayoutRenderer;
+	import org.osmf.layout.ILayoutTarget;
+	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
@@ -109,7 +109,7 @@ package org.osmf.composition
 		// Protected API
 		//
 		
-		protected function get layoutRenderer():LayoutRenderer
+		protected function get layoutRenderer():LayoutRendererBase
 		{
 			return _layoutRenderer;
 		}
@@ -159,7 +159,7 @@ package org.osmf.composition
 				{
 					_layoutRenderer
 						= new (Class(layoutRendererFacet.object))()
-						as LayoutRenderer;
+						as LayoutRendererBase;
 				}
 				catch (e:*)
 				{
@@ -169,7 +169,7 @@ package org.osmf.composition
 			
 			if (_layoutRenderer == null)
 			{
-				_layoutRenderer = new DefaultLayoutRenderer();
+				_layoutRenderer = new LayoutRenderer();
 			}
 			
 			_layoutRenderer.container = _childrenContainer;
@@ -178,7 +178,7 @@ package org.osmf.composition
 		private var _traitAggregator:TraitAggregator;		
 		private var _owner:CompositeElement;
 		private var _childrenContainer:ILayoutTarget;
-		private var _layoutRenderer:LayoutRenderer;
+		private var _layoutRenderer:LayoutRendererBase;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeDisplayObjectTrait");
 	}

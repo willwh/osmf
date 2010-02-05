@@ -39,7 +39,7 @@ package org.osmf.composition
 			
 			// No layout renderer class being assigned, the default
 			// should have been used:
-			assertTrue(trait.layoutRenderer is DefaultLayoutRenderer);
+			assertTrue(trait.layoutRenderer is LayoutRenderer);
 			
 			var layoutRendererFacet:LayoutRendererFacet
 				= new LayoutRendererFacet(MyLayoutRenderer);
@@ -52,14 +52,14 @@ package org.osmf.composition
 			owner.metadata.removeFacet(layoutRendererFacet);
 			
 			// Should be 'default' once more: 
-			assertTrue(trait.layoutRenderer is DefaultLayoutRenderer);
+			assertTrue(trait.layoutRenderer is LayoutRenderer);
 			
 			// Assigning class that is not LayoutRenderer implementing:
 			layoutRendererFacet = new LayoutRendererFacet(Array);
 			owner.metadata.addFacet(layoutRendererFacet);
 			
 			// Should be 'default' once more: 
-			assertTrue(trait.layoutRenderer is DefaultLayoutRenderer);
+			assertTrue(trait.layoutRenderer is LayoutRenderer);
 		}
 	}
 	
@@ -69,14 +69,14 @@ import org.osmf.layout.*;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
 
-internal class MyLayoutRenderer extends EventDispatcher implements LayoutRenderer
+internal class MyLayoutRenderer extends EventDispatcher implements LayoutRendererBase
 {
-	public function get parent():LayoutRenderer
+	public function get parent():LayoutRendererBase
 	{
 		return _parent;
 	}
 	
-	public function set parent(value:LayoutRenderer):void
+	public function set parent(value:LayoutRendererBase):void
 	{
 		_parent = value;
 	}
@@ -120,5 +120,5 @@ internal class MyLayoutRenderer extends EventDispatcher implements LayoutRendere
 	{
 	}
 	
-	private var _parent:LayoutRenderer;
+	private var _parent:LayoutRendererBase;
 }
