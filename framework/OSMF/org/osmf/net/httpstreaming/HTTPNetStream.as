@@ -1275,7 +1275,7 @@ package org.osmf.net.httpstreaming
 		private var _lastDownloadStartTime:Number = -1;
 		private var _lastDownloadDuration:Number;
 		private var _lastDownloadRatio:Number = 0;
-		private var _manualSwitchMode:Boolean = true;
+		private var _manualSwitchMode:Boolean = false;
 		private var _aggressiveUpswitch:Boolean = true;	// XXX needs a getter and setter, or to be part of a pluggable rate-setter
 		private var indexHandler:HTTPStreamingIndexHandlerBase;
 		private var fileHandler:HTTPStreamingFileHandlerBase;

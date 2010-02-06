@@ -78,6 +78,7 @@ package org.osmf.net.httpstreaming
 			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler();
 			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler(indexHandler);
 			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler);
+			httpNetStream.manualSwitchMode = true;
 			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(loadTrait.resource as URLResource);
 			return httpNetStream;
 		}
