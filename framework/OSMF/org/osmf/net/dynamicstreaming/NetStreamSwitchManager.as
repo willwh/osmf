@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	import flash.events.NetStatusEvent;
@@ -66,16 +68,28 @@ package org.osmf.net.dynamicstreaming
 		 * @param connection The NetConnection for the NetStream that will be managed.
 		 * @param netStream The NetStream to manage.
 		 * @param dsResource The DynamicStreamingResource that is playing in the NetStream.
+		 * @param switchingRules The switching rules that this manager will use.  This
+		 * class will set its own MetricsProvider on each switching rule in the list.
 		 **/
-		public function NetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource)
+		public function NetStreamSwitchManager
+			( connection:NetConnection
+			, netStream:NetStream
+			, dsResource:DynamicStreamingResource
+			, switchingRules:Vector.<SwitchingRuleBase>)
 		{
 			this.connection = connection;
 			this.netStream = netStream;
 			this.dsResource = dsResource;
+			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 
 			_autoSwitch = true;
 			_maxAllowedIndex = int.MAX_VALUE;
 			metricsProvider = createMetricsProvider();
+			
+			for each (var switchingRule:SwitchingRuleBase in switchingRules)
+			{
+				switchingRule.metrics = metricsProvider;
+			}
 			
 			startingBuffer = BUFFER_START;
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
@@ -87,8 +101,6 @@ package org.osmf.net.dynamicstreaming
 
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
-
-			addSwitchingRules();
 		}
 		
 		/**
@@ -183,44 +195,8 @@ package org.osmf.net.dynamicstreaming
 		// Protected
 		//
 		
-		/**
-		 * Override this method to provide your own switching rules. Switching
-		 * rule classes must extend SwitchingRuleBase.  By default, this method
-		 * adds the SufficientBandwidthRule, InsufficientBandwidthRule,
-		 * DroppedFramesRule, and InsufficientBufferRule.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function addSwitchingRules():void
+		protected function addSwitchingRule(rule:SwitchingRuleBase):void
 		{
-			addSwitchingRule(new SufficientBandwidthRule(metricsProvider));
-			addSwitchingRule(new InsufficientBandwidthRule(metricsProvider));
-			addSwitchingRule(new DroppedFramesRule(metricsProvider));
-			addSwitchingRule(new InsufficientBufferRule(metricsProvider));
-		}
-		
-		/**
-		 * Adds a switching rule to the collection of switching
-		 * rules. Developers can override the default set of switching
-		 * rules or add to them by overridding the <code>addSwitchingRules</code>
-		 * method.
-		 * 
-		 * @param rule The switching rule to add.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected final function addSwitchingRule(rule:SwitchingRuleBase):void
-		{
-			if (switchingRules == null)
-			{
-				switchingRules = new Vector.<SwitchingRuleBase>();
-			}
 			switchingRules.push(rule);
 		}
 
@@ -432,7 +408,6 @@ package org.osmf.net.dynamicstreaming
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_START:
 					prepareForSwitching();
-					netStream.bufferTime = isLive ? maxBufferLength : startingBuffer;
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					switching  = false;

@@ -80,7 +80,8 @@ package org.osmf.net.dynamicstreaming
 			}
 				
 			stream.play(dsr);
-			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr), dsr);
+			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr, rules), dsr);
 		}
 				
 		private static const TIMEOUT:int = 12000;

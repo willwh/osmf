@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
@@ -28,6 +30,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase
 	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
@@ -94,9 +97,15 @@ package org.osmf.net.httpstreaming
 			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
-				return new NetStreamSwitchManager(connection, netStream, dsResource);
+				return new NetStreamSwitchManager(connection, netStream, dsResource, defaultSwitchingRules);
 			}
 			return null;
+		}
+		
+		private function get defaultSwitchingRules():Vector.<SwitchingRuleBase>
+		{
+			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			return rules;
 		}
 	}
 }

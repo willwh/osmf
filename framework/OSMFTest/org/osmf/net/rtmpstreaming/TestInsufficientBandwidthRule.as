@@ -19,16 +19,18 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.net.NetConnection;
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.netmocker.MockMetricsProvider;
 	import org.osmf.utils.NetFactory;
 
-	public class TestBandwidthRule extends TestCase
+	public class TestInsufficientBandwidthRule extends TestCase
 	{
 		override public function setUp():void
 		{
@@ -44,7 +46,8 @@ package org.osmf.net.dynamicstreaming
 			
 			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
 			
-			var bwRule:InsufficientBandwidthRule = new InsufficientBandwidthRule(metrics);
+			var bwRule:InsufficientBandwidthRule = new InsufficientBandwidthRule();
+			bwRule.metrics = metrics;
 			
 			var result:int;
 			

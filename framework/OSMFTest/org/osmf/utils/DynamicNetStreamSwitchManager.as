@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.utils
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
@@ -31,9 +33,13 @@ package org.osmf.utils
 	
 	public class DynamicNetStreamSwitchManager extends NetStreamSwitchManager
 	{
-		public function DynamicNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource)
+		public function DynamicNetStreamSwitchManager
+			( connection:NetConnection
+			, netStream:NetStream
+			, dsResource:DynamicStreamingResource
+			, rules:Vector.<SwitchingRuleBase>)
 		{
-			super(connection, netStream, dsResource);
+			super(connection, netStream, dsResource, rules);
 		}
 
 		public function get metricsProvider():MetricsProvider
@@ -55,11 +61,6 @@ package org.osmf.utils
 			return _metricsProvider;
 		}
 		
-		override protected function addSwitchingRules():void
-		{
-			// Add none.
-		}
-
 		private var _metricsProvider:MetricsProvider;
 	}
 }

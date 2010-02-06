@@ -168,16 +168,12 @@
     <classEntry path="org.osmf.net.NetStreamUtils"/>
     <classEntry path="org.osmf.net.StreamType"/>
     <classEntry path="org.osmf.net.StreamingURLResource"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.DroppedFramesRule"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingItem"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingResource"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.InsufficientBandwidthRule"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.InsufficientBufferRule"/>
     <classEntry path="org.osmf.net.dynamicstreaming.MetricsProvider"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamSwitchManager"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.SufficientBandwidthRule"/>
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingDetail"/>
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingDetailCodes"/>
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingRuleBase"/>
@@ -214,6 +210,10 @@
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagAudio"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject"/>
     <classEntry path="org.osmf.net.httpstreaming.flv.FLVTagVideo"/>
+    <classEntry path="org.osmf.net.rtmpstreaming.DroppedFramesRule"/>
+    <classEntry path="org.osmf.net.rtmpstreaming.InsufficientBandwidthRule"/>
+    <classEntry path="org.osmf.net.rtmpstreaming.InsufficientBufferRule"/>
+    <classEntry path="org.osmf.net.rtmpstreaming.SufficientBandwidthRule"/>
     <classEntry path="org.osmf.plugin.DynamicPluginLoader"/>
     <classEntry path="org.osmf.plugin.PluginElement"/>
     <classEntry path="org.osmf.plugin.PluginEntry"/>

@@ -19,13 +19,12 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
-	import flash.events.Event;
-	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 
 	/**
 	 * Switching rule for Bandwidth detection. This rule switches down when
@@ -64,9 +63,9 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function InsufficientBandwidthRule(metrics:MetricsProvider, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
+		public function InsufficientBandwidthRule(safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
 		{
-			super(metrics);
+			super();
 			
 			_safetyMultiple = safetyMultiple;
 		}

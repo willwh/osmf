@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
@@ -28,15 +30,19 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.rtmpstreaming.InsufficientBandwidthRule;
+	import org.osmf.net.rtmpstreaming.SufficientBandwidthRule;
+	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
+	import org.osmf.net.rtmpstreaming.InsufficientBufferRule;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * DynamicStreamingNetLoader extends NetLoader to provide
-	 * dynamic stream switching functionality. This class is
-	 * "backwards compatible" meaning if it is not handed a 
-	 * DynamicStreamingResource it will call the base class
-	 * implementation for both <code>load</code> and <code>unload</code>
-	 * methods.
+	 * dynamic stream switching functionality for RTMP streams.
+	 * This class is "backwards compatible" meaning if it is not
+	 * handed an RTMP DynamicStreamingResource it will call the
+	 * base class implementation for both <code>load</code> and
+	 * <code>unload</code> methods.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -87,9 +93,19 @@ package org.osmf.net.dynamicstreaming
 			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
-				return new NetStreamSwitchManager(connection, netStream, dsResource);
+				return new NetStreamSwitchManager(connection, netStream, dsResource, defaultSwitchingRules);
 			}
 			return null;
+		}
+		
+		private function get defaultSwitchingRules():Vector.<SwitchingRuleBase>
+		{
+			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			rules.push(new SufficientBandwidthRule());
+			rules.push(new InsufficientBandwidthRule());
+			rules.push(new DroppedFramesRule());
+			rules.push(new InsufficientBufferRule());
+			return rules;
 		}
 	}
 }

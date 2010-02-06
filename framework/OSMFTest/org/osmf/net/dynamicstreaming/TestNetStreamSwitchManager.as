@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net.dynamicstreaming
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -66,7 +68,7 @@ package org.osmf.net.dynamicstreaming
 				(stream as MockNetStream).expectedDuration = 2;
 			}
 
-			switchManager = new DynamicNetStreamSwitchManager(connection, stream, dsResource);
+			switchManager = new DynamicNetStreamSwitchManager(connection, stream, dsResource, new Vector.<SwitchingRuleBase>());
 		}
 		
 		override public function tearDown():void
@@ -175,7 +177,7 @@ package org.osmf.net.dynamicstreaming
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithNoSwitch);
 
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
 			switchManager.addRule(switchingRule);
 			
 			playStream(1);
@@ -201,7 +203,7 @@ package org.osmf.net.dynamicstreaming
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchDown);
 			
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
 			switchManager.addRule(switchingRule);
 			
 			playStream(2);
@@ -227,7 +229,7 @@ package org.osmf.net.dynamicstreaming
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
 			
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule(switchManager.metricsProvider);
+			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
 			switchManager.addRule(switchingRule);
 			
 			playStream(1);

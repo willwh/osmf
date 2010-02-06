@@ -19,13 +19,13 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
-	import flash.events.Event;
-
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 	
 	/**
 	 * The only switching rule that switches up, all the others switch down.
@@ -37,9 +37,9 @@ package org.osmf.net.dynamicstreaming
 	 */
 	public class SufficientBandwidthRule extends SwitchingRuleBase
 	{
-		public function SufficientBandwidthRule(nsMetrics:MetricsProvider)
+		public function SufficientBandwidthRule()
 		{
-			super(nsMetrics);
+			super();
 		}
 
 		/**

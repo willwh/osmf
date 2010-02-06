@@ -19,14 +19,16 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.events.NetStatusEvent;
 	
-	import org.osmf.net.NetStreamCodes;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 	
 	/**
 	 * Switching rule for Buffer detection.
@@ -63,15 +65,27 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function InsufficientBufferRule(metrics:MetricsProvider, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
+		public function InsufficientBufferRule(panicBufferLevel:int=PANIC_BUFFER_LEVEL)
 		{
-			super(metrics);
+			super();
 			
-			metrics.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
 			_panic = false;
 			_panicBufferLevel = panicBufferLevel;
 		}
-
+		
+		/**
+		 * @private
+		 **/
+		override public function set metrics(value:MetricsProvider):void
+		{
+			super.metrics = value;
+			
+			if (value != null)
+			{
+				value.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
+			}
+		}
+		
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
@@ -111,7 +125,8 @@ package org.osmf.net.dynamicstreaming
 					_panic = false;
 					break;
 				case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
-					if (Math.round(metrics.netStream.time) != 0) {
+					if (Math.round(metrics.netStream.time) != 0)
+					{
 						_panic = true;
 						_moreDetail = "Buffer was empty";
 					}

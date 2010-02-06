@@ -19,13 +19,15 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.utils.getTimer;
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 
 	/**
 	 * Switching rule for frame drop detection. Monitors frame drops using the data 
@@ -39,9 +41,9 @@ package org.osmf.net.dynamicstreaming
 	 */
 	public class DroppedFramesRule extends SwitchingRuleBase
 	{
-		private const DROP_ONE_FRAMEDROP_FPS:Number = 10;
-		private const DROP_TWO_FRAMEDROP_FPS:Number = 20;
-		private const PANIC_FRAMEDROP_FPS:Number = 24;
+		private static const DROP_ONE_FRAMEDROP_FPS:Number = 10;
+		private static const DROP_TWO_FRAMEDROP_FPS:Number = 20;
+		private static const PANIC_FRAMEDROP_FPS:Number = 24;
 		
 		/**
 		 * Constructor.
@@ -59,10 +61,10 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function DroppedFramesRule(metrics:MetricsProvider, dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
+		public function DroppedFramesRule(dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
 										dropPanic:int=PANIC_FRAMEDROP_FPS)
 		{
-			super(metrics);
+			super();
 			
 			_dropOneFrameDropFPS = dropOne;
 			_dropTwoFrameDropFPS = dropTwo;

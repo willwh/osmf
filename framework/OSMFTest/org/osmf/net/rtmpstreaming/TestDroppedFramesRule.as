@@ -19,16 +19,19 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.net.NetConnection;
+	import flash.net.NetStream;
 	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.NetFactory;
 
-	public class TestSwitchUpRule extends TestCase
+	public class TestDroppedFramesRule extends TestCase
 	{
 		public function testGetNewIndex():void
 		{
@@ -36,53 +39,59 @@ package org.osmf.net.dynamicstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 			
-			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
+			var ns:NetStream = netFactory.createNetStream(connection);
 			
-			var suRule:SufficientBandwidthRule = new SufficientBandwidthRule(metrics);
+			var metrics:MockMetricsProvider = new MockMetricsProvider(ns);
+			
+			var fdRule:DroppedFramesRule = new DroppedFramesRule();
+			fdRule.metrics = metrics;
 			
 			var result:int;
 			
 			// Test with an empty metrics object
-			result = suRule.getNewIndex();
+			result = fdRule.getNewIndex();
 			assertEquals(-1, result);
 			
-			// Test with bandwidth higher than the current stream
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
-			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
+
+			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));		
 			dsResource.streamItems.push(new DynamicStreamingItem("stream2_500kbps", 500));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 
-			// Test with lots of bandwidth, but insufficient buffer	
-			metrics.avgMaxBitrate = 5000;
-			metrics.bufferLength = 0;
 			metrics.dynamicStreamingResource = dsResource;
-			result = suRule.getNewIndex();
-			assertEquals(-1, result);
 			
-			// Test with bandwidth lower than the current stream		
-			metrics.avgMaxBitrate = 1234;
+			// Test dropping more than 10 frames
 			metrics.currentIndex = 3;
-			result = suRule.getNewIndex();
-			assertEquals(-1, result);
+			metrics.averageDroppedFPS = 11;
+			result = fdRule.getNewIndex();
+			assertEquals(2, result);
 			
-			// Test with lots of bandwidth and a stable buffer
-			metrics.avgMaxBitrate = 5000;
-			metrics.frameDropRate = 0;
-			metrics.bufferLength = 10;
+			// Test dropping more than 10 frames at current index at zero
 			metrics.currentIndex = 0;
-			metrics.dynamicStreamingResource = dsResource;
-			result = suRule.getNewIndex();
-			assertEquals(3, result);
+			metrics.averageDroppedFPS = 11;
+			result = fdRule.getNewIndex();
+			assertEquals(0, result);
 
-			// Test with lots of bandwidth, a stable buffer, but too many dropped frames
-			metrics.avgMaxBitrate = 5000;
-			metrics.frameDropRate = 10;
-			metrics.bufferLength = 10;
+			// Test dropping more than 20 frames
+			metrics.currentIndex = 3;
+			metrics.averageDroppedFPS = 21;
+			result = fdRule.getNewIndex();
+			assertEquals(1, result);
+
+			// Test dropping more than 20 frames with current index at zero
 			metrics.currentIndex = 0;
-			metrics.dynamicStreamingResource = dsResource;
-			result = suRule.getNewIndex();
-			assertEquals(-1, result);	
+			metrics.averageDroppedFPS = 21;
+			result = fdRule.getNewIndex();
+			assertEquals(0, result);
+			
+			// Test dropping lots of frames
+			metrics.currentIndex = 3;
+			metrics.averageDroppedFPS = 40;
+			result = fdRule.getNewIndex();
+			assertEquals(0, result);
+			
+			// TODO: Add tests for the index locking behavior.
 		}		
 	}
 }

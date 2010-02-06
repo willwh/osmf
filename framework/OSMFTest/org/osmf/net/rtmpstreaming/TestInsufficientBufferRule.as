@@ -19,7 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -31,11 +31,13 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.net.*;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
+	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.netmocker.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 
-	public class TestBufferRule extends TestCase
+	public class TestInsufficientBufferRule extends TestCase
 	{
 		override public function setUp():void
 		{
@@ -88,7 +90,8 @@ package org.osmf.net.dynamicstreaming
 					assertNotNull(stream);
 					
 					var metrics:MockMetricsProvider = new MockMetricsProvider(stream);
-					_bufferRule = new InsufficientBufferRule(metrics);
+					_bufferRule = new InsufficientBufferRule();
+					_bufferRule.metrics = metrics;
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					

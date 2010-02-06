@@ -39,6 +39,7 @@ package org.osmf
 	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.net.httpstreaming.flv.*;
+	import org.osmf.net.rtmpstreaming.*;
 	import org.osmf.plugin.*;
 	import org.osmf.proxies.*;
 	import org.osmf.swf.*;
@@ -244,10 +245,10 @@ package org.osmf
 			// Dynamic Streaming
 			//
 			
-			addTestSuite(TestBandwidthRule);
-			addTestSuite(TestBufferRule);
-			addTestSuite(TestFrameDropRule);
-			addTestSuite(TestSwitchUpRule);
+			addTestSuite(TestInsufficientBandwidthRule);
+			addTestSuite(TestInsufficientBufferRule);
+			addTestSuite(TestDroppedFramesRule);
+			addTestSuite(TestSufficientBandwidthRule);
 			addTestSuite(TestDynamicStreamingItem);
 			addTestSuite(TestDynamicStreamingResource);
 			

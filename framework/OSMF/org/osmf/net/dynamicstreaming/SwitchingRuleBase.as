@@ -34,17 +34,14 @@ package org.osmf.net.dynamicstreaming
 	{
 		/**
 		 * Constructor.
-		 * 
-		 * @param metrics The MetricsProvider implementation the class will use.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function SwitchingRuleBase(metrics:MetricsProvider)
+		public function SwitchingRuleBase()
 		{
-			_metrics = metrics;
 		}
 
 		/**
@@ -79,6 +76,20 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
+		 * The provider of metrics which the rule can use to determine
+		 * whether to suggest a switch.
+		 **/
+		public  function get metrics():MetricsProvider
+		{
+			return _metrics;
+		}
+		
+		public function set metrics(value:MetricsProvider):void
+		{
+			_metrics = value;
+		}
+		
+		/**
 		 * Utility method for updating detail.
 		 *  
 		 *  @langversion 3.0
@@ -96,15 +107,6 @@ package org.osmf.net.dynamicstreaming
 			{
 				_detail.update(detailCode, moreDetail);
 			}
-		}
-		
-		/**
-		 * The provider of metrics which the rule can use to determine
-		 * whether to suggest a switch.
-		 **/
-		protected function get metrics():MetricsProvider
-		{
-			return _metrics;
 		}
 		
 		private var _metrics:MetricsProvider;

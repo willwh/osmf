@@ -26,9 +26,9 @@ package org.osmf.utils
 	
 	public class DynamicSwitchingRule extends SwitchingRuleBase
 	{
-		public function DynamicSwitchingRule(metrics:MetricsProvider)
+		public function DynamicSwitchingRule()
 		{
-			super(metrics);
+			super();
 		}
 		
 		public var newIndex:int = -1;
