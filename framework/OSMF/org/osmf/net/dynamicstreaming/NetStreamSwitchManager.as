@@ -68,28 +68,24 @@ package org.osmf.net.dynamicstreaming
 		 * @param connection The NetConnection for the NetStream that will be managed.
 		 * @param netStream The NetStream to manage.
 		 * @param dsResource The DynamicStreamingResource that is playing in the NetStream.
-		 * @param switchingRules The switching rules that this manager will use.  This
-		 * class will set its own MetricsProvider on each switching rule in the list.
+		 * @param metricsProvider The provider of runtime metrics.
+		 * @param switchingRules The switching rules that this manager will use.
 		 **/
 		public function NetStreamSwitchManager
 			( connection:NetConnection
 			, netStream:NetStream
 			, dsResource:DynamicStreamingResource
+			, metricsProvider:MetricsProviderBase
 			, switchingRules:Vector.<SwitchingRuleBase>)
 		{
 			this.connection = connection;
 			this.netStream = netStream;
 			this.dsResource = dsResource;
+			this.metricsProvider = metricsProvider;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 
 			_autoSwitch = true;
 			_maxAllowedIndex = int.MAX_VALUE;
-			metricsProvider = createMetricsProvider();
-			
-			for each (var switchingRule:SwitchingRuleBase in switchingRules)
-			{
-				switchingRule.metrics = metricsProvider;
-			}
 			
 			startingBuffer = BUFFER_START;
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
@@ -156,6 +152,7 @@ package org.osmf.net.dynamicstreaming
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			_maxAllowedIndex = value;
+			metricsProvider.maxAllowedIndex = value;
 		}
 		
 		/**
@@ -195,11 +192,6 @@ package org.osmf.net.dynamicstreaming
 		// Protected
 		//
 		
-		protected function addSwitchingRule(rule:SwitchingRuleBase):void
-		{
-			switchingRules.push(rule);
-		}
-
 		/**
 		 * Override this method to set your own interval for when to retry
 		 * a failed stream.  The default is 30 seconds. This property returns
@@ -281,22 +273,7 @@ package org.osmf.net.dynamicstreaming
 			var rate:Number = dsResource.streamItems[index].bitrate * 1000/8;
 			connection.call("setBandwidthLimit", null, rate * 1.40, rate * 1.40);
 		}
-		
-		/**
-		 * The MetricsProvider object which provides metrics to the switching rules.
-		 * This class creates a MetricsProvider by default but it can be overridden
-		 * by a subclass.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function createMetricsProvider():MetricsProvider
-		{
-			return new MetricsProvider(netStream);
-		}
-		
+				
 		// Internals
 		//
 		
@@ -462,11 +439,11 @@ package org.osmf.net.dynamicstreaming
 			maxBufferLength = isLive ? BUFFER_STABLE_LIVE : BUFFER_STABLE_ONDEMAND;
 			metricsProvider.targetBufferTime = maxBufferLength;
 			metricsProvider.enable();
-			metricsProvider.optimizeForLiveBandwidthEstimate = isLive;
+			metricsProvider.isLive = isLive;
 			
 			debug("prepareForSwitching() - max buffer=" + maxBufferLength+", isLive=" + isLive);
 			
-			metricsProvider.dynamicStreamingResource = dsResource;
+			metricsProvider.resource = dsResource;
 			
 			netStream.bufferTime = isLive ? maxBufferLength : startingBuffer;
 			actualIndex = 0;
@@ -551,7 +528,7 @@ package org.osmf.net.dynamicstreaming
 		private var netStream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 		private var switchingRules:Vector.<SwitchingRuleBase>;
-		private var metricsProvider:MetricsProvider;
+		private var metricsProvider:MetricsProviderBase;
 		private var checkRulesTimer:Timer;
 		private var clearFailedCountsTimer:Timer;
 		private var actualIndex:int = -1;

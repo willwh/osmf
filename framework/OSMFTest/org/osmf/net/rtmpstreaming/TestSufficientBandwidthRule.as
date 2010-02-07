@@ -27,7 +27,8 @@ package org.osmf.net.rtmpstreaming
 	
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.netmocker.MockNetStream;
+	import org.osmf.netmocker.MockRTMPMetricsProvider;
 	import org.osmf.utils.NetFactory;
 
 	public class TestSufficientBandwidthRule extends TestCase
@@ -38,10 +39,9 @@ package org.osmf.net.rtmpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 			
-			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
+			var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(netFactory.createNetStream(connection));
 			
-			var suRule:SufficientBandwidthRule = new SufficientBandwidthRule();
-			suRule.metrics = metrics;
+			var suRule:SufficientBandwidthRule = new SufficientBandwidthRule(metrics);
 			
 			var result:int;
 			
@@ -57,33 +57,42 @@ package org.osmf.net.rtmpstreaming
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 
 			// Test with lots of bandwidth, but insufficient buffer	
-			metrics.avgMaxBitrate = 5000;
-			metrics.bufferLength = 0;
-			metrics.dynamicStreamingResource = dsResource;
+			metrics.averageMaxBandwidth = 5000;
+			if (metrics.netStream is MockNetStream)
+			{
+				MockNetStream(metrics.netStream).bufferLength = 0;
+			}
+			metrics.resource = dsResource;
 			result = suRule.getNewIndex();
 			assertEquals(-1, result);
 			
 			// Test with bandwidth lower than the current stream		
-			metrics.avgMaxBitrate = 1234;
+			metrics.averageMaxBandwidth = 1234;
 			metrics.currentIndex = 3;
 			result = suRule.getNewIndex();
 			assertEquals(-1, result);
 			
 			// Test with lots of bandwidth and a stable buffer
-			metrics.avgMaxBitrate = 5000;
-			metrics.frameDropRate = 0;
-			metrics.bufferLength = 10;
+			metrics.averageMaxBandwidth = 5000;
+			metrics.droppedFPS = 0;
+			if (metrics.netStream is MockNetStream)
+			{
+				MockNetStream(metrics.netStream).bufferLength = 10;
+			}
 			metrics.currentIndex = 0;
-			metrics.dynamicStreamingResource = dsResource;
+			metrics.resource = dsResource;
 			result = suRule.getNewIndex();
 			assertEquals(3, result);
 
 			// Test with lots of bandwidth, a stable buffer, but too many dropped frames
-			metrics.avgMaxBitrate = 5000;
-			metrics.frameDropRate = 10;
-			metrics.bufferLength = 10;
+			metrics.averageMaxBandwidth = 5000;
+			metrics.droppedFPS = 10;
+			if (metrics.netStream is MockNetStream)
+			{
+				MockNetStream(metrics.netStream).bufferLength = 10;
+			}
 			metrics.currentIndex = 0;
-			metrics.dynamicStreamingResource = dsResource;
+			metrics.resource = dsResource;
 			result = suRule.getNewIndex();
 			assertEquals(-1, result);	
 		}		

@@ -37,7 +37,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.netmocker.MockNetStream;
-	import org.osmf.utils.DynamicNetStreamSwitchManager;
+	import org.osmf.netmocker.MockRTMPMetricsProvider;
 	import org.osmf.utils.DynamicSwitchingRule;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.URL;
@@ -67,8 +67,14 @@ package org.osmf.net.dynamicstreaming
 			{
 				(stream as MockNetStream).expectedDuration = 2;
 			}
+			
+			metrics = new MockRTMPMetricsProvider(stream);
 
-			switchManager = new DynamicNetStreamSwitchManager(connection, stream, dsResource, new Vector.<SwitchingRuleBase>());
+			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			switchingRule = new DynamicSwitchingRule(metrics);
+			rules.push(switchingRule);
+
+			switchManager = new NetStreamSwitchManager(connection, stream, dsResource, metrics, rules);
 		}
 		
 		override public function tearDown():void
@@ -76,6 +82,8 @@ package org.osmf.net.dynamicstreaming
 			super.tearDown();
 			
 			dsResource = null;
+			metrics = null;
+			switchingRule = null;
 			switchManager = null;
 			netFactory = null;
 			eventDispatcher = null;
@@ -177,8 +185,6 @@ package org.osmf.net.dynamicstreaming
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithNoSwitch);
 
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
-			switchManager.addRule(switchingRule);
 			
 			playStream(1);
 		}
@@ -203,9 +209,6 @@ package org.osmf.net.dynamicstreaming
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchDown);
 			
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
-			switchManager.addRule(switchingRule);
-			
 			playStream(2);
 			
 			// Suggest a down-switch.
@@ -228,9 +231,6 @@ package org.osmf.net.dynamicstreaming
 			
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
-			
-			var switchingRule:DynamicSwitchingRule = new DynamicSwitchingRule();
-			switchManager.addRule(switchingRule);
 			
 			playStream(1);
 			
@@ -269,7 +269,9 @@ package org.osmf.net.dynamicstreaming
 
 		private var eventDispatcher:EventDispatcher;
 		private var netFactory:NetFactory;
-		private var switchManager:DynamicNetStreamSwitchManager;
+		private var switchingRule:DynamicSwitchingRule;
+		private var switchManager:NetStreamSwitchManager;
+		private var metrics:MetricsProviderBase;
 		private var stream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 	}

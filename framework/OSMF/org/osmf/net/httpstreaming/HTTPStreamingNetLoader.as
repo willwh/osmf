@@ -30,8 +30,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase
 	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
+	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
 	import org.osmf.traits.LoadTrait;
@@ -98,14 +98,16 @@ package org.osmf.net.httpstreaming
 			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
-				return new NetStreamSwitchManager(connection, netStream, dsResource, defaultSwitchingRules);
+				var metrics:HTTPMetricsProvider = new HTTPMetricsProvider(netStream as HTTPNetStream);
+				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 			}
 			return null;
 		}
 		
-		private function get defaultSwitchingRules():Vector.<SwitchingRuleBase>
+		private function getDefaultSwitchingRules(metrics:HTTPMetricsProvider):Vector.<SwitchingRuleBase>
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			rules.push(new DownloadRatioRule(metrics));
 			return rules;
 		}
 	}

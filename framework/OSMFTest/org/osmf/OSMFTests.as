@@ -37,6 +37,7 @@ package org.osmf
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
 	import org.osmf.net.dynamicstreaming.*;
+	import org.osmf.net.httpstreaming.*;
 	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.net.httpstreaming.flv.*;
 	import org.osmf.net.rtmpstreaming.*;
@@ -60,7 +61,9 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-			
+
+			addTestSuite(TestDownloadRatioRule);
+						
 			// Layout
 			//			
 				
@@ -259,6 +262,7 @@ package org.osmf
 			// HTTP Streaming
 			//
 			
+			addTestSuite(TestDownloadRatioRule);
 			addTestSuite(TestBoxParser);
 			addTestSuite(TestAdobeBootstrapBox);
 			addTestSuite(TestAdobeFragmentRunTable);

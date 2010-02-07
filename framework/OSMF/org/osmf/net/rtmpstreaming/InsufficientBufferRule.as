@@ -26,7 +26,7 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 	
@@ -55,7 +55,7 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor
 		 * 
-		 * @param metrics The provider of NetStream metrics.
+		 * @param metrics Provider of runtime metrics.
 		 * @param panicBufferLevel A Tunable parameter for this rule. The "panic" buffer level 
 		 * in seconds. This rule watches for the buffer length to fall below this level. The default
 		 * value is 2 seconds.
@@ -65,27 +65,15 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function InsufficientBufferRule(panicBufferLevel:int=PANIC_BUFFER_LEVEL)
+		public function InsufficientBufferRule(metrics:MetricsProviderBase, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
 		{
-			super();
+			super(metrics);
 			
 			_panic = false;
 			_panicBufferLevel = panicBufferLevel;
+			metrics.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
 		}
-		
-		/**
-		 * @private
-		 **/
-		override public function set metrics(value:MetricsProvider):void
-		{
-			super.metrics = value;
-			
-			if (value != null)
-			{
-				value.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
-			}
-		}
-		
+				
 		/**
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
@@ -99,10 +87,11 @@ package org.osmf.net.rtmpstreaming
 		{
 			var newIndex:int = -1;
 			
-			if (_panic || (metrics.bufferLength < _panicBufferLevel && metrics.reachedTargetBufferFull))
+			if (_panic || (rtmpMetrics.netStream.bufferLength < _panicBufferLevel && rtmpMetrics.targetBufferTimeReached))
 			{
-				if (!_panic) {
-					_moreDetail = "Buffer  of " + Math.round(metrics.bufferLength)  + " < " + _panicBufferLevel + " seconds";
+				if (!_panic)
+				{
+					_moreDetail = "Buffer  of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + _panicBufferLevel + " seconds";
 				}
 				
 				newIndex = 0;
@@ -125,7 +114,7 @@ package org.osmf.net.rtmpstreaming
 					_panic = false;
 					break;
 				case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
-					if (Math.round(metrics.netStream.time) != 0)
+					if (Math.round(rtmpMetrics.netStream.time) != 0)
 					{
 						_panic = true;
 						_moreDetail = "Buffer was empty";
@@ -138,6 +127,11 @@ package org.osmf.net.rtmpstreaming
 			}
 		}
 		
+		private function get rtmpMetrics():RTMPMetricsProvider
+		{
+			return metrics as RTMPMetricsProvider;
+		}
+
 		private function debug(...args):void
 		{
 			CONFIG::LOGGING

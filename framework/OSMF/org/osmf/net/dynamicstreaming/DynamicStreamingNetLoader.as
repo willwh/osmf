@@ -16,7 +16,9 @@
 *  
 *  The Initial Developer of the Original Code is Akamai Technologies, Inc.
 *  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
-*  Technologies, Inc. All Rights Reserved. 
+*  Technologies, Inc. All Rights Reserved.
+* 
+*  Contributor: Adobe Systems Inc.
 *  
 *****************************************************/
 package org.osmf.net.dynamicstreaming
@@ -30,10 +32,11 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamUtils;
-	import org.osmf.net.rtmpstreaming.InsufficientBandwidthRule;
-	import org.osmf.net.rtmpstreaming.SufficientBandwidthRule;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
+	import org.osmf.net.rtmpstreaming.InsufficientBandwidthRule;
 	import org.osmf.net.rtmpstreaming.InsufficientBufferRule;
+	import org.osmf.net.rtmpstreaming.RTMPMetricsProvider;
+	import org.osmf.net.rtmpstreaming.SufficientBandwidthRule;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
@@ -93,18 +96,19 @@ package org.osmf.net.dynamicstreaming
 			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
-				return new NetStreamSwitchManager(connection, netStream, dsResource, defaultSwitchingRules);
+				var metrics:RTMPMetricsProvider = new RTMPMetricsProvider(netStream);
+				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 			}
 			return null;
 		}
 		
-		private function get defaultSwitchingRules():Vector.<SwitchingRuleBase>
+		private function getDefaultSwitchingRules(metricsProvider:RTMPMetricsProvider):Vector.<SwitchingRuleBase>
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
-			rules.push(new SufficientBandwidthRule());
-			rules.push(new InsufficientBandwidthRule());
-			rules.push(new DroppedFramesRule());
-			rules.push(new InsufficientBufferRule());
+			rules.push(new SufficientBandwidthRule(metricsProvider));
+			rules.push(new InsufficientBandwidthRule(metricsProvider));
+			rules.push(new DroppedFramesRule(metricsProvider));
+			rules.push(new InsufficientBufferRule(metricsProvider));
 			return rules;
 		}
 	}

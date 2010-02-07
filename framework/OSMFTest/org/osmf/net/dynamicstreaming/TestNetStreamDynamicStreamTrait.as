@@ -25,6 +25,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.*;
 	
 	import org.osmf.net.*;
+	import org.osmf.net.rtmpstreaming.RTMPMetricsProvider;
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestDynamicStreamTrait;
 	import org.osmf.utils.*;
@@ -80,8 +81,9 @@ package org.osmf.net.dynamicstreaming
 			}
 				
 			stream.play(dsr);
+			var metrics:MetricsProviderBase = new RTMPMetricsProvider(stream);
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
-			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr, rules), dsr);
+			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr, metrics, rules), dsr);
 		}
 				
 		private static const TIMEOUT:int = 12000;

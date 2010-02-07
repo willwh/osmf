@@ -25,7 +25,7 @@ package org.osmf.net.rtmpstreaming
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 
@@ -61,10 +61,14 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function DroppedFramesRule(dropOne:int=DROP_ONE_FRAMEDROP_FPS, dropTwo:int=DROP_TWO_FRAMEDROP_FPS,
-										dropPanic:int=PANIC_FRAMEDROP_FPS)
+		public function DroppedFramesRule
+			( metrics:MetricsProviderBase
+			, dropOne:int=DROP_ONE_FRAMEDROP_FPS
+			, dropTwo:int=DROP_TWO_FRAMEDROP_FPS
+			, dropPanic:int=PANIC_FRAMEDROP_FPS
+			)
 		{
-			super();
+			super(metrics);
 			
 			_dropOneFrameDropFPS = dropOne;
 			_dropTwoFrameDropFPS = dropTwo;
@@ -88,23 +92,23 @@ package org.osmf.net.rtmpstreaming
         	var newIndex:int = -1;
         	var moreDetail:String;
         	
-        	if (metrics.averageDroppedFPS > _panicFrameDropFPS) 
+        	if (rtmpMetrics.averageDroppedFPS > _panicFrameDropFPS) 
         	{
         		newIndex = 0;
-				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _panicFrameDropFPS;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _panicFrameDropFPS;
         	} 
-        	else if (metrics.averageDroppedFPS > _dropTwoFrameDropFPS) 
+        	else if (rtmpMetrics.averageDroppedFPS > _dropTwoFrameDropFPS) 
         	{
-				newIndex = metrics.currentIndex - 2 < 0 ? 0 : metrics.currentIndex - 2;
-				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _dropTwoFrameDropFPS;
+				newIndex = rtmpMetrics.currentIndex - 2 < 0 ? 0 : rtmpMetrics.currentIndex - 2;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _dropTwoFrameDropFPS;
         	} 
-        	else if (metrics.averageDroppedFPS > _dropOneFrameDropFPS) 
+        	else if (rtmpMetrics.averageDroppedFPS > _dropOneFrameDropFPS) 
         	{
-        		newIndex = metrics.currentIndex -1 < 0 ? 0 : metrics.currentIndex - 1;
-				moreDetail = "Average droppedFPS of " + Math.round(metrics.averageDroppedFPS) + " > " + _dropOneFrameDropFPS;
+        		newIndex = rtmpMetrics.currentIndex -1 < 0 ? 0 : rtmpMetrics.currentIndex - 1;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _dropOneFrameDropFPS;
         	}
   			
-        	if (newIndex != -1 && newIndex < metrics.currentIndex) 
+        	if (newIndex != -1 && newIndex < rtmpMetrics.currentIndex) 
         	{
         		lockIndex(newIndex);
  				       	 	
@@ -113,11 +117,11 @@ package org.osmf.net.rtmpstreaming
 			
 			// If the rule says no change, but we're locked at the current index,
 			// ensure that we stay locked by returning the current index.
-			if (newIndex == -1 && isLocked(metrics.currentIndex))
+			if (newIndex == -1 && isLocked(rtmpMetrics.currentIndex))
 			{
 				debug("getNewIndex() - locked at: " + metrics.currentIndex); 
 				
-				newIndex = metrics.currentIndex;
+				newIndex = rtmpMetrics.currentIndex;
 			}
         	
         	if (newIndex != -1)
@@ -149,6 +153,11 @@ package org.osmf.net.rtmpstreaming
 			return (index >= lockLevel) && (getTimer() - lastLockTime) < LOCK_INTERVAL;
 		}
 		
+		private function get rtmpMetrics():RTMPMetricsProvider
+		{
+			return metrics as RTMPMetricsProvider;
+		}
+
 		private function debug(...args):void
 		{
 			CONFIG::LOGGING

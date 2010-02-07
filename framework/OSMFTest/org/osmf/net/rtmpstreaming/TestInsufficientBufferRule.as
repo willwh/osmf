@@ -89,9 +89,8 @@ package org.osmf.net.rtmpstreaming
 					var stream:NetStream = (loadedContext as NetLoadedContext).stream;
 					assertNotNull(stream);
 					
-					var metrics:MockMetricsProvider = new MockMetricsProvider(stream);
-					_bufferRule = new InsufficientBufferRule();
-					_bufferRule.metrics = metrics;
+					var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(stream);
+					_bufferRule = new InsufficientBufferRule(metrics);
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					

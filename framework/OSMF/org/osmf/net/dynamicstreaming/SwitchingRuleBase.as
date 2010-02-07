@@ -34,14 +34,19 @@ package org.osmf.net.dynamicstreaming
 	{
 		/**
 		 * Constructor.
+		 * 
+		 * @param metrics Provider of runtime metrics.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function SwitchingRuleBase()
+		public function SwitchingRuleBase(metrics:MetricsProviderBase)
 		{
+			super();
+			
+			_metrics = metrics;
 		}
 
 		/**
@@ -79,14 +84,9 @@ package org.osmf.net.dynamicstreaming
 		 * The provider of metrics which the rule can use to determine
 		 * whether to suggest a switch.
 		 **/
-		public  function get metrics():MetricsProvider
+		protected function get metrics():MetricsProviderBase
 		{
 			return _metrics;
-		}
-		
-		public function set metrics(value:MetricsProvider):void
-		{
-			_metrics = value;
 		}
 		
 		/**
@@ -109,7 +109,7 @@ package org.osmf.net.dynamicstreaming
 			}
 		}
 		
-		private var _metrics:MetricsProvider;
+		private var _metrics:MetricsProviderBase;
 		private var _detail:SwitchingDetail;
 	}
 }

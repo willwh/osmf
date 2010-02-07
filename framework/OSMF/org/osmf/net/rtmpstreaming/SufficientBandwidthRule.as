@@ -23,12 +23,12 @@ package org.osmf.net.rtmpstreaming
 {
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.dynamicstreaming.MetricsProvider;
+	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 	
 	/**
-	 * The only switching rule that switches up, all the others switch down.
+	 * Switching rule that switches up when the user has sufficient bandwidth to do so.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -37,9 +37,12 @@ package org.osmf.net.rtmpstreaming
 	 */
 	public class SufficientBandwidthRule extends SwitchingRuleBase
 	{
-		public function SufficientBandwidthRule()
+		/**
+		 * Constructor.
+		 **/
+		public function SufficientBandwidthRule(metrics:MetricsProviderBase)
 		{
-			super();
+			super(metrics);
 		}
 
 		/**
@@ -58,12 +61,12 @@ package org.osmf.net.rtmpstreaming
         	var moreDetail:String;
         	
         	// Wait until the metrics class can calculate a stable average bandwidth
-        	if (metrics.averageMaxBandwidth != 0) 
+        	if (rtmpMetrics.averageMaxBandwidth != 0) 
         	{
 				// First find the preferred bitrate level we should be at by finding the highest profile that can play, given the current average max bandwidth
-				for (var i:int = metrics.dynamicStreamingResource.streamItems.length - 1; i >= 0; i--) 
+				for (var i:int = rtmpMetrics.resource.streamItems.length - 1; i >= 0; i--) 
 				{
-					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.streamItems[i].bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
+					if (rtmpMetrics.averageMaxBandwidth > (rtmpMetrics.resource.streamItems[i].bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
 					{
 						newIndex = i;
 						break;
@@ -71,14 +74,14 @@ package org.osmf.net.rtmpstreaming
 				}
 								
 				// If we are about to recommend a switch up, check some other metrics to verify the recommendation
-				if (newIndex > metrics.currentIndex) 
+				if (newIndex > rtmpMetrics.currentIndex) 
 				{
 	        		// We switch up only if conditions are perfect - no framedrops and a stable buffer
-	        		newIndex = (metrics.droppedFPS < MIN_DROPPED_FPS && metrics.bufferLength > metrics.targetBufferTime) ? newIndex : -1;
+	        		newIndex = (rtmpMetrics.droppedFPS < MIN_DROPPED_FPS && rtmpMetrics.netStream.bufferLength > rtmpMetrics.targetBufferTime) ? newIndex : -1;
 	        		
 	        		if (newIndex != -1)
 	        		{
-						moreDetail = "Move up since avg dropped FPS " + Math.round(metrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + metrics.targetBufferTime;
+						moreDetail = "Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.targetBufferTime;
 						updateDetail(SwitchingDetailCodes.SWITCHING_UP_BANDWIDTH_SUFFICIENT, moreDetail);	        			
 	        		}
 	        	}
@@ -96,6 +99,11 @@ package org.osmf.net.rtmpstreaming
         	return newIndex;
 		}
 		
+		private function get rtmpMetrics():RTMPMetricsProvider
+		{
+			return metrics as RTMPMetricsProvider;
+		}
+
 		private function debug(...args):void
 		{
 			CONFIG::LOGGING

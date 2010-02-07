@@ -26,7 +26,7 @@ package org.osmf.net.rtmpstreaming
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.netmocker.MockRTMPMetricsProvider;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.utils.NetFactory;
@@ -41,10 +41,9 @@ package org.osmf.net.rtmpstreaming
 			
 			var ns:NetStream = netFactory.createNetStream(connection);
 			
-			var metrics:MockMetricsProvider = new MockMetricsProvider(ns);
+			var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(ns);
 			
-			var fdRule:DroppedFramesRule = new DroppedFramesRule();
-			fdRule.metrics = metrics;
+			var fdRule:DroppedFramesRule = new DroppedFramesRule(metrics);
 			
 			var result:int;
 			
@@ -59,7 +58,7 @@ package org.osmf.net.rtmpstreaming
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 
-			metrics.dynamicStreamingResource = dsResource;
+			metrics.resource = dsResource;
 			
 			// Test dropping more than 10 frames
 			metrics.currentIndex = 3;

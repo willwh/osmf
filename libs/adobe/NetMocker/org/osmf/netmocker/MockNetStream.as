@@ -160,6 +160,17 @@ package org.osmf.netmocker
 		// Overrides
 		//
 		
+		override public function get bufferLength():Number
+		{
+			return bufferLengthSet ? _bufferLength : super.bufferLength;
+		}
+		
+		public function set bufferLength(value:Number):void
+		{
+			bufferLengthSet = true;
+			_bufferLength = value;
+		}
+		
 		override public function get bytesLoaded():uint
 		{
 			return _bytesLoaded;
@@ -451,6 +462,9 @@ package org.osmf.netmocker
 		
 		private var _expectedCuePoints:Array = [];
 		private var lastFiredCuePointTime:int = -1;
+		
+		private var bufferLengthSet:Boolean = false;
+		private var _bufferLength:Number;
 		
 		private var playheadTimer:Timer;
 		private var switchCompleteTimers:Vector.<Timer> = new Vector.<Timer>;

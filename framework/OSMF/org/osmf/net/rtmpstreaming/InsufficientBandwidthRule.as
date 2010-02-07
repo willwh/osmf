@@ -23,6 +23,7 @@ package org.osmf.net.rtmpstreaming
 {
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
 	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
 
@@ -54,7 +55,6 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor
 		 * 
-		 * @param metrics The provider of NetStream metrics.
 		 * @param safteyMultiple A multiplier that is used when the stream bitrate is compared against available
 		 * bandwidth. The stream bitrate is multiplied by this amount. The default is 1.15.
 		 *  
@@ -63,9 +63,9 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function InsufficientBandwidthRule(safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
+		public function InsufficientBandwidthRule(metrics:MetricsProviderBase, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
 		{
-			super();
+			super(metrics);
 			
 			_safetyMultiple = safetyMultiple;
 		}
@@ -85,23 +85,23 @@ package org.osmf.net.rtmpstreaming
         	var moreDetail:String;
         	
         	// Wait until the metrics class can calculate a stable average bandwidth
-        	if (metrics.averageMaxBandwidth != 0) 
+        	if (rtmpMetrics.averageMaxBandwidth != 0) 
         	{
 				// See if we need to switch down based on average max bandwidth
-				for (var i:int = metrics.currentIndex; i >= 0; i--) 
+				for (var i:int = rtmpMetrics.currentIndex; i >= 0; i--) 
 				{
-					if (metrics.averageMaxBandwidth > (metrics.dynamicStreamingResource.streamItems[i].bitrate * _safetyMultiple)) 
+					if (rtmpMetrics.averageMaxBandwidth > (rtmpMetrics.resource.streamItems[i].bitrate * _safetyMultiple)) 
 					{
 						newIndex = i;
 						break;
 					}
 				}
 				
-				newIndex = (newIndex == metrics.currentIndex) ? -1 : newIndex;
+				newIndex = (newIndex == rtmpMetrics.currentIndex) ? -1 : newIndex;
 				
-				if ((newIndex != -1) && (newIndex < metrics.currentIndex))
+				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 				{
-					moreDetail = "Average bandwidth of " + Math.round(metrics.averageMaxBandwidth) + " < " + _safetyMultiple + " * rendition bitrate";
+					moreDetail = "Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBandwidth) + " < " + _safetyMultiple + " * rendition bitrate";
 					updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT, moreDetail);
 	        	}
         	} 
@@ -114,6 +114,10 @@ package org.osmf.net.rtmpstreaming
         	return newIndex;
 		}
 		
+		private function get rtmpMetrics():RTMPMetricsProvider
+		{
+			return metrics as RTMPMetricsProvider;
+		}
 				
 		private function debug(...args):void
 		{

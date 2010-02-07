@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -16,26 +16,36 @@
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
-*  
+*  Incorporated. All Rights Reserved.
+* 
 *****************************************************/
-package org.osmf.utils
+package org.osmf.netmocker
 {
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.httpstreaming.HTTPMetricsProvider;
 	
-	public class DynamicSwitchingRule extends SwitchingRuleBase
+	public class MockHTTPMetricsProvider extends HTTPMetricsProvider
 	{
-		public function DynamicSwitchingRule(metrics:MetricsProviderBase)
+		public function MockHTTPMetricsProvider()
 		{
-			super(metrics);
+			super(null);
+		}
+
+		public function set downloadRatio(value:Number):void
+		{
+			_downloadRatio = value;
 		}
 		
-		public var newIndex:int = -1;
-
-		override public function getNewIndex():int
+		override public function get downloadRatio():Number
 		{
-			return newIndex;
+			return _downloadRatio;
 		}
+		
+		override public function getBitrateForIndex(index:int):Number
+		{
+			return resource.streamItems[index].bitrate;
+		}
+		
+		private var _downloadRatio:Number = 0;
+		private var _bitrates:Array;
 	}
 }

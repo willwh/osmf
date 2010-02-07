@@ -27,7 +27,7 @@ package org.osmf.net.rtmpstreaming
 	
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.netmocker.MockMetricsProvider;
+	import org.osmf.netmocker.MockRTMPMetricsProvider;
 	import org.osmf.utils.NetFactory;
 
 	public class TestInsufficientBandwidthRule extends TestCase
@@ -44,10 +44,9 @@ package org.osmf.net.rtmpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 			
-			var metrics:MockMetricsProvider = new MockMetricsProvider(netFactory.createNetStream(connection));
+			var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(netFactory.createNetStream(connection));
 			
-			var bwRule:InsufficientBandwidthRule = new InsufficientBandwidthRule();
-			bwRule.metrics = metrics;
+			var bwRule:InsufficientBandwidthRule = new InsufficientBandwidthRule(metrics);
 			
 			var result:int;
 			
@@ -59,8 +58,8 @@ package org.osmf.net.rtmpstreaming
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			
-			metrics.avgMaxBitrate = 5000;
-			metrics.dynamicStreamingResource = dsResource;
+			metrics.averageMaxBandwidth = 5000;
+			metrics.resource = dsResource;
 			result = bwRule.getNewIndex();
 			assertEquals(-1, result);
 			
@@ -69,19 +68,19 @@ package org.osmf.net.rtmpstreaming
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 			
-			metrics.avgMaxBitrate = 1234;
+			metrics.averageMaxBandwidth = 1234;
 			metrics.currentIndex = 3;
 			result = bwRule.getNewIndex();
 			assertEquals(2, result);
 			assertNotNull(bwRule.detail);
 			
 			// Another test with very low bandwidth
-			metrics.avgMaxBitrate = 500;
+			metrics.averageMaxBandwidth = 500;
 			result = bwRule.getNewIndex();
 			assertEquals(0, result);
 			
 			// Another test with ridiculously low bandwidth
-			metrics.avgMaxBitrate = 1;
+			metrics.averageMaxBandwidth = 1;
 			result = bwRule.getNewIndex();
 			assertEquals(-1, result);
 		}
