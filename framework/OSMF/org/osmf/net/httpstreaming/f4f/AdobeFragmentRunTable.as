@@ -146,11 +146,11 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function findFragmentIdByTime(time:Number):Number
+		public function findFragmentIdByTime(time:Number):FragmentAccessInformation
 		{
 			if (_fragmentDurationPairs.length <= 0)
 			{
-				return 0;
+				return null;
 			}
 			
 			var fdp:FragmentDurationPair = null;
@@ -167,9 +167,11 @@ package org.osmf.net.httpstreaming.f4f
 			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time));
 		}
 		
-		public function validateFragment(fragId:uint):Number
+		public function validateFragment(fragId:uint):FragmentAccessInformation
 		{
 			var size:uint = _fragmentDurationPairs.length - 1;
+			var fai:FragmentAccessInformation = new FragmentAccessInformation();
+			
 			for (var i:uint = 0; i < size; i++)
 			{
 				var curFdp:FragmentDurationPair = _fragmentDurationPairs[i];
@@ -179,25 +181,37 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					if (curFdp.duration > 0)
 					{
-						return fragId;
+						fai.fragId = fragId;
+						fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration * (fragId - curFdp.firstFragment + 1);
+						return fai;
 					}
 					
 					curFdp = findValidFragmentDurationPair(i + 1);
 					if (curFdp == null)
 					{
-						return NaN;
+						return null;
 					}
 					
-					return curFdp != null? curFdp.firstFragment : NaN;
+					fai.fragId = curFdp.firstFragment;
+					fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration;
+					
+					return fai;
 				}
 			}
 			
-			if (fragId >= _fragmentDurationPairs[size].firstFragment)
+			if (fragId >= _fragmentDurationPairs[size].firstFragment && _fragmentDurationPairs[size].duration > 0)
 			{
-				return _fragmentDurationPairs[size].duration > 0 ? fragId : NaN;
+				fai.fragId = fragId;
+				fai.fragmentEndTime = 
+					_fragmentDurationPairs[size].durationAccrued + 
+					_fragmentDurationPairs[size].duration * (fragId - _fragmentDurationPairs[size].firstFragment + 1);
+			}
+			else
+			{
+				fai = null;
 			}
 			
-			return NaN;
+			return fai;
 		}
 		
 		// Internal

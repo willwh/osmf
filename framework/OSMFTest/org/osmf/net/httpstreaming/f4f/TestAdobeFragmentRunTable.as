@@ -51,32 +51,32 @@ package org.osmf.net.httpstreaming.f4f
 		
 		public function testFindFragmentIdByTime():void
 		{
-			assertTrue(afrt.findFragmentIdByTime(0) == 1);
-			assertTrue(afrt.findFragmentIdByTime(1000) == 1);
-			assertTrue(afrt.findFragmentIdByTime(2000) == 1);
-			assertTrue(afrt.findFragmentIdByTime(3000) == 1);
-			assertTrue(afrt.findFragmentIdByTime(4000) == 1);
-			assertTrue(afrt.findFragmentIdByTime(4399) == 1);
-			assertTrue(afrt.findFragmentIdByTime(4400) == 2);
-			assertTrue(afrt.findFragmentIdByTime(5000) == 2);
-			assertTrue(afrt.findFragmentIdByTime(6000) == 2);
-			assertTrue(afrt.findFragmentIdByTime(7000) == 2);
-			assertTrue(afrt.findFragmentIdByTime(8000) == 2);
-			assertTrue(afrt.findFragmentIdByTime(8799) == 2);
-			assertTrue(afrt.findFragmentIdByTime(8800) == 3);
-			assertTrue(afrt.findFragmentIdByTime(9000) == 3);
-			assertTrue(afrt.findFragmentIdByTime(10000) == 3);
-			assertTrue(afrt.findFragmentIdByTime(11000) == 3);
-			assertTrue(afrt.findFragmentIdByTime(12000) == 3);
-			assertTrue(afrt.findFragmentIdByTime(12100) == 3);
-			assertTrue(afrt.findFragmentIdByTime(12107) == 3);
-			assertTrue(afrt.findFragmentIdByTime(12108) == 4);
+			assertTrue(afrt.findFragmentIdByTime(0).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(1000).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(2000).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(3000).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(4000).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(4399).fragId == 1);
+			assertTrue(afrt.findFragmentIdByTime(4400).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(5000).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(6000).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(7000).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(8000).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(8799).fragId == 2);
+			assertTrue(afrt.findFragmentIdByTime(8800).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(9000).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(10000).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(11000).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(12000).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(12100).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(12107).fragId == 3);
+			assertTrue(afrt.findFragmentIdByTime(12108).fragId == 4);
 			
 			// Jump to the end.
-			assertTrue(afrt.findFragmentIdByTime(60000) == 15);
-			assertTrue(afrt.findFragmentIdByTime(60800) == 15);
-			assertTrue(afrt.findFragmentIdByTime(60922) == 15);
-			assertTrue(afrt.findFragmentIdByTime(60923) == 16);
+			assertTrue(afrt.findFragmentIdByTime(60000).fragId == 15);
+			assertTrue(afrt.findFragmentIdByTime(60800).fragId == 15);
+			assertTrue(afrt.findFragmentIdByTime(60922).fragId == 15);
+			assertTrue(afrt.findFragmentIdByTime(60923).fragId == 16);
 		}
 
 		public function testTotalDuration():void

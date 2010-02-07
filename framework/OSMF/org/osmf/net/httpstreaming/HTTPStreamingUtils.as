@@ -25,6 +25,7 @@ package org.osmf.net.httpstreaming
 	
 	import flash.utils.ByteArray;
 	
+	import org.osmf.manifest.BootstrapInfo;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
@@ -119,17 +120,7 @@ package org.osmf.net.httpstreaming
 			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null)
 			{
-				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet;
-				if (facet != null)
-				{
-					var abstUrl:String = facet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
-					var abstData:ByteArray = facet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_DATA_KEY)) as ByteArray;
-				
-					if ((abstUrl == null || abstUrl.length <= 0) && abstData == null)
-					{
-						facet = null;
-					}
-				}
+				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet;
 			}
 			
 			return facet;
@@ -145,10 +136,6 @@ package org.osmf.net.httpstreaming
 			var httpFacet:Facet = getHTTPStreamingMetadataFacet(resource);
 			if (httpFacet != null)
 			{
-				var abstURL:String
-					= httpFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
-				var abstData:ByteArray
-					= httpFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_DATA_KEY)) as ByteArray;
 				var serverBaseURLs:Vector.<String>
 					= httpFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY)) as Vector.<String>;
 				
@@ -156,9 +143,8 @@ package org.osmf.net.httpstreaming
 				
 				indexInfo =
 					new HTTPStreamingF4FIndexInfo
-						( abstURL
-						, abstData
-						, serverBaseURLs != null && serverBaseURLs.length > 0 ? serverBaseURLs[0] : null
+						( 
+						serverBaseURLs != null && serverBaseURLs.length > 0 ? serverBaseURLs[0] : null
 						, streamInfos
 						);
 			}
@@ -172,7 +158,10 @@ package org.osmf.net.httpstreaming
 			
 			var drmFacet:KeyValueFacet 
 				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
+			var bootstrapFacet:KeyValueFacet
+				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet;
 			var additionalHeader:ByteArray = null;
+			var bootstrap:BootstrapInfo = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
@@ -183,8 +172,12 @@ package org.osmf.net.httpstreaming
 						additionalHeader = drmFacet.getValue(
 							new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
 					}
-					
-					streamInfos.push(new HTTPStreamingF4FStreamInfo(streamItem.streamName, streamItem.bitrate, additionalHeader));
+					if (bootstrapFacet != null)
+					{
+						bootstrap = bootstrapFacet.getValue(
+							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName)) as BootstrapInfo;
+					}
+					streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamItem.streamName, streamItem.bitrate, additionalHeader));
 				}
 			}
 			else
@@ -194,9 +187,14 @@ package org.osmf.net.httpstreaming
 					additionalHeader 
 						= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
 				}
+				if (bootstrapFacet != null)
+				{
+					bootstrap = bootstrapFacet.getValue(
+						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY)) as BootstrapInfo;
+				}
 				
 				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
-				streamInfos.push(new HTTPStreamingF4FStreamInfo(streamName, NaN, additionalHeader));
+				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader));
 			}
 
 			return streamInfos;

@@ -65,16 +65,20 @@ package org.osmf.net.httpstreaming.flv
 			return ba;
 		}
 		
-		public static function compareByteArray(ba1:ByteArray, ba2:ByteArray):Boolean
+		public static function compareByteArray(ba1:ByteArray, ba2:ByteArray, ba1Offset:uint = 0, ba2Offset:uint = 0):Boolean
 		{
-			if (ba1.length != ba2.length)
+			ba1.position = ba1Offset;
+			ba2.position = ba2Offset;
+			
+			if (ba1.bytesAvailable != ba2.bytesAvailable)
 			{
 				return false;
 			}
 			
-			for (var i:int = 0; i < ba1.length; i++)
+			var size:uint = ba1.bytesAvailable;
+			for (var i:int = 0; i < size; i++)
 			{
-				if (ba1[i] != ba2[i])
+				if (ba1[ba1Offset + i] != ba2[ba2Offset + i])
 				{
 					return false;
 				}

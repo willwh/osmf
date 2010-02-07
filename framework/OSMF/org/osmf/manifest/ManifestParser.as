@@ -129,7 +129,7 @@ package org.osmf.manifest
 			
 			for each (var info:XML in root.xmlns::bootstrapInfo)
 			{
-				parseBootstrapInfo(info, manifest.media, baseUrl);
+				parseBootstrapInfo(info, manifest.media, baseUrl, manifest);
 			}	
 			
 			// Required if base URL is omitted from Manifest
@@ -163,7 +163,7 @@ package org.osmf.manifest
 			
 			if (value.attribute('bootstrapInfoId').length() > 0)
 			{
-				media.bootstrapInfoId = value.@bootstrapInfoId;
+				media.bootstrapInfo.id = value.@bootstrapInfoId;
 			}
 			
 			if (value.attribute('height').length() > 0)
@@ -226,17 +226,16 @@ package org.osmf.manifest
 			}
 		}		
 		
-		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:URL):void
+		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:URL, manifest:Manifest):void
 		{			
-			var id:String = null;								
-			var url:URL = null;
-			var data:ByteArray;
 			var media:Media;	
-			var profile:String;
+			
+			var url:URL = null;
+			var bootstrapInfo:BootstrapInfo = new BootstrapInfo();
 			
 			if (value.attribute('profile').length() > 0)
 			{
-				profile = value.@profile;
+				bootstrapInfo.profile = value.@profile;
 			}
 			else  // Raise parse error
 			{
@@ -245,7 +244,7 @@ package org.osmf.manifest
 			
 			if (value.attribute("id").length() > 0)
 			{
-				id = value.@id;
+				bootstrapInfo.id = value.@id; 
 			}
 				
 			if (value.attribute("url").length() > 0)
@@ -255,28 +254,21 @@ package org.osmf.manifest
 				{
 					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
 				}
+				bootstrapInfo.url = url;
 			}
 			else
 			{			
 				var metadata:String = value.text();
 				var decoder:Base64Decoder = new Base64Decoder();
 				decoder.decode(metadata);
-				data = decoder.drain();
+				bootstrapInfo.data = decoder.drain();
 			}
 								
 			for each (media in allMedia)
 			{
-				if (media.bootstrapInfoId == id)
+				if (media.bootstrapInfo.id == bootstrapInfo.id)
 				{
-					media.bootstrapProfile = profile; 
-					if (url != null)
-					{
-						media.bootstrapInfoURL = url;
-					}
-					else
-					{
-						media.bootstrapInfo = data;
-					}					
+					media.bootstrapInfo = bootstrapInfo;
 				}						
 			}								
 		}		
@@ -313,6 +305,7 @@ package org.osmf.manifest
 		public function createResource(value:Manifest, manifestLocation:URL):MediaResourceBase
 		{			
 			var drmFacet:KeyValueFacet;
+			var bootstrapFacet:KeyValueFacet;
 			var resource:MediaResourceBase;
 			var media:Media;
 			var serverBaseURLs:Vector.<String>
@@ -365,18 +358,25 @@ package org.osmf.manifest
 				}
 				
 				if (media.bootstrapInfo	!= null ||
-					media.bootstrapInfoURL != null)
+					media.bootstrapInfo.url != null)
 				{
 					serverBaseURLs = new Vector.<String>();
 					serverBaseURLs.push(baseURLString);
 					
-					bootstrapInfoURLString = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
-					if (media.bootstrapInfoURL != null &&
-						media.bootstrapInfoURL.absolute == false)
+					bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
+					if (media.bootstrapInfo.url != null &&
+						media.bootstrapInfo.url.absolute == false)
 					{
 						bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
+						media.bootstrapInfo.url = new URL(bootstrapInfoURLString);
 					}
-					resource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(bootstrapInfoURLString, media.bootstrapInfo, serverBaseURLs));
+					bootstrapFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP);
+					bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
+					if (serverBaseURLs.length > 0)
+					{
+						bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+					}
+					resource.metadata.addFacet(bootstrapFacet);
 				}
 
 				if (media.drmAdditionalHeader != null)
@@ -393,6 +393,8 @@ package org.osmf.manifest
 			else if (value.media.length > 1) // Dynamic Streaming
 			{
 				var baseURL:URL = value.baseURL != null ? new FMSURL(value.baseURL.rawUrl) : new URL(manifestFolder);
+				serverBaseURLs = new Vector.<String>();
+				serverBaseURLs.push(baseURL.rawUrl);
 				
 				// TODO: MBR streams can be absolute (with no baseURL) or relative (with a baseURL).
 				// But we need to map them into the DynamicStreamingResource object model, which
@@ -401,7 +403,11 @@ package org.osmf.manifest
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
-								
+				
+				bootstrapFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP);
+				dynResource.metadata.addFacet(bootstrapFacet);
+				bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+				
 				for each (media in value.media)
 				{	
 					var stream:String;
@@ -433,18 +439,16 @@ package org.osmf.manifest
 					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.
 					// For now we assume they're all the same.
 					if (media.bootstrapInfo	!= null ||
-						media.bootstrapInfoURL != null)
+						media.bootstrapInfo.url != null)
 					{
-						serverBaseURLs = new Vector.<String>();
-						serverBaseURLs.push(baseURL.rawUrl);
-						
-						bootstrapInfoURLString = media.bootstrapInfoURL ? media.bootstrapInfoURL.rawUrl : null;
-						if (media.bootstrapInfoURL != null &&
-							media.bootstrapInfoURL.absolute == false)
+						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
+						if (media.bootstrapInfo.url != null &&
+							media.bootstrapInfo.url.absolute == false)
 						{
 							bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
+							media.bootstrapInfo.url = new URL(bootstrapInfoURLString); 
 						}
-						dynResource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet(bootstrapInfoURLString, media.bootstrapInfo, serverBaseURLs));
+						bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
 					}
 				}
 				resource = dynResource;

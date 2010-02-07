@@ -33,7 +33,7 @@ package org.osmf.manifest
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	internal class BootstrapInfo
+	public class BootstrapInfo
 	{
 		/**
 		 * The actual bootstrap information in binary format

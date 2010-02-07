@@ -23,6 +23,8 @@ package org.osmf.net.httpstreaming.f4f
 {
 	import flash.utils.ByteArray;
 	
+	import org.osmf.manifest.BootstrapInfo;
+	
 	[ExcludeClass]
 	
 	/**
@@ -30,13 +32,15 @@ package org.osmf.net.httpstreaming.f4f
 	 */
 	public class HTTPStreamingF4FStreamInfo
 	{
-		public function HTTPStreamingF4FStreamInfo(streamName:String, bitrate:Number=NaN, additionalHeader:ByteArray=null)
+		public function HTTPStreamingF4FStreamInfo(
+			bootstrap:BootstrapInfo, streamName:String, bitrate:Number=NaN, additionalHeader:ByteArray=null)
 		{
 			super();
 			
 			_streamName = streamName;
 			_bitrate = bitrate;
 			_additionalHeader = additionalHeader;
+			_bootstrap = bootstrap;
 		}
 		
 		public function get streamName():String
@@ -54,8 +58,14 @@ package org.osmf.net.httpstreaming.f4f
 			return _additionalHeader;
 		}
 		
+		public function get bootstrapInfo():BootstrapInfo
+		{
+			return _bootstrap;
+		}
+		
 		private var _streamName:String;
 		private var _bitrate:Number;
+		private var _bootstrap:BootstrapInfo;
 		private var _additionalHeader:ByteArray;
 	}
 }

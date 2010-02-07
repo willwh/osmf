@@ -37,35 +37,15 @@ package org.osmf.net.httpstreaming.f4f
 	public class HTTPStreamingF4FIndexInfo extends HTTPStreamingIndexInfoBase
 	{
 		public function HTTPStreamingF4FIndexInfo
-			( bootstrapInfoURL:String
-			, bootstrapInfoData:ByteArray
-			, serverBaseURL:String=null
+			(
+			 serverBaseURL:String=null
 			, streamInfos:Vector.<HTTPStreamingF4FStreamInfo>=null
 			)
 		{
 			super();
 			
-			_bootstrapInfoURL = bootstrapInfoURL;
-			_bootstrapInfoData = bootstrapInfoData;
 			_serverBaseURL = serverBaseURL;
 			_streamInfos = streamInfos;
-			
-			if (	(bootstrapInfoURL == null || bootstrapInfoURL.length <= 0) 
-				&& 	bootstrapInfoData == null
-			   )
-			{
-				throw new Error("HTTPStreamingF4FIndexInfo requires a valid value for either the URL to bootstrap information or the bytes of bootstrap information");
-			}
-		}
-		
-		public function get bootstrapInfoURL():String
-		{
-			return _bootstrapInfoURL;
-		}
-
-		public function get bootstrapInfoData():ByteArray
-		{
-			return _bootstrapInfoData;
 		}
 
 		public function get serverBaseURL():String
@@ -78,8 +58,6 @@ package org.osmf.net.httpstreaming.f4f
 			return _streamInfos;
 		}
 		
-		private var _bootstrapInfoURL:String;
-		private var _bootstrapInfoData:ByteArray;
 		private var _serverBaseURL:String;
 		private var _streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;
 	}

@@ -185,13 +185,13 @@ package org.osmf.manifest
 			assertTrue(Media(manifest.media[1]).drmAdditionalHeader != null);
 			assertTrue(Media(manifest.media[2]).drmAdditionalHeader != null);
 			
-			assertEquals("Sample Bootstrap 1", Media(manifest.media[0]).bootstrapInfo);
-			assertEquals("Sample Bootstrap 1", Media(manifest.media[1]).bootstrapInfo);
-			assertEquals("Sample Bootstrap 1", Media(manifest.media[2]).bootstrapInfo);
+			assertTrue(Media(manifest.media[0]).bootstrapInfo != null);
+			assertTrue(Media(manifest.media[1]).bootstrapInfo != null);
+			assertTrue(Media(manifest.media[2]).bootstrapInfo != null);
 			
-			assertEquals("named", Media(manifest.media[0]).bootstrapProfile);
-			assertEquals("named", Media(manifest.media[1]).bootstrapProfile);
-			assertEquals("named", Media(manifest.media[2]).bootstrapProfile);
+			assertEquals("named", Media(manifest.media[0]).bootstrapInfo.profile);
+			assertEquals("named", Media(manifest.media[1]).bootstrapInfo.profile);
+			assertEquals("named", Media(manifest.media[2]).bootstrapInfo.profile);
 			
 			assertEquals(480, Media(manifest.media[0]).height);
 			assertEquals(600, Media(manifest.media[1]).height);

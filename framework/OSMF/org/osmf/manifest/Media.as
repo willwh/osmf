@@ -57,44 +57,8 @@ package org.osmf.manifest
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
- 		public var bootstrapInfo:ByteArray;
+ 		public var bootstrapInfo:BootstrapInfo = new BootstrapInfo();
  		
- 		/**
-		 * The URL that points to the bootstrap info.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
- 		public var bootstrapInfoURL:URL;
- 		
- 		/**
-		 * The profile, or type of bootstrapping represented by this element. 
-		 * For the Named Access profile, use "named". For the Range Access Profile, 
-		 * use "range". For other bootstrapping profiles, use some other string (i.e. 
-		 * the field is extensible). It is required.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
- 		public var bootstrapProfile:String;
-		
-		/**
-		 * The ID of this &lt;bootstrapInfo&gt; element. It is optional. If it is not specified, 
-		 * then this bootstrapping block will apply to all &lt;media&gt; elements that don't have a 
-		 * bootstrapInfoId property. If it is specified, then this bootstrapping block will apply 
-		 * only to those &lt;media&gt; elements that use the same ID in their bootstrapInfoId property.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 		
-		public var bootstrapInfoId:String;
-				
 		/**
 		 * Location of the media.
 		 *  
@@ -145,7 +109,5 @@ package org.osmf.manifest
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var height:Number;
-				
-		
 	}
 }

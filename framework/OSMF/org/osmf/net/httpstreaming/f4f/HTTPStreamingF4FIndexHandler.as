@@ -27,9 +27,9 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.manifest.BootstrapInfo;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
-	import org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase;
 
 	CONFIG::LOGGING 
 	{	
@@ -59,6 +59,7 @@ package org.osmf.net.httpstreaming.f4f
 			super();
 			
 			currentQuality = -1;
+			currentFAI = null;
 		}
 		
 		/**
@@ -68,41 +69,87 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			// Make sure we have an info object of the expected type.
 			var f4fIndexInfo:HTTPStreamingF4FIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
-			if (f4fIndexInfo == null)
+			if (f4fIndexInfo == null || f4fIndexInfo.streamInfos == null || f4fIndexInfo.streamInfos.length <= 0)
 			{
-				throw new ArgumentError();
+				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+				return;					
 			}
-
-			serverBaseURL = f4fIndexInfo.serverBaseURL;
+			bootstrapBoxes = new Vector.<AdobeBootstrapBox>(f4fIndexInfo.streamInfos.length);
+			totalDurationNotified = false;
+			pendingIndexLoads = 0;
 			
+			serverBaseURL = f4fIndexInfo.serverBaseURL;			
 			streamInfos = f4fIndexInfo.streamInfos;
 			
-			// If the bootstrapInfoData is null, we dispatch an event 
-			// that contains the URL to the bootstrap information file
-			// so that HTTPNetStream can retrieve it. 
-			if (f4fIndexInfo.bootstrapInfoData == null)
+			var bootstrapBox:AdobeBootstrapBox;
+			for (var i:int = 0; i < streamInfos.length; i++)
+			{
+				var bootstrap:BootstrapInfo = streamInfos[i].bootstrapInfo;
+				if (bootstrap == null || (bootstrap.url == null && bootstrap.data == null))
+				{
+					dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+					return;					
+				}
+				if (bootstrap.data != null)
+				{
+					bootstrapBox = processBootstrapData(bootstrap.data, null);
+					if (bootstrapBox == null)
+					{
+						dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+						return;					
+					}
+					bootstrapBoxes[i] = bootstrapBox;
+					if (!totalDurationNotified)
+					{
+						dispatchEvent
+							( new HTTPStreamingIndexHandlerEvent
+								( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
+								, false
+								, false
+								, null
+								, null
+								, bootstrapBox.totalDuration / bootstrapBox.timeScale
+								)
+							);
+						totalDurationNotified = true;
+					}
+				}
+				else
+				{
+					pendingIndexLoads++;
+					dispatchEvent
+						(	new HTTPStreamingIndexHandlerEvent
+								( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
+								, false
+								, false
+								, null
+								, null
+								, 0
+								, new URLRequest(bootstrap.url.rawUrl)
+								, i
+								, true
+								)
+						);
+				}
+			}
+			
+			if (pendingIndexLoads == 0)
 			{
 				dispatchEvent
-					(	new HTTPStreamingIndexHandlerEvent
-							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
-							, false
-							, false
-							, null
-							, null
-							, 0
-							, new URLRequest(f4fIndexInfo.bootstrapInfoURL)
-							, null
-							, true
-							)
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
+						, false
+						, false
+						, getStreamNames(streamInfos)
+						, getQualityRates(streamInfos)
+						)
 					);
-			}
-			else
-			{
-				if (f4fIndexInfo.bootstrapInfoData != null)
-				{
-					f4fIndexInfo.bootstrapInfoData.position = 0;
-				}
-				processIndexData(f4fIndexInfo.bootstrapInfoData, null);
+	
+				dispatchEvent
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
+						)
+					);
 			}
 		}
 		
@@ -111,76 +158,49 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function processIndexData(data:*, indexContext:Object):void
 		{
-			var parser:BoxParser = new BoxParser();
-			parser.init(data);
-			try
-			{
-				var boxes:Vector.<Box> = parser.getBoxes();
-			}
-			catch (e:Error)
-			{
-				boxes = null;
-			}
-			
-			if (boxes == null || boxes.length < 1)
-			{
-				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR)); 
-
-				return;
-			}
-			
-			abst = boxes[0] as AdobeBootstrapBox;
-			if (abst == null)
+			var index:int = indexContext as int;
+			var bootstrapBox:AdobeBootstrapBox = this.processBootstrapData(data, index);
+			if (bootstrapBox == null)
 			{
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
-				
-				return;
+				return;					
 			}
-			
-			currentFragmentNumber = 1;
-			if (serverBaseURL == null || serverBaseURL.length <= 0)
-			{
-				if (abst.serverBaseURLs != null && abst.serverBaseURLs.length > 0)
-				{
-					// If serverBaseURL is not set from the external, we need to pick 
-					// a server base URL from the bootstrap box. For now, we just
-					// pick the first one.
-					serverBaseURL = abst.serverBaseURLs[0];
-				}
-				else
-				{
-					dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
+			pendingIndexLoads--;
+			bootstrapBoxes[index] = bootstrapBox;
 
-					return;
-				}
+			if (!totalDurationNotified)
+			{
+				dispatchEvent
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
+						, false
+						, false
+						, null
+						, null
+						, bootstrapBox.totalDuration / bootstrapBox.timeScale
+						)
+					);
+				totalDurationNotified = true;
 			}
-			
-			dispatchEvent
-				( new HTTPStreamingIndexHandlerEvent
-					( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
-					, false
-					, false
-					, getStreamNames(streamInfos)
-					, getQualityRates(streamInfos)
-					)
-				);
-			
-			dispatchEvent
-				( new HTTPStreamingIndexHandlerEvent
-					( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
-					, false
-					, false
-					, null
-					, null
-					, abst.totalDuration / abst.timeScale
-					)
-				);
-			
-			dispatchEvent
-				( new HTTPStreamingIndexHandlerEvent
-					( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
-					)
-				);
+
+			if (pendingIndexLoads == 0)
+			{
+				dispatchEvent
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
+						, false
+						, false
+						, getStreamNames(streamInfos)
+						, getQualityRates(streamInfos)
+						)
+					);
+	
+				dispatchEvent
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
+						)
+					);
+			}
 		}	
 		
 		/**
@@ -188,6 +208,7 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
+			abst = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable();
@@ -197,23 +218,20 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
-				var fragId:Number = frt.findFragmentIdByTime(time * abst.timeScale);
-				if (isNaN(fragId))
+				currentFAI = frt.findFragmentIdByTime(time * abst.timeScale);
+				if (currentFAI == null)
 				{
 					return null;
 				}
 				
-				currentFragmentNumber = fragId;
-				var segId:uint = abst.findSegmentId(currentFragmentNumber);
+				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				
-				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFragmentNumber;
-				currentFragmentNumber++;
+				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 				
 				CONFIG::LOGGING
 				{
 					logger.debug("getFileForTime URL = " + requestUrl);
 				}
-			
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 			}
@@ -234,25 +252,24 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getNextFile(quality:int):HTTPStreamRequest
 		{
+			abst = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
-			if (	currentFragmentNumber <= abst.totalFragments
+			if (	(currentFAI.fragId + 1)  <= abst.totalFragments
 				&& 	quality >= 0
 				&&  quality < streamInfos.length
 			   )
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable();
-				var fragId:Number = frt.validateFragment(currentFragmentNumber);
-				if (isNaN(fragId))
+				currentFAI = frt.validateFragment(currentFAI.fragId + 1);
+				if (currentFAI == null)
 				{
 					return null;
 				}
 				
-				currentFragmentNumber = fragId;
 				
-				var segId:uint = abst.findSegmentId(currentFragmentNumber);
-				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFragmentNumber;
-				currentFragmentNumber++;
+				var segId:uint = abst.findSegmentId(currentFAI.fragId);
+				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 				
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
@@ -282,7 +299,7 @@ package org.osmf.net.httpstreaming.f4f
 		internal function calculateSegmentDuration(timeBias:Number):Number
 		{
 			var fragmentDurationPairs:Vector.<FragmentDurationPair> = (abst.fragmentRunTables)[0].fragmentDurationPairs;
-			var fragmentId:uint = currentFragmentNumber - 1;
+			var fragmentId:uint = currentFAI.fragId;
 			
 			var index:int =  fragmentDurationPairs.length - 1;
 			while (index >= 0)
@@ -353,6 +370,48 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}
 		
+		private function processBootstrapData(data:*, indexContext:Object):AdobeBootstrapBox
+		{
+			var bootstrapBox:AdobeBootstrapBox = null;
+			
+			var parser:BoxParser = new BoxParser();
+			data.position = 0;
+			parser.init(data);
+			try
+			{
+				var boxes:Vector.<Box> = parser.getBoxes();
+			}
+			catch (e:Error)
+			{
+				boxes = null;
+			}
+			
+			if (boxes == null || boxes.length < 1)
+			{
+				return null;
+			}
+			
+			bootstrapBox = boxes[0] as AdobeBootstrapBox;
+			if (bootstrapBox == null)
+			{
+				return null;
+			}
+			
+			if (serverBaseURL == null || serverBaseURL.length <= 0)
+			{
+				if (bootstrapBox.serverBaseURLs == null || bootstrapBox.serverBaseURLs.length <= 0)
+				{
+					// If serverBaseURL is not set from the external, we need to pick 
+					// a server base URL from the bootstrap box. For now, we just
+					// pick the first one. It is an error if the server base URL is null 
+					// under this circumstance.
+					return null;
+				}
+			}
+			
+			return bootstrapBox;
+		}	
+
 		private function getQualityRates(streamInfos:Vector.<HTTPStreamingF4FStreamInfo>):Array
 		{
 			var rates:Array = [];
@@ -368,7 +427,7 @@ package org.osmf.net.httpstreaming.f4f
 			
 			return rates;
 		}
-
+		
 		private function getStreamNames(streamInfos:Vector.<HTTPStreamingF4FStreamInfo>):Array
 		{
 			var streamNames:Array = [];
@@ -391,11 +450,14 @@ package org.osmf.net.httpstreaming.f4f
 			return abst.fragmentRunTables[0];
 		}
 
+		private var totalDurationNotified:Boolean;
+		private var pendingIndexLoads:int;
 		private var abst:AdobeBootstrapBox;
-		private var currentFragmentNumber:int;
+		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
 		private var serverBaseURL:String;
 		private var streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;
 		private var currentQuality:int;
+		private var currentFAI:FragmentAccessInformation;
 		
 		CONFIG::LOGGING
 		{
