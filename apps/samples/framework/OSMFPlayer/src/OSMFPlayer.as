@@ -41,6 +41,7 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.RegistrationPoint;
@@ -122,7 +123,8 @@ package
 		{
 			// Construct a MediaContainer that will be used to show the media
 			// on screen once it has loaded.
-			container = new MediaContainer();
+			containerRenderer = new LayoutRenderer();
+			container = new MediaContainer(null, containerRenderer);
 			containerLayout = new LayoutRendererProperties(container);
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
@@ -142,7 +144,7 @@ package
 			overlayLayout.percentHeight = 100;
 			overlayLayout.order = 1;
 			
-			container.layoutRenderer.addTarget(overlay);
+			containerRenderer.addTarget(overlay);
 		}
 		
 		private function setupUserInterface():void
@@ -158,7 +160,7 @@ package
 			controlBarLayout.bottom = 25;
 			controlBarLayout.alignment = RegistrationPoint.TOP_MIDDLE;
 			
-			container.layoutRenderer.addTarget(controlBar);
+			containerRenderer.addTarget(controlBar);
 			
 			var urlInput:URLInput = controlBar.getWidget(ControlBar.URL_INPUT) as URLInput;
 			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
@@ -273,6 +275,7 @@ package
 		private var element:MediaElement;
 		
 		private var container:MediaContainer;
+		private var containerRenderer:LayoutRenderer;
 		private var containerLayout:LayoutRendererProperties;
 		private var controlBar:ControlBarBase;
 		

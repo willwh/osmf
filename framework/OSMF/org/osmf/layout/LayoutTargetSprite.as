@@ -250,6 +250,9 @@ package org.osmf.layout
 			}
 		}
 		
+		/**
+		 * @private
+		 */
 		public function validateNow():void
 		{
 			if (renderers.containerRenderer)

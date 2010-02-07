@@ -70,11 +70,11 @@ package org.osmf.containers
 		{
 			super(metadata);
 			
-			this.layoutRenderer ||= new LayoutRenderer()
+			this.layoutRenderer = layoutRenderer || new LayoutRenderer();
 			this.layoutRenderer.container = this; 
 		}
 		
-		// MediaContainer
+		// IMediaContainer
 		//
 		
 		/**
@@ -111,7 +111,6 @@ package org.osmf.containers
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
-			
 			
 			return element;
 		}
