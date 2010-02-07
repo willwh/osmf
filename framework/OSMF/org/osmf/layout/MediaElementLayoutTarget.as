@@ -28,7 +28,6 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.layout.ILayoutTarget;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
@@ -37,7 +36,7 @@ package org.osmf.layout
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Dispatched when a layout child's displayObject has changed.
+	 * Dispatched when a layout target's view has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
 	 *  
@@ -47,9 +46,9 @@ package org.osmf.layout
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
-	
+
 	/**
-	 * Dispatched when a layout element's mediaal width and height changed.
+	 * Dispatched when a layout element's measured width and height changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 *  
@@ -59,30 +58,88 @@ package org.osmf.layout
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
-
+	
 	/**
-	 * Dispatched when a layout target's layoutRenderer property changed.
+	 * Dispatched when a layout target is being set as a layout renderer's container.
+	 *
+	 * LayoutRendererBase dispatches this event on the target being set as its container.
 	 * 
-	 * @eventType org.osmf.layout.LayoutTargetEvent.LAYOUT_RENDERER_CHANGE
+	 * Implementations that are to be used as layout renderer containers are required
+	 * to listen to the event in order to maintain a reference to their layout
+	 * renderer, so it can be correctly parented on the container becoming a child
+	 * of another container.
+	 *  
+	 * @eventType org.osmf.layout.LayoutTargetEvent.SET_AS_LAYOUT_RENDERER_CONTAINER
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="layoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
-
+	[Event(name="setAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
+	
 	/**
-	 * Dispatched when a layout target's parentLayoutRenderer property changed.
+	 * Dispatched when a layout target is being un-set as a layout renderer's container.
 	 * 
-	 * @eventType org.osmf.layout.LayoutTargetEvent.PARENT_LAYOUT_RENDERER_CHANGE
+	 * LayoutRendererBase dispatches this event on the target being unset as its container.
+	 * 
+	 * Implementations that are to be used as layout renderer containers are required
+	 * to listen to the event in order to reset the reference to their layout renderer. 
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.UNSET_AS_LAYOUT_RENDERER_CONTAINER
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="parentLayoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
+	[Event(name="unsetAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * Dispatched when a layout target is added as a target to a layout renderer.
+	 * 
+	 * LayoutRendererBase dispatches this event on a target when it gets added to
+	 * its list of targets.
+	 * 
+	 * Implementations that are to be used as layout renderer containers
+	 * are required to listen to the event in order to invoke <code>setParent</code>
+	 * on the renderer that they are the container for.
+	 * 
+	 * Failing to do so will break the rendering tree, resulting in unneccasary
+	 * layout recalculations, as well as unexpected size and positioning of the target.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="addToLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
+	 * Dispatched when a layout target is removed as a target from a layout renderer.
+	 * 
+	 * LayoutRendererBase dispatches this event on a target when it gets removed from
+	 * its list of targets.
+	 *
+	 * Implementations that are to be used as layout renderer containers
+	 * are required to listen to the event in order to invoke <code>setParent</code>
+	 * on the renderer that they are the container for. In case of removal, the
+	 * parent should be set to null, unless the target has already been assigned
+	 * as the container of another renderer.
+	 * 
+	 * Failing to do so will break the rendering tree, resulting in unneccasary
+	 * layout recalculations, as well as unexpected size and positioning of the target.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.REMOVE_FROM_LAYOUT_RENDERER
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="removeFromLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
 	 * @private
@@ -118,6 +175,8 @@ package org.osmf.layout
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				
+				renderers = new LayoutTargetRenderers(this);
+				
 				onMediaElementTraitsChange();
 			}
 		}
@@ -129,22 +188,6 @@ package org.osmf.layout
 		
 		// ILayoutTarget
 		//
-
-		/**
-		 * @private
-		 */
-		public function get layoutRenderer():LayoutRendererBase
-		{
-			return _layoutRenderer;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function get parentLayoutRenderer():LayoutRendererBase
-		{
-			return _parentLayoutRenderer;
-		}
 		
 		/**
 		 * @private
@@ -185,26 +228,28 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function measure():void
+		public function measure(deep:Boolean = true):void
 		{
-			// No action required. Layout renderers will invoke measurement
-			// directly via the layoutRenderer property.
+			if (_displayObject is ILayoutTarget)
+			{
+				ILayoutTarget(_displayObject).measure(deep);
+			}
 		}
 		
 		/**
 		 * @private
 		 */
-		public function layout(availableWidth:Number, availableHeight:Number):void
+		public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
-			if (_displayObject != null && _layoutRenderer == null)
+			if (_displayObject is ILayoutTarget)
+			{
+				ILayoutTarget(_displayObject).layout(availableWidth, availableHeight, deep);
+			}
+			else if (_displayObject != null && renderers.containerRenderer == null)
 			{
 				_displayObject.width = availableWidth;
 				_displayObject.height = availableHeight;
-			}
-			else
-			{
-				
-			}
+			} 
 		}
 		
 		// Public interface
@@ -238,58 +283,60 @@ package org.osmf.layout
 		//
 		
 		private var _mediaElement:MediaElement;
+		
 		private var displayObjectTrait:DisplayObjectTrait;
 		private var _displayObject:DisplayObject;
-		private var _layoutRenderer:LayoutRendererBase;
-		private var _parentLayoutRenderer:LayoutRendererBase;
+		
+		private var renderers:LayoutTargetRenderers;
 		
 		// Event Handlers
 		//
 		
 		private function onMediaElementTraitsChange(event:MediaElementEvent = null):void
 		{
-			var newDisplayObjectTrait:DisplayObjectTrait
-				= 	(	event
-					&&	event.type == MediaElementEvent.TRAIT_REMOVE
-					&&	event.traitType == MediaTraitType.DISPLAY_OBJECT
-					)	?	null
-						:	_mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-							
-			if (newDisplayObjectTrait != displayObjectTrait)
+			if ( event == null || (event && event.traitType == MediaTraitType.DISPLAY_OBJECT))
 			{
-				if (displayObjectTrait)
+				var newDisplayObjectTrait:DisplayObjectTrait 
+					= (event && event.type == MediaElementEvent.TRAIT_REMOVE)
+						? null
+						: _mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+								
+				if (newDisplayObjectTrait != displayObjectTrait)
 				{
-					displayObjectTrait.removeEventListener
-						( DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
-						, onDisplayObjectTraitDisplayObjecChange
-						);
+					if (displayObjectTrait)
+					{
+						displayObjectTrait.removeEventListener
+							( DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
+							, onDisplayObjectTraitDisplayObjecChange
+							);
+						
+						displayObjectTrait.removeEventListener
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
+							, onDisplayObjectTraitMediaSizeChange
+							);
+					}
 					
-					displayObjectTrait.removeEventListener
-						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
-						, onDisplayObjectTraitMediaSizeChange
+					displayObjectTrait = newDisplayObjectTrait;
+					
+					if (displayObjectTrait)
+					{
+						displayObjectTrait.addEventListener
+							( DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
+							, onDisplayObjectTraitDisplayObjecChange
+							);
+						
+						displayObjectTrait.addEventListener
+							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
+							, onDisplayObjectTraitMediaSizeChange
+							);
+					}
+					
+					updateDisplayObject
+						( displayObjectTrait
+							? displayObjectTrait.displayObject
+							: null
 						);
 				}
-				
-				displayObjectTrait = newDisplayObjectTrait;
-				
-				if (displayObjectTrait)
-				{
-					displayObjectTrait.addEventListener
-						( DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
-						, onDisplayObjectTraitDisplayObjecChange
-						);
-					
-					displayObjectTrait.addEventListener
-						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
-						, onDisplayObjectTraitMediaSizeChange
-						);
-				}
-				
-				updateDisplayObject
-					( displayObjectTrait
-						? displayObjectTrait.displayObject
-						: null
-					);
 			}
 		}
 		
@@ -306,38 +353,24 @@ package org.osmf.layout
 						, oldDisplayObject
 						, newDisplayObject
 						)
+					);	
+			}
+			
+			if	(	newDisplayObject is ILayoutTarget
+				&&	renderers.parentRenderer
+				)
+			{
+				// This media element is targetted by a renderer. Send a 
+				// fake event to the target, indicating that the target
+				// has now become the child of this very same renderer.
+				// This will make sure that the target's renderer gets
+				// parented correctly:
+				ILayoutTarget(newDisplayObject).dispatchEvent
+					( new LayoutTargetEvent
+						( LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER
+						, false, false, renderers.parentRenderer
+						)
 					);
-				
-				if (oldDisplayObject is ILayoutTarget)
-				{
-					oldDisplayObject.removeEventListener
-						( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
-						, onLayoutRendererChange
-						);
-						
-					oldDisplayObject.removeEventListener
-						( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
-						, onParentLayoutRendererChange
-						);
-				}
-				
-				if (newDisplayObject is ILayoutTarget)
-				{
-					newDisplayObject.addEventListener
-						( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
-						, onLayoutRendererChange
-						);
-						
-					newDisplayObject.addEventListener
-						( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
-						, onParentLayoutRendererChange
-						);
-				}
-				
-				var layoutTarget:ILayoutTarget = newDisplayObject as ILayoutTarget;
-				
-				setLayoutRenderer(layoutTarget ? layoutTarget.layoutRenderer : null);
-				setParentLayoutRenderer(layoutTarget ? layoutTarget.parentLayoutRenderer : null);
 			}
 		}
 		
@@ -351,50 +384,6 @@ package org.osmf.layout
 			dispatchEvent(event.clone());	
 		}
 		
-		private function onLayoutRendererChange(event:LayoutRendererChangeEvent):void
-		{
-			setLayoutRenderer(event.newValue);
-		}
-		
-		private function onParentLayoutRendererChange(event:LayoutRendererChangeEvent):void
-		{
-			setParentLayoutRenderer(event.newValue);
-		}
-		
-		private function setLayoutRenderer(value:LayoutRendererBase):void
-		{
-			if (value != _layoutRenderer)
-			{
-				var oldRenderer:LayoutRendererBase = _layoutRenderer;
-				_layoutRenderer = value;
-				dispatchEvent
-					( new LayoutRendererChangeEvent
-						( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
-						, false, false
-						, oldRenderer
-						, value
-						)
-					); 
-			} 
-		}
-		
-		private function setParentLayoutRenderer(value:LayoutRendererBase):void
-		{
-			if (value != _parentLayoutRenderer)
-			{
-				var oldRenderer:LayoutRendererBase = _parentLayoutRenderer;
-				_parentLayoutRenderer = value;
-				dispatchEvent
-					( new LayoutRendererChangeEvent
-						( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
-						, false, false
-						, oldRenderer
-						, value
-						)
-					); 
-			} 
-		}
-		
 		/* Static */
 		
 		private static const layoutTargets:Dictionary = new Dictionary(true);
@@ -402,7 +391,7 @@ package org.osmf.layout
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaElementLayoutTarget");
 	}
 }
-
+	
 /**
  * Internal class, used to prevent the MediaElementLayoutTarget constructor
  * to run successfully on being invoked outside of this class.

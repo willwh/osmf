@@ -96,10 +96,11 @@ package org.osmf.layout
 		{
 			return _parent;	
 		}
-		final protected function setParent(value:LayoutRendererBase):void
+		final internal function setParent(value:LayoutRendererBase):void
 		{
 			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getFacet(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "null");}
 			_parent = value;
+			processParentChange(_parent);
 		}
 		
 		/**
@@ -125,23 +126,17 @@ package org.osmf.layout
 				{
 					reset();
 					
-					if (_container.layoutRenderer == this)
-					{
-						_container.dispatchEvent
-							( new LayoutRendererChangeEvent
-								( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
-								, false, false
-								, this
-								, null
-								)
-							);
-							
-						_container.addEventListener
-							( DisplayObjectEvent.MEDIA_SIZE_CHANGE
-							, invalidatingEventHandler
-							, false, 0, true
-							);
-					}
+					_container.dispatchEvent
+						( new LayoutTargetEvent
+							( LayoutTargetEvent.UNSET_AS_LAYOUT_RENDERER_CONTAINER
+							, false, false, this
+							)
+						);
+					
+					_container.removeEventListener
+						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
+						, invalidatingEventHandler
+						);
 				}
 			
 				var oldContainer:ILayoutTarget = _container;	
@@ -159,11 +154,9 @@ package org.osmf.layout
 						);
 
 					_container.dispatchEvent
-						( new LayoutRendererChangeEvent
-							( LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE
-							, false, false
-							, _container.layoutRenderer
-							, this
+						( new LayoutTargetEvent
+							( LayoutTargetEvent.SET_AS_LAYOUT_RENDERER_CONTAINER
+							, false, false, this
 							)
 						);
 						
@@ -202,13 +195,12 @@ package org.osmf.layout
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			// Dispatch a parentLayoutRendererChange event on the target. This is the cue for
+			// Dispatch a ADD_TO_LAYOUT_RENDERER event on the target. This is the cue for
 			// the currently owning renderer to remove the target from its listing:
 			target.dispatchEvent
-				( new LayoutRendererChangeEvent
-					( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
-					, false, false
-					, target.parentLayoutRenderer, this
+				( new LayoutTargetEvent
+					( LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER
+					, false, false, this
 					)
 				);
 			
@@ -219,12 +211,6 @@ package org.osmf.layout
 			
 			// Add the target to our listing:
 			layoutTargets.splice(index, 0, target);	
-			
-			// Parent the added layout renderer (if available):
-			if (target.layoutRenderer)
-			{
-				target.layoutRenderer.setParent(this);
-			}
 			
 			// Watch the facets on the target's metadata that we're interested in:
 			var watchers:Array = metaDataWatchers[target] = new Array();
@@ -242,8 +228,9 @@ package org.osmf.layout
 			// Watch the target's displayObject, dimenions, and layoutRenderer change:
 			target.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
 			target.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
-			target.addEventListener(LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE, onTargetChildRendererChange);
-			target.addEventListener(LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE, onTargetParentRendererChange);
+			
+			target.addEventListener(LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER, onTargetAddedToRenderer);
+			target.addEventListener(LayoutTargetEvent.SET_AS_LAYOUT_RENDERER_CONTAINER, onTargetSetAsContainer);
 			
 			invalidate();
 			
@@ -285,17 +272,12 @@ package org.osmf.layout
 				// Remove the target from our listing:
 				removedTarget = layoutTargets.splice(index,1)[0];
 				
-				// Un-parent the target if it is a layout renderer:
-				if (target.layoutRenderer && target.layoutRenderer.parent == this)
-				{
-					target.layoutRenderer.setParent(null);
-				}
-				
 				// Un-watch the target's displayObject and dimenions change:
 				target.removeEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, invalidatingEventHandler);
 				target.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, invalidatingEventHandler);
-				target.removeEventListener(LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE, onTargetChildRendererChange);
-				target.removeEventListener(LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE, onTargetParentRendererChange);
+				
+				target.removeEventListener(LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER, onTargetAddedToRenderer);
+				target.removeEventListener(LayoutTargetEvent.SET_AS_LAYOUT_RENDERER_CONTAINER, onTargetSetAsContainer);
 								
 				// Remove the metadata change watchers that we added:
 				for each (var watcher:MetadataWatcher in metaDataWatchers[target])
@@ -308,11 +290,9 @@ package org.osmf.layout
 				processTargetRemoved(target);
 				
 				target.dispatchEvent
-					( new LayoutRendererChangeEvent
-						( LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE
-						, false, false
-						, target.parentLayoutRenderer
-						, null
+					( new LayoutTargetEvent
+						( LayoutTargetEvent.REMOVE_FROM_LAYOUT_RENDERER
+						, false, false, this
 						)
 					);
 					
@@ -429,7 +409,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		protected function measure():void
+		internal function measure():void
 		{
 			// Take care of all targets being staged correctly:
 			prepareTargets();
@@ -437,12 +417,7 @@ package org.osmf.layout
 			// Traverse, execute bottom-up:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
-				if (target.layoutRenderer)
-				{
-					target.layoutRenderer.measure();
-				}
-				
-				target.measure();
+				target.measure(true /* deep */);
 			}
 			
 			// Calculate our own size:
@@ -451,34 +426,30 @@ package org.osmf.layout
 			_measuredWidth = size.x;
 			_measuredHeight = size.y;
 			
-			_container.measure();
+			_container.measure(false /* shallow */);
 		}
 		
 		/**
 		 * @private
 		 */
-		protected function layout(availableWidth:Number, availableHeight:Number):void
+		internal function layout(availableWidth:Number, availableHeight:Number):void
 		{
 			processUpdateMediaDisplayBegin(layoutTargets);
 			
-			_container.layout(availableWidth, availableHeight);
+			_container.layout(availableWidth, availableHeight, false /* shallow */);
 			
 			// Traverse, execute top-down:
 			for each (var target:ILayoutTarget in layoutTargets)
 			{
 				var bounds:Rectangle = calculateTargetBounds(target, availableWidth, availableHeight);
 				
-				target.layout(bounds.width, bounds.height);
+				target.layout(bounds.width, bounds.height, true /* deep */);
 				
 				var displayObject:DisplayObject = target.displayObject;
 				if (displayObject)
 				{
 					displayObject.x = bounds.x;
 					displayObject.y = bounds.y;
-				}
-				if (target.layoutRenderer)
-				{
-					target.layoutRenderer.layout(bounds.width, bounds.height);
 				}
 			}
 			
@@ -708,6 +679,19 @@ package org.osmf.layout
 			return new Point();
 		}
 		
+		/**
+		 * @private
+		 *
+		 * Subclasses should override this method to implement to do processing on the
+		 * renderer's parent being changed.
+		 * 
+		 * @value The new parent of the renderer.
+		 */
+		protected function processParentChange(value:LayoutRendererBase):void
+		{
+			
+		}
+		
 		// Internals
 		//
 		
@@ -761,22 +745,33 @@ package org.osmf.layout
 			invalidate();
 		}
 		
-		private function onTargetChildRendererChange(event:LayoutRendererChangeEvent = null):void
+		private function onTargetAddedToRenderer(event:LayoutTargetEvent):void
 		{
-			var target:ILayoutTarget = event ? event.target as ILayoutTarget : null;
-			if (target && target.layoutRenderer)
+			if (event.layoutRenderer != this)
 			{
-				target.layoutRenderer.setParent(this);
+				// The target is being added to another renderer. If we have
+				// it on as a target, then remove it from our listing:
+				var target:ILayoutTarget = event.target as ILayoutTarget;
+				if (hasTarget(target))
+				{
+					removeTarget(target);
+				}
 			}
 		}
 		
-		private function onTargetParentRendererChange(event:LayoutRendererChangeEvent = null):void
+		private function onTargetSetAsContainer(event:LayoutTargetEvent):void
 		{
-			CONFIG::LOGGING { logger.debug("onTargetParentRendererChange: {0}, {1}", event.oldValue == this, event.newValue != this); }
-			if (event.oldValue == this && event.newValue != this)
+			if (event.layoutRenderer != this)
 			{
-				removeTarget(event.target as ILayoutTarget);
-			}
+				// Our container is being set as the container to another
+				// layout renderer. If this container still is our container,
+				// we need to release our own reference:
+				var target:ILayoutTarget = event.target as ILayoutTarget;
+				if (container == target)
+				{
+					container = null;
+				}
+			}	
 		}
 		
 		private function prepareTargets():void

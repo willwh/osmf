@@ -70,8 +70,8 @@ package org.osmf.containers
 		{
 			super(metadata);
 			
-			layoutRenderer ||= new LayoutRenderer()
-			layoutRenderer.container = this; 
+			this.layoutRenderer ||= new LayoutRenderer()
+			this.layoutRenderer.container = this; 
 		}
 		
 		// MediaContainer
@@ -200,8 +200,10 @@ package org.osmf.containers
 		// Overrides
 		//
 		
-		override public function layout(availableWidth:Number, availableHeight:Number):void
+		override public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
+			super.layout(availableWidth, availableHeight, deep);
+			
 			if (!isNaN(backgroundColor))
 			{
 				drawBackground();
@@ -216,7 +218,7 @@ package org.osmf.containers
 		/**
 		 * @private
 		 */
-		public function validateNow():void
+		override public function validateNow():void
 		{
 			layoutRenderer.validateNow();
 		}
@@ -302,6 +304,8 @@ package org.osmf.containers
 		 * media elements that they wrap: 
 		 */		
 		private var layoutTargets:Dictionary = new Dictionary();
+		
+		private var layoutRenderer:LayoutRendererBase;
 		
 		private var _backgroundColor:Number;
 		private var _backgroundAlpha:Number;

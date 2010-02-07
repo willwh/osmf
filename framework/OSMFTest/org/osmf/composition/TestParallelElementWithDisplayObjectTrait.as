@@ -64,10 +64,7 @@ package org.osmf.composition
 			
 			assertTrue(sizeChangeEventCount == 1);
 			
-			// TODO: Fix the rest of this test.  For some reason, setting the dimensions
-			// doesn't propagate to the container, it only affects the underlying trait. 
-			
-			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
 			assertEquals(50, displayObjectTrait.mediaWidth);
 			assertEquals(50, displayObjectTrait.mediaHeight);
@@ -81,7 +78,7 @@ package org.osmf.composition
 			
 			displayObjectTrait2.setSize(100, 50);
 			
-			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
 			assertEquals(4, sizeChangeEventCount);
 			
@@ -90,7 +87,7 @@ package org.osmf.composition
 			
 			displayObjectTrait2.setSize(100, 100);
 			
-			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
 			assertEquals(6, sizeChangeEventCount);
 			
@@ -107,7 +104,7 @@ package org.osmf.composition
 			displayObjectTrait = parallel.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			assertNotNull(displayObjectTrait);
 			
-			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
 			assertEquals(6, sizeChangeEventCount);
 			
@@ -118,7 +115,7 @@ package org.osmf.composition
 			view3.graphics.drawRect(0, 0, 600, 600);
 			displayObjectTrait3.displayObject = view3;
 			
-			LayoutTargetSprite(displayObjectTrait.displayObject).layoutRenderer.validateNow();
+			LayoutTargetSprite(displayObjectTrait.displayObject).validateNow();
 			
 			assertEquals(6, sizeChangeEventCount);
 			

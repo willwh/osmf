@@ -80,6 +80,11 @@ package org.osmf.composition
 				);
 		}
 		
+		public function get layoutRenderer():LayoutRendererBase
+		{
+			return _layoutRenderer;
+		}
+		
 		/**
 		 * @private
 		 */
@@ -108,11 +113,6 @@ package org.osmf.composition
 		
 		// Protected API
 		//
-		
-		protected function get layoutRenderer():LayoutRendererBase
-		{
-			return _layoutRenderer;
-		}
 		
 		protected function get traitAggregator():TraitAggregator
 		{

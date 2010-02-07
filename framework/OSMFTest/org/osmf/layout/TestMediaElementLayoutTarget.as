@@ -47,8 +47,6 @@ package org.osmf.layout
 			assertEquals(melt.metadata, me.metadata);
 			assertEquals(NaN, melt.measuredWidth);
 			assertEquals(NaN, melt.measuredHeight);
-			assertNull(null, melt.layoutRenderer);
-			assertNull(null, melt.parentLayoutRenderer);
 		}
 		
 		public function testMediaElementLayoutTargetWithDisplayObjectTrait():void
@@ -67,13 +65,9 @@ package org.osmf.layout
 			assertEquals(lt.displayObject, lts);
 			assertEquals(lt.measuredWidth, 100);
 			assertEquals(lt.measuredHeight, 200); 
-			assertNull(null, lt.layoutRenderer);
-			assertNull(null, lt.parentLayoutRenderer);
 			
 			var renderer:LayoutRendererBase = new LayoutRenderer();
 			renderer.container = lts;
-			
-			assertEquals(renderer, lt.layoutRenderer);
 				
 			var lastEvent:Event;
 			var eventCounter:int = 0;

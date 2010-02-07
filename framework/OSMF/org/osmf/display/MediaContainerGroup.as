@@ -23,7 +23,6 @@ package org.osmf.display
 {
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import org.osmf.containers.MediaContainer;
@@ -80,11 +79,11 @@ package org.osmf.display
 			
 			// Setup the layout renderer that will govern the layout of child
 			// groups:
-			var layoutRenderer:LayoutRendererBase
+			this.layoutRenderer
 				=	groupsLayoutRenderer
 				||	new LayoutRenderer();
 				
-			layoutRenderer.container = this; 
+			this.layoutRenderer.container = this; 
 		}
 		
 		// Public API
@@ -213,7 +212,7 @@ package org.osmf.display
 		/**
 		 * @private
 		 */		
-		public function validateNow():void
+		override public function validateNow():void
 		{
 			layoutRenderer.validateNow();
 			_mediaContainer.validateNow();
@@ -237,14 +236,14 @@ package org.osmf.display
 			return super.removeChildAt(index + 1);
 		}
 		
-		override public function measure():void
+		override public function measure(deep:Boolean = true):void
 		{
-			_mediaContainer.measure();
+			_mediaContainer.measure(deep);
 			
-			super.measure();
+			super.measure(deep);
 		}
 		
-		override public function layout(availableWidth:Number, availableHeight:Number):void
+		override public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
 			if (availableWidth)
 			{
@@ -261,12 +260,13 @@ package org.osmf.display
 				scrollRect = new Rectangle(0, 0, availableWidth, availableHeight);
 			}
 			
-			super.layout(availableWidth, availableHeight);
+			super.layout(availableWidth, availableHeight, deep);
 		}
 		
 		// Internals
 		//
 		
 		private var _mediaContainer:MediaContainer;
+		private var layoutRenderer:LayoutRendererBase;
 	}
 }

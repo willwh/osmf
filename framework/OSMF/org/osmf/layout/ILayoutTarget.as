@@ -25,7 +25,6 @@ package org.osmf.layout
 	import flash.events.IEventDispatcher;
 	
 	import org.osmf.metadata.IMetadataProvider;
-	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * Dispatched when a layout target's view has changed.
@@ -38,9 +37,9 @@ package org.osmf.layout
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
-	
+
 	/**
-	 * Dispatched when a layout target's intrinsical width and/or height changed.
+	 * Dispatched when a layout element's measured width and height changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
 	 *  
@@ -52,28 +51,86 @@ package org.osmf.layout
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
-	 * Dispatched when a layout target's layoutRenderer property changed.
+	 * Dispatched when a layout target is being set as a layout renderer's container.
+	 *
+	 * LayoutRendererBase dispatches this event on the target being set as its container.
 	 * 
-	 * @eventType org.osmf.layout.LayoutTargetEvent.LAYOUT_RENDERER_CHANGE
+	 * Implementations that are to be used as layout renderer containers are required
+	 * to listen to the event in order to maintain a reference to their layout
+	 * renderer, so it can be correctly parented on the container becoming a child
+	 * of another container.
+	 *  
+	 * @eventType org.osmf.layout.LayoutTargetEvent.SET_AS_LAYOUT_RENDERER_CONTAINER
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="layoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
+	[Event(name="setAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * Dispatched when a layout target is being un-set as a layout renderer's container.
+	 * 
+	 * LayoutRendererBase dispatches this event on the target being unset as its container.
+	 * 
+	 * Implementations that are to be used as layout renderer containers are required
+	 * to listen to the event in order to reset the reference to their layout renderer. 
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.UNSET_AS_LAYOUT_RENDERER_CONTAINER
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="unsetAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * Dispatched when a layout target is added as a target to a layout renderer.
+	 * 
+	 * LayoutRendererBase dispatches this event on a target when it gets added to
+	 * its list of targets.
+	 * 
+	 * Implementations that are to be used as layout renderer containers
+	 * are required to listen to the event in order to invoke <code>setParent</code>
+	 * on the renderer that they are the container for.
+	 * 
+	 * Failing to do so will break the rendering tree, resulting in unneccasary
+	 * layout recalculations, as well as unexpected size and positioning of the target.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="addToLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
-	 * Dispatched when a layout target's parentLayoutRenderer property changed.
+	 * Dispatched when a layout target is removed as a target from a layout renderer.
 	 * 
-	 * @eventType org.osmf.layout.LayoutTargetEvent.PARENT_LAYOUT_RENDERER_CHANGE
+	 * LayoutRendererBase dispatches this event on a target when it gets removed from
+	 * its list of targets.
+	 *
+	 * Implementations that are to be used as layout renderer containers
+	 * are required to listen to the event in order to invoke <code>setParent</code>
+	 * on the renderer that they are the container for. In case of removal, the
+	 * parent should be set to null, unless the target has already been assigned
+	 * as the container of another renderer.
+	 * 
+	 * Failing to do so will break the rendering tree, resulting in unneccasary
+	 * layout recalculations, as well as unexpected size and positioning of the target.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.REMOVE_FROM_LAYOUT_RENDERER
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="parentLayoutRendererChange",type="org.osmf.layout.LayoutRendererChangeEvent")]
+	[Event(name="removeFromLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
 	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer
@@ -102,13 +159,13 @@ package org.osmf.layout
 		/**
 	 	 * Defines the layout renderer that the implementing object uses to render
 	 	 * its children. Can be null.
-	 	 */	 	
 	 	function get layoutRenderer():LayoutRendererBase;
+	 	 */	 	
 	 	
 	 	/**
 	 	 * Defines the layout renderer that lays out the implementing object.
-	 	 */	 	
 	 	function get parentLayoutRenderer():LayoutRendererBase;
+	 	 */	 	
 		
 	 	/**
 	 	 * Defines the width of the element without any transformations being
@@ -139,26 +196,36 @@ package org.osmf.layout
 	 	/**
 		 * Method invoked by a LayoutRenderer object to inform the implementation
 		 * that it should reasses its measuredWidth and measuredHeight fields:
+		 * 
+		 * @param deep True if the measurement request is to be forwarded to
+		 * the target's potential associated layout renderer (if the target
+		 * implementation is a container). The forwarding should take place before
+		 * the target measures itself.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-	 	function measure():void;
+	 	function measure(deep:Boolean = true):void;
 	 	
 	 	/**
 		 * Method invoked by a LayoutRenderer object to inform the implementation
 		 * that it should update its display to adjust to the given available
 		 * width and height.
 		 *  
+	 	 * @param availableWidth
+	 	 * @param availableHeight
+	 	 * @param deep True if the layout request is to be forwarded to
+		 * the target's potential associated layout renderer (if the target
+		 * implementation is a container). The forwarding should take place
+		 * after the target lays itself out.
+	 	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-	 	function layout(availableWidth:Number, availableHeight:Number):void;
-	 	
-	 	
+	 	function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void;
 	}
 }

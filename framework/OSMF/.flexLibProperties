@@ -92,9 +92,10 @@
     <classEntry path="org.osmf.layout.LayoutFacet"/>
     <classEntry path="org.osmf.layout.LayoutRenderer"/>
     <classEntry path="org.osmf.layout.LayoutRendererBase"/>
-    <classEntry path="org.osmf.layout.LayoutRendererChangeEvent"/>
     <classEntry path="org.osmf.layout.LayoutRendererMode"/>
     <classEntry path="org.osmf.layout.LayoutRendererProperties"/>
+    <classEntry path="org.osmf.layout.LayoutTargetEvent"/>
+    <classEntry path="org.osmf.layout.LayoutTargetRenderers"/>
     <classEntry path="org.osmf.layout.LayoutTargetSprite"/>
     <classEntry path="org.osmf.layout.MediaElementLayoutTarget"/>
     <classEntry path="org.osmf.layout.PaddingLayoutFacet"/>

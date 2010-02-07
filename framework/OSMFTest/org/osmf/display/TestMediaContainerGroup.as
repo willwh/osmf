@@ -38,7 +38,7 @@ package org.osmf.display
 			childA.addChildGroup(childA1);
 			childA1.addChildGroup(childA1A);
 			
-			root.layoutRenderer.validateNow();
+			root.validateNow();
 			
 			assertEquals(0, root.width);
 			assertEquals(0, root.height);
@@ -47,7 +47,7 @@ package org.osmf.display
 			
 			childA1A.width = 400;
 			childA1A.height = 50;
-			root.layoutRenderer.validateNow();
+			root.validateNow();
 			
 			assertEquals(400, childA1A.width);
 			assertEquals(50, childA1A.height);

@@ -26,7 +26,6 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.ExternalProperty;
 
 	public class TesterLayoutTargetSprite extends Sprite implements ILayoutTarget
 	{
@@ -43,16 +42,6 @@ package org.osmf.layout
 			return this;
 		}
 		
-		public function get layoutRenderer():LayoutRendererBase
-		{
-			return _layoutRenderer.value as LayoutRendererBase;
-		}
-		
-		public function get parentLayoutRenderer():LayoutRendererBase
-		{
-			return _parentLayoutRenderer.value as LayoutRendererBase;
-		}
-		
 		public function get measuredWidth():Number
 		{
 			return _measuredWidth;
@@ -63,12 +52,12 @@ package org.osmf.layout
 			return _measuredHeight;
 		}
 		
-		public function measure():void
+		public function measure(deep:Boolean = true):void
 		{
 			//
 		}
 		
-		public function layout(availableWidth:Number, availableHeight:Number):void
+		public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
 			width = availableWidth;
 			height = availableHeight;
@@ -79,8 +68,7 @@ package org.osmf.layout
 		
 		public function TesterLayoutTargetSprite()
 		{
-			_layoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.LAYOUT_RENDERER_CHANGE);
-			_parentLayoutRenderer = new ExternalProperty(this, LayoutRendererChangeEvent.PARENT_LAYOUT_RENDERER_CHANGE);
+			renderers = new LayoutTargetRenderers(this);
 			
 			super();
 		}
@@ -107,8 +95,7 @@ package org.osmf.layout
 		
 		private var _metadata:Metadata = new Metadata();
 		
-		private var _layoutRenderer:ExternalProperty;
-		private var _parentLayoutRenderer:ExternalProperty;
+		private var renderers:LayoutTargetRenderers;
 		
 		private var _measuredWidth:Number;
 		private var _measuredHeight:Number;
