@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.elements.proxyClasses
 {
+	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	
 	[ExcludeClass]
@@ -28,16 +29,22 @@ package org.osmf.elements.proxyClasses
 	/**
 	 * @private
 	 */
-	public class TemporalProxyTimeTrait extends TimeTrait
+	public class DurationSeekTrait extends SeekTrait
 	{
-		public function TemporalProxyTimeTrait(duration:Number)
+		public function DurationSeekTrait(temporal:TimeTrait)
 		{
-			super(duration);
+			super(temporal);
 		}
-
-		public function set currentTime(value:Number):void
+		
+		override protected function seekingChangeEnd(time:Number):void
 		{
-			super.setCurrentTime(value);
+			super.seekingChangeEnd(time);
+
+			// Auto-complete any in-progress seek operation.
+			if (seeking == true)
+			{
+				setSeeking(false, time);
+			}
 		}
 	}
 }

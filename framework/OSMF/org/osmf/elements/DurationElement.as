@@ -24,8 +24,8 @@ package org.osmf.elements
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.osmf.elements.proxyClasses.TemporalProxySeekTrait;
-	import org.osmf.elements.proxyClasses.TemporalProxyTimeTrait;
+	import org.osmf.elements.proxyClasses.DurationSeekTrait;
+	import org.osmf.elements.proxyClasses.DurationTimeTrait;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
@@ -35,22 +35,22 @@ package org.osmf.elements
 	import org.osmf.traits.PlayTrait;
 
 	/**
-	 * A TemporalProxyElement wraps a MediaElement to give it temporal capabilities.
+	 * A DurationElement wraps a MediaElement to give it temporal capabilities.
 	 * It allows a non-temporal MediaElement to be treated as a temporal MediaElement.
-	 * <p>The TemporalProxyElement class is especially useful for creating delays
+	 * <p>The DurationElement class is especially useful for creating delays
 	 * in the presentation of a media composition.
 	 * For example, the following code presents a sequence of videos,
 	 * separated from each another by five-second delays.</p>
 	 * <listing>
 	 * var sequence:SerialElement = new SerialElement();
 	 * 
-	 * sequence.addChild(new VideoElement(new NetLoader(),
+	 * sequence.addChild(new VideoElement(
 	 * 	new URLResource("http://www.example.com/video1.flv")));
-	 * sequence.addChild(new TemporalProxyElement(new MediaElement(),5));
-	 * sequence.addChild(new VideoElement(new NetLoader(),
+	 * sequence.addChild(new DurationElement(5));
+	 * sequence.addChild(new VideoElement(
 	 * 	new URLResource("http://www.example.com/ad.flv")));
-	 * sequence.addChild(new TemporalProxyElement(new MediaElement(),5));
-	 * sequence.addChild(new VideoElement(new NetLoader(),
+	 * sequence.addChild(new DurationElement(5));
+	 * sequence.addChild(new VideoElement(
 	 * 	new URLResource("http://www.example.com/video2.flv")));
 	 * 
 	 * // Add the SerialElement to the MediaPlayer.
@@ -58,8 +58,8 @@ package org.osmf.elements
 	 * </listing>
 	 * <p>The following example presents a sequence of rotating banners.
 	 * The delays separating the appearances of the banners are 
-	 * created with TemporalProxyElements.
-	 * In addition, the images themselves are wrapped in TemporalProxyElements
+	 * created with DurationElements.
+	 * In addition, the images themselves are wrapped in DurationElements
 	 * to enable them to support a duration.</p>
 	 * <listing>
 	 * // The first banner does not appear for five seconds.
@@ -68,37 +68,37 @@ package org.osmf.elements
 	 * 
 	 * var bannerSequence:SerialElement = new SerialElement();
 	 * 
-	 * bannerSequence.addChild(new TemporalProxyElement(new MediaElement(),5));
-	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")),20);
-	 * bannerSequence.addChild(new TemporalProxyElement(new MediaElement(),15));
-	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner2.jpg")),20);
-	 * bannerSequence.addChild(new TemporalProxyElement(new MediaElement(),15));
-	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
-	 * 	new URLResource("http://www.examplebanners.com/banner3.jpg")),20);
+	 * bannerSequence.addChild(new DurationElement(5));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
+	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")));
+	 * bannerSequence.addChild(new DurationElement(15));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
+	 * 	new URLResource("http://www.examplebanners.com/banner2.jpg")));
+	 * bannerSequence.addChild(new DurationElement(15));
+	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
+	 * 	new URLResource("http://www.examplebanners.com/banner3.jpg")));
 	 * </listing>
 	 * @see ProxyElement
-	 * @see org.osmf.composition.SerialElement
+	 * @see org.osmf.elements.SerialElement
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class TemporalProxyElement extends ProxyElement
+	public class DurationElement extends ProxyElement
 	{
 		/**
 	 	 * Constructor.
-	 	 * @param duration Duration of the TemporalProxyElement's TimeTrait, in seconds.
-	 	 * @param mediaElement Element to be wrapped by this TemporalProxyElement.
+	 	 * @param duration Duration of the DurationElement's TimeTrait, in seconds.
+	 	 * @param mediaElement Optional element to be wrapped by this DurationElement.
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
 	 	 *  @playerversion AIR 1.5
 	 	 *  @productversion OSMF 1.0
 	 	 */		
-		public function TemporalProxyElement(duration:Number, mediaElement:MediaElement=null)
+		public function DurationElement(duration:Number, mediaElement:MediaElement=null)
 		{
 			_duration = duration;
 			
@@ -112,27 +112,27 @@ package org.osmf.elements
 		/**
 		 * @private
 		 * 
-	 	 * Sets up the temporal proxy's TimeTrait, SeekTrait, and PlayTrait.
+	 	 * Sets up the element's TimeTrait, SeekTrait, and PlayTrait.
 	 	 * The proxy's traits will override the same traits in the wrapped element.
 	 	 * <p>This gives the application access to the trait properties in the wrapped
 	 	 * element that did not exist before it was wrapped.</p>
-	 	 * <p>For example, the TemporalProxyElement in the following line wraps an ImageElement.
-	 	 * The <code>duration</code> property of the TemporalProxyElement's TimeTrait allows
+	 	 * <p>For example, the DurationElement in the following line wraps an ImageElement.
+	 	 * The <code>duration</code> property of the DurationElement's TimeTrait allows
 	 	 * the application to specify the duration that the image is displayed, in this case 20 seconds.</p>
 	 	 * <listing>
-	 	 * bannerSequence.addChild(new TemporalProxyElement(new ImageElement(new ImageLoader(),
-	 	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")),20);	
+	 	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
+	 	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")));	
 	 	 * </listing>
 	 	 */	
 		override protected function setupOverriddenTraits():void
 		{
 			super.setupOverriddenTraits();
 			
-			timeTrait = new TemporalProxyTimeTrait(_duration);
+			timeTrait = new DurationTimeTrait(_duration);
 			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
 			addTrait(MediaTraitType.TIME, timeTrait);
 
-			seekTrait = new TemporalProxySeekTrait(timeTrait);
+			seekTrait = new DurationSeekTrait(timeTrait);
 			addTrait(MediaTraitType.SEEK, seekTrait);
 			
 			// Reduce priority of our listener so that all other listeners will
@@ -222,8 +222,8 @@ package org.osmf.elements
 		private var absoluteTimeAtLastPlay:Number = 0; // milliseconds
 		private var playheadTimer:Timer;
 		
-		private var timeTrait:TemporalProxyTimeTrait;
-		private var seekTrait:TemporalProxySeekTrait;
+		private var timeTrait:DurationTimeTrait;
+		private var seekTrait:DurationSeekTrait;
 		private var playTrait:PlayTrait;
 	}
 }

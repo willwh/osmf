@@ -91,7 +91,7 @@ package org.osmf.view
 			// Set up the MediaPlayer.
 			//
 			
-			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
+			mediaPlayerWrapper.scaleMode = ScaleMode.LETTERBOX;
 			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
 			mediaPlayerWrapper.mediaPlayer.autoRewind = true;
 			

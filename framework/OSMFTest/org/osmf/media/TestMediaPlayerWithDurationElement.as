@@ -21,20 +21,20 @@
 package org.osmf.media
 {
 	import org.osmf.net.NetLoader;
-	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
-	public class TestMediaPlayerWithTemporalProxyElement extends TestMediaPlayer
+	public class TestMediaPlayerWithDurationElement extends TestMediaPlayer
 	{
 		// Overrides
 		//
 				
 		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
-			return new TemporalProxyElement(1);
+			return new DurationElement(1);
 		}
 		
 		override protected function get hasLoadTrait():Boolean

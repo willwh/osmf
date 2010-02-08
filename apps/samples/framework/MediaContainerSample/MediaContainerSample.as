@@ -30,8 +30,8 @@ package
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.ImageElement;
-	import org.osmf.elements.TemporalProxyElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
@@ -186,7 +186,7 @@ package
 		
 		private function constructBanner(url:String):MediaElement
 		{
-			return new TemporalProxyElement
+			return new DurationElement
 					( BANNER_INTERVAL
 					, constructImage(url)
 					);

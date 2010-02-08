@@ -24,7 +24,7 @@ package org.osmf.smil.media
 	import org.osmf.elements.CompositeElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
@@ -122,8 +122,8 @@ package org.osmf.smil.media
 					var imageResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src)); 
 					var imageElement:MediaElement = factory.createMediaElement(imageResource);
 					var dur:Number = (smilElement as SMILMediaElement).duration;
-					var temporalProxyElement:TemporalProxyElement = new TemporalProxyElement(dur, imageElement);
-					(parentMediaElement as CompositeElement).addChild(temporalProxyElement);
+					var durationElement:DurationElement = new DurationElement(dur, imageElement);
+					(parentMediaElement as CompositeElement).addChild(durationElement);
 					break;
 				case SMILElementType.AUDIO:
 					var audioResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));

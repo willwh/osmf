@@ -27,6 +27,8 @@
 	xmlns:samples				="org.osmf.samples.*"
 	>
 	
+	<mx:Canvas id="container" width="320" height="240" backgroundColor="0x0096ff" horizontalCenter="0" verticalCenter="0"> 
+	
 	<samples:MediaPlayerWrapper
 		id 						="mediaPlayerWrapper"
 		top 					="0"
@@ -35,6 +37,7 @@
 		right 					="0"
 		/>
  
+	</mx:Canvas>
 	
 	<!-- Upper Left Region -->
 	

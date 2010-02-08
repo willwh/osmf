@@ -34,7 +34,7 @@ package org.osmf.examples
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SWFElement;
 	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
@@ -436,13 +436,13 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"Slideshow"
-				  	, 	"Demonstrates the use of TemporalProxyElement to present a set of images in sequence."
+				  	, 	"Demonstrates the use of DurationElement to present a set of images in sequence."
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE3)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE3)))));
 							
 							return serialElement;
 				  	   	}
@@ -463,28 +463,28 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"Captions"
-				  	, 	"Demonstrates the use of TemporalProxyElement to present a set of text elements in sequence."
+				  	, 	"Demonstrates the use of DurationElement to present a set of text elements in sequence."
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("War was Beginning.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: What happen ?")));
-							serialElement.addChild(new TemporalProxyElement(4, new TextElement("Mechanic: Somebody set up us the bomb.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Operator: We get signal.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: What !")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Operator: Main screen turn on.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: It's you !!")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("CATS: How are you gentlemen !!")));
-							serialElement.addChild(new TemporalProxyElement(5, new TextElement("CATS: All your base are belong to us.")));
-							serialElement.addChild(new TemporalProxyElement(5, new TextElement("CATS: You are on the way to destruction.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: What you say !!")));
-							serialElement.addChild(new TemporalProxyElement(4, new TextElement("CATS: You have no chance to survive make your time.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("CATS: Ha ha ha ha ...")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Operator: Captain !!")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: Take off every 'ZIG'!!")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: You know what you doing.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: Move 'ZIG'.")));
-							serialElement.addChild(new TemporalProxyElement(3, new TextElement("Captain: For great justice.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("War was Beginning.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What happen ?")));
+							serialElement.addChild(new DurationElement(4, new TextElement("Mechanic: Somebody set up us the bomb.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: We get signal.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What !")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Main screen turn on.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: It's you !!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("CATS: How are you gentlemen !!")));
+							serialElement.addChild(new DurationElement(5, new TextElement("CATS: All your base are belong to us.")));
+							serialElement.addChild(new DurationElement(5, new TextElement("CATS: You are on the way to destruction.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: What you say !!")));
+							serialElement.addChild(new DurationElement(4, new TextElement("CATS: You have no chance to survive make your time.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("CATS: Ha ha ha ha ...")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Operator: Captain !!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Take off every 'ZIG'!!")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: You know what you doing.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: Move 'ZIG'.")));
+							serialElement.addChild(new DurationElement(3, new TextElement("Captain: For great justice.")));
 							
 							return serialElement;
 				  	   	}
@@ -653,11 +653,11 @@ package org.osmf.examples
 				  	   	{
 				  	   		var serialElement:SerialElement = new SerialElement();
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(5));
+				  	   		serialElement.addChild(new DurationElement(5));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(10));
+				  	   		serialElement.addChild(new DurationElement(10));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(2));
+				  	   		serialElement.addChild(new DurationElement(2));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
 				  	   		return serialElement; 
 				  	   	}
@@ -674,11 +674,11 @@ package org.osmf.examples
 				  	   		parallelElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE))));
 				  	   		var serialElement:SerialElement = new SerialElement();
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(5));
+				  	   		serialElement.addChild(new DurationElement(5));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(10));
+				  	   		serialElement.addChild(new DurationElement(10));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
-				  	   		serialElement.addChild(new TemporalProxyElement(2));
+				  	   		serialElement.addChild(new DurationElement(2));
 				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
 				  	   		parallelElement.addChild(serialElement);
 				  	   		return parallelElement; 
@@ -718,7 +718,7 @@ package org.osmf.examples
 							resource.metadata.addFacet(kvFacet);
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
 
 				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
 							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
@@ -727,7 +727,7 @@ package org.osmf.examples
 							resource.metadata.addFacet(kvFacet);
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
 
 				  	   		resource = new URLResource(new FMSURL(REMOTE_STREAM));
 							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
@@ -760,7 +760,7 @@ package org.osmf.examples
 							dsResource.metadata.addFacet(kvFacet);
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE1)))));
 
 							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (i = 0; i < 5; i++)
@@ -773,7 +773,7 @@ package org.osmf.examples
 							dsResource.metadata.addFacet(kvFacet);
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
-							serialElement.addChild(new TemporalProxyElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
+							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(new URL(REMOTE_SLIDESHOW_IMAGE2)))));
 
 							dsResource = new DynamicStreamingResource(new FMSURL(REMOTE_MBR_STREAM_HOST));
 							for (i = 0; i < 5; i++)

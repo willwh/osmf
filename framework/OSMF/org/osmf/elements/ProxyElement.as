@@ -70,7 +70,7 @@ package org.osmf.elements
 	 * alternate implementation of some of the wrapped element's underlying traits,
 	 * to provide an implementation when a needed underlying trait does not exist,
 	 * or to prevent an underlying trait from being exposed at all.</p>
-	 * @see TemporalProxyElement
+	 * @see DurationElement
 	 * @see org.osmf.events.MediaElementEvent
 	 * @see org.osmf.traits
 	 *  

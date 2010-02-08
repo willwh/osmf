@@ -26,8 +26,8 @@ package org.osmf.elements
 	import flash.events.Event;
 	
 	import org.osmf.events.SeekEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.MediaTraitType;
@@ -37,9 +37,9 @@ package org.osmf.elements
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.URL;
 
-	public class TestTemporalProxyElement extends TestMediaElement
+	public class TestDurationElement extends TestMediaElement
 	{
-		public function TestTemporalProxyElement()
+		public function TestDurationElement()
 		{
 			super();
 		}
@@ -48,8 +48,8 @@ package org.osmf.elements
 		{
 			try 
 			{
-				new TemporalProxyElement(NaN);
-				new TemporalProxyElement(NaN, new MediaElement());
+				new DurationElement(NaN);
+				new DurationElement(NaN, new MediaElement());
 			}
 			catch(error:IllegalOperationError)
 			{
@@ -60,7 +60,7 @@ package org.osmf.elements
 		public function testTraits():void
 		{
 			var mediaElement:MediaElement = new MediaElement();
-			var proxy:TemporalProxyElement = new TemporalProxyElement(NaN, mediaElement);
+			var proxy:DurationElement = new DurationElement(NaN, mediaElement);
 			
 			assertTrue(mediaElement.getTrait(MediaTraitType.TIME) == null);
 			assertTrue(proxy.getTrait(MediaTraitType.TIME) != null);
@@ -81,7 +81,7 @@ package org.osmf.elements
 		{
 			events = new Vector.<Event>();
 			var mediaElement:MediaElement = new MediaElement();
-			var proxy:TemporalProxyElement = new TemporalProxyElement(50, mediaElement);
+			var proxy:DurationElement = new DurationElement(50, mediaElement);
 			
 			var timeTrait:TimeTrait = proxy.getTrait(MediaTraitType.TIME) as TimeTrait;
 			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -114,7 +114,7 @@ package org.osmf.elements
 		
 		override protected function createMediaElement():MediaElement
 		{
-			return new TemporalProxyElement(0);
+			return new DurationElement(0);
 		}
 		
 		override protected function get hasLoadTrait():Boolean

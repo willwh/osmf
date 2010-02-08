@@ -17,6 +17,7 @@
     <classEntry path="org.osmf.elements.CompositionMode"/>
     <classEntry path="org.osmf.elements.CuePoint"/>
     <classEntry path="org.osmf.elements.CuePointType"/>
+    <classEntry path="org.osmf.elements.DurationElement"/>
     <classEntry path="org.osmf.elements.F4MElement"/>
     <classEntry path="org.osmf.elements.F4MLoader"/>
     <classEntry path="org.osmf.elements.FactoryElement"/>
@@ -30,7 +31,6 @@
     <classEntry path="org.osmf.elements.SWFLoader"/>
     <classEntry path="org.osmf.elements.SerialElement"/>
     <classEntry path="org.osmf.elements.SoundLoader"/>
-    <classEntry path="org.osmf.elements.TemporalProxyElement"/>
     <classEntry path="org.osmf.elements.VideoElement"/>
     <classEntry path="org.osmf.elements.audioClasses.AudioAudioTrait"/>
     <classEntry path="org.osmf.elements.audioClasses.AudioPlayTrait"/>
@@ -82,10 +82,10 @@
     <classEntry path="org.osmf.elements.loaderClasses.LoaderLoadTrait"/>
     <classEntry path="org.osmf.elements.loaderClasses.LoaderLoadedContext"/>
     <classEntry path="org.osmf.elements.loaderClasses.LoaderUtils"/>
+    <classEntry path="org.osmf.elements.proxyClasses.DurationSeekTrait"/>
+    <classEntry path="org.osmf.elements.proxyClasses.DurationTimeTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.FactoryLoadTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.MetadataProxy"/>
-    <classEntry path="org.osmf.elements.proxyClasses.TemporalProxySeekTrait"/>
-    <classEntry path="org.osmf.elements.proxyClasses.TemporalProxyTimeTrait"/>
     <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
     <classEntry path="org.osmf.events.BufferEvent"/>

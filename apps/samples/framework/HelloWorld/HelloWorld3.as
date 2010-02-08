@@ -28,9 +28,9 @@ package
 	
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.SWFElement;
 	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.TemporalProxyElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
@@ -85,7 +85,7 @@ package
 
 			// Second child is a SWF that shows for three seconds.
 			serialElement.addChild
-				( new TemporalProxyElement
+				( new DurationElement
 					( 3
 					, new SWFElement
 						( new URLResource(new URL(REMOTE_SWF))

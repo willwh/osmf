@@ -130,6 +130,14 @@ package org.osmf
 			addTestSuite(TestHTMLTimeTrait);
 			addTestSuite(TestHTMLAudioTrait);
 			
+			// Images & SWFs
+			//
+			
+			addTestSuite(TestImageLoader);
+			addTestSuite(TestImageElement);
+
+			addTestSuite(TestSWFLoader);
+			addTestSuite(TestSWFElement);
 			
 			// Composition
 			//
@@ -163,6 +171,23 @@ package org.osmf
 			
 			addTestSuite(TestCompositeAudioTrait);
 			
+			// Proxies
+			//
+			
+			addTestSuite(TestProxyElement);
+			addTestSuite(TestProxyElementAsDynamicProxy);
+			addTestSuite(TestDurationElement);
+			addTestSuite(TestListenerProxyElement);
+			addTestSuite(TestListenerProxyElementAsSubclass);
+			addTestSuite(TestFactoryElement);
+			addTestSuite(TestFactoryLoadTrait);
+			
+			// Tracking
+			//
+			
+			addTestSuite(TestBeacon);
+			addTestSuite(TestBeaconElement);
+
 			// MediaPlayer
 			//
 			
@@ -225,15 +250,6 @@ package org.osmf
 			addTestSuite(TestAdobeFragmentRunTable);
 			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
-
-			// Images & SWFs
-			//
-			
-			addTestSuite(TestImageLoader);
-			addTestSuite(TestImageElement);
-
-			addTestSuite(TestSWFLoader);
-			addTestSuite(TestSWFElement);
 			
 			// Plugins
 			//
@@ -244,23 +260,6 @@ package org.osmf
 			addTestSuite(TestPluginManager);
 			addTestSuite(TestPluginLoadingState);
 			addTestSuite(TestPluginLoadedContext);
-
-			// Proxies
-			//
-			
-			addTestSuite(TestProxyElement);
-			addTestSuite(TestProxyElementAsDynamicProxy);
-			addTestSuite(TestTemporalProxyElement);
-			addTestSuite(TestListenerProxyElement);
-			addTestSuite(TestListenerProxyElementAsSubclass);
-			addTestSuite(TestFactoryElement);
-			addTestSuite(TestFactoryLoadTrait);
-			
-			// Tracking
-			//
-			
-			addTestSuite(TestBeacon);
-			addTestSuite(TestBeaconElement);
 						
 			// Layout
 			//			
@@ -287,6 +286,7 @@ package org.osmf
 
 			// Utils
 			//
+			
 			addTestSuite(TestBinarySearch);
 			addTestSuite(TestOSMFStrings);
 			addTestSuite(TestVersion);		
@@ -305,7 +305,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
-			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
+			addTestSuite(TestMediaPlayerWithDurationElement);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
 
 			// This test fails intermittently on the build machine.
