@@ -28,6 +28,8 @@ package
 	
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
