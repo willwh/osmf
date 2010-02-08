@@ -33,7 +33,7 @@ package org.osmf.plugins.video
 		public function SimpleVideoPluginInfo()
 		{
 			var netLoader:NetLoader = new NetLoader();
-			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.video.SimpleVideoPlugin", netLoader.canHandleResource, createVideoElement);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.elements.video.SimpleVideoPlugin", netLoader.canHandleResource, createVideoElement);
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(item);
 			

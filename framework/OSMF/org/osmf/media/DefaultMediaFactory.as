@@ -22,17 +22,17 @@
 package org.osmf.media
 {
 	import org.osmf.elements.AudioElement;
-	import org.osmf.elements.SoundLoader;
-	import org.osmf.elements.ImageElement;
-	import org.osmf.elements.ImageLoader;
 	import org.osmf.elements.F4MElement;
 	import org.osmf.elements.F4MLoader;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.ImageLoader;
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SWFLoader;
+	import org.osmf.elements.SoundLoader;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
-	import org.osmf.elements.SWFElement;
-	import org.osmf.elements.SWFLoader;
-	import org.osmf.elements.VideoElement;
 	
 	/**
 	 * <p>Defines a default media factory.</p>
@@ -111,7 +111,7 @@ package org.osmf.media
 			
 			addItem 
 				( new MediaFactoryItem
-					( "org.osmf.f4m"
+					( "org.osmf.elements.f4m"
 					, f4mLoader.canHandleResource
 					, function():MediaElement
 						{
@@ -122,7 +122,7 @@ package org.osmf.media
 				
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.video.httpstreaming"
+					( "org.osmf.elements.video.httpstreaming"
 					, new HTTPStreamingNetLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -133,7 +133,7 @@ package org.osmf.media
 
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.video.dynamicStreaming"
+					( "org.osmf.elements.video.dynamicStreaming"
 					, new DynamicStreamingNetLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -144,7 +144,7 @@ package org.osmf.media
 			
 			addItem
 				( new MediaFactoryItem
-					( "org.omsf.video"
+					( "org.omsf.elements.video"
 					, new NetLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -155,7 +155,7 @@ package org.osmf.media
 			
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.audio"
+					( "org.osmf.elements.audio"
 					, new SoundLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -166,7 +166,7 @@ package org.osmf.media
 				
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.audio.streaming"
+					( "org.osmf.elements.audio.streaming"
 					, new NetLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -177,7 +177,7 @@ package org.osmf.media
 				
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.image"
+					( "org.osmf.elements.image"
 					, new ImageLoader().canHandleResource
 					, function():MediaElement
 						{
@@ -188,7 +188,7 @@ package org.osmf.media
 				
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.swf"
+					( "org.osmf.elements.swf"
 					, new SWFLoader().canHandleResource
 					, function():MediaElement
 						{

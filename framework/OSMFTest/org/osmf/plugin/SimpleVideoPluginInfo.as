@@ -29,7 +29,7 @@ package org.osmf.plugin
 	
 	public class SimpleVideoPluginInfo extends PluginInfo
 	{
-		public static const MEDIA_FACTORY_ITEM_ID:String = "org.osmf.video.simplevideo2";
+		public static const MEDIA_FACTORY_ITEM_ID:String = "org.osmf.elements.video.simplevideo2";
 
 		public function SimpleVideoPluginInfo()
 		{

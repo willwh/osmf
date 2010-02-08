@@ -30,13 +30,13 @@ package
 	
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.*;
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
@@ -44,7 +44,6 @@ package
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor="0x333333")]
 	public class MASTSample extends Sprite
@@ -130,7 +129,7 @@ package
 				var netLoader:NetLoader = new NetLoader();
 				
 				// Add a default VideoElement
-				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.elements.video", netLoader.canHandleResource, createVideoElement));
 				mediaElement = mediaFactory.createMediaElement(resource);
 			}
 			

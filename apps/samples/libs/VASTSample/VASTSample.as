@@ -26,20 +26,17 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import org.osmf.composition.SerialElement;
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.URL;
 	import org.osmf.vast.loader.VASTLoadedContext;
 	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.VASTMediaGenerator;
-	import org.osmf.video.VideoElement;
 
 	/**
 	 * Demonstrates playback of a video preceded by a preroll from a VAST

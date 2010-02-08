@@ -32,8 +32,8 @@ package org.osmf.plugin
 	
 	public class SimpleVideoImagePluginInfo extends PluginInfo
 	{
-		public static const VIDEO_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.video.simplevideo";
-		public static const IMAGE_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.image.simplemage";
+		public static const VIDEO_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.elements.video.simplevideo";
+		public static const IMAGE_MEDIA_FACTORY_ITEM_ID:String = "org.osmf.elements.image.simplemage";
 
 		public function SimpleVideoImagePluginInfo()
 		{

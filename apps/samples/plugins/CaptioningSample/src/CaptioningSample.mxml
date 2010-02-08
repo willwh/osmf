@@ -47,13 +47,13 @@
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
-			import org.osmf.video.VideoElement;
 			import org.osmf.utils.URL;
 			import org.osmf.metadata.TemporalFacet;
 			import org.osmf.metadata.TemporalFacetEvent;
 			import org.osmf.events.SeekEvent;
 			import org.osmf.events.MetadataEvent;
 			import org.osmf.events.TimeEvent;
+			import org.osmf.elements.VideoElement;
 
 			import org.osmf.captioning.CaptioningPluginInfo;
 			import org.osmf.captioning.model.Caption;
@@ -122,7 +122,7 @@
 
 				var netLoader:NetLoader = new NetLoader();
 
-				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.elements.video", netLoader.canHandleResource, createVideoElement));
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar

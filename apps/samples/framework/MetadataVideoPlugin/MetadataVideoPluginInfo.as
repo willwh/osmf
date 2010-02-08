@@ -21,6 +21,7 @@
 *****************************************************/
 package
 {
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
@@ -28,7 +29,6 @@ package
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	/**
 	 * Implementation of PluginInfo for a plugin that exposes a MediaFactoryItem

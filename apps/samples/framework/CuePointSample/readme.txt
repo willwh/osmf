@@ -2,7 +2,7 @@ Sample Application: CuePointSample
 
 A. Overview
 
-This sample application demonstrates temporal metadata within the OSMF framework. Its purpose is to demonstrate how the TemporalFacet and TemporalIndentifier classes in the org.osmf.metadata package can be used to inspect, add to, and listen for temporal metadata associated with a media element. The sample uses the new CuePoint class found in org.osmf.video.
+This sample application demonstrates temporal metadata within the OSMF framework. Its purpose is to demonstrate how the TemporalFacet and TemporalIndentifier classes in the org.osmf.metadata package can be used to inspect, add to, and listen for temporal metadata associated with a media element. The sample uses the new CuePoint class found in org.osmf.elements.
 
 B. Installation Instructions (Flex Builder)
 

@@ -35,6 +35,7 @@
 			import org.osmf.traits.LoadTrait;
 			import mx.controls.Alert;
 
+			import org.osmf.elements.VideoElement;
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;	
@@ -51,7 +52,6 @@
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
-			import org.osmf.video.VideoElement;
 			import org.osmf.utils.URL;
 			import org.osmf.metadata.TemporalFacet;
 			import org.osmf.metadata.TemporalFacetEvent;
@@ -476,7 +476,7 @@
 
 				var netLoader:NetLoader = new NetLoader();
 
-				mediaFactory.addItem(new MediaFactoryItem("org.osmf.video", netLoader.canHandleResource, createVideoElement));
+				mediaFactory.addItem(new MediaFactoryItem("org.osmf.elements.video", netLoader.canHandleResource, createVideoElement));
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar

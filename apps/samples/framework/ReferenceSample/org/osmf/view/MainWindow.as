@@ -76,7 +76,7 @@ package org.osmf.view
 			// The default VideoElement.
 			mediaFactory.addItem
 				( new MediaFactoryItem
-					( "org.osmf.video"
+					( "org.osmf.elements.video"
 					, netLoader.canHandleResource
 					, createVideoElement
 					)
