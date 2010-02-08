@@ -42,11 +42,19 @@ package
 		
 		public function canReferenceMedia(target:MediaElement):Boolean
 		{
+			// The media factory will ask us if we are interested in receiving
+			// 'addReference' calls for certain pieces of media. We are only
+			// interested in elements that have a NS_CONTROL_BAR_TARGET namespaced
+			// metadata facet attached:
 			return getTargetFacet(target) != null;
 		}
 		
 		public function addReference(target:MediaElement):void
 		{
+			// The media factory is notifying us of a media element that it
+			// instantiated. We use the NS_CONTROL_BAR_TARGET namespaced metadata
+			// facet in order to find out if the instantiated element is the
+			// element that our control bar should control:
 			var targetFacet:KeyValueFacet = getTargetFacet(target);
 			if (targetFacet)
 			{
@@ -64,6 +72,11 @@ package
 		
 		override public function set resource(value:MediaResourceBase):void
 		{
+			// Right after the media factroy has instantiated us, it will set the
+			// resource that it used to do so. We look the NS_CONTROL_BAR_SETTINGS
+			// namespaced metadata facets, and retain it as our settings record 
+			// (containing only one field: "ID" that tells us the ID of the media
+			// element that we should be controlling):
 			if (value != null)
 			{
 				settings
@@ -76,11 +89,18 @@ package
 		
 		override protected function setupTraits():void
 		{
+			// Setup a control bar using the ChromeLibrary:
 			setupControlBar();
 			
+			// Signal that this media element is viewable: create a DisplayObjectTrait.
+			// Assign controlBar (which is a Sprite) to be our view's displayObject.
+			// Additionally, use its current width and height for the trait's mediaWidth
+			// and mediaHeight properties:
 			viewable = new DisplayObjectTrait(controlBar, controlBar.measuredWidth, controlBar.measuredHeight);
+			// Add the trait:
 			addTrait(MediaTraitType.DISPLAY_OBJECT, viewable);
 			
+			// Set the control bar's width and height as absolute layout values:
 			var layoutProperties:LayoutRendererProperties = new LayoutRendererProperties(this);
 			layoutProperties.width = controlBar.measuredWidth;
 			layoutProperties.height = controlBar.measuredHeight;
