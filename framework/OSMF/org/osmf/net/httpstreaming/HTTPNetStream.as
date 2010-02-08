@@ -324,7 +324,7 @@ package org.osmf.net.httpstreaming
 				offset = 0;		// FMS rule. Seek to <0 is same as seeking to zero.
 			}
 			
-			if (_state != HTTPStreamingState.INIT && _state != HTTPStreamingState.STOP && _state != HTTPStreamingState.HALT)	// can't seek before playback starts, and can't seek once playback ends
+			if (_state != HTTPStreamingState.INIT)    // can't seek before playback starts
 			{
 				if(_initialTime < 0)
 				{
