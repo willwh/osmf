@@ -41,7 +41,7 @@ package org.osmf.examples
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.image.ImageElement;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.layout.LayoutRendererMode;
+	import org.osmf.layout.LayoutMode;
 	import org.osmf.manifest.F4MElement;
 	import org.osmf.manifest.F4MLoader;
 	import org.osmf.media.MediaElement;
@@ -353,7 +353,7 @@ package org.osmf.examples
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
 							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
-							layout.mode = LayoutRendererMode.HBOX;
+							layout.mode = LayoutMode.HORIZONTAL;
 							layout.width = 640
 							layout.height = 352;
 							

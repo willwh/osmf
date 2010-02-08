@@ -159,7 +159,7 @@ package org.osmf.layout
 		 */	
 		public function get mode():String
 		{
-			return lazyAttributes ? lazyAttributes.mode : null;
+			return lazyAttributes ? lazyAttributes.mode : LayoutMode.NONE;
 		}
 		public function set mode(value:String):void
 		{
@@ -415,7 +415,6 @@ package org.osmf.layout
 			eagerAnchor.bottom = value;
 		}
 		
-		
 		// PaddingLayoutFacet
 		//
 		
@@ -498,6 +497,45 @@ package org.osmf.layout
 		{
 			eagerPadding.bottom = value;
 		}
+		
+		/**
+		 * @inherit
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function toString():String
+		{
+			return "mode: " + mode + " "
+				 + "abs ["
+				 + x + ", "
+				 + y + ", "
+				 + width + ", "
+				 + height + "] "
+				 + "rel ["
+				 + percentX + ", "
+				 + percentY + ", "
+				 + percentWidth + ", "
+				 + percentHeight + "] "
+				 + "anch ("
+				 + left + ", "
+				 + top + ")("
+				 + right + ", "
+				 + bottom + ") "
+				 + "pad [" 
+				 + paddingLeft + ", "
+				 + paddingTop + ", "
+				 + paddingRight + ", "
+				 + paddingBottom + "] "
+				 + "order: " + order + " "
+				 + "scale: " + scaleMode + " "
+				 + "valign: " + verticalAlignment + " "
+				 + "halign: " + horizontalAlignment + " "
+				 + "snap: " + snapToPixel;
+		}
+		
 		
 		// Internals
 		//

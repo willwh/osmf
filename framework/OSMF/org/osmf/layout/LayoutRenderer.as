@@ -95,7 +95,7 @@ package org.osmf.layout
 						, MetadataNamespaces.LAYOUT_ATTRIBUTES
 						, function (facet:LayoutAttributesFacet):void
 							{
-								mode = facet ? facet.mode : LayoutRendererMode.CANVAS
+								mode = facet ? facet.mode : LayoutMode.NONE
 								invalidate();
 							}
 						);
@@ -125,33 +125,29 @@ package org.osmf.layout
 		 */
 		override protected function processTargetAdded(target:ILayoutTarget):void
 		{
-			// Set targets to take 100% of their container's width and height, but only
-			// if no relative facet is present all together:
+			var attributes:LayoutAttributesFacet = target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet;
+			
+			// If no layout properties are set on the target ...
 			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
-			if	(	mode == LayoutRendererMode.CANVAS
+			if	(	mode == LayoutMode.NONE
 				&&	relative == null
-				&&	target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) == null
+				&&	attributes == null
 				&&	target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
 				&&	target.metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) == null
 				)
 			{
+				// Set target to take 100% of their container's width and height
 				relative = new RelativeLayoutFacet();
-				target.metadata.addFacet(relative);
-				
 				relative.width = 100;
 				relative.height = 100;
+				target.metadata.addFacet(relative);
 			
-				// Set targets to scale letter box mode, centered, by default:
-				
-				var attributes:LayoutAttributesFacet = target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet;
-				if (attributes == null)
-				{
-					attributes = new LayoutAttributesFacet();
-					target.metadata.addFacet(attributes);
-				}
+				// Set target to scale letter box mode, centered, by default:
+				attributes = new LayoutAttributesFacet();
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
 				attributes.verticalAlignment ||= VerticalAlign.MIDDLE;
 				attributes.horizontalAlignment ||= HorizontalAlign.CENTER;
+				target.metadata.addFacet(attributes);
 			}
 			
 			// Watch the order metadata attribute for change:
@@ -455,18 +451,18 @@ package org.osmf.layout
 			 	rect.height = Math.round(rect.height);
 			}
 			
-			if	(mode == LayoutRendererMode.HBOX || mode == LayoutRendererMode.VBOX)
+			if	(mode == LayoutMode.HORIZONTAL || mode == LayoutMode.VERTICAL)
 			{ 
 				if (lastCalculatedBounds != null)
 				{
 					// Apply either the x or y coordinate to apply the desired boxing
 					// behavior:
 					
-					if (mode == LayoutRendererMode.HBOX)
+					if (mode == LayoutMode.HORIZONTAL)
 					{
 						rect.x = lastCalculatedBounds.x + lastCalculatedBounds.width;
 					}
-					else // mode == DefaultRendererMode.VBOX
+					else // mode == VERTICAL
 					{
 						rect.y = lastCalculatedBounds.y + lastCalculatedBounds.height;
 					}
@@ -522,15 +518,15 @@ package org.osmf.layout
 					targetBounds.width ||= target.measuredWidth || 0;
 					targetBounds.height ||= target.measuredHeight || 0;
 					
-					if (mode == LayoutRendererMode.HBOX || mode == LayoutRendererMode.VBOX)
+					if (mode == LayoutMode.HORIZONTAL || mode == LayoutMode.VERTICAL)
 					{
 						if (lastBounds)
 						{
-							if (mode == LayoutRendererMode.HBOX)
+							if (mode == LayoutMode.HORIZONTAL)
 							{
 								targetBounds.x = lastBounds.x + lastBounds.width;
 							}
-							else // mode == DefaultRendererMode.VBOX
+							else // mode == VERTICAL
 							{
 								targetBounds.y = lastBounds.y + lastBounds.height;
 							}
@@ -582,7 +578,7 @@ package org.osmf.layout
 		private static const DIMENSIONS:int = WIDTH + HEIGHT;
 		private static const ALL:int = POSITION + DIMENSIONS;
 		
-		private var mode:String = LayoutRendererMode.CANVAS;
+		private var mode:String = LayoutMode.NONE;
 		private var lastCalculatedBounds:Rectangle;
 		
 		private var targetMetadataWatchers:Dictionary = new Dictionary();

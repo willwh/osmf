@@ -268,7 +268,7 @@
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase"/>
     <classEntry path="org.osmf.events.MediaErrorEvent"/>
-    <classEntry path="org.osmf.layout.LayoutRendererMode"/>
+    <classEntry path="org.osmf.layout.LayoutMode"/>
     <classEntry path="org.osmf.layout.LayoutRenderer"/>
     <classEntry path="org.osmf.utils.URL"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler"/>

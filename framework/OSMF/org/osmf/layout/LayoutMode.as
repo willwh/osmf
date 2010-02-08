@@ -22,36 +22,36 @@
 
 package org.osmf.layout
 {
-	public class LayoutRendererMode
+	public class LayoutMode
 	{
 		/**
-		 * Identifier for the default renderer's CANVAS (default) mode.
+		 * Identifier for the layout renderer's default) mode.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const CANVAS:String = "canvas";
+		public static const NONE:String = "none";
 		
 		/**
-		 * Identifier for the default renderer's VBOX (default) mode.
+		 * Identifier for the layout renderer's vertical mode.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VBOX:String = "vbox";
+		public static const VERTICAL:String = "vertical";
 		
 		/**
-		 * Identifier for the default renderer's HBOX (default) mode.
+		 * Identifier for the layout renderer's horizontal mode.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const	HBOX:String = "hbox";
+		public static const	HORIZONTAL:String = "horizontal";
 	}
 }
