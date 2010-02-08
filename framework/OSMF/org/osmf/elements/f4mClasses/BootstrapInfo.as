@@ -25,7 +25,11 @@ package org.osmf.elements.f4mClasses
 	
 	import org.osmf.utils.URL;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Describes the BootstrapInfo used by media objects.
 	 *  
 	 *  @langversion 3.0

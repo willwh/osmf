@@ -21,7 +21,12 @@
 *****************************************************/
 package org.osmf.net.httpstreaming.f4f
 {
-	public class FragmentAccessInformation
+	[ExcludeClass]
+	
+	/**
+	 * @private
+	 **/
+	internal class FragmentAccessInformation
 	{
 		public var fragId:uint
 		
