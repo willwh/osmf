@@ -26,7 +26,7 @@ package org.osmf.plugins.video
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.VideoElement;
 	
 	public class SimpleVideoPluginInfo extends PluginInfo
 	{

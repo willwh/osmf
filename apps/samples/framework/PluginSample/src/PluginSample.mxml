@@ -29,7 +29,6 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.audio.AudioElement;
 			import org.osmf.metadata.*;
 			import org.osmf.logging.flex.FlexLogWrapper;
 			import org.osmf.logging.TraceLoggerFactory;
@@ -44,7 +43,6 @@
 			import flash.net.getClassByAlias;
 
 			import org.osmf.events.*;
-			import org.osmf.image.*;
 			import org.osmf.logging.ILogger;
 			import org.osmf.logging.Log;
 			import org.osmf.media.*;
@@ -54,7 +52,6 @@
 			import org.osmf.plugins.video.SimpleVideoPluginInfo;
 			import org.osmf.utils.*;
 			import org.osmf.traits.*;
-			import org.osmf.video.*;
 			import org.osmf.plugins.smoothing.SmootherPluginInfo;
 			import org.osmf.plugins.smoothing.Smoother;
 			

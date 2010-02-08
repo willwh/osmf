@@ -24,7 +24,7 @@ package org.osmf.plugins.smoothing
 	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.VideoElement;
 
 	/**
 	 * The actual media element that does the referrencing and smoothing of
