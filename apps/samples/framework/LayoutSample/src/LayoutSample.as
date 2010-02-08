@@ -23,8 +23,6 @@
 package 
 {
 	import flash.display.Sprite;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.containers.MediaContainer;
@@ -35,7 +33,6 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.utils.URL;
 	import org.osmf.video.VideoElement;
 
@@ -82,18 +79,21 @@ package
 			// layout properties are set for it.		
 			
 			// Construct a parallel element that holds both the video and the
-			// logo still. Note that the parallel element (on being assigned as
-			// a child of the container, later on) will also have the default
-			// layout properties applied: 
+			// logo still: 
 			var parallel:ParallelElement = new ParallelElement();
 			parallel.addChild(video);
 			parallel.addChild(logo);
 			
+			// Give the parallel element a fixed width and height. Both the
+			// video element and the logo will base their appearance of these
+			// metrics:
+			var parallelLayout:LayoutRendererProperties = new LayoutRendererProperties(parallel);
+			parallelLayout.width = stage.stageWidth;
+			parallelLayout.height = stage.stageHeight;
+			
 			// Construct a container that will display the parallel media
 			// element:
 			var container:MediaContainer = new MediaContainer()
-			container.width = stage.stageWidth
-			container.height = stage.stageHeight;
 			container.addMediaElement(parallel);
 			addChild(container);
 			
