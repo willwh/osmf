@@ -136,7 +136,7 @@ package org.osmf.layout
 		 */	
 		public function get snapToPixel():Boolean
 		{
-			return lazyAttributes ? lazyAttributes.snapToPixel : false;
+			return lazyAttributes ? lazyAttributes.snapToPixel : true;
 		}
 		public function set snapToPixel(value:Boolean):void
 		{

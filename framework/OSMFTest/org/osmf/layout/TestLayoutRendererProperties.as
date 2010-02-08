@@ -38,7 +38,7 @@ package org.osmf.layout
 			assertEquals(null, lp.scaleMode);
 			assertEquals(null, lp.verticalAlignment);
 			assertEquals(null, lp.horizontalAlignment);
-			assertEquals(false, lp.snapToPixel);
+			assertEquals(true, lp.snapToPixel);
 			assertEquals(null, lp.mode);
 			
 			assertEquals(NaN, lp.x);

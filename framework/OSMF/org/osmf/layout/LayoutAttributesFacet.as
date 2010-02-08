@@ -130,6 +130,7 @@ package org.osmf.layout
 			_verticalAlignment = null;
 			_horizontalAlignment = null;
 			_scaleMode = null;
+			_snapToPixel = true;
 		}
 		
 		// Facet

@@ -71,13 +71,13 @@ package org.osmf.layout
 			assertEquals(2, lastEvent.value);
 			assertEquals(facet.order, facet.getValue(LayoutAttributesFacet.ORDER), 2);
 			
-			facet.snapToPixel = true;
+			facet.snapToPixel = false;
 			
 			assertEquals(4, eventCounter);
 			assertEquals(LayoutAttributesFacet.SNAP_TO_PIXEL, lastEvent.identifier);
-			assertEquals(false, lastEvent.oldValue);
-			assertEquals(true, lastEvent.value);
-			assertEquals(facet.snapToPixel, facet.getValue(LayoutAttributesFacet.SNAP_TO_PIXEL), true);
+			assertEquals(true, lastEvent.oldValue);
+			assertEquals(false, lastEvent.value);
+			assertEquals(facet.snapToPixel, facet.getValue(LayoutAttributesFacet.SNAP_TO_PIXEL), false);
 			
 			facet.scaleMode = ScaleMode.LETTERBOX;
 			
