@@ -25,7 +25,7 @@ package org.osmf.net.httpstreaming
 	
 	import flash.utils.ByteArray;
 	
-	import org.osmf.manifest.BootstrapInfo;
+	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;

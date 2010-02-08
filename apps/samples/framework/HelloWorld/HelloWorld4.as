@@ -23,17 +23,16 @@ package
 {
 	import flash.display.Sprite;
 	
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	/**
 	 * Variation on HelloWorld, using MediaElement + IViewable

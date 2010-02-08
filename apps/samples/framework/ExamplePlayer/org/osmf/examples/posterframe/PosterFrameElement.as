@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.examples.posterframe
 {
-	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.ImageLoader;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.MediaTraitType;
 	

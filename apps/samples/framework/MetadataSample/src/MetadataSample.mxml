@@ -35,16 +35,16 @@
 	 		import org.osmf.metadata.ObjectFacet;
 	 		import org.osmf.layout.LayoutRendererProperties;
 	 		import org.osmf.metadata.Facet;
-			import org.osmf.audio.AudioElement;
-			import org.osmf.composition.CompositeElement;
-			import org.osmf.composition.ParallelElement;
-			import org.osmf.composition.SerialElement;
+			import org.osmf.elements.AudioElement;
+			import org.osmf.elements.CompositeElement;
+			import org.osmf.elements.ParallelElement;
+			import org.osmf.elements.SerialElement;
 			import org.osmf.display.ScaleMode;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 			import org.osmf.events.MetadataEvent;
-			import org.osmf.image.ImageLoader;
-			import org.osmf.image.ImageElement;
+			import org.osmf.elements.ImageLoader;
+			import org.osmf.elements.ImageElement;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaFactoryItem;
@@ -56,7 +56,7 @@
 			import org.osmf.metadata.ObjectIdentifier;
 			import org.osmf.net.NetLoader;
 			import org.osmf.utils.URL;
-			import org.osmf.video.VideoElement;
+			import org.osmf.elements.VideoElement;
 	 		
 	 		private var factory:MediaFactory;
 			private var sharedNetLoader:NetLoader;

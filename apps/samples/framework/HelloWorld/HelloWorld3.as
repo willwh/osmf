@@ -26,17 +26,15 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import org.osmf.composition.SerialElement;
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
-	import org.osmf.proxies.TemporalProxyElement;
-	import org.osmf.swf.SWFElement;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	/**
 	 * Another simple OSMF application, building on HelloWorld2.as.

@@ -24,6 +24,8 @@ package org.osmf.view
 	import flash.events.MouseEvent;
 	import flash.system.Security;
 	
+	import org.osmf.elements.SWFLoader;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -31,10 +33,8 @@ package org.osmf.view
 	import org.osmf.media.URLResource;
 	import org.osmf.model.ReferenceSWFElement;
 	import org.osmf.net.NetLoader;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	public class MainWindow extends MainWindowLayout
 	{

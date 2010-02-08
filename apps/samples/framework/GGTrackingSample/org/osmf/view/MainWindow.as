@@ -24,18 +24,18 @@ package org.osmf.view
 	import flash.events.MouseEvent;
 	
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.PluginManagerEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	public class MainWindow extends MainWindowLayout
 	{

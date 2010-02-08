@@ -20,9 +20,9 @@
 *****************************************************/
 package org.osmf.media
 {
+	import org.osmf.elements.VideoElement;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
@@ -30,7 +30,6 @@ package org.osmf.media
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 	
 	public class TestMediaPlayerWithVideoElementSubclip extends TestMediaPlayer
 	{

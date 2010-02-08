@@ -21,18 +21,18 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.audio.AudioElement;
-	import org.osmf.audio.SoundLoader;
-	import org.osmf.image.ImageElement;
-	import org.osmf.image.ImageLoader;
-	import org.osmf.manifest.F4MElement;
-	import org.osmf.manifest.F4MLoader;
+	import org.osmf.elements.AudioElement;
+	import org.osmf.elements.SoundLoader;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.ImageLoader;
+	import org.osmf.elements.F4MElement;
+	import org.osmf.elements.F4MLoader;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
-	import org.osmf.swf.SWFElement;
-	import org.osmf.swf.SWFLoader;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SWFLoader;
+	import org.osmf.elements.VideoElement;
 	
 	/**
 	 * <p>Defines a default media factory.</p>

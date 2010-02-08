@@ -26,8 +26,8 @@ package
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
-	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.elements.VideoElement;
 
 	public class DebuggerElementProxy extends ListenerProxyElement
 	{

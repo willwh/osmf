@@ -27,7 +27,7 @@ package org.osmf.metadata
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
-	import org.osmf.composition.CompositeElement;
+	import org.osmf.elements.CompositeElement;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;

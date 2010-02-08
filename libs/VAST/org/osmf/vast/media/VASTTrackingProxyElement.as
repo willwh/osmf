@@ -27,12 +27,12 @@ package org.osmf.vast.media
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.Beacon;
+	import org.osmf.elements.ListenerProxyElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.tracking.Beacon;
-	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;

@@ -38,7 +38,7 @@ package org.osmf.smil.loader
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.proxies.FactoryLoadTrait;
+	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
 	import org.osmf.smil.media.SMILMediaGenerator;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.parser.SMILParser;

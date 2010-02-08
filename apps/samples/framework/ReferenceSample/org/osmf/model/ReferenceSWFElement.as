@@ -25,12 +25,12 @@ package org.osmf.model
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SWFLoader;
 	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
-	import org.osmf.swf.SWFElement;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;

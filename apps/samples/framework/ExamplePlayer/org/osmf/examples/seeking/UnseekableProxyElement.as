@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.examples.seeking
 {
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**

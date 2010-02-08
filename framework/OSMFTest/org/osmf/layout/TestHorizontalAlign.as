@@ -26,7 +26,7 @@ package org.osmf.layout
 
 	public class TestHorizontalAlign extends TestCase
 	{
-		public function testHorizontalAlign(methodName:String=null)
+		public function testHorizontalAlign(methodName:String=null):void
 		{
 			// Pro forma:
 			var horizontalAlign:HorizontalAlign = new HorizontalAlign();

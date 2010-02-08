@@ -23,12 +23,12 @@ package org.osmf.plugin
 {
 	import flash.display.DisplayObject;
 	
+	import org.osmf.elements.SWFLoader;
+	import org.osmf.elements.loaderClasses.LoaderLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.swf.LoaderLoadedContext;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	

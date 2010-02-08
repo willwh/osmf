@@ -51,7 +51,7 @@
 			import org.osmf.traits.LoadState;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
-			import org.osmf.video.VideoElement;
+			import org.osmf.elements.VideoElement;
 			
 			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;

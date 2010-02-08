@@ -8,6 +8,7 @@ package org.osmf.test.mast.managers
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.MediaPlayerSprite;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.mast.MASTPluginInfo;
@@ -20,7 +21,6 @@ package org.osmf.test.mast.managers
 	import org.osmf.plugin.PluginManager;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
-	import org.osmf.video.VideoElement;
 
 	public class TestMASTConditionManager extends TestCase
 	{

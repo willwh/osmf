@@ -23,17 +23,15 @@ package org.osmf.vast.media
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTDocument;
 	import org.osmf.vast.model.VASTInlineAd;
 	import org.osmf.vast.model.VASTMediaFile;
-	import org.osmf.video.VideoElement;
 	
 	/**
 	 * Utility class for creating MediaElements from a VASTDocument.

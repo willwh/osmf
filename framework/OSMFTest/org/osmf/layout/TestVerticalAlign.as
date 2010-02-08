@@ -26,7 +26,7 @@ package org.osmf.layout
 
 	public class TestVerticalAlign extends TestCase
 	{
-		public function testVerticalAlign(methodName:String=null)
+		public function testVerticalAlign(methodName:String=null):void
 		{
 			// Pro forma:
 			var verticalAlign:VerticalAlign = new VerticalAlign();

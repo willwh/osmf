@@ -25,19 +25,19 @@ package org.osmf.captioning.media
 	import org.osmf.captioning.loader.CaptioningLoadedContext;
 	import org.osmf.captioning.loader.CaptioningLoader;
 	import org.osmf.captioning.model.CaptioningDocument;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
-	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 

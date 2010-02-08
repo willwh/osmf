@@ -27,7 +27,7 @@ package org.osmf.media
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.VideoElement;
 	
 	public class TestMediaPlayerWithVideoElement extends TestMediaPlayer
 	{

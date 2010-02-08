@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.audio.AudioElement;
+	import org.osmf.elements.AudioElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;

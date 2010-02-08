@@ -4,20 +4,18 @@ package org.osmf.test.mast.media
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.mast.media.MASTProxyElement;
-	import org.osmf.media.URLResource;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.net.NetLoader;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.FMSURL;
-	import org.osmf.video.VideoElement;
 	
 
 	public class TestMASTProxyElement extends TestCase

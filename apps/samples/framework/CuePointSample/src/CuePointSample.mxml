@@ -29,8 +29,8 @@
 		<![CDATA[
 			import org.osmf.metadata.TemporalIdentifier;
 			import mx.collections.ArrayCollection;
-			import org.osmf.video.CuePoint;
-			import org.osmf.video.CuePointType;
+			import org.osmf.elements.CuePoint;
+			import org.osmf.elements.CuePointType;
 			import org.osmf.metadata.TemporalFacetEvent;
 			import org.osmf.metadata.Metadata;
 			import org.osmf.metadata.TemporalFacet;
@@ -40,7 +40,7 @@
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
-			import org.osmf.video.VideoElement;
+			import org.osmf.elements.VideoElement;
 			import org.osmf.net.NetLoader;
 			import org.osmf.net.NetStreamCodes;
 			import org.osmf.media.URLResource;

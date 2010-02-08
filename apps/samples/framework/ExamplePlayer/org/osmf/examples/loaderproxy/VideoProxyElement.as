@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;

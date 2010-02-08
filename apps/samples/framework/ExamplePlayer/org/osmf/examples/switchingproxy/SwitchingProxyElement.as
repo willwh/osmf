@@ -24,8 +24,8 @@ package org.osmf.examples.switchingproxy
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;

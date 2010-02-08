@@ -25,7 +25,8 @@ package org.osmf.mast.media
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.composition.SerialElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.SerialElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.logging.ILogger;
@@ -38,12 +39,11 @@ package org.osmf.mast.media
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.traits.MASTPlayTrait;
 	import org.osmf.mast.types.MASTConditionType;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;

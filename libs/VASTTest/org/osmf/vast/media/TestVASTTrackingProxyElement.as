@@ -26,8 +26,8 @@ package org.osmf.vast.media
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.proxies.ProxyElement;
-	import org.osmf.proxies.TestListenerProxyElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.TestListenerProxyElement;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;

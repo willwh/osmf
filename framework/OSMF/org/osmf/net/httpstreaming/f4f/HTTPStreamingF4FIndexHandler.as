@@ -26,8 +26,8 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
+	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
-	import org.osmf.manifest.BootstrapInfo;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 

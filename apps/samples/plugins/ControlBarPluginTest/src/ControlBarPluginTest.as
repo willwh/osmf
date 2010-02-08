@@ -2,7 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.composition.ParallelElement;
+	import org.osmf.elements.ParallelElement;
 	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;

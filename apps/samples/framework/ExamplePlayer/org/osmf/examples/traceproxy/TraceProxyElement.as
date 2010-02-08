@@ -24,7 +24,7 @@ package org.osmf.examples.traceproxy
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
-	import org.osmf.proxies.*;
+	import org.osmf.elements.*;
 	import org.osmf.traits.*;
 	
 	/**

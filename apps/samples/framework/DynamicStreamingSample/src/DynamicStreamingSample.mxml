@@ -55,7 +55,7 @@
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;			
 
-			import org.osmf.video.VideoElement;
+			import org.osmf.elements.VideoElement;
 			
 			import org.osmf.utils.*;
 			

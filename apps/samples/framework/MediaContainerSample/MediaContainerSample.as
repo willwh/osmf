@@ -28,11 +28,13 @@ package
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
-	import org.osmf.composition.ParallelElement;
-	import org.osmf.composition.SerialElement;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.image.ImageElement;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.VerticalAlign;
@@ -40,9 +42,7 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class MediaContainerSample extends Sprite

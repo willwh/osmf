@@ -21,7 +21,7 @@
 package org.osmf.media
 {
 	import org.osmf.net.NetLoader;
-	import org.osmf.proxies.TemporalProxyElement;
+	import org.osmf.elements.TemporalProxyElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;

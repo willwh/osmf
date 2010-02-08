@@ -1,9 +1,31 @@
+/*****************************************************
+*  
+*  Copyright 2009 Akamai Technologies, Inc.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Akamai Technologies, Inc.
+*  Portions created by Akamai Technologies, Inc. are Copyright (C) 2009 Akamai 
+*  Technologies, Inc. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.test.captioning.media
 {
 	import flash.events.Event;
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.captioning.media.CaptioningProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
@@ -11,14 +33,12 @@ package org.osmf.test.captioning.media
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.net.NetLoader;
 	import org.osmf.test.captioning.CaptioningTestConstants;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 	
 
 	public class TestCaptioningProxyElement extends TestMediaElement

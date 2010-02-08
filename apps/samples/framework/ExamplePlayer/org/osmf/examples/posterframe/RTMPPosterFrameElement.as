@@ -21,13 +21,13 @@
 *****************************************************/
 package org.osmf.examples.posterframe
 {
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.video.VideoElement;
+	import org.osmf.traits.PlayTrait;
 
 	/**
 	 * A PosterFrameElement is a playable Image Element.  Making it playable

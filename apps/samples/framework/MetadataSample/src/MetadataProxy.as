@@ -1,15 +1,15 @@
 package
 {
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.proxies.ProxyElement;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	public class MetadataProxy extends ProxyElement
 	{

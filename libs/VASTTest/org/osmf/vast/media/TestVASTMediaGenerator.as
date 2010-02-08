@@ -37,7 +37,7 @@ package org.osmf.vast.media
 	import org.osmf.vast.model.VASTUrl;
 	import org.osmf.vast.model.VASTVideo;
 	import org.osmf.vast.model.VASTWrapperAd;
-	import org.osmf.video.VideoElement;
+	import org.osmf.elements.VideoElement;
 	
 	public class TestVASTMediaGenerator extends TestCase
 	{

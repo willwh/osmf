@@ -23,16 +23,17 @@ package org.osmf
 {
 	import flexunit.framework.TestSuite;
 	
-	import org.osmf.audio.*;
-	import org.osmf.composition.*;
 	import org.osmf.containers.*;
 	import org.osmf.display.*;
+	import org.osmf.elements.audioClasses.*;
+	import org.osmf.elements.compositeClasses.*;
+	import org.osmf.elements.f4mClasses.*;
+	import org.osmf.elements.htmlClasses.*;
+	import org.osmf.elements.proxyClasses.*;
+	import org.osmf.elements.*;
 	import org.osmf.events.*;
-	import org.osmf.external.*;
-	import org.osmf.image.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
-	import org.osmf.manifest.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
@@ -42,16 +43,8 @@ package org.osmf
 	import org.osmf.net.httpstreaming.flv.*;
 	import org.osmf.net.rtmpstreaming.*;
 	import org.osmf.plugin.*;
-	import org.osmf.proxies.*;
-	import org.osmf.swf.*;
-	import org.osmf.tracking.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
-	import org.osmf.vast.*;
-	import org.osmf.vast.loader.*;
-	import org.osmf.vast.media.*;
-	import org.osmf.vast.parser.*;
-	import org.osmf.video.*;
 
 	public class OSMFTests extends TestSuite
 	{
@@ -61,73 +54,6 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-
-			addTestSuite(TestDownloadRatioRule);
-						
-			// Layout
-			//			
-				
-			addTestSuite(TestAbsoluteLayoutFacet);
-			addTestSuite(TestAnchorLayoutFacet);
-			addTestSuite(TestLayoutRendererBase);
-			addTestSuite(TestLayoutRenderer);
-			addTestSuite(TestLayoutAttributesFacet);
-			addTestSuite(TestMediaElementLayoutTarget);
-			addTestSuite(TestPaddingLayoutFacet);
-			addTestSuite(TestVerticalAlign);
-			addTestSuite(TestHorizontalAlign);
-			addTestSuite(TestRelativeLayoutFacet);
-			addTestSuite(TestLayoutRendererProperties);
-			
-			// Containers
-			//
-			
-			addTestSuite(TestMediaContainer);
-			addTestSuite(TestMediaContainerGroup);
-			addTestSuite(TestHTMLMediaContainer);
-			addTestSuite(TestMediaPlayerSprite);
-			
-			// Composition
-			//
-			
-			addTestSuite(TestTraitAggregator);
-			addTestSuite(TestTraitLoader);
-
-			addTestSuite(TestCompositeElement);
-			addTestSuite(TestParallelElement);
-			addTestSuite(TestSerialElement);
-
-			addTestSuite(TestParallelElementWithAudioTrait);
-			addTestSuite(TestParallelElementWithBufferTrait);
-			addTestSuite(TestParallelElementDRMTrait); 
-			addTestSuite(TestParallelElementWithDynamicStreamTrait);
-			addTestSuite(TestParallelElementWithLoadTrait);
-			addTestSuite(TestParallelElementWithPlayTrait);
-			addTestSuite(TestParallelElementWithSeekTrait);
-			addTestSuite(TestParallelElementWithTimeTrait);
-			addTestSuite(TestParallelElementWithDisplayObjectTrait);
-			
-			addTestSuite(TestSerialElementWithAudioTrait);
-			addTestSuite(TestSerialElementWithBufferTrait);
-			addTestSuite(TestSerialElementDRMTrait);
-			addTestSuite(TestSerialElementWithDynamicStreamTrait);
-			addTestSuite(TestSerialElementWithLoadTrait);
-			addTestSuite(TestSerialElementWithPlayTrait);
-			addTestSuite(TestSerialElementWithSeekTrait);
-			addTestSuite(TestSerialElementWithTimeTrait);
-			addTestSuite(TestSerialElementWithDisplayObjectTrait);
-			
-			addTestSuite(TestCompositeAudioTrait);
-			
-			// Utils
-			//
-			addTestSuite(TestBinarySearch);
-			addTestSuite(TestOSMFStrings);
-			addTestSuite(TestVersion);		
-			addTestSuite(TestURL);
-			addTestSuite(TestFMSURL);
-			addTestSuite(TestHTTPLoader);
-			addTestSuite(TestTimeUtil);
 
 			// Logging
 			//
@@ -204,14 +130,44 @@ package org.osmf
 			addTestSuite(TestHTMLTimeTrait);
 			addTestSuite(TestHTMLAudioTrait);
 			
+			
+			// Composition
+			//
+			
+			addTestSuite(TestTraitAggregator);
+			addTestSuite(TestTraitLoader);
+
+			addTestSuite(TestCompositeElement);
+			addTestSuite(TestParallelElement);
+			addTestSuite(TestSerialElement);
+
+			addTestSuite(TestParallelElementWithAudioTrait);
+			addTestSuite(TestParallelElementWithBufferTrait);
+			addTestSuite(TestParallelElementWithDRMTrait); 
+			addTestSuite(TestParallelElementWithDynamicStreamTrait);
+			addTestSuite(TestParallelElementWithLoadTrait);
+			addTestSuite(TestParallelElementWithPlayTrait);
+			addTestSuite(TestParallelElementWithSeekTrait);
+			addTestSuite(TestParallelElementWithTimeTrait);
+			addTestSuite(TestParallelElementWithDisplayObjectTrait);
+			
+			addTestSuite(TestSerialElementWithAudioTrait);
+			addTestSuite(TestSerialElementWithBufferTrait);
+			addTestSuite(TestSerialElementWithDRMTrait);
+			addTestSuite(TestSerialElementWithDynamicStreamTrait);
+			addTestSuite(TestSerialElementWithLoadTrait);
+			addTestSuite(TestSerialElementWithPlayTrait);
+			addTestSuite(TestSerialElementWithSeekTrait);
+			addTestSuite(TestSerialElementWithTimeTrait);
+			addTestSuite(TestSerialElementWithDisplayObjectTrait);
+			
+			addTestSuite(TestCompositeAudioTrait);
+			
 			// MediaPlayer
 			//
 			
 			addTestSuite(TestMediaPlayer);
 			
-			// This test fails intermittently on the build machine.
-			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
-
 			// Metadata
 			//
 
@@ -305,18 +261,42 @@ package org.osmf
 			
 			addTestSuite(TestBeacon);
 			addTestSuite(TestBeaconElement);
-									
-			// VAST
+						
+			// Layout
+			//			
+				
+			addTestSuite(TestAbsoluteLayoutFacet);
+			addTestSuite(TestAnchorLayoutFacet);
+			addTestSuite(TestLayoutRendererBase);
+			addTestSuite(TestLayoutRenderer);
+			addTestSuite(TestLayoutAttributesFacet);
+			addTestSuite(TestMediaElementLayoutTarget);
+			addTestSuite(TestPaddingLayoutFacet);
+			addTestSuite(TestVerticalAlign);
+			addTestSuite(TestHorizontalAlign);
+			addTestSuite(TestRelativeLayoutFacet);
+			addTestSuite(TestLayoutRendererProperties);
+			
+			// Containers
 			//
 			
-			addTestSuite(TestVASTLoader);
-			addTestSuite(TestVASTParser);
-			addTestSuite(TestDefaultVASTMediaFileResolver);
-			addTestSuite(TestVASTImpressionProxyElement);
-			addTestSuite(TestVASTMediaGenerator);
-			addTestSuite(TestVASTTrackingProxyElement);
-			
-			// Additional MediaPlayer tests
+			addTestSuite(TestMediaContainer);
+			addTestSuite(TestMediaContainerGroup);
+			addTestSuite(TestHTMLMediaContainer);
+			addTestSuite(TestMediaPlayerSprite);
+
+			// Utils
+			//
+			addTestSuite(TestBinarySearch);
+			addTestSuite(TestOSMFStrings);
+			addTestSuite(TestVersion);		
+			addTestSuite(TestURL);
+			addTestSuite(TestFMSURL);
+			addTestSuite(TestHTTPLoader);
+			addTestSuite(TestTimeUtil);
+			addTestSuite(TestTraitEventDispatcher);
+
+			// Additional MediaPlayer Tests
 			//
 			
 			addTestSuite(TestMediaPlayerWithAudioElement);
@@ -327,11 +307,9 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithTemporalProxyElement);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
-			
-			//TraitEventDispatcher
-			addTestSuite(TestTraitEventDispatcher);
-			
-			
+
+			// This test fails intermittently on the build machine.
+			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
 		}
 	}
 }

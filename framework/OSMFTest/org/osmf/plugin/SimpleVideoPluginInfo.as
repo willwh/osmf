@@ -21,12 +21,11 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.image.ImageLoader;
+	import org.osmf.elements.ImageLoader;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.net.NetLoader;
-	import org.osmf.utils.Version;
-	import org.osmf.video.VideoElement;
 	
 	public class SimpleVideoPluginInfo extends PluginInfo
 	{

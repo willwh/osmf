@@ -23,7 +23,7 @@ package org.osmf.net.httpstreaming.f4f
 {
 	import flash.utils.ByteArray;
 	
-	import org.osmf.manifest.BootstrapInfo;
+	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	
 	[ExcludeClass]
 	

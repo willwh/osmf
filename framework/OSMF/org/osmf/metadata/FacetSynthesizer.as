@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import org.osmf.composition.CompositionMode;
+	import org.osmf.elements.CompositionMode;
 	import org.osmf.utils.URL;
 	
 	/**

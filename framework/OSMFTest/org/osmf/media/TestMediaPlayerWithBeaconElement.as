@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.tracking.Beacon;
-	import org.osmf.tracking.BeaconElement;
+	import org.osmf.elements.Beacon;
+	import org.osmf.elements.BeaconElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;

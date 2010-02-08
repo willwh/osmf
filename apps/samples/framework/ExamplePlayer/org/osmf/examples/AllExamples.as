@@ -25,10 +25,17 @@ package org.osmf.examples
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.osmf.audio.AudioElement;
-	import org.osmf.composition.ParallelElement;
-	import org.osmf.composition.SerialElement;
 	import org.osmf.display.ScaleMode;
+	import org.osmf.elements.AudioElement;
+	import org.osmf.elements.Beacon;
+	import org.osmf.elements.BeaconElement;
+	import org.osmf.elements.F4MElement;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
@@ -39,11 +46,8 @@ package org.osmf.examples
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
-	import org.osmf.image.ImageElement;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutMode;
-	import org.osmf.manifest.F4MElement;
-	import org.osmf.manifest.F4MLoader;
+	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
@@ -52,10 +56,6 @@ package org.osmf.examples
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.proxies.TemporalProxyElement;
-	import org.osmf.swf.SWFElement;
-	import org.osmf.tracking.Beacon;
-	import org.osmf.tracking.BeaconElement;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -64,7 +64,6 @@ package org.osmf.examples
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 	
 	/**
 	 * Central repository of all examples for this application.

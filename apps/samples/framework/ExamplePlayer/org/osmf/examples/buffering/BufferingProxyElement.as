@@ -21,9 +21,8 @@
 *****************************************************/
 package org.osmf.examples.buffering
 {
+	import org.osmf.elements.ListenerProxyElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ListenerProxyElement;
-	import org.osmf.traits.IBufferable;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**

@@ -23,12 +23,12 @@ package org.osmf.test.smil.loader
 {
 	import flash.events.*;
 	
+	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.proxies.FactoryLoadTrait;
 	import org.osmf.smil.loader.*;
 	import org.osmf.smil.model.*;
 	import org.osmf.test.smil.SMILTestConstants;

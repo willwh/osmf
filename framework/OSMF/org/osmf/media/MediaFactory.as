@@ -25,7 +25,7 @@ package org.osmf.media
 	
 	import flash.utils.Dictionary;
 	
-	import org.osmf.proxies.ProxyElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**

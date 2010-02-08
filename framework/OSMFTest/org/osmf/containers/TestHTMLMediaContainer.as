@@ -25,7 +25,7 @@ package org.osmf.containers
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.external.HTMLElement;
+	import org.osmf.elements.HTMLElement;
 	
 	public class TestHTMLMediaContainer extends TestCase
 	{

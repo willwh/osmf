@@ -25,10 +25,10 @@ package org.osmf.containers
 	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	
+	import org.osmf.elements.HTMLElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.ContainerChangeEvent;
-	import org.osmf.external.HTMLElement;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ProxyElement;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 

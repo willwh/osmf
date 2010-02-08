@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
+	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
@@ -30,7 +31,6 @@ package org.osmf.media
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.video.VideoElement;
 	
 	public class TestMediaPlayerWithDynamicStreamingVideoElement extends TestMediaPlayer
 	{

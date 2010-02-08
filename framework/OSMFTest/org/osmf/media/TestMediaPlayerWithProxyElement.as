@@ -20,7 +20,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.proxies.ProxyElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithProxyElement extends TestMediaPlayer

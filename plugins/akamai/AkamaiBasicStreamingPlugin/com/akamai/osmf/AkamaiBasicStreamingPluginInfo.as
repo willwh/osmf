@@ -25,12 +25,12 @@ package com.akamai.osmf
 	import com.akamai.osmf.net.AkamaiNetConnectionFactory;
 	import com.akamai.osmf.net.AkamaiNetLoader;
 	
-	import org.osmf.audio.AudioElement;
+	import org.osmf.elements.AudioElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfo;
-	import org.osmf.video.VideoElement;
 	
 	/**
 	 * The PlugInfo class required by the OSMF plugin API.

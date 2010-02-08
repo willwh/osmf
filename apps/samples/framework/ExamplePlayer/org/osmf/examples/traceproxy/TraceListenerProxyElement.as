@@ -27,7 +27,7 @@ package org.osmf.examples.traceproxy
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
-	import org.osmf.proxies.*;
+	import org.osmf.elements.*;
 	import org.osmf.traits.*;
 	
 	public class TraceListenerProxyElement extends ListenerProxyElement

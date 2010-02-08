@@ -23,7 +23,7 @@ package org.osmf.media
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.proxies.ProxyElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicReferenceMediaElement;
 	import org.osmf.utils.SampleResourceHandler;

@@ -25,7 +25,7 @@ package org.osmf.utils
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
-	import org.osmf.proxies.ProxyElement;
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoaderBase;

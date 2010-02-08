@@ -24,10 +24,10 @@ package org.osmf.examples.chromeless
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
+	import org.osmf.elements.SWFElement;
+	import org.osmf.elements.SWFLoader;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.swf.SWFElement;
-	import org.osmf.swf.SWFLoader;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	

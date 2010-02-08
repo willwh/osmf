@@ -23,26 +23,16 @@ package org.osmf
 {
 	import flexunit.framework.TestSuite;
 	
+	import org.osmf.elements.*;
+	import org.osmf.media.*;
+	import org.osmf.net.*;
+	import org.osmf.plugin.*;
+	import org.osmf.utils.*;
+	
 	CONFIG::FLASH_10_1
 	{
-		import org.osmf.drm.TestDRMServices;
-		import org.osmf.video.TestVideoElement;
-		import org.osmf.net.TestNetContentProtectable;
+		import org.osmf.drm.*;
 	}
-	
-	import org.osmf.image.TestImageElementIntegration;
-	import org.osmf.image.TestImageLoaderIntegration;
-	import org.osmf.media.TestMediaPlayer;
-	
-	import org.osmf.net.TestNetLoader;
-	import org.osmf.plugin.TestDynamicPluginLoaderIntegration;
-	import org.osmf.plugin.TestPluginManagerIntegration;
-	import org.osmf.swf.TestSWFElementIntegration;
-	import org.osmf.swf.TestSWFLoaderIntegration;
-	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.TestHTTPLoader;
-	import org.osmf.net.TestManifestLoader;
-	
 
 	public class OSMFIntegrationTests extends TestSuite
 	{
@@ -57,7 +47,7 @@ package org.osmf
 			{
 				addTestSuite(TestDRMServices);
 				addTestSuite(TestVideoElement);
-				addTestSuite(TestNetContentProtectable);
+				addTestSuite(TestNetStreamDRMTrait);
 				
 			}
 			
@@ -83,7 +73,7 @@ package org.osmf
 			
 			addTestSuite(TestPluginManagerIntegration);
 			
-			addTestSuite(TestManifestLoader);
+			addTestSuite(TestF4MLoader);
 		}
 	}
 }

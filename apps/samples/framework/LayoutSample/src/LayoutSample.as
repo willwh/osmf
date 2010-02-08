@@ -24,17 +24,17 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.composition.ParallelElement;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
-	import org.osmf.image.ImageElement;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
 	public class LayoutSample extends Sprite

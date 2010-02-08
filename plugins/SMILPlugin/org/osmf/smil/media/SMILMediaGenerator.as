@@ -21,9 +21,11 @@
 *****************************************************/
 package org.osmf.smil.media
 {
-	import org.osmf.composition.CompositeElement;
-	import org.osmf.composition.ParallelElement;
-	import org.osmf.composition.SerialElement;
+	import org.osmf.elements.CompositeElement;
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.TemporalProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.media.MediaElement;
@@ -34,14 +36,12 @@ package org.osmf.smil.media
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.proxies.TemporalProxyElement;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 	
 	/**
 	 * A utility class for creating MediaElements from a <code>SMILDocument</code>.

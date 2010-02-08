@@ -24,7 +24,7 @@ package org.osmf.utils
 	import flash.display.DisplayObject;
 	
 	import org.osmf.net.dynamicstreaming.SwitchingDetail;
-	import org.osmf.proxies.ListenerProxyElement;
+	import org.osmf.elements.ListenerProxyElement;
 		
 	public class DynamicListenerProxyElement extends ListenerProxyElement
 	{

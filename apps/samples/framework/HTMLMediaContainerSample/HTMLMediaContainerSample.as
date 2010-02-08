@@ -21,16 +21,15 @@
 *****************************************************/
 package 
 {
-	import org.osmf.composition.ParallelElement;
-	import org.osmf.composition.SerialElement;
 	import org.osmf.containers.HTMLMediaContainer;
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.external.HTMLElement;
+	import org.osmf.elements.HTMLElement;
+	import org.osmf.elements.ParallelElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
 	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;
 
 	[SWF(backgroundColor='#333333', frameRate='30', width='640', height='358')]
 	public class HTMLMediaContainerSample extends MediaContainer

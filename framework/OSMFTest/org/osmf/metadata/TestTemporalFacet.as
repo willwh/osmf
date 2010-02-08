@@ -28,6 +28,7 @@ package org.osmf.metadata
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
@@ -42,8 +43,7 @@ package org.osmf.metadata
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
-	import org.osmf.video.VideoElement;	
+	import org.osmf.utils.URL;	
 
 	public class TestTemporalFacet extends TestCase
 	{
