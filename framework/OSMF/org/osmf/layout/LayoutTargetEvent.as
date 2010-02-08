@@ -24,9 +24,21 @@ package org.osmf.layout
 {
 	import flash.events.Event;
 
+	/**
+	 * @private
+	 *
+	 * Defines the events that can be dispatched on a ILayoutTarget. ILayoutTargets
+	 * are not expected to dispatch these events directly: instead LayoutRenderer
+	 * and MediaElementLayoutTarget dispatch these events via ILayoutTarget instances
+	 * to inform them about what layout renderer they are targetted by, or of what
+	 * layout renderer they got set as the container.
+	 * 
+	 */	
 	internal class LayoutTargetEvent extends Event
 	{
 		/**
+		 * @private
+		 * 
 		 * Constant that defines the value of the type property of the event object for
 		 * a setAsLayoutRendererContainer event.
 		 * 
@@ -40,6 +52,8 @@ package org.osmf.layout
 		public static const SET_AS_LAYOUT_RENDERER_CONTAINER:String = "setAsLayoutRendererContainer";
 		
 		/**
+		 * @private
+		 * 
 		 * Constant that defines the value of the type property of the event object for
 		 * a unsetAsLayoutRendererContainer event.
 		 * 
@@ -53,6 +67,8 @@ package org.osmf.layout
 		public static const UNSET_AS_LAYOUT_RENDERER_CONTAINER:String = "unsetAsLayoutRendererContainer";
 		
 		/**
+		 * @private
+		 * 
 		 * Constant that defines the value of the type property of the event object for
 		 * a addToLayoutRenderer event.
 		 * 
@@ -66,6 +82,8 @@ package org.osmf.layout
 		public static const ADD_TO_LAYOUT_RENDERER:String = "addToLayoutRenderer";
 		
 		/**
+		 * @private
+		 * 
 		 * Constant that defines the value of the type property of the event object for
 		 * a removeFromLayoutRenderer event.
 		 * 
@@ -79,6 +97,8 @@ package org.osmf.layout
 		public static const REMOVE_FROM_LAYOUT_RENDERER:String = "removeFromLayoutRenderer";
 		
 		/**
+		 * @private
+		 * 
 		 * Constructor
 		 *  
 		 * @param type
@@ -86,7 +106,11 @@ package org.osmf.layout
 		 * @param cancelable
 		 * @param layoutRenderer
 		 * 
-		 */		
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */			
 		public function LayoutTargetEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, layoutRenderer:LayoutRendererBase = null)
 		{
 			_layoutRenderer = layoutRenderer;
@@ -94,6 +118,8 @@ package org.osmf.layout
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Defines the layout renderer associated with the event.
 		 */		
 		public function get layoutRenderer():LayoutRendererBase

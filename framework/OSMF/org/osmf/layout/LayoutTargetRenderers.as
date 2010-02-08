@@ -26,15 +26,24 @@ package org.osmf.layout
 	 * @private 
 	 *
 	 * Utility class that manages correctly parenting the layout renderers
-	 * that are associated with an ILayoutTarget implementing object. 
+	 * that are associated with an ILayoutTarget implementing object.
+	 * 
+	 * The object helps ILayoutTarget implementations to manage their
+	 * internal references to the layout renderers that they get assigned via
+	 * the receival of LayoutTargetEvents.
 	 */	
 	internal class LayoutTargetRenderers
 	{
 		/**
 		 * @private 
 		 *
-		 * Constructor 
-		 */		
+		 * Constructor
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
 		public function LayoutTargetRenderers(target:ILayoutTarget)
 		{
 			target.addEventListener(LayoutTargetEvent.ADD_TO_LAYOUT_RENDERER, onAddedToLayoutRenderer);
@@ -47,15 +56,25 @@ package org.osmf.layout
 		/**
 		 * @private
 		 * 
-		 * Defines the layout renderer that the target object is the container of. 
-		 */		
+		 * Defines the layout renderer that the target object is the container of.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	 
 		public var containerRenderer:LayoutRendererBase;
 		
 		/**
 		 * @private
 		 * 
-		 * Defines the layout renderer that the target object is a target of. 
-		 */		
+		 * Defines the layout renderer that the target object is a target of.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */			
 		public var parentRenderer:LayoutRendererBase;
 		
 		// Internals
