@@ -489,6 +489,9 @@ package org.osmf.layout
 			return rect;
 		}
 		
+		/**
+		 * @private
+		 */		
 		override protected function calculateContainerSize(targets:Vector.<ILayoutTarget>):Point
 		{
 			var size:Point = new Point(NaN, NaN);

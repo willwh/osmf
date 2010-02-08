@@ -688,8 +688,7 @@ package org.osmf.layout
 		 * @value The new parent of the renderer.
 		 */
 		protected function processParentChange(value:LayoutRendererBase):void
-		{
-			
+		{	
 		}
 		
 		// Internals
