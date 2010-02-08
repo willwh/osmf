@@ -82,16 +82,16 @@ package
 			// layout properties are set for it.		
 			
 			// Construct a parallel element that holds both the video and the
-			// logo still:
+			// logo still. Note that the parallel element (on being assigned as
+			// a child of the container, later on) will also have the default
+			// layout properties applied: 
 			var parallel:ParallelElement = new ParallelElement();
-			MetadataUtils.setElementId(parallel.metadata, "parallel");
 			parallel.addChild(video);
 			parallel.addChild(logo);
 			
 			// Construct a container that will display the parallel media
 			// element:
 			var container:MediaContainer = new MediaContainer()
-			MetadataUtils.setElementId(container.metadata, "container");
 			container.width = stage.stageWidth
 			container.height = stage.stageHeight;
 			container.addMediaElement(parallel);
