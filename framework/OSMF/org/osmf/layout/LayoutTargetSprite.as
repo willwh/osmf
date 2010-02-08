@@ -213,26 +213,26 @@ package org.osmf.layout
 				renderers.containerRenderer.measure();
 			}
 			
-			var newMediaWidth:Number;
-			var newMediaHeight:Number;
+			var newMeasuredWidth:Number;
+			var newMeasuredHeight:Number;
 			
 			if (renderers.containerRenderer)
 			{
 				// The measured dimensions can be fetched from the sprite's own
 				// layout renderer. Since measurement takes place bottom to top,
 				// the renderer should already be up to date for this pass:
-				newMediaWidth = renderers.containerRenderer.measuredWidth;
-				newMediaHeight = renderers.containerRenderer.measuredHeight;
+				newMeasuredWidth = renderers.containerRenderer.measuredWidth;
+				newMeasuredHeight = renderers.containerRenderer.measuredHeight;
 			}
 			else
 			{
 				// The sprite is a leaf. Fetch the size from the sprite itself:
-				newMediaWidth = super.width / scaleX;
-				newMediaHeight = super.height / scaleY;
+				newMeasuredWidth = super.width / scaleX;
+				newMeasuredHeight = super.height / scaleY;
 			}
 				
-			if 	(	newMediaWidth != _measuredWidth
-				||	newMediaHeight != _measuredHeight
+			if 	(	newMeasuredWidth != _measuredWidth
+				||	newMeasuredHeight != _measuredHeight
 				)
 			{
 				var event:DisplayObjectEvent
@@ -240,11 +240,11 @@ package org.osmf.layout
 							( DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false
 							, null			, null
 							, _measuredWidth	, _measuredHeight
-							, newMediaWidth	, newMediaHeight
+							, newMeasuredWidth	, newMeasuredHeight
 							);
 							
-				_measuredWidth = newMediaWidth;
-				_measuredHeight = newMediaHeight;
+				_measuredWidth = newMeasuredWidth;
+				_measuredHeight = newMeasuredHeight;
 				
 				dispatchEvent(event);
 			}

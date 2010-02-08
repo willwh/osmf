@@ -150,7 +150,8 @@ package org.osmf.layout
 					target.metadata.addFacet(attributes);
 				}
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
-				attributes.alignment ||= RegistrationPoint.CENTER;
+				attributes.verticalAlignment ||= VerticalAlign.MIDDLE;
+				attributes.horizontalAlignment ||= HorizontalAlign.CENTER;
 			}
 			
 			// Watch the order metadata attribute for change:
@@ -411,101 +412,39 @@ package org.osmf.layout
 			deltaY ||= availableHeight - (rect.y || 0) - (rect.height || 0);
 			
 			// Apply alignment (if there's surpluss space reported:)
-			if (deltaX || deltaY)
+			if (deltaY)
 			{
-				deltaX ||= 0;
-				deltaY ||= 0;
-				
-				switch (attributes.alignment)
+				switch (attributes.verticalAlignment)
 				{
 					case null:
-					case RegistrationPoint.TOP_LEFT:
+					case VerticalAlign.TOP:
 						// all set.
 						break;
-					case RegistrationPoint.MIDDLE_LEFT:
+					case VerticalAlign.MIDDLE:
 						rect.y += deltaY / 2;
-						toDo ^= Y;
 						break;
-					case RegistrationPoint.BOTTOM_LEFT:
+					case VerticalAlign.BOTTOM:
 						rect.y += deltaY;
-						toDo ^= Y;
 						break;
-					case RegistrationPoint.TOP_MIDDLE:
-						rect.x += deltaX / 2;
-						toDo ^= X;
-						break;
-					case RegistrationPoint.CENTER:
-						rect.x += deltaX / 2;
-						rect.y += deltaY / 2;
-						toDo ^= POSITION;
-						break;
-					case RegistrationPoint.BOTTOM_MIDDLE:
-						rect.x += deltaX / 2;
-						rect.y += deltaY;
-						toDo ^= POSITION;
-						break;
-					case RegistrationPoint.TOP_RIGHT:
-						rect.x += deltaX;
-						toDo ^= X;
-						break;
-					case RegistrationPoint.MIDDLE_RIGHT:
-						rect.x += deltaX;
-						rect.y += deltaY / 2;
-						toDo ^= POSITION;
-						break;
-					case RegistrationPoint.BOTTOM_RIGHT:
-						rect.x += deltaX;
-						rect.y += deltaY;
-						toDo ^= POSITION;
-						break; 
 				}
 			}
 			
-			// Apply registration point adjustments:
-			
-			switch (attributes.registrationPoint)
-			{ 
-				case null:
-				case RegistrationPoint.TOP_LEFT:
-					// all set.
-					break;
-				case RegistrationPoint.MIDDLE_LEFT:
-					rect.y -= rect.height / 2;
-					toDo ^= Y;
-					break;
-				case RegistrationPoint.BOTTOM_LEFT:
-					rect.y -= rect.height;
-					toDo ^= Y;
-					break;
-				case RegistrationPoint.TOP_MIDDLE:
-					rect.x -= rect.width / 2;
-					toDo ^= X;
-					break;
-				case RegistrationPoint.CENTER:
-					rect.x -= rect.width / 2;
-					rect.y -= rect.height / 2;
-					toDo ^= POSITION;
-					break;
-				case RegistrationPoint.BOTTOM_MIDDLE:
-					rect.x -= rect.width / 2;
-					rect.y -= rect.height;
-					toDo ^= POSITION;
-					break;
-				case RegistrationPoint.TOP_RIGHT:
-					rect.x -= rect.width;
-					toDo ^= X;
-					break;
-				case RegistrationPoint.MIDDLE_RIGHT:
-					rect.x -= rect.width;
-					rect.y -= rect.height / 2;
-					toDo ^= POSITION;
-					break;
-				case RegistrationPoint.BOTTOM_RIGHT:
-					rect.x -= rect.width;
-					rect.y -= rect.height;
-					toDo ^= POSITION;
-					break;
-			}
+			if (deltaX)
+			{	
+				switch (attributes.horizontalAlignment)
+				{
+					case null:
+					case HorizontalAlign.LEFT:
+						// all set.
+						break;
+					case HorizontalAlign.CENTER:
+						rect.x += deltaX / 2;
+						break;
+					case HorizontalAlign.RIGHT:
+						rect.x += deltaX;
+						break;
+				}
+			}						
 			
 			// Apply pixel snapping:
 			if (attributes.snapToPixel)

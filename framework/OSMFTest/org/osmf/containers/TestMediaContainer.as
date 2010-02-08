@@ -27,9 +27,10 @@ package org.osmf.containers
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.ScaleMode;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.layout.RegistrationPoint;
 	import org.osmf.layout.TesterSprite;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -92,7 +93,8 @@ package org.osmf.containers
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
 			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
 			layout.scaleMode = ScaleMode.NONE;
-			layout.alignment = RegistrationPoint.CENTER;
+			layout.verticalAlignment = VerticalAlign.MIDDLE;
+			layout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			var container:MediaContainer = constructContainer();
 			container.width = 800;

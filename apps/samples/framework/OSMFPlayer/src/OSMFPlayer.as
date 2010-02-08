@@ -41,10 +41,11 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
-	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
@@ -158,7 +159,8 @@ package
 			var controlBarLayout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
 			controlBarLayout.order = 2;
 			controlBarLayout.bottom = 25;
-			controlBarLayout.alignment = RegistrationPoint.TOP_MIDDLE;
+			controlBarLayout.verticalAlignment = VerticalAlign.TOP;
+			controlBarLayout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			containerRenderer.addTarget(controlBar);
 			

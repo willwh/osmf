@@ -35,9 +35,9 @@ package org.osmf.layout
 			assertNotNull(lp);
 			
 			assertEquals(NaN, lp.order);
-			assertEquals(RegistrationPoint.TOP_LEFT, lp.registrationPoint);
 			assertEquals(null, lp.scaleMode);
-			assertEquals(RegistrationPoint.TOP_LEFT, lp.alignment);
+			assertEquals(null, lp.verticalAlignment);
+			assertEquals(null, lp.horizontalAlignment);
 			assertEquals(false, lp.snapToPixel);
 			assertEquals(null, lp.mode);
 			
@@ -68,14 +68,14 @@ package org.osmf.layout
 				lp.order = 1;
 				assertEquals(1, lp.order);
 				
-				lp.registrationPoint = RegistrationPoint.BOTTOM_MIDDLE;
-				assertEquals(RegistrationPoint.BOTTOM_MIDDLE, lp.registrationPoint);
+				lp.verticalAlignment = VerticalAlign.BOTTOM;
+				assertEquals(VerticalAlign.BOTTOM, lp.verticalAlignment);
+				
+				lp.horizontalAlignment = HorizontalAlign.CENTER;
+				assertEquals(HorizontalAlign.CENTER, lp.horizontalAlignment);
 				
 				lp.scaleMode = ScaleMode.LETTERBOX;
 				assertEquals(ScaleMode.LETTERBOX, lp.scaleMode);
-				
-				lp.alignment = RegistrationPoint.CENTER;
-				assertEquals(RegistrationPoint.CENTER, lp.alignment);
 				
 				lp.snapToPixel = true;
 				assertTrue(lp.snapToPixel);

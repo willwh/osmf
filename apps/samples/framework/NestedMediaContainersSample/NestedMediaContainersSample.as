@@ -30,8 +30,9 @@ package
 	import org.osmf.display.MediaContainerGroup;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -77,20 +78,22 @@ package
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.LETTERBOX;
-			bannersLayout.alignment = RegistrationPoint.TOP_MIDDLE;
+			bannersLayout.verticalAlignment = VerticalAlign.TOP;
+			bannersLayout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			var skyScraperLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraper);
 			skyScraperLayout.percentWidth = 100;
 			skyScraperLayout.percentHeight = 100;
 			skyScraperLayout.scaleMode = ScaleMode.LETTERBOX;
-			skyScraperLayout.alignment = RegistrationPoint.MIDDLE_RIGHT;
+			skyScraperLayout.verticalAlignment = VerticalAlign.MIDDLE;
+			skyScraperLayout.horizontalAlignment = HorizontalAlign.RIGHT;
 			
 			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.STRETCH;
-			mainLayout.alignment = RegistrationPoint.TOP_MIDDLE;
-			
+			mainLayout.verticalAlignment = VerticalAlign.TOP;
+			mainLayout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			// Consruct a tree of containers:
 

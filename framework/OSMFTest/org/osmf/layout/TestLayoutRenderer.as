@@ -181,7 +181,8 @@ package org.osmf.layout
 			layout.percentWidth = layout.percentHeight = 80;
 			layout.percentX = layout.percentY = 10;
 			layout.scaleMode = ScaleMode.NONE; // this is the default, actually.
-			layout.alignment = RegistrationPoint.MIDDLE_RIGHT;
+			layout.verticalAlignment = VerticalAlign.MIDDLE;
+			layout.horizontalAlignment = HorizontalAlign.RIGHT;
 			
 			// Container
 			
@@ -208,49 +209,57 @@ package org.osmf.layout
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.CENTER;
+			layout.verticalAlignment = VerticalAlign.MIDDLE;
+			layout.horizontalAlignment = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.MIDDLE_LEFT;
+			layout.verticalAlignment = VerticalAlign.MIDDLE;
+			layout.horizontalAlignment = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.TOP_LEFT;
+			layout.verticalAlignment = VerticalAlign.TOP;
+			layout.horizontalAlignment = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.TOP_MIDDLE;
+			layout.verticalAlignment = VerticalAlign.TOP;
+			layout.horizontalAlignment = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.TOP_RIGHT;
+			layout.verticalAlignment = VerticalAlign.TOP;
+			layout.horizontalAlignment = HorizontalAlign.RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);	
 			
-			layout.alignment = RegistrationPoint.BOTTOM_LEFT;
+			layout.verticalAlignment = VerticalAlign.BOTTOM;
+			layout.horizontalAlignment = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
+			layout.verticalAlignment = VerticalAlign.BOTTOM;
+			layout.horizontalAlignment = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			layout.alignment = RegistrationPoint.BOTTOM_RIGHT;
+			layout.verticalAlignment = VerticalAlign.BOTTOM;
+			layout.horizontalAlignment = HorizontalAlign.RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
@@ -417,65 +426,6 @@ package org.osmf.layout
 			assertEquals(0, t1.y);
 			assertEquals(100, t1.width);
 			assertEquals(100, t1.height);
-		}
-		
-		public function testRegistrationPoint():void
-		{
-			var renderer:LayoutRenderer = new LayoutRenderer();
-			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			renderer.container = container;
-			
-			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			t1.setIntrinsicDimensions(100,100);
-			
-			renderer.addTarget(t1);
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(t1);
-			layout.snapToPixel = true;
-				
-			layout.registrationPoint = RegistrationPoint.TOP_LEFT;
-			renderer.validateNow();
-			assertEquals(0, t1.x);
-			assertEquals(0, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.TOP_MIDDLE;
-			renderer.validateNow();
-			assertEquals(-50, t1.x);
-			assertEquals(0, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.TOP_RIGHT;
-			renderer.validateNow();
-			assertEquals(-100, t1.x);
-			assertEquals(0, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.BOTTOM_LEFT;
-			renderer.validateNow();
-			assertEquals(0, t1.x);
-			assertEquals(-100, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.BOTTOM_MIDDLE;
-			renderer.validateNow();
-			assertEquals(-50, t1.x);
-			assertEquals(-100, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.BOTTOM_RIGHT;
-			renderer.validateNow();
-			assertEquals(-100, t1.x);
-			assertEquals(-100, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.MIDDLE_LEFT;
-			renderer.validateNow();
-			assertEquals(0, t1.x);
-			assertEquals(-50, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.CENTER;
-			renderer.validateNow();
-			assertEquals(-50, t1.x);
-			assertEquals(-50, t1.y);
-			
-			layout.registrationPoint = RegistrationPoint.MIDDLE_RIGHT;
-			renderer.validateNow();
-			assertEquals(-100, t1.x);
-			assertEquals(-50, t1.y);
 		}
 	}
 }

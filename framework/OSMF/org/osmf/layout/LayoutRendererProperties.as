@@ -65,26 +65,6 @@ package org.osmf.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired position of the target in the display list
-		 * of its context.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get registrationPoint():String
-		{
-			return lazyAttributes ? lazyAttributes.registrationPoint : RegistrationPoint.TOP_LEFT;
-		}
-		public function set registrationPoint(value:String):void
-		{
-			eagerAttributes.registrationPoint = value;
-		}
-		
-		/**
-		 * The default layout renderer interprets this value as follows:
-		 * 
 		 * Defines the desired scale mode to be applied to the target.
 		 *  
 		 *  @langversion 3.0
@@ -104,21 +84,43 @@ package org.osmf.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired alignment mode to be applied to the target when
-		 * scaling of the target leaves a blank space.
+		 * Defines the desired horizontal alignment mode to be applied to the
+		 * target when layout of the target leaves surplus horizontal blank
+		 * space.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get alignment():String
+		public function get horizontalAlignment():String
 		{
-			return lazyAttributes ? lazyAttributes.alignment : RegistrationPoint.TOP_LEFT;
+			return lazyAttributes ? lazyAttributes.horizontalAlignment : null;
 		}
-		public function set alignment(value:String):void
+		public function set horizontalAlignment(value:String):void
 		{
-			eagerAttributes.alignment = value;
+			eagerAttributes.horizontalAlignment = value;
+		}
+		
+		/**
+		 * The default layout renderer interprets this value as follows:
+		 * 
+		 * Defines the desired vertical alignment mode to be applied to the
+		 * target when layout of the target leaves surplus vertical blank
+		 * space.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get verticalAlignment():String
+		{
+			return lazyAttributes ? lazyAttributes.verticalAlignment : null;
+		}
+		public function set verticalAlignment(value:String):void
+		{
+			eagerAttributes.verticalAlignment = value;
 		}
 
 		/**

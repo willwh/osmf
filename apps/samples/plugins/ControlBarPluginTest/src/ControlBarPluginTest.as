@@ -4,8 +4,9 @@ package
 	
 	import org.osmf.composition.ParallelElement;
 	import org.osmf.events.PluginManagerEvent;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.NullFacetSynthesizer;
@@ -85,7 +86,8 @@ package
 			var controlBar:MediaElement = osmf.factory.createMediaElement(resource);
 			
 			var layout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
-			layout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
+			layout.verticalAlignment = VerticalAlign.BOTTOM;
+			layout.horizontalAlignment = HorizontalAlign.CENTER;
 			layout.order = 1;
 			
 			return controlBar;

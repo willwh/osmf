@@ -33,8 +33,9 @@ package
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.image.ImageElement;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.layout.RegistrationPoint;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -87,13 +88,15 @@ package
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.NONE;
-			bannersLayout.alignment = RegistrationPoint.BOTTOM_MIDDLE;
+			bannersLayout.verticalAlignment = VerticalAlign.BOTTOM;
+			bannersLayout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.LETTERBOX;
-			mainLayout.alignment = RegistrationPoint.TOP_MIDDLE;
+			mainLayout.verticalAlignment = VerticalAlign.TOP;
+			mainLayout.horizontalAlignment = HorizontalAlign.CENTER;
 			
 			// Consruct 3 regions:
 
