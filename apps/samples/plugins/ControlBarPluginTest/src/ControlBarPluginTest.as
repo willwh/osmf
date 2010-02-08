@@ -27,9 +27,6 @@ package
 			osmf.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 			osmf.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
 			osmf.pluginManager.loadPlugin(pluginResource);
-			
-			osmf.container.width = 640;
-			osmf.container.height = 360;
 		}
 		
 		// Internals
@@ -52,6 +49,10 @@ package
 		{
 			rootElement = new ParallelElement();
 			rootElement.addChild(constructVideoElement());
+			
+			var rootElementLayout:LayoutRendererProperties = new LayoutRendererProperties(rootElement);
+			rootElementLayout.width = stage.stageWidth;
+			rootElementLayout.height = stage.stageHeight;
 			
 			return rootElement;
 		}
