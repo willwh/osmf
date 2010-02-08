@@ -21,14 +21,17 @@
 *****************************************************/
 package org.osmf.image
 {
+	import flash.display.Bitmap;
+	
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.swf.LoaderLoadTrait;
 	import org.osmf.swf.LoaderLoadedContext;
 	import org.osmf.swf.LoaderUtils;
-	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 	
 	/**
@@ -88,6 +91,24 @@ package org.osmf.image
 			super(resource, loader, [ImageLoader]);
 		}
 		
+		public function set smoothing(value:Boolean):void
+		{
+			if (_smoothing != value)
+			{
+				_smoothing = value;
+				
+				applySmoothingSetting();
+			}
+		}
+
+		public function get smoothing():Boolean
+		{
+			return _smoothing;			
+		}
+		
+		// Overrides
+		//
+		
 		/**
 		 * @private 
 		 */ 		
@@ -105,6 +126,8 @@ package org.osmf.image
 				= (getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext as LoaderLoadedContext;
 			
 			addTrait(MediaTraitType.DISPLAY_OBJECT, LoaderUtils.createDisplayObjectTrait(context.loader, this));
+			
+			applySmoothingSetting();
 		}
 		
 		/**
@@ -113,6 +136,24 @@ package org.osmf.image
 		override protected function processUnloadingState():void
 		{
 			removeTrait(MediaTraitType.DISPLAY_OBJECT);	
+		}
+		
+		// Internals
+		//
+		
+		private var _smoothing:Boolean;
+		
+		private function applySmoothingSetting():void
+		{
+			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+			if (displayObjectTrait)
+			{
+				var bitmap:Bitmap = displayObjectTrait.displayObject as Bitmap;
+				if (bitmap)
+				{
+					bitmap.smoothing = _smoothing;
+				}
+			}
 		}
 	}
 }

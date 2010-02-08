@@ -37,6 +37,9 @@ package org.osmf.image
 	{
 		public function testVoid():void
 		{
+			var element:ImageElement = new ImageElement();
+			assertFalse(element.smoothing);
+			
 			// See TestImageElementIntegration for the actual tests.
 		}
 	}
