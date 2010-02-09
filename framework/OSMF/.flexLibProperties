@@ -192,7 +192,6 @@
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingItem"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingResource"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.MetricsProvider"/>
     <classEntry path="org.osmf.net.dynamicstreaming.MetricsProviderBase"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamSwitchManager"/>
