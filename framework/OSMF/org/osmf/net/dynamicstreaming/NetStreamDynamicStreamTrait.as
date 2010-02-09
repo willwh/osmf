@@ -63,7 +63,7 @@ package org.osmf.net.dynamicstreaming
 			this.dsResource = dsResource;
 									
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus, 1);
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 		}
 		
 		override public function dispose():void

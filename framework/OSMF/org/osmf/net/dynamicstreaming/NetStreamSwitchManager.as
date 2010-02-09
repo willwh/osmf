@@ -96,7 +96,10 @@ package org.osmf.net.dynamicstreaming
 			isLive = dsResource.streamType == StreamType.LIVE; 
 
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+			
+			// Make sure we get onPlayStatus first (by setting a higher priority)
+			// so that we can expose a consistent state to clients.
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus, int.MAX_VALUE);
 		}
 		
 		/**
@@ -426,7 +429,6 @@ package org.osmf.net.dynamicstreaming
 					
 					debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
 					pendingTransitionsArray.shift();
-					reason = null;
 
 					break;
 			}
