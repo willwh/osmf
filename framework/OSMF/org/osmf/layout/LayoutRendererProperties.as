@@ -28,6 +28,10 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 	
+	/**
+	 * Defines a utility object that is to be used to set properties on media elements
+	 * or layout targets that the layout renderer will base its layout on.
+	 */	
 	public class LayoutRendererProperties
 	{
 		public function LayoutRendererProperties(target:IMetadataProvider)
