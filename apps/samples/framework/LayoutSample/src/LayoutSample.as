@@ -23,6 +23,8 @@
 package 
 {
 	import flash.display.Sprite;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
@@ -63,10 +65,6 @@ package
 			// Instruct the image to be moved to the right hand side, should
 			// any surplus horizontal space be available after scaling:
 			logoLayout.horizontalAlignment = HorizontalAlign.RIGHT;
-			
-			// Set an order value for the image: elements with the highest
-			// order appear on top in the display stack:
-			logoLayout.order = 1;
 			
 			// Construct a video element:
 			var video:MediaElement = new VideoElement(new URLResource(LOGO_VID));

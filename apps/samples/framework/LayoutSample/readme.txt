@@ -2,8 +2,10 @@ Sample Application: LayoutSample
 
 A. Overview
 
-This sample application demonstrates how to use the OSMF layout API to show an overlay bug at
-the bottom-right side of a video.
+This sample application demonstrates how to use the OSMF layout API to:
+
+- show an overlay bug at the bottom-right side of a video,
+- use the API to layout things other than media elements.
 
 B. Installation Instructions (Flex Builder)
 
@@ -21,4 +23,4 @@ internet when trying them out.
 
 C. Usage Instructions
 
--
+Both LayoutSample.as and LayoutSample2.as are runable applications. Use Flex Builder's "Set as Default Application" to select one.
