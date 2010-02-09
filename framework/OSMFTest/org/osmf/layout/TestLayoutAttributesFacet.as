@@ -63,13 +63,13 @@ package org.osmf.layout
 			assertEquals(HorizontalAlign.RIGHT, lastEvent.value);
 			assertEquals(facet.horizontalAlignment, facet.getValue(LayoutAttributesFacet.HORIZONTAL_ALIGNMENT), HorizontalAlign.RIGHT);
 			
-			facet.order = 2;
+			facet.index = 2;
 			
 			assertEquals(3, eventCounter);
 			assertEquals(LayoutAttributesFacet.ORDER, lastEvent.identifier);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(2, lastEvent.value);
-			assertEquals(facet.order, facet.getValue(LayoutAttributesFacet.ORDER), 2);
+			assertEquals(facet.index, facet.getValue(LayoutAttributesFacet.ORDER), 2);
 			
 			facet.snapToPixel = false;
 			

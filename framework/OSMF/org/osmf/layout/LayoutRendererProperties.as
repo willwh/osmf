@@ -53,19 +53,19 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get order():Number
+		public function get index():Number
 		{
-			return lazyAttributes ? lazyAttributes.order : NaN;
+			return lazyAttributes ? lazyAttributes.index : NaN;
 		}
-		public function set order(value:Number):void
+		public function set index(value:Number):void
 		{
-			eagerAttributes.order = value;
+			eagerAttributes.index = value;
 		}
 		
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired scale mode to be applied to the target.
+		 * Defines the desired scale layoutMode to be applied to the target.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -84,7 +84,7 @@ package org.osmf.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired horizontal alignment mode to be applied to the
+		 * Defines the desired horizontal alignment layoutMode to be applied to the
 		 * target when layout of the target leaves surplus horizontal blank
 		 * space.
 		 *  
@@ -105,7 +105,7 @@ package org.osmf.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * Defines the desired vertical alignment mode to be applied to the
+		 * Defines the desired vertical alignment layoutMode to be applied to the
 		 * target when layout of the target leaves surplus vertical blank
 		 * space.
 		 *  
@@ -146,24 +146,23 @@ package org.osmf.layout
 		/**
 		 * The default layout renderer interprets this value as follows:
 		 * 
-		 * If set to null or DefaultRendererMode.CANVAS, the renderer will operate in
-		 * canvase mode. When set to DefaultRendererMode.HBOX or DefaultRendererMode.VBOX,
+		 * When set to LayoutMode.HORIZONTAL or LayoutMode.VERTICAL,
 		 * then the renderer will ignore its targets positioning settings (either
-		 * influencing X or Y, depending on the mode chosen), laying out its elements
-		 * adjecent in the order specified by the 'order' property.
+		 * influencing X or Y, depending on the layoutMode chosen), laying out its elements
+		 * adjecent in the index specified by the 'index' property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get mode():String
+		public function get layoutMode():String
 		{
-			return lazyAttributes ? lazyAttributes.mode : LayoutMode.NONE;
+			return lazyAttributes ? lazyAttributes.layoutMode : LayoutMode.NONE;
 		}
-		public function set mode(value:String):void
+		public function set layoutMode(value:String):void
 		{
-			eagerAttributes.mode = value;
+			eagerAttributes.layoutMode = value;
 		}
 
 		// AbsoluteLayoutFacet
@@ -377,8 +376,8 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines how many pixels should be present between the right-hand 
-		 * side border of the target's bounding box, and the right-hand side
-		 * border of its context.
+		 * side bindex of the target's bounding box, and the right-hand side
+		 * bindex of its context.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -398,8 +397,8 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines how many pixels should be present between the bottom
-		 * side border of the target's bounding box, and the bottom side
-		 * border of its context.
+		 * side bindex of the target's bounding box, and the bottom side
+		 * bindex of its context.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -508,8 +507,7 @@ package org.osmf.layout
 		 */
 		public function toString():String
 		{
-			return "mode: " + mode + " "
-				 + "abs ["
+			return "abs ["
 				 + x + ", "
 				 + y + ", "
 				 + width + ", "
@@ -529,7 +527,8 @@ package org.osmf.layout
 				 + paddingTop + ", "
 				 + paddingRight + ", "
 				 + paddingBottom + "] "
-				 + "order: " + order + " "
+				 + "layoutMode: " + layoutMode + " "
+				 + "index: " + index + " "
 				 + "scale: " + scaleMode + " "
 				 + "valign: " + verticalAlignment + " "
 				 + "halign: " + horizontalAlignment + " "

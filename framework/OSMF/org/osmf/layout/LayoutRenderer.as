@@ -95,7 +95,7 @@ package org.osmf.layout
 						, MetadataNamespaces.LAYOUT_ATTRIBUTES
 						, function (facet:LayoutAttributesFacet):void
 							{
-								mode = facet ? facet.mode : LayoutMode.NONE
+								layoutMode = facet ? facet.layoutMode : LayoutMode.NONE
 								invalidate();
 							}
 						);
@@ -129,7 +129,7 @@ package org.osmf.layout
 			
 			// If no layout properties are set on the target ...
 			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
-			if	(	mode == LayoutMode.NONE
+			if	(	layoutMode == LayoutMode.NONE
 				&&	relative == null
 				&&	attributes == null
 				&&	target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
@@ -142,7 +142,7 @@ package org.osmf.layout
 				relative.height = 100;
 				target.metadata.addFacet(relative);
 			
-				// Set target to scale letter box mode, centered, by default:
+				// Set target to scale letter box layoutMode, centered, by default:
 				attributes = new LayoutAttributesFacet();
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
 				attributes.verticalAlignment ||= VerticalAlign.MIDDLE;
@@ -150,7 +150,7 @@ package org.osmf.layout
 				target.metadata.addFacet(attributes);
 			}
 			
-			// Watch the order metadata attribute for change:
+			// Watch the index metadata attribute for change:
 			//
 			
 			targetMetadataWatchers[target] = MetadataUtils.watchFacetValue
@@ -194,16 +194,16 @@ package org.osmf.layout
 				= y.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES)
 				as LayoutAttributesFacet;
 				
-			var orderX:Number = attributesX ? attributesX.order : NaN;
-			var orderY:Number = attributesY ? attributesY.order : NaN;
+			var indexX:Number = attributesX ? attributesX.index : NaN;
+			var indexY:Number = attributesY ? attributesY.index : NaN;
 			
-			return	(	isNaN(orderX)					// if orderX is NaN, consider x it to be smaller
-							? -1						// than y, else
-							: isNaN(orderY)				// if orderY is NaN, consider y to be smaller
-								? 1						// than x, else
-								: orderX == orderY		// if the orders are equal, then so 
+			return	(	isNaN(indexY)					// if indexY is NaN, consider x it to be bigger
+							? 1							// than x, else
+							: isNaN(indexX)				// if indexX is NaN, consider x to be smaller
+								? -1					// than y, else
+								: indexX == indexY		// if the indexs are equal, then so 
 									? 0					// are x and y, else
-									: orderX < orderY	// if orderX is smaller than orderY, 
+									: indexX < indexY	// if indexX is smaller than indexY, 
 										? -1			// then consider x smaller than Y, else
 										: 1				// x must be bigger than y.
 					);
@@ -298,7 +298,7 @@ package org.osmf.layout
 				}
 			}
 			
-			// Last, do anchors: (doing them last is a natural order because we require
+			// Last, do anchors: (doing them last is a natural index because we require
 			// a set width and x to do 'right', as well as a set height and y to do
 			// 'bottom'.)
 			if (toDo != 0)
@@ -379,7 +379,7 @@ package org.osmf.layout
 				}
 			}
 			
-			// Apply scaling mode:
+			// Apply scaling layoutMode:
 			if (attributes.scaleMode)
 			{
 				if	(!	( toDo & WIDTH || toDo & HEIGHT)					
@@ -451,18 +451,18 @@ package org.osmf.layout
 			 	rect.height = Math.round(rect.height);
 			}
 			
-			if	(mode == LayoutMode.HORIZONTAL || mode == LayoutMode.VERTICAL)
+			if	(layoutMode == LayoutMode.HORIZONTAL || layoutMode == LayoutMode.VERTICAL)
 			{ 
 				if (lastCalculatedBounds != null)
 				{
 					// Apply either the x or y coordinate to apply the desired boxing
 					// behavior:
 					
-					if (mode == LayoutMode.HORIZONTAL)
+					if (layoutMode == LayoutMode.HORIZONTAL)
 					{
 						rect.x = lastCalculatedBounds.x + lastCalculatedBounds.width;
 					}
-					else // mode == VERTICAL
+					else // layoutMode == VERTICAL
 					{
 						rect.y = lastCalculatedBounds.y + lastCalculatedBounds.height;
 					}
@@ -518,15 +518,15 @@ package org.osmf.layout
 					targetBounds.width ||= target.measuredWidth || 0;
 					targetBounds.height ||= target.measuredHeight || 0;
 					
-					if (mode == LayoutMode.HORIZONTAL || mode == LayoutMode.VERTICAL)
+					if (layoutMode == LayoutMode.HORIZONTAL || layoutMode == LayoutMode.VERTICAL)
 					{
 						if (lastBounds)
 						{
-							if (mode == LayoutMode.HORIZONTAL)
+							if (layoutMode == LayoutMode.HORIZONTAL)
 							{
 								targetBounds.x = lastBounds.x + lastBounds.width;
 							}
-							else // mode == VERTICAL
+							else // layoutMode == VERTICAL
 							{
 								targetBounds.y = lastBounds.y + lastBounds.height;
 							}
@@ -578,7 +578,7 @@ package org.osmf.layout
 		private static const DIMENSIONS:int = WIDTH + HEIGHT;
 		private static const ALL:int = POSITION + DIMENSIONS;
 		
-		private var mode:String = LayoutMode.NONE;
+		private var layoutMode:String = LayoutMode.NONE;
 		private var lastCalculatedBounds:Rectangle;
 		
 		private var targetMetadataWatchers:Dictionary = new Dictionary();

@@ -356,15 +356,15 @@ package org.osmf.layout
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			layout = new LayoutRendererProperties(t1);
-			layout.order = 8;
+			layout.index = 8;
 			
 			var t2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			layout = new LayoutRendererProperties(t2);
-			layout.order = 2;
+			layout.index = 2;
 			
 			var t3:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			layout = new LayoutRendererProperties(t3);
-			layout.order = 2;
+			layout.index = 2;
 			
 			var t4:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			
@@ -381,7 +381,7 @@ package org.osmf.layout
 			assertEquals(t1, container.getChildAt(3));
 			
 			layout = new LayoutRendererProperties(t4);
-			layout.order = 4;
+			layout.index = 4;
 			
 			renderer.validateNow();
 			

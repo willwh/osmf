@@ -34,12 +34,12 @@ package org.osmf.layout
 			var lp:LayoutRendererProperties = new LayoutRendererProperties(new MediaElement());
 			assertNotNull(lp);
 			
-			assertEquals(NaN, lp.order);
+			assertEquals(NaN, lp.index);
 			assertEquals(null, lp.scaleMode);
 			assertEquals(null, lp.verticalAlignment);
 			assertEquals(null, lp.horizontalAlignment);
 			assertEquals(true, lp.snapToPixel);
-			assertEquals(LayoutMode.NONE, lp.mode);
+			assertEquals(LayoutMode.NONE, lp.layoutMode);
 			
 			assertEquals(NaN, lp.x);
 			assertEquals(NaN, lp.y);			
@@ -65,8 +65,8 @@ package org.osmf.layout
 			// could be created.
 			for (var i:int = 0; i<2; i++)
 			{
-				lp.order = 1;
-				assertEquals(1, lp.order);
+				lp.index = 1;
+				assertEquals(1, lp.index);
 				
 				lp.verticalAlignment = VerticalAlign.BOTTOM;
 				assertEquals(VerticalAlign.BOTTOM, lp.verticalAlignment);
@@ -80,8 +80,8 @@ package org.osmf.layout
 				lp.snapToPixel = true;
 				assertTrue(lp.snapToPixel);
 				
-				lp.mode = LayoutMode.HORIZONTAL;
-				assertEquals(LayoutMode.HORIZONTAL, lp.mode); 
+				lp.layoutMode = LayoutMode.HORIZONTAL;
+				assertEquals(LayoutMode.HORIZONTAL, lp.layoutMode); 
 				
 				lp.x = 1;
 				assertEquals(1, lp.x);

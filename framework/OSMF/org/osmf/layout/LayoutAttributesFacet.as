@@ -44,14 +44,14 @@ package org.osmf.layout
 		/**
 		 * @private
 		 * 
-		 * Intentifier for the facet's order property.
+		 * Intentifier for the facet's index property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ORDER:StringIdentifier = new StringIdentifier("order");
+		public static const ORDER:StringIdentifier = new StringIdentifier("index");
 		
 		/**
 		 * @private
@@ -68,7 +68,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the facet's order property.
+		 * Intentifier for the facet's index property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -116,14 +116,14 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the facet's mode property.
+		 * Intentifier for the facet's layoutMode property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MODE:StringIdentifier = new StringIdentifier("mode");
+		public static const MODE:StringIdentifier = new StringIdentifier("layoutMode");
 		
 		public function LayoutAttributesFacet()
 		{
@@ -131,7 +131,7 @@ package org.osmf.layout
 			_horizontalAlignment = null;
 			_scaleMode = null;
 			_snapToPixel = true;
-			_mode = LayoutMode.NONE;
+			_layoutMode = LayoutMode.NONE;
 		}
 		
 		// Facet
@@ -156,7 +156,7 @@ package org.osmf.layout
 			}
 			else if (identifier.equals(ORDER))
 			{
-				return order;
+				return index;
 			}
 			else if (identifier.equals(SCALE_MODE))
 			{
@@ -186,18 +186,18 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get order():Number
+		public function get index():Number
 		{
-			return _order;
+			return _index;
 		}
-		public function set order(value:Number):void
+		public function set index(value:Number):void
 		{
-			if (_order != value)
+			if (_index != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, ORDER, value, _order);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, ORDER, value, _index);
 					
-				_order = value;
+				_index = value;
 						
 				dispatchEvent(event);
 			}
@@ -286,18 +286,18 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get mode():String
+		public function get layoutMode():String
 		{
-			return _mode;
+			return _layoutMode;
 		}
-		public function set mode(value:String):void
+		public function set layoutMode(value:String):void
 		{
-			if (_mode != value)
+			if (_layoutMode != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, MODE, value, _mode);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, MODE, value, _layoutMode);
 					
-				_mode = value;
+				_layoutMode = value;
 						
 				dispatchEvent(event);
 			}
@@ -306,11 +306,11 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private var _order:Number = NaN;
+		private var _index:Number = NaN;
 		private var _scaleMode:String;
 		private var _verticalAlignment:String;
 		private var _horizontalAlignment:String;
 		private var _snapToPixel:Boolean;
-		private var _mode:String;
+		private var _layoutMode:String;
 	}
 }
