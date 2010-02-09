@@ -63,18 +63,14 @@ package org.osmf.elements.loaderClasses
 			
 			try
 			{
-				// Add a scroll rect, to allow the loaded content to
-				// overdraw its bounds, while maintaining scale, and size
-				// with the layout system.
-				//
+			
 				// Note that it's critical that the DisplayObjectTrait's
 				// displayObject be set to the Loader's content property (and
 				// not to a container Sprite, as was the case with a previous fix),
 				// since player-to-SWF communication is based on the player's
 				// ability to reference the SWF's API.
 				var info:LoaderInfo = loader.contentLoaderInfo;  
-				loader.content.scrollRect = new Rectangle(0, 0, info.width, info.height);
-				
+								
 				if (info.contentType == SWF_MIME_TYPE &&
 					info.actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
 				{
@@ -86,6 +82,13 @@ package org.osmf.elements.loaderClasses
 				{
 					displayObject = loader.content;
 				}
+				
+				// Add a scroll rect, to allow the loaded content to
+				// overdraw its bounds, while maintaining scale, and size
+				// with the layout system.
+				//
+				displayObject.scrollRect = new Rectangle(0, 0, info.width, info.height);
+				
 				mediaWidth = info.width;
 				mediaHeight = info.height;
 			}
