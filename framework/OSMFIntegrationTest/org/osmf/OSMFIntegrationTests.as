@@ -28,10 +28,10 @@ package org.osmf
 	import org.osmf.net.*;
 	import org.osmf.plugin.*;
 	import org.osmf.utils.*;
-	
+
 	CONFIG::FLASH_10_1
 	{
-		import org.osmf.drm.*;
+	import org.osmf.drm.TestDRMServices;
 	}
 
 	public class OSMFIntegrationTests extends TestSuite

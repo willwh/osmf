@@ -102,7 +102,7 @@ package org.osmf.elements
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
 			//We never get the IContentProtectableTRait here, so we have to basicly dectect decyption by checking for  the files duration
-			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
+			var elem:VideoElement = new VideoElement(resource);
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);
 			
 			mediaPlayer =  new MediaPlayer();
@@ -146,7 +146,7 @@ package org.osmf.elements
 			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
 			resource.metadata.addFacet(facet);
 						
-			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
+			var elem:VideoElement = new VideoElement(resource);
 			var protectable:DRMTrait;
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 			var token:Object;
@@ -182,7 +182,7 @@ package org.osmf.elements
 			function onFinished(event:TimerEvent):void
 			{
 				mediaPlayer.media = null;
-				mediaPlayer.media = new VideoElement(new NetLoader(), resource);
+				mediaPlayer.media = new VideoElement(resource);
 				protectable = (mediaPlayer.media.getTrait(MediaTraitType.DRM) as DRMTrait);
 				protectable.addEventListener(DRMEvent.DRM_STATE_CHANGE, onTokenAuth);
 				protectable.authenticateWithToken(token);
@@ -209,7 +209,7 @@ package org.osmf.elements
 		{
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
-			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
+			var elem:VideoElement = new VideoElement(resource);
 			var protectable:DRMTrait;
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 							
@@ -249,7 +249,7 @@ package org.osmf.elements
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 					
 			var protectable:DRMTrait;
-			var elem:VideoElement = new VideoElement(new NetLoader(), resource);
+			var elem:VideoElement = new VideoElement(resource);
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait );
 			
 			mediaPlayer.media = elem;
