@@ -221,21 +221,33 @@ package org.osmf.display
 		// Overrides
 		//
 		
+		/**
+		 * @inheritDoc
+		 **/
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
 		{
 			return super.addChildAt(child, index + 1);
 		}
 		
+		/**
+		 * @inheritDoc
+		 **/
 		override public function setChildIndex(child:DisplayObject, index:int):void
 		{
 			super.setChildIndex(child, index + 1);
 		}
 		
+		/**
+		 * @inheritDoc
+		 **/
 		override public function removeChildAt(index:int):DisplayObject
 		{
 			return super.removeChildAt(index + 1);
 		}
 		
+		/**
+		 * @inheritDoc
+		 **/
 		override public function measure(deep:Boolean = true):void
 		{
 			_mediaContainer.measure(deep);
@@ -243,6 +255,9 @@ package org.osmf.display
 			super.measure(deep);
 		}
 		
+		/**
+		 * @inheritDoc
+		 **/
 		override public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
 			if (availableWidth)

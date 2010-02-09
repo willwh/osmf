@@ -280,6 +280,9 @@ package org.osmf.layout
 	 	// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function set width(value:Number):void
 		{
 			new LayoutRendererProperties(this).width = value; 
@@ -289,6 +292,9 @@ package org.osmf.layout
 			return _measuredWidth;
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function set height(value:Number):void
 		{
 			new LayoutRendererProperties(this).height = value; 

@@ -199,6 +199,9 @@ package org.osmf.containers
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 		{
 			super.layout(availableWidth, availableHeight, deep);

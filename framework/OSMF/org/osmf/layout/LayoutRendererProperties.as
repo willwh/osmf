@@ -498,7 +498,7 @@ package org.osmf.layout
 		}
 		
 		/**
-		 * @inherit
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

@@ -96,6 +96,10 @@ package org.osmf.layout
 		{
 			return _parent;	
 		}
+		
+		/**
+		 * @private
+		 **/
 		final internal function setParent(value:LayoutRendererBase):void
 		{
 			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getFacet(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "null");}
