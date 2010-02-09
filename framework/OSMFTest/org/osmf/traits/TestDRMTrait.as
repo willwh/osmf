@@ -24,7 +24,6 @@ package org.osmf.traits
 	import flash.events.Event;
 	import flash.utils.ByteArray;
 	
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.utils.DynamicDRMTrait;

@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.drm
+package org.osmf.net.drm
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;

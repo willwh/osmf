@@ -19,20 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net
+package org.osmf.net.drm
 {
-	import flash.events.Event;
-	
+	import org.osmf.events.DRMEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.traits.DRMTrait;
+
 	CONFIG::FLASH_10_1
 	{
-		import org.osmf.drm.DRMServices;
-		import flash.net.drm.DRMContentData;
+	import flash.net.drm.DRMContentData;
 	}
-
-	import org.osmf.events.DRMEvent;
-	import org.osmf.traits.DRMTrait;
-	import org.osmf.events.MediaError;
-	import org.osmf.drm.DRMState;
 
     [ExcludeClass]
     

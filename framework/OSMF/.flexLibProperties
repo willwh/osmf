@@ -7,9 +7,6 @@
     <classEntry path="org.osmf.display.MediaContainerGroup"/>
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
-    <classEntry path="org.osmf.drm.DRMAuthenticationMethod"/>
-    <classEntry path="org.osmf.drm.DRMServices"/>
-    <classEntry path="org.osmf.drm.DRMState"/>
     <classEntry path="org.osmf.elements.AudioElement"/>
     <classEntry path="org.osmf.elements.Beacon"/>
     <classEntry path="org.osmf.elements.BeaconElement"/>
@@ -180,7 +177,6 @@
     <classEntry path="org.osmf.net.NetStreamAudioTrait"/>
     <classEntry path="org.osmf.net.NetStreamBufferTrait"/>
     <classEntry path="org.osmf.net.NetStreamCodes"/>
-    <classEntry path="org.osmf.net.NetStreamDRMTrait"/>
     <classEntry path="org.osmf.net.NetStreamDisplayObjectTrait"/>
     <classEntry path="org.osmf.net.NetStreamLoadTrait"/>
     <classEntry path="org.osmf.net.NetStreamPlayTrait"/>
@@ -189,6 +185,8 @@
     <classEntry path="org.osmf.net.NetStreamUtils"/>
     <classEntry path="org.osmf.net.StreamType"/>
     <classEntry path="org.osmf.net.StreamingURLResource"/>
+    <classEntry path="org.osmf.net.drm.DRMServices"/>
+    <classEntry path="org.osmf.net.drm.NetStreamDRMTrait"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingItem"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader"/>
     <classEntry path="org.osmf.net.dynamicstreaming.DynamicStreamingResource"/>
@@ -249,6 +247,8 @@
     <classEntry path="org.osmf.plugin.StaticPluginLoader"/>
     <classEntry path="org.osmf.traits.AudioTrait"/>
     <classEntry path="org.osmf.traits.BufferTrait"/>
+    <classEntry path="org.osmf.traits.DRMAuthenticationMethod"/>
+    <classEntry path="org.osmf.traits.DRMState"/>
     <classEntry path="org.osmf.traits.DRMTrait"/>
     <classEntry path="org.osmf.traits.DisplayObjectTrait"/>
     <classEntry path="org.osmf.traits.DynamicStreamTrait"/>

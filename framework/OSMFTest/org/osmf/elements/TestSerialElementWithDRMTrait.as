@@ -26,10 +26,10 @@ package org.osmf.elements
 	import flexunit.framework.Assert;
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.drm.DRMAuthenticationMethod;
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
+	import org.osmf.traits.DRMAuthenticationMethod;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicDRMTrait;

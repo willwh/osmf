@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net
+package org.osmf.net.drm
 {
 	import flash.events.Event;
 	import flash.net.drm.AuthenticationMethod;
@@ -28,7 +28,7 @@ package org.osmf.net
 	import flexunit.framework.Assert;
 	
 	import org.osmf.traits.DRMTrait;
-	import org.osmf.drm.DRMState;
+	import org.osmf.traits.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.utils.Base64Decoder;
 	import org.osmf.utils.InterfaceTestCase;

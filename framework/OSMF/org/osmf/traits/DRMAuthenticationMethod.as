@@ -19,22 +19,21 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.drm
+package org.osmf.traits
 {
 	/**
-	 * This class is an enumeration of the 
-	 * possible values of the DRMTrait and DRMServices
-	 * authenticationMethod property. 
+	 * An enumeration of possible authentication methods. 
 	 */ 
-	public class DRMAuthenticationMethod
+	public final class DRMAuthenticationMethod
 	{
 		/**
-		 * Indicates that no authentication is required.
+		 * Indicates that  authentication can take place anonymously (i.e.
+		 * without credentials).
 		 */ 		
 		public static const ANONYMOUS:String = "anonymous";
 		
 		/**
-		 * Indicates that a valid user name and password are required.
+		 * Indicates that valid credentials are required.
 		 */ 
 		public static const USERNAME_AND_PASSWORD:String = "usernameAndPassword";
 	}

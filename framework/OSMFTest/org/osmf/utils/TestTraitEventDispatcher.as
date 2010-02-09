@@ -2,7 +2,6 @@ package org.osmf.utils
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
@@ -10,7 +9,6 @@ package org.osmf.utils
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DRMEvent;
@@ -20,6 +18,7 @@ package org.osmf.utils
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
@@ -253,7 +252,7 @@ package org.osmf.utils
 			var properties:Vector.<String> = new Vector.<String>();
 			events.push(event1, event2, event3);
 			
-			properties.push("autoSwitch", "detail", "switching");
+			properties.push("autoSwitch", "reason", "switching");
 			
 			testWithElement(events, properties, MediaTraitType.DYNAMIC_STREAM);										 
 		}

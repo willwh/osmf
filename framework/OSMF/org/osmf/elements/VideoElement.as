@@ -32,7 +32,6 @@ package org.osmf.elements
 	import flash.net.NetStream;
 	import flash.utils.ByteArray;
 	
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -64,6 +63,7 @@ package org.osmf.elements
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -80,7 +80,7 @@ package org.osmf.elements
 	import flash.net.drm.DRMContentData;	
 	import flash.system.SystemUpdaterType;
 	import flash.system.SystemUpdater;	
-	import org.osmf.net.NetStreamDRMTrait;
+	import org.osmf.net.drm.NetStreamDRMTrait;
 	}
 	
 	/**

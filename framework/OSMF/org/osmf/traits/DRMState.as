@@ -19,17 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.drm
+package org.osmf.traits
 {
 	/**
-	 * DRMState specifies the differet states a media's DRMTRait
-	 * can be in.
+	 * DRMState specifies the different DRM states a piece of media can be in.
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class DRMState
+	public final class DRMState
 	{		
 		/**
 		 * The DRMTrait is preparing to use the DRM
@@ -43,8 +43,7 @@ package org.osmf.drm
 		public static const INITIALIZING:String 			= "initializing"; 
 		
 		/**
-		 * The DRMTrait will dispatch this when a piece of media
-		 * has credential based authentication.  Call authenticate()
+		 * The DRMTrait needs credential-based authentication.  Call authenticate()
 		 * on the DRMTrait to provide authentication.
 		 *  
 		 *  @langversion 3.0
@@ -55,11 +54,11 @@ package org.osmf.drm
 		public static const AUTHENTICATION_NEEDED:String	= "authenticationNeeded"; 
 		
 		/**
-		 * The DRMTrait is authenting when the authentication 
-		 * information has been recieved and the DRM subsystem
+		 * The DRMTrait is authenticating when the authentication 
+		 * information has been received and the DRM subsystem
 		 * is in the process of validating the credentials.  If
 		 * the media is anonymously authenticated, the DRM subsystem
-		 * is validating the content is still valid to play.
+		 * is validating that the content is still valid to play.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -69,8 +68,8 @@ package org.osmf.drm
 		public static const AUTHENTICATING:String	 		= "authenticating";
 		
 		/**
-		 * The authenticated state is entered when right to
-		 * play back the media have been recieved.
+		 * The authenticated state is entered when the right to
+		 * play back the media has been received.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -80,7 +79,7 @@ package org.osmf.drm
 		public static const AUTHENTICATED:String			= "authenticated"; 
 		
 		/**
-		 *  The authentication attempt failed
+		 *  The authentication attempt failed.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1

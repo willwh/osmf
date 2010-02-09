@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.drm
+package org.osmf.net.drm
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -27,34 +27,30 @@ package org.osmf.drm
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.utils.ByteArray;
+	
+	import org.osmf.events.DRMEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.traits.DRMState;
+	import org.osmf.utils.OSMFStrings;
 
 	CONFIG::FLASH_10_1
 	{
-		import flash.events.DRMAuthenticationCompleteEvent;
-		import flash.events.DRMAuthenticationErrorEvent;
-		import flash.events.DRMErrorEvent;
-		import flash.events.DRMStatusEvent;
-		import flash.net.drm.AuthenticationMethod;
-		import flash.net.drm.DRMContentData;
-		import flash.net.drm.DRMManager;
-		import flash.net.drm.DRMVoucher;
-		import flash.net.drm.LoadVoucherSetting;
-		import flash.system.SystemUpdater;
-		import flash.system.SystemUpdaterType;
-		import org.osmf.events.DRMEvent;
-		import flash.net.drm.VoucherAccessInfo;
+	import flash.events.DRMAuthenticationCompleteEvent;
+	import flash.events.DRMAuthenticationErrorEvent;
+	import flash.events.DRMErrorEvent;
+	import flash.events.DRMStatusEvent;
+	import flash.net.drm.AuthenticationMethod;
+	import flash.net.drm.DRMContentData;
+	import flash.net.drm.DRMManager;
+	import flash.net.drm.DRMVoucher;
+	import flash.net.drm.LoadVoucherSetting;
+	import flash.net.drm.VoucherAccessInfo;
+	import flash.system.SystemUpdater;
+	import flash.system.SystemUpdaterType;
 	}
 		
-	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.utils.OSMFStrings;
-	import org.osmf.events.DRMEvent;
-
-	
-	
 	/**
-	 * @private
-	 * TODO: Remove private tag when DRM content / 10.1 content is public.
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
 	 * to playback the media.
 	 *
@@ -63,13 +59,10 @@ package org.osmf.drm
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]	
 
 	/**
-	 * @private
-	 * TODO: Remove private tag when DRM content / 10.1 content is public.
-	 *
-	 * The DRMServices class is a utility class to adapt the Flash Player's DRM to the
-	 * OSMF-style DRMTrait trait API.  DRMServices handles triggering updates to
-	 * the DRM subsystem, as well as triggering the appropriate events when authentication
-	 * is needed, complete, or failed.
+	 * The DRMServices class is a utility class to adapt the Flash Player's DRM
+	 * to the OSMF-style DRM API.  DRMServices handles triggering updates to
+	 * the DRM subsystem, as well as triggering the appropriate events when
+	 * authentication is needed, complete, or failed.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1

@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.traits
 {
-
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	
@@ -75,7 +73,7 @@ package org.osmf.traits
 		 * and "usernameAndPassword".  The default is "".  This method should be overriden by
 		 * subclasses.  The DRMAuthentication enumeration contains these values.
 		 * 
-		 * @see org.osmf.drm.DRMAuthenticationMethod 
+		 * @see DRMAuthenticationMethod 
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
@@ -123,7 +121,7 @@ package org.osmf.traits
 		
 		/**
 		 * The current state of the DRM for this media.  The states are explained
-		 * in the DRMState enumeration in the org.osmf.drm package.
+		 * in the DRMState enumeration.
 		 * @see DRMState
 		 *  
 		 *  @langversion 3.0

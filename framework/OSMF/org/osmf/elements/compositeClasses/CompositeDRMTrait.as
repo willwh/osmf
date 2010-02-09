@@ -21,10 +21,10 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.drm.DRMState;
 	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
