@@ -28,6 +28,8 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
+	[ExcludeClass]
+	
 	/**
 	 * Dispatched when the resolver's resolvedTrait property changed.
 	 *  
@@ -39,6 +41,8 @@ package org.osmf.media
 	[Event(name="change", type="flash.events.Event")]
 	
 	/**
+	 * @private
+	 * 
 	 * Abstract base class for objects that keep a list of traits of similar type, capable
 	 * of pointing out a so called "active" trait, that currently represents the group.
 	 *  
@@ -47,7 +51,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class MediaTraitResolver extends EventDispatcher
+	internal class MediaTraitResolver extends EventDispatcher
 	{
 		/**
 		 * Constructor

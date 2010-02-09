@@ -28,7 +28,11 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines a trait resolver that tracks two traits: a default trait
 	 * the is set at consturction time, plus one additional trait that
 	 * can be set via the addTrait method.

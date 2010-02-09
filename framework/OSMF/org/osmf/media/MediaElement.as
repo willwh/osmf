@@ -332,6 +332,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Adds a trait resolver object for a given trait type.
 		 * 
 		 * Only one resolver can be set per trait type.
@@ -384,6 +386,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Removes a trait resolver object for a given trait type.
 		 * 
 		 * @param type The MediaTraitType for the resolver to remove.
@@ -421,6 +425,8 @@ package org.osmf.media
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Defines the trait resolver that's set for the specified trait type.
 		 * 
 		 * @param type The MediaTraitType for the resolver object which should be returned.
@@ -440,6 +446,8 @@ package org.osmf.media
 		//
 		
 		/**
+		 * @private
+		 * 
 		 * Sets up the trait resolvers for the media elements. Occurs during
 		 * construction. Subclasses should override this method and call
 		 * addTraitResolver for each trait they wish to add a resolver for.
