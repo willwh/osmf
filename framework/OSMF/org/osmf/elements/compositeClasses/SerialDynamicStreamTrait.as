@@ -24,7 +24,6 @@ package org.osmf.elements.compositeClasses
 	import flash.events.Event;
 	
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -96,7 +95,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeEnd(index:int, reason:String=null):void
 		{
 			if (switching)
 			{
@@ -104,7 +103,7 @@ package org.osmf.elements.compositeClasses
 				traitOfCurrentChild.switchTo(index);
 			}
 
-			super.switchingChangeEnd(index, detail);
+			super.switchingChangeEnd(index, reason);
 		}
 		
 		/**
@@ -169,7 +168,7 @@ package org.osmf.elements.compositeClasses
 		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
 			// Propagate to composite trait.
-			setSwitching(event.switching, traitOfCurrentChild.currentIndex, event.detail);
+			setSwitching(event.switching, traitOfCurrentChild.currentIndex, event.reason);
 		}
 		
 		private function get traitOfCurrentChild():DynamicStreamTrait

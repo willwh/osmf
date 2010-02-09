@@ -23,7 +23,6 @@ package org.osmf.utils
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.elements.ListenerProxyElement;
 		
 	public class DynamicListenerProxyElement extends ListenerProxyElement
@@ -117,9 +116,9 @@ package org.osmf.utils
 			changeEventQueue.push({"oldWidth":oldWidth, "oldHeight":oldHeight, "newWidth":newWidth, "newHeight":newHeight});
 		}
 		
-		override protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
+		override protected function processSwitchingChange(switching:Boolean, reason:String):void
 		{
-			changeEventQueue.push({"switching":switching, "detail":detail});
+			changeEventQueue.push({"switching":switching, "reason":reason});
 		}
 
 		override protected function processNumDynamicStreamsChange():void

@@ -63,7 +63,7 @@ package org.osmf.net.dynamicstreaming
 			this.dsResource = dsResource;
 									
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus, 1);
 		}
 		
 		override public function dispose():void
@@ -88,7 +88,7 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeStart(newSwitching:Boolean, index:int, reason:String=null):void
 		{
 			if (newSwitching && !inSetSwitching)
 			{
@@ -102,9 +102,9 @@ package org.osmf.net.dynamicstreaming
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeEnd(index:int, reason:String=null):void
 		{
-			super.switchingChangeEnd(index, detail);
+			super.switchingChangeEnd(index, reason);
 			
 			if (switching && !inSetSwitching)
 			{
@@ -155,7 +155,7 @@ package org.osmf.net.dynamicstreaming
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					// When a switch finishes, make sure our current index and
 					// switching state reflect the changes to the NetStream.
-					setSwitching(false, switchManager.currentIndex);
+					setSwitching(false, switchManager.currentIndex, switchManager.lastSwitchReason);
 					break;
 			}
 		}

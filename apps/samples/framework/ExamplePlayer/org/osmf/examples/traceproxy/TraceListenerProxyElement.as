@@ -26,7 +26,6 @@ package org.osmf.examples.traceproxy
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.elements.*;
 	import org.osmf.traits.*;
 	
@@ -102,9 +101,9 @@ package org.osmf.examples.traceproxy
 			trace("Dimension Change: " + oldWidth + "x" + oldHeight + "->" + newWidth + "x" + newHeight);
 		}
 		
-		override protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
+		override protected function processSwitchingChange(switching:Boolean, reason:String):void
 		{
-			trace("Switching Change: " + switching + " (" + detail + ")");
+			trace("Switching Change: " + switching + " (" + reason + ")");
 		}
 		
 		override protected function processNumDynamicStreamsChange():void

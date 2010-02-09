@@ -25,7 +25,6 @@ package
 	import flash.display.DisplayObject;
 	
 	import org.osmf.media.MediaElement;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.elements.ListenerProxyElement;
 	import org.osmf.elements.VideoElement;
 
@@ -111,9 +110,9 @@ package
 			debugger.send("seekingChange", seeking, time);
 		}
 		
-		override protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
+		override protected function processSwitchingChange(switching:Boolean, reason:String):void
 		{
-			debugger.send("switchingChange", detail);
+			debugger.send("switchingChange", reason);
 		}
 		
 		override protected function processVolumeChange(newVolume:Number):void

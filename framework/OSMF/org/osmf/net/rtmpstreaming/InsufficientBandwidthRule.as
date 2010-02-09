@@ -24,8 +24,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Switching rule for Bandwidth detection. This rule switches down when
@@ -43,14 +43,14 @@ package org.osmf.net.rtmpstreaming
 	{
 		/**
 		 * When comparing stream bitrates to available bandwidth, the stream bitrate
-		 * is mulitplied by this number:
+		 * is multiplied by this number:
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		private const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
+		private static const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
 		
 		/**
 		 * Constructor
@@ -101,8 +101,9 @@ package org.osmf.net.rtmpstreaming
 				
 				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 				{
-					moreDetail = "Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBandwidth) + " < " + _safetyMultiple + " * rendition bitrate";
-					updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT, moreDetail);
+					debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBandwidth) + " < " + _safetyMultiple + " * rendition bitrate");
+
+					setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT));
 	        	}
         	} 
         	

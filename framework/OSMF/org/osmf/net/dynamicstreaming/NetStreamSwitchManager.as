@@ -169,15 +169,11 @@ package org.osmf.net.dynamicstreaming
 				else
 				{
 					debug("switchTo() - manually switching to index: " + index);
+					reason = null;
 					
-					var moreDetail:String = "manually switching to index: " + index;
-					detail = new SwitchingDetail
-								( index < currentIndex ? SwitchingDetailCodes.SWITCHING_DOWN_OTHER : SwitchingDetailCodes.SWITCHING_UP_OTHER
-								, moreDetail
-								);
 					if (actualIndex == -1)
 					{
-						prepareForSwitching()
+						prepareForSwitching();
 					}
 
 					executeSwitch(index);
@@ -187,6 +183,14 @@ package org.osmf.net.dynamicstreaming
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE));
 			}
+		}
+		
+		/**
+		 * @private
+		 **/
+		internal function get lastSwitchReason():String
+		{
+			return reason;
 		}
 		
 		// Protected
@@ -344,7 +348,7 @@ package org.osmf.net.dynamicstreaming
 				if (n != -1 && n < newIndex) 
 				{
 					newIndex = n;
-					detail = switchingRules[i].detail;
+					reason = switchingRules[i].reason;
 				} 
 			}
 			
@@ -356,7 +360,7 @@ package org.osmf.net.dynamicstreaming
 				&&	newIndex <= maxAllowedIndex
 			   ) 
 			{
-				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps, detail: " + (detail != null ? detail.description + " " + detail.moreInfo : "none"));
+				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps, reason: " + reason);
 
 				// If this stream has failed, we don't want to try it again until 
 				// failedItemWaitPeriod has elapsed
@@ -422,8 +426,8 @@ package org.osmf.net.dynamicstreaming
 					
 					debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
 					pendingTransitionsArray.shift();
+					reason = null;
 
-					detail = null;
 					break;
 			}
 		}
@@ -541,7 +545,7 @@ package org.osmf.net.dynamicstreaming
 		private var maxBufferLength:Number;
 		private var isLive:Boolean;
 		private var connection:NetConnection;
-		private var detail:SwitchingDetail;
+		private var reason:String;
 		private var _maxAllowedIndex:int;
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource

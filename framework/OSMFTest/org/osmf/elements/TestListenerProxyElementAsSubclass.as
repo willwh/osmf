@@ -25,16 +25,15 @@ package org.osmf.elements
 	import flash.display.Sprite;
 	
 	import org.osmf.events.*;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
-	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.traits.*;
 	import org.osmf.utils.DynamicBufferTrait;
+	import org.osmf.utils.DynamicDisplayObjectTrait;
+	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicListenerProxyElement;
 	import org.osmf.utils.DynamicLoadTrait;
 	import org.osmf.utils.DynamicMediaElement;
-	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicTimeTrait;
-	import org.osmf.utils.DynamicDisplayObjectTrait;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.SimpleLoader;
 	
 	public class TestListenerProxyElementAsSubclass extends TestListenerProxyElement
@@ -333,9 +332,9 @@ package org.osmf.elements
 			dsTrait.switchTo(3);
 			assertTrue(events.length == 4);
 			assertTrue(events[2]["switching"] == true);
-			assertTrue((events[2]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
+			assertTrue(events[2]["reason"] == OSMFStrings.getString(OSMFStrings.SWITCHING_MANUAL));
 			assertTrue(events[3]["switching"] == false);
-			assertTrue((events[3]["detail"] as SwitchingDetail).detailCode == SwitchingDetailCodes.SWITCHING_MANUAL);
+			assertTrue(events[3]["reason"] == OSMFStrings.getString(OSMFStrings.SWITCHING_MANUAL));
 			
 			dsTrait.autoSwitch = true;
 			assertTrue(events.length == 5);

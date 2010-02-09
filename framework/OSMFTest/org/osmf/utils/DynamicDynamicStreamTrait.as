@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.DynamicStreamTrait;
 	
 	public class DynamicDynamicStreamTrait extends DynamicStreamTrait
@@ -48,13 +47,13 @@ package org.osmf.utils
 			return _bitrates[index];
 		}
 		
-		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeEnd(index:int, reason:String=null):void
 		{
-			super.switchingChangeEnd(index, detail);
+			super.switchingChangeEnd(index, reason);
 			
 			if (switching)
 			{
-				setSwitching(false, index, detail);
+				setSwitching(false, index, reason);
 			}
 		}
 		

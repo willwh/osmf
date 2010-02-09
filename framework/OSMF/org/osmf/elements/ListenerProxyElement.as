@@ -33,7 +33,6 @@ package org.osmf.elements
 	import org.osmf.events.TimeEvent;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.DynamicStreamTrait;
@@ -310,7 +309,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function processSwitchingChange(switching:Boolean, detail:SwitchingDetail):void
+		protected function processSwitchingChange(switching:Boolean, reason:String):void
 		{
 		}
 		
@@ -417,7 +416,7 @@ package org.osmf.elements
 
 		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
-			processSwitchingChange(event.switching, event.detail);
+			processSwitchingChange(event.switching, event.reason);
 		}
 		
 		private function onNumDynamicStreamsChange(event:DynamicStreamEvent):void

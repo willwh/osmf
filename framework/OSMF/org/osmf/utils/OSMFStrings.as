@@ -157,14 +157,12 @@ package org.osmf.utils
 		public static const HTTP_SECURITY_LOAD_ERROR:String				= "httpSecurityLoadError";
 		public static const BEACON_FAILURE_ERROR:String					= "beaconFailureError";
 		
-		// SwitchingDetailCodes
+		// Switching Reasons
 		
 		public static const SWITCHING_UP_BANDWIDTH_SUFFICIENT:String	= "switchingUpBandwidthSufficient";
 		public static const SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT:String= "switchingDownBandwidthInsufficient";
 		public static const SWITCHING_DOWN_BUFFER_INSUFFICIENT:String	= "switchingDownBufferInsufficient";
 		public static const SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE:String= "switchingDownFrameDropUnacceptable";
-		public static const SWITCHING_DOWN_OTHER:String					= "switchingDownOther";
-		public static const SWITCHING_UP_OTHER:String					= "switchingUpOther";
 		public static const SWITCHING_MANUAL:String						= "switchingManual";
 				
 		// CompositeDisplayObjectTrait
@@ -232,8 +230,6 @@ package org.osmf.utils
 			resourceDict[SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT]		= "Average bandwith is insufficient for the current stream's bitrate";
 			resourceDict[SWITCHING_DOWN_BUFFER_INSUFFICIENT]		= "Buffer length is insufficient";
 			resourceDict[SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE]		= "Average dropped Frames per Second is unacceptable for the current stream";
-			resourceDict[SWITCHING_DOWN_OTHER]						= "Switching down";
-			resourceDict[SWITCHING_UP_OTHER]						= "Switching up";
 			resourceDict[SWITCHING_MANUAL]							= "Switching Manual";
 
 			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";

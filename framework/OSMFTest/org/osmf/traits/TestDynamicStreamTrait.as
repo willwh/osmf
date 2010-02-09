@@ -180,8 +180,7 @@ package org.osmf.traits
 			{
 				assertTrue(dynamicStreamTrait.switching);
 				
-				assertTrue(event.detail.detailCode > 0);
-				assertTrue(event.detail.description.length > 0);
+				assertTrue(event.reason != null && event.reason.length > 0);
 				
 				if (processesSwitchCompletion == false)
 				{

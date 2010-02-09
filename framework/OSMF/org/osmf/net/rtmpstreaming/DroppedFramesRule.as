@@ -26,8 +26,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Switching rule for frame drop detection. Monitors frame drops using the data 
@@ -111,8 +111,8 @@ package org.osmf.net.rtmpstreaming
         	if (newIndex != -1 && newIndex < rtmpMetrics.currentIndex) 
         	{
         		lockIndex(newIndex);
- 				       	 	
-        	 	updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE, moreDetail);
+ 				
+ 				setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE));
 			}
 			
 			// If the rule says no change, but we're locked at the current index,

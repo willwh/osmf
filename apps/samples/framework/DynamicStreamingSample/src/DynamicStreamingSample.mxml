@@ -275,9 +275,9 @@
 					showCurrentIndex = true;
 				}
 				
-				if (event.detail != null)
+				if (event.reason != null)
 				{
-					msg += ", " + event.detail.description + ". " + (event.detail.moreInfo != null ? event.detail.moreInfo : "");
+					msg += ", " + event.reason;
 				}
 				
 				debug(msg);

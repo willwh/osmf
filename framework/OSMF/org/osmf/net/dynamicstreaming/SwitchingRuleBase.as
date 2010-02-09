@@ -67,17 +67,26 @@ package org.osmf.net.dynamicstreaming
 		}
 		
 		/**
-		 * Returns the SwitchingDetail object which contains the detail for why the rule is suggesting 
-		 * the new index.  
+		 * Returns the reason why the rule is suggesting the new index.  
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get detail():SwitchingDetail
+		public function get reason():String
 		{
-			return _detail;
+			return _reason;
+		}
+
+		/**
+		 * Sets the reason why the rule is suggesting the new index.  Should
+		 * be called by subclasses prior to returning a non-default value from
+		 * getNewIndex.
+		 **/
+		protected function setReason(value:String):void
+		{
+			_reason = value;
 		}
 		
 		/**
@@ -89,27 +98,7 @@ package org.osmf.net.dynamicstreaming
 			return _metrics;
 		}
 		
-		/**
-		 * Utility method for updating detail.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function updateDetail(detailCode:int, moreDetail:String):void
-		{
-			if (_detail == null)
-			{
-				_detail = new SwitchingDetail(detailCode, moreDetail);
-			}
-			else
-			{
-				_detail.update(detailCode, moreDetail);
-			}
-		}
-		
 		private var _metrics:MetricsProviderBase;
-		private var _detail:SwitchingDetail;
+		private var _reason:String;
 	}
 }

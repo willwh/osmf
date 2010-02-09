@@ -24,7 +24,6 @@ package org.osmf.elements.compositeClasses
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -108,7 +107,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */ 
-		override protected function switchingChangeStart(newSwitching:Boolean, index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeStart(newSwitching:Boolean, index:int, reason:String=null):void
 		{
 			if (newSwitching)
 			{
@@ -148,16 +147,16 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */ 
-		override protected function switchingChangeEnd(index:int, detail:SwitchingDetail=null):void
+		override protected function switchingChangeEnd(index:int, reason:String=null):void
 		{
-			super.switchingChangeEnd(index, detail);
+			super.switchingChangeEnd(index, reason);
 			
 			// If a switch didn't trigger the switch of any children, or if all
 			// children finished their switches immediately, then we can
 			// terminate the switch now.
 			if (switching == true && numChildrenSwitching == 0)
 			{
-				setSwitching(false, index, detail);
+				setSwitching(false, index, reason);
 			}
 		}
 		

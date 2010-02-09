@@ -72,7 +72,7 @@ package org.osmf.net.rtmpstreaming
 			metrics.currentIndex = 3;
 			result = bwRule.getNewIndex();
 			assertEquals(2, result);
-			assertNotNull(bwRule.detail);
+			assertNotNull(bwRule.reason);
 			
 			// Another test with very low bandwidth
 			metrics.averageMaxBandwidth = 500;

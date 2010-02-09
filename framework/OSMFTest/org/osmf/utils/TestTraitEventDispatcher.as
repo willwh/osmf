@@ -20,7 +20,6 @@ package org.osmf.utils
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
-	import org.osmf.net.dynamicstreaming.SwitchingDetail;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
@@ -246,9 +245,9 @@ package org.osmf.utils
 		
 		public function  testDynamicStreamEvents():void
 		{
-			var event1:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, new SwitchingDetail(1), false);
-			var event2:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, false, new SwitchingDetail(1), true );
-			var event3:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, true, new SwitchingDetail(1), true );
+			var event1:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, "", false);
+			var event2:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, false, "", true );
+			var event3:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, true, "", true );
 						
 			var events:Vector.<Event> = new Vector.<Event>();
 			var properties:Vector.<String> = new Vector.<String>();

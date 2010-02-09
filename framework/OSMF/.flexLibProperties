@@ -195,8 +195,6 @@
     <classEntry path="org.osmf.net.dynamicstreaming.MetricsProviderBase"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait"/>
     <classEntry path="org.osmf.net.dynamicstreaming.NetStreamSwitchManager"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.SwitchingDetail"/>
-    <classEntry path="org.osmf.net.dynamicstreaming.SwitchingDetailCodes"/>
     <classEntry path="org.osmf.net.dynamicstreaming.SwitchingRuleBase"/>
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPMetricsProvider"/>

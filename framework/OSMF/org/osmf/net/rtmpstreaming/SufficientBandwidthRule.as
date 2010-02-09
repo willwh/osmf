@@ -24,8 +24,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Switching rule that switches up when the user has sufficient bandwidth to do so.
@@ -81,8 +81,8 @@ package org.osmf.net.rtmpstreaming
 	        		
 	        		if (newIndex != -1)
 	        		{
-						moreDetail = "Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.targetBufferTime;
-						updateDetail(SwitchingDetailCodes.SWITCHING_UP_BANDWIDTH_SUFFICIENT, moreDetail);	        			
+	        			debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.targetBufferTime);
+	        			setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_UP_BANDWIDTH_SUFFICIENT));
 	        		}
 	        	}
 	        	else
@@ -116,8 +116,8 @@ package org.osmf.net.rtmpstreaming
 			}
 		}
 		
-		private const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
-		private const MIN_DROPPED_FPS:int = 2;
+		private static const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
+		private static const MIN_DROPPED_FPS:int = 2;
 		
 		CONFIG::LOGGING
 		{

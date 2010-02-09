@@ -27,8 +27,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingDetailCodes;
 	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * Switching rule for Buffer detection.
@@ -49,7 +49,7 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		private const PANIC_BUFFER_LEVEL:int = 2;
+		private static const PANIC_BUFFER_LEVEL:int = 2;
 		
 
 		/**
@@ -91,11 +91,11 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (!_panic)
 				{
-					_moreDetail = "Buffer  of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + _panicBufferLevel + " seconds";
+					debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + _panicBufferLevel + " seconds");
 				}
 				
 				newIndex = 0;
-				updateDetail(SwitchingDetailCodes.SWITCHING_DOWN_BUFFER_INSUFFICIENT, _moreDetail);
+				setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_BUFFER_INSUFFICIENT));
 			}
 			
 			if (newIndex != -1)
