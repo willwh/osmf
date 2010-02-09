@@ -126,7 +126,7 @@ package
 			
 			// Make sure that the element shows over the video: element's with a
 			// higher order number set are placed higher in the display list:
-			layout.order = 1;
+			layout.index = 1;
 			
 			return controlBar;
 		}

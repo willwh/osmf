@@ -143,7 +143,7 @@ package
 			var overlayLayout:LayoutRendererProperties = new LayoutRendererProperties(overlay);
 			overlayLayout.percentWidth = 100;
 			overlayLayout.percentHeight = 100;
-			overlayLayout.order = 1;
+			overlayLayout.index = 1;
 			
 			containerRenderer.addTarget(overlay);
 		}
@@ -157,7 +157,7 @@ package
 			controlBar.autoHide = configuration.autoHideControlBar;
 			
 			var controlBarLayout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
-			controlBarLayout.order = 2;
+			controlBarLayout.index = 2;
 			controlBarLayout.bottom = 25;
 			controlBarLayout.verticalAlignment = VerticalAlign.TOP;
 			controlBarLayout.horizontalAlignment = HorizontalAlign.CENTER;
