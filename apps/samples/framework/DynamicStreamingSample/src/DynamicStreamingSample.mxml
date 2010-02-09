@@ -510,7 +510,7 @@
 		<mx:HBox id="inputContainer" height="60">
 			<mx:Spacer width="10" />
 			<mx:ComboBox id="cbMediaURL" editable="true" dataProvider="{this.smilFiles}" />
-			<mx:Button label="Load" click="{loadMedia(cbMediaURL.selectedItem as String)}"/>
+			<mx:Button label="Load" click="{loadMedia(cbMediaURL.text)}"/>
 			<mx:Button label="Unload" click="{unload()}"/>
 			<mx:Label text="{_mediaFileLoadState}"/>
 		</mx:HBox>	
