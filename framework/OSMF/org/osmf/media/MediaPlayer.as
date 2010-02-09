@@ -943,7 +943,23 @@ package org.osmf.media
 	    */
 	    public function play():void
 	    {
-	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).play();	    	
+	    	//Bug FM-347 - the media player should autorewind once the playhead is at the end, and play() is called.
+	    	if (canPlay && 
+	    		canSeek &&
+	    		duration == currentTime)
+	    	{
+    			addEventListener(SeekEvent.SEEK_END, onSeek);
+    		  	seek(0);		
+    		  	function onSeek(event:SeekEvent):void
+    		  	{	
+    		  		removeEventListener(SeekEvent.SEEK_END, onSeek);    		  		
+    		  		play();	      		  		
+    		  	}    		
+	    	}
+	    	else //Regular case.
+	    	{
+	    	   	PlayTrait(getTraitOrThrow(MediaTraitType.PLAY)).play();	  
+	    	}	    	  	
 	    }
 		
 		/**
