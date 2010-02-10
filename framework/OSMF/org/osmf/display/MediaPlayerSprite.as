@@ -55,6 +55,7 @@ package org.osmf.display
 			super();	
 			mediaPlayer = player != null ? player : new MediaPlayer(); 		
 			mediaContainer = new MediaContainer();
+			mediaContainer.clipChildren = true;
 			addChild(mediaContainer);			
 		}	
 		
