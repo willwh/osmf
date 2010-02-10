@@ -246,20 +246,6 @@ package org.osmf.layout
 			}
 		}
 		
-		/**
-		 * @private
-		 */
-		public function validateNow():void
-		{
-			if (renderers.containerRenderer)
-			{
-				renderers.containerRenderer.validateNow();
-			}
-		}
-	 	
-	 	/**
-		 * @private
-		 */
 	 	public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 	 	{
 	 		if (renderers.containerRenderer == null)
@@ -272,6 +258,20 @@ package org.osmf.layout
 	 			renderers.containerRenderer.layout(availableWidth, availableHeight);
 	 		}
 	 	}
+	 	
+	 	// Public Interface
+	 	//
+	 	
+	 	/**
+		 * @private
+		 */
+		public function validateNow():void
+		{
+			if (renderers.containerRenderer)
+			{
+				renderers.containerRenderer.validateNow();
+			}
+		}
 	 	
 	 	// Overrides
 		//
@@ -300,33 +300,13 @@ package org.osmf.layout
 			return _measuredHeight;
 		}
 		
-		// Internals
-		//
-		
-		/**
-		 * @private
-		 * 
-		 * This method is provided internally for the sole purpose of being
-		 * able to set the parent of the targetting layout renderer in case
-		 * it is the display object of a media element's display object
-		 * trait.
-		 * 
-		 * @return
-		 */		
-		internal function getContainerRenderer():LayoutRendererBase
-		{
-			return renderers.containerRenderer;
-		}
-		
 		// Private
 		//
 		
 		private var _metadata:Metadata;
-		
-		private var renderers:LayoutTargetRenderers;
-		
 		private var _measuredWidth:Number = NaN;
 		private var _measuredHeight:Number = NaN;
+		private var renderers:LayoutTargetRenderers;
 		
 		/* static */
 		
