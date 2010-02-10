@@ -72,11 +72,8 @@ package org.osmf.test.mast.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:MASTLoadedContext = event.loadedContext as MASTLoadedContext;
-				assertTrue(loadedContext != null);
-				
 				// Just check that we got a valid MAST DOM back
-				var document:MASTDocument = loadedContext.document;
+				var document:MASTDocument = MASTLoadTrait(event.loadTrait).document;
 				assertTrue(document != null);
 				assertTrue(document.triggers.length == 1);
 				
@@ -121,7 +118,7 @@ package org.osmf.test.mast.loader
 						);
 				}
 			}
-			return new LoadTrait(loader, resource);
+			return new MASTLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

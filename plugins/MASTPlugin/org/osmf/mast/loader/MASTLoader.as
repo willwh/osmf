@@ -32,8 +32,8 @@ package org.osmf.mast.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.HTTPLoadedContext;
 	import org.osmf.utils.HTTPLoader;
+	import org.osmf.utils.HTTPLoadTrait;
 	CONFIG::LOGGING
 	{
 	import org.osmf.logging.*;		
@@ -81,13 +81,12 @@ package org.osmf.mast.loader
 						
 			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 			
-			// Create a temporary ILoadable for this purpose, so that our main
-			// ILoadable doesn't reflect any of the state changes from the
+			// Create a temporary LoadTrait for this purpose, so that our main
+			// LoadTrait doesn't reflect any of the state changes from the
 			// loading of the URL, and so that we can catch any errors.
-			var httpLoadTrait:LoadTrait = new LoadTrait(httpLoader, loadTrait.resource);
+			var httpLoadTrait:HTTPLoadTrait = new HTTPLoadTrait(httpLoader, loadTrait.resource);
 						
 			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
-		
 			
 			httpLoader.load(httpLoadTrait);
 			
@@ -99,14 +98,12 @@ package org.osmf.mast.loader
 					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 	
-					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
-					
 					var parser:MASTParser = new MASTParser();
 					var mastDocument:MASTDocument;
 					
 					try
 					{
-						mastDocument = parser.parse(loadedContext.urlLoader.data.toString());
+						mastDocument = parser.parse(httpLoadTrait.urlLoader.data.toString());
 					}
 					catch(e:Error)
 					{
@@ -114,7 +111,8 @@ package org.osmf.mast.loader
 						throw e;
 					}
 					
-					updateLoadTrait(loadTrait, LoadState.READY, new MASTLoadedContext(mastDocument));
+					MASTLoadTrait(loadTrait).document = mastDocument;
+					updateLoadTrait(loadTrait, LoadState.READY);
 					
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)
@@ -151,7 +149,7 @@ package org.osmf.mast.loader
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
 			// Nothing to do.
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}		
 

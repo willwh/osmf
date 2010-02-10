@@ -339,7 +339,7 @@ package org.osmf.elements.compositeClasses
 						 	 : LoadState.UNINITIALIZED;
 			}
 			
-			setLoadStateAndContext(newLoadState, null);
+			setLoadState(newLoadState);
 		}
 		
 		private function updateBytesTotal():void

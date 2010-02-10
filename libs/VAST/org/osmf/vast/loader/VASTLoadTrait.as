@@ -17,45 +17,27 @@
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
-* 
-*  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
 package org.osmf.vast.loader
 {
-	import org.osmf.traits.ILoadedContext;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.vast.model.VASTDocument;
 	
+	[ExcludeClass]
+	
 	/**
-	 * The VASTLoadedContext class contains information about the output of a load operation
-	 * performed by a VASTLoader, specifically, the VASTDocument object which is the root
-	 * level object in the object model representation of a VAST document. 
-	 * 
-	 * @see http://www.iab.net/vast
- 	 * @see VASTLoader
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	public class VASTLoadedContext implements ILoadedContext
+	 * LoadTrait for VAST documents.
+	 **/
+	public class VASTLoadTrait extends LoadTrait
 	{
-		/**
-		 * Constructor.
-		 * 
-		 * @param vastDocument The root level object of the VAST document object model.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function VASTLoadedContext(vastDocument:VASTDocument)
+		public function VASTLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			_vastDocument = vastDocument;
+			super(loader, resource);
 		}
-		
+
 		/**
 		 * The root level object in the VAST document object model.
 		 *  
@@ -67,6 +49,11 @@ package org.osmf.vast.loader
 		public function get vastDocument():VASTDocument
 		{
 			return _vastDocument;
+		}
+		
+		public function set vastDocument(value:VASTDocument):void
+		{
+			_vastDocument = value;
 		}
 		
 		private var _vastDocument:VASTDocument;

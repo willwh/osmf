@@ -35,8 +35,6 @@ package org.osmf.traits
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.SimpleResource;
 	
-	// TODO:
-	// - Modify merged class to make load/unload methods final, and use process/postProcess metaphor.
 	public class TestLoaderBase extends TestCase
 	{
 		override public function setUp():void
@@ -110,8 +108,6 @@ package org.osmf.traits
 					assertTrue(event.oldState == LoadState.LOADING);
 					assertTrue(event.newState == LoadState.READY);
 					
-					assertTrue(event.loadedContext != null);
-					
 					if (doTwice)
 					{
 						reload = true;
@@ -182,8 +178,6 @@ package org.osmf.traits
 					assertTrue(event.oldState == LoadState.LOADING);
 					assertTrue(event.newState == LoadState.LOAD_ERROR);
 					
-					assertTrue(event.loadedContext == null);
-					
 					if (eventCount == 1 && doTwice)
 					{
 						reload = true;
@@ -204,8 +198,6 @@ package org.osmf.traits
 					
 					assertTrue(event.oldState == LoadState.LOADING);
 					assertTrue(event.newState == LoadState.LOAD_ERROR);
-					
-					assertTrue(event.loadedContext == null);
 					
 					markCompleteOnMediaError(2);
 					break;
@@ -298,8 +290,6 @@ package org.osmf.traits
 					assertTrue(event.oldState == LoadState.LOADING);
 					assertTrue(event.newState == LoadState.READY);
 					
-					assertTrue(event.loadedContext != null);
-					
 					// Now unload.
 					doUnload = true;
 					
@@ -307,14 +297,10 @@ package org.osmf.traits
 				case 2:
 					assertTrue(event.oldState == LoadState.READY);
 					assertTrue(event.newState == LoadState.UNLOADING);
-					
-					assertTrue(event.loadedContext != null);
 					break;
 				case 3:
 					assertTrue(event.oldState == LoadState.UNLOADING);
 					assertTrue(event.newState == LoadState.UNINITIALIZED);
-					
-					assertTrue(event.loadedContext == null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;

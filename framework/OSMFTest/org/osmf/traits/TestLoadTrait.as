@@ -126,13 +126,6 @@ package org.osmf.traits
 			
 			assertTrue(loadTrait.loadState == LoadState.UNINITIALIZED);
 		}
-
-		public function testGetLoadedContext():void
-		{
-			var loadTrait:LoadTrait = createLoadTrait();
-			
-			assertTrue(loadTrait.loadedContext == null);
-		}
 		
 		public function testGetBytesLoaded():void
 		{
@@ -213,8 +206,6 @@ package org.osmf.traits
 				case 1:
 					assertTrue(event.loadState == LoadState.READY);
 					
-					assertTrue(loadTrait.loadedContext != null);
-					
 					if (doTwice)
 					{
 						reload = true;
@@ -239,15 +230,11 @@ package org.osmf.traits
 					assertTrue(doTwice);
 					
 					assertTrue(event.loadState == LoadState.UNLOADING);
-					
-					assertTrue(loadTrait.loadedContext != null);
 					break;
 				case 3:
 					assertTrue(doTwice);
 					
 					assertTrue(event.loadState == LoadState.UNINITIALIZED);
-					
-					assertTrue(loadTrait.loadedContext == null);
 					break;
 				case 4:
 					assertTrue(doTwice);
@@ -258,8 +245,6 @@ package org.osmf.traits
 					assertTrue(doTwice);
 					
 					assertTrue(event.loadState == LoadState.READY);
-					
-					assertTrue(loadTrait.loadedContext != null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;
@@ -322,8 +307,6 @@ package org.osmf.traits
 				case 1:
 					assertTrue(event.loadState == LoadState.LOAD_ERROR);
 					
-					assertTrue(currentLoadTrait.loadedContext == null);
-					
 					if (eventCount == 1 && doTwice)
 					{
 						reload = true;
@@ -342,8 +325,6 @@ package org.osmf.traits
 					assertTrue(doTwice);
 					
 					assertTrue(event.loadState == LoadState.LOAD_ERROR);
-					
-					assertTrue(currentLoadTrait.loadedContext == null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;
@@ -410,21 +391,15 @@ package org.osmf.traits
 				case 1:
 					assertTrue(event.loadState == LoadState.READY);
 					
-					assertTrue(currentLoadTrait.loadedContext != null);
-					
 					// Now unload.
 					doUnload = true;
 					
 					break;
 				case 2:
 					assertTrue(event.loadState == LoadState.UNLOADING);
-					
-					assertTrue(currentLoadTrait.loadedContext != null);
 					break;
 				case 3:
 					assertTrue(event.loadState == LoadState.UNINITIALIZED);
-					
-					assertTrue(currentLoadTrait.loadedContext == null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;

@@ -3,7 +3,7 @@
   <includeClasses>
     <classEntry path="org.osmf.vast.loader.VASTDocumentProcessedEvent"/>
     <classEntry path="org.osmf.vast.loader.VASTDocumentProcessor"/>
-    <classEntry path="org.osmf.vast.loader.VASTLoadedContext"/>
+    <classEntry path="org.osmf.vast.loader.VASTLoadTrait"/>
     <classEntry path="org.osmf.vast.loader.VASTLoader"/>
     <classEntry path="org.osmf.vast.media.DefaultVASTMediaFileResolver"/>
     <classEntry path="org.osmf.vast.media.IVASTMediaFileResolver"/>

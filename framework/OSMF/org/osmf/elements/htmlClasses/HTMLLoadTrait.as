@@ -46,7 +46,7 @@ package org.osmf.elements.htmlClasses
 		
 		public function set loadState(value:String):void
 		{
-			setLoadStateAndContext(value, null);
+			setLoadState(value);
 		}
 				
 		override public function load():void

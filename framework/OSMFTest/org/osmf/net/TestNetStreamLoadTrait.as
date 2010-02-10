@@ -128,7 +128,7 @@ package org.osmf.net
 					assertTrue(loadTrait.bytesLoaded == 0 || isNaN(loadTrait.bytesLoaded));
 					
 					// No bytes will download until the stream is first played.
-					var netStream:NetStream = NetLoadedContext(loadTrait.loadedContext).stream;
+					var netStream:NetStream = NetStreamLoadTrait(loadTrait).netStream;
 					netStream.play(NetStreamUtils.getStreamNameFromURL(SUCCESSFUL_RESOURCE.url));
 					
 					var timer:Timer = new Timer(500);

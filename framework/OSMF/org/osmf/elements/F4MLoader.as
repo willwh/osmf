@@ -34,7 +34,6 @@ package org.osmf.elements
 	import org.osmf.elements.f4mClasses.DRMAdditionalHeader;
 	import org.osmf.elements.f4mClasses.Manifest;
 	import org.osmf.elements.f4mClasses.ManifestParser;
-	import org.osmf.elements.f4mClasses.F4MLoadedContext;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
@@ -137,9 +136,14 @@ package org.osmf.elements
 						
 			function onError(event:ErrorEvent):void
 			{				
+				manifestLoader.removeEventListener(Event.COMPLETE, onComplete);
+				manifestLoader.removeEventListener(IOErrorEvent.IO_ERROR, onError);
+				manifestLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);		
+
 				updateLoadTrait(loadTrait, LoadState.LOAD_ERROR); 				
 				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(0, event.text)));
-			}			
+			}
+			
 			function onComplete(event:Event):void
 			{	
 				manifestLoader.removeEventListener(Event.COMPLETE, onComplete);
@@ -211,7 +215,7 @@ package org.osmf.elements
 				}									
 				
 				FactoryLoadTrait(loadTrait).mediaElement = loadedElem;																		
-				updateLoadTrait(loadTrait, LoadState.READY, new F4MLoadedContext());		
+				updateLoadTrait(loadTrait, LoadState.READY);		
 			}				
 		}
 		
@@ -220,7 +224,7 @@ package org.osmf.elements
 		 */
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);					
 		}
 		
 		private function loadAdditionalHeader(item:DRMAdditionalHeader, completionCallback:Function, onError:Function):void

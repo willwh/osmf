@@ -22,7 +22,7 @@
 package org.osmf.captioning.media
 {
 	import org.osmf.captioning.CaptioningPluginInfo;
-	import org.osmf.captioning.loader.CaptioningLoadedContext;
+	import org.osmf.captioning.loader.CaptioningLoadTrait;
 	import org.osmf.captioning.loader.CaptioningLoader;
 	import org.osmf.captioning.model.CaptioningDocument;
 	import org.osmf.elements.ProxyElement;
@@ -124,7 +124,7 @@ package org.osmf.captioning.media
 					var timedTextURL:String = facet.getValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
 					if (timedTextURL != null)
 					{
-						loadTrait = new LoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
+						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
 						
 						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99);
 						addTrait(MediaTraitType.LOAD, loadTrait);
@@ -143,8 +143,7 @@ package org.osmf.captioning.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:CaptioningLoadedContext = loadTrait.loadedContext as CaptioningLoadedContext
-				var document:CaptioningDocument = loadedContext.document;
+				var document:CaptioningDocument = loadTrait.document;
 				var mediaElement:MediaElement = super.proxiedElement;
 				
 				// Create a new TemporalFacet, add it to the metadata for the mediaelement
@@ -187,7 +186,7 @@ package org.osmf.captioning.media
 			}
 		}
 		
-		private var loadTrait:LoadTrait;
+		private var loadTrait:CaptioningLoadTrait;
 		private var _continueLoadOnFailure:Boolean;
 				
 		private static const ERROR_MISSING_CAPTION_METADATA:String = "Media Element is missing Captioning metadata";

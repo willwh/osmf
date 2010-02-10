@@ -45,7 +45,6 @@ package org.osmf.smil.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.HTTPLoadedContext;
 
 	/**
 	 * The SMILLoader class will load a SMIL (Synchronized 
@@ -156,8 +155,8 @@ package org.osmf.smil.loader
 		 */
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{			
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, new HTTPLoadedContext(null));
-			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED, null);					
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);
+			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);					
 		}
 		
 		/**
@@ -192,8 +191,8 @@ package org.osmf.smil.loader
 				{
 					elementLoadTrait.mediaElement = loadedElement;
 				}
-				//TODO Remove the HTTPLOadedContext (which is a place holder) Once we remove the LoadedContext.
-				updateLoadTrait(loadTrait, LoadState.READY, new HTTPLoadedContext(null));
+
+				updateLoadTrait(loadTrait, LoadState.READY);
 			}		
 		}
 				

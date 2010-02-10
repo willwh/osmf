@@ -134,9 +134,10 @@ package org.osmf.plugin
 							mediaFactory.addItem(item);							
 						}
 						
-						var loadedContext:PluginLoadedContext = new PluginLoadedContext(pluginInfo, loader); 
-						
-						updateLoadTrait(loadTrait, LoadState.READY, loadedContext);
+						var pluginLoadTrait:PluginLoadTrait = loadTrait as PluginLoadTrait;
+						pluginLoadTrait.pluginInfo = pluginInfo;
+						pluginLoadTrait.loader = loader;
+						updateLoadTrait(pluginLoadTrait, LoadState.READY);
 					}
 					catch (error:RangeError)
 					{

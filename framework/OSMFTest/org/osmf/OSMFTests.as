@@ -208,7 +208,6 @@ package org.osmf
 			// NetStream
 			//
 			
-			addTestSuite(TestNetLoadedContext);
 			addTestSuite(TestNetNegotiator);
 			addTestSuite(TestNetConnectionFactory);
 			addTestSuite(TestNetLoader);
@@ -259,7 +258,6 @@ package org.osmf
 			addTestSuite(TestDynamicPluginLoader);
 			addTestSuite(TestPluginManager);
 			addTestSuite(TestPluginLoadingState);
-			addTestSuite(TestPluginLoadedContext);
 						
 			// Layout
 			//			

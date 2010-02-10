@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import org.osmf.elements.loaderClasses.LoaderLoadedContext;
 	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.media.LoadableElementBase;
@@ -100,10 +99,9 @@ package org.osmf.elements
 		 */ 		
 		override protected function processReadyState():void
 		{
-			var context:LoaderLoadedContext
-				= (getTrait(MediaTraitType.LOAD) as LoadTrait).loadedContext as LoaderLoadedContext;
+			var loaderLoadTrait:LoaderLoadTrait = getTrait(MediaTraitType.LOAD) as LoaderLoadTrait;
 			
-			addTrait(MediaTraitType.DISPLAY_OBJECT, LoaderUtils.createDisplayObjectTrait(context.loader, this));
+			addTrait(MediaTraitType.DISPLAY_OBJECT, LoaderUtils.createDisplayObjectTrait(loaderLoadTrait.loader, this));
 		}
 		
 		/**

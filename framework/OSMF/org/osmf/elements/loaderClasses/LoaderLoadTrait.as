@@ -21,13 +21,13 @@
 *****************************************************/
 package org.osmf.elements.loaderClasses
 {
+	import flash.display.Loader;
 	import flash.events.ProgressEvent;
 	
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	
 	[ExcludeClass]
 	
@@ -41,21 +41,26 @@ package org.osmf.elements.loaderClasses
 			super(loader, resource);
 		}
 		
-		override protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
+		public function get loader():Loader
+		{
+			return _loader;
+		}
+		
+		public function set loader(value:Loader):void
+		{
+			_loader = value;
+		}
+		
+		override protected function loadStateChangeStart(newState:String):void
 		{
 			if (newState == LoadState.READY)
 			{
-				var context:LoaderLoadedContext = newContext as LoaderLoadedContext;
-
 				// Update to current values.
-				setBytesTotal(context.loader.contentLoaderInfo.bytesTotal);
-				setBytesLoaded(context.loader.contentLoaderInfo.bytesLoaded);
+				setBytesTotal(loader.contentLoaderInfo.bytesTotal);
+				setBytesLoaded(loader.contentLoaderInfo.bytesLoaded);
 				
 				// But listen for any changes.
-				context
-					.loader
-					.contentLoaderInfo
-					.addEventListener(ProgressEvent.PROGRESS, onContextLoadProgress, false, 0, true);
+				loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onContentLoadProgress, false, 0, true);
 			}
 			else if (newState == LoadState.UNINITIALIZED)
 			{
@@ -66,10 +71,12 @@ package org.osmf.elements.loaderClasses
 		// Internals
 		//
 		
-		private function onContextLoadProgress(event:ProgressEvent):void
+		private function onContentLoadProgress(event:ProgressEvent):void
 		{
 			setBytesTotal(event.bytesTotal);
 			setBytesLoaded(event.bytesLoaded);
 		}
+		
+		private var _loader:Loader;
 	}
 }

@@ -33,7 +33,6 @@ package org.osmf.utils
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -153,7 +152,9 @@ package org.osmf.utils
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadTrait(loadTrait, LoadState.READY, new HTTPLoadedContext(loader));
+				var httpLoadTrait:HTTPLoadTrait = loadTrait as HTTPLoadTrait;
+				httpLoadTrait.urlLoader = loader;
+				updateLoadTrait(loadTrait, LoadState.READY);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -210,7 +211,7 @@ package org.osmf.utils
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
 			// Nothing to do.
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		

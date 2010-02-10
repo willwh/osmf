@@ -23,7 +23,6 @@ package org.osmf.utils
 {
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -43,7 +42,7 @@ package org.osmf.utils
 			
 			if (SimpleResource(loadTrait.resource).type == SimpleResource.SUCCESSFUL)
 			{
-				doUpdateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+				doUpdateLoadTrait(loadTrait, LoadState.READY);
 			}
 			else
 			{
@@ -54,13 +53,13 @@ package org.osmf.utils
 
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			doUpdateLoadTrait(loadTrait, LoadState.UNLOADING, new SimpleLoadedContext());
+			doUpdateLoadTrait(loadTrait, LoadState.UNLOADING);
 			doUpdateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 
-		public function doUpdateLoadTrait(loadTrait:LoadTrait, newState:String, loadedContext:ILoadedContext=null):void
+		public function doUpdateLoadTrait(loadTrait:LoadTrait, newState:String):void
 		{
-			super.updateLoadTrait(loadTrait, newState, loadedContext);
+			super.updateLoadTrait(loadTrait, newState);
 		}
 	}
 }

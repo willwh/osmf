@@ -183,31 +183,18 @@ package org.osmf.traits
 		 * Updates the given LoadTrait with the given info, dispatching the
 		 * appropriate events.
 		 * 
-		 * TODO: Make this final.
-		 * 
 		 * @param loadTrait The LoadTrait to update.
 		 * @param newState The new LoadState of the LoadTrait.
-		 * @param loadedContext The loaded context (if any) of the LoadTrait.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function updateLoadTrait(loadTrait:LoadTrait, newState:String, loadedContext:ILoadedContext=null):void
+		protected final function updateLoadTrait(loadTrait:LoadTrait, newState:String):void
 		{
 			if (newState != loadTrait.loadState)
 			{
-				
-				if (newState == LoadState.READY && loadedContext == null)
-				{
-					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NULL));
-				}
-				if (newState == LoadState.UNINITIALIZED && loadedContext != null)
-				{
-					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.LOADED_CONTEXT_NOT_NULL));
-				}
-				
 				var oldState:String = loadTrait.loadState;
 				
 				dispatchEvent
@@ -219,7 +206,6 @@ package org.osmf.traits
 						, loadTrait
 						, oldState
 						, newState
-						, loadedContext
 						)
 					);
 			}

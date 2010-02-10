@@ -25,7 +25,6 @@ package org.osmf.traits
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.DynamicLoader;
-	import org.osmf.utils.SimpleLoadedContext;
 	import org.osmf.utils.SimpleResource;
 	
 	public class TestLoaderBaseAsSubclass extends TestLoaderBase
@@ -50,37 +49,6 @@ package org.osmf.traits
 			return new SimpleResource(SimpleResource.UNHANDLED);
 		}
 		
-		public function testLoadWithIllegalStateChange():void
-		{
-			var dynLoader:DynamicLoader = loader as DynamicLoader;
-			
-			var loadTrait:LoadTrait = createLoadTrait(loader, successfulResource);
-			
-			// Illegal to set to READY without a loaded context.
-			try
-			{
-				dynLoader.doUpdateLoadTrait(loadTrait, LoadState.READY, null);
-				
-				fail();
-			}
-			catch (e:IllegalOperationError)
-			{
-			}
-			
-			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.LOADING);
-
-			// Illegal to set to UNINITIALIZED with a loaded context.
-			try
-			{
-				dynLoader.doUpdateLoadTrait(loadTrait, LoadState.UNINITIALIZED, new SimpleLoadedContext());
-				
-				fail();
-			}
-			catch (e:IllegalOperationError)
-			{
-			}
-		}
-
 		public function testLoadWithInvalidLoadTrait():void
 		{
 			var dynLoader:DynamicLoader = loader as DynamicLoader;
@@ -111,7 +79,7 @@ package org.osmf.traits
 			{
 			}
 
-			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.READY);
 			assertTrue(loadTrait.loadState == LoadState.READY);
 
 			// Can't load while READY.
@@ -166,7 +134,7 @@ package org.osmf.traits
 			{
 			}
 
-			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.UNLOADING, new SimpleLoadedContext());
+			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.UNLOADING);
 			assertTrue(loadTrait.loadState == LoadState.UNLOADING);
 
 			// Can't unload while UNLOADING.
@@ -181,7 +149,7 @@ package org.osmf.traits
 			}
 			
 			loadTrait = createLoadTrait(loader, unhandledResource);
-			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+			dynLoader.doUpdateLoadTrait(loadTrait, LoadState.READY);
 			assertTrue(loadTrait.loadState == LoadState.READY);
 
 			// Can't unload an invalid resource.

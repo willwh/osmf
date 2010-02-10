@@ -19,19 +19,39 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.traits
+package org.osmf.utils
 {
+	import flash.net.URLLoader;
+	
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+
+	[ExcludeClass]
+	
 	/**
-	 * An ILoadedContext is a marker interface for the context loaded into an
-	 * LoadTrait.  Different LoadTraits will have different types of loaded
-	 * contexts.  
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	public interface ILoadedContext
+	 * @private
+	 **/
+	public class HTTPLoadTrait extends LoadTrait
 	{
+		public function HTTPLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
+		{
+			super(loader, resource);
+		}
+
+		/**
+		 * The URLLoader for the HTTP request.
+		 */
+		public function get urlLoader():URLLoader
+		{
+			return _urlLoader;
+		}
+		
+		public function set urlLoader(value:URLLoader):void
+		{
+			_urlLoader = value;
+		}
+		
+		private var _urlLoader:URLLoader;
 	}
 }

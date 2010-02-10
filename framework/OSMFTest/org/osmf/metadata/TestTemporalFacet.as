@@ -33,6 +33,7 @@ package org.osmf.metadata
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -231,7 +232,7 @@ package org.osmf.metadata
 		private function testOnTraitRemove():void
 		{
 			var mediaElement:DynamicMediaElement = createDynamicMediaElement();
-																			 			
+																		 			
 			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), mediaElement);
 
 			for each(var value:TemporalIdentifier in _testValues)
@@ -301,9 +302,11 @@ package org.osmf.metadata
 				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
 			}
 
-			return new DynamicMediaElement([ MediaTraitType.LOAD, MediaTraitType.PLAY,
+			var elem:DynamicMediaElement = new DynamicMediaElement([ MediaTraitType.PLAY,
 											 MediaTraitType.SEEK, MediaTraitType.TIME ],
 											 loader, resourceForMediaElement);
+			elem.doAddTrait(MediaTraitType.LOAD, new NetStreamLoadTrait(loader, resourceForMediaElement));
+			return elem;
 		}
 		
 		private function mustReceiveEvent(event:Event):void
@@ -318,7 +321,7 @@ package org.osmf.metadata
 			return new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		}
 		
-		private static const NAMESPACE:String = "www.osmf.org.test";
+		private static const NAMESPACE:String = "http://www.osmf.org/test";
 		private static const TOLERANCE:Number = .25;
 		private static const TIMEOUT:Number = 5000;
 		

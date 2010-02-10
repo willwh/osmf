@@ -89,12 +89,12 @@ package org.osmf.utils
 					{
 						timer.removeEventListener(TimerEvent.TIMER, onTimer);
 						
-						updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+						updateLoadTrait(loadTrait, LoadState.READY);
 					}
 				}
 				else
 				{
-					updateLoadTrait(loadTrait, LoadState.READY, new SimpleLoadedContext());
+					updateLoadTrait(loadTrait, LoadState.READY);
 				}
 			}
 		}
@@ -107,7 +107,7 @@ package org.osmf.utils
 			if (loadTrait.loadState == LoadState.LOADING ||
 				loadTrait.loadState == LoadState.READY)
 			{
-				updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
+				updateLoadTrait(loadTrait, LoadState.UNLOADING);
 				updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 			}
 		}

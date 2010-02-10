@@ -27,10 +27,9 @@ package org.osmf.elements.audioClasses
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.traits.ILoadedContext;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	
 	[ExcludeClass]
 	
@@ -44,18 +43,29 @@ package org.osmf.elements.audioClasses
 			super(loader, resource);
 		}
 		
-		override protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
+		public function get sound():Sound
+		{
+			return _sound;
+		}
+		
+		public function set sound(value:Sound):void
+		{
+			_sound = value;
+		}
+		
+		override protected function loadStateChangeStart(newState:String):void
 		{
 			if (newState == LoadState.READY)
 			{
-				var context:SoundLoadedContext = newContext as SoundLoadedContext;
-				sound = context.sound;
-				sound.addEventListener(Event.OPEN, bytesTotalCheckingHandler, false, 0, true);
-				sound.addEventListener(ProgressEvent.PROGRESS, bytesTotalCheckingHandler, false, 0, true);
+				if (_sound != null)
+				{
+					_sound.addEventListener(Event.OPEN, bytesTotalCheckingHandler, false, 0, true);
+					_sound.addEventListener(ProgressEvent.PROGRESS, bytesTotalCheckingHandler, false, 0, true);
+				}
 			}
 			else if (newState == LoadState.UNINITIALIZED)
 			{
-				sound = null;
+				_sound = null;
 			}
 		}
 		
@@ -64,7 +74,7 @@ package org.osmf.elements.audioClasses
 		 */
 		override public function get bytesLoaded():Number
 		{
-			return sound ? sound.bytesLoaded : NaN;
+			return _sound ? _sound.bytesLoaded : NaN;
 		}
 		
 		/**
@@ -72,7 +82,7 @@ package org.osmf.elements.audioClasses
 		 */
 		override public function get bytesTotal():Number
 		{
-			return sound ? sound.bytesTotal : NaN;
+			return _sound ? _sound.bytesTotal : NaN;
 		}
 		
 		// Internals
@@ -80,7 +90,7 @@ package org.osmf.elements.audioClasses
 
 		private function bytesTotalCheckingHandler(_:Event):void
 		{
-			if (lastBytesTotal != sound.bytesTotal)
+			if (lastBytesTotal != _sound.bytesTotal)
 			{
 				var event:LoadEvent
 					= new LoadEvent
@@ -88,15 +98,15 @@ package org.osmf.elements.audioClasses
 						, false
 						, false
 						, null
-						, sound.bytesTotal
+						, _sound.bytesTotal
 						);
 						
-				lastBytesTotal = sound.bytesTotal;
+				lastBytesTotal = _sound.bytesTotal;
 				dispatchEvent(event);
 			}
 		}	
 		
 		private var lastBytesTotal:Number;
-		private var sound:Sound;
+		private var _sound:Sound;
 	}
 }

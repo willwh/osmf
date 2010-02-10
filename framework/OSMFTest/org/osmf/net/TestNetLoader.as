@@ -273,16 +273,16 @@ package org.osmf.net
 				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			}
 			
-			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait1.load();
-			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait2.load();
-			var loadTrait3:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait3:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait3.load();
-			var loadTrait4:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait4:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait4.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait4.load();
 			var responses:int = 0;
@@ -311,10 +311,10 @@ package org.osmf.net
 				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			}
 
-			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait1.load();
-			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait2.load();
 
@@ -328,10 +328,8 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
-						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
-						assertTrue(context2.shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
 					}
 				}
 			}
@@ -347,10 +345,10 @@ package org.osmf.net
 				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			}
 
-			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait1.load();
-			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait2.load();
 
@@ -364,10 +362,8 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
-						assertFalse(context1.shareable);
-						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
-						assertFalse(context2.shareable);
+						assertFalse(NetStreamLoadTrait(loadTrait1).shareable);
+						assertFalse(NetStreamLoadTrait(loadTrait2).shareable);
 					}
 				}
 			}
@@ -383,10 +379,10 @@ package org.osmf.net
 				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			}
 
-			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait1.load();
-			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait2.load();
 
@@ -400,10 +396,8 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
-						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
-						assertTrue(context2.shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
 
 						loadTrait1.unload();
 					}
@@ -412,7 +406,7 @@ package org.osmf.net
 				{
 					if (responses == 2)
 					{
-						assertTrue((loadTrait2.loadedContext as NetLoadedContext).connection.connected);
+						assertTrue(NetStreamLoadTrait(loadTrait2).connection.connected);
 					}
 				}
 			}
@@ -431,10 +425,10 @@ package org.osmf.net
 			}
 
 			
-			var loadTrait1:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait1.load();
-			var loadTrait2:LoadTrait = new LoadTrait(netLoader, successfulResource);
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
 			loadTrait2.load();
 			
@@ -449,10 +443,8 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						var context1:NetLoadedContext = loadTrait1.loadedContext as NetLoadedContext;
-						assertTrue(context1.shareable);
-						var context2:NetLoadedContext = loadTrait2.loadedContext as NetLoadedContext;
-						assertTrue(context2.shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
+						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
 					}
 				}
 			}
@@ -484,7 +476,7 @@ package org.osmf.net
 					mockLoader.netConnectionExpectation = NetConnectionExpectation.REJECTED_CONNECTION;
 				}
 			}
-			return new LoadTrait(loader, resource);
+			return new NetStreamLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

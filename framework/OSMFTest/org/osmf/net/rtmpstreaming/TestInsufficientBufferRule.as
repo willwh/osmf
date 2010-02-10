@@ -68,7 +68,7 @@ package org.osmf.net.rtmpstreaming
 		{
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
-			_loadTrait =  new LoadTrait(_loader, dsResource);
+			_loadTrait =  new NetStreamLoadTrait(_loader, dsResource);
 			_loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
 			
 			_eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, ASYNC_DELAY));
@@ -82,11 +82,8 @@ package org.osmf.net.rtmpstreaming
 			{
 				case LoadState.READY:
 					_loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
-					var loadedContext:ILoadedContext = _loadTrait.loadedContext;
-					assertTrue(loadedContext != null);
-					assertTrue(loadedContext is NetLoadedContext);
 					
-					var stream:NetStream = (loadedContext as NetLoadedContext).stream;
+					var stream:NetStream = (_loadTrait as NetStreamLoadTrait).netStream;
 					assertNotNull(stream);
 					
 					var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(stream);

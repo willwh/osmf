@@ -57,9 +57,6 @@ package org.osmf.traits
 	 * can be presented.  It can also be used as the base class for a more specific
 	 * LoadTrait subclass.
 	 * 
-	 * <p>The load operation takes an MediaResourceBase as input and produces an
-	 * ILoadedContext as output.</p>
-	 * 
 	 * <p>If <code>hasTrait(MediaTraitType.LOAD)</code> returns <code>true</code>,
 	 * use the <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method
 	 * to get an object of this type.</p>
@@ -137,26 +134,7 @@ package org.osmf.traits
 		{
 			return _loadState;
 		}
-		
-		/**
-		 * The context resulting from this trait's successful <code>load()</code>
-		 * operation.
-		 * 
-         * <p>The context is <code>null</code> before this object's loadState is
-         * <code>LOADING</code> or <code>READY</code>, depending on the loader
-         * implementation at hand. The context is <code>null</code> after the
-         * LoadTrait has been unloaded.</p>
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
- 		public function get loadedContext():ILoadedContext
-		{
-			return _loadedContext;
-		}
-		
+				
 		/**
 		 * Loads this the media into this LoadTrait.
 		 * Updates the load state.
@@ -274,21 +252,20 @@ package org.osmf.traits
 		//
 		
 		/**
-		 * Sets the load state and (optionally) the loaded context for this LoadTrait.
+		 * Sets the load state for this LoadTrait.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected final function setLoadStateAndContext(newState:String, newContext:ILoadedContext):void
+		protected final function setLoadState(newState:String):void
 		{
 			if (_loadState != newState)
 			{
-				loadStateChangeStart(newState, newContext);
+				loadStateChangeStart(newState);
 				
 				_loadState = newState;
-				_loadedContext = newContext;
 				
 				loadStateChangeEnd();				
 			}
@@ -408,25 +385,24 @@ package org.osmf.traits
 		}
 
 		/**
-		 * Called immediately before the <code>loadState</code> and <code>loadedContext</code>
-		 * properties are changed.
+		 * Called immediately before the <code>loadState</code>
+		 * property is changed.
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
 		 *  
 		 * @param newState New <code>loadState</code> value.
-		 * @param newContext New <code>loadedContext</code> value.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function loadStateChangeStart(newState:String, newContext:ILoadedContext):void
+		protected function loadStateChangeStart(newState:String):void
 		{
 		}
 		
 		/**
-		 * Called just after the <code>loadState</code> and <code>loadedContext</code>
-		 * properties are changed.
+		 * Called just after the <code>loadState</code> property is
+		 * change.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -442,7 +418,7 @@ package org.osmf.traits
 		{
 			if (event.loadTrait == this)
 			{
-				setLoadStateAndContext(event.newState, event.loadedContext);
+				setLoadState(event.newState);
 			}
 		}
 
@@ -450,7 +426,6 @@ package org.osmf.traits
 		private var _resource:MediaResourceBase;
 		
 		private var _loadState:String;
-		private var _loadedContext:ILoadedContext;
 
 		private var _bytesLoaded:Number;
 		private var _bytesTotal:Number;

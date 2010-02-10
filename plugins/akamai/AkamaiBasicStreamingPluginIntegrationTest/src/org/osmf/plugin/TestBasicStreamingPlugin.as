@@ -164,10 +164,6 @@ package org.osmf.plugin
 			{
 				if (event.loadState == LoadState.READY)
 				{
-					var loadedContext:ILoadedContext = loadTrait.loadedContext;
-					assertTrue(loadedContext != null);
-					assertTrue(loadedContext is NetLoadedContext);
-	
 					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 					assertTrue(playTrait != null);

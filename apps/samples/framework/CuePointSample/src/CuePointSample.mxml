@@ -36,7 +36,6 @@
 			import org.osmf.metadata.TemporalFacet;
 			import org.osmf.metadata.MetadataNamespaces;
 			import org.osmf.traits.TimeTrait;
-			import org.osmf.net.NetLoadedContext;
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;

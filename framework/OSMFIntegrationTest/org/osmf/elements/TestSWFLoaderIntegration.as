@@ -102,14 +102,10 @@ package org.osmf.elements
 				case 1:
 					assertTrue(event.oldState == LoadState.UNINITIALIZED);
 					assertTrue(event.newState == LoadState.LOADING);
-					
-					assertNotNull(event.loadedContext);
 					break;
 				case 2:
 					assertTrue(event.oldState == LoadState.LOADING);
 					assertTrue(event.newState == LoadState.READY);
-					
-					assertTrue(event.loadedContext != null);
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 					break;

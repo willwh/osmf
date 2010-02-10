@@ -33,8 +33,8 @@ package org.osmf.mast.media
 	import org.osmf.logging.Log;
 	import org.osmf.mast.loader.MASTDocumentProcessedEvent;
 	import org.osmf.mast.loader.MASTDocumentProcessor;
-	import org.osmf.mast.loader.MASTLoadedContext;
 	import org.osmf.mast.loader.MASTLoader;
+	import org.osmf.mast.loader.MASTLoadTrait;
 	import org.osmf.mast.managers.MASTConditionManager;
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.traits.MASTPlayTrait;
@@ -122,7 +122,7 @@ package org.osmf.mast.media
 			
 			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
 			
-			loadTrait = new LoadTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
+			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
 			
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
@@ -181,12 +181,10 @@ package org.osmf.mast.media
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:MASTLoadedContext = loadTrait.loadedContext as MASTLoadedContext
-				
 				var processor:MASTDocumentProcessor = new MASTDocumentProcessor();
 				processor.addEventListener(MASTDocumentProcessedEvent.PROCESSED, onDocumentProcessed, false, 0, true);
 				var mediaElement:MediaElement = (proxiedElement as SerialElement).getChildAt(0);
-				var causesPendingPlayRequest:Boolean = processor.processDocument(loadedContext.document, mediaElement);
+				var causesPendingPlayRequest:Boolean = processor.processDocument(loadTrait.document, mediaElement);
 
 				// If there was no condition that causes a pending play request
 				// remove the custom IPlayable
@@ -283,7 +281,7 @@ package org.osmf.mast.media
 			return index;
 		}
 		
-		private var loadTrait:LoadTrait;
+		private var loadTrait:MASTLoadTrait;
 		
 		private static const ERROR_MISSING_MAST_METADATA:String = "Media Element is missing MAST metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";

@@ -29,7 +29,7 @@ package org.osmf.elements
 	import flash.media.Sound;
 	import flash.net.URLRequest;
 	
-	import org.osmf.elements.audioClasses.SoundLoadedContext;
+	import org.osmf.elements.audioClasses.SoundLoadTrait;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
@@ -133,12 +133,14 @@ package org.osmf.elements
 		 */ 
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
+			var soundLoadTrait:SoundLoadTrait = loadTrait as SoundLoadTrait;
+
+			updateLoadTrait(soundLoadTrait, LoadState.LOADING);
+
 			var sound:Sound = new Sound();
-			var context:SoundLoadedContext = new SoundLoadedContext(sound);
-			updateLoadTrait(loadTrait, LoadState.LOADING, context);
 			toggleSoundListeners(sound, true);
 
-			var urlRequest:URLRequest = new URLRequest((loadTrait.resource as URLResource).url.toString());
+			var urlRequest:URLRequest = new URLRequest((soundLoadTrait.resource as URLResource).url.toString());
 			
 			try
 			{
@@ -178,7 +180,8 @@ package org.osmf.elements
 				 
 				toggleSoundListeners(sound, false);
 
-				updateLoadTrait(loadTrait, LoadState.READY, context);
+				soundLoadTrait.sound = sound;
+				updateLoadTrait(soundLoadTrait, LoadState.READY);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -231,17 +234,18 @@ package org.osmf.elements
 		 */ 
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			var context:SoundLoadedContext = loadTrait.loadedContext as SoundLoadedContext;
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, context);
+			var soundLoadTrait:SoundLoadTrait = loadTrait as SoundLoadTrait;
+			
+			updateLoadTrait(soundLoadTrait, LoadState.UNLOADING);
 			try
 			{			
-				context.sound.close();
+				soundLoadTrait.sound.close();
 			}
 			catch (error:IOError)
 			{
 				// Swallow, either way the Sound is now unloaded.
 			}
-			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
+			updateLoadTrait(soundLoadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		// Internals

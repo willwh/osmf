@@ -21,8 +21,11 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
+	import flash.events.Event;
+	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
@@ -50,7 +53,7 @@ package org.osmf.examples.loaderproxy
 			// which simply replaces the URL.
 			//
 			
-			loadTrait = new LoadTrait(new VideoProxyLoader(), resource);
+			loadTrait = new VideoProxyLoadTrait(new VideoProxyLoader(), resource);
 			
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
@@ -64,21 +67,27 @@ package org.osmf.examples.loaderproxy
 		{
 			if (event.loadState == LoadState.READY)
 			{
-				var loadedContext:VideoProxyLoadedContext = loadTrait.loadedContext as VideoProxyLoadedContext
-				
 				// Replace the resource with the new URL.
-				proxiedElement.resource = new URLResource(loadedContext.url);
+				proxiedElement.resource = new URLResource(loadTrait.url);
 				
 				// Our work is done, remove the custom LoadTrait.  This will
 				// expose the base LoadTrait, which we can then use to do
 				// the actual load.
+				preventAddEventDispatch = true;
 				removeTrait(MediaTraitType.LOAD);
+				preventAddEventDispatch = false;
 				(getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 				
 				loadTrait = null;
 			}
 		}
 		
-		private var loadTrait:LoadTrait;
+		override protected function blocksTrait(traitType:String):Boolean
+		{
+			return preventAddEventDispatch && traitType == MediaTraitType.LOAD;
+		}
+		
+		private var loadTrait:VideoProxyLoadTrait;
+		private var preventAddEventDispatch:Boolean;
 	}
 }

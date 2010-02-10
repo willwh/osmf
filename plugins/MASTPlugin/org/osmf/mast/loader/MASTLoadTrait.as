@@ -17,13 +17,35 @@
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
-*  
-*****************************************************/
-package org.osmf.utils
+* 
+******************************************************/
+package org.osmf.mast.loader
 {
-	import org.osmf.traits.ILoadedContext;
-
-	public class SimpleLoadedContext implements ILoadedContext
+	import org.osmf.mast.model.MASTDocument;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+	
+	public class MASTLoadTrait extends LoadTrait
 	{
+		public function MASTLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
+		{
+			super(loader, resource);
+		}
+
+		/**
+		 * The MASTDocument object.
+		 */
+		public function get document():MASTDocument
+		{
+			return _document;
+		}
+		
+		public function set document(value:MASTDocument):void
+		{
+			_document = value;
+		}
+		
+		private var _document:MASTDocument;
 	}
 }

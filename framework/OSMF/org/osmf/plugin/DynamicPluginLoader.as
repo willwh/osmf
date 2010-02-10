@@ -24,13 +24,13 @@ package org.osmf.plugin
 	import flash.display.DisplayObject;
 	
 	import org.osmf.elements.SWFLoader;
-	import org.osmf.elements.loaderClasses.LoaderLoadedContext;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	
 	internal class DynamicPluginLoader extends PluginLoader
 	{
@@ -71,10 +71,10 @@ package org.osmf.plugin
 			// Create a temporary LoadTrait for this purpose, so that our main
 			// LoadTrait doesn't reflect any of the state changes from the
 			// loading of the SWF, and so that we can catch any errors.
-			var swfLoadTrait:LoadTrait = new LoadTrait(swfLoader, loadTrait.resource);
-			swfLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
+			var loaderLoadTrait:LoaderLoadTrait = new LoaderLoadTrait(swfLoader, loadTrait.resource);
+			loaderLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 			
-			swfLoader.load(swfLoadTrait);
+			swfLoader.load(loaderLoadTrait);
 			
 			function onSWFLoaderStateChange(event:LoaderEvent):void
 			{
@@ -82,13 +82,13 @@ package org.osmf.plugin
 				{
 					// This is a terminal state, so remove all listeners.
 					swfLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onSWFLoaderStateChange);
-					swfLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
+					loaderLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 	
-					var loadedContext:LoaderLoadedContext = event.loadedContext as LoaderLoadedContext;
-					var root:DisplayObject = loadedContext.loader.content;
+					var loaderLoadTrait:LoaderLoadTrait = event.loadTrait as LoaderLoadTrait;
+					var root:DisplayObject = loaderLoadTrait.loader.content;
 					var pluginInfo:PluginInfo = root[PLUGININFO_PROPERTY_NAME] as PluginInfo;
 					
-					loadFromPluginInfo(loadTrait, pluginInfo, loadedContext.loader);
+					loadFromPluginInfo(loadTrait, pluginInfo, loaderLoadTrait.loader);
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)
 				{
@@ -106,7 +106,7 @@ package org.osmf.plugin
 			{
 				// Only remove this listener, as there will be a corresponding
 				// event for the load failure.
-				swfLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
+				loaderLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 				
 				loadTrait.dispatchEvent(event.clone());
 			}
@@ -120,20 +120,19 @@ package org.osmf.plugin
 		 */
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);
 			
 			// First unload the PluginInfo.
 			//
 			
-			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
-			var pluginInfo:PluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
+			var pluginLoadTrait:PluginLoadTrait = loadTrait as PluginLoadTrait;
 			
-			unloadFromPluginInfo(pluginInfo);
+			unloadFromPluginInfo(pluginLoadTrait.pluginInfo);
 
 			// Then unload the SWF.
 			//
 			
-			pluginLoadedContext.loader.unloadAndStop();
+			pluginLoadTrait.loader.unloadAndStop();
 
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}

@@ -89,7 +89,6 @@ package org.osmf.test.smil.loader
 			if (event.newState == LoadState.READY)
 			{
 				var trait:FactoryLoadTrait = event.loadTrait as FactoryLoadTrait;
-				//var loadedContext = event.loadedContext as MediaElementLoadedContext;
 				assertTrue(trait != null);
 				
 				// Just check that we got a valid MediaElement

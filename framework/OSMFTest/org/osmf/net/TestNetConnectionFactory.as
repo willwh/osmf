@@ -62,7 +62,7 @@ package org.osmf.net
 		{
 			var factory:NetConnectionFactory = createNetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadTrait:LoadTrait = new LoadTrait(null, SUCCESSFUL_RESOURCE);
+			var loadTrait:LoadTrait = new NetStreamLoadTrait(null, SUCCESSFUL_RESOURCE);
 			factory.create(loadTrait,sharing);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
@@ -77,7 +77,7 @@ package org.osmf.net
 		{
 			var factory:NetConnectionFactory = createNetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadTrait:LoadTrait = new LoadTrait(null, SUCCESSFUL_RESOURCE);
+			var loadTrait:LoadTrait = new NetStreamLoadTrait(null, SUCCESSFUL_RESOURCE);
 			factory.create(loadTrait,sharing);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{

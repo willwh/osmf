@@ -47,7 +47,6 @@ package org.osmf.elements
 	import org.osmf.metadata.TemporalFacetEvent;
 	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
-	import org.osmf.net.NetLoadedContext;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamAudioTrait;
 	import org.osmf.net.NetStreamBufferTrait;
@@ -274,9 +273,8 @@ package org.osmf.elements
 		 */
 		override protected function processReadyState():void
 		{
-			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
-			var context:NetLoadedContext = NetLoadedContext(loadTrait.loadedContext);
-			stream = context.stream;
+			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			stream = loadTrait.netStream;
 				
 			// Set the video's dimensions so that it doesn't appear at the wrong size.
 			// We'll set the correct dimensions once the metadata is loaded.  (FM-206)
@@ -387,8 +385,7 @@ package org.osmf.elements
 		
 		private function finishLoad():void
 		{
-			var loadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
-			var context:NetLoadedContext = NetLoadedContext(loadTrait.loadedContext);
+			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 
 	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
 	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
@@ -404,9 +401,9 @@ package org.osmf.elements
 	  		}
 	    	
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-			if (dsResource != null && context.switchManager != null)
+			if (dsResource != null && loadTrait.switchManager != null)
 			{
-				addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream, context.switchManager, dsResource));
+				addTrait(MediaTraitType.DYNAMIC_STREAM, new NetStreamDynamicStreamTrait(stream, loadTrait.switchManager, dsResource));
 			}
 		}
 		

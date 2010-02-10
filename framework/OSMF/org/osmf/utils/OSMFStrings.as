@@ -101,8 +101,6 @@ package org.osmf.utils
 		public static const MUST_SET_LOADER_FOR_LOAD:String 			= "mustSetLoaderForLoad"
 		public static const MUST_SET_LOADER_FOR_UNLOAD:String 			= "mustSetLoaderForUnload";
 		public static const LOADER_CANT_HANDLE_RESOURCE:String 			= "loaderCantHandleResource";
-		public static const LOADED_CONTEXT_NULL:String 					= "loadedContextNull";
-		public static const LOADED_CONTEXT_NOT_NULL:String 				= "loadedContextNonNull";
 		
 		// LoaderBase
 		
@@ -211,8 +209,6 @@ package org.osmf.utils
 			resourceDict[MUST_SET_LOADER_FOR_LOAD] 					= "Must set LoaderBase on a LoadTrait before calling LoaderBase.load";
 			resourceDict[MUST_SET_LOADER_FOR_UNLOAD] 				= "Must set LoaderBase on a LoadTrait before calling LoaderBase.unload";
 			resourceDict[LOADER_CANT_HANDLE_RESOURCE]				= "LoaderBase unable to handle the given MediaResourceBase";
-			resourceDict[LOADED_CONTEXT_NULL] 						= "LoadedContext is null for LoadState.READY";
-			resourceDict[LOADED_CONTEXT_NOT_NULL] 					= "LoadedContext is non-null for LoadState.UNINITIALIZED";
 
 			resourceDict[ALREADY_READY] 							= "Loader - attempt to load an already loaded object";
 			resourceDict[ALREADY_LOADING] 							= "Loader - attempt to load a loading object";

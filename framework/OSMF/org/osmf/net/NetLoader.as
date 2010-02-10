@@ -59,7 +59,6 @@ package org.osmf.net
 	 * facilitates connection sharing, this is an easy way of enabling global sharing, by creating a single NetConnectionFactory
 	 * instance within the player and then handing it to all NetLoader instances. 
 	 * 
-	 * @see NetLoadedContext
 	 * @see NetConnectionFactory
 	 * @see flash.net.NetConnection
 	 * @see flash.net.NetStream
@@ -161,29 +160,28 @@ package org.osmf.net
 		}
 		
 		/**
-	     * Unloads the media after validating the unload operation against the LoadTrait. Examines the NetLoadedContext
-	     * object associated with the LoadTrait. If the object is null, throws a OSMFStrings.NULL_PARAM error.
-	     * Closes the NetStream defines within the NetLoadedContext object. 
+	     * Unloads the media after validating the unload operation against the LoadTrait.
+	     * Closes the NetStream defined within the NetStreamLoadTrait object. 
 	     * If the shareable property of the object is true, calls the NetConnectionFactory to close() the NetConnection
-	     * otherwise closes the NetConnection directly. Dispatches the loaderStateChange event with every state change.
+	     * otherwise closes the NetConnection directly. Dispatches the loadStateChange event with every state change.
 	     * 
 	     * @throws IllegalOperationError if the parameter is <code>null</code>.
 	     * @param loadTrait LoadTrait to be unloaded.
-	     * @see org.osmf.loaders.LoaderBase#event:loaderStateChange	
+	     * @see org.osmf.loaders.LoaderBase#event:loadStateChange	
 		**/
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			var netLoadedContext:NetLoadedContext = loadTrait.loadedContext as NetLoadedContext;			
+			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;			
 			
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext); 			
-			netLoadedContext.stream.close();
-			if (netLoadedContext.shareable)
+			updateLoadTrait(loadTrait, LoadState.UNLOADING); 			
+			netLoadTrait.netStream.close();
+			if (netLoadTrait.shareable)
 			{
-				netLoadedContext.netConnectionFactory.closeNetConnectionByResource(netLoadedContext.resource);
+				netLoadTrait.netConnectionFactory.closeNetConnectionByResource(netLoadTrait.resource as URLResource);
 			}		
 			else
 			{
-				netLoadedContext.connection.close();
+				netLoadTrait.connection.close();
 			}	
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
@@ -295,10 +293,17 @@ package org.osmf.net
 		**/
 		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, shareable:Boolean = false, factory:NetConnectionFactory = null):void
 		{
-			var stream:NetStream = createNetStream(connection, loadTrait);				
-			stream.client = new NetClient();
-			var switchManager:NetStreamSwitchManager = createNetStreamSwitchManager(connection, stream, loadTrait);
-			updateLoadTrait(loadTrait, LoadState.READY, new NetLoadedContext(connection, stream, switchManager, shareable, factory, loadTrait.resource as URLResource));		
+			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
+			
+			netLoadTrait.connection = connection;
+			var netStream:NetStream = createNetStream(connection, netLoadTrait);				
+			netStream.client = new NetClient();
+			netLoadTrait.netStream = netStream;
+			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait);
+			netLoadTrait.shareable = shareable;
+			netLoadTrait.netConnectionFactory = factory;
+			
+			updateLoadTrait(loadTrait, LoadState.READY);
 		}	
 		
 		/**

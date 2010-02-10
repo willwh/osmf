@@ -62,7 +62,7 @@ package org.osmf.plugin
 
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			return new LoadTrait(loader, resource);
+			return new PluginLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

@@ -83,11 +83,11 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
-				assertTrue(loadedContext != null);
+				var vastLoadTrait:VASTLoadTrait = event.loadTrait as VASTLoadTrait;
+				assertTrue(vastLoadTrait != null);
 				
 				// Just check that we got an inline ad back.
-				var document:VASTDocument = loadedContext.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;
@@ -110,14 +110,14 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
-				assertTrue(loadedContext != null);
+				var vastLoadTrait:VASTLoadTrait = event.loadTrait as VASTLoadTrait;
+				assertTrue(vastLoadTrait != null);
 				
 				// Verify that the result has an inline ad (which would have
 				// come from the nested VAST document) and that the wrapper ad
 				// (which would have come from the original VAST document) has
 				// been merged and removed.
-				var document:VASTDocument = loadedContext.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;
@@ -290,14 +290,14 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:VASTLoadedContext = event.loadedContext as VASTLoadedContext;
-				assertTrue(loadedContext != null);
+				var vastLoadTrait:VASTLoadTrait = event.loadTrait as VASTLoadTrait;
+				assertTrue(vastLoadTrait != null);
 				
 				// Verify that the result has a wrapper ad (indicating that
 				// a reference to a nested VAST document exists) but no inline
 				// ad (which would show that the nested VAST document was not
 				// retrieved).
-				var document:VASTDocument = loadedContext.vastDocument;
+				var document:VASTDocument = vastLoadTrait.vastDocument;
 				assertTrue(document != null);
 				assertTrue(document.ads.length == 1);
 				var ad:VASTAd = document.ads[0] as VASTAd;
@@ -323,8 +323,6 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.LOAD_ERROR)
 			{
-				assertTrue(event.loadedContext == null);
-				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
@@ -341,8 +339,6 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.LOAD_ERROR)
 			{
-				assertTrue(event.loadedContext == null);
-				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
@@ -359,8 +355,6 @@ package org.osmf.vast.loader
 		{
 			if (event.newState == LoadState.LOAD_ERROR)
 			{
-				assertTrue(event.loadedContext == null);
-				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
@@ -455,7 +449,7 @@ package org.osmf.vast.loader
 						);
 				}
 			}
-			return new LoadTrait(loader, resource);
+			return new VASTLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

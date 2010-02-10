@@ -34,7 +34,7 @@ package org.osmf.mast.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.URL;
-	import org.osmf.vast.loader.VASTLoadedContext;
+	import org.osmf.vast.loader.VASTLoadTrait;
 	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.DefaultVASTMediaFileResolver;
 	import org.osmf.vast.media.IVASTMediaFileResolver;
@@ -144,8 +144,8 @@ package org.osmf.mast.loader
 		 */
 		public function loadVastDocument(source:MASTSource, condition:MASTCondition):void
 		{
-			var loadTrait:LoadTrait
-				= new LoadTrait(new VASTLoader(), new URLResource(new URL(source.url)));
+			var loadTrait:VASTLoadTrait
+				= new VASTLoadTrait(new VASTLoader(), new URLResource(new URL(source.url)));
 			
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
@@ -160,11 +160,10 @@ package org.osmf.mast.loader
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Get the appropriate inline MediaElements.
-					var loadedContext:VASTLoadedContext = loadTrait.loadedContext as VASTLoadedContext;
 					var generator:VASTMediaGenerator = new VASTMediaGenerator();
 					var resolver:IVASTMediaFileResolver = new DefaultVASTMediaFileResolver();
 					
-					dispatchEvent(new MASTDocumentProcessedEvent(generator.createMediaElements(loadedContext.vastDocument), condition));
+					dispatchEvent(new MASTDocumentProcessedEvent(generator.createMediaElements(loadTrait.vastDocument), condition));
 				}
 			}
 		}

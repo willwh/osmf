@@ -29,7 +29,6 @@ package org.osmf.elements
 	import org.osmf.elements.audioClasses.AudioTimeTrait;
 	import org.osmf.elements.audioClasses.SoundAdapter;
 	import org.osmf.elements.audioClasses.SoundLoadTrait;
-	import org.osmf.elements.audioClasses.SoundLoadedContext;
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
@@ -177,13 +176,13 @@ package org.osmf.elements
 			var timeTrait:TimeTrait;
 			
 			// Different paths for streaming vs. progressive.
-			var netLoadedContext:NetLoadedContext = loadTrait.loadedContext as NetLoadedContext;
-			if (netLoadedContext)
+			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
+			if (netLoadTrait)
 			{
 				// Streaming Audio
 				//
 				
-				var stream:NetStream = netLoadedContext.stream;
+				var stream:NetStream = netLoadTrait.netStream;
 				
 				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 				timeTrait = new NetStreamTimeTrait(stream, resource);
@@ -197,9 +196,9 @@ package org.osmf.elements
 				// Progressive Audio
 				//
 				
-				var soundLoadedContext:SoundLoadedContext = loadTrait.loadedContext as SoundLoadedContext;
+				var soundLoadTrait:SoundLoadTrait = loadTrait as SoundLoadTrait;
 
-				soundAdapter = new SoundAdapter(this, soundLoadedContext.sound);
+				soundAdapter = new SoundAdapter(this, soundLoadTrait.sound);
 				
 				addTrait(MediaTraitType.PLAY, new AudioPlayTrait(soundAdapter));
 				timeTrait = new AudioTimeTrait(soundAdapter);

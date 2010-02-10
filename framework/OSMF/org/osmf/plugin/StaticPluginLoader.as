@@ -66,10 +66,10 @@ package org.osmf.plugin
 		
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
-			var pluginLoadedContext:PluginLoadedContext = loadTrait.loadedContext as PluginLoadedContext;
-			var pluginInfo:PluginInfo = pluginLoadedContext != null ? pluginLoadedContext.pluginInfo : null;
+			var pluginLoadTrait:PluginLoadTrait = loadTrait as PluginLoadTrait;
+			var pluginInfo:PluginInfo = pluginLoadTrait.pluginInfo;
 
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);
 						
 			unloadFromPluginInfo(pluginInfo);
 			

@@ -32,8 +32,8 @@ package org.osmf.vast.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.HTTPLoadedContext;
 	import org.osmf.utils.HTTPLoader;
+	import org.osmf.utils.HTTPLoadTrait;
 	
 	/**
 	 * Loader for a VAST Document.  The load process is complete when
@@ -110,7 +110,7 @@ package org.osmf.vast.loader
 			// Create a temporary LoadTrait for this purpose, so that our main
 			// LoadTrait doesn't reflect any of the state changes from the
 			// loading of the URL, and so that we can catch any errors.
-			var httpLoadTrait:LoadTrait = new LoadTrait(httpLoader, loadTrait.resource);
+			var httpLoadTrait:HTTPLoadTrait = new HTTPLoadTrait(httpLoader, loadTrait.resource);
 			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadTraitError);
 			
 			CONFIG::LOGGING
@@ -128,12 +128,10 @@ package org.osmf.vast.loader
 					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadTraitError);
 	
-					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
-					
 					// Use a separate processor class to parse the document.
 					var processor:VASTDocumentProcessor = new VASTDocumentProcessor(maxNumWrapperRedirects, httpLoader);
 					toggleProcessorListeners(processor, true);
-					processor.processVASTDocument(loadedContext.urlLoader.data);
+					processor.processVASTDocument(httpLoadTrait.urlLoader.data);
 
 					function toggleProcessorListeners(processor:VASTDocumentProcessor, add:Boolean):void
 					{
@@ -153,7 +151,9 @@ package org.osmf.vast.loader
 					{
 						toggleProcessorListeners(processor, false);
 					
-						updateLoadTrait(loadTrait, LoadState.READY, new VASTLoadedContext(event.vastDocument));
+						var vastLoadTrait:VASTLoadTrait = loadTrait as VASTLoadTrait;
+						vastLoadTrait.vastDocument = event.vastDocument;
+						updateLoadTrait(loadTrait, LoadState.READY);
 					}
 					
 					function onDocumentProcessFailed(event:VASTDocumentProcessedEvent):void
@@ -202,7 +202,7 @@ package org.osmf.vast.loader
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
 			// Nothing to do.
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		

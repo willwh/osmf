@@ -38,7 +38,7 @@ package org.osmf.examples.loaderproxy
 		 **/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			// Always true for simplicity.
+			// Always true, for simplicity.
 			return true;
 		}
 		
@@ -49,7 +49,9 @@ package org.osmf.examples.loaderproxy
 			// (we just rewrite the URL as an example).
 			var url:URL = new URL("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			updateLoadTrait(loadTrait, LoadState.READY, new VideoProxyLoadedContext(url));
+			var vpLoadTrait:VideoProxyLoadTrait = loadTrait as VideoProxyLoadTrait;
+			vpLoadTrait.url = url;
+			updateLoadTrait(loadTrait, LoadState.READY);
 		}
 	}
 }

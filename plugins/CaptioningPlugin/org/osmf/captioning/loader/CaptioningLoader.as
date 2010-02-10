@@ -31,7 +31,7 @@ package org.osmf.captioning.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.HTTPLoadedContext;
+	import org.osmf.utils.HTTPLoadTrait;
 	import org.osmf.utils.HTTPLoader;
 
 	CONFIG::LOGGING
@@ -99,7 +99,7 @@ package org.osmf.captioning.loader
 			// Create a temporary LoadTrait for this purpose, so that our main
 			// LoadTrait doesn't reflect any of the state changes from the
 			// loading of the URL, and so that we can catch any errors.
-			var httpLoadTrait:LoadTrait = new LoadTrait(httpLoader, loadTrait.resource);
+			var httpLoadTrait:HTTPLoadTrait = new HTTPLoadTrait(httpLoader, loadTrait.resource);
 						
 			httpLoadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 			
@@ -121,14 +121,12 @@ package org.osmf.captioning.loader
 					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 
-					var loadedContext:HTTPLoadedContext = event.loadedContext as HTTPLoadedContext;
-					
 					var parser:ICaptioningParser = createCaptioningParser();
 					var captioningDocument:CaptioningDocument;
 					
 					try
 					{
-						captioningDocument = parser.parse(loadedContext.urlLoader.data.toString());
+						captioningDocument = parser.parse(httpLoadTrait.urlLoader.data.toString());
 					}
 					catch(e:Error)
 					{
@@ -142,7 +140,8 @@ package org.osmf.captioning.loader
 						updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					}
 					
-					updateLoadTrait(loadTrait, LoadState.READY, new CaptioningLoadedContext(captioningDocument));
+					CaptioningLoadTrait(loadTrait).document = captioningDocument;
+					updateLoadTrait(loadTrait, LoadState.READY);
 					
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)
@@ -192,7 +191,7 @@ package org.osmf.captioning.loader
 		override protected function executeUnload(loadTrait:LoadTrait):void
 		{
 			// Nothing to do.
-			updateLoadTrait(loadTrait, LoadState.UNLOADING, loadTrait.loadedContext);			
+			updateLoadTrait(loadTrait, LoadState.UNLOADING);			
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
 		}
 		

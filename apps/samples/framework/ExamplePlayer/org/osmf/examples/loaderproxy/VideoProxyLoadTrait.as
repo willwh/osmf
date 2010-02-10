@@ -16,41 +16,37 @@
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved.
-* 
-*  Contributor(s): Akamai Technologies
+*  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.mast.loader
+package org.osmf.examples.loaderproxy
 {
-	import org.osmf.mast.model.MASTDocument;
-	import org.osmf.traits.ILoadedContext;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.URL;
 	
 	/**
-	 * Loaded context for the MASTProxyElement.
+	 * LoadTrait for the VideoProxyElement.  Holds the URL that will
+	 * be applied to the proxied VideoElement.
 	 **/
-	public class MASTLoadedContext implements ILoadedContext
+	internal class VideoProxyLoadTrait extends LoadTrait
 	{
-		/**
-		 * Constructor.
-		 * 
-		 * @param document The MASTDocument object representing
-		 * the root level of the MAST document object model.
-		 */
-		public function MASTLoadedContext(document:MASTDocument)
+		public function VideoProxyLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			_document = document;
-		}
-
-		/**
-		 * Get the MASTDocument object that was supplied to
-		 * the constructor.
-		 */
-		public function get document():MASTDocument
-		{
-			return _document;
+			super(loader, resource);
 		}
 		
-		private var _document:MASTDocument;
+		public function get url():URL
+		{
+			return _url;
+		}
+		
+		public function set url(value:URL):void
+		{
+			_url = value;
+		}
+		
+		private var _url:URL;
 	}
 }

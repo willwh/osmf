@@ -71,7 +71,6 @@ package org.osmf.elements
 			parallel.addChild(mediaElement1);
 			var loadTrait:LoadTrait = parallel.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait.loadState == LoadState.READY);
-			assertTrue(loadTrait.loadedContext == null);
 			assertTrue(loadTrait.resource == null);
 			assertTrue(isNaN(loadTrait.bytesLoaded));
 			assertTrue(isNaN(loadTrait.bytesTotal));

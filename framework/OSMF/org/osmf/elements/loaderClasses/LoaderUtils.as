@@ -115,10 +115,12 @@ package org.osmf.elements.loaderClasses
 		 **/
 		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function, useCurrentSecurityDomain:Boolean):void
 		{
+			var loaderLoadTrait:LoaderLoadTrait = loadTrait as LoaderLoadTrait;
+
 			var loader:Loader = new Loader();
-			var loadedContext:LoaderLoadedContext = new LoaderLoadedContext(loader);
+			loaderLoadTrait.loader = loader;
 			
-			updateLoadTraitCallback(loadTrait, LoadState.LOADING, loadedContext);
+			updateLoadTraitCallback(loadTrait, LoadState.LOADING);
 			
 			var context:LoaderContext 	= new LoaderContext();
 			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as URLResource).url.toString());
@@ -163,16 +165,15 @@ package org.osmf.elements.loaderClasses
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadTraitCallback(loadTrait, LoadState.READY, loadedContext);
+				updateLoadTraitCallback(loadTrait, LoadState.READY);
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
 			{	
 				toggleLoaderListeners(loader, false);
 				loader = null;
-				loadedContext = null;
 				
-				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR, null);
+				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -190,9 +191,8 @@ package org.osmf.elements.loaderClasses
 			{	
 				toggleLoaderListeners(loader, false);
 				loader = null;
-				loadedContext = null;
 				
-				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR, loadedContext);
+				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -212,11 +212,10 @@ package org.osmf.elements.loaderClasses
 		 **/
 		public static function unloadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function):void
 		{
-			var context:LoaderLoadedContext = loadTrait.loadedContext as LoaderLoadedContext;
-			updateLoadTraitCallback(loadTrait, LoadState.UNLOADING, context);			
-			context.loader.unloadAndStop();
+			var loaderLoadTrait:LoaderLoadTrait = loadTrait as LoaderLoadTrait;
+			updateLoadTraitCallback(loadTrait, LoadState.UNLOADING);			
+			loaderLoadTrait.loader.unloadAndStop();
 			updateLoadTraitCallback(loadTrait, LoadState.UNINITIALIZED);
-
 		}
 		
 		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";

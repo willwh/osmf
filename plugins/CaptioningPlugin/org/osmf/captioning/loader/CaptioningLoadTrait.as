@@ -1,4 +1,4 @@
-﻿/*****************************************************
+/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -19,47 +19,30 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements.audioClasses
+package org.osmf.captioning.loader
 {
-	import flash.media.Sound;
+	import org.osmf.captioning.model.CaptioningDocument;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	
-	import org.osmf.traits.ILoadedContext;
-	
-	[ExcludeClass]
-	
-	/**
-	 * @private
-	 **/
-	public class SoundLoadedContext implements ILoadedContext
+	public class CaptioningLoadTrait extends LoadTrait
 	{
-		/**
-		 *  Constructor.
-		 * 	@param sound A new Sound object that has been
-		 * 	successfully loaded.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function SoundLoadedContext(sound:Sound)
+		public function CaptioningLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			_sound = sound;
+			super(loader, resource);
 		}
 
-		/**
-		 * The Sound to be used by a AudioElement.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get sound():Sound
+		public function get document():CaptioningDocument
 		{
-			return _sound;
+			return _document;
 		}
 		
-		private var _sound:Sound;
+		public function set document(value:CaptioningDocument):void
+		{
+			_document = value;
+		}
+
+		private var _document:CaptioningDocument;
 	}
 }

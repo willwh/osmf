@@ -23,7 +23,6 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.traits.ILoadedContext;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
 	
@@ -61,7 +60,6 @@ package org.osmf.events
 		 * @param loadTrait The LoadTrait for this event.
 		 * @param oldState The previous state of the loadTrait.
 		 * @param newState The new state of the loadTrait.
-		 * @param loadedContext The loaded context (if any) of the loadTrait.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -76,7 +74,6 @@ package org.osmf.events
 							, loadTrait:LoadTrait=null
 							, oldState:String=null
 							, newState:String=null
-							, loadedContext:ILoadedContext=null
 							)
 		{			
 			super(type, bubbles, cancelable);
@@ -85,7 +82,6 @@ package org.osmf.events
 			_loadTrait = loadTrait;
 			_oldState = oldState;
 			_newState = newState;
-			_loadedContext = loadedContext;
 		}
 		
 		/**
@@ -141,24 +137,11 @@ package org.osmf.events
 		}
 		
 		/**
-		 * The loaded context (if any) of the LoadTrait.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get loadedContext():ILoadedContext
-		{
-			return _loadedContext;
-		}
-
-		/**
 		 * @private
 		 */
 		override public function clone():Event
 		{
-			return new LoaderEvent(type, bubbles, cancelable, loader, loadTrait, oldState, newState, loadedContext);
+			return new LoaderEvent(type, bubbles, cancelable, loader, loadTrait, oldState, newState);
 		}
 		
 		// Internals
@@ -168,6 +151,5 @@ package org.osmf.events
 		private var _loadTrait:LoadTrait;
 		private var _oldState:String;
 		private var _newState:String;
-		private var _loadedContext:ILoadedContext;
 	}
 }

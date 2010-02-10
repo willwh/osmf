@@ -35,7 +35,6 @@
     <classEntry path="org.osmf.elements.audioClasses.AudioTimeTrait"/>
     <classEntry path="org.osmf.elements.audioClasses.SoundAdapter"/>
     <classEntry path="org.osmf.elements.audioClasses.SoundLoadTrait"/>
-    <classEntry path="org.osmf.elements.audioClasses.SoundLoadedContext"/>
     <classEntry path="org.osmf.elements.beaconClasses.BeaconPlayTrait"/>
     <classEntry path="org.osmf.elements.compositeClasses.ChildSeekOperation"/>
     <classEntry path="org.osmf.elements.compositeClasses.CompositeAudioTrait"/>
@@ -68,7 +67,6 @@
     <classEntry path="org.osmf.elements.compositeClasses.TraitLoaderEvent"/>
     <classEntry path="org.osmf.elements.f4mClasses.BootstrapInfo"/>
     <classEntry path="org.osmf.elements.f4mClasses.DRMAdditionalHeader"/>
-    <classEntry path="org.osmf.elements.f4mClasses.F4MLoadedContext"/>
     <classEntry path="org.osmf.elements.f4mClasses.Manifest"/>
     <classEntry path="org.osmf.elements.f4mClasses.ManifestParser"/>
     <classEntry path="org.osmf.elements.f4mClasses.Media"/>
@@ -77,7 +75,6 @@
     <classEntry path="org.osmf.elements.htmlClasses.HTMLPlayTrait"/>
     <classEntry path="org.osmf.elements.htmlClasses.HTMLTimeTrait"/>
     <classEntry path="org.osmf.elements.loaderClasses.LoaderLoadTrait"/>
-    <classEntry path="org.osmf.elements.loaderClasses.LoaderLoadedContext"/>
     <classEntry path="org.osmf.elements.loaderClasses.LoaderUtils"/>
     <classEntry path="org.osmf.elements.proxyClasses.DurationSeekTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.DurationTimeTrait"/>
@@ -171,7 +168,6 @@
     <classEntry path="org.osmf.net.NetConnectionAttempt"/>
     <classEntry path="org.osmf.net.NetConnectionCodes"/>
     <classEntry path="org.osmf.net.NetConnectionFactory"/>
-    <classEntry path="org.osmf.net.NetLoadedContext"/>
     <classEntry path="org.osmf.net.NetLoader"/>
     <classEntry path="org.osmf.net.NetNegotiator"/>
     <classEntry path="org.osmf.net.NetStreamAudioTrait"/>
@@ -240,7 +236,7 @@
     <classEntry path="org.osmf.plugin.PluginEntry"/>
     <classEntry path="org.osmf.plugin.PluginInfo"/>
     <classEntry path="org.osmf.plugin.PluginInfoResource"/>
-    <classEntry path="org.osmf.plugin.PluginLoadedContext"/>
+    <classEntry path="org.osmf.plugin.PluginLoadTrait"/>
     <classEntry path="org.osmf.plugin.PluginLoader"/>
     <classEntry path="org.osmf.plugin.PluginLoadingState"/>
     <classEntry path="org.osmf.plugin.PluginManager"/>
@@ -252,7 +248,6 @@
     <classEntry path="org.osmf.traits.DRMTrait"/>
     <classEntry path="org.osmf.traits.DisplayObjectTrait"/>
     <classEntry path="org.osmf.traits.DynamicStreamTrait"/>
-    <classEntry path="org.osmf.traits.ILoadedContext"/>
     <classEntry path="org.osmf.traits.LoadState"/>
     <classEntry path="org.osmf.traits.LoadTrait"/>
     <classEntry path="org.osmf.traits.LoaderBase"/>
@@ -268,7 +263,7 @@
     <classEntry path="org.osmf.utils.ExternalProperty"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>
-    <classEntry path="org.osmf.utils.HTTPLoadedContext"/>
+    <classEntry path="org.osmf.utils.HTTPLoadTrait"/>
     <classEntry path="org.osmf.utils.HTTPLoader"/>
     <classEntry path="org.osmf.utils.OSMFStrings"/>
     <classEntry path="org.osmf.utils.TimeUtil"/>

@@ -23,48 +23,46 @@ package org.osmf.plugin
 {
 	import flash.display.Loader;
 	
-	import org.osmf.traits.ILoadedContext;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+	import org.osmf.media.MediaResourceBase;
+	
+	[ExcludeClass]
 	
 	/**
-	 * This class represents the loaded context resulting from loading a plugin
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	internal class PluginLoadedContext implements ILoadedContext
+	 * @private
+	 */
+	internal class PluginLoadTrait extends LoadTrait
 	{
-		public function PluginLoadedContext(_pluginInfo:PluginInfo, _loader:Loader)
+		public function PluginLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			this._pluginInfo = _pluginInfo;
-			this._loader = _loader;
+			super(loader, resource);
 		}
-		
+
 		/**
-		 * Returns the <code>PluginInfo</code> reference
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * The <code>PluginInfo</code> reference.
 		 */
 		public function get pluginInfo():PluginInfo
 		{
 			return _pluginInfo;
 		}
 	
+		public function set pluginInfo(value:PluginInfo):void
+		{
+			_pluginInfo = value;
+		}
+
 		/**
-		 * Returns the <code>Loader</code> used to load the plugin
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * The <code>Loader</code> used to load the plugin
 		 */
 		public function get loader():Loader
 		{
 			return _loader;
+		}
+
+		public function set loader(value:Loader):void
+		{
+			_loader = value;
 		}
 
 		private var _pluginInfo:PluginInfo;

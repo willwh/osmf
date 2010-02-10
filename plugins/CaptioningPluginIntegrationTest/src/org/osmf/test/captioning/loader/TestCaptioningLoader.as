@@ -72,11 +72,8 @@ package org.osmf.test.captioning.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var loadedContext:CaptioningLoadedContext = event.loadedContext as CaptioningLoadedContext;
-				assertTrue(loadedContext != null);
-				
 				// Just check that we got a valid Captioning DOM back
-				var document:CaptioningDocument = loadedContext.document;
+				var document:CaptioningDocument = CaptioningLoadTrait(event.loadTrait).document;
 				assertTrue(document != null);
 				assertTrue(document.numCaptions > 0);
 				

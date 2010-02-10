@@ -207,7 +207,7 @@ package org.osmf.vast.loader
 					( new URL(ad.wrapperAd.vastAdTagURL)
 					);
 					
-			var wrapperLoadTrait:LoadTrait = new LoadTrait(wrapperLoader, wrapperResource);
+			var wrapperLoadTrait:VASTLoadTrait = new VASTLoadTrait(wrapperLoader, wrapperResource);
 			wrapperLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 			wrapperLoadTrait.load();
 			
@@ -218,8 +218,7 @@ package org.osmf.vast.loader
 					wrapperLoadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
 					
 					// Merge the wrapper's ad with the original ad.
- 					var wrapperLoadedContext:VASTLoadedContext = wrapperLoadTrait.loadedContext as VASTLoadedContext;
-					var success:Boolean = mergeAds(ad, wrapperLoadedContext.vastDocument);
+ 					var success:Boolean = mergeAds(ad, wrapperLoadTrait.vastDocument);
 						
 					CONFIG::LOGGING
 					{

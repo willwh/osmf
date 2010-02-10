@@ -23,6 +23,8 @@ package org.osmf.plugin
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.LoadableElementBase;
+	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * PluginElement is a MediaElement used for integrating
@@ -54,6 +56,14 @@ package org.osmf.plugin
 		public function PluginElement(loader:PluginLoader, resource:MediaResourceBase=null)
 		{
 			super(resource, loader);			
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
+		{
+			return new PluginLoadTrait(loader, resource);
 		}
 	}
 }

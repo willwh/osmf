@@ -36,8 +36,8 @@ package
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.URL;
-	import org.osmf.vast.loader.VASTLoadedContext;
 	import org.osmf.vast.loader.VASTLoader;
+	import org.osmf.vast.loader.VASTLoadTrait;
 	import org.osmf.vast.media.VASTMediaGenerator;
 
 	/**
@@ -73,8 +73,8 @@ package
 		
 		private function loadVASTDocument(vastURL:URL, applyAsPreroll:Boolean):void
 		{
-			var loadTrait:LoadTrait
-				= new LoadTrait(new VASTLoader(), new URLResource(vastURL));
+			var loadTrait:VASTLoadTrait
+				= new VASTLoadTrait(new VASTLoader(), new URLResource(vastURL));
 						
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
@@ -89,9 +89,8 @@ package
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
 					// Create the appropriate inline MediaElements.
-					var loadedContext:VASTLoadedContext = loadTrait.loadedContext as VASTLoadedContext;
 					var generator:VASTMediaGenerator = new VASTMediaGenerator();
-					var mediaElements:Vector.<MediaElement> = generator.createMediaElements(loadedContext.vastDocument);
+					var mediaElements:Vector.<MediaElement> = generator.createMediaElements(loadTrait.vastDocument);
 					
 					// We'll use the first one (if any) as our preroll.
 					loadMediaWithAd(applyAsPreroll, mediaElements.length > 0 ? mediaElements[0] : null);

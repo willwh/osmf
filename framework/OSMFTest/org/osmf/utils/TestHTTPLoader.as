@@ -65,7 +65,7 @@ package org.osmf.utils
 					mockLoader.setExpectationForURL(UNHANDLED_RESOURCE.url.rawUrl, false, null);
 				}
 			}	
-			return new LoadTrait(loader, resource);
+			return new HTTPLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

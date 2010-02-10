@@ -29,6 +29,7 @@ package org.osmf.elements
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.utils.HTTPLoader;
+	import org.osmf.utils.HTTPLoadTrait;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -109,7 +110,7 @@ package org.osmf.elements
 			// we treat this as a ping failure.
 			if (httpLoader.canHandleResource(urlResource))
 			{
-				var loadTrait:LoadTrait = new LoadTrait(httpLoader, urlResource);
+				var loadTrait:LoadTrait = new HTTPLoadTrait(httpLoader, urlResource);
 				
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				loadTrait.load();
