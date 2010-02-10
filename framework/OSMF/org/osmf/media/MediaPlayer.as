@@ -946,6 +946,7 @@ package org.osmf.media
 	    	//Bug FM-347 - the media player should autorewind once the playhead is at the end, and play() is called.
 	    	if (canPlay && 
 	    		canSeek &&
+	    		canSeekTo(0) &&
 	    		duration == currentTime)
 	    	{
     			addEventListener(SeekEvent.SEEK_END, onSeek);
