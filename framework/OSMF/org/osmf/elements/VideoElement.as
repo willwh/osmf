@@ -68,6 +68,7 @@ package org.osmf.elements
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
@@ -106,6 +107,11 @@ package org.osmf.elements
 	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
+	* The VideoElement can handle subclip metadata to create subclips of
+	* a piece of content. Subclip parameters should be specified 
+	* on the URLResource for the Video. More information at 
+	* MetadataNamespaces, SUBCLIP_METADATA.
+	* 
 	* 
 	* @see org.osmf.net.NetLoader
 	* @see org.osmf.media.URLResource
@@ -477,7 +483,7 @@ package org.osmf.elements
      	     	
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.
      	private function onUpdateComplete(event:Event):void
-     	{     		
+     	{          		
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).load();		
      	}

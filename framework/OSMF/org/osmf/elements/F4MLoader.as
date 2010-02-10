@@ -197,7 +197,7 @@ package org.osmf.elements
 			
 			function finishLoad():void
 			{			
-				var netResource:MediaResourceBase = parser.createResource(manifest, URLResource(loadTrait.resource).url);	
+				var netResource:MediaResourceBase = parser.createResource(manifest, URLResource(loadTrait.resource));	
 				
 				try
 				{

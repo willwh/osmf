@@ -35,7 +35,6 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.Base64Decoder;
 	import org.osmf.utils.DateUtil;
 	import org.osmf.utils.FMSURL;
@@ -304,7 +303,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function createResource(value:Manifest, manifestLocation:URL):MediaResourceBase
+		public function createResource(value:Manifest, manifestResource:URLResource):MediaResourceBase
 		{			
 			var drmFacet:KeyValueFacet;
 			var bootstrapFacet:KeyValueFacet;
@@ -314,9 +313,9 @@ package org.osmf.elements.f4mClasses
 			var url:URL;
 			var bootstrapInfoURLString:String;
 			
-			var cleanedPath:String = "/" + manifestLocation.path;
+			var cleanedPath:String = "/" + manifestResource.url.path;
 			cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/"));
-			var manifestFolder:String = manifestLocation.protocol + "://" +  manifestLocation.host + (manifestLocation.port != "" ? ":" + manifestLocation.port : "") + cleanedPath;
+			var manifestFolder:String = manifestResource.url.protocol + "://" +  manifestResource.url.host + (manifestResource.url.port != "" ? ":" + manifestResource.url.port : "") + cleanedPath;
 			
 			if (value.media.length == 1)  // Single Stream/Progressive Resource
 			{
@@ -465,6 +464,12 @@ package org.osmf.elements.f4mClasses
 			{
 				resource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
 			}
+			
+			//Add subclip metadata from original resource
+			if (manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA))
+			{
+				resource.metadata.addFacet(manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
+			}		
 			
 			return resource;
 		}
