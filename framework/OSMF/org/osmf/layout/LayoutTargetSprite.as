@@ -29,6 +29,8 @@ package org.osmf.layout
 	import org.osmf.metadata.Metadata;
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target's view has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
@@ -41,6 +43,8 @@ package org.osmf.layout
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout element's measured width and height changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
@@ -53,6 +57,8 @@ package org.osmf.layout
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being set as a layout renderer's container.
 	 *
 	 * LayoutRendererBase dispatches this event on the target being set as its container.
@@ -72,6 +78,8 @@ package org.osmf.layout
 	[Event(name="setAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being un-set as a layout renderer's container.
 	 * 
 	 * LayoutRendererBase dispatches this event on the target being unset as its container.
@@ -89,6 +97,8 @@ package org.osmf.layout
 	[Event(name="unsetAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is added as a target to a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets added to
@@ -111,6 +121,8 @@ package org.osmf.layout
 	[Event(name="addToLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is removed as a target from a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets removed from
@@ -168,44 +180,28 @@ package org.osmf.layout
 		}
 		
 		// ILayoutTarget
+		//
 		
-		/**
-		 * @private
-		 */
 		public function get metadata():Metadata
 		{
 			return _metadata;
 		}
 		
-		/**
-		 * A reference to this instance.
-		 * 
-		 * @private
-		 */
 		public function get displayObject():DisplayObject
 		{
 			return this;
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get measuredWidth():Number
 		{
 			return _measuredWidth;
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get measuredHeight():Number
 		{
 			return _measuredHeight;
 		}
 		
-		/**
-		 * @private
-		 */	
 		public function measure(deep:Boolean = true):void
 		{
 			if (deep && renderers.containerRenderer)

@@ -27,6 +27,8 @@ package org.osmf.layout
 	import org.osmf.metadata.IMetadataProvider;
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target's view has changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
@@ -39,6 +41,8 @@ package org.osmf.layout
 	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout element's measured width and height changed.
 	 * 
 	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
@@ -51,6 +55,8 @@ package org.osmf.layout
 	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being set as a layout renderer's container.
 	 *
 	 * LayoutRendererBase dispatches this event on the target being set as its container.
@@ -70,6 +76,8 @@ package org.osmf.layout
 	[Event(name="setAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being un-set as a layout renderer's container.
 	 * 
 	 * LayoutRendererBase dispatches this event on the target being unset as its container.
@@ -87,6 +95,8 @@ package org.osmf.layout
 	[Event(name="unsetAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is added as a target to a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets added to
@@ -109,6 +119,8 @@ package org.osmf.layout
 	[Event(name="addToLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is removed as a target from a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets removed from
@@ -198,9 +210,8 @@ package org.osmf.layout
 		 * that it should reasses its measuredWidth and measuredHeight fields:
 		 * 
 		 * @param deep True if the measurement request is to be forwarded to
-		 * the target's potential associated layout renderer (if the target
-		 * implementation is a container). The forwarding should take place before
-		 * the target measures itself.
+		 * the target's potential inner layout system. The forwarding should take
+		 * place up front the target measuring itself.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -217,9 +228,8 @@ package org.osmf.layout
 	 	 * @param availableWidth
 	 	 * @param availableHeight
 	 	 * @param deep True if the layout request is to be forwarded to
-		 * the target's potential associated layout renderer (if the target
-		 * implementation is a container). The forwarding should take place
-		 * after the target lays itself out.
+		 * the target's potential inner layout system. The forwarding should take
+		 * place only after the target has laid itself out.
 	 	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
