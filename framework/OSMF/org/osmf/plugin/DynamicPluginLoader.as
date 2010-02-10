@@ -84,7 +84,6 @@ package org.osmf.plugin
 					swfLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onSWFLoaderStateChange);
 					loaderLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadError);
 	
-					var loaderLoadTrait:LoaderLoadTrait = event.loadTrait as LoaderLoadTrait;
 					var root:DisplayObject = loaderLoadTrait.loader.content;
 					var pluginInfo:PluginInfo = root[PLUGININFO_PROPERTY_NAME] as PluginInfo;
 					
