@@ -22,6 +22,7 @@
 package org.osmf.layout
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
@@ -34,32 +35,10 @@ package org.osmf.layout
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
-
-	/**
-	 * Dispatched when a layout target's view has changed.
-	 * 
-	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
-
-	/**
-	 * Dispatched when a layout element's measured width and height changed.
-	 * 
-	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being set as a layout renderer's container.
 	 *
 	 * LayoutRendererBase dispatches this event on the target being set as its container.
@@ -79,6 +58,8 @@ package org.osmf.layout
 	[Event(name="setAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is being un-set as a layout renderer's container.
 	 * 
 	 * LayoutRendererBase dispatches this event on the target being unset as its container.
@@ -96,6 +77,8 @@ package org.osmf.layout
 	[Event(name="unsetAsLayoutRendererContainer",type="org.osmf.layout.LayoutTargetEvent")]
 	
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is added as a target to a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets added to
@@ -118,6 +101,8 @@ package org.osmf.layout
 	[Event(name="addToLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * Dispatched when a layout target is removed as a target from a layout renderer.
 	 * 
 	 * LayoutRendererBase dispatches this event on a target when it gets removed from
@@ -140,6 +125,51 @@ package org.osmf.layout
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="removeFromLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * stage a display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.ADD_CHILD_AT
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="addChildAt",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * change the display index of the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.SET_CHILD_INDEX
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="setChildIndex",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * remove the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.REMOVE_CHILD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
 	 * @private
@@ -176,6 +206,10 @@ package org.osmf.layout
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				
 				renderers = new LayoutTargetRenderers(this);
+				
+				addEventListener(LayoutTargetEvent.ADD_CHILD_AT, onAddChildAt);
+				addEventListener(LayoutTargetEvent.SET_CHILD_INDEX, onSetChildIndex);
+				addEventListener(LayoutTargetEvent.REMOVE_CHILD, onRemoveChild);
 				
 				onMediaElementTraitsChange();
 			}
@@ -382,6 +416,48 @@ package org.osmf.layout
 		private function onDisplayObjectTraitMediaSizeChange(event:DisplayObjectEvent):void
 		{
 			dispatchEvent(event.clone());	
+		}
+		
+		private function onAddChildAt(event:LayoutTargetEvent):void
+		{
+			if (_displayObject is ILayoutTarget)
+			{
+				ILayoutTarget(_displayObject)
+					.dispatchEvent(event.clone());
+			}
+			else if (_displayObject is DisplayObjectContainer)
+			{
+				DisplayObjectContainer(_displayObject)
+					.addChildAt(event.displayObject, event.index);
+			}
+		}
+		
+		private function onRemoveChild(event:LayoutTargetEvent):void
+		{
+			if (_displayObject is ILayoutTarget)
+			{
+				ILayoutTarget(_displayObject)
+					.dispatchEvent(event.clone());
+			}
+			else if (_displayObject is DisplayObjectContainer)
+			{
+				DisplayObjectContainer(_displayObject)
+					.removeChild(event.displayObject);
+			}	
+		}
+		
+		private function onSetChildIndex(event:LayoutTargetEvent):void
+		{
+			if (_displayObject is ILayoutTarget)
+			{
+				ILayoutTarget(_displayObject)
+					.dispatchEvent(event.clone());
+			}
+			else if (_displayObject is DisplayObjectContainer)
+			{
+				DisplayObjectContainer(_displayObject)
+					.setChildIndex(event.displayObject, event.index);
+			}	
 		}
 		
 		/* Static */

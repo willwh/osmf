@@ -148,7 +148,6 @@ package org.osmf.layout
 					
 				if (_container)
 				{
-					displayObjectContainer = _container.displayObject as DisplayObjectContainer;
 					metadata = _container.metadata;
 					
 					_container.addEventListener
@@ -388,7 +387,7 @@ package org.osmf.layout
 		 */
 		final public function validateNow():void
 		{
-			if (_container == null || displayObjectContainer == null || cleaning == true)
+			if (_container == null || cleaning == true)
 			{
 				// no-op:
 				return;	
@@ -718,8 +717,7 @@ package org.osmf.layout
 			}
 			
 			_container = null;
-			this.displayObjectContainer = null;
-			this.metadata = null;
+			metadata = null;
 		}
 		
 		private function targetMetadataChangeCallback(facet:Facet):void
@@ -803,22 +801,51 @@ package org.osmf.layout
 			if (currentObject == object)
 			{
 				// Make sure that the object is at the right position in the display list:
-				displayObjectContainer.setChildIndex(object, Math.min(Math.max(0,displayObjectContainer.numChildren-1), index));
 				CONFIG::LOGGING { logger.debug("[.] setChildIndex, {0} on {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				
+				_container.dispatchEvent
+					( new LayoutTargetEvent
+						( LayoutTargetEvent.SET_CHILD_INDEX
+						, false, false
+						, this
+						, target
+						, currentObject
+						, index
+						)
+					);
 			}
 			else
 			{
 				if (currentObject != null)
 				{
-					// Remove the current object:
-					displayObjectContainer.removeChild(currentObject);
 					CONFIG::LOGGING { logger.debug("[-] removeChild, {0} from {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+					
+					// Remove the current object:
+					_container.dispatchEvent
+						( new LayoutTargetEvent
+							( LayoutTargetEvent.REMOVE_CHILD
+							, false, false
+							, this
+							, target
+							, currentObject
+							)
+						);
 				}
 				
 				// Add the new object:
-				displayObjectContainer.addChildAt(object, index);
-				stagedDisplayObjects[target] = object;
 				CONFIG::LOGGING { logger.debug("[+] addChild, {0} to {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				stagedDisplayObjects[target] = object;
+				
+				_container.dispatchEvent
+					( new LayoutTargetEvent
+						( LayoutTargetEvent.ADD_CHILD_AT
+						, false, false
+						, this
+						, target
+						, object
+						, index
+						)
+					);
 				
 				// If there wasn't an old object, then trigger the staging processor:
 				if (currentObject == null)
@@ -833,16 +860,23 @@ package org.osmf.layout
 			var currentObject:DisplayObject = stagedDisplayObjects[target];
 			if (currentObject != null)
 			{
-				delete stagedDisplayObjects[target];
-				displayObjectContainer.removeChild(currentObject);
-				
 				CONFIG::LOGGING { logger.debug("[-] removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+				delete stagedDisplayObjects[target];
+				
+				_container.dispatchEvent
+					( new LayoutTargetEvent
+						( LayoutTargetEvent.REMOVE_CHILD
+						, false, false
+						, this
+						, target
+						, currentObject
+						)
+					);
 			}
 		}
 		
 		private var _parent:LayoutRendererBase;
 		private var _container:ILayoutTarget;		
-		private var displayObjectContainer:DisplayObjectContainer;
 		private var metadata:Metadata;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;

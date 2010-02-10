@@ -29,6 +29,7 @@ package org.osmf.containers
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererBase;
+	import org.osmf.layout.LayoutTargetEvent;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.logging.ILogger;
@@ -50,17 +51,11 @@ package org.osmf.containers
 		/**
 		 * Constructor
 		 *  
-		 * @param metadata The metadata that elementLayoutRenderer and/or
-		 * containersLayoutRenderer may be using on calculating their layouts using
-		 * this container as their context.
-		 * @param elementLayoutRenderer The layout renderer that will render
+		 * @param metadata The metadata that _layoutRenderer will be using on
+		 * calculating its layout.
+		 * @param layoutRenderer The layout renderer that will render
 		 * the MediaElement instances that get added to this container. If no
-		 * renderer is specified, a DefaultLayoutRenderer instance will be
-		 * used.
-		 * @param containersLayoutRenderer The layout renderer that will render
-		 * the child MediaContainer instances that get added to this container. If
-		 * no renderer is specified, a DefaultLayoutRenderer instance will be
-		 * used.
+		 * renderer is specified, a LayoutRenderer instance will be used.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -71,8 +66,8 @@ package org.osmf.containers
 		{
 			super(metadata);
 			
-			this.layoutRenderer = layoutRenderer || new LayoutRenderer();
-			this.layoutRenderer.container = this; 
+			_layoutRenderer = layoutRenderer || new LayoutRenderer();
+			_layoutRenderer.container = this; 
 		}
 		
 		// IMediaContainer
@@ -101,7 +96,7 @@ package org.osmf.containers
 				var contentTarget:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(element);
 				
 				layoutTargets[element] = contentTarget;
-				layoutRenderer.addTarget(contentTarget);
+				_layoutRenderer.addTarget(contentTarget);
 				
 				element.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onElementContainerChange);
 			}
@@ -127,7 +122,7 @@ package org.osmf.containers
 			{
 				CONFIG::LOGGING { logger.debug("removeMediaElement {0} from {1}", element.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				element.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onElementContainerChange);
-				layoutRenderer.removeTarget(contentTarget);
+				_layoutRenderer.removeTarget(contentTarget);
 				delete layoutTargets[element];
 				result = element;
 				
@@ -161,6 +156,11 @@ package org.osmf.containers
 		// Public API
 		//
 		
+		public function get layoutRenderer():LayoutRendererBase
+		{
+			return _layoutRenderer;
+		}
+		
 		/**
 		 * Defines if the children of the container that display outside of its bounds 
 		 * will be clipped or not.
@@ -175,7 +175,7 @@ package org.osmf.containers
 		{
 			if (value && scrollRect == null)
 			{
-				scrollRect = new Rectangle(0, 0, layoutRenderer.measuredWidth, layoutRenderer.measuredHeight);
+				scrollRect = new Rectangle(0, 0, _layoutRenderer.measuredWidth, _layoutRenderer.measuredHeight);
 			}
 			else if (value == false && scrollRect)
 			{
@@ -198,6 +198,9 @@ package org.osmf.containers
 		{
 			super.layout(availableWidth, availableHeight, deep);
 			
+			lastAvailableWidth = availableWidth;
+			lastAvailableHeight = availableHeight;
+			
 			if (!isNaN(backgroundColor))
 			{
 				drawBackground();
@@ -214,7 +217,7 @@ package org.osmf.containers
 		 */
 		override public function validateNow():void
 		{
-			layoutRenderer.validateNow();
+			_layoutRenderer.validateNow();
 		}
 		
 		// Public Interface
@@ -267,6 +270,44 @@ package org.osmf.containers
 			return _backgroundAlpha;
 		}
 		
+		// Overrides
+		//
+		
+		override public function addChild(child:DisplayObject):DisplayObject
+		{
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
+		}
+		
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
+		{
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
+		}
+		
+		override public function removeChild(child:DisplayObject):DisplayObject
+		{
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
+		}
+		
+		override public function setChildIndex(child:DisplayObject, index:int):void
+		{
+			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
+		}
+		
+		override protected function onAddChildAt(event:LayoutTargetEvent):void
+		{
+			super.addChildAt(event.displayObject, event.index);
+		}
+		
+		override protected function onRemoveChild(event:LayoutTargetEvent):void
+		{
+			super.removeChild(event.displayObject);	
+		}
+		
+		override protected function onSetChildIndex(event:LayoutTargetEvent):void
+		{
+			super.setChildIndex(event.displayObject, event.index);	
+		}
+		
 		// Internals
 		//
 		
@@ -276,12 +317,12 @@ package org.osmf.containers
 			
 			if	(	!isNaN(_backgroundColor)
 				&& 	_backgroundAlpha != 0
-				&&	layoutRenderer.measuredWidth
-				&&	layoutRenderer.measuredHeight
+				&&	lastAvailableWidth
+				&&	lastAvailableHeight
 				)
 			{
 				graphics.beginFill(_backgroundColor,_backgroundAlpha);
-				graphics.drawRect(0, 0, layoutRenderer.measuredWidth, layoutRenderer.measuredHeight);
+				graphics.drawRect(0, 0, lastAvailableWidth, lastAvailableHeight);
 				graphics.endFill();
 			}
 		}
@@ -302,10 +343,13 @@ package org.osmf.containers
 		 */		
 		private var layoutTargets:Dictionary = new Dictionary();
 		
-		private var layoutRenderer:LayoutRendererBase;
+		private var _layoutRenderer:LayoutRendererBase;
 		
 		private var _backgroundColor:Number;
 		private var _backgroundAlpha:Number;
+		
+		private var lastAvailableWidth:Number;
+		private var lastAvailableHeight:Number;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaContainer");
 	}

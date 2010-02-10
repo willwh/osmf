@@ -25,7 +25,7 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
-	import org.osmf.display.MediaContainerGroup;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.ImageElement;
@@ -97,39 +97,41 @@ package
 			
 			// Consruct a tree of containers:
 
-			var mainGroup:MediaContainerGroup = new MediaContainerGroup();
+			var mainGroup:MediaContainer = new MediaContainer();
 			mainGroup.width = 640;
 			mainGroup.height = 352;
-			mainGroup.mediaContainer.backgroundColor = 0xFFFFFF;
-			mainGroup.mediaContainer.backgroundAlpha = .2;
+			mainGroup.backgroundColor = 0xFFFFFF;
+			mainGroup.backgroundAlpha = .2;
 			MetadataUtils.setElementId(mainGroup.metadata, "mainGroup");
 			addChild(mainGroup);
 			
-				var bannerGroup:MediaContainerGroup = new MediaContainerGroup();
-				bannerGroup.mediaContainer.backgroundColor = 0xFF;
-				bannerGroup.mediaContainer.backgroundAlpha = .2;
+				var bannerGroup:MediaContainer = new MediaContainer();
+				bannerGroup.backgroundColor = 0xFF;
+				bannerGroup.backgroundAlpha = .2;
 				bannerGroup.height = 60;
 				
 				var bannerGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(bannerGroup);
 				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
 				MetadataUtils.setElementId(bannerGroup.metadata, "bannerGroup");
-				mainGroup.addChildGroup(bannerGroup);
 				
-				var skyScraperGroup:MediaContainerGroup = new MediaContainerGroup();
-				skyScraperGroup.mediaContainer.backgroundColor = 0xFF00;
-				skyScraperGroup.mediaContainer.backgroundAlpha = .2;
+				var skyScraperGroup:MediaContainer = new MediaContainer();
+				skyScraperGroup.backgroundColor = 0xFF00;
+				skyScraperGroup.backgroundAlpha = .2;
 				skyScraperGroup.width = 120;
 				
 				var skyScraperGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraperGroup);
 				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
 				MetadataUtils.setElementId(skyScraperGroup.metadata, "skyScraperGroup");
-				mainGroup.addChildGroup(skyScraperGroup);
 				
 			// Bind media elements to their target containers:
+			mainGroup.addMediaElement(mainContent);
+			bannerGroup.addMediaElement(banners);
+			skyScraperGroup.addMediaElement(skyScraper);
 			
-			mainGroup.mediaContainer.addMediaElement(mainContent);
-			bannerGroup.mediaContainer.addMediaElement(banners);
-			skyScraperGroup.mediaContainer.addMediaElement(skyScraper);
+			// Add the sub containers to the main container's layout renderer. We
+			// can do this because MediaContainer implements ILayoutTarget:
+			mainGroup.layoutRenderer.addTarget(bannerGroup);
+			mainGroup.layoutRenderer.addTarget(skyScraperGroup);
 			
 			// To operate playback of the content tree, construct a
 			// media player. Assignment of the root element to its source will

@@ -171,6 +171,10 @@ package org.osmf.utils
 		
 		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
 		
+		// MediaContainer
+		
+		public static const DIRECT_DISPLAY_LIST_MOD_ERROR:String		= "directDisplayListModError";
+		
 		// HTMLLoadTrait
 		
 		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
@@ -238,6 +242,8 @@ package org.osmf.utils
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
 			
 			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance.";
+			
+			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 			
 			resourceDict[CONTENT_IO_LOAD_ERROR]						= "I/O error when loading image or SWF";
 			resourceDict[CONTENT_SECURITY_LOAD_ERROR]				= "Security error when loading image or SWF";

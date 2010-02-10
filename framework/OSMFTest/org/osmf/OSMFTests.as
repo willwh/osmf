@@ -278,7 +278,6 @@ package org.osmf
 			//
 			
 			addTestSuite(TestMediaContainer);
-			addTestSuite(TestMediaContainerGroup);
 			addTestSuite(TestHTMLMediaContainer);
 			addTestSuite(TestMediaPlayerSprite);
 

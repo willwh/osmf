@@ -22,6 +22,7 @@
 
 package org.osmf.layout
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 
 	/**
@@ -30,11 +31,11 @@ package org.osmf.layout
 	 * Defines the events that can be dispatched on a ILayoutTarget. ILayoutTargets
 	 * are not expected to dispatch these events directly: instead LayoutRenderer
 	 * and MediaElementLayoutTarget dispatch these events via ILayoutTarget instances
-	 * to inform them about what layout renderer they are targetted by, or of what
+	 * to inform them about what layout renderer they are layoutTargetted by, or of what
 	 * layout renderer they got set as the container.
 	 * 
 	 */	
-	internal class LayoutTargetEvent extends Event
+	public class LayoutTargetEvent extends Event
 	{
 		/**
 		 * @private
@@ -99,21 +100,78 @@ package org.osmf.layout
 		/**
 		 * @private
 		 * 
+		 * Constant that defines the value of the type property of the event object for
+		 * a addChildAt event.
+		 * 
+		 * @eventType ADD_CHILD_AT 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const ADD_CHILD_AT:String = "addChildAt";
+		
+		/**
+		 * @private
+		 * 
+		 * Constant that defines the value of the type property of the event object for
+		 * a removeChild event.
+		 * 
+		 * @eventType REMOVE_CHILD 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const REMOVE_CHILD:String = "removeChild";
+		
+		/**
+		 * @private
+		 * 
+		 * Constant that defines the value of the type property of the event object for
+		 * a setChildIndex event.
+		 * 
+		 * @eventType SET_CHILD_INDEX 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public static const SET_CHILD_INDEX:String = "setChildIndex";
+		
+		/**
+		 * @private
+		 * 
 		 * Constructor
 		 *  
 		 * @param type
 		 * @param bubbles
 		 * @param cancelable
 		 * @param layoutRenderer
+		 * @param layoutTarget
+		 * @param displayObject
+		 * @param index
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
-		public function LayoutTargetEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, layoutRenderer:LayoutRendererBase = null)
+		public function LayoutTargetEvent
+							( type:String, bubbles:Boolean=false, cancelable:Boolean=false
+							, layoutRenderer:LayoutRendererBase = null
+							, layoutTarget:ILayoutTarget = null
+							, displayObject:DisplayObject = null
+							, index:int = -1
+							)
 		{
 			_layoutRenderer = layoutRenderer;
+			_layoutTarget = layoutTarget;
+			_displayObject = displayObject;
+			_index = index;
 			super(type, bubbles, cancelable);
 		}
 		
@@ -127,6 +185,21 @@ package org.osmf.layout
 			return _layoutRenderer;
 		}
 		
+		public function get layoutTarget():ILayoutTarget
+		{
+			return _layoutTarget;
+		}
+		
+		public function get displayObject():DisplayObject
+		{
+			return _displayObject;
+		}
+		
+		public function get index():int
+		{
+			return _index;
+		}
+		
 		// Overrides
 		//
 		
@@ -135,12 +208,21 @@ package org.osmf.layout
 		 */		
 		override public function clone():Event
 		{
-			return new LayoutTargetEvent(type, bubbles, cancelable, _layoutRenderer);
+			return new LayoutTargetEvent
+						( type, bubbles, cancelable
+						, _layoutRenderer
+						, _layoutTarget
+						, _displayObject
+						, _index
+						);
 		}
 		
 		// Internals
 		//
 		
 		private var _layoutRenderer:LayoutRendererBase;
+		private var _layoutTarget:ILayoutTarget;
+		private var _displayObject:DisplayObject;
+		private var _index:int;
 	}
 }

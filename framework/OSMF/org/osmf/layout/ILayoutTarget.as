@@ -145,6 +145,51 @@ package org.osmf.layout
 	[Event(name="removeFromLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * stage a display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.ADD_CHILD_AT
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="addChildAt",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * change the display index of the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.SET_CHILD_INDEX
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="setChildIndex",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * remove the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.REMOVE_CHILD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
 	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer
 	 * implementing instance will be capable of laying out. 
 	 *  
@@ -152,7 +197,7 @@ package org.osmf.layout
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */	
+	 */
 	public interface ILayoutTarget extends IEventDispatcher, IMetadataProvider
 	{
 		/**

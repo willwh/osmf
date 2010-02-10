@@ -27,34 +27,6 @@ package org.osmf.layout
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.Metadata;
-
-	/**
-	 * @private
-	 * 
-	 * Dispatched when a layout target's view has changed.
-	 * 
-	 * @eventType org.osmf.events.DisplayObjectEvent.DISPLAY_OBJECT_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="displayObjectChange",type="org.osmf.events.DisplayObjectEvent")]
-
-	/**
-	 * @private
-	 * 
-	 * Dispatched when a layout element's measured width and height changed.
-	 * 
-	 * @eventType org.osmf.events.DisplayObjectEvent.MEDIA_SIZE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="mediaSizeChange",type="org.osmf.events.DisplayObjectEvent")]
 	
 	/**
 	 * @private
@@ -147,6 +119,51 @@ package org.osmf.layout
 	[Event(name="removeFromLayoutRenderer",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * stage a display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.ADD_CHILD_AT
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="addChildAt",type="org.osmf.layout.LayoutTargetEvent")]
+	
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * change the display index of the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.SET_CHILD_INDEX
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="setChildIndex",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
+	 * @private
+	 * 
+	 * Dispatched when a layout renderer wishes its layout target container to
+	 * remove the display object for one of its targets.
+	 * 
+	 * @eventType org.osmf.layout.LayoutTargetEvent.REMOVE_CHILD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
+
+	/**
 	 * LayoutContextSprite defines a Sprite based ILayoutContext implementation.
 	 *  
 	 *  @langversion 3.0
@@ -172,6 +189,10 @@ package org.osmf.layout
 			_metadata = metadata || new Metadata();
 			
 			renderers = new LayoutTargetRenderers(this);
+			
+			addEventListener(LayoutTargetEvent.ADD_CHILD_AT, onAddChildAt);
+			addEventListener(LayoutTargetEvent.SET_CHILD_INDEX, onSetChildIndex);
+			addEventListener(LayoutTargetEvent.REMOVE_CHILD, onRemoveChild);
 			
 			mouseEnabled = true;
 			mouseChildren = true;
@@ -272,7 +293,35 @@ package org.osmf.layout
 				renderers.containerRenderer.validateNow();
 			}
 		}
-	 	
+		
+		// Protected
+		//
+		
+		
+		/**
+		 * @private
+		 **/
+		protected function onAddChildAt(event:LayoutTargetEvent):void
+		{
+			addChildAt(event.displayObject, event.index);
+		}
+		
+		/**
+		 * @private
+		 **/
+		protected function onRemoveChild(event:LayoutTargetEvent):void
+		{
+			removeChild(event.displayObject);	
+		}
+		
+		/**
+		 * @private
+		 **/
+		protected function onSetChildIndex(event:LayoutTargetEvent):void
+		{
+			setChildIndex(event.displayObject, event.index);	
+		}
+		
 	 	// Overrides
 		//
 		
