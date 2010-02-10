@@ -62,7 +62,7 @@ package org.osmf.net
 		 */
 		override public function get currentTime():Number
 		{
-			return netStream.time + audioDelay;
+			return netStream.time + timeOffset;
 		}
 		
 		private function onMetaData(value:Object):void
@@ -107,17 +107,22 @@ package org.osmf.net
 					// For progressive,	NetStream.Play.Stop means playback
 					// has completed.  But this isn't fired for streaming.
 					if (NetStreamUtils.isStreamingResource(resource) == false)
-					{
-						// Flash player bug, the PLAY.STOP is fired before the time is >= duration.
-						// https://bugs.adobe.com/jira/browse/FP-3724
-						audioDelay = duration - netStream.time;	
+					{						
 						signalComplete();				
 					}
 					break;
 			}
 		}
+		
+		protected override function signalComplete():void
+		{
+			// Flash player bug, the PLAY.STOP is fired before the time is >= duration.
+			// https://bugs.adobe.com/jira/browse/FP-3724
+			timeOffset = duration - netStream.time;	
+			super.signalComplete();
+		}
 			
-		private var audioDelay:Number = 0;
+		private var timeOffset:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
 	}
