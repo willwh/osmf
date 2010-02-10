@@ -166,7 +166,7 @@ package org.osmf.layout
 			assertEquals(169, viewSprite.height);
 		}
 		
-		public function testSingleChildScaleAndAlignment():void
+		public function testSingleChildScaleAndAlign():void
 		{
 			// Child
 			
@@ -181,8 +181,8 @@ package org.osmf.layout
 			layout.percentWidth = layout.percentHeight = 80;
 			layout.percentX = layout.percentY = 10;
 			layout.scaleMode = ScaleMode.NONE; // this is the default, actually.
-			layout.verticalAlignment = VerticalAlign.MIDDLE;
-			layout.horizontalAlignment = HorizontalAlign.RIGHT;
+			layout.verticalAlign = VerticalAlign.MIDDLE;
+			layout.horizontalAlign = HorizontalAlign.RIGHT;
 			
 			// Container
 			
@@ -209,57 +209,57 @@ package org.osmf.layout
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.MIDDLE;
-			layout.horizontalAlignment = HorizontalAlign.CENTER;
+			layout.verticalAlign = VerticalAlign.MIDDLE;
+			layout.horizontalAlign = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.MIDDLE;
-			layout.horizontalAlignment = HorizontalAlign.LEFT;
+			layout.verticalAlign = VerticalAlign.MIDDLE;
+			layout.horizontalAlign = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60 + 480 / 2 - 50 / 2, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.TOP;
-			layout.horizontalAlignment = HorizontalAlign.LEFT;
+			layout.verticalAlign = VerticalAlign.TOP;
+			layout.horizontalAlign = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.TOP;
-			layout.horizontalAlignment = HorizontalAlign.CENTER;
+			layout.verticalAlign = VerticalAlign.TOP;
+			layout.horizontalAlign = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.TOP;
-			layout.horizontalAlignment = HorizontalAlign.RIGHT;
+			layout.verticalAlign = VerticalAlign.TOP;
+			layout.horizontalAlign = HorizontalAlign.RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);
 			assertEquals(60, melt.displayObject.y);	
 			
-			layout.verticalAlignment = VerticalAlign.BOTTOM;
-			layout.horizontalAlignment = HorizontalAlign.LEFT;
+			layout.verticalAlign = VerticalAlign.BOTTOM;
+			layout.horizontalAlign = HorizontalAlign.LEFT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.BOTTOM;
-			layout.horizontalAlignment = HorizontalAlign.CENTER;
+			layout.verticalAlign = VerticalAlign.BOTTOM;
+			layout.horizontalAlign = HorizontalAlign.CENTER;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 / 2 - 50 / 2, melt.displayObject.x);
 			assertEquals(480 + 60 - 50, melt.displayObject.y);
 			
-			layout.verticalAlignment = VerticalAlign.BOTTOM;
-			layout.horizontalAlignment = HorizontalAlign.RIGHT;
+			layout.verticalAlign = VerticalAlign.BOTTOM;
+			layout.horizontalAlign = HorizontalAlign.RIGHT;
 			layoutRenderer.validateNow();
 			
 			assertEquals(80 + 640 - 50, melt.displayObject.x);

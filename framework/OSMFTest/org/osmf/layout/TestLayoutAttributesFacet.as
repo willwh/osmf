@@ -47,29 +47,29 @@ package org.osmf.layout
 						
 			assertEquals(facet.namespaceURL, MetadataNamespaces.LAYOUT_ATTRIBUTES);
 			
-			facet.verticalAlignment = VerticalAlign.BOTTOM;
+			facet.verticalAlign = VerticalAlign.BOTTOM;
 			
 			assertEquals(1, eventCounter);
-			assertEquals(LayoutAttributesFacet.VERTICAL_ALIGNMENT, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.VERTICAL_ALIGN, lastEvent.identifier);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(VerticalAlign.BOTTOM, lastEvent.value);
-			assertEquals(facet.verticalAlignment, facet.getValue(LayoutAttributesFacet.VERTICAL_ALIGNMENT), VerticalAlign.BOTTOM);
+			assertEquals(facet.verticalAlign, facet.getValue(LayoutAttributesFacet.VERTICAL_ALIGN), VerticalAlign.BOTTOM);
 			
-			facet.horizontalAlignment = HorizontalAlign.RIGHT;
+			facet.horizontalAlign = HorizontalAlign.RIGHT;
 			
 			assertEquals(2, eventCounter);
-			assertEquals(LayoutAttributesFacet.HORIZONTAL_ALIGNMENT, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.HORIZONTAL_ALIGN, lastEvent.identifier);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(HorizontalAlign.RIGHT, lastEvent.value);
-			assertEquals(facet.horizontalAlignment, facet.getValue(LayoutAttributesFacet.HORIZONTAL_ALIGNMENT), HorizontalAlign.RIGHT);
+			assertEquals(facet.horizontalAlign, facet.getValue(LayoutAttributesFacet.HORIZONTAL_ALIGN), HorizontalAlign.RIGHT);
 			
 			facet.index = 2;
 			
 			assertEquals(3, eventCounter);
-			assertEquals(LayoutAttributesFacet.ORDER, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.INDEX, lastEvent.identifier);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(2, lastEvent.value);
-			assertEquals(facet.index, facet.getValue(LayoutAttributesFacet.ORDER), 2);
+			assertEquals(facet.index, facet.getValue(LayoutAttributesFacet.INDEX), 2);
 			
 			facet.snapToPixel = false;
 			

@@ -64,7 +64,7 @@ package
 			
 			// Instruct the image to be moved to the right hand side, should
 			// any surplus horizontal space be available after scaling:
-			logoLayout.horizontalAlignment = HorizontalAlign.RIGHT;
+			logoLayout.horizontalAlign = HorizontalAlign.RIGHT;
 			
 			// Construct a video element:
 			var video:MediaElement = new VideoElement(new URLResource(LOGO_VID));

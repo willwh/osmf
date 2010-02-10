@@ -88,15 +88,15 @@ package
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.NONE;
-			bannersLayout.verticalAlignment = VerticalAlign.BOTTOM;
-			bannersLayout.horizontalAlignment = HorizontalAlign.CENTER;
+			bannersLayout.verticalAlign = VerticalAlign.BOTTOM;
+			bannersLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.LETTERBOX;
-			mainLayout.verticalAlignment = VerticalAlign.TOP;
-			mainLayout.horizontalAlignment = HorizontalAlign.CENTER;
+			mainLayout.verticalAlign = VerticalAlign.TOP;
+			mainLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			// Consruct 3 regions:
 

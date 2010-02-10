@@ -78,22 +78,22 @@ package
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.LETTERBOX;
-			bannersLayout.verticalAlignment = VerticalAlign.TOP;
-			bannersLayout.horizontalAlignment = HorizontalAlign.CENTER;
+			bannersLayout.verticalAlign = VerticalAlign.TOP;
+			bannersLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			var skyScraperLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraper);
 			skyScraperLayout.percentWidth = 100;
 			skyScraperLayout.percentHeight = 100;
 			skyScraperLayout.scaleMode = ScaleMode.LETTERBOX;
-			skyScraperLayout.verticalAlignment = VerticalAlign.MIDDLE;
-			skyScraperLayout.horizontalAlignment = HorizontalAlign.RIGHT;
+			skyScraperLayout.verticalAlign = VerticalAlign.MIDDLE;
+			skyScraperLayout.horizontalAlign = HorizontalAlign.RIGHT;
 			
 			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.STRETCH;
-			mainLayout.verticalAlignment = VerticalAlign.TOP;
-			mainLayout.horizontalAlignment = HorizontalAlign.CENTER;
+			mainLayout.verticalAlign = VerticalAlign.TOP;
+			mainLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			// Consruct a tree of containers:
 

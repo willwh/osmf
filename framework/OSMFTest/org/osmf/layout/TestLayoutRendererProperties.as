@@ -36,8 +36,8 @@ package org.osmf.layout
 			
 			assertEquals(NaN, lp.index);
 			assertEquals(null, lp.scaleMode);
-			assertEquals(null, lp.verticalAlignment);
-			assertEquals(null, lp.horizontalAlignment);
+			assertEquals(null, lp.verticalAlign);
+			assertEquals(null, lp.horizontalAlign);
 			assertEquals(true, lp.snapToPixel);
 			assertEquals(LayoutMode.NONE, lp.layoutMode);
 			
@@ -68,11 +68,11 @@ package org.osmf.layout
 				lp.index = 1;
 				assertEquals(1, lp.index);
 				
-				lp.verticalAlignment = VerticalAlign.BOTTOM;
-				assertEquals(VerticalAlign.BOTTOM, lp.verticalAlignment);
+				lp.verticalAlign = VerticalAlign.BOTTOM;
+				assertEquals(VerticalAlign.BOTTOM, lp.verticalAlign);
 				
-				lp.horizontalAlignment = HorizontalAlign.CENTER;
-				assertEquals(HorizontalAlign.CENTER, lp.horizontalAlignment);
+				lp.horizontalAlign = HorizontalAlign.CENTER;
+				assertEquals(HorizontalAlign.CENTER, lp.horizontalAlign);
 				
 				lp.scaleMode = ScaleMode.LETTERBOX;
 				assertEquals(ScaleMode.LETTERBOX, lp.scaleMode);

@@ -93,8 +93,8 @@ package org.osmf.containers
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
 			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
 			layout.scaleMode = ScaleMode.NONE;
-			layout.verticalAlignment = VerticalAlign.MIDDLE;
-			layout.horizontalAlignment = HorizontalAlign.CENTER;
+			layout.verticalAlign = VerticalAlign.MIDDLE;
+			layout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			var container:MediaContainer = constructContainer();
 			container.width = 800;

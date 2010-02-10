@@ -97,13 +97,13 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get horizontalAlignment():String
+		public function get horizontalAlign():String
 		{
-			return lazyAttributes ? lazyAttributes.horizontalAlignment : null;
+			return lazyAttributes ? lazyAttributes.horizontalAlign : null;
 		}
-		public function set horizontalAlignment(value:String):void
+		public function set horizontalAlign(value:String):void
 		{
-			eagerAttributes.horizontalAlignment = value;
+			eagerAttributes.horizontalAlign = value;
 		}
 		
 		/**
@@ -118,13 +118,13 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get verticalAlignment():String
+		public function get verticalAlign():String
 		{
-			return lazyAttributes ? lazyAttributes.verticalAlignment : null;
+			return lazyAttributes ? lazyAttributes.verticalAlign : null;
 		}
-		public function set verticalAlignment(value:String):void
+		public function set verticalAlign(value:String):void
 		{
-			eagerAttributes.verticalAlignment = value;
+			eagerAttributes.verticalAlign = value;
 		}
 
 		/**
@@ -534,8 +534,8 @@ package org.osmf.layout
 				 + "layoutMode: " + layoutMode + " "
 				 + "index: " + index + " "
 				 + "scale: " + scaleMode + " "
-				 + "valign: " + verticalAlignment + " "
-				 + "halign: " + horizontalAlignment + " "
+				 + "valign: " + verticalAlign + " "
+				 + "halign: " + horizontalAlign + " "
 				 + "snap: " + snapToPixel;
 		}
 		

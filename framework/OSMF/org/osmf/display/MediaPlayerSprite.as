@@ -85,8 +85,8 @@ package org.osmf.display
 					
 					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
 					layout.scaleMode = _scaleMode;
-					layout.verticalAlignment = VerticalAlign.MIDDLE;
-					layout.horizontalAlignment = HorizontalAlign.CENTER;
+					layout.verticalAlign = VerticalAlign.MIDDLE;
+					layout.horizontalAlign = HorizontalAlign.CENTER;
 				}
 				
 				_mediaPlayer.media = _mediaElement;
@@ -147,8 +147,8 @@ package org.osmf.display
 				{
 					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
 					layout.scaleMode = _scaleMode;
-					layout.verticalAlignment = VerticalAlign.MIDDLE;
-					layout.horizontalAlignment = HorizontalAlign.CENTER;
+					layout.verticalAlign = VerticalAlign.MIDDLE;
+					layout.horizontalAlign = HorizontalAlign.CENTER;
 					
 					mediaContainer.validateNow();
 				}

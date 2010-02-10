@@ -159,8 +159,8 @@ package
 			var controlBarLayout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
 			controlBarLayout.index = 2;
 			controlBarLayout.bottom = 25;
-			controlBarLayout.verticalAlignment = VerticalAlign.TOP;
-			controlBarLayout.horizontalAlignment = HorizontalAlign.CENTER;
+			controlBarLayout.verticalAlign = VerticalAlign.TOP;
+			controlBarLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			containerRenderer.addTarget(controlBar);
 			

@@ -145,8 +145,8 @@ package org.osmf.layout
 				// Set target to scale letter box layoutMode, centered, by default:
 				attributes = new LayoutAttributesFacet();
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
-				attributes.verticalAlignment ||= VerticalAlign.MIDDLE;
-				attributes.horizontalAlignment ||= HorizontalAlign.CENTER;
+				attributes.verticalAlign ||= VerticalAlign.MIDDLE;
+				attributes.horizontalAlign ||= HorizontalAlign.CENTER;
 				target.metadata.addFacet(attributes);
 			}
 			
@@ -156,7 +156,7 @@ package org.osmf.layout
 			targetMetadataWatchers[target] = MetadataUtils.watchFacetValue
 				( target.metadata
 				, MetadataNamespaces.LAYOUT_ATTRIBUTES
-				, LayoutAttributesFacet.ORDER
+				, LayoutAttributesFacet.INDEX
 				, function(..._):void 
 					{
 						updateTargetOrder(target);
@@ -410,7 +410,7 @@ package org.osmf.layout
 			// Apply alignment (if there's surpluss space reported:)
 			if (deltaY)
 			{
-				switch (attributes.verticalAlignment)
+				switch (attributes.verticalAlign)
 				{
 					case null:
 					case VerticalAlign.TOP:
@@ -427,7 +427,7 @@ package org.osmf.layout
 			
 			if (deltaX)
 			{	
-				switch (attributes.horizontalAlignment)
+				switch (attributes.horizontalAlign)
 				{
 					case null:
 					case HorizontalAlign.LEFT:

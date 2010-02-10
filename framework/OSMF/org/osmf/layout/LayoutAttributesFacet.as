@@ -51,7 +51,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ORDER:StringIdentifier = new StringIdentifier("index");
+		public static const INDEX:StringIdentifier = new StringIdentifier("index");
 		
 		/**
 		 * @private
@@ -80,26 +80,26 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the facet's vertical alignment property.
+		 * Intentifier for the facet's vertical align property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VERTICAL_ALIGNMENT:StringIdentifier = new StringIdentifier("verticalAlignment");
+		public static const VERTICAL_ALIGN:StringIdentifier = new StringIdentifier("verticalAlign");
 		
 		/**
 		 * @private
 		 *
-		 * Intentifier for the facet's horizontal alignment property.
+		 * Intentifier for the facet's horizontal align property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const HORIZONTAL_ALIGNMENT:StringIdentifier = new StringIdentifier("horizontalAlignment");
+		public static const HORIZONTAL_ALIGN:StringIdentifier = new StringIdentifier("horizontalAlign");
 		
 		/**
 		 * @private
@@ -127,8 +127,8 @@ package org.osmf.layout
 		
 		public function LayoutAttributesFacet()
 		{
-			_verticalAlignment = null;
-			_horizontalAlignment = null;
+			_verticalAlign = null;
+			_horizontalAlign = null;
 			_scaleMode = null;
 			_snapToPixel = true;
 			_layoutMode = LayoutMode.NONE;
@@ -154,7 +154,7 @@ package org.osmf.layout
 			{
 				return undefined;
 			}
-			else if (identifier.equals(ORDER))
+			else if (identifier.equals(INDEX))
 			{
 				return index;
 			}
@@ -162,13 +162,13 @@ package org.osmf.layout
 			{
 				return scaleMode;
 			}
-			else if (identifier.equals(VERTICAL_ALIGNMENT))
+			else if (identifier.equals(VERTICAL_ALIGN))
 			{
-				return verticalAlignment;
+				return verticalAlign;
 			}
-			else if (identifier.equals(HORIZONTAL_ALIGNMENT))
+			else if (identifier.equals(HORIZONTAL_ALIGN))
 			{
-				return horizontalAlignment;
+				return horizontalAlign;
 			}
 			else if (identifier.equals(SNAP_TO_PIXEL))
 			{
@@ -195,7 +195,7 @@ package org.osmf.layout
 			if (_index != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, ORDER, value, _index);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, INDEX, value, _index);
 					
 				_index = value;
 						
@@ -226,18 +226,18 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get verticalAlignment():String
+		public function get verticalAlign():String
 		{
-			return _verticalAlignment;
+			return _verticalAlign;
 		}
-		public function set verticalAlignment(value:String):void
+		public function set verticalAlign(value:String):void
 		{
-			if (_verticalAlignment != value)
+			if (_verticalAlign != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, VERTICAL_ALIGNMENT, value, _verticalAlignment);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, VERTICAL_ALIGN, value, _verticalAlign);
 					
-				_verticalAlignment = value;
+				_verticalAlign = value;
 						
 				dispatchEvent(event);
 			}
@@ -246,18 +246,18 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get horizontalAlignment():String
+		public function get horizontalAlign():String
 		{
-			return _horizontalAlignment;
+			return _horizontalAlign;
 		}
-		public function set horizontalAlignment(value:String):void
+		public function set horizontalAlign(value:String):void
 		{
-			if (_horizontalAlignment != value)
+			if (_horizontalAlign != value)
 			{
 				var event:FacetValueChangeEvent
-					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, HORIZONTAL_ALIGNMENT, value, _horizontalAlignment);
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, HORIZONTAL_ALIGN, value, _horizontalAlign);
 					
-				_horizontalAlignment = value;
+				_horizontalAlign = value;
 						
 				dispatchEvent(event);
 			}
@@ -308,8 +308,8 @@ package org.osmf.layout
 		
 		private var _index:Number = NaN;
 		private var _scaleMode:String;
-		private var _verticalAlignment:String;
-		private var _horizontalAlignment:String;
+		private var _verticalAlign:String;
+		private var _horizontalAlign:String;
 		private var _snapToPixel:Boolean;
 		private var _layoutMode:String;
 	}

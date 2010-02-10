@@ -121,8 +121,8 @@ package
 			// Set some layout properties on the control bar. Specifically, have it
 			// appear at the bottom of the parallel element, horizontally centererd:
 			var layout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
-			layout.verticalAlignment = VerticalAlign.BOTTOM;
-			layout.horizontalAlignment = HorizontalAlign.CENTER;
+			layout.verticalAlign = VerticalAlign.BOTTOM;
+			layout.horizontalAlign = HorizontalAlign.CENTER;
 			
 			// Make sure that the element shows over the video: element's with a
 			// higher order number set are placed higher in the display list:

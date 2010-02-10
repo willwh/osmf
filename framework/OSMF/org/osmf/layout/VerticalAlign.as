@@ -51,7 +51,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MIDDLE:String = "center";
+		public static const MIDDLE:String = "middle";
 		
 		/**
 		 * Defines the bottom vertical align mode.
