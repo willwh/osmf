@@ -31,8 +31,8 @@ package org.osmf
 
 	CONFIG::FLASH_10_1
 	{
-	import org.osmf.drm.TestDRMServices;
-	import org.osmf.drm.TestNetStreamDRMTrait;
+	import org.osmf.net.drm.TestDRMServices;
+	import org.osmf.net.drm.TestNetStreamDRMTrait;
 	}
 
 	public class OSMFIntegrationTests extends TestSuite

@@ -29,7 +29,6 @@ package org.osmf.elements
 	
 	import mx.utils.Base64Decoder;
 	
-	import org.osmf.drm.DRMState;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaPlayer;
@@ -38,7 +37,7 @@ package org.osmf.elements
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.net.NetLoader;
+	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;

@@ -33,6 +33,7 @@ package org.osmf.net.drm
 	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.traits.DRMState;
 	import org.osmf.utils.OSMFStrings;
 
 	public class TestDRMServices extends TestCase
