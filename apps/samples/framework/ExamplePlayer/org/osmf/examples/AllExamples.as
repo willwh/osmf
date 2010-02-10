@@ -352,7 +352,7 @@ package org.osmf.examples
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
 							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
-							layout.mode = LayoutMode.HORIZONTAL;
+							layout.layoutMode = LayoutMode.HORIZONTAL;
 							layout.width = 640
 							layout.height = 352;
 							
