@@ -24,6 +24,7 @@ package org.osmf.elements
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -62,7 +63,7 @@ package org.osmf.elements
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			return new LoadTrait(loader, resource);
+			return new LoaderLoadTrait(loader, resource);
 		}
 
 		override protected function get successfulResource():MediaResourceBase

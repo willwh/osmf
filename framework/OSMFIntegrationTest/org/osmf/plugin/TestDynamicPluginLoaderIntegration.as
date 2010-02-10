@@ -21,11 +21,11 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.URL;
@@ -54,7 +54,7 @@ package org.osmf.plugin
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			return new LoadTrait(loader, resource);
+			return new PluginLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

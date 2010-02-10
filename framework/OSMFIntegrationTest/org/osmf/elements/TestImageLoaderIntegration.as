@@ -21,13 +21,14 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.traits.LoaderBase;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.URL;
 	
@@ -40,7 +41,7 @@ package org.osmf.elements
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			return new LoadTrait(loader, resource);
+			return new LoaderLoadTrait(loader, resource);
 		}
 
 		override protected function get successfulResource():MediaResourceBase
