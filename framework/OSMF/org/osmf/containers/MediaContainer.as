@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.containers
 {
+	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
@@ -77,9 +78,6 @@ package org.osmf.containers
 		// IMediaContainer
 		//
 		
-		/**
-		 * @private
-		 */
 		public function addMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
@@ -115,9 +113,6 @@ package org.osmf.containers
 			return element;
 		}
 		
-		/**
-		 * @private
-		 */
 		public function removeMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
@@ -158,9 +153,6 @@ package org.osmf.containers
 			return result;
 		}
 		
-		/**
-		 * @private
-		 */
 		public function containsMediaElement(element:MediaElement):Boolean
 		{
 			return layoutTargets[element] != undefined
@@ -224,6 +216,9 @@ package org.osmf.containers
 		{
 			layoutRenderer.validateNow();
 		}
+		
+		// Public Interface
+		//
 		
 		/**
 		 * Defines the container's background color. By default, this value
