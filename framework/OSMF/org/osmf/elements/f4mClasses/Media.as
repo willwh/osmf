@@ -57,7 +57,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
- 		public var bootstrapInfo:BootstrapInfo = new BootstrapInfo();
+ 		public var bootstrapInfo:BootstrapInfo;
  		
 		/**
 		 * Location of the media.

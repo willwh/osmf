@@ -164,6 +164,7 @@ package org.osmf.elements.f4mClasses
 			
 			if (value.attribute('bootstrapInfoId').length() > 0)
 			{
+				media.bootstrapInfo = new BootstrapInfo();
 				media.bootstrapInfo.id = value.@bootstrapInfoId;
 			}
 			
@@ -267,7 +268,11 @@ package org.osmf.elements.f4mClasses
 								
 			for each (media in allMedia)
 			{
-				if (media.bootstrapInfo.id == bootstrapInfo.id)
+				if (media.bootstrapInfo == null) //No per media bootstrap. Apply it to all items.
+				{
+					media.bootstrapInfo = bootstrapInfo;
+				}
+				else if (media.bootstrapInfo.id == bootstrapInfo.id)
 				{
 					media.bootstrapInfo = bootstrapInfo;
 				}						
@@ -358,8 +363,7 @@ package org.osmf.elements.f4mClasses
 					resource = new URLResource(new URL(manifestFolder + "/" + url.rawUrl));
 				}
 				
-				if (media.bootstrapInfo	!= null ||
-					media.bootstrapInfo.url != null)
+				if (media.bootstrapInfo	!= null)
 				{
 					serverBaseURLs = new Vector.<String>();
 					serverBaseURLs.push(baseURLString);
@@ -439,8 +443,7 @@ package org.osmf.elements.f4mClasses
 					
 					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.
 					// For now we assume they're all the same.
-					if (media.bootstrapInfo	!= null ||
-						media.bootstrapInfo.url != null)
+					if (media.bootstrapInfo	!= null)
 					{
 						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
 						if (media.bootstrapInfo.url != null &&

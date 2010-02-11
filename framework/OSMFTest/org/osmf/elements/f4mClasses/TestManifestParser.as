@@ -236,7 +236,11 @@ package org.osmf.elements.f4mClasses
 			assertTrue(facet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
 			
 			assertEquals(kvFacet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
-						
+			
+			//Make sure we don't put on a HTTPStreaming bootstrap:
+			
+			var bootStrapFacet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet ;
+			assertNull(bootStrapFacet);					
 		}
 		
 		public function testResourceCreationSubClip():void
