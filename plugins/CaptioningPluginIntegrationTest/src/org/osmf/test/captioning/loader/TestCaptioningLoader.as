@@ -118,7 +118,7 @@ package org.osmf.test.captioning.loader
 						);
 				}
 			}
-			return new LoadTrait(loader, resource);
+			return new CaptioningLoadTrait(loader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase
