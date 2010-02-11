@@ -24,13 +24,11 @@ package org.osmf.net.rtmpstreaming
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
-	import flash.net.NetStreamInfo;
 	import flash.utils.Timer;
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
 	
 	/**
@@ -46,6 +44,11 @@ package org.osmf.net.rtmpstreaming
 	 */
 	public class RTMPMetricsProvider extends MetricsProviderBase
 	{
+		/**
+		 * Constructor.
+		 * 
+		 * @param netStream The NetStream to provide metrics for.
+		 **/
 		public function RTMPMetricsProvider(netStream:NetStream)
 		{
 			super(netStream);
@@ -169,11 +172,14 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override public function disable():void 
+		override public function set enabled(value:Boolean):void 
 		{
-			super.disable();
+			super.enabled = value;
 			
-			_timer.stop();
+			if (value == false)
+			{
+				_timer.stop();
+			}
 		}
 		
 		// Internals

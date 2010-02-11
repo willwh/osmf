@@ -60,39 +60,18 @@ package org.osmf.net.dynamicstreaming
 			_targetBufferTime = 0;
 			_isLive = false;
 		}
-		
-		/**
-		 * Enables this metrics engine.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function enable(): void 
-		{
-			_enabled = true;
-		}
-		
-		/**
-		 * Disables this metrics engine.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function disable(): void 
-		{
-			_enabled = false;
-		}
-		
+
 		/**
 		 * Indicates whether this metrics engine is enabled.
 		 **/
 		public function get enabled():Boolean
 		{
 			return _enabled;
+		}
+		
+		public function set enabled(value:Boolean):void
+		{
+			_enabled = value;
 		}
 		
 		/**

@@ -53,7 +53,7 @@ package org.osmf.net.rtmpstreaming
 		private static const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
 		
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param safteyMultiple A multiplier that is used when the stream bitrate is compared against available
 		 * bandwidth. The stream bitrate is multiplied by this amount. The default is 1.15.
@@ -71,6 +71,8 @@ package org.osmf.net.rtmpstreaming
 		}
 
 		/**
+		 * @private
+		 * 
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
 		 *  

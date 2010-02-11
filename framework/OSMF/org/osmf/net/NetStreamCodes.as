@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.net
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetStreamCodes class provides static constants for event types
 	 * that a NetStream dispatches as NetStatusEvents.
 	 * <p>A NetClient uses some of these codes to register handlers for 		
@@ -34,7 +38,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class NetStreamCodes
+	public final class NetStreamCodes
 	{
 		/**	
 		 * "status"	

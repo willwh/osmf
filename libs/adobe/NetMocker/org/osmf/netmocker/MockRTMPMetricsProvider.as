@@ -159,14 +159,6 @@ package org.osmf.netmocker
 			_isLive = value;
 		}
 		
-		override public function enable():void
-		{
-		}
-		
-		override public function disable():void
-		{
-		}
-		
 		private var _targetBufferTimeReached:Boolean;
 		private var _maxBandwidth:Number;
 		private var _averageMaxBandwidthArray:Array;

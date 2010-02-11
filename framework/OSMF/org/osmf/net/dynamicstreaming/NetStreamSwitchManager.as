@@ -444,7 +444,7 @@ package org.osmf.net.dynamicstreaming
 			
 			maxBufferLength = isLive ? BUFFER_STABLE_LIVE : BUFFER_STABLE_ONDEMAND;
 			metricsProvider.targetBufferTime = maxBufferLength;
-			metricsProvider.enable();
+			metricsProvider.enabled = true;
 			metricsProvider.isLive = isLive;
 			
 			debug("prepareForSwitching() - max buffer=" + maxBufferLength+", isLive=" + isLive);

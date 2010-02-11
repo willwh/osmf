@@ -46,6 +46,8 @@ package org.osmf.net.rtmpstreaming
 		}
 
 		/**
+		 * @private
+		 * 
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
 		 * 

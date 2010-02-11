@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.net
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The NetConnectionCodes class provides static constants for event types
 	 * that a NetConnection dispatches as NetStatusEvents.
 	 * @see flash.net.NetConnection
@@ -32,7 +36,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class NetConnectionCodes
+	public final class NetConnectionCodes
 	{
 		/**
 		 * "error"	Packet encoded in an unidentified format.

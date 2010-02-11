@@ -84,6 +84,8 @@ package org.osmf.net.httpstreaming
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Overridden to allow the creation of a NetStreamSwitchManager object.
 		 *  
 		 *  @langversion 3.0

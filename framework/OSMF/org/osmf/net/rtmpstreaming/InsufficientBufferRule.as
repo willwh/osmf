@@ -53,7 +53,7 @@ package org.osmf.net.rtmpstreaming
 		
 
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 * @param metrics Provider of runtime metrics.
 		 * @param panicBufferLevel A Tunable parameter for this rule. The "panic" buffer level 
@@ -75,6 +75,8 @@ package org.osmf.net.rtmpstreaming
 		}
 				
 		/**
+		 * @private
+		 * 
 		 * The new bitrate index to which this rule recommends switching. If the rule has no change request it will
 		 * return a value of -1. 
 		 *  
