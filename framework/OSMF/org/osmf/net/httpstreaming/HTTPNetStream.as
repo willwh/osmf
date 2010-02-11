@@ -110,13 +110,14 @@ package org.osmf.net.httpstreaming
 			
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
-			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION, onTotalDuration);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX, onRequestLoadIndexFile);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
-			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ADDITIONAL_HEADER, onAdditionalHeader);
+			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
+			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
 			
 			// removed NOTIFY_TIME_BIAS
-			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDuration);
+			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
+			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromFileHandler);
 			
 			mainTimer = new Timer(MAIN_TIMER_INTERVAL); 
 			mainTimer.addEventListener(TimerEvent.TIMER, onMainTimer);	
@@ -395,13 +396,21 @@ package org.osmf.net.httpstreaming
 			_state = value;
 		}
 		
-		private function insertScriptDataTag(tag:FLVTagScriptDataObject):void
+		private function insertScriptDataTag(tag:FLVTagScriptDataObject, first:Boolean = false):void
 		{
 			if (!_insertScriptDataTags)
 			{
 				_insertScriptDataTags = new Vector.<FLVTagScriptDataObject>();
 			}
-			_insertScriptDataTags.push(tag);
+			
+			if (first)
+			{
+				_insertScriptDataTags.unshift(tag);	// push front
+			}
+			else
+			{
+				_insertScriptDataTags.push(tag);
+			}
 		}
 		
 		private function flvTagHandler(tag:FLVTag):Boolean
@@ -1110,7 +1119,12 @@ package org.osmf.net.httpstreaming
 			}
 		}
 
-		private function onSegmentDuration(event:HTTPStreamingFileHandlerEvent):void
+		private function onSegmentDurationFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
+		{
+			_segmentDuration = event.segmentDuration;
+		}
+		
+		private function onSegmentDurationFromIndexHandler(event:HTTPStreamingIndexHandlerEvent):void	// TOOD: unify this with the above so we don't need to duplicate
 		{
 			_segmentDuration = event.segmentDuration;
 		}
@@ -1121,18 +1135,6 @@ package org.osmf.net.httpstreaming
 			_streamNames = event.streamNames;
 			_numQualityLevels = _qualityRates.length;
 		}	
-
-		private function onTotalDuration(event:HTTPStreamingIndexHandlerEvent):void
-		{
-			_totalDuration = event.totalDuration;
-			
-			var object:Object = new Object();
-			object["duration"] = _totalDuration;
-			if (super.client != null && super.client.hasOwnProperty("onMetaData"))
-			{
-				super.client.onMetaData(object);
-			}
-		}
 
 		private function onIndexReady(event:HTTPStreamingIndexHandlerEvent):void
 		{
@@ -1168,16 +1170,37 @@ package org.osmf.net.httpstreaming
 				);
 		}
 
-		private function onAdditionalHeader(event:HTTPStreamingIndexHandlerEvent):void
+		private function onScriptDataFromIndexHandler(event:HTTPStreamingIndexHandlerEvent):void
+		{
+			onScriptData(event.scriptDataObject, event.scriptDataFirst, event.scriptDataImmediate);
+		}
+		
+		private function onScriptDataFromFileHandler(event:HTTPStreamingFileHandlerEvent):void
+		{
+			onScriptData(event.scriptDataObject, event.scriptDataFirst, event.scriptDataImmediate);			// TODO: somehow figure out how to not need duplicate listeners
+		}
+		
+		private function onScriptData(scriptDataObject:FLVTagScriptDataObject, scriptDataFirst:Boolean, scriptDataImmediate:Boolean):void
 		{
 			CONFIG::LOGGING
 			{
-				logger.debug("onAdditionalHeader called");
+				logger.debug("onScriptData called");
 			}
 			
-			var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			flvTag.data = event.additionalHeader;
-			insertScriptDataTag(flvTag);
+			if (scriptDataImmediate)
+			{
+				if (client)
+				{
+					if (client.hasOwnProperty(scriptDataObject.objects[0]))
+					{
+						client[scriptDataObject.objects[0]](scriptDataObject.objects[1]);	// XXX note that we can only support a single argument for immediate dispatch
+					}
+				}
+			}
+			else
+			{
+				insertScriptDataTag(scriptDataObject, scriptDataFirst);
+			}
 		}
 
 		/**

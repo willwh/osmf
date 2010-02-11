@@ -23,7 +23,8 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	import flash.net.URLRequest;
-	import flash.utils.ByteArray;
+	
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	[ExcludeClass]
 	
@@ -34,10 +35,10 @@ package org.osmf.events
 	{
 		public static const NOTIFY_INDEX_READY:String = "notifyIndexReady";
 		public static const NOTIFY_RATES:String = "notifyRates";
-		public static const NOTIFY_TOTAL_DURATION:String = "notifyTotalDuration";
 		public static const REQUEST_LOAD_INDEX:String = "requestLoadIndex";
 		public static const NOTIFY_ERROR:String = "notifyError";
-		public static const NOTIFY_ADDITIONAL_HEADER:String = "notifyAdditionalHeader";
+		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
+		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
 
 		public function HTTPStreamingIndexHandlerEvent(
 			type:String, 
@@ -45,21 +46,25 @@ package org.osmf.events
 			cancelable:Boolean=false,
 			streamNames:Array = null, 
 			rates:Array = null, 
-			totalDuration:Number = 0,
 			request:URLRequest = null,
 			requestContext:Object = null,
 			binaryData:Boolean = true,
-			additionalHeader:ByteArray = null)
+			segmentDuration:Number = 0,
+			scriptDataObject:FLVTagScriptDataObject = null,
+			scriptDataFirst:Boolean = false,
+			scriptDataImmediate:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
 		{
 			super(type, bubbles, cancelable);
 			
 			_streamNames = streamNames;
 			_rates = rates;
-			_totalDuration = totalDuration;
 			_request = request;
 			_requestContext = requestContext;
 			_binaryData = binaryData;
-			_additionalHeader = additionalHeader;
+			_segmentDuration = segmentDuration;
+			_scriptDataObject = scriptDataObject;
+			_scriptDataFirst = scriptDataFirst;
+			_scriptDataImmediate = scriptDataImmediate
 		}
 
 		public function get streamNames():Array
@@ -70,11 +75,6 @@ package org.osmf.events
 		public function get rates():Array
 		{
 			return _rates;
-		}
-
-		public function get totalDuration():Number
-		{
-			return _totalDuration;
 		}
 
 		public function get request():URLRequest
@@ -92,9 +92,24 @@ package org.osmf.events
 			return _binaryData;
 		}
 		
-		public function get additionalHeader():ByteArray
+		public function get segmentDuration():Number
 		{
-			return _additionalHeader;
+			return _segmentDuration;
+		}
+		
+		public function get scriptDataObject():FLVTagScriptDataObject
+		{
+			return _scriptDataObject;
+		}
+		
+		public function get scriptDataFirst():Boolean
+		{
+			return _scriptDataFirst;
+		}
+		
+		public function get scriptDataImmediate():Boolean
+		{
+			return _scriptDataImmediate;
 		}
 
 		override public function clone():Event
@@ -105,11 +120,13 @@ package org.osmf.events
 				, cancelable
 				, streamNames
 				, rates
-				, totalDuration
 				, request
 				, requestContext
 				, binaryData
-				, additionalHeader
+				, segmentDuration
+				, scriptDataObject
+				, scriptDataFirst
+				, scriptDataImmediate
 				);
 		}
 		
@@ -118,10 +135,12 @@ package org.osmf.events
 		
 		private var _streamNames:Array;
 		private var _rates:Array;
-		private var _totalDuration:Number;
 		private var _request:URLRequest;
 		private var _requestContext:Object;
 		private var _binaryData:Boolean;
-		private var _additionalHeader:ByteArray;	
+		private var _segmentDuration:Number;
+		private var _scriptDataObject:FLVTagScriptDataObject;
+		private var _scriptDataFirst:Boolean;
+		private var _scriptDataImmediate:Boolean;	
 	}
 }

@@ -22,6 +22,7 @@
 package org.osmf.events
 {
 	import flash.events.Event;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	[ExcludeClass]
 	
@@ -31,20 +32,21 @@ package org.osmf.events
 	public class HTTPStreamingFileHandlerEvent extends Event
 	{
 		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
-		public static const NOTIFY_TIME_BIAS:String = "notifyTimeBias";
-
+		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
+		
 		public function HTTPStreamingFileHandlerEvent(
-			type:String, bubbles:Boolean=false, cancelable:Boolean=false, timeBias:Number=0, segmentDuration:Number=0)
+			type:String, bubbles:Boolean=false, cancelable:Boolean=false, 
+			segmentDuration:Number=0,
+			scriptDataObject:FLVTagScriptDataObject = null,
+			scriptDataFirst:Boolean = false,
+			scriptDataImmediate:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
 		{
 			super(type, bubbles, cancelable);
 			
-			_timeBias = timeBias;
 			_segmentDuration = segmentDuration;
-		}
-		
-		public function get timeBias():Number
-		{
-			return _timeBias;
+			_scriptDataObject = scriptDataObject;
+			_scriptDataFirst = scriptDataFirst;
+			_scriptDataImmediate = scriptDataImmediate
 		}
 
 		public function get segmentDuration():Number
@@ -52,15 +54,33 @@ package org.osmf.events
 			return _segmentDuration;
 		}
 
-		override public function clone():Event
+	
+		public function get scriptDataObject():FLVTagScriptDataObject
 		{
-			return new HTTPStreamingFileHandlerEvent(type, bubbles, cancelable, timeBias, segmentDuration);
+			return _scriptDataObject;
 		}
 		
+		public function get scriptDataFirst():Boolean
+		{
+			return _scriptDataFirst;
+		}
+		
+		public function get scriptDataImmediate():Boolean
+		{
+			return _scriptDataImmediate;
+		}
+	
+		override public function clone():Event
+		{
+			return new HTTPStreamingFileHandlerEvent(type, bubbles, cancelable, segmentDuration, scriptDataObject, scriptDataFirst, scriptDataImmediate);
+		}
+				
 		// Internal
 		//
 		
-		private var _timeBias:Number;
 		private var _segmentDuration:Number;
+		private var _scriptDataObject:FLVTagScriptDataObject;
+		private var _scriptDataFirst:Boolean;
+		private var _scriptDataImmediate:Boolean;	
 	}
 }

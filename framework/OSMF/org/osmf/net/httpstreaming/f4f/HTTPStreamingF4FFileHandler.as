@@ -270,26 +270,6 @@ package org.osmf.net.httpstreaming.f4f
 					_mdatBytesOffset = 0;
 				}
 			}
-			
-			// TODO: Can we move the calculateSegmentDuration out of here, and have
-			// it called by the receiver of the event?  This would decouple us from
-			// the index handler.  We'd probably need to change the event to be
-			// "notify time bias and time scale", or something like that.
-			var duration:Number = _indexHandler ? _indexHandler.calculateSegmentDuration(timeBias) : 0;
-			var event:HTTPStreamingFileHandlerEvent = new HTTPStreamingFileHandlerEvent(
-				HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, false, false, 0, duration / _afra.timeScale); 
-			dispatchEvent(event);
-			
-			// We also update the timeBias if the request was an explicit seek to
-			// position zero.
-			if (	entry != null
-				|| (_processRequestWasSeek && _seekToTime <= 0)
-			   )
-			{
-				event = new HTTPStreamingFileHandlerEvent(
-					HTTPStreamingFileHandlerEvent.NOTIFY_TIME_BIAS, false, false, timeBias / _afra.timeScale);
-				dispatchEvent(event);
-			}
 		}
 		
 		private function getMDATBytesOffset(seekToTime:Number):LocalRandomAccessEntry

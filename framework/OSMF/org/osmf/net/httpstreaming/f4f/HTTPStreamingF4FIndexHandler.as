@@ -30,6 +30,7 @@ package org.osmf.net.httpstreaming.f4f
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
+	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
 	CONFIG::LOGGING 
 	{	
@@ -101,16 +102,7 @@ package org.osmf.net.httpstreaming.f4f
 					bootstrapBoxes[i] = bootstrapBox;
 					if (!totalDurationNotified)
 					{
-						dispatchEvent
-							( new HTTPStreamingIndexHandlerEvent
-								( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
-								, false
-								, false
-								, null
-								, null
-								, bootstrapBox.totalDuration / bootstrapBox.timeScale
-								)
-							);
+						notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale);						
 						totalDurationNotified = true;
 					}
 				}
@@ -124,7 +116,6 @@ package org.osmf.net.httpstreaming.f4f
 								, false
 								, null
 								, null
-								, 0
 								, new URLRequest(bootstrap.url.rawUrl)
 								, i
 								, true
@@ -170,16 +161,7 @@ package org.osmf.net.httpstreaming.f4f
 
 			if (!totalDurationNotified)
 			{
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_TOTAL_DURATION
-						, false
-						, false
-						, null
-						, null
-						, bootstrapBox.totalDuration / bootstrapBox.timeScale
-						)
-					);
+				notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale);						
 				totalDurationNotified = true;
 			}
 
@@ -352,18 +334,22 @@ package org.osmf.net.httpstreaming.f4f
 				// hit considering the size of the additional header.
 				if (newAdditionalHeader != prevAdditionalHeader && newAdditionalHeader != null)
 				{
+					var flvTag:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+					flvTag.data = newAdditionalHeader;
 					dispatchEvent
 						( new HTTPStreamingIndexHandlerEvent
-							( HTTPStreamingIndexHandlerEvent.NOTIFY_ADDITIONAL_HEADER
+							( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
 							, false
 							, false
 							, null
 							, null
-							, 0
 							, null
 							, null
 							, true
-							, newAdditionalHeader
+							, 0
+							, flvTag
+							, true
+							, false
 							)
 						);
 				}
@@ -448,6 +434,30 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			// For now, we assume that there is only one fragment run table.
 			return abst.fragmentRunTables[0];
+		}
+		
+		private function notifyTotalDuration(duration:Number):void
+		{
+			var sdo:FLVTagScriptDataObject = new FLVTagScriptDataObject();
+			var metaInfo:Object = new Object();
+			metaInfo.duration = duration;
+			sdo.objects = ["onMetaData", metaInfo];
+			dispatchEvent
+				( new HTTPStreamingIndexHandlerEvent
+					( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
+					,false
+					, false
+					, null
+					, null
+					, null
+					, null
+					, false
+					, 0
+					, sdo
+					, false
+					, true
+					)
+				);
 		}
 
 		private var totalDurationNotified:Boolean;
