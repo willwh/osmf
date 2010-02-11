@@ -32,16 +32,17 @@ package org.osmf.netmocker
 
 	public class MockDynamicStreamingNetLoader extends DynamicStreamingNetLoader implements IMockNetLoader
 	{
-		public function MockDynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, netConnectionFactory:NetConnectionFactory= null, mockNetNegotiator:MockNetNegotiator = null)
+		public function MockDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null, mockNetNegotiatorFunction:Function = null)
 		{
-			negotiator = mockNetNegotiator || new MockNetNegotiator();
+			mockNetNegotiatorFunction = mockNetNegotiatorFunction || createMockNetNegotiator;
+			_netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			
 			if (netConnectionFactory == null)
 			{
-				netConnectionFactory = new DefaultNetConnectionFactory(negotiator);
+				netConnectionFactory = new DefaultNetConnectionFactory(createMockNetNegotiator);
 			}
 			
-			super(allowConnectionSharing, netConnectionFactory);
+			super(netConnectionFactory);
 		}
 		
 		/**
@@ -49,12 +50,12 @@ package org.osmf.netmocker
 		 */
 		public function set netConnectionExpectation(value:NetConnectionExpectation):void
 		{
-			negotiator.netConnectionExpectation = value;			
+			_netConnectionExpectation = value;			
 		}
 		
 		public function get netConnectionExpectation():NetConnectionExpectation
 		{
-			return negotiator.netConnectionExpectation;
+			return _netConnectionExpectation;
 		}
 		
 		/**
@@ -128,6 +129,14 @@ package org.osmf.netmocker
 			return mockNetStream;
 	    }
 	    
+	    private function createMockNetNegotiator():MockNetNegotiator
+	    {
+	    	var mockNetNegotiator:MockNetNegotiator = new MockNetNegotiator();
+	    	mockNetNegotiator.netConnectionExpectation = _netConnectionExpectation;
+	    	return mockNetNegotiator;
+	    }
+
+		private var _netConnectionExpectation:NetConnectionExpectation;
 	    private var _netStreamExpectedDuration:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
 	    private var _netStreamExpectedWidth:Number = 0;

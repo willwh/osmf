@@ -25,8 +25,9 @@ package com.akamai.osmf.net
 	import flash.net.NetConnection;
 	
 	import org.osmf.net.NetNegotiator;
-	import org.osmf.utils.URL;
+	import org.osmf.net.PortProtocol;
 	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
 
 	/**
 	 * The AkamaiNetNegotiator class is a custom <code>NetNegotiator</code> class serving
@@ -56,7 +57,7 @@ package com.akamai.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		override protected function buildConnectionAddress(url:URL, protocol:String, port:String):String
+		override protected function buildConnectionAddress(url:URL, portProtocol:PortProtocol):String
 		{
 			var fmsURL:FMSURL = url as FMSURL;
 			if (fmsURL == null)
@@ -68,7 +69,7 @@ package com.akamai.osmf.net
 			var aifpToken:String = fmsURL.getParamValue("aifp");
 			var slistToken:String = fmsURL.getParamValue("slist");
 					
-			var retVal:String = new String(protocol + "://" + fmsURL.host + ":" + port + "/" + fmsURL.appName);
+			var retVal:String = new String(portProtocol.protocol + "://" + fmsURL.host + ":" + portProtocol.port + "/" + fmsURL.appName);
 			
 			if (authToken.length > 0)
 			{

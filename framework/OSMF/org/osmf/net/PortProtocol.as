@@ -24,17 +24,42 @@
 package org.osmf.net
 {
 	/**
-	* NetConnectionAttempt is a utility class for defining the data structure for a connection attempt.
-	*  
-	*  @langversion 3.0
-	*  @playerversion Flash 10
-	*  @playerversion AIR 1.5
-	*  @productversion OSMF 1.0
-	*/
-	public class NetConnectionAttempt
+	 * PortProtocol encapsulates a port-protocol pair.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	public class PortProtocol
 	{
-		public var port:String;
-		public var address:String;
-		public var protocol:String;
+		/**
+		 * The port.
+		 **/
+		public function get port():int
+		{
+			return _port;
+		}
+		
+		public function set port(value:int):void
+		{
+			_port = value;
+		}
+
+		/**
+		 * The protocol.
+		 **/
+		public function get protocol():String
+		{
+			return _protocol;
+		}
+		
+		public function set protocol(value:String):void
+		{
+			_protocol = value;
+		}
+				
+		private var _port:int;
+		private var _protocol:String;
 	}
 }

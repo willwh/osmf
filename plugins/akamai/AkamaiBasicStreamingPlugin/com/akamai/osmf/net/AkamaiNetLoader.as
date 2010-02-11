@@ -25,7 +25,7 @@ package com.akamai.osmf.net
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.*;
@@ -42,9 +42,9 @@ package com.akamai.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		public function AkamaiNetLoader(allowConnectionSharing:Boolean = true, factory:NetConnectionFactory = null)
+		public function AkamaiNetLoader(factory:NetConnectionFactoryBase)
 		{
-			super(allowConnectionSharing, factory);
+			super(factory);
 		}
 
 		/**

@@ -23,8 +23,9 @@ package org.osmf.netmocker
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;
@@ -74,7 +75,7 @@ package org.osmf.netmocker
 			{
 				netLoader.netConnectionExpectation = NetConnectionExpectation.REJECTED_CONNECTION;
 			}
-			return new LoadTrait(netLoader, resource);
+			return new NetStreamLoadTrait(netLoader, resource);
 		}
 		
 		override protected function get successfulResource():MediaResourceBase

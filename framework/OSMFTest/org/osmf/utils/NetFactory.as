@@ -27,10 +27,12 @@ package org.osmf.utils
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetNegotiator;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockNetConnection;
 	import org.osmf.netmocker.MockNetLoader;
+	import org.osmf.netmocker.MockNetNegotiator;
 	import org.osmf.netmocker.MockNetStream;
 	
 	/**
@@ -72,11 +74,11 @@ package org.osmf.utils
 		/**
 		 * Create and return a new NetLoader.
 		 **/
-		public function createNetLoader(allowConnectionSharing:Boolean = true, factory:NetConnectionFactory = null):NetLoader
+		public function createNetLoader(factory:NetConnectionFactory=null):NetLoader
 		{
 			return useMockObjects
-						? new MockNetLoader(allowConnectionSharing, factory)
-						: new NetLoader(allowConnectionSharing, factory);
+						? new MockNetLoader(factory)
+						: new NetLoader(factory);
 		}
 
 		/**
@@ -97,6 +99,16 @@ package org.osmf.utils
 			return useMockObjects
 						? new MockNetConnection()
 						: new NetConnection();
+		}
+		
+		/**
+		 * Create and return a new NetNegotiator.
+		 **/
+		public function createNetNegotiator():NetNegotiator
+		{
+			return useMockObjects
+						? new MockNetNegotiator()
+						: new NetNegotiator();
 		}
 
 		/**

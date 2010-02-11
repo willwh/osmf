@@ -44,7 +44,7 @@ package com.akamai.osmf
 		public function AkamaiBasicStreamingPluginInfo()
 		{		
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
-			netLoader = new AkamaiNetLoader(true, new AkamaiNetConnectionFactory());
+			netLoader = new AkamaiNetLoader(new AkamaiNetConnectionFactory());
 			
 			var item:MediaFactoryItem = new MediaFactoryItem("com.akamai.osmf.BasicStreamingVideoElement", netLoader.canHandleResource, createVideoElement);
 			items.push(item);

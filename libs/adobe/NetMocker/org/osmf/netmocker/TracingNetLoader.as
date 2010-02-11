@@ -42,12 +42,11 @@ package org.osmf.netmocker
 		 * @param allowConnectionSharing true if the NetLoader can invoke a NetConnectionFactory which
 		 * re-uses (shares) an existing NetConnection. 
 		 */
-		public function TracingNetLoader(allowConnectionSharing:Boolean=true)
+		public function TracingNetLoader()
 		{
-			var negotiator:NetNegotiator = new TracingNetNegotiator();
-			var factory:NetConnectionFactory = new DefaultNetConnectionFactory(negotiator);
+			var factory:NetConnectionFactory = new DefaultNetConnectionFactory(createNetNegotiator);
 			
-			super(allowConnectionSharing, factory);
+			super(factory);
 		}
 	    
 	    /**
@@ -63,6 +62,11 @@ package org.osmf.netmocker
 	    
 	    // Internals
 	    //
+	    
+	    private function createNetNegotiator():NetNegotiator
+	    {
+	    	return new TracingNetNegotiator();
+	    }
 	    
 	    private function onNetStreamNetStatusEvent(event:NetStatusEvent):void
 	    {

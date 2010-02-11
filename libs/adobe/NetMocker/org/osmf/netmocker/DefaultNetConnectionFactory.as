@@ -26,9 +26,11 @@ package org.osmf.netmocker
 	
 	public class DefaultNetConnectionFactory extends NetConnectionFactory
 	{
-		public function DefaultNetConnectionFactory(netNegotiator:NetNegotiator)
+		public function DefaultNetConnectionFactory(netNegotiatorCreationFunction:Function, allowNetConnectionSharing:Boolean=true)
 		{
-			this.netNegotiator = netNegotiator;
+			super(allowNetConnectionSharing);
+			
+			this.netNegotiatorCreationFunction = netNegotiatorCreationFunction;
 		}
 		
 		/**
@@ -36,9 +38,9 @@ package org.osmf.netmocker
 		 */
 		override protected function createNetNegotiator():NetNegotiator
 		{
-			return netNegotiator; 
+			return netNegotiatorCreationFunction.call(this); 
 		}
 		
-		private var netNegotiator:NetNegotiator;
+		private var netNegotiatorCreationFunction:Function;
 	}
 }

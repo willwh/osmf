@@ -66,7 +66,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const CONNECTION_FAILED:String = "connectionfailed";
+		public static const CONNECTION_FAILED:String = "connectionFailed";
 
 		/**
 		 * Constructor.

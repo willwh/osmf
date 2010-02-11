@@ -23,6 +23,9 @@ package org.osmf.net
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.net.NetConnection;
+	import flash.utils.Timer;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
@@ -34,11 +37,10 @@ package org.osmf.net
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
 	import org.osmf.netmocker.IMockNetLoader;
 	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.netmocker.MockNetNegotiator;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NetFactory;
@@ -242,24 +244,34 @@ package org.osmf.net
 			doTestMultipleConcurrentLoads();
 		}
 		
-		public function testConnectionSharing():void
-		{
-			doTestConnectionSharing();
-		}
-		
 		public function testAllowConnectionSharing():void
 		{
 			doTestAllowConnectionSharing();
+		}
+		
+		public function testDisallowConnectionSharing():void
+		{
+			doTestDisallowConnectionSharing();
 		}
 		
 		public function testUnloadWithSharedConnections():void
 		{
 			doTestUnloadWithSharedConnections();
 		}
+
+		public function testUnloadWithUnsharedConnections():void
+		{
+			doTestUnloadWithUnsharedConnections();
+		}
 		
 		public function testNetConnectionFactoryArgument():void
 		{
 			doTestNetConnectionFactoryArgument();
+		}
+		
+		public function testLoadHTTP():void
+		{
+			doTestLoadHTTP();
 		}
 		
 		private function doTestMultipleConcurrentLoads():void
@@ -302,8 +314,10 @@ package org.osmf.net
 			
 		}
 		
-		private function doTestConnectionSharing():void
+		private function doTestAllowConnectionSharing():void
 		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
 			var netLoader:NetLoader = netFactory.createNetLoader();
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
@@ -330,15 +344,19 @@ package org.osmf.net
 					{
 						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
 						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}
 			
 		}
 		
-		private function doTestAllowConnectionSharing():void
+		private function doTestDisallowConnectionSharing():void
 		{
-			var netLoader:NetLoader = netFactory.createNetLoader(false);
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, false));
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{
@@ -364,6 +382,8 @@ package org.osmf.net
 					{
 						assertFalse(NetStreamLoadTrait(loadTrait1).shareable);
 						assertFalse(NetStreamLoadTrait(loadTrait2).shareable);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}
@@ -372,6 +392,8 @@ package org.osmf.net
 		
 		private function doTestUnloadWithSharedConnections():void
 		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
 			var netLoader:NetLoader = netFactory.createNetLoader();
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
@@ -404,26 +426,98 @@ package org.osmf.net
 				}
 				if (event.loadState == LoadState.UNINITIALIZED)
 				{
-					if (responses == 2)
+					responses++;
+					if (responses == 3)
 					{
+						assertTrue(NetStreamLoadTrait(loadTrait1).connection.connected);
 						assertTrue(NetStreamLoadTrait(loadTrait2).connection.connected);
+						
+						loadTrait2.unload();
+					}
+					else if (responses == 4)
+					{
+						// For some reason, the connected property doesn't show up as
+						// false when testing against Akamai, even though we're closing
+						// the connection.
+						assertTrue(NetStreamLoadTrait(loadTrait2).connection.connected == false || mockLoader == null);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}
-			
 		}
 		
-		private function doTestNetConnectionFactoryArgument():void
+		private function doTestUnloadWithUnsharedConnections():void
 		{
-			var negotiator:NetNegotiator = new MockNetNegotiator();
-			var factory:NetConnectionFactory = new DefaultNetConnectionFactory(negotiator);
-			var netLoader:NetLoader = netFactory.createNetLoader(true, factory);
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, false));
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{
 				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			}
 
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource2);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+
+			var responses:int = 0;
+			function onMultiLoad(event:LoadEvent):void
+			{
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
+					
+				if (event.loadState == LoadState.READY)
+				{
+					responses++;
+					if (responses == 1)
+					{
+						loadTrait2.load();
+					}
+					else if (responses == 2)
+					{
+						assertFalse(NetStreamLoadTrait(loadTrait1).shareable);
+						assertFalse(NetStreamLoadTrait(loadTrait2).shareable);
+
+						loadTrait1.unload();
+					}
+				}
+				if (event.loadState == LoadState.UNINITIALIZED)
+				{
+					responses++;
+					if (responses == 3)
+					{
+						assertFalse(NetStreamLoadTrait(loadTrait1).connection.connected);
+						assertTrue(NetStreamLoadTrait(loadTrait2).connection.connected);
+						
+						loadTrait2.unload();
+					}
+					else if (responses == 4)
+					{
+						// For some reason, the connected property doesn't show up as
+						// false when testing against Akamai, even though we're closing
+						// the connection.
+						assertTrue(NetStreamLoadTrait(loadTrait2).connection.connected == false || mockLoader == null);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+		}
+		
+		private function doTestNetConnectionFactoryArgument():void
+		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, true));
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
 			
 			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, successfulResource);
 			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
@@ -445,10 +539,51 @@ package org.osmf.net
 					{
 						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
 						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}
+		}
+		
+		private function createNetNegotiator():NetNegotiator
+		{
+			return netFactory.createNetNegotiator();
+		}
+
+		private function doTestLoadHTTP():void
+		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(createNetNegotiator));
+			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
+			}
+			
+			var loadTrait1:LoadTrait = new NetStreamLoadTrait(netLoader, SUCCESSFUL_HTTP_RESOURCE);
+			loadTrait1.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait1.load();
+			var loadTrait2:LoadTrait = new NetStreamLoadTrait(netLoader, SUCCESSFUL_HTTP_RESOURCE);
+			loadTrait2.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMultiLoad);
+			loadTrait2.load();
+			
+			var responses:int = 0;
+
+			function onMultiLoad(event:LoadEvent):void
+			{
+				assertTrue(event.type == LoadEvent.LOAD_STATE_CHANGE);
+					
+				if (event.loadState == LoadState.READY)
+				{
+					responses++;
+					if (responses == 2)
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
 		}
 		
 		//---------------------------------------------------------------------
@@ -512,6 +647,11 @@ package org.osmf.net
 			return new NetFactory();
 		}
 		
+		private function get successfulResource2():MediaResourceBase
+		{
+			return SUCCESSFUL_RESOURCE2;
+		}
+
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.
@@ -522,8 +662,10 @@ package org.osmf.net
 		private var eventDispatcher:EventDispatcher;
 		
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
+		private static const SUCCESSFUL_RESOURCE2:URLResource = new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE));
 		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
 		private static const UNHANDLED_RESOURCE:NullResource = new NullResource();
+		private static const SUCCESSFUL_HTTP_RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		private static const TEST_TIME:Number = 4000;
 		private static const PORT_443:String = "443";
 		private static const RTMPTE:String = "rtmpte";

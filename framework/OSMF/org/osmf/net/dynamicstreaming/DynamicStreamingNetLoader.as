@@ -29,7 +29,7 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.NetStream;
 	
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
@@ -40,12 +40,14 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.traits.LoadTrait;
 	
 	/**
-	 * DynamicStreamingNetLoader extends NetLoader to provide
-	 * dynamic stream switching functionality for RTMP streams.
-	 * This class is "backwards compatible" meaning if it is not
-	 * handed an RTMP DynamicStreamingResource it will call the
-	 * base class implementation for both <code>load</code> and
-	 * <code>unload</code> methods.
+	 * DynamicStreamingNetLoader extends NetLoader to provide dynamic stream
+	 * switching functionality for RTMP streams. It does this by creating a
+	 * NetStreamSwitchManager for each LoadTrait that is loaded through this
+	 * object.
+	 * 
+	 * <p>This class is "backwards compatible", meaning if it is not handed an
+	 * RTMP DynamicStreamingResource then it will call the base class
+	 * implementation for both <code>load</code> and <code>unload</code> methods.</p>
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -56,15 +58,21 @@ package org.osmf.net.dynamicstreaming
 	{
 		/**
 		 * Constructor.
-		 *  
+		 * 
+		 * @param factory the NetConnectionFactoryBase instance to use for managing NetConnections.
+		 * If factory is null, a NetConnectionFactory will be created and used. Since the
+		 * NetConnectionFactory class facilitates connection sharing, this is an easy way of
+		 * enabling global sharing, by creating a single NetConnectionFactory instance within
+		 * the player and then handing it to all NetLoader instances.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DynamicStreamingNetLoader(allowConnectionSharing:Boolean=true, factory:NetConnectionFactory=null)
+		public function DynamicStreamingNetLoader(factory:NetConnectionFactoryBase=null)
 		{
-			super(allowConnectionSharing, factory);
+			super(factory);
 		}
 		
 		/**
@@ -82,6 +90,8 @@ package org.osmf.net.dynamicstreaming
 		}
 				
 		/**
+		 * @private
+		 * 
 		 * Overridden to allow the creation of a NetStreamSwitchManager object.
 		 *  
 		 *  @langversion 3.0

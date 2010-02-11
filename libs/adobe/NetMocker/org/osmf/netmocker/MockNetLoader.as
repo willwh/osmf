@@ -40,21 +40,20 @@ package org.osmf.netmocker
 		/**
 		 * Constructor
 		 * 
-		 * @param allowConnectionSharing true if the NetLoader can invoke a NetConnectionFactory which
-		 * re-uses (shares) an existing NetConnection. 
 		 * @param netConnectionFactory the netConnection factory instance to be used
 		 * @param mockNetNegotiator the mock NetNegotiator to be used
 		 */
-		public function MockNetLoader(allowConnectionSharing:Boolean=true,netConnectionFactory:NetConnectionFactory= null,mockNetNegotiator:MockNetNegotiator = null)
+		public function MockNetLoader(netConnectionFactory:NetConnectionFactory= null,mockNetNegotiatorFunction:Function = null)
 		{
-			negotiator = mockNetNegotiator || new MockNetNegotiator();
+			mockNetNegotiatorFunction = mockNetNegotiatorFunction || createMockNetNegotiator;
+			netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			
 			if (netConnectionFactory == null)
 			{
-				netConnectionFactory = new DefaultNetConnectionFactory(negotiator);
+				netConnectionFactory = new DefaultNetConnectionFactory(mockNetNegotiatorFunction);
 			}
 			
-			super(allowConnectionSharing, netConnectionFactory);
+			super(netConnectionFactory);
 		}
 
 		/**
@@ -63,12 +62,12 @@ package org.osmf.netmocker
 		 **/ 
 		public function set netConnectionExpectation(value:NetConnectionExpectation):void
 		{
-			negotiator.netConnectionExpectation = value;
+			_netConnectionExpectation = value;
 		}
 		
 		public function get netConnectionExpectation():NetConnectionExpectation
 		{
-			return negotiator.netConnectionExpectation;
+			return _netConnectionExpectation;
 		}
 		
 		/**
@@ -194,7 +193,6 @@ package org.osmf.netmocker
 		{
 			return _netStreamExpectedCuePoints;
 		}
-		
 			    
 	    /**
 	     * @inheritDoc
@@ -213,6 +211,14 @@ package org.osmf.netmocker
 			return mockNetStream;
 	    }
 	    
+	    private function createMockNetNegotiator():MockNetNegotiator
+	    {
+	    	var mockNegotiator:MockNetNegotiator = new MockNetNegotiator();
+	    	mockNegotiator.netConnectionExpectation = _netConnectionExpectation;
+	    	return mockNegotiator;
+	    }
+	    
+	    private var _netConnectionExpectation:NetConnectionExpectation;
 	    private var _netStreamExpectedDuration:Number = 0;
 	    private var _netStreamExpectedBytesTotal:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
@@ -220,7 +226,5 @@ package org.osmf.netmocker
 	    private var _netStreamExpectedHeight:Number = 0;
 	    private var _netStreamExpectedEvents:Array = [];
 	    private var _netStreamExpectedCuePoints:Array = [];
-
-		private var negotiator:MockNetNegotiator;   
 	}
 }

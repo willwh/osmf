@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.net
 {
-
-
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.net.NetConnection;
 	
 	import flexunit.framework.TestCase;
@@ -31,14 +31,24 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
 	import org.osmf.netmocker.MockNetNegotiator;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.TestConstants;
 
-
-
 	public class TestNetConnectionFactory extends TestCase
 	{
+		override public function setUp():void
+		{
+			eventDispatcher = new EventDispatcher();
+
+			super.setUp();
+		}
+		
+		override public function tearDown():void
+		{
+			super.tearDown();
+			
+			eventDispatcher = null;
+		}
 		
 		public function testCreateWithSharingEnabled():void
 		{
@@ -49,6 +59,11 @@ package org.osmf.net
 		{
 			testCreateMethod(false);
 		}
+
+		public function testCreateMultipleWithSharingEnabled():void
+		{
+			testCreateMethod(true, true);
+		}
 		
 		public function testCloseNetConnectionByResource():void
 		{
@@ -57,50 +72,92 @@ package org.osmf.net
 		
 		/////////////////////////////////////////
 		
-		
-		private function testCreateMethod(sharing:Boolean):void
+		private function testCreateMethod(sharing:Boolean, createMultiple:Boolean=false):void
 		{
-			var factory:NetConnectionFactory = createNetConnectionFactory();
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var factory:NetConnectionFactory = createNetConnectionFactory(sharing);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadTrait:LoadTrait = new NetStreamLoadTrait(null, SUCCESSFUL_RESOURCE);
-			factory.create(loadTrait,sharing);
+			var resource:URLResource = SUCCESSFUL_RESOURCE;
+			factory.createNetConnection(resource);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATED);
 				assertStrictlyEquals(event.shareable,sharing);
 				assertTrue(event.netConnection.connected);
-				assertStrictlyEquals(event.loadTrait,loadTrait);
+				assertStrictlyEquals(event.resource,resource);
+				
+				if (createMultiple)
+				{
+					factory.removeEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
+					factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated2);
+					
+					var resource2:URLResource = SUCCESSFUL_RESOURCE2;
+					factory.createNetConnection(resource2);
+					
+					function onCreated2(event2:NetConnectionFactoryEvent):void
+					{
+						assertTrue(event2.type == NetConnectionFactoryEvent.CREATED);
+						assertStrictlyEquals(event2.shareable,sharing);
+						assertTrue(event2.netConnection.connected);
+						assertStrictlyEquals(event2.resource,resource2);
+						
+						// As long as both resources have the same app instance, they
+						// should use the same NetConnection.
+						assertStrictlyEquals(event.netConnection,event2.netConnection);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+				else
+				{
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
 			}
 		}
 		
 		private function doTestCloseNetConnectionByResource(sharing:Boolean):void
 		{
-			var factory:NetConnectionFactory = createNetConnectionFactory();
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var factory:NetConnectionFactory = createNetConnectionFactory(sharing);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATED,onCreated);
-			var loadTrait:LoadTrait = new NetStreamLoadTrait(null, SUCCESSFUL_RESOURCE);
-			factory.create(loadTrait,sharing);
+			var resource:URLResource = SUCCESSFUL_RESOURCE;
+			factory.createNetConnection(resource);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATED);
 				assertStrictlyEquals(event.shareable,sharing);
 				assertTrue(event.netConnection.connected);
-				assertStrictlyEquals(event.loadTrait,loadTrait);
+				assertStrictlyEquals(event.resource,resource);
 				var nc:NetConnection = event.netConnection;
 				factory.closeNetConnectionByResource(SUCCESSFUL_RESOURCE);
 				assertFalse(nc.connected);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
-	
 		
-		private function createNetConnectionFactory():NetConnectionFactory
+		private function createNetConnectionFactory(allowNetConnectionSharing:Boolean):NetConnectionFactory
 		{
-			var negotiator:MockNetNegotiator = new MockNetNegotiator()
-			return new DefaultNetConnectionFactory(negotiator);
+			return new DefaultNetConnectionFactory(createNetNegotiator, allowNetConnectionSharing);
 		}
 		
+		private function createNetNegotiator():NetNegotiator
+		{
+			return new MockNetNegotiator();
+		}
+		
+		private function mustReceiveEvent(event:Event):void
+		{
+			// Placeholder to ensure an event is received.
+		}
+		
+		private var eventDispatcher:EventDispatcher;
+		
+		private static const TEST_TIME:int = 4000;
+		
 		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
-		
-		
+		private static const SUCCESSFUL_RESOURCE2:URLResource = new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE));
 	}
-	
 }

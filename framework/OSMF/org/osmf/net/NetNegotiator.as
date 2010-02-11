@@ -71,7 +71,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event( name="connectionfailed", type="org.osmf.events.NetNegotiatorEvent")]
+	[Event( name="connectionFailed", type="org.osmf.events.NetNegotiatorEvent")]
 	
 	
 	/**
@@ -89,11 +89,9 @@ package org.osmf.net
 	 */
 	public class NetNegotiator extends EventDispatcher 
 	{
-		
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -118,13 +116,15 @@ package org.osmf.net
 		 */
 		public function connect(urlResource:URLResource):void
 		{
-			connectionAttempts = getConnectionSequence(urlResource.url);
+			this.urlResource = urlResource;
+			
+			connectionAttempts = buildPortProtocolSequence(urlResource.url)
 			initializeConnectionAttempts();
 			tryToConnect(null); 
 		}  
 		
 		/** 
-		 * Assembles a vector of NetConnection Objects to be used during the connection attempted.
+		 * Assembles a vector of PortProtocol Objects to be used during the connection attempt.
 		 * The default protocols attempted when a "rtmp" connection is specified are 
 		 * "rtmp","rtmps", and "rtmpt". When a "rtmpe" connection is requested, both "rtmpe"
 		 * and rtmpte" protocols are attempted. When "rtmps","rtmpt" or "rtmpte" are requested,
@@ -132,15 +132,17 @@ package org.osmf.net
 		 * is specified in the URLResource, then only that port is used.  
 		 * 
 		 * @param url the URL to be loaded
-		 * @returns a Vector of NetConnectionAttempt objects. 
+		 * @returns a Vector of PortProtocol objects. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function buildPortProtocolSequence(url:URL):Vector.<NetConnectionAttempt>  {
-			var portProtocols:Vector.<NetConnectionAttempt> = new Vector.<NetConnectionAttempt>;
+		protected function buildPortProtocolSequence(url:URL):Vector.<PortProtocol>
+		{
+			var portProtocols:Vector.<PortProtocol> = new Vector.<PortProtocol>;
+			
 			var allowedPorts:String = (url.port == "") ? DEFAULT_PORTS: url.port;
 			var allowedProtocols:String;
 			switch (url.protocol)
@@ -163,7 +165,7 @@ package org.osmf.net
 			{
 				for (var j:int = 0; j < portArray.length; j++)
 				{
-					var attempt:NetConnectionAttempt = new NetConnectionAttempt();
+					var attempt:PortProtocol = new PortProtocol();
 					attempt.protocol = protocolArray[i];
 					attempt.port = portArray[j];
 					portProtocols.push(attempt);
@@ -176,18 +178,17 @@ package org.osmf.net
 		 * Assembles a connection address. 
 		 * 
 		 * @param url the URL to be loaded
-		 * @param protocol the protocol as a String
-		 * @param port the port as a String
+		 * @param portProtocol The port and protocol being used for the connection.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function buildConnectionAddress(url:URL, protocol:String, port:String):String
+		protected function buildConnectionAddress(url:URL, portProtocol:PortProtocol):String
 		{
 			var fmsURL:FMSURL = url is FMSURL ? url as FMSURL : new FMSURL(url.rawUrl);
-			var addr:String = protocol + "://" + fmsURL.host + ":" + port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
+			var addr:String = portProtocol.protocol + "://" + fmsURL.host + ":" + portProtocol.port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
 			
 			// Pass along any query string params
 			if (fmsURL.query != null && fmsURL.query != "")
@@ -199,7 +200,8 @@ package org.osmf.net
 		}
 		
 		/**
-		 *  The factory function for creating a NetConnection.  Allows third party plugins to create custom net connections.
+		 *  The factory function for creating a NetConnection.  Allows third party plugins to
+		 *  create custom net connections.
 		 *
 		 *  @return An unconnected NetConnection.
 	     * 	@see flash.net.NetConnection
@@ -215,7 +217,7 @@ package org.osmf.net
 		}
 		
 		/** 
-		 * Initializers properties and timers used during rtmp connection attempts.
+		 * Initializes properties and timers used during rtmp connection attempts.
 		 * @private
 		 */
 		private function initializeConnectionAttempts():void
@@ -248,7 +250,12 @@ package org.osmf.net
 			netConnections[attemptIndex].client = new NetClient();
 			try 
 			{
-				netConnections[attemptIndex].connect((connectionAttempts[attemptIndex] as  NetConnectionAttempt).address);
+				var host:String
+					= buildConnectionAddress
+						( urlResource.url
+						, connectionAttempts[attemptIndex]
+						);
+				netConnections[attemptIndex].connect(host);
 				attemptIndex++;
 				if (attemptIndex >= connectionAttempts.length) 
 				{
@@ -376,27 +383,9 @@ package org.osmf.net
 			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT,"Failed to establish a NetConnection within the timeout period of " + DEFAULT_TIMEOUT + " ms."));
 		}
 		
-		/** 
-		 * Builds a vector of connection attempt objects
-		 * 
-		 * @private
-		 */
-		private function getConnectionSequence(url:URL):Vector.<NetConnectionAttempt> 
-		{
-			var portProtocols:Vector.<NetConnectionAttempt> = buildPortProtocolSequence(url);
-			var connectionAttempts:Vector.<NetConnectionAttempt> = new Vector.<NetConnectionAttempt>();
-			for (var i:int = 0; i<portProtocols.length; i++) 
-			{
-				var attempt:NetConnectionAttempt= new NetConnectionAttempt();
-				attempt.address = buildConnectionAddress(url, portProtocols[i].protocol, portProtocols[i].port);
-				attempt.port = portProtocols[i].port;
-				attempt.protocol = portProtocols[i].protocol;
-				connectionAttempts.push(attempt);
-			}
-			return connectionAttempts;
-		}
-		
-		private var connectionAttempts:Vector.<NetConnectionAttempt>;
+		private var urlResource:URLResource;
+		private var defaultPortProtocols:Vector.<PortProtocol>;
+		private var connectionAttempts:Vector.<PortProtocol>;
 		private var netConnections:Vector.<NetConnection>;
 		private var failedConnectionCount:int;
 		private var timeOutTimer:Timer;
