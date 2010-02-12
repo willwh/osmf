@@ -332,6 +332,10 @@ package org.osmf.layout
 		{
 			new LayoutRendererProperties(this).width = value; 
 		}
+		
+		/**
+		 * @private
+		 **/
 		override public function get width():Number
 		{
 			return _measuredWidth;
@@ -344,6 +348,10 @@ package org.osmf.layout
 		{
 			new LayoutRendererProperties(this).height = value; 
 		}
+		
+		/**
+		 * @private
+		 **/
 		override public function get height():Number
 		{
 			return _measuredHeight;

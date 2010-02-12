@@ -273,36 +273,57 @@ package org.osmf.containers
 		// Overrides
 		//
 		
+		/**
+		 * @private
+		 **/
 		override public function addChild(child:DisplayObject):DisplayObject
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function removeChild(child:DisplayObject):DisplayObject
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function setChildIndex(child:DisplayObject, index:int):void
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.DIRECT_DISPLAY_LIST_MOD_ERROR));
 		}
 		
+		/**
+		 * @private
+		 **/
 		override protected function onAddChildAt(event:LayoutTargetEvent):void
 		{
 			super.addChildAt(event.displayObject, event.index);
 		}
 		
+		/**
+		 * @private
+		 **/
 		override protected function onRemoveChild(event:LayoutTargetEvent):void
 		{
 			super.removeChild(event.displayObject);	
 		}
 		
+		/**
+		 * @private
+		 **/
 		override protected function onSetChildIndex(event:LayoutTargetEvent):void
 		{
 			super.setChildIndex(event.displayObject, event.index);	
