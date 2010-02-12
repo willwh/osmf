@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.media
 {
+	import __AS3__.vec.Vector;
+	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.utils.DynamicMediaElement;
@@ -29,6 +31,20 @@ package org.osmf.media
 	
 	public class TestMediaFactoryItem extends TestCase
 	{
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			createdElements = new Vector.<MediaElement>();
+		}
+		
+		override public function tearDown():void
+		{
+			createdElements = null;
+			
+			super.tearDown();
+		}
+		
 		public function testConstructor():void
 		{
 			var item:MediaFactoryItem = new MediaFactoryItem
@@ -111,6 +127,20 @@ package org.osmf.media
 			assertTrue(element2 is DynamicMediaElement);
 			assertTrue(element1 != element2);
 		}
+
+		public function testGetMediaElementCreationNotificationFunction():void
+		{
+			var item:MediaFactoryItem = createMediaFactoryItem("id");
+			var func:Function = item.mediaElementCreationNotificationFunction;
+			assertTrue(func != null);
+			
+			assertTrue(createdElements.length == 0);
+			
+			var element:MediaElement = new MediaElement();
+			func.call(item, element);
+			assertTrue(createdElements.length == 1);
+			assertTrue(createdElements[0] == element);
+		}
 		
 		public function testGetType():void
 		{
@@ -124,6 +154,7 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler(canHandleResource).canHandleResource
 					, createDynamicMediaElement
+					, creationCallback
 					);
 		}
 		
@@ -136,6 +167,13 @@ package org.osmf.media
 		{
 			return new DynamicMediaElement();
 		}
+		
+		private function creationCallback(mediaElement:MediaElement):void
+		{
+			createdElements.push(mediaElement);
+		}
+		
+		private var createdElements:Vector.<MediaElement>;
 		
 		private static const VALID_RESOURCE:URLResource = new URLResource(new URL("http://www.example.com/valid"));
 		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL("http://www.example.com/invalid"));

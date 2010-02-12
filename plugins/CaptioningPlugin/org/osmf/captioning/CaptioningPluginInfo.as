@@ -64,6 +64,7 @@ package org.osmf.captioning
 			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.captioning.CaptioningPluginInfo",
 													loader.canHandleResource,
 													createCaptioningProxyElement,
+													null,
 													MediaFactoryItemType.PROXY);
 			items.push(item);
 			

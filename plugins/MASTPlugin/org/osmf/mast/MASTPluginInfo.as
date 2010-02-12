@@ -47,6 +47,7 @@ package org.osmf.mast
 				( "org.osmf.mast.MASTPluginInfo"
 				, loader.canHandleResource
 				, createMASTProxyElement
+				, null
 				, MediaFactoryItemType.PROXY
 				);
 			items.push(item);

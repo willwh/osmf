@@ -28,7 +28,6 @@ package
 	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.plugin.PluginInfo;
@@ -45,7 +44,7 @@ package
 			// variables in this SWF.
 			Security.allowDomain("*");
 			
-			super();	
+			super();
 		}
 		
 		/**
@@ -60,6 +59,7 @@ package
 						( ID
 						, canHandleResourceCallback
 						, mediaElementCreationCallback
+						, mediaElementCreationNotificationCallback
 						);
 						
 				var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
@@ -79,6 +79,8 @@ package
 		public static const NS_CONTROL_BAR_TARGET:URL = new URL("http://www.osmf.org/samples/controlbar/target");
 		
 		private var _pluginInfo:PluginInfo;
+		private var controlBarElement:ControlBarElement;
+		private var targetElement:MediaElement;
 		
 		private function canHandleResourceCallback(resource:MediaResourceBase):Boolean
 		{
@@ -98,7 +100,27 @@ package
 		
 		private function mediaElementCreationCallback():MediaElement
 		{
-			return new ControlBarElement();
-		}			
+			controlBarElement = new ControlBarElement();
+			
+			updateControls();
+			
+			return controlBarElement;
+		}
+		
+		private function mediaElementCreationNotificationCallback(target:MediaElement):void
+		{
+			// If the control bar has been created, notify it about the just-created element.
+			targetElement = target;
+			
+			updateControls();
+		}
+		
+		private function updateControls():void
+		{
+			if (controlBarElement != null && targetElement != null && controlBarElement != targetElement)
+			{
+				controlBarElement.addReference(targetElement);
+			}
+		}
 	}
 }

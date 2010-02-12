@@ -284,14 +284,46 @@ package org.osmf.plugin
 			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
 			
 			pluginManager.loadPlugin(resource);
-			assertEquals(1, pluginInfo.createCount);
+			assertEquals(0, pluginInfo.createCount);
+			assertEquals(0, pluginInfo.callbackCount);
 			
-			pluginManager.loadPlugin(resource); //No-op, plugin already loaded.
-			assertEquals(1, pluginInfo.createCount);
+			pluginManager.loadPlugin(resource); // No-op, plugin already loaded.
+			assertEquals(0, pluginInfo.createCount);
+			assertEquals(0, pluginInfo.callbackCount);
 			
-			pluginManager.unloadPlugin(resource);
-			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); //Unloading and reloading will force recreation.
-			assertEquals(2, pluginInfo.createCount);			
+			// Creating a MediaElement that the plugin can handle should trigger
+			// the creation  function.
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/video.flv")));
+			assertTrue(mediaElement == null);
+			assertEquals(1, pluginInfo.createCount);
+			assertEquals(0, pluginInfo.callbackCount);
+
+		}
+		
+		public function testLoadCreateOnLoadPluginWithCallbacks():void
+		{
+			mediaFactory = new DefaultMediaFactory();
+			pluginManager = new PluginManager(mediaFactory);
+			
+			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
+			assertEquals(0, pluginInfo.createCount);
+			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
+			
+			pluginManager.loadPlugin(resource);
+			assertEquals(0, pluginInfo.createCount);
+			assertEquals(0, pluginInfo.callbackCount);
+
+			// Creating a MediaElement that a default factory item can handle
+			// should trigger the callback function.
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/image1.jpg")));
+			assertTrue(mediaElement != null);
+			assertEquals(0, pluginInfo.createCount);
+			assertEquals(1, pluginInfo.callbackCount);
+
+			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/image2.jpg")));
+			assertTrue(mediaElement != null);
+			assertEquals(0, pluginInfo.createCount);
+			assertEquals(2, pluginInfo.callbackCount);
 		}
 		
 		public function testMinimumVersionOverrride():void

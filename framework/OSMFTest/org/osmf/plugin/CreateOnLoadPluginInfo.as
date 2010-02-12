@@ -35,7 +35,7 @@ package org.osmf.plugin
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement, MediaFactoryItemType.CREATE_ON_LOAD);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement, creationCallback);
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(item);
 			
@@ -56,14 +56,25 @@ package org.osmf.plugin
 		{
 			return _createCount;
 		}
+
+		public function get callbackCount():Number
+		{
+			return _callbackCount;
+		}
 		
 		private function createElement():MediaElement
 		{
 			_createCount++;
-			return new VideoElement();			
+			return null;
+		}
+		
+		private function creationCallback(element:MediaElement):void
+		{
+			_callbackCount++;
 		}
 		
 		private var _createCount:Number = 0;
+		private var _callbackCount:Number = 0;
 		private var _pluginMetadata:Metadata;
 	}
 }

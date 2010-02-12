@@ -26,7 +26,6 @@ package
 	import org.osmf.chrome.controlbar.Direction;
 	import org.osmf.chrome.controlbar.widgets.*;
 	import org.osmf.layout.LayoutRendererProperties;
-	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.IMetadataProvider;
@@ -35,34 +34,34 @@ package
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 
-	public class ControlBarElement extends MediaElement implements IMediaReferrer
+	public class ControlBarElement extends MediaElement
 	{
-		// IMediaReferrer
-		//
-		
-		public function canReferenceMedia(target:MediaElement):Boolean
-		{
-			// The media factory will ask us if we are interested in receiving
-			// 'addReference' calls for certain pieces of media. We are only
-			// interested in elements that have a NS_CONTROL_BAR_TARGET namespaced
-			// metadata facet attached:
-			return getTargetFacet(target) != null;
-		}
-		
 		public function addReference(target:MediaElement):void
 		{
-			// The media factory is notifying us of a media element that it
-			// instantiated. We use the NS_CONTROL_BAR_TARGET namespaced metadata
-			// facet in order to find out if the instantiated element is the
-			// element that our control bar should control:
-			var targetFacet:KeyValueFacet = getTargetFacet(target);
-			if (targetFacet)
+			if (this.target == null)
 			{
-				if 	(	targetFacet.getValue(ID) != null
-					&&	targetFacet.getValue(ID) == settings.getValue(ID)
-					)
+				this.target = target;
+				
+				processTarget();
+			}
+		}
+		
+		private function processTarget():void
+		{
+			if (target != null && settings != null)
+			{
+				// We use the NS_CONTROL_BAR_TARGET namespaced metadata facet in order
+				// to find out if the instantiated element is the element that our
+				// control bar should control:
+				var targetFacet:KeyValueFacet = getTargetFacet(target);
+				if (targetFacet)
 				{
-					controlBar.element = target;
+					if 	(	targetFacet.getValue(ID) != null
+						&&	targetFacet.getValue(ID) == settings.getValue(ID)
+						)
+					{
+						controlBar.element = target;
+					}
 				}
 			}
 		}
@@ -72,7 +71,7 @@ package
 		
 		override public function set resource(value:MediaResourceBase):void
 		{
-			// Right after the media factroy has instantiated us, it will set the
+			// Right after the media factory has instantiated us, it will set the
 			// resource that it used to do so. We look the NS_CONTROL_BAR_SETTINGS
 			// namespaced metadata facets, and retain it as our settings record 
 			// (containing only one field: "ID" that tells us the ID of the media
@@ -82,6 +81,8 @@ package
 				settings
 					= value.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS)
 					as KeyValueFacet;
+					
+				processTarget();
 			}
 			
 			super.resource = value;
@@ -168,6 +169,7 @@ package
 		
 		private var settings:KeyValueFacet
 		
+		private var target:MediaElement;
 		private var controlBar:ControlBarBase;
 		private var viewable:DisplayObjectTrait;
 		

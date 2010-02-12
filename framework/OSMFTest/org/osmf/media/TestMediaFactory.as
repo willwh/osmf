@@ -284,7 +284,7 @@ package org.osmf.media
 			assertTrue(((mediaElement as ProxyElement).proxiedElement as ProxyElement).proxiedElement is DynamicMediaElement);
 		}
 		
-		public function testCreateMediaElementWithReference():void
+		public function testCreateMediaElementWithCreationCallback():void
 		{
 			var standardInfo:MediaFactoryItem = createMediaFactoryItem("standardInfo","http://www.example.com/standardInfo");
 			mediaFactory.addItem(standardInfo);
@@ -307,7 +307,6 @@ package org.osmf.media
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/invalidReferenceInfo")));
 			assertTrue(mediaElement != null);
-			assertTrue(!(mediaElement is IMediaReferrer));
 			
 			// Now create a referencing element that should match a previously
 			// created one.
@@ -316,7 +315,6 @@ package org.osmf.media
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo1")));
 			assertTrue(mediaElement != null);
-			assertTrue(mediaElement is IMediaReferrer);
 			var dynamicElement:DynamicReferenceMediaElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
 			assertTrue(dynamicElement.references.length == 1);
@@ -328,7 +326,6 @@ package org.osmf.media
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo2")));
 			assertTrue(mediaElement != null);
-			assertTrue(mediaElement is IMediaReferrer);
 			dynamicElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
 			assertTrue(dynamicElement.references.length == 2);
@@ -347,7 +344,6 @@ package org.osmf.media
 			
 			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo3")));
 			assertTrue(mediaElement != null);
-			assertTrue(mediaElement is IMediaReferrer);
 			dynamicElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
 			assertTrue(dynamicElement.references.length == 1);
@@ -379,6 +375,7 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
 					, createDynamicMediaElement
+					, null
 					, type != null ? type : MediaFactoryItemType.STANDARD
 					);
 		}
@@ -394,6 +391,7 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
 					, createProxyElement
+					, null
 					, MediaFactoryItemType.PROXY
 					);
 		}
@@ -405,16 +403,11 @@ package org.osmf.media
 		
 		private function createReferenceMediaFactoryItem(id:String, urlToMatch:String=null, referenceUrlToMatch:String=null, type:String=null):MediaFactoryItem
 		{
-			function createDynamicReferenceMediaElement():MediaElement
-			{
-				return new DynamicReferenceMediaElement(referenceUrlToMatch);
-			}
-
-			return new MediaFactoryItem
+			return new ReferenceMediaFactoryItem
 					( id
 					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
-					, createDynamicReferenceMediaElement
 					, type != null ? type : MediaFactoryItemType.STANDARD
+					, referenceUrlToMatch
 					);
 		}
 
@@ -425,4 +418,34 @@ package org.osmf.media
 		
 		private var mediaFactory:MediaFactory;
 	}
+}
+
+import org.osmf.media.MediaElement;
+import org.osmf.media.MediaFactoryItem;
+import org.osmf.media.MediaFactoryItemType;
+import org.osmf.utils.DynamicReferenceMediaElement;
+
+class ReferenceMediaFactoryItem extends MediaFactoryItem
+{
+	public function ReferenceMediaFactoryItem(id:String, handler:Function, type:String, referenceUrlToMatch:String)
+	{
+		super(id, handler, createDynamicReferenceMediaElement, creationCallback, type);
+		
+		refElement = new DynamicReferenceMediaElement(referenceUrlToMatch);
+	}
+	
+	private function createDynamicReferenceMediaElement():MediaElement
+	{
+		return refElement;
+	}
+
+	private function creationCallback(target:MediaElement):void
+	{
+		if (refElement.canReferenceMedia(target))
+		{
+			refElement.addReference(target);
+		}
+	}
+
+	private var refElement:DynamicReferenceMediaElement;
 }

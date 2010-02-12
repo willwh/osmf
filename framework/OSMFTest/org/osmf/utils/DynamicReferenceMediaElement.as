@@ -21,13 +21,12 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.IMediaReferrer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoaderBase;
 
-	public class DynamicReferenceMediaElement extends DynamicMediaElement implements IMediaReferrer
+	public class DynamicReferenceMediaElement extends DynamicMediaElement
 	{
 		public function DynamicReferenceMediaElement(referenceUrlToMatch:String, traitTypes:Array=null, loader:LoaderBase=null, resource:MediaResourceBase=null)
 		{

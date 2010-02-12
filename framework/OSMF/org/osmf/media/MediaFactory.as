@@ -65,12 +65,10 @@ package org.osmf.media
 		{
 			allItems = new Dictionary();
 			
-			// Our two dictionaries are set to store with weak keys, so that
-			// if this object is the only object that references either a
-			// created MediaElement or a referrer, then the MediaElement or
-			// referrer will still be garbage collected.
+			// Our created elements dictionary is set to store with weak keys, so
+			// that if this object is the only object that references a created
+			// MediaElement, then the MediaElement will still be garbage collected.
 			createdElements = new Dictionary(false);
-			referrers = new Dictionary(false);
 			
 			this.itemResolver
 				= (itemResolver == null)? new MediaFactoryItemResolver() : itemResolver;
@@ -114,12 +112,13 @@ package org.osmf.media
 			{
 				items.push(item);		
 			}
-			
-			if (item.type == MediaFactoryItemType.CREATE_ON_LOAD)
+
+			if (item.mediaElementCreationNotificationFunction != null)
 			{
-				var autoElem:MediaElement = item.mediaElementCreationFunction();	
-				registerReferrer(autoElem as IMediaReferrer);														
-			}			
+				// Inform the newly added item about all previously created
+				// MediaElements.
+				invokeMediaElementCreationNotificationForCreatedMediaElements(item);
+			}
 		}
 		
 		/**
@@ -274,9 +273,9 @@ package org.osmf.media
 		 */
 		public function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
-			// Note that proxies are resolved before references are applied:
-			// if a media element is proxied, then references apply to the root
-			// proxy, not the wrapped media element.
+			// Note that proxies are resolved before creation callbacks are called:
+			// if a media element is proxied, then the creation callback will be invoked
+			// with the root proxy, not the wrapped media element.
 			// 
 
 			// We attempt to create a MediaElement of the STANDARD type.
@@ -295,46 +294,22 @@ package org.osmf.media
 				// PROXY element as the wrapper for the STANDARD element.
 				mediaElement = (proxyElement != null ? proxyElement : mediaElement);
 				
-				// Set up any references to the created MediaElement.
-				addReferencesToMediaElement(mediaElement);
-				
-				// If the created element is a referrer element, we should
-				// register it as such.
-				var newReferrer:IMediaReferrer = mediaElement as IMediaReferrer;
-				registerReferrer(newReferrer);
-							
+				// Inform any MediaFactoryItems that need to know about newly
+				// created MediaElements about this one.
+				invokeMediaElementCreationNotifications(mediaElement);
+											
 				// Add the newly created MediaElement (or its root proxy) to
-				// our list of created elements, so that it can be added as a
-				// reference to future reference elements too.
-				createdElements[mediaElement] = mediaElement;
+				// our list of created elements, so that it can be passed to the
+				// creation callback function for any subsequently added factory
+				// items.  (Note that we store it as the key only, so that it
+				// will be GC'd if this is the only object that holds a 
+				// reference to it.  We set the value to an arbitrary Boolean.)
+				createdElements[mediaElement] = true;
 			}
 			
 			return mediaElement;
 		}
-		
-		/**
-		 * Registers a media element as a referrer.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		private function registerReferrer(newReferrer:IMediaReferrer):void
-		{
-			if (newReferrer != null)
-			{
-				// Set up any references from the new referrer to other
-				// MediaElements.
-				addReferenceToCreatedMediaElements(newReferrer);
-
-				// Add the new referrer to our list of referrers, so that it
-				// can acquire references to any (relevant) MediaElements that
-				// are created in the future.
-				referrers[newReferrer] = newReferrer;
-			}
-		}
-		
+				
 		// Internals
 		//
 		
@@ -363,15 +338,7 @@ package org.osmf.media
 				var item:MediaFactoryItem = itemResolver.resolveItems(resource, items) as MediaFactoryItem;
 				if (item != null)
 				{
-					try
-					{
-						mediaElement = item.mediaElementCreationFunction.call();
-					}
-					catch (error:Error)
-					{
-						// Swallow, the creation function is wrongly specified.
-						// We'll just return a null MediaElement.
-					}
+					mediaElement = invokeMediaElementCreationFunction(item);
 				}
 			}
 			else if (itemType == MediaFactoryItemType.PROXY)
@@ -387,7 +354,7 @@ package org.osmf.media
 				for (var i:int = items.length; i > 0; i--)
 				{
 					var proxyItem:MediaFactoryItem = items[i-1] as MediaFactoryItem;
-					var proxyElement:ProxyElement = proxyItem.mediaElementCreationFunction.call() as ProxyElement;
+					var proxyElement:ProxyElement = invokeMediaElementCreationFunction(proxyItem) as ProxyElement;
 					if (proxyElement != null)
 					{
 						proxyElement.proxiedElement = nextElementToWrap;
@@ -406,7 +373,7 @@ package org.osmf.media
 			
 			return mediaElement;
 		}
-				
+		
 		private static function getItemsByResource(resource:MediaResourceBase, items:Vector.<MediaFactoryItem>):Vector.<MediaFactoryItem>
 		{
 			var results:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
@@ -436,29 +403,75 @@ package org.osmf.media
 			return -1;
 		}
 
-		private function addReferenceToCreatedMediaElements(newReferrer:IMediaReferrer):void
+		/**
+		 * Invokes the creation callback on the given MediaFactoryItem, for
+		 * all created MediaElements.
+		 **/
+		private function invokeMediaElementCreationNotificationForCreatedMediaElements(item:MediaFactoryItem):void
 		{
-			for each (var element:MediaElement in createdElements)
+			if (item.mediaElementCreationNotificationFunction != null)
 			{
-				if (newReferrer.canReferenceMedia(element))
+				// Remember, the MediaElements are stored as the keys (so
+				// that they can be GC'd if the Dictionary holds the only
+				// reference), hence we need to do a for..in.
+				for (var elem:Object in createdElements)
 				{
-					newReferrer.addReference(element);
+					invokeMediaElementCreationNotificationFunction(item, elem as MediaElement);
 				}
 			}
 		}
 		
-		private function addReferencesToMediaElement(mediaElement:MediaElement):void
+		/**
+		 * Invokes the creation callback on all MediaFactoryItems, for the given
+		 * MediaElement.
+		 **/
+		private function invokeMediaElementCreationNotifications(mediaElement:MediaElement):void
 		{
-			for each (var referrer:IMediaReferrer in referrers)
+			for each (var type:String in MediaFactoryItemType.ALL_TYPES)
 			{
-				if (referrer.canReferenceMedia(mediaElement))
+				var items:Vector.<MediaFactoryItem> = allItems[type];
+				if (items != null)
 				{
-					referrer.addReference(mediaElement);
+					for each (var item:MediaFactoryItem in items)
+					{
+						if (item.mediaElementCreationNotificationFunction != null)
+						{
+							invokeMediaElementCreationNotificationFunction(item, mediaElement);
+						}
+					}
 				}
 			}
 		}
+		
+		private function invokeMediaElementCreationFunction(item:MediaFactoryItem):MediaElement
+		{
+			var mediaElement:MediaElement = null;
+			try
+			{
+				mediaElement = item.mediaElementCreationFunction();
+			}
+			catch (error:Error)
+			{
+				// Swallow, the creation function is wrongly specified.
+				// We'll just return a null MediaElement.
+			}
+			return mediaElement;
+		}
 
-		private var itemResolver:MediaFactoryItemResolver
+		private function invokeMediaElementCreationNotificationFunction(item:MediaFactoryItem, mediaElement:MediaElement):void
+		{
+			try
+			{
+				item.mediaElementCreationNotificationFunction.call(item, mediaElement);
+			}
+			catch (error:Error)
+			{
+				// Swallow, the creation callback function is wrongly
+				// specified.  We'll continue as-is.
+			}
+		}
+
+		private var itemResolver:MediaFactoryItemResolver;
 		
 		private var allItems:Dictionary;
 			// Keys are: String (MediaFactoryItemType)
@@ -466,10 +479,6 @@ package org.osmf.media
 		
 		private var createdElements:Dictionary;
 			// Keys are: MediaElement
-			// Values are: MediaElement
-
-		private var referrers:Dictionary;
-			// Keys are: IMediaReferrer
-			// Values are: IMediaReferrer
+			// Values are: Boolean (just a placeholder, the important part is the key)
 	}
 }

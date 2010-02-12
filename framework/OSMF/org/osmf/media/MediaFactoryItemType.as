@@ -58,23 +58,10 @@ package org.osmf.media
 		public static const PROXY:String = "proxy";
 		
 		/**
-		 * Represents MediaFactoryItems for MediaElements that should be created
-		 * as soon as they are added to the MediaFactory.  Typically these types
-		 * of items are reference items (i.e. implement the IMediaReferrer interface)
-		 * so that they can monitor other created MediaElements.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const CREATE_ON_LOAD:String = "createOnLoad";
-
-		/**
 		 * @private
 		 * 
 		 * All available types should be included in this array.
 		 */
-		internal static const ALL_TYPES:Array = [STANDARD, PROXY, CREATE_ON_LOAD];
+		internal static const ALL_TYPES:Array = [STANDARD, PROXY];
 	}
 }
