@@ -33,7 +33,12 @@ package org.osmf.net.httpstreaming.f4f
 	public class HTTPStreamingF4FStreamInfo
 	{
 		public function HTTPStreamingF4FStreamInfo(
-			bootstrap:BootstrapInfo, streamName:String, bitrate:Number=NaN, additionalHeader:ByteArray=null)
+			bootstrap:BootstrapInfo, 
+			streamName:String, 
+			bitrate:Number, 
+			additionalHeader:ByteArray,
+			streamMetadata:ByteArray,
+			xmpMetadata:ByteArray)
 		{
 			super();
 			
@@ -41,6 +46,8 @@ package org.osmf.net.httpstreaming.f4f
 			_bitrate = bitrate;
 			_additionalHeader = additionalHeader;
 			_bootstrap = bootstrap;
+			_streamMetadata = streamMetadata;
+			_xmpMetadata = xmpMetadata;
 		}
 		
 		public function get streamName():String
@@ -63,9 +70,21 @@ package org.osmf.net.httpstreaming.f4f
 			return _bootstrap;
 		}
 		
+		public function get streamMetadata():ByteArray
+		{
+			return _streamMetadata;
+		}
+		
+		public function get xmpMetadata():ByteArray
+		{
+			return _xmpMetadata;
+		}
+		
 		private var _streamName:String;
 		private var _bitrate:Number;
 		private var _bootstrap:BootstrapInfo;
 		private var _additionalHeader:ByteArray;
+		private var _streamMetadata:ByteArray;
+		private var _xmpMetadata:ByteArray;
 	}
 }

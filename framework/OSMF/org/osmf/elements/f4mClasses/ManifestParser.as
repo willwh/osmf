@@ -141,6 +141,7 @@ package org.osmf.elements.f4mClasses
 		
 		private function parseMedia(value:XML, baseUrl:URL):Media
 		{
+			var decoder:Base64Decoder;
 			var media:Media = new Media();
 			
 			if (value.attribute('url').length() > 0)
@@ -180,11 +181,25 @@ package org.osmf.elements.f4mClasses
 			
 			if (value.xmlns::moov.length() > 0)
 			{		
-				var decoder:Base64Decoder = new Base64Decoder();
+				decoder = new Base64Decoder();
 				decoder.decode(value.xmlns::moov.text());
 				media.moov = decoder.drain();	
 			}
 			
+			if (value.xmlns::metadata.length() > 0)
+			{
+				decoder = new Base64Decoder();
+				decoder.decode(value.xmlns::metadata.text());
+				media.metadata = decoder.drain();	
+			}
+			
+			if (value.xmlns::xmpMetadata.length() > 0)
+			{
+				decoder = new Base64Decoder();
+				decoder.decode(value.xmlns::xmpMetadata.text());
+				media.xmp = decoder.drain();	
+			}
+
 			return media;
 		}
 		
@@ -310,8 +325,8 @@ package org.osmf.elements.f4mClasses
 		 */ 		
 		public function createResource(value:Manifest, manifestResource:URLResource):MediaResourceBase
 		{			
-			var drmFacet:KeyValueFacet;
-			var bootstrapFacet:KeyValueFacet;
+			var drmFacet:KeyValueFacet = null;
+			var metadataFacet:KeyValueFacet = null;
 			var resource:MediaResourceBase;
 			var media:Media;
 			var serverBaseURLs:Vector.<String>
@@ -375,13 +390,30 @@ package org.osmf.elements.f4mClasses
 						bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
 						media.bootstrapInfo.url = new URL(bootstrapInfoURLString);
 					}
-					bootstrapFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP);
-					bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
+					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
 					if (serverBaseURLs.length > 0)
 					{
-						bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
 					}
-					resource.metadata.addFacet(bootstrapFacet);
+				}
+				
+				if (media.metadata != null)
+				{
+					if (metadataFacet == null)
+					{
+						metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					}
+					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY), media.metadata);					
+				}
+				
+				if (media.xmp != null)
+				{
+					if (metadataFacet == null)
+					{
+						metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					}
+					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY), media.xmp);					
 				}
 
 				if (media.drmAdditionalHeader != null)
@@ -392,8 +424,16 @@ package org.osmf.elements.f4mClasses
 						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader.data);
 						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data));
 					}
-					resource.metadata.addFacet(drmFacet);
 				}
+				
+				if (metadataFacet != null)
+				{
+					resource.metadata.addFacet(metadataFacet);
+				}
+				if (drmFacet != null)
+				{
+					resource.metadata.addFacet(drmFacet);
+				}				
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{
@@ -409,9 +449,9 @@ package org.osmf.elements.f4mClasses
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 				
-				bootstrapFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP);
-				dynResource.metadata.addFacet(bootstrapFacet);
-				bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+				metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+				dynResource.metadata.addFacet(metadataFacet);
+				metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
 				
 				for each (media in value.media)
 				{	
@@ -441,8 +481,6 @@ package org.osmf.elements.f4mClasses
 						} 						
 					}
 					
-					// TODO: Move this out of the loop when the manifest supports root-level bootstrap info.
-					// For now we assume they're all the same.
 					if (media.bootstrapInfo	!= null)
 					{
 						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
@@ -452,7 +490,17 @@ package org.osmf.elements.f4mClasses
 							bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
 							media.bootstrapInfo.url = new URL(bootstrapInfoURLString); 
 						}
-						bootstrapFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
+						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
+					}
+			
+					if (media.metadata != null)
+					{
+						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName), media.metadata);					
+					}
+					
+					if (media.xmp != null)
+					{
+						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName), media.xmp);					
 					}
 				}
 				resource = dynResource;

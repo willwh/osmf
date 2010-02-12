@@ -120,7 +120,7 @@ package org.osmf.net.httpstreaming
 			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null)
 			{
-				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet;
+				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet;
 			}
 			
 			return facet;
@@ -158,26 +158,38 @@ package org.osmf.net.httpstreaming
 			
 			var drmFacet:KeyValueFacet 
 				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
-			var bootstrapFacet:KeyValueFacet
-				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet;
+			var metadataFacet:KeyValueFacet
+				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet;
 			var additionalHeader:ByteArray = null;
 			var bootstrap:BootstrapInfo = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
+			var streamMetadata:ByteArray;
+			var xmpMetadata:ByteArray;
 			if (dsResource != null)
 			{
 				for each (var streamItem:DynamicStreamingItem in dsResource.streamItems)
 				{
+					additionalHeader = null;
+					bootstrap = null;
+					streamMetadata = null;
+					xmpMetadata = null;
+					
 					if (drmFacet != null)
 					{
 						additionalHeader = drmFacet.getValue(
 							new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
 					}
-					if (bootstrapFacet != null)
+					if (metadataFacet != null)
 					{
-						bootstrap = bootstrapFacet.getValue(
+						bootstrap = metadataFacet.getValue(
 							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName)) as BootstrapInfo;
+						streamMetadata = metadataFacet.getValue(
+							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName)) as ByteArray;
+						xmpMetadata = metadataFacet.getValue(
+							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName)) as ByteArray;
 					}
-					streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamItem.streamName, streamItem.bitrate, additionalHeader));
+					streamInfos.push(new HTTPStreamingF4FStreamInfo(
+						bootstrap, streamItem.streamName, streamItem.bitrate, additionalHeader, streamMetadata, xmpMetadata));
 				}
 			}
 			else
@@ -187,14 +199,18 @@ package org.osmf.net.httpstreaming
 					additionalHeader 
 						= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
 				}
-				if (bootstrapFacet != null)
+				if (metadataFacet != null)
 				{
-					bootstrap = bootstrapFacet.getValue(
+					bootstrap = metadataFacet.getValue(
 						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY)) as BootstrapInfo;
+					streamMetadata = metadataFacet.getValue(
+						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY)) as ByteArray;
+					xmpMetadata = metadataFacet.getValue(
+						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY)) as ByteArray;
 				}
 				
 				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
-				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader));
+				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader, streamMetadata, xmpMetadata));
 			}
 
 			return streamInfos;

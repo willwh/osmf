@@ -59,6 +59,26 @@ package org.osmf.elements.f4mClasses
 		 */
  		public var bootstrapInfo:BootstrapInfo;
  		
+ 		/**
+ 		 * The stream metadata in its binary representation.
+ 		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+ 		 */
+ 		public var metadata:ByteArray;
+ 		
+ 		/**
+ 		 * The XMP metadata in its binary representation.
+ 		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+ 		 */
+ 		public var xmp:ByteArray;
+
 		/**
 		 * Location of the media.
 		 *  

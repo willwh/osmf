@@ -239,7 +239,7 @@ package org.osmf.elements.f4mClasses
 			
 			//Make sure we don't put on a HTTPStreaming bootstrap:
 			
-			var bootStrapFacet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP) as KeyValueFacet ;
+			var bootStrapFacet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet ;
 			assertNull(bootStrapFacet);					
 		}
 		

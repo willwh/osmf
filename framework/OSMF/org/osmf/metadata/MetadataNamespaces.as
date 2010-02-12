@@ -75,9 +75,10 @@ package org.osmf.metadata
 																= new ObjectIdentifier("pluginMediaFactory");
 		
 		public static const HTTP_STREAMING_METADATA:URL			= new URL("http://www.osmf.org/httpstreaming/1.0");
-		public static const HTTP_STREAMING_BOOTSTRAP:URL		= new URL("http://www.osmf.org/httpstreaming/1.0/boostrap");
 		
 		public static const HTTP_STREAMING_BOOTSTRAP_KEY:String	= "bootstrap";
+		public static const HTTP_STREAMING_STREAM_METADATA_KEY:String = "streamMetadata";
+		public static const HTTP_STREAMING_XMP_METADATA_KEY:String = "xmpMetadata";
 		
 		public static const HTTP_STREAMING_ABST_URL_KEY:String	= "abstUrl";
 		public static const HTTP_STREAMING_ABST_DATA_KEY:String	= "abstData";
