@@ -29,15 +29,16 @@ package org.osmf.examples
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.Beacon;
 	import org.osmf.elements.BeaconElement;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.F4MElement;
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SWFElement;
 	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
+	import org.osmf.examples.buffering.SynchronizedParallelElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.posterframe.PosterFrameElement;
@@ -357,6 +358,37 @@ package org.osmf.examples
 							layout.height = 352;
 							
 							var mediaElement1:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+							layout = new LayoutRendererProperties(mediaElement1);
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							parallelElement.addChild(mediaElement1);
+							
+							var mediaElement2:MediaElement = new VideoElement(new URLResource(new FMSURL(REMOTE_STREAM)));
+							layout = new LayoutRendererProperties(mediaElement2);
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							layout.scaleMode = ScaleMode.LETTERBOX;
+							parallelElement.addChild(mediaElement2);
+							
+							return parallelElement;
+				  	   	} 
+				  	)
+				);
+				
+			examples.push
+				( new Example
+					( 	"Synchronized Parallel Composition"
+					, 	"Demonstrates playback of a ParallelElement that contains the same streaming video twice, where both videos get paused when one of them is in a buffering state."
+				  	,  	function():MediaElement
+				  	   	{
+							var parallelElement:SynchronizedParallelElement = new SynchronizedParallelElement();
+							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
+							layout.layoutMode = LayoutMode.HORIZONTAL;
+							layout.width = 640
+							layout.height = 352;
+							
+							var mediaElement1:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_STREAM)));
 							layout = new LayoutRendererProperties(mediaElement1);
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;

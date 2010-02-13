@@ -84,6 +84,7 @@ package org.osmf.view
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
@@ -213,6 +214,11 @@ package org.osmf.view
 		private function onMutedChange(event:AudioEvent):void
 		{
 			muteToggle.selected = event.muted;
+		}
+
+		private function onBufferingChange(event:BufferEvent):void
+		{
+			buffering.text = event.buffering ? "true" : "false";
 		}
 
 		private function onBufferTimeChange(event:BufferEvent):void

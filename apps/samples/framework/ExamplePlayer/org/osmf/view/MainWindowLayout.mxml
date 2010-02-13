@@ -160,6 +160,12 @@
 		>
 		
 		<mx:Label
+			text				="Buffering: "
+			/>
+		<mx:Label
+			id					="buffering"
+			/>
+		<mx:Label
 			text				="Buffer Time: "
 			/>
 		<mx:Label
