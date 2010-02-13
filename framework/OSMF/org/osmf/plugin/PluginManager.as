@@ -365,7 +365,7 @@ package org.osmf.plugin
 			}
 			else if (resource is PluginInfoResource)
 			{
-				identifier = (resource as PluginInfoResource).pluginInfoRef;
+				identifier = (resource as PluginInfoResource).pluginInfo;
 			}
 					
 			return identifier;

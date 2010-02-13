@@ -59,7 +59,7 @@ package org.osmf.plugin
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
 			var classResource:PluginInfoResource = loadTrait.resource as PluginInfoResource; 	
-			var pluginInfo:PluginInfo = classResource.pluginInfoRef;
+			var pluginInfo:PluginInfo = classResource.pluginInfo;
 			
 			loadFromPluginInfo(loadTrait, pluginInfo);
 		}

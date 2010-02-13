@@ -42,8 +42,8 @@ package org.osmf.plugin
 		/**
 		 * Constructor. 
 		 * <p>The default constructor must be able to instantiate the class
-		 * referenced by <code>pluginInfoRef</code>.</p>
-		 * @param pluginInfoRef Reference to an instance of PluginInfo.
+		 * referenced by <code>pluginInfo</code>.</p>
+		 * @param pluginInfo Reference to an instance of PluginInfo.
 		 * @param parameters the list of initialization paramerers
 		 *  to pass to the IPlugin info once loaded
 		 *  
@@ -52,9 +52,9 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginInfoResource(pluginInfoRef:PluginInfo)
+		public function PluginInfoResource(pluginInfo:PluginInfo)
 		{
-			_pluginInfoRef = pluginInfoRef;		
+			_pluginInfo = pluginInfo;		
 		}
 			
 		/**
@@ -65,12 +65,12 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get pluginInfoRef():PluginInfo
+		public function get pluginInfo():PluginInfo
 		{
-			return _pluginInfoRef;	
+			return _pluginInfo;	
 		}
 	
-		private var _pluginInfoRef:PluginInfo;
+		private var _pluginInfo:PluginInfo;
 		
 	}
 }
