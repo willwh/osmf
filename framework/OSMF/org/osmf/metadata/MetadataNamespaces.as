@@ -64,6 +64,7 @@ package org.osmf.metadata
 		public static const ANCHOR_LAYOUT_PARAMETERS:URL		= new URL("http://www.osmf.org/layout/anchor");
 		public static const PADDING_LAYOUT_PARAMETERS:URL 		= new URL("http://www.osmf.org/layout/padding");
 		public static const LAYOUT_ATTRIBUTES:URL 				= new URL("http://www.osmf.org/layout/attributes");
+		public static const BOX_LAYOUT_ATTRIBUTES:URL			= new URL("http://www.osmf.org/layout/attributes/box");
 		
 		public static const ELEMENT_ID:URL	 					= new URL("http://www.osmf.org/elementId");
 		

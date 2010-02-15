@@ -125,6 +125,18 @@ package org.osmf.layout
 		 */
 		public static const MODE:StringIdentifier = new StringIdentifier("layoutMode");
 		
+		/**
+		 * @private
+		 *
+		 * Intentifier for the facet's includeInLayout property.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const INCLUDE_IN_LAYOUT:StringIdentifier = new StringIdentifier("includeInLayout");
+		
 		public function LayoutAttributesFacet()
 		{
 			_verticalAlign = null;
@@ -132,6 +144,7 @@ package org.osmf.layout
 			_scaleMode = null;
 			_snapToPixel = true;
 			_layoutMode = LayoutMode.NONE;
+			_includeInLayout = true;
 		}
 		
 		// Facet
@@ -171,6 +184,10 @@ package org.osmf.layout
 				return horizontalAlign;
 			}
 			else if (identifier.equals(SNAP_TO_PIXEL))
+			{
+				return snapToPixel;
+			}
+			else if (identifier.equals(INCLUDE_IN_LAYOUT))
 			{
 				return snapToPixel;
 			}
@@ -303,6 +320,26 @@ package org.osmf.layout
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		public function get includeInLayout():Boolean
+		{
+			return _includeInLayout;
+		}
+		public function set includeInLayout(value:Boolean):void
+		{
+			if (_includeInLayout != value)
+			{
+				var event:FacetValueChangeEvent
+					= new FacetValueChangeEvent(FacetValueChangeEvent.VALUE_CHANGE, false, false, INCLUDE_IN_LAYOUT, value, _layoutMode);
+					
+				_includeInLayout = value;
+						
+				dispatchEvent(event);
+			}
+		}
+		
 		// Internals
 		//
 		
@@ -312,5 +349,6 @@ package org.osmf.layout
 		private var _horizontalAlign:String;
 		private var _snapToPixel:Boolean;
 		private var _layoutMode:String;
+		private var _includeInLayout:Boolean;
 	}
 }

@@ -169,6 +169,26 @@ package org.osmf.layout
 			eagerAttributes.layoutMode = value;
 		}
 
+		/**
+		 * The default layout renderer interprets this value as follows:
+		 * 
+		 * When set to true (default), the target will participate in the layout
+		 * process. When set to false, it will be ignored.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get includeInLayout():Boolean
+		{
+			return lazyAttributes ? lazyAttributes.includeInLayout : true;
+		}
+		public function set includeInLayout(value:Boolean):void
+		{
+			eagerAttributes.includeInLayout = value;
+		}
+
 		// AbsoluteLayoutFacet
 		//
 

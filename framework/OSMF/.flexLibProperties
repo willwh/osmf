@@ -107,6 +107,7 @@
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutFacet"/>
     <classEntry path="org.osmf.layout.AnchorLayoutFacet"/>
+    <classEntry path="org.osmf.layout.BoxAttributesFacet"/>
     <classEntry path="org.osmf.layout.HorizontalAlign"/>
     <classEntry path="org.osmf.layout.ILayoutTarget"/>
     <classEntry path="org.osmf.layout.LayoutAttributesFacet"/>

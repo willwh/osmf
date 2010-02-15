@@ -197,16 +197,21 @@ package org.osmf.layout
 			var indexX:Number = attributesX ? attributesX.index : NaN;
 			var indexY:Number = attributesY ? attributesY.index : NaN;
 			
-			return	(	isNaN(indexY)					// if indexY is NaN, consider x it to be bigger
-							? 1							// than x, else
-							: isNaN(indexX)				// if indexX is NaN, consider x to be smaller
-								? -1					// than y, else
-								: indexX == indexY		// if the indexs are equal, then so 
-									? 0					// are x and y, else
-									: indexX < indexY	// if indexX is smaller than indexY, 
-										? -1			// then consider x smaller than Y, else
-										: 1				// x must be bigger than y.
-					);
+			if (isNaN(indexX) && isNaN(indexY))
+			{
+				return 1;
+			}
+			else
+			{
+				indexX ||= 0;
+				indexY ||= 0;
+				
+				return indexX < indexY
+							? -1
+							: indexX > indexY
+								? 1
+								: 0;
+			}
 		}
 		
 		/**
@@ -219,12 +224,17 @@ package org.osmf.layout
 		 */
 		override protected function calculateTargetBounds(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			var rect:Rectangle = new Rectangle(0, 0, target.measuredWidth, target.measuredHeight);
-			
 			var attributes:LayoutAttributesFacet
 				= target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet
 				|| new LayoutAttributesFacet();
+			
+			if (attributes.includeInLayout == false)
+			{
+				return new Rectangle(); 
+			}
 				
+			var rect:Rectangle = new Rectangle(0, 0, target.measuredWidth, target.measuredHeight);
+			
 			var absolute:AbsoluteLayoutFacet
 				= target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
 				as AbsoluteLayoutFacet;
@@ -266,10 +276,11 @@ package org.osmf.layout
 			// processing relative parameters:
 			if (toDo != 0)
 			{
+				var box:BoxAttributesFacet;
 				var relative:RelativeLayoutFacet
 					= target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
 					as RelativeLayoutFacet;
-					
+						
 				if (relative)
 				{
 					if ((toDo & X) && !isNaN(relative.x))
@@ -280,8 +291,23 @@ package org.osmf.layout
 					
 					if ((toDo & WIDTH) && !isNaN(relative.width))
 					{
-						rect.width = (availableWidth * relative.width) / 100;
-						toDo ^= WIDTH; 
+						if (layoutMode == LayoutMode.HORIZONTAL)
+						{
+							box	= container.metadata.getFacet(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesFacet
+								|| new BoxAttributesFacet();
+								
+							rect.width 
+								=	( Math.max(0, availableWidth - box.absoluteSum)
+									* relative.width
+									)
+									/ box.relativeSum;
+						}
+						else
+						{
+							rect.width = (availableWidth * relative.width) / 100;
+						}
+							
+						toDo ^= WIDTH;
 					}
 					
 					if ((toDo & Y) && !isNaN(relative.y))
@@ -292,7 +318,22 @@ package org.osmf.layout
 					
 					if ((toDo & HEIGHT) && !isNaN(relative.height))
 					{
-						rect.height = (availableHeight * relative.height) / 100;
+						if (layoutMode == LayoutMode.VERTICAL)
+						{
+							box	= container.metadata.getFacet(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesFacet
+								|| new BoxAttributesFacet();
+								
+							rect.height
+								= 	( Math.max(0, availableHeight - box.absoluteSum)
+									* relative.height
+									)
+									/ box.relativeSum;
+						}
+						else
+						{
+							rect.height = (availableHeight * relative.height) / 100;
+						}
+						
 						toDo ^= HEIGHT;
 					}
 				}
@@ -300,7 +341,7 @@ package org.osmf.layout
 			
 			// Last, do anchors: (doing them last is a natural index because we require
 			// a set width and x to do 'right', as well as a set height and y to do
-			// 'bottom'.)
+			// 'bottom')
 			if (toDo != 0)
 			{
 				var anchors:AnchorLayoutFacet
@@ -404,8 +445,15 @@ package org.osmf.layout
 			}
 			
 			// Set deltas:
-			deltaX ||= availableWidth - (rect.x || 0) - (rect.width || 0);
-			deltaY ||= availableHeight - (rect.y || 0) - (rect.height || 0);
+			if (layoutMode != LayoutMode.HORIZONTAL)
+			{
+				deltaX ||= availableWidth - (rect.x || 0) - (rect.width || 0);
+			}
+			
+			if (layoutMode != LayoutMode.VERTICAL)
+			{
+				deltaY ||= availableHeight - (rect.y || 0) - (rect.height || 0);
+			}
 			
 			// Apply alignment (if there's surpluss space reported:)
 			if (deltaY)
@@ -502,13 +550,20 @@ package org.osmf.layout
 				size.y = absolute.height;
 			}
 			
-			if (isNaN(size.x) || isNaN(size.y))
+			if (layoutMode != LayoutMode.NONE)
+			{
+				var boxAttributes:BoxAttributesFacet = new BoxAttributesFacet();
+				container.metadata.addFacet(boxAttributes);
+			}
+			
+			if (isNaN(size.x) || isNaN(size.y) || layoutMode != LayoutMode.NONE)
 			{
 				// Iterrate over all targets, calculating their bounds, combining the results
 				// into a bounds rectangle:
 				var containerBounds:Rectangle = new Rectangle();
 				var targetBounds:Rectangle;
 				var lastBounds:Rectangle;
+				var targetProperties:LayoutRendererProperties;
 				
 				for each (var target:ILayoutTarget in targets)
 				{
@@ -518,18 +573,40 @@ package org.osmf.layout
 					targetBounds.width ||= target.measuredWidth || 0;
 					targetBounds.height ||= target.measuredHeight || 0;
 					
-					if (layoutMode == LayoutMode.HORIZONTAL || layoutMode == LayoutMode.VERTICAL)
+					if (layoutMode == LayoutMode.HORIZONTAL)
 					{
+						targetProperties = new LayoutRendererProperties(target);
+						if (!isNaN(targetProperties.percentWidth))
+						{
+							boxAttributes.relativeSum += targetProperties.percentWidth;
+						}
+						else
+						{
+							boxAttributes.absoluteSum += targetBounds.width;	
+						}
+						
 						if (lastBounds)
 						{
-							if (layoutMode == LayoutMode.HORIZONTAL)
-							{
-								targetBounds.x = lastBounds.x + lastBounds.width;
-							}
-							else // layoutMode == VERTICAL
-							{
-								targetBounds.y = lastBounds.y + lastBounds.height;
-							}
+							targetBounds.x = lastBounds.x + lastBounds.width;		
+						}
+						
+						lastBounds = targetBounds;
+					}
+					else if (layoutMode == LayoutMode.VERTICAL)
+					{
+						targetProperties = new LayoutRendererProperties(target);
+						if (!isNaN(targetProperties.percentHeight))
+						{
+							boxAttributes.relativeSum += targetProperties.percentHeight;
+						}
+						else
+						{
+							boxAttributes.absoluteSum += targetBounds.height;	
+						}
+						
+						if (lastBounds)
+						{
+							targetBounds.y = lastBounds.y + lastBounds.height;
 						}
 						
 						lastBounds = targetBounds;
@@ -538,8 +615,12 @@ package org.osmf.layout
 					containerBounds = containerBounds.union(targetBounds);
 				}
 				
-				size.x ||= containerBounds.width;
-				size.y ||= containerBounds.height;	
+				size.x ||= (absolute == null || isNaN(absolute.width))
+							? containerBounds.width
+							: absolute.width;
+				size.y ||= (absolute == null || isNaN(absolute.height))
+							? containerBounds.height
+							: absolute.height;
 			}
 			
 			CONFIG::LOGGING

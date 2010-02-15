@@ -29,7 +29,7 @@ package
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 
-	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
+	[SWF(backgroundColor="0xC0C0C0", frameRate="25", width="640", height="360")]
 	public class LayoutSample2 extends Sprite
 	{
 		public function LayoutSample2()
@@ -67,7 +67,7 @@ package
 			var result:LayoutTargetSprite = new LayoutTargetSprite();
 			
 			// Draw a circle: 
-			result.graphics.beginFill(color, .5);
+			result.graphics.beginFill(color);
 			result.graphics.drawCircle(50,50,50);
 			result.graphics.endFill();
 			
