@@ -27,7 +27,6 @@ package org.osmf.examples
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.elements.AudioElement;
-	import org.osmf.elements.Beacon;
 	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.F4MElement;
@@ -684,13 +683,13 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(5));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(10));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(2));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		return serialElement; 
 				  	   	}
 				  	)
@@ -705,13 +704,13 @@ package org.osmf.examples
 				  	   		var parallelElement:ParallelElement = new ParallelElement();
 				  	   		parallelElement.addChild(new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE))));
 				  	   		var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(5));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(10));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		serialElement.addChild(new DurationElement(2));
-				  	   		serialElement.addChild(new BeaconElement(new Beacon(new URL(BEACON_URL + "?random=" + Math.random()))));
+				  	   		serialElement.addChild(new BeaconElement(new URL(BEACON_URL + "?random=" + Math.random())));
 				  	   		parallelElement.addChild(serialElement);
 				  	   		return parallelElement; 
 				  	   	}
