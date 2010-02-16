@@ -67,6 +67,7 @@
     <classEntry path="org.osmf.elements.f4mClasses.Base64Decoder"/>
     <classEntry path="org.osmf.elements.f4mClasses.BootstrapInfo"/>
     <classEntry path="org.osmf.elements.f4mClasses.DRMAdditionalHeader"/>
+    <classEntry path="org.osmf.elements.f4mClasses.DateUtil"/>
     <classEntry path="org.osmf.elements.f4mClasses.Manifest"/>
     <classEntry path="org.osmf.elements.f4mClasses.ManifestParser"/>
     <classEntry path="org.osmf.elements.f4mClasses.Media"/>
@@ -259,7 +260,6 @@
     <classEntry path="org.osmf.traits.PlayTrait"/>
     <classEntry path="org.osmf.traits.SeekTrait"/>
     <classEntry path="org.osmf.traits.TimeTrait"/>
-    <classEntry path="org.osmf.utils.DateUtil"/>
     <classEntry path="org.osmf.utils.ExternalProperty"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>

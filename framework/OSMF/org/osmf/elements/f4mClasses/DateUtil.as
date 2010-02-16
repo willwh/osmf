@@ -19,11 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.utils
+package org.osmf.elements.f4mClasses
 {
+	[ExcludeClass]
 
 	/**
+	* @private
+	* 
 	* 	Class that contains static utility methods for manipulating and working
 	*	with Dates.
 	* 
@@ -36,7 +38,7 @@ package org.osmf.utils
 	*  @playerversion AIR 1.5
 	*  @productversion OSMF 1.0
 	*/	
-	public class DateUtil
+	internal class DateUtil
 	{
 	
 		/**
