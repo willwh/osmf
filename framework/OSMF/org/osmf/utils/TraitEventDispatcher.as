@@ -1,3 +1,24 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
 package org.osmf.utils
 {
 	import flash.events.Event;
@@ -245,6 +266,7 @@ package org.osmf.utils
 		public function TraitEventDispatcher()
 		{
 			super();
+			
 			if (eventMaps == null)
 			{
 				eventMaps = new Dictionary();
@@ -274,9 +296,14 @@ package org.osmf.utils
 		/**
 		 * Specifies the object to listen for trait changes and 
 		 * events with.  All of the mediaElement's trait events
-		 * such as   SeekEvent.SEEK_BEGIN or PlayEvent.PLAY_STATE_CHANGE
-		 * are all redispatched from this class.
+		 * such as SeekEvent.SEEK_BEGIN or PlayEvent.PLAY_STATE_CHANGE
+		 * are redispatched from this class.
 		 */ 
+		public function get media():MediaElement
+		{
+			return _mediaElement;
+		}
+
 		public function set media(value:MediaElement):void
 		{
 			if (value != _mediaElement)
@@ -305,12 +332,10 @@ package org.osmf.utils
 				}			
 			}
 		}
-		
-		public function get media():MediaElement
-		{
-			return _mediaElement;
-		}
-		
+				
+		/**
+		 * @private
+		 **/
 		override public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void
 		{
 			var hadEventListener:Boolean = hasEventListener(type);		
@@ -323,6 +348,9 @@ package org.osmf.utils
 			}			
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void
 		{
 			super.removeEventListener(type, listener, useCapture);
@@ -415,6 +443,4 @@ package org.osmf.utils
 		private static var eventMaps:Dictionary;	
 		private var _mediaElement:MediaElement;		
 	}
-	
-	
 }
