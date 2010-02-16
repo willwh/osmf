@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.utils.Base64Decoder;
+	import mx.utils.Base64Decoder;
 	
 	public class TestHTTPStreamingF4FFileHandler extends TestCase
 	{

@@ -27,10 +27,11 @@ package org.osmf.net.drm
 	
 	import flexunit.framework.Assert;
 	
-	import org.osmf.traits.DRMTrait;
-	import org.osmf.traits.DRMState;
+	import mx.utils.Base64Decoder;
+	
 	import org.osmf.events.DRMEvent;
-	import org.osmf.utils.Base64Decoder;
+	import org.osmf.traits.DRMState;
+	import org.osmf.traits.DRMTrait;
 	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestNetStreamDRMTrait extends InterfaceTestCase

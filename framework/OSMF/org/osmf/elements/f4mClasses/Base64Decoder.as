@@ -19,12 +19,15 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.utils
+package org.osmf.elements.f4mClasses
 {
-	
 	import flash.utils.ByteArray;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * A utility class to decode a Base64 encoded String to a ByteArray.
 	 *  
 	 *  @langversion 3.0
@@ -32,7 +35,7 @@ package org.osmf.utils
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class Base64Decoder
+	internal class Base64Decoder
 	{
 		//--------------------------------------------------------------------------
 		//
