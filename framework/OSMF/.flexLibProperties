@@ -7,7 +7,6 @@
     <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.elements.AudioElement"/>
-    <classEntry path="org.osmf.elements.Beacon"/>
     <classEntry path="org.osmf.elements.BeaconElement"/>
     <classEntry path="org.osmf.elements.CompositeElement"/>
     <classEntry path="org.osmf.elements.CompositionMode"/>
@@ -34,6 +33,7 @@
     <classEntry path="org.osmf.elements.audioClasses.AudioTimeTrait"/>
     <classEntry path="org.osmf.elements.audioClasses.SoundAdapter"/>
     <classEntry path="org.osmf.elements.audioClasses.SoundLoadTrait"/>
+    <classEntry path="org.osmf.elements.beaconClasses.Beacon"/>
     <classEntry path="org.osmf.elements.beaconClasses.BeaconPlayTrait"/>
     <classEntry path="org.osmf.elements.compositeClasses.ChildSeekOperation"/>
     <classEntry path="org.osmf.elements.compositeClasses.CompositeAudioTrait"/>

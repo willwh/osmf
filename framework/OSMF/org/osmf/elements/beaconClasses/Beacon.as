@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements
+package org.osmf.elements.beaconClasses
 {
 	import flash.events.EventDispatcher;
 	
@@ -57,7 +57,11 @@ package org.osmf.elements
 	 */
 	[Event(name="pingFailed",type="org.osmf.events.BeaconEvent")]
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * A Beacon encapsulates an HTTP request to a resource, in which
 	 * the response is irrelevant.
 	 *  

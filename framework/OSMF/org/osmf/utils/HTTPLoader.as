@@ -37,7 +37,11 @@ package org.osmf.utils
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Implementation of LoaderBase that can retrieve an URLResource using HTTP.
 	 *  
 	 *  @langversion 3.0

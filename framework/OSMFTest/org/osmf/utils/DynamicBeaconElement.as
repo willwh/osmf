@@ -19,57 +19,25 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements
+package org.osmf.utils
 {
+	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.beaconClasses.Beacon;
-	import org.osmf.elements.beaconClasses.BeaconPlayTrait;
-	import org.osmf.media.MediaElement;
-	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 	
-	/**
-	 * A MediaElement which pings a URL.
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	public class BeaconElement extends MediaElement
+	public class DynamicBeaconElement extends BeaconElement
 	{
-		/**
-		 * Constructor.
-		 * 
-		 * @param url The URL to ping when this BeaconElement is played.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function BeaconElement(url:URL)
+		public function DynamicBeaconElement(beacon:Beacon)
 		{
-			this.url = url;
-
-			super();
-		}
-		
-		/**
-		 * @private
-		 */
-		override protected function setupTraits():void
-		{
-			addTrait(MediaTraitType.PLAY, new BeaconPlayTrait(createBeacon()));
-		}
-		
-		/**
-		 * @private
-		 **/
-		protected function createBeacon():Beacon
-		{
-			return new Beacon(url);
+			this.beacon = beacon;
+			
+			super(null);
 		}
 
-		private var url:URL;
+		override protected function createBeacon():Beacon
+		{
+			return beacon;
+		}
+		
+		private var beacon:Beacon;
 	}
 }

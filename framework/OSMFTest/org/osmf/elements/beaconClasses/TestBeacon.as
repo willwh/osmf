@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements
+package org.osmf.elements.beaconClasses
 {
 	import flash.events.Event;
 	

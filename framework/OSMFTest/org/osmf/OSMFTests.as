@@ -26,6 +26,7 @@ package org.osmf
 	import org.osmf.containers.*;
 	import org.osmf.display.*;
 	import org.osmf.elements.audioClasses.*;
+	import org.osmf.elements.beaconClasses.*;
 	import org.osmf.elements.compositeClasses.*;
 	import org.osmf.elements.f4mClasses.*;
 	import org.osmf.elements.htmlClasses.*;

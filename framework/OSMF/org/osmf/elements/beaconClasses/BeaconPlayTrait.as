@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.beaconClasses
 {
-	import org.osmf.elements.Beacon;
 	import org.osmf.events.BeaconEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;

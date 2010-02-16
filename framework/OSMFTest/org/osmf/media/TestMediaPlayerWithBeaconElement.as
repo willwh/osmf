@@ -21,9 +21,10 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.elements.Beacon;
 	import org.osmf.elements.BeaconElement;
+	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.DynamicBeaconElement;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.URL;
@@ -56,7 +57,7 @@ package org.osmf.media
 				MockHTTPLoader(httpLoader).setExpectationForURL(INVALID_URL.rawUrl, false, null);
 			}
 			
-			return new BeaconElement(new Beacon(PING_URL, httpLoader));
+			return new DynamicBeaconElement(new Beacon(PING_URL, httpLoader));
 		}
 		
 		override protected function get hasLoadTrait():Boolean

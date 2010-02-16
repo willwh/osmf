@@ -23,16 +23,18 @@ package org.osmf.elements
 {
 	import flash.events.Event;
 	
+	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.PlayEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
+	import org.osmf.utils.DynamicBeaconElement;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NetFactory;
@@ -51,7 +53,7 @@ package org.osmf.elements
 			var httpLoader:HTTPLoader = createHTTPLoader();
 			httpLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
 			
-			var mediaElement:MediaElement = new BeaconElement(new Beacon(RESOURCE.url, httpLoader));
+			var mediaElement:MediaElement = createBeaconElement(RESOURCE.url, httpLoader);
 			var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			assertTrue(playTrait != null);
 			assertTrue(playTrait.canPause == false);
@@ -100,7 +102,7 @@ package org.osmf.elements
 		
 		override protected function createMediaElement():MediaElement
 		{
-			return new BeaconElement(new Beacon(RESOURCE.url, createHTTPLoader()));
+			return createBeaconElement(RESOURCE.url);
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -125,6 +127,11 @@ package org.osmf.elements
 		
 		// Internals
 		//
+		
+		private function createBeaconElement(url:URL, httpLoader:HTTPLoader=null):BeaconElement
+		{
+			return new DynamicBeaconElement(new Beacon(url, httpLoader || createHTTPLoader()));
+		}
 		
 		private function createHTTPLoader():HTTPLoader
 		{
