@@ -62,19 +62,6 @@ package org.osmf.events
 		public static const PLUGIN_LOAD_ERROR:String	= "pluginLoadError";
 
 		/**
-		 * The PluginManagerEvent.PLUGIN_UNLOAD constant defines the value of the
-		 * type property of the event object for a pluginUnload event.
-		 * 
-		 * @eventType pluginUnload
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public static const PLUGIN_UNLOAD:String		= "pluginUnload";
-		
-		/**
 		 * Constructor.
 		 * 
 		 * @param type The type of the event.

@@ -170,7 +170,7 @@
 				return new VideoElement();
 			}
 
-			private function loadPlugin(source:String, load:Boolean=true):void
+			private function loadPlugin(source:String):void
 			{
 				var pluginResource:MediaResourceBase;
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
@@ -185,14 +185,7 @@
 					pluginResource = new PluginInfoResource(new pluginInfoRef);
 				}
 				
-				if (load)
-				{
-					loadPluginFromResource(pluginResource);
-				}
-				else
-				{
-					unloadPluginFromResource(pluginResource);
-				}			
+				loadPluginFromResource(pluginResource);
 			}
 			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
@@ -202,28 +195,11 @@
 				pluginManager.loadPlugin(pluginResource);
 			}
 			
-			private function unloadPluginFromResource(pluginResource:MediaResourceBase):void
-			{
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_UNLOAD, onPluginUnloaded);
-				pluginManager.unloadPlugin(pluginResource);
-			}
-			
-			private function unloadPlugin(source:String):void
-			{
-				loadPlugin(source, false);
-			}
-			
 			private function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				debug("Plugin LOADED!"); 
 			}
 
-			private function onPluginUnloaded(event:PluginManagerEvent):void
-			{
-				debug("Plugin UNLOADED!");
-			}
-			
-			
 			private function onPluginLoadFailed(event:PluginManagerEvent):void
 			{
 				debug("Plugin LOAD FAILED!");

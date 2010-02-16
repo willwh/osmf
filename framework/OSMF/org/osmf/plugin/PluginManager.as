@@ -64,30 +64,8 @@ package org.osmf.plugin
 	[Event(name="pluginLoadError", type="org.osmf.events.PluginManagerEvent")]
 
 	/**
-	 * Dispatched when the PluginManager has successfully unloaded a plugin.
-	 *
-	 * @eventType org.osmf.events.PluginManagerEvent.PLUGIN_UNLOAD
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="pluginUnload", type="org.osmf.events.PluginManagerEvent")]
-
-	/**
-	 * <p>
-	 * This class, as indicated by its name, is a manager that provide access to plugin related
-	 * features, including:
-	 * <ul>
-	 * <li>Load a plugin</li>
-	 * <li>Unload a plugin</li>
-	 * <li>Check whether a plugin has been loaded</li>
-	 * <li>Get access to the media factory</li>
-	 * <li>Get the number of plugins that have been loaded</li>
-	 * <li>Get the plugin specified by the index</li>
-	 * </ul>
-	 * </p> 
+	 * This class is a manager that provide access to plugin related
+	 * features.
 	 *
 	 *  
 	 *  @langversion 3.0
@@ -98,7 +76,7 @@ package org.osmf.plugin
 	public class PluginManager extends EventDispatcher
 	{
 		/**
-		 * Constructor
+		 * Constructor.
 		 *
 		 * @param mediaFactory MediaFactory within which the PluginManager will place the
 		 * information from loaded plugins.  If null, the PluginManager will create a
@@ -129,7 +107,7 @@ package org.osmf.plugin
 		 * event will be dispatched. Otherwise, a PluginManagerEvent.PLUGIN_LOAD_ERROR
 		 * event will be dispatched.
 		 *
-		 * @param resource MediaResourceBase at which the plugin (swf file or class) is hosted. It is assumed that 
+		 * @param resource MediaResourceBase at which the plugin (SWF file or class) is hosted. It is assumed that 
 		 * it is sufficient to identify a plugin using the MediaResourceBase.  
 		 *
 		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginInfoResource 
@@ -218,88 +196,6 @@ package org.osmf.plugin
 		}
 
 		/**
-		 * Unload a plugin identified by url.
-		 * 
-		 * @param url URL that is used to identify the plugin.Upon successful loading,
-		 * a PluginManagerEvent.PLUGIN_UNLOAD event will be dispatched. 
-		 * 
-		 * @throws ArgumentError If resource is null or resource is not URLResource or PluginInfoResource 
-		 *
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function unloadPlugin(resource:MediaResourceBase):void
-		{
-			if (resource == null) 
-	
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
-			}
-			
-			var identifier:Object = getPluginIdentifier(resource);
-			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
-			if (pluginEntry != null)
-			{
-				var loadTrait:LoadTrait = pluginEntry.pluginElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-				if (loadTrait != null)
-				{
-					loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					loadTrait.unload();
-				}
-			}
-			else
-			{
-				dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_UNLOAD));
-			}
-			
-			function onLoadStateChange(event:LoadEvent):void
-			{
-				if (event.loadState == LoadState.UNINITIALIZED)
-				{
-					// When the LoadTrait's state is back to UNINITIALIZED, the unload process 
-					// is finished.
-					removePluginEntry(pluginEntry);
-					delete _pluginMap[identifier];
-					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_UNLOAD));
-				}
-			}
-		}
-
-
-		/**
-		 * Check whether a plugin has been loaded.
-		 * 
-		 * @param resource MediaResourceBase that is used to identify the plugin.
-		 * 
-		 * @return Returns true or false accordingly.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function isPluginLoaded(resource:MediaResourceBase):Boolean
-		{
-			if (resource == null)
-			{
-				return false;
-			}
-			
-			var identifier:Object = getPluginIdentifier(resource);
-			if (identifier == null)
-			{
-				return false;
-			}
-			
-			var pluginEntry:PluginEntry = _pluginMap[identifier] as PluginEntry;
-			
-			return ((pluginEntry != null) && (pluginEntry.state == PluginLoadingState.LOADED));
-		}
-
-		/**
 		 * Get access to the media factory that is used for plugin loading and 
 		 * MediaInfo registering. Plugins can use this MediaFactory to create
 		 * other types of MediaElement.
@@ -313,43 +209,6 @@ package org.osmf.plugin
 		public function get mediaFactory():MediaFactory
 		{
 			return _mediaFactory;
-		}
-
-		/**
-		 * Get the number of plugins that have been loaded
-		 *
-		 * @return Returns the number of plugins that have been loaded
-		 *
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get numLoadedPlugins():int
-		{
-			return _pluginList.length;
-		}
-
-		/**
-		 * Get the plugin specified by the index
-		 *
-		 * @param index The index identifies the slot at which the plugin is stored
-		 *
-		 * @return Returns the MediaResourceBase that represents the plugin
-		 *
-		 * @throws RangeError if the index is out of the range
-		 *
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function getLoadedPluginAt(index:int):MediaResourceBase
-		{
-			var pluginEntry:PluginEntry = _pluginList[index];
-			return pluginEntry.pluginElement.resource;
 		}
 		
 		// Internals

@@ -54,16 +54,7 @@ package org.osmf.plugin
 			
 			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					// expected
-					assertTrue(pluginManager.numLoadedPlugins == 1);
-					assertTrue(pluginManager.getLoadedPluginAt(0) == pluginResource);
-				}
-				else
-				{
-					assertTrue(false);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD);
 			}
 		}
 		
@@ -77,33 +68,12 @@ package org.osmf.plugin
 			
 			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					// expected
-					assertTrue(pluginManager.numLoadedPlugins == 1);
-					assertTrue(pluginManager.getLoadedPluginAt(0) == pluginResource);
-					pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
-					pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent2);
-					pluginManager.loadPlugin(pluginResource);
-				}
-				else
-				{
-					assertTrue(false);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD);
 			}
 			
 			function onPluginLoadEvent2(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					// expected
-					assertTrue(pluginManager.numLoadedPlugins == 1);
-					assertTrue(pluginManager.getLoadedPluginAt(0) == pluginResource);
-				}
-				else
-				{
-					assertTrue(false);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD)
 			}
 		}
 
@@ -117,15 +87,7 @@ package org.osmf.plugin
 			
 			function onPluginLoadEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					assertTrue(false);
-				}
-				else
-				{
-					// expected
-					assertTrue(pluginManager.numLoadedPlugins == 0);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
 			}
 		}
 

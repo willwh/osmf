@@ -73,42 +73,6 @@ package org.osmf.plugin
 			}
 		}
 
-		public function testUnloadStaticPluginWithValidClassResource():void
-		{
-			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginManagerEvent);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_UNLOAD, addAsync(onPluginUnloadedEvent, 500));
-			pluginManager.loadPlugin(pluginResource);
-			
-			function onPluginManagerEvent(event:PluginManagerEvent):void
-			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					// expected
-					assertTrue(event.resource != null);
-					pluginManager.unloadPlugin(pluginResource);
-				}
-				else
-				{
-					assertTrue(false);
-				}
-			}
-			
-			function onPluginUnloadedEvent(event:PluginManagerEvent):void
-			{	
-				if (event.type == PluginManagerEvent.PLUGIN_UNLOAD)
-				{
-					// expected
-					assertTrue(pluginManager.numLoadedPlugins == 0);
-				}
-				else
-				{
-					assertTrue(false);
-				}
-			}			
-		}
-
 		public function testCheckLoadStatusOfStaticPluginWithValidClassResource():void
 		{
 			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo);
@@ -118,17 +82,7 @@ package org.osmf.plugin
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					// expected
-					assertTrue(pluginManager.isPluginLoaded(pluginResource));
-					assertTrue(pluginManager.numLoadedPlugins == 1);
-					assertTrue(pluginManager.getLoadedPluginAt(0) == pluginResource);
-				}
-				else
-				{
-					assertTrue(false);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD);
 			}
 		}
 
@@ -141,15 +95,7 @@ package org.osmf.plugin
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					assertTrue(false);
-				}
-				else
-				{
-					assertTrue(pluginManager.isPluginLoaded(pluginResource) == false);
-					assertTrue(pluginManager.numLoadedPlugins == 0);
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
 			}
 		}
 	
@@ -201,46 +147,15 @@ package org.osmf.plugin
 			pluginManager.loadPlugin(pluginResource);
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
-			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					assertTrue(false);
-				}
-				else
-				{
-					assertTrue(pluginManager.isPluginLoaded(pluginResource) == false);
-					assertTrue(pluginManager.numLoadedPlugins == 0);
-				}
+			{
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR)
 			}
-		}
-		
-		public function testIsPluginLoaded():void
-		{
-			assertTrue(pluginManager.isPluginLoaded(null) == false);
-			assertTrue(pluginManager.isPluginLoaded(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))) == false);
-			
-			assertTrue(pluginManager.isPluginLoaded(new URLResource(null)) == false);
-			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL(""))) == false);
-			assertTrue(pluginManager.isPluginLoaded(new URLResource(new FMSURL("rtmp://example.com/vod"))) == false);			
-
-			assertTrue(pluginManager.isPluginLoaded(new PluginInfoResource(new SimpleVideoPluginInfo)) == false);			
 		}
 		
 		public function testLoadPluginWithInvalidParameters():void
 		{
 			assertTrue(doLoadPluginWithInvalidParameter(null));
 			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
-		}
-		
-		public function testUnloadPluginWithInvalidParameters():void
-		{
-			assertTrue(doUnloadPluginWithInvalidParameter(null));
-			
-			// Unlike with load, the unload of an invalid resource should *not*
-			// trigger an exception.  To do so would involve determining whether
-			// the resource truly is a plugin resource or not (which probably
-			// means loading it).
-			assertFalse(doUnloadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
 		}
 		
 		public function testLoadPluginWithCustomMetadata():void
@@ -354,21 +269,6 @@ package org.osmf.plugin
 			}			
 		}
 		
-		private function doUnloadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
-		{
-			try 
-			{
-				pluginManager.unloadPlugin(resource);
-				return false;
-			}
-			catch(e:Error)
-			{
-				return true;
-			}
-			
-			return false;
-		}
-		
 		private function doLoadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
 		{
 			try 
@@ -403,6 +303,5 @@ class OldPluginInfo extends org.osmf.plugin.PluginInfo
 	{
 		return "0.5.0";
 	}
-	
 }
 

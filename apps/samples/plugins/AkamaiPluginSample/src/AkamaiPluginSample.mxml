@@ -269,29 +269,13 @@
 				loadPluginFromResource(pluginResource);
 			}
 			
-			private function unloadPlugin(source:String):void
-			{
-				if (pluginResourceMap != null)
-				{
-					var pluginResource:MediaResourceBase = pluginResourceMap[source];
-					unloadPluginFromResource(pluginResource);
-					delete pluginResourceMap[source];
-				}
-			}
-			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
 				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 				pluginManager.loadPlugin(pluginResource);
 			}
-			
-			private function unloadPluginFromResource(pluginResource:MediaResourceBase):void
-			{
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_UNLOAD, onPluginUnloaded);
-				pluginManager.unloadPlugin(pluginResource);
-			}
-			
+						
 			private function onPluginLoaded(event:PluginManagerEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
@@ -306,18 +290,10 @@
 				removePluginManagerEventListeners();
 			}
 
-			private function onPluginUnloaded(event:PluginManagerEvent):void
-			{
-				var selection:Object = cbPlugin.selectedItem;
-				appendInfoText("Plugin UNLOADED: " + selection.label);
-				removePluginManagerEventListeners();
-			}
-			
 			private function removePluginManagerEventListeners():void
 			{
 				pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
 				pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-				pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_UNLOAD, onPluginUnloaded);
 			}
 			
 			private function pluginComboBoxChanged(event:DropdownEvent):void
@@ -476,7 +452,6 @@
 			<mx:Label text="Plugin URL:" />
 			<mx:TextInput id="urlInput" width="500"/>
 			<mx:Button label="Load Plugin" click="{loadPlugin(urlInput.text)}"/>
-			<mx:Button label="Unload Plugin" click="{unloadPlugin(urlInput.text)}"/>
 		</mx:HBox>	
 		<mx:HBox height="60">
 			<mx:Spacer width="10" />
