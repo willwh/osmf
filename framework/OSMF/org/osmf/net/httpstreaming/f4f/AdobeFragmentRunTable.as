@@ -167,6 +167,17 @@ package org.osmf.net.httpstreaming.f4f
 			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time));
 		}
 		
+		/**
+		 * Given a fragment id, check whether the current fragment is valid or a discontinuity.
+		 * If the latter, skip to the nearest fragment and return the new fragment id.
+		 * 
+		 * @return the Id of the fragment that is valid.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function validateFragment(fragId:uint):FragmentAccessInformation
 		{
 			var size:uint = _fragmentDurationPairs.length - 1;
@@ -212,6 +223,49 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			
 			return fai;
+		}
+		
+		/**
+		 * Given a fragment id, return the number of fragments after the 
+		 * fragment with the id given.
+		 * 
+		 * @return the number of fragments after the fragment with the id given.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function fragmentsLeft(fragId:uint, currentMediaTime:Number):uint
+		{
+			if (_fragmentDurationPairs == null)
+			{
+				return 0;
+			}
+			
+			var fdp:FragmentDurationPair = _fragmentDurationPairs[fragmentDurationPairs.length - 1] as FragmentDurationPair;
+			var fragments:uint = (currentMediaTime - fdp.durationAccrued) / fdp.duration + fdp.firstFragment - fragId;
+			
+			return fragments;
+		}		
+		
+		/**
+		 * @return whether the fragment table is complete.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function tableComplete():Boolean
+		{
+			if (_fragmentDurationPairs == null)
+			{
+				return false;
+			}
+			
+			var fdp:FragmentDurationPair = _fragmentDurationPairs[fragmentDurationPairs.length - 1] as FragmentDurationPair;
+			return (fdp.duration == 0 && fdp.discontinuityIndicator == 0);
 		}
 		
 		// Internal

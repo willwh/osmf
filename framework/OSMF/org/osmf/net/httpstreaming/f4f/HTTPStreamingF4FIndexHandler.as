@@ -55,12 +55,14 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function HTTPStreamingF4FIndexHandler()
+		public function HTTPStreamingF4FIndexHandler(fragmentsThreshold:uint = DEFAULT_FRAGMENTS_THRESHOLD)
 		{
 			super();
 			
 			currentQuality = -1;
 			currentFAI = null;
+			fragmentRunTablesUpdating = false;			
+			this.fragmentsThreshold = fragmentsThreshold;
 		}
 		
 		/**
@@ -76,6 +78,7 @@ package org.osmf.net.httpstreaming.f4f
 				return;					
 			}
 			bootstrapBoxes = new Vector.<AdobeBootstrapBox>(f4fIndexInfo.streamInfos.length);
+			fragmentRunTablesUpdating= false;
 			totalDurationNotified = false;
 			pendingIndexLoads = 0;
 			
@@ -156,7 +159,20 @@ package org.osmf.net.httpstreaming.f4f
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 				return;					
 			}
-			pendingIndexLoads--;
+			
+			if (!fragmentRunTablesUpdating) 
+			{
+				pendingIndexLoads--;
+			}
+			else
+			{
+				pendingIndexUpdates--;
+				if (pendingIndexUpdates == 0)
+				{
+					fragmentRunTablesUpdating = false;
+				}
+			}
+			
 			bootstrapBoxes[index] = bootstrapBox;
 
 			if (!totalDurationNotified)
@@ -165,7 +181,7 @@ package org.osmf.net.httpstreaming.f4f
 				totalDurationNotified = true;
 			}
 
-			if (pendingIndexLoads == 0)
+			if (pendingIndexLoads == 0 && !fragmentRunTablesUpdating)
 			{
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
@@ -190,10 +206,10 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getFileForTime(time:Number, quality:int):HTTPStreamRequest
 		{
-			abst = bootstrapBoxes[quality];
+			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
-			var frt:AdobeFragmentRunTable = getFragmentRunTable();
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			if (	time >= 0
 				&&	time * abst.timeScale <= frt.totalDuration
 				&& 	quality >= 0
@@ -216,6 +232,7 @@ package org.osmf.net.httpstreaming.f4f
 				}
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
+				checkFragmentInventory(currentFAI.fragId, abst, frt);
 			}
 			
 			CONFIG::LOGGING
@@ -234,7 +251,7 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		override public function getNextFile(quality:int):HTTPStreamRequest
 		{
-			abst = bootstrapBoxes[quality];
+			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
 			if (	(currentFAI.fragId + 1)  <= abst.totalFragments
@@ -242,19 +259,19 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
-				var frt:AdobeFragmentRunTable = getFragmentRunTable();
+				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 				currentFAI = frt.validateFragment(currentFAI.fragId + 1);
 				if (currentFAI == null)
 				{
 					return null;
 				}
-				
-				
+		
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
 				
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
+				checkFragmentInventory(currentFAI.fragId, abst, frt);
 					
 				CONFIG::LOGGING
 				{
@@ -278,7 +295,7 @@ package org.osmf.net.httpstreaming.f4f
 		 * 
 		 * Given timeBias, calculates the corresponding segment duration.
 		 */
-		internal function calculateSegmentDuration(timeBias:Number):Number
+		internal function calculateSegmentDuration(abst:AdobeBootstrapBox, timeBias:Number):Number
 		{
 			var fragmentDurationPairs:Vector.<FragmentDurationPair> = (abst.fragmentRunTables)[0].fragmentDurationPairs;
 			var fragmentId:uint = currentFAI.fragId;
@@ -356,6 +373,36 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}
 		
+		private function checkFragmentInventory(
+			fragId:uint, abst:AdobeBootstrapBox, frt:AdobeFragmentRunTable):void
+		{
+			if (fragmentRunTablesUpdating ||
+				!abst.live || 
+				frt.tableComplete() || 
+				(frt.fragmentsLeft(fragId, abst.currentMediaTime) > fragmentsThreshold))
+			{
+				return;
+			}
+			
+			fragmentRunTablesUpdating = true;
+			pendingIndexUpdates = streamInfos.length;
+			for (var i:uint = 0; i < streamInfos.length; i++)
+			{
+				dispatchEvent
+					(	new HTTPStreamingIndexHandlerEvent
+							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
+							, false
+							, false
+							, null
+							, null
+							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url.rawUrl)
+							, i
+							, true
+							)
+					);				
+			}
+		}
+		
 		private function processBootstrapData(data:*, indexContext:Object):AdobeBootstrapBox
 		{
 			var bootstrapBox:AdobeBootstrapBox = null;
@@ -430,7 +477,7 @@ package org.osmf.net.httpstreaming.f4f
 			return streamNames;
 		}
 
-		private function getFragmentRunTable():AdobeFragmentRunTable
+		private function getFragmentRunTable(abst:AdobeBootstrapBox):AdobeFragmentRunTable
 		{
 			// For now, we assume that there is only one fragment run table.
 			return abst.fragmentRunTables[0];
@@ -462,12 +509,17 @@ package org.osmf.net.httpstreaming.f4f
 
 		private var totalDurationNotified:Boolean;
 		private var pendingIndexLoads:int;
-		private var abst:AdobeBootstrapBox;
+		private var pendingIndexUpdates:int;
+//		private var abst:AdobeBootstrapBox;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
 		private var serverBaseURL:String;
 		private var streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;
 		private var currentQuality:int;
 		private var currentFAI:FragmentAccessInformation;
+		private var fragmentsThreshold:uint;
+		private var fragmentRunTablesUpdating:Boolean;
+		
+		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
 		CONFIG::LOGGING
 		{
