@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.utils
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Class that contains static utility methods for manipulating and working
 	 * with time values.
 	 *  
