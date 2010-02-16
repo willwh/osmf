@@ -23,7 +23,7 @@ package org.osmf.vast.media
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.elements.Beacon;
+	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.elements.ListenerProxyElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.BufferTrait;
