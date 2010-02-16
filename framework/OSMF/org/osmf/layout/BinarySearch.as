@@ -19,11 +19,17 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.utils
+package org.osmf.layout
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.utils.OSMFStrings;
+	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Utility class that generalizes binary search within sorted lists.
 	 *  
 	 *  @langversion 3.0
@@ -31,7 +37,7 @@ package org.osmf.utils
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class BinarySearch
+	internal class BinarySearch
 	{
 		/**
 		 * Method for searching an item in a sorted list.

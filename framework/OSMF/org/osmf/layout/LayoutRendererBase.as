@@ -40,7 +40,6 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
-	import org.osmf.utils.BinarySearch;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	

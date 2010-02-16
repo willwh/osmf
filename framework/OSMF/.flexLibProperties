@@ -108,6 +108,7 @@
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutFacet"/>
     <classEntry path="org.osmf.layout.AnchorLayoutFacet"/>
+    <classEntry path="org.osmf.layout.BinarySearch"/>
     <classEntry path="org.osmf.layout.BoxAttributesFacet"/>
     <classEntry path="org.osmf.layout.HorizontalAlign"/>
     <classEntry path="org.osmf.layout.ILayoutTarget"/>
@@ -258,7 +259,6 @@
     <classEntry path="org.osmf.traits.PlayTrait"/>
     <classEntry path="org.osmf.traits.SeekTrait"/>
     <classEntry path="org.osmf.traits.TimeTrait"/>
-    <classEntry path="org.osmf.utils.BinarySearch"/>
     <classEntry path="org.osmf.utils.DateUtil"/>
     <classEntry path="org.osmf.utils.ExternalProperty"/>
     <classEntry path="org.osmf.utils.FMSHost"/>

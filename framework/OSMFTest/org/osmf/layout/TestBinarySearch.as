@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.utils
+package org.osmf.layout
 {
 	import __AS3__.vec.Vector;
 	
