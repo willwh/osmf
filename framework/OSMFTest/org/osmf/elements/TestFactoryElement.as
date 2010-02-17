@@ -40,7 +40,7 @@ package org.osmf.elements
 			var resource:URLResource = new URLResource(new URL("http://example.com/blah"));
 			var loader:LoaderBase = new LoaderBase();
 			var factory:FactoryElement = new FactoryElement(resource, loader);
-			var testFacet:KeyValueFacet = new KeyValueFacet(new URL("http://adobe.com/"));
+			var testFacet:KeyValueFacet = new KeyValueFacet("http://adobe.com/");
 			factory.metadata.addFacet(testFacet);
 						
 			var wrapped:MediaElement = new MediaElement();
@@ -62,8 +62,8 @@ package org.osmf.elements
 			load.mediaElement = wrapped;
 			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, load, LoadState.LOADING, LoadState.READY));
 			
-			//Ensure metadata proxy is functioning properly
-			assertEquals(factory.metadata.getFacet(new URL("http://adobe.com/")), testFacet);		
+			// Ensure metadata proxy is functioning properly
+			assertEquals(factory.metadata.getFacet("http://adobe.com/"), testFacet);		
 			
 			assertEquals(factory.metadata.namespaceURLs.length, wrapped.metadata.namespaceURLs.length);
 						

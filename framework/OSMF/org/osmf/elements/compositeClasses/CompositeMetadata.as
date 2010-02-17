@@ -36,7 +36,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 
 	[ExcludeClass]
 	
@@ -218,7 +217,7 @@ package org.osmf.elements.compositeClasses
 				{
 					processChildFacetAdd
 						( child
-						, child.getFacet(new URL(url))
+						, child.getFacet(url)
 						, false // Don't trigger child facet add events. 
 						);
 				}
@@ -284,7 +283,7 @@ package org.osmf.elements.compositeClasses
 				{
 					processChildFacetRemove
 						( child
-						, child.getFacet(new URL(url))
+						, child.getFacet(url)
 						, false // Don't trigger child facet remove events.
 						);
 				}
@@ -409,7 +408,7 @@ package org.osmf.elements.compositeClasses
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_BE_UNIQUE));
 			}
 			
-			facetSynthesizers[synthesizer.namespaceURL.rawUrl] = synthesizer;
+			facetSynthesizers[synthesizer.namespaceURL] = synthesizer;
 		}
 		
 		/**
@@ -432,7 +431,7 @@ package org.osmf.elements.compositeClasses
 			
 			if (getFacetSynthesizer(synthesizer.namespaceURL) != null)
 			{
-				delete facetSynthesizers[synthesizer.namespaceURL.rawUrl];
+				delete facetSynthesizers[synthesizer.namespaceURL];
 			}
 		}
 		
@@ -447,16 +446,15 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function getFacetSynthesizer(namespaceURL:URL):FacetSynthesizer
+		public function getFacetSynthesizer(namespaceURL:String):FacetSynthesizer
 		{
 			var result:FacetSynthesizer;
 			
 			if (namespaceURL != null)
 			{
-				var namespaceString:String = namespaceURL.toString();
 				for (var rawUrl:String in facetSynthesizers)
 				{
-					if (rawUrl == namespaceString)
+					if (rawUrl == namespaceURL)
 					{
 						result = facetSynthesizers[rawUrl];
 						break;
@@ -519,14 +517,14 @@ package org.osmf.elements.compositeClasses
 			
 			if (facet != null)
 			{
-				var childrenNamespace:URL = facet.namespaceURL;
+				var childrenNamespaceURL:String = facet.namespaceURL;
 				
-				var facetGroup:FacetGroup = childFacetGroups[childrenNamespace.rawUrl];
+				var facetGroup:FacetGroup = childFacetGroups[childrenNamespaceURL];
 				if (facetGroup == null)
 				{
-					childFacetGroups[childrenNamespace.rawUrl]
+					childFacetGroups[childrenNamespaceURL]
 						= facetGroup
-						= new FacetGroup(childrenNamespace);
+						= new FacetGroup(childrenNamespaceURL);
 						
 					facetGroup.addEventListener(Event.CHANGE, onFacetGroupChange);
 						
@@ -565,8 +563,8 @@ package org.osmf.elements.compositeClasses
 			
 			if (facet != null)
 			{
-				var childrenNamespace:URL = facet.namespaceURL;
-				var facetGroup:FacetGroup = childFacetGroups[childrenNamespace.rawUrl];
+				var childrenNamespaceURL:String = facet.namespaceURL;
+				var facetGroup:FacetGroup = childFacetGroups[childrenNamespaceURL];
 				facetGroup.removeFacet(child, facet);
 				
 				if (facetGroup.length == 0)
@@ -580,7 +578,7 @@ package org.osmf.elements.compositeClasses
 							, child, facet, facetGroup
 							);
 							
-					delete childFacetGroups[childrenNamespace.rawUrl];
+					delete childFacetGroups[childrenNamespaceURL];
 					
 				}
 			}
@@ -629,7 +627,7 @@ package org.osmf.elements.compositeClasses
 			// If no one before us was able to deliver a facet synthesizer, then perhaps we can:
 			if (event.suggestedFacetSynthesizer == null)
 			{
-				event.suggestFacetSynthesizer(facetSynthesizers[event.facetGroup.namespaceURL.rawUrl]);
+				event.suggestFacetSynthesizer(facetSynthesizers[event.facetGroup.namespaceURL]);
 			}
 						
 			var clonedEvent:CompositeMetadataEvent 
@@ -659,7 +657,7 @@ package org.osmf.elements.compositeClasses
 			}
 			
 			var synthesizedFacet:Facet;
-			var facetSynthesizer:FacetSynthesizer = facetSynthesizers[facetGroup.namespaceURL.rawUrl];
+			var facetSynthesizer:FacetSynthesizer = facetSynthesizers[facetGroup.namespaceURL];
 			
 			var localEvent:CompositeMetadataEvent
 				= new CompositeMetadataEvent

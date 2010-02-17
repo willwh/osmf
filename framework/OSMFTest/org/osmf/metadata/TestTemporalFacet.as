@@ -81,14 +81,14 @@ package org.osmf.metadata
 			}
 			
 			// Test passing valid arguments
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
+			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 			assertTrue(facet != null);
-			assertEquals(NAMESPACE, facet.namespaceURL.rawUrl);
+			assertEquals(NAMESPACE, facet.namespaceURL);
 		}
 		
 		public function testAddValue():void
 		{
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
+			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 			
 			for each(var value:TemporalIdentifier in _testValues)
 			{
@@ -128,7 +128,7 @@ package org.osmf.metadata
 		
 		public function testGetValue():void
 		{
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), new VideoElement());
+			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 
 			facet.addValue(new TemporalIdentifier(500, 5));
 			
@@ -159,7 +159,7 @@ package org.osmf.metadata
 			var videoElement:VideoElement = createMediaElement();
 			videoElement.resource = resourceForMediaElement;
 			
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), videoElement);
+			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, videoElement);
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 
@@ -233,7 +233,7 @@ package org.osmf.metadata
 		{
 			var mediaElement:DynamicMediaElement = createDynamicMediaElement();
 																		 			
-			var facet:TemporalFacet = new TemporalFacet(new URL(NAMESPACE), mediaElement);
+			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, mediaElement);
 
 			for each(var value:TemporalIdentifier in _testValues)
 			{

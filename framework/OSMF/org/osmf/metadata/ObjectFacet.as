@@ -24,7 +24,6 @@ package org.osmf.metadata
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.utils.URL;
 
 	/**
 	 * ObjectFacet defines a facet that holds a single object value.
@@ -48,7 +47,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ObjectFacet(namespaceURL:URL, value:Object, synthesizer:Class = null)
+		public function ObjectFacet(namespaceURL:String, value:Object, synthesizer:Class = null)
 		{
 			super(namespaceURL);
 			_object = value;

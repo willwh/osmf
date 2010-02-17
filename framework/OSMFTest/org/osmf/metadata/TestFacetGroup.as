@@ -24,13 +24,12 @@ package org.osmf.metadata
 	import flash.events.Event;
 	
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.utils.URL;
 
 	public class TestFacetGroup extends TestCaseEx
 	{
 		public function testFacetGroup():void
 		{
-			var url:URL = new URL("url");
+			var url:String = "url";
 			var fg:FacetGroup = new FacetGroup(url);
 			
 			assertNotNull(fg);

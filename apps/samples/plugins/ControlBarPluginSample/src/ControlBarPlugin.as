@@ -75,8 +75,8 @@ package
 		//
 		
 		public static const ID:String = "org.osmf.samples.controlbar";
-		public static const NS_CONTROL_BAR_SETTINGS:URL = new URL("http://www.osmf.org/samples/controlbar/settings");
-		public static const NS_CONTROL_BAR_TARGET:URL = new URL("http://www.osmf.org/samples/controlbar/target");
+		public static const NS_CONTROL_BAR_SETTINGS:String = "http://www.osmf.org/samples/controlbar/settings";
+		public static const NS_CONTROL_BAR_TARGET:String = "http://www.osmf.org/samples/controlbar/target";
 		
 		private var _pluginInfo:PluginInfo;
 		private var controlBarElement:ControlBarElement;

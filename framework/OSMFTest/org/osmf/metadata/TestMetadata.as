@@ -29,7 +29,6 @@ package org.osmf.metadata
 	
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 
 	public class TestMetadata extends TestCase
 	{
@@ -43,7 +42,7 @@ package org.osmf.metadata
 		public function testAddMetadata():void
 		{				
 			var addCalled:Boolean = false;	
-			var testNs:URL = new URL("dfs3424f#@$@D");
+			var testNs:String = "dfs3424f#@$@D";
 			collection.addEventListener(MetadataEvent.FACET_ADD, onAdd);
 			var value:KeyValueFacet = new KeyValueFacet(testNs);
 			
@@ -52,7 +51,7 @@ package org.osmf.metadata
 					
 			var facet:Facet = 	collection.getFacet(testNs);
 									
-			assertEquals(value, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
+			assertEquals(value, facet, collection.getFacet("dfs3424f#@$@D"));		
 			
 			//Test the Catching of Errors
 			var nullThrown:Boolean = false;
@@ -90,7 +89,7 @@ package org.osmf.metadata
 		public function testRemoveMetadata():void
 		{		
 			var removeCalled:Boolean = false;	
-			var testNs:URL = new URL("dfs3424f#@$@D");
+			var testNs:String = "dfs3424f#@$@D";
 			var value:KeyValueFacet = new KeyValueFacet(testNs);
 			collection.addEventListener(MetadataEvent.FACET_REMOVE, onRemove);
 			collection.addFacet(value);
@@ -98,15 +97,15 @@ package org.osmf.metadata
 			
 			assertTrue(removeCalled);
 					
-			value = new KeyValueFacet(new URL("dfs3424f#@$@D"));
+			value = new KeyValueFacet("dfs3424f#@$@D");
 			
 			removeCalled = false;			
-			assertNull( collection.removeFacet(new KeyValueFacet(new URL("unknown"))));					
+			assertNull( collection.removeFacet(new KeyValueFacet("unknown")));					
 			assertFalse(removeCalled); //Make sure we didn't dispatch an event for an already removed item.
 								
 			var facet:Facet = 	collection.getFacet(testNs);
 									
-			assertEquals(value, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
+			assertEquals(value, facet, collection.getFacet("dfs3424f#@$@D"));		
 			
 			//Test the Catching of Errors
 			var nullThrown:Boolean = false;
@@ -145,7 +144,7 @@ package org.osmf.metadata
 		{	
 			var addCalled:Boolean = false;	
 			var removeCalled:Boolean = false;	
-			var testNs:URL = new URL("dfs3424f#@$@D");
+			var testNs:String = "dfs3424f#@$@D";
 		
 			collection.addEventListener(MetadataEvent.FACET_ADD, onAdd);
 			collection.addEventListener(MetadataEvent.FACET_REMOVE, onRemove);
@@ -162,7 +161,7 @@ package org.osmf.metadata
 								
 			var facet:Facet = 	collection.getFacet(testNs);
 									
-			assertEquals(value1, facet, collection.getFacet(new URL("dfs3424f#@$@D")));		
+			assertEquals(value1, facet, collection.getFacet("dfs3424f#@$@D"));		
 			
 			function onAdd(event:MetadataEvent):void
 			{
@@ -183,8 +182,8 @@ package org.osmf.metadata
 		{
 			var adobe:String =  "http://www.adobe.com/";
 			var example:String = "http://www.example.com/";
-			var value:KeyValueFacet = new KeyValueFacet(new URL(adobe));
-			var value2:KeyValueFacet = new KeyValueFacet(new URL(example));
+			var value:KeyValueFacet = new KeyValueFacet(adobe);
+			var value2:KeyValueFacet = new KeyValueFacet(example);
 			
 			collection.addFacet(value);
 			collection.addFacet(value2);
@@ -196,16 +195,16 @@ package org.osmf.metadata
 			assertTrue(adobe == nameSpaces[1] || example == nameSpaces[1] );
 			assertTrue(example == nameSpaces[0] || adobe == nameSpaces[0]  );
 			
-			var facet:Facet = collection.getFacet(new URL(adobe));
+			var facet:Facet = collection.getFacet(adobe);
 			assertEquals(value, facet);
 			
-			facet = collection.getFacet(new URL(adobe));
+			facet = collection.getFacet(adobe);
 			assertEquals(value, facet);
 			
-			facet = collection.getFacet(new URL("testNamespace"));
+			facet = collection.getFacet("testNamespace");
 			assertNull(facet);
 			
-			facet = collection.getFacet(new URL(example));
+			facet = collection.getFacet(example);
 			assertEquals(value2, facet);
 					
 					
@@ -215,11 +214,11 @@ package org.osmf.metadata
 		{
 			var adobe:String =  "http://www.adobe.com/";
 			var example:String = "http://www.example.com/";
-			var value:KeyValueFacet = new KeyValueFacet(new URL(adobe));
-			var value2:KeyValueFacet = new KeyValueFacet(new URL(example));
-			var value3:CustomFacet = new CustomFacet(new URL(example));
+			var value:KeyValueFacet = new KeyValueFacet(adobe);
+			var value2:KeyValueFacet = new KeyValueFacet(example);
+			var value3:CustomFacet = new CustomFacet(example);
 			
-			assertEquals(example, value3.namespaceURL.rawUrl)
+			assertEquals(example, value3.namespaceURL)
 						
 			collection.addFacet(value);
 			collection.addFacet(value2);
@@ -229,11 +228,11 @@ package org.osmf.metadata
 			
 			assertEquals(2, nameSpaces.length); 
 			//Can't predict the order of the facet types, so we need to check for both.
-			assertTrue(value3 == collection.getFacet(new URL(nameSpaces[0])) || value3 == collection.getFacet(new URL(nameSpaces[1])));
-			assertTrue(value == collection.getFacet(new URL(nameSpaces[0])) || value == collection.getFacet(new URL(nameSpaces[1])));
-			assertTrue(collection.getFacet(new URL(nameSpaces[0])) != collection.getFacet(new URL(nameSpaces[1])));
+			assertTrue(value3 == collection.getFacet(nameSpaces[0]) || value3 == collection.getFacet(nameSpaces[1]));
+			assertTrue(value == collection.getFacet(nameSpaces[0]) || value == collection.getFacet(nameSpaces[1]));
+			assertTrue(collection.getFacet(nameSpaces[0]) != collection.getFacet(nameSpaces[1]));
 						
-			var facet:Facet = collection.getFacet(new URL(adobe));
+			var facet:Facet = collection.getFacet(adobe);
 			assertEquals(value, facet);
 		
 					
@@ -245,11 +244,11 @@ package org.osmf.metadata
 		{
 			var adobe:String =  "http://www.adobe.com/";
 			var example:String = "http://www.example.com/";
-			var value:KeyValueFacet = new KeyValueFacet(new URL(adobe));
-			var value2:KeyValueFacet = new KeyValueFacet(new URL(example));
-			var value3:CustomFacet = new CustomFacet(new URL(example));
+			var value:KeyValueFacet = new KeyValueFacet(adobe);
+			var value2:KeyValueFacet = new KeyValueFacet(example);
+			var value3:CustomFacet = new CustomFacet(example);
 			
-			assertEquals(example, value3.namespaceURL.rawUrl)
+			assertEquals(example, value3.namespaceURL)
 						
 			collection.addFacet(value);
 			collection.addFacet(value2);
@@ -268,7 +267,6 @@ package org.osmf.metadata
 
 import org.osmf.metadata.Facet;
 import org.osmf.metadata.Metadata
-import org.osmf.utils.URL;
 import flash.events.EventDispatcher;
 import org.osmf.metadata.IIdentifier;
 import org.osmf.metadata.FacetSynthesizer;
@@ -277,7 +275,7 @@ import org.osmf.metadata.Facet;
 internal class CustomFacet extends Facet
 {
 		
-	public function CustomFacet(ns:URL)
+	public function CustomFacet(ns:String)
 	{
 		super(ns);
 	}

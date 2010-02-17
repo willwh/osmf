@@ -134,7 +134,7 @@
 			private function onCuePoint(event:TemporalFacetEvent):void
 			{
 				var cuePoint:CuePoint = event.value as CuePoint;
-				var ns:URL = (event.currentTarget as TemporalFacet).namespaceURL;
+				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
 				
 				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.currentTime;
 				trace("cuePoint.time="+cuePoint.time+", currentTime time="+this.mediaPlayerWrapper.mediaPlayer.currentTime+", diff="+diff);
@@ -155,7 +155,7 @@
 				showCuePointEvent(cuePoint, ns);
 			}
 			
-			private function showCuePointEvent(cuePoint:CuePoint, ns:URL):void
+			private function showCuePointEvent(cuePoint:CuePoint, ns:String):void
 			{
 				// Don't show navigation cue points in the cue point event display
 				if (cuePoint.type == CuePointType.NAVIGATION)
@@ -165,7 +165,7 @@
 				
 				var cuePointType:String = stringFromCuePointType(cuePoint.type);
 				
-				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePointType+"\", namespace: \""+ns.rawUrl+"\"";
+				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePointType+"\", namespace: \""+ns+"\"";
 				taCuePointEvents.text += msg + "\n";
 				
 				callLater(autoScroll);
@@ -265,7 +265,7 @@
 					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
 					
 					// Show all the cue points found in the media
-					if (_cuePointsCollection == null && temporalFacet.namespaceURL.rawUrl == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC.rawUrl)
+					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC)
 					{
 						this._cuePointsCollection = new ArrayCollection();
 						for (var i:int = 0; i < temporalFacet.numValues; i++)
@@ -305,7 +305,7 @@
 			{
 				if (_temporalFacet == null)
 				{
-					_temporalFacet = new TemporalFacet(new URL(CUSTOM_NAMESPACE), videoElement);
+					_temporalFacet = new TemporalFacet(CUSTOM_NAMESPACE, videoElement);
 					videoElement.metadata.addFacet(_temporalFacet);				
 				}						
 			

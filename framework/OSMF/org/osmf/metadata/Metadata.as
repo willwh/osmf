@@ -29,7 +29,6 @@ package org.osmf.metadata
 	
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Dispatched when the an IMetadata has been added.
@@ -77,9 +76,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function getFacet(nameSpace:URL):Facet
+		public function getFacet(namespaceURL:String):Facet
 		{				
-			return _list[nameSpace.rawUrl] as Facet;			
+			return _list[namespaceURL] as Facet;			
 		}
 		
 		/** 
@@ -107,8 +106,8 @@ package org.osmf.metadata
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				return;
 			}	
-			var oldFacet:Facet = _list[data.namespaceURL.rawUrl];			
-			_list[data.namespaceURL.rawUrl] = data;
+			var oldFacet:Facet = _list[data.namespaceURL];			
+			_list[data.namespaceURL] = data;
 			if (oldFacet)
 			{
 				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, oldFacet));		
@@ -142,9 +141,9 @@ package org.osmf.metadata
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
 				return;
 			}	
-			if (_list[data.namespaceURL.rawUrl])
+			if (_list[data.namespaceURL])
 			{			
-				delete _list[data.namespaceURL.rawUrl];	
+				delete _list[data.namespaceURL];	
 				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, data));	
 				return data;					
 			}				

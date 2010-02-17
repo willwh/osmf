@@ -19,7 +19,6 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.metadata
 {
 	import flash.errors.IllegalOperationError;
@@ -28,7 +27,6 @@ package org.osmf.metadata
 	import org.osmf.events.FacetValueEvent;
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * The MetadataWatcher class is a convenience class that helps monitoring Metadata
@@ -44,7 +42,7 @@ package org.osmf.metadata
 		/**
 		 * Constructor 
 		 * @param metadata The Metadata to watch for change.
-		 * @param nameSpace The namespace that identifies the Facet instance to watch
+		 * @param namespaceURL The namespace that identifies the Facet instance to watch
 		 * for change.
 		 * @param identifier The identifier pointing to the value of interest to watch
 		 * for change. Note that this parameter is optional: not specifying an
@@ -59,15 +57,15 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MetadataWatcher(metadata:Metadata, nameSpace:URL, identifier:IIdentifier, callback:Function)
+		public function MetadataWatcher(metadata:Metadata, namespaceURL:String, identifier:IIdentifier, callback:Function)
 		{
-			if (metadata == null || nameSpace == null || callback == null)
+			if (metadata == null || namespaceURL == null || callback == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 
 			this.metadata = metadata;
-			this.nameSpace = nameSpace;
+			this.namespaceURL = namespaceURL;
 			this.identifier = identifier;
 			this.callback = callback;
 		}
@@ -94,7 +92,7 @@ package org.osmf.metadata
 					, false, 0, true
 					);
 				
-				processWatchedFacetChange(metadata.getFacet(nameSpace));
+				processWatchedFacetChange(metadata.getFacet(namespaceURL));
 				
 				// For convience, always trigger a first change callback when
 				// start watching:
@@ -194,7 +192,7 @@ package org.osmf.metadata
 		private function onFacetAdd(event:MetadataEvent):void
 		{
 			// See if this is the facet that we're watching:
-			if (event.facet.namespaceURL.rawUrl == nameSpace.rawUrl)
+			if (event.facet.namespaceURL == namespaceURL)
 			{
 				processWatchedFacetChange(event.facet);
 				
@@ -214,7 +212,7 @@ package org.osmf.metadata
 		private function onFacetRemove(event:MetadataEvent):void
 		{
 			// See if this is the facet that we're watching:
-			if (event.facet && event.facet.namespaceURL.rawUrl == nameSpace.rawUrl)
+			if (event.facet && event.facet.namespaceURL == namespaceURL)
 			{
 				processWatchedFacetChange(null);
 				
@@ -280,7 +278,7 @@ package org.osmf.metadata
 		}
 		
 		private var metadata:Metadata;
-		private var nameSpace:URL;
+		private var namespaceURL:String;
 		private var identifier:IIdentifier;
 		private var callback:Function;
 		

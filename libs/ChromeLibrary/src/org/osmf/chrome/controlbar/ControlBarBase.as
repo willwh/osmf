@@ -39,8 +39,8 @@ package org.osmf.chrome.controlbar
 		[Embed("../assets/images/controlBarBackdrop.png")]
 		public var backdropType:Class;
 		
-		public static const METADATA_AUTO_HIDE_URL:URL
-			= new URL("http://www.osmf.org.chrome/controlbar/autoHide");
+		public static const METADATA_AUTO_HIDE_URL:String
+			= "http://www.osmf.org.chrome/controlbar/autoHide";
 		 
 		public function ControlBarBase(backdrop:Class = null)
 		{

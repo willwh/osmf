@@ -28,7 +28,6 @@ package org.osmf.metadata
 	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Dispatched when the facet group changes as a result of either
@@ -67,9 +66,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function FacetGroup(nameSpace:URL)
+		public function FacetGroup(namespaceURL:String)
 		{
-			_namespaceURL = nameSpace;
+			_namespaceURL = namespaceURL;
 			
 			facets = new Vector.<Object>();
 		}
@@ -83,7 +82,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get namespaceURL():URL
+		public function get namespaceURL():String
 		{
 			return _namespaceURL;
 		}
@@ -108,7 +107,7 @@ package org.osmf.metadata
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (facet.namespaceURL.rawUrl != _namespaceURL.rawUrl)
+			if (facet.namespaceURL != _namespaceURL)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_EQUAL_GROUP_NS));
 			}
@@ -246,7 +245,7 @@ package org.osmf.metadata
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 		
-		private var _namespaceURL:URL;
+		private var _namespaceURL:String;
 		private var facets:Vector.<Object>;
 	}
 }

@@ -321,7 +321,7 @@
 			private function onShowCaption(event:TemporalFacetEvent):void
 			{
 				var caption:Caption = event.value as Caption;
-				var ns:URL = (event.currentTarget as TemporalFacet).namespaceURL;
+				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
 
 				// Make sure this is a caption object, and just for good measure, we'll
 				// also check the namespace				

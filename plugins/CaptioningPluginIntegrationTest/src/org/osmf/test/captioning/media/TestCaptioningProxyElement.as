@@ -193,7 +193,7 @@ package org.osmf.test.captioning.media
 		private function createResourceWithBadFacet():URLResource
 		{
 			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
-			var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.osmf.bogus/captioning/1.0"));
+			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.osmf.bogus/captioning/1.0");
 			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
 			resource.metadata.addFacet(kvFacet);
 			return resource;			

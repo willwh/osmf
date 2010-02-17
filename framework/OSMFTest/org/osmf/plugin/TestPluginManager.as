@@ -166,12 +166,12 @@ package org.osmf.plugin
 			assertNull(pluginInfo.pluginMetadata);
 			
 			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
-			resource.metadata.addFacet(new KeyValueFacet(new URL(metadataNS)));
+			resource.metadata.addFacet(new KeyValueFacet(metadataNS));
 			
 			pluginManager.loadPlugin(resource);
 			
 			assertNotNull(pluginInfo.pluginMetadata);
-			assertNotNull(pluginInfo.pluginMetadata.getFacet(new URL(metadataNS)));
+			assertNotNull(pluginInfo.pluginMetadata.getFacet(metadataNS));
 		}
 		
 		public function testLoadPluginWithDefaultMetadata():void

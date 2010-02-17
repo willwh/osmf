@@ -27,7 +27,6 @@ package org.osmf.metadata
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 
 	/**
 	 * Utility class which contains static methods to perform common metadata functions
@@ -37,7 +36,6 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-
 	public class MetadataUtils
 	{
 		/** 
@@ -158,7 +156,7 @@ package org.osmf.metadata
 		 * function callback(newValue:*):void
 		 * 
 		 * @param metadata The metadata instance to watch.
-		 * @param nameSpace The namespace of the facet to watch.
+		 * @param namespaceURL The namespace of the facet to watch.
 		 * @param identifier The value identifier to watch for.
 		 * @param callback The method to invoke upon the value changing. 
 		 * @return The resulting change watcher.
@@ -171,13 +169,13 @@ package org.osmf.metadata
 		 */		
 		public static function watchFacetValue
 								( metadata:Metadata
-								, nameSpace:URL
+								, namespaceURL:String
 								, identifier:IIdentifier
 								, callback:Function
 								):MetadataWatcher
 		{
 			if	( metadata == null
-				|| nameSpace == null
+				|| namespaceURL == null
 				|| identifier == null
 				|| callback == null
 				)
@@ -186,7 +184,7 @@ package org.osmf.metadata
 			}
 			
 			var watcher:MetadataWatcher 
-				= new MetadataWatcher(metadata, nameSpace, identifier, callback);
+				= new MetadataWatcher(metadata, namespaceURL, identifier, callback);
 			
 			watcher.watch();
 			
@@ -203,7 +201,7 @@ package org.osmf.metadata
 		 * function callback(newValue:Facet):void
 		 * 
 		 * @param metadata The metadata instance to watch.
-		 * @param nameSpace The namespace of the facet to watch.
+		 * @param namespaceURL The namespace of the facet to watch.
 		 * @param callback The method to invoke upon the value changing.
 		 * @return The resulting change watcher.
 		 * 
@@ -215,12 +213,12 @@ package org.osmf.metadata
 		 */		
 		public static function watchFacet
 								( metadata:Metadata
-								, nameSpace:URL
+								, namespaceURL:String
 								, callback:Function
 								):MetadataWatcher
 		{
 			if	( metadata == null
-				|| nameSpace == null
+				|| namespaceURL == null
 				|| callback == null
 				)
 			{
@@ -228,7 +226,7 @@ package org.osmf.metadata
 			}
 			
 			var watcher:MetadataWatcher 
-				= new MetadataWatcher(metadata, nameSpace, null, callback);
+				= new MetadataWatcher(metadata, namespaceURL, null, callback);
 			
 			watcher.watch();
 			

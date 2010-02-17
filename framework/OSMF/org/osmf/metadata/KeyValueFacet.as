@@ -29,7 +29,6 @@ package org.osmf.metadata
 	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.events.FacetValueEvent;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * The KeyValue Facet class represents a concrete class of key value pairs for 
@@ -53,13 +52,13 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function KeyValueFacet(ns:URL = null, synthesizer:Class = null)		
+		public function KeyValueFacet(namespaceURL:String = null, synthesizer:Class = null)		
 		{						
-			super(ns ||= MetadataNamespaces.DEFAULT_METADATA);
+			super(namespaceURL ||= MetadataNamespaces.DEFAULT_METADATA);
 			
 			data = new Dictionary();
 			synthesizer ||= FacetSynthesizer;
-			_synthesizer = new synthesizer(ns);
+			_synthesizer = new synthesizer(namespaceURL);
 		}
 		
 		

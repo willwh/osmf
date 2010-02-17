@@ -22,7 +22,6 @@
 package org.osmf.metadata
 {
 	import org.osmf.elements.CompositionMode;
-	import org.osmf.utils.URL;
 
 	/**
 	 * Defines a facet synthesizer that has a synthesize method that always
@@ -43,9 +42,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function NullFacetSynthesizer(nameSpace:URL)
+		public function NullFacetSynthesizer(namespaceURL:String)
 		{
-			super(nameSpace);
+			super(namespaceURL);
 		}
 		
 		// Overrides

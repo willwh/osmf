@@ -32,7 +32,6 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
-	import org.osmf.utils.URL;
 
 	/**
 	 * Defines a layout renderer that sizes and positions its targets using the folowing
@@ -61,7 +60,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override protected function get usedMetadataFacets():Vector.<URL>
+		override protected function get usedMetadataFacets():Vector.<String>
 		{
 			return USED_METADATA_FACETS;
 		}
@@ -639,7 +638,7 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private static const USED_METADATA_FACETS:Vector.<URL> = new Vector.<URL>(5, true);
+		private static const USED_METADATA_FACETS:Vector.<String> = new Vector.<String>(5, true);
 		
 		/* static */
 		{

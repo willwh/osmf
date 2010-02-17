@@ -38,7 +38,6 @@ package org.osmf.metadata
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
 	[Event (name="durationReached", type="org.osmf.metadata.TemporalFacetEvent")]
@@ -60,7 +59,7 @@ package org.osmf.metadata
 		/**
 		 * Constructor.
 		 * 
-		 * @param nameSpace The namespace of the facet.
+		 * @param namespaceURL The namespace of the facet.
 		 * @param owner The media element this facet applies to.
 		 * 
 		 * @throws ArgumentError If owner argument is null.
@@ -70,7 +69,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TemporalFacet(namespaceURL:URL, owner:MediaElement, synthesizer:Class = null)
+		public function TemporalFacet(namespaceURL:String, owner:MediaElement, synthesizer:Class = null)
 		{
 			super(namespaceURL);
 

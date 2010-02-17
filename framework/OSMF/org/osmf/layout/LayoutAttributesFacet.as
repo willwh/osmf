@@ -25,7 +25,6 @@ package org.osmf.layout
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.StringIdentifier;
-	import org.osmf.utils.URL;
 
 	/**
 	 * @private
@@ -153,7 +152,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override public function get namespaceURL():URL
+		override public function get namespaceURL():String
 		{
 			return MetadataNamespaces.LAYOUT_ATTRIBUTES;
 		}

@@ -89,7 +89,7 @@ package org.osmf.test.mast.managers
 
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var kvFacet:KeyValueFacet = new KeyValueFacet(new URL("http://www.akamai.com/mast"));
+			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.akamai.com/mast");
 			kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_TEST);
 			resource.metadata.addFacet(kvFacet);
 			

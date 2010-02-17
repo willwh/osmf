@@ -80,8 +80,8 @@ package org.osmf.metadata
 				callbackCount++;
 			}
 			
-			var facet1NS:URL = new URL("http://www.facet1NS.com");
-			var facet2NS:URL = new URL("http://www.facet2NS.com");
+			var facet1NS:String = new String("http://www.facet1NS.com");
+			var facet2NS:String = new String("http://www.facet2NS.com");
 			var metaData:Metadata = new Metadata();
 			var watcher:MetadataWatcher = MetadataUtils.watchFacet(metaData, facet1NS, facetChangeCallback);
 			
@@ -126,8 +126,8 @@ package org.osmf.metadata
 				callbackCount++;
 			}
 			
-			var facet1NS:URL = new URL("http://www.facet1NS.com");
-			var facet2NS:URL = new URL("http://www.facet2NS.com");
+			var facet1NS:String = new String("http://www.facet1NS.com");
+			var facet2NS:String = new String("http://www.facet2NS.com");
 			var metaData:Metadata = new Metadata();
 			var watcher:MetadataWatcher
 				= MetadataUtils.watchFacetValue

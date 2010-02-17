@@ -25,7 +25,6 @@ package org.osmf.layout
 	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.NullFacetSynthesizer;
-	import org.osmf.utils.URL;
 
 	/**
 	 * @private

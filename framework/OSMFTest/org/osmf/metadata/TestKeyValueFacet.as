@@ -29,7 +29,6 @@ package org.osmf.metadata
 	
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.events.FacetValueEvent;
-	import org.osmf.utils.URL;
 
 	public class TestKeyValueFacet extends TestCase
 	{
@@ -41,12 +40,12 @@ package org.osmf.metadata
 			
 		public function testConstructor():void
 		{				
-			var keyValueMeta:KeyValueFacet = new KeyValueFacet(new URL(""));
+			var keyValueMeta:KeyValueFacet = new KeyValueFacet("");
 									
 			assertEquals(undefined, keyValueMeta.getValue(testKey));
 			
 			//Ensure it works will a null URL, KeyValueMetadata's ctor should make a dictionary if param is null or not present.
-			keyValueMeta = new KeyValueFacet(new URL(""));
+			keyValueMeta = new KeyValueFacet("");
 			
 			keyValueMeta.addValue(testKey,testData);
 			var gottenValue:* = keyValueMeta.getValue(testKey);
@@ -55,7 +54,7 @@ package org.osmf.metadata
 		
 		public function testNamespace():void
 		{
-			var ns:URL = new URL("http://www.example.com") 
+			var ns:String = "http://www.example.com"; 
 			var keyValueMeta:KeyValueFacet = new KeyValueFacet(ns);
 			assertEquals(ns, keyValueMeta.namespaceURL);			
 		}
@@ -123,7 +122,7 @@ package org.osmf.metadata
 		
 		private function testEvents():void
 		{			
-			var kv:KeyValueFacet = new KeyValueFacet(new URL("http:/tes.com/"));
+			var kv:KeyValueFacet = new KeyValueFacet("http:/tes.com/");
 			kv.addEventListener(FacetValueEvent.VALUE_ADD, onAdd);
 			kv.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, onChange);
 			kv.addEventListener(FacetValueEvent.VALUE_REMOVE, onRemove);

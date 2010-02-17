@@ -23,8 +23,6 @@ package org.osmf.metadata
 {
 	import flash.events.EventDispatcher;
 	
-	import org.osmf.utils.URL;
-
 	/**
 	 * Facet class for representing media and MIME types.
 	 *  

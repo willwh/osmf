@@ -22,9 +22,7 @@
 package org.osmf.metadata
 {
 	import flash.events.EventDispatcher;
-	
-	import org.osmf.utils.URL;
-	 
+		 
      /**
 	 * Signals that all of the Facets's values have changed.
 	 * 
@@ -84,7 +82,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function Facet(namespaceURL:URL)
+		public function Facet(namespaceURL:String)
 		{
 			_namespaceURL = namespaceURL;
 		}
@@ -97,7 +95,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get namespaceURL():URL
+		public function get namespaceURL():String
 		{
 			return _namespaceURL;
 		}
@@ -136,6 +134,6 @@ package org.osmf.metadata
 			return null;
 		}
 		
-		private var _namespaceURL:URL;
+		private var _namespaceURL:String;
 	}
 }

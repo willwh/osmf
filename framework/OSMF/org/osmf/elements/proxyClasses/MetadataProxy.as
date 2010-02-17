@@ -28,7 +28,6 @@ package org.osmf.elements.proxyClasses
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -49,7 +48,7 @@ package org.osmf.elements.proxyClasses
 			// Transfer all old facets to new:
 			for each(var url:String in wrapped.namespaceURLs)
 			{
-				value.addFacet(wrapped.getFacet(new URL(url)));
+				value.addFacet(wrapped.getFacet(url));
 			}
 			wrapped = value;		
 			wrapped.addEventListener(MetadataEvent.FACET_ADD, redispatch);
@@ -59,9 +58,9 @@ package org.osmf.elements.proxyClasses
 		/** 
 		 * @private
 		 */ 
-		override public function getFacet(nameSpace:URL):Facet
+		override public function getFacet(namespaceURL:String):Facet
 		{				
-			return wrapped.getFacet(nameSpace);		
+			return wrapped.getFacet(namespaceURL);		
 		}
 		
 		/** 

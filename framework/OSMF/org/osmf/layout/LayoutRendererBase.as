@@ -41,7 +41,6 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Use LayoutRendererBase as the base class for custom layout renders. The class
@@ -49,7 +48,7 @@ package org.osmf.layout
 	 * 
 	 *  * A base implementation for collecting and managing layout layoutTargets.
 	 *  * A base implementation for metadata watching: override usedMetadataFacets to
-	 *    return the set of metadata facet namespaces that	your renderer reads from its
+	 *    return the set of metadata facet namespaces thatyour renderer reads from its
 	 *    target on rendering them. All specified facets will be watched for change, at
 	 *    which the invalidate methods gets invoked.
 	 *  * A base invalidation scheme that postpones rendering until after all other frame
@@ -216,7 +215,7 @@ package org.osmf.layout
 			
 			// Watch the facets on the target's metadata that we're interested in:
 			var watchers:Array = metaDataWatchers[target] = new Array();
-			for each (var namespaceURL:URL in usedMetadataFacets)
+			for each (var namespaceURL:String in usedMetadataFacets)
 			{
 				watchers.push
 					( MetadataUtils.watchFacet
@@ -481,9 +480,9 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function get usedMetadataFacets():Vector.<URL>
+		protected function get usedMetadataFacets():Vector.<String>
 		{
-			return new Vector.<URL>;
+			return new Vector.<String>;
 		}
 		
 		/**

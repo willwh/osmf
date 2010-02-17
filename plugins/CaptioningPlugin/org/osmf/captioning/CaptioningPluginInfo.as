@@ -42,11 +42,11 @@ package org.osmf.captioning
 	public class CaptioningPluginInfo extends PluginInfo
 	{
 		// Constants for specifying the Timed Text document URL on the resource metadata
-		public static const CAPTIONING_METADATA_NAMESPACE:URL = new URL("http://www.osmf.org/captioning/1.0");
+		public static const CAPTIONING_METADATA_NAMESPACE:String = "http://www.osmf.org/captioning/1.0";
 		public static const CAPTIONING_METADATA_KEY_URI:String = "uri";
 		
 		// Constants for the temporal metadata (captions)
-		public static const CAPTIONING_TEMPORAL_METADATA_NAMESPACE:URL = new URL("http://www.osmf.org/temporal/captioning");
+		public static const CAPTIONING_TEMPORAL_METADATA_NAMESPACE:String = "http://www.osmf.org/temporal/captioning";
 		
 		/**
 		 * Constructor.

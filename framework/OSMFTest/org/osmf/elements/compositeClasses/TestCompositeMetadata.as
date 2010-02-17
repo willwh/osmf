@@ -21,14 +21,13 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.elements.CompositionMode;
+	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
 	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.ObjectFacet;
-	import org.osmf.utils.URL;
 
 	public class TestCompositeMetadata extends TestCaseEx
 	{
@@ -47,7 +46,6 @@ package org.osmf.elements.compositeClasses
 			assertEquals(metadata, cm.activeChild);
 			
 			assertNull(cm.getFacetSynthesizer(null));
-			assertNull(cm.getFacetSynthesizer(new URL(null)));
 			
 			assertEquals(cm.numChildren, 0);
 			
@@ -67,7 +65,7 @@ package org.osmf.elements.compositeClasses
 			assertThrows(cm.removeFacetSynthesizer, null);
 			assertThrows(cm.addFacetSynthesizer, null);
 			
-			var url:URL = new URL("myURL");
+			var url:String = "myURL";
 			var synth:AFacetSynthesizer = new AFacetSynthesizer(url);
 			cm.addFacetSynthesizer(synth);
 			assertEquals(synth, cm.getFacetSynthesizer(url));
@@ -129,9 +127,9 @@ package org.osmf.elements.compositeClasses
 		public function testCompositeMetadataEvent():void
 		{
 			var child:Metadata = new Metadata();
-			var facet:Facet = new ObjectFacet(new URL(""), "test");
-			var facetGroup:FacetGroup = new FacetGroup(new URL(""));
-			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer(new URL(""));
+			var facet:Facet = new ObjectFacet("", "test");
+			var facetGroup:FacetGroup = new FacetGroup("");
+			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer("");
 			var e:CompositeMetadataEvent
 				= new CompositeMetadataEvent
 					( CompositeMetadataEvent.CHILD_ADD
@@ -157,7 +155,7 @@ package org.osmf.elements.compositeClasses
 
 class AFacetSynthesizer extends FacetSynthesizer
 {
-	public function AFacetSynthesizer(namespaceURL:URL)
+	public function AFacetSynthesizer(namespaceURL:String)
 	{
 		super(namespaceURL);
 	}

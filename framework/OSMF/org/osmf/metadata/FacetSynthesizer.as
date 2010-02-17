@@ -22,7 +22,6 @@
 package org.osmf.metadata
 {
 	import org.osmf.elements.CompositionMode;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Defines an algorithm that can synthesize a facet value
@@ -48,9 +47,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function FacetSynthesizer(nameSpace:URL)
+		public function FacetSynthesizer(namespaceURL:String)
 		{
-			_namespaceURL = nameSpace;
+			_namespaceURL = namespaceURL;
 		}
 		
 		
@@ -63,7 +62,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get namespaceURL():URL
+		public function get namespaceURL():String
 		{
 			return _namespaceURL;
 		}
@@ -121,6 +120,6 @@ package org.osmf.metadata
 		// Internals
 		//
 		
-		private var _namespaceURL:URL;
+		private var _namespaceURL:String;
 	}
 }

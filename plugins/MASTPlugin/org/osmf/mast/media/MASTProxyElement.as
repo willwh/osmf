@@ -60,7 +60,7 @@ package org.osmf.mast.media
 	 */
 	public class MASTProxyElement extends ProxyElement
 	{
-		public static const MAST_METADATA_NAMESPACE:URL	= new URL("http://www.akamai.com/mast");
+		public static const MAST_METADATA_NAMESPACE:String = "http://www.akamai.com/mast";
 		public static const METADATA_KEY_URI:String = "url";
 		
 		/**
