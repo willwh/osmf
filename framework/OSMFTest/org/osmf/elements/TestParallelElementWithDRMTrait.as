@@ -216,7 +216,7 @@ package org.osmf.elements
 		public function testAuthentication():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING];
+			var eventQueue:Array = [ DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var parallel:ParallelElement = new ParallelElement();
@@ -243,7 +243,7 @@ package org.osmf.elements
 				events++;						
 			}			
 			
-			assertEquals(events, 2);
+			assertEquals(events, 3);
 						
 		}
 		
@@ -251,7 +251,7 @@ package org.osmf.elements
 		public function testAuthenticationToken():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING];
+			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var parallel:ParallelElement = new ParallelElement();
@@ -278,7 +278,7 @@ package org.osmf.elements
 				events++;						
 			}			
 			
-			assertEquals(events, 2);
+			assertEquals(events, 3);
 						
 		}
 		
