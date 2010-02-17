@@ -36,6 +36,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
+	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -69,14 +70,14 @@ package org.osmf.net.httpstreaming
 		public static function createHTTPStreamingMetadataFacet(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Facet
 		{
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+			var bootstrap:BootstrapInfo = new BootstrapInfo();
 			if (abstUrl != null && abstUrl.length > 0)
 			{
-				facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY), abstUrl);
+				bootstrap.url = new URL(abstUrl);
 			}
-			if (abstData != null)
-			{
-				facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_DATA_KEY), abstData);
-			}
+			bootstrap.data = abstData;
+			facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), bootstrap);
+			
 			if (serverBaseUrls != null && serverBaseUrls.length > 0)
 			{
 				facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseUrls);
