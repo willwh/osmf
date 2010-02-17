@@ -309,46 +309,42 @@ package org.osmf.elements.compositeClasses
 		 */ 		
 		override public function dispose():void
 		{
-			traitAggregationHelper.detach();
-			traitAggregationHelper = null;
-			
+			if (traitAggregationHelper != null)
+			{
+				traitAggregationHelper.detach();
+				traitAggregationHelper = null;
+			}
 			super.dispose();
 		}
 		
 		private function processAggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
-		{
-			trace('processAggregatedChild');
-			DRMTrait(childTrait).addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);							
-			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, calculatedDrmState));
+		{			
+			DRMTrait(childTrait).addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);						
+			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMTrait(childTrait).drmState));
 		}
 		
 		private function processUnaggregatedChild(childTrait:MediaTraitBase, child:MediaElement):void
-		{
-			trace('processUnaggregatedChild');
+		{			
 			DRMTrait(childTrait).removeEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);	
 			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, calculatedDrmState));
 		}
 		
-		private function onDRMStateChange(event:DRMEvent = null):void
-		{		
+		private function onDRMStateChange(event:DRMEvent):void
+		{			
 			var oldState:String = calculatedDrmState;
 			recalculateDRMState();		
-			if (oldState != calculatedDrmState)
-			{
+			if (oldState != calculatedDrmState ||
+					(calculatedDrmState == DRMState.AUTHENTICATION_NEEDED &&  //If we authenticated once piece of content, and there are still others, disptatch another auth needed.
+					 event.drmState	== DRMState.AUTHENTICATED))
+			{				
 				drmStateChange(calculatedDrmState, event.token, event.error, startDate, endDate, period, event.serverURL);
 			}
 		}
 		
 		private function listenedChildChange(event:TraitAggregatorEvent):void
-		{
-			trace('listeneded child change');
+		{			
 			var oldState:String = calculatedDrmState;
-			recalculateDRMState();	
-				
-			if (oldState != calculatedDrmState)
-			{
-				drmStateChange(calculatedDrmState, null, null, null, null, NaN, "");
-			}
+			onDRMStateChange(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, null));			
 		}
 		
 		private var mode:CompositionMode;

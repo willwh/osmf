@@ -337,12 +337,13 @@ package org.osmf.elements
 	  		private function reloadAfterAuth(event:DRMEvent):void
 	  		{
 	  			if (drmTrait.drmState == DRMState.AUTHENTICATED)
-	  			{
-	  				if (LoadTrait(getTrait(MediaTraitType.LOAD)).loadState == LoadState.READY)
+	  			{	  				
+	  				var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+	  				if (loadTrait.loadState == LoadState.READY)
 		  			{				  			
-		  				LoadTrait(getTrait(MediaTraitType.LOAD)).unload();	  	
-		  			}	
-		  			LoadTrait(getTrait(MediaTraitType.LOAD)).load();  	
+		  				loadTrait.unload();	  	
+		  			}
+		  			loadTrait.load();	  					  				
 	  			}	  				  					
 	  		}	
 			
@@ -500,7 +501,7 @@ package org.osmf.elements
      	}
      	     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
-     	{
+     	{     		
      		var error:MediaError = null;
  			switch (event.info.code)
 			{
@@ -518,7 +519,7 @@ package org.osmf.elements
 					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
 					break;	
 			}
-			
+					
 			CONFIG::FLASH_10_1
 			{
 			if (event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
