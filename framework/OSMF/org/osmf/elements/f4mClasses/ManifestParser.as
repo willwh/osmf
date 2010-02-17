@@ -35,7 +35,6 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
 	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -358,18 +357,11 @@ package org.osmf.elements.f4mClasses
 				
 				if (url.absolute)
 				{
-					if (NetStreamUtils.isRTMPStream(url))
-					{
-						resource = new URLResource(new FMSURL(url.rawUrl));
-					}
-					else
-					{
-						resource = new URLResource(url);
-					}					
+					resource = new URLResource(url);
 				}				
 				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new URLResource(new FMSURL(value.baseURL.rawUrl + "/" + url.rawUrl));
+					resource = new URLResource(new URL(value.baseURL.rawUrl + "/" + url.rawUrl));
 				}
 				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
 				{
@@ -435,7 +427,7 @@ package org.osmf.elements.f4mClasses
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{
-				var baseURL:URL = value.baseURL != null ? new FMSURL(value.baseURL.rawUrl) : new URL(manifestFolder);
+				var baseURL:URL = value.baseURL != null ? new URL(value.baseURL.rawUrl) : new URL(manifestFolder);
 				serverBaseURLs = new Vector.<String>();
 				serverBaseURLs.push(baseURL.rawUrl);
 				

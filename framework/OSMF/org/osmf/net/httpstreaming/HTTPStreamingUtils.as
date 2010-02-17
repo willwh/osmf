@@ -37,7 +37,11 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Contains a set of HTTP streaming-related utility functions.
 	 *  
 	 *  @langversion 3.0

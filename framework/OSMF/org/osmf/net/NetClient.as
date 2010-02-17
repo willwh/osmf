@@ -135,8 +135,6 @@ package org.osmf.net
 		 * NetStreamCodes class that have the prefix "ON_", such as 
 		 * ON_CUE_POINT, ON_IMAGE_DATA, etc.
 		 * @param handler Handler to remove.
-		 * @return Returns <code>true</code> if the specified handler was found and
-		 * successfully removed. 
 		 * @see NetStreamCodes
 		 *  
 		 *  @langversion 3.0
@@ -144,10 +142,8 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function removeHandler(name:String,handler:Function):Boolean
+		public function removeHandler(name:String,handler:Function):void
 		{
-			var result:Boolean;
-			
 			if (handlers.hasOwnProperty(name))
 			{
 				var handlersForName:Array = handlers[name];
@@ -158,13 +154,10 @@ package org.osmf.net
 					{
 						handlersForName.splice(i, 1);
 						
-						result = true;
 						break;
 					}
 				}
 			}
-			
-			return result;	
 		}
 		
 		// Proxy Overrides
