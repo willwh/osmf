@@ -68,7 +68,6 @@ package org.osmf.elements
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
@@ -487,10 +486,11 @@ package org.osmf.elements
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).load();		
      	}
-     	
+ 			
      	private function onUpdateError(event:Event):void
      	{     	
-     		dispatchEvent(new ErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, "Error Updating DRM: " + event.toString()));
+     		var errorID:int = event is ErrorEvent ? ErrorEvent(event).errorID : 0;
+     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(errorID, "Error Updating DRM: " + event.toString())));
      		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
      	}
      	
