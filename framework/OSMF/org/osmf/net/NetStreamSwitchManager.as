@@ -83,7 +83,6 @@ package org.osmf.net
 			_autoSwitch = true;
 			_maxAllowedIndex = int.MAX_VALUE;
 			
-			startingBuffer = BUFFER_START;
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
 									
@@ -342,9 +341,6 @@ package org.osmf.net
 			
 			switch (event.info.code) 
 			{
-				case NetStreamCodes.NETSTREAM_BUFFER_FULL:
-					netStream.bufferTime = maxBufferLength;
-					break;
 				case NetStreamCodes.NETSTREAM_PLAY_START:
 					prepareForSwitching();
 					break;
@@ -358,7 +354,6 @@ package org.osmf.net
 					switching  = false;
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
-					netStream.bufferTime = isLive ? maxBufferLength : startingBuffer;
 					switching  = false;
 					if (pendingTransitionsArray.length > 0) 
 					{
@@ -397,15 +392,10 @@ package org.osmf.net
 		{
 			initDSIFailedCounts();
 			
-			maxBufferLength = isLive ? BUFFER_STABLE_LIVE : BUFFER_STABLE_ONDEMAND;
-			metrics.targetBufferTime = maxBufferLength;
 			metrics.enabled = true;
-			
-			debug("prepareForSwitching() - max buffer=" + maxBufferLength+", isLive=" + isLive);
 			
 			metrics.resource = dsResource;
 			
-			netStream.bufferTime = isLive ? maxBufferLength : startingBuffer;
 			actualIndex = 0;
 			pendingTransitionsArray = new Array();
 			
@@ -507,8 +497,6 @@ package org.osmf.net
 		private var switching:Boolean;
 		private var _currentIndex:int;
 		private var pendingTransitionsArray:Array;
-		private var startingBuffer:Number;
-		private var maxBufferLength:Number;
 		private var connection:NetConnection;
 		private var reason:String;
 		private var _maxAllowedIndex:int;
@@ -518,9 +506,6 @@ package org.osmf.net
 		private var _bandwidthLimitMultiplier:Number = 1.4;
 														
 		private static const RULE_CHECK_INTERVAL:Number = 500;	// Switching rule check interval in milliseconds
-		private static const BUFFER_STABLE_ONDEMAND:Number = 8;
-		private static const BUFFER_STABLE_LIVE:Number = 10;
-		private static const BUFFER_START:Number = 1;
 		private static const DEFAULT_MAX_UP_SWITCHES_PER_STREAM_ITEM:int = 3;
 		private static const DEFAULT_WAIT_DURATION_AFTER_DOWN_SWITCH:int = 30000;
 		private static const DEFAULT_CLEAR_FAILED_COUNTS_INTERVAL:Number = 300000;	// default of 5 minutes for clearing failed counts on stream items

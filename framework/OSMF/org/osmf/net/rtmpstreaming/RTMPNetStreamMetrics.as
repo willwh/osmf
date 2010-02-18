@@ -55,7 +55,6 @@ package org.osmf.net.rtmpstreaming
 			super(netStream);
 			
 			_droppedFPS = 0;
-			_targetBufferTimeReached = false;
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFPS = 0;
@@ -86,19 +85,6 @@ package org.osmf.net.rtmpstreaming
 			_timer.delay = value;
 		}
 				
-		/**
-		 * Returns true if the target buffer time has been reached by the stream.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get targetBufferTimeReached():Boolean
-		{
-			return _targetBufferTimeReached;
-		}
-		
 		/**
 		 * The maximum achieved frame rate for this NetStream. 
 		 *  
@@ -164,7 +150,7 @@ package org.osmf.net.rtmpstreaming
 		{
 			return _averageMaxBandwidth;
 		}
-		
+
 		/**
 		 * @private
 		 *  
@@ -190,21 +176,11 @@ package org.osmf.net.rtmpstreaming
 		{
 			switch (e.info.code) 
 			{
-				case NetStreamCodes.NETSTREAM_BUFFER_FULL:
-					_targetBufferTimeReached = netStream.bufferLength >= targetBufferTime;
-					break;
-				case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:
-					_targetBufferTimeReached = false;
-					break;
 				case NetStreamCodes.NETSTREAM_PLAY_START:
-					_targetBufferTimeReached = false;
 					if (!_timer.running && enabled) 
 					{
 						_timer.start();
 					}
-					break;
-				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
-					_targetBufferTimeReached = false;
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					_timer.stop();
@@ -297,7 +273,6 @@ package org.osmf.net.rtmpstreaming
 		}
 		
 		private var _timer:Timer;
-		private var _targetBufferTimeReached:Boolean;
 		private var _maxBandwidth:Number;
 		private var _averageMaxBandwidthArray:Array;
 		private var _averageMaxBandwidth:Number;

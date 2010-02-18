@@ -59,17 +59,6 @@ package org.osmf.netmocker
 			this._reachedTargetBufferFull = value;
 		}
 		
-		override public function get targetBufferTime():Number
-		{
-			return this._targetBufferTime;
-		}
-		
-		override public function set targetBufferTime(value:Number):void
-		{
-			this._targetBufferTime = value;
-		}
-		
-	
 		public function get expectedFPS():Number
 		{
 			return this._maxFrameRate;

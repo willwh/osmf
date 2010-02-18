@@ -35,39 +35,17 @@ package org.osmf.netmocker
 			super(netStream);
 			
 			_droppedFPS = 0;
-			_targetBufferTimeReached = false;
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFPS = 0;
 			_averageMaxBandwidthArray = new Array();
 			_averageDroppedFPSArray = new Array();
 			_enabled = true;
-			_targetBufferTime = 0;
 			_currentIndex = 0;
 			_averageMaxBandwidth = 0;
 			_netStream = netStream;
 		}
 
-		override public function get targetBufferTimeReached():Boolean
-		{
-			return _targetBufferTimeReached;
-		}
-		
-		public function set targetBufferTimeReached(value:Boolean):void
-		{
-			_targetBufferTimeReached = value;
-		}
-		
-		override public function get targetBufferTime():Number
-		{
-			return _targetBufferTime;
-		}
-		
-		override public function set targetBufferTime(value:Number):void
-		{
-			_targetBufferTime = value;
-		}
-			
 		override public function get maxFPS():Number
 		{
 			return _maxFPS;
@@ -148,7 +126,6 @@ package org.osmf.netmocker
 			return _netStream;
 		}
 		
-		private var _targetBufferTimeReached:Boolean;
 		private var _maxBandwidth:Number;
 		private var _averageMaxBandwidthArray:Array;
 		private var _averageMaxBandwidth:Number;
@@ -160,7 +137,6 @@ package org.osmf.netmocker
 		private var _maxFPS:Number;
 		private var _currentIndex:int;
 		private var _dsResource:DynamicStreamingResource;
-		private var _targetBufferTime:Number;
 		private var _enabled:Boolean;
 		private var _netStream:NetStream;
 	}

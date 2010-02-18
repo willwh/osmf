@@ -88,7 +88,7 @@ package org.osmf.net.rtmpstreaming
 		{
 			var newIndex:int = -1;
 			
-			if (_panic || (rtmpMetrics.netStream.bufferLength < _panicBufferLevel && rtmpMetrics.targetBufferTimeReached))
+			if (_panic || (rtmpMetrics.netStream.bufferLength < _panicBufferLevel && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime))
 			{
 				if (!_panic)
 				{

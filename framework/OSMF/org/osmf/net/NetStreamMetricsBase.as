@@ -56,7 +56,6 @@ package org.osmf.net
 			
 			_netStream = netStream;
 			_enabled = true;
-			_targetBufferTime = 0;
 		}
 
 		/**
@@ -140,30 +139,10 @@ package org.osmf.net
 			_maxAllowedIndex = value;
 		}
 		
-		/**
-		 * Returns the target buffer time for the stream. This target is the buffer
-		 * level at which the stream is considered stable. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get targetBufferTime():Number
-		{
-			return _targetBufferTime;
-		}
-		
-		public function set targetBufferTime(value:Number):void 
-		{
-			_targetBufferTime = value;
-		}
-		
 		private var _netStream:NetStream;
 		private var _resource:DynamicStreamingResource;
 		private var _currentIndex:int;
 		private var _maxAllowedIndex:int;
-		private var _targetBufferTime:Number = 0;
 		private var _enabled:Boolean;
 	}
 }

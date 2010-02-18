@@ -78,11 +78,11 @@ package org.osmf.net.rtmpstreaming
 				if (newIndex > rtmpMetrics.currentIndex) 
 				{
 	        		// We switch up only if conditions are perfect - no framedrops and a stable buffer
-	        		newIndex = (rtmpMetrics.droppedFPS < MIN_DROPPED_FPS && rtmpMetrics.netStream.bufferLength > rtmpMetrics.targetBufferTime) ? newIndex : -1;
+	        		newIndex = (rtmpMetrics.droppedFPS < MIN_DROPPED_FPS && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime) ? newIndex : -1;
 	        		
 	        		if (newIndex != -1)
 	        		{
-	        			debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.targetBufferTime);
+	        			debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.netStream.bufferTime);
 	        			setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_UP_BANDWIDTH_SUFFICIENT));
 	        		}
 	        	}
