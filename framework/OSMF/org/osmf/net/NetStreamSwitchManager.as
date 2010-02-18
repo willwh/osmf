@@ -63,20 +63,20 @@ package org.osmf.net
 		 * 
 		 * @param connection The NetConnection for the NetStream that will be managed.
 		 * @param netStream The NetStream to manage.
-		 * @param dsResource The DynamicStreamingResource that is playing in the NetStream.
+		 * @param resource The DynamicStreamingResource that is playing in the NetStream.
 		 * @param metrics The provider of runtime metrics.
 		 * @param switchingRules The switching rules that this manager will use.
 		 **/
 		public function NetStreamSwitchManager
 			( connection:NetConnection
 			, netStream:NetStream
-			, dsResource:DynamicStreamingResource
+			, resource:DynamicStreamingResource
 			, metrics:NetStreamMetricsBase
 			, switchingRules:Vector.<SwitchingRuleBase>)
 		{
 			this.connection = connection;
 			this.netStream = netStream;
-			this.dsResource = dsResource;
+			this.dsResource = resource;
 			this.metrics = metrics;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 
@@ -194,87 +194,60 @@ package org.osmf.net
 		//
 		
 		/**
-		 * Override this method to set your own interval for when to retry
-		 * a failed stream.  The default is 30 seconds. This property returns
-		 * a value in milliseconds.
-		 * <p>
-		 * When a switch down occurs, the stream being switched from has its
+		 * Override this method to provide additional decisioning around
+		 * allowing automatic switches to occur.  This method will be invoked
+		 * just prior to a switch request.  If false is returned, that switch
+		 * request will not take place.
+		 * 
+		 * <p>By default, the implementation does the following:</p>
+		 * <p>1) When a switch down occurs, the stream being switched from has its
 		 * failed count incremented. If, when the switching rules are evaluated
 		 * again, a rule suggests switching up, since the stream previously
-		 * failed, it won't be tried again until this period elapses. This
+		 * failed, it won't be tried again until a duration (30s) elapses. This
 		 * provides a better user experience by preventing a situation where
 		 * the switch up is attempted but then fails almost immediately.</p>
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function get failedItemWaitPeriod():int
+		 * <p>2) Once a stream item has 3 failures, there will be no more
+		 * attempts to switch to it until an interval (5m) has expired.  At the
+		 * end of this interval, all failed counts are reset to zero.</p>
+		 * 
+		 * @param newIndex The new index to switch to.
+		 **/
+		protected function canAutoSwitchNow(newIndex:int):Boolean
 		{
-			return DEFAULT_WAIT_PERIOD_FOR_FAILED_STREAM_RETRY;
+			// If this stream has failed, we don't want to try it again until 
+			// the wait period has elapsed
+			if (dsiFailedCounts[newIndex] >= 1)
+			{
+				var current:int = getTimer();
+				if (current - failedDSI[newIndex] < DEFAULT_WAIT_DURATION_AFTER_DOWN_SWITCH)
+				{
+					debug("canAutoSwitchNow() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
+					return false;
+				}
+			}
+			// If the requested index is currently locked out, then we don't
+			// allow the switch.
+			else if (dsiFailedCounts[newIndex] > DEFAULT_MAX_UP_SWITCHES_PER_STREAM_ITEM)
+			{
+				return false;
+			}
+			
+			return true;
 		}
 		
 		/**
-		 * Override this method to specify the interval for when the stream
-		 * item failed counts should be cleared. This property returns a value
-		 * in milliseconds.
-		 * <p>
-		 * When a stream item reaches the maximum allowed failures a timer 
-		 * is started and when this interval expires, all failed counts are 
-		 * reset to zero. The default is 5 minutes.</p>
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function get clearFailedCountsInterval():int
+		 * The multiplier to apply to the maximum bandwidth for the client.  The
+		 * default is 1.4 (140%).
+		 **/
+		protected final function get bandwidthLimitMultiplier():Number
 		{
-			return DEFAULT_CLEAR_FAILED_COUNTS_INTERVAL;
+			return _bandwidthLimitMultiplier;
 		}
-		
-		/**
-		 * Override this method to specify the allowed number of failures 
-		 * for stream items. Once a stream item reaches this number
-		 * of failed attempts, there will be no more attempts to 
-		 * switch to it until the <code>clearFailedCountsInterval</code> has
-		 * expired. The default is 3.
-		 * 
-		 * @see #clearFailedCountsInterval
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function get allowedFailuresPerItem():int
+		protected final function set bandwidthLimitMultiplier(value:Number):void
 		{
-			return DEFAULT_ALLOWED_FAILS_PER_ITEM;
+			_bandwidthLimitMultiplier = value;
 		}
-				
-		/**
-		 * Override this method to provide custom logic to set the 
-		 * maximum bandwidth for the client from client to server, 
-		 * server to client, or both. Default behavior for this
-		 * method is to set the bandwidth in both directions to 
-		 * 140% of the highest bitrate level.
-		 * 
-		 * @param index The index of the stream which should be throttled. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function setThrottleLimits(index:int):void 
-		{
-			// We set the bandwidth in both directions to 140% of the bitrate level. 
-			debug("setThrottleLimits() - Set rate limit to " + Math.round(dsResource.streamItems[index].bitrate*1.4) + " kbps");
-			var rate:Number = dsResource.streamItems[index].bitrate * 1000/8;
-			connection.call("setBandwidthLimit", null, rate * 1.40, rate * 1.40);
-		}
-				
+						
 		// Internals
 		//
 		
@@ -353,23 +326,11 @@ package org.osmf.net
 				&& 	newIndex != int.MAX_VALUE
 				&&	newIndex != actualIndex
 				&&	!switching
-				&&	isDSIAvailable(newIndex)
 				&&	newIndex <= maxAllowedIndex
+				&&  canAutoSwitchNow(newIndex)
 			   ) 
 			{
 				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps, reason: " + reason);
-
-				// If this stream has failed, we don't want to try it again until 
-				// failedItemWaitPeriod has elapsed
-				if (dsiFailedCounts[newIndex] >= 1)
-				{
-					var current:int = getTimer();
-					if (current - failedDSI[newIndex] < failedItemWaitPeriod)
-					{
-						debug("executeSwitch() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
-						return;
-					}
-				}
 				
 				executeSwitch(newIndex);
 			}  
@@ -484,11 +445,11 @@ package org.osmf.net
 			
 			// Start the timer that clears the failed counts if one of them
 			// just went over the max failed count
-			if (dsiFailedCounts[index] > allowedFailuresPerItem)
+			if (dsiFailedCounts[index] > DEFAULT_MAX_UP_SWITCHES_PER_STREAM_ITEM)
 			{
 				if (clearFailedCountsTimer == null)
 				{
-					clearFailedCountsTimer = new Timer(clearFailedCountsInterval, 1);
+					clearFailedCountsTimer = new Timer(DEFAULT_CLEAR_FAILED_COUNTS_INTERVAL, 1);
 					clearFailedCountsTimer.addEventListener(TimerEvent.TIMER, clearFailedCounts);
 				}
 				
@@ -502,15 +463,20 @@ package org.osmf.net
 			clearFailedCountsTimer = null;
 			initDSIFailedCounts();
 		}
-		
-		private function isDSIAvailable(index:int):Boolean
-		{
-			return (dsiFailedCounts[index] <= allowedFailuresPerItem);
-		}
-		
+				
 		private function get isLive():Boolean
 		{
 			return dsResource.streamType == StreamType.LIVE;
+		}
+		
+		private function setThrottleLimits(index:int):void 
+		{
+			// We set the bandwidth in both directions based on the multiplier applied to the bitrate level. 
+			debug("setThrottleLimits() - Set rate limit to " + Math.round(dsResource.streamItems[index].bitrate*_bandwidthLimitMultiplier) + " kbps");
+			var rate:Number = dsResource.streamItems[index].bitrate * 1000/8;
+			rate = rate * _bandwidthLimitMultiplier;
+			
+			connection.call("setBandwidthLimit", null, rate, rate);
 		}
 
 		/**
@@ -549,13 +515,14 @@ package org.osmf.net
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource
 		private var failedDSI:Dictionary;
+		private var _bandwidthLimitMultiplier:Number = 1.4;
 														
 		private static const RULE_CHECK_INTERVAL:Number = 500;	// Switching rule check interval in milliseconds
 		private static const BUFFER_STABLE_ONDEMAND:Number = 8;
 		private static const BUFFER_STABLE_LIVE:Number = 10;
 		private static const BUFFER_START:Number = 1;
-		private static const DEFAULT_ALLOWED_FAILS_PER_ITEM:int = 3;
-		private static const DEFAULT_WAIT_PERIOD_FOR_FAILED_STREAM_RETRY:int = 30000;
+		private static const DEFAULT_MAX_UP_SWITCHES_PER_STREAM_ITEM:int = 3;
+		private static const DEFAULT_WAIT_DURATION_AFTER_DOWN_SWITCH:int = 30000;
 		private static const DEFAULT_CLEAR_FAILED_COUNTS_INTERVAL:Number = 300000;	// default of 5 minutes for clearing failed counts on stream items
 		
 		CONFIG::LOGGING
