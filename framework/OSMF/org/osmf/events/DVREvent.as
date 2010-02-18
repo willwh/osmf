@@ -26,8 +26,7 @@ package org.osmf.events
 	
 	public class DVREvent extends Event
 	{
-		public static const SNAP_TO_LIVE_CHANGE:String = "snapToLiveChange";
-		public static const UPDATED:String = "updated";
+		public static const IS_RECORDING_CHANGE:String = "isRecordingChange";
 		
 		public function DVREvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

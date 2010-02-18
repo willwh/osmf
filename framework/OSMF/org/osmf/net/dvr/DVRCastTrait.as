@@ -64,35 +64,6 @@ package org.osmf.net.dvr
 			streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
 		}
 		
-		// Overrides
-		//
-		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get offline():Boolean
-		{
-			return _offline;
-		}
-		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get isRecording():Boolean
-		{
-			return _isRecording;
-		}
-		
 		/**
 		 * @inherited
 		 *
@@ -104,59 +75,6 @@ package org.osmf.net.dvr
 		override public function get livePosition():Number
 		{
 			return _livePosition;
-		}
-		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get recordingStartTime():Date
-		{
-			return _recordingStartTime;
-		}
-		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function get recordingStopTime():Date
-		{
-			return _recordingStartTime;
-		}
-		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override protected function processUpdateIntervalChange(interval:Number):void
-		{
-			if (streamInfoUpdateTimer == null || streamInfoUpdateTimer.delay != interval)
-			{
-				if (streamInfoUpdateTimer == null)
-				{
-					streamInfoUpdateTimer = new Timer(interval);
-					streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
-				}
-				
-				streamInfoUpdateTimer.delay = interval;
-				
-				if (streamInfoUpdateTimer.running == false)
-				{
-					streamInfoUpdateTimer.start();
-				}
-			}
 		}
 		
 		// Internals
@@ -221,8 +139,6 @@ package org.osmf.net.dvr
 						)
 					);
 			}
-			
-			updated();
 		}
 		
 		private function calculateOffset():void
@@ -250,8 +166,6 @@ package org.osmf.net.dvr
 						? beginOffset
 						: currentDuration;
 			}
-			
-			trace("offset: ", offset);
 		}
 		
 		private function onStreamInfoUpdateTimer(event:TimerEvent):void

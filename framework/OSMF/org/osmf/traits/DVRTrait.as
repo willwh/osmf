@@ -30,12 +30,7 @@ package org.osmf.traits
 	/**
 	 * Dispatched when the object's snapToLive property changed. 
 	 */	
-	[Event(name="snapToLiveChange", type="org.osmf.events.DVREvent")]
-	
-	/**
-	 * Dispatched when the object's stream information was updated.
-	 */
-	[Event(name="updated", type="org.osmf.events.DVREvent")]
+	[Event(name="isRecordingChange", type="org.osmf.events.DVREvent")]
 	
 	/**
 	 * The DVRTrait object defines a set of methods and properties to operate
@@ -52,42 +47,6 @@ package org.osmf.traits
 		}
 		
 		/**
-		 * Defines if the recording is currently available.
-		 * 
-		 * False by default. Subclasses that support an offline state must
-		 * override this function.
-		 */
-		public function get offline():Boolean
-		{
-			return false;
-		}
-		
-		/**
-		 * Defines whether initial playback of the media is to start at the
-		 * beginning of the recording, or at the end of the recording, in
-		 * case recording is still in progress.
-		 * 
-		 * By default the property is set to false.
-		 * 
-		 * Dispatches a DVREvent.SNAP_TO_LIVE_CHANGE event.
-		 * 
-		 * @param value true if initial playback should start at the end of
-		 * the recording, in case recording is ongoing.
-		 */		
-		final public function set snapToLive(value:Boolean):void
-		{
-			if (value != _snapToLive)
-			{
-				_snapToLive = value;
-				dispatchEvent(new DVREvent(DVREvent.SNAP_TO_LIVE_CHANGE));
-			}
-		}
-		final public function get snapToLive():Boolean
-		{
-			return _snapToLive;
-		}
-		
-		/**
 		 * Defines if the recording is ongoing.
 		 * 
 		 * It is mandatory for subclasses to provide an override for this
@@ -95,36 +54,21 @@ package org.osmf.traits
 		 *  
 		 * @return true if the recording is ongoing.
 		 */		
-		public function get isRecording():Boolean
+		public final function get isRecording():Boolean
 		{
 			throw new IllegalOperationError
 				(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
-		
-		/**
-		 * Defines the start time of the recording.
-		 * 
-		 * Subclasses that can provide this information must override this
-		 * method.
-		 * 
-		 * @return null by default;
-		 */		
-		public function get recordingStartTime():Date
+		protected final function set isRecording(value:Boolean):void
 		{
-			return null;
-		}
-		
-		/**
-		 * Defines the start time of the recording.
-		 * 
-		 * Subclasses that can provide this information must override this
-		 * method.
-		 * 
-		 * @return null by default;
-		 */
-		public function get recordingStopTime():Date
-		{
-			return null;
+			if (value != _isRecording)
+			{
+				isRecordingChangeStart(value);
+				
+				_isRecording = value;
+				
+				isRecordingChangeEnd();
+			}
 		}
 		
 		/**
@@ -141,49 +85,36 @@ package org.osmf.traits
 				(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}
 		
-		/**
-		 * Defines at what interval the object will refetch stream
-		 * information from the server. 
-		 */		
-		public function set updateInterval(value:Number):void
-		{
-			if (value != _updateInterval)
-			{
-				_updateInterval = value;
-				processUpdateIntervalChange(value);
-			}
-		}
-		public function get updateInterval():Number
-		{
-			return _updateInterval;
-		}
-		
-		// Subclass methods
+		// Subclass stubs
 		//
 		
 		/**
-		 * To be invoked by subclasses after the stream information  
-		 * was updated.
+		 * Subclasses may override this method to do processing when the
+		 * isRecording property is about to change.
+		 * 
+		 * @param value The value that isRecording is about to be set to.
 		 */		
-		final protected function updated():void
-		{
-			dispatchEvent(new DVREvent(DVREvent.UPDATED));
+		protected function isRecordingChangeStart(value:Boolean):void
+		{	
 		}
 		
 		/**
-		 * To be overridden by subclasses to process the update interval
-		 * being changed.
+		 * Subclasses may override this method to do processing when the
+		 * isRecording property has just been changed.
 		 * 
-		 * @param interval the new updateInterval value.
-		 */		
-		protected function processUpdateIntervalChange(interval:Number):void
-		{	
+		 * <p>Subclasses that override should call this method 
+		 * to dispatch the isRecordingChange event.</p> 
+		 * 
+		 * @param value The value that isRecording has been set to.
+		 */
+		protected function isRecordingChangeEnd():void
+		{
+			dispatchEvent(new DVREvent(DVREvent.IS_RECORDING_CHANGE));
 		}
 		
 		// Internals
 		//
 		
-		private var _snapToLive:Boolean;
-		private var _updateInterval:Number;
+		private var _isRecording:Boolean;
 	}
 }
