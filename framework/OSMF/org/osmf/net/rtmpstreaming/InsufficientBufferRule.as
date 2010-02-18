@@ -40,36 +40,23 @@ package org.osmf.net.rtmpstreaming
 	public class InsufficientBufferRule extends SwitchingRuleBase
 	{
 		/**
-		 * The default value used to detect a panic when the 
-		 * buffer length falls below this amount.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		private static const PANIC_BUFFER_LEVEL:int = 2;
-		
-
-		/**
 		 * Constructor.
 		 * 
 		 * @param metrics Provider of runtime metrics.
-		 * @param panicBufferLevel A Tunable parameter for this rule. The "panic" buffer level 
-		 * in seconds. This rule watches for the buffer length to fall below this level. The default
-		 * value is 2 seconds.
+		 * @param minBufferLength The minimum buffer length that must be maintained before the
+		 * rule suggests a switch down.  The default value is 2 seconds.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function InsufficientBufferRule(metrics:RTMPNetStreamMetrics, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
+		public function InsufficientBufferRule(metrics:RTMPNetStreamMetrics, minBufferLength:Number=2)
 		{
 			super(metrics);
 			
 			_panic = false;
-			_panicBufferLevel = panicBufferLevel;
+			this.minBufferLength = minBufferLength;
 			metrics.netStream.addEventListener(NetStatusEvent.NET_STATUS, monitorNetStatus, false, 0, true);
 		}
 				
@@ -88,11 +75,11 @@ package org.osmf.net.rtmpstreaming
 		{
 			var newIndex:int = -1;
 			
-			if (_panic || (rtmpMetrics.netStream.bufferLength < _panicBufferLevel && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime))
+			if (_panic || (rtmpMetrics.netStream.bufferLength < minBufferLength && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime))
 			{
 				if (!_panic)
 				{
-					debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + _panicBufferLevel + " seconds");
+					debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + minBufferLength + " seconds");
 				}
 				
 				newIndex = 0;
@@ -147,7 +134,7 @@ package org.osmf.net.rtmpstreaming
 				
 		private var _panic:Boolean;
 		private var _moreDetail:String;
-		private var _panicBufferLevel:int;
+		private var minBufferLength:Number;
 				
 		CONFIG::LOGGING
 		{

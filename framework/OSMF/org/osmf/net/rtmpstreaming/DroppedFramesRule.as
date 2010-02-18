@@ -45,11 +45,14 @@ package org.osmf.net.rtmpstreaming
 		 * Constructor.
 		 * 
 		 * @param metrics The provider of NetStream metrics.
-		 * @param dropOne The number of frame drops that need to occur to cause a switch down by one index.
+		 * @param downSwitchByOne The number of dropped frames per second that
+		 * need to occur to cause a switch down by one index.
 		 * The default is 10 frames per second.
-		 * @param dropTwo The number of frame drops that need to occur to cause a switch down by two indices.
+		 * @param downSwitchByTwo The number of dropped frames per second that
+		 * need to occur to cause a switch down by two indices.
 		 * The default is 20 frames per second.
-		 * @param dropPanic The number of frame drops that need to occur to cause a switch to the lowest bitrate.
+		 * @param downSwitchToZero The number of dropped frames per second that
+		 * need to occur to cause a switch to the lowest bitrate.
 		 * The default is 24 frames per second.
 		 *  
 		 *  @langversion 3.0
@@ -59,16 +62,16 @@ package org.osmf.net.rtmpstreaming
 		 */ 
 		public function DroppedFramesRule
 			( metrics:NetStreamMetricsBase
-			, dropOne:int=10
-			, dropTwo:int=20
-			, dropPanic:int=24
+			, downSwitchByOne:int=10
+			, downSwitchByTwo:int=20
+			, downSwitchToZero:int=24
 			)
 		{
 			super(metrics);
 			
-			_dropOneFrameDropFPS = dropOne;
-			_dropTwoFrameDropFPS = dropTwo;
-			_panicFrameDropFPS = dropPanic;
+			this.downSwitchByOne = downSwitchByOne;
+			this.downSwitchByTwo = downSwitchByTwo;
+			this.downSwitchToZero = downSwitchToZero;
 			
 			lastLockTime = 0;
 			lockLevel = int.MAX_VALUE;
@@ -90,20 +93,20 @@ package org.osmf.net.rtmpstreaming
         	var newIndex:int = -1;
         	var moreDetail:String;
         	
-        	if (rtmpMetrics.averageDroppedFPS > _panicFrameDropFPS) 
+        	if (rtmpMetrics.averageDroppedFPS > downSwitchToZero) 
         	{
         		newIndex = 0;
-				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _panicFrameDropFPS;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + downSwitchToZero;
         	} 
-        	else if (rtmpMetrics.averageDroppedFPS > _dropTwoFrameDropFPS) 
+        	else if (rtmpMetrics.averageDroppedFPS > downSwitchByTwo) 
         	{
 				newIndex = rtmpMetrics.currentIndex - 2 < 0 ? 0 : rtmpMetrics.currentIndex - 2;
-				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _dropTwoFrameDropFPS;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + downSwitchByTwo;
         	} 
-        	else if (rtmpMetrics.averageDroppedFPS > _dropOneFrameDropFPS) 
+        	else if (rtmpMetrics.averageDroppedFPS > downSwitchByOne) 
         	{
         		newIndex = rtmpMetrics.currentIndex -1 < 0 ? 0 : rtmpMetrics.currentIndex - 1;
-				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + _dropOneFrameDropFPS;
+				moreDetail = "Average droppedFPS of " + Math.round(rtmpMetrics.averageDroppedFPS) + " > " + downSwitchByOne;
         	}
   			
         	if (newIndex != -1 && newIndex < rtmpMetrics.currentIndex) 
@@ -168,9 +171,9 @@ package org.osmf.net.rtmpstreaming
 			}
 		}        
 		
-		private var _dropOneFrameDropFPS:int;
-		private var _dropTwoFrameDropFPS:int;
-		private var _panicFrameDropFPS:int;
+		private var downSwitchByOne:int;
+		private var downSwitchByTwo:int;
+		private var downSwitchToZero:int;
 		
 		private var lockLevel:Number;
 		private var lastLockTime:Number;

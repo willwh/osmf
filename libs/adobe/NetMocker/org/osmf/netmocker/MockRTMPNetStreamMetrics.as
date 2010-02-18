@@ -38,11 +38,10 @@ package org.osmf.netmocker
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFPS = 0;
-			_averageMaxBandwidthArray = new Array();
 			_averageDroppedFPSArray = new Array();
 			_enabled = true;
 			_currentIndex = 0;
-			_averageMaxBandwidth = 0;
+			_averageMaxBytesPerSecond = 0;
 			_netStream = netStream;
 		}
 
@@ -76,24 +75,15 @@ package org.osmf.netmocker
 			_averageDroppedFPS = value;
 		}
 		
-		override public function get maxBandwidth():Number
+		
+		override public function get averageMaxBytesPerSecond():Number
 		{
-			return _maxBandwidth;
+			return _averageMaxBytesPerSecond;
 		}
 		
-		public function set maxBandwidth(value:Number):void
+		public function set averageMaxBytesPerSecond(value:Number):void
 		{
-			_maxBandwidth = value;
-		}
-		
-		override public function get averageMaxBandwidth():Number
-		{
-			return _averageMaxBandwidth;
-		}
-		
-		public function set averageMaxBandwidth(value:Number):void
-		{
-			_averageMaxBandwidth = value;
+			_averageMaxBytesPerSecond = value;
 		}
 		
 		override public function get currentIndex():int
@@ -126,9 +116,7 @@ package org.osmf.netmocker
 			return _netStream;
 		}
 		
-		private var _maxBandwidth:Number;
-		private var _averageMaxBandwidthArray:Array;
-		private var _averageMaxBandwidth:Number;
+		private var _averageMaxBytesPerSecond:Number;
 		private var _averageDroppedFPSArray:Array;
 		private var _averageDroppedFPS:Number;
 		private var _droppedFPS:Number;

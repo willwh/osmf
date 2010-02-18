@@ -62,22 +62,26 @@ package org.osmf.net.rtmpstreaming
         	var moreDetail:String;
         	
         	// Wait until the metrics class can calculate a stable average bandwidth
-        	if (rtmpMetrics.averageMaxBandwidth != 0) 
+        	if (rtmpMetrics.averageMaxBytesPerSecond != 0) 
         	{
-				// First find the preferred bitrate level we should be at by finding the highest profile that can play, given the current average max bandwidth
+				// First find the preferred bitrate level we should be at by finding
+				// the highest profile that can play, given the current average max
+				// bytes per second.
 				for (var i:int = rtmpMetrics.resource.streamItems.length - 1; i >= 0; i--) 
 				{
-					if (rtmpMetrics.averageMaxBandwidth > (rtmpMetrics.resource.streamItems[i].bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
+					if (rtmpMetrics.averageMaxBytesPerSecond * 8 / 1024 > (rtmpMetrics.resource.streamItems[i].bitrate * BANDWIDTH_SAFETY_MULTIPLE)) 
 					{
 						newIndex = i;
 						break;
 					}
 				}
 								
-				// If we are about to recommend a switch up, check some other metrics to verify the recommendation
+				// If we are about to recommend a switch up, check some other metrics
+				// to verify the recommendation
 				if (newIndex > rtmpMetrics.currentIndex) 
 				{
-	        		// We switch up only if conditions are perfect - no framedrops and a stable buffer
+	        		// We switch up only if conditions are perfect - no framedrops and
+	        		// a stable buffer.
 	        		newIndex = (rtmpMetrics.droppedFPS < MIN_DROPPED_FPS && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime) ? newIndex : -1;
 	        		
 	        		if (newIndex != -1)

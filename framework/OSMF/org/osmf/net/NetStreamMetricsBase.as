@@ -55,20 +55,6 @@ package org.osmf.net
 			super();
 			
 			_netStream = netStream;
-			_enabled = true;
-		}
-
-		/**
-		 * Indicates whether this metrics engine is enabled.
-		 **/
-		public function get enabled():Boolean
-		{
-			return _enabled;
-		}
-		
-		public function set enabled(value:Boolean):void
-		{
-			_enabled = value;
 		}
 		
 		/**
@@ -116,9 +102,9 @@ package org.osmf.net
 			return _currentIndex;
 		}
 		
-		public function set currentIndex(i:int):void 
+		public function set currentIndex(value:int):void 
 		{
-			_currentIndex = i;
+			_currentIndex = value;
 		}
 		
 		/**
@@ -143,6 +129,5 @@ package org.osmf.net
 		private var _resource:DynamicStreamingResource;
 		private var _currentIndex:int;
 		private var _maxAllowedIndex:int;
-		private var _enabled:Boolean;
 	}
 }

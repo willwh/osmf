@@ -29,8 +29,8 @@ package org.osmf.net.rtmpstreaming
 	/**
 	 * Switching rule for Bandwidth detection. This rule switches down when
 	 * bandwidth is insufficient for the current stream.  When comparing stream bitrates 
-	 * to available bandwidth, the class uses a "safety multiple", the stream bitrate
-	 * is mulitplied by this number. The default is 1.15, but can be overriden in the
+	 * to available bandwidth, the class uses a "bitrate multiplier", the stream bitrate
+	 * is multiplied by this number. The default is 1.15, but can be overridden in the
 	 * class constructor.
 	 *  
 	 *  @langversion 3.0
@@ -41,32 +41,22 @@ package org.osmf.net.rtmpstreaming
 	public class InsufficientBandwidthRule extends SwitchingRuleBase
 	{
 		/**
-		 * When comparing stream bitrates to available bandwidth, the stream bitrate
-		 * is multiplied by this number:
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		private static const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
-		
-		/**
 		 * Constructor.
 		 * 
-		 * @param safteyMultiple A multiplier that is used when the stream bitrate is compared against available
-		 * bandwidth. The stream bitrate is multiplied by this amount. The default is 1.15.
+		 * @param metrics The provider of NetStream metrics.
+		 * @param bitrateMultiplier A multiplier that is used when the stream bitrate is compared against
+		 * available bandwidth.  The stream bitrate is multiplied by this amount. The default is 1.15.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function InsufficientBandwidthRule(metrics:RTMPNetStreamMetrics, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
+		public function InsufficientBandwidthRule(metrics:RTMPNetStreamMetrics, bitrateMultiplier:Number=1.15)
 		{
 			super(metrics);
 			
-			_safetyMultiple = safetyMultiple;
+			this.bitrateMultiplier = bitrateMultiplier;
 		}
 
 		/**
@@ -86,12 +76,12 @@ package org.osmf.net.rtmpstreaming
         	var moreDetail:String;
         	
         	// Wait until the metrics class can calculate a stable average bandwidth
-        	if (rtmpMetrics.averageMaxBandwidth != 0) 
+        	if (rtmpMetrics.averageMaxBytesPerSecond != 0) 
         	{
-				// See if we need to switch down based on average max bandwidth
+				// See if we need to switch down based on average max bytes per second
 				for (var i:int = rtmpMetrics.currentIndex; i >= 0; i--) 
 				{
-					if (rtmpMetrics.averageMaxBandwidth > (rtmpMetrics.resource.streamItems[i].bitrate * _safetyMultiple)) 
+					if (rtmpMetrics.averageMaxBytesPerSecond * 8 / 1024 > (rtmpMetrics.resource.streamItems[i].bitrate * bitrateMultiplier)) 
 					{
 						newIndex = i;
 						break;
@@ -102,7 +92,7 @@ package org.osmf.net.rtmpstreaming
 				
 				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 				{
-					debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBandwidth) + " < " + _safetyMultiple + " * rendition bitrate");
+					debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBytesPerSecond) + " < " + bitrateMultiplier + " * rendition bitrate");
 
 					setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT));
 	        	}
@@ -133,7 +123,7 @@ package org.osmf.net.rtmpstreaming
 			}
 		}
 
-		private var _safetyMultiple:Number;
+		private var bitrateMultiplier:Number;
 			
 		CONFIG::LOGGING
 		{

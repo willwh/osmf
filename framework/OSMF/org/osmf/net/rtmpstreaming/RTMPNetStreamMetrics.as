@@ -29,8 +29,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.StreamType;
 	import org.osmf.net.NetStreamMetricsBase;
+	import org.osmf.net.StreamType;
 	
 	/**
 	 * The RTMPNetStreamMetrics makes use of the metrics offered by NetStream.info,
@@ -58,7 +58,7 @@ package org.osmf.net.rtmpstreaming
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFPS = 0;
-			_averageMaxBandwidthArray = new Array();
+			_averageMaxBytesPerSecondArray = new Array();
 			_averageDroppedFPSArray = new Array();
 			
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, netStatus);
@@ -68,7 +68,7 @@ package org.osmf.net.rtmpstreaming
 		}
 		
 		/**
-		 * The update interval (in milliseconds) at which metrics and averages are recalculated.
+		 * The update interval (in milliseconds) at which metrics are recalculated.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -112,7 +112,7 @@ package org.osmf.net.rtmpstreaming
 		}
 		
 		/**
-		 * The average frame-drop rate.
+		 * The average frame-drop rate calculated over the life of the NetStream.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -126,49 +126,19 @@ package org.osmf.net.rtmpstreaming
 		
 		
 		/**
-		 * The last maximum bandwidth measurement, in kbps.
+		 * The average max bytes per second value, calculated based on a
+		 * recent set of samples.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get maxBandwidth():Number
+		public function get averageMaxBytesPerSecond():Number
 		{
-			return _maxBandwidth;
-		}
-		
-		/**
-		 * The average max bandwidth value, in kbps.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get averageMaxBandwidth():Number
-		{
-			return _averageMaxBandwidth;
+			return _averageMaxBytesPerSecond;
 		}
 
-		/**
-		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override public function set enabled(value:Boolean):void 
-		{
-			super.enabled = value;
-			
-			if (value == false)
-			{
-				_timer.stop();
-			}
-		}
-		
 		// Internals
 		//
 		
@@ -177,7 +147,7 @@ package org.osmf.net.rtmpstreaming
 			switch (e.info.code) 
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_START:
-					if (!_timer.running && enabled) 
+					if (!_timer.running) 
 					{
 						_timer.start();
 					}
@@ -198,20 +168,20 @@ package org.osmf.net.rtmpstreaming
 					return;
 				}
 			
-				// Average max bandwdith
-				_maxBandwidth = netStream.info.maxBytesPerSecond * 8 / 1024;
-				_averageMaxBandwidthArray.unshift(_maxBandwidth);
-				if (_averageMaxBandwidthArray.length > DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE) 
+				// Average maxBytesPerSecond
+				var maxBytesPerSecond:Number = netStream.info.maxBytesPerSecond;
+				_averageMaxBytesPerSecondArray.unshift(maxBytesPerSecond);
+				if (_averageMaxBytesPerSecondArray.length > DEFAULT_AVG_MAX_BYTES_SAMPLE_SIZE) 
 				{
-					_averageMaxBandwidthArray.pop();
+					_averageMaxBytesPerSecondArray.pop();
 				}
-				var totalMaxBitrate:Number = 0;
-				var peakMaxBitrate:Number = 0;
+				var totalMaxBytesPerSecond:Number = 0;
+				var peakMaxBytesPerSecond:Number = 0;
 				
-				for (var b:uint = 0; b < _averageMaxBandwidthArray.length; b++) 
+				for (var b:uint = 0; b < _averageMaxBytesPerSecondArray.length; b++) 
 				{
-					totalMaxBitrate += _averageMaxBandwidthArray[b];
-					peakMaxBitrate = _averageMaxBandwidthArray[b] > peakMaxBitrate ? _averageMaxBandwidthArray[b]: peakMaxBitrate;
+					totalMaxBytesPerSecond += _averageMaxBytesPerSecondArray[b];
+					peakMaxBytesPerSecond = _averageMaxBytesPerSecondArray[b] > peakMaxBytesPerSecond ? _averageMaxBytesPerSecondArray[b]: peakMaxBytesPerSecond;
 				}
 				
 		 		// Flash player can have problems attempting to accurately estimate 
@@ -220,8 +190,8 @@ package org.osmf.net.rtmpstreaming
 		 		// this as an oscillating series of maxBytesPerSecond measurements,
 		 		// where the peak roughly corresponds to the true estimate of max
 		 		// bandwidth available.  When isLive is true, we optimize the estimated
-		 		// averageMaxBandwidth. 
-				_averageMaxBandwidth = _averageMaxBandwidthArray.length < DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE ? 0 : isLive ? peakMaxBitrate : totalMaxBitrate / _averageMaxBandwidthArray.length;
+		 		// averageMaxBytesPerSecond. 
+				_averageMaxBytesPerSecond = _averageMaxBytesPerSecondArray.length < DEFAULT_AVG_MAX_BYTES_SAMPLE_SIZE ? 0 : isLive ? peakMaxBytesPerSecond : totalMaxBytesPerSecond / _averageMaxBytesPerSecondArray.length;
 				
 				// Estimate max (true) framerate
 				_maxFPS = netStream.currentFPS > _maxFPS ? netStream.currentFPS : _maxFPS;
@@ -273,9 +243,8 @@ package org.osmf.net.rtmpstreaming
 		}
 		
 		private var _timer:Timer;
-		private var _maxBandwidth:Number;
-		private var _averageMaxBandwidthArray:Array;
-		private var _averageMaxBandwidth:Number;
+		private var _averageMaxBytesPerSecondArray:Array;
+		private var _averageMaxBytesPerSecond:Number;
 		private var _averageDroppedFPSArray:Array;
 		private var _averageDroppedFPS:Number;
 		private var _droppedFPS:Number;
@@ -284,7 +253,7 @@ package org.osmf.net.rtmpstreaming
 		private var _maxFPS:Number;
 		
 		private const DEFAULT_UPDATE_INTERVAL:Number = 100;
-		private const DEFAULT_AVG_BANDWIDTH_SAMPLE_SIZE:Number = 50;
+		private const DEFAULT_AVG_MAX_BYTES_SAMPLE_SIZE:Number = 50;
 		private const DEFAULT_AVG_FRAMERATE_SAMPLE_SIZE:Number = 50;		
 		
 		CONFIG::LOGGING

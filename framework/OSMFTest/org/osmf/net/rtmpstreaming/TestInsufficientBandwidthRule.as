@@ -58,7 +58,7 @@ package org.osmf.net.rtmpstreaming
 			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(null);
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			
-			metrics.averageMaxBandwidth = 5000;
+			metrics.averageMaxBytesPerSecond = 5000 * 1024 / 8;
 			metrics.resource = dsResource;
 			result = bwRule.getNewIndex();
 			assertEquals(-1, result);
@@ -68,19 +68,19 @@ package org.osmf.net.rtmpstreaming
 			dsResource.streamItems.push(new DynamicStreamingItem("stream3_1000kbps", 1000));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 			
-			metrics.averageMaxBandwidth = 1234;
+			metrics.averageMaxBytesPerSecond = 1234 * 1024 / 8;
 			metrics.currentIndex = 3;
 			result = bwRule.getNewIndex();
 			assertEquals(2, result);
 			assertNotNull(bwRule.reason);
 			
 			// Another test with very low bandwidth
-			metrics.averageMaxBandwidth = 500;
+			metrics.averageMaxBytesPerSecond = 500 * 1024 / 8;
 			result = bwRule.getNewIndex();
 			assertEquals(0, result);
 			
 			// Another test with ridiculously low bandwidth
-			metrics.averageMaxBandwidth = 1;
+			metrics.averageMaxBytesPerSecond = 1 * 1024 / 8;
 			result = bwRule.getNewIndex();
 			assertEquals(-1, result);
 		}

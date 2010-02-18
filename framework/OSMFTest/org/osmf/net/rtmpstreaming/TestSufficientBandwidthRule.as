@@ -57,7 +57,7 @@ package org.osmf.net.rtmpstreaming
 			dsResource.streamItems.push(new DynamicStreamingItem("stream4_3000kpbs", 3000));
 
 			// Test with lots of bandwidth, but insufficient buffer	
-			metrics.averageMaxBandwidth = 5000;
+			metrics.averageMaxBytesPerSecond= 5000;
 			if (metrics.netStream is MockNetStream)
 			{
 				MockNetStream(metrics.netStream).bufferLength = 0;
@@ -67,13 +67,13 @@ package org.osmf.net.rtmpstreaming
 			assertEquals(-1, result);
 			
 			// Test with bandwidth lower than the current stream		
-			metrics.averageMaxBandwidth = 1234;
+			metrics.averageMaxBytesPerSecond = 1234 * 1024 / 8;
 			metrics.currentIndex = 3;
 			result = suRule.getNewIndex();
 			assertEquals(-1, result);
 			
 			// Test with lots of bandwidth and a stable buffer
-			metrics.averageMaxBandwidth = 5000;
+			metrics.averageMaxBytesPerSecond = 5000 * 1024 / 8;
 			metrics.droppedFPS = 0;
 			if (metrics.netStream is MockNetStream)
 			{
@@ -85,7 +85,7 @@ package org.osmf.net.rtmpstreaming
 			assertEquals(3, result);
 
 			// Test with lots of bandwidth, a stable buffer, but too many dropped frames
-			metrics.averageMaxBandwidth = 5000;
+			metrics.averageMaxBytesPerSecond = 5000 * 1024 / 8;
 			metrics.droppedFPS = 10;
 			if (metrics.netStream is MockNetStream)
 			{

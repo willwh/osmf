@@ -392,8 +392,6 @@ package org.osmf.net
 		{
 			initDSIFailedCounts();
 			
-			metrics.enabled = true;
-			
 			metrics.resource = dsResource;
 			
 			actualIndex = 0;
