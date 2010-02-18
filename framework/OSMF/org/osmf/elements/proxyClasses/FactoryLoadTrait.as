@@ -21,18 +21,29 @@
 *****************************************************/
 package org.osmf.elements.proxyClasses
 {
+	import flash.events.Event;
+	
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 
 	[ExcludeClass]
 	
 	/**
+	 * Dispatched load complete in order to notify the factory element that the 
+	 * proxied item is ready.
+	 */ 
+	[Event('proxyReady')]
+	
+	/**
 	 * @private
 	 */ 
 	public class FactoryLoadTrait extends LoadTrait
 	{
+		public static const PROXY_READY:String = "proxyReady";
 		/**
 		 * @private
 		 * Constructs a new FactoryLoad trait.
@@ -41,6 +52,20 @@ package org.osmf.elements.proxyClasses
 		{
 			super(loader, resource);
 		}
+		
+		override protected function loadStateChangeEnd():void
+		{
+			if (loadState != LoadState.READY)
+			{
+				dispatchEvent(new LoadEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loadState));
+			}
+			else  //Notify the Factory we are done loading
+			{
+				dispatchEvent(new Event(PROXY_READY));
+			}
+		}
+		
+		
 		
 		/**
 		 * @private

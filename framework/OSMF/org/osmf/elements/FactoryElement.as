@@ -21,9 +21,10 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.events.Event;
+	
 	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
 	import org.osmf.elements.proxyClasses.MetadataProxy;
-	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
@@ -59,14 +60,11 @@ package org.osmf.elements
 			this.resource = resource;
 		}
 	
-		private function onLoaderStateChange(event:LoadEvent):void
-		{
-			if (event.loadState == LoadState.READY)
-			{
-				removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
-				proxiedElement =  loadTrait.mediaElement;
-				_metadata.metadata = proxiedElement.metadata;
-			}
+		private function onLoaderStateChange(event:Event):void
+		{			
+			removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
+			proxiedElement =  loadTrait.mediaElement;
+			_metadata.metadata = proxiedElement.metadata;
 		}
 		
 		// Overriding is neccessary because there is a null wrappedElement.
@@ -79,7 +77,8 @@ package org.osmf.elements
 			{
 				_resource = value;
 				loadTrait = new FactoryLoadTrait(loader, resource);
-				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaderStateChange);
+				loadTrait.addEventListener(FactoryLoadTrait.PROXY_READY, onLoaderStateChange);
+				
 				if (super.getTrait(MediaTraitType.LOAD) != null)
 				{
 					super.removeTrait(MediaTraitType.LOAD);
