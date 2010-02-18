@@ -46,12 +46,7 @@ package org.osmf.traits
 			_protectionTrait = createInterfaceObject() as DynamicDRMTrait;
 			events = [];
 		}
-		
-		public function testAuthMethod():void
-		{
-			assertEquals("",  _protectionTrait.authenticationMethod);
-		}
-		
+				
 		public function testNeedsAuthentication():void
 		{
 			protectionTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, eventCatcher);

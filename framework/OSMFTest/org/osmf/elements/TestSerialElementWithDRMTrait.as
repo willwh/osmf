@@ -81,7 +81,7 @@ package org.osmf.elements
 			Assert.assertEquals(trait.serverURL, elem2Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem2Drm.startDate);
 			Assert.assertEquals(trait.period, elem2Drm.period);
-			Assert.assertEquals(trait.authenticationMethod,  "");
+			
 						
 			var start:Date = new Date(1);
 			var end:Date = new Date(2);
@@ -93,8 +93,7 @@ package org.osmf.elements
 			Assert.assertEquals(trait.startDate, start);
 			Assert.assertEquals(trait.serverURL, "server");
 			Assert.assertEquals(trait.period, 50);
-			Assert.assertEquals(trait.authenticationMethod,  DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-									
+								
 		}
 		
 		public function testSerialEvents():void
@@ -269,15 +268,17 @@ package org.osmf.elements
 					
 			trait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);
 			
+			assertEquals(trait.drmState, DRMState.AUTHENTICATION_NEEDED);
+			
 			trait.authenticate();
-													
+																
 			function onDRMStateChange(event:DRMEvent):void
 			{
 				assertEquals(event.drmState, eventQueue.pop());
 				events++;						
 			}
 			
-			assertEquals( events, 2);
+			assertEquals(2, events);
 			
 			//Move the serial to the next element
 			var time:DynamicTimeTrait = elem.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
@@ -286,7 +287,8 @@ package org.osmf.elements
 									
 			trait.authenticateWithToken(new ByteArray());
 			
-			assertEquals(events, 5);
+			assertEquals(5, events);
+			assertEquals(eventQueue.length, 0);
 		}
 				
 		

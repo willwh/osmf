@@ -33,12 +33,7 @@ package org.osmf.utils
 		{
 			super();
 		}
-		
-		override public function get authenticationMethod():String
-		{
-			return _authenticationMethod;
-		}
-		
+				
 		override public function authenticate(username:String=null, password:String=null):void
 		{
 			drmStateChange(DRMState.AUTHENTICATING, null, null);

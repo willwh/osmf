@@ -81,7 +81,6 @@ package org.osmf.elements
 			Assert.assertEquals(trait.serverURL, elem2Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem2Drm.startDate);
 			Assert.assertEquals(trait.period, elem2Drm.period);
-			Assert.assertEquals(trait.authenticationMethod,  "");
 						
 			var start1:Date = new Date(2);
 			var end1:Date = new Date(5);
@@ -96,10 +95,8 @@ package org.osmf.elements
 			Assert.assertEquals(trait.startDate, start1);
 			Assert.assertEquals(trait.serverURL, "server2");
 			Assert.assertEquals(trait.period, 25);
-			Assert.assertEquals(trait.authenticationMethod,  "Both");
 			
 			elem2Drm.invokeDrmStateChange(DRMState.INITIALIZING,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.authenticationMethod,  DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
 			
 			
 			//Mixup drmStates:
@@ -285,7 +282,7 @@ package org.osmf.elements
 		public function testAuthFailure():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED, DRMState.AUTHENTICATE_FAILED, DRMState.AUTHENTICATING];
+			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATE_FAILED, DRMState.AUTHENTICATING];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var serial:SerialElement = new SerialElement();
@@ -303,7 +300,7 @@ package org.osmf.elements
 					
 			trait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);
 			
-			trait.authenticate();
+			trait.authenticate();  //Will fail, since username and password are null.
 			trait.authenticateWithToken(new ByteArray());
 													
 			function onDRMStateChange(event:DRMEvent):void
@@ -312,8 +309,8 @@ package org.osmf.elements
 				events++;						
 			}
 			
-			assertEquals( events, 2);
-			
+			assertEquals( events, 4);
+			assertEquals(eventQueue.length, 0);
 		}
 		
 		
