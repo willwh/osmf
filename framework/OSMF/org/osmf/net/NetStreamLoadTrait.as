@@ -27,7 +27,6 @@ package org.osmf.net
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;

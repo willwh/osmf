@@ -28,8 +28,8 @@ package org.osmf.utils
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetNegotiator;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.osmf.netmocker.MockDynamicStreamingNetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
+	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockNetConnection;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.MockNetNegotiator;
@@ -82,13 +82,13 @@ package org.osmf.utils
 		}
 
 		/**
-		 * Create and return a new DynamicStreamingNetLoader.
+		 * Create and return a new RTMPDynamicStreamingNetLoader.
 		 **/
-		public function createDynamicStreamingNetLoader():DynamicStreamingNetLoader
+		public function createRTMPDynamicStreamingNetLoader():RTMPDynamicStreamingNetLoader
 		{
 			return useMockObjects
-						? new MockDynamicStreamingNetLoader()
-						: new DynamicStreamingNetLoader();
+						? new MockRTMPDynamicStreamingNetLoader()
+						: new RTMPDynamicStreamingNetLoader();
 		}
 		
 		/**

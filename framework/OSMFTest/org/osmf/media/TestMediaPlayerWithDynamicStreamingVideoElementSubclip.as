@@ -25,9 +25,9 @@ package org.osmf.media
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.netmocker.MockDynamicStreamingNetLoader;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.FMSURL;
@@ -42,7 +42,7 @@ package org.osmf.media
 		override public function setUp():void
 		{
 			netFactory = new NetFactory();
-			loader = netFactory.createDynamicStreamingNetLoader();
+			loader = netFactory.createRTMPDynamicStreamingNetLoader();
 
 			super.setUp();
 		}
@@ -57,18 +57,18 @@ package org.osmf.media
 
 		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
-			if (loader is MockDynamicStreamingNetLoader)
+			if (loader is MockRTMPDynamicStreamingNetLoader)
 			{
 				// Give our mock loader an arbitrary duration and size to ensure
 				// we get metadata.
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedDuration = 6; // TODO: ???
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedSubclipDuration = 3;
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedWidth = expectedMediaWidthAfterLoad;
-				MockDynamicStreamingNetLoader(loader).netStreamExpectedHeight = expectedMediaHeightAfterLoad;
+				MockRTMPDynamicStreamingNetLoader(loader).netStreamExpectedDuration = 6; // TODO: ???
+				MockRTMPDynamicStreamingNetLoader(loader).netStreamExpectedSubclipDuration = 3;
+				MockRTMPDynamicStreamingNetLoader(loader).netStreamExpectedWidth = expectedMediaWidthAfterLoad;
+				MockRTMPDynamicStreamingNetLoader(loader).netStreamExpectedHeight = expectedMediaHeightAfterLoad;
 			
 				if (resource == INVALID_RESOURCE)
 				{
-					MockDynamicStreamingNetLoader(loader).netConnectionExpectation = NetConnectionExpectation.INVALID_FMS_APPLICATION;
+					MockRTMPDynamicStreamingNetLoader(loader).netConnectionExpectation = NetConnectionExpectation.INVALID_FMS_APPLICATION;
 				}
 			}
 

@@ -19,8 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	/**
 	 * Base class for defining a switching rule.
@@ -42,7 +41,7 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function SwitchingRuleBase(metrics:MetricsProviderBase)
+		public function SwitchingRuleBase(metrics:NetStreamMetricsBase)
 		{
 			super();
 			
@@ -93,12 +92,12 @@ package org.osmf.net.dynamicstreaming
 		 * The provider of metrics which the rule can use to determine
 		 * whether to suggest a switch.
 		 **/
-		protected function get metrics():MetricsProviderBase
+		protected function get metrics():NetStreamMetricsBase
 		{
 			return _metrics;
 		}
 		
-		private var _metrics:MetricsProviderBase;
+		private var _metrics:NetStreamMetricsBase;
 		private var _reason:String;
 	}
 }

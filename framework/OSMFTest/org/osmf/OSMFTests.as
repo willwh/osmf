@@ -38,7 +38,6 @@ package org.osmf
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
-	import org.osmf.net.dynamicstreaming.*;
 	import org.osmf.net.httpstreaming.*;
 	import org.osmf.net.httpstreaming.f4f.*;
 	import org.osmf.net.httpstreaming.flv.*;
@@ -237,7 +236,7 @@ package org.osmf
 			addTestSuite(TestDynamicStreamingItem);
 			addTestSuite(TestDynamicStreamingResource);
 			
-			addTestSuite(TestDynamicStreamingNetLoader);
+			addTestSuite(TestRTMPDynamicStreamingNetLoader);
 			addTestSuite(TestNetStreamSwitchManager);
 			addTestSuite(TestNetStreamDynamicStreamTrait);
 			

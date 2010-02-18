@@ -19,8 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	/**
 	 * DynamicStreamingItem represents a single stream in

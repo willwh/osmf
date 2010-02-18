@@ -29,7 +29,7 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;

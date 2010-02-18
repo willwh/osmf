@@ -21,14 +21,12 @@
 *  Contributor(s): Adobe Systems Incorporated.
 * 
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
 	import org.osmf.events.DynamicStreamEvent;
-	import org.osmf.net.NetClient;
-	import org.osmf.net.NetStreamCodes;
 	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.utils.OSMFStrings;
 

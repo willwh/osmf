@@ -25,12 +25,12 @@ package org.osmf.netmocker
 {
 	import flash.net.NetStream;
 	
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.rtmpstreaming.RTMPMetricsProvider;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.rtmpstreaming.RTMPNetStreamMetrics;
 
-	public class MockRTMPMetricsProvider extends RTMPMetricsProvider
+	public class MockRTMPNetStreamMetrics extends RTMPNetStreamMetrics
 	{
-		public function MockRTMPMetricsProvider(netStream:NetStream)
+		public function MockRTMPNetStreamMetrics(netStream:NetStream)
 		{
 			super(netStream);
 			
@@ -39,7 +39,6 @@ package org.osmf.netmocker
 			_lastFrameDropCounter = 0;
 			_lastFrameDropValue = 0;
 			_maxFPS = 0;
-			_isLive = false;
 			_averageMaxBandwidthArray = new Array();
 			_averageDroppedFPSArray = new Array();
 			_enabled = true;
@@ -149,16 +148,6 @@ package org.osmf.netmocker
 			return _netStream;
 		}
 		
-		override public function get isLive():Boolean
-		{
-			return _isLive;
-		}
-		
-		override public function set isLive(value:Boolean):void
-		{
-			_isLive = value;
-		}
-		
 		private var _targetBufferTimeReached:Boolean;
 		private var _maxBandwidth:Number;
 		private var _averageMaxBandwidthArray:Array;
@@ -173,7 +162,6 @@ package org.osmf.netmocker
 		private var _dsResource:DynamicStreamingResource;
 		private var _targetBufferTime:Number;
 		private var _enabled:Boolean;
-		private var _isLive:Boolean;
 		private var _netStream:NetStream;
 	}
 }

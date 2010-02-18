@@ -25,16 +25,16 @@ package org.osmf.net.httpstreaming
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.netmocker.MockHTTPMetricsProvider;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.netmocker.MockHTTPNetStreamMetrics;
 	import org.osmf.utils.NetFactory;
 	
 	public class TestDownloadRatioRule extends TestCase
 	{
 		public function testGetNewIndex():void
 		{
-			var metrics:MockHTTPMetricsProvider = new MockHTTPMetricsProvider();
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics();
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics);
 			
@@ -92,7 +92,7 @@ package org.osmf.net.httpstreaming
 		
 		public function testGetNewIndexWithAggressiveUpswitchingDisabled():void
 		{
-			var metrics:MockHTTPMetricsProvider = new MockHTTPMetricsProvider();
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics();
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics, false);
 			

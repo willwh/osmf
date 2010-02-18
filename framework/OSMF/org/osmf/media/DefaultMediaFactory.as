@@ -31,7 +31,7 @@ package org.osmf.media
 	import org.osmf.elements.SoundLoader;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	
 	/**
@@ -133,8 +133,8 @@ package org.osmf.media
 
 			addItem
 				( new MediaFactoryItem
-					( "org.osmf.elements.video.dynamicStreaming"
-					, new DynamicStreamingNetLoader().canHandleResource
+					( "org.osmf.elements.video.rtmpdynamicStreaming"
+					, new RTMPDynamicStreamingNetLoader().canHandleResource
 					, function():MediaElement
 						{
 							return new VideoElement()

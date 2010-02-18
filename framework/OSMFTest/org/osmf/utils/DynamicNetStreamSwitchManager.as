@@ -26,10 +26,10 @@ package org.osmf.utils
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.dynamicstreaming.MetricsProvider;
-	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.MetricsProvider;
+	import org.osmf.net.NetStreamSwitchManager;
+	import org.osmf.net.SwitchingRuleBase;
 	
 	public class DynamicNetStreamSwitchManager extends NetStreamSwitchManager
 	{

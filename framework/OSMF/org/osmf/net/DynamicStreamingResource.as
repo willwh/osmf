@@ -21,11 +21,10 @@
 *  Contributor: Adobe Systems Inc.
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.net.StreamingURLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;

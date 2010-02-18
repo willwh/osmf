@@ -38,7 +38,6 @@ package org.osmf.net
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MimeTypes;
-	import org.osmf.net.dynamicstreaming.NetStreamSwitchManager;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;

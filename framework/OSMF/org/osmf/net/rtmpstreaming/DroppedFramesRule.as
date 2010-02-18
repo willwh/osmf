@@ -25,8 +25,8 @@ package org.osmf.net.rtmpstreaming
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.NetStreamMetricsBase;
+	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -41,10 +41,6 @@ package org.osmf.net.rtmpstreaming
 	 */
 	public class DroppedFramesRule extends SwitchingRuleBase
 	{
-		private static const DROP_ONE_FRAMEDROP_FPS:Number = 10;
-		private static const DROP_TWO_FRAMEDROP_FPS:Number = 20;
-		private static const PANIC_FRAMEDROP_FPS:Number = 24;
-		
 		/**
 		 * Constructor.
 		 * 
@@ -62,10 +58,10 @@ package org.osmf.net.rtmpstreaming
 		 *  @productversion OSMF 1.0
 		 */ 
 		public function DroppedFramesRule
-			( metrics:MetricsProviderBase
-			, dropOne:int=DROP_ONE_FRAMEDROP_FPS
-			, dropTwo:int=DROP_TWO_FRAMEDROP_FPS
-			, dropPanic:int=PANIC_FRAMEDROP_FPS
+			( metrics:NetStreamMetricsBase
+			, dropOne:int=10
+			, dropTwo:int=20
+			, dropPanic:int=24
 			)
 		{
 			super(metrics);
@@ -155,9 +151,9 @@ package org.osmf.net.rtmpstreaming
 			return (index >= lockLevel) && (getTimer() - lastLockTime) < LOCK_INTERVAL;
 		}
 		
-		private function get rtmpMetrics():RTMPMetricsProvider
+		private function get rtmpMetrics():RTMPNetStreamMetrics
 		{
-			return metrics as RTMPMetricsProvider;
+			return metrics as RTMPNetStreamMetrics;
 		}
 
 		private function debug(...args):void
@@ -166,7 +162,7 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (_logger == null)
 				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.DroppedFramesRule");
+					_logger = Log.getLogger("org.osmf.net.DroppedFramesRule");
 				}
 				_logger.debug(">>> FrameDropRule."+args);
 			}

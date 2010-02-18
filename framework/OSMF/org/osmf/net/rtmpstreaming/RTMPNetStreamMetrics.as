@@ -29,10 +29,11 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
+	import org.osmf.net.StreamType;
+	import org.osmf.net.NetStreamMetricsBase;
 	
 	/**
-	 * The RTMPMetricsProvider makes use of the metrics offered by NetStream.info,
+	 * The RTMPNetStreamMetrics makes use of the metrics offered by NetStream.info,
 	 * but more importantly it calculates running averages, which we feel are more
 	 * robust metrics on which to make switching decisions. It's goal is to be the
 	 * one-stop shop for all the info you need about the health of the stream.
@@ -42,14 +43,14 @@ package org.osmf.net.rtmpstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class RTMPMetricsProvider extends MetricsProviderBase
+	public class RTMPNetStreamMetrics extends NetStreamMetricsBase
 	{
 		/**
 		 * Constructor.
 		 * 
 		 * @param netStream The NetStream to provide metrics for.
 		 **/
-		public function RTMPMetricsProvider(netStream:NetStream)
+		public function RTMPNetStreamMetrics(netStream:NetStream)
 		{
 			super(netStream);
 			
@@ -284,10 +285,15 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (_logger == null)
 				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.MetricsProvider");
+					_logger = Log.getLogger("org.osmf.net.MetricsProvider");
 				}
 				_logger.debug(">>> MetricsProvider."+args);
 			}
+		}
+		
+		private function get isLive():Boolean
+		{
+			return resource.streamType == StreamType.LIVE;
 		}
 		
 		private var _timer:Timer;

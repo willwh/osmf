@@ -31,8 +31,8 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.net.*;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.netmocker.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
@@ -45,13 +45,13 @@ package org.osmf.net.rtmpstreaming
 
 			_eventDispatcher = new EventDispatcher();
 			_netFactory = new NetFactory();
-			_loader = _netFactory.createDynamicStreamingNetLoader();
+			_loader = _netFactory.createRTMPDynamicStreamingNetLoader();
 			
-			if (_loader is MockDynamicStreamingNetLoader)
+			if (_loader is MockRTMPDynamicStreamingNetLoader)
 			{
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_BUFFER_EMPTY, "status", 5),
-																						new EventInfo(NetStreamCodes.NETSTREAM_PLAY_INSUFFICIENTBW, "status", 10) ];
-				(_loader as MockDynamicStreamingNetLoader).netStreamExpectedDuration = 2;
+				(_loader as MockRTMPDynamicStreamingNetLoader).netStreamExpectedEvents = [ 	new EventInfo(NetStreamCodes.NETSTREAM_BUFFER_EMPTY, "status", 5),
+																							new EventInfo(NetStreamCodes.NETSTREAM_PLAY_INSUFFICIENTBW, "status", 10) ];
+				(_loader as MockRTMPDynamicStreamingNetLoader).netStreamExpectedDuration = 2;
 			}			
 		}
 		
@@ -86,7 +86,7 @@ package org.osmf.net.rtmpstreaming
 					var stream:NetStream = (_loadTrait as NetStreamLoadTrait).netStream;
 					assertNotNull(stream);
 					
-					var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(stream);
+					var metrics:MockRTMPNetStreamMetrics = new MockRTMPNetStreamMetrics(stream);
 					_bufferRule = new InsufficientBufferRule(metrics);
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);

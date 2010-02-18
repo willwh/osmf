@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
@@ -34,10 +34,8 @@ package org.osmf.net.dynamicstreaming
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.net.NetClient;
-	import org.osmf.net.NetStreamCodes;
 	import org.osmf.netmocker.MockNetStream;
-	import org.osmf.netmocker.MockRTMPMetricsProvider;
+	import org.osmf.netmocker.MockRTMPNetStreamMetrics;
 	import org.osmf.utils.DynamicSwitchingRule;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.URL;
@@ -68,7 +66,7 @@ package org.osmf.net.dynamicstreaming
 				(stream as MockNetStream).expectedDuration = 2;
 			}
 			
-			metrics = new MockRTMPMetricsProvider(stream);
+			metrics = new MockRTMPNetStreamMetrics(stream);
 
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
 			switchingRule = new DynamicSwitchingRule(metrics);
@@ -271,7 +269,7 @@ package org.osmf.net.dynamicstreaming
 		private var netFactory:NetFactory;
 		private var switchingRule:DynamicSwitchingRule;
 		private var switchManager:NetStreamSwitchManager;
-		private var metrics:MetricsProviderBase;
+		private var metrics:NetStreamMetricsBase;
 		private var stream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 	}

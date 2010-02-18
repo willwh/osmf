@@ -21,11 +21,11 @@
 *****************************************************/
 package org.osmf.netmocker
 {
-	import org.osmf.net.httpstreaming.HTTPMetricsProvider;
+	import org.osmf.net.httpstreaming.HTTPNetStreamMetrics;
 	
-	public class MockHTTPMetricsProvider extends HTTPMetricsProvider
+	public class MockHTTPNetStreamMetrics extends HTTPNetStreamMetrics
 	{
-		public function MockHTTPMetricsProvider()
+		public function MockHTTPNetStreamMetrics()
 		{
 			super(null);
 		}

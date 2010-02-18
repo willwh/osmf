@@ -26,8 +26,7 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
@@ -65,7 +64,7 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function InsufficientBufferRule(metrics:MetricsProviderBase, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
+		public function InsufficientBufferRule(metrics:RTMPNetStreamMetrics, panicBufferLevel:int=PANIC_BUFFER_LEVEL)
 		{
 			super(metrics);
 			
@@ -129,9 +128,9 @@ package org.osmf.net.rtmpstreaming
 			}
 		}
 		
-		private function get rtmpMetrics():RTMPMetricsProvider
+		private function get rtmpMetrics():RTMPNetStreamMetrics
 		{
-			return metrics as RTMPMetricsProvider;
+			return metrics as RTMPNetStreamMetrics;
 		}
 
 		private function debug(...args):void
@@ -140,7 +139,7 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (_logger == null)
 				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.InsufficientBufferRule");
+					_logger = Log.getLogger("org.osmf.net.InsufficientBufferRule");
 				}
 				_logger.debug(">>> BufferRule."+args);
 			}

@@ -81,10 +81,6 @@ package org.osmf.plugin
 		 * @param mediaFactory MediaFactory within which the PluginManager will place the
 		 * information from loaded plugins.  If null, the PluginManager will create a
 		 * DefaultMediaFactory.
-		 * @param minimumSupportedFrameworkVersion  The minimum version number of the
-		 * framework that a loaded plugin must be compiled against in order to load.
-		 * Version numbers are defined in the org.osmf.utils.Version class.  The default
-		 * (null) indicates that the PluginManager should use Version.lastAPICompatibleVersion.
 		 *
 		 *  
 		 *  @langversion 3.0
@@ -92,10 +88,10 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginManager(mediaFactory:MediaFactory=null, minimumSupportedFrameworkVersion:String=null)
+		public function PluginManager(mediaFactory:MediaFactory=null)
 		{
 			_mediaFactory = mediaFactory != null ? mediaFactory : new DefaultMediaFactory();
-			this.minimumSupportedFrameworkVersion = minimumSupportedFrameworkVersion != null ? minimumSupportedFrameworkVersion : Version.lastAPICompatibleVersion ;
+			minimumSupportedFrameworkVersion = Version.lastAPICompatibleVersion;
 			initPluginFactory();
 			_pluginMap = new Dictionary();
 			_pluginList = new Vector.<PluginEntry>();

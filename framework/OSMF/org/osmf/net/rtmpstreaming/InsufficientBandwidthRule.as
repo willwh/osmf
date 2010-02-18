@@ -23,8 +23,7 @@ package org.osmf.net.rtmpstreaming
 {
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -63,7 +62,7 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function InsufficientBandwidthRule(metrics:MetricsProviderBase, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
+		public function InsufficientBandwidthRule(metrics:RTMPNetStreamMetrics, safetyMultiple:Number=BANDWIDTH_SAFETY_MULTIPLE)
 		{
 			super(metrics);
 			
@@ -117,9 +116,9 @@ package org.osmf.net.rtmpstreaming
         	return newIndex;
 		}
 		
-		private function get rtmpMetrics():RTMPMetricsProvider
+		private function get rtmpMetrics():RTMPNetStreamMetrics
 		{
-			return metrics as RTMPMetricsProvider;
+			return metrics as RTMPNetStreamMetrics;
 		}
 				
 		private function debug(...args):void
@@ -128,7 +127,7 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (_logger == null)
 				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.InsufficientBandwidthRule");
+					_logger = Log.getLogger("org.osmf.net.InsufficientBandwidthRule");
 				}
 				_logger.debug(">>> BandwidthRule."+args);
 			}

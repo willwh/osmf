@@ -26,13 +26,13 @@ package org.osmf.netmocker
 	
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.LoadTrait;
 	
 
-	public class MockDynamicStreamingNetLoader extends DynamicStreamingNetLoader implements IMockNetLoader
+	public class MockRTMPDynamicStreamingNetLoader extends RTMPDynamicStreamingNetLoader implements IMockNetLoader
 	{
-		public function MockDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null, mockNetNegotiatorFunction:Function = null)
+		public function MockRTMPDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null, mockNetNegotiatorFunction:Function = null)
 		{
 			mockNetNegotiatorFunction = mockNetNegotiatorFunction || createMockNetNegotiator;
 			_netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;

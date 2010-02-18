@@ -21,7 +21,7 @@
 *  Contributor: Adobe Systems Inc.
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import __AS3__.vec.Vector;
 	
@@ -29,18 +29,16 @@ package org.osmf.net.dynamicstreaming
 	import flash.net.NetStream;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamUtils;
-	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
-	import org.osmf.net.rtmpstreaming.InsufficientBandwidthRule;
-	import org.osmf.net.rtmpstreaming.InsufficientBufferRule;
-	import org.osmf.net.rtmpstreaming.RTMPMetricsProvider;
-	import org.osmf.net.rtmpstreaming.SufficientBandwidthRule;
+	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
-	 * DynamicStreamingNetLoader extends NetLoader to provide dynamic stream
+	 * RTMPDynamicStreamingNetLoader extends NetLoader to provide dynamic stream
 	 * switching functionality for RTMP streams. It does this by creating a
 	 * NetStreamSwitchManager for each LoadTrait that is loaded through this
 	 * object.
@@ -54,7 +52,7 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class DynamicStreamingNetLoader extends NetLoader
+	public class RTMPDynamicStreamingNetLoader extends NetLoader
 	{
 		/**
 		 * Constructor.
@@ -70,7 +68,7 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DynamicStreamingNetLoader(factory:NetConnectionFactoryBase=null)
+		public function RTMPDynamicStreamingNetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super(factory);
 		}
@@ -106,19 +104,19 @@ package org.osmf.net.dynamicstreaming
 			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
-				var metrics:RTMPMetricsProvider = new RTMPMetricsProvider(netStream);
+				var metrics:RTMPNetStreamMetrics = new RTMPNetStreamMetrics(netStream);
 				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 			}
 			return null;
 		}
 		
-		private function getDefaultSwitchingRules(metricsProvider:RTMPMetricsProvider):Vector.<SwitchingRuleBase>
+		private function getDefaultSwitchingRules(metrics:RTMPNetStreamMetrics):Vector.<SwitchingRuleBase>
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
-			rules.push(new SufficientBandwidthRule(metricsProvider));
-			rules.push(new InsufficientBandwidthRule(metricsProvider));
-			rules.push(new DroppedFramesRule(metricsProvider));
-			rules.push(new InsufficientBufferRule(metricsProvider));
+			rules.push(new SufficientBandwidthRule(metrics));
+			rules.push(new InsufficientBandwidthRule(metrics));
+			rules.push(new DroppedFramesRule(metrics));
+			rules.push(new InsufficientBufferRule(metrics));
 			return rules;
 		}
 	}

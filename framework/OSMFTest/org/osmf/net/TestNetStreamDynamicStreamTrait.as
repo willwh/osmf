@@ -19,13 +19,12 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import flash.events.*;
 	import flash.net.*;
 	
-	import org.osmf.net.*;
-	import org.osmf.net.rtmpstreaming.RTMPMetricsProvider;
+	import org.osmf.net.rtmpstreaming.RTMPNetStreamMetrics;
 	import org.osmf.netmocker.MockNetStream;
 	import org.osmf.traits.TestDynamicStreamTrait;
 	import org.osmf.utils.*;
@@ -81,7 +80,7 @@ package org.osmf.net.dynamicstreaming
 			}
 				
 			stream.play(dsr);
-			var metrics:MetricsProviderBase = new RTMPMetricsProvider(stream);
+			var metrics:NetStreamMetricsBase = new RTMPNetStreamMetrics(stream);
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
 			return new NetStreamDynamicStreamTrait(stream, new NetStreamSwitchManager(connection, stream, dsr, metrics, rules), dsr);
 		}

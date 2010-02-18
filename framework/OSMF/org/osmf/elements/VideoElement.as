@@ -45,6 +45,7 @@ package org.osmf.elements
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.metadata.TemporalFacetEvent;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetLoader;
@@ -52,16 +53,15 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamBufferTrait;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamDisplayObjectTrait;
+	import org.osmf.net.NetStreamDynamicStreamTrait;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.NetStreamPlayTrait;
 	import org.osmf.net.NetStreamSeekTrait;
 	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.dynamicstreaming.NetStreamDynamicStreamTrait;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
@@ -137,7 +137,7 @@ package org.osmf.elements
 		 */
 		public function VideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{	
-			super(resource, loader, [HTTPStreamingNetLoader, DynamicStreamingNetLoader, NetLoader]);
+			super(resource, loader, [HTTPStreamingNetLoader, RTMPDynamicStreamingNetLoader, NetLoader]);
 			
 			if (!(resource == null || resource is URLResource))			
 			{

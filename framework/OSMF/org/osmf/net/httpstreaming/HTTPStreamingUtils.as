@@ -32,8 +32,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
 	import org.osmf.utils.URL;

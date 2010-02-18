@@ -34,8 +34,8 @@ package org.osmf.smil.media
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
 	import org.osmf.smil.model.SMILElementType;

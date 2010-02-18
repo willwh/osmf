@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
+	import org.osmf.net.NetStreamMetricsBase;
 	
 	[ExcludeClass]
 	
@@ -30,12 +30,12 @@ package org.osmf.net.httpstreaming
 	 * 
 	 * Metrics provider for an HTTPNetStream.
 	 **/
-	public class HTTPMetricsProvider extends MetricsProviderBase
+	public class HTTPNetStreamMetrics extends NetStreamMetricsBase
 	{
 		/**
 		 * Constructor.
 		 **/
-		public function HTTPMetricsProvider(netStream:HTTPNetStream)
+		public function HTTPNetStreamMetrics(netStream:HTTPNetStream)
 		{
 			super(netStream);
 			

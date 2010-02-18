@@ -60,6 +60,8 @@ package org.osmf.utils
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * The most recent OSMF version which is API compatible with the current version.
 		 *  
 		 *  @langversion 3.0

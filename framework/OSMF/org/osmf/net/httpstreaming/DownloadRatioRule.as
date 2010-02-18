@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.SwitchingRuleBase;
 
 	[ExcludeClass]
 	
@@ -41,7 +40,7 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DownloadRatioRule(metrics:MetricsProviderBase, aggressiveUpswitch:Boolean=true)
+		public function DownloadRatioRule(metrics:HTTPNetStreamMetrics, aggressiveUpswitch:Boolean=true)
 		{
 			super(metrics);
 			
@@ -169,9 +168,9 @@ package org.osmf.net.httpstreaming
 			return httpMetrics.getBitrateForIndex(index) / httpMetrics.getBitrateForIndex(metrics.currentIndex);
 		}
 		
-		private function get httpMetrics():HTTPMetricsProvider
+		private function get httpMetrics():HTTPNetStreamMetrics
 		{
-			return metrics as HTTPMetricsProvider;
+			return metrics as HTTPNetStreamMetrics;
 		}
 		
 		private var aggressiveUpswitch:Boolean = false;

@@ -19,7 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import flexunit.framework.TestCase;
 

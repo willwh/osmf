@@ -59,8 +59,7 @@
 			
 			import org.osmf.utils.*;
 			
-			import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
-			import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+			import org.osmf.net.DynamicStreamingResource;
 			
 			// Force the inclusion of the PluginInfo class so we can 
 			// load the plugin statically

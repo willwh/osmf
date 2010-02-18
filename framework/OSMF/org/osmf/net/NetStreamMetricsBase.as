@@ -21,14 +21,13 @@
 *  Contributor: Adobe Systems Inc.
 *  
 *****************************************************/
-
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import flash.events.EventDispatcher;
 	import flash.net.NetStream;
 		
 	/**
-	 * The MetricsProviderBase class serves as a base class for a provider of
+	 * The NetStreamMetricsBase class serves as a base class for a provider of
 	 * run-time metrics to the switching rules.
 	 *  
 	 *  @langversion 3.0
@@ -36,7 +35,7 @@ package org.osmf.net.dynamicstreaming
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MetricsProviderBase extends EventDispatcher
+	public class NetStreamMetricsBase extends EventDispatcher
 	{		
 		/**
 		 * Constructor.
@@ -51,14 +50,13 @@ package org.osmf.net.dynamicstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function MetricsProviderBase(netStream:NetStream)
+		public function NetStreamMetricsBase(netStream:NetStream)
 		{
 			super();
 			
 			_netStream = netStream;
 			_enabled = true;
 			_targetBufferTime = 0;
-			_isLive = false;
 		}
 
 		/**
@@ -161,29 +159,10 @@ package org.osmf.net.dynamicstreaming
 			_targetBufferTime = value;
 		}
 		
-		/**
-		 * Indicates whether the stream is live.
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get isLive():Boolean
-		{
-			return _isLive; 
-		}
-		
-		public function set isLive(value:Boolean):void 
-		{
-			_isLive = value;
-		}
-		
 		private var _netStream:NetStream;
 		private var _resource:DynamicStreamingResource;
 		private var _currentIndex:int;
 		private var _maxAllowedIndex:int;
-		private var _isLive:Boolean = false;
 		private var _targetBufferTime:Number = 0;
 		private var _enabled:Boolean;
 	}

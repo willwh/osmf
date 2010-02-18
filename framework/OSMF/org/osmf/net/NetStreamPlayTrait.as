@@ -31,7 +31,6 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.utils.OSMFStrings;

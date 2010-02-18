@@ -24,9 +24,6 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * @private
-	 * TODO: Remove private tag when DRM content / 10.1 content is public.
-	 * 
 	 * A DRMEvent is dispatched when a DRMTrait's properties change.
 	 *
 	 *  @langversion 3.0

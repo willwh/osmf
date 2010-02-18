@@ -21,12 +21,12 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.NetStreamMetricsBase;
+	import org.osmf.net.SwitchingRuleBase;
 	
 	public class DynamicSwitchingRule extends SwitchingRuleBase
 	{
-		public function DynamicSwitchingRule(metrics:MetricsProviderBase)
+		public function DynamicSwitchingRule(metrics:NetStreamMetricsBase)
 		{
 			super(metrics);
 		}

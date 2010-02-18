@@ -53,9 +53,9 @@ package org.osmf.examples
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingNetLoader;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -777,7 +777,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a SerialElement that contains one dynamic streaming video chopped up into several subclips, each separated by the 5 second display of an image."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var netLoader:NetLoader = new DynamicStreamingNetLoader();
+				  	   		var netLoader:NetLoader = new RTMPDynamicStreamingNetLoader();
 				  	   		
 							var serialElement:SerialElement = new SerialElement();
 

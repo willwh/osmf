@@ -19,7 +19,7 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net.rtmpstreaming
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -31,7 +31,7 @@ package org.osmf.net.dynamicstreaming
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 
-	public class TestDynamicStreamingNetLoader extends TestNetLoader
+	public class TestRTMPDynamicStreamingNetLoader extends TestNetLoader
 	{
 		override public function setUp():void
 		{
@@ -63,12 +63,12 @@ package org.osmf.net.dynamicstreaming
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return netFactory.createDynamicStreamingNetLoader();
+			return netFactory.createRTMPDynamicStreamingNetLoader();
 		}
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			var mockLoader:MockDynamicStreamingNetLoader = loader as MockDynamicStreamingNetLoader;
+			var mockLoader:MockRTMPDynamicStreamingNetLoader = loader as MockRTMPDynamicStreamingNetLoader;
 			if (mockLoader)
 			{
 				if (resource === successfulResource)

@@ -23,7 +23,11 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * The BeaconEvent is dispatched by a Beacon when its HTTP request
 	 * either succeeds or fails.
 	 *  

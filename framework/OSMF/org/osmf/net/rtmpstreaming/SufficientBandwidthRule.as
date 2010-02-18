@@ -23,8 +23,7 @@ package org.osmf.net.rtmpstreaming
 {
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
-	import org.osmf.net.dynamicstreaming.SwitchingRuleBase;
+	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
@@ -40,7 +39,7 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * Constructor.
 		 **/
-		public function SufficientBandwidthRule(metrics:MetricsProviderBase)
+		public function SufficientBandwidthRule(metrics:RTMPNetStreamMetrics)
 		{
 			super(metrics);
 		}
@@ -101,9 +100,9 @@ package org.osmf.net.rtmpstreaming
         	return newIndex;
 		}
 		
-		private function get rtmpMetrics():RTMPMetricsProvider
+		private function get rtmpMetrics():RTMPNetStreamMetrics
 		{
-			return metrics as RTMPMetricsProvider;
+			return metrics as RTMPNetStreamMetrics;
 		}
 
 		private function debug(...args):void
@@ -112,7 +111,7 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (_logger == null)
 				{
-					_logger = Log.getLogger("org.osmf.net.dynamicstreaming.SufficientBandwidthRule");
+					_logger = Log.getLogger("org.osmf.net.SufficientBandwidthRule");
 				}
 				_logger.debug(">>> SwitchUpRule."+args);
 			}

@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dynamicstreaming
+package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
@@ -35,10 +35,6 @@ package org.osmf.net.dynamicstreaming
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	import org.osmf.net.NetClient;
-	import org.osmf.net.NetStreamCodes;
-	import org.osmf.net.NetStreamUtils;
-	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;
 	
 	CONFIG::LOGGING
@@ -68,20 +64,20 @@ package org.osmf.net.dynamicstreaming
 		 * @param connection The NetConnection for the NetStream that will be managed.
 		 * @param netStream The NetStream to manage.
 		 * @param dsResource The DynamicStreamingResource that is playing in the NetStream.
-		 * @param metricsProvider The provider of runtime metrics.
+		 * @param metrics The provider of runtime metrics.
 		 * @param switchingRules The switching rules that this manager will use.
 		 **/
 		public function NetStreamSwitchManager
 			( connection:NetConnection
 			, netStream:NetStream
 			, dsResource:DynamicStreamingResource
-			, metricsProvider:MetricsProviderBase
+			, metrics:NetStreamMetricsBase
 			, switchingRules:Vector.<SwitchingRuleBase>)
 		{
 			this.connection = connection;
 			this.netStream = netStream;
 			this.dsResource = dsResource;
-			this.metricsProvider = metricsProvider;
+			this.metrics = metrics;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 
 			_autoSwitch = true;
@@ -93,8 +89,6 @@ package org.osmf.net.dynamicstreaming
 									
 			failedDSI = new Dictionary();
 			
-			isLive = dsResource.streamType == StreamType.LIVE; 
-
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			// Make sure we get onPlayStatus first (by setting a higher priority)
@@ -155,7 +149,7 @@ package org.osmf.net.dynamicstreaming
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
 			_maxAllowedIndex = value;
-			metricsProvider.maxAllowedIndex = value;
+			metrics.maxAllowedIndex = value;
 		}
 		
 		/**
@@ -396,7 +390,7 @@ package org.osmf.net.dynamicstreaming
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					switching  = false;
 					actualIndex = dsResource.indexFromName(event.info.details);
-					metricsProvider.currentIndex = actualIndex;
+					metrics.currentIndex = actualIndex;
 					pendingTransitionsArray.push(actualIndex);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
@@ -443,13 +437,12 @@ package org.osmf.net.dynamicstreaming
 			initDSIFailedCounts();
 			
 			maxBufferLength = isLive ? BUFFER_STABLE_LIVE : BUFFER_STABLE_ONDEMAND;
-			metricsProvider.targetBufferTime = maxBufferLength;
-			metricsProvider.enabled = true;
-			metricsProvider.isLive = isLive;
+			metrics.targetBufferTime = maxBufferLength;
+			metrics.enabled = true;
 			
 			debug("prepareForSwitching() - max buffer=" + maxBufferLength+", isLive=" + isLive);
 			
-			metricsProvider.resource = dsResource;
+			metrics.resource = dsResource;
 			
 			netStream.bufferTime = isLive ? maxBufferLength : startingBuffer;
 			actualIndex = 0;
@@ -467,7 +460,7 @@ package org.osmf.net.dynamicstreaming
 			
 			setThrottleLimits(dsResource.streamItems.length - 1);
 			debug("prepareForSwitching() - Starting with stream index " + actualIndex + " at " + Math.round(dsResource.streamItems[actualIndex].bitrate) + " kbps");
-			metricsProvider.currentIndex = actualIndex;
+			metrics.currentIndex = actualIndex;
 		}
 		
 		private function initDSIFailedCounts():void
@@ -514,6 +507,11 @@ package org.osmf.net.dynamicstreaming
 		{
 			return (dsiFailedCounts[index] <= allowedFailuresPerItem);
 		}
+		
+		private function get isLive():Boolean
+		{
+			return dsResource.streamType == StreamType.LIVE;
+		}
 
 		/**
 		 * If DEBUG is true, traces out debug messages.
@@ -534,7 +532,7 @@ package org.osmf.net.dynamicstreaming
 		private var netStream:NetStream;
 		private var dsResource:DynamicStreamingResource;
 		private var switchingRules:Vector.<SwitchingRuleBase>;
-		private var metricsProvider:MetricsProviderBase;
+		private var metrics:NetStreamMetricsBase;
 		private var checkRulesTimer:Timer;
 		private var clearFailedCountsTimer:Timer;
 		private var actualIndex:int = -1;
@@ -545,7 +543,6 @@ package org.osmf.net.dynamicstreaming
 		private var pendingTransitionsArray:Array;
 		private var startingBuffer:Number;
 		private var maxBufferLength:Number;
-		private var isLive:Boolean;
 		private var connection:NetConnection;
 		private var reason:String;
 		private var _maxAllowedIndex:int;
@@ -563,7 +560,7 @@ package org.osmf.net.dynamicstreaming
 		
 		CONFIG::LOGGING
 		{
-			private static var logger:ILogger = Log.getLogger("org.osmf.net.dynamicstreaming.NetStreamSwitchManager");
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.NetStreamSwitchManager");
 		}
 	}
 }

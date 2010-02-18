@@ -25,10 +25,10 @@ package org.osmf.net.rtmpstreaming
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.netmocker.MockNetStream;
-	import org.osmf.netmocker.MockRTMPMetricsProvider;
+	import org.osmf.netmocker.MockRTMPNetStreamMetrics;
 	import org.osmf.utils.NetFactory;
 
 	public class TestSufficientBandwidthRule extends TestCase
@@ -39,7 +39,7 @@ package org.osmf.net.rtmpstreaming
 			var connection:NetConnection = netFactory.createNetConnection();
 			connection.connect(null);
 			
-			var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(netFactory.createNetStream(connection));
+			var metrics:MockRTMPNetStreamMetrics = new MockRTMPNetStreamMetrics(netFactory.createNetStream(connection));
 			
 			var suRule:SufficientBandwidthRule = new SufficientBandwidthRule(metrics);
 			

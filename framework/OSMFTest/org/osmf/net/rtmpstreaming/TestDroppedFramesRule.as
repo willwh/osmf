@@ -26,9 +26,9 @@ package org.osmf.net.rtmpstreaming
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.netmocker.MockRTMPMetricsProvider;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingItem;
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
+	import org.osmf.netmocker.MockRTMPNetStreamMetrics;
+	import org.osmf.net.DynamicStreamingItem;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.utils.NetFactory;
 
 	public class TestDroppedFramesRule extends TestCase
@@ -41,7 +41,7 @@ package org.osmf.net.rtmpstreaming
 			
 			var ns:NetStream = netFactory.createNetStream(connection);
 			
-			var metrics:MockRTMPMetricsProvider = new MockRTMPMetricsProvider(ns);
+			var metrics:MockRTMPNetStreamMetrics = new MockRTMPNetStreamMetrics(ns);
 			
 			var fdRule:DroppedFramesRule = new DroppedFramesRule(metrics);
 			

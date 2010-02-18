@@ -23,12 +23,12 @@ package org.osmf.netmocker
 {
 	import flash.net.NetStream;
 	
-	import org.osmf.net.dynamicstreaming.DynamicStreamingResource;
-	import org.osmf.net.dynamicstreaming.MetricsProviderBase;
+	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.NetStreamMetricsBase;
 
-	public class MockMetricsProvider extends MetricsProviderBase
+	public class MockNetStreamMetricsBase extends NetStreamMetricsBase
 	{
-		public function MockMetricsProvider(ns:NetStream)
+		public function MockNetStreamMetricsBase(ns:NetStream)
 		{
 			super(ns);
 			
@@ -49,7 +49,7 @@ package org.osmf.netmocker
 			_ns = ns;
 		}
 
-		 public function get reachedTargetBufferFull():Boolean
+		public function get reachedTargetBufferFull():Boolean
 		{
 			return this._reachedTargetBufferFull;
 		}
@@ -70,7 +70,7 @@ package org.osmf.netmocker
 		}
 		
 	
-		 public function get expectedFPS():Number
+		public function get expectedFPS():Number
 		{
 			return this._maxFrameRate;
 		}
@@ -80,7 +80,7 @@ package org.osmf.netmocker
 			this._maxFrameRate = value;
 		}
 		
-		 public function get droppedFPS():Number
+		public function get droppedFPS():Number
 		{
 			return this._frameDropRate;
 		}
@@ -90,7 +90,7 @@ package org.osmf.netmocker
 			this._frameDropRate = value;
 		}
 		
-		 public function get averageDroppedFPS():Number
+		public function get averageDroppedFPS():Number
 		{
 			return this._avgDroppedFrameRate;
 		}
@@ -100,7 +100,7 @@ package org.osmf.netmocker
 			this._avgDroppedFrameRate = value;
 		}
 		
-		 public function get maxBandwidth():Number
+		public function get maxBandwidth():Number
 		{
 			return this._lastMaxBitrate;
 		}
@@ -110,7 +110,7 @@ package org.osmf.netmocker
 			this._lastMaxBitrate = value;
 		}
 		
-		 public function get averageMaxBandwidth():Number
+		public function get averageMaxBandwidth():Number
 		{
 			return this._avgMaxBitrate;
 		}
@@ -130,22 +130,22 @@ package org.osmf.netmocker
 			this._currentIndex = value;
 		}
 		
-		 public function get maxIndex():int
+		public function get maxIndex():int
 		{
 			return _dsResource.streamItems.length - 1;
 		}
 		
-		 public function get dynamicStreamingResource():DynamicStreamingResource
+		public function get dynamicStreamingResource():DynamicStreamingResource
 		{
 			return this._dsResource;
 		}
 		
-		 public function set dynamicStreamingResource(value:DynamicStreamingResource):void
+		public function set dynamicStreamingResource(value:DynamicStreamingResource):void
 		{
 			this._dsResource = value;
 		}
 		
-		 public function get bufferLength():Number
+		public function get bufferLength():Number
 		{
 			return this._bufferLength;
 		}
@@ -155,7 +155,7 @@ package org.osmf.netmocker
 			this._bufferLength = value;
 		}
 		
-		 public function get bufferTime():Number
+		public function get bufferTime():Number
 		{
 			return this._bufferTime;
 		}
@@ -170,24 +170,16 @@ package org.osmf.netmocker
 			return _ns;
 		}
 		
-		 public function get optimizeForLiveBandwidthEstimate():Boolean
+		public function get optimizeForLiveBandwidthEstimate():Boolean
 		{
 			return _optimizeForLiveBandwidthEstimate;
 		}
 		
-		 public function set optimizeForLiveBandwidthEstimate(value:Boolean):void
+		public function set optimizeForLiveBandwidthEstimate(value:Boolean):void
 		{
 			_optimizeForLiveBandwidthEstimate = value;
 		}
-		
-		override public function enable():void
-		{
-		}
-		
-		override public function disable():void
-		{
-		}
-		
+				
 		private var _reachedTargetBufferFull:Boolean;
 		private var _currentBufferSize:Number;
 		private var _maxBufferSize:Number;

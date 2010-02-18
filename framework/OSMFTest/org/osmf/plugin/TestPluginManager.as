@@ -29,7 +29,7 @@ package org.osmf.plugin
 	import org.osmf.media.*;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.dynamicstreaming.*;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.utils.*;
 
 	public class TestPluginManager extends TestCase
@@ -239,34 +239,6 @@ package org.osmf.plugin
 			assertTrue(mediaElement != null);
 			assertEquals(0, pluginInfo.createCount);
 			assertEquals(2, pluginInfo.callbackCount);
-		}
-		
-		public function testMinimumVersionOverrride():void
-		{
-			var loaded:Boolean = false;
-			var loadedFailed:Boolean = false;
-			
-			
-			var pluginInfo:OldPluginInfo = new OldPluginInfo(new Vector.<MediaFactoryItem>);
-			
-			pluginManager = new PluginManager(mediaFactory, "0.5.0");
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onLoaded);
-			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
-			assertTrue(loaded);
-			
-			pluginManager = new PluginManager(mediaFactory, "0.6.0");
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onFailed);
-			pluginManager.loadPlugin(new PluginInfoResource(pluginInfo)); 
-			assertTrue(loadedFailed);
-			
-			function onLoaded(event:PluginManagerEvent):void
-			{
-				loaded = true;
-			}	
-			function onFailed(event:PluginManagerEvent):void
-			{
-				loadedFailed = true;
-			}			
 		}
 		
 		private function doLoadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
