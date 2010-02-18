@@ -165,23 +165,7 @@ package org.osmf.net.drm
 		{		
 			return drmContentData;
 		}
-					
-		/**
-		 * The required method of authentication.  Possible values are "anonymous"
-		 * and "usernameAndPassword".
-		 * 
-		 * Returns null if metadata hasn't been set.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get authenticationMethod():String
-		{			
-			return drmContentData ? drmContentData.authenticationMethod : null;
-		}
-		
+			
 		/**
 		 * Authenticates the media.  Can be used for both anonymous and credential-based
 		 * authentication.

@@ -1342,21 +1342,7 @@ package org.osmf.media
 			
 			return bytes;
 		}
-		
-		/**
-		 * The required method of authentication.  Possible values are "anonymous"
-		 * and "usernameAndPassword".  The default is "". 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get authenticationMethod():String
-		{
-			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).authenticationMethod : "";
-		}
-		
+	
 		/**
 		 * Authenticates the media.  Can be used for both anonymous and credential-based
 		 * authentication.  If the media has already been authenticated or authentication 

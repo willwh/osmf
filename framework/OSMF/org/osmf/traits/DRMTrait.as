@@ -67,24 +67,7 @@ package org.osmf.traits
 		{
 			super(MediaTraitType.DRM);
 		}
-		
-		/**
-		 * The required method of authentication.  Possible values are "anonymous"
-		 * and "usernameAndPassword".  The default is "".  This method should be overriden by
-		 * subclasses.  The DRMAuthentication enumeration contains these values.
-		 * 
-		 * @see DRMAuthenticationMethod 
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get authenticationMethod():String
-		{
-			return "";
-		}
-		
+				
 		/**
 		 * Authenticates the media.  Can be used for both anonymous and credential-based
 		 * authentication.  If the media has already been authenticated, this is a no-op.

@@ -27,6 +27,7 @@ package org.osmf.elements.f4mClasses
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
@@ -511,9 +512,10 @@ package org.osmf.elements.f4mClasses
 			}
 			
 			//Add subclip metadata from original resource
-			if (manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA))
+			var subclipMeta:Facet = manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA);
+			if (subclipMeta != null)
 			{
-				resource.metadata.addFacet(manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
+				resource.metadata.addFacet(subclipMeta);
 			}		
 			
 			return resource;

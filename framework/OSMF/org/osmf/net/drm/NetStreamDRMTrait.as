@@ -79,14 +79,6 @@ package org.osmf.net.drm
 		/**
 		 * @private
 		 */				
-		override public function get authenticationMethod():String
-		{
-			return drmServices.authenticationMethod;
-		}
-
-		/**
-		 * @private
-		 */				
 		override public function authenticate(username:String = null, password:String = null):void
 		{							
 			drmServices.authenticate(username, password);
