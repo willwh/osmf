@@ -27,6 +27,7 @@ package org.osmf.net
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -101,6 +102,24 @@ package org.osmf.net
 	   	public function set switchManager(value:NetStreamSwitchManager):void
 	   	{
 	   		_switchManager = value;
+	   	}
+	   	
+	   	/**
+	   	 * Defines the object's DVRTrait
+	   	 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+	   	 */	   	
+	   	public function set dvrTrait(value:DVRTrait):void
+	   	{
+	   		_dvrTrait = value;
+	   	}
+	   	
+	   	public function get dvrTrait():DVRTrait
+	   	{
+	   		return _dvrTrait; 
 	   	}
 	   	
 	   	/**
@@ -200,6 +219,7 @@ package org.osmf.net
 
 	   	private var _connection:NetConnection;
 	   	private var _switchManager:NetStreamSwitchManager;
+	   	private var _dvrTrait:DVRTrait;
 	   	private var _netConnectionFactory:NetConnectionFactory;
 
 	   	private var _shareable:Boolean;

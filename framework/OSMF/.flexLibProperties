@@ -192,6 +192,12 @@
     <classEntry path="org.osmf.net.SwitchingRuleBase"/>
     <classEntry path="org.osmf.net.drm.DRMServices"/>
     <classEntry path="org.osmf.net.drm.NetStreamDRMTrait"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastNetConnectionFactory"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastNetLoader"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastNetNegotiator"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastNetStream"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastStreamInfoRetreiver"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStreamMetrics"/>
@@ -249,6 +255,7 @@
     <classEntry path="org.osmf.traits.DRMAuthenticationMethod"/>
     <classEntry path="org.osmf.traits.DRMState"/>
     <classEntry path="org.osmf.traits.DRMTrait"/>
+    <classEntry path="org.osmf.traits.DVRTrait"/>
     <classEntry path="org.osmf.traits.DisplayObjectTrait"/>
     <classEntry path="org.osmf.traits.DynamicStreamTrait"/>
     <classEntry path="org.osmf.traits.LoadState"/>

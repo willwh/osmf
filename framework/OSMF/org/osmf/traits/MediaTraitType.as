@@ -125,6 +125,16 @@ package org.osmf.traits
 		 *  @productversion OSMF 1.0
 		 */
 		public static const DISPLAY_OBJECT:String = "displayObject";
+		
+		/**
+		 * Identifies an instance of a DVRTrait. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const DVR:String = "dvr";
 				
 		/**
 		 * @private
@@ -132,8 +142,7 @@ package org.osmf.traits
 		 * Array containing all trait types in the system.
 		 */
 		public static const ALL_TYPES:Vector.<String> = Vector.<String>
-			( 
-			  [   AUDIO
+			(	[ AUDIO
 				, BUFFER
 				, DRM
 				, DYNAMIC_STREAM
@@ -142,7 +151,8 @@ package org.osmf.traits
 				, SEEK
 				, TIME
 				, DISPLAY_OBJECT
-			  ]
+				, DVR
+			  	]
 			);
 	}
 }

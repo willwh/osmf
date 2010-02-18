@@ -392,6 +392,10 @@ package org.osmf.elements
 		{
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 
+			if (loadTrait.dvrTrait)
+			{
+	  			addTrait(MediaTraitType.DVR, loadTrait.dvrTrait);
+  			}
 	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
 	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
 			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, resource);
@@ -404,7 +408,7 @@ package org.osmf.elements
 			{
 	    		addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
 	  		}
-	    	
+	  		
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null && loadTrait.switchManager != null)
 			{
@@ -428,7 +432,8 @@ package org.osmf.elements
 			removeTrait(MediaTraitType.DISPLAY_OBJECT);
 	    	removeTrait(MediaTraitType.SEEK);
     		removeTrait(MediaTraitType.DYNAMIC_STREAM);
-	    	
+    		removeTrait(MediaTraitType.DVR);
+    		
 	    	CONFIG::FLASH_10_1
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
@@ -545,7 +550,6 @@ package org.osmf.elements
  			drmUpdater.update(type);
      	}
      	}
-     	
      	
      	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
      	

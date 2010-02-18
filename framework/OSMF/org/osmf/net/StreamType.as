@@ -68,5 +68,16 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ANY:String = "any";
+		
+		/**
+		 * The DVR stream type represents a possibly server side
+		 * recording live stream.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const DVR:String = "dvr";
 	}
 }

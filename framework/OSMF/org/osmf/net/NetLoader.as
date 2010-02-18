@@ -38,6 +38,7 @@ package org.osmf.net
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MimeTypes;
+	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -179,6 +180,20 @@ package org.osmf.net
 		{
 			return null;
 		}
+		
+		/**
+		 * The factory function for creating a DVRTrait
+		 *
+		 * @param resource 
+		 * @param connection
+		 * @param stream
+		 * @return 
+		 * 
+		 */		 		
+		protected function createDvrTrait(resource:MediaResourceBase, connection:NetConnection, stream:NetStream):DVRTrait
+		{
+			return null;
+		}
 
 		/**
 		 * @private
@@ -269,6 +284,7 @@ package org.osmf.net
 			netStream.client = new NetClient();
 			netLoadTrait.netStream = netStream;
 			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait);
+			netLoadTrait.dvrTrait = createDvrTrait(loadTrait.resource, connection, netStream);
 			netLoadTrait.shareable = shareable;
 			netLoadTrait.netConnectionFactory = factory;
 			

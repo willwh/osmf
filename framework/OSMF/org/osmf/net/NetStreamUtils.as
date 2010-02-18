@@ -183,8 +183,9 @@ package org.osmf.net
 			}
 			
 			// Check for subclip metadata (which is ignored for live).
-			if (startArg != PLAY_START_ARG_LIVE &&
-				resource != null)
+			if 	(	startArg != PLAY_START_ARG_LIVE
+				&&	resource != null
+				)
 			{
 				var kvFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA) as KeyValueFacet;
 				if (kvFacet != null)

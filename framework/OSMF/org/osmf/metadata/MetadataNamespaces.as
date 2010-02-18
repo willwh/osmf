@@ -54,6 +54,8 @@ package org.osmf.metadata
 		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
 		public static const DRM_ADDITIONAL_HEADER_KEY:String			= "DRMAdditionalHeader";
 		
+		public static const DVRCAST_METADATA:String						= "http://www.osmf.org/dvr/dvrcast/1.0";
+		
 		public static const REGION_TARGET:String						= "http://www.osmf.org/region/target";
 		
 		public static const LAYOUT_RENDERER_TYPE:String					= "http://www.osmf.org/layout/renderer_type";

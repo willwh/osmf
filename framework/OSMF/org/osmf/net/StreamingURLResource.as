@@ -43,18 +43,22 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource.
-		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
+		 * @param streamType The type of the stream. If null, defaults to StreamType.ANY.
+		 * @param dvrProtocol The server side DVR protocol to use. Null by default.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function StreamingURLResource(url:URL, streamType:String=null)
+		public function StreamingURLResource
+							( url:URL
+							, streamType:String = null
+							)
 		{
-			super(url);
-			
 			_streamType = streamType || StreamType.ANY;
+			
+			super(url);
 		}
 
 		/**

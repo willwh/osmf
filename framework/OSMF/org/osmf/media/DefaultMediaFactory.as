@@ -31,8 +31,9 @@ package org.osmf.media
 	import org.osmf.elements.SoundLoader;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
+	import org.osmf.net.dvr.DVRCastNetLoader;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	
 	/**
 	 * <p>Defines a default media factory.</p>
@@ -108,7 +109,6 @@ package org.osmf.media
 		private function init():void
 		{
 			var f4mLoader:F4MLoader = new F4MLoader(this);
-			
 			addItem 
 				( new MediaFactoryItem
 					( "org.osmf.elements.f4m"
@@ -116,6 +116,18 @@ package org.osmf.media
 					, function():MediaElement
 						{
 							return new F4MElement(null, f4mLoader);
+						}
+					)
+				);
+			
+			var dvrCastLoader:DVRCastNetLoader = new DVRCastNetLoader();
+			addItem
+				( new MediaFactoryItem
+					( "org.osmg.elements.video.dvr.dvrcast"
+					, dvrCastLoader.canHandleResource
+					, function():MediaElement
+						{
+							return new VideoElement(null, dvrCastLoader);
 						}
 					)
 				);
