@@ -154,6 +154,7 @@ package org.osmf.utils
 		public static const HTTP_IO_LOAD_ERROR:String					= "httpIOLoadError";
 		public static const HTTP_SECURITY_LOAD_ERROR:String				= "httpSecurityLoadError";
 		public static const BEACON_FAILURE_ERROR:String					= "beaconFailureError";
+		public static const DRM_UPDATE_ERROR:String						= "drmUpdateError";
 		
 		// Switching Reasons
 		
@@ -274,6 +275,7 @@ package org.osmf.utils
 			resourceDict[HTTP_IO_LOAD_ERROR]						= "I/O error when loading URL over HTTP";
 			resourceDict[HTTP_SECURITY_LOAD_ERROR]					= "Security error when loading URL over HTTP";
 			resourceDict[BEACON_FAILURE_ERROR]						= "Beacon failed to successfully ping its HTTP URL";
+			resourceDict[DRM_UPDATE_ERROR]							= "The upadte of the DRM subsystem failed";
 			
 			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
 			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";

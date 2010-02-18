@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
@@ -489,9 +488,8 @@ package org.osmf.elements
      	}
  			
      	private function onUpdateError(event:Event):void
-     	{
-     		// TODO: Fix this, we should use a valid error ID.
-     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(-1, "Error Updating DRM: " + event.toString())));
+     	{       		
+     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString())));
      		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
      	}
      	
