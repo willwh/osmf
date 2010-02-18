@@ -330,9 +330,9 @@ package org.osmf.elements.f4mClasses
 								<bootstrapInfo profile="named" id='1'>U2FtcGxlIEJvb3RzdHJhcCAx==</bootstrapInfo>
 								<bootstrapInfo profile="named" id='2'>U2FtcGxlIEJvb3RzdHJhcCAy==</bootstrapInfo>
 								<bootstrapInfo profile="named" id='3'>U2FtcGxlIEJvb3RzdHJhcCAz==</bootstrapInfo>
-								<media url="rtmp://example.com/myvideo/low"  bitrate="408" width="640" height="480" drmAdditionalHeaderId='1'/>
-								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600" drmAdditionalHeaderId='2'/>
-								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmAdditionalHeaderId='3'/>
+								<media url="http://example.com/myvideo/low"  bitrate="408" width="640" height="480" drmAdditionalHeaderId='1'/>
+								<media url="http://example.com/myvideo/medium" bitrate="908" width="800" height="600" drmAdditionalHeaderId='2'/>
+								<media url="http://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmAdditionalHeaderId='3'/>
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
