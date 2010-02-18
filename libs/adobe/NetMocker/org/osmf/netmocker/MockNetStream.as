@@ -118,6 +118,7 @@ package org.osmf.netmocker
 		 * <li>time - the time in seconds of the cue point</li>
 		 * <li>name - the name of the cue point (can be any string)</li>
 		 * <li>parameters - optional array of key/value pairs</li>
+		 * </ul>
 		 */
 		 public function set expectedCuePoints(value:Array):void
 		 {
