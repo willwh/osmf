@@ -489,9 +489,9 @@ package org.osmf.elements
      	}
  			
      	private function onUpdateError(event:Event):void
-     	{     	
-     		var errorID:int = event is ErrorEvent ? ErrorEvent(event).errorID : 0;
-     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(errorID, "Error Updating DRM: " + event.toString())));
+     	{
+     		// TODO: Fix this, we should use a valid error ID.
+     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(-1, "Error Updating DRM: " + event.toString())));
      		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
      	}
      	
