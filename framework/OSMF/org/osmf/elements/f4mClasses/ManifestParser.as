@@ -439,9 +439,13 @@ package org.osmf.elements.f4mClasses
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 				
-				metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
-				dynResource.metadata.addFacet(metadataFacet);
-				metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+				//Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resoruces always get a generated base url.
+				if (baseURL.protocol.substr(0,4) != "rtmp")
+				{
+					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					dynResource.metadata.addFacet(metadataFacet);
+					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+				}
 				
 				for each (media in value.media)
 				{	
