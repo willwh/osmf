@@ -453,16 +453,20 @@ package org.osmf.elements.compositeClasses
 			var child:MediaElement = event.target as MediaElement;
 			
 			var children:Array = childrenTraits[event.traitType]; 
-			children.splice(children.indexOf(child),1);
 			
-			dispatchEvent
-				( new TraitAggregatorEvent
-					( TraitAggregatorEvent.TRAIT_UNAGGREGATED
-					, event.traitType
-					, child.getTrait(event.traitType)
-					, child
-					)
-				);
+			if (children != null)
+			{
+				children.splice(children.indexOf(child),1);
+				
+				dispatchEvent
+					( new TraitAggregatorEvent
+						( TraitAggregatorEvent.TRAIT_UNAGGREGATED
+						, event.traitType
+						, child.getTrait(event.traitType)
+						, child
+						)
+					);
+			}
 		}
 		
 		private function onTraitAdded(event:MediaElementEvent):void

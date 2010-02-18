@@ -230,6 +230,7 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					logger.debug("getFileForTime URL = " + requestUrl);
 				}
+
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 				checkFragmentInventory(currentFAI.fragId, abst, frt);
@@ -510,7 +511,6 @@ package org.osmf.net.httpstreaming.f4f
 		private var totalDurationNotified:Boolean;
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
-//		private var abst:AdobeBootstrapBox;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
 		private var serverBaseURL:String;
 		private var streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;

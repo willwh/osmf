@@ -287,6 +287,11 @@ package org.osmf.net.httpstreaming.f4f
 		
 		private function calculateFragmentId(fdp:FragmentDurationPair, time:Number):uint
 		{
+			if (fdp.duration <= 0)
+			{
+				return fdp.firstFragment;
+			}
+			
 			return fdp.firstFragment + ((uint)(time - fdp.durationAccrued)) / fdp.duration;
 		}
 

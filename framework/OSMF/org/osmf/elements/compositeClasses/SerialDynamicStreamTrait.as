@@ -97,7 +97,7 @@ package org.osmf.elements.compositeClasses
 		 */
 		override protected function switchingChangeEnd(index:int, reason:String=null):void
 		{
-			if (switching)
+			if (switching && !preventSwitchingChangePropagate)
 			{
 				// Propagate to the current child.
 				traitOfCurrentChild.switchTo(index);
@@ -168,7 +168,9 @@ package org.osmf.elements.compositeClasses
 		private function onSwitchingChange(event:DynamicStreamEvent):void
 		{
 			// Propagate to composite trait.
+			preventSwitchingChangePropagate = true;
 			setSwitching(event.switching, traitOfCurrentChild.currentIndex, event.reason);
+			preventSwitchingChangePropagate = false;
 		}
 		
 		private function get traitOfCurrentChild():DynamicStreamTrait
@@ -180,5 +182,6 @@ package org.osmf.elements.compositeClasses
 		
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
+		private var preventSwitchingChangePropagate:Boolean;
 	}
 }
