@@ -431,8 +431,7 @@ package org.osmf.net.drm
 			updateDRMState
 				( DRMState.AUTHENTICATE_FAILED,
 					new MediaError
-						( event.errorID
-						, MediaErrorCodes.getMessageForErrorID(event.errorID)
+						( MediaErrorCodes.DRM_AUTHENTICATION_FAILED
 						)					
 				);
 		}

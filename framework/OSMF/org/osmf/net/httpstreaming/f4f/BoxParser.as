@@ -612,7 +612,7 @@ package org.osmf.net.httpstreaming.f4f
 
 		CONFIG::LOGGING
 		{
-			private var logger:ILogger = Log.getLogger("org.osmf.net.httpstreaming.f4f.BoxParser");;
+			private static const logger:ILogger = Log.getLogger("org.osmf.net.httpstreaming.f4f.BoxParser");;
 		}
 	}
 }

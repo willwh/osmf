@@ -83,6 +83,8 @@ package org.osmf.events
 		public static const DVRCAST_FAILED_RETREIVING_STREAM_INFO:int	= 3420;
 
 		/**
+		 * @private
+		 * 
 		 * Returns a message for the error of the specified ID.  If the error ID
 		 * is unknown, returns the empty string.
 		 * 
@@ -95,7 +97,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getMessageForErrorID(errorID:int):String
+		internal static function getMessageForErrorID(errorID:int):String
 		{
 			var message:String = "";
 			
