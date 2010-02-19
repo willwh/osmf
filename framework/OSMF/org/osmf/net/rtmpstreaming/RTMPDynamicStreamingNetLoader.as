@@ -35,7 +35,6 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.SwitchingRuleBase;
-	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * RTMPDynamicStreamingNetLoader extends NetLoader to provide dynamic stream
@@ -97,11 +96,10 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
 		{
 			// Only generate the switching manager if the resource is truly
 			// switchable.
-			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
 				var metrics:RTMPNetStreamMetrics = new RTMPNetStreamMetrics(netStream);

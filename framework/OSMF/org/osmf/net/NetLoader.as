@@ -141,13 +141,12 @@ package org.osmf.net
 		 *
 		 * The factory function for creating a NetStream.
 		 * 
-		 * @param connection The NetConnnection to associate with the new NetStream.
-		 * @param loadTrait The LoadTrait instance requesting this NetStream. Developers of custom NetStreams can use this 
-		 * LoadTrait reference to dispatch custom media errors against the LoadTrait.
+		 * @param connection The NetConnection to associate with the new NetStream.
+		 * @param resource The resource whose content will be played in the NetStream.
 		 * 
 		 * @return a new NetStream associated with the NetConnection.
 		**/
-		protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
+		protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			return new NetStream(connection);
 		}
@@ -157,14 +156,12 @@ package org.osmf.net
 		 * 
 		 * @param connection The NetConnection that's associated with the NetStreamSwitchManager.
 		 * @param netStream The NetStream upon which the NetStreamSwitchManager will operate.
-		 * @param loadTrait The LoadTrait instance requesting this NetStreamSwitchManager. Developers
-		 * of custom NetStreamSwitchManagers can use this LoadTrait reference to dispatch custom media
-		 * errors against the LoadTrait.
+		 * @param dsResource The resource upon which the NetStreamSwitchManager will operate.
 		 * 
 		 * @return null if multi-bitrate switching is not enabled for the NetStream returned by
 		 * createNetStream.
 		 **/
-		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
 		{
 			return null;
 		}
@@ -268,10 +265,10 @@ package org.osmf.net
 			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
 			
 			netLoadTrait.connection = connection;
-			var netStream:NetStream = createNetStream(connection, netLoadTrait);				
+			var netStream:NetStream = createNetStream(connection, netLoadTrait.resource as URLResource);				
 			netStream.client = new NetClient();
 			netLoadTrait.netStream = netStream;
-			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait);
+			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
 			netLoadTrait.dvrTrait = createDvrTrait(loadTrait.resource, connection, netStream);
 			netLoadTrait.netConnectionFactory = factory;
 			

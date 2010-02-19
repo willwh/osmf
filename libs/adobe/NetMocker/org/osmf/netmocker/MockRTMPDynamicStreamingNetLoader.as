@@ -24,11 +24,11 @@ package org.osmf.netmocker
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
-	import org.osmf.traits.LoadTrait;
 	
 
 	public class MockRTMPDynamicStreamingNetLoader extends RTMPDynamicStreamingNetLoader implements IMockNetLoader
@@ -120,7 +120,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
+	    override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 	    {
 			var mockNetStream:MockNetStream = new MockNetStream(connection);			
 			mockNetStream.client = new NetClient();			

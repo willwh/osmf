@@ -26,13 +26,13 @@ package org.osmf.net.dvr
 	import flash.net.NetStream;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.DVRTrait;
-	import org.osmf.traits.LoadTrait;
 
 	/**
 	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
@@ -82,9 +82,9 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
+		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			return new DVRCastNetStream(connection, loadTrait);
+			return new DVRCastNetStream(connection, resource);
 		}
 		
 		/**

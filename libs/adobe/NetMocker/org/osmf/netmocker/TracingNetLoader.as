@@ -25,10 +25,10 @@ package org.osmf.netmocker
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * A NetLoader which outputs all NetStatusEvents to the console.
@@ -51,7 +51,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
+	    override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 	    {
 			var ns:NetStream = new NetStream(connection);
 			ns.client = new NetClient();

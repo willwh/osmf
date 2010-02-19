@@ -4,11 +4,11 @@ package org.osmf.net.dvr
 	import flash.net.NetStream;
 	import flash.net.NetStreamPlayOptions;
 	
-	import org.osmf.traits.LoadTrait;
+	import org.osmf.media.URLResource;
 
 	public class DVRCastNetStream extends NetStream
 	{
-		public function DVRCastNetStream(connection:NetConnection, loadTrait:LoadTrait)
+		public function DVRCastNetStream(connection:NetConnection, resource:URLResource)
 		{
 			super(connection);
 		}

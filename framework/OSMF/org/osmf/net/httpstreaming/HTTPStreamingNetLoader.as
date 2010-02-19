@@ -34,7 +34,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
-	import org.osmf.traits.LoadTrait;
 
 	/**
 	 * A NetLoader subclass which adds support for HTTP streaming.
@@ -73,13 +72,13 @@ package org.osmf.net.httpstreaming
 		/**
 		 * @private
 		 */
-		override protected function createNetStream(connection:NetConnection,loadTrait:LoadTrait):NetStream
+		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
 			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler();
 			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler(indexHandler);
 			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler);
 			httpNetStream.manualSwitchMode = true;
-			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(loadTrait.resource as URLResource);
+			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);
 			return httpNetStream;
 		}
 		
@@ -93,11 +92,10 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, loadTrait:LoadTrait):NetStreamSwitchManager
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
 		{
 			// Only generate the switching manager if the resource is truly
 			// switchable.
-			var dsResource:DynamicStreamingResource = loadTrait.resource as DynamicStreamingResource;
 			if (dsResource != null)
 			{
 				var metrics:HTTPNetStreamMetrics = new HTTPNetStreamMetrics(netStream as HTTPNetStream);

@@ -26,10 +26,10 @@ package org.osmf.netmocker
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
-	import org.osmf.traits.LoadTrait;
 	
 	/**
 	 * A NetLoader which replaces the NetConnection and NetStream with mock
@@ -200,7 +200,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetStream(connection:NetConnection, loadTrait:LoadTrait):NetStream
+	    override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 	    {
 			var mockNetStream:MockNetStream = new MockNetStream(connection);
 			mockNetStream.client = new NetClient();
