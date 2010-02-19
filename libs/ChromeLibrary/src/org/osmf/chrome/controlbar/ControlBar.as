@@ -40,6 +40,7 @@ package org.osmf.chrome.controlbar
 		public static const EJECT_BUTTON:String = "ejectButton";
 		public static const FULL_SCREEN_ENTER:String = "fullScreenEnter";
 		public static const FULL_SCREEN_LEAVE:String = "fullScreenLeave";
+		public static const RECORD_BUTTON:String = "recordButton";
 		public static const SOUND_LESS:String = "soundLess";
 		public static const SOUND_MORE:String = "soundMore";
 		public static const PIN_UP_BUTTON:String = "pinUpButton";
@@ -118,6 +119,11 @@ package org.osmf.chrome.controlbar
 			widget = addWidget(SOUND_MORE, new SoundMoreButton());
 			widget.setRegistrationTarget(SOUND_LESS, Direction.LEFT);
 			widget.setPosition(1, 0);
+			
+			widget = addWidget(RECORD_BUTTON, new RecordButton());
+			widget.setRegistrationTarget(SOUND_MORE, Direction.LEFT);
+			widget.setPosition(3, 0);
+			widget.hint = "This live stream is currently being recorded on the server. Click to seek to the live position.";
 		}
 		
 		private function onPinButtonClick(event:MouseEvent):void

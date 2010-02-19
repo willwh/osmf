@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2010 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -13,9 +13,8 @@
 *  License for the specific language governing rights and limitations
 *  under the License.
 *   
-*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/

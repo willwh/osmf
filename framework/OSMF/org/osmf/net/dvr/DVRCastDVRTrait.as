@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2010 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -13,9 +13,8 @@
 *  License for the specific language governing rights and limitations
 *  under the License.
 *   
-*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
@@ -37,11 +36,15 @@ package org.osmf.net.dvr
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.traits.DVRTrait;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines a DVRTrait subclass that interacts with a DVRCast equiped
 	 * FMS server.
 	 */	
-	public class DVRCastTrait extends DVRTrait
+	public class DVRCastDVRTrait extends DVRTrait
 	{
 		/**
 		 * @inherited
@@ -51,7 +54,7 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DVRCastTrait(streamInfo:KeyValueFacet, connection:NetConnection, stream:NetStream)
+		public function DVRCastDVRTrait(streamInfo:KeyValueFacet, connection:NetConnection, stream:NetStream)
 		{
 			this.connection = connection;
 			this.stream = DVRCastNetStream(stream);
@@ -62,7 +65,12 @@ package org.osmf.net.dvr
 			
 			streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamName); 
 			streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
+			
+			configurateStreamInfoUpdateTimer(); 
 		}
+		
+		// Overrides
+		//
 		
 		/**
 		 * @inherited
@@ -75,6 +83,21 @@ package org.osmf.net.dvr
 		override public function get livePosition():Number
 		{
 			return _livePosition;
+		}
+		
+		/**
+		 * @inherited
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		override protected function isRecordingChangeEnd():void
+		{
+			configurateStreamInfoUpdateTimer();
+			
+			super.isRecordingChangeEnd();
 		}
 		
 		// Internals
@@ -91,13 +114,11 @@ package org.osmf.net.dvr
 		private var currentDuration:Number;
 		private var maxDuration:Number;
 		
-		private var _offline:Boolean;
-		private var _isRecording:Boolean;
 		private var _livePosition:Number;
-		private var _recordingStartTime:Date;
-		private var _recordingStopTime:Date;
 		
 		private var offset:Number;
+		
+		private static const STREAM_INFO_UPDATE_DELAY:Number		= 3000;
 		
 		private static const KEY_CALL_TIME:ObjectIdentifier 		= new ObjectIdentifier("callTime");
 		private static const KEY_OFFLINE:ObjectIdentifier 			= new ObjectIdentifier("offline");
@@ -115,30 +136,15 @@ package org.osmf.net.dvr
 		
 		private function updateProperties(streamInfo:KeyValueFacet):void
 		{
+			trace("updateProperties!");
+			
 			streamName 			= streamInfo.getValue(KEY_STREAM_NAME);
 			beginOffset 		= streamInfo.getValue(KEY_BEGIN_OFFSET) || 0;
 			endOffset 			= streamInfo.getValue(KEY_END_OFFSET) || 0;
 			currentDuration		= streamInfo.getValue(KEY_CURRENT_LENGTH) || 0;
 			maxDuration			= streamInfo.getValue(KEY_MAX_LENGTH) || 0;
 			
-			_offline 			= streamInfo.getValue(KEY_OFFLINE);
-			_isRecording		= streamInfo.getValue(KEY_IS_RECORDING);
-			_recordingStartTime	= streamInfo.getValue(KEY_RECORDING_START);
-			_recordingStopTime	= streamInfo.getValue(KEY_RECORDING_STOP);
-			
-			// Disable the netstream play and play2 if the stream is signalled
-			// to be offline:
-			stream.disabled = _offline;
-			if (_offline)
-			{
-				dispatchEvent
-					( new MediaErrorEvent
-						( MediaErrorEvent.MEDIA_ERROR
-						, false, false
-						, new MediaError(MediaErrorCodes.DVRCAST_CONTENT_OFFLINE)
-						)
-					);
-			}
+			setIsRecording(streamInfo.getValue(KEY_IS_RECORDING));
 		}
 		
 		private function calculateOffset():void
@@ -165,6 +171,28 @@ package org.osmf.net.dvr
 					= currentDuration > beginOffset
 						? beginOffset
 						: currentDuration;
+			}
+		}
+		
+		private function configurateStreamInfoUpdateTimer():void
+		{
+			if (isRecording)
+			{
+				if (streamInfoUpdateTimer == null)
+				{
+					streamInfoUpdateTimer = new Timer(STREAM_INFO_UPDATE_DELAY);
+					streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
+					streamInfoUpdateTimer.start();
+				}
+			}
+			else
+			{
+				if (streamInfoUpdateTimer != null)
+				{
+					streamInfoUpdateTimer.removeEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
+					streamInfoUpdateTimer.stop();
+					streamInfoUpdateTimer = null;
+				}
 			}
 		}
 		

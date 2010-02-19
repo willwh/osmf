@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2010 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -13,9 +13,8 @@
 *  License for the specific language governing rights and limitations
 *  under the License.
 *   
-*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
@@ -40,7 +39,12 @@ package org.osmf.traits
 	{
 		/**
 		 * Constructor
-		 */		
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */				
 		public function DVRTrait()
 		{
 			super(MediaTraitType.DVR);
@@ -51,15 +55,30 @@ package org.osmf.traits
 		 * 
 		 * It is mandatory for subclasses to provide an override for this
 		 * method.
-		 *  
-		 * @return true if the recording is ongoing.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		public final function get isRecording():Boolean
 		{
-			throw new IllegalOperationError
-				(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
+			return _isRecording;
 		}
-		protected final function set isRecording(value:Boolean):void
+		
+		/**
+		 * @private
+		 * 
+		 * Method that allows subclasses to set the isRecording property.
+		 * 
+		 * @param value The new value for the isRecording property.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		protected final function setIsRecording(value:Boolean):void
 		{
 			if (value != _isRecording)
 			{
@@ -78,7 +97,12 @@ package org.osmf.traits
 		 * 
 		 * It is mandatory for subclasses to provide an override for this
 		 * method.
-		 */		
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
 		public function get livePosition():Number
 		{
 			throw new IllegalOperationError
@@ -89,16 +113,25 @@ package org.osmf.traits
 		//
 		
 		/**
+		 * @private
+		 * 
 		 * Subclasses may override this method to do processing when the
 		 * isRecording property is about to change.
 		 * 
 		 * @param value The value that isRecording is about to be set to.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		protected function isRecordingChangeStart(value:Boolean):void
 		{	
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Subclasses may override this method to do processing when the
 		 * isRecording property has just been changed.
 		 * 
@@ -106,6 +139,11 @@ package org.osmf.traits
 		 * to dispatch the isRecordingChange event.</p> 
 		 * 
 		 * @param value The value that isRecording has been set to.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		protected function isRecordingChangeEnd():void
 		{

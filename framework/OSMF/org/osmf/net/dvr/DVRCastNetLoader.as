@@ -13,7 +13,6 @@
 *  License for the specific language governing rights and limitations
 *  under the License.
 *   
-*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
@@ -109,7 +108,7 @@ package org.osmf.net.dvr
 					
 	  			if (dvrcastFacet != null)
 	  			{
-	  				result = new DVRCastTrait(dvrcastFacet, connection, stream);
+	  				result = new DVRCastDVRTrait(dvrcastFacet, connection, stream);
 	  			}
 			}
 			
