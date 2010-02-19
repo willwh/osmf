@@ -26,8 +26,7 @@ package org.osmf.elements
 	import flash.events.StatusEvent;
 	import flash.media.Video;
 	import flash.net.NetStream;
-	import flash.system.SystemUpdater;
-	import flash.system.SystemUpdaterType;
+
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.DRMEvent;

@@ -27,8 +27,7 @@ package org.osmf.net.drm
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
-	import flash.system.SystemUpdater;
-	import flash.system.SystemUpdaterType;
+
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.DRMEvent;
