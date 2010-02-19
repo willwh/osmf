@@ -22,13 +22,12 @@
 package org.osmf.elements
 {
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
-	import flash.events.ProgressEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
 	import flash.media.Video;
 	import flash.net.NetStream;
+	import flash.system.SystemUpdater;
+	import flash.system.SystemUpdaterType;
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.DRMEvent;
@@ -491,17 +490,7 @@ package org.osmf.elements
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
     		(getTrait(MediaTraitType.LOAD) as LoadTrait).load();		
      	}
- 			
-     	private function onUpdateError(event:Event):void
-     	{       		
-     		dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString())));
-     		(getTrait(MediaTraitType.LOAD) as LoadTrait).unload();
-     	}
-     	
-     	private function onUpdateProgress(event:ProgressEvent):void
-     	{
-     		dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, event.bytesLoaded, event.bytesTotal));
-     	}
+ 	    	
      	     	
      	private function onNetStatusEvent(event:NetStatusEvent):void
      	{     		
@@ -527,7 +516,7 @@ package org.osmf.elements
 			{
 			if (event.info.code == NetStreamCodes.NETSTREAM_DRM_UPDATE)
 			{
-	     		update(SystemUpdaterType.DRM);
+				update(SystemUpdaterType.DRM);
 	     	}
 			}
 						
@@ -541,13 +530,12 @@ package org.osmf.elements
 		{
      	private function update(type:String):void
      	{
-     		var drmUpdater:SystemUpdater = new SystemUpdater();
- 			drmUpdater.addEventListener(Event.COMPLETE, onUpdateComplete);
- 			drmUpdater.addEventListener(ProgressEvent.PROGRESS, onUpdateProgress);
- 			drmUpdater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
- 			drmUpdater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
- 			drmUpdater.addEventListener(Event.CANCEL, onUpdateError);
- 			drmUpdater.update(type);
+     		if (drmTrait == null)
+			{
+				createDRMTrait();	
+			}	
+			var updater:SystemUpdater = drmTrait.update(type);	
+			updater.addEventListener(Event.COMPLETE, onUpdateComplete);			
      	}
      	}
      	

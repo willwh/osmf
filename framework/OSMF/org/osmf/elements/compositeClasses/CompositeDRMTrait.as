@@ -45,6 +45,7 @@ package org.osmf.elements.compositeClasses
 			if (drmLevels == null)
 			{
 				drmLevels = {};				
+				drmLevels[DRMState.UPDATING] = 0;
 				drmLevels[DRMState.AUTHENTICATE_FAILED] = 1;
 				drmLevels[DRMState.AUTHENTICATION_NEEDED] = 2;
 				drmLevels[DRMState.INITIALIZING]  = 3;

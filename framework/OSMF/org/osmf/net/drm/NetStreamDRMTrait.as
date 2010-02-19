@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net.drm
 {
+	
+	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.traits.DRMTrait;
@@ -28,6 +30,7 @@ package org.osmf.net.drm
 	CONFIG::FLASH_10_1
 	{
 	import flash.net.drm.DRMContentData;
+	import flash.system.SystemUpdater;
 	}
 
     [ExcludeClass]
@@ -75,6 +78,15 @@ package org.osmf.net.drm
 		{
 			return drmServices.drmMetadata;
 		}
+		
+		/**
+		 * Calls the System Updater's update function
+		 * @private
+		 */				
+		public function update(type:String):SystemUpdater
+		{
+			return drmServices.update(type);
+		}		
 
 		/**
 		 * @private

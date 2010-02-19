@@ -26,6 +26,9 @@ package org.osmf.net.drm
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.StatusEvent;
+	import flash.system.SystemUpdater;
+	import flash.system.SystemUpdaterType;
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.DRMEvent;
@@ -140,27 +143,15 @@ package org.osmf.net.drm
 						
 				}
 				catch (error:IllegalOperationError)
-				{
-					var e:Error = error;
+				{					
 					function onComplete(event:Event):void
-					{
-						updater.removeEventListener(IOErrorEvent.IO_ERROR, onComplete);
-						updater.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
+					{						
 						updater.removeEventListener(Event.COMPLETE, onComplete);
-						if (event.type == Event.COMPLETE)
-						{
-								drmMetadata = value;
-								return;
-						}	
-					}				
-					if (updater == null)
-					{
-						updater = new SystemUpdater();
-						updater.addEventListener(IOErrorEvent.IO_ERROR, onComplete);
-						updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onComplete);
-						updater.addEventListener(Event.COMPLETE, onComplete);
-						updater.update(SystemUpdaterType.DRM);				
-					}
+						drmMetadata = value;						
+					}			
+										
+					update(SystemUpdaterType.DRM);
+					updater.addEventListener(Event.COMPLETE, onComplete);
 				}
 			}
 		}
@@ -333,6 +324,31 @@ package org.osmf.net.drm
 			updateDRMState(DRMState.AUTHENTICATE_FAILED, error);
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Triggers and update of the DRM subsystem.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function update(type:String):SystemUpdater
+		{
+			updateDRMState(DRMState.UPDATING);		
+			if (updater == null) //An update hasn't been triggered
+			{
+				updater = new SystemUpdater();
+				updater.update(type);
+			}
+			//If there is an update already happening, just wait for it to finish.			
+			toggleErrorListeners(updater, true);					
+			return updater;		
+		}
+		
+		
+		
 		// Internals
 		//
 		
@@ -346,6 +362,8 @@ package org.osmf.net.drm
 		 */ 
 		private function retrieveVoucher():void
 		{				
+			updateDRMState(DRMState.AUTHENTICATING);
+			
 			drmManager.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMError);
 			drmManager.addEventListener(DRMStatusEvent.DRM_STATUS, onVoucherLoaded);
 						
@@ -436,6 +454,39 @@ package org.osmf.net.drm
 				);
 		}
 		
+		private function toggleErrorListeners(updater:SystemUpdater, on:Boolean):void
+		{
+			if (on)
+			{
+				updater.addEventListener(Event.COMPLETE, onUpdateComplete);
+				updater.addEventListener(Event.CANCEL, onUpdateComplete);
+				updater.addEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
+				updater.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
+				updater.addEventListener(StatusEvent.STATUS, onUpdateError);
+			}
+			else
+			{
+				updater.removeEventListener(Event.COMPLETE, onUpdateComplete);
+				updater.removeEventListener(Event.CANCEL, onUpdateComplete);
+				updater.removeEventListener(IOErrorEvent.IO_ERROR, onUpdateError);
+				updater.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onUpdateError);
+				updater.removeEventListener(StatusEvent.STATUS, onUpdateError);
+			}
+		}
+		
+		private function onUpdateComplete(event:Event):void
+		{
+			toggleErrorListeners(updater, false);
+		}
+		
+		private function onUpdateError(event:Event):void
+		{
+			toggleErrorListeners(updater, false);
+			//Error ID is supported in flash 10.1
+			updateDRMState(DRMState.AUTHENTICATE_FAILED, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString()));
+		}
+				
+		
 		private function updateDRMState(newState:String,  error:MediaError = null,  start:Date = null, end:Date = null, period:Number = 0 , token:Object=null, prompt:String = null ):void
 		{
 			_drmState = newState;
@@ -461,7 +512,8 @@ package org.osmf.net.drm
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;
 		private var drmManager:DRMManager;
-		private var updater:SystemUpdater;
+		//this is static, since the SystemUpdater needs to be trated as a singleton.  Only one update at a time.
+		private static var updater:SystemUpdater;
 	}
 	}
 }
