@@ -23,7 +23,9 @@ package org.osmf.media
 {
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicReferenceMediaElement;
 	import org.osmf.utils.SampleResourceHandler;
@@ -193,6 +195,21 @@ package org.osmf.media
 			assertTrue(mediaElement.resource != null);
 			assertTrue(mediaElement.resource is URLResource);
 			assertTrue(URLResource(mediaElement.resource).url.toString() == "http://www.example.com/a1");
+		}
+
+		public function testCreateMediaElementWithItemsToResolve():void
+		{
+			var a1:MediaFactoryItem = new MediaFactoryItem("org.osmf.a1", canAlwaysHandleResource, function ():MediaElement { return new VideoElement();});
+			mediaFactory.addItem(a1);
+			var a2:MediaFactoryItem = new MediaFactoryItem("org.osmf.a2", canAlwaysHandleResource, function ():MediaElement { return new VideoElement();});
+			mediaFactory.addItem(a2);
+			var a3:MediaFactoryItem = new MediaFactoryItem("org.othr.a3", canAlwaysHandleResource, function ():MediaElement { return new AudioElement();});
+			mediaFactory.addItem(a3);
+			var a4:MediaFactoryItem = new MediaFactoryItem("org.osmf.a4", canAlwaysHandleResource, function ():MediaElement { return new VideoElement();});
+			mediaFactory.addItem(a4);
+			
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a")));
+			assertTrue(mediaElement is AudioElement);
 		}
 		
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionReturnType():void
@@ -373,7 +390,7 @@ package org.osmf.media
 		{
 			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
+					, new SampleResourceHandler((urlToMatch ? null : canNeverHandleResource), urlToMatch).canHandleResource
 					, createDynamicMediaElement
 					, null
 					, type != null ? type : MediaFactoryItemType.STANDARD
@@ -389,7 +406,7 @@ package org.osmf.media
 		{
 			return new MediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
+					, new SampleResourceHandler((urlToMatch ? null : canNeverHandleResource), urlToMatch).canHandleResource
 					, createProxyElement
 					, null
 					, MediaFactoryItemType.PROXY
@@ -405,15 +422,20 @@ package org.osmf.media
 		{
 			return new ReferenceMediaFactoryItem
 					( id
-					, new SampleResourceHandler((urlToMatch ? null : canHandleResource), urlToMatch).canHandleResource
+					, new SampleResourceHandler((urlToMatch ? null : canNeverHandleResource), urlToMatch).canHandleResource
 					, type != null ? type : MediaFactoryItemType.STANDARD
 					, referenceUrlToMatch
 					);
 		}
 
-		private function canHandleResource(resource:MediaResourceBase):Boolean
+		private function canNeverHandleResource(resource:MediaResourceBase):Boolean
 		{
 			return false;
+		}
+
+		private function canAlwaysHandleResource(resource:MediaResourceBase):Boolean
+		{
+			return true;
 		}
 		
 		private var mediaFactory:MediaFactory;

@@ -138,7 +138,6 @@
     <classEntry path="org.osmf.media.MediaElement"/>
     <classEntry path="org.osmf.media.MediaFactory"/>
     <classEntry path="org.osmf.media.MediaFactoryItem"/>
-    <classEntry path="org.osmf.media.MediaFactoryItemResolver"/>
     <classEntry path="org.osmf.media.MediaFactoryItemType"/>
     <classEntry path="org.osmf.media.MediaPlayer"/>
     <classEntry path="org.osmf.media.MediaPlayerState"/>

@@ -96,9 +96,9 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DefaultMediaFactory(itemResolver:MediaFactoryItemResolver=null)
+		public function DefaultMediaFactory()
 		{
-			super(itemResolver);
+			super();
 			
 			init();
 		}

@@ -61,7 +61,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function MediaFactory(itemResolver:MediaFactoryItemResolver=null)
+		public function MediaFactory()
 		{
 			allItems = new Dictionary();
 			
@@ -69,9 +69,6 @@ package org.osmf.media
 			// that if this object is the only object that references a created
 			// MediaElement, then the MediaElement will still be garbage collected.
 			createdElements = new Dictionary(false);
-			
-			this.itemResolver
-				= (itemResolver == null)? new MediaFactoryItemResolver() : itemResolver;
 		}
 		
 		/**
@@ -309,7 +306,49 @@ package org.osmf.media
 			
 			return mediaElement;
 		}
-				
+		
+		// Protected
+		//
+		
+		/**
+		 * Returns the most appropriate MediaFactoryItem for the specified resource
+		 * out of the MediaFactoryItems in the specified list.
+		 * 
+		 * This method is invoked when <code>createMediaElement</code> is invoked
+		 * with a resource that more than one MediaFactoryItem can handle.  Subclasses
+		 * can override to select the most appropriate one.
+		 * 
+		 * The default behavior is to select the first item which is not "native" to
+		 * the framework, under the theory that plugins ought to take precedence over
+		 * core media types.  It makes this decision based on the presence or absence
+	 	 * of an id value which starts with "org.osmf".
+		 */
+		protected function resolveItems(resource:MediaResourceBase, items:Vector.<MediaFactoryItem>):MediaFactoryItem
+		{
+			if (resource == null || items == null)
+			{
+				return null;
+			}
+			
+			var firstNativeItem:MediaFactoryItem = null;
+			
+			for (var i:int = 0; i < items.length; i++)
+			{
+				var item:MediaFactoryItem = items[i] as MediaFactoryItem;
+				if (item.id.indexOf("org.osmf") == -1)
+				{
+					// Non-native, we'll take it.
+					return item;
+				}
+				else if (firstNativeItem == null)
+				{
+					firstNativeItem = item;
+				}
+			}
+			
+			return firstNativeItem;
+		}
+		
 		// Internals
 		//
 		
@@ -335,7 +374,7 @@ package org.osmf.media
 			
 			if (itemType == MediaFactoryItemType.STANDARD)
 			{
-				var item:MediaFactoryItem = itemResolver.resolveItems(resource, items) as MediaFactoryItem;
+				var item:MediaFactoryItem = resolveItems(resource, items) as MediaFactoryItem;
 				if (item != null)
 				{
 					mediaElement = invokeMediaElementCreationFunction(item);
@@ -350,7 +389,7 @@ package org.osmf.media
 				// we iterate from the end to the beginning simply to make
 				// it easier to assign the wrappedElement in our for loop.
 				// In the future, we may want to provide control for the
-				// ordering to the client through some type of resolver.
+				// ordering to the client through some type of resolver method.
 				for (var i:int = items.length; i > 0; i--)
 				{
 					var proxyItem:MediaFactoryItem = items[i-1] as MediaFactoryItem;
@@ -471,8 +510,6 @@ package org.osmf.media
 			}
 		}
 
-		private var itemResolver:MediaFactoryItemResolver;
-		
 		private var allItems:Dictionary;
 			// Keys are: String (MediaFactoryItemType)
 			// Values are: Vector.<MediaFactoryItem>
