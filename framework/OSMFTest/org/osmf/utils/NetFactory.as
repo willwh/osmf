@@ -25,14 +25,13 @@ package org.osmf.utils
 	import flash.net.NetStream;
 	
 	import org.osmf.net.NetClient;
-	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetNegotiator;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.MockNetConnection;
 	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.netmocker.MockNetNegotiator;
 	import org.osmf.netmocker.MockNetStream;
 	
 	/**
@@ -74,7 +73,7 @@ package org.osmf.utils
 		/**
 		 * Create and return a new NetLoader.
 		 **/
-		public function createNetLoader(factory:NetConnectionFactory=null):NetLoader
+		public function createNetLoader(factory:NetConnectionFactoryBase=null):NetLoader
 		{
 			return useMockObjects
 						? new MockNetLoader(factory)
@@ -101,16 +100,6 @@ package org.osmf.utils
 						: new NetConnection();
 		}
 		
-		/**
-		 * Create and return a new NetNegotiator.
-		 **/
-		public function createNetNegotiator():NetNegotiator
-		{
-			return useMockObjects
-						? new MockNetNegotiator()
-						: new NetNegotiator();
-		}
-
 		/**
 		 * Create and return a new NetStream.
 		 **/

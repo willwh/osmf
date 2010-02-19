@@ -86,6 +86,7 @@
     <classEntry path="org.osmf.events.BufferEvent"/>
     <classEntry path="org.osmf.events.ContainerChangeEvent"/>
     <classEntry path="org.osmf.events.DRMEvent"/>
+    <classEntry path="org.osmf.events.DVREvent"/>
     <classEntry path="org.osmf.events.DisplayObjectEvent"/>
     <classEntry path="org.osmf.events.DynamicStreamEvent"/>
     <classEntry path="org.osmf.events.FacetValueChangeEvent"/>
@@ -102,7 +103,6 @@
     <classEntry path="org.osmf.events.MediaPlayerStateChangeEvent"/>
     <classEntry path="org.osmf.events.MetadataEvent"/>
     <classEntry path="org.osmf.events.NetConnectionFactoryEvent"/>
-    <classEntry path="org.osmf.events.NetNegotiatorEvent"/>
     <classEntry path="org.osmf.events.PlayEvent"/>
     <classEntry path="org.osmf.events.PluginManagerEvent"/>
     <classEntry path="org.osmf.events.SeekEvent"/>
@@ -194,7 +194,6 @@
     <classEntry path="org.osmf.net.drm.NetStreamDRMTrait"/>
     <classEntry path="org.osmf.net.dvr.DVRCastNetConnectionFactory"/>
     <classEntry path="org.osmf.net.dvr.DVRCastNetLoader"/>
-    <classEntry path="org.osmf.net.dvr.DVRCastNetNegotiator"/>
     <classEntry path="org.osmf.net.dvr.DVRCastNetStream"/>
     <classEntry path="org.osmf.net.dvr.DVRCastStreamInfoRetreiver"/>
     <classEntry path="org.osmf.net.dvr.DVRCastTrait"/>

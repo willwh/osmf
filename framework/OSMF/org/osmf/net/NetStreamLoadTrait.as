@@ -123,44 +123,27 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-		 * The NetConnectionFactory associated with the NetConnection.
-		 * If the NetConnection is shared, then the NetConnection should
-		 * be closed by calling closeNetConnectionByResource() on the 
-		 * NetConnectionFactory instance rather than on the NetConnection itself.
+		 * The NetConnectionFactoryBase associated with the NetConnection.
+		 * If a NetConnectionFactory is used and the NetConnection is shared,
+		 * then the NetConnection should be closed by calling
+		 * closeNetConnectionByResource() on the NetConnectionFactory instance
+		 * rather than on the NetConnection itself.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    public function get netConnectionFactory():NetConnectionFactory
+	    public function get netConnectionFactory():NetConnectionFactoryBase
 	    {	   	
 	   		return _netConnectionFactory;
 	   	}
 	   	
-	   	public function set netConnectionFactory(value:NetConnectionFactory):void
+	   	public function set netConnectionFactory(value:NetConnectionFactoryBase):void
 	   	{
 	   		_netConnectionFactory = value;
 	   	}
 	   	
-	   	/**
-		 * Specifies whether or not the NetConnection may be shared between LoadTrait instances
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-	    public function get shareable():Boolean
-	    {	   	
-	   		return _shareable;
-	   	}
-	   	
-	   	public function set shareable(value:Boolean):void
-	   	{
-	   		_shareable = value;
-	   	}
-
 		override protected function loadStateChangeStart(newState:String):void
 		{
 			if (newState == LoadState.READY)
@@ -220,9 +203,8 @@ package org.osmf.net
 	   	private var _connection:NetConnection;
 	   	private var _switchManager:NetStreamSwitchManager;
 	   	private var _dvrTrait:DVRTrait;
-	   	private var _netConnectionFactory:NetConnectionFactory;
+	   	private var _netConnectionFactory:NetConnectionFactoryBase;
 
-	   	private var _shareable:Boolean;
 		private var isStreamingResource:Boolean;
 		private var _netStream:NetStream;
 	}

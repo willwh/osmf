@@ -7,7 +7,6 @@
     <classEntry path="org.osmf.netmocker.MockHTTPNetStreamMetrics"/>
     <classEntry path="org.osmf.netmocker.MockNetConnection"/>
     <classEntry path="org.osmf.netmocker.MockNetLoader"/>
-    <classEntry path="org.osmf.netmocker.MockNetNegotiator"/>
     <classEntry path="org.osmf.netmocker.MockNetStream"/>
     <classEntry path="org.osmf.netmocker.MockNetStreamMetricsBase"/>
     <classEntry path="org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader"/>
@@ -15,7 +14,6 @@
     <classEntry path="org.osmf.netmocker.NetConnectionExpectation"/>
     <classEntry path="org.osmf.netmocker.NetStatusEventInterceptor"/>
     <classEntry path="org.osmf.netmocker.TracingNetLoader"/>
-    <classEntry path="org.osmf.netmocker.TracingNetNegotiator"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

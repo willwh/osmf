@@ -26,23 +26,23 @@ package org.osmf.netmocker
 	
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.LoadTrait;
 	
 
 	public class MockRTMPDynamicStreamingNetLoader extends RTMPDynamicStreamingNetLoader implements IMockNetLoader
 	{
-		public function MockRTMPDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null, mockNetNegotiatorFunction:Function = null)
+		public function MockRTMPDynamicStreamingNetLoader(netConnectionFactory:NetConnectionFactory= null)
 		{
-			mockNetNegotiatorFunction = mockNetNegotiatorFunction || createMockNetNegotiator;
-			_netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			
 			if (netConnectionFactory == null)
 			{
-				netConnectionFactory = new DefaultNetConnectionFactory(createMockNetNegotiator);
+				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
 			super(netConnectionFactory);
+			
+			this.netConnectionFactory = netConnectionFactory;
 		}
 		
 		/**
@@ -50,12 +50,15 @@ package org.osmf.netmocker
 		 */
 		public function set netConnectionExpectation(value:NetConnectionExpectation):void
 		{
-			_netConnectionExpectation = value;			
+			if (netConnectionFactory is DefaultNetConnectionFactory)
+			{
+				DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectation = value;
+			}
 		}
 		
 		public function get netConnectionExpectation():NetConnectionExpectation
 		{
-			return _netConnectionExpectation;
+			return netConnectionFactory is DefaultNetConnectionFactory ? DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectation : null;
 		}
 		
 		/**
@@ -129,20 +132,12 @@ package org.osmf.netmocker
 			return mockNetStream;
 	    }
 	    
-	    private function createMockNetNegotiator():MockNetNegotiator
-	    {
-	    	var mockNetNegotiator:MockNetNegotiator = new MockNetNegotiator();
-	    	mockNetNegotiator.netConnectionExpectation = _netConnectionExpectation;
-	    	return mockNetNegotiator;
-	    }
-
-		private var _netConnectionExpectation:NetConnectionExpectation;
 	    private var _netStreamExpectedDuration:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
 	    private var _netStreamExpectedWidth:Number = 0;
 	    private var _netStreamExpectedHeight:Number = 0;
 	    private var _netStreamExpectedEvents:Array = [];
 
-		private var negotiator:MockNetNegotiator;   		
+		private var netConnectionFactory:NetConnectionFactoryBase;
 	}
 }

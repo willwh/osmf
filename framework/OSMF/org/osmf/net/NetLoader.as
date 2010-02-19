@@ -47,24 +47,11 @@ package org.osmf.net
 	 * The NetLoader class extends LoaderBase to provide
 	 * loading support to the AudioElement and VideoElement classes.
 	 * <p>Supports both streaming and progressive media resources.
-	 * If the resource URL is RTMP, connects to an RTMP server by invoking a NetConnectionFactory. 
+	 * If the resource URL is RTMP, connects to an RTMP server by invoking a NetConnectionFactoryBase. 
 	 * NetConnections may be shared between LoadTrait instances.
 	 * If the resource URL is HTTP, performs a <code>connect(null)</code>
 	 * for progressive downloads.</p>
 	 * 
-	 * @param allowConnectionSharing if true, the NetLoader will allow sharing. Note that this param implies
-	 * that an already existing NetConnection may be used to satisfy this LoadTrait, as well as whether a
-	 * new NetConnection established by this loader can be shared with future LoadTraits. 
-	 * 
-	 * @param factory the NetConnectionFactory instance to use for managing NetConnections. Since the NetConnectionFactory
-	 * facilitates connection sharing, this is an easy way of enabling global sharing, by creating a single NetConnectionFactory
-	 * instance within the player and then handing it to all NetLoader instances. 
-	 * 
-	 * @see NetConnectionFactory
-	 * @see flash.net.NetConnection
-	 * @see flash.net.NetStream
-	 * 
-	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -75,7 +62,7 @@ package org.osmf.net
 		/**
 		 * Constructor.
 		 * 
-		 * @param factory the NetConnectionFactoryBase instance to use for managing NetConnections.
+		 * @param factory The NetConnectionFactoryBase instance to use for managing NetConnections.
 		 * If factory is null, a NetConnectionFactory will be created and used. Since the
 		 * NetConnectionFactory class facilitates connection sharing, this is an easy way of
 		 * enabling global sharing, by creating a single NetConnectionFactory instance within
@@ -86,12 +73,13 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetLoader(factory:NetConnectionFactoryBase = null)
+		public function NetLoader(factory:NetConnectionFactoryBase=null)
 		{
 			super();
 
 			netConnectionFactory = factory || new NetConnectionFactory();
-			addListenersToFactory();
+			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
+			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onCreationError);
 		}
 		
 		/**
@@ -245,9 +233,9 @@ package org.osmf.net
 		 * @private
 		 * 
 	     * Unloads the media after validating the unload operation against the LoadTrait.
-	     * Closes the NetStream defined within the NetStreamLoadTrait object. 
-	     * If the shareable property of the object is true, calls the NetConnectionFactory to close() the NetConnection
-	     * otherwise closes the NetConnection directly. Dispatches the loadStateChange event with every state change.
+	     * Closes the NetStream defined within the NetStreamLoadTrait object,
+	     * as well as the NetConnection defined within the trait object.  Dispatches the
+	     * loadStateChange event with every state change.
 	     * 
 	     * @throws IllegalOperationError if the parameter is <code>null</code>.
 	     * @param loadTrait LoadTrait to be unloaded.
@@ -259,14 +247,14 @@ package org.osmf.net
 			
 			updateLoadTrait(loadTrait, LoadState.UNLOADING); 			
 			netLoadTrait.netStream.close();
-			if (netLoadTrait.shareable)
+			if (netLoadTrait.netConnectionFactory != null)
 			{
-				netLoadTrait.netConnectionFactory.closeNetConnectionByResource(netLoadTrait.resource as URLResource);
-			}		
+				netLoadTrait.netConnectionFactory.closeNetConnection(netLoadTrait.connection);
+			}
 			else
 			{
 				netLoadTrait.connection.close();
-			}	
+			}
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED); 				
 		}
 		
@@ -275,7 +263,7 @@ package org.osmf.net
 		 *
 		 *  @private
 		**/
-		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, shareable:Boolean = false, factory:NetConnectionFactory = null):void
+		private function finishLoading(connection:NetConnection, loadTrait:LoadTrait, factory:NetConnectionFactoryBase = null):void
 		{
 			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
 			
@@ -285,7 +273,6 @@ package org.osmf.net
 			netLoadTrait.netStream = netStream;
 			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait);
 			netLoadTrait.dvrTrait = createDvrTrait(loadTrait.resource, connection, netStream);
-			netLoadTrait.shareable = shareable;
 			netLoadTrait.netConnectionFactory = factory;
 			
 			updateLoadTrait(loadTrait, LoadState.READY);
@@ -304,27 +291,26 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Called once the NetConnectionFactory has successfully created a NetConnection
+		 * Called once the NetConnectionFactoryBase has successfully created a NetConnection
 		 * 
 		 * @private
 		 */
-		private function onCreated(event:NetConnectionFactoryEvent):void
+		private function onCreationComplete(event:NetConnectionFactoryEvent):void
 		{
 			finishLoading
 				( event.netConnection
 				, findAndRemovePendingLoad(event.resource)
-				, event.shareable
-				, event.currentTarget as NetConnectionFactory
+				, event.currentTarget as NetConnectionFactoryBase
 				);
 		}
 		
 		/**
-		 * Called once the NetConnectionFactory has failed to create a NetConnection
+		 * Called once the NetConnectionFactoryBase has failed to create a NetConnection
 		 * TBD - error dispatched at lower level.
 		 * 
 		 * @private
 		 */
-		private function onCreationFailed(event:NetConnectionFactoryEvent):void
+		private function onCreationError(event:NetConnectionFactoryEvent):void
 		{
 			var loadTrait:LoadTrait = findAndRemovePendingLoad(event.resource);
 			loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, event.mediaError));
@@ -343,12 +329,6 @@ package org.osmf.net
 			connection.client = new NetClient();
 			connection.connect(null);
 			finishLoading(connection, loadTrait);
-		}
-		
-		private function addListenersToFactory():void
-		{
-			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATED, onCreated);
-			netConnectionFactory.addEventListener(NetConnectionFactoryEvent.CREATION_FAILED, onCreationFailed);
 		}
 		
 		private function addPendingLoad(loadTrait:LoadTrait):void

@@ -41,32 +41,32 @@ package org.osmf.events
 	public class NetConnectionFactoryEvent extends Event 
 	{
 		/**
-		 * The NetConnectionFactoryEvent.CREATED constant defines the value of the
+		 * The NetConnectionFactoryEvent.CREATION_COMPLETE constant defines the value of the
 		 * type property of the event object for a NetConnectionFactoryEvent when the 
 		 * the class has succeeded in establishing a connected NetConnection.
 		 * 
-		 * @eventType CREATED 
+		 * @eventType CREATION_COMPLETE 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const CREATED:String = "created";
+		public static const CREATION_COMPLETE:String = "creationComplete";
 		
 		/**
-		 * The NetConnectionFactoryEvent.CREATION_FAILED constant defines the value of the
+		 * The NetConnectionFactoryEvent.CREATION_ERROR constant defines the value of the
 		 * type property of the event object for a NetConnectionFactoryEvent when the 
 		 * the class has failed at establishing a connected NetConnection.
 		 * 
-		 * @eventType CREATION_FAILED
+		 * @eventType CREATION_ERROR
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const CREATION_FAILED:String = "creationfailed";
+		public static const CREATION_ERROR:String = "creationError";
 
 		/**
 		 * Constructor.
@@ -76,9 +76,8 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param netConnection NetConnection to which this event refers.
  		 * @param resource URLResource to which this event refers.
- 		 * @param shareable Specifies if this NetConnection may be shared between LoadTraits.
-		 * @param mediaError Error associated with the creation attempt.  Should only be non-null
-		 * when type is CREATION_FAILED.
+ 		 * @param mediaError Error associated with the creation attempt.  Should only be non-null
+		 * when type is CREATION_ERROR.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -90,7 +89,6 @@ package org.osmf.events
 			, cancelable:Boolean=false
 			, netConnection:NetConnection=null
 			, resource:URLResource=null
-			, shareable:Boolean=false
 			, mediaError:MediaError=null
 			)
 		{
@@ -98,7 +96,6 @@ package org.osmf.events
 
 			_netConnection = netConnection;
 			_resource = resource;
-			_shareable = shareable;
 			_mediaError = mediaError;
 		}
 		
@@ -129,21 +126,8 @@ package org.osmf.events
 		}
 		
 		/**
-		 * Specifies if this NetConnection may be shared between LoadTraits.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get shareable():Boolean
-		{
-			return _shareable;
-		}
-
-		/**
 		 * Error associated with the creation attempt.  Should only be non-null
-		 * when type is CREATION_FAILED.
+		 * when type is CREATION_ERROR.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -160,12 +144,11 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new NetConnectionFactoryEvent(type, bubbles, cancelable, _netConnection, _resource, shareable, _mediaError);
+			return new NetConnectionFactoryEvent(type, bubbles, cancelable, _netConnection, _resource, _mediaError);
 		}  
 		
 		private var _netConnection:NetConnection;
 		private var _resource:URLResource;
-		private var _shareable:Boolean;
 		private var _mediaError:MediaError
 	}
 }

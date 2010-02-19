@@ -342,9 +342,6 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
-						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
-						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
@@ -356,7 +353,7 @@ package org.osmf.net
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, false));
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(false));
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{
@@ -380,9 +377,6 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						assertFalse(NetStreamLoadTrait(loadTrait1).shareable);
-						assertFalse(NetStreamLoadTrait(loadTrait2).shareable);
-						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
@@ -418,9 +412,6 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
-						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
-
 						loadTrait1.unload();
 					}
 				}
@@ -451,7 +442,7 @@ package org.osmf.net
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, false));
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(false));
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{
@@ -479,9 +470,6 @@ package org.osmf.net
 					}
 					else if (responses == 2)
 					{
-						assertFalse(NetStreamLoadTrait(loadTrait1).shareable);
-						assertFalse(NetStreamLoadTrait(loadTrait2).shareable);
-
 						loadTrait1.unload();
 					}
 				}
@@ -512,7 +500,7 @@ package org.osmf.net
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(netFactory.createNetNegotiator, true));
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(true));
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{
@@ -537,25 +525,17 @@ package org.osmf.net
 					responses++;
 					if (responses == 2)
 					{
-						assertTrue(NetStreamLoadTrait(loadTrait1).shareable);
-						assertTrue(NetStreamLoadTrait(loadTrait2).shareable);
-						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
 				}
 			}
 		}
 		
-		private function createNetNegotiator():NetNegotiator
-		{
-			return netFactory.createNetNegotiator();
-		}
-
 		private function doTestLoadHTTP():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
-			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory(createNetNegotiator));
+			var netLoader:NetLoader = netFactory.createNetLoader(new DefaultNetConnectionFactory());
 			var mockLoader:IMockNetLoader = netLoader as IMockNetLoader;
 			if (mockLoader != null)
 			{

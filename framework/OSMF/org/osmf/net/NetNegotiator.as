@@ -21,7 +21,6 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-
 package org.osmf.net
 {
 	CONFIG::LOGGING
@@ -42,15 +41,15 @@ package org.osmf.net
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.events.NetNegotiatorEvent;
+	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
 	/**
-	 * Dispatched when the negotiator has successfully connected.
+	 * Dispatched when the factory has successfully created and connected a NetConnection.
 	 *
-	 * @eventType org.osmf.events.NetNegotiatorEvent.CONNECTED
+	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_COMPLETE
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -58,12 +57,12 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event( name="connected", type="org.osmf.events.NetNegotiatorEvent")]
+	[Event(name="creationComplete", type="org.osmf.events.NetConnectionFactoryEvent")]
 	
 	/**
-	 * Dispatched when the negotiator has failed to connect.
+	 * Dispatched when the factory has failed to create and connect a NetConnection.
 	 *
-	 * @eventType org.osmf.events.NetNegotiatorEvent.CONNECTION_FAILED
+	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_ERROR
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -71,15 +70,12 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event( name="connectionFailed", type="org.osmf.events.NetNegotiatorEvent")]
-	
-	
+	[Event(name="creationError", type="org.osmf.events.NetConnectionFactoryEvent")]
+
 	/**
 	 * The NetNegotiator class attempts to negotiate its way through firewalls and proxy
 	 * servers, by trying multiple parallel connection attempts on differing port and protocol combinations.
-	 * The first connection to succeed is kept and those still pending are shut down. In the connect() method, 
-	 * the class can accept any resource that extends URLResource although it would expect to receive a FMSURL since
-	 * its purpose is specifically connecting to Flash Media Server. 
+	 * The first connection to succeed is kept and those still pending are shut down.
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -87,7 +83,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class NetNegotiator extends EventDispatcher 
+	internal class NetNegotiator extends EventDispatcher
 	{
 		/**
 		 * Constructor.
@@ -103,117 +99,16 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Accepts a URLResource and begins the process of finding a good connection. 
-		 * 
-		 * @param urlResource a URLResource, usually a FMSURL
-		 * 
-		 * @see org.osmf.utils.FMSURL
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function connect(urlResource:URLResource):void
+		public function createNetConnection(resource:URLResource, netConnectionURLs:Vector.<URL>, netConnections:Vector.<NetConnection>):void
 		{
-			this.urlResource = urlResource;
+			this.resource = resource;
+			this.netConnectionURLs = netConnectionURLs;
+			this.netConnections = netConnections;
 			
-			connectionAttempts = buildPortProtocolSequence(urlResource.url)
 			initializeConnectionAttempts();
-			tryToConnect(null); 
-		}  
-		
-		/** 
-		 * Assembles a vector of PortProtocol Objects to be used during the connection attempt.
-		 * The default protocols attempted when a "rtmp" connection is specified are 
-		 * "rtmp","rtmps", and "rtmpt". When a "rtmpe" connection is requested, both "rtmpe"
-		 * and rtmpte" protocols are attempted. When "rtmps","rtmpt" or "rtmpte" are requested,
-		 * only those protocols are attempted. The default ports are 1935, 443 and 80. If a specific port
-		 * is specified in the URLResource, then only that port is used.  
-		 * 
-		 * @param url the URL to be loaded
-		 * @returns a Vector of PortProtocol objects. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function buildPortProtocolSequence(url:URL):Vector.<PortProtocol>
-		{
-			var portProtocols:Vector.<PortProtocol> = new Vector.<PortProtocol>;
-			
-			var allowedPorts:String = (url.port == "") ? DEFAULT_PORTS: url.port;
-			var allowedProtocols:String;
-			switch (url.protocol)
-			{
-				case PROTOCOL_RTMP:
-					allowedProtocols = DEFAULT_PROTOCOLS_FOR_RTMP;
-					break;
-				case PROTOCOL_RTMPE:
-					allowedProtocols = DEFAULT_PROTOCOLS_FOR_RTMPE;
-					break;
-				case PROTOCOL_RTMPS:
-				case PROTOCOL_RTMPT:
-				case PROTOCOL_RTMPTE:
-					allowedProtocols = url.protocol;
-					break;
-			}
-			var portArray:Array = allowedPorts.split(",");
-			var protocolArray:Array = allowedProtocols.split(",");
-			for (var i:int = 0; i < protocolArray.length; i++)
-			{
-				for (var j:int = 0; j < portArray.length; j++)
-				{
-					var attempt:PortProtocol = new PortProtocol();
-					attempt.protocol = protocolArray[i];
-					attempt.port = portArray[j];
-					portProtocols.push(attempt);
-				}
-			} 
-			return portProtocols;
-		}
-		
-		/**
-		 * Assembles a connection address. 
-		 * 
-		 * @param url the URL to be loaded
-		 * @param portProtocol The port and protocol being used for the connection.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function buildConnectionAddress(url:URL, portProtocol:PortProtocol):String
-		{
-			var fmsURL:FMSURL = url is FMSURL ? url as FMSURL : new FMSURL(url.rawUrl);
-			var addr:String = portProtocol.protocol + "://" + fmsURL.host + ":" + portProtocol.port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
-			
-			// Pass along any query string params
-			if (fmsURL.query != null && fmsURL.query != "")
-			{
-				addr += "?" + fmsURL.query;
-			}
-			
-			return addr;
-		}
-		
-		/**
-		 *  The factory function for creating a NetConnection.  Allows third party plugins to
-		 *  create custom net connections.
-		 *
-		 *  @return An unconnected NetConnection.
-	     * 	@see flash.net.NetConnection
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function createNetConnection():NetConnection
-		{
-			return new NetConnection();
+			tryToConnect(null);
 		}
 		
 		/** 
@@ -223,19 +118,19 @@ package org.osmf.net
 		private function initializeConnectionAttempts():void
 		{
 			// Master timeout
-			timeOutTimer = new Timer(_timeout,1);
-			timeOutTimer.addEventListener(TimerEvent.TIMER_COMPLETE,masterTimeout);
+			timeOutTimer = new Timer(DEFAULT_TIMEOUT, 1);
+			timeOutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, masterTimeout);
 			timeOutTimer.start();
+			
 			// Individual attempt sequencer
 			connectionTimer = new Timer(CONNECTION_ATTEMPT_INTERVAL);
-			connectionTimer.addEventListener(TimerEvent.TIMER,tryToConnect);
+			connectionTimer.addEventListener(TimerEvent.TIMER, tryToConnect);
 			connectionTimer.start();
-			// Initialize counters and vectors
+			
+			// Initialize counters
 			failedConnectionCount = 0;
 			attemptIndex = 0;
-			netConnections = new Vector.<NetConnection>;
 		}
-
 		
 		/** 
 		 * Attempts to connect to FMS using a particular connection string
@@ -243,36 +138,31 @@ package org.osmf.net
 		 */
 		private function tryToConnect(evt:TimerEvent):void 
 		{
-			netConnections[attemptIndex] = createNetConnection();
-			netConnections[attemptIndex].addEventListener(NetStatusEvent.NET_STATUS,onNetStatus,false,0,true);
-    		netConnections[attemptIndex].addEventListener(SecurityErrorEvent.SECURITY_ERROR,onNetSecurityError,false,0,true);
-    		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR,onAsyncError,false,0,true);
+			netConnections[attemptIndex].addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 0, true);
+    		netConnections[attemptIndex].addEventListener(SecurityErrorEvent.SECURITY_ERROR, onNetSecurityError, false, 0, true);
+    		netConnections[attemptIndex].addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError, false, 0, true);
 			netConnections[attemptIndex].client = new NetClient();
 			try 
 			{
-				var host:String
-					= buildConnectionAddress
-						( urlResource.url
-						, connectionAttempts[attemptIndex]
-						);
-				netConnections[attemptIndex].connect(host);
+				var host:URL = netConnectionURLs[attemptIndex];
+				netConnections[attemptIndex].connect(host.rawUrl);
 				attemptIndex++;
-				if (attemptIndex >= connectionAttempts.length) 
+				if (attemptIndex >= netConnectionURLs.length) 
 				{
 					connectionTimer.stop();
 				}
 			}
 			catch (ioError:IOError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_IO_ERROR,ioError.message));
+				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_IO_ERROR, ioError.message));
 			}
 			catch (argumentError:ArgumentError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR,argumentError.message));
+				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR, argumentError.message));
 			}
 			catch (securityError:SecurityError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR,securityError.message));
+				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, securityError.message));
 			}
 		}
 		
@@ -285,14 +175,14 @@ package org.osmf.net
 			switch (event.info.code) 
 			{
 				case NetConnectionCodes.CONNECT_INVALIDAPP:
-					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APP,event.info.description));
+					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APP, event.info.description));
 					break;
 				case NetConnectionCodes.CONNECT_REJECTED:
-					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED,event.info.description));
+					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED, event.info.description));
     				break;
     			case NetConnectionCodes.CONNECT_FAILED:
     				failedConnectionCount++;
-    				if (failedConnectionCount >= connectionAttempts.length) 
+    				if (failedConnectionCount >= netConnectionURLs.length) 
     				{
     					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_FAILED));
     				}
@@ -300,11 +190,12 @@ package org.osmf.net
 				case NetConnectionCodes.CONNECT_SUCCESS:
 					shutDownUnsuccessfulConnections();
 					dispatchEvent
-						( new NetNegotiatorEvent
-							( NetNegotiatorEvent.CONNECTED
+						( new NetConnectionFactoryEvent
+							( NetConnectionFactoryEvent.CREATION_COMPLETE
 							, false
 							, false
 							, event.currentTarget as NetConnection
+							, resource
 							)
 						);
 					break;
@@ -325,9 +216,9 @@ package org.osmf.net
 				var nc:NetConnection = netConnections[i];
 				if (!nc.connected)
 				{
-					nc.removeEventListener(NetStatusEvent.NET_STATUS,onNetStatus);
-					nc.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,onNetSecurityError);
-					nc.removeEventListener(AsyncErrorEvent.ASYNC_ERROR,onAsyncError);
+					nc.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					nc.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onNetSecurityError);
+					nc.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
 					nc.close();
 					delete netConnections[i];
 				}
@@ -346,11 +237,12 @@ package org.osmf.net
 			}
 			shutDownUnsuccessfulConnections();
 			dispatchEvent
-				( new NetNegotiatorEvent
-					( NetNegotiatorEvent.CONNECTION_FAILED
+				( new NetConnectionFactoryEvent
+					( NetConnectionFactoryEvent.CREATION_ERROR
 					, false
 					, false
 					, null
+					, resource
 					, mediaError
 					)
 				);
@@ -383,33 +275,18 @@ package org.osmf.net
 			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT,"Failed to establish a NetConnection within the timeout period of " + DEFAULT_TIMEOUT + " ms."));
 		}
 		
-		private var urlResource:URLResource;
-		private var defaultPortProtocols:Vector.<PortProtocol>;
-		private var connectionAttempts:Vector.<PortProtocol>;
+		private var resource:URLResource;
+		private var netConnectionURLs:Vector.<URL>;
 		private var netConnections:Vector.<NetConnection>;
+		
 		private var failedConnectionCount:int;
 		private var timeOutTimer:Timer;
 		private var connectionTimer:Timer;
 		private var attemptIndex:int;
 		private var mediaError:MediaError;
-		private var _timeout:Number = DEFAULT_TIMEOUT;
 		
 		private static const DEFAULT_TIMEOUT:Number = 10000;
-		private static const DEFAULT_PORTS:String = "1935,443,80";
-		private static const DEFAULT_PROTOCOLS_FOR_RTMP:String = "rtmp,rtmps,rtmpt"
-		private static const DEFAULT_PROTOCOLS_FOR_RTMPE:String = "rtmpe,rtmpte";
 		private static const CONNECTION_ATTEMPT_INTERVAL:Number = 50;
-		
-		private static const PROTOCOL_RTMP:String = "rtmp";
-		private static const PROTOCOL_RTMPS:String = "rtmps";
-		private static const PROTOCOL_RTMPT:String = "rtmpt";
-		private static const PROTOCOL_RTMPE:String = "rtmpe";
-		private static const PROTOCOL_RTMPTE:String = "rtmpte";
-		private static const PROTOCOL_HTTP:String = "http";
-		private static const PROTOCOL_HTTPS:String = "https";
-		private static const PROTOCOL_FILE:String = "file";
-		private static const PROTOCOL_EMPTY:String = "";
-		private static const MP3_EXTENSION:String = ".mp3";
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
 	}

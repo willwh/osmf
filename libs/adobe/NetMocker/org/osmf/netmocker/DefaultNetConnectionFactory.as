@@ -21,26 +21,46 @@
 *****************************************************/
 package org.osmf.netmocker
 {
+	import flash.net.NetConnection;
+	
 	import org.osmf.net.NetConnectionFactory;
-	import org.osmf.net.NetNegotiator;
 	
 	public class DefaultNetConnectionFactory extends NetConnectionFactory
 	{
-		public function DefaultNetConnectionFactory(netNegotiatorCreationFunction:Function, allowNetConnectionSharing:Boolean=true)
+		public function DefaultNetConnectionFactory(allowNetConnectionSharing:Boolean=true)
 		{
-			super(allowNetConnectionSharing);
+			_netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
 			
-			this.netNegotiatorCreationFunction = netNegotiatorCreationFunction;
+			super(allowNetConnectionSharing);
 		}
 		
 		/**
-		 * Override this method to allow the use of a custom NetNegotiator
-		 */
-		override protected function createNetNegotiator():NetNegotiator
+		 * The client's expectation for how this object's NetConnection will
+		 * behave after connect() is called.
+		 **/ 
+		public function set netConnectionExpectation(value:NetConnectionExpectation):void
 		{
-			return netNegotiatorCreationFunction.call(this); 
+			this._netConnectionExpectation = value;
 		}
 		
-		private var netNegotiatorCreationFunction:Function;
+		public function get netConnectionExpectation():NetConnectionExpectation
+		{
+			return _netConnectionExpectation;
+		}
+		
+	    /**
+	     * @inheritDoc
+	     **/
+	    override protected function createNetConnectionObject():NetConnection
+	    {
+			var mockNetConnection:MockNetConnection = new MockNetConnection();
+			if (netConnectionExpectation != null)
+			{
+				mockNetConnection.expectation = this.netConnectionExpectation;
+			}
+			return mockNetConnection;
+	    }
+	    
+	    private var _netConnectionExpectation:NetConnectionExpectation;		
 	}
 }

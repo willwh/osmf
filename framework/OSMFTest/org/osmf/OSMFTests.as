@@ -208,9 +208,8 @@ package org.osmf
 			// NetStream
 			//
 			
-			addTestSuite(TestNetNegotiator);
-			addTestSuite(TestNetConnectionFactory);
 			addTestSuite(TestNetLoader);
+			addTestSuite(TestNetConnectionFactory);
  			addTestSuite(TestNetClient);
 			addTestSuite(TestNetStreamUtils);
 			addTestSuite(TestStreamingURLResource);

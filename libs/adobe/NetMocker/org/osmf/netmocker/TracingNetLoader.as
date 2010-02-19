@@ -28,7 +28,6 @@ package org.osmf.netmocker
 	import org.osmf.net.NetClient;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
-	import org.osmf.net.NetNegotiator;
 	import org.osmf.traits.LoadTrait;
 	
 	/**
@@ -44,7 +43,7 @@ package org.osmf.netmocker
 		 */
 		public function TracingNetLoader()
 		{
-			var factory:NetConnectionFactory = new DefaultNetConnectionFactory(createNetNegotiator);
+			var factory:NetConnectionFactory = new DefaultNetConnectionFactory();
 			
 			super(factory);
 		}
@@ -62,11 +61,6 @@ package org.osmf.netmocker
 	    
 	    // Internals
 	    //
-	    
-	    private function createNetNegotiator():NetNegotiator
-	    {
-	    	return new TracingNetNegotiator();
-	    }
 	    
 	    private function onNetStreamNetStatusEvent(event:NetStatusEvent):void
 	    {

@@ -22,19 +22,16 @@
 
 package com.akamai.osmf.net
 {
+	import flash.net.NetConnection;
+	
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
-	import org.osmf.net.NetNegotiator;
 	import org.osmf.utils.FMSURL;
 
 	/**
 	 * The AkamaiNetConnectionFactory class extends NetConnectionFactory to
-	 * provide the means to create a custom NetNegotiator (via the 
-	 * <code>createNetNegotiator</code> method) and create a 
-	 * unique key for connection sharing (via the <code>extractKey</code>
-	 * method).
-	 * 
-	 * @see NetNegotiator
+	 * provide the means to create a unique key for connection sharing and
+	 * support token authentication.
 	 * 
 	 */
 	public class AkamaiNetConnectionFactory extends NetConnectionFactory
@@ -48,27 +45,25 @@ package com.akamai.osmf.net
 		}
 
 		/**
-		 * Overrides the base class method to provide a custom NetNegotiator
-		 */
-		override protected function createNetNegotiator():NetNegotiator
-		{
-			return new AkamaiNetNegotiator();
-		}
-		
-
-		/**
 		 * @inheritDoc
 		 */
-		override protected function extractKey(resource:URLResource):String
+		override protected function createNetConnectionKey(resource:URLResource):String
 		{
 			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
 			var authToken:String = fmsURL.getParamValue("auth");
 			var aifpToken:String = fmsURL.getParamValue("aifp");
 			var slistToken:String = fmsURL.getParamValue("slist");
 			
-			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName + authToken + aifpToken + slistToken;
+			return super.createNetConnectionKey(resource) + authToken + aifpToken + slistToken;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		override protected function createNetConnectionObject():NetConnection
+		{
+			return new AkamaiNetConnection();
+		}
 	}
 }
 

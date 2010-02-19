@@ -35,23 +35,19 @@ package org.osmf.net
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.NetConnectionFactoryEvent;
-	import org.osmf.events.NetNegotiatorEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * The NetConnectionFactory class is used to generate connected NetConnection
 	 * instances and to manage sharing of these instances.  The NetConnectionFactory
-	 * uses a NetNegotiator to handle port/protocol negotiation.
+	 * can also handle port/protocol negotiation.
 	 * 
 	 * <p>NetConnectionFactory is stateless. Multiple parallel createNetConnection()
-	 * requests may be made. Concurrent requests to the same URL are handled
-	 * efficiently by a single NetNegotiatior per request.  A hash of the resource
-	 * URL is used as a key to determine which NetConnections may be shared.</p>
+	 * requests may be made. A hash of the resource URL is used as a key to determine
+	 * which NetConnections may be shared.</p>
 	 * 
-	 * @see NetNegotiator
-	 * 
-	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -62,7 +58,7 @@ package org.osmf.net
 		/**
 		 * Constructor.
 		 * 
-		 * @param allowNetConnectionSharing Boolean specifying whether created NetConnections
+		 * @param shareNetConnections Boolean specifying whether created NetConnections
 		 * may be shared or not.  The default is true.
 		 * 
 		 *  @langversion 3.0
@@ -70,11 +66,11 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetConnectionFactory(allowNetConnectionSharing:Boolean=true)
+		public function NetConnectionFactory(shareNetConnections:Boolean=true)
 		{
 			super();
 			
-			this.allowNetConnectionSharing = allowNetConnectionSharing;
+			this.shareNetConnections = shareNetConnections;
 		}
 		
 		/**
@@ -85,8 +81,6 @@ package org.osmf.net
 		 * and not pending is a new connection sequence initiated via a new NetNegotiator instance.
 		 * <p/>
 		 * 
-		 * @see NetNegotiator
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -94,19 +88,20 @@ package org.osmf.net
 		 */
 		override public function createNetConnection(resource:URLResource):void
 		{
-			var key:String = extractKey(resource);
+			var key:String = createNetConnectionKey(resource);
 			
 			// The first time this method is called, we create our dictionaries.
 			if (connectionDictionary == null)
 			{
 				connectionDictionary = new Dictionary();
+				keyDictionary = new Dictionary();
 				pendingDictionary = new Dictionary();
 			}
 			var sharedConnection:SharedConnection = connectionDictionary[key] as SharedConnection;
-			var connectionsUnderway:Vector.<PendingConnection> = pendingDictionary[key] as Vector.<PendingConnection>;
+			var connectionsUnderway:Vector.<URLResource> = pendingDictionary[key] as Vector.<URLResource>;
 			
 			// Check to see if we already have this connection ready to be shared.
-			if (sharedConnection != null && allowNetConnectionSharing)
+			if (sharedConnection != null && shareNetConnections)
 			{
 				CONFIG::LOGGING
 				{
@@ -116,12 +111,11 @@ package org.osmf.net
 				sharedConnection.count++;
 				dispatchEvent
 					( new NetConnectionFactoryEvent
-						( NetConnectionFactoryEvent.CREATED
+						( NetConnectionFactoryEvent.CREATION_COMPLETE
 						, false
 						, false
 						, sharedConnection.netConnection
 						, resource
-						, true
 						)
 					);
 			} 
@@ -130,40 +124,48 @@ package org.osmf.net
 			{
 				// Add this resource to the vector of resources to be notified once the
 				// connection has either succeeded or failed.
-				connectionsUnderway.push(new PendingConnection(resource, allowNetConnectionSharing));
+				connectionsUnderway.push(resource);
 			}
 			// If no connection is shareable or pending, then initiate a new connection attempt.
 			else
 			{
 				// Add this connection to the list of pending connections
-				var pendingConnections:Vector.<PendingConnection> = new Vector.<PendingConnection>();
-				pendingConnections.push(new PendingConnection(resource, allowNetConnectionSharing));
+				var pendingConnections:Vector.<URLResource> = new Vector.<URLResource>();
+				pendingConnections.push(resource);
 				pendingDictionary[key] = pendingConnections;
 				
-				// Perform the connection attempt
-				var negotiator:NetNegotiator = createNetNegotiator();
-				negotiator.addEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
-				negotiator.addEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
-				negotiator.connect(resource);
+				// Set up our URLs and NetConnections
+				var netConnectionURLs:Vector.<URL> = createNetConnectionURLs(resource.url);
+				var netConnections:Vector.<NetConnection> = new Vector.<NetConnection>();
+				for (var j:int = 0; j < netConnectionURLs.length; j++)
+				{
+					netConnections.push(createNetConnectionObject());
+				} 
 				
-				function onConnected(event:NetNegotiatorEvent):void
+				// Perform the connection attempt
+				var negotiator:NetNegotiator = new NetNegotiator();
+				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onConnected);
+				negotiator.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onConnectionFailed);
+				negotiator.createNetConnection(resource, netConnectionURLs, netConnections);
+				
+				function onConnected(event:NetConnectionFactoryEvent):void
 				{
 					CONFIG::LOGGING 
 					{	
 						logger.info("NetConnection established with: " + event.netConnection.uri);
 					}
 
-					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
-					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
+					negotiator.removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onConnected);
+					negotiator.removeEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onConnectionFailed);
 					
 					var pendingEvents:Vector.<NetConnectionFactoryEvent> = new Vector.<NetConnectionFactoryEvent>();
 					
 					// Dispatch an event for each pending LoadTrait.
-					var pendingConnections:Vector.<PendingConnection> = pendingDictionary[key];
+					var pendingConnections:Vector.<URLResource> = pendingDictionary[key];
 					for (var i:Number = 0; i < pendingConnections.length; i++)
 					{
-						var pendingConnection:PendingConnection = pendingConnections[i] as PendingConnection;
-						if (pendingConnection.shareable)
+						var pendingResource:URLResource = pendingConnections[i] as URLResource;
+						if (shareNetConnections)
 						{
 							var alreadyShared:SharedConnection = connectionDictionary[key] as SharedConnection;
 							if (alreadyShared != null)
@@ -176,6 +178,7 @@ package org.osmf.net
 								obj.count = 1;
 								obj.netConnection = event.netConnection;
 								connectionDictionary[key] = obj;
+								keyDictionary[obj.netConnection] = key;
 							}
 						} 
 						
@@ -184,12 +187,11 @@ package org.osmf.net
 						// request.
 						pendingEvents.push
 							( new NetConnectionFactoryEvent
-								( NetConnectionFactoryEvent.CREATED
+								( NetConnectionFactoryEvent.CREATION_COMPLETE
 								, false
 								, false
 								, event.netConnection
-								, pendingConnection.resource
-								, pendingConnection.shareable
+								, pendingResource
 								)
 							);
 					}
@@ -203,7 +205,7 @@ package org.osmf.net
 					}
 				}
 				
-				function onConnectionFailed(event:NetNegotiatorEvent):void
+				function onConnectionFailed(event:NetConnectionFactoryEvent):void
 				{
 					CONFIG::LOGGING 
 					{
@@ -211,21 +213,20 @@ package org.osmf.net
 						logger.info("NetConnection failed for: " + fmsURL.protocol + "://" + fmsURL.host + (fmsURL.port.length > 0 ? ":" + fmsURL.port : "" ) + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""));
 					}
 
-					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTED, onConnected);
-					negotiator.removeEventListener(NetNegotiatorEvent.CONNECTION_FAILED, onConnectionFailed);
+					negotiator.removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onConnected);
+					negotiator.removeEventListener(NetConnectionFactoryEvent.CREATION_ERROR, onConnectionFailed);
 		
 					// Dispatch an event for each pending resource.
-					var pendingConnections:Vector.<PendingConnection> = pendingDictionary[key];
-					for (var i:Number=0; i < pendingConnections.length; i++)
+					var pendingConnections:Vector.<URLResource> = pendingDictionary[key];
+					for each (var pendingResource:URLResource in pendingConnections)
 					{
 						dispatchEvent
 							( new NetConnectionFactoryEvent
-								( NetConnectionFactoryEvent.CREATION_FAILED
+								( NetConnectionFactoryEvent.CREATION_ERROR
 								, false
 								, false
 								, null
-								, resource
-								, false
+								, pendingResource
 								, event.mediaError
 								)
 							);
@@ -236,7 +237,9 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Manages the closing of a shared NetConnection using the resource as the key. NetConnections
+		 * @private
+		 * 
+		 * Manages the closing of a shared NetConnection. NetConnections
 		 * are only physically closed after the last sharer has requested a close().
 		 * 
 		 * @param resource the URLResource originally used to establish the NetConenction
@@ -246,33 +249,41 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function closeNetConnectionByResource(resource:URLResource):void
+		override public function closeNetConnection(netConnection:NetConnection):void
 		{
-			var key:String = extractKey(resource);
-			var obj:SharedConnection = connectionDictionary[key] as SharedConnection;
-			obj.count--;
-			if (obj.count == 0)
+			if (shareNetConnections)
 			{
-				obj.netConnection.close();
-				delete connectionDictionary[key];
+				var key:String = keyDictionary[netConnection] as String;
+				if (key != null)
+				{
+					var obj:SharedConnection = connectionDictionary[key] as SharedConnection;
+					obj.count--;
+					if (obj.count == 0)
+					{
+						netConnection.close();
+						
+						delete connectionDictionary[key];
+						delete keyDictionary[netConnection];
+					}
+				}
+			}
+			else
+			{
+				super.closeNetConnection(netConnection);
 			}
 		}
 		
+		// Protected
+		//
+		
 		/**
-		 * Override this method to allow the use of a custom NetNegotiator
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function createNetNegotiator():NetNegotiator
-		{
-			return new NetNegotiator();
-		}
-
-		/**
-		 * Generates a key to uniquely identify each connection. 
+		 * Generates a key to uniquely identify each connection.  This key is used
+		 * to determine whether a particularly URLResource can share an existing
+		 * NetConnection.  If the keys for two URLResources are identical, then
+		 * they can share the same NetConnection.
+		 * 
+		 * By default, this method returns a String consisting of the protocol,
+		 * host, port, and FMS application name. 
 		 * 
 		 * @param resource a URLResource
 		 * @return a String hash that uniquely identifies the NetConnection
@@ -282,24 +293,155 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function extractKey(resource:URLResource):String
+		protected function createNetConnectionKey(resource:URLResource):String
 		{
 			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
 			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName;
 		}
 		
-		private var allowNetConnectionSharing:Boolean;
+		/**
+		 *  The factory function for creating a NetConnection.
+		 *
+		 *  @return An unconnected NetConnection.
+	     * 	@see flash.net.NetConnection
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected function createNetConnectionObject():NetConnection
+		{
+			return new NetConnection();
+		}
+
+		/**
+		 * Assembles a vector of URLs that should be used during the connection
+		 * attempt.  The default protocols attempted when a "rtmp" connection is
+		 * specified are "rtmp", "rtmps", and "rtmpt". When a "rtmpe" connection
+		 * is requested, both "rtmpe" and "rtmpte" protocols are attempted. When
+		 * "rtmps","rtmpt" or "rtmpte" are requested, only those protocols are
+		 * attempted.  The default ports are 1935, 443 and 80. If a specific port
+		 * is specified in the URL, then only that port is used.
+		 * 
+		 * Subclasses can override this method to change this default behavior.
+		 * 
+		 * @param url the URL to be loaded
+		 **/
+		protected function createNetConnectionURLs(url:URL):Vector.<URL>
+		{
+			var urls:Vector.<URL> = new Vector.<URL>();
+			
+			var portProtocols:Vector.<PortProtocol> = buildPortProtocolSequence(url);
+			for each (var portProtocol:PortProtocol in portProtocols)
+			{
+				urls.push(buildConnectionAddress(url, portProtocol));
+			}
+			
+			return urls;
+		}
+		
+		// Internals
+		//
+				
+		/** 
+		 * Assembles a vector of PortProtocol Objects to be used during the connection attempt.
+		 * 
+		 * @param url the URL to be loaded
+		 * @returns a Vector of PortProtocol objects. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		private function buildPortProtocolSequence(url:URL):Vector.<PortProtocol>
+		{
+			var portProtocols:Vector.<PortProtocol> = new Vector.<PortProtocol>;
+			
+			var allowedPorts:String = (url.port == "") ? DEFAULT_PORTS: url.port;
+			var allowedProtocols:String;
+			switch (url.protocol)
+			{
+				case PROTOCOL_RTMP:
+					allowedProtocols = DEFAULT_PROTOCOLS_FOR_RTMP;
+					break;
+				case PROTOCOL_RTMPE:
+					allowedProtocols = DEFAULT_PROTOCOLS_FOR_RTMPE;
+					break;
+				case PROTOCOL_RTMPS:
+				case PROTOCOL_RTMPT:
+				case PROTOCOL_RTMPTE:
+					allowedProtocols = url.protocol;
+					break;
+			}
+			var portArray:Array = allowedPorts.split(",");
+			var protocolArray:Array = allowedProtocols.split(",");
+			for (var i:int = 0; i < protocolArray.length; i++)
+			{
+				for (var j:int = 0; j < portArray.length; j++)
+				{
+					var attempt:PortProtocol = new PortProtocol();
+					attempt.protocol = protocolArray[i];
+					attempt.port = portArray[j];
+					portProtocols.push(attempt);
+				}
+			} 
+			return portProtocols;
+		}
+		
+		/**
+		 * Assembles a connection address. 
+		 * 
+		 * @param url the URL to be loaded
+		 * @param portProtocol The port and protocol being used for the connection.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		private function buildConnectionAddress(url:URL, portProtocol:PortProtocol):URL
+		{
+			var fmsURL:FMSURL = url is FMSURL ? url as FMSURL : new FMSURL(url.rawUrl);
+			var addr:String = portProtocol.protocol + "://" + fmsURL.host + ":" + portProtocol.port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
+			
+			// Pass along any query string params
+			if (fmsURL.query != null && fmsURL.query != "")
+			{
+				addr += "?" + fmsURL.query;
+			}
+			
+			return new URL(addr);
+		}
+		
+		private var shareNetConnections:Boolean;
 		private var negotiator:NetNegotiator;
 		private var connectionDictionary:Dictionary;
+		private var keyDictionary:Dictionary;
 		private var pendingDictionary:Dictionary;
 		
+		private static const DEFAULT_PORTS:String = "1935,443,80";
+		private static const DEFAULT_PROTOCOLS_FOR_RTMP:String = "rtmp,rtmps,rtmpt"
+		private static const DEFAULT_PROTOCOLS_FOR_RTMPE:String = "rtmpe,rtmpte";
+
+		private static const PROTOCOL_RTMP:String = "rtmp";
+		private static const PROTOCOL_RTMPS:String = "rtmps";
+		private static const PROTOCOL_RTMPT:String = "rtmpt";
+		private static const PROTOCOL_RTMPE:String = "rtmpe";
+		private static const PROTOCOL_RTMPTE:String = "rtmpte";
+		private static const PROTOCOL_HTTP:String = "http";
+		private static const PROTOCOL_HTTPS:String = "https";
+		private static const PROTOCOL_FILE:String = "file";
+		private static const PROTOCOL_EMPTY:String = "";
+		private static const MP3_EXTENSION:String = ".mp3";
+
 		CONFIG::LOGGING
 		private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetConnectionFactory");
 	}
 }
 
 import flash.net.NetConnection;
-import org.osmf.media.URLResource;
 
 /**
  * Utility class for structuring shared connection data.
@@ -316,33 +458,3 @@ class SharedConnection
 	public var netConnection:NetConnection;
 }
 
-/**
- * Utility class for structuring pending connection data.
- *
- *  
- *  @langversion 3.0
- *  @playerversion Flash 10
- *  @playerversion AIR 1.5
- *  @productversion OSMF 1.0
- */
-class PendingConnection
-{
-	public function PendingConnection(resource:URLResource, shareable:Boolean)
-	{
-		_resource = resource;
-		_shareable = shareable;
-	}
-	
-	public function get resource():URLResource
-	{
-		return _resource;
-	}
-	
-	public function get shareable():Boolean
-	{
-		return _shareable;
-	}
-	
-	private var _resource:URLResource;
-	private var _shareable:Boolean;
-}

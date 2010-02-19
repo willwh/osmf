@@ -27,7 +27,7 @@ package org.osmf.netmocker
 	import flash.net.NetStream;
 	
 	import org.osmf.net.NetClient;
-	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.LoadTrait;
 	
@@ -43,17 +43,16 @@ package org.osmf.netmocker
 		 * @param netConnectionFactory the netConnection factory instance to be used
 		 * @param mockNetNegotiator the mock NetNegotiator to be used
 		 */
-		public function MockNetLoader(netConnectionFactory:NetConnectionFactory= null,mockNetNegotiatorFunction:Function = null)
+		public function MockNetLoader(netConnectionFactory:NetConnectionFactoryBase= null)
 		{
-			mockNetNegotiatorFunction = mockNetNegotiatorFunction || createMockNetNegotiator;
-			netConnectionExpectation = NetConnectionExpectation.VALID_CONNECTION;
-			
 			if (netConnectionFactory == null)
 			{
-				netConnectionFactory = new DefaultNetConnectionFactory(mockNetNegotiatorFunction);
+				netConnectionFactory = new DefaultNetConnectionFactory();
 			}
 			
 			super(netConnectionFactory);
+			
+			this.netConnectionFactory = netConnectionFactory;
 		}
 
 		/**
@@ -62,12 +61,15 @@ package org.osmf.netmocker
 		 **/ 
 		public function set netConnectionExpectation(value:NetConnectionExpectation):void
 		{
-			_netConnectionExpectation = value;
+			if (netConnectionFactory is DefaultNetConnectionFactory)
+			{
+				DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectation = value;
+			}
 		}
 		
 		public function get netConnectionExpectation():NetConnectionExpectation
 		{
-			return _netConnectionExpectation;
+			return netConnectionFactory is DefaultNetConnectionFactory ? DefaultNetConnectionFactory(netConnectionFactory).netConnectionExpectation : null;
 		}
 		
 		/**
@@ -211,15 +213,7 @@ package org.osmf.netmocker
 			mockNetStream.expectedCuePoints = _netStreamExpectedCuePoints;
 			return mockNetStream;
 	    }
-	    
-	    private function createMockNetNegotiator():MockNetNegotiator
-	    {
-	    	var mockNegotiator:MockNetNegotiator = new MockNetNegotiator();
-	    	mockNegotiator.netConnectionExpectation = _netConnectionExpectation;
-	    	return mockNegotiator;
-	    }
-	    
-	    private var _netConnectionExpectation:NetConnectionExpectation;
+	    	    
 	    private var _netStreamExpectedDuration:Number = 0;
 	    private var _netStreamExpectedBytesTotal:Number = 0;
 	    private var _netStreamExpectedSubclipDuration:Number = NaN;
@@ -227,5 +221,7 @@ package org.osmf.netmocker
 	    private var _netStreamExpectedHeight:Number = 0;
 	    private var _netStreamExpectedEvents:Array = [];
 	    private var _netStreamExpectedCuePoints:Array = [];
+	    
+	    private var netConnectionFactory:NetConnectionFactoryBase;
 	}
 }

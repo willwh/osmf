@@ -28,15 +28,16 @@ package org.osmf.net
 	
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
+	import flash.net.NetConnection;
 	
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * Dispatched when the factory has successfully created and connected a NetConnection
+	 * Dispatched when the factory has successfully created and connected a NetConnection.
 	 *
-	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATED
+	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_COMPLETE
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -44,12 +45,12 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="created", type="org.osmf.events.NetConnectionFactoryEvent")]
+	[Event(name="creationComplete", type="org.osmf.events.NetConnectionFactoryEvent")]
 	
 	/**
-	 * Dispatched when the factory has failed to create and connect a NetConnection
+	 * Dispatched when the factory has failed to create and connect a NetConnection.
 	 *
-	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_FAILED
+	 * @eventType org.osmf.events.NetConnectionFactoryEvent.CREATION_ERROR
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -57,7 +58,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="creationfailed", type="org.osmf.events.NetConnectionFactoryEvent")]
+	[Event(name="creationError", type="org.osmf.events.NetConnectionFactoryEvent")]
 	
 	/**
 	 * The NetConnectionFactoryBase is a base class for objects that need to
@@ -101,6 +102,24 @@ package org.osmf.net
 		public function createNetConnection(resource:URLResource):void
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
+		}
+		
+		/**
+		 * Closes the given NetConnection.  The client of a NetConnectionFactoryBase
+		 * should use this method to close NetConnections (as opposed to NetConnection.close)
+		 * because some NetConnectionFactoryBase subclasses might want fine-grained control
+		 * over the lifetime of the NetConnections they create.
+		 * 
+		 * @param resource The NetConnection to close.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function closeNetConnection(netConnection:NetConnection):void
+		{
+			netConnection.close();
 		}
 	}
 }

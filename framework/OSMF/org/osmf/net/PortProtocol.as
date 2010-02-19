@@ -23,7 +23,11 @@
 *****************************************************/
 package org.osmf.net
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * PortProtocol encapsulates a port-protocol pair.
 	 *  
 	 *  @langversion 3.0
@@ -31,7 +35,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class PortProtocol
+	internal class PortProtocol
 	{
 		/**
 		 * The port.
