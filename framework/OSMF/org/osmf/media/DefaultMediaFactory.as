@@ -123,7 +123,7 @@ package org.osmf.media
 			var dvrCastLoader:DVRCastNetLoader = new DVRCastNetLoader();
 			addItem
 				( new MediaFactoryItem
-					( "org.osmg.elements.video.dvr.dvrcast"
+					( "org.osmf.elements.video.dvr.dvrcast"
 					, dvrCastLoader.canHandleResource
 					, function():MediaElement
 						{
@@ -156,7 +156,7 @@ package org.osmf.media
 			
 			addItem
 				( new MediaFactoryItem
-					( "org.omsf.elements.video"
+					( "org.osmf.elements.video"
 					, new NetLoader().canHandleResource
 					, function():MediaElement
 						{
