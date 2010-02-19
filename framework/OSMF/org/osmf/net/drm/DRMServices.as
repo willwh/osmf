@@ -139,7 +139,7 @@ package org.osmf.net.drm
 						);
 						
 				}
-				catch (error:Error)
+				catch (error:IllegalOperationError)
 				{
 					var e:Error = error;
 					function onComplete(event:Event):void
@@ -455,6 +455,7 @@ package org.osmf.net.drm
 					)
 				);
 		}
+		
 		
 		private var _drmState:String = DRMState.INITIALIZING;
 		private var lastToken:ByteArray
