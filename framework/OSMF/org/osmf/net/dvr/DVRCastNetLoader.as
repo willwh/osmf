@@ -40,7 +40,7 @@ package org.osmf.net.dvr
 	public class DVRCastNetLoader extends NetLoader
 	{
 		/**
-		 * @inherited 
+		 * Constructor.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -53,12 +53,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */		
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
@@ -74,12 +69,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
@@ -87,14 +77,9 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		override protected function createDvrTrait(resource:MediaResourceBase, connection:NetConnection, stream:NetStream):DVRTrait
+		override protected function createDVRTrait(connection:NetConnection, netStream:NetStream, resource:URLResource):DVRTrait
 		{
 			var result:DVRTrait;
 	
@@ -108,7 +93,7 @@ package org.osmf.net.dvr
 					
 	  			if (dvrcastFacet != null)
 	  			{
-	  				result = new DVRCastDVRTrait(dvrcastFacet, connection, stream);
+	  				result = new DVRCastDVRTrait(dvrcastFacet, connection, netStream);
 	  			}
 			}
 			

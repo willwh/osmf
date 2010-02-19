@@ -144,7 +144,7 @@ package org.osmf.net
 		 * @param connection The NetConnection to associate with the new NetStream.
 		 * @param resource The resource whose content will be played in the NetStream.
 		 * 
-		 * @return a new NetStream associated with the NetConnection.
+		 * @return A new NetStream associated with the NetConnection.
 		**/
 		protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
@@ -158,8 +158,8 @@ package org.osmf.net
 		 * @param netStream The NetStream upon which the NetStreamSwitchManager will operate.
 		 * @param dsResource The resource upon which the NetStreamSwitchManager will operate.
 		 * 
-		 * @return null if multi-bitrate switching is not enabled for the NetStream returned by
-		 * createNetStream.
+		 * @return The NetStreamSwitchManager for the NetStream, null if multi-bitrate switching
+		 * is not enabled for the NetStream.
 		 **/
 		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
 		{
@@ -167,15 +167,16 @@ package org.osmf.net
 		}
 		
 		/**
-		 * The factory function for creating a DVRTrait
+		 * The factory function for creating a DVRTrait.
 		 *
-		 * @param resource 
-		 * @param connection
-		 * @param stream
-		 * @return 
-		 * 
+		 * @param connection The NetConnection that's associated with the DVRTrait.
+		 * @param netStream The NetStream that's associated with the DVRTrait.
+		 * @param resource The URLResource that's associated with the DVRTrait.
+		 *  
+		 * @return The DVRTrait for the NetStream, null if DVR is not enabled for
+		 * the NetStream.
 		 */		 		
-		protected function createDvrTrait(resource:MediaResourceBase, connection:NetConnection, stream:NetStream):DVRTrait
+		protected function createDVRTrait(connection:NetConnection, netStream:NetStream, resource:URLResource):DVRTrait
 		{
 			return null;
 		}
@@ -269,7 +270,7 @@ package org.osmf.net
 			netStream.client = new NetClient();
 			netLoadTrait.netStream = netStream;
 			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
-			netLoadTrait.dvrTrait = createDvrTrait(loadTrait.resource, connection, netStream);
+			netLoadTrait.dvrTrait = createDVRTrait(connection, netStream, netLoadTrait.resource as URLResource);
 			netLoadTrait.netConnectionFactory = factory;
 			
 			updateLoadTrait(loadTrait, LoadState.READY);

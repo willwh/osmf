@@ -49,6 +49,8 @@ package org.osmf.net.drm
 	import flash.system.SystemUpdater;
 	import flash.system.SystemUpdaterType;
 	}
+	
+	[ExcludeClass]
 		
 	/**
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
@@ -59,6 +61,8 @@ package org.osmf.net.drm
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]	
 
 	/**
+	 * @private
+	 * 
 	 * The DRMServices class is a utility class to adapt the Flash Player's DRM
 	 * to the OSMF-style DRM API.  DRMServices handles triggering updates to
 	 * the DRM subsystem, as well as triggering the appropriate events when
@@ -69,7 +73,7 @@ package org.osmf.net.drm
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class DRMServices extends EventDispatcher
+	internal class DRMServices extends EventDispatcher
 	{
 	CONFIG::FLASH_10_1
 	{

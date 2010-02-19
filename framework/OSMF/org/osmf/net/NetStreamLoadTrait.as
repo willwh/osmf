@@ -144,6 +144,9 @@ package org.osmf.net
 	   		_netConnectionFactory = value;
 	   	}
 	   	
+	   	/**
+	   	 * @private
+	   	 **/
 		override protected function loadStateChangeStart(newState:String):void
 		{
 			if (newState == LoadState.READY)

@@ -24,8 +24,7 @@ package org.osmf.utils
 	import flash.utils.Dictionary;
 	
 	/**
-	 * Repository for all user-facing strings.  Currently just stored as static
-	 * constants on the class.
+	 * Client class for accessing all user-facing strings.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -78,122 +77,377 @@ package org.osmf.utils
 		
 		// CompositeTraitFactory
 		
+		/**
+		 * @private
+		 **/
 		public static const COMPOSITE_TRAIT_NOT_FOUND:String 			= "compositeTraitNotFound";
 		
 		// General
 		
+		/**
+		 * @private
+		 **/
 		public static const INVALID_PARAM:String 						= "invalidParam";
+
+		/**
+		 * @private
+		 **/
 		public static const NULL_PARAM:String 							= "nullParam";
+
+		/**
+		 * @private
+		 **/
 		public static const FUNCTION_MUST_BE_OVERRIDDEN:String			= "functionMustBeOverridden";
+
+		/**
+		 * @private
+		 **/
 		public static const ALREADY_LISTED:String						= "alreadyListed";
+
+		/**
+		 * @private
+		 **/
 		public static const UNSUPPORTED_MEDIA_ELEMENT_TYPE:String		= "unsupportedMediaElementType";
+
+		/**
+		 * @private
+		 **/
 		public static const UNSUPPORTED_TRAIT_TYPE:String				= "unsupportedTraitType";
 		
 				
 		// MediaElement
 		
+		/**
+		 * @private
+		 **/
 		public static const TRAIT_INSTANCE_ALREADY_ADDED:String 		= "traitInstanceAlreadyAdded";
+
+		/**
+		 * @private
+		 **/
 		public static const TRAIT_RESOLVER_ALREADY_ADDED:String 		= "traitResolverAlreadyAdded";
+
+		/**
+		 * @private
+		 **/
 		public static const TRAIT_TYPE_MISMATCH:String					= "traitTypeMismatch";
 								
 		// LoadTrait
 		
+		/**
+		 * @private
+		 **/
 		public static const MUST_SET_LOADER_FOR_LOAD:String 			= "mustSetLoaderForLoad"
+
+		/**
+		 * @private
+		 **/
 		public static const MUST_SET_LOADER_FOR_UNLOAD:String 			= "mustSetLoaderForUnload";
+
+		/**
+		 * @private
+		 **/
 		public static const LOADER_CANT_HANDLE_RESOURCE:String 			= "loaderCantHandleResource";
 		
 		// LoaderBase
 		
+		/**
+		 * @private
+		 **/
 		public static const ALREADY_READY:String 						= "alreadyReady";
+
+		/**
+		 * @private
+		 **/
 		public static const ALREADY_LOADING:String 						= "alreadyLoading";
+
+		/**
+		 * @private
+		 **/
 		public static const ALREADY_UNLOADED:String 					= "alreadyUnloaded";
+
+		/**
+		 * @private
+		 **/
 		public static const ALREADY_UNLOADING:String 					= "alreadyUnloading";
 		
 		// NetLoader
 		
+		/**
+		 * @private
+		 **/
 		public static const NULL_NETSTREAM:String 						= "nullNetStream";
 		
 		// MediaPlayer
 		
+		/**
+		 * @private
+		 **/
 		public static const TRAIT_NOT_SUPPORTED:String 					= "traitNotSupported";		
 		
 		// Metadata
 		
+		/**
+		 * @private
+		 **/
 		public static const NAMESPACE_MUST_NOT_BE_EMPTY:String			= "namespaceMustNotBeEmpty";
+
+		/**
+		 * @private
+		 **/
 		public static const NAMESPACE_MUST_BE_UNIQUE:String				= "namespaceMustBeUnique";
+
+		/**
+		 * @private
+		 **/
 		public static const NAMESPACE_MUST_EQUAL_GROUP_NS:String		= "namespaceMustEqualGroupNS";		
 		
 		// MediaErrorCodes
 		
+		/**
+		 * @private
+		 **/
 		public static const CONTENT_IO_LOAD_ERROR:String				= "contentIOLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const CONTENT_SECURITY_LOAD_ERROR:String			= "contentSecurityLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const SWF_IO_LOAD_ERROR:String					= "swfIOLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const SWF_SECURITY_LOAD_ERROR:String				= "swfSecurityError";
+
+		/**
+		 * @private
+		 **/
 		public static const INVALID_PLUGIN_VERSION:String				= "invalidPluginVersion";
+
+		/**
+		 * @private
+		 **/
 		public static const INVALID_PLUGIN_IMPLEMENTATION:String		= "invalidPluginImplementation";
+
+		/**
+		 * @private
+		 **/
 		public static const INVALID_URL_PROTOCOL:String					= "invalidURLProtocol";
+
+		/**
+		 * @private
+		 **/
 		public static const PLAY_FAILED:String 							= "playbackFailed";
+
+		/**
+		 * @private
+		 **/
 		public static const STREAM_NOT_FOUND:String	 					= "streamNotFound";
+
+		/**
+		 * @private
+		 **/
 		public static const FILE_STRUCTURE_INVALID:String				= "fileStructureInvalid";
+
+		/**
+		 * @private
+		 **/
 		public static const NO_SUPPORTED_TRACK_FOUND:String				= "noSupportedTrackFound";
+
+		/**
+		 * @private
+		 **/
 		public static const PLAY_FAILED_NETCONNECTION_FAILURE:String 	= "playFailedNetConnectionFailure";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_REJECTED:String				= "netConnectionRejected";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_INVALID_APP:String			= "netConnectionInvalidApp";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_FAILED:String					= "netConnectionFailed";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_TIMEOUT:String				= "netConnectionTimeout";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_SECURITY_ERROR:String			= "netConnectionSecurityError";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_ASYNC_ERROR:String			= "netConnectionAsyncError";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_IO_ERROR:String				= "netConnectionIOError";
+
+		/**
+		 * @private
+		 **/
 		public static const NETCONNECTION_ARGUMENT_ERROR:String			= "netConnectionArgumentError";
+
+		/**
+		 * @private
+		 **/
 		public static const STREAMSWITCH_INVALID_INDEX:String			= "streamSwitchInvalidIndex";
+
+		/**
+		 * @private
+		 **/
 		public static const STREAMSWITCH_STREAM_NOT_FOUND:String		= "streamSwitchStreamNotFound";
+
+		/**
+		 * @private
+		 **/
 		public static const STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE:String = "streamSwitchStreamNotInManualMode";
+
+		/**
+		 * @private
+		 **/
 		public static const AUDIO_IO_LOAD_ERROR:String					= "audioIOLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const AUDIO_SECURITY_LOAD_ERROR:String			= "audioSecurityLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const PLAY_FAILED_NO_SOUND_CHANNELS:String		= "playFailedNoSoundChannels";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_IO_LOAD_ERROR:String					= "httpIOLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_SECURITY_LOAD_ERROR:String				= "httpSecurityLoadError";
+
+		/**
+		 * @private
+		 **/
 		public static const BEACON_FAILURE_ERROR:String					= "beaconFailureError";
+
+		/**
+		 * @private
+		 **/
 		public static const DRM_UPDATE_ERROR:String						= "drmUpdateError";
 		
 		// Switching Reasons
 		
+		/**
+		 * @private
+		 **/
 		public static const SWITCHING_UP_BANDWIDTH_SUFFICIENT:String	= "switchingUpBandwidthSufficient";
+
+		/**
+		 * @private
+		 **/
 		public static const SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT:String= "switchingDownBandwidthInsufficient";
+
+		/**
+		 * @private
+		 **/
 		public static const SWITCHING_DOWN_BUFFER_INSUFFICIENT:String	= "switchingDownBufferInsufficient";
+
+		/**
+		 * @private
+		 **/
 		public static const SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE:String= "switchingDownFrameDropUnacceptable";
+
+		/**
+		 * @private
+		 **/
 		public static const SWITCHING_MANUAL:String						= "switchingManual";
-				
+
 		// CompositeDisplayObjectTrait
 		
+		/**
+		 * @private
+		 **/
 		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "invalidLayoutRendererConstructor";	
 		
 		// MediaElementLayoutTarget
 		
+		/**
+		 * @private
+		 **/
 		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
 		
 		// MediaContainer
 		
+		/**
+		 * @private
+		 **/
 		public static const DIRECT_DISPLAY_LIST_MOD_ERROR:String		= "directDisplayListModError";
 		
 		// HTMLLoadTrait
 		
+		/**
+		 * @private
+		 **/
 		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
 		
 		// DRM
 		
+		/**
+		 * @private
+		 **/
 		public static const DRM_METADATA_NOT_SET:String					= "drmMetadataNotSet";
 		
 		// DRM Errors
 
+		/**
+		 * @private
+		 **/
 		public static const DRM_AUTHENTICATION_FAILED:String			= "drmAuthenticationFailed";
+
+		/**
+		 * @private
+		 **/
 		public static const DRM_NEEDS_AUTHENTICATION:String				= "drmNeedsAuthentication";
+
+		/**
+		 * @private
+		 **/
 		public static const DRM_CONTENT_NOT_YET_VALID:String			= "drmContentNotYetValid";
 		
 		// Flash Media Manifest Errors
 		
+		/**
+		 * @private
+		 **/
 		public static const F4M_PARSE_PROFILE_MISSING:String			= "f4mProfileMissing";
+
+		/**
+		 * @private
+		 **/
 		public static const F4M_PARSE_MEDIA_URL_MISSING:String			= "f4mMediaURLMissing";
+
+		/**
+		 * @private
+		 **/
 		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
 		
 		private static const resourceDict:Dictionary = new Dictionary();
