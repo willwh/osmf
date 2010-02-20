@@ -1451,9 +1451,8 @@ package org.osmf.media
 		}	
 		
 		/**
-		 * Returns the length of the playback window, in seconds.  Returns "" if
-		 * the DRM system isn't initialized yet.
-		 * 
+		 * Returns the URL of the server used to manage this content's DRM.  Returns ""
+		 * if the server is unknown.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

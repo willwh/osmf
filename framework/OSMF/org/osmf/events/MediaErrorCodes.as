@@ -74,13 +74,13 @@ package org.osmf.events
 		
 		public static const DRM_UPDATE_ERROR:int						= 380;
 		
-		public static const DRM_AUTHENTICATION_FAILED:int				= 3301;
-		public static const DRM_NEEDS_AUTHENTICATION:int				= 3330;
-		public static const DRM_CONTENT_NOT_YET_VALID:int				= 3331;
+		public static const DRM_AUTHENTICATION_FAILED:int				= 401;
+		public static const DRM_NEEDS_AUTHENTICATION:int				= 402;
+		public static const DRM_CONTENT_NOT_YET_VALID:int				= 403;
 		
-		public static const DVRCAST_SUBSCRIPTION_FAILED:int				= 3401;
-		public static const DVRCAST_CONTENT_OFFLINE:int					= 3410;
-		public static const DVRCAST_FAILED_RETREIVING_STREAM_INFO:int	= 3420;
+		public static const DVRCAST_SUBSCRIPTION_FAILED:int				= 501;
+		public static const DVRCAST_CONTENT_OFFLINE:int					= 502;
+		public static const DVRCAST_FAILED_RETREIVING_STREAM_INFO:int	= 503;
 
 		/**
 		 * @private

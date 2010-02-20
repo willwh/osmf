@@ -28,7 +28,8 @@ package org.osmf.elements
 	import org.osmf.utils.URL;
 	
 	/**
-	 * A MediaElement which pings a URL.
+	 * A MediaElement which maps the "play" operation to the request (via
+	 * an HTTP GET) of a URL.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -40,7 +41,8 @@ package org.osmf.elements
 		/**
 		 * Constructor.
 		 * 
-		 * @param url The URL to ping when this BeaconElement is played.
+		 * @param url The URL to retrieve (via an HTTP Get) when this
+		 * BeaconElement is played.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
