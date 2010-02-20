@@ -68,7 +68,7 @@ package org.osmf.elements.beaconClasses
 			
 			var beacon:Beacon = new Beacon(SUCCESSFUL_URL, loader);
 			beacon.addEventListener(BeaconEvent.PING_COMPLETE, addAsync(onTestPingWithSuccess, 4000));
-			beacon.addEventListener(BeaconEvent.PING_FAILED, dontCall);
+			beacon.addEventListener(BeaconEvent.PING_ERROR, dontCall);
 			beacon.ping();
 		}
 		
@@ -83,13 +83,13 @@ package org.osmf.elements.beaconClasses
 			
 			var beacon:Beacon = new Beacon(FAILED_URL, loader);
 			beacon.addEventListener(BeaconEvent.PING_COMPLETE, dontCall);
-			beacon.addEventListener(BeaconEvent.PING_FAILED, addAsync(onTestPingWithFailure, 4000));
+			beacon.addEventListener(BeaconEvent.PING_ERROR, addAsync(onTestPingWithFailure, 4000));
 			beacon.ping();
 		}
 		
 		private function onTestPingWithFailure(event:BeaconEvent):void
 		{
-			assertTrue(event.type == BeaconEvent.PING_FAILED);
+			assertTrue(event.type == BeaconEvent.PING_ERROR);
 			assertTrue(event.errorText == null);
 		}
 		
@@ -99,13 +99,13 @@ package org.osmf.elements.beaconClasses
 			
 			var beacon:Beacon = new Beacon(INVALID_URL, loader);
 			beacon.addEventListener(BeaconEvent.PING_COMPLETE, dontCall);
-			beacon.addEventListener(BeaconEvent.PING_FAILED, addAsync(onTestPingWithInvalidURL, 4000));
+			beacon.addEventListener(BeaconEvent.PING_ERROR, addAsync(onTestPingWithInvalidURL, 4000));
 			beacon.ping();
 		}
 		
 		private function onTestPingWithInvalidURL(event:BeaconEvent):void
 		{
-			assertTrue(event.type == BeaconEvent.PING_FAILED);
+			assertTrue(event.type == BeaconEvent.PING_ERROR);
 			assertTrue(event.errorText == null);
 		}
 		

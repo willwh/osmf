@@ -53,15 +53,15 @@ package org.osmf.elements.beaconClasses
 			{
 				// A play equals a "ping".
 				beacon.addEventListener(BeaconEvent.PING_COMPLETE, onBeaconEvent);
-				beacon.addEventListener(BeaconEvent.PING_FAILED, onBeaconEvent);
+				beacon.addEventListener(BeaconEvent.PING_ERROR, onBeaconEvent);
 				beacon.ping();
 				
 				function onBeaconEvent(event:BeaconEvent):void
 				{
 					beacon.removeEventListener(BeaconEvent.PING_COMPLETE, onBeaconEvent);
-					beacon.removeEventListener(BeaconEvent.PING_FAILED, onBeaconEvent);
+					beacon.removeEventListener(BeaconEvent.PING_ERROR, onBeaconEvent);
 					
-					if (event.type == BeaconEvent.PING_FAILED)
+					if (event.type == BeaconEvent.PING_ERROR)
 					{
 						dispatchEvent
 							( new MediaErrorEvent

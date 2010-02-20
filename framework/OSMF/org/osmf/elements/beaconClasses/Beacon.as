@@ -47,14 +47,14 @@ package org.osmf.elements.beaconClasses
 	/**
 	 * Dispatched when the Beacon's HTTP request has failed.
 	 * 
-	 * @eventType org.osmf.events.BeaconEvent.PING_FAILED
+	 * @eventType org.osmf.events.BeaconEvent.PING_ERROR
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="pingFailed",type="org.osmf.events.BeaconEvent")]
+	[Event(name="pingError",type="org.osmf.events.BeaconEvent")]
 
 	[ExcludeClass]
 	
@@ -130,13 +130,13 @@ package org.osmf.elements.beaconClasses
 					{
 						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 						
-						dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
+						dispatchEvent(new BeaconEvent(BeaconEvent.PING_ERROR));
 					}
 				}
 			}
 			else
 			{
-				dispatchEvent(new BeaconEvent(BeaconEvent.PING_FAILED));
+				dispatchEvent(new BeaconEvent(BeaconEvent.PING_ERROR));
 			}
 		}
 		
