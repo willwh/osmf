@@ -42,7 +42,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -214,7 +214,7 @@ package org.osmf.elements
 					loadedElem["defaultDuration"] = manifest.duration;	
 				}									
 				
-				FactoryLoadTrait(loadTrait).mediaElement = loadedElem;																		
+				LoadFromDocumentLoadTrait(loadTrait).mediaElement = loadedElem;																		
 				updateLoadTrait(loadTrait, LoadState.READY);		
 			}				
 		}

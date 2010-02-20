@@ -55,20 +55,20 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param oldValue Old IMediaContainer reference.
-		 * @param newValue New IMediaContainer reference.
+		 * @param oldContainer Old IMediaContainer reference.
+		 * @param newContainer New IMediaContainer reference.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ContainerChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldValue:IMediaContainer=null, newValue:IMediaContainer=null)
+		public function ContainerChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, oldContainer:IMediaContainer=null, newContainer:IMediaContainer=null)
 		{
 			super(type, bubbles, cancelable);
 			
-			_oldValue = oldValue;
-			_newValue = newValue;
+			_oldContainer = oldContainer;
+			_newContainer = newContainer;
 		}
 		
 		/**
@@ -79,9 +79,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get oldValue():IMediaContainer
+		public function get oldContainer():IMediaContainer
 		{
-			return _oldValue;
+			return _oldContainer;
 		}
 		
 		/**
@@ -92,9 +92,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get newValue():IMediaContainer
+		public function get newContainer():IMediaContainer
 		{
-			return _newValue;
+			return _newContainer;
 		}
 		
 		// Overrides
@@ -105,13 +105,13 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new ContainerChangeEvent(type, bubbles, cancelable, _oldValue, _newValue);
+			return new ContainerChangeEvent(type, bubbles, cancelable, _oldContainer, _newContainer);
 		}
 		
 		// Internals
 		//
 		
-		private var _oldValue:IMediaContainer;
-		private var _newValue:IMediaContainer;
+		private var _oldContainer:IMediaContainer;
+		private var _newContainer:IMediaContainer;
 	}
 }

@@ -88,6 +88,9 @@ package org.osmf.net
 									
 			failedDSI = new Dictionary();
 			
+			// We set the bandwidth in both directions based on a multiplier applied to the bitrate level. 
+			_bandwidthLimit = 1.4 * resource.streamItems[resource.streamItems.length-1].bitrate * 1000/8;
+			
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			// Make sure we get onPlayStatus first (by setting a higher priority)
@@ -236,15 +239,15 @@ package org.osmf.net
 		
 		/**
 		 * The multiplier to apply to the maximum bandwidth for the client.  The
-		 * default is 1.4 (140%).
+		 * default is 140% of the highest bitrate stream.
 		 **/
-		protected final function get bandwidthLimitMultiplier():Number
+		protected final function get bandwidthLimit():Number
 		{
-			return _bandwidthLimitMultiplier;
+			return _bandwidthLimit;
 		}
-		protected final function set bandwidthLimitMultiplier(value:Number):void
+		protected final function set bandwidthLimit(value:Number):void
 		{
-			_bandwidthLimitMultiplier = value;
+			_bandwidthLimit = value;
 		}
 						
 		// Internals
@@ -459,12 +462,7 @@ package org.osmf.net
 		
 		private function setThrottleLimits(index:int):void 
 		{
-			// We set the bandwidth in both directions based on the multiplier applied to the bitrate level. 
-			debug("setThrottleLimits() - Set rate limit to " + Math.round(dsResource.streamItems[index].bitrate*_bandwidthLimitMultiplier) + " kbps");
-			var rate:Number = dsResource.streamItems[index].bitrate * 1000/8;
-			rate = rate * _bandwidthLimitMultiplier;
-			
-			connection.call("setBandwidthLimit", null, rate, rate);
+			connection.call("setBandwidthLimit", null, _bandwidthLimit, _bandwidthLimit);
 		}
 
 		/**
@@ -501,7 +499,7 @@ package org.osmf.net
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource
 		private var failedDSI:Dictionary;
-		private var _bandwidthLimitMultiplier:Number = 1.4;
+		private var _bandwidthLimit:Number = 0;;
 														
 		private static const RULE_CHECK_INTERVAL:Number = 500;	// Switching rule check interval in milliseconds
 		private static const DEFAULT_MAX_UP_SWITCHES_PER_STREAM_ITEM:int = 3;

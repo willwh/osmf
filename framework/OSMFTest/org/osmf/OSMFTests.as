@@ -179,8 +179,8 @@ package org.osmf
 			addTestSuite(TestDurationElement);
 			addTestSuite(TestListenerProxyElement);
 			addTestSuite(TestListenerProxyElementAsSubclass);
-			addTestSuite(TestFactoryElement);
-			addTestSuite(TestFactoryLoadTrait);
+			addTestSuite(TestLoadFromDocumentElement);
+			addTestSuite(TestLoadFromDocumentLoadTrait);
 			
 			// Tracking
 			//

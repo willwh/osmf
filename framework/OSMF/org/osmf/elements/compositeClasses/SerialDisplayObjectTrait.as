@@ -105,8 +105,8 @@ package org.osmf.elements.compositeClasses
 		
 		private function onTargetContainerChange(event:ContainerChangeEvent):void
 		{
-			var oldContainer:IMediaContainer = event.oldValue;
-			var newContainer:IMediaContainer = event.newValue;
+			var oldContainer:IMediaContainer = event.oldContainer;
+			var newContainer:IMediaContainer = event.newContainer;
 			var element:MediaElement = layoutTarget.mediaElement;
 			
 			var targetInLayoutRenderer:Boolean

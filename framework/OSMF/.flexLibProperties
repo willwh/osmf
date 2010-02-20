@@ -15,11 +15,11 @@
     <classEntry path="org.osmf.elements.DurationElement"/>
     <classEntry path="org.osmf.elements.F4MElement"/>
     <classEntry path="org.osmf.elements.F4MLoader"/>
-    <classEntry path="org.osmf.elements.FactoryElement"/>
     <classEntry path="org.osmf.elements.HTMLElement"/>
     <classEntry path="org.osmf.elements.ImageElement"/>
     <classEntry path="org.osmf.elements.ImageLoader"/>
     <classEntry path="org.osmf.elements.ListenerProxyElement"/>
+    <classEntry path="org.osmf.elements.LoadFromDocumentElement"/>
     <classEntry path="org.osmf.elements.ParallelElement"/>
     <classEntry path="org.osmf.elements.ProxyElement"/>
     <classEntry path="org.osmf.elements.SWFElement"/>
@@ -79,7 +79,7 @@
     <classEntry path="org.osmf.elements.loaderClasses.LoaderUtils"/>
     <classEntry path="org.osmf.elements.proxyClasses.DurationSeekTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.DurationTimeTrait"/>
-    <classEntry path="org.osmf.elements.proxyClasses.FactoryLoadTrait"/>
+    <classEntry path="org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait"/>
     <classEntry path="org.osmf.elements.proxyClasses.MetadataProxy"/>
     <classEntry path="org.osmf.events.AudioEvent"/>
     <classEntry path="org.osmf.events.BeaconEvent"/>
@@ -265,7 +265,6 @@
     <classEntry path="org.osmf.traits.PlayTrait"/>
     <classEntry path="org.osmf.traits.SeekTrait"/>
     <classEntry path="org.osmf.traits.TimeTrait"/>
-    <classEntry path="org.osmf.utils.ExternalProperty"/>
     <classEntry path="org.osmf.utils.FMSHost"/>
     <classEntry path="org.osmf.utils.FMSURL"/>
     <classEntry path="org.osmf.utils.HTTPLoadTrait"/>

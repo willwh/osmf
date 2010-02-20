@@ -21,31 +21,54 @@
 *****************************************************/
 package org.osmf.elements.proxyClasses
 {
-	import flexunit.framework.Assert;
-	import flexunit.framework.TestCase;
+	import flash.events.Event;
 	
+	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 
-	public class TestFactoryLoadTrait extends TestCase
+	[ExcludeClass]
+	
+	/**
+	 * Dispatched load complete in order to notify the factory element that the 
+	 * proxied item is ready.
+	 */ 
+	[Event('proxyReady')]
+	
+	/**
+	 * @private
+	 */ 
+	public class LoadFromDocumentLoadTrait extends LoadTrait
 	{
-		public function testGetter():void
+		public static const PROXY_READY:String = "proxyReady";
+		
+		/**
+		 * Constructor.
+		 */ 
+		public function LoadFromDocumentLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			var loader:LoaderBase = new LoaderBase();
-			
-			var resource:MediaResourceBase = new MediaResourceBase();
-			
-			var trait:FactoryLoadTrait = new FactoryLoadTrait(loader, resource);
-					
-			var elem:MediaElement = new MediaElement();
-			trait.mediaElement  = elem;
-			
-			assertEquals(elem, trait.mediaElement);
-			
-			assertEquals(resource, trait.resource);
-			
+			super(loader, resource);
 		}
 		
+		override protected function loadStateChangeEnd():void
+		{
+			if (loadState != LoadState.READY)
+			{
+				dispatchEvent(new LoadEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loadState));
+			}
+			else  // Notify the Factory we are done loading
+			{
+				dispatchEvent(new Event(PROXY_READY));
+			}
+		}
+		
+		/**
+		 * @private
+		 * The MediaElement created by the FactoryElement's loader.
+		 */ 
+		public var mediaElement:MediaElement;
 	}
 }

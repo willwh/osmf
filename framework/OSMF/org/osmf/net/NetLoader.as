@@ -285,7 +285,7 @@ package org.osmf.net
 		{
 			addPendingLoad(loadTrait);
 			
-			netConnectionFactory.createNetConnection(loadTrait.resource as URLResource);
+			netConnectionFactory.create(loadTrait.resource as URLResource);
 		}
 		
 		/**

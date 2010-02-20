@@ -60,7 +60,7 @@ package com.akamai.osmf.net
 		/**
 		 * @inheritDoc
 		 */
-		override protected function createNetConnectionObject():NetConnection
+		override protected function createNetConnection():NetConnection
 		{
 			return new AkamaiNetConnection();
 		}

@@ -25,17 +25,16 @@ package org.osmf.elements
 	import org.osmf.media.URLResource;
 
 	/**
-	 * The F4MElement is the Element used to load media from
-	 * .f4m files.  The f4m format is a specific to playing media
-	 * in the flash player, and is documented #Link#.  
+	 * The F4MElement is the MediaElement used to load media from F4M files.  F4M files are
+	 * XML documents that adhere to the Flash Media Manifest format, which is documented
+	 * at http://opensource.adobe.com/wiki/display/osmf/Flash+Media+Manifest+File+Format+Specification.  
 	 * 
-	 * The F4MElement can handle subclip metadata to create subclips of
-	 * a piece of content. Subclip parameters should be specified 
-	 * on the URLResource for the manifest.  Subclips are only supported for 
-	 * video currently. More information at MetadataNamespaces, SUBCLIP_METADATA.
-	 * 
+	 * The F4MElement can handle subclip metadata to create subclips of a piece
+	 * of content. Subclip parameters should be specified on the URLResource for
+	 * the manifest.  Subclips are only supported for video currently. More information
+	 * is at MetadataNamespaces.SUBCLIP_METADATA.
 	 */
-  	public class F4MElement extends FactoryElement
+  	public class F4MElement extends LoadFromDocumentElement
 	{
 		/**
 		 * Creates a new F4MElement. 
@@ -53,6 +52,5 @@ package org.osmf.elements
 			}			
 			super(resource, loader);									
 		}	
-			
 	}
 }

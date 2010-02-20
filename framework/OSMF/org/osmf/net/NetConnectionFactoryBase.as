@@ -99,7 +99,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function createNetConnection(resource:URLResource):void
+		public function create(resource:URLResource):void
 		{
 			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
 		}

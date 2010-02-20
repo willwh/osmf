@@ -51,7 +51,7 @@ package org.osmf.netmocker
 	    /**
 	     * @inheritDoc
 	     **/
-	    override protected function createNetConnectionObject():NetConnection
+	    override protected function createNetConnection():NetConnection
 	    {
 			var mockNetConnection:MockNetConnection = new MockNetConnection();
 			if (netConnectionExpectation != null)

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
@@ -32,30 +32,30 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.URL;
 	
-	public class TestFactoryElement extends TestProxyElement
+	public class TestLoadFromDocumentElement extends TestProxyElement
 	{
 				
 		public function testWithLoader():void
 		{
 			var resource:URLResource = new URLResource(new URL("http://example.com/blah"));
 			var loader:LoaderBase = new LoaderBase();
-			var factory:FactoryElement = new FactoryElement(resource, loader);
+			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
 			var testFacet:KeyValueFacet = new KeyValueFacet("http://adobe.com/");
-			factory.metadata.addFacet(testFacet);
+			elem.metadata.addFacet(testFacet);
 						
 			var wrapped:MediaElement = new MediaElement();
 						
-			assertEquals(resource, factory.resource);
+			assertEquals(resource, elem.resource);
 				
 			resource = new URLResource(new URL("http://newresource.com/test"));		
-			factory.resource = resource;
-			assertEquals(resource, factory.resource);
+			elem.resource = resource;
+			assertEquals(resource, elem.resource);
 									
-			assertTrue(factory.hasTrait(MediaTraitType.LOAD));
+			assertTrue(elem.hasTrait(MediaTraitType.LOAD));
 			
-			assertNotNull(factory.metadata);
+			assertNotNull(elem.metadata);
 			
-			var load:FactoryLoadTrait = factory.getTrait(MediaTraitType.LOAD) as FactoryLoadTrait;
+			var load:LoadFromDocumentLoadTrait = elem.getTrait(MediaTraitType.LOAD) as LoadFromDocumentLoadTrait;
 			
 			assertNotNull(load);
 			
@@ -63,9 +63,9 @@ package org.osmf.elements
 			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, load, LoadState.LOADING, LoadState.READY));
 			
 			// Ensure metadata proxy is functioning properly
-			assertEquals(factory.metadata.getFacet("http://adobe.com/"), testFacet);		
+			assertEquals(elem.metadata.getFacet("http://adobe.com/"), testFacet);		
 			
-			assertEquals(factory.metadata.namespaceURLs.length, wrapped.metadata.namespaceURLs.length);
+			assertEquals(elem.metadata.namespaceURLs.length, wrapped.metadata.namespaceURLs.length);
 						
 		}
 	}

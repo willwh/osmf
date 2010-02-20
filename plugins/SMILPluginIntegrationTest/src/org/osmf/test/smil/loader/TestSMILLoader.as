@@ -23,7 +23,7 @@ package org.osmf.test.smil.loader
 {
 	import flash.events.*;
 	
-	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.media.MediaElement;
@@ -58,7 +58,7 @@ package org.osmf.test.smil.loader
 		
 		override protected function createLoadTrait(loader:LoaderBase, resource:MediaResourceBase):LoadTrait
 		{
-			return new FactoryLoadTrait(loader, resource);
+			return new LoadFromDocumentLoadTrait(loader, resource);
 		}
 		
 		public function testLoadWithValidSMILDocument():void
@@ -88,7 +88,7 @@ package org.osmf.test.smil.loader
 		{
 			if (event.newState == LoadState.READY)
 			{
-				var trait:FactoryLoadTrait = event.loadTrait as FactoryLoadTrait;
+				var trait:LoadFromDocumentLoadTrait = event.loadTrait as LoadFromDocumentLoadTrait;
 				assertTrue(trait != null);
 				
 				// Just check that we got a valid MediaElement

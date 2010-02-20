@@ -44,8 +44,8 @@ package org.osmf.net
 	 * instances and to manage sharing of these instances.  The NetConnectionFactory
 	 * can also handle port/protocol negotiation.
 	 * 
-	 * <p>NetConnectionFactory is stateless. Multiple parallel createNetConnection()
-	 * requests may be made. A hash of the resource URL is used as a key to determine
+	 * <p>NetConnectionFactory is stateless. Multiple parallel create() requests
+	 * may be made. A hash of the resource URL is used as a key to determine
 	 * which NetConnections may be shared.</p>
 	 * 
 	 *  @langversion 3.0
@@ -86,7 +86,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override public function createNetConnection(resource:URLResource):void
+		override public function create(resource:URLResource):void
 		{
 			var key:String = createNetConnectionKey(resource);
 			
@@ -139,7 +139,7 @@ package org.osmf.net
 				var netConnections:Vector.<NetConnection> = new Vector.<NetConnection>();
 				for (var j:int = 0; j < netConnectionURLs.length; j++)
 				{
-					netConnections.push(createNetConnectionObject());
+					netConnections.push(createNetConnection());
 				} 
 				
 				// Perform the connection attempt
@@ -310,7 +310,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function createNetConnectionObject():NetConnection
+		protected function createNetConnection():NetConnection
 		{
 			return new NetConnection();
 		}

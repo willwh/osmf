@@ -34,7 +34,6 @@ package org.osmf.media
 	import org.osmf.metadata.IMetadataProvider;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.utils.ExternalProperty;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -133,7 +132,12 @@ package org.osmf.media
 			setupTraitResolvers();		
 			setupTraits();
 			
-			_container = new ExternalProperty(this, ContainerChangeEvent.CONTAINER_CHANGE);
+			addEventListener
+				( ContainerChangeEvent.CONTAINER_CHANGE
+				, onContainerChange
+				, false
+				, Number.MAX_VALUE
+				);
 		}
 	
 		/**
@@ -228,7 +232,7 @@ package org.osmf.media
 		 */
 		public function get container():IMediaContainer
 		{
-			return _container.value as IMediaContainer;
+			return _container;
 		}
 		
 		/**
@@ -540,6 +544,16 @@ package org.osmf.media
 				setLocalTrait(type, resolvedTrait);
 			} 
 		}
+
+		private function onContainerChange(event:ContainerChangeEvent):void
+		{
+			if	(	_container == event.oldContainer
+				&&	_container != event.newContainer
+				)
+			{
+				_container = event.newContainer;
+			}
+		}
 		
 		private var traits:Dictionary = new Dictionary();
 		private var traitResolvers:Dictionary = new Dictionary();
@@ -549,6 +563,6 @@ package org.osmf.media
 		private var _resource:MediaResourceBase;
 		private var _metadata:Metadata;
 		
-		private var _container:ExternalProperty;
+		private var _container:IMediaContainer;
 	}
 }

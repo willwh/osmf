@@ -350,7 +350,7 @@ package org.osmf.containers
 		
 		private function onElementContainerChange(event:ContainerChangeEvent):void
 		{
-			if (event.oldValue == this)
+			if (event.oldContainer == this)
 			{
 				removeMediaElement(event.target as MediaElement);
 			}

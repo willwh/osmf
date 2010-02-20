@@ -97,7 +97,7 @@ package org.osmf.net
 		
 		public function testDirectCreateWithBadResource():void
 		{
-			// The purpose of this test is to ensure coverage of the createNetConnection class
+			// The purpose of this test is to ensure coverage of the createNetConnection method
 			// which is otherwise over-ridden by NetMocker. We test with an intentionally bad URL so that
 			// the outcome of the test is not dependent on connectivity.
 			doTestDirectCreateWithBadResource();
@@ -130,7 +130,7 @@ package org.osmf.net
 			var factory:NetConnectionFactory = createNetConnectionFactory(sharing);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
 			var resource:URLResource = SUCCESSFUL_RESOURCE;
-			factory.createNetConnection(resource);
+			factory.create(resource);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_COMPLETE);
@@ -143,7 +143,7 @@ package org.osmf.net
 					factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated2);
 					
 					var resource2:URLResource = SUCCESSFUL_RESOURCE2;
-					factory.createNetConnection(resource2);
+					factory.create(resource2);
 					
 					function onCreated2(event2:NetConnectionFactoryEvent):void
 					{
@@ -172,7 +172,7 @@ package org.osmf.net
 			var factory:NetConnectionFactory = createNetConnectionFactory(sharing);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
 			var resource:URLResource = SUCCESSFUL_RESOURCE;
-			factory.createNetConnection(resource);
+			factory.create(resource);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_COMPLETE);
@@ -192,7 +192,7 @@ package org.osmf.net
 			
 			var factory:NetConnectionFactory = createNetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
-			factory.createNetConnection(resource);
+			factory.create(resource);
 			function onCreated(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_COMPLETE);
@@ -210,7 +210,7 @@ package org.osmf.net
 			
 			var factory:NetConnectionFactory = createNetConnectionFactory(true, NetConnectionExpectation.REJECTED_CONNECTION);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR,onCreationFailed);
-			factory.createNetConnection(UNSUCCESSFUL_RESOURCE);
+			factory.create(UNSUCCESSFUL_RESOURCE);
 			function onCreationFailed(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_ERROR);
@@ -227,7 +227,7 @@ package org.osmf.net
 			
 			var factory:NetConnectionFactory = new NetConnectionFactory();
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR,onCreationFailed);
-			factory.createNetConnection(UNSUCCESSFUL_RESOURCE);
+			factory.create(UNSUCCESSFUL_RESOURCE);
 			function onCreationFailed(event:NetConnectionFactoryEvent):void
 			{
 				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_ERROR);
@@ -245,7 +245,7 @@ package org.osmf.net
 			
 			var factory:NetConnectionFactory = createNetConnectionFactory(true, expectation);
 			factory.addEventListener(NetConnectionFactoryEvent.CREATION_ERROR,onCreationFailed);
-			factory.createNetConnection(SUCCESSFUL_RESOURCE);
+			factory.create(SUCCESSFUL_RESOURCE);
 			
 			function onCreationFailed(event:NetConnectionFactoryEvent):void
 			{

@@ -21,11 +21,11 @@
 *****************************************************/
 package org.osmf.smil.elements
 {
+	import org.osmf.elements.LoadFromDocumentElement;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.elements.FactoryElement;
 	import org.osmf.smil.loader.SMILLoader;
 
-	public class SMILElement extends FactoryElement
+	public class SMILElement extends LoadFromDocumentElement
 	{
 		public function SMILElement(resource:MediaResourceBase = null, loader:SMILLoader = null)
 		{

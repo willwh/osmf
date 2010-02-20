@@ -23,7 +23,7 @@ package org.osmf.elements
 {
 	import flash.events.Event;
 	
-	import org.osmf.elements.proxyClasses.FactoryLoadTrait;
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.elements.proxyClasses.MetadataProxy;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
@@ -32,27 +32,31 @@ package org.osmf.elements
 	import org.osmf.traits.MediaTraitType;
 
 	/**
-	 * The LoadableProxyElement will use a custom Loader to load and create a media element.
-	 * The MediaElement will them be used as the proxies wrapped element.  The Loader needs
-	 * to return a MediaElementContext.  This class is generally used to create on step loading and
-	 * creation of compositions using playlists, such as SMIL.
+	 * The LoadFromDocumentElement is the base class for MediaElements that load documents
+	 * that contain information about the real MediaElement to expose.  For example, a SMIL
+	 * document can be translated into a MediaElement, but until the load of the SMIl document
+	 * takes place, it's impossible to know what MediaElement the SMIL document will expose.
+	 * 
+	 * Because of the dynamic nature of this operation, a LoadFromDocumentElement extends
+	 * ProxyElement.  When the load is complete, it will set the proxiedElement property to
+	 * the MediaElement that was generated from the document.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class FactoryElement extends ProxyElement
+	public class LoadFromDocumentElement extends ProxyElement
 	{
 		/**
-		 * Creates a new FactoryElement.  This is an abstract base class, and should be subclassed.
+		 * Creates a new LoadFromDocumentElement.  This is an abstract base class, and should be subclassed.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function FactoryElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
+		public function LoadFromDocumentElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
 		{	
 			super(null);		
 			_metadata = new MetadataProxy();
@@ -67,17 +71,18 @@ package org.osmf.elements
 			_metadata.metadata = proxiedElement.metadata;
 		}
 		
-		// Overriding is neccessary because there is a null wrappedElement.
 		/**
 		 * @private
+		 * 
+		 * Overriding is neccessary because there is a null wrappedElement.
 		 */ 
 		override public function set resource(value:MediaResourceBase):void 
 		{
 			if (_resource != value && value != null)
 			{
 				_resource = value;
-				loadTrait = new FactoryLoadTrait(loader, resource);
-				loadTrait.addEventListener(FactoryLoadTrait.PROXY_READY, onLoaderStateChange);
+				loadTrait = new LoadFromDocumentLoadTrait(loader, resource);
+				loadTrait.addEventListener(LoadFromDocumentLoadTrait.PROXY_READY, onLoaderStateChange);
 				
 				if (super.getTrait(MediaTraitType.LOAD) != null)
 				{
@@ -108,7 +113,7 @@ package org.osmf.elements
 
 		private var _metadata:MetadataProxy;
 		private var _resource:MediaResourceBase;
-		private var loadTrait:FactoryLoadTrait;
+		private var loadTrait:LoadFromDocumentLoadTrait;
 		private var loader:LoaderBase;
 	}
 }

@@ -50,11 +50,11 @@ package org.osmf.net.dvr
 			super();
 		}
 
-		override public function createNetConnection(resource:URLResource):void
+		override public function create(resource:URLResource):void
 		{
 			urlResource = resource;
 			
-			super.createNetConnection(urlResource);
+			super.create(urlResource);
 		}
 		
 		// Internals
