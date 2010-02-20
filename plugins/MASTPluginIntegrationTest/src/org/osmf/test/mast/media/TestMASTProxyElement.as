@@ -15,7 +15,6 @@ package org.osmf.test.mast.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
-	import org.osmf.utils.FMSURL;
 	
 
 	public class TestMASTProxyElement extends TestCase
@@ -51,7 +50,7 @@ package org.osmf.test.mast.media
 	
 		public function testWithNoMetadata():void
 		{
-			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 			var mediaElement:MediaElement = new MediaElement();
 			mediaElement.resource = resource;
 			
@@ -110,7 +109,7 @@ package org.osmf.test.mast.media
 		public function testLoadFailure():void
 		{
 			var mediaElement:MediaElement = new VideoElement();
-			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), "http://foo.com/bogus/badfile.xml");
@@ -174,7 +173,7 @@ package org.osmf.test.mast.media
 
 		private function createResourceWithMetadata(preroll:Boolean=true):URLResource
 		{
-			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
@@ -187,7 +186,5 @@ package org.osmf.test.mast.media
 		private static const MAST_URL_POSTROLL:String 		= "http://mediapm.edgesuite.net/osmf/content/mast/mast_sample_onitemend.xml";
 		
 		private static const REMOTE_STREAM:String = "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
-		
-		
 	}
 }

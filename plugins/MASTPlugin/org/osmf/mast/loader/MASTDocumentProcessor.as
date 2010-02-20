@@ -33,7 +33,6 @@ package org.osmf.mast.loader
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.utils.URL;
 	import org.osmf.vast.loader.VASTLoadTrait;
 	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.DefaultVASTMediaFileResolver;
@@ -145,7 +144,7 @@ package org.osmf.mast.loader
 		public function loadVastDocument(source:MASTSource, condition:MASTCondition):void
 		{
 			var loadTrait:VASTLoadTrait
-				= new VASTLoadTrait(new VASTLoader(), new URLResource(new URL(source.url)));
+				= new VASTLoadTrait(new VASTLoader(), new URLResource(source.url));
 			
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE

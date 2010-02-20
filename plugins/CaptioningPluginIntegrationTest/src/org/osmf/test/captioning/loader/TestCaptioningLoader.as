@@ -23,22 +23,21 @@ package org.osmf.test.captioning.loader
 {
 	import flash.events.*;
 	
+	import org.osmf.captioning.loader.*;
+	import org.osmf.captioning.model.*;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.captioning.loader.*;
-	import org.osmf.captioning.model.*;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.test.captioning.CaptioningTestConstants;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	
 	public class TestCaptioningLoader extends TestLoaderBase
 	{
@@ -96,7 +95,7 @@ package org.osmf.test.captioning.loader
 				if (resource == successfulResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, CaptioningTestConstants.CAPTIONING_DOCUMENT_CONTENTS
 						);
@@ -104,7 +103,7 @@ package org.osmf.test.captioning.loader
 				else if (resource == failedResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -112,7 +111,7 @@ package org.osmf.test.captioning.loader
 				else if (resource == unhandledResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -148,20 +147,20 @@ package org.osmf.test.captioning.loader
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/script.php?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/script.php?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/script.php?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/script.php?param=value")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("httpt://example.com"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
@@ -177,9 +176,9 @@ package org.osmf.test.captioning.loader
 		private var httpLoader:HTTPLoader;
 		private var eventDispatcher:EventDispatcher;
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(CaptioningTestConstants.CAPTIONING_DOCUMENT_URL));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(CaptioningTestConstants.MISSING_CAPTIONING_DOCUMENT_URL));
-		private static const UNHANDLED_RESOURCE:URLResource = new URLResource(new URL("ftp://example.com"));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(CaptioningTestConstants.CAPTIONING_DOCUMENT_URL);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(CaptioningTestConstants.MISSING_CAPTIONING_DOCUMENT_URL);
+		private static const UNHANDLED_RESOURCE:URLResource = new URLResource("ftp://example.com");
 		
 	}
 }

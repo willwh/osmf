@@ -29,7 +29,6 @@ package org.osmf.net
 	import org.osmf.traits.TestTimeTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestNetStreamTimeTrait extends TestTimeTrait
 	{
@@ -62,7 +61,7 @@ package org.osmf.net
 			{
 				MockNetStream(stream).expectedDuration = EXPECTED_DURATION;
 			}
-			return new NetStreamTimeTrait(stream, new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
+			return new NetStreamTimeTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		}
 		
 		private var stream:NetStream;

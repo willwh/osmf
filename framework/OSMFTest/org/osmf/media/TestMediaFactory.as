@@ -29,7 +29,6 @@ package org.osmf.media
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicReferenceMediaElement;
 	import org.osmf.utils.SampleResourceHandler;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaFactory extends TestCase
 	{
@@ -186,11 +185,11 @@ package org.osmf.media
 			var a1:MediaFactoryItem = createMediaFactoryItem("a1","http://www.example.com/a1");
 			mediaFactory.addItem(a1);
 			
-			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com"))) == null);
-			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a2"))) == null);
+			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com")) == null);
+			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com/a2")) == null);
 			assertTrue(mediaFactory.createMediaElement(null) == null);
 			
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a1")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/a1"));
 			assertTrue(mediaElement != null);
 			assertTrue(mediaElement.resource != null);
 			assertTrue(mediaElement.resource is URLResource);
@@ -208,7 +207,7 @@ package org.osmf.media
 			var a4:MediaFactoryItem = new MediaFactoryItem("org.osmf.a4", canAlwaysHandleResource, function ():MediaElement { return new VideoElement();});
 			mediaFactory.addItem(a4);
 			
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/a"));
 			assertTrue(mediaElement is AudioElement);
 		}
 		
@@ -226,7 +225,7 @@ package org.osmf.media
 				return "hi";
 			}
 
-			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a1"))) == null);
+			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com/a1")) == null);
 		}
 		
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionParams():void
@@ -243,7 +242,7 @@ package org.osmf.media
 				return new MediaElement();
 			}
 			
-			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a1"))) == null);
+			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com/a1")) == null);
 		}
 			
 		public function testCreateMediaElementWithInvalidMediaElementCreationFunctionNullReturnValue():void
@@ -260,7 +259,7 @@ package org.osmf.media
 				return null;
 			}
 			
-			assertTrue(mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/a1"))) == null);
+			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com/a1")) == null);
 		}
 
 		public function testCreateMediaElementWithProxy():void
@@ -269,7 +268,7 @@ package org.osmf.media
 			mediaFactory.addItem(standardInfo);
 						
 			// By default, createMediaElement creates standard media elements.
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
 			assertTrue(!(mediaElement is ProxyElement));
 			assertTrue(mediaElement is DynamicMediaElement);
 
@@ -278,7 +277,7 @@ package org.osmf.media
 			var invalidProxyInfo:MediaFactoryItem = createMediaFactoryItem("invalidProxyInfo", "http://www.example.com/standardInfo", null, MediaFactoryItemType.PROXY);
 			mediaFactory.addItem(invalidProxyInfo);
 
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
 			assertTrue(!(mediaElement is ProxyElement));
 			
 			// If we add a proxy media info whose media element is a proxy, then
@@ -287,7 +286,7 @@ package org.osmf.media
 			var validProxyInfo:MediaFactoryItem = createProxyMediaFactoryItem("validProxyInfo", "http://www.example.com/standardInfo");
 			mediaFactory.addItem(validProxyInfo);
 
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
 			assertTrue(mediaElement is ProxyElement);
 			assertTrue((mediaElement as ProxyElement).proxiedElement is DynamicMediaElement);
 			
@@ -295,7 +294,7 @@ package org.osmf.media
 			var deepProxyInfo:MediaFactoryItem = createProxyMediaFactoryItem("deepProxyInfo", "http://www.example.com/standardInfo");
 			mediaFactory.addItem(deepProxyInfo);
 
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
 			assertTrue(mediaElement is ProxyElement);
 			assertTrue((mediaElement as ProxyElement).proxiedElement is ProxyElement);
 			assertTrue(((mediaElement as ProxyElement).proxiedElement as ProxyElement).proxiedElement is DynamicMediaElement);
@@ -310,11 +309,11 @@ package org.osmf.media
 			
 			// Create some standard media elements through the factory so that we
 			// have things to reference.
-			var createdElement1:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/standardInfo")));
+			var createdElement1:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
 			assertTrue(createdElement1 is DynamicMediaElement);
-			var createdElement2:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/otherStandardInfo")));
+			var createdElement2:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
 			assertTrue(createdElement2 is DynamicMediaElement);
-			var createdElement3:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/otherStandardInfo")));
+			var createdElement3:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
 			assertTrue(createdElement3 is DynamicMediaElement);
 
 			// If we add a media info whose media element is not a reference,
@@ -322,7 +321,7 @@ package org.osmf.media
 			var invalidReferenceInfo:MediaFactoryItem = createMediaFactoryItem("invalidReferenceInfo", "http://www.example.com/invalidReferenceInfo");
 			mediaFactory.addItem(invalidReferenceInfo);
 			
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/invalidReferenceInfo")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/invalidReferenceInfo"));
 			assertTrue(mediaElement != null);
 			
 			// Now create a referencing element that should match a previously
@@ -330,7 +329,7 @@ package org.osmf.media
 			var referenceInfo:MediaFactoryItem = createReferenceMediaFactoryItem("referenceInfo1","http://www.example.com/referenceInfo1", "http://www.example.com/standardInfo");
 			mediaFactory.addItem(referenceInfo);
 			
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo1")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo1"));
 			assertTrue(mediaElement != null);
 			var dynamicElement:DynamicReferenceMediaElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
@@ -341,7 +340,7 @@ package org.osmf.media
 			referenceInfo = createReferenceMediaFactoryItem("referenceInfo2","http://www.example.com/referenceInfo2", "http://www.example.com/otherStandardInfo");
 			mediaFactory.addItem(referenceInfo);
 			
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo2")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo2"));
 			assertTrue(mediaElement != null);
 			dynamicElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
@@ -359,7 +358,7 @@ package org.osmf.media
 			referenceInfo = createReferenceMediaFactoryItem("referenceInfo3","http://www.example.com/referenceInfo3", "http://www.example.com/referenceInfo2");
 			mediaFactory.addItem(referenceInfo);
 			
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/referenceInfo3")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo3"));
 			assertTrue(mediaElement != null);
 			dynamicElement = mediaElement as DynamicReferenceMediaElement;
 			assertTrue(dynamicElement);
@@ -368,7 +367,7 @@ package org.osmf.media
 			
 			// Creating a new element will result in it being added to any
 			// existing reference that matches it.
-			var createdElement4:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/otherStandardInfo")));
+			var createdElement4:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
 			assertTrue(createdElement4 is DynamicMediaElement);
 			assertTrue(referenceElement.references.length == 3);
 			assertTrue(referenceElement.references[0] == createdElement4 ||
@@ -379,7 +378,7 @@ package org.osmf.media
 			var yetAnotherStandardInfo:MediaFactoryItem = createMediaFactoryItem("yetAnotherStandardInfo","http://www.example.com/yetAnotherStandardInfo");
 			mediaFactory.addItem(yetAnotherStandardInfo);
 			
-			var createdElement5:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://www.example.com/yetAnotherStandardInfo")));
+			var createdElement5:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/yetAnotherStandardInfo"));
 			assertTrue(createdElement5 is DynamicMediaElement);
 			assertTrue(referenceElement.references.length == 3);
 		}

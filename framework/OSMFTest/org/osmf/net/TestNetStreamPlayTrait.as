@@ -28,7 +28,6 @@ package org.osmf.net
 	import org.osmf.traits.TestPlayTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestNetStreamPlayTrait extends TestPlayTrait
 	{
@@ -53,7 +52,7 @@ package org.osmf.net
 
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new NetStreamPlayTrait(stream, new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
+			return new NetStreamPlayTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		}
 
 		private var netFactory:NetFactory;

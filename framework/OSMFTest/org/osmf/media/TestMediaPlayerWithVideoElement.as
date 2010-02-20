@@ -20,14 +20,13 @@
 *****************************************************/
 package org.osmf.media
 {
+	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
-	import org.osmf.elements.VideoElement;
 	
 	public class TestMediaPlayerWithVideoElement extends TestMediaPlayer
 	{
@@ -78,7 +77,7 @@ package org.osmf.media
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			return new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			return new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 
 		override protected function get invalidResourceForMediaElement():MediaResourceBase
@@ -135,7 +134,7 @@ package org.osmf.media
 		// Internals
 		//
 
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const INVALID_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 		
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;

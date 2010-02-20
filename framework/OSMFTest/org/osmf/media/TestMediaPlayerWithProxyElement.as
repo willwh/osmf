@@ -21,7 +21,6 @@
 package org.osmf.media
 {
 	import org.osmf.elements.ProxyElement;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithProxyElement extends TestMediaPlayer
 	{
@@ -40,7 +39,7 @@ package org.osmf.media
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource("http://example.com");
 		}
 
 		override protected function get invalidResourceForMediaElement():MediaResourceBase

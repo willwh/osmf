@@ -34,10 +34,8 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
-	import org.osmf.traits.LoadTrait;
-	import org.osmf.utils.URL;
-	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.loader.VASTLoadTrait;
+	import org.osmf.vast.loader.VASTLoader;
 	import org.osmf.vast.media.VASTMediaGenerator;
 
 	/**
@@ -68,10 +66,10 @@ package
 			
 			// Second param indicates whether to set it as a preroll or
 			// as a postroll.
-			loadVASTDocument(new URL(VAST_DOCUMENT_URL1), true);
+			loadVASTDocument(VAST_DOCUMENT_URL1, true);
 		}
 		
-		private function loadVASTDocument(vastURL:URL, applyAsPreroll:Boolean):void
+		private function loadVASTDocument(vastURL:String, applyAsPreroll:Boolean):void
 		{
 			var loadTrait:VASTLoadTrait
 				= new VASTLoadTrait(new VASTLoader(), new URLResource(vastURL));
@@ -112,7 +110,7 @@ package
 			// Add the main video.
 			serialElement.addChild
 				( new VideoElement
-					( new URLResource(new URL(REMOTE_STREAM))
+					( new URLResource(REMOTE_STREAM)
 					)
 				);
 			

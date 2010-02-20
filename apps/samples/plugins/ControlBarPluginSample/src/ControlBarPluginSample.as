@@ -33,7 +33,6 @@ package
 	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.plugin.PluginInfoResource;
-	import org.osmf.utils.URL;
 	
 	[SWF(width="640", height="360", backgroundColor="0x000000",frameRate="25")]
 	public class ControlBarPluginSample extends Sprite
@@ -154,8 +153,8 @@ package
 		
 		/* static */
 		
-		private static const VIDEO_URL:URL
-			= new URL("http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv");
+		private static const VIDEO_URL:String
+			= "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
 			
 		private static var ID:ObjectIdentifier = new ObjectIdentifier("ID");
 		

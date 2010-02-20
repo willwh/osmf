@@ -21,13 +21,11 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.beaconClasses.Beacon;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicBeaconElement;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithBeaconElement extends TestMediaPlayer
 	{
@@ -53,8 +51,8 @@ package org.osmf.media
 		{
 			if (httpLoader is MockHTTPLoader)
 			{
-				MockHTTPLoader(httpLoader).setExpectationForURL(PING_URL.rawUrl, true, null);
-				MockHTTPLoader(httpLoader).setExpectationForURL(INVALID_URL.rawUrl, false, null);
+				MockHTTPLoader(httpLoader).setExpectationForURL(PING_URL, true, null);
+				MockHTTPLoader(httpLoader).setExpectationForURL(INVALID_URL, false, null);
 			}
 			
 			return new DynamicBeaconElement(new Beacon(PING_URL, httpLoader));
@@ -85,8 +83,8 @@ package org.osmf.media
 			return [MediaTraitType.PLAY];
 		}
 		
-		private static const PING_URL:URL = new URL("http://example.com");
-		private static const INVALID_URL:URL = new URL("http://www.adobe.com/invalidURL");
+		private static const PING_URL:String = "http://example.com";
+		private static const INVALID_URL:String = "http://www.adobe.com/invalidURL";
 		
 		private var httpLoader:HTTPLoader;
 	}

@@ -29,7 +29,6 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithVideoElementSubclip extends TestMediaPlayer
 	{
@@ -81,7 +80,7 @@ package org.osmf.media
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			var resource:URLResource = new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
+			var resource:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
 			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
@@ -153,7 +152,7 @@ package org.osmf.media
 		// Internals
 		//
 
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const INVALID_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 		
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;

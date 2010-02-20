@@ -25,7 +25,6 @@ package org.osmf.elements
 	import org.osmf.elements.beaconClasses.BeaconPlayTrait;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * A MediaElement which maps the "play" operation to the request (via
@@ -41,7 +40,7 @@ package org.osmf.elements
 		/**
 		 * Constructor.
 		 * 
-		 * @param url The URL to retrieve (via an HTTP Get) when this
+		 * @param url The URL to retrieve (via an HTTP GET) when this
 		 * BeaconElement is played.
 		 *  
 		 *  @langversion 3.0
@@ -49,7 +48,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function BeaconElement(url:URL)
+		public function BeaconElement(url:String)
 		{
 			this.url = url;
 
@@ -72,6 +71,6 @@ package org.osmf.elements
 			return new Beacon(url);
 		}
 
-		private var url:URL;
+		private var url:String;
 	}
 }

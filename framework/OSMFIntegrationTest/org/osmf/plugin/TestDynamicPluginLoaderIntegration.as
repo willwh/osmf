@@ -28,7 +28,6 @@ package org.osmf.plugin
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.IntegrationTestUtils;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
 	public class TestDynamicPluginLoaderIntegration extends TestLoaderBase
@@ -59,17 +58,17 @@ package org.osmf.plugin
 		
 		override protected function get successfulResource():MediaResourceBase
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+			return new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
 		}
 
 		override protected function get failedResource():MediaResourceBase
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
+			return new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
 		}
 
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL));
+			return new URLResource(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL);
 		}
 		
 		public function testLoadOfPlugin():void

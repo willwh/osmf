@@ -25,7 +25,6 @@ package org.osmf.examples.loaderproxy
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Loader for the VideoProxyElement.  The load operation simply generates
@@ -47,7 +46,7 @@ package org.osmf.examples.loaderproxy
 			// Here's a new URL, this will replace the previous URL.
 			// Note that this class could do other preflight activities
 			// (we just rewrite the URL as an example).
-			var url:URL = new URL("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
+			var url:String = "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 			
 			var vpLoadTrait:VideoProxyLoadTrait = loadTrait as VideoProxyLoadTrait;
 			vpLoadTrait.url = url;

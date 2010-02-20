@@ -32,7 +32,6 @@ package org.osmf.vast.media
 	import org.osmf.traits.PlayState;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTUrl;
 	
 	/**
@@ -146,8 +145,11 @@ package org.osmf.vast.media
 			
 			for each (var vastUrl:VASTUrl in urls)
 			{
-				var beacon:Beacon = new Beacon(new URL(vastUrl.url), httpLoader);
-				beacon.ping();
+				if (vastUrl.url != null)
+				{
+					var beacon:Beacon = new Beacon(vastUrl.url, httpLoader);
+					beacon.ping();
+				}
 			}
 		}
 

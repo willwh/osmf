@@ -27,7 +27,6 @@ package org.osmf.netmocker
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
 	
@@ -93,8 +92,8 @@ package org.osmf.netmocker
 			return UNHANDLED_RESOURCE;
 		}
 
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
-		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
+		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 		private static const UNHANDLED_RESOURCE:NullResource = new NullResource();
 		
 		private var netLoader:MockNetLoader;

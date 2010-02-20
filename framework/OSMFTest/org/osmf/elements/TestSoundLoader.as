@@ -27,12 +27,11 @@ package org.osmf.elements
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestSoundLoader extends TestLoaderBase
 	{
@@ -48,17 +47,17 @@ package org.osmf.elements
 		
 		override protected function get successfulResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+			return new URLResource(TestConstants.LOCAL_SOUND_FILE);
 		}
 
 		override protected function get failedResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
+			return new URLResource(TestConstants.LOCAL_INVALID_SOUND_FILE);
 		}
 
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com/blah.xml"));
+			return new URLResource("http://example.com/blah.xml");
 		}
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
@@ -70,37 +69,37 @@ package org.osmf.elements
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp3?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/audio?param=.mp3"))));
+			assertTrue(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio.mp3?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/audio?param=.mp3")));
 			
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/audio.mp31"))));	
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));		
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.foo")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/audio.mp31")));	
+			assertFalse(loader.canHandleResource(new URLResource("foo")));		
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
 					
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.AUDIO);
-			var resource:URLResource = new URLResource(new URL("http://example.com/test"));
+			var resource:URLResource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
 			metadata = new MediaTypeFacet(null, "audio/mpeg");
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.AUDIO, "audio/mpeg");
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
@@ -109,62 +108,62 @@ package org.osmf.elements
 			
 			
 			metadata = new MediaTypeFacet(MediaType.VIDEO);
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(null, "video/x-flv");
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 			
 			metadata = new MediaTypeFacet(MediaType.VIDEO, "video/x-flv");
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.SWF);	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(null, "Invalid Mime Type");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid Mime Type");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.VIDEO, "Invalid Mime Type");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.AUDIO, "Invalid Mime Type");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE,  "video/x-flv");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "audio/mpeg");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.VIDEO, "audio/mpeg");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.AUDIO, "video/x-flv");	
-			resource = new URLResource(new URL("http://example.com/test"));
+			resource = new URLResource("http://example.com/test");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 		}

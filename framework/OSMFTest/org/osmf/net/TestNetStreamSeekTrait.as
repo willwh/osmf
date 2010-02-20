@@ -30,7 +30,6 @@ package org.osmf.net
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestNetStreamSeekTrait extends TestSeekTrait
 	{
@@ -65,7 +64,7 @@ package org.osmf.net
 				MockNetStream(stream).expectedDuration = maxSeekValue;
 			}
 			
-			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
+			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 			var seekTrait:NetStreamSeekTrait =  new NetStreamSeekTrait(timeTrait, stream);		
 			
 			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);

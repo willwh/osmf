@@ -39,7 +39,6 @@ package org.osmf.captioning.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 
 	/**
 	 * The CaptioningProxyElement class is a wrapper for the media supplied.
@@ -124,7 +123,7 @@ package org.osmf.captioning.media
 					var timedTextURL:String = facet.getValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
 					if (timedTextURL != null)
 					{
-						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(new URL(timedTextURL)));
+						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(timedTextURL));
 						
 						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99);
 						addTrait(MediaTraitType.LOAD, loadTrait);
@@ -191,6 +190,5 @@ package org.osmf.captioning.media
 				
 		private static const ERROR_MISSING_CAPTION_METADATA:String = "Media Element is missing Captioning metadata";
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
-		
 	}
 }

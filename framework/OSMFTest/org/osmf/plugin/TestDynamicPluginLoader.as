@@ -27,7 +27,6 @@ package org.osmf.plugin
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
 	/**
@@ -48,45 +47,45 @@ package org.osmf.plugin
 
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.SWF);
-			var resource:URLResource = new URLResource(new URL("http://example.com/image"));
+			var resource:URLResource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
 			metadata = new MediaTypeFacet(null, "application/x-shockwave-flash");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet( MediaType.SWF, "application/x-shockwave-flash");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			// Add some invalid cases based on metadata information
 			metadata = new MediaTypeFacet(MediaType.IMAGE);
 			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 			
 			metadata = new MediaTypeFacet(null, "Invalid Mime Type");
 					
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet( MediaType.SWF, "Invalid Mime Type");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "application/x-shockwave-flash");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid Mime Type");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 		}

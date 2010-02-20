@@ -28,9 +28,8 @@ package org.osmf.elements.beaconClasses
 	import org.osmf.events.BeaconEvent;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
-	import org.osmf.utils.TestConstants;
 	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.URL;
+	import org.osmf.utils.TestConstants;
 	
 	public class TestBeacon extends TestCase
 	{
@@ -43,8 +42,8 @@ package org.osmf.elements.beaconClasses
 			else
 			{
 				var loader:MockHTTPLoader = new MockHTTPLoader();
-				loader.setExpectationForURL(SUCCESSFUL_URL.rawUrl, true, null);
-				loader.setExpectationForURL(FAILED_URL.rawUrl, false, null);
+				loader.setExpectationForURL(SUCCESSFUL_URL, true, null);
+				loader.setExpectationForURL(FAILED_URL, false, null);
 				return loader;
 			}
 		}
@@ -115,8 +114,8 @@ package org.osmf.elements.beaconClasses
 			fail();
 		}
 
-		private var SUCCESSFUL_URL:URL = new URL(TestConstants.REMOTE_IMAGE_FILE);
-		private var FAILED_URL:URL = new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE);
-		private var INVALID_URL:URL = new URL("ftp://example.com");
+		private var SUCCESSFUL_URL:String = TestConstants.REMOTE_IMAGE_FILE;
+		private var FAILED_URL:String = TestConstants.REMOTE_INVALID_IMAGE_FILE;
+		private var INVALID_URL:String = "ftp://example.com";
 	}
 }

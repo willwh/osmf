@@ -32,7 +32,6 @@ package org.osmf.vast.loader
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.HTTPLoader;
-	import org.osmf.utils.URL;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTDocument;
 	import org.osmf.vast.model.VASTInlineAd;
@@ -203,9 +202,7 @@ package org.osmf.vast.loader
 				;
 			
 			var wrapperResource:URLResource
-				= new URLResource
-					( new URL(ad.wrapperAd.vastAdTagURL)
-					);
+				= new URLResource(ad.wrapperAd.vastAdTagURL);
 					
 			var wrapperLoadTrait:VASTLoadTrait = new VASTLoadTrait(wrapperLoader, wrapperResource);
 			wrapperLoadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onWrapperLoadStateChange);
@@ -223,7 +220,7 @@ package org.osmf.vast.loader
 					CONFIG::LOGGING
 					{
 						logger.debug("Wrapper ad " + ad.id + " loaded");
-						logger.debug("Merging wrapper ad " + ad.id + " with nested document at " + URLResource(wrapperResource).url.rawUrl);
+						logger.debug("Merging wrapper ad " + ad.id + " with nested document at " + URLResource(wrapperResource).url);
 						logger.debug("Merge " + (success ? "succeeded" : "failed"));
 					} 
 

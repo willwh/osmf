@@ -26,10 +26,9 @@ package
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	/**
-	 * Variation on HelloWorld, using MediaPlayer + IViewable
+	 * Variation on HelloWorld, using MediaPlayer + DisplayObjectTrait
 	 * rather than MediaPlayerSprite.
 	 **/
 	[SWF(width="640", height="352")]
@@ -38,20 +37,17 @@ package
 		public function HelloWorld5()
 		{
 			var mediaPlayer:MediaPlayer = new MediaPlayer();
+
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			mediaPlayer.media = new VideoElement
-				( new URLResource(new URL(REMOTE_PROGRESSIVE))
-				);
+			mediaPlayer.media = new VideoElement(resource);
 				
 			if (mediaPlayer.displayObject != null)
 			{
 				addChild(mediaPlayer.displayObject);
 			}
 		}
-		
-		private static const REMOTE_PROGRESSIVE:String
-			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 	}
 }

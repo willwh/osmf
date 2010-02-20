@@ -43,7 +43,6 @@
 			import org.osmf.net.NetLoader;
 			import org.osmf.net.NetStreamCodes;
 			import org.osmf.media.URLResource;
-			import org.osmf.utils.URL;
 			import org.osmf.events.*;
 						
 			private static const REMOTE_PDL:String = "http://mediapm.edgesuite.net/osmf/content/test/cuepoints/spacealonehd_sounas_640_400.flv";
@@ -113,7 +112,7 @@
 				waitForSeek = false;
 				ignoreDynamicCuePoints = false;
 
-				videoElement = new VideoElement(new URLResource(new URL(REMOTE_STREAM_WITH_NAV)));
+				videoElement = new VideoElement(new URLResource(REMOTE_STREAM_WITH_NAV));
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
 				// when ISeekable is added

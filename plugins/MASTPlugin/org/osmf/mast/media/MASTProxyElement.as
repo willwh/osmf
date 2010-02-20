@@ -50,7 +50,6 @@ package org.osmf.mast.media
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.utils.URL;
 
 	/**
 	 * The MASTProxyElement class is a wrapper for the media supplied.
@@ -122,7 +121,7 @@ package org.osmf.mast.media
 			
 			var mastURL:String = facet.getValue(new ObjectIdentifier(METADATA_KEY_URI));
 			
-			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(new URL(mastURL)));
+			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(mastURL));
 			
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE

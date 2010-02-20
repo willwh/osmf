@@ -131,7 +131,7 @@
 			{
 				clear();
 				
-				var resource:URLResource = new URLResource(new FMSURL(url));
+				var resource:URLResource = new URLResource(url);
 
 				mediaElement = mediaFactory.createMediaElement(resource);
 
@@ -152,7 +152,7 @@
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// This is a URL, create a URLResource
-					pluginResource = new URLResource(new URL(source));
+					pluginResource = new URLResource(source);
 				}
 				else
 				{

@@ -35,7 +35,6 @@
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.metadata.ObjectIdentifier;
-			import org.osmf.utils.FMSURL;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
@@ -47,7 +46,6 @@
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
-			import org.osmf.utils.URL;
 			import org.osmf.metadata.TemporalFacet;
 			import org.osmf.metadata.TemporalFacetEvent;
 			import org.osmf.events.SeekEvent;
@@ -110,7 +108,7 @@
 			
 			private function loadMedia(url:String):void
 			{
-				var resource:URLResource = new URLResource(new FMSURL(url));
+				var resource:URLResource = new URLResource(url);
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
@@ -153,7 +151,7 @@
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// This is a URL, create a URLResource
-					pluginResource = new URLResource(new URL(source));
+					pluginResource = new URLResource(source);
 				}
 				else
 				{

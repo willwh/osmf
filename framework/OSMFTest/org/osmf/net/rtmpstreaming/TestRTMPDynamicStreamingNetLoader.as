@@ -51,7 +51,7 @@ package org.osmf.net.rtmpstreaming
 		override public function testCanHandleResource():void
 		{
 			var dsr:DynamicStreamingResource = successfulResource as DynamicStreamingResource;
-			var host:URL = dsr.host;
+			var host:String = dsr.host;
 			
 			assertTrue(loader.canHandleResource(new URLResource(host)) == true);
 			assertTrue(loader.canHandleResource(failedResource) == true);
@@ -91,7 +91,7 @@ package org.osmf.net.rtmpstreaming
 		{
 			if (_dsResource == null)
 			{
-				_dsResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+				_dsResource = new DynamicStreamingResource(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST);
 				for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
 				{
 					_dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
@@ -131,7 +131,7 @@ package org.osmf.net.rtmpstreaming
 		private var eventDispatcher:EventDispatcher;
 		private var _dsResource:DynamicStreamingResource;		
 		
-		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 		private static const UNHANDLED_RESOURCE:NullResource = new NullResource();
 	}
 }

@@ -43,8 +43,7 @@ package org.osmf.metadata
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;	
+	import org.osmf.utils.TestConstants;	
 
 	public class TestTemporalFacet extends TestCase
 	{
@@ -318,7 +317,7 @@ package org.osmf.metadata
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			return new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			return new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 		
 		private static const NAMESPACE:String = "http://www.osmf.org/test";

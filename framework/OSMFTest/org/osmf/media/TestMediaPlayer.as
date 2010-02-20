@@ -46,7 +46,6 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayer extends TestCase
 	{
@@ -1535,14 +1534,14 @@ package org.osmf.media
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement can work with.
-			return new URLResource(new URL("http://www.example.com"));
+			return new URLResource("http://www.example.com");
 		}
 
 		protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement should fail to load.
-			return new URLResource(new URL("http://www.example.com/fail"));
+			return new URLResource("http://www.example.com/fail");
 		}
 
 		protected function get existentTraitTypesOnInitialization():Array

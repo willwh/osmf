@@ -31,8 +31,6 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.net.*;
-	import org.osmf.net.DynamicStreamingItem;
-	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.netmocker.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
@@ -66,7 +64,7 @@ package org.osmf.net.rtmpstreaming
 		
 		public function testGetNewIndex():void
 		{
-			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
+			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			dsResource.streamItems.push(new DynamicStreamingItem("stream1_300kbps", 300));
 			_loadTrait =  new NetStreamLoadTrait(_loader, dsResource);
 			_loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoaded);
@@ -91,7 +89,7 @@ package org.osmf.net.rtmpstreaming
 			
 					stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					
-					var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+					var dsResource:DynamicStreamingResource = new DynamicStreamingResource(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST);
 					for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
 					{
 						dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));

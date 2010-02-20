@@ -27,7 +27,6 @@ package org.osmf.media
 	
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SampleResourceHandler;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaFactoryItem extends TestCase
 	{
@@ -175,7 +174,7 @@ package org.osmf.media
 		
 		private var createdElements:Vector.<MediaElement>;
 		
-		private static const VALID_RESOURCE:URLResource = new URLResource(new URL("http://www.example.com/valid"));
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL("http://www.example.com/invalid"));
+		private static const VALID_RESOURCE:URLResource = new URLResource("http://www.example.com/valid");
+		private static const INVALID_RESOURCE:URLResource = new URLResource("http://www.example.com/invalid");
 	}
 }

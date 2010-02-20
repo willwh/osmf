@@ -22,13 +22,12 @@
 package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.net.NetLoader;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockRTMPDynamicStreamingNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	
@@ -93,7 +92,7 @@ package org.osmf.media
 		
 		override protected function get dynamicStreamResource():MediaResourceBase
 		{
-			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST));
+			var dsResource:DynamicStreamingResource = new DynamicStreamingResource(TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_HOST);
 			for each (var item:Object in TestConstants.REMOTE_DYNAMIC_STREAMING_VIDEO_STREAMS)
 			{
 				dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
@@ -162,7 +161,7 @@ package org.osmf.media
 		// Internals
 		//
 		
-		private static const INVALID_RESOURCE:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const INVALID_RESOURCE:DynamicStreamingResource = new DynamicStreamingResource(TestConstants.INVALID_STREAMING_VIDEO);
 		
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;

@@ -27,14 +27,13 @@ package org.osmf.plugin
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
 	public class TestStaticPluginLoader extends TestLoaderBase
@@ -77,7 +76,7 @@ package org.osmf.plugin
 
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource("http://example.com");
 		}
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void

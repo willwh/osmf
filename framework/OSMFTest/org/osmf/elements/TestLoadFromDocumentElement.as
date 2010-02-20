@@ -30,14 +30,13 @@ package org.osmf.elements
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 	
 	public class TestLoadFromDocumentElement extends TestProxyElement
 	{
 				
 		public function testWithLoader():void
 		{
-			var resource:URLResource = new URLResource(new URL("http://example.com/blah"));
+			var resource:URLResource = new URLResource("http://example.com/blah");
 			var loader:LoaderBase = new LoaderBase();
 			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
 			var testFacet:KeyValueFacet = new KeyValueFacet("http://adobe.com/");
@@ -47,7 +46,7 @@ package org.osmf.elements
 						
 			assertEquals(resource, elem.resource);
 				
-			resource = new URLResource(new URL("http://newresource.com/test"));		
+			resource = new URLResource("http://newresource.com/test");		
 			elem.resource = resource;
 			assertEquals(resource, elem.resource);
 									

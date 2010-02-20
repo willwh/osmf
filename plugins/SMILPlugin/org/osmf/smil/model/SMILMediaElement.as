@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.smil.model
 {
-	import org.osmf.utils.URL;
-	
 	/**
 	 * This class represents a SMIL media element, such
 	 * as a video element or an image element.

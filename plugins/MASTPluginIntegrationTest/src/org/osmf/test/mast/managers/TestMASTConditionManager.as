@@ -53,7 +53,7 @@ package org.osmf.test.mast.managers
 			if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 			{
 				// This is a URL, create a URLResource
-				pluginResource = new URLResource(new URL(source));
+				pluginResource = new URLResource(source);
 			}
 			else
 			{
@@ -85,7 +85,7 @@ package org.osmf.test.mast.managers
 					
 		private function loadMainVideo(url:String):void
 		{	
-			var resource:URLResource = new URLResource(new FMSURL(url));
+			var resource:URLResource = new URLResource(url);
 
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).

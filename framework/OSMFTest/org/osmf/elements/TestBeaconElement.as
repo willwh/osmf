@@ -39,7 +39,6 @@ package org.osmf.elements
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestBeaconElement extends TestMediaElement
 	{
@@ -128,7 +127,7 @@ package org.osmf.elements
 		// Internals
 		//
 		
-		private function createBeaconElement(url:URL, httpLoader:HTTPLoader=null):BeaconElement
+		private function createBeaconElement(url:String, httpLoader:HTTPLoader=null):BeaconElement
 		{
 			return new DynamicBeaconElement(new Beacon(url, httpLoader || createHTTPLoader()));
 		}
@@ -142,11 +141,11 @@ package org.osmf.elements
 			else
 			{
 				var loader:MockHTTPLoader = new MockHTTPLoader();
-				loader.setExpectationForURL(RESOURCE.url.rawUrl, true, null);
+				loader.setExpectationForURL(RESOURCE.url, true, null);
 				return loader;
 			}
 		}
 		
-		private static const RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
+		private static const RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_IMAGE_FILE);
 	}
 }

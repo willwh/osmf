@@ -26,7 +26,6 @@ package org.osmf.net
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
@@ -45,7 +44,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getStreamNameFromURL(url:URL):String
+		public static function getStreamNameFromURL(url:String):String
 		{
 			var streamName:String = "";
 			
@@ -54,23 +53,19 @@ package org.osmf.net
 			{
 				if (isRTMPStream(url))
 				{
-					var fmsURL:FMSURL = url as FMSURL;
-					if (fmsURL == null)
-					{
-						fmsURL = new FMSURL(url.rawUrl);
-					}
+					var fmsURL:FMSURL = new FMSURL(url);
 	
 					streamName = fmsURL.streamName;
 	
 					// Add optional query parameters to the stream name.
-					if (url.query != null && url.query != "")
+					if (fmsURL.query != null && fmsURL.query != "")
 					{
-						 streamName += "?" + url.query;
+						 streamName += "?" + fmsURL.query;
 					}
 				}
 				else
 				{
-					streamName = url.rawUrl;
+					streamName = url;
 				}
 			}
 			
@@ -110,13 +105,14 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function isRTMPStream(url:URL):Boolean
+		public static function isRTMPStream(url:String):Boolean
 		{
 			var result:Boolean = false;
 			
 			if (url != null)
-			{			
-				var protocol:String = url.protocol;
+			{
+				var theURL:URL = new URL(url);
+				var protocol:String = theURL.protocol;
 				if (protocol != null && protocol.length > 0)
 				{
 					result = (protocol.search(/^rtmp$|rtmp[tse]$|rtmpte$/i) != -1);

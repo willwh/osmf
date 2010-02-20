@@ -43,7 +43,6 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -101,7 +100,7 @@ package org.osmf.net
 		/**
 		 * @private
 		 */
-		public function createNetConnection(resource:URLResource, netConnectionURLs:Vector.<URL>, netConnections:Vector.<NetConnection>):void
+		public function createNetConnection(resource:URLResource, netConnectionURLs:Vector.<String>, netConnections:Vector.<NetConnection>):void
 		{
 			this.resource = resource;
 			this.netConnectionURLs = netConnectionURLs;
@@ -144,8 +143,8 @@ package org.osmf.net
 			netConnections[attemptIndex].client = new NetClient();
 			try 
 			{
-				var host:URL = netConnectionURLs[attemptIndex];
-				netConnections[attemptIndex].connect(host.rawUrl);
+				var host:String = netConnectionURLs[attemptIndex];
+				netConnections[attemptIndex].connect(host);
 				attemptIndex++;
 				if (attemptIndex >= netConnectionURLs.length) 
 				{
@@ -276,7 +275,7 @@ package org.osmf.net
 		}
 		
 		private var resource:URLResource;
-		private var netConnectionURLs:Vector.<URL>;
+		private var netConnectionURLs:Vector.<String>;
 		private var netConnections:Vector.<NetConnection>;
 		
 		private var failedConnectionCount:int;

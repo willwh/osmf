@@ -24,7 +24,6 @@
 package org.osmf.media
 {
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * URLResource is a media resource that has a URL. It serves as a context object for MediaElements that expect a URL as input.	 
@@ -49,24 +48,24 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function URLResource(url:URL)
+		public function URLResource(url:String)
 		{
-			_url = (url == null) ? new URL(null) : url;	
+			_url = url;	
 		}
 		
 		/**
-		 * Required by the URLResource constructor, returns a URL object.
+		 * The URL of the resource.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get url():URL
+		public function get url():String
 		{
 			return _url;
 		}
 		
-		private var _url:URL;	
+		private var _url:String;	
 	}
 }

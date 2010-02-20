@@ -28,11 +28,10 @@ package org.osmf.elements
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicLoadTrait;
+	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.SimpleResource;
-	import org.osmf.utils.URL;
 	
 	public class TestSerialElementWithLoadTrait extends TestCase
 	{
@@ -51,7 +50,7 @@ package org.osmf.elements
 			var mediaElement1:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD],
 										loader1,
-										new URLResource(new URL("http://www.example.com/loadTrait1")),
+										new URLResource("http://www.example.com/loadTrait1"),
 										true);
 			var loadTrait1:DynamicLoadTrait = mediaElement1.getTrait(MediaTraitType.LOAD) as DynamicLoadTrait;			
 			loadTrait1.load();
@@ -61,7 +60,7 @@ package org.osmf.elements
 			var mediaElement2:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD],
 										loader2,
-										new URLResource(new URL("http://www.example.com/loadTrait2")),
+										new URLResource("http://www.example.com/loadTrait2"),
 										true);
 			var loadTrait2:DynamicLoadTrait = mediaElement2.getTrait(MediaTraitType.LOAD) as DynamicLoadTrait;
 			assertTrue(loadTrait2.loadState == LoadState.UNINITIALIZED);
@@ -70,7 +69,7 @@ package org.osmf.elements
 			var mediaElement3:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD],
 										loader3,
-										new URLResource(new URL("http://www.example.com/loadTrait3")),
+										new URLResource("http://www.example.com/loadTrait3"),
 										true);
 			var loadTrait3:DynamicLoadTrait = mediaElement3.getTrait(MediaTraitType.LOAD) as DynamicLoadTrait;
 			loadTrait3.load();

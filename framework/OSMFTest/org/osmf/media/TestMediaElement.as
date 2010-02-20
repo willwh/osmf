@@ -34,7 +34,6 @@ package org.osmf.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 
 	public class TestMediaElement extends TestCaseEx
 	{
@@ -275,7 +274,7 @@ package org.osmf.media
 		{
 			// Subclasses can override to specify a resource that the
 			// MediaElement can work with.
-			return new URLResource(new URL("http://www.example.com"));
+			return new URLResource("http://www.example.com");
 		}
 
 		protected function get existentTraitTypesOnInitialization():Array

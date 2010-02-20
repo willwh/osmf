@@ -38,7 +38,6 @@ package org.osmf.net
 	import org.osmf.netmocker.MockRTMPNetStreamMetrics;
 	import org.osmf.utils.DynamicSwitchingRule;
 	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.URL;
 	
 	public class TestNetStreamSwitchManager extends TestCase
 	{
@@ -48,7 +47,7 @@ package org.osmf.net
 			
 			eventDispatcher = new EventDispatcher();
 			
-			dsResource = new DynamicStreamingResource(new URL("rtmp://www.example.com/ondemand"));
+			dsResource = new DynamicStreamingResource("rtmp://www.example.com/ondemand");
 			dsResource.streamItems.push(new DynamicStreamingItem("stream_500kbps", 500));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream_800kbps", 800));
 			dsResource.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));

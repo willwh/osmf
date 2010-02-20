@@ -81,14 +81,14 @@ package org.osmf.utils
 			
 			if (	urlResource == null
 				|| 	urlResource.url == null
-				||  urlResource.url.rawUrl == null
-				||  urlResource.url.rawUrl.length <= 0
+				||  urlResource.url.length <= 0
 			   )
 			{
 				return false;
 			}
-						
-			if (urlResource.url.protocol.search(/http$|https$/i) == -1)
+			
+			var url:URL = new URL(urlResource.url);		
+			if (url.protocol.search(/http$|https$/i) == -1)
 			{
 				return false;
 			}

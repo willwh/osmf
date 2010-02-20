@@ -38,6 +38,8 @@ package org.osmf.utils
 			assertEquals(url.getParamValue("var1"), "foo");
 			assertEquals(url.getParamValue("var2"), "bar");
 			assertEquals(url.fragment, "yyz");
+			assertEquals(url.extension, "php");
+			assertTrue(url.absolute);
 
 			// A URI with an IP address
 			url = new URL("telnet://192.0.2.16:80/");
@@ -46,6 +48,8 @@ package org.osmf.utils
 			assertEquals(url.host, "192.0.2.16");
 			assertEquals(url.port, "80");
 			assertEquals(url.path, "");
+			assertEquals(url.extension, "");
+			assertTrue(url.absolute);
 			
 			// A local file location
 			url = new URL("/Users/mynamehere/Documents/media/myfile.flv");
@@ -54,13 +58,17 @@ package org.osmf.utils
 			assertEquals(url.host, "");
 			assertEquals(url.port, "");
 			assertEquals(url.path, "Users/mynamehere/Documents/media/myfile.flv");
+			assertEquals(url.extension, "flv");
+			assertFalse(url.absolute);
 			
 			// Relative path test
 			url = new URL("../../../myfile.flv");
 			assertEquals(url.protocol, "");
 			assertEquals(url.host, "");
 			assertEquals(url.path, "../../../myfile.flv");
-			
+			assertEquals(url.extension, "flv");
+			assertFalse(url.absolute);
+
 			// Relative path test
 			url = new URL("../myfile.flv");
 			assertEquals(url.protocol, "");
@@ -97,6 +105,8 @@ package org.osmf.utils
 			assertEquals(url.host, "foo.com");
 			assertEquals(url.path, "mymp4.mp4");
 			assertEquals(url.port, "");
+			assertEquals(url.extension, "mp4");
+			assertTrue(url.absolute);
 
 		}
 		

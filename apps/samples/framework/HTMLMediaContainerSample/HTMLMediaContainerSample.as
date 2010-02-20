@@ -29,7 +29,6 @@ package
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	[SWF(backgroundColor='#333333', frameRate='30', width='640', height='358')]
 	public class HTMLMediaContainerSample extends MediaContainer
@@ -49,15 +48,15 @@ package
 				rootElement.addChild(banners);
 				
 					var banner1:HTMLElement = new HTMLElement();
-					banner1.resource = new URLResource(new URL(BANNER_1));
+					banner1.resource = new URLResource(BANNER_1);
 					banners.addChild(banner1);
 					
 					var banner2:HTMLElement = new HTMLElement();
-					banner2.resource = new URLResource(new URL(BANNER_2));
+					banner2.resource = new URLResource(BANNER_2);
 					banners.addChild(banner2);
 					
 					var banner3:HTMLElement = new HTMLElement();
-					banner3.resource = new URLResource(new URL(BANNER_3));
+					banner3.resource = new URLResource(BANNER_3);
 					banners.addChild(banner3);
 				
 				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
@@ -76,7 +75,7 @@ package
 		private function constructVideo(url:String):VideoElement
 		{
 			return new VideoElement
-					( new URLResource(new URL(url))
+					( new URLResource(url)
 					);
 		}
 		

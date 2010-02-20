@@ -34,7 +34,6 @@ package
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	/**
 	 * Another simple OSMF application, building on HelloWorld2.as.
@@ -79,7 +78,7 @@ package
 			// First child is a progressive video.
 			serialElement.addChild
 				( new VideoElement
-					( new URLResource(new URL(REMOTE_PROGRESSIVE))
+					( new URLResource(REMOTE_PROGRESSIVE)
 					)
 				);
 
@@ -88,7 +87,7 @@ package
 				( new DurationElement
 					( 3
 					, new SWFElement
-						( new URLResource(new URL(REMOTE_SWF))
+						( new URLResource(REMOTE_SWF)
 						)
 					)
 				);
@@ -96,7 +95,7 @@ package
 			// Third child is a progressive video.
 			serialElement.addChild
 				( new VideoElement
-					( new URLResource(new URL(REMOTE_STREAM))
+					( new URLResource(REMOTE_STREAM)
 					)
 				);
 				

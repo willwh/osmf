@@ -23,13 +23,12 @@ package org.osmf.elements
 {
 	import flash.media.SoundMixer;
 	
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestAudioElementWithSoundLoader extends TestMediaElement
 	{
@@ -45,7 +44,7 @@ package org.osmf.elements
 
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+			return new URLResource(TestConstants.LOCAL_SOUND_FILE);
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array

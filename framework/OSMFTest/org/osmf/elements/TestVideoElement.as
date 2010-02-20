@@ -23,14 +23,14 @@ package org.osmf.elements
 {
 	import flash.events.Event;
 	
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.TemporalFacet;
@@ -41,16 +41,15 @@ package org.osmf.elements
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.netmocker.EventInfo;
 	import org.osmf.netmocker.MockNetLoader;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestVideoElement extends TestMediaElement
 	{
@@ -121,8 +120,8 @@ package org.osmf.elements
 		public function testLiveTraits():void
 		{
 			var videoElement:VideoElement = createMediaElement() as VideoElement;
-			videoElement.resource = new StreamingURLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO_LIVE),
-																StreamType.LIVE);
+			videoElement.resource = new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO_LIVE,
+															 StreamType.LIVE);
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
@@ -164,7 +163,7 @@ package org.osmf.elements
 			}
 			
 			var videoElement:VideoElement = createMediaElement() as VideoElement;
-			videoElement.resource = new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
+			videoElement.resource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			videoElement.metadata.addEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
@@ -319,7 +318,7 @@ package org.osmf.elements
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			return new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			return new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array

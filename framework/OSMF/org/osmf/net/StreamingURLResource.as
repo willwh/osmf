@@ -43,8 +43,17 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param url The URL of the resource.
-		 * @param streamType The type of the stream. If null, defaults to StreamType.ANY.
-		 * @param dvrProtocol The server side DVR protocol to use. Null by default.
+		 * @param streamType The type of the stream. If null, defaults to
+		 * StreamType.ANY.
+		 * @param urlIncludesFMSApplicationInstance Indicates, for RTMP streaming
+		 * URLs, whether the URL includes the FMS application instance or not.  If
+		 * true, then the second part of the URL path is considered the instance
+		 * name, such as <code>rtmp://host/app/foo/bar/stream</code>. In this case
+		 * the instance name would be 'foo' and the stream would be 'bar/stream'.
+		 * If false, then the second part of the URL path is considered to be the
+		 * stream name, such as <code>rtmp://host/app/foo/bar/stream</code>. In this
+		 * case there is no instance name and the stream would be 'foo/bar/stream'.
+		 * The default is false.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -52,11 +61,13 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public function StreamingURLResource
-							( url:URL
+							( url:String
 							, streamType:String = null
+							, urlIncludesFMSApplicationInstance:Boolean = false
 							)
 		{
 			_streamType = streamType || StreamType.ANY;
+			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
 			
 			super(url);
 		}
@@ -73,7 +84,7 @@ package org.osmf.net
 		 *   </tr>
 		 *   <tr>
 		 * 	<td><code>StreamType.ANY</code></td>
-		 * 	<td>The StreamingURLResource represents a any possible stream type.</td>
+		 * 	<td>The StreamingURLResource represents any possible stream type (except DVR).</td>
 		 *   </tr>
 		 *   <tr>
 		 * 	<td><code>StreamType.LIVE</code></td>
@@ -82,6 +93,10 @@ package org.osmf.net
 		 *   <tr>
 		 * 	<td><code>StreamType.RECORDED</code></td>
 		 * 	<td>The StreamingURLResource represents a recorded stream.</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	<td><code>StreamType.DVR</code></td>
+		 * 	<td>The StreamingURLResource represents a DVR stream.</td>
 		 *   </tr>
 		 * </table>
 		 * 
@@ -97,6 +112,22 @@ package org.osmf.net
 			return _streamType;
 		}
 		
+		/**
+		 * Indicates, for RTMP streaming URLs, whether the URL includes the FMS
+		 * application instance or not.  If true, then the second part of the URL
+		 * path is considered the instance name, such as <code>rtmp://host/app/foo/bar/stream</code>.
+		 * In this case the instance name would be 'foo' and the stream would be 'bar/stream'.
+		 * If false, then the second part of the URL path is considered to be the
+		 * stream name, such as <code>rtmp://host/app/foo/bar/stream</code>. In this
+		 * case there is no instance name and the stream would be 'foo/bar/stream'.
+		 * The default is false.
+		 **/
+		public function get urlIncludesFMSApplicationInstance():Boolean
+		{
+			return _urlIncludesFMSApplicationInstance;
+		}
+		
 		private var _streamType:String; // StreamType
+		private var _urlIncludesFMSApplicationInstance:Boolean = false;
 	}
 }

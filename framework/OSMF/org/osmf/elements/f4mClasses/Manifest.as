@@ -22,9 +22,7 @@
 package org.osmf.elements.f4mClasses
 {
 	import __AS3__.vec.Vector;
-	
-	import org.osmf.utils.URL;
-	
+		
 	[ExcludeClass]
 	
 	/**
@@ -54,7 +52,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public var baseURL:URL;
+		public var baseURL:String;
 				
 		/**
 		 * The &lt;duration&gt; element represents the duration of the media, in seconds. 

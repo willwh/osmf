@@ -25,19 +25,16 @@ package org.osmf.elements
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.elements.F4MElement;
-	import org.osmf.elements.F4MLoader;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
-	import org.osmf.utils.URL;
 	
 	public class TestF4MLoader extends TestCase
 	{
 		public function testDynamicVideoLoad():void
 		{
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource(new URL('http://flipside.corp.adobe.com/testing/oconnell/manifest/progressive.f4m'));
+			var res1:URLResource = new URLResource('http://flipside.corp.adobe.com/testing/oconnell/manifest/progressive.f4m');
 						
 			var finished:Function = addAsync(function():void{}, 3000);
 						
@@ -70,7 +67,7 @@ package org.osmf.elements
 			var finished:Function = addAsync(function():void{}, 3000);
 			
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource(new URL('http://flipside.corp.adobe.com/testing/oconnell/manifest/dynamic_Streaming.f4m'));
+			var res1:URLResource = new URLResource('http://flipside.corp.adobe.com/testing/oconnell/manifest/dynamic_Streaming.f4m');
 			var proxy:F4MElement = new F4MElement(res1, loader);
 			
 			var player:MediaPlayer = new MediaPlayer();
@@ -101,7 +98,7 @@ package org.osmf.elements
 			var finished:Function = addAsync(function():void{}, 5000);
 			
 			var loader:F4MLoader = new F4MLoader();			
-			var res1:URLResource = new URLResource(new URL('http://flipside.corp.adobe.com/testing/oconnell/manifest/externals.f4m'));
+			var res1:URLResource = new URLResource('http://flipside.corp.adobe.com/testing/oconnell/manifest/externals.f4m');
 			var proxy:F4MElement = new F4MElement(null, loader);
 			proxy.resource = res1;
 			var player:MediaPlayer = new MediaPlayer();

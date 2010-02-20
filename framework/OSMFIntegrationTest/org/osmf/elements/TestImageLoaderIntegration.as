@@ -30,7 +30,6 @@ package org.osmf.elements
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestImageLoaderIntegration extends TestLoaderBase
 	{
@@ -46,17 +45,17 @@ package org.osmf.elements
 
 		override protected function get successfulResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
+			return new URLResource(TestConstants.REMOTE_IMAGE_FILE);
 		}
 
 		override protected function get failedResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE));
+			return new URLResource(TestConstants.REMOTE_INVALID_IMAGE_FILE);
 		}
 
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
+			return new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 		}
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void

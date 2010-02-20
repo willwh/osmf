@@ -31,14 +31,13 @@ package org.osmf.test.mast.loader
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.test.mast.MASTTestConstants;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	
 	public class TestMASTLoader extends TestLoaderBase
 	{
@@ -96,7 +95,7 @@ package org.osmf.test.mast.loader
 				if (resource == successfulResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, MASTTestConstants.MAST_DOCUMENT_CONTENTS
 						);
@@ -104,7 +103,7 @@ package org.osmf.test.mast.loader
 				else if (resource == failedResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -112,7 +111,7 @@ package org.osmf.test.mast.loader
 				else if (resource == unhandledResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -148,20 +147,20 @@ package org.osmf.test.mast.loader
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/script.php?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/script.php?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/script.php?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/script.php?param=value")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("httpt://example.com"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
@@ -177,9 +176,9 @@ package org.osmf.test.mast.loader
 		private var httpLoader:HTTPLoader;
 		private var eventDispatcher:EventDispatcher;
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(MASTTestConstants.MAST_DOCUMENT_URL));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(MASTTestConstants.MISSING_MAST_DOCUMENT_URL));
-		private static const UNHANDLED_RESOURCE:URLResource = new URLResource(new URL("ftp://example.com"));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(MASTTestConstants.MAST_DOCUMENT_URL);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(MASTTestConstants.MISSING_MAST_DOCUMENT_URL);
+		private static const UNHANDLED_RESOURCE:URLResource = new URLResource("ftp://example.com");
 		
 	}
 }

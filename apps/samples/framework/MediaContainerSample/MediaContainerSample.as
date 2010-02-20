@@ -42,7 +42,6 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.utils.URL;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class MediaContainerSample extends Sprite
@@ -195,7 +194,7 @@ package
 		private function constructImage(url:String):MediaElement
 		{
 			return new ImageElement
-					( new URLResource(new URL(url))
+					( new URLResource(url)
 					) 
 				
 		}
@@ -203,7 +202,7 @@ package
 		private function constructVideo(url:String):VideoElement
 		{
 			return new VideoElement
-					( new URLResource(new URL(url))
+					( new URLResource(url)
 					);
 		}
 		

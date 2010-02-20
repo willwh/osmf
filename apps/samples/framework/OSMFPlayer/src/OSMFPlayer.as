@@ -51,7 +51,6 @@ package
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.Version;
 	
 	[Frame(factoryClass="Preloader")]
@@ -94,7 +93,7 @@ package
 			onStageResize();
 			
 			// Try to load the currently set URL (if any):
-			loadURL(new URL(configuration.url));
+			loadURL(configuration.url);
 		}
 		
 		// Internals
@@ -172,7 +171,7 @@ package
 			button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
 		}
 		
-		private function loadURL(url:URL):void
+		private function loadURL(url:String):void
 		{
 			updateTargetElement(factory.createMediaElement(new URLResource(url)));	
 		}
@@ -239,7 +238,7 @@ package
 			var urlInput:URLInput = event.target as URLInput;
 			if (urlInput)
 			{
-				loadURL(new URL(urlInput.url));
+				loadURL(urlInput.url);
 			}
 		}
 		

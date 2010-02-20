@@ -28,7 +28,6 @@ package org.osmf.media
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithAudioElement extends TestMediaPlayer
 	{
@@ -76,7 +75,7 @@ package org.osmf.media
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			return new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+			return new URLResource(TestConstants.STREAMING_AUDIO_FILE);
 		}
 
 		override protected function get invalidResourceForMediaElement():MediaResourceBase
@@ -105,7 +104,7 @@ package org.osmf.media
 		// Internals
 		//
 
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_AUDIO_FILE));
+		private static const INVALID_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_AUDIO_FILE);
 		
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;

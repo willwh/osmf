@@ -70,8 +70,6 @@ package org.osmf.elements.htmlClasses
 			var url:String
 				= urlResource
 					? urlResource.url
-						? urlResource.url.rawUrl
-						: ""
 					: "";
 			
 			var result:* = owner.invokeJavaScriptMethod("load", url);

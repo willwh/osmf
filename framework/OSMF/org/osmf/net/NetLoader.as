@@ -42,6 +42,7 @@ package org.osmf.net
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.URL;
 
 	/**
 	 * The NetLoader class extends LoaderBase to provide
@@ -114,24 +115,25 @@ package org.osmf.net
 			 * We assume being unable to handle the resource for conditions not mentioned above
 			 */
 			var res:URLResource = resource as URLResource;
-			if (res == null || res.url == null || res.url.rawUrl == null || res.url.rawUrl.length <= 0)
+			var url:URL = res != null ? new URL(res.url) : null;
+			if (url == null || url.rawUrl == null || url.rawUrl.length <= 0)
 			{
 				return false;
 			}
-			if (res.url.protocol == "")
+			if (url.protocol == "")
 			{
-				return res.url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1;
+				return url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1;
 			}
-			if (NetStreamUtils.isRTMPStream(res.url))
+			if (NetStreamUtils.isRTMPStream(url.rawUrl))
 			{
 				return true;
 			}
-			if (res.url.protocol.search(/file$|http$|https$/i) != -1)
+			if (url.protocol.search(/file$|http$|https$/i) != -1)
 			{
-				return (res.url.path == null ||
-						res.url.path.length <= 0 ||
-						res.url.path.indexOf(".") == -1 ||
-						res.url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1);
+				return (url.path == null ||
+						url.path.length <= 0 ||
+						url.path.indexOf(".") == -1 ||
+						url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1);
 			}
 			
 			return false;
@@ -198,7 +200,8 @@ package org.osmf.net
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{	
 			updateLoadTrait(loadTrait, LoadState.LOADING);
-			switch ((loadTrait.resource as URLResource).url.protocol)
+			var url:URL = new URL((loadTrait.resource as URLResource).url);
+			switch (url.protocol)
 			{
 				case PROTOCOL_RTMP:
 				case PROTOCOL_RTMPS:

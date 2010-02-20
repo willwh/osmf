@@ -30,6 +30,7 @@ package org.osmf.smil.loader
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
@@ -38,13 +39,13 @@ package org.osmf.smil.loader
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.smil.media.SMILMediaGenerator;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.parser.SMILParser;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.URL;
 
 	/**
 	 * The SMILLoader class will load a SMIL (Synchronized 
@@ -93,7 +94,8 @@ package org.osmf.smil.loader
 			else if (resource is URLResource)
 			{
 				var urlResource:URLResource = URLResource(resource);
-				canHandle =  (urlResource.url.path.search(/\.smi$|\.smil$/i) != -1);
+				var url:URL = new URL(urlResource.url);
+				canHandle =  (url.path.search(/\.smi$|\.smil$/i) != -1);
 			}		
 			
 			return canHandle;
@@ -106,7 +108,7 @@ package org.osmf.smil.loader
 		{			
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 
-			var urlLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
+			var urlLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url));
 			setupListeners();
 			
 			function setupListeners(add:Boolean=true):void

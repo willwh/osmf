@@ -26,7 +26,7 @@ package com.akamai.osmf.net
 	
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
-	import org.osmf.utils.FMSURL;
+	import org.osmf.utils.URL;
 
 	/**
 	 * The AkamaiNetConnectionFactory class extends NetConnectionFactory to
@@ -49,10 +49,10 @@ package com.akamai.osmf.net
 		 */
 		override protected function createNetConnectionKey(resource:URLResource):String
 		{
-			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
-			var authToken:String = fmsURL.getParamValue("auth");
-			var aifpToken:String = fmsURL.getParamValue("aifp");
-			var slistToken:String = fmsURL.getParamValue("slist");
+			var theURL:URL = new URL(resource.url);
+			var authToken:String = theURL.getParamValue("auth");
+			var aifpToken:String = theURL.getParamValue("aifp");
+			var slistToken:String = theURL.getParamValue("slist");
 			
 			return super.createNetConnectionKey(resource) + authToken + aifpToken + slistToken;
 		}

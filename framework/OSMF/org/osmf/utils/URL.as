@@ -21,7 +21,6 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-
 package org.osmf.utils
 {
 	/**
@@ -301,7 +300,27 @@ package org.osmf.utils
 		{
 			return protocol != "";
 		}
-				
+		
+		/**
+		 * Returns the file extension of the URL, the empty string if there is
+		 * no extension.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get extension():String
+		{
+			var lastDot:int = path.lastIndexOf(".");
+			if (lastDot != -1)
+			{
+				return path.substr(lastDot+1);
+			}
+			
+			return "";
+		}
+		
 		/**
 		 * Parses the url into properties.
 		 *  

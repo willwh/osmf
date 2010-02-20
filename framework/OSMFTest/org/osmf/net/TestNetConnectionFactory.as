@@ -32,9 +32,7 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.DefaultNetConnectionFactory;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestNetConnectionFactory extends TestCase
 	{
@@ -64,7 +62,7 @@ package org.osmf.net
 
 		public function testCreateMultipleWithSharingEnabled():void
 		{
-			testCreateMethod(true, true);
+			testCreateMethod(true, SUCCESSFUL_RESOURCE2);
 		}
 		
 		public function testCloseNetConnection():void
@@ -75,21 +73,23 @@ package org.osmf.net
 		public function testCreateWithGoodResource():void
 		{
 			// test protocols
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_RTMP)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_RTMPE)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_RTMPTE)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_RTMPS)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_RTMPT)));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMPE));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMPTE));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMPS));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMPT));
 			
 			// test ports
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_1935)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_443)));
-			doTestCreateWithGoodResource(new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO_80)));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_1935));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_443));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_80));
 			
-			// Test URL instead of FMSURL
-			doTestCreateWithGoodResource(new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO_RTMP)));
+			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP));
 
+			// test with useInstance
+			doTestCreateWithGoodResource(new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP, null, true));
 		}
+		
 		public function testCreateWithBadResource():void
 		{
 			doTestCreateWithBadResource();
@@ -123,7 +123,7 @@ package org.osmf.net
 		
 		/////////////////////////////////////////
 		
-		private function testCreateMethod(sharing:Boolean, createMultiple:Boolean=false):void
+		private function testCreateMethod(sharing:Boolean, secondResource:URLResource=null):void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
 			
@@ -137,12 +137,12 @@ package org.osmf.net
 				assertTrue(event.netConnection.connected);
 				assertStrictlyEquals(event.resource,resource);
 				
-				if (createMultiple)
+				if (secondResource != null)
 				{
 					factory.removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
 					factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated2);
 					
-					var resource2:URLResource = SUCCESSFUL_RESOURCE2;
+					var resource2:URLResource = secondResource;
 					factory.create(resource2);
 					
 					function onCreated2(event2:NetConnectionFactoryEvent):void
@@ -276,8 +276,8 @@ package org.osmf.net
 		
 		private static const TEST_TIME:int = 4000;
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.REMOTE_STREAMING_VIDEO));
-		private static const SUCCESSFUL_RESOURCE2:URLResource = new URLResource(new FMSURL(TestConstants.STREAMING_AUDIO_FILE));
-		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(new FMSURL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
+		private static const SUCCESSFUL_RESOURCE2:URLResource = new URLResource(TestConstants.STREAMING_AUDIO_FILE);
+		private static const UNSUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 	}
 }

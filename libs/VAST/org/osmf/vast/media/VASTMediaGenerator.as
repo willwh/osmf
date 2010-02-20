@@ -27,7 +27,6 @@ package org.osmf.vast.media
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTDocument;
 	import org.osmf.vast.model.VASTInlineAd;
@@ -122,7 +121,7 @@ package org.osmf.vast.media
 								mediaURL = mediaURL.replace(/\.flv$|\.f4v$/i, "");
 							}
 
-							var rootElement:MediaElement = new VideoElement(new URLResource(new FMSURL(mediaURL)));
+							var rootElement:MediaElement = new VideoElement(new URLResource(mediaURL));
 							
 							// Resolve the chain of ProxyElements, ensuring that
 							// the VideoElement is at the deepest point. 

@@ -198,8 +198,7 @@
 			
 			private function loadMedia(url:String):void
 			{	
-				var resource:URLResource = new StreamingURLResource(new FMSURL(url), 
-																	isLiveStream(url) ? StreamType.LIVE : StreamType.RECORDED); 
+				var resource:URLResource = new StreamingURLResource(url, isLiveStream(url) ? StreamType.LIVE : StreamType.RECORDED); 
 				if (isMASTPluginLoaded())
 				{
 					// Assign to the resource the metadata that indicates that it should have a MAST
@@ -251,7 +250,7 @@
 				if (source.substr(0, 4) == "http" || source.substr(0, 4) == "file")
 				{
 					// This is a URL, create a URLResource
-					pluginResource = new URLResource(new URL(source));
+					pluginResource = new URLResource(source);
 				}
 				else
 				{

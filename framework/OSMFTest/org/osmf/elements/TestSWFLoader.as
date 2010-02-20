@@ -24,13 +24,9 @@ package org.osmf.elements
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Note that because SWFLoader must make network calls and cannot be
@@ -49,61 +45,61 @@ package org.osmf.elements
 			var loader:SWFLoader = new SWFLoader();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("file:///movie.swf"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("assets/movie.swf"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.swf"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.swf?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("movie.swf"))));
+			assertTrue(loader.canHandleResource(new URLResource("file:///movie.swf")));
+			assertTrue(loader.canHandleResource(new URLResource("assets/movie.swf")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/movie.swf")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/movie.swf?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("movie.swf")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie.foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/movie?param=.swf"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/movie.foo")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/movie")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/movie?param=.swf")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
 
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.SWF);
-			var resource:URLResource = new URLResource(new URL("http://example.com/movie"));
+			var resource:URLResource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
 			metadata = new MediaTypeFacet();
-			resource = new URLResource(new URL("http://example.com/movie.swf"));
+			resource = new URLResource("http://example.com/movie.swf");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.SWF, "application/x-shockwave-flash");
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			// Add some invalid cases based on metadata information
 			metadata = new MediaTypeFacet(MediaType.IMAGE);
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(null,  "Invalide MIME Type");
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet();
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "application/x-shockwave-flash");
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid MIME Type");
-			resource = new URLResource(new URL("http://example.com/movie"));
+			resource = new URLResource("http://example.com/movie");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 		}

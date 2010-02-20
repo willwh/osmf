@@ -37,8 +37,6 @@ package org.osmf.test.captioning.media
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.FMSURL;
-	import org.osmf.utils.URL;
 	
 
 	public class TestCaptioningProxyElement extends TestMediaElement
@@ -182,7 +180,7 @@ package org.osmf.test.captioning.media
 
 		private function createResource(captioningDoc:String):URLResource
 		{
-			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 	
 			var kvFacet:KeyValueFacet = new KeyValueFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), captioningDoc);
@@ -192,7 +190,7 @@ package org.osmf.test.captioning.media
 		
 		private function createResourceWithBadFacet():URLResource
 		{
-			var resource:URLResource = new URLResource(new FMSURL(REMOTE_STREAM));				
+			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.osmf.bogus/captioning/1.0");
 			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
 			resource.metadata.addFacet(kvFacet);

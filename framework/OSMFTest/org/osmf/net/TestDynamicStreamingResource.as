@@ -26,7 +26,6 @@ package org.osmf.net
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.metadata.Metadata;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.OSMFStrings;
 
 	public class TestDynamicStreamingResource extends TestCase
@@ -38,10 +37,10 @@ package org.osmf.net
 			
 		public function testDynamicStreamingResource():void
 		{
-			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL(HOSTNAME));
+			var dsr:DynamicStreamingResource = new DynamicStreamingResource(HOSTNAME);
 			
 			// Test hostName property
-			assertEquals(HOSTNAME, dsr.host.rawUrl);
+			assertEquals(HOSTNAME, dsr.host);
 			
 			assertEquals(0, dsr.streamItems.length);
 			

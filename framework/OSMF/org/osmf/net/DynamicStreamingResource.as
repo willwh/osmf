@@ -28,7 +28,6 @@ package org.osmf.net
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 
 	/**
 	 * DynamicStreamingResource represents a dynamic streaming profile.
@@ -54,7 +53,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DynamicStreamingResource(host:URL, streamType:String=null)
+		public function DynamicStreamingResource(host:String, streamType:String=null)
 		{
 			super(host, streamType);
 			
@@ -69,7 +68,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get host():URL
+		public function get host():String
 		{
 			return url;
 		}

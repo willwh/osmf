@@ -23,11 +23,11 @@ package org.osmf.elements
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.*;
@@ -82,7 +82,8 @@ package org.osmf.elements
 			if (urlResource != null &&
 				urlResource.url != null)
 			{
-				return (urlResource.url.path.search(/\.gif$|\.jpg$|\.png$/i) != -1);
+				var url:URL = new URL(urlResource.url);
+				return (url.path.search(/\.gif$|\.jpg$|\.png$/i) != -1);
 			}	
 			return false;
 		}

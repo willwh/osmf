@@ -28,7 +28,6 @@ package org.osmf.elements
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.utils.URL;
 
 	public class TestF4MLoader extends TestCase
 	{
@@ -45,17 +44,17 @@ package org.osmf.elements
 		{		
 			var loader:F4MLoader = new F4MLoader();
 			
-			var res1:URLResource = new URLResource(new URL('http://example.com/manifest.f4m'));
+			var res1:URLResource = new URLResource('http://example.com/manifest.f4m');
 			
-			var res2:URLResource = new URLResource(new URL('http://example.com/manifest.f4m'));
+			var res2:URLResource = new URLResource('http://example.com/manifest.f4m');
 			res2.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
 			
-			var res3:URLResource = new URLResource(new URL('http://example.com/manifest.blah'));
+			var res3:URLResource = new URLResource('http://example.com/manifest.blah');
 			res3.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
 			
-			var res4:URLResource = new URLResource(new URL('http://example.com/manifest.blah'));
+			var res4:URLResource = new URLResource('http://example.com/manifest.blah');
 			
-			var res5:URLResource = new URLResource(new URL('http://example.com/manifest.blah'));
+			var res5:URLResource = new URLResource('http://example.com/manifest.blah');
 			res5.metadata.addFacet(new MediaTypeFacet(null, 'application/blah+xml'));
 										
 			assertTrue(loader.canHandleResource(res1));
@@ -69,7 +68,7 @@ package org.osmf.elements
 		public function testUnloadFail():void
 		{
 			var loader:F4MLoader = new F4MLoader();
-			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource(new URL("http://example.com/notValid")));
+			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource("http://example.com/notValid"));
 			var errorThrown:Boolean = false;
 			try
 			{
@@ -86,7 +85,7 @@ package org.osmf.elements
 		{
 			
 			var loader:F4MLoader = new F4MLoader();
-			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource(new URL("http://example.com/notValid.f4m")));
+			var loadTrait:LoadTrait = new LoadTrait(loader, new URLResource("http://example.com/notValid.f4m"));
 			loadTrait.addEventListener(MediaErrorEvent.MEDIA_ERROR, addAsync(onError, 10000));
 			
 			var errorThrown:Boolean = false;

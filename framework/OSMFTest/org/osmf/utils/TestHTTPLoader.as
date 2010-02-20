@@ -25,8 +25,8 @@ package org.osmf.utils
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	
 	public class TestHTTPLoader extends TestLoaderBase
@@ -54,15 +54,15 @@ package org.osmf.utils
 			{
 				if (resource == SUCCESSFUL_RESOURCE)
 				{
-					mockLoader.setExpectationForURL(SUCCESSFUL_RESOURCE.url.rawUrl, true, null);
+					mockLoader.setExpectationForURL(SUCCESSFUL_RESOURCE.url, true, null);
 				}
 				else if (resource == FAILED_RESOURCE)
 				{
-					mockLoader.setExpectationForURL(FAILED_RESOURCE.url.rawUrl, false, null);
+					mockLoader.setExpectationForURL(FAILED_RESOURCE.url, false, null);
 				}
 				else if (resource == UNHANDLED_RESOURCE)
 				{
-					mockLoader.setExpectationForURL(UNHANDLED_RESOURCE.url.rawUrl, false, null);
+					mockLoader.setExpectationForURL(UNHANDLED_RESOURCE.url, false, null);
 				}
 			}	
 			return new HTTPLoadTrait(loader, resource);
@@ -95,27 +95,27 @@ package org.osmf.utils
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/script.php?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/script.php?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/script.php?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/script.php?param=value")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("httpt://example.com"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
 		}
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_INVALID_IMAGE_FILE));
-		private static const UNHANDLED_RESOURCE:URLResource = new URLResource(new URL("ftp://example.com"));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_IMAGE_FILE);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_INVALID_IMAGE_FILE);
+		private static const UNHANDLED_RESOURCE:URLResource = new URLResource("ftp://example.com");
 	}
 }

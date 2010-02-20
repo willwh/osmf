@@ -33,7 +33,6 @@ package org.osmf.elements
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestAudioElement extends TestMediaElement
 	{
@@ -63,7 +62,7 @@ package org.osmf.elements
 
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+			return new URLResource(TestConstants.STREAMING_AUDIO_FILE);
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array
@@ -106,9 +105,9 @@ package org.osmf.elements
 			// Verify that the appropriate loader eventually gets set if we don't supply one.
 			var audioElement:AudioElement = new AudioElement();
 			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) == null);
-			audioElement.resource = new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+			audioElement.resource = new URLResource(TestConstants.LOCAL_SOUND_FILE);
 			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) is SoundLoadTrait);
-			audioElement.resource = new URLResource(new URL(TestConstants.STREAMING_AUDIO_FILE));
+			audioElement.resource = new URLResource(TestConstants.STREAMING_AUDIO_FILE);
 			assertTrue(audioElement.getTrait(MediaTraitType.LOAD) is NetStreamLoadTrait);
 		}
 		

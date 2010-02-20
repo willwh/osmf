@@ -33,7 +33,6 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
-	import org.osmf.utils.URL;
 
 	public class TestManifestParser extends TestCase
 	{
@@ -217,7 +216,7 @@ package org.osmf.elements.f4mClasses
 								<media url="http://example.com/myvideo/low.mp4" bitrate="408" width="640" height="480" drmAdditionalHeaderId="drmMetadata2052"/>
 							</manifest>
 			var manifest:Manifest = parser.parse(test);
-			var manifestResource:URLResource = new URLResource( new URL('http://example.com/manifest.f4m'));
+			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);			
@@ -228,7 +227,7 @@ package org.osmf.elements.f4mClasses
 			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
 			
 			assertTrue(resource is URLResource)
-			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url.rawUrl)
+			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url)
 			
 			var facet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
@@ -258,7 +257,7 @@ package org.osmf.elements.f4mClasses
 								<media url="http://example.com/myvideo/super_high.mp4" bitrate="1024" width="1920" height="1080" drmAdditionalHeaderId="drmMetadata2052"/>
 							</manifest>
 			var manifest:Manifest = parser.parse(test);
-			var manifestResource:URLResource = new URLResource( new URL('http://example.com/manifest.f4m'));
+			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
 			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 50);			
@@ -292,7 +291,7 @@ package org.osmf.elements.f4mClasses
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource(new URL('http://example.com/manifest.f4m')));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
@@ -336,7 +335,7 @@ package org.osmf.elements.f4mClasses
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource(new URL('http://example.com/manifest.f4m')));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is DynamicStreamingResource);
 
@@ -364,13 +363,13 @@ package org.osmf.elements.f4mClasses
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource(new URL('http://example.com/manifest.f4m')));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
 			
 			var dynResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			
 			assertEquals(dynResource.streamItems.length, 3);
 			
-			assertEquals(dynResource.host.rawUrl, "rtmp://newbase.com/myserver");
+			assertEquals(dynResource.host, "rtmp://newbase.com/myserver");
 			
 			assertEquals(dynResource.streamItems[0].streamName, "low");
 			assertEquals(dynResource.streamItems[1].streamName, "medium");
@@ -389,13 +388,13 @@ package org.osmf.elements.f4mClasses
 						</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource(new URL('http://example.com/manifest.f4m')));
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
 			
 			assertTrue(resource is URLResource);
 			
 			var urlResource:URLResource = resource as URLResource;
 				
-			assertEquals(urlResource.url.rawUrl, "http://example.com/myvideo/low.flv");
+			assertEquals(urlResource.url, "http://example.com/myvideo/low.flv");
 			CONFIG::FLASH_10_1
 			{
 				var hsFacet:KeyValueFacet = HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) as KeyValueFacet;
@@ -422,7 +421,7 @@ package org.osmf.elements.f4mClasses
 			var resource:MediaResourceBase;
 			try
 			{
-				resource = parser.createResource(manifest, new URLResource(new URL('http://example.com/manifest.f4m')));
+				resource = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
 			}
 			catch(error:Error)
 			{
@@ -438,7 +437,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals(dynResource.streamItems[0].streamName, "low");
 			assertEquals(dynResource.streamItems[1].streamName, "medium");
 			assertEquals(dynResource.streamItems[2].streamName, "high");
-			assertEquals(dynResource.host.rawUrl, "http://example.com");
+			assertEquals(dynResource.host, "http://example.com");
 		}
 			
 	}

@@ -31,7 +31,6 @@ package org.osmf.media
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.SimpleLoader;
 	import org.osmf.utils.SimpleResource;
-	import org.osmf.utils.URL;
 	
 	public class TestLoadableElementBase extends TestMediaElement
 	{
@@ -115,7 +114,7 @@ package org.osmf.media
 			var mediaElement:MediaElement = new LoadableElementBase(null, null, [MockHTTPLoader, SimpleLoader]);
 			
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) == null);
-			mediaElement.resource = new URLResource(new URL("http://example.com"));
+			mediaElement.resource = new URLResource("http://example.com");
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);
 			mediaElement.resource = new SimpleResource("foo");
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);

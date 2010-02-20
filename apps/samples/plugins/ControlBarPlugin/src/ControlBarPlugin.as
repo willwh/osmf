@@ -31,7 +31,6 @@ package
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.plugin.PluginInfo;
-	import org.osmf.utils.URL;
 
 	public class ControlBarPlugin extends Sprite
 	{

@@ -28,7 +28,6 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	/**
 	 * Variation on HelloWorld, using MediaContainer.
@@ -38,8 +37,11 @@ package
 	{
 		public function HelloWorld6()
 		{
+			// Create the resource to play.
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
+			
 			// Create the MediaElement.
-			var mediaElement:MediaElement = new VideoElement(new URLResource(new URL(REMOTE_PROGRESSIVE)));
+			var mediaElement:MediaElement = new VideoElement(resource);
 			
 			// Create the container class that holds our media.
  			var container:MediaContainer = new MediaContainer();
@@ -48,10 +50,9 @@ package
 
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			var mediaPlayer:MediaPlayer = new MediaPlayer(mediaElement);
+			mediaPlayer = new MediaPlayer(mediaElement);
 		}
-				
-		private static const REMOTE_PROGRESSIVE:String
-			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
+		
+		private var mediaPlayer:MediaPlayer;
 	}
 }

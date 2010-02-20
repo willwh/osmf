@@ -28,7 +28,6 @@ package com.akamai.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
-	import org.osmf.utils.*;
 
 	/**
 	 * The AkamaiNetLoader class provides the means for

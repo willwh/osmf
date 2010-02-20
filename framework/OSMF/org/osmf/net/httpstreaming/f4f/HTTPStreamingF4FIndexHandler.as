@@ -119,7 +119,7 @@ package org.osmf.net.httpstreaming.f4f
 								, false
 								, null
 								, null
-								, new URLRequest(bootstrap.url.rawUrl)
+								, new URLRequest(bootstrap.url)
 								, i
 								, true
 								)
@@ -396,7 +396,7 @@ package org.osmf.net.httpstreaming.f4f
 							, false
 							, null
 							, null
-							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url.rawUrl)
+							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url)
 							, i
 							, true
 							)

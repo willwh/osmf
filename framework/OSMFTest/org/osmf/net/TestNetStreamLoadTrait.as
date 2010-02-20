@@ -32,14 +32,13 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoadTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestNetStreamLoadTrait extends TestLoadTrait
 	{
@@ -156,8 +155,8 @@ package org.osmf.net
 			// Placeholder
 		}
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(TestConstants.INVALID_STREAMING_VIDEO));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(TestConstants.INVALID_STREAMING_VIDEO);
 		private static const UNHANDLED_RESOURCE:MediaResourceBase = new NullResource();
 		
 		private var netFactory:NetFactory;

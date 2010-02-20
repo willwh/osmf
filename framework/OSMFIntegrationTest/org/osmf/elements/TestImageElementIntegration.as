@@ -21,11 +21,10 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	public class TestImageElementIntegration extends TestImageOrSWFElementIntegration
 	{
@@ -36,7 +35,7 @@ package org.osmf.elements
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.REMOTE_IMAGE_FILE));
+			return new URLResource(TestConstants.REMOTE_IMAGE_FILE);
 		}
 		
 		override protected function get expectedBytesTotal():Number

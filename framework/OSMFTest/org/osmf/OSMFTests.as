@@ -54,7 +54,7 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-
+			
 			// Logging
 			//
 			

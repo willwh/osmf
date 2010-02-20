@@ -23,19 +23,18 @@ package org.osmf.elements
 {
 	import flash.events.Event;
 	
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.MediaElementEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.URL;
 	
 	public class TestCompositeElement extends TestMediaElement
 	{
@@ -65,7 +64,7 @@ package org.osmf.elements
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL("http://www.example.com"));
+			return new URLResource("http://www.example.com");
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array
@@ -363,7 +362,7 @@ package org.osmf.elements
 				var childElement:MediaElement = 
 					new DynamicMediaElement([MediaTraitType.LOAD],
 											loader,
-											new URLResource(new URL("http://www.example.com/load")));
+											new URLResource("http://www.example.com/load"));
 				var loadTrait:LoadTrait = childElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 				loadTrait.load();
 				assertTrue(loadTrait.loadState == LoadState.READY);

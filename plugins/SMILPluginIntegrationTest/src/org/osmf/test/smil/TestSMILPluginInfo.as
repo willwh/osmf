@@ -28,8 +28,7 @@ package org.osmf.test.smil
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.URLResource;
 	import org.osmf.plugin.PluginInfo;
-	import org.osmf.smil.SMILPluginInfo;
-	import org.osmf.utils.URL;	
+	import org.osmf.smil.SMILPluginInfo;	
 
 	public class TestSMILPluginInfo extends TestCase
 	{
@@ -44,7 +43,7 @@ package org.osmf.test.smil
 
 			var mediaFactory:MediaFactory = new MediaFactory();
 			mediaFactory.addItem(item);
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL)));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL));
 			assertNotNull(mediaElement);						
 		}
 		

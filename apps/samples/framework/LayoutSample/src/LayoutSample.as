@@ -23,8 +23,6 @@
 package 
 {
 	import flash.display.Sprite;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
@@ -36,7 +34,6 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
 	public class LayoutSample extends Sprite
@@ -100,7 +97,7 @@ package
 			player.loop = true;
 		}
 		
-		private static const LOGO_PNG:URL = new URL("http://dl.dropbox.com/u/2980264/OSMF/logo_white.png");
-		private static const LOGO_VID:URL = new URL("http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv");
+		private static const LOGO_PNG:String = "http://dl.dropbox.com/u/2980264/OSMF/logo_white.png";
+		private static const LOGO_VID:String = "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
 	}
 }

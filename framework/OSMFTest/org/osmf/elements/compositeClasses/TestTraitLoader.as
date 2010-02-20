@@ -33,7 +33,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.URL;
 	
 	public class TestTraitLoader extends TestCase
 	{
@@ -61,13 +60,13 @@ package org.osmf.elements.compositeClasses
 			var mediaElement2:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.TIME],
 										loader2,
-										new URLResource(new URL("http://www.example.com/loadable2")));
+										new URLResource("http://www.example.com/loadable2"));
 			
 			var loader3:SimpleLoader = new SimpleLoader();
 			var mediaElement3:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.DISPLAY_OBJECT, MediaTraitType.SEEK],
 										loader3,
-										new URLResource(new URL("http://www.example.com/loadable3")));
+										new URLResource("http://www.example.com/loadable3"));
 
 			var mediaElement4:MediaElement =
 				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.AUDIO]);
@@ -156,7 +155,7 @@ package org.osmf.elements.compositeClasses
 
 			// Don't let the load complete immediately.
 			var loader2:SimpleLoader = new SimpleLoader(true);
-			var resource2:URLResource = new URLResource(new URL("http://www.example.com/loadable2"));
+			var resource2:URLResource = new URLResource("http://www.example.com/loadable2");
 			var mediaElement2:DynamicMediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.TIME],
 										loader2,
@@ -166,7 +165,7 @@ package org.osmf.elements.compositeClasses
 			var mediaElement3:DynamicMediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.DISPLAY_OBJECT, MediaTraitType.SEEK],
 										loader3,
-										new URLResource(new URL("http://www.example.com/loadable3")));
+										new URLResource("http://www.example.com/loadable3"));
 
 			var mediaElement4:DynamicMediaElement =
 				new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK, MediaTraitType.AUDIO]);

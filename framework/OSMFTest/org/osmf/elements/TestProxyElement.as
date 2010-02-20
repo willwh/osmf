@@ -26,14 +26,13 @@ package org.osmf.elements
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.URL;
 
 	public class TestProxyElement extends TestMediaElement
 	{
@@ -175,7 +174,7 @@ package org.osmf.elements
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource("http://example.com");
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array

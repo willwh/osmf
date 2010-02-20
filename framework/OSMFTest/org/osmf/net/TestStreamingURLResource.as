@@ -22,7 +22,6 @@
 package org.osmf.net
 {
 	import org.osmf.media.TestURLResource;
-	import org.osmf.utils.URL;
 	
 	public class TestStreamingURLResource extends TestURLResource
 	{
@@ -41,11 +40,20 @@ package org.osmf.net
 		
 		public function testStreamType():void
 		{
-			var resource:StreamingURLResource = new StreamingURLResource(new URL("http://example.com"));
+			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
 			assertTrue(resource.streamType == StreamType.ANY);
 			
-			resource = new StreamingURLResource(new URL("http://example.com"), StreamType.LIVE);
+			resource = new StreamingURLResource("http://example.com", StreamType.LIVE);
 			assertTrue(resource.streamType == StreamType.LIVE);
+		}
+
+		public function testURLIncludesFMSApplicationInstance():void
+		{
+			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
+			assertTrue(resource.urlIncludesFMSApplicationInstance == false);
+			
+			resource = new StreamingURLResource("http://example.com", StreamType.ANY, true);
+			assertTrue(resource.urlIncludesFMSApplicationInstance == true);
 		}
 	}
 }

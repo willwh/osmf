@@ -166,6 +166,8 @@
     <classEntry path="org.osmf.metadata.TemporalIdentifier"/>
     <classEntry path="org.osmf.net.DynamicStreamingItem"/>
     <classEntry path="org.osmf.net.DynamicStreamingResource"/>
+    <classEntry path="org.osmf.net.FMSHost"/>
+    <classEntry path="org.osmf.net.FMSURL"/>
     <classEntry path="org.osmf.net.ModifiableTimeTrait"/>
     <classEntry path="org.osmf.net.NetClient"/>
     <classEntry path="org.osmf.net.NetConnectionCodes"/>
@@ -265,8 +267,6 @@
     <classEntry path="org.osmf.traits.PlayTrait"/>
     <classEntry path="org.osmf.traits.SeekTrait"/>
     <classEntry path="org.osmf.traits.TimeTrait"/>
-    <classEntry path="org.osmf.utils.FMSHost"/>
-    <classEntry path="org.osmf.utils.FMSURL"/>
     <classEntry path="org.osmf.utils.HTTPLoadTrait"/>
     <classEntry path="org.osmf.utils.HTTPLoader"/>
     <classEntry path="org.osmf.utils.OSMFStrings"/>

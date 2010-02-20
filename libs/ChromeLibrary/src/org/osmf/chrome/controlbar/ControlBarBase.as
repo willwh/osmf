@@ -32,7 +32,6 @@ package org.osmf.chrome.controlbar
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.ObjectFacet;
-	import org.osmf.utils.URL;
 	
 	public class ControlBarBase extends FadingSprite
 	{

@@ -61,7 +61,7 @@ package org.osmf.net
 			
 		override protected function createInterfaceObject(... args):Object
 		{
-			var dsr:DynamicStreamingResource = new DynamicStreamingResource(new FMSURL("http://www.example.com/ondemand"));
+			var dsr:DynamicStreamingResource = new DynamicStreamingResource("http://www.example.com/ondemand");
 			dsr.streamItems.push(new DynamicStreamingItem("stream_500kbps", 500));
 			dsr.streamItems.push(new DynamicStreamingItem("stream_800kbps", 800));
 			dsr.streamItems.push(new DynamicStreamingItem("stream_1000kbps", 1000));

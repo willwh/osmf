@@ -58,7 +58,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function parse(value:String, rootUrl:URL=null):Manifest
+		public function parse(value:String, rootUrl:String=null):Manifest
 		{
 			var manifest:Manifest = new Manifest();
 			
@@ -96,10 +96,10 @@ package org.osmf.elements.f4mClasses
 			
 			if (root.xmlns::baseURL.length() > 0)
 			{			
-				manifest.baseURL = new URL(root.xmlns::baseURL.text());
+				manifest.baseURL = root.xmlns::baseURL.text();
 			}
 			
-			var baseUrl:URL = (manifest.baseURL != null)? manifest.baseURL :  rootUrl;
+			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL :  rootUrl;
 			
 			// Media	
 			
@@ -137,14 +137,14 @@ package org.osmf.elements.f4mClasses
 			return manifest;
 		}
 		
-		private function parseMedia(value:XML, baseUrl:URL):Media
+		private function parseMedia(value:XML, baseUrl:String):Media
 		{
 			var decoder:Base64Decoder;
 			var media:Media = new Media();
 			
 			if (value.attribute('url').length() > 0)
 			{
-				media.url = new URL(value.@url);
+				media.url = value.@url;
 			}
 			else  // Raise parse error
 			{
@@ -201,9 +201,9 @@ package org.osmf.elements.f4mClasses
 			return media;
 		}
 		
-		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:URL, manifest:Manifest):void
+		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:String, manifest:Manifest):void
 		{
-			var url:URL = null;
+			var url:String = null;
 			var media:Media;
 			
 			var drmAdditionalHeader:DRMAdditionalHeader = new DRMAdditionalHeader();	
@@ -215,10 +215,10 @@ package org.osmf.elements.f4mClasses
 			
 			if (value.attribute("url").length() > 0)
 			{
-				url = new URL(value.@url);
-				if (!url.absolute)
+				url = value.@url;
+				if (!isAbsoluteURL(url))
 				{
-					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
+					url = baseUrl + "/" + url;
 				}
 				drmAdditionalHeader.url = url;
 			}
@@ -241,11 +241,11 @@ package org.osmf.elements.f4mClasses
 			}
 		}		
 		
-		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:URL, manifest:Manifest):void
+		private function parseBootstrapInfo(value:XML, allMedia:Vector.<Media>, baseUrl:String, manifest:Manifest):void
 		{			
 			var media:Media;	
 			
-			var url:URL = null;
+			var url:String = null;
 			var bootstrapInfo:BootstrapInfo = new BootstrapInfo();
 			
 			if (value.attribute('profile').length() > 0)
@@ -264,10 +264,10 @@ package org.osmf.elements.f4mClasses
 				
 			if (value.attribute("url").length() > 0)
 			{
-				url = new URL(value.@url);
-				if (!url.absolute && baseUrl != null)
+				url = value.@url;
+				if (!isAbsoluteURL(url) && baseUrl != null)
 				{
-					url = new URL(baseUrl.rawUrl + "/" + url.rawUrl);
+					url = baseUrl + "/" + url;
 				}
 				bootstrapInfo.url = url;
 			}
@@ -327,13 +327,14 @@ package org.osmf.elements.f4mClasses
 			var metadataFacet:KeyValueFacet = null;
 			var resource:MediaResourceBase;
 			var media:Media;
-			var serverBaseURLs:Vector.<String>
-			var url:URL;
+			var serverBaseURLs:Vector.<String>;
+			var url:String;
 			var bootstrapInfoURLString:String;
 			
-			var cleanedPath:String = "/" + manifestResource.url.path;
+			var manifestURL:URL = new URL(manifestResource.url); 
+			var cleanedPath:String = "/" + manifestURL.path;
 			cleanedPath = cleanedPath.substr(0, cleanedPath.lastIndexOf("/"));
-			var manifestFolder:String = manifestResource.url.protocol + "://" +  manifestResource.url.host + (manifestResource.url.port != "" ? ":" + manifestResource.url.port : "") + cleanedPath;
+			var manifestFolder:String = manifestURL.protocol + "://" +  manifestURL.host + (manifestURL.port != "" ? ":" + manifestURL.port : "") + cleanedPath;
 			
 			if (value.media.length == 1)  // Single Stream/Progressive Resource
 			{
@@ -341,32 +342,32 @@ package org.osmf.elements.f4mClasses
 				url = media.url;
 				
 				var baseURLString:String = null;
-				if (url.absolute)
+				if (isAbsoluteURL(url))
 				{
 					// The server base URL needs to be extracted from the media's
 					// URL.  Note that we assume it's the same for all media.
-					baseURLString = media.url.rawUrl.substr(0, media.url.rawUrl.lastIndexOf("/"));
+					baseURLString = media.url.substr(0, media.url.lastIndexOf("/"));
 				}
 				else if (value.baseURL != null)
 				{
-					baseURLString = value.baseURL.rawUrl;
+					baseURLString = value.baseURL;
 				}
 				else
 				{
 					baseURLString = manifestFolder;
 				}
 				
-				if (url.absolute)
+				if (isAbsoluteURL(url))
 				{
 					resource = new URLResource(url);
 				}				
 				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new URLResource(new URL(value.baseURL.rawUrl + "/" + url.rawUrl));
+					resource = new URLResource(value.baseURL + "/" + url);
 				}
 				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
 				{
-					resource = new URLResource(new URL(manifestFolder + "/" + url.rawUrl));
+					resource = new URLResource(manifestFolder + "/" + url);
 				}
 				
 				if (media.bootstrapInfo	!= null)
@@ -374,12 +375,12 @@ package org.osmf.elements.f4mClasses
 					serverBaseURLs = new Vector.<String>();
 					serverBaseURLs.push(baseURLString);
 					
-					bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
+					bootstrapInfoURLString = media.bootstrapInfo.url;
 					if (media.bootstrapInfo.url != null &&
-						media.bootstrapInfo.url.absolute == false)
+						isAbsoluteURL(media.bootstrapInfo.url) == false)
 					{
-						bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
-						media.bootstrapInfo.url = new URL(bootstrapInfoURLString);
+						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
 					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
@@ -428,9 +429,9 @@ package org.osmf.elements.f4mClasses
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
 			{
-				var baseURL:URL = value.baseURL != null ? new URL(value.baseURL.rawUrl) : new URL(manifestFolder);
+				var baseURL:String = value.baseURL != null ? value.baseURL : manifestFolder;
 				serverBaseURLs = new Vector.<String>();
-				serverBaseURLs.push(baseURL.rawUrl);
+				serverBaseURLs.push(baseURL);
 				
 				// TODO: MBR streams can be absolute (with no baseURL) or relative (with a baseURL).
 				// But we need to map them into the DynamicStreamingResource object model, which
@@ -440,8 +441,8 @@ package org.osmf.elements.f4mClasses
 				
 				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
 				
-				//Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resoruces always get a generated base url.
-				if (baseURL.protocol.substr(0,4) != "rtmp")
+				// Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resources always get a generated base url.
+				if (NetStreamUtils.isRTMPStream(baseURL) == false)
 				{
 					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					dynResource.metadata.addFacet(metadataFacet);
@@ -452,13 +453,13 @@ package org.osmf.elements.f4mClasses
 				{	
 					var stream:String;
 					
-					if (media.url.absolute)
+					if (isAbsoluteURL(media.url))
 					{
 						stream = NetStreamUtils.getStreamNameFromURL(media.url);
 					}
 					else
 					{
-						stream = media.url.rawUrl;
+						stream = media.url;
 					}					
 					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
 					dynResource.streamItems.push(item);
@@ -478,12 +479,12 @@ package org.osmf.elements.f4mClasses
 					
 					if (media.bootstrapInfo	!= null)
 					{
-						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url.rawUrl : null;
+						bootstrapInfoURLString = media.bootstrapInfo.url ? media.bootstrapInfo.url : null;
 						if (media.bootstrapInfo.url != null &&
-							media.bootstrapInfo.url.absolute == false)
+							isAbsoluteURL(media.bootstrapInfo.url) == false)
 						{
-							bootstrapInfoURLString = new URL(manifestFolder + "/" + bootstrapInfoURLString).rawUrl;
-							media.bootstrapInfo.url = new URL(bootstrapInfoURLString); 
+							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
+							media.bootstrapInfo.url = bootstrapInfoURLString; 
 						}
 						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
 					}
@@ -519,6 +520,12 @@ package org.osmf.elements.f4mClasses
 			}		
 			
 			return resource;
+		}
+		
+		private function isAbsoluteURL(url:String):Boolean
+		{
+			var theURL:URL = new URL(url);
+			return theURL.absolute;
 		}
 		
 		private function extractDRMMetadata(data:ByteArray):ByteArray

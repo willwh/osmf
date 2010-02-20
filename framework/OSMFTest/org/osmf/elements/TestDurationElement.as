@@ -35,7 +35,6 @@ package org.osmf.elements
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.utils.URL;
 
 	public class TestDurationElement extends TestMediaElement
 	{
@@ -124,7 +123,7 @@ package org.osmf.elements
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource("http://example.com");
 		}
 		
 		override protected function get existentTraitTypesOnInitialization():Array

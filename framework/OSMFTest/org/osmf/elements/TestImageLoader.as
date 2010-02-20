@@ -24,13 +24,9 @@ package org.osmf.elements
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
-	import org.osmf.metadata.ObjectIdentifier;
-	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Note that because ImageLoader must make network calls and cannot be
@@ -49,91 +45,91 @@ package org.osmf.elements
 			var loader:ImageLoader = new ImageLoader();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("file:///image.gif"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("assets/image.gif"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.gif"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.jpg"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.png"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/image.png?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("image.gif"))));
+			assertTrue(loader.canHandleResource(new URLResource("file:///image.gif")));
+			assertTrue(loader.canHandleResource(new URLResource("assets/image.gif")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/image.gif")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/image.jpg")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/image.png")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/image.png?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("image.gif")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image.foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("http://example.com/image?param=.gif"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/image.foo")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/image")));
+			assertFalse(loader.canHandleResource(new URLResource("http://example.com/image?param=.gif")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
 
 			// Verify some valid resources based on metadata information
 			var metadata:MediaTypeFacet = new MediaTypeFacet(MediaType.IMAGE);
-			var resource:URLResource = new URLResource(new URL("http://example.com/image"));
+			var resource:URLResource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 			
 			
 			metadata = new MediaTypeFacet(null, "image/png");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(null, "image/gif");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(null, "image/jpeg");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "image/png");
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "image/gif");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "image/jpeg");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertTrue(loader.canHandleResource(resource));
 
 			// Add some invalid cases based on metadata information
 			
 			metadata = new MediaTypeFacet(MediaType.SWF);			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(null, "Invalid MIME Type");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			
 			metadata = new MediaTypeFacet(MediaType.IMAGE, "Invalid MIME Type");			
-		resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.SWF, "image/gif");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 
 			metadata = new MediaTypeFacet(MediaType.SWF, "Invalid MIME Type");			
-			resource = new URLResource(new URL("http://example.com/image"));
+			resource = new URLResource("http://example.com/image");
 			resource.metadata.addFacet(metadata);
 			assertFalse(loader.canHandleResource(resource));
 		}

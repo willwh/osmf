@@ -107,7 +107,7 @@ package org.osmf.captioning.loader
 			{
 				if (logger != null)
 				{
-					logger.debug("Downloading document at " + URLResource(httpLoadTrait.resource).url.rawUrl);
+					logger.debug("Downloading document at " + URLResource(httpLoadTrait.resource).url);
 				}
 			}
 			

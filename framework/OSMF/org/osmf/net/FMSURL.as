@@ -21,12 +21,17 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-
-package org.osmf.utils
+package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.utils.URL;
+	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Parses a URL into properties specific to Flash Media Server.
 	 * 
 	 * @see URL

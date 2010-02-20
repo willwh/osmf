@@ -34,6 +34,7 @@ package org.osmf.elements
 	import org.osmf.elements.f4mClasses.DRMAdditionalHeader;
 	import org.osmf.elements.f4mClasses.Manifest;
 	import org.osmf.elements.f4mClasses.ManifestParser;
+	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultMediaFactory;
@@ -42,7 +43,6 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -112,7 +112,7 @@ package org.osmf.elements
 			else if (resource is URLResource)
 			{
 				var urlResource:URLResource = URLResource(resource);
-				var extension:String = urlResource.url.path.substr(urlResource.url.path.length-3,3);
+				var extension:String = new URL(urlResource.url).extension;
 				return extension == F4M_EXTENSION;
 			}		
 			else
@@ -129,7 +129,7 @@ package org.osmf.elements
 			updateLoadTrait(loadTrait, LoadState.LOADING);
 			
 			var manifest:Manifest;
-			var manifestLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url.rawUrl));
+			var manifestLoader:URLLoader = new URLLoader(new URLRequest(URLResource(loadTrait.resource).url));
 			manifestLoader.addEventListener(Event.COMPLETE, onComplete);
 			manifestLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			manifestLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
@@ -244,14 +244,14 @@ package org.osmf.elements
 				completionCallback(true);
 			}
 			
-			drmLoader.load(new URLRequest(item.url.rawUrl));
+			drmLoader.load(new URLRequest(item.url));
 		}	
 			
-		private function getRootUrl(url:URL):URL
+		private function getRootUrl(url:String):String
 		{
-			var path:String = url.rawUrl.substr(0, url.rawUrl.lastIndexOf("/"));
+			var path:String = url.substr(0, url.lastIndexOf("/"));
 			
-			return new URL(path);
+			return path;
 		}
 		
 		private static const F4M_EXTENSION:String = "f4m";

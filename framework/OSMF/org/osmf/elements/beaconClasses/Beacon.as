@@ -31,7 +31,6 @@ package org.osmf.elements.beaconClasses
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.HTTPLoadTrait;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Dispatched when the Beacon's HTTP request has succeeded.
@@ -86,7 +85,7 @@ package org.osmf.elements.beaconClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function Beacon(url:URL, httpLoader:HTTPLoader=null)
+		public function Beacon(url:String, httpLoader:HTTPLoader=null)
 		{
 			if (url == null)
 			{
@@ -141,7 +140,7 @@ package org.osmf.elements.beaconClasses
 			}
 		}
 		
-		private var url:URL;
+		private var url:String;
 		private var httpLoader:HTTPLoader;
 	}
 }

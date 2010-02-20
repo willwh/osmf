@@ -216,7 +216,7 @@ package org.osmf.plugin
 			
 			if (resource is URLResource)
 			{
-				identifier = (resource as URLResource).url.rawUrl;
+				identifier = (resource as URLResource).url;
 			}
 			else if (resource is PluginInfoResource)
 			{

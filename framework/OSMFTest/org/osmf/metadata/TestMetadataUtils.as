@@ -26,8 +26,6 @@ package org.osmf.metadata
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.URL;
 
 	public class TestMetadataUtils extends TestCase
 	{
@@ -49,7 +47,7 @@ package org.osmf.metadata
 		
 		private function testResourceWithData(expectedResult:int, mediaType:String, mimeType:String, supportedMedia:Vector.<String>, supportedMime:Vector.<String>):void
 		{
-			var resource:URLResource = new URLResource(new URL("test"));
+			var resource:URLResource = new URLResource("test");
 			resource.metadata.addFacet(new MediaTypeFacet(mediaType, mimeType));
 			assertEquals(expectedResult, MetadataUtils.checkMetadataMatchWithResource(resource, supportedMedia, supportedMime));
 		}

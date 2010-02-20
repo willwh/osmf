@@ -20,12 +20,8 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.net.NetLoader;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.NetFactory;
-	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithDurationElement extends TestMediaPlayer
 	{
@@ -44,7 +40,7 @@ package org.osmf.media
 		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL("http://example.com"));
+			return new URLResource("http://example.com");
 		}
 
 		override protected function get invalidResourceForMediaElement():MediaResourceBase

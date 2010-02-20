@@ -31,7 +31,6 @@ package
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.plugin.PluginManager;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * The Configuration class defines an object that simplifies setting up
@@ -85,13 +84,13 @@ package
 		{
 			if (url != value)
 			{
-				resource = new URLResource(new URL(value));
+				resource = new URLResource(value);
 			}
 		}
 		public function get url():String
 		{
-			return (_resource is URLResource && URLResource(_resource).url)
-						? URLResource(_resource).url.rawUrl
+			return _resource is URLResource
+						? URLResource(_resource).url
 						: null;
 		}
 		

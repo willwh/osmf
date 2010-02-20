@@ -30,6 +30,7 @@ package org.osmf.elements
 	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * The SWFLoader class creates a flash.display.Loader object, 
@@ -92,7 +93,8 @@ package org.osmf.elements
 			if (urlResource != null &&
 				urlResource.url != null)
 			{
-				return (urlResource.url.path.search(/\.swf$/i) != -1);
+				var url:URL = new URL(urlResource.url);
+				return (url.path.search(/\.swf$/i) != -1);
 			}	
 			return false;
 		}

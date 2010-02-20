@@ -22,7 +22,6 @@
 package org.osmf.net
 {
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
@@ -31,7 +30,6 @@ package org.osmf.net
 	import org.osmf.traits.TestDisplayObjectTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestNetStreamDisplayObjectTrait extends TestDisplayObjectTrait
 	{
@@ -65,7 +63,7 @@ package org.osmf.net
 			
 			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, addAsync(onTestOnMetadata, 5000));
 			
-			stream.play(NetStreamUtils.getStreamNameFromURL(new URL(TestConstants.REMOTE_PROGRESSIVE_VIDEO)));
+			stream.play(NetStreamUtils.getStreamNameFromURL(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
 		
 			function onTestOnMetadata(event:DisplayObjectEvent):void
 			{

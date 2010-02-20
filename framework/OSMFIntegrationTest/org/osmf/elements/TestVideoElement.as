@@ -40,7 +40,6 @@ package org.osmf.elements
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.URL;
 
 	public class TestVideoElement extends TestCase
 	{
@@ -66,7 +65,7 @@ package org.osmf.elements
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
-			var resource:URLResource = new URLResource(new URL(ANONYMOUS_ENCRYPTED));
+			var resource:URLResource = new URLResource(ANONYMOUS_ENCRYPTED);
 			resource.metadata.addFacet(facet);
 			
 			testElementAnon(resource);								
@@ -79,15 +78,15 @@ package org.osmf.elements
 	
 		public function testIdentSidecar():void
 		{						 
-			//Identity based credentials w/ metadata sidecar
+			// Identity based credentials w/ metadata sidecar
 			
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);				
-			//Separate DRM metadata										
+			// Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
-			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
+			var resource:URLResource = new URLResource(IDENT_ENCRYPTED);
 			resource.metadata.addFacet(facet);
 			
 			testElementCred(resource, "dmo", "password");
@@ -96,11 +95,11 @@ package org.osmf.elements
 		public function testAnonEncrypted():void
 		{
 			// Anonymous Encrypted content without metadata sidecar
-			var resource:URLResource = new URLResource(new URL(ANONYMOUS_INLINE));
+			var resource:URLResource = new URLResource(ANONYMOUS_INLINE);
 			var protectable:DRMTrait;
 			var testFinished:Function = addAsync( function (event:Event):void {}, 20000);
 			
-			//We never get the IContentProtectableTRait here, so we have to basicly dectect decyption by checking for  the files duration
+			// We never get the IContentProtectableTrait here, so we have to basicly dectect decyption by checking for  the files duration
 			var elem:VideoElement = new VideoElement(resource);
 			elem.addEventListener(MediaElementEvent.TRAIT_ADD,  onTrait);
 			
@@ -138,11 +137,11 @@ package org.osmf.elements
 									
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);				
-			//Separate DRM metadata										
+			// Separate DRM metadata										
 			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 			facet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY),  decoder.toByteArray());
 			
-			var resource:URLResource = new URLResource(new URL(IDENT_ENCRYPTED));
+			var resource:URLResource = new URLResource(IDENT_ENCRYPTED);
 			resource.metadata.addFacet(facet);
 						
 			var elem:VideoElement = new VideoElement(resource);
@@ -200,7 +199,7 @@ package org.osmf.elements
 		public function testIdentEncrypted():void
 		{
 			// Identity Encrypted content without metadata sidecar
-			var resource:URLResource = new URLResource(new URL(IDENT_INLINE));
+			var resource:URLResource = new URLResource(IDENT_INLINE);
 			testElementCred(resource, "dmo", "password");				
 		}
 		

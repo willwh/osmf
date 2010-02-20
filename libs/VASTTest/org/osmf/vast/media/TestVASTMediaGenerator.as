@@ -126,14 +126,14 @@ package org.osmf.vast.media
 			assertTrue(resource.url != null);
 			
 			// The .flv extension should have been stripped.
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_STREAMING_VIDEO.substring(0,	TestConstants.REMOTE_STREAMING_VIDEO.length-4));
+			assertTrue(resource.url == TestConstants.REMOTE_STREAMING_VIDEO.substring(0,	TestConstants.REMOTE_STREAMING_VIDEO.length-4));
 
 			mediaElement = mediaElements[1];
 			assertTrue(mediaElement is VideoElement);
 			resource = mediaElement.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 		
 		public function testCreateMediaElementsWithMediaFileResolver():void
@@ -167,7 +167,7 @@ package org.osmf.vast.media
 			var resource:URLResource = mediaElement.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 		
 		public function testCreateMediaElementsWithImpressionProxy():void
@@ -199,7 +199,7 @@ package org.osmf.vast.media
 			var resource:URLResource = impressionProxy.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 			assertTrue(impressionProxy.proxiedElement is VideoElement);
 		}
 		
@@ -236,7 +236,7 @@ package org.osmf.vast.media
 			var resource:URLResource = trackingProxy.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 			assertTrue(trackingProxy.proxiedElement is VideoElement);
 		}
 		
@@ -275,14 +275,14 @@ package org.osmf.vast.media
 			var resource:URLResource = trackingProxy.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 
 			var impressionProxy:VASTImpressionProxyElement = trackingProxy.proxiedElement as VASTImpressionProxyElement;
 			assertTrue(impressionProxy != null);
 			resource = impressionProxy.resource as URLResource;
 			assertTrue(resource != null);
 			assertTrue(resource.url != null);
-			assertTrue(resource.url.rawUrl == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			assertTrue(resource.url == TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 			assertTrue(impressionProxy.proxiedElement is VideoElement);
 		}
 	}

@@ -103,31 +103,31 @@ package org.osmf.plugin
 		private function doTestPlayVODStreamWithAuth():void
 		{
 			// on-demand stream with an auth token
-			doTestMediaElementLoadAndPlay(new URL(REMOTE_STREAM_WITH_AUTH));
+			doTestMediaElementLoadAndPlay(REMOTE_STREAM_WITH_AUTH);
 		}
 
 		private function doTestPlayLiveStreamWithAuth():void
 		{
 			// a live stream with an auth token
-			doTestMediaElementLoadAndPlay(new URL(REMOTE_LIVE_WITH_AUTH));
+			doTestMediaElementLoadAndPlay(REMOTE_LIVE_WITH_AUTH);
 		}
 
 		private function doTestPlayVODStream():void
 		{
 			// on-demand stream with no auth
-			doTestMediaElementLoadAndPlay(new FMSURL(REMOTE_STREAM));
+			doTestMediaElementLoadAndPlay(REMOTE_STREAM);
 		}
 
 		private function doTestPlayBadLiveStream():void
 		{
 			// a bad live stream, cause it to test the retry timer
-			doTestMediaElementLoadAndPlay(new FMSURL(REMOTE_LIVE_BAD));
+			doTestMediaElementLoadAndPlay(REMOTE_LIVE_BAD);
 		}
 
 		private function doTestPlayProgressive():void
 		{
 			// a progressive file
-			doTestMediaElementLoadAndPlay(new FMSURL(PROGRESSIVE_FLV));
+			doTestMediaElementLoadAndPlay(PROGRESSIVE_FLV);
 		}
 
 		private function callAfterLoad(callback:Function):void
@@ -150,7 +150,7 @@ package org.osmf.plugin
 			}
 		}
 		
-		private function doTestMediaElementLoadAndPlay(url:URL):void
+		private function doTestMediaElementLoadAndPlay(url:String):void
 		{			
 			var urlResource:URLResource = new URLResource(url);
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(urlResource);

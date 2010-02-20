@@ -31,7 +31,6 @@ package org.osmf.smil.parser
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
 	import org.osmf.utils.TimeUtil;
-	import org.osmf.utils.URL;	
 	
 	/**
 	 * Parses a SMIL file and creates a document object
@@ -209,7 +208,7 @@ package org.osmf.smil.parser
 					{
 						case SMILElementType.META:
 							element = new SMILMetaElement();
-							element.base = new URL(node.@[ATTRIB_META_BASE]);
+							element.base = node.@[ATTRIB_META_BASE];
 							break;
 					}
 					break;

@@ -30,13 +30,12 @@ package org.osmf.elements
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.IntegrationTestUtils;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 
 	
 	public class TestSWFLoaderIntegration extends TestLoaderBase
@@ -68,17 +67,17 @@ package org.osmf.elements
 
 		override protected function get successfulResource():MediaResourceBase
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+			return new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
 		}
 
 		override protected function get failedResource():MediaResourceBase
 		{
-			return new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
+			return new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
 		}
 		
 		override protected function get unhandledResource():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.REMOTE_STREAMING_VIDEO));
+			return new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 		}
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
@@ -92,7 +91,7 @@ package org.osmf.elements
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 1000));
 						
 			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadAVM1SWF);
-			loader.load(createLoadTrait(loader, new URLResource(new URL(IntegrationTestUtils.REMOTE_AVM1_SWF_FILE))));
+			loader.load(createLoadTrait(loader, new URLResource(IntegrationTestUtils.REMOTE_AVM1_SWF_FILE)));
 		}
 		
 		private function onTestLoadAVM1SWF(event:LoaderEvent):void

@@ -22,9 +22,9 @@
 package org.osmf.smil.media
 {
 	import org.osmf.elements.CompositeElement;
+	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SerialElement;
-	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
@@ -41,7 +41,6 @@ package org.osmf.smil.media
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * A utility class for creating MediaElements from a <code>SMILDocument</code>.
@@ -98,7 +97,7 @@ package org.osmf.smil.media
 					mediaElement = serialElement;
 					break;
 				case SMILElementType.VIDEO:
-					var resource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var resource:URLResource = new URLResource((smilElement as SMILMediaElement).src);
 					var videoElement:MediaElement = factory.createMediaElement(resource);
 					var smilVideoElement:SMILMediaElement = smilElement as SMILMediaElement;
 					
@@ -119,14 +118,14 @@ package org.osmf.smil.media
 					(parentMediaElement as CompositeElement).addChild(videoElement);
 					break;
 				case SMILElementType.IMAGE:
-					var imageResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src)); 
+					var imageResource:URLResource = new URLResource((smilElement as SMILMediaElement).src); 
 					var imageElement:MediaElement = factory.createMediaElement(imageResource);
 					var dur:Number = (smilElement as SMILMediaElement).duration;
 					var durationElement:DurationElement = new DurationElement(dur, imageElement);
 					(parentMediaElement as CompositeElement).addChild(durationElement);
 					break;
 				case SMILElementType.AUDIO:
-					var audioResource:URLResource = new URLResource(new URL((smilElement as SMILMediaElement).src));
+					var audioResource:URLResource = new URLResource((smilElement as SMILMediaElement).src);
 					var audioElement:MediaElement = factory.createMediaElement(audioResource);
 					(parentMediaElement as CompositeElement).addChild(audioElement);
 					break;
@@ -151,7 +150,7 @@ package org.osmf.smil.media
 		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument):MediaResourceBase
 		{
 			var dsr:DynamicStreamingResource = null;
-			var hostURL:URL;
+			var hostURL:String;
 			
 			for (var i:int = 0; i < smilDocument.numElements; i++)
 			{
@@ -171,7 +170,7 @@ package org.osmf.smil.media
 			return dsr;
 		}
 		
-		private function createDynamicStreamingItems(switchElement:SMILElement, hostURL:URL):DynamicStreamingResource
+		private function createDynamicStreamingItems(switchElement:SMILElement, hostURL:String):DynamicStreamingResource
 		{
 			var dsr:DynamicStreamingResource = null;
 			var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();

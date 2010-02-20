@@ -24,7 +24,6 @@ package org.osmf.examples.loaderproxy
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * LoadTrait for the VideoProxyElement.  Holds the URL that will
@@ -37,16 +36,16 @@ package org.osmf.examples.loaderproxy
 			super(loader, resource);
 		}
 		
-		public function get url():URL
+		public function get url():String
 		{
 			return _url;
 		}
 		
-		public function set url(value:URL):void
+		public function set url(value:String):void
 		{
 			_url = value;
 		}
 		
-		private var _url:URL;
+		private var _url:String;
 	}
 }

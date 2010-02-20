@@ -36,7 +36,6 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FStreamInfo;
-	import org.osmf.utils.URL;
 	
 	[ExcludeClass]
 	
@@ -73,7 +72,7 @@ package org.osmf.net.httpstreaming
 			var bootstrap:BootstrapInfo = new BootstrapInfo();
 			if (abstUrl != null && abstUrl.length > 0)
 			{
-				bootstrap.url = new URL(abstUrl);
+				bootstrap.url = abstUrl;
 			}
 			bootstrap.data = abstData;
 			facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), bootstrap);
@@ -214,7 +213,7 @@ package org.osmf.net.httpstreaming
 						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY)) as ByteArray;
 				}
 				
-				var streamName:String = resource.url.rawUrl.substr(resource.url.rawUrl.lastIndexOf("/")+1);
+				var streamName:String = resource.url.substr(resource.url.lastIndexOf("/")+1);
 				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader, streamMetadata, xmpMetadata));
 			}
 

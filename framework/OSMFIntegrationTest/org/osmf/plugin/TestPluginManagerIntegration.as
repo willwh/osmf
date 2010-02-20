@@ -27,7 +27,6 @@ package org.osmf.plugin
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.utils.IntegrationTestUtils;
-	import org.osmf.utils.URL;
 
 	public class TestPluginManagerIntegration extends TestCase
 	{
@@ -47,7 +46,7 @@ package org.osmf.plugin
 		public function testLoadDynamicPluginWithValidURLResource():void
 		{
 			var pluginResource:URLResource 
-				= new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
@@ -61,7 +60,7 @@ package org.osmf.plugin
 		public function testLoadTwiceDynamicPluginWithValidURLResource():void
 		{
 			var pluginResource:URLResource 
-				= new URLResource(new URL(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL));
+				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
@@ -80,7 +79,7 @@ package org.osmf.plugin
 		public function testLoadDynamicPluginWithInvalidURLResource():void
 		{
 			var pluginResource:URLResource 
-				= new URLResource(new URL(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL));
+				= new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginLoadEvent, 500));
 			pluginManager.loadPlugin(pluginResource);

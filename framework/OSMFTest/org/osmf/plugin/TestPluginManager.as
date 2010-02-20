@@ -121,7 +121,7 @@ package org.osmf.plugin
 	
 		public function testLoadDynamicPluginWithInvalidURLResource():void
 		{
-			var pluginResource:URLResource = new URLResource(new URL("http://myinvalidurl.com/foo.swf"));
+			var pluginResource:URLResource = new URLResource("http://myinvalidurl.com/foo.swf");
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
@@ -141,7 +141,7 @@ package org.osmf.plugin
 
 		public function testCheckLoadStatusOfDynamicPluginWithInvalidURLResource():void
 		{
-			var pluginResource:URLResource = new URLResource(new URL("http://myinvalidurl.com/foo.swf"));
+			var pluginResource:URLResource = new URLResource("http://myinvalidurl.com/foo.swf");
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
 			pluginManager.loadPlugin(pluginResource);
@@ -155,7 +155,7 @@ package org.osmf.plugin
 		public function testLoadPluginWithInvalidParameters():void
 		{
 			assertTrue(doLoadPluginWithInvalidParameter(null));
-			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource(new FMSURL("rtmp://example.com/vod"))));
+			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource("rtmp://example.com/vod")));
 		}
 		
 		public function testLoadPluginWithCustomMetadata():void
@@ -208,7 +208,7 @@ package org.osmf.plugin
 			
 			// Creating a MediaElement that the plugin can handle should trigger
 			// the creation  function.
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/video.flv")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/video.flv"));
 			assertTrue(mediaElement == null);
 			assertEquals(1, pluginInfo.createCount);
 			assertEquals(0, pluginInfo.callbackCount);
@@ -230,12 +230,12 @@ package org.osmf.plugin
 
 			// Creating a MediaElement that a default factory item can handle
 			// should trigger the callback function.
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/image1.jpg")));
+			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/image1.jpg"));
 			assertTrue(mediaElement != null);
 			assertEquals(0, pluginInfo.createCount);
 			assertEquals(1, pluginInfo.callbackCount);
 
-			mediaElement = mediaFactory.createMediaElement(new URLResource(new URL("http://example.com/image2.jpg")));
+			mediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/image2.jpg"));
 			assertTrue(mediaElement != null);
 			assertEquals(0, pluginInfo.createCount);
 			assertEquals(2, pluginInfo.callbackCount);

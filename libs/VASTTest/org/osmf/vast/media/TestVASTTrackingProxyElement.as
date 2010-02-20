@@ -71,37 +71,37 @@ package org.osmf.vast.media
 					if (eventCount == 1)
 					{
 						// START Event #1
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL1);
+						assertTrue(URLResource(event.loadTrait.resource).url == START_EVENT_URL1);
 						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 2)
 					{
 						// START Event #2
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL2);
+						assertTrue(URLResource(event.loadTrait.resource).url == START_EVENT_URL2);
 						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 3)
 					{
 						// FIRST_QUARTILE Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == FIRST_QUARTILE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == FIRST_QUARTILE_EVENT_URL);
 						assertTrue(timeTrait.currentTime == DURATION * 0.25);
 					}
 					else if (eventCount == 4)
 					{
 						// MIDPOINT Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == MIDPOINT_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == MIDPOINT_EVENT_URL);
 						assertTrue(timeTrait.currentTime == DURATION * 0.5);
 					}
 					else if (eventCount == 5)
 					{
 						// THIRD_QUARTILE Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == THIRD_QUARTILE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == THIRD_QUARTILE_EVENT_URL);
 						assertTrue(timeTrait.currentTime == DURATION * 0.75);
 					}
 					else if (eventCount == 6)
 					{
 						// COMPLETE Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == COMPLETE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == COMPLETE_EVENT_URL);
 						assertTrue(timeTrait.currentTime == DURATION);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -144,13 +144,13 @@ package org.osmf.vast.media
 					if (eventCount == 1)
 					{
 						// START Event #1
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL1);
+						assertTrue(URLResource(event.loadTrait.resource).url == START_EVENT_URL1);
 						assertTrue(timeTrait.currentTime == 0);
 					}
 					else if (eventCount == 2)
 					{
 						// START Event #2
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == START_EVENT_URL2);
+						assertTrue(URLResource(event.loadTrait.resource).url == START_EVENT_URL2);
 						assertTrue(timeTrait.currentTime == 0);
 						
 						// Pausing should fire the PAUSE event, and no other event.
@@ -159,7 +159,7 @@ package org.osmf.vast.media
 					else if (eventCount == 3)
 					{
 						// PAUSE Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == PAUSE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == PAUSE_EVENT_URL);
 						assertTrue(timeTrait.currentTime < DURATION * 0.25);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -196,7 +196,7 @@ package org.osmf.vast.media
 					if (eventCount == 1)
 					{
 						// MUTE Event
-						assertTrue(URLResource(event.loadTrait.resource).url.rawUrl == MUTE_EVENT_URL);
+						assertTrue(URLResource(event.loadTrait.resource).url == MUTE_EVENT_URL);
 
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}

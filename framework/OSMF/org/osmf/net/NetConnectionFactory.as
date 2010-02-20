@@ -36,7 +36,6 @@ package org.osmf.net
 	
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.FMSURL;
 	import org.osmf.utils.URL;
 	
 	/**
@@ -135,7 +134,8 @@ package org.osmf.net
 				pendingDictionary[key] = pendingConnections;
 				
 				// Set up our URLs and NetConnections
-				var netConnectionURLs:Vector.<URL> = createNetConnectionURLs(resource.url);
+				var urlIncludesFMSApplicationInstance:Boolean = resource is StreamingURLResource ? StreamingURLResource(resource).urlIncludesFMSApplicationInstance : false 
+				var netConnectionURLs:Vector.<String> = createNetConnectionURLs(resource.url, urlIncludesFMSApplicationInstance);
 				var netConnections:Vector.<NetConnection> = new Vector.<NetConnection>();
 				for (var j:int = 0; j < netConnectionURLs.length; j++)
 				{
@@ -209,7 +209,7 @@ package org.osmf.net
 				{
 					CONFIG::LOGGING 
 					{
-						var fmsURL:FMSURL = resource.url is FMSURL ? resource.url as FMSURL : new FMSURL(resource.url.rawUrl);
+						var fmsURL:FMSURL = new FMSURL(resource.url);
 						logger.info("NetConnection failed for: " + fmsURL.protocol + "://" + fmsURL.host + (fmsURL.port.length > 0 ? ":" + fmsURL.port : "" ) + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:""));
 					}
 
@@ -242,7 +242,7 @@ package org.osmf.net
 		 * Manages the closing of a shared NetConnection. NetConnections
 		 * are only physically closed after the last sharer has requested a close().
 		 * 
-		 * @param resource the URLResource originally used to establish the NetConenction
+		 * @param netConnection The NetConnection to close.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -295,7 +295,7 @@ package org.osmf.net
 		 */
 		protected function createNetConnectionKey(resource:URLResource):String
 		{
-			var fmsURL:FMSURL = resource is FMSURL ? resource as FMSURL : new FMSURL(resource.url.rawUrl);
+			var fmsURL:FMSURL = new FMSURL(resource.url);
 			return fmsURL.protocol + fmsURL.host + fmsURL.port + fmsURL.appName;
 		}
 		
@@ -326,16 +326,18 @@ package org.osmf.net
 		 * 
 		 * Subclasses can override this method to change this default behavior.
 		 * 
-		 * @param url the URL to be loaded
+		 * @param url The URL to be loaded.
+		 * @param urlIncludesFMSApplicationInstance Indicates whether the URL includes
+		 * the FMS application instance name.  See StreamingURLResource for more info.
 		 **/
-		protected function createNetConnectionURLs(url:URL):Vector.<URL>
+		protected function createNetConnectionURLs(url:String, urlIncludesFMSApplicationInstance:Boolean=false):Vector.<String>
 		{
-			var urls:Vector.<URL> = new Vector.<URL>();
+			var urls:Vector.<String> = new Vector.<String>();
 			
 			var portProtocols:Vector.<PortProtocol> = buildPortProtocolSequence(url);
 			for each (var portProtocol:PortProtocol in portProtocols)
 			{
-				urls.push(buildConnectionAddress(url, portProtocol));
+				urls.push(buildConnectionAddress(url, urlIncludesFMSApplicationInstance, portProtocol));
 			}
 			
 			return urls;
@@ -355,13 +357,15 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		private function buildPortProtocolSequence(url:URL):Vector.<PortProtocol>
+		private function buildPortProtocolSequence(url:String):Vector.<PortProtocol>
 		{
 			var portProtocols:Vector.<PortProtocol> = new Vector.<PortProtocol>;
 			
-			var allowedPorts:String = (url.port == "") ? DEFAULT_PORTS: url.port;
+			var theURL:URL = new URL(url);
+			
+			var allowedPorts:String = (theURL.port == "") ? DEFAULT_PORTS: theURL.port;
 			var allowedProtocols:String;
-			switch (url.protocol)
+			switch (theURL.protocol)
 			{
 				case PROTOCOL_RTMP:
 					allowedProtocols = DEFAULT_PROTOCOLS_FOR_RTMP;
@@ -372,7 +376,7 @@ package org.osmf.net
 				case PROTOCOL_RTMPS:
 				case PROTOCOL_RTMPT:
 				case PROTOCOL_RTMPTE:
-					allowedProtocols = url.protocol;
+					allowedProtocols = theURL.protocol;
 					break;
 			}
 			var portArray:Array = allowedPorts.split(",");
@@ -393,7 +397,9 @@ package org.osmf.net
 		/**
 		 * Assembles a connection address. 
 		 * 
-		 * @param url the URL to be loaded
+		 * @param url The URL to be loaded.
+		 * @param urlIncludesFMSApplicationInstance Indicates whether the URL includes
+		 * the FMS application instance name.  See StreamingURLResource for more info.
 		 * @param portProtocol The port and protocol being used for the connection.
 		 *  
 		 *  @langversion 3.0
@@ -401,9 +407,9 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		private function buildConnectionAddress(url:URL, portProtocol:PortProtocol):URL
+		private function buildConnectionAddress(url:String, urlIncludesFMSApplicationInstance:Boolean, portProtocol:PortProtocol):String
 		{
-			var fmsURL:FMSURL = url is FMSURL ? url as FMSURL : new FMSURL(url.rawUrl);
+			var fmsURL:FMSURL = new FMSURL(url, urlIncludesFMSApplicationInstance);
 			var addr:String = portProtocol.protocol + "://" + fmsURL.host + ":" + portProtocol.port + "/" + fmsURL.appName + (fmsURL.useInstance ? "/" + fmsURL.instanceName:"");
 			
 			// Pass along any query string params
@@ -412,7 +418,7 @@ package org.osmf.net
 				addr += "?" + fmsURL.query;
 			}
 			
-			return new URL(addr);
+			return addr;
 		}
 		
 		private var shareNetConnections:Boolean;

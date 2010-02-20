@@ -21,8 +21,8 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoaderBase;
 
@@ -43,7 +43,7 @@ package org.osmf.utils
 			return 		target is DynamicMediaElement
 					&&	target.resource is URLResource
 					&&  referenceUrlToMatch != null
-					&&  URLResource(target.resource).url.rawUrl == referenceUrlToMatch;
+					&&  URLResource(target.resource).url == referenceUrlToMatch;
 		}
 
 		public function addReference(target:MediaElement):void

@@ -37,7 +37,6 @@ package org.osmf.test.smil.loader
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	
 	public class TestSMILLoader extends TestLoaderBase
 	{
@@ -130,17 +129,17 @@ package org.osmf.test.smil.loader
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/myfile.smil"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/playlist.smi"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/script.smil?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/myfile.smil")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/playlist.smi")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/script.smil?param=value")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("httpt://example.com"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
@@ -155,11 +154,11 @@ package org.osmf.test.smil.loader
 		
 		private var eventDispatcher:EventDispatcher;
 		
-		private static const SUCCESSFUL_SEQ_RESOURCE:URLResource = new URLResource(new URL(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL));
-		private static const SUCCESSFUL_PAR_RESOURCE:URLResource = new URLResource(new URL(SMILTestConstants.SMIL_DOCUMENT_PAR_URL));		
-		private static const SUCCESSFUL_MBR_RESOURCE:URLResource = new URLResource(new URL(SMILTestConstants.SMIL_DOCUMENT_MBR_URL));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(SMILTestConstants.MISSING_SMIL_DOCUMENT_URL));
-		private static const UNHANDLED_RESOURCE:URLResource = new URLResource(new URL("ftp://example.com"));
+		private static const SUCCESSFUL_SEQ_RESOURCE:URLResource = new URLResource(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL);
+		private static const SUCCESSFUL_PAR_RESOURCE:URLResource = new URLResource(SMILTestConstants.SMIL_DOCUMENT_PAR_URL);		
+		private static const SUCCESSFUL_MBR_RESOURCE:URLResource = new URLResource(SMILTestConstants.SMIL_DOCUMENT_MBR_URL);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(SMILTestConstants.MISSING_SMIL_DOCUMENT_URL);
+		private static const UNHANDLED_RESOURCE:URLResource = new URLResource("ftp://example.com");
 		
 	}
 }

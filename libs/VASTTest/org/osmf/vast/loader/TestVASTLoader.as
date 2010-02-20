@@ -38,7 +38,6 @@ package org.osmf.vast.loader
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	import org.osmf.vast.VASTTestConstants;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTDocument;
@@ -377,7 +376,7 @@ package org.osmf.vast.loader
 				if (resource == successfulResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, VASTTestConstants.VAST_DOCUMENT_CONTENTS
 						);
@@ -385,7 +384,7 @@ package org.osmf.vast.loader
 				else if (resource == failedResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -393,7 +392,7 @@ package org.osmf.vast.loader
 				else if (resource == unhandledResource)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, false
 						, null
 						);
@@ -401,7 +400,7 @@ package org.osmf.vast.loader
 				else if (resource == INVALID_XML_RESOURCE)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, VASTTestConstants.INVALID_XML_VAST_DOCUMENT_CONTENTS
 						);
@@ -409,7 +408,7 @@ package org.osmf.vast.loader
 				else if (resource == INVALID_RESOURCE)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, VASTTestConstants.INVALID_VAST_DOCUMENT_CONTENTS
 						);
@@ -417,19 +416,19 @@ package org.osmf.vast.loader
 				else if (resource == OUTER_WRAPPER_RESOURCE)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, VASTTestConstants.OUTER_WRAPPER_VAST_DOCUMENT_CONTENTS
 						);
 
 					mockLoader.setExpectationForURL
-						( INNER_WRAPPER_RESOURCE.url.rawUrl
+						( INNER_WRAPPER_RESOURCE.url
 						, true
 						, VASTTestConstants.INNER_WRAPPER_VAST_DOCUMENT_CONTENTS
 						);
 
 					mockLoader.setExpectationForURL
-						( SUCCESSFUL_RESOURCE.url.rawUrl
+						( SUCCESSFUL_RESOURCE.url
 						, true
 						, VASTTestConstants.VAST_DOCUMENT_CONTENTS
 						);
@@ -437,13 +436,13 @@ package org.osmf.vast.loader
 				else if (resource == WRAPPER_WITH_INVALID_WRAPPED_RESOURCE)
 				{
 					mockLoader.setExpectationForURL
-						( URLResource(resource).url.rawUrl
+						( URLResource(resource).url
 						, true
 						, VASTTestConstants.WRAPPER_WITH_INVALID_WRAPPED_VAST_DOCUMENT_CONTENTS
 						);
 
 					mockLoader.setExpectationForURL
-						( FAILED_RESOURCE.url.rawUrl
+						( FAILED_RESOURCE.url
 						, false
 						, null
 						);
@@ -479,20 +478,20 @@ package org.osmf.vast.loader
 			super.testCanHandleResource();
 			
 			// Verify some valid resources.
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("http://example.com/script.php?param=value"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/video.flv"))));
-			assertTrue(loader.canHandleResource(new URLResource(new URL("https://example.com/script.php?param=value"))));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("http://example.com/script.php?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/video.flv")));
+			assertTrue(loader.canHandleResource(new URLResource("https://example.com/script.php?param=value")));
 			
 			// And some invalid ones.
-			assertFalse(loader.canHandleResource(new URLResource(new URL("file:///audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("assets/audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("audio.mp3"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("httpt://example.com"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL("foo"))));
-			assertFalse(loader.canHandleResource(new URLResource(new URL(""))));
+			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
+			assertFalse(loader.canHandleResource(new URLResource("foo")));
+			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));
 			assertFalse(loader.canHandleResource(null));
@@ -508,14 +507,14 @@ package org.osmf.vast.loader
 		private var httpLoader:HTTPLoader;
 		private var eventDispatcher:EventDispatcher;
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.VAST_DOCUMENT_URL));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.MISSING_VAST_DOCUMENT_URL));
-		private static const UNHANDLED_RESOURCE:URLResource = new URLResource(new URL("ftp://example.com"));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(VASTTestConstants.VAST_DOCUMENT_URL);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(VASTTestConstants.MISSING_VAST_DOCUMENT_URL);
+		private static const UNHANDLED_RESOURCE:URLResource = new URLResource("ftp://example.com");
 		
-		private static const INVALID_XML_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.INVALID_XML_VAST_DOCUMENT_URL));
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.INVALID_VAST_DOCUMENT_URL));
-		private static const OUTER_WRAPPER_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.OUTER_WRAPPER_VAST_DOCUMENT_URL));
-		private static const INNER_WRAPPER_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.INNER_WRAPPER_VAST_DOCUMENT_URL));
-		private static const WRAPPER_WITH_INVALID_WRAPPED_RESOURCE:URLResource = new URLResource(new URL(VASTTestConstants.WRAPPER_WITH_INVALID_WRAPPED_VAST_DOCUMENT_URL)); 
+		private static const INVALID_XML_RESOURCE:URLResource = new URLResource(VASTTestConstants.INVALID_XML_VAST_DOCUMENT_URL);
+		private static const INVALID_RESOURCE:URLResource = new URLResource(VASTTestConstants.INVALID_VAST_DOCUMENT_URL);
+		private static const OUTER_WRAPPER_RESOURCE:URLResource = new URLResource(VASTTestConstants.OUTER_WRAPPER_VAST_DOCUMENT_URL);
+		private static const INNER_WRAPPER_RESOURCE:URLResource = new URLResource(VASTTestConstants.INNER_WRAPPER_VAST_DOCUMENT_URL);
+		private static const WRAPPER_WITH_INVALID_WRAPPED_RESOURCE:URLResource = new URLResource(VASTTestConstants.WRAPPER_WITH_INVALID_WRAPPED_VAST_DOCUMENT_URL); 
 	}
 }

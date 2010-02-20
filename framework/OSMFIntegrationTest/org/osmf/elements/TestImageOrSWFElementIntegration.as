@@ -27,8 +27,8 @@ package org.osmf.elements
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
-	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoadState;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 
 	public class TestImageOrSWFElementIntegration extends TestMediaElement

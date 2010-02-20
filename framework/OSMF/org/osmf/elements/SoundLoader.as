@@ -102,20 +102,21 @@ package org.osmf.elements
 			 */
 			 
 			var urlResource:URLResource = resource as URLResource;
-			if (urlResource == null || urlResource.url == null || urlResource.url.rawUrl == null || urlResource.url.rawUrl.length <= 0)
+			if (urlResource == null || urlResource.url == null || urlResource.url.length <= 0)
 			{
 				return false;
 			}
-			if (urlResource.url.protocol == "")
+			var url:URL = new URL(urlResource.url);
+			if (url.protocol == "")
 			{
-				return urlResource.url.path.search(/\.mp3$/i) != -1;
+				return url.path.search(/\.mp3$/i) != -1;
 			}		
-			if (urlResource.url.protocol.search(/file$|http$|https$/i) != -1)
+			if (url.protocol.search(/file$|http$|https$/i) != -1)
 			{
-				return (urlResource.url.path == null ||
-						urlResource.url.path.length <= 0 ||
-						urlResource.url.path.indexOf(".") == -1 ||
-						urlResource.url.path.search(/\.mp3$/i) != -1);
+				return (url.path == null ||
+						url.path.length <= 0 ||
+						url.path.indexOf(".") == -1 ||
+						url.path.search(/\.mp3$/i) != -1);
 			}
 			
 			return false;

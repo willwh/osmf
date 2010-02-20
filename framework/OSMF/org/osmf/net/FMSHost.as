@@ -21,7 +21,7 @@
 *  Contributor(s): Akamai Technologies
 *  
 *****************************************************/
-package org.osmf.utils
+package org.osmf.net
 {
 	/**
 	 * FMSHost is a utility class providing the FMSURL class the means to 
@@ -33,7 +33,7 @@ package org.osmf.utils
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class FMSHost
+	internal class FMSHost
 	{
 		/**
 		 * Constructor.

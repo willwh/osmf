@@ -30,7 +30,6 @@ package org.osmf.elements.audioClasses
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoadTrait;
 	import org.osmf.utils.NullResource;
-	import org.osmf.utils.URL;
 	import org.osmf.utils.TestConstants;
 
 	public class TestSoundLoadTrait extends TestLoadTrait
@@ -75,8 +74,8 @@ package org.osmf.elements.audioClasses
 			return true;
 		}
 		
-		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
-		private static const FAILED_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
+		private static const SUCCESSFUL_RESOURCE:URLResource = new URLResource(TestConstants.LOCAL_SOUND_FILE);
+		private static const FAILED_RESOURCE:URLResource = new URLResource(TestConstants.LOCAL_INVALID_SOUND_FILE);
 		private static const UNHANDLED_RESOURCE:MediaResourceBase = new NullResource();
 	}
 }

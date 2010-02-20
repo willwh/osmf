@@ -23,8 +23,41 @@ package org.osmf.media
 {
 	import org.osmf.utils.InterfaceTestCase;
 	
-	public class TestURLResource extends TestIURLResource
+	public class TestURLResource extends InterfaceTestCase
 	{
+		public function testGetURL():void
+		{
+			// Simple URL
+			var resource:URLResource = createURLResource("http://www.example.com");
+			assertTrue(resource != null);
+			assertTrue(resource.url == "http://www.example.com");
+			
+			// Empty URL
+			resource = createURLResource("");
+			assertTrue(resource != null);
+			assertTrue(resource.url == "");
+
+			// null URL
+			resource = createURLResource(null);
+			assertTrue(resource != null);
+			assertTrue(resource.url == null);			
+		}
+		
+		public function testMetadata():void
+		{
+			// Simple URL
+			var resource:URLResource = createURLResource("http://www.example.com");
+			
+			//T est metadata list is valid, and empty.
+			assertNotNull(resource.metadata);
+			
+		}
+		
+		private function createURLResource(url:String):URLResource
+		{
+			return createInterfaceObject(url) as URLResource;
+		}
+				
 		override protected function createInterfaceObject(... args):Object
 		{
 			var resource:URLResource = null;

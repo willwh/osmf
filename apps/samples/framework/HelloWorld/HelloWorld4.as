@@ -32,10 +32,9 @@ package
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
-	import org.osmf.utils.URL;
 
 	/**
-	 * Variation on HelloWorld, using MediaElement + IViewable
+	 * Variation on HelloWorld, using MediaElement + DisplayObjectTrait
 	 * rather than MediaPlayerSprite.
 	 **/
 	[SWF(width="640", height="352")]
@@ -43,9 +42,8 @@ package
 	{
 		public function HelloWorld4()
 		{
-			var element:MediaElement = new VideoElement
-				( new URLResource(new URL(REMOTE_PROGRESSIVE))
-				);
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
+			var element:MediaElement = new VideoElement(resource);
 			
 			var loadTrait:LoadTrait = element.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
@@ -65,8 +63,5 @@ package
 				}
 			}
 		}
-		
-		private static const REMOTE_PROGRESSIVE:String
-			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 	}
 }

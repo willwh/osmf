@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.smil.model
 {
-	import org.osmf.utils.URL;
-	
 	/**
 	 * Represents a meta tag in a SMIL document.
 	 */
@@ -40,16 +38,16 @@ package org.osmf.smil.model
 		 * The <code>base</code> attribute value if 
 		 * found with the tag in the SMIL file.
 		 */
-		public function get base():URL
+		public function get base():String
 		{
 			return _base;
 		}
 		
-		public function set base(value:URL):void
+		public function set base(value:String):void
 		{
 			_base = value;
 		}
 		
-		private var _base:URL;
+		private var _base:String;
 	}
 }

@@ -23,8 +23,6 @@ package org.osmf.elements.f4mClasses
 {
 	import flash.utils.ByteArray;
 	
-	import org.osmf.utils.URL;
-	
 	/**
 	 * Describes a specific piece of media.
 	 *  
@@ -87,7 +85,7 @@ package org.osmf.elements.f4mClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public var url:URL;
+		public var url:String;
 		
 		/**
 		 * The bitrate of the media in kilobits per second.

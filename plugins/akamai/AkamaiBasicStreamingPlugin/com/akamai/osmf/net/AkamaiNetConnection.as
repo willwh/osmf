@@ -24,7 +24,7 @@ package com.akamai.osmf.net
 {
 	import flash.net.NetConnection;
 	
-	import org.osmf.utils.FMSURL;
+	import org.osmf.net.FMSURL;
 
 	/**
 	 * The AkamaiNetConnection class extends NetConnection to provide 
@@ -58,13 +58,12 @@ package com.akamai.osmf.net
 		{
 			if (command != null)
 			{
-				_url = new FMSURL(command);
-				_isLive = (_url.appName.toLowerCase() == "live") ? true : false;	
+				var theURL:FMSURL = new FMSURL(command);
+				_isLive = (theURL.appName.toLowerCase() == "live") ? true : false;	
 			}
 			super.connect(command, parameters);
 		}
 		
 		private var _isLive:Boolean;
-		private var _url:FMSURL;		
 	}
 }

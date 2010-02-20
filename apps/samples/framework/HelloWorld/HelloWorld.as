@@ -26,7 +26,6 @@ package
 	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 
 	/**
 	 * The simplest OSMF application possible.
@@ -41,15 +40,13 @@ package
 			// Create the Sprite class that holds our MediaPlayer.
  			var sprite:MediaPlayerSprite = new MediaPlayerSprite();
 			addChild(sprite);
+
+			// Create the resource to play.
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			// Set the MediaElement on the MediaPlayer.  Because
+			// Create the MediaElement and set it on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			sprite.mediaElement = new VideoElement
-				( new URLResource(new URL(REMOTE_PROGRESSIVE))
-				);
+			sprite.mediaElement = new VideoElement(resource);
 		}
-		
-		private static const REMOTE_PROGRESSIVE:String
-			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 	}
 }

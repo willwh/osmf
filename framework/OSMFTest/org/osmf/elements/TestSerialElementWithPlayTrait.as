@@ -38,7 +38,6 @@ package org.osmf.elements
 	import org.osmf.utils.DynamicPlayTrait;
 	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.URL;
 	
 	public class TestSerialElementWithPlayTrait extends TestCase
 	{
@@ -418,7 +417,7 @@ package org.osmf.elements
 			var mediaElement2:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD],
 										loader2,
-										new URLResource(new URL("http://www.example.com/loadTrait1")),
+										new URLResource("http://www.example.com/loadTrait1"),
 										true
 										);
 			var playTrait2:PlayTrait = mediaElement2.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -430,7 +429,7 @@ package org.osmf.elements
 			var mediaElement3:MediaElement =
 				new DynamicMediaElement([MediaTraitType.LOAD],
 										loader3,
-										new URLResource(new URL("http://www.example.com/loadTrait1")));
+										new URLResource("http://www.example.com/loadTrait1"));
 			var playTrait3:PlayTrait = mediaElement3.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			assertTrue(playTrait3 == null);
 			var loadTrait3:LoadTrait = mediaElement3.getTrait(MediaTraitType.LOAD) as LoadTrait;			
