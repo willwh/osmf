@@ -58,11 +58,13 @@ package org.osmf.chrome.controlbar.widgets
 			if (element != null)
 			{
 				controlBarAutoHideWatcher
-					= MetadataUtils.watchFacet
+					= new MetadataWatcher
 						( element.metadata
 						, ControlBarBase.METADATA_AUTO_HIDE_URL
+						, null
 						, controlBarAutoHideChangeCallback
 						);
+				controlBarAutoHideWatcher.watch();
 			}
 			else
 			{

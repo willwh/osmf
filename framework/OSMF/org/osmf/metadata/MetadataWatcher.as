@@ -29,8 +29,9 @@ package org.osmf.metadata
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * The MetadataWatcher class is a convenience class that helps monitoring Metadata
-	 * instances for change.
+	 * The MetadataWatcher class is a convenience class for monitoring Metadata
+	 * instances for change.  It is capable of watching for facet or facet value
+	 * changes.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -40,7 +41,8 @@ package org.osmf.metadata
 	public class MetadataWatcher
 	{
 		/**
-		 * Constructor 
+		 * Constructor.
+		 * 
 		 * @param metadata The Metadata to watch for change.
 		 * @param namespaceURL The namespace that identifies the Facet instance to watch
 		 * for change.
@@ -71,7 +73,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Starts watching the target facet (value)
+		 * Starts watching the target facet.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -108,7 +110,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Stops watching the target facet (value)
+		 * Stops watching the target facet.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

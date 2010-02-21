@@ -34,7 +34,7 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
@@ -74,11 +74,13 @@ package org.osmf.elements.compositeClasses
 				);
 			
 			// Watch our owner's metadata for a layout class being set:
-			MetadataUtils.watchFacet
+			watcher = new MetadataWatcher
 				( owner.metadata
 				, MetadataNamespaces.LAYOUT_RENDERER_TYPE
+				, null
 				, layoutRendererFacetChangeCallback
 				);
+			watcher.watch();
 		}
 		
 		public function get layoutRenderer():LayoutRendererBase
@@ -180,6 +182,7 @@ package org.osmf.elements.compositeClasses
 		private var _owner:CompositeElement;
 		private var _childrenContainer:ILayoutTarget;
 		private var _layoutRenderer:LayoutRendererBase;
+		private var watcher:MetadataWatcher;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeDisplayObjectTrait");
 	}

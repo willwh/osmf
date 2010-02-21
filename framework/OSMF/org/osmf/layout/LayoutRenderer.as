@@ -30,7 +30,6 @@ package org.osmf.layout
 	import org.osmf.display.ScaleMode;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
 
 	/**
@@ -79,25 +78,29 @@ package org.osmf.layout
 			if (newContainer)
 			{
 				containerAbsoluteWatcher
-					= MetadataUtils.watchFacet
+					= new MetadataWatcher
 						( newContainer.metadata
 						, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS
+						, null
 						, function (..._):void
 							{
 								invalidate();
 							}
 						);
-						
+				containerAbsoluteWatcher.watch();
+				
 				containerAttributesWatcher
-					= MetadataUtils.watchFacet
+					= new MetadataWatcher
 						( newContainer.metadata
 						, MetadataNamespaces.LAYOUT_ATTRIBUTES
+						, null
 						, function (facet:LayoutAttributesFacet):void
 							{
 								layoutMode = facet ? facet.layoutMode : LayoutMode.NONE
 								invalidate();
 							}
 						);
+				containerAttributesWatcher.watch();
 			}
 			
 			invalidate();
@@ -152,7 +155,7 @@ package org.osmf.layout
 			// Watch the index metadata attribute for change:
 			//
 			
-			targetMetadataWatchers[target] = MetadataUtils.watchFacetValue
+			var watcher:MetadataWatcher = new MetadataWatcher
 				( target.metadata
 				, MetadataNamespaces.LAYOUT_ATTRIBUTES
 				, LayoutAttributesFacet.INDEX
@@ -161,6 +164,8 @@ package org.osmf.layout
 						updateTargetOrder(target);
 					}
 				);
+			watcher.watch();
+			targetMetadataWatchers[target] = watcher;
 		}
 		
 		/**

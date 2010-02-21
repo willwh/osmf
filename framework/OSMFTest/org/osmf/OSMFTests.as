@@ -203,6 +203,7 @@ package org.osmf
 			addTestSuite(TestKeyValueFacet);
 			addTestSuite(TestFacetGroup);
 			addTestSuite(TestMetadataUtils);
+			addTestSuite(TestMetadataWatcher);
 			addTestSuite(TestCompositeMetadata);
 			addTestSuite(TestTemporalFacet);
 

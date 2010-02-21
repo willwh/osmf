@@ -24,7 +24,6 @@ package org.osmf.layout
 	import __AS3__.vec.Vector;
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -38,7 +37,6 @@ package org.osmf.layout
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -217,13 +215,16 @@ package org.osmf.layout
 			var watchers:Array = metaDataWatchers[target] = new Array();
 			for each (var namespaceURL:String in usedMetadataFacets)
 			{
-				watchers.push
-					( MetadataUtils.watchFacet
+				var watcher:MetadataWatcher =
+					new MetadataWatcher
 						( target.metadata
 						, namespaceURL
+						, null
 						, targetMetadataChangeCallback
 						)
-					);
+					;
+				watcher.watch();
+				watchers.push(watcher);
 			}
 			
 			// Watch the target's displayObject, dimenions, and layoutRenderer change:
