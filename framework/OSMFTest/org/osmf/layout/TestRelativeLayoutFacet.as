@@ -26,7 +26,7 @@ package org.osmf.layout
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullFacetSynthesizer;
-	import org.osmf.metadata.StringIdentifier;
+	import org.osmf.metadata.ObjectIdentifier;
 
 	public class TestRelativeLayoutFacet extends TestCase
 	{
@@ -79,7 +79,7 @@ package org.osmf.layout
 			assertEquals(facet.height, facet.getValue(RelativeLayoutFacet.HEIGHT), 4);
 			
 			assertEquals(undefined, facet.getValue(null));
-			assertEquals(undefined, facet.getValue(new StringIdentifier("@*#$^98367423874")));
+			assertEquals(undefined, facet.getValue(new ObjectIdentifier("@*#$^98367423874")));
 			
 			assertTrue(facet.synthesizer is NullFacetSynthesizer);
 		}

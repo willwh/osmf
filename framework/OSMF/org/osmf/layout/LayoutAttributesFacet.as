@@ -24,7 +24,7 @@ package org.osmf.layout
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.StringIdentifier;
+	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -50,7 +50,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const INDEX:StringIdentifier = new StringIdentifier("index");
+		public static const INDEX:ObjectIdentifier = new ObjectIdentifier("index");
 		
 		/**
 		 * @private
@@ -62,7 +62,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const REGISTRATION_POINT:StringIdentifier = new StringIdentifier("registrationPoint");
+		public static const REGISTRATION_POINT:ObjectIdentifier = new ObjectIdentifier("registrationPoint");
 		
 		/**
 		 * @private
@@ -74,7 +74,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const SCALE_MODE:StringIdentifier = new StringIdentifier("scaleMode");
+		public static const SCALE_MODE:ObjectIdentifier = new ObjectIdentifier("scaleMode");
 		
 		/**
 		 * @private
@@ -86,7 +86,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VERTICAL_ALIGN:StringIdentifier = new StringIdentifier("verticalAlign");
+		public static const VERTICAL_ALIGN:ObjectIdentifier = new ObjectIdentifier("verticalAlign");
 		
 		/**
 		 * @private
@@ -98,7 +98,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const HORIZONTAL_ALIGN:StringIdentifier = new StringIdentifier("horizontalAlign");
+		public static const HORIZONTAL_ALIGN:ObjectIdentifier = new ObjectIdentifier("horizontalAlign");
 		
 		/**
 		 * @private
@@ -110,7 +110,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const SNAP_TO_PIXEL:StringIdentifier = new StringIdentifier("snapToPixel");
+		public static const SNAP_TO_PIXEL:ObjectIdentifier = new ObjectIdentifier("snapToPixel");
 		
 		/**
 		 * @private
@@ -122,7 +122,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MODE:StringIdentifier = new StringIdentifier("layoutMode");
+		public static const MODE:ObjectIdentifier = new ObjectIdentifier("layoutMode");
 		
 		/**
 		 * @private
@@ -134,7 +134,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const INCLUDE_IN_LAYOUT:StringIdentifier = new StringIdentifier("includeInLayout");
+		public static const INCLUDE_IN_LAYOUT:ObjectIdentifier = new ObjectIdentifier("includeInLayout");
 		
 		public function LayoutAttributesFacet()
 		{

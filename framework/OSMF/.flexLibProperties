@@ -159,7 +159,6 @@
     <classEntry path="org.osmf.metadata.NullFacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.ObjectFacet"/>
     <classEntry path="org.osmf.metadata.ObjectIdentifier"/>
-    <classEntry path="org.osmf.metadata.StringIdentifier"/>
     <classEntry path="org.osmf.metadata.TemporalFacet"/>
     <classEntry path="org.osmf.metadata.TemporalFacetEvent"/>
     <classEntry path="org.osmf.metadata.TemporalIdentifier"/>

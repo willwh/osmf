@@ -25,7 +25,7 @@ package org.osmf.layout
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.StringIdentifier;
+	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -56,7 +56,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const LEFT:StringIdentifier = new StringIdentifier("left");
+		public static const LEFT:ObjectIdentifier = new ObjectIdentifier("left");
 		
 		/**
 		 * @private
@@ -68,7 +68,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const TOP:StringIdentifier = new StringIdentifier("top");
+		public static const TOP:ObjectIdentifier = new ObjectIdentifier("top");
 		
 		/**
 		 * @private
@@ -80,7 +80,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const RIGHT:StringIdentifier = new StringIdentifier("right");
+		public static const RIGHT:ObjectIdentifier = new ObjectIdentifier("right");
 		
 		/**
 		 * @private
@@ -92,7 +92,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BOTTOM:StringIdentifier = new StringIdentifier("bottom");
+		public static const BOTTOM:ObjectIdentifier = new ObjectIdentifier("bottom");
 		
 		// Facet
 		//

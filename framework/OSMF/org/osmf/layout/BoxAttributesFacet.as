@@ -24,7 +24,7 @@ package org.osmf.layout
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.IIdentifier;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.StringIdentifier;
+	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -50,7 +50,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const RELATIVE_SUM:StringIdentifier = new StringIdentifier("relativeSum");
+		public static const RELATIVE_SUM:ObjectIdentifier = new ObjectIdentifier("relativeSum");
 		
 		/**
 		 * @private
@@ -62,7 +62,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ABSOLUTE_SUM:StringIdentifier = new StringIdentifier("absoluteSum");
+		public static const ABSOLUTE_SUM:ObjectIdentifier = new ObjectIdentifier("absoluteSum");
 		
 		
 		public function BoxAttributesFacet()
