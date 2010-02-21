@@ -27,7 +27,7 @@ package org.osmf.metadata
 	
 	import org.osmf.media.URLResource;
 
-	public class TestMetadataUtils extends TestCase
+	public class TestMediaTypeUtil extends TestCase
 	{
 		public function testMatch():void
 		{
@@ -37,19 +37,19 @@ package org.osmf.metadata
 			supportedMime.push("audio/mp3");	
 			supportedMime.push("audio/mpeg");
 			
-			assertEquals(MetadataUtils.METADATA_MATCH_FOUND, MetadataUtils.checkMetadataMatch(MediaType.AUDIO, "audio/mp3", supportedMedia, supportedMime));
-			assertEquals(MetadataUtils.METADATA_MATCH_UNKNOWN, MetadataUtils.checkMetadataMatch(null, null, supportedMedia, supportedMime));		
-			assertEquals(MetadataUtils.METADATA_CONFLICTS_FOUND, MetadataUtils.checkMetadataMatch(MediaType.VIDEO, null, supportedMedia, supportedMime));
-			assertEquals(MetadataUtils.METADATA_CONFLICTS_FOUND, MetadataUtils.checkMetadataMatch(MediaType.AUDIO, "video/x-flv", supportedMedia, supportedMime));
-			assertEquals(MetadataUtils.METADATA_MATCH_FOUND, MetadataUtils.checkMetadataMatch(MediaType.AUDIO, null, supportedMedia, supportedMime));
-			assertEquals(MetadataUtils.METADATA_MATCH_FOUND, MetadataUtils.checkMetadataMatch(null, "audio/mpeg", supportedMedia, supportedMime));						
+			assertEquals(MediaTypeUtil.METADATA_MATCH_FOUND, MediaTypeUtil.checkMetadataMatch(MediaType.AUDIO, "audio/mp3", supportedMedia, supportedMime));
+			assertEquals(MediaTypeUtil.METADATA_MATCH_UNKNOWN, MediaTypeUtil.checkMetadataMatch(null, null, supportedMedia, supportedMime));		
+			assertEquals(MediaTypeUtil.METADATA_CONFLICTS_FOUND, MediaTypeUtil.checkMetadataMatch(MediaType.VIDEO, null, supportedMedia, supportedMime));
+			assertEquals(MediaTypeUtil.METADATA_CONFLICTS_FOUND, MediaTypeUtil.checkMetadataMatch(MediaType.AUDIO, "video/x-flv", supportedMedia, supportedMime));
+			assertEquals(MediaTypeUtil.METADATA_MATCH_FOUND, MediaTypeUtil.checkMetadataMatch(MediaType.AUDIO, null, supportedMedia, supportedMime));
+			assertEquals(MediaTypeUtil.METADATA_MATCH_FOUND, MediaTypeUtil.checkMetadataMatch(null, "audio/mpeg", supportedMedia, supportedMime));						
 		}
 		
 		private function testResourceWithData(expectedResult:int, mediaType:String, mimeType:String, supportedMedia:Vector.<String>, supportedMime:Vector.<String>):void
 		{
 			var resource:URLResource = new URLResource("test");
 			resource.metadata.addFacet(new MediaTypeFacet(mediaType, mimeType));
-			assertEquals(expectedResult, MetadataUtils.checkMetadataMatchWithResource(resource, supportedMedia, supportedMime));
+			assertEquals(expectedResult, MediaTypeUtil.checkMetadataMatchWithResource(resource, supportedMedia, supportedMime));
 		}
 		
 		public function testResourceMatch():void
@@ -60,12 +60,12 @@ package org.osmf.metadata
 			supportedMime.push("audio/mp3");	
 			supportedMime.push("audio/mpeg");
 								
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_MATCH_FOUND,MediaType.AUDIO, "audio/mp3", supportedMedia, supportedMime));			
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_MATCH_UNKNOWN, null, null, supportedMedia, supportedMime));					
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_CONFLICTS_FOUND, MediaType.VIDEO, null, supportedMedia, supportedMime));			
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_CONFLICTS_FOUND, MediaType.AUDIO, "video/x-flv", supportedMedia, supportedMime));			
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_MATCH_FOUND, MediaType.AUDIO, null, supportedMedia, supportedMime));			
-			assertEquals(testResourceWithData(MetadataUtils.METADATA_MATCH_FOUND, null, "audio/mpeg", supportedMedia, supportedMime));						
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_MATCH_FOUND,MediaType.AUDIO, "audio/mp3", supportedMedia, supportedMime));			
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_MATCH_UNKNOWN, null, null, supportedMedia, supportedMime));					
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_CONFLICTS_FOUND, MediaType.VIDEO, null, supportedMedia, supportedMime));			
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_CONFLICTS_FOUND, MediaType.AUDIO, "video/x-flv", supportedMedia, supportedMime));			
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_MATCH_FOUND, MediaType.AUDIO, null, supportedMedia, supportedMime));			
+			assertEquals(testResourceWithData(MediaTypeUtil.METADATA_MATCH_FOUND, null, "audio/mpeg", supportedMedia, supportedMime));						
 		}
 	}
 }

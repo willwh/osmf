@@ -152,9 +152,9 @@
     <classEntry path="org.osmf.metadata.KeyValueFacet"/>
     <classEntry path="org.osmf.metadata.MediaType"/>
     <classEntry path="org.osmf.metadata.MediaTypeFacet"/>
+    <classEntry path="org.osmf.metadata.MediaTypeUtil"/>
     <classEntry path="org.osmf.metadata.Metadata"/>
     <classEntry path="org.osmf.metadata.MetadataNamespaces"/>
-    <classEntry path="org.osmf.metadata.MetadataUtils"/>
     <classEntry path="org.osmf.metadata.MetadataWatcher"/>
     <classEntry path="org.osmf.metadata.NullFacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.ObjectFacet"/>

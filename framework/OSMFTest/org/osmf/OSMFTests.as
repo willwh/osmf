@@ -202,7 +202,7 @@ package org.osmf
 			addTestSuite(TestMediaType);
 			addTestSuite(TestKeyValueFacet);
 			addTestSuite(TestFacetGroup);
-			addTestSuite(TestMetadataUtils);
+			addTestSuite(TestMediaTypeUtil);
 			addTestSuite(TestMetadataWatcher);
 			addTestSuite(TestCompositeMetadata);
 			addTestSuite(TestTemporalFacet);

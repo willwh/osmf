@@ -22,11 +22,8 @@
 
 package org.osmf.chrome.controlbar.widgets
 {
-	import flash.events.MouseEvent;
-	
 	import org.osmf.chrome.controlbar.ControlBarBase;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.metadata.ObjectFacet;
 	

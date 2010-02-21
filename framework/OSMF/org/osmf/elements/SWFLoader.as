@@ -27,7 +27,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.MediaTypeUtil;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;
@@ -83,10 +83,10 @@ package org.osmf.elements
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
-			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
+			var rt:int = MediaTypeUtil.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
+			if (rt != MediaTypeUtil.METADATA_MATCH_UNKNOWN)
 			{
-				return rt == MetadataUtils.METADATA_MATCH_FOUND;
+				return rt == MediaTypeUtil.METADATA_MATCH_FOUND;
 			}			
 			
 			var urlResource:URLResource = resource as URLResource;

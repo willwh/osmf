@@ -23,7 +23,6 @@
 *****************************************************/
 package org.osmf.vast.media
 {
-	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.vast.model.VASTMediaFile;
 	
 	/**
@@ -61,7 +60,15 @@ package org.osmf.vast.media
 		
 		private static function supportsMimeType(mimeType:String):Boolean
 		{
-			return (MetadataUtils.checkMetadataMatch(null, mimeType, null, VIDEO_MIME_TYPES_SUPPORTED) == MetadataUtils.METADATA_MATCH_FOUND);
+			for each (var supportedMimeType:String in VIDEO_MIME_TYPES_SUPPORTED)
+			{
+				if (mimeType == supportedMimeType)
+				{
+					return true;
+				}
+			}
+			
+			return false;
 		}
 		
 		private static const VIDEO_MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>

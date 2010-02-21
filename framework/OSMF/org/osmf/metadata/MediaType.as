@@ -39,7 +39,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const VIDEO:String	= "Video";
+		public static const VIDEO:String	= "video";
 		
 		/**
 		 * Audio media
@@ -49,7 +49,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const AUDIO:String	= "Audio";
+		public static const AUDIO:String	= "audio";
 		
 		/**
 		 * Image media
@@ -59,7 +59,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const IMAGE:String	= "Image";
+		public static const IMAGE:String	= "image";
 		
 		/**
 		 * SWF format media
@@ -69,7 +69,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const SWF:String		= "SWF";
+		public static const SWF:String		= "swf";
 				
 	}
 }

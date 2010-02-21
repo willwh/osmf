@@ -38,7 +38,8 @@ package org.osmf.smil.loader
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.MediaTypeFacet;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.smil.media.SMILMediaGenerator;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.parser.SMILParser;
@@ -83,13 +84,16 @@ package org.osmf.smil.loader
 		 * @private
 		 */ 
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
-		{	
-			var match:int = MetadataUtils.checkMetadataMatchWithResource(resource, mediaTypesSupported, supportedMimeTypes);
+		{
 			var canHandle:Boolean = false;
 			
-			if (match == MetadataUtils.METADATA_MATCH_FOUND)
+			var facet:MediaTypeFacet = resource.metadata.getFacet(MetadataNamespaces.MEDIATYPE_METADATA) as MediaTypeFacet;
+
+			// We should bypass the rest of this method if a MIME type
+			// is explicitly specified (whether it matches or not).
+			if (facet != null && facet.mimeType != null)
 			{
-				canHandle = true;
+				canHandle = facet.mimeType == SMIL_MIME_TYPE;
 			}
 			else if (resource is URLResource)
 			{

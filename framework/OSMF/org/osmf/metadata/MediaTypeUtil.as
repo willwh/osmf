@@ -27,8 +27,12 @@ package org.osmf.metadata
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
+	
+	[ExcludeClass]
 
 	/**
+	 * @private
+	 * 
 	 * Utility class which contains static methods to perform common metadata functions
 	 *  
 	 *  @langversion 3.0
@@ -36,7 +40,7 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MetadataUtils
+	public class MediaTypeUtil
 	{
 		/** 
 		 * Checks whether we can draw a conclusion of whether the resouce can be handled based on metadata. This is

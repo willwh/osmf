@@ -27,10 +27,10 @@ package org.osmf.metadata
 	{
 		public function testMediaConstants():void
 		{
-			assertEquals( MediaType.VIDEO,"Video");
-			assertEquals( MediaType.AUDIO,"Audio");
-			assertEquals( MediaType.IMAGE,"Image");
-			assertEquals( MediaType.SWF,"SWF");
+			assertEquals(MediaType.VIDEO, "video");
+			assertEquals(MediaType.AUDIO, "audio");
+			assertEquals(MediaType.IMAGE, "image");
+			assertEquals(MediaType.SWF, "swf");
 		}
 	}
 }
