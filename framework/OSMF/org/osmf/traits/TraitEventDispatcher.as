@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.utils
+package org.osmf.traits
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -36,7 +36,6 @@ package org.osmf.utils
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.MediaTraitType;
 	
 	
 	/**

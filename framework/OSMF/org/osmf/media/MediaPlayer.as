@@ -29,7 +29,6 @@ package org.osmf.media
 	import org.osmf.events.*;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.utils.TraitEventDispatcher;
 	   
 	/**
 	 * Dispatched when the <code>duration</code> property of the media has changed.

@@ -81,6 +81,7 @@ package org.osmf
 			addTestSuite(TestTimeTraitAsSubclass);
 			addTestSuite(TestDisplayObjectTrait);
 			addTestSuite(TestDisplayObjectTraitAsSubclass);
+			addTestSuite(TestTraitEventDispatcher);
 
 			// Events
 			//
@@ -290,7 +291,6 @@ package org.osmf
 			addTestSuite(TestFMSURL);
 			addTestSuite(TestHTTPLoader);
 			addTestSuite(TestTimeUtil);
-			addTestSuite(TestTraitEventDispatcher);
 
 			// Additional MediaPlayer Tests
 			//

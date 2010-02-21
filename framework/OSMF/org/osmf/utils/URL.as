@@ -23,7 +23,11 @@
 *****************************************************/
 package org.osmf.utils
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * URL parses a Uniform Resource Identifier (URI/URL) into individual properties and provides easy access
 	 * to query string parameters.  This also works with rtmp:// urls, but will assume the instance isn't specified.  
 	 * To use rtmp:// urls with an instance name, use the FMSURL class instead of URL.
