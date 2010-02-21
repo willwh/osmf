@@ -31,7 +31,7 @@ package org.osmf.metadata
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Dispatched when the an IMetadata has been added.
+	 * Dispatched when a facet has been added to this Metadata object.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.FACET_ADD
 	 *  
@@ -43,7 +43,7 @@ package org.osmf.metadata
 	[Event(name="facetAdd",type="org.osmf.events.MetadataEvent")]
 	
 	/**
-	 * Dispatched when the an IMetadata has been removed.
+	 * Dispatched when a facet has been removed from this Metadata object.
 	 * 
 	 * @eventType org.osmf.events.MetadataEvent.FACET_REMOVE
 	 *  
@@ -55,7 +55,7 @@ package org.osmf.metadata
 	[Event(name="facetRemove",type="org.osmf.events.MetadataEvent")]
 	
 	/**
-	 *  The Metadata collection is the default implementation for metadata carrying media.
+	 *  The Metadata collection is the default implementation for metadata-carrying media.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

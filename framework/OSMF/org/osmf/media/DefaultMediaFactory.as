@@ -50,7 +50,7 @@ package org.osmf.media
 	 *   NetLoader (streaming or progressive)
 	 * </li>
 	 * <li>
-	 * 	 DynamicStreamingNetLoader (MBR streaming)
+	 * 	 RTMPDynamicStreamingNetLoader (MBR streaming)
 	 * </li>
 	 * <li>
 	 * 	 HTTPStreamingNetLoader (HTTP streaming)

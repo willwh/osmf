@@ -19,11 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.metadata
 {
+	/**
+	 * Marker interface for a class that carries Metadata.
+	 **/
 	public interface IMetadataProvider
 	{
+		/**
+		 * The Metadata associated with this object.
+		 **/
 		function get metadata():Metadata;		
 	}
 }
