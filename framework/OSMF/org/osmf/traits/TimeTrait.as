@@ -181,11 +181,16 @@ package org.osmf.traits
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Called when a subclass or a media element that has the temporal trait first detects
 		 * that <code>currentTime</code> equals <code>duration</code>.
 		 * <p>Not called when both <code>currentTime</code> and <code>duration</code> equal zero.</p>
 		 * 
 		 * <p>Dispatches the complete event.</p>
+		 * 
+		 * <p>Exposed as protected (though undocumented) because some subclasses need to
+		 * prevent event dispatch.</p>
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

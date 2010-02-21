@@ -61,14 +61,14 @@ package org.osmf.utils
 		
 		public function doBlockTrait(type:String):void
 		{
-			blockedTraits[type] = true;
+			if (blockedTraits.indexOf(type) == -1)
+			{
+				blockedTraits.push(type);
+				
+				// Refresh.
+				super.blockedTraits = blockedTraits;
+			}
 		}
-
-		override protected function blocksTrait(type:String):Boolean
-		{
-			return blockedTraits[type] == true;
-		}
-
 		private function initialize(traitTypes:Array, loader:LoaderBase, resource:MediaResourceBase):void
 		{
 			this.resource = resource;
@@ -110,7 +110,5 @@ package org.osmf.utils
 				}
 			}
 		}
-		
-		private var blockedTraits:Dictionary = new Dictionary();
 	}
 }

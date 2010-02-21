@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.examples.seeking
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
@@ -34,12 +36,11 @@ package org.osmf.examples.seeking
 		public function UnseekableProxyElement(wrappedElement:MediaElement)
 		{
 			super(wrappedElement);
-		}
-		
-		override protected function blocksTrait(type:String):Boolean
-		{
+			
 			// Prevent seeking.
-			return type == MediaTraitType.SEEK;
+			var traitsToBlock:Vector.<String> = new Vector.<String>();
+			traitsToBlock.push(MediaTraitType.SEEK);
+			blockedTraits = traitsToBlock;
 		}
 	}
 }

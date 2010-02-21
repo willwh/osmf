@@ -21,11 +21,8 @@
 *****************************************************/
 package org.osmf.examples.loaderproxy
 {
-	import flash.events.Event;
-	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
@@ -73,21 +70,21 @@ package org.osmf.examples.loaderproxy
 				// Our work is done, remove the custom LoadTrait.  This will
 				// expose the base LoadTrait, which we can then use to do
 				// the actual load.
-				preventAddEventDispatch = true;
+
+				var traitsToBlock:Vector.<String> = new Vector.<String>();
+				traitsToBlock.push(MediaTraitType.LOAD);
+				
+				// Block the LoadTrait while we remove the temporary trait.
+				blockedTraits = traitsToBlock;
 				removeTrait(MediaTraitType.LOAD);
-				preventAddEventDispatch = false;
+				blockedTraits = new Vector.<String>();
+				
 				(getTrait(MediaTraitType.LOAD) as LoadTrait).load();
 				
 				loadTrait = null;
 			}
 		}
 		
-		override protected function blocksTrait(traitType:String):Boolean
-		{
-			return preventAddEventDispatch && traitType == MediaTraitType.LOAD;
-		}
-		
 		private var loadTrait:VideoProxyLoadTrait;
-		private var preventAddEventDispatch:Boolean;
 	}
 }

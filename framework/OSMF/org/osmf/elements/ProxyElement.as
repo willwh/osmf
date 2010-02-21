@@ -47,17 +47,16 @@ package org.osmf.elements
 	 * It uses the ProxyElement's <code>setupOverriddenTraits()</code> method to arrange for
 	 * the wrapped element's traits to be overridden.</p>
 	 * <p>To block traits, the subclass prevents the traits of
-	 * the wrapped element from being exposed by calling the ProxyElement's
-	 * <code>blocksTrait(type:MediaTraitType)</code> method for every trait
-	 * type that it wants to block.
+	 * the wrapped element from being exposed by setting the ProxyElement's
+	 * <code>blockedTraits</code> property for the trait
+	 * types that it wants to block.
 	 * This causes the wrapped element's <code>hasTrait()</code>
 	 * method to return <code>false</code> and its
 	 * <code>getTrait()</code> method to return <code>null</code>
 	 * for the blocked trait types.</p>
 	 * <p>A ProxyElement normally dispatches the wrapped element's
-	 * MediaElementEvents, unless its <code>blocksTrait()</code> method returns 
-	 * <code>false</code> for the trait that is the target of the
-	 * MediaElementEvent.</p>
+	 * MediaElementEvents, unless its the trait's type is among those that
+	 * are blocked by the ProxyElement.</p>
 	 * <p>ProxyElement subclasses are useful for modifying the behavior of a
 	 * MediaElement in a non-invasive way.  
 	 * An example would be adding
@@ -322,24 +321,34 @@ package org.osmf.elements
 		}
 		
 		/**
-		 * Indicates whether the ProxyElement will prevent the trait of the specified
-		 * type from being exposed when the wrapped element contains the trait
-		 * and the proxy does not.  The default is <code>false</code> for all trait types.
+		 * The set of MediaTraitTypes that this ProxyElement will block.  When a trait
+		 * is blocked, the ProxyElement will prevent that trait from being exposed when
+		 * the proxied element contains the trait and the proxy does not.
 		 * 
-		 * Subclasses override this to selectively block access to the
-		 * traits of the wrapped element on a per-type basis.
-		 * @param type MediaTraitType to block or not block
-		 * @return Returns <code>true</code> to block the trait of the specified type, 
-		 * <code>false</code> not to block
+		 * Subclasses can call this to selectively block access to the traits of the
+		 * proxied element on a per-type basis.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */ 
-		protected function blocksTrait(traitType:String):Boolean
+		 **/
+		protected final function get blockedTraits():Vector.<String>
 		{
-			return false;
+			if (_blockedTraits == null)
+			{
+				_blockedTraits = new Vector.<String>();
+			}
+			
+			return _blockedTraits;
+		}
+		
+		protected final function set blockedTraits(value:Vector.<String>):void
+		{
+			_blockedTraits = value;
+			
+			// TODO: Need to handle the case where this is set after the
+			// proxiedElement is set (i.e. the dynamic case).
 		}
 		
 		// Internals
@@ -404,6 +413,12 @@ package org.osmf.elements
 			}
 		}
 		
+		private function blocksTrait(traitType:String):Boolean
+		{
+			return _blockedTraits && _blockedTraits.indexOf(traitType) != -1;
+		}
+		
 		private var _proxiedElement:MediaElement;
+		private var _blockedTraits:Vector.<String>;
 	}
 }
