@@ -37,7 +37,6 @@ package org.osmf.net
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MetadataUtils;
-	import org.osmf.metadata.MimeTypes;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -97,7 +96,7 @@ package org.osmf.net
 		**/
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MimeTypes.SUPPORTED_VIDEO_MIME_TYPES);
+			var rt:int = MetadataUtils.checkMetadataMatchWithResource(resource, MEDIA_TYPES_SUPPORTED, MIME_TYPES_SUPPORTED);
 			if (rt != MetadataUtils.METADATA_MATCH_UNKNOWN)
 			{
 				return rt == MetadataUtils.METADATA_MATCH_FOUND;
@@ -387,6 +386,17 @@ package org.osmf.net
 		private static const PROTOCOL_EMPTY:String = "";
 				
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.VIDEO]);
+		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>
+		([
+			"video/x-flv", 
+			"video/x-f4v", 
+			"video/mp4", 
+			"video/mp4v-es", 
+			"video/x-m4v", 
+			"video/3gpp", 
+			"video/3gpp2", 
+			"video/quicktime", 
+		]);
 	}
 }
 

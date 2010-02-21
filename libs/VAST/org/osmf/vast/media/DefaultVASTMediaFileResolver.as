@@ -23,7 +23,7 @@
 *****************************************************/
 package org.osmf.vast.media
 {
-	import org.osmf.metadata.MimeTypes;
+	import org.osmf.metadata.MetadataUtils;
 	import org.osmf.vast.model.VASTMediaFile;
 	
 	/**
@@ -61,15 +61,19 @@ package org.osmf.vast.media
 		
 		private static function supportsMimeType(mimeType:String):Boolean
 		{
-			for each (var supportedType:String in MimeTypes.SUPPORTED_VIDEO_MIME_TYPES)
-			{
-				if (mimeType == supportedType)
-				{
-					return true;
-				}
-			}
-			
-			return false;
+			return (MetadataUtils.checkMetadataMatch(null, mimeType, null, VIDEO_MIME_TYPES_SUPPORTED) == MetadataUtils.METADATA_MATCH_FOUND);
 		}
+		
+		private static const VIDEO_MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>
+		([
+			"video/x-flv", 
+			"video/x-f4v", 
+			"video/mp4", 
+			"video/mp4v-es", 
+			"video/x-m4v", 
+			"video/3gpp", 
+			"video/3gpp2", 
+			"video/quicktime", 
+		]);
 	}
 }

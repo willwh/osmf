@@ -156,7 +156,6 @@
     <classEntry path="org.osmf.metadata.MetadataNamespaces"/>
     <classEntry path="org.osmf.metadata.MetadataUtils"/>
     <classEntry path="org.osmf.metadata.MetadataWatcher"/>
-    <classEntry path="org.osmf.metadata.MimeTypes"/>
     <classEntry path="org.osmf.metadata.NullFacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.ObjectFacet"/>
     <classEntry path="org.osmf.metadata.ObjectIdentifier"/>
