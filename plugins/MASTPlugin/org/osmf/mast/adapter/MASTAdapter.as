@@ -135,7 +135,7 @@ package org.osmf.mast.adapter
 			_map[ON_PAUSE]			= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
 			_map[ON_MUTE]			= "org.osmf.events.AudioEvent.MUTED_CHANGE";
 			_map[ON_VOLUME_CHANGE]	= "org.osmf.events.AudioEvent.VOLUME_CHANGE";
-			_map[ON_SEEK]			= "org.osmf.events.SeekEvent.SEEK_END";
+			_map[ON_SEEK]			= "org.osmf.events.SeekEvent.SEEKING_CHANGE";
 			_map[ON_ITEM_START]		= "org.osmf.events.PlayEvent.PLAY_STATE_CHANGE";
 			_map[ON_ITEM_END]		= "org.osmf.events.TimeEvent.DURATION_REACHED";
 		}

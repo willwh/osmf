@@ -183,8 +183,8 @@ package org.osmf.utils
 		
 		public function  testSeekEvents():void
 		{
-			var event1:SeekEvent = new SeekEvent(SeekEvent.SEEK_BEGIN, false, false, 12);
-			var event2:SeekEvent = new SeekEvent(SeekEvent.SEEK_END, false, false, 15 );
+			var event1:SeekEvent = new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, true, 12);
+			var event2:SeekEvent = new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, false, 15 );
 						
 			var events:Vector.<Event> = new Vector.<Event>();
 			var properties:Vector.<String> = new Vector.<String>();

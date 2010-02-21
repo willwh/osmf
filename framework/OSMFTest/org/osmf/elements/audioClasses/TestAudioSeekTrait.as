@@ -22,14 +22,15 @@
 package org.osmf.elements.audioClasses
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.media.Sound;
 	import flash.media.SoundMixer;
 	import flash.net.URLRequest;
 	
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.traits.TimeTrait;
 	import org.osmf.traits.TestSeekTrait;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.TestConstants;
 	
 	public class TestAudioSeekTrait extends TestSeekTrait
@@ -53,6 +54,13 @@ package org.osmf.elements.audioClasses
 			return true;
 		}
 		
+		override public function setUp():void
+		{
+			eventDispatcher = new EventDispatcher();
+			
+			super.setUp();
+		}
+		
 		override public function tearDown():void
 		{
 			super.tearDown();
@@ -62,40 +70,57 @@ package org.osmf.elements.audioClasses
 			
 			soundAdapter = null;
 			timeTrait = null;
+			
+			eventDispatcher = null;
 		}
 
 		public function testSeekTrait():void
 		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 3000));
 			assertFalse(seekTrait.seeking);
+
+			soundAdapter.addEventListener("downloadComplete", onDownloadComplete);
+			seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onTestSeekTrait);
+			
+			var eventCount:int = 0; 
 			
 			soundAdapter.soundTransform.volume = 0;
 			soundAdapter.play();
 			
-			soundAdapter.addEventListener("downloadComplete", onDownloadComplete);
-			
-			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeekTrait1);
-			seekTrait.addEventListener(SeekEvent.SEEK_END, addAsync(onTestSeekTrait2, 3000));
-		}
-		
-		private function onDownloadComplete(event:Event):void
-		{
-			assertFalse(seekTrait.seeking);
-			
-			assertTrue(seekTrait.canSeekTo(3));
+			function onDownloadComplete(event:Event):void
+			{
+				assertTrue(eventCount == 0);
+				eventCount++;
 				
-			seekTrait.seek(3);
+				assertFalse(seekTrait.seeking);
+				
+				assertTrue(seekTrait.canSeekTo(3));
+					
+				seekTrait.seek(3);
+			}
+	
+			function onTestSeekTrait(event:SeekEvent):void
+			{
+				if (event.seeking == true)
+				{
+					assertTrue(eventCount == 1);
+					eventCount++;
+				}
+				if (event.seeking == false)
+				{
+					assertTrue(eventCount == 2);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
 		}
 
-		private function onTestSeekTrait1(event:SeekEvent):void
+		private function mustReceiveEvent(event:Event):void
 		{
-			assertTrue(event.type == SeekEvent.SEEK_BEGIN);
+			// Placeholder to ensure an event is received.
 		}
-		
-		private function onTestSeekTrait2(event:SeekEvent):void
-		{
-			assertTrue(event.type == SeekEvent.SEEK_END);
-		}
-		
+
+		private var eventDispatcher:EventDispatcher;
 		private var soundAdapter:SoundAdapter;
 		private var timeTrait:TimeTrait;
 	}

@@ -85,8 +85,7 @@ package org.osmf.elements
 			var timeTrait:TimeTrait = proxy.getTrait(MediaTraitType.TIME) as TimeTrait;
 			var playTrait:PlayTrait = proxy.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			var seekTrait:SeekTrait = proxy.getTrait(MediaTraitType.SEEK) as SeekTrait;
-			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
-			seekTrait.addEventListener(SeekEvent.SEEK_END, eventCatcher);
+			seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, eventCatcher);
 			
 			playTrait.play();
 			assertTrue(playTrait.playState == PlayState.PLAYING);
@@ -99,8 +98,8 @@ package org.osmf.elements
 			assertEquals(2, events.length);
 			assertTrue(events[0] is SeekEvent);
 			assertTrue(events[1] is SeekEvent);
-			assertTrue(SeekEvent(events[0]).type == SeekEvent.SEEK_BEGIN);
-			assertTrue(SeekEvent(events[1]).type == SeekEvent.SEEK_END);		
+			assertTrue(SeekEvent(events[0]).seeking == true);
+			assertTrue(SeekEvent(events[1]).seeking == false);		
 		}
 		
 		public function eventCatcher(event:Event):void

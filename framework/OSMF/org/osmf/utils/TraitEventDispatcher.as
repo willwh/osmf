@@ -277,8 +277,7 @@ package org.osmf.utils
 				eventMaps[AudioEvent.VOLUME_CHANGE]						= MediaTraitType.AUDIO;	
 				eventMaps[AudioEvent.MUTED_CHANGE]						= MediaTraitType.AUDIO;
 				eventMaps[AudioEvent.PAN_CHANGE]						= MediaTraitType.AUDIO;	
-				eventMaps[SeekEvent.SEEK_BEGIN]							= MediaTraitType.SEEK;	
-				eventMaps[SeekEvent.SEEK_END]							= MediaTraitType.SEEK;	
+				eventMaps[SeekEvent.SEEKING_CHANGE]						= MediaTraitType.SEEK;	
 				eventMaps[DynamicStreamEvent.SWITCHING_CHANGE] 			= MediaTraitType.DYNAMIC_STREAM;	
 				eventMaps[DynamicStreamEvent.AUTO_SWITCH_CHANGE] 		= MediaTraitType.DYNAMIC_STREAM;	
 				eventMaps[DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE] = MediaTraitType.DYNAMIC_STREAM;
@@ -296,7 +295,7 @@ package org.osmf.utils
 		/**
 		 * Specifies the object to listen for trait changes and 
 		 * events with.  All of the mediaElement's trait events
-		 * such as SeekEvent.SEEK_BEGIN or PlayEvent.PLAY_STATE_CHANGE
+		 * such as SeekEvent.SEEKING_CHANGE or PlayEvent.PLAY_STATE_CHANGE
 		 * are redispatched from this class.
 		 */ 
 		public function get media():MediaElement
@@ -390,8 +389,7 @@ package org.osmf.utils
 					changeListeners(add, traitType, AudioEvent.PAN_CHANGE);							
 					break;
 				case MediaTraitType.SEEK:
-					changeListeners(add, traitType, SeekEvent.SEEK_BEGIN);
-					changeListeners(add, traitType, SeekEvent.SEEK_END);
+					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE);
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:	
 					changeListeners(add, traitType, DynamicStreamEvent.SWITCHING_CHANGE);

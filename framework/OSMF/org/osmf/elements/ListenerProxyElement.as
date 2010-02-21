@@ -401,7 +401,7 @@ package org.osmf.elements
 
 		private function onSeekingChange(event:SeekEvent):void
 		{
-			processSeekingChange(event.type == SeekEvent.SEEK_BEGIN, event.time);
+			processSeekingChange(event.seeking, event.time);
 		}
 		
 		private function onComplete(event:TimeEvent):void
@@ -577,13 +577,11 @@ package org.osmf.elements
 			{
 				if (added)
 				{
-					seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				}
 				else
 				{
-					seekTrait.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekTrait.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				}
 			}
 		}

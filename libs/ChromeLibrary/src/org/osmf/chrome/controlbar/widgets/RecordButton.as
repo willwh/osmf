@@ -88,12 +88,15 @@ package org.osmf.chrome.controlbar.widgets
 					// While seeking, disable the button:
 					enabled = false;
 					seekable.addEventListener
-						( SeekEvent.SEEK_END
-						, function(event:Event):void
+						( SeekEvent.SEEKING_CHANGE
+						, function(event:SeekEvent):void
 							{
-								// Re-enable the button:
-								removeEventListener(event.type, arguments.callee);
-								enabled = true;
+								if (event.seeking == false)
+								{
+									// Re-enable the button:
+									removeEventListener(event.type, arguments.callee);
+									enabled = true;
+								}
 							}
 						);
 						

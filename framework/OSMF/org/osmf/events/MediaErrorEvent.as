@@ -61,7 +61,7 @@ package org.osmf.events
 		 */
 		public function MediaErrorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, error:MediaError=null)
 		{
-			super(MEDIA_ERROR, bubbles, cancelable);
+			super(type, bubbles, cancelable);
 			
 			_error = error;
 		}

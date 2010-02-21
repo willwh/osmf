@@ -24,28 +24,16 @@ package org.osmf.traits
 	import org.osmf.events.SeekEvent;
 
 	/**
-	 * Dispatched when this trait begins a seek operation.
+	 * Dispatched when this trait begins or ends a seek operation.
 	 * 
-	 * @eventType org.osmf.events.SeekEvent.SEEK_BEGIN
+	 * @eventType org.osmf.events.SeekEvent.SEEKING_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="seekBegin",type="org.osmf.events.SeekEvent")]
-
-	/**
-	 * Dispatched when this trait ends a seek operation.
-	 * 
-	 * @eventType org.osmf.events.SeekEvent.SEEK_END
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */
-	[Event(name="seekEnd",type="org.osmf.events.SeekEvent")]
+	[Event(name="seekingChange",type="org.osmf.events.SeekEvent")]
 
 	/**
 	 * SeekTrait defines the trait interface for media that can be instructed
@@ -210,9 +198,10 @@ package org.osmf.traits
 		{
 			dispatchEvent
 				( new SeekEvent
-					( seeking ? SeekEvent.SEEK_BEGIN : SeekEvent.SEEK_END
+					( SeekEvent.SEEKING_CHANGE
 					, false
 					, false
+					, seeking
 					, time
 					)
 				);

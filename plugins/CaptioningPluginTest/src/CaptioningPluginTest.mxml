@@ -152,8 +152,7 @@
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekEnd);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekBegin);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onMediaPlayerStateChange);
 				
 				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
@@ -257,16 +256,18 @@
 				}
 			}
 			
-			private function onSeekEnd(event:SeekEvent):void
+			private function onSeekingChange(event:SeekEvent):void
 			{
-				waitForSeek = false;
+				if (event.seeking)
+				{
+					clearCaptionText();
+				}
+				else
+				{
+					waitForSeek = false;
+				}
 			}
 			
-			private function onSeekBegin(event:SeekEvent):void
-			{
-				clearCaptionText();
-			}
-
    			private function toggleDragging(state:Boolean):void
    			{
    				sliderDragging = state;

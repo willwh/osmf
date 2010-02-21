@@ -114,8 +114,7 @@
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
 				
 				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
@@ -378,7 +377,7 @@
 			
 			private function onSeekingChange(event:SeekEvent):void
 			{
-				if (event.type == SeekEvent.SEEK_END)
+				if (event.seeking == false)
 				{
 					waitForSeek = false;
 					updateSwitchingControls();

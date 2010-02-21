@@ -148,13 +148,13 @@ package org.osmf.elements.compositeClasses
 		 */
 		override protected function onSeekingChanged(event:SeekEvent):void
 		{
-			if (event.type == SeekEvent.SEEK_BEGIN && !inSeek)
+			if (event.seeking && !inSeek)
 			{
 				// In this case, the child seek causes its siblings (in
 				// parallel) to seek.
 				seek(event.time);
 			}
-			else if (event.type == SeekEvent.SEEK_END && checkSeeking() == false)
+			else if (event.seeking == false && checkSeeking() == false)
 			{
 				// The child is exiting the seeking state, so we just
 				// update the composite seeking state.

@@ -83,8 +83,7 @@ package org.osmf.elements
 			assertTrue(seekTrait != null);
 			assertTrue(seekTrait.seeking == false);
 			
-			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
-			seekTrait.addEventListener(SeekEvent.SEEK_END, eventCatcher);
+			seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, eventCatcher);
 			
 			assertTrue(seekTrait.canSeekTo(10) == true);
 			assertTrue(seekTrait.canSeekTo(25) == true);

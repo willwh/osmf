@@ -331,8 +331,7 @@ package org.osmf.metadata
    			{
 	   			if (traitType == MediaTraitType.SEEK && seekTrait != null)
 	   			{
-					seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 	   			}
 	   			
 	   			else if (traitType == MediaTraitType.PLAY && playTrait != null)
@@ -352,8 +351,7 @@ package org.osmf.metadata
 	   		{
 	   			if (traitType == MediaTraitType.SEEK && seekTrait != null)
 	   			{
-					seekTrait.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange);
-					seekTrait.removeEventListener(SeekEvent.SEEK_END, onSeekingChange);
+					seekTrait.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 	   			}
 	   			
 	   			else if (traitType == MediaTraitType.PLAY && playTrait != null)
@@ -365,7 +363,7 @@ package org.osmf.metadata
    		
    		private function onSeekingChange(event:SeekEvent):void
    		{
-   			if (event.type == SeekEvent.SEEK_BEGIN)
+   			if (event.seeking)
    			{
    				reset(true);
    			}

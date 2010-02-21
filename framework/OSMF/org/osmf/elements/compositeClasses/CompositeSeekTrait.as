@@ -112,14 +112,12 @@ package org.osmf.elements.compositeClasses
 		
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
-			child.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChanged, false, 0, true);
-			child.addEventListener(SeekEvent.SEEK_END, onSeekingChanged, false, 0, true);
+			child.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChanged, false, 0, true);
 		}
 
 		private function processUnaggregatedChild(child:MediaTraitBase):void
 		{
-			child.removeEventListener(SeekEvent.SEEK_BEGIN, onSeekingChanged);
-			child.removeEventListener(SeekEvent.SEEK_END, onSeekingChanged);
+			child.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChanged);
 		}
 		
 		/**
@@ -214,7 +212,7 @@ package org.osmf.elements.compositeClasses
 				// composite trait needs to remember where the composition seeks to.
 				seekToTime	= seekTo;
 				
-				dispatchEvent(new SeekEvent(_seeking ? SeekEvent.SEEK_BEGIN : SeekEvent.SEEK_END, false, false, seekTo));
+				dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, seeking, seekTo));
 			}
 		}
 		*  

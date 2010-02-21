@@ -943,23 +943,17 @@ package org.osmf.media
 	    */
 	    public function play():void
 	    {
-	    	//Bug FM-347 - the media player should autorewind once the playhead is at the end, and play() is called.
+	    	// Bug FM-347 - the media player should autorewind once the playhead is at the end, and play() is called.
 	    	if (canPlay && 
 	    		canSeek &&
 	    		canSeekTo(0) &&
 	    		duration == currentTime)
 	    	{
-    			addEventListener(SeekEvent.SEEK_END, onSeek);
-    		  	seek(0);		
-    		  	function onSeek(event:SeekEvent):void
-    		  	{	
-    		  		removeEventListener(SeekEvent.SEEK_END, onSeek);    		  		
-    		  		play();	      		  		
-    		  	}    		
+	    		executeAutoRewind(true);
 	    	}
-	    	else //Regular case.
+	    	else
 	    	{
-	    	   	PlayTrait(getTraitOrThrow(MediaTraitType.PLAY)).play();	  
+	    	   	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).play();	  
 	    	}	    	  	
 	    }
 		
@@ -1028,13 +1022,7 @@ package org.osmf.media
 
 			if (autoRewind && canSeek)
 			{
-				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
-				function onSeekEnd(event:SeekEvent):void
-				{
-					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
-					setState(MediaPlayerState.READY);
-				}
-				seek(0);									
+				executeAutoRewind(false);
 			}
 	    }
 	
@@ -1554,8 +1542,7 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
 					break;
 				case MediaTraitType.SEEK:
-					changeListeners(add, traitType, SeekEvent.SEEK_BEGIN, onSeeking);
-					changeListeners(add, traitType, SeekEvent.SEEK_END, onSeeking);
+					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE, onSeeking);
 					_canSeek = add;					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;							
 					break;
@@ -1648,7 +1635,7 @@ package org.osmf.media
 		
 		private function onSeeking(event:SeekEvent):void
 		{			
-			if (event.type == SeekEvent.SEEK_BEGIN)
+			if (event.type == SeekEvent.SEEKING_CHANGE && event.seeking)
 			{				
 				setState(MediaPlayerState.BUFFERING);				
 			}
@@ -1718,14 +1705,8 @@ package org.osmf.media
 		private function onComplete(event:TimeEvent):void
 		{
 			if (loop && canSeek && canPlay)
-			{	
-				addEventListener(SeekEvent.SEEK_END, onSeekEnd);
-				function onSeekEnd(event:SeekEvent):void
-				{
-					removeEventListener(SeekEvent.SEEK_END, onSeekEnd);
-					play();	
-				}
-				seek(0); // If we don't wait for the seek-end, everything breaks for looping.									
+			{
+				executeAutoRewind(true);
 			}
 			else if (!loop && canPlay)
 			{
@@ -1735,7 +1716,28 @@ package org.osmf.media
 			{
 				setState(MediaPlayerState.READY);
 			}
-		}			
+		}	
+		
+		private function executeAutoRewind(playAfterAutoRewind:Boolean):void
+		{
+ 			addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+			function onSeekingChange(event:SeekEvent):void
+			{
+				if (event.seeking == false)
+				{
+					removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+					if (playAfterAutoRewind)
+					{
+						play();
+					}
+					else
+					{
+						setState(MediaPlayerState.READY);
+					}
+				}	
+			}
+			seek(0);									
+		}		
 								
 		private function onCurrentTimeTimer(event:TimerEvent):void
 		{

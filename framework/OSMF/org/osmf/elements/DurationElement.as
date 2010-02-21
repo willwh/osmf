@@ -138,8 +138,7 @@ package org.osmf.elements
 			// Reduce priority of our listener so that all other listeners will
 			// receive the seeking=true event before we dispatch the seeking=false
 			// event. 
-			seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onSeekingChange, false, -1);
-			seekTrait.addEventListener(SeekEvent.SEEK_END, onSeekingChange, false, -1);
+			seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange, false, -1);
 			
 			playTrait = new PlayTrait();
 			playTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
@@ -193,7 +192,7 @@ package org.osmf.elements
 		
 		private function onSeekingChange(event:SeekEvent):void
 		{
-			if (event.type == SeekEvent.SEEK_BEGIN)
+			if (event.seeking)
 			{				
 				elapsedTime = event.time;
 				absoluteTimeAtLastPlay = flash.utils.getTimer();

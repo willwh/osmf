@@ -34,7 +34,7 @@ package org.osmf.utils
 		{
 			super(timeTrait);
 			
-			addEventListener(SeekEvent.SEEK_BEGIN, onSeekBegin);
+			addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 			
 			_autoCompleteSeek = true;
 		}
@@ -63,9 +63,9 @@ package org.osmf.utils
 		// Internals
 		//
 		
-		private function onSeekBegin(event:SeekEvent):void
+		private function onSeekingChange(event:SeekEvent):void
 		{
-			if (autoCompleteSeek)
+			if (event.seeking && autoCompleteSeek)
 			{
 				seekTargetTime = event.time;
 

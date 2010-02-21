@@ -332,7 +332,7 @@ package org.osmf.mast.managers
 				case MASTAdapter.ON_SEEK:
 					{
 						var seekingChangeEvent:SeekEvent = event as SeekEvent;
-						if (seekingChangeEvent.type == SeekEvent.SEEK_BEGIN)
+						if (seekingChangeEvent.seeking == true)
 						{
 							conditionTrue = true;
 						}

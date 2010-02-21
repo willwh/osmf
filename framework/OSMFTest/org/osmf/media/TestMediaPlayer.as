@@ -649,8 +649,7 @@ package org.osmf.media
 					var hasSeeked:Boolean = false;
 					
 					mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestStop2);
-					mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
-					mediaPlayer.addEventListener(SeekEvent.SEEK_END, onTestStop3);
+					mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onTestStop3);
 					
 					mediaPlayer.stop();
 					
@@ -666,8 +665,7 @@ package org.osmf.media
 						if (autoRewind == false)
 						{
 							mediaPlayer.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestStop2);
-							mediaPlayer.removeEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
-							mediaPlayer.removeEventListener(SeekEvent.SEEK_END, onTestStop3);
+							mediaPlayer.removeEventListener(SeekEvent.SEEKING_CHANGE, onTestStop3);
 							
 							eventDispatcher.dispatchEvent(new Event("testComplete"));
 						}
@@ -684,19 +682,18 @@ package org.osmf.media
 							assertTrue(mediaPlayer.paused == false);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == true);
-							assertTrue(event3.type == SeekEvent.SEEK_BEGIN);
+							assertTrue(event3.seeking == true);
 							assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 						}
 						else
 						{
 							mediaPlayer.removeEventListener(PlayEvent.PLAY_STATE_CHANGE, onTestStop2);
-							mediaPlayer.removeEventListener(SeekEvent.SEEK_BEGIN, onTestStop3);
-							mediaPlayer.removeEventListener(SeekEvent.SEEK_END, onTestStop3);
+							mediaPlayer.removeEventListener(SeekEvent.SEEKING_CHANGE, onTestStop3);
 							
 							assertTrue(mediaPlayer.paused == false);
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == false);
-							assertTrue(event3.type == SeekEvent.SEEK_END);
+							assertTrue(event3.seeking == false);
 							
 							assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 	
@@ -748,8 +745,7 @@ package org.osmf.media
 				
 				var eventCount:int = 0;
 
-				mediaPlayer.addEventListener(SeekEvent.SEEK_BEGIN, canSeek ? onTestSeek : mustNotReceiveEvent);
-				mediaPlayer.addEventListener(SeekEvent.SEEK_END, canSeek ? onTestSeek : mustNotReceiveEvent);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, canSeek ? onTestSeek : mustNotReceiveEvent);
 				mediaPlayer.seek(seekTarget);
 				
 				if (!canSeek)
@@ -764,13 +760,13 @@ package org.osmf.media
 					if (eventCount == 1)
 					{
 						assertTrue(mediaPlayer.seeking == true);
-						assertTrue(event.type == SeekEvent.SEEK_BEGIN);
+						assertTrue(event.seeking);
 						assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 					}
 					else if (eventCount == 2)
 					{
 						assertTrue(mediaPlayer.seeking == false);
-						assertTrue(event.type == SeekEvent.SEEK_END);
+						assertTrue(event.seeking == false);
 						assertTrue(mediaPlayer.state == MediaPlayerState.READY ||
 								   mediaPlayer.state == MediaPlayerState.PAUSED);
 						

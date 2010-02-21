@@ -89,8 +89,7 @@ package org.osmf.traits
 
 				var eventCount:int = 0;
 
-				seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeek);
-				seekTrait.addEventListener(SeekEvent.SEEK_END, onTestSeek);
+				seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onTestSeek);
 				assertTrue(seekTrait.canSeekTo(maxSeekValue));
 				seekTrait.seek(maxSeekValue);
 				
@@ -100,7 +99,7 @@ package org.osmf.traits
 					
 					if (eventCount == 1)
 					{
-						assertTrue(event.type == SeekEvent.SEEK_BEGIN);
+						assertTrue(event.seeking);
 						assertTrue(event.time == maxSeekValue);
 						if (processesSeekCompletion == false)
 						{
@@ -109,7 +108,7 @@ package org.osmf.traits
 					}
 					else if (eventCount == 2)
 					{
-						assertTrue(event.type == SeekEvent.SEEK_END);
+						assertTrue(event.seeking == false);
 						assertTrue(event.time == maxSeekValue);
 						assertTrue(processesSeekCompletion == true);
 						
@@ -129,8 +128,7 @@ package org.osmf.traits
 				var beginEventCount:int = 0;
 				var endEventCount:int = 0;
 
-				seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, onTestSeekConsecutively);
-				seekTrait.addEventListener(SeekEvent.SEEK_END, onTestSeekConsecutively);
+				seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onTestSeekConsecutively);
 				assertTrue(seekTrait.canSeekTo(maxSeekValue));
 				
 				// Consecutive seeks should result in either two BEGIN/END event
@@ -140,12 +138,12 @@ package org.osmf.traits
 				
 				function onTestSeekConsecutively(event:SeekEvent):void
 				{
-					if (event.type == SeekEvent.SEEK_BEGIN)
+					if (event.seeking)
 					{
 						beginEventCount++;
 					}
 
-					if (event.type == SeekEvent.SEEK_END)
+					if (event.seeking == false)
 					{
 						endEventCount++;
 					}
@@ -164,8 +162,7 @@ package org.osmf.traits
 		{
 			if (maxSeekValue > 0)
 			{
-				seekTrait.addEventListener(SeekEvent.SEEK_BEGIN, eventCatcher);
-				seekTrait.addEventListener(SeekEvent.SEEK_END, eventCatcher);
+				seekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, eventCatcher);
 			
 				assertFalse(seekTrait.canSeekTo(maxSeekValue + 1));
 				
