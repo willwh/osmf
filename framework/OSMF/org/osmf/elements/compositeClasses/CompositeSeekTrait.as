@@ -23,7 +23,6 @@ package org.osmf.elements.compositeClasses
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
@@ -42,7 +41,7 @@ package org.osmf.elements.compositeClasses
 	 */
 	internal class CompositeSeekTrait extends SeekTrait implements IReusable
 	{
-		public function CompositeSeekTrait(traitAggregator:TraitAggregator, mode:CompositionMode, owner:MediaElement)
+		public function CompositeSeekTrait(traitAggregator:TraitAggregator, mode:String, owner:MediaElement)
 		{
 			super(owner.getTrait(MediaTraitType.TIME) as TimeTrait);
 			
@@ -261,7 +260,7 @@ package org.osmf.elements.compositeClasses
 		// Internals
 		//
 		
-		private var mode:CompositionMode;
+		private var mode:String;
 		private var _traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
 	}

@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
@@ -63,7 +62,7 @@ package org.osmf.elements.compositeClasses
 		public function createTrait
 							( traitType:String
 							, traitAggregator:TraitAggregator
-							, mode:CompositionMode
+							, mode:String
 							, owner:MediaElement
 							):MediaTraitBase
 		{

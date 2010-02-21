@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.media.MediaElement;
@@ -38,7 +37,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private 
 		 */ 
-		public function CompositeDRMTrait(traitAggregator:TraitAggregator, owner:MediaElement, mode:CompositionMode)
+		public function CompositeDRMTrait(traitAggregator:TraitAggregator, owner:MediaElement, mode:String)
 		{
 			super();
 			
@@ -336,7 +335,7 @@ package org.osmf.elements.compositeClasses
 		
 		private static var drmLevels:Object;
 		
-		private var mode:CompositionMode;
+		private var mode:String;
 		private var calculatedDrmState:String = "";
 		private var traitAggregationHelper:TraitAggregationHelper
 		private var owner:MediaElement;

@@ -9,7 +9,6 @@
     <classEntry path="org.osmf.elements.AudioElement"/>
     <classEntry path="org.osmf.elements.BeaconElement"/>
     <classEntry path="org.osmf.elements.CompositeElement"/>
-    <classEntry path="org.osmf.elements.CompositionMode"/>
     <classEntry path="org.osmf.elements.CuePoint"/>
     <classEntry path="org.osmf.elements.CuePointType"/>
     <classEntry path="org.osmf.elements.DurationElement"/>
@@ -48,6 +47,7 @@
     <classEntry path="org.osmf.elements.compositeClasses.CompositeSeekOperationInfo"/>
     <classEntry path="org.osmf.elements.compositeClasses.CompositeSeekTrait"/>
     <classEntry path="org.osmf.elements.compositeClasses.CompositeTimeTrait"/>
+    <classEntry path="org.osmf.elements.compositeClasses.CompositionMode"/>
     <classEntry path="org.osmf.elements.compositeClasses.IReusable"/>
     <classEntry path="org.osmf.elements.compositeClasses.ParallelDisplayObjectTrait"/>
     <classEntry path="org.osmf.elements.compositeClasses.ParallelDynamicStreamTrait"/>

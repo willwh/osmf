@@ -19,9 +19,13 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements
+package org.osmf.elements.compositeClasses
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Enumeration of different modes for composite media elements.
 	 *  
 	 *  @langversion 3.0
@@ -40,7 +44,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const PARALLEL:CompositionMode = new CompositionMode("parallel");
+		public static const PARALLEL:String = "parallel";
 
 		/**
 		 * The SERIAL composition mode represents media compositions whose
@@ -51,37 +55,6 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const SERIAL:CompositionMode = new CompositionMode("serial");
-		
-		// Public interface
-		//
-		
-		/**
-		 * Constructor
-		 * 
-		 * @param token The token that identifies the composition mode.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		public function CompositionMode(token:String)
-		{
-			this.token = token;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function toString():String
-		{
-			return token;
-		}
-		
-		// Internals
-		//
-		
-		private var token:String;
+		public static const SERIAL:String = "serial";
 	}
 }

@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import org.osmf.elements.CompositionMode;
+	import org.osmf.elements.compositeClasses.CompositionMode;
 
 	[ExcludeClass]
 	
@@ -57,7 +57,7 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 */
-		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:CompositionMode, activeMetadata:Metadata):Facet
+		override public function synthesize(targetMetadata:Metadata, facetGroup:FacetGroup, mode:String, activeMetadata:Metadata):Facet
 		{
 			return null;
 		}

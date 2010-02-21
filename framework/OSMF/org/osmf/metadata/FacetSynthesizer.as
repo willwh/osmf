@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import org.osmf.elements.CompositionMode;
+	import org.osmf.elements.compositeClasses.CompositionMode;
 	
 	[ExcludeClass]
 	
@@ -83,7 +83,7 @@ package org.osmf.metadata
 		 * 
 		 * @param targetMetadata The metadata instance that will have the synthesized value appended.
 		 * @param facetGroup The collection of facets the synthesized value should be based on.
-		 * @param mode The mode of synthesizes that should be applied.
+		 * @param mode The CompositionMode of synthesis that should be applied.
 		 * @param activeMetadata If the targetMetadata value belongs to a SerialElement this value
 		 * references the metadata of its currently active child.
 		 * @return The synthesized value.
@@ -96,7 +96,7 @@ package org.osmf.metadata
 		public function synthesize
 							( targetMetadata:Metadata
 							, facetGroup:FacetGroup
-							, mode:CompositionMode
+							, mode:String
 							, activeMetadata:Metadata
 							):Facet
 		{	

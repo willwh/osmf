@@ -27,7 +27,6 @@ package org.osmf.elements.compositeClasses
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.Facet;
@@ -343,7 +342,7 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function set mode(value:CompositionMode):void
+		public function set mode(value:String):void
 		{
 			if (_mode != value)
 			{
@@ -352,7 +351,7 @@ package org.osmf.elements.compositeClasses
 				processSynthesisDependencyChanged();
 			}
 		}
-		public function get mode():CompositionMode
+		public function get mode():String
 		{
 			return _mode;
 		}
@@ -719,7 +718,7 @@ package org.osmf.elements.compositeClasses
 		private var childFacetGroups:Dictionary; 
 		private var facetSynthesizers:Dictionary;
 		
-		private var _mode:CompositionMode;
+		private var _mode:String;
 		private var _activeChild:Metadata;
 		
 		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeMetadata");

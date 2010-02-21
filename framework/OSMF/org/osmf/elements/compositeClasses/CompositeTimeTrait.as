@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
@@ -64,7 +63,7 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function CompositeTimeTrait(traitAggregator:TraitAggregator, mode:CompositionMode, owner:MediaElement)
+		public function CompositeTimeTrait(traitAggregator:TraitAggregator, mode:String, owner:MediaElement)
 		{
 			super();
 			
@@ -308,7 +307,7 @@ package org.osmf.elements.compositeClasses
 		
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
-		private var mode:CompositionMode;
+		private var mode:String;
 		private var owner:MediaElement;
 	}
 }

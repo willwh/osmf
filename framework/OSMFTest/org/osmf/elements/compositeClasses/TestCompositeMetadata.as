@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
@@ -145,13 +144,12 @@ package org.osmf.elements.compositeClasses
 		}
 	}
 }
-	import org.osmf.metadata.FacetSynthesizer;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.FacetGroup;
-	import org.osmf.elements.CompositionMode;
-	import org.osmf.metadata.Facet;
-	import org.osmf.utils.URL;
-	
+
+import org.osmf.elements.compositeClasses.CompositionMode;
+import org.osmf.metadata.Facet;
+import org.osmf.metadata.FacetGroup;
+import org.osmf.metadata.FacetSynthesizer;
+import org.osmf.metadata.Metadata;
 
 class AFacetSynthesizer extends FacetSynthesizer
 {
@@ -163,7 +161,7 @@ class AFacetSynthesizer extends FacetSynthesizer
 	override public function synthesize
 		( targetMetadata:Metadata
 		, facetGroup:FacetGroup
-		, mode:CompositionMode
+		, mode:String
 		, activeMetadata:Metadata
 		):Facet
 	{

@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.LoadState;
@@ -52,7 +51,7 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function CompositeLoadTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
+		public function CompositeLoadTrait(traitAggregator:TraitAggregator, mode:String)
 		{
 			super(null, null);
 			
@@ -404,6 +403,6 @@ package org.osmf.elements.compositeClasses
 
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
-		private var mode:CompositionMode;
+		private var mode:String;
 	}
 }

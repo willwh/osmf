@@ -23,8 +23,9 @@ package org.osmf.elements
 {
 	import flash.utils.Dictionary;
 	
-	import org.osmf.elements.compositeClasses.IReusable;
 	import org.osmf.elements.compositeClasses.CompositeMetadata;
+	import org.osmf.elements.compositeClasses.CompositionMode;
+	import org.osmf.elements.compositeClasses.IReusable;
 	import org.osmf.elements.compositeClasses.TraitAggregatorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;

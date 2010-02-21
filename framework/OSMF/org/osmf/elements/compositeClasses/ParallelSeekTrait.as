@@ -23,7 +23,6 @@ package org.osmf.elements.compositeClasses
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;

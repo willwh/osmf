@@ -25,7 +25,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.elements.CompositionMode;
 	
 	/**
 	 * Implementation of BufferTrait which can be a composite media trait.
@@ -41,7 +40,7 @@ package org.osmf.elements.compositeClasses
 	 */
 	internal class CompositeBufferTrait extends BufferTrait implements IReusable
 	{
-		public function CompositeBufferTrait(traitAggregator:TraitAggregator, mode:CompositionMode)
+		public function CompositeBufferTrait(traitAggregator:TraitAggregator, mode:String)
 		{
 			super();
 			
@@ -280,7 +279,7 @@ package org.osmf.elements.compositeClasses
 
 		private var traitAggregator:TraitAggregator;
 		private var traitAggregationHelper:TraitAggregationHelper;
-		private var mode:CompositionMode;		
+		private var mode:String;		
 		private var bufferTimeFromChildren:Boolean;
 		private var settingBufferTime:Boolean;
 	}

@@ -21,11 +21,10 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import org.osmf.elements.CompositionMode;
 	import org.osmf.elements.compositeClasses.CompositeMetadata;
+	import org.osmf.elements.compositeClasses.CompositionMode;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
-	import org.osmf.traits.MediaTraitType;
 	
 	/**
 	 * A ParallelElement is a media composition whose elements are presented
