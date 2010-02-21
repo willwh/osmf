@@ -30,7 +30,6 @@ package org.osmf.net.dvr
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetNegotiator;
@@ -105,7 +104,7 @@ package org.osmf.net.dvr
 			{
 				removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
 			
-				var dvrcastFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA, NullFacetSynthesizer);
+				var dvrcastFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA);
 				for (var key:String in streamInfoRetreiver.streamInfo)
 				{
 					dvrcastFacet.addValue(new ObjectIdentifier(key), streamInfoRetreiver.streamInfo[key]);

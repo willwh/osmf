@@ -41,7 +41,9 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectFacet;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class MediaContainerSample extends Sprite
@@ -74,12 +76,12 @@ package
 				
 			// DEBUG: add id's to the elements at hand (these IDs will show in the logger
 			// traces, if the LOGGING conditional is set to 'true' on the OSMF project):
-			MetadataUtils.setElementId(rootElement.metadata, "rootElement");
-			MetadataUtils.setElementId(banners.metadata, "banners");
-			MetadataUtils.setElementId(skyScraper.metadata, "skyScraper");
-			MetadataUtils.setElementId(banners.getChildAt(0).metadata, "banner1");
-			MetadataUtils.setElementId(banners.getChildAt(1).metadata, "banner2");
-			MetadataUtils.setElementId(banners.getChildAt(2).metadata, "banner3");
+			setElementId(rootElement.metadata, "rootElement");
+			setElementId(banners.metadata, "banners");
+			setElementId(skyScraper.metadata, "skyScraper");
+			setElementId(banners.getChildAt(0).metadata, "banner1");
+			setElementId(banners.getChildAt(1).metadata, "banner2");
+			setElementId(banners.getChildAt(2).metadata, "banner3");
 			
 			// Next, decorate the content tree with attributes:
 			
@@ -124,9 +126,9 @@ package
 			addChild(skyScraperContainer);
 			
 			// DEBUG: add id's to the elements at hand:
-			MetadataUtils.setElementId(mainContainer.metadata, "mainContainer");
-			MetadataUtils.setElementId(bannerContainer.metadata, "bannerContainer");
-			MetadataUtils.setElementId(skyScraperContainer.metadata, "skyScraperContainer");
+			setElementId(mainContainer.metadata, "mainContainer");
+			setElementId(bannerContainer.metadata, "bannerContainer");
+			setElementId(skyScraperContainer.metadata, "skyScraperContainer");
 			
 			// Bind media elements to their target regions:
 			
@@ -204,6 +206,17 @@ package
 			return new VideoElement
 					( new URLResource(url)
 					);
+		}
+		
+		/**
+		 * Adds an element string identifier to a metadata instance.
+		 *  
+		 * @param target The metadata instance to set the id on.
+		 * @param id The id to set.
+		 */		
+		private static function setElementId(target:Metadata, id:String):void
+		{
+			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
 		}
 		
 		private static const BANNER_INTERVAL:int = 5;

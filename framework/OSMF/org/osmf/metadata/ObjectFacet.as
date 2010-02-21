@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import flash.events.EventDispatcher;
-	
 	import org.osmf.events.FacetValueChangeEvent;
 
 	/**
@@ -47,14 +45,10 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function ObjectFacet(namespaceURL:String, value:Object, synthesizer:Class = null)
+		public function ObjectFacet(namespaceURL:String, value:Object)
 		{
 			super(namespaceURL);
 			_object = value;
-			
-			// If no synthesizer is specified, then use the default one:
-			synthesizer ||= FacetSynthesizer;
-			_synthesizer = new synthesizer(namespaceURL);
 		}
 		
 		/**
@@ -99,14 +93,6 @@ package org.osmf.metadata
 			return _object;
 		}
 		
-		/**
-		 * @private
-		 */
-		override public function get synthesizer():FacetSynthesizer
-		{
-			return _synthesizer;
-		}
-		
 		// Overrides
 		//
 		
@@ -122,7 +108,5 @@ package org.osmf.metadata
 		//
 		
 		protected var _object:Object;
-		
-		private var _synthesizer:FacetSynthesizer;
 	}
 }

@@ -32,7 +32,6 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.traits.DVRTrait;
 	
@@ -205,7 +204,7 @@ package org.osmf.net.dvr
 		{
 			if (streamInfoRetreiver.streamInfo != null)
 			{
-				var streamInfo:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA, NullFacetSynthesizer);
+				var streamInfo:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA);
 				for (var key:String in streamInfoRetreiver.streamInfo)
 				{
 					streamInfo.addValue(new ObjectIdentifier(key), streamInfoRetreiver.streamInfo[key]);

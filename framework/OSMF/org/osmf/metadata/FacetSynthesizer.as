@@ -23,7 +23,11 @@ package org.osmf.metadata
 {
 	import org.osmf.elements.CompositionMode;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines an algorithm that can synthesize a facet value
 	 * from any number of facet values of a given namespace, in
 	 * the context of a parent MetaData, FacetGroup, CompositionMode, 

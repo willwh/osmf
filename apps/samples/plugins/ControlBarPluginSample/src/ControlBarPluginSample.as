@@ -30,7 +30,6 @@ package
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
 	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.NullFacetSynthesizer;
 	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.plugin.PluginInfoResource;
 	
@@ -101,7 +100,6 @@ package
 			var controlBarTarget:KeyValueFacet
 				= new KeyValueFacet
 					( ControlBarPlugin.NS_CONTROL_BAR_TARGET
-					, NullFacetSynthesizer
 					);
 			controlBarTarget.addValue(ID, "mainContent");
 			
@@ -124,7 +122,6 @@ package
 			var controlBarSettings:KeyValueFacet
 				= new KeyValueFacet
 					( ControlBarPlugin.NS_CONTROL_BAR_SETTINGS
-					, NullFacetSynthesizer // Don't have this facet inherit.
 					);
 			controlBarSettings.addValue(ID, "mainContent");
 			

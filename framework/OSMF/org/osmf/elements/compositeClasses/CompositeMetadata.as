@@ -115,9 +115,9 @@ package org.osmf.elements.compositeClasses
 	 * Defines a piece of meta data that keeps track of a collection
 	 * of child meta data references as a plain list.
 	 * 
-	 * By default, no syntesis takes place. External clients can inspect facet
+	 * By default, no synthesis takes place. External clients can inspect facet
 	 * groups at will, and monitor them for change. However, the class provides
-	 * any infrastructure for synthesis like so:
+	 * an infrastructure for synthesis like so:
 	 * 
 	 * By using 'addFacetSynthesizer' and 'removeFacetSynthesizer', clients can
 	 * define how facets groups of a given name space will be synthesized into

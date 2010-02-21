@@ -117,6 +117,8 @@ package org.osmf.metadata
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Defines the facet synthesizer that will be used by default to
 		 * synthesize a new value based on a group of facets that share
 		 * the namespace that this facet is registered under.

@@ -52,13 +52,11 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function KeyValueFacet(namespaceURL:String = null, synthesizer:Class = null)		
+		public function KeyValueFacet(namespaceURL:String = null)		
 		{						
 			super(namespaceURL ||= MetadataNamespaces.DEFAULT_METADATA);
 			
 			data = new Dictionary();
-			synthesizer ||= FacetSynthesizer;
-			_synthesizer = new synthesizer(namespaceURL);
 		}
 		
 		
@@ -74,14 +72,6 @@ package org.osmf.metadata
 				return data[objectIdentifier.key];
 			}			
 		}
-		
-		/**
-		 * @private
-		 */
-		override public function get synthesizer():FacetSynthesizer
-		{
-			return _synthesizer;
-		} 
 		
 		/**
 		 * Associates the key with the value object.  If the ObjectIdentifier's key property
@@ -177,8 +167,5 @@ package org.osmf.metadata
 		}
 				
 		private var data:Dictionary;
-			
-		private var _synthesizer:FacetSynthesizer;
-
 	}
 }

@@ -69,7 +69,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TemporalFacet(namespaceURL:String, owner:MediaElement, synthesizer:Class = null)
+		public function TemporalFacet(namespaceURL:String, owner:MediaElement)
 		{
 			super(namespaceURL);
 
@@ -96,9 +96,6 @@ package org.osmf.metadata
 			
 			owner.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 			owner.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-			
-			synthesizer ||= FacetSynthesizer;
-			_synthesizer = new synthesizer(namespaceURL);
 		}
 		
 		/**
@@ -229,14 +226,6 @@ package org.osmf.metadata
 			{
 				return null;
 			}
-		}
-		
-		/**
-		 * @private
-		 */
-		override public function get synthesizer():FacetSynthesizer
-		{
-			return _synthesizer;
 		}
 		
 		/**
@@ -629,7 +618,6 @@ package org.osmf.metadata
 		private var intervalTimer:Timer;
 		private var restartTimer:Boolean;
 		private var enabled:Boolean;
-		private var _synthesizer:FacetSynthesizer;
 		private var durationTimers:Dictionary;
 	}
 }

@@ -31,7 +31,9 @@ package org.osmf.containers
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.layout.VerticalAlign;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -86,7 +88,7 @@ package org.osmf.containers
 			
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 			
-			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
 			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
@@ -134,7 +136,10 @@ package org.osmf.containers
 			assertEquals(500, container.width);
 			assertEquals(400, container.height);
 		}
-		
-		
+
+		private function setElementId(target:Metadata, id:String):void
+		{
+			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
+		}
 	}
 }

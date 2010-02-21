@@ -266,11 +266,6 @@ package org.osmf.metadata
 
 
 import org.osmf.metadata.Facet;
-import org.osmf.metadata.Metadata
-import flash.events.EventDispatcher;
-import org.osmf.metadata.IIdentifier;
-import org.osmf.metadata.FacetSynthesizer;
-import org.osmf.metadata.Facet;
 
 internal class CustomFacet extends Facet
 {

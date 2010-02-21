@@ -38,7 +38,9 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectFacet;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class NestedMediaContainersSample extends Sprite
@@ -101,7 +103,7 @@ package
 			mainGroup.height = 352;
 			mainGroup.backgroundColor = 0xFFFFFF;
 			mainGroup.backgroundAlpha = .2;
-			MetadataUtils.setElementId(mainGroup.metadata, "mainGroup");
+			setElementId(mainGroup.metadata, "mainGroup");
 			addChild(mainGroup);
 			
 				var bannerGroup:MediaContainer = new MediaContainer();
@@ -111,7 +113,7 @@ package
 				
 				var bannerGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(bannerGroup);
 				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
-				MetadataUtils.setElementId(bannerGroup.metadata, "bannerGroup");
+				setElementId(bannerGroup.metadata, "bannerGroup");
 				
 				var skyScraperGroup:MediaContainer = new MediaContainer();
 				skyScraperGroup.backgroundColor = 0xFF00;
@@ -120,7 +122,7 @@ package
 				
 				var skyScraperGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraperGroup);
 				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
-				MetadataUtils.setElementId(skyScraperGroup.metadata, "skyScraperGroup");
+				setElementId(skyScraperGroup.metadata, "skyScraperGroup");
 				
 			// Bind media elements to their target containers:
 			mainGroup.addMediaElement(mainContent);
@@ -166,6 +168,17 @@ package
 					);
 		}
 		
+		/**
+		 * Adds an element string identifier to a metadata instance.
+		 *  
+		 * @param target The metadata instance to set the id on.
+		 * @param id The id to set.
+		 */		
+		private static function setElementId(target:Metadata, id:String):void
+		{
+			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
+		}
+
 		private static const BANNER_INTERVAL:int = 5;
 		
 		private static const REMOTE_PROGRESSIVE:String

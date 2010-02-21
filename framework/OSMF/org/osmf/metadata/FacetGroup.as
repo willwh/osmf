@@ -29,6 +29,8 @@ package org.osmf.metadata
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.utils.OSMFStrings;
 	
+	[ExcludeClass]
+	
 	/**
 	 * Dispatched when the facet group changes as a result of either
 	 * a value being added, removed, or changed on a facet, or when
@@ -42,6 +44,8 @@ package org.osmf.metadata
 	[Event(name="change", type="flash.events.Event")]
 	
 	/**
+	 * @private
+	 * 
 	 * Defines a group of facets that share one and the same name
 	 * space.
 	 *  

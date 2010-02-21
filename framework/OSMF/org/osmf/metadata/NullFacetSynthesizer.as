@@ -23,7 +23,11 @@ package org.osmf.metadata
 {
 	import org.osmf.elements.CompositionMode;
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines a facet synthesizer that has a synthesize method that always
 	 * returns null.
 	 *  

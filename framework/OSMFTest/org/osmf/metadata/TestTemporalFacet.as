@@ -135,7 +135,6 @@ package org.osmf.metadata
 			assertNull(facet.getValue(null));
 			assertNull(facet.getValue(new TemporalIdentifier(123, 2)));
 			assertNull(facet.getValueAt(-5));
-			assertTrue(facet.synthesizer is FacetSynthesizer);
 		}
 		
 		public function testPositionReached():void

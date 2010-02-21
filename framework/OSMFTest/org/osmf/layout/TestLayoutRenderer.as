@@ -26,7 +26,9 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.ScaleMode;
-	import org.osmf.metadata.MetadataUtils;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -39,7 +41,7 @@ package org.osmf.layout
 			
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
-			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
@@ -56,7 +58,7 @@ package org.osmf.layout
 			// Container
 			
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			MetadataUtils.setElementId(container.metadata,"container");
+			setElementId(container.metadata,"container");
 			
 			var layoutRenderer:LayoutRenderer = new LayoutRenderer();
 			layoutRenderer.container = container;
@@ -172,7 +174,7 @@ package org.osmf.layout
 			
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
-			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 50, 50);
@@ -187,7 +189,7 @@ package org.osmf.layout
 			// Container
 			
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			MetadataUtils.setElementId(container.metadata,"container");
+			setElementId(container.metadata,"container");
 			
 			var layoutRenderer:LayoutRenderer = new LayoutRenderer();
 			layoutRenderer.container = container;
@@ -271,7 +273,7 @@ package org.osmf.layout
 			// Element with given dimenions: 400x800
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
-			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
@@ -282,7 +284,7 @@ package org.osmf.layout
 			
 			// Container without any dimenion settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			MetadataUtils.setElementId(container.metadata,"container");
+			setElementId(container.metadata,"container");
 			
 			var layoutRenderer:LayoutRenderer = new LayoutRenderer();
 			layoutRenderer.container = container;
@@ -302,7 +304,7 @@ package org.osmf.layout
 			// Element with given dimenions: 400x800
 			var mediaElement:DynamicMediaElement = new DynamicMediaElement();
 				
-			MetadataUtils.setElementId(mediaElement.metadata,"mediaElement");
+			setElementId(mediaElement.metadata,"mediaElement");
 			
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
@@ -314,7 +316,7 @@ package org.osmf.layout
 			
 			// Container without any dimenion settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
-			MetadataUtils.setElementId(container.metadata,"container");
+			setElementId(container.metadata,"container");
 			
 			var layoutRenderer:LayoutRenderer = new LayoutRenderer();
 			layoutRenderer.container = container;
@@ -331,7 +333,7 @@ package org.osmf.layout
 			// Containter that holds the previous container: dimensions should 
 			// bubble up another level:
 			var container2:LayoutTargetSprite = new LayoutTargetSprite();
-			MetadataUtils.setElementId(container2.metadata,"container2");
+			setElementId(container2.metadata,"container2");
 			
 			var layoutRenderer2:LayoutRenderer = new LayoutRenderer();
 			layoutRenderer2.container = container2;
@@ -426,6 +428,11 @@ package org.osmf.layout
 			assertEquals(0, t1.y);
 			assertEquals(100, t1.width);
 			assertEquals(100, t1.height);
+		}
+		
+		private function setElementId(target:Metadata, id:String):void
+		{
+			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
 		}
 	}
 }
