@@ -38,14 +38,11 @@ package org.osmf.metadata
 	public class TemporalFacetKey extends FacetKey
 	{
 		/**
-		 * This constant can be used by classes extending this
-		 * class that wish to differentiate between a time value
-		 * of zero and undefined. For example, a duration of zero
-		 * could be interpreted a few different ways, where as
-		 * undefined clearly means the duration is not defined
-		 * and should be ignored.
+		 * Constant for an undefined <code>duration</code>.  Useful for
+		 * distinguishing between a duration value of zero and an
+		 * undefined duration.
 		 **/
-		public static const UNDEFINED:Number = -1;
+		public static const DURATION_UNDEFINED:Number = -1;
 		
 		/**
 		 * Constructor.
@@ -93,6 +90,8 @@ package org.osmf.metadata
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Compares the parameter's time property with this object's time property. Returns true
 		 * if they are equal.
 		 *  

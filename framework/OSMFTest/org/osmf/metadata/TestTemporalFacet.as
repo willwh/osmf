@@ -265,9 +265,9 @@ package org.osmf.metadata
 			_testValues = new Vector.<TemporalFacetKey>();
 			
 			_testValues.push(new TemporalFacetKey(3.5, 1));
-			_testValues.push(new TemporalFacetKey(1, TemporalFacetKey.UNDEFINED));
+			_testValues.push(new TemporalFacetKey(1, TemporalFacetKey.DURATION_UNDEFINED));
 			_testValues.push(new TemporalFacetKey(3, 0));
-			_testValues.push(new TemporalFacetKey(2, TemporalFacetKey.UNDEFINED));
+			_testValues.push(new TemporalFacetKey(2, TemporalFacetKey.DURATION_UNDEFINED));
 			_testValues.push(new TemporalFacetKey(2.5, 1));
 			
 			// Add a few duplicates

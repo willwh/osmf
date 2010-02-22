@@ -48,7 +48,7 @@ package org.osmf.elements
 		 *  @productversion OSMF 1.0
 		 */
 		public function CuePoint(type:CuePointType, time:Number, name:String, parameters:Array, 
-									duration:Number=TemporalFacetKey.UNDEFINED)
+									duration:Number=TemporalFacetKey.DURATION_UNDEFINED)
 		{
 			super(time, duration);
 			_type = type;

@@ -54,7 +54,7 @@ package org.osmf.captioning.model
 		 */
 		public function Caption(id:uint, start:Number, end:Number, captionText:String)
 		{
-			var duration:Number = end > 0 ? (end - start) : TemporalFacetKey.UNDEFINED;
+			var duration:Number = end > 0 ? (end - start) : TemporalFacetKey.DURATION_UNDEFINED;
 			super(start, duration);
 			
 			_id = id;

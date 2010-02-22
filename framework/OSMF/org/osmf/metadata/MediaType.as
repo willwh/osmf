@@ -29,7 +29,7 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class MediaType
+	public final class MediaType
 	{	
 		/**
 		 * Video media
