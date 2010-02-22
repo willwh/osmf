@@ -165,18 +165,22 @@ package org.osmf.chrome.controlbar.widgets
 			var temporal:TimeTrait = element ? element.getTrait(MediaTraitType.TIME) as TimeTrait : null;
 			if (temporal != null)
 			{
+				var duration:Number = temporal.duration;
+				var position:Number = temporal.currentTime;
+			
 				currentTime.text
-					= prettyPrintSeconds(temporal.currentTime);
+					= prettyPrintSeconds(position);
 					
 				remainingTime.text
 					= "-" 
-					+ prettyPrintSeconds(temporal.duration - temporal.currentTime);
+					+ prettyPrintSeconds(Math.max(0, duration - position));
 				
 				var scrubberX:Number
 						= 	SCRUBBER_START
-						+ 	( (SCRUBBER_END - SCRUBBER_START)
-							* temporal.currentTime
-							) / temporal.duration
+						+ 	(	(SCRUBBER_END - SCRUBBER_START)
+								* position
+							)
+							/ duration
 						||	SCRUBBER_START; // defaul value if calc. returns NaN.
 							
 				scrubber.x = Math.min(SCRUBBER_END, Math.max(SCRUBBER_START, scrubberX));

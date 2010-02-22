@@ -1,6 +1,5 @@
 package org.osmf.chrome.hint
 {
-	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.errors.IllegalOperationError;
 	import flash.events.MouseEvent;
@@ -11,6 +10,7 @@ package org.osmf.chrome.hint
 	
 	import org.osmf.chrome.fonts.Fonts;
 	import org.osmf.chrome.utils.FadingSprite;
+	import org.osmf.layout.LayoutTargetSprite;
 
 	public class Hint
 	{
@@ -81,6 +81,8 @@ package org.osmf.chrome.hint
 					openingTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onOpeningTimerComplete);
 					openingTimer.start();
 				}
+				
+				view.measure();
 			}
 		}
 		
@@ -96,7 +98,7 @@ package org.osmf.chrome.hint
 		private static const OPENING_DELAY:Number = 1200;
 		
 		private var stage:Stage;
-		private var view:Sprite;
+		private var view:LayoutTargetSprite;
 		private var _text:String;
 		private var label:TextField;
 		
@@ -127,8 +129,6 @@ package org.osmf.chrome.hint
 			stage.addChild(view);
 			view.x = stage.mouseX - 13;
 			view.y = stage.mouseY - view.height - 2;
-			
-			trace(stage.mouseX, stage.mouseY, view.height);
 		}
 			
 	}
