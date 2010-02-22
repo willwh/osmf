@@ -12,8 +12,7 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
-*  
+*
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
@@ -95,8 +94,7 @@ package org.osmf.elements.compositeClasses
 					
 					// Add the sum of all preceding temporal object's duration:
 					traitAggregator.forEachChildTrait
-						(
-							function(peerTimeTrait:TimeTrait):void
+						( function(peerTimeTrait:TimeTrait):void
 						  	{
 						  		if (precedingDurationSet == false)
 						  		{
@@ -111,7 +109,7 @@ package org.osmf.elements.compositeClasses
 									}
 						  		}
 						  	}
-							, MediaTraitType.TIME
+						, MediaTraitType.TIME
 						);
 						
 					result += precedingDuration;

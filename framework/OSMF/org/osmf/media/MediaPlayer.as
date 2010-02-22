@@ -279,6 +279,18 @@ package org.osmf.media
  	 *  @productversion OSMF 1.0
  	 */ 
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
+	
+	/**
+	 * Dispatched when the <code>isRecording</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.DVREvent.IS_RECORDING_CHANGE
+ 	 *  
+ 	 *  @langversion 3.0
+ 	 *  @playerversion Flash 10.1
+ 	 *  @playerversion AIR 1.5
+ 	 *  @productversion OSMF 1.0
+ 	 */ 
+	[Event(name='isRecordingChange', type='org.osmf.events.DVREvent')]
 
     /**
 	 * Dispatched when the <code>canPlay</code> property has changed.
@@ -775,6 +787,19 @@ package org.osmf.media
 		public function get hasDRM():Boolean
 		{
 			return _hasDRM;
+		}	
+		
+		/**
+		 *  Return if the the media element has the DVRTrait.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get hasDVR():Boolean
+		{
+			return _hasDVR;
 		}	
 				
 		/**
@@ -1450,6 +1475,37 @@ package org.osmf.media
 		{
 			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).serverURL : "";
 		}
+		
+		/**
+		 * Returns the position to seek to in order to reach the latest live content available
+		 * on the server.
+		 * 
+		 * Media without a DVRTrait will always return <code>NaN</code>.
+		 *   
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */			
+		public function get livePosition():Number
+		{
+			return hasDVR ? DVRTrait(media.getTrait(MediaTraitType.DVR)).livePosition : NaN;
+		}
+		
+		/**
+		 * Returns <code>true</code> if the media is currently being recorded by its server.
+		 * 
+		 * Media without a DVRTrait will always return <code>false</code>. 
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		public function get isRecording():Boolean
+		{
+			return hasDVR ? DVRTrait(media.getTrait(MediaTraitType.DVR)).isRecording : false;
+		}
 
 		// Internals
 		//
@@ -1600,7 +1656,10 @@ package org.osmf.media
 				case MediaTraitType.DRM:					
 					_hasDRM	= add;
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;	
-					break;				
+					break;
+				case MediaTraitType.DVR:
+					_hasDVR = add;
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DVR_CHANGE;	
 			}					 
 			if (eventType != null)
 			{
@@ -1851,5 +1910,6 @@ package org.osmf.media
 		private var _canBuffer:Boolean;
 		private var _isDynamicStream:Boolean;
 		private var _hasDRM:Boolean;
+		private var _hasDVR:Boolean;
 	}
 }
