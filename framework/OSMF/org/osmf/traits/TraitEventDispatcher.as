@@ -236,6 +236,18 @@ package org.osmf.traits
 	 *  @productversion OSMF 1.0
 	 */
 	[Event(name="bytesTotalChange",type="org.osmf.events.LoadEvent")]
+	
+	/**
+	 * Dispatched when the state of the LoadTrait has changed.
+	 *
+	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="loadStateChange", type="org.osmf.events.LoadEvent")]
 
 	/**
 	 * Dispatched when either anonymous or credential-based authentication is needed in order
