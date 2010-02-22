@@ -24,9 +24,9 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetGroup;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.ObjectFacet;
 
 	public class TestCompositeMetadata extends TestCaseEx
 	{
@@ -73,7 +73,8 @@ package org.osmf.elements.compositeClasses
 			assertNull(null, cm.getFacetSynthesizer(url));
 			cm.addFacetSynthesizer(synth);
 			
-			var facet:Facet = new ObjectFacet(url,"test");
+			var facet:Facet = new Facet(url);
+			facet.addValue(new FacetKey(url),"test");
 			cm.addChild(metadata);
 			assertDispatches
 				(	cm

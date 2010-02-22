@@ -35,7 +35,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
-	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -154,14 +153,15 @@ package org.osmf.elements.compositeClasses
 				_layoutRenderer = null;
 			}
 			
-			var layoutRendererFacet:ObjectFacet	= facet as ObjectFacet;
-				
-			if (layoutRendererFacet)
+			if (facet != null)
 			{
 				try
 				{
+					// TODO: Fix this.  Presumably the layout renderer facet should have
+					// a default key to which the layout renderer class is assigned.  But
+					// I'm not sure if this code is even being used.
 					_layoutRenderer
-						= new (Class(layoutRendererFacet.object))()
+						= new (facet.getValue(null) as Class)()
 						as LayoutRendererBase;
 				}
 				catch (e:*)

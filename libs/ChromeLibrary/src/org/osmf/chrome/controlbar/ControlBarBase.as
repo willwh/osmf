@@ -31,7 +31,8 @@ package org.osmf.chrome.controlbar
 	import org.osmf.chrome.utils.FadingSprite;
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.ObjectFacet;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.FacetKey;
 	
 	public class ControlBarBase extends FadingSprite
 	{
@@ -236,7 +237,9 @@ package org.osmf.chrome.controlbar
 		{
 			if (_element)
 			{
-				_element.metadata.addFacet(new ObjectFacet(METADATA_AUTO_HIDE_URL, _autoHide));
+				var facet:Facet = new Facet(METADATA_AUTO_HIDE_URL);
+				facet.addValue(new FacetKey(METADATA_AUTO_HIDE_URL), _autoHide);
+				_element.metadata.addFacet(facet);
 			}
 		}
 	}

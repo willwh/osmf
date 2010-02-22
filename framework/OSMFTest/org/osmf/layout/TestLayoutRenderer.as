@@ -26,9 +26,10 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.display.ScaleMode;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -432,7 +433,9 @@ package org.osmf.layout
 		
 		private function setElementId(target:Metadata, id:String):void
 		{
-			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
+			var facet:Facet = new Facet(MetadataNamespaces.ELEMENT_ID);
+			facet.addValue(new FacetKey(MetadataNamespaces.ELEMENT_ID), id);
+			target.addFacet(facet);
 		}
 	}
 }

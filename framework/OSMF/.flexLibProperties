@@ -157,7 +157,6 @@
     <classEntry path="org.osmf.metadata.MetadataNamespaces"/>
     <classEntry path="org.osmf.metadata.MetadataWatcher"/>
     <classEntry path="org.osmf.metadata.NullFacetSynthesizer"/>
-    <classEntry path="org.osmf.metadata.ObjectFacet"/>
     <classEntry path="org.osmf.metadata.TemporalFacet"/>
     <classEntry path="org.osmf.metadata.TemporalFacetKey"/>
     <classEntry path="org.osmf.net.DynamicStreamingItem"/>

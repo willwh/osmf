@@ -43,7 +43,8 @@ package
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectFacet;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.FacetKey;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class MediaContainerSample extends Sprite
@@ -216,7 +217,9 @@ package
 		 */		
 		private static function setElementId(target:Metadata, id:String):void
 		{
-			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
+			var facet:Facet = new Facet(MetadataNamespaces.ELEMENT_ID);
+			facet.addValue(new FacetKey(MetadataNamespaces.ELEMENT_ID), id);
+			target.addFacet(facet);
 		}
 		
 		private static const BANNER_INTERVAL:int = 5;

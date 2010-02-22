@@ -31,9 +31,10 @@ package org.osmf.containers
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.layout.VerticalAlign;
+	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectFacet;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
@@ -139,7 +140,9 @@ package org.osmf.containers
 
 		private function setElementId(target:Metadata, id:String):void
 		{
-			target.addFacet(new ObjectFacet(MetadataNamespaces.ELEMENT_ID, id));
+			var facet:Facet = new Facet(MetadataNamespaces.ELEMENT_ID);
+			facet.addValue(new FacetKey(MetadataNamespaces.ELEMENT_ID), id);
+			target.addFacet(facet);
 		}
 	}
 }

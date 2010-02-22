@@ -42,7 +42,8 @@ package org.osmf.metadata
 			
 			var metadata1:Metadata = new Metadata();
 			var metadata2:Metadata = new Metadata();
-			var facet:ObjectFacet = new ObjectFacet(url,"hello");
+			var facet:Facet = new Facet(url);
+			facet.addValue(new FacetKey(url),"hello");
 			
 			metadata1.addFacet(facet);
 			metadata2.addFacet(facet);
@@ -58,11 +59,6 @@ package org.osmf.metadata
 			assertEquals(facet, fg.getFacetAt(1));
 			assertEquals(metadata2, fg.getMetadataAt(1));
 			assertEquals(1, fg.indexOf(metadata2, facet));
-			
-			assertDispatches
-				( fg, [Event.CHANGE]
-				, function():void{facet.object = "hello world"}
-				);
 			
 			assertEquals
 				( facet
