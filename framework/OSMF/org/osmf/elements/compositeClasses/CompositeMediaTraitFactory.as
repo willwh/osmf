@@ -114,7 +114,11 @@ package org.osmf.elements.compositeClasses
 					
 				case MediaTraitType.DRM:
 					compositeTrait = new CompositeDRMTrait(traitAggregator, owner, mode);
-					break;	
+					break;
+					
+				case MediaTraitType.DVR:
+					compositeTrait = new CompositeDVRTrait(traitAggregator, owner, mode);
+					break;
 					
 				default:
 					throw new Error(OSMFStrings.getString(OSMFStrings.COMPOSITE_TRAIT_NOT_FOUND));
