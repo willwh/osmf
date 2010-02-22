@@ -165,6 +165,7 @@ package
 			
 			var urlInput:URLInput = controlBar.getWidget(ControlBar.URL_INPUT) as URLInput;
 			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
+			
 			urlInput.url = configuration.url;
 			
 			var button:Button = controlBar.getWidget(ControlBar.EJECT_BUTTON) as Button;
