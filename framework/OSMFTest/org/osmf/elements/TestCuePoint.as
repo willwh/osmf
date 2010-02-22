@@ -50,14 +50,5 @@ package org.osmf.elements
 			
 			assertTrue(cuePoint1.equals(cuePoint2));
 		}
-		
-		public function testCuePointType():void
-		{
-			var cuePointType:CuePointType = CuePointType.fromString("actionscript");
-			assertEquals(cuePointType, CuePointType.ACTIONSCRIPT);
-			
-			cuePointType = CuePointType.fromString(null);
-			assertNull(cuePointType);
-		}
 	}
 }

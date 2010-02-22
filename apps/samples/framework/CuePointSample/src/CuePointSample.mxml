@@ -79,26 +79,6 @@
 				return (h == 0 ? "":(h<10 ? "0"+h.toString()+":" : h.toString()+":"))+(m<10 ? "0"+m.toString() : m.toString())+":"+(s<10 ? "0"+s.toString() : s.toString());
 			}
 				
-			public static function stringFromCuePointType(cuePointType:CuePointType):String
-			{
-				var typeStr:String = "";
-				
-				switch (cuePointType)
-				{
-					case CuePointType.ACTIONSCRIPT:
-						typeStr = "ActionScript";
-						break;
-					case CuePointType.EVENT:
-						typeStr = "Event";
-						break;
-					case CuePointType.NAVIGATION:
-						typeStr = "Navigation";
-						break;						
-				}
-				
-				return typeStr;	
-			}			
-			
 			private function init():void
 			{
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
@@ -161,9 +141,7 @@
 					return;
 				}
 				
-				var cuePointType:String = stringFromCuePointType(cuePoint.type);
-				
-				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePointType+"\", namespace: \""+ns+"\"";
+				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePoint.type+"\", namespace: \""+ns+"\"";
 				taCuePointEvents.text += msg + "\n";
 				
 				callLater(autoScroll);
@@ -384,7 +362,7 @@
 						<mx:DataGridColumn headerText="Type" dataField="type" sortable="false">
 							<mx:itemRenderer>
 								<mx:Component>
-									<mx:Label text="{CuePointSample.stringFromCuePointType(data.type)}" color="#000000"/>
+									<mx:Label text="{data.type}" color="#000000"/>
 								</mx:Component>
 							</mx:itemRenderer>
 						</mx:DataGridColumn>

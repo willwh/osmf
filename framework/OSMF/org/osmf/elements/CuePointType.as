@@ -29,7 +29,7 @@ package org.osmf.elements
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class CuePointType
+	public final class CuePointType
 	{
 		/**
 		 * A Navigation cue point.
@@ -39,7 +39,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const NAVIGATION:CuePointType		= new CuePointType("navigation");
+		public static const NAVIGATION:String		= "navigation";
 		
 		/**
 		 * An Event cue point.
@@ -49,7 +49,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const EVENT:CuePointType			= new CuePointType("event");
+		public static const EVENT:String			= "event";
 		
 		/**
 		 * An ActionScript cue point.
@@ -59,45 +59,6 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ACTIONSCRIPT:CuePointType	= new CuePointType("actionscript");
-		
-		/**
-		 * @private
-		 * 
-		 * Constructor.
-		 * 
-		 * @param typeName The name of the cue point type.
-		 */
-		public function CuePointType(typeName:String)
-		{
-			_typeName = typeName;
-		}
-		
-		/**
-		 * Returns the cue point type constant that matches the given type name as a string,
-		 * null if there is no match.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static function fromString(typeName:String):CuePointType
-		{
-			var lowerCaseTypeName:String = (typeName != null) ? typeName.toLowerCase() : typeName;
-			
-			for each (var cuePointType:CuePointType in ALL_CUEPOINT_TYPES)
-			{
-				if (lowerCaseTypeName == cuePointType._typeName)
-				{
-					return cuePointType;
-				}
-			}
-			
-			return null;
-		}
-
-		private static const ALL_CUEPOINT_TYPES:Array = [ EVENT, NAVIGATION, ACTIONSCRIPT ];
-		private var _typeName:String;
+		public static const ACTIONSCRIPT:String		= "actionscript";
 	}
 }

@@ -469,8 +469,12 @@ package org.osmf.elements
 				
 				for (var i:int = 0; i < cuePoints.length; i++)
 				{
-					var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(cuePoints[i].type), cuePoints[i].time, 
-																					cuePoints[i].name, cuePoints[i].parameters);
+					var cuePoint:CuePoint = new CuePoint
+						( cuePoints[i].type
+						, cuePoints[i].time
+						, cuePoints[i].name
+						, cuePoints[i].parameters
+						);
 					temporalFacetDynamic.addValue(cuePoint, cuePoint);
 				}
 				
@@ -486,7 +490,12 @@ package org.osmf.elements
 				metadata.addFacet(_temporalFacetEmbedded);
      		}
 
-			var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(info.type), info.time, info.name, info.parameters);
+			var cuePoint:CuePoint = new CuePoint
+				( info.type
+				, info.time
+				, info.name
+				, info.parameters
+				);
 			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.TIME_REACHED, cuePoint));     		
      	}     	
      	     	

@@ -47,8 +47,13 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function CuePoint(type:CuePointType, time:Number, name:String, parameters:Array, 
-									duration:Number=TemporalFacetKey.DURATION_UNDEFINED)
+		public function CuePoint
+			( type:String
+			, time:Number
+			, name:String
+			, parameters:Array
+			, duration:Number=TemporalFacetKey.DURATION_UNDEFINED
+			)
 		{
 			super(time, duration);
 			_type = type;
@@ -65,7 +70,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get type():CuePointType
+		public function get type():String
 		{
 			return _type;
 		}
@@ -97,7 +102,7 @@ package org.osmf.elements
 		}
 		
 		private var _name:String;
-		private var _type:CuePointType;
+		private var _type:String;
 		private var _parameters:Array;	// Custom name/value data for the cue point
 	}
 }
