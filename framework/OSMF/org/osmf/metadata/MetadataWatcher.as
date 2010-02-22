@@ -46,11 +46,11 @@ package org.osmf.metadata
 		 * @param metadata The Metadata to watch for change.
 		 * @param namespaceURL The namespace that identifies the Facet instance to watch
 		 * for change.
-		 * @param identifier The identifier pointing to the value of interest to watch
-		 * for change. Note that this parameter is optional: not specifying an
-		 * identifier will result in the facet as a whole being watched for change.
+		 * @param key The key pointing to the value of interest to watch
+		 * for change. Note that this parameter is optional: not specifying a key
+		 * will result in the facet as a whole being watched for change.
 		 * @param callback The method to invoke on either the facet or facet value (see
-		 * identifier parameter description) changing. The callback function is expected
+		 * key parameter description) changing. The callback function is expected
 		 * to take one argument, which will be set to the new value.
 		 * 
 		 *  
@@ -59,7 +59,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MetadataWatcher(metadata:Metadata, namespaceURL:String, identifier:IIdentifier, callback:Function)
+		public function MetadataWatcher(metadata:Metadata, namespaceURL:String, key:FacetKey, callback:Function)
 		{
 			if (metadata == null || namespaceURL == null || callback == null)
 			{
@@ -68,7 +68,7 @@ package org.osmf.metadata
 
 			this.metadata = metadata;
 			this.namespaceURL = namespaceURL;
-			this.identifier = identifier;
+			this.key = key;
 			this.callback = callback;
 		}
 		
@@ -98,9 +98,9 @@ package org.osmf.metadata
 				
 				// For convience, always trigger a first change callback when
 				// start watching:
-				if (identifier)
+				if (key)
 				{
-					callback(currentFacet ? currentFacet.getValue(identifier) : undefined);
+					callback(currentFacet ? currentFacet.getValue(key) : undefined);
 				}
 				else
 				{
@@ -200,13 +200,13 @@ package org.osmf.metadata
 				
 				// In case we're watching at the facet level only, then
 				// trigger the callback:
-				if (identifier == null)
+				if (key == null)
 				{
 					callback(event.facet);
 				}
 				else
 				{
-					callback(event.facet.getValue(identifier));
+					callback(event.facet.getValue(key));
 				}
 			}
 		}
@@ -227,11 +227,11 @@ package org.osmf.metadata
 		
 		private function onFacetValueChange(event:FacetValueChangeEvent):void
 		{
-			if (identifier)
+			if (key)
 			{
 				// We're watching a specific value: only invoke the callback
 				// if this is 'our' value that is changing:
-				if (identifier.equals(event.identifier))
+				if (key.equals(event.key))
 				{
 					callback(event.value);
 				}	
@@ -245,11 +245,11 @@ package org.osmf.metadata
 		
 		private function onFacetValueAdd(event:FacetValueEvent):void
 		{
-			if (identifier)
+			if (key)
 			{
 				// We're watching a specific value: only invoke the callback
 				// if this is 'our' value that is being added:
-				if (identifier.equals(event.identifier))
+				if (key.equals(event.key))
 				{
 					callback(event.value);
 				}	
@@ -263,11 +263,11 @@ package org.osmf.metadata
 		
 		private function onFacetValueRemove(event:FacetValueEvent):void
 		{
-			if (identifier)
+			if (key)
 			{
 				// We're watching a specific value: only invoke the callback
 				// if this is 'our' value that is being removed:
-				if (identifier.equals(event.identifier))
+				if (key.equals(event.key))
 				{
 					callback(undefined);
 				}	
@@ -281,7 +281,7 @@ package org.osmf.metadata
 		
 		private var metadata:Metadata;
 		private var namespaceURL:String;
-		private var identifier:IIdentifier;
+		private var key:FacetKey;
 		private var callback:Function;
 		
 		private var currentFacet:Facet;

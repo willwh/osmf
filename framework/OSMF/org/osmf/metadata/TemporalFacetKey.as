@@ -29,14 +29,16 @@ package org.osmf.metadata
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class TemporalIdentifier implements IIdentifier
+	public class TemporalFacetKey extends FacetKey
 	{
-		// This constant can be used by classes extending this
-		// class that wish to differentiate between a time value
-		// of zero and undefined. For example, a duration of zero
-		// could be interpreted a few different ways, where as
-		// undefined clearly means the duration is not defined
-		// and should be ignored.
+		/**
+		 * This constant can be used by classes extending this
+		 * class that wish to differentiate between a time value
+		 * of zero and undefined. For example, a duration of zero
+		 * could be interpreted a few different ways, where as
+		 * undefined clearly means the duration is not defined
+		 * and should be ignored.
+		 **/
 		public static const UNDEFINED:Number = -1;
 		
 		/**
@@ -50,8 +52,10 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TemporalIdentifier(time:Number, duration:Number):void
+		public function TemporalFacetKey(time:Number, duration:Number):void
 		{
+			super(time);
+			
 			_time = time;
 			_duration = duration;
 		}
@@ -91,10 +95,10 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function equals(value:IIdentifier):Boolean
+		override public function equals(value:FacetKey):Boolean
 		{
-			return value is TemporalIdentifier
-				&& TemporalIdentifier(value).time == _time;
+			return value is TemporalFacetKey
+				&& TemporalFacetKey(value).time == _time;
 		}
 		
 		

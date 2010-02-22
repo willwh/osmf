@@ -26,7 +26,7 @@ package org.osmf.layout
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullFacetSynthesizer;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 
 	public class TestRelativeLayoutFacet extends TestCase
 	{
@@ -49,7 +49,7 @@ package org.osmf.layout
 			facet.x = 1;
 			
 			assertEquals(1, eventCounter);
-			assertEquals(RelativeLayoutFacet.X, lastEvent.identifier);
+			assertEquals(RelativeLayoutFacet.X, lastEvent.key);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(1, lastEvent.value);
 			assertEquals(facet.x, facet.getValue(RelativeLayoutFacet.X), 1);
@@ -57,7 +57,7 @@ package org.osmf.layout
 			facet.y = 2;
 			
 			assertEquals(2, eventCounter);
-			assertEquals(RelativeLayoutFacet.Y, lastEvent.identifier);
+			assertEquals(RelativeLayoutFacet.Y, lastEvent.key);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(2, lastEvent.value);
 			assertEquals(facet.y, facet.getValue(RelativeLayoutFacet.Y), 2);
@@ -65,7 +65,7 @@ package org.osmf.layout
 			facet.width = 3;
 			
 			assertEquals(3, eventCounter);
-			assertEquals(RelativeLayoutFacet.WIDTH, lastEvent.identifier);
+			assertEquals(RelativeLayoutFacet.WIDTH, lastEvent.key);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(3, lastEvent.value);
 			assertEquals(facet.width, facet.getValue(RelativeLayoutFacet.WIDTH), 3);
@@ -73,13 +73,13 @@ package org.osmf.layout
 			facet.height = 4;
 			
 			assertEquals(4, eventCounter);
-			assertEquals(RelativeLayoutFacet.HEIGHT, lastEvent.identifier);
+			assertEquals(RelativeLayoutFacet.HEIGHT, lastEvent.key);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(4, lastEvent.value);
 			assertEquals(facet.height, facet.getValue(RelativeLayoutFacet.HEIGHT), 4);
 			
 			assertEquals(undefined, facet.getValue(null));
-			assertEquals(undefined, facet.getValue(new ObjectIdentifier("@*#$^98367423874")));
+			assertEquals(undefined, facet.getValue(new FacetKey("@*#$^98367423874")));
 			
 			assertTrue(facet.synthesizer is NullFacetSynthesizer);
 		}

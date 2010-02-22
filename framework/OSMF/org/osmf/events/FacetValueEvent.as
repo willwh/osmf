@@ -23,7 +23,7 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 
 	/**
 	 * The FacetValue change event is used to listen for changes to values within the
@@ -70,7 +70,7 @@ package org.osmf.events
 		 * @param type Event type.
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param identifier The unique identifier for this key in the facet's collection.
+		 * @param key The unique identifier for this key in the facet's collection.
 		 * @param value The affected value.
 		 *  
 		 *  @langversion 3.0
@@ -78,11 +78,11 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function FacetValueEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null)
+		public function FacetValueEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, key:FacetKey=null, value:*=null)
 		{		
 			super(type, bubbles, cancelable);
 			
-			_identifier = identifier;			
+			_key = key;			
 			_value = value;
 		}	
 		
@@ -95,9 +95,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get identifier():IIdentifier
+		public function get key():FacetKey
 		{
-			return _identifier;
+			return _key;
 		}
 				
 		/**
@@ -120,10 +120,10 @@ package org.osmf.events
 		 */ 
 		override public function clone():Event
 		{
-			return new FacetValueEvent(type, bubbles, cancelable, _identifier, _value);
+			return new FacetValueEvent(type, bubbles, cancelable, _key, _value);
 		}
 				
-		private var _identifier:IIdentifier;			
+		private var _key:FacetKey;			
 		private var _value:*;
 	}
 }

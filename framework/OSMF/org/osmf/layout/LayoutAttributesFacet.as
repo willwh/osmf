@@ -22,9 +22,8 @@
 package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -50,7 +49,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const INDEX:ObjectIdentifier = new ObjectIdentifier("index");
+		public static const INDEX:FacetKey = new FacetKey("index");
 		
 		/**
 		 * @private
@@ -62,7 +61,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const REGISTRATION_POINT:ObjectIdentifier = new ObjectIdentifier("registrationPoint");
+		public static const REGISTRATION_POINT:FacetKey = new FacetKey("registrationPoint");
 		
 		/**
 		 * @private
@@ -74,7 +73,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const SCALE_MODE:ObjectIdentifier = new ObjectIdentifier("scaleMode");
+		public static const SCALE_MODE:FacetKey = new FacetKey("scaleMode");
 		
 		/**
 		 * @private
@@ -86,7 +85,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const VERTICAL_ALIGN:ObjectIdentifier = new ObjectIdentifier("verticalAlign");
+		public static const VERTICAL_ALIGN:FacetKey = new FacetKey("verticalAlign");
 		
 		/**
 		 * @private
@@ -98,7 +97,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const HORIZONTAL_ALIGN:ObjectIdentifier = new ObjectIdentifier("horizontalAlign");
+		public static const HORIZONTAL_ALIGN:FacetKey = new FacetKey("horizontalAlign");
 		
 		/**
 		 * @private
@@ -110,7 +109,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const SNAP_TO_PIXEL:ObjectIdentifier = new ObjectIdentifier("snapToPixel");
+		public static const SNAP_TO_PIXEL:FacetKey = new FacetKey("snapToPixel");
 		
 		/**
 		 * @private
@@ -122,7 +121,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const MODE:ObjectIdentifier = new ObjectIdentifier("layoutMode");
+		public static const MODE:FacetKey = new FacetKey("layoutMode");
 		
 		/**
 		 * @private
@@ -134,7 +133,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const INCLUDE_IN_LAYOUT:ObjectIdentifier = new ObjectIdentifier("includeInLayout");
+		public static const INCLUDE_IN_LAYOUT:FacetKey = new FacetKey("includeInLayout");
 		
 		public function LayoutAttributesFacet()
 		{
@@ -160,33 +159,33 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			if (identifier == null)
+			if (key == null)
 			{
 				return undefined;
 			}
-			else if (identifier.equals(INDEX))
+			else if (key.equals(INDEX))
 			{
 				return index;
 			}
-			else if (identifier.equals(SCALE_MODE))
+			else if (key.equals(SCALE_MODE))
 			{
 				return scaleMode;
 			}
-			else if (identifier.equals(VERTICAL_ALIGN))
+			else if (key.equals(VERTICAL_ALIGN))
 			{
 				return verticalAlign;
 			}
-			else if (identifier.equals(HORIZONTAL_ALIGN))
+			else if (key.equals(HORIZONTAL_ALIGN))
 			{
 				return horizontalAlign;
 			}
-			else if (identifier.equals(SNAP_TO_PIXEL))
+			else if (key.equals(SNAP_TO_PIXEL))
 			{
 				return snapToPixel;
 			}
-			else if (identifier.equals(INCLUDE_IN_LAYOUT))
+			else if (key.equals(INCLUDE_IN_LAYOUT))
 			{
 				return snapToPixel;
 			}

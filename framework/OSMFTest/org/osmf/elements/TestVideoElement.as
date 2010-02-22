@@ -28,13 +28,13 @@ package org.osmf.elements
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MetadataEvent;
+	import org.osmf.events.TemporalFacetEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.TemporalFacet;
-	import org.osmf.metadata.TemporalFacetEvent;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.StreamType;

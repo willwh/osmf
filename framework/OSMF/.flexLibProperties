@@ -106,6 +106,7 @@
     <classEntry path="org.osmf.events.PlayEvent"/>
     <classEntry path="org.osmf.events.PluginManagerEvent"/>
     <classEntry path="org.osmf.events.SeekEvent"/>
+    <classEntry path="org.osmf.events.TemporalFacetEvent"/>
     <classEntry path="org.osmf.events.TimeEvent"/>
     <classEntry path="org.osmf.layout.AbsoluteLayoutFacet"/>
     <classEntry path="org.osmf.layout.AnchorLayoutFacet"/>
@@ -146,8 +147,8 @@
     <classEntry path="org.osmf.media.URLResource"/>
     <classEntry path="org.osmf.metadata.Facet"/>
     <classEntry path="org.osmf.metadata.FacetGroup"/>
+    <classEntry path="org.osmf.metadata.FacetKey"/>
     <classEntry path="org.osmf.metadata.FacetSynthesizer"/>
-    <classEntry path="org.osmf.metadata.IIdentifier"/>
     <classEntry path="org.osmf.metadata.IMetadataProvider"/>
     <classEntry path="org.osmf.metadata.KeyValueFacet"/>
     <classEntry path="org.osmf.metadata.MediaType"/>
@@ -158,10 +159,8 @@
     <classEntry path="org.osmf.metadata.MetadataWatcher"/>
     <classEntry path="org.osmf.metadata.NullFacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.ObjectFacet"/>
-    <classEntry path="org.osmf.metadata.ObjectIdentifier"/>
     <classEntry path="org.osmf.metadata.TemporalFacet"/>
-    <classEntry path="org.osmf.metadata.TemporalFacetEvent"/>
-    <classEntry path="org.osmf.metadata.TemporalIdentifier"/>
+    <classEntry path="org.osmf.metadata.TemporalFacetKey"/>
     <classEntry path="org.osmf.net.DynamicStreamingItem"/>
     <classEntry path="org.osmf.net.DynamicStreamingResource"/>
     <classEntry path="org.osmf.net.FMSHost"/>

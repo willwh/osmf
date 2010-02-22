@@ -27,6 +27,8 @@
 	<mx:Style source="CaptioningSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.metadata.FacetKey;
+			import org.osmf.events.TemporalFacetEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.plugin.PluginInfoResource;
 			import mx.controls.Alert;
@@ -34,7 +36,7 @@
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;
-			import org.osmf.metadata.ObjectIdentifier;
+			import org.osmf.metadata.FacetKey;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
@@ -47,7 +49,7 @@
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.metadata.TemporalFacet;
-			import org.osmf.metadata.TemporalFacetEvent;
+			import org.osmf.events.TemporalFacetEvent;
 			import org.osmf.events.SeekEvent;
 			import org.osmf.events.MetadataEvent;
 			import org.osmf.events.TimeEvent;
@@ -113,7 +115,7 @@
 				// document applied (and include the URL of that document).
 				var kvFacet:KeyValueFacet = new KeyValueFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 												
-				kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), 
+				kvFacet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), 
 									CAPTION_URL);
 				resource.metadata.addFacet(kvFacet);
 
@@ -297,7 +299,7 @@
 			private function onShowCaption(event:TemporalFacetEvent):void
 			{
 				
-				var caption:Caption = event.value as Caption;
+				var caption:Caption = event.key as Caption;
 				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
 
 				// Make sure this is a caption object, and just for good measure, we'll

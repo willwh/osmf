@@ -32,7 +32,7 @@ package org.osmf.test.captioning.media
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.test.captioning.CaptioningTestConstants;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -183,7 +183,7 @@ package org.osmf.test.captioning.media
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 	
 			var kvFacet:KeyValueFacet = new KeyValueFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
-			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), captioningDoc);
+			kvFacet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), captioningDoc);
 			resource.metadata.addFacet(kvFacet);
 			return resource;			
 		}
@@ -192,7 +192,7 @@ package org.osmf.test.captioning.media
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.osmf.bogus/captioning/1.0");
-			kvFacet.addValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
+			kvFacet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
 			resource.metadata.addFacet(kvFacet);
 			return resource;			
 		}

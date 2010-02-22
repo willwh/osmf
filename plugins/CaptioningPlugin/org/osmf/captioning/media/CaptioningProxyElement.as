@@ -34,7 +34,7 @@ package org.osmf.captioning.media
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -120,7 +120,7 @@ package org.osmf.captioning.media
 				}
 				else
 				{		
-					var timedTextURL:String = facet.getValue(new ObjectIdentifier(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
+					var timedTextURL:String = facet.getValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
 					if (timedTextURL != null)
 					{
 						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(timedTextURL));

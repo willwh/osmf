@@ -101,9 +101,9 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Method returning the value that belongs to the passed identifier.
+		 * Method returning the value that belongs to the passed key.
 		 * 
-		 * Returns 'undefined' if the facet fails to resolve the identifier.
+		 * Returns 'undefined' if the facet fails to resolve the key.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -111,7 +111,7 @@ package org.osmf.metadata
 		 *  @productversion OSMF 1.0
 		 */
 
-		public function getValue(identifier:IIdentifier):*
+		public function getValue(key:FacetKey):*
 		{
 			return null;
 		}

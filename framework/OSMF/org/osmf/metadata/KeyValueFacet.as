@@ -64,17 +64,16 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			var objectIdentifier:ObjectIdentifier = identifier as ObjectIdentifier; 
-			if (objectIdentifier)
+			if (key != null)
 			{
-				return data[objectIdentifier.key];
+				return data[key.key];
 			}			
 		}
 		
 		/**
-		 * Associates the key with the value object.  If the ObjectIdentifier's key property
+		 * Associates the key with the value object.  If the FacetKey's key property
 		 * is equal to the key of another object already in the Facet 
 		 * this will overwrite the association with the new value.
 		 * 
@@ -86,7 +85,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function addValue(key:ObjectIdentifier, value:Object):void
+		public function addValue(key:FacetKey, value:Object):void
 		{
 			var oldValue:* = data[key.key];			
 			data[key.key] = value;
@@ -128,7 +127,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function removeValue(key:ObjectIdentifier):*
+		public function removeValue(key:FacetKey):*
 		{
 			var value:* = data[key.key];
 			if (value !== undefined)
@@ -156,12 +155,12 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get keys():Vector.<ObjectIdentifier>
+		public function get keys():Vector.<FacetKey>
 		{
-			var allKeys:Vector.<ObjectIdentifier> = new Vector.<ObjectIdentifier>;
+			var allKeys:Vector.<FacetKey> = new Vector.<FacetKey>;
 			for (var key:Object in data)
 			{
-				allKeys.push(new ObjectIdentifier(key));
+				allKeys.push(new FacetKey(key));
 			}
 			return allKeys;
 		}

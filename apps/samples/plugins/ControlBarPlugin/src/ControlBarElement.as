@@ -30,7 +30,7 @@ package
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.IMetadataProvider;
 	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 
@@ -175,7 +175,7 @@ package
 		
 		/* static */
 		
-		private static const ID:ObjectIdentifier = new ObjectIdentifier("ID");
+		private static const ID:FacetKey = new FacetKey("ID");
 		
 		private static const SCRUB_BAR:String = "scrubBar";
 		private static const PAUSE_BUTTON:String = "pauseButton";

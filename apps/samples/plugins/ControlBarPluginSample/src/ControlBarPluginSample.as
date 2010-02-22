@@ -30,7 +30,7 @@ package
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
 	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.plugin.PluginInfoResource;
 	
 	[SWF(width="640", height="360", backgroundColor="0x000000",frameRate="25")]
@@ -153,7 +153,7 @@ package
 		private static const VIDEO_URL:String
 			= "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
 			
-		private static var ID:ObjectIdentifier = new ObjectIdentifier("ID");
+		private static var ID:FacetKey = new FacetKey("ID");
 		
 		// Comment out to load the plug-in for a SWF (instead of using static linking, for testing):	
 		//private static const pluginResource:URLResource = new URLResource(new URL("ControlBarPlugin.swf"));

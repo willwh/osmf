@@ -31,7 +31,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
@@ -75,11 +75,11 @@ package org.osmf.net.httpstreaming
 				bootstrap.url = abstUrl;
 			}
 			bootstrap.data = abstData;
-			facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), bootstrap);
+			facet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), bootstrap);
 			
 			if (serverBaseUrls != null && serverBaseUrls.length > 0)
 			{
-				facet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseUrls);
+				facet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseUrls);
 			}
 			return facet;
 		}
@@ -141,7 +141,7 @@ package org.osmf.net.httpstreaming
 			if (httpFacet != null)
 			{
 				var serverBaseURLs:Vector.<String>
-					= httpFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY)) as Vector.<String>;
+					= httpFacet.getValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY)) as Vector.<String>;
 				
 				var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = generateStreamInfos(resource);
 				
@@ -181,16 +181,16 @@ package org.osmf.net.httpstreaming
 					if (drmFacet != null)
 					{
 						additionalHeader = drmFacet.getValue(
-							new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
+							new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
 					}
 					if (metadataFacet != null)
 					{
 						bootstrap = metadataFacet.getValue(
-							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName)) as BootstrapInfo;
+							new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName)) as BootstrapInfo;
 						streamMetadata = metadataFacet.getValue(
-							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName)) as ByteArray;
+							new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName)) as ByteArray;
 						xmpMetadata = metadataFacet.getValue(
-							new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName)) as ByteArray;
+							new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName)) as ByteArray;
 					}
 					streamInfos.push(new HTTPStreamingF4FStreamInfo(
 						bootstrap, streamItem.streamName, streamItem.bitrate, additionalHeader, streamMetadata, xmpMetadata));
@@ -201,16 +201,16 @@ package org.osmf.net.httpstreaming
 				if (drmFacet != null)
 				{
 					additionalHeader 
-						= drmFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
+						= drmFacet.getValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
 				}
 				if (metadataFacet != null)
 				{
 					bootstrap = metadataFacet.getValue(
-						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY)) as BootstrapInfo;
+						new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY)) as BootstrapInfo;
 					streamMetadata = metadataFacet.getValue(
-						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY)) as ByteArray;
+						new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY)) as ByteArray;
 					xmpMetadata = metadataFacet.getValue(
-						new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY)) as ByteArray;
+						new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY)) as ByteArray;
 				}
 				
 				var streamName:String = resource.url.substr(resource.url.lastIndexOf("/")+1);

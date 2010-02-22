@@ -19,12 +19,15 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.metadata
+package org.osmf.events
 {
 	import flash.events.Event;
+	
+	import org.osmf.metadata.TemporalFacetKey;
 
 	/**
-	 * Event class used by the TemporalFacet class.
+	 * A TemporalFacetEvent is dispatched when properties of the TemporalFacet
+	 * class change.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -33,7 +36,27 @@ package org.osmf.metadata
 	 */
 	public class TemporalFacetEvent extends Event
 	{
+		/**
+		 * The TemporalFacetEvent.POSITION_REACHED constant defines the value of the
+		 * type property of the event object for a positionReached event. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
 		public static const POSITION_REACHED:String = "positionReached";
+		
+		/**
+		 * The TemporalFacetEvent.DURATION_REACHED constant defines the value
+		 * of the type property of the event object for a durationReached
+		 * event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public static const DURATION_REACHED:String = "durationReached";
 		
 		/**
@@ -44,23 +67,23 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TemporalFacetEvent(type:String, value:TemporalIdentifier, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function TemporalFacetEvent(type:String, key:TemporalFacetKey, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
-			_value = value;
+			_key = key;
 		}
 		
 		/**
-		 * Returns the TemporalIdentifier associated with the event instance.
+		 * The TemporalFacetKey associated with the event.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get value():TemporalIdentifier
+		public function get key():TemporalFacetKey
 		{
-			return _value;
+			return _key;
 		}
 		
 		/**
@@ -68,9 +91,9 @@ package org.osmf.metadata
 		 */
 		override public function clone():Event
 		{
-			return new TemporalFacetEvent(type, _value, bubbles, cancelable);
+			return new TemporalFacetEvent(type, _key, bubbles, cancelable);
 		}
 		
-		private var _value:TemporalIdentifier;
+		private var _key:TemporalFacetKey;
 	}
 }

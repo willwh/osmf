@@ -47,8 +47,8 @@ package org.osmf.metadata
 		public static const SUBCLIP_METADATA:String						= "http://www.osmf.org/subclip/1.0";
 		public static const SUBCLIP_START_KEY:String					= "startTime";
 		public static const SUBCLIP_END_KEY:String						= "endTime";
-		public static const SUBCLIP_START_ID:ObjectIdentifier			= new ObjectIdentifier(SUBCLIP_START_KEY);
-		public static const SUBCLIP_END_ID:ObjectIdentifier				= new ObjectIdentifier(SUBCLIP_END_KEY);
+		public static const SUBCLIP_START_ID:FacetKey					= new FacetKey(SUBCLIP_START_KEY);
+		public static const SUBCLIP_END_ID:FacetKey						= new FacetKey(SUBCLIP_END_KEY);
 		
 		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/default";
 		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
@@ -72,8 +72,7 @@ package org.osmf.metadata
 		public static const TEMPORAL_METADATA_DYNAMIC:String			= "http://www.osmf.org/temporal/dynamic";
 
 		public static const PLUGIN_PARAMETERS:String					= "http://www.osmf.org/plugin/parameters";
-		public static const PLUGIN_METADATA_MEDIAFACTORY_KEY:ObjectIdentifier
-																		= new ObjectIdentifier("pluginMediaFactory");
+		public static const PLUGIN_METADATA_MEDIAFACTORY_KEY:FacetKey	= new FacetKey("pluginMediaFactory");
 		
 		public static const HTTP_STREAMING_METADATA:String				= "http://www.osmf.org/httpstreaming/1.0";
 		

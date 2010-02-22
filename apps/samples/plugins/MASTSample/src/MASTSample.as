@@ -117,7 +117,7 @@ package
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
 			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.akamai.com/mast");
-			kvFacet.addValue(new ObjectIdentifier("url"), MAST_URL_PREROLL);
+			kvFacet.addValue(new FacetKey("url"), MAST_URL_PREROLL);
 			resource.metadata.addFacet(kvFacet);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);

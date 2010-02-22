@@ -29,7 +29,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
@@ -232,7 +232,7 @@ package org.osmf.elements.f4mClasses
 			var facet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
 			
-			assertTrue(facet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
+			assertTrue(facet.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
 			
 			assertEquals(kvFacet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
 			
@@ -300,7 +300,7 @@ package org.osmf.elements.f4mClasses
 			
 			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
-			var keys:Vector.<ObjectIdentifier> = facet.keys;
+			var keys:Vector.<FacetKey> = facet.keys;
 			assertEquals(6, keys.length);
 			
 			assertTrue(facet.getValue(keys[0]) != null);
@@ -341,7 +341,7 @@ package org.osmf.elements.f4mClasses
 
 			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
 			assertNotNull(facet);
-			var keys:Vector.<ObjectIdentifier> = facet.keys;
+			var keys:Vector.<FacetKey> = facet.keys;
 			assertEquals(6, keys.length);
 
 			assertTrue(facet.getValue(keys[0]) != null);
@@ -399,7 +399,7 @@ package org.osmf.elements.f4mClasses
 			{
 				var hsFacet:KeyValueFacet = HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) as KeyValueFacet;
 				assertTrue(hsFacet != null);
-				var abstURL:String = hsFacet.getValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
+				var abstURL:String = hsFacet.getValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
 				assertTrue(abstURL == "http://example.com/foo");
 			}
 		}

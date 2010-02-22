@@ -66,7 +66,7 @@ package org.osmf.metadata
 			assertEquals(4, callbackCount);
 			assertEquals(callbackArgument, facet1);
 			
-			facet1.addValue(new ObjectIdentifier("myKey"),"someValue");
+			facet1.addValue(new FacetKey("myKey"),"someValue");
 			
 			assertEquals(5, callbackCount);
 			assertEquals(callbackArgument, facet1);
@@ -89,7 +89,7 @@ package org.osmf.metadata
 				= new MetadataWatcher
 					( metaData
 					, facet1NS
-					, new ObjectIdentifier("myKey")
+					, new FacetKey("myKey")
 					, facetValueChangeCallback
 					);
 			watcher.watch();
@@ -115,17 +115,17 @@ package org.osmf.metadata
 			
 			assertEquals(4, callbackCount);
 			
-			facet1.addValue(new ObjectIdentifier("myKey"),"someValue");
+			facet1.addValue(new FacetKey("myKey"),"someValue");
 			
 			assertEquals(5, callbackCount);
 			assertEquals(callbackArgument, "someValue");
 			
-			facet1.addValue(new ObjectIdentifier("myKey"),23);
+			facet1.addValue(new FacetKey("myKey"),23);
 			
 			assertEquals(6, callbackCount);
 			assertEquals(callbackArgument,23);
 			
-			facet1.removeValue(new ObjectIdentifier("myKey"));
+			facet1.removeValue(new FacetKey("myKey"));
 			
 			assertEquals(7, callbackCount);
 			assertNull(callbackArgument);

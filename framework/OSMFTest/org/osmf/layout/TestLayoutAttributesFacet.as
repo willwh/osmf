@@ -27,7 +27,7 @@ package org.osmf.layout
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullFacetSynthesizer;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 
 	public class TestLayoutAttributesFacet extends TestCase
 	{
@@ -50,7 +50,7 @@ package org.osmf.layout
 			facet.verticalAlign = VerticalAlign.BOTTOM;
 			
 			assertEquals(1, eventCounter);
-			assertEquals(LayoutAttributesFacet.VERTICAL_ALIGN, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.VERTICAL_ALIGN, lastEvent.key);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(VerticalAlign.BOTTOM, lastEvent.value);
 			assertEquals(facet.verticalAlign, facet.getValue(LayoutAttributesFacet.VERTICAL_ALIGN), VerticalAlign.BOTTOM);
@@ -58,7 +58,7 @@ package org.osmf.layout
 			facet.horizontalAlign = HorizontalAlign.RIGHT;
 			
 			assertEquals(2, eventCounter);
-			assertEquals(LayoutAttributesFacet.HORIZONTAL_ALIGN, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.HORIZONTAL_ALIGN, lastEvent.key);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(HorizontalAlign.RIGHT, lastEvent.value);
 			assertEquals(facet.horizontalAlign, facet.getValue(LayoutAttributesFacet.HORIZONTAL_ALIGN), HorizontalAlign.RIGHT);
@@ -66,7 +66,7 @@ package org.osmf.layout
 			facet.index = 2;
 			
 			assertEquals(3, eventCounter);
-			assertEquals(LayoutAttributesFacet.INDEX, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.INDEX, lastEvent.key);
 			assertEquals(NaN, lastEvent.oldValue);
 			assertEquals(2, lastEvent.value);
 			assertEquals(facet.index, facet.getValue(LayoutAttributesFacet.INDEX), 2);
@@ -74,7 +74,7 @@ package org.osmf.layout
 			facet.snapToPixel = false;
 			
 			assertEquals(4, eventCounter);
-			assertEquals(LayoutAttributesFacet.SNAP_TO_PIXEL, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.SNAP_TO_PIXEL, lastEvent.key);
 			assertEquals(true, lastEvent.oldValue);
 			assertEquals(false, lastEvent.value);
 			assertEquals(facet.snapToPixel, facet.getValue(LayoutAttributesFacet.SNAP_TO_PIXEL), false);
@@ -82,13 +82,13 @@ package org.osmf.layout
 			facet.scaleMode = ScaleMode.LETTERBOX;
 			
 			assertEquals(5, eventCounter);
-			assertEquals(LayoutAttributesFacet.SCALE_MODE, lastEvent.identifier);
+			assertEquals(LayoutAttributesFacet.SCALE_MODE, lastEvent.key);
 			assertEquals(null, lastEvent.oldValue);
 			assertEquals(ScaleMode.LETTERBOX, lastEvent.value);
 			assertEquals(facet.scaleMode, facet.getValue(LayoutAttributesFacet.SCALE_MODE), ScaleMode.LETTERBOX);
 			
 			assertEquals(undefined, facet.getValue(null));
-			assertEquals(undefined, facet.getValue(new ObjectIdentifier("@*#$^98367423874")));
+			assertEquals(undefined, facet.getValue(new FacetKey("@*#$^98367423874")));
 			
 			assertTrue(facet.synthesizer is NullFacetSynthesizer);
 		}

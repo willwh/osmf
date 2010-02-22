@@ -30,8 +30,8 @@ package org.osmf.utils
 	import org.osmf.traits.TimeTrait;
 	
 	/**
-	 * ITemporal which keeps its current time in sync with the playing state of an
-	 * IPlayable, via a Timer.  Useful for testing.
+	 * TimeTrait which keeps its current time in sync with the playing state of a
+	 * PlayTrait, via a Timer.  Useful for testing.
 	 **/
 	public class TimerTimeTrait extends TimeTrait
 	{

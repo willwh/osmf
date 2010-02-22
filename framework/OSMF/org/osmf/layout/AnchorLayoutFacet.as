@@ -23,9 +23,8 @@ package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -56,7 +55,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const LEFT:ObjectIdentifier = new ObjectIdentifier("left");
+		public static const LEFT:FacetKey = new FacetKey("left");
 		
 		/**
 		 * @private
@@ -68,7 +67,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const TOP:ObjectIdentifier = new ObjectIdentifier("top");
+		public static const TOP:FacetKey = new FacetKey("top");
 		
 		/**
 		 * @private
@@ -80,7 +79,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const RIGHT:ObjectIdentifier = new ObjectIdentifier("right");
+		public static const RIGHT:FacetKey = new FacetKey("right");
 		
 		/**
 		 * @private
@@ -92,7 +91,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const BOTTOM:ObjectIdentifier = new ObjectIdentifier("bottom");
+		public static const BOTTOM:FacetKey = new FacetKey("bottom");
 		
 		// Facet
 		//
@@ -108,25 +107,25 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			if (identifier == null)
+			if (key == null)
 			{
 				return undefined;
 			}
-			else if (identifier.equals(LEFT))
+			else if (key.equals(LEFT))
 			{
 				return left;
 			}
-			else if (identifier.equals(TOP))
+			else if (key.equals(TOP))
 			{
 				return top;
 			}
-			else if (identifier.equals(RIGHT))
+			else if (key.equals(RIGHT))
 			{
 				return right;
 			}
-			else if (identifier.equals(BOTTOM))
+			else if (key.equals(BOTTOM))
 			{
 				return bottom
 			}

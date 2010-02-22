@@ -30,6 +30,7 @@ package org.osmf.metadata
 	
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.TemporalFacetEvent;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
@@ -89,7 +90,7 @@ package org.osmf.metadata
 		{
 			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 			
-			for each(var value:TemporalIdentifier in _testValues)
+			for each(var value:TemporalFacetKey in _testValues)
 			{
 				facet.addValue(value);
 			}
@@ -100,7 +101,7 @@ package org.osmf.metadata
 			
 			for (var i:int = 0; i < numValues; i++)
 			{
-				var val:TemporalIdentifier = facet.getValueAt(i);
+				var val:TemporalFacetKey = facet.getValueAt(i);
 				assertTrue(val.time > lastValue);
 				lastValue = val.time;	
 			}
@@ -117,7 +118,7 @@ package org.osmf.metadata
 			
 			try
 			{
-				facet.addValue(new TemporalIdentifier(-100, -10));
+				facet.addValue(new TemporalFacetKey(-100, -10));
 				fail();
 			}
 			catch(err:ArgumentError)
@@ -129,11 +130,11 @@ package org.osmf.metadata
 		{
 			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 
-			facet.addValue(new TemporalIdentifier(500, 5));
+			facet.addValue(new TemporalFacetKey(500, 5));
 			
-			assertNotNull(facet.getValue(new TemporalIdentifier(500, 5)));
+			assertNotNull(facet.getValue(new TemporalFacetKey(500, 5)));
 			assertNull(facet.getValue(null));
-			assertNull(facet.getValue(new TemporalIdentifier(123, 2)));
+			assertNull(facet.getValue(new TemporalFacetKey(123, 2)));
 			assertNull(facet.getValueAt(-5));
 		}
 		
@@ -161,7 +162,7 @@ package org.osmf.metadata
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 
-			for each(var value:TemporalIdentifier in _testValues)
+			for each(var value:TemporalFacetKey in _testValues)
 			{
 				facet.addValue(value);
 			}
@@ -199,7 +200,7 @@ package org.osmf.metadata
 				assertTrue(playTrait != null);
 				
 				// The time should be within TOLERANCE seconds of the playhead position
-				var timeValue:Number = (event.value as TemporalIdentifier).time;
+				var timeValue:Number = event.key.time;
 				var playheadPosition:Number = timeTrait.currentTime;
 				assertTrue((playheadPosition >= (timeValue - TOLERANCE)) && (playheadPosition <= (timeValue + TOLERANCE)));
 				
@@ -233,7 +234,7 @@ package org.osmf.metadata
 																		 			
 			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, mediaElement);
 
-			for each(var value:TemporalIdentifier in _testValues)
+			for each(var value:TemporalFacetKey in _testValues)
 			{
 				facet.addValue(value);
 			}
@@ -261,17 +262,17 @@ package org.osmf.metadata
 
 		private function createTemporalData():void
 		{
-			_testValues = new Vector.<TemporalIdentifier>();
+			_testValues = new Vector.<TemporalFacetKey>();
 			
-			_testValues.push(new TemporalIdentifier(3.5, 1));
-			_testValues.push(new TemporalIdentifier(1, TemporalIdentifier.UNDEFINED));
-			_testValues.push(new TemporalIdentifier(3, 0));
-			_testValues.push(new TemporalIdentifier(2, TemporalIdentifier.UNDEFINED));
-			_testValues.push(new TemporalIdentifier(2.5, 1));
+			_testValues.push(new TemporalFacetKey(3.5, 1));
+			_testValues.push(new TemporalFacetKey(1, TemporalFacetKey.UNDEFINED));
+			_testValues.push(new TemporalFacetKey(3, 0));
+			_testValues.push(new TemporalFacetKey(2, TemporalFacetKey.UNDEFINED));
+			_testValues.push(new TemporalFacetKey(2.5, 1));
 			
 			// Add a few duplicates
-			_testValues.push(new TemporalIdentifier(1, 1));
-			_testValues.push(new TemporalIdentifier(3, 1));
+			_testValues.push(new TemporalFacetKey(1, 1));
+			_testValues.push(new TemporalFacetKey(3, 1));
 		}
 		
 		
@@ -323,7 +324,7 @@ package org.osmf.metadata
 		private static const TOLERANCE:Number = .25;
 		private static const TIMEOUT:Number = 5000;
 		
-		private var _testValues:Vector.<TemporalIdentifier>;
+		private var _testValues:Vector.<TemporalFacetKey>;
 		
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;

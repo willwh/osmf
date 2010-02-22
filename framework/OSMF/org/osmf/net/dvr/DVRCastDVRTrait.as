@@ -32,7 +32,7 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.DVRTrait;
 	
 	[ExcludeClass]
@@ -119,17 +119,17 @@ package org.osmf.net.dvr
 		
 		private static const STREAM_INFO_UPDATE_DELAY:Number		= 3000;
 		
-		private static const KEY_CALL_TIME:ObjectIdentifier 		= new ObjectIdentifier("callTime");
-		private static const KEY_OFFLINE:ObjectIdentifier 			= new ObjectIdentifier("offline");
-		private static const KEY_BEGIN_OFFSET:ObjectIdentifier 		= new ObjectIdentifier("beginOffset");
-		private static const KEY_END_OFFSET:ObjectIdentifier 		= new ObjectIdentifier("endOffset");
-		private static const KEY_RECORDING_START:ObjectIdentifier 	= new ObjectIdentifier("startRec");
-		private static const KEY_RECORDING_STOP:ObjectIdentifier 	= new ObjectIdentifier("stopRec");
-		private static const KEY_IS_RECORDING:ObjectIdentifier 		= new ObjectIdentifier("isRec");
-		private static const KEY_STREAM_NAME:ObjectIdentifier 		= new ObjectIdentifier("streamName");
-		private static const KEY_LAST_UPDATE:ObjectIdentifier 		= new ObjectIdentifier("lastUpdate");
-		private static const KEY_CURRENT_LENGTH:ObjectIdentifier 	= new ObjectIdentifier("currLen");
-		private static const KEY_MAX_LENGTH:ObjectIdentifier 		= new ObjectIdentifier("maxLen");
+		private static const KEY_CALL_TIME:FacetKey 		= new FacetKey("callTime");
+		private static const KEY_OFFLINE:FacetKey 			= new FacetKey("offline");
+		private static const KEY_BEGIN_OFFSET:FacetKey 		= new FacetKey("beginOffset");
+		private static const KEY_END_OFFSET:FacetKey 		= new FacetKey("endOffset");
+		private static const KEY_RECORDING_START:FacetKey 	= new FacetKey("startRec");
+		private static const KEY_RECORDING_STOP:FacetKey 	= new FacetKey("stopRec");
+		private static const KEY_IS_RECORDING:FacetKey 		= new FacetKey("isRec");
+		private static const KEY_STREAM_NAME:FacetKey 		= new FacetKey("streamName");
+		private static const KEY_LAST_UPDATE:FacetKey 		= new FacetKey("lastUpdate");
+		private static const KEY_CURRENT_LENGTH:FacetKey 	= new FacetKey("currLen");
+		private static const KEY_MAX_LENGTH:FacetKey 		= new FacetKey("maxLen");
 		
 		private static const DVRCAST_GET_STREAM_INFO_RPC:String		= "DVRGetStreamInfo";
 		
@@ -207,7 +207,7 @@ package org.osmf.net.dvr
 				var streamInfo:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA);
 				for (var key:String in streamInfoRetreiver.streamInfo)
 				{
-					streamInfo.addValue(new ObjectIdentifier(key), streamInfoRetreiver.streamInfo[key]);
+					streamInfo.addValue(new FacetKey(key), streamInfoRetreiver.streamInfo[key]);
 				}
 				
 				updateProperties(streamInfo);

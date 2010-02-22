@@ -10,7 +10,7 @@ package org.osmf.test.mast.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -112,7 +112,7 @@ package org.osmf.test.mast.media
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
-			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), "http://foo.com/bogus/badfile.xml");
+			kvFacet.addValue(new FacetKey(MASTProxyElement.METADATA_KEY_URI), "http://foo.com/bogus/badfile.xml");
 			resource.metadata.addFacet(kvFacet);
 
 			mediaElement.resource = resource
@@ -176,7 +176,7 @@ package org.osmf.test.mast.media
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 
 			var kvFacet:KeyValueFacet = new KeyValueFacet(MASTProxyElement.MAST_METADATA_NAMESPACE);
-			kvFacet.addValue(new ObjectIdentifier(MASTProxyElement.METADATA_KEY_URI), preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
+			kvFacet.addValue(new FacetKey(MASTProxyElement.METADATA_KEY_URI), preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
 			resource.metadata.addFacet(kvFacet);
 			
 			return resource;			

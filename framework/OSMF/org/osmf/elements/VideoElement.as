@@ -26,22 +26,21 @@ package org.osmf.elements
 	import flash.events.StatusEvent;
 	import flash.media.Video;
 	import flash.net.NetStream;
-
 	import flash.utils.ByteArray;
 	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.TemporalFacetEvent;
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.KeyValueFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 	import org.osmf.metadata.TemporalFacet;
-	import org.osmf.metadata.TemporalFacetEvent;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
@@ -302,7 +301,7 @@ package org.osmf.elements
     			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
     			if (metadataFacet != null)
     			{    				
-    				var metadata:ByteArray = metadataFacet.getValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
+    				var metadata:ByteArray = metadataFacet.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
     				if (metadata != null)
     				{
     					setupDRMTrait(metadata);

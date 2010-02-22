@@ -22,10 +22,8 @@
 package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -53,7 +51,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const X:ObjectIdentifier = new ObjectIdentifier("x");
+		public static const X:FacetKey = new FacetKey("x");
 		
 		/**
 		 * @private
@@ -65,7 +63,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const Y:ObjectIdentifier = new ObjectIdentifier("y");
+		public static const Y:FacetKey = new FacetKey("y");
 		
 		/**
 		 * @private
@@ -77,7 +75,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const WIDTH:ObjectIdentifier = new ObjectIdentifier("width");
+		public static const WIDTH:FacetKey = new FacetKey("width");
 		
 		/**
 		 * @private
@@ -89,7 +87,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const HEIGHT:ObjectIdentifier = new ObjectIdentifier("height");
+		public static const HEIGHT:FacetKey = new FacetKey("height");
 		
 		// Facet
 		//
@@ -105,25 +103,25 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			if (identifier == null)
+			if (key == null)
 			{
 				return undefined;
 			}
-			else if (identifier.equals(X))
+			else if (key.equals(X))
 			{
 				return x;
 			}
-			else if (identifier.equals(Y))
+			else if (key.equals(Y))
 			{
 				return y;
 			}
-			else if (identifier.equals(WIDTH))
+			else if (key.equals(WIDTH))
 			{
 				return width;
 			}
-			else if (identifier.equals(HEIGHT))
+			else if (key.equals(HEIGHT))
 			{
 				return height;
 			}

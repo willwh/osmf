@@ -32,7 +32,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.metadata.MediaType;
 	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetStreamUtils;
@@ -383,10 +383,10 @@ package org.osmf.elements.f4mClasses
 						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
 					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
-					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
+					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
 					if (serverBaseURLs.length > 0)
 					{
-						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
 					}
 				}
 				
@@ -396,7 +396,7 @@ package org.osmf.elements.f4mClasses
 					{
 						metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					}
-					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY), media.metadata);					
+					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY), media.metadata);					
 				}
 				
 				if (media.xmp != null)
@@ -405,7 +405,7 @@ package org.osmf.elements.f4mClasses
 					{
 						metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					}
-					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY), media.xmp);					
+					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY), media.xmp);					
 				}
 
 				if (media.drmAdditionalHeader != null)
@@ -413,8 +413,8 @@ package org.osmf.elements.f4mClasses
 					drmFacet = new KeyValueFacet(MetadataNamespaces.DRM_METADATA);
 					if (Media(value.media[0]).drmAdditionalHeader != null && Media(value.media[0]).drmAdditionalHeader.data != null)
 					{
-						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader.data);
-						drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data));
+						drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader.data);
+						drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data));
 					}
 				}
 				
@@ -446,7 +446,7 @@ package org.osmf.elements.f4mClasses
 				{
 					metadataFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					dynResource.metadata.addFacet(metadataFacet);
-					metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
 				}
 				
 				for each (media in value.media)
@@ -472,8 +472,8 @@ package org.osmf.elements.f4mClasses
 						}						
 						if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 						{
-							drmFacet.addValue(new ObjectIdentifier(item), extractDRMMetadata(media.drmAdditionalHeader.data));	
-							drmFacet.addValue(new ObjectIdentifier(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader.data);
+							drmFacet.addValue(new FacetKey(item), extractDRMMetadata(media.drmAdditionalHeader.data));	
+							drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader.data);
 						} 						
 					}
 					
@@ -486,17 +486,17 @@ package org.osmf.elements.f4mClasses
 							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 							media.bootstrapInfo.url = bootstrapInfoURLString; 
 						}
-						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
+						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
 					}
 			
 					if (media.metadata != null)
 					{
-						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName), media.metadata);					
+						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName), media.metadata);					
 					}
 					
 					if (media.xmp != null)
 					{
-						metadataFacet.addValue(new ObjectIdentifier(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName), media.xmp);					
+						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName), media.xmp);					
 					}
 				}
 				resource = dynResource;

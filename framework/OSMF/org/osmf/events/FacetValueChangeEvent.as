@@ -23,11 +23,11 @@ package org.osmf.events
 {
 	import flash.events.Event;
 	
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 
 	/**
 	 * FacetValueChangeEvent is the event dispatched when the data within a facet changes.
-	 * Data is tracked within an Facet using an IIdentifier.  The newly changed value is also present in this 
+	 * Data is tracked within an Facet using a FacetKey.  The newly changed value is also present in this 
 	 * event, as well as the old value.
 	 *  
 	 *  @langversion 3.0
@@ -66,9 +66,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function FacetValueChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, identifier:IIdentifier=null, value:*=null, oldValue:*=null)
+		public function FacetValueChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, key:FacetKey=null, value:*=null, oldValue:*=null)
 		{
-			super(type, bubbles, cancelable, identifier, value);
+			super(type, bubbles, cancelable, key, value);
 			
 			_oldValue = oldValue;
 		}
@@ -91,7 +91,7 @@ package org.osmf.events
 		 */ 
 		override public function clone():Event
 		{
-			return new FacetValueChangeEvent(type, bubbles, cancelable, identifier, value, _oldValue);
+			return new FacetValueChangeEvent(type, bubbles, cancelable, key, value, _oldValue);
 		}
 
 		private var _oldValue:*;

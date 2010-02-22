@@ -27,13 +27,13 @@
 	<mx:Style source="CuePointSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.metadata.TemporalIdentifier;
 			import mx.collections.ArrayCollection;
 			import org.osmf.elements.CuePoint;
 			import org.osmf.elements.CuePointType;
-			import org.osmf.metadata.TemporalFacetEvent;
+			import org.osmf.events.TemporalFacetEvent;
 			import org.osmf.metadata.Metadata;
 			import org.osmf.metadata.TemporalFacet;
+			import org.osmf.metadata.TemporalFacetKey;
 			import org.osmf.metadata.MetadataNamespaces;
 			import org.osmf.traits.TimeTrait;
 			import org.osmf.traits.LoadTrait;
@@ -132,7 +132,7 @@
 			
 			private function onCuePoint(event:TemporalFacetEvent):void
 			{
-				var cuePoint:CuePoint = event.value as CuePoint;
+				var cuePoint:CuePoint = event.key as CuePoint;
 				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
 				
 				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.currentTime;
@@ -324,7 +324,7 @@
 				// See if there is an existing value, if so replace it
 				for (var i:int = 0; i < _cuePointsCollection.length; i++)
 				{
-					if ((_cuePointsCollection[i] as TemporalIdentifier).time == newCuePoint.time)
+					if ((_cuePointsCollection[i] as TemporalFacetKey).time == newCuePoint.time)
 					{
 						_cuePointsCollection.removeItemAt(i);
 						break;

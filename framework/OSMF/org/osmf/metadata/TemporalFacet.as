@@ -31,6 +31,7 @@ package org.osmf.metadata
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
+	import org.osmf.events.TemporalFacetEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
@@ -39,12 +40,33 @@ package org.osmf.metadata
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 	
+	/**
+	 * Dispatched when the state of the LoadTrait has changed.
+	 *
+	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
+
+	/**
+	 * Dispatched when the duration has been reach.
+	 *
+	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
 	[Event (name="durationReached", type="org.osmf.metadata.TemporalFacetEvent")]
 
 	/**
 	 * The TemporalFacet class manages temporal metadata of the type
-	 * <code>TemporalIdentifier</code> associated with a <code>MediaElement</code> 
+	 * <code>TemporalFacetKey</code> associated with a <code>MediaElement</code> 
 	 * and dispatches events of type <code>TemporalFacetEvent</code> when 
 	 * the TimeTrait position of the MediaElement matches any of the
 	 * time values in it's collection of <code>TemporalIdentifer</code> objects. 
@@ -118,7 +140,7 @@ package org.osmf.metadata
 		/**
 		 * Adds temporal metadata to this facet.
 		 * 
-		 * @param value A <code>TemporalIdentifier</code> instance to
+		 * @param value A <code>TemporalFacetKey</code> instance to
 		 * be added to the class' internal collection.
 		 * 
 		 * @throws ArgumentError If value is null or the time in the value 
@@ -129,7 +151,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function addValue(value:TemporalIdentifier):void
+		public function addValue(value:TemporalFacetKey):void
 		{
 			if (value == null || value.time < 0)
 			{
@@ -138,7 +160,7 @@ package org.osmf.metadata
 			
 			if (temporalValueCollection == null)
 			{
-				temporalValueCollection = new Vector.<TemporalIdentifier>();
+				temporalValueCollection = new Vector.<TemporalFacetKey>();
 				temporalValueCollection.push(value);
 			}
 			else
@@ -172,13 +194,13 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			if (identifier is TemporalIdentifier)
+			if (key is FacetKey)
 			{
-				for each (var temporalMetadata:TemporalIdentifier in temporalValueCollection)
+				for each (var temporalMetadata:TemporalFacetKey in temporalValueCollection)
 				{
-					if (temporalMetadata.equals(identifier))
+					if (temporalMetadata.equals(key))
 					{
 						return temporalMetadata;
 					}
@@ -202,13 +224,13 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Gets the TemporalIdentifier item at the specified index in this
+		 * Gets the TemporalFacetKey item at the specified index in this
 		 * class' internal collection. Note this collection is sorted by time.
 		 *  
 		 * @param index The index in the collection from which to retrieve 
-		 * the TemporalIdentifier item.
+		 * the TemporalFacetKey item.
 		 * 
-		 * @return The TemporalIdentifier item at the specified index or 
+		 * @return The TemporalFacetKey item at the specified index or 
 		 * <code>null</code> if there is none.
 		 *  
 		 *  @langversion 3.0
@@ -216,7 +238,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getValueAt(index:int):TemporalIdentifier
+		public function getValueAt(index:int):TemporalFacetKey
 		{
 			if (index >= 0 && temporalValueCollection != null && index < temporalValueCollection.length)
 			{
@@ -432,7 +454,7 @@ package org.osmf.metadata
 		 */
 		private function dispatchTemporalEvents(index:int):void
 		{
-			var valueObj:TemporalIdentifier = temporalValueCollection[index];
+			var valueObj:TemporalFacetKey = temporalValueCollection[index];
 			dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, valueObj));
 			
 			if (valueObj.duration > 0)
@@ -609,7 +631,7 @@ package org.osmf.metadata
 															// class will check for temporal metadata
 		private static const TOLERANCE:Number = 0.25;	// A value must be within this tolerence to trigger
 														//	a position reached event.				
-		private var temporalValueCollection:Vector.<TemporalIdentifier>;
+		private var temporalValueCollection:Vector.<TemporalFacetKey>;
 		private var owner:MediaElement;
 		private var timeTrait:TimeTrait;
 		private var seekTrait:SeekTrait;

@@ -22,32 +22,38 @@
 package org.osmf.metadata
 {
 	/**
-	 * The ObjectIdentifier is the implementation of IIdentifier 
-	 * used to wrap any given Object.
+	 * The FacetKey represents a key that can be used to look up a corresponding
+	 * value within a Facet.
+	 * 
+	 * The OSMF Metadata APIs are based upon the idea that all metadata associated
+	 * with a piece of media can be broken down into a set of Facets, or views
+	 * into a subset of that metadata, and that each such Facet consists of a set
+	 * of key-value pairs.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class ObjectIdentifier implements IIdentifier
+	public class FacetKey
 	{
 		/**
-		 * Construct an ObjectIdentifier with the specified object as the key.
+		 * Constructor.
+		 * 
+		 * @param key The actual key encapsulated by this FacetKey.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function ObjectIdentifier(key:Object)
+		public function FacetKey(key:Object)
 		{
 			_key = key;
 		}
 		
 		/**
-		 * @returns the key to this Identifier.  The key is the object used
-		 * to identify the value within a KeyValueFacet.  
+		 * The actual key encapsulated by this FacetKey.  
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -60,23 +66,22 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Overridable quality method for comparing two Identifiers.
+		 * Comparison function between FacetKeys.  All FacetKeys
+		 * expose a comparison function so that the Facet knows how
+		 * to distinguish between two FacetKeys.
+		 * 
+		 * Subclasses can override to provide custom comparison logic.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function equals(value:IIdentifier):Boolean
+		public function equals(value:FacetKey):Boolean
 		{
-			if(value is ObjectIdentifier)
-			{				
-				return _key == ObjectIdentifier(value).key;
-			}
-			return false;
+			return value != null ? key == value.key : false;  
 		}
 		
 		private var _key:Object;
-		
 	}
 }

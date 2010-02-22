@@ -198,7 +198,7 @@ package org.osmf
 			//
 
 			addTestSuite(TestMetadata);
-			addTestSuite(TestObjectIdentifier);
+			addTestSuite(TestFacetKey);
 			addTestSuite(TestMediaType);
 			addTestSuite(TestKeyValueFacet);
 			addTestSuite(TestFacetGroup);

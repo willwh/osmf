@@ -33,9 +33,9 @@ package org.osmf.metadata
 	public class TestKeyValueFacet extends TestCase
 	{
 		private static const testData:String = "sdlkjlkj432423423$@#$@#$#@$234";
-		private static const testKey:ObjectIdentifier = new ObjectIdentifier("342dsds4rknfn34$%^%^tef44");
+		private static const testKey:FacetKey = new FacetKey("342dsds4rknfn34$%^%^tef44");
 		private static const testData2:String = "98798797879";
-		private static const testKey2:ObjectIdentifier = new ObjectIdentifier("QWEWRE");
+		private static const testKey2:FacetKey = new FacetKey("QWEWRE");
 			
 			
 		public function testConstructor():void
@@ -71,20 +71,20 @@ package org.osmf.metadata
 			assertEquals(testData2, keyValueMeta.getValue(testKey2));
 			assertEquals(testData, keyValueMeta.getValue(testKey));		
 			
-			assertTrue(arrayHasValues(Vector.<IIdentifier>(keyValueMeta.keys), [testKey.key, testKey2.key]));
+			assertTrue(arrayHasValues(Vector.<FacetKey>(keyValueMeta.keys), [testKey.key, testKey2.key]));
 					
 			assertEquals(testData, keyValueMeta.removeValue(testKey));	
 					
-			assertTrue(arrayHasValues(Vector.<IIdentifier>(keyValueMeta.keys), [testKey2.key]));	
+			assertTrue(arrayHasValues(Vector.<FacetKey>(keyValueMeta.keys), [testKey2.key]));	
 			
 			assertEquals(testData2, keyValueMeta.removeValue(testKey2));	
 			
-			assertTrue(arrayHasValues(Vector.<IIdentifier>(keyValueMeta.keys),[]));							
+			assertTrue(arrayHasValues(Vector.<FacetKey>(keyValueMeta.keys),[]));							
 		}
 		
-		private function arrayHasValues(values:Vector.<IIdentifier>, testValues:Array):Boolean
+		private function arrayHasValues(values:Vector.<FacetKey>, testValues:Array):Boolean
 		{	
-			for each( var value:ObjectIdentifier in values)
+			for each( var value:FacetKey in values)
 			{
 				var testIndex:int = testValues.indexOf(value.key);
 			
@@ -130,28 +130,28 @@ package org.osmf.metadata
 			kv.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, eventCatcher);
 			kv.addEventListener(FacetValueEvent.VALUE_REMOVE, eventCatcher);
 			
-			kv.addValue(new ObjectIdentifier("key1"), "value1");
-			kv.addValue(new ObjectIdentifier("key1"), "valueChange");
-			kv.removeValue(new ObjectIdentifier("key1"));		
-			assertEquals(undefined, kv.removeValue(new ObjectIdentifier("key1")));						
+			kv.addValue(new FacetKey("key1"), "value1");
+			kv.addValue(new FacetKey("key1"), "valueChange");
+			kv.removeValue(new FacetKey("key1"));		
+			assertEquals(undefined, kv.removeValue(new FacetKey("key1")));						
 						
 			function onAdd(event:FacetValueEvent):void
 			{
 				assertEquals(event.value, "value1");
-				assertTrue(event.identifier.equals(new ObjectIdentifier("key1")));
+				assertTrue(event.key.equals(new FacetKey("key1")));
 			}
 			
 			function onRemove(event:FacetValueEvent):void
 			{
 				assertEquals(event.value, "valueChange");
-				assertTrue(event.identifier.equals(new ObjectIdentifier("key1")));
+				assertTrue(event.key.equals(new FacetKey("key1")));
 			}
 			
 			function onChange(event:FacetValueChangeEvent):void
 			{
 				assertEquals(event.value, "valueChange");
 				assertEquals(event.oldValue, "value1");
-				assertTrue(event.identifier.equals(new ObjectIdentifier("key1")));
+				assertTrue(event.key.equals(new FacetKey("key1")));
 			}
 			
 			assertEquals(1, addsCaught);

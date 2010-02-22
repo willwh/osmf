@@ -88,7 +88,7 @@ package org.osmf.metadata
 		 * 
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
 			return _object;
 		}

@@ -22,9 +22,8 @@
 package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
-	import org.osmf.metadata.IIdentifier;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.ObjectIdentifier;
 
 	/**
 	 * @private
@@ -50,7 +49,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const RELATIVE_SUM:ObjectIdentifier = new ObjectIdentifier("relativeSum");
+		public static const RELATIVE_SUM:FacetKey = new FacetKey("relativeSum");
 		
 		/**
 		 * @private
@@ -62,7 +61,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ABSOLUTE_SUM:ObjectIdentifier = new ObjectIdentifier("absoluteSum");
+		public static const ABSOLUTE_SUM:FacetKey = new FacetKey("absoluteSum");
 		
 		
 		public function BoxAttributesFacet()
@@ -86,17 +85,17 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override public function getValue(identifier:IIdentifier):*
+		override public function getValue(key:FacetKey):*
 		{
-			if (identifier == null)
+			if (key == null)
 			{
 				return undefined;
 			}
-			else if (identifier.equals(RELATIVE_SUM))
+			else if (key.equals(RELATIVE_SUM))
 			{
 				return relativeSum;
 			}
-			else if (identifier.equals(ABSOLUTE_SUM))
+			else if (key.equals(ABSOLUTE_SUM))
 			{
 				return absoluteSum;
 			}
