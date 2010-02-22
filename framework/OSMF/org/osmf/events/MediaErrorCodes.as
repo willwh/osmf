@@ -73,11 +73,7 @@ package org.osmf.events
 		public static const BEACON_FAILURE_ERROR:int 					= 370;
 		
 		public static const DRM_UPDATE_ERROR:int						= 380;
-		
-		public static const DRM_AUTHENTICATION_FAILED:int				= 401;
-		public static const DRM_NEEDS_AUTHENTICATION:int				= 402;
-		public static const DRM_CONTENT_NOT_YET_VALID:int				= 403;
-		
+				
 		public static const DVRCAST_SUBSCRIPTION_FAILED:int				= 501;
 		public static const DVRCAST_CONTENT_OFFLINE:int					= 502;
 		public static const DVRCAST_FAILED_RETREIVING_STREAM_INFO:int	= 503;
@@ -142,9 +138,6 @@ package org.osmf.events
 			, {errorID:HTTP_IO_LOAD_ERROR,						message:OSMFStrings.HTTP_IO_LOAD_ERROR}
 			, {errorID:HTTP_SECURITY_LOAD_ERROR,				message:OSMFStrings.HTTP_SECURITY_LOAD_ERROR}
 			, {errorID:BEACON_FAILURE_ERROR,					message:OSMFStrings.BEACON_FAILURE_ERROR}
-			, {errorID:DRM_AUTHENTICATION_FAILED,				message:OSMFStrings.DRM_AUTHENTICATION_FAILED}
-			, {errorID:DRM_NEEDS_AUTHENTICATION,				message:OSMFStrings.DRM_NEEDS_AUTHENTICATION}
-			, {errorID:DRM_CONTENT_NOT_YET_VALID,				message:OSMFStrings.DRM_CONTENT_NOT_YET_VALID}
 			, {errorID:DRM_UPDATE_ERROR,						message:OSMFStrings.DRM_UPDATE_ERROR}
 		];
 	}

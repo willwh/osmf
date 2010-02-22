@@ -416,23 +416,6 @@ package org.osmf.utils
 		 **/
 		public static const DRM_METADATA_NOT_SET:String					= "drmMetadataNotSet";
 		
-		// DRM Errors
-
-		/**
-		 * @private
-		 **/
-		public static const DRM_AUTHENTICATION_FAILED:String			= "drmAuthenticationFailed";
-
-		/**
-		 * @private
-		 **/
-		public static const DRM_NEEDS_AUTHENTICATION:String				= "drmNeedsAuthentication";
-
-		/**
-		 * @private
-		 **/
-		public static const DRM_CONTENT_NOT_YET_VALID:String			= "drmContentNotYetValid";
-		
 		// Flash Media Manifest Errors
 		
 		/**
@@ -490,10 +473,7 @@ package org.osmf.utils
 			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";
 			
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
-			resourceDict[DRM_AUTHENTICATION_FAILED]					= "AuthenticationFailed	  SWF should ask user to reenter user credentials and retry license acquisition";
-			resourceDict[DRM_NEEDS_AUTHENTICATION]					= "NeedAuthentication	  Remedy is to authenticate the user and then redo license acquisition";
-			resourceDict[DRM_CONTENT_NOT_YET_VALID]					= "ContentNotYetValid	  The acquired license is not yet valid";
-		
+			
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
 			
 			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance.";

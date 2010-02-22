@@ -358,7 +358,7 @@ package org.osmf.elements
 							
 			private function onDRMErrorEvent(event:DRMErrorEvent):void
 			{
-				if (event.errorID == MediaErrorCodes.DRM_NEEDS_AUTHENTICATION)  // Needs authentication
+				if (event.errorID == DRM_NEEDS_AUTHENTICATION)  // Needs authentication
 				{					
 					drmTrait.drmMetadata = event.contentData;
 				}	
@@ -558,7 +558,8 @@ package org.osmf.elements
 		private var _deblocking:int;
 		
 		CONFIG::FLASH_10_1
-		{
+		{		
+		private static const DRM_NEEDS_AUTHENTICATION:int				= 3330; 
 		private var drmTrait:NetStreamDRMTrait;	
 		}
 	}

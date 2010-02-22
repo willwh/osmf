@@ -411,10 +411,10 @@ package org.osmf.net.drm
 			{
 				switch(event.errorID)
 				{
-					case MediaErrorCodes.DRM_CONTENT_NOT_YET_VALID:
+					case DRM_CONTENT_NOT_YET_VALID:
 						forceRefreshVoucher();
 						break;
-					case MediaErrorCodes.DRM_NEEDS_AUTHENTICATION:
+					case DRM_NEEDS_AUTHENTICATION:
 						var voucherInfo:VoucherAccessInfo = event.contentData.getVoucherAccessInfo()[0];
 						updateDRMState(DRMState.AUTHENTICATION_NEEDED, null, null, null, 0, null, voucherInfo.displayName );
 						break;
@@ -445,12 +445,7 @@ package org.osmf.net.drm
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
 			
-			updateDRMState
-				( DRMState.AUTHENTICATE_FAILED,
-					new MediaError
-						( MediaErrorCodes.DRM_AUTHENTICATION_FAILED
-						)					
-				);
+			updateDRMState(DRMState.AUTHENTICATE_FAILED);
 		}
 		
 		private function toggleErrorListeners(updater:SystemUpdater, on:Boolean):void
@@ -504,6 +499,22 @@ package org.osmf.net.drm
 					)
 				);
 		}
+		
+		// The flash player's internal DRM error codes
+		/**
+		 * @private 
+		 */ 
+		private static const DRM_AUTHENTICATION_FAILED:int				= 3301;
+		
+		/**
+		 * @private 
+		 */ 
+		private static const DRM_NEEDS_AUTHENTICATION:int				= 3330;
+		
+		/**
+		 * @private 
+		 */ 
+		private static const DRM_CONTENT_NOT_YET_VALID:int				= 3331;
 		
 		
 		private var _drmState:String = DRMState.INITIALIZING;
