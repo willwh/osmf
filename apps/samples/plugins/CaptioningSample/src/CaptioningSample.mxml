@@ -270,7 +270,7 @@
 				{
 					trace(">>> Temporal facet added, namespace="+facet.namespaceURL);
 					temporalFacet = facet;
-					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onShowCaption);
+					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
 					temporalFacet.addEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
 					
 					// If you wanted a list of all the captions added, 
@@ -290,7 +290,7 @@
    				if (facet && temporalFacet)
    				{
    					trace(">>> Temporal facet removed, namespace="+facet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onShowCaption);
+   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
    					temporalFacet.removeEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
    					temporalFacet = null;
    				}

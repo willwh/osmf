@@ -138,12 +138,12 @@ package org.osmf.metadata
 			assertNull(facet.getValueAt(-5));
 		}
 		
-		public function testPositionReached():void
+		public function testTimeReached():void
 		{
 			testEvents();
 		}
 		
-		public function testPositionReachedWithPause():void
+		public function testTimeReachedWithPause():void
 		{
 			testEvents(true);
 		}
@@ -167,9 +167,9 @@ package org.osmf.metadata
 				facet.addValue(value, value);
 			}
 			
-			var positionReachedCount:int = 0;
+			var timeReachedCount:int = 0;
 
-			facet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
+			facet.addEventListener(TemporalFacetEvent.TIME_REACHED, onTimeReached);
 			
 			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			assertTrue(loadTrait != null);
@@ -186,9 +186,9 @@ package org.osmf.metadata
 				}
 			}
 			
-			function onPositionReached(event:TemporalFacetEvent):void
+			function onTimeReached(event:TemporalFacetEvent):void
 			{
-				positionReachedCount++;
+				timeReachedCount++;
 				
 				var newEvent:TemporalFacetEvent = event.clone() as TemporalFacetEvent;
 				assertNotNull(newEvent);
@@ -204,16 +204,16 @@ package org.osmf.metadata
 				var playheadPosition:Number = timeTrait.currentTime;
 				assertTrue((playheadPosition >= (timeValue - TOLERANCE)) && (playheadPosition <= (timeValue + TOLERANCE)));
 				
-				if (testPause && (positionReachedCount == (facet.numValues/2)))
+				if (testPause && (timeReachedCount == (facet.numValues/2)))
 				{
 					playTrait.pause();
 					playTrait.play();
 				}
 								
-				// This ensures we got all the "position reached" events
-				if (positionReachedCount == facet.numValues)
+				// This ensures we got all the "time reached" events
+				if (timeReachedCount == facet.numValues)
 				{
-					facet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
+					facet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onTimeReached);
 					playTrait.pause();
 					
 					var seekTrait:SeekTrait = videoElement.getTrait(MediaTraitType.SEEK) as SeekTrait;

@@ -22,7 +22,13 @@
 package org.osmf.metadata
 {
 	/**
-	 * Base class for temporal metadata.
+	 * The FacetKey used by the TemporalFacet.  A TemporalFacetKey
+	 * holds a time property and an optional duration.  When
+	 * a MediaElement plays back, the TemporalFacetKey will trigger
+	 * an event when the MediaElement's currentTime matches the
+	 * time property of the TemporalFacetKey.  If the key
+	 * also holds a duration, a second event will be fired when the
+	 * MediaElement's currentTime reaches that offset.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

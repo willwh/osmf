@@ -30,7 +30,7 @@ package org.osmf.metadata
 	import org.osmf.utils.OSMFStrings;
 		 
      /**
-	 * Signals that all of the Facets's values have changed.
+	 * Signals that a new value has been added to a Facet.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_ADD
 	 *  
@@ -42,7 +42,7 @@ package org.osmf.metadata
      [Event(name='facetValueAdd', type='org.osmf.events.FacetValueEvent')]
 	
      /**
-	 * Signals that all of the Facets's values have changed.
+	 * Signals that a value has been removed from a Facet.
 	 * 
 	 * @eventType org.osmf.events.FacetEvent.VALUE_REMOVE
 	 *  
@@ -54,7 +54,7 @@ package org.osmf.metadata
      [Event(name='facetValueRemove', type='org.osmf.events.FacetEvent')]
 	
      /**
-	 * Signals that all of the Facets's values have changed.
+	 * Signals that a value within a Facet has changed.
 	 * 
 	 * @eventType org.osmf.events.FacetValueChangeEvent.VALUE_CHANGE
 	 *  

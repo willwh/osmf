@@ -41,21 +41,25 @@ package org.osmf.metadata
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Dispatched when the state of the LoadTrait has changed.
+	 * Dispatched when the currentTime property of the MediaElement associated
+	 * with this TemporalFacet has reached the time value of one of the
+	 * TemporalFacetKeys in this TemporalFacet.
 	 *
-	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
+	 * @eventType org.osmf.metadata.TemporalFacetEvent.TIME_REACHED
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event (name="positionReached", type="org.osmf.metadata.TemporalFacetEvent")]
+	[Event (name="timeReached", type="org.osmf.metadata.TemporalFacetEvent")]
 
 	/**
-	 * Dispatched when the duration has been reach.
+	 * Dispatched when the currentTime property of the MediaElement associated
+	 * with this TemporalFacet has reached the duration offset of one of the
+	 * TemporalFacetKeys in this TemporalFacet.
 	 *
-	 * @eventType org.osmf.events.LoadEvent.LOAD_STATE_CHANGE
+	 * @eventType org.osmf.metadata.TemporalFacetEvent.DURATION_REACHED
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -263,6 +267,9 @@ package org.osmf.metadata
 			return _enabled;
 		}
 		
+		/**
+		 * @private
+		 **/ 
 		public function set enabled(value:Boolean):void 
 		{
 			_enabled = value;
@@ -323,7 +330,7 @@ package org.osmf.metadata
 		
 		/**
 		 * The interval timer callback. Checks for temporal metadata 
-		 * around the current TimeTrait.position and dispatches a TemporalFacetEvent
+		 * around the current TimeTrait.currentTime and dispatches a TemporalFacetEvent
 		 * if found. 
 		 *  
 		 *  @langversion 3.0
@@ -474,7 +481,7 @@ package org.osmf.metadata
 		private function dispatchTemporalEvents(index:int):void
 		{
 			var valueObj:TemporalFacetKey = temporalValueCollection[index];
-			dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, valueObj));
+			dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.TIME_REACHED, valueObj));
 			
 			if (valueObj.duration > 0)
 			{
@@ -652,7 +659,7 @@ package org.osmf.metadata
 		private static const CHECK_INTERVAL:Number = 100;	// The default interval (in milliseconds) the 
 															// class will check for temporal metadata
 		private static const TOLERANCE:Number = 0.25;	// A value must be within this tolerence to trigger
-														//	a position reached event.				
+														//	a timeReached event.				
 		private var temporalValueCollection:Vector.<TemporalFacetKey>;
 		private var media:MediaElement;
 		private var timeTrait:TimeTrait;

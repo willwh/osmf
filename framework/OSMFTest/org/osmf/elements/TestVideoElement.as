@@ -189,11 +189,11 @@ package org.osmf.elements
 				if (event.facet is TemporalFacet)
 				{
 					videoElement.metadata.removeEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
-					event.facet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onPositionReached);
+					event.facet.addEventListener(TemporalFacetEvent.TIME_REACHED, onTimeReached);
 				}
 			}
 			
-			function onPositionReached(event:TemporalFacetEvent):void
+			function onTimeReached(event:TemporalFacetEvent):void
 			{
 				if (testCuePoints)
 				{

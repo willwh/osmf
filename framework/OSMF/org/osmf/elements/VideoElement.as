@@ -487,7 +487,7 @@ package org.osmf.elements
      		}
 
 			var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(info.type), info.time, info.name, info.parameters);
-			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.POSITION_REACHED, cuePoint));     		
+			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.TIME_REACHED, cuePoint));     		
      	}     	
      	     	
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.

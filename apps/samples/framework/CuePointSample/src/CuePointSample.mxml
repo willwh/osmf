@@ -263,7 +263,7 @@
 				if (temporalFacet)
 				{
 					trace(">>> Temporal facet added, namespace="+temporalFacet.namespaceURL);
-					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
+					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onCuePoint);
 					
 					// Show all the cue points found in the media (via an unsupported API).
 					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA)
@@ -284,7 +284,7 @@
    				if (temporalFacet)
    				{
    					trace(">>> Temporal facet removed, namespace="+temporalFacet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
+   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onCuePoint);
    				}
    			}
    									

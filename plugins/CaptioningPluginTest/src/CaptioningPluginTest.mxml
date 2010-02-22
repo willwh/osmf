@@ -300,7 +300,7 @@
 				{
 					debug(">>> Temporal facet added, namespace="+facet.namespaceURL);
 					temporalFacet = facet;
-					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onShowCaption);
+					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
 					temporalFacet.addEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
 				}
    			}
@@ -312,7 +312,7 @@
    				if (facet && temporalFacet)
    				{
    					debug(">>> Temporal facet removed, namespace="+facet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.POSITION_REACHED, onShowCaption);
+   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
    					temporalFacet.removeEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
    					temporalFacet = null;
    				}

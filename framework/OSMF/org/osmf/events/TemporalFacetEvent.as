@@ -37,15 +37,15 @@ package org.osmf.events
 	public class TemporalFacetEvent extends Event
 	{
 		/**
-		 * The TemporalFacetEvent.POSITION_REACHED constant defines the value of the
-		 * type property of the event object for a positionReached event. 
+		 * The TemporalFacetEvent.TIME_REACHED constant defines the value of the
+		 * type property of the event object for a timeReached event. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const POSITION_REACHED:String = "positionReached";
+		public static const TIME_REACHED:String = "timeReached";
 		
 		/**
 		 * The TemporalFacetEvent.DURATION_REACHED constant defines the value
