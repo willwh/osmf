@@ -147,7 +147,6 @@
 				}
 				else if (ignoreDynamicCuePoints && ns == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC)
 				{
-					(event.target as TemporalFacet).enable = false;
 					return;
 				}				
 
@@ -266,7 +265,7 @@
 					trace(">>> Temporal facet added, namespace="+temporalFacet.namespaceURL);
 					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
 					
-					// Show all the cue points found in the media
+					// Show all the cue points found in the media (via an unsupported API).
 					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC)
 					{
 						this._cuePointsCollection = new ArrayCollection();
@@ -312,7 +311,7 @@
 				}						
 			
 				var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, Number(tiCuePointTime.text), tiCuePointName.text, null);
-				_temporalFacet.addValue(cuePoint);
+				_temporalFacet.addValue(cuePoint, cuePoint);
 				
 				updateInternalCollection(cuePoint);
 				

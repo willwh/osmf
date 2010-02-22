@@ -26,7 +26,7 @@ package org.osmf.smil
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.plugin.PluginInfo;
@@ -59,7 +59,7 @@ package org.osmf.smil
 		override public function initializePlugin(metadata:Metadata):void
 		{
 			// We'll use the player-supplied MediaFactory for creating all MediaElements.
-			var pluginFacet:KeyValueFacet = metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS) as KeyValueFacet;
+			var pluginFacet:Facet = metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
 			if (pluginFacet != null)
 			{
 				mediaFactory = pluginFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY) as MediaFactory;

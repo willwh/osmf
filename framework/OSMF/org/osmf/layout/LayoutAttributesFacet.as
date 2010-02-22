@@ -137,6 +137,8 @@ package org.osmf.layout
 		
 		public function LayoutAttributesFacet()
 		{
+			super(MetadataNamespaces.LAYOUT_ATTRIBUTES);
+			
 			_verticalAlign = null;
 			_horizontalAlign = null;
 			_scaleMode = null;
@@ -147,14 +149,6 @@ package org.osmf.layout
 		
 		// Facet
 		//
-		
-		/**
-		 * @private
-		 */
-		override public function get namespaceURL():String
-		{
-			return MetadataNamespaces.LAYOUT_ATTRIBUTES;
-		}
 		
 		/**
 		 * @private

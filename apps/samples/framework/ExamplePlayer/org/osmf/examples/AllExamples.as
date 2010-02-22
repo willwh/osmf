@@ -50,7 +50,7 @@ package org.osmf.examples
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.DynamicStreamingItem;
@@ -722,10 +722,10 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		var resource:URLResource = new URLResource(REMOTE_STREAM);
-							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 25);
-							resource.metadata.addFacet(kvFacet);
+							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+							facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 25);
+							resource.metadata.addFacet(facet);
 				  	   		return new VideoElement(resource);
 				  	   	}
 				  	)
@@ -742,26 +742,26 @@ package org.osmf.examples
 							var serialElement:SerialElement = new SerialElement();
 
 				  	   		var resource:URLResource = new URLResource(REMOTE_STREAM);
-							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
-							resource.metadata.addFacet(kvFacet);
+							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+							resource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
 
 				  	   		resource = new URLResource(REMOTE_STREAM);
-							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 15);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 22);
-							resource.metadata.addFacet(kvFacet);
+							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 15);
+							facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 22);
+							resource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
 
 				  	   		resource = new URLResource(REMOTE_STREAM);
-							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 22);
-							resource.metadata.addFacet(kvFacet);
+							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 22);
+							resource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 				  	   		
 							return serialElement; 
@@ -784,9 +784,9 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 10);
-							dsResource.metadata.addFacet(kvFacet);
+							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 10);
+							dsResource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
@@ -796,10 +796,10 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 150);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 172);
-							dsResource.metadata.addFacet(kvFacet);
+							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 150);
+							facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 172);
+							dsResource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
@@ -809,9 +809,9 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-							kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 640);
-							dsResource.metadata.addFacet(kvFacet);
+							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+							facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 640);
+							dsResource.metadata.addFacet(facet);
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 				  	   		
 							return new TraceListenerProxyElement(serialElement); 

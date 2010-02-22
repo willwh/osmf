@@ -29,7 +29,7 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.IMetadataProvider;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -53,7 +53,7 @@ package
 				// We use the NS_CONTROL_BAR_TARGET namespaced metadata facet in order
 				// to find out if the instantiated element is the element that our
 				// control bar should control:
-				var targetFacet:KeyValueFacet = getTargetFacet(target);
+				var targetFacet:Facet = getTargetFacet(target);
 				if (targetFacet)
 				{
 					if 	(	targetFacet.getValue(ID) != null
@@ -79,8 +79,7 @@ package
 			if (value != null)
 			{
 				settings
-					= value.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS)
-					as KeyValueFacet;
+					= value.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS);
 					
 				processTarget();
 			}
@@ -112,15 +111,14 @@ package
 		// Internals
 		//
 		
-		private function getTargetFacet(target:IMetadataProvider):KeyValueFacet
+		private function getTargetFacet(target:IMetadataProvider):Facet
 		{
-			var targetFacet:KeyValueFacet;
+			var targetFacet:Facet;
 			
 			if (target)
 			{
 				targetFacet	
-					= target.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_TARGET)
-					as KeyValueFacet;
+					= target.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_TARGET);
 			}
 			
 			return targetFacet;
@@ -167,7 +165,7 @@ package
 			widget.setPosition(1, 0);
 		}
 		
-		private var settings:KeyValueFacet
+		private var settings:Facet;
 		
 		private var target:MediaElement;
 		private var controlBar:ControlBarBase;

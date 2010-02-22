@@ -44,7 +44,7 @@ package org.osmf.metadata
 			assertEquals(1,callbackCount);
 			assertNull(callbackArgument);
 			
-			var facet1:KeyValueFacet = new KeyValueFacet(facet1NS);
+			var facet1:Facet = new Facet(facet1NS);
 			metaData.addFacet(facet1);
 			
 			assertEquals(2, callbackCount);
@@ -55,7 +55,7 @@ package org.osmf.metadata
 			assertEquals(3, callbackCount);
 			assertNull(callbackArgument);
 			
-			var facet2:KeyValueFacet = new KeyValueFacet(facet2NS);
+			var facet2:Facet = new Facet(facet2NS);
 			metaData.addFacet(facet2);
 			
 			assertEquals(3, callbackCount);
@@ -97,7 +97,7 @@ package org.osmf.metadata
 			assertEquals(1,callbackCount);
 			assertNull(callbackArgument);
 			
-			var facet1:KeyValueFacet = new KeyValueFacet(facet1NS);
+			var facet1:Facet = new Facet(facet1NS);
 			metaData.addFacet(facet1);
 			
 			assertEquals(2, callbackCount);
@@ -106,7 +106,7 @@ package org.osmf.metadata
 			
 			assertEquals(3, callbackCount);
 			
-			var facet2:KeyValueFacet = new KeyValueFacet(facet2NS);
+			var facet2:Facet = new Facet(facet2NS);
 			metaData.addFacet(facet2);
 			
 			assertEquals(3, callbackCount);

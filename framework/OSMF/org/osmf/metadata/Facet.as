@@ -21,7 +21,13 @@
 *****************************************************/
 package org.osmf.metadata
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.Dictionary;
+	
+	import org.osmf.events.FacetValueChangeEvent;
+	import org.osmf.events.FacetValueEvent;
+	import org.osmf.utils.OSMFStrings;
 		 
      /**
 	 * Signals that all of the Facets's values have changed.
@@ -75,20 +81,29 @@ package org.osmf.metadata
 	public class Facet extends EventDispatcher
 	{		
 		/**
-		 * Constructs a new facet with the specified namespace url.
+		 * Constructor.
+		 * 
+		 * @param namespaceURL The namespace for this facet.
+		 * 
+		 * @throws ArgumentError If namespaceURL is null or the empty string. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function Facet(namespaceURL:String)
-		{
+		public function Facet(namespaceURL:String = null)		
+		{						
 			_namespaceURL = namespaceURL;
+			
+			if (namespaceURL == null || namespaceURL.length == 0)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
 		}
 		
 		/**
-		 * The namespace that corresponds to the schema for this metadata.
+		 * The namespace for this facet.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -101,7 +116,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Method returning the value that belongs to the passed key.
+		 * Returns the value associate with a FacetKey.
 		 * 
 		 * Returns 'undefined' if the facet fails to resolve the key.
 		 *  
@@ -113,9 +128,116 @@ package org.osmf.metadata
 
 		public function getValue(key:FacetKey):*
 		{
-			return null;
+			if (key != null && data != null)
+			{
+				return data[key.key];
+			}			
 		}
 		
+		/**
+		 * Stores the specified value in this Facet, using the specified
+		 * FacetKey as the key.  The FacetKey can subsequently be used to
+		 * retrieve the value.  If the FacetKey's key property is equal to
+		 * the key of another object already in the Facet this will overwrite
+		 * the association with the new value.
+		 * 
+		 * @param key The FacetKey to associate the value with.
+		 * @param value The value to add to the Facet.  
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function addValue(key:FacetKey, value:Object):void
+		{
+			if (data == null)
+			{
+				data = new Dictionary();
+			}
+			
+			var oldValue:* = data[key.key];			
+			data[key.key] = value;
+			
+			if (oldValue != value)
+			{				
+				var event:Event
+					= oldValue === undefined
+						? new FacetValueEvent
+							( FacetValueEvent.VALUE_ADD
+							, false
+							, false
+							, key
+							, value
+							)
+						: new FacetValueChangeEvent
+							( FacetValueChangeEvent.VALUE_CHANGE
+							, false
+							, false
+							, key
+							, value
+							, oldValue
+							)
+						;
+						
+				dispatchEvent(event);
+			}
+		}
+		
+		/**
+		 * Removes the value associated with the specified FacetKey from this
+		 * Facet. Returns undefined if there is no value associated with the
+		 * FacetKey in this facet.
+		 * 
+		 * @param key The FacetKey associated with the value to be removed.
+		 * @returns The removed item, null if no such item exists.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function removeValue(key:FacetKey):*
+		{
+			var value:* = data[key.key];
+			if (value !== undefined)
+			{
+				delete data[key.key];
+								
+				dispatchEvent
+					( new FacetValueEvent
+						( FacetValueEvent.VALUE_REMOVE
+						, false
+						, false
+						, key
+						, value
+						)
+					);
+			}
+			return value;
+		}
+		
+		/**
+		 * All of the FacetKeys stored in this Facet.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function get keys():Vector.<FacetKey>
+		{
+			var allKeys:Vector.<FacetKey> = new Vector.<FacetKey>;
+			if (data != null)
+			{
+				for (var key:Object in data)
+				{
+					allKeys.push(new FacetKey(key));
+				}
+			}
+			return allKeys;
+		}
+
 		/**
 		 * @private
 		 * 
@@ -137,5 +259,6 @@ package org.osmf.metadata
 		}
 		
 		private var _namespaceURL:String;
+		private var data:Dictionary;
 	}
 }

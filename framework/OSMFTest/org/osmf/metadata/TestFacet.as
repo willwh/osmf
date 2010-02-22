@@ -30,7 +30,7 @@ package org.osmf.metadata
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.events.FacetValueEvent;
 
-	public class TestKeyValueFacet extends TestCase
+	public class TestFacet extends TestCase
 	{
 		private static const testData:String = "sdlkjlkj432423423$@#$@#$#@$234";
 		private static const testKey:FacetKey = new FacetKey("342dsds4rknfn34$%^%^tef44");
@@ -40,28 +40,48 @@ package org.osmf.metadata
 			
 		public function testConstructor():void
 		{				
-			var keyValueMeta:KeyValueFacet = new KeyValueFacet("");
+			var facet:Facet = new Facet("a");
 									
-			assertEquals(undefined, keyValueMeta.getValue(testKey));
+			assertEquals(undefined, facet.getValue(testKey));
 			
-			//Ensure it works will a null URL, KeyValueMetadata's ctor should make a dictionary if param is null or not present.
-			keyValueMeta = new KeyValueFacet("");
+			// Ensure it works with a null URL, Facet's ctor should make a dictionary if param is null or not present.
+			facet = new Facet("b");
 			
-			keyValueMeta.addValue(testKey,testData);
-			var gottenValue:* = keyValueMeta.getValue(testKey);
+			facet.addValue(testKey, testData);
+			var gottenValue:* = facet.getValue(testKey);
 			assertEquals(testData, gottenValue);
+			
+			try
+			{
+				new Facet(null);
+				
+				fail();
+			}
+			catch (error:ArgumentError)
+			{
+			}
+
+			try
+			{
+				new Facet("");
+				
+				fail();
+			}
+			catch (error:ArgumentError)
+			{
+			}
 		}
 		
 		public function testNamespace():void
 		{
 			var ns:String = "http://www.example.com"; 
-			var keyValueMeta:KeyValueFacet = new KeyValueFacet(ns);
+			var keyValueMeta:Facet = new Facet(ns);
 			assertEquals(ns, keyValueMeta.namespaceURL);			
 		}
 		
 		public function testDataFunc():void
 		{
-			var keyValueMeta:KeyValueFacet = new KeyValueFacet();			
+			var keyValueMeta:Facet = new Facet("a");			
 			
 			keyValueMeta.addValue(testKey, testData);
 			assertEquals(testData, keyValueMeta.getValue(testKey));				
@@ -88,7 +108,7 @@ package org.osmf.metadata
 			{
 				var testIndex:int = testValues.indexOf(value.key);
 			
-				if(testValues.indexOf(value.key) >= 0)
+				if (testValues.indexOf(value.key) >= 0)
 				{
 					testValues.splice(testIndex,1);
 				}
@@ -122,18 +142,18 @@ package org.osmf.metadata
 		
 		private function testEvents():void
 		{			
-			var kv:KeyValueFacet = new KeyValueFacet("http:/tes.com/");
-			kv.addEventListener(FacetValueEvent.VALUE_ADD, onAdd);
-			kv.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, onChange);
-			kv.addEventListener(FacetValueEvent.VALUE_REMOVE, onRemove);
-			kv.addEventListener(FacetValueEvent.VALUE_ADD, eventCatcher);
-			kv.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, eventCatcher);
-			kv.addEventListener(FacetValueEvent.VALUE_REMOVE, eventCatcher);
+			var facet:Facet = new Facet("http:/tes.com/");
+			facet.addEventListener(FacetValueEvent.VALUE_ADD, onAdd);
+			facet.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, onChange);
+			facet.addEventListener(FacetValueEvent.VALUE_REMOVE, onRemove);
+			facet.addEventListener(FacetValueEvent.VALUE_ADD, eventCatcher);
+			facet.addEventListener(FacetValueChangeEvent.VALUE_CHANGE, eventCatcher);
+			facet.addEventListener(FacetValueEvent.VALUE_REMOVE, eventCatcher);
 			
-			kv.addValue(new FacetKey("key1"), "value1");
-			kv.addValue(new FacetKey("key1"), "valueChange");
-			kv.removeValue(new FacetKey("key1"));		
-			assertEquals(undefined, kv.removeValue(new FacetKey("key1")));						
+			facet.addValue(new FacetKey("key1"), "value1");
+			facet.addValue(new FacetKey("key1"), "valueChange");
+			facet.removeValue(new FacetKey("key1"));		
+			assertEquals(undefined, facet.removeValue(new FacetKey("key1")));						
 						
 			function onAdd(event:FacetValueEvent):void
 			{
@@ -158,9 +178,5 @@ package org.osmf.metadata
 			assertEquals(1, removesCaught);
 			assertEquals(1, changesCaught);							
 		}
-		
-
-
-		
 	}
 }

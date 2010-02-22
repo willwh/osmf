@@ -27,7 +27,7 @@ package org.osmf.net
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.NullResource;
@@ -157,33 +157,33 @@ package org.osmf.net
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 					   
 			resource = new StreamingURLResource("rtmp://example.com");
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			resource.metadata.addFacet(kvFacet);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			resource = new StreamingURLResource("rtmp://example.com");
-			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
-			resource.metadata.addFacet(kvFacet);
+			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == 10 &&
 					   result["len"] == 5);
 
 			resource = new StreamingURLResource("rtmp://example.com");
-			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
-			resource.metadata.addFacet(kvFacet);
+			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == 10 &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			resource = new StreamingURLResource("rtmp://example.com");
-			kvFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
-			resource.metadata.addFacet(kvFacet);
+			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == 15);

@@ -26,7 +26,7 @@ package org.osmf.net.dvr
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.StreamType;
@@ -87,9 +87,9 @@ package org.osmf.net.dvr
 			if (streamingURLResource != null && connection != null)
 			{
 				// See if a DVRCast facet is available on the resource's metadata:
-				var dvrcastFacet:KeyValueFacet
+				var dvrcastFacet:Facet
 					=	resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
-					as	KeyValueFacet;
+					as	Facet;
 					
 	  			if (dvrcastFacet != null)
 	  			{

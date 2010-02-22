@@ -65,11 +65,13 @@ package org.osmf.metadata
 	[Event (name="durationReached", type="org.osmf.metadata.TemporalFacetEvent")]
 
 	/**
-	 * The TemporalFacet class manages temporal metadata of the type
-	 * <code>TemporalFacetKey</code> associated with a <code>MediaElement</code> 
-	 * and dispatches events of type <code>TemporalFacetEvent</code> when 
-	 * the TimeTrait position of the MediaElement matches any of the
-	 * time values in it's collection of <code>TemporalIdentifer</code> objects. 
+	 * The TemporalFacet class manages temporal metadata associated with a
+	 * <code>MediaElement</code>.  The TemporalFacet uses a TemporalFacetKey
+	 * to represent both keys and values (i.e. a TemporalFacetKey will be stored
+	 * as both key and value).  A TemporalFacet dispatches events of type
+	 * <code>TemporalFacetEvent</code> when the currentTime property (via the
+	 * TimeTrait) of the MediaElement matches any of the time values in its
+	 * collection of <code>TemporalFacetKey</code> objects. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -82,64 +84,49 @@ package org.osmf.metadata
 		 * Constructor.
 		 * 
 		 * @param namespaceURL The namespace of the facet.
-		 * @param owner The media element this facet applies to.
+		 * @param media The media element this facet applies to.
 		 * 
-		 * @throws ArgumentError If owner argument is null.
+		 * @throws ArgumentError If media argument is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TemporalFacet(namespaceURL:String, owner:MediaElement)
+		public function TemporalFacet(namespaceURL:String, media:MediaElement)
 		{
 			super(namespaceURL);
 
-			if (owner == null)
+			if (media == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 
-			this.owner = owner;	
-			enabled = true;
+			this.media = media;	
+			_enabled = true;
 			
 			intervalTimer = new Timer(CHECK_INTERVAL);
 			intervalTimer.addEventListener(TimerEvent.TIMER, onIntervalTimer);
 			
-			// Check the owner media element for traits, if they are null here
-			// 	that's okay we'll manage them in the event handlers.
-			timeTrait = owner.getTrait(MediaTraitType.TIME) as TimeTrait;
+			// Check the media element for traits, if they are null here
+			// that's okay we'll manage them in the event handlers.
+			timeTrait = media.getTrait(MediaTraitType.TIME) as TimeTrait;
 			
-			seekTrait = owner.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			seekTrait = media.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			setupTraitEventListener(MediaTraitType.SEEK);
 			
-			playTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			playTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			setupTraitEventListener(MediaTraitType.PLAY);
 			
-			owner.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-			owner.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-		}
-		
-		/**
-		 * Enables/disables this facet (enabled by default). If enabled, the class
-		 * will dispatch events of type TemporalFacetEvent. Setting
-		 * this property to <code>false</code> will cause the class to stop
-		 * dispatching events.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function set enable(value:Boolean):void 
-		{
-			enabled = value;
-			reset(value);
+			media.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			media.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 		}
 		
 		/**
 		 * Adds temporal metadata to this facet.
 		 * 
+		 * @param key A <code>TemporalFacetKey</code> instance to
+		 * be added to the class' internal collection.
 		 * @param value A <code>TemporalFacetKey</code> instance to
 		 * be added to the class' internal collection.
 		 * 
@@ -151,9 +138,11 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function addValue(value:TemporalFacetKey):void
+		override public function addValue(key:FacetKey, value:Object):void
 		{
-			if (value == null || value.time < 0)
+			var tfKey:TemporalFacetKey = key as TemporalFacetKey;
+			var tfValue:TemporalFacetKey = value as TemporalFacetKey
+			if (tfKey == null || tfKey.time < 0 || tfValue == null || tfValue.time < 0 || tfKey.time != tfValue.time)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
@@ -161,12 +150,12 @@ package org.osmf.metadata
 			if (temporalValueCollection == null)
 			{
 				temporalValueCollection = new Vector.<TemporalFacetKey>();
-				temporalValueCollection.push(value);
+				temporalValueCollection.push(tfKey);
 			}
 			else
 			{
 				// Find the index where we should insert this value
-				var index:int = findTemporalMetadata(0, temporalValueCollection.length - 1, value.time);
+				var index:int = findTemporalMetadata(0, temporalValueCollection.length - 1, tfKey.time);
 				
 				// A negative index value means it doesn't exist in the array and the absolute value is the
 				// index where it should be inserted.  A positive index means a value exists and in this
@@ -174,21 +163,21 @@ package org.osmf.metadata
 				if (index < 0) 
 				{
 					index *= -1;
-					temporalValueCollection.splice(index, 0, value);
+					temporalValueCollection.splice(index, 0, tfValue);
 				}
 				
 				// Make sure we don't insert a dup at index 0
-				else if ((index == 0) && (value.time != temporalValueCollection[0].time)) 
+				else if ((index == 0) && (tfKey.time != temporalValueCollection[0].time)) 
 				{
-					temporalValueCollection.splice(index, 0, value);
+					temporalValueCollection.splice(index, 0, tfValue);
 				}
 				else 
 				{
-					temporalValueCollection[index] = value;
+					temporalValueCollection[index] = tfValue;
 				}
 			}
 			
-			enable = true;
+			enabled = true;
 		}
 		
 		/**
@@ -196,7 +185,7 @@ package org.osmf.metadata
 		 */
 		override public function getValue(key:FacetKey):*
 		{
-			if (key is FacetKey)
+			if (key is TemporalFacetKey)
 			{
 				for each (var temporalMetadata:TemporalFacetKey in temporalValueCollection)
 				{
@@ -211,7 +200,9 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * The number of TemporalIdentifer values in this class' collection.
+		 * @private
+		 * 
+		 * The number of TemporalFacetKey values in this class' collection.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -224,6 +215,8 @@ package org.osmf.metadata
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Gets the TemporalFacetKey item at the specified index in this
 		 * class' internal collection. Note this collection is sorted by time.
 		 *  
@@ -248,6 +241,30 @@ package org.osmf.metadata
 			{
 				return null;
 			}
+		}
+		
+		/**
+		 * @private
+		 * 
+		 * Enables/disables this facet (enabled by default). If enabled, the class
+		 * will dispatch events of type TemporalFacetEvent. Setting
+		 * this property to <code>false</code> will cause the class to stop
+		 * dispatching events.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get enabled():Boolean
+		{
+			return _enabled;
+		}
+		
+		public function set enabled(value:Boolean):void 
+		{
+			_enabled = value;
+			reset(value);
 		}
 		
 		/**
@@ -505,8 +522,11 @@ package org.osmf.metadata
 			}
 			
 			// Get the next time value after this one so we can decide to adjust the timer interval
-			var nextTime:Number = temporalValueCollection[((index + 1) < temporalValueCollection.length) ? (index + 1) : 
-																				(temporalValueCollection.length - 1)].time;
+			var nextTime:Number =
+					   temporalValueCollection[((index + 1) < temporalValueCollection.length)
+					? (index + 1)
+					: (temporalValueCollection.length - 1)].time;
+					
 			var result:Boolean = false;																				
 		
 			if ( (temporalValueCollection[index].time >= (now - TOLERANCE)) && 
@@ -564,7 +584,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Called when traits are added to the owner media element.
+		 * Called when traits are added to the media element.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -576,14 +596,14 @@ package org.osmf.metadata
 			switch (event.traitType)
 			{
 				case MediaTraitType.TIME:
-					timeTrait = owner.getTrait(MediaTraitType.TIME) as TimeTrait;
+					timeTrait = media.getTrait(MediaTraitType.TIME) as TimeTrait;
 					startTimer();
 					break;
 				case MediaTraitType.SEEK:
-					seekTrait = owner.getTrait(MediaTraitType.SEEK) as SeekTrait;
+					seekTrait = media.getTrait(MediaTraitType.SEEK) as SeekTrait;
 					break;
 				case MediaTraitType.PLAY:
-					playTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					playTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					break;
 			}
 			
@@ -591,7 +611,7 @@ package org.osmf.metadata
 		}
 		
 		/**
-		 * Called when traits are removed from the owner media element.
+		 * Called when traits are removed from the media element.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -609,11 +629,11 @@ package org.osmf.metadata
 					timeTrait = null;
 					// This is a work around for FM-171. Traits are added and removed for
 					// each child in a composition element when transitioning between child
-					// elements. So don't stop the timer if the owner is a composition.
+					// elements. So don't stop the timer if the MediaElement is a composition.
 					//
 					// $$$todo: remove this 'if' statement and the import for
 					// 'org.osmf.composition.CompositeElement' when FM-171 is fixed.
-					if (!(owner is CompositeElement))
+					if (!(media is CompositeElement))
 					{
 						startTimer(false);
 					}
@@ -632,14 +652,14 @@ package org.osmf.metadata
 		private static const TOLERANCE:Number = 0.25;	// A value must be within this tolerence to trigger
 														//	a position reached event.				
 		private var temporalValueCollection:Vector.<TemporalFacetKey>;
-		private var owner:MediaElement;
+		private var media:MediaElement;
 		private var timeTrait:TimeTrait;
 		private var seekTrait:SeekTrait;
 		private var playTrait:PlayTrait;
 		private var lastFiredTemporalMetadataIndex:int;
 		private var intervalTimer:Timer;
 		private var restartTimer:Boolean;
-		private var enabled:Boolean;
+		private var _enabled:Boolean;
 		private var durationTimers:Dictionary;
 	}
 }

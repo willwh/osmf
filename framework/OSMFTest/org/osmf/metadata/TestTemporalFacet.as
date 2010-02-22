@@ -92,7 +92,7 @@ package org.osmf.metadata
 			
 			for each(var value:TemporalFacetKey in _testValues)
 			{
-				facet.addValue(value);
+				facet.addValue(value, value);
 			}
 			
 			// Values should be sorted by time when we get them back
@@ -109,7 +109,7 @@ package org.osmf.metadata
 			// Test invalid values
 			try
 			{
-				facet.addValue(null);
+				facet.addValue(null, null);
 				fail();
 			}
 			catch(err:ArgumentError)
@@ -118,7 +118,7 @@ package org.osmf.metadata
 			
 			try
 			{
-				facet.addValue(new TemporalFacetKey(-100, -10));
+				facet.addValue(new TemporalFacetKey(-100, -10), new TemporalFacetKey(-100, -10));
 				fail();
 			}
 			catch(err:ArgumentError)
@@ -130,7 +130,7 @@ package org.osmf.metadata
 		{
 			var facet:TemporalFacet = new TemporalFacet(NAMESPACE, new VideoElement());
 
-			facet.addValue(new TemporalFacetKey(500, 5));
+			facet.addValue(new TemporalFacetKey(500, 5), new TemporalFacetKey(500, 5));
 			
 			assertNotNull(facet.getValue(new TemporalFacetKey(500, 5)));
 			assertNull(facet.getValue(null));
@@ -164,7 +164,7 @@ package org.osmf.metadata
 
 			for each(var value:TemporalFacetKey in _testValues)
 			{
-				facet.addValue(value);
+				facet.addValue(value, value);
 			}
 			
 			var positionReachedCount:int = 0;
@@ -219,7 +219,7 @@ package org.osmf.metadata
 					var seekTrait:SeekTrait = videoElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
 					seekTrait.seek(5);
 	
-					facet.enable = false;
+					facet.enabled = false;
 					if (eventDispatcher != null)
 					{
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -236,7 +236,7 @@ package org.osmf.metadata
 
 			for each(var value:TemporalFacetKey in _testValues)
 			{
-				facet.addValue(value);
+				facet.addValue(value, value);
 			}
 						
 			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;

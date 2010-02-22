@@ -26,7 +26,7 @@ package org.osmf.elements
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
@@ -39,7 +39,7 @@ package org.osmf.elements
 			var resource:URLResource = new URLResource("http://example.com/blah");
 			var loader:LoaderBase = new LoaderBase();
 			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
-			var testFacet:KeyValueFacet = new KeyValueFacet("http://adobe.com/");
+			var testFacet:Facet = new Facet("http://adobe.com/");
 			elem.metadata.addFacet(testFacet);
 						
 			var wrapped:MediaElement = new MediaElement();

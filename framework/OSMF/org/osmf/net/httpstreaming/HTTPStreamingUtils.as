@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
@@ -68,7 +68,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public static function createHTTPStreamingMetadataFacet(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Facet
 		{
-			var facet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+			var facet:Facet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 			var bootstrap:BootstrapInfo = new BootstrapInfo();
 			if (abstUrl != null && abstUrl.length > 0)
 			{
@@ -91,8 +91,8 @@ package org.osmf.net.httpstreaming
 		 * HTTP streaming. The criteria is as follows:
 		 * 
 		 * 1. If the resource is of type URLResource
-		 * 2. If the resource has a KeyValueFacet under the namespace MetadataNamespaces.HTTP_STREAMING_METADATA
-		 * 3. If the KeyValueFacet contains a URL that points to the bootstrap information or if the KeyValueFacet
+		 * 2. If the resource has a Facet under the namespace MetadataNamespaces.HTTP_STREAMING_METADATA
+		 * 3. If the Facet contains a URL that points to the bootstrap information or if the Facet
 		 *    contains the bytes of the bootstrap information. Either is fine but cannot be absent at the same time.
 		 * 
 		 * If all three criteria are satisfied, the Facet will be returned. Otherwise, null.
@@ -124,7 +124,7 @@ package org.osmf.net.httpstreaming
 			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null)
 			{
-				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet;
+				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as Facet;
 			}
 			
 			return facet;
@@ -160,10 +160,10 @@ package org.osmf.net.httpstreaming
 		{
 			var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = new Vector.<HTTPStreamingF4FStreamInfo>();
 			
-			var drmFacet:KeyValueFacet 
-				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
-			var metadataFacet:KeyValueFacet
-				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet;
+			var drmFacet:Facet 
+				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as Facet;
+			var metadataFacet:Facet
+				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as Facet;
 			var additionalHeader:ByteArray = null;
 			var bootstrap:BootstrapInfo = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;

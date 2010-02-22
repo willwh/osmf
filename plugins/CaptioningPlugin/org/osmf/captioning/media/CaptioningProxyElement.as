@@ -24,6 +24,7 @@ package org.osmf.captioning.media
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.captioning.loader.CaptioningLoadTrait;
 	import org.osmf.captioning.loader.CaptioningLoader;
+	import org.osmf.captioning.model.Caption;
 	import org.osmf.captioning.model.CaptioningDocument;
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
@@ -145,13 +146,14 @@ package org.osmf.captioning.media
 				var document:CaptioningDocument = loadTrait.document;
 				var mediaElement:MediaElement = super.proxiedElement;
 				
-				// Create a new TemporalFacet, add it to the metadata for the mediaelement
+				// Create a new TemporalFacet, add it to the metadata for the media element
 				var temporalFacetDynamic:TemporalFacet = 
 						new TemporalFacet(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, super.proxiedElement);
 				
 				for (var i:int = 0; i < document.numCaptions; i++)
 				{
-					temporalFacetDynamic.addValue(document.getCaptionAt(i));
+					var caption:Caption = document.getCaptionAt(i);
+					temporalFacetDynamic.addValue(caption, caption);
 				}
 				
 				mediaElement.metadata.addFacet(temporalFacetDynamic);			

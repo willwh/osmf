@@ -32,7 +32,7 @@ package org.osmf.smil.media
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
@@ -104,10 +104,10 @@ package org.osmf.smil.media
 					if (!isNaN(smilVideoElement.clipBegin) && smilVideoElement.clipBegin > 0 &&
 					    !isNaN(smilVideoElement.clipEnd) && smilVideoElement.clipEnd > 0)
 					{
-						var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-						kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, smilVideoElement.clipBegin);
-						kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, smilVideoElement.clipEnd);
-						resource.metadata.addFacet(kvFacet);
+						var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+						facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, smilVideoElement.clipBegin);
+						facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, smilVideoElement.clipEnd);
+						resource.metadata.addFacet(facet);
 					}
 										
 					var duration:Number = (smilElement as SMILMediaElement).duration;

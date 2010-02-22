@@ -14,7 +14,7 @@ package org.osmf.test.mast.managers
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.*;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfoResource;
@@ -89,9 +89,9 @@ package org.osmf.test.mast.managers
 
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var kvFacet:KeyValueFacet = new KeyValueFacet("http://www.akamai.com/mast");
-			kvFacet.addValue(new FacetKey("url"), MAST_URL_TEST);
-			resource.metadata.addFacet(kvFacet);
+			var facet:Facet = new Facet("http://www.akamai.com/mast");
+			facet.addValue(new FacetKey("url"), MAST_URL_TEST);
+			resource.metadata.addFacet(facet);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 			

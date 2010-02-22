@@ -93,15 +93,12 @@ package org.osmf.layout
 		 */
 		public static const BOTTOM:FacetKey = new FacetKey("bottom");
 		
-		// Facet
-		//
-		
 		/**
-		 * @private
+		 * Constructor.
 		 */		
-		override public function get namespaceURL():String
+		public function PaddingLayoutFacet()
 		{
-			return MetadataNamespaces.PADDING_LAYOUT_PARAMETERS;
+			super(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS);
 		}
 		
 		override public function getValue(key:FacetKey):*

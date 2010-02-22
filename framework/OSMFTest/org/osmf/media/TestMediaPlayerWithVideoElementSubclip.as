@@ -21,7 +21,7 @@
 package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
@@ -81,10 +81,10 @@ package org.osmf.media
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
 			var resource:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
-			resource.metadata.addFacet(kvFacet);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
+			resource.metadata.addFacet(facet);
 			return resource;
 		}
 

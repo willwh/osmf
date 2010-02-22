@@ -93,15 +93,12 @@ package org.osmf.layout
 		 */
 		public static const BOTTOM:FacetKey = new FacetKey("bottom");
 		
-		// Facet
-		//
-		
 		/**
-		 * @private
-		 */
-		override public function get namespaceURL():String
+		 * Constructor.
+		 **/
+		public function AnchorLayoutFacet()
 		{
-			return MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS;
+			super(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS);
 		}
 		
 		/**
@@ -134,17 +131,7 @@ package org.osmf.layout
 				return undefined;
 			}
 		}
-		
-		/**
-		 * This facet does not merge.
-		 * 
-		 * @private
-		 */
-		public function merge(childFacet:Facet):Facet
-		{
-			return null;
-		}
-		
+				
 		// Public Interface
 		//
 		

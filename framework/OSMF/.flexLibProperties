@@ -150,7 +150,6 @@
     <classEntry path="org.osmf.metadata.FacetKey"/>
     <classEntry path="org.osmf.metadata.FacetSynthesizer"/>
     <classEntry path="org.osmf.metadata.IMetadataProvider"/>
-    <classEntry path="org.osmf.metadata.KeyValueFacet"/>
     <classEntry path="org.osmf.metadata.MediaType"/>
     <classEntry path="org.osmf.metadata.MediaTypeFacet"/>
     <classEntry path="org.osmf.metadata.MediaTypeUtil"/>

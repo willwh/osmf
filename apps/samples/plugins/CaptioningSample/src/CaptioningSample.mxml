@@ -41,7 +41,7 @@
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaElement;
-			import org.osmf.metadata.KeyValueFacet;
+			import org.osmf.metadata.Facet;
 			import org.osmf.media.URLResource;
 			import org.osmf.events.PluginManagerEvent;
 			import org.osmf.media.MediaResourceBase;
@@ -113,11 +113,11 @@
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
-				var kvFacet:KeyValueFacet = new KeyValueFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+				var facet:Facet = new Facet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 												
-				kvFacet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), 
+				facet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), 
 									CAPTION_URL);
-				resource.metadata.addFacet(kvFacet);
+				resource.metadata.addFacet(facet);
 
 				var netLoader:NetLoader = new NetLoader();
 
@@ -275,11 +275,11 @@
 					
 					// If you wanted a list of all the captions added, 
 					// this code shows how that is possible
-					for (var i:int=0; i < facet.numValues; i++)
-					{
-						var caption:Caption = temporalFacet.getValueAt(i) as Caption;
-						//trace("caption["+i+"].text="+caption.text);
-					}
+					//for (var i:int=0; i < facet.numValues; i++)
+					//{
+					//	var caption:Caption = temporalFacet.getValueAt(i) as Caption;
+					//	trace("caption["+i+"].text="+caption.text);
+					//}
 				}
    			}
    			
@@ -394,13 +394,6 @@
 			{
 				captioningEnabled = !captioningEnabled;
 				captionLabel.visible = captioningEnabled;
-				
-				// We can enable and disable the TemporalFacet which helps performance
-				// because when the TemporalFacet is disabled, it's timers are disabled.
-				if (temporalFacet)
-				{
-					temporalFacet.enable = captioningEnabled;
-				}
 				
 				var color:String = captioningEnabled ? "#00cc00" : "#cc0000";
 				ccBox.setStyle("borderColor", color);

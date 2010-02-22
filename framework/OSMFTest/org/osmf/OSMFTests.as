@@ -199,11 +199,11 @@ package org.osmf
 
 			addTestSuite(TestMetadata);
 			addTestSuite(TestFacetKey);
-			addTestSuite(TestMediaType);
-			addTestSuite(TestKeyValueFacet);
+			addTestSuite(TestFacet);
 			addTestSuite(TestFacetGroup);
-			addTestSuite(TestMediaTypeUtil);
 			addTestSuite(TestMetadataWatcher);
+			addTestSuite(TestMediaType);
+			addTestSuite(TestMediaTypeUtil);
 			addTestSuite(TestCompositeMetadata);
 			addTestSuite(TestTemporalFacet);
 

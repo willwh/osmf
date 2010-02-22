@@ -126,7 +126,7 @@ package org.osmf.elements.compositeClasses
 		public function testCompositeMetadataEvent():void
 		{
 			var child:Metadata = new Metadata();
-			var facet:Facet = new ObjectFacet("", "test");
+			var facet:Facet = new Facet("test");
 			var facetGroup:FacetGroup = new FacetGroup("");
 			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer("");
 			var e:CompositeMetadataEvent

@@ -27,7 +27,7 @@ package org.osmf.plugin
 	
 	import org.osmf.events.*;
 	import org.osmf.media.*;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.utils.*;
@@ -166,7 +166,7 @@ package org.osmf.plugin
 			assertNull(pluginInfo.pluginMetadata);
 			
 			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
-			resource.metadata.addFacet(new KeyValueFacet(metadataNS));
+			resource.metadata.addFacet(new Facet(metadataNS));
 			
 			pluginManager.loadPlugin(resource);
 			
@@ -185,7 +185,7 @@ package org.osmf.plugin
 			pluginManager.loadPlugin(resource);
 			
 			assertNotNull(pluginInfo.pluginMetadata);
-			var defaultFacet:KeyValueFacet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS) as KeyValueFacet;
+			var defaultFacet:Facet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
 			assertNotNull(defaultFacet);
 			var injectedFactory:MediaFactory = defaultFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY);
 			assertNotNull(injectedFactory);

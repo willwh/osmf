@@ -47,9 +47,9 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function LayoutFacet()
+		public function LayoutFacet(namespaceURL:String)
 		{
-			super(null);
+			super(namespaceURL);
 			
 			_synthesizer = new NullFacetSynthesizer(namespaceURL);
 		}

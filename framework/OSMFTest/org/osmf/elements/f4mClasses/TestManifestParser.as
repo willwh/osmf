@@ -27,9 +27,9 @@ package org.osmf.elements.f4mClasses
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
-	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
@@ -218,33 +218,32 @@ package org.osmf.elements.f4mClasses
 			var manifest:Manifest = parser.parse(test);
 			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);			
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 30);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);			
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 30);
 						
-			manifestResource.metadata.addFacet(kvFacet);
+			manifestResource.metadata.addFacet(facet);
 			
 			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
 			
 			assertTrue(resource is URLResource)
 			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url)
 			
-			var facet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
-			assertNotNull(facet);
+			var facet2:Facet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
+			assertNotNull(facet2);
 			
-			assertTrue(facet.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
+			assertTrue(facet2.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
 			
-			assertEquals(kvFacet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
+			assertEquals(facet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
 			
-			//Make sure we don't put on a HTTPStreaming bootstrap:
-			
-			var bootStrapFacet:KeyValueFacet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as KeyValueFacet ;
+			// Make sure we don't put on a HTTPStreaming bootstrap:
+			var bootStrapFacet:Facet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
 			assertNull(bootStrapFacet);					
 		}
 		
 		public function testResourceCreationSubClip():void
 		{
-			//MBR
+			// MBR
 			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
 								<id>myvideo</id>
 								<duration>253</duration>
@@ -259,20 +258,20 @@ package org.osmf.elements.f4mClasses
 			var manifest:Manifest = parser.parse(test);
 			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 50);			
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 80);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 50);			
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 80);
 						
-			manifestResource.metadata.addFacet(kvFacet);
+			manifestResource.metadata.addFacet(facet);
 			
 			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
 			
 			assertTrue(resource is DynamicStreamingResource)
 			
-			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
-			assertNotNull(facet);
+			var facet2:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
+			assertNotNull(facet2);
 						
-			assertEquals(kvFacet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
+			assertEquals(facet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
 						
 		}
 		
@@ -298,7 +297,7 @@ package org.osmf.elements.f4mClasses
 			assertEquals("medium", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[1]).streamName);
 			assertEquals("high", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[2]).streamName);
 			
-			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
+			var facet:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
 			assertNotNull(facet);
 			var keys:Vector.<FacetKey> = facet.keys;
 			assertEquals(6, keys.length);
@@ -339,7 +338,7 @@ package org.osmf.elements.f4mClasses
 			
 			assertTrue(resource is DynamicStreamingResource);
 
-			var facet:KeyValueFacet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet ;
+			var facet:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
 			assertNotNull(facet);
 			var keys:Vector.<FacetKey> = facet.keys;
 			assertEquals(6, keys.length);

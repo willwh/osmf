@@ -23,7 +23,7 @@ package org.osmf.examples.posterframe
 {
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.MediaTraitType;
@@ -39,10 +39,10 @@ package org.osmf.examples.posterframe
 		{
 			// Add metadata to our resource so that it's treated as a zero-length
 			// subclip.
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, posterFrameTime);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, posterFrameTime);
-			resource.metadata.addFacet(kvFacet);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, posterFrameTime);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, posterFrameTime);
+			resource.metadata.addFacet(facet);
 	
 			super(resource, loader);
 		}

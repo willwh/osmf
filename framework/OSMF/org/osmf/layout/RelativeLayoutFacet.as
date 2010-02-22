@@ -92,15 +92,12 @@ package org.osmf.layout
 		 */
 		public static const HEIGHT:FacetKey = new FacetKey("height");
 		
-		// Facet
-		//
-		
 		/**
-		 * @private
+		 * Constructor.
 		 */
-		override public function get namespaceURL():String
+		public function RelativeLayoutFacet()
 		{
-			return MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS;
+			super(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS);
 		}
 		
 		/**

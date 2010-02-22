@@ -22,7 +22,7 @@
 package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
@@ -100,10 +100,10 @@ package org.osmf.media
 			{
 				dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 			}
-			var kvFacet:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
-			kvFacet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
-			dsResource.metadata.addFacet(kvFacet);
+			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
+			dsResource.metadata.addFacet(facet);
 			return dsResource;
 		}
 

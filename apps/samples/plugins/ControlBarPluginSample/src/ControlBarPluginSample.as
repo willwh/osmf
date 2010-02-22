@@ -29,7 +29,7 @@ package
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.FacetKey;
 	import org.osmf.plugin.PluginInfoResource;
 	
@@ -97,8 +97,8 @@ package
 			// Construct a metadata facet that we can append to the video's collection
 			// of metadata. The control bar plug-in will use the metadata to identify
 			// the video element as its target:
-			var controlBarTarget:KeyValueFacet
-				= new KeyValueFacet
+			var controlBarTarget:Facet
+				= new Facet
 					( ControlBarPlugin.NS_CONTROL_BAR_TARGET
 					);
 			controlBarTarget.addValue(ID, "mainContent");
@@ -119,8 +119,8 @@ package
 			// will use it to parameterize the element. Specifically, the ID field
 			// will tell the plug-in what the ID of the content it should control
 			// is:
-			var controlBarSettings:KeyValueFacet
-				= new KeyValueFacet
+			var controlBarSettings:Facet
+				= new Facet
 					( ControlBarPlugin.NS_CONTROL_BAR_SETTINGS
 					);
 			controlBarSettings.addValue(ID, "mainContent");

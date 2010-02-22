@@ -38,7 +38,7 @@ package org.osmf.elements
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.FacetKey;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.net.DynamicStreamingResource;
@@ -298,7 +298,7 @@ package org.osmf.elements
     			stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     						    			 			
     			// DRMContent data Sidecar
-    			var metadataFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as KeyValueFacet;
+    			var metadataFacet:Facet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as Facet;
     			if (metadataFacet != null)
     			{    				
     				var metadata:ByteArray = metadataFacet.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
@@ -463,7 +463,7 @@ package org.osmf.elements
 				{
 					var cuePoint:CuePoint = new CuePoint(CuePointType.fromString(cuePoints[i].type), cuePoints[i].time, 
 																					cuePoints[i].name, cuePoints[i].parameters);
-					temporalFacetDynamic.addValue(cuePoint);
+					temporalFacetDynamic.addValue(cuePoint, cuePoint);
 				}
 				
 				metadata.addFacet(temporalFacetDynamic);			

@@ -23,7 +23,7 @@ package org.osmf.net
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.URL;
@@ -183,15 +183,15 @@ package org.osmf.net
 				&&	resource != null
 				)
 			{
-				var kvFacet:KeyValueFacet = resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA) as KeyValueFacet;
-				if (kvFacet != null)
+				var facet:Facet = resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA) as Facet;
+				if (facet != null)
 				{
-					startArg = kvFacet.getValue(MetadataNamespaces.SUBCLIP_START_ID);
+					startArg = facet.getValue(MetadataNamespaces.SUBCLIP_START_ID);
 					if (isNaN(startArg))
 					{
 						startArg = PLAY_START_ARG_RECORDED;
 					}
-					var subclipEndTime:Number = kvFacet.getValue(MetadataNamespaces.SUBCLIP_END_ID);
+					var subclipEndTime:Number = facet.getValue(MetadataNamespaces.SUBCLIP_END_ID);
 					if (!isNaN(subclipEndTime))
 					{
 						// Disallow negative durations.  And make sure we don't

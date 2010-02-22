@@ -30,7 +30,7 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.metadata.KeyValueFacet;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.DVRTrait;
@@ -53,7 +53,7 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DVRCastDVRTrait(streamInfo:KeyValueFacet, connection:NetConnection, stream:NetStream)
+		public function DVRCastDVRTrait(streamInfo:Facet, connection:NetConnection, stream:NetStream)
 		{
 			this.connection = connection;
 			this.stream = DVRCastNetStream(stream);
@@ -133,7 +133,7 @@ package org.osmf.net.dvr
 		
 		private static const DVRCAST_GET_STREAM_INFO_RPC:String		= "DVRGetStreamInfo";
 		
-		private function updateProperties(streamInfo:KeyValueFacet):void
+		private function updateProperties(streamInfo:Facet):void
 		{
 			trace("updateProperties!");
 			
@@ -204,7 +204,7 @@ package org.osmf.net.dvr
 		{
 			if (streamInfoRetreiver.streamInfo != null)
 			{
-				var streamInfo:KeyValueFacet = new KeyValueFacet(MetadataNamespaces.DVRCAST_METADATA);
+				var streamInfo:Facet = new Facet(MetadataNamespaces.DVRCAST_METADATA);
 				for (var key:String in streamInfoRetreiver.streamInfo)
 				{
 					streamInfo.addValue(new FacetKey(key), streamInfoRetreiver.streamInfo[key]);

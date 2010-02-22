@@ -66,20 +66,11 @@ package org.osmf.layout
 		
 		public function BoxAttributesFacet()
 		{
+			super(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES);
+			
 			_relativeSum = 0;
 			_absoluteSum = 0;
 			
-		}
-		
-		// Facet
-		//
-		
-		/**
-		 * @private
-		 */
-		override public function get namespaceURL():String
-		{
-			return MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES;
 		}
 		
 		/**
