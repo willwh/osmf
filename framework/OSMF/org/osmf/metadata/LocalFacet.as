@@ -20,7 +20,11 @@
 *****************************************************/
 package org.osmf.metadata
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines a facet that has a NullFacetSynthesizer.
 	 * 
 	 * LocalFacets are local to the metadata that they get added to. When

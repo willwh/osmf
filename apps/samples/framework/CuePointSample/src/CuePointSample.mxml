@@ -141,11 +141,11 @@
 				// If we are getting embedded cue points, let's ignore the dynamic cue points coming from
 				// the framework, these are being dispatched from the list of cue points found in the 
 				// metadata for the file.
-				if (ns == MetadataNamespaces.TEMPORAL_METADATA_EMBEDDED)
+				if (ns == MetadataNamespaces.TEMPORAL_EMBEDDED_METADATA)
 				{
 					ignoreDynamicCuePoints = true;
 				}
-				else if (ignoreDynamicCuePoints && ns == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC)
+				else if (ignoreDynamicCuePoints && ns == MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA)
 				{
 					return;
 				}				
@@ -266,7 +266,7 @@
 					temporalFacet.addEventListener(TemporalFacetEvent.POSITION_REACHED, onCuePoint);
 					
 					// Show all the cue points found in the media (via an unsupported API).
-					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC)
+					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA)
 					{
 						this._cuePointsCollection = new ArrayCollection();
 						for (var i:int = 0; i < temporalFacet.numValues; i++)

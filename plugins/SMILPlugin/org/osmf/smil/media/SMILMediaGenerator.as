@@ -105,8 +105,8 @@ package org.osmf.smil.media
 					    !isNaN(smilVideoElement.clipEnd) && smilVideoElement.clipEnd > 0)
 					{
 						var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-						facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, smilVideoElement.clipBegin);
-						facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, smilVideoElement.clipEnd);
+						facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, smilVideoElement.clipBegin);
+						facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, smilVideoElement.clipEnd);
 						resource.metadata.addFacet(facet);
 					}
 										

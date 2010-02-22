@@ -101,8 +101,8 @@ package org.osmf.media
 				dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 			}
 			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 2);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 5);
 			dsResource.metadata.addFacet(facet);
 			return dsResource;
 		}

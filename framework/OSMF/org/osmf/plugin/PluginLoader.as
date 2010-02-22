@@ -111,13 +111,13 @@ package org.osmf.plugin
 					{
 						// Make sure the plugin metadata has the expected default params
 						// (such as MediaFactory). 
-						var pluginFacet:Facet = loadTrait.resource.metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS) as Facet;
+						var pluginFacet:Facet = loadTrait.resource.metadata.getFacet(MetadataNamespaces.PLUGIN_METADATA) as Facet;
 						if (pluginFacet == null)
 						{
-							pluginFacet = new Facet(MetadataNamespaces.PLUGIN_PARAMETERS);
+							pluginFacet = new Facet(MetadataNamespaces.PLUGIN_METADATA);
 							loadTrait.resource.metadata.addFacet(pluginFacet);
 						}
-						pluginFacet.addValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY, mediaFactory);
+						pluginFacet.addValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY, mediaFactory);
 						
 						pluginInfo.initializePlugin(loadTrait.resource.metadata);
 					

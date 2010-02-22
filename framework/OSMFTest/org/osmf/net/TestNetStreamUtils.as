@@ -165,8 +165,8 @@ package org.osmf.net
 
 			resource = new StreamingURLResource("rtmp://example.com");
 			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 15);
 			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == 10 &&
@@ -174,7 +174,7 @@ package org.osmf.net
 
 			resource = new StreamingURLResource("rtmp://example.com");
 			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);
 			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == 10 &&
@@ -182,7 +182,7 @@ package org.osmf.net
 
 			resource = new StreamingURLResource("rtmp://example.com");
 			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 15);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 15);
 			resource.metadata.addFacet(facet);
 			result = NetStreamUtils.getPlayArgsForResource(resource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&

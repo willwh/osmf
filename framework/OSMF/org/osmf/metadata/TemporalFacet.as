@@ -123,6 +123,8 @@ package org.osmf.metadata
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Adds temporal metadata to this facet.
 		 * 
 		 * @param key A <code>TemporalFacetKey</code> instance to

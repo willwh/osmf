@@ -40,8 +40,8 @@ package org.osmf.examples.posterframe
 			// Add metadata to our resource so that it's treated as a zero-length
 			// subclip.
 			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, posterFrameTime);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, posterFrameTime);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, posterFrameTime);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, posterFrameTime);
 			resource.metadata.addFacet(facet);
 	
 			super(resource, loader);

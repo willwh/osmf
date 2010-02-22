@@ -185,9 +185,9 @@ package org.osmf.plugin
 			pluginManager.loadPlugin(resource);
 			
 			assertNotNull(pluginInfo.pluginMetadata);
-			var defaultFacet:Facet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
+			var defaultFacet:Facet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_METADATA);
 			assertNotNull(defaultFacet);
-			var injectedFactory:MediaFactory = defaultFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY);
+			var injectedFactory:MediaFactory = defaultFacet.getValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY);
 			assertNotNull(injectedFactory);
 			assertEquals(injectedFactory, mediaFactory);
 		}

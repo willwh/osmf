@@ -219,8 +219,8 @@ package org.osmf.elements.f4mClasses
 			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
 			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 10);			
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 30);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);			
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 30);
 						
 			manifestResource.metadata.addFacet(facet);
 			
@@ -259,8 +259,8 @@ package org.osmf.elements.f4mClasses
 			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
 		
 			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 50);			
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 80);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 50);			
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 80);
 						
 			manifestResource.metadata.addFacet(facet);
 			

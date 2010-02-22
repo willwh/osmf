@@ -82,8 +82,8 @@ package org.osmf.media
 			// a real NetLoader rather than a MockNetLoader.
 			var resource:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_ID, 2);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_ID, 5);
+			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 2);
+			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 5);
 			resource.metadata.addFacet(facet);
 			return resource;
 		}

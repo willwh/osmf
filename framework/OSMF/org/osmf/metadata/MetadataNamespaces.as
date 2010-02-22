@@ -22,66 +22,163 @@
 package org.osmf.metadata
 {
 	/**
-	 *  Contains the static constants for metadata namespaces used with Open Source Media Framework.
+	 * Contains the static constants for metadata namespaces and facet keys
+	 * used within OSMF.
+	 * 
+	 * Each of these namespaces represents metadata that can be assigned to
+	 * a MediaResourceBase, and which certain MediaElement subclasses will
+	 * look for and upon detecting, adjust their behavior.  For example, if
+	 * the subclip metadata is assigned to a StreamingURLResource that is
+	 * passed to the VideoElement, then the VideoElement will play the
+	 * specified subclip, rather than the whole vide.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MetadataNamespaces
+	public final class MetadataNamespaces
 	{
 		/**
-		 * The namespace that holds OSMF-specific metadata
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 		
-		public static const DEFAULT_METADATA:String						= "http://www.osmf.org/default/1.0";
-		public static const METADATA_KEY_MEDIA_TYPE:String				= "mediaType";
+		 * Metadata namespace that holds media type information.
+		 **/
+		public static const MEDIATYPE_METADATA:String					= "http://www.osmf.org/mediatype/1.0";
 		
-		public static const MEDIATYPE_METADATA:String					= "http://www.osmf.org/mediatype/default";
-		
+		/**
+		 * Metadata namespace that holds subclip information.
+		 **/
 		public static const SUBCLIP_METADATA:String						= "http://www.osmf.org/subclip/1.0";
-		public static const SUBCLIP_START_KEY:String					= "startTime";
-		public static const SUBCLIP_END_KEY:String						= "endTime";
-		public static const SUBCLIP_START_ID:FacetKey					= new FacetKey(SUBCLIP_START_KEY);
-		public static const SUBCLIP_END_ID:FacetKey						= new FacetKey(SUBCLIP_END_KEY);
 		
-		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/default";
-		public static const DRM_CONTENT_METADATA_KEY:String				= "DRMContentMetadata";
-		public static const DRM_ADDITIONAL_HEADER_KEY:String			= "DRMAdditionalHeader";
-		
-		public static const DVRCAST_METADATA:String						= "http://www.osmf.org/dvr/dvrcast/1.0";
-		
-		public static const REGION_TARGET:String						= "http://www.osmf.org/region/target";
-		
-		public static const LAYOUT_RENDERER_TYPE:String					= "http://www.osmf.org/layout/renderer_type";
-		public static const ABSOLUTE_LAYOUT_PARAMETERS:String			= "http://www.osmf.org/layout/absolute";
-		public static const RELATIVE_LAYOUT_PARAMETERS:String			= "http://www.osmf.org/layout/relative";
-		public static const ANCHOR_LAYOUT_PARAMETERS:String				= "http://www.osmf.org/layout/anchor";
-		public static const PADDING_LAYOUT_PARAMETERS:String 			= "http://www.osmf.org/layout/padding";
-		public static const LAYOUT_ATTRIBUTES:String 					= "http://www.osmf.org/layout/attributes";
-		public static const BOX_LAYOUT_ATTRIBUTES:String				= "http://www.osmf.org/layout/attributes/box";
-		
-		public static const ELEMENT_ID:String	 						= "http://www.osmf.org/elementId";
-		
-		public static const TEMPORAL_METADATA_EMBEDDED:String			= "http://www.osmf.org/temporal/embedded";
-		public static const TEMPORAL_METADATA_DYNAMIC:String			= "http://www.osmf.org/temporal/dynamic";
+		/**
+		 * Metadata FacetKey for the subclip startTime property.
+		 **/
+		public static const SUBCLIP_START_TIME_KEY:FacetKey				= new FacetKey("startTime");
 
-		public static const PLUGIN_PARAMETERS:String					= "http://www.osmf.org/plugin/parameters";
-		public static const PLUGIN_METADATA_MEDIAFACTORY_KEY:FacetKey	= new FacetKey("pluginMediaFactory");
+		/**
+		 * Metadata FacetKey for the subclip endTime property.
+		 **/
+		public static const SUBCLIP_END_TIME_KEY:FacetKey				= new FacetKey("endTime");
 		
+		/**
+		 * Metadata namespace that holds DRM metadata.
+		 **/
+		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/1.0";
+		
+		/**
+		 * Metadata FacetKey for DRM content metadata.
+		 **/
+		public static const DRM_CONTENT_METADATA_KEY:FacetKey			= new FacetKey("DRMContentMetadata");
+
+		/**
+		 * Metadata FacetKey for the DRM additional header.
+		 **/
+		public static const DRM_ADDITIONAL_HEADER_KEY:FacetKey			= new FacetKey("DRMAdditionalHeader");
+		
+		/**
+		 * Metadata namespace that holds embedded temporal metadata.
+		 **/
+		public static const TEMPORAL_EMBEDDED_METADATA:String			= "http://www.osmf.org/metadata/temporalEmbedded/1.0";
+
+		/**
+		 * Metadata namespace that holds dynamic (runtime) temporal metadata.
+		 **/
+		public static const TEMPORAL_DYNAMIC_METADATA:String			= "http://www.osmf.org/metadata/temporalDynamic/1.0";
+
+		/**
+		 * Metadata namespace that holds parameters that are passed from OSMF to
+		 * plugins.
+		 **/
+		public static const PLUGIN_METADATA:String						= "http://www.osmf.org/plugin/parameters/1.0";
+
+		/**
+		 * Metadata FacetKey for a MediaFactory that is a parameter from the
+		 * player to a plugin. 
+		 **/
+		public static const PLUGIN_MEDIAFACTORY_KEY:FacetKey	= new FacetKey("pluginMediaFactory");
+
+		// Internal OSMF Namespaces
+		//
+		
+		/**
+		 * @private
+		 **/
+		public static const DVRCAST_METADATA:String						= "http://www.osmf.org/dvr/dvrcast/1.0";
+
+		/**
+		 * @private
+		 * 
+		 * Used by the layout system to log individual IDs of regions.  For debugging only.
+		 **/
+		public static const ELEMENT_ID:String	 						= "http://www.osmf.org/layout/elementId/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const LAYOUT_RENDERER_TYPE:String					= "http://www.osmf.org/layout/renderer_type/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const ABSOLUTE_LAYOUT_PARAMETERS:String			= "http://www.osmf.org/layout/absolute/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const RELATIVE_LAYOUT_PARAMETERS:String			= "http://www.osmf.org/layout/relative/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const ANCHOR_LAYOUT_PARAMETERS:String				= "http://www.osmf.org/layout/anchor/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const PADDING_LAYOUT_PARAMETERS:String 			= "http://www.osmf.org/layout/padding/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const LAYOUT_ATTRIBUTES:String 					= "http://www.osmf.org/layout/attributes/1.0";
+
+		/**
+		 * @private
+		 **/
+		public static const BOX_LAYOUT_ATTRIBUTES:String				= "http://www.osmf.org/layout/attributes/box/1.0";
+		
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_METADATA:String				= "http://www.osmf.org/httpstreaming/1.0";
 		
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_BOOTSTRAP_KEY:String			= "bootstrap";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_STREAM_METADATA_KEY:String 	= "streamMetadata";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_XMP_METADATA_KEY:String 		= "xmpMetadata";
 		
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_ABST_URL_KEY:String			= "abstUrl";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_ABST_DATA_KEY:String			= "abstData";
+
+		/**
+		 * @private
+		 **/
 		public static const HTTP_STREAMING_SERVER_BASE_URLS_KEY:String 	= "serverBaseUrls";
 	}
 }

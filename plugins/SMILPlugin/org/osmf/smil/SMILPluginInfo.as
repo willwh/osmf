@@ -59,10 +59,10 @@ package org.osmf.smil
 		override public function initializePlugin(metadata:Metadata):void
 		{
 			// We'll use the player-supplied MediaFactory for creating all MediaElements.
-			var pluginFacet:Facet = metadata.getFacet(MetadataNamespaces.PLUGIN_PARAMETERS);
+			var pluginFacet:Facet = metadata.getFacet(MetadataNamespaces.PLUGIN_METADATA);
 			if (pluginFacet != null)
 			{
-				mediaFactory = pluginFacet.getValue(MetadataNamespaces.PLUGIN_METADATA_MEDIAFACTORY_KEY) as MediaFactory;
+				mediaFactory = pluginFacet.getValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY) as MediaFactory;
 			}
 		}
 		

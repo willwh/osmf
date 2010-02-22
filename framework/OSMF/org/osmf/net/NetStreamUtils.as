@@ -186,12 +186,12 @@ package org.osmf.net
 				var facet:Facet = resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA) as Facet;
 				if (facet != null)
 				{
-					startArg = facet.getValue(MetadataNamespaces.SUBCLIP_START_ID);
+					startArg = facet.getValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY);
 					if (isNaN(startArg))
 					{
 						startArg = PLAY_START_ARG_RECORDED;
 					}
-					var subclipEndTime:Number = facet.getValue(MetadataNamespaces.SUBCLIP_END_ID);
+					var subclipEndTime:Number = facet.getValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY);
 					if (!isNaN(subclipEndTime))
 					{
 						// Disallow negative durations.  And make sure we don't

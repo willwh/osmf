@@ -465,7 +465,7 @@ package org.osmf.elements
 			
 			if (cuePoints != null && cuePoints.length > 0)
 			{
-				var temporalFacetDynamic:TemporalFacet = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_DYNAMIC, this);
+				var temporalFacetDynamic:TemporalFacet = new TemporalFacet(MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA, this);
 				
 				for (var i:int = 0; i < cuePoints.length; i++)
 				{
@@ -482,7 +482,7 @@ package org.osmf.elements
      	{
      		if (_temporalFacetEmbedded == null)
      		{
-				_temporalFacetEmbedded = new TemporalFacet(MetadataNamespaces.TEMPORAL_METADATA_EMBEDDED, this);
+				_temporalFacetEmbedded = new TemporalFacet(MetadataNamespaces.TEMPORAL_EMBEDDED_METADATA, this);
 				metadata.addFacet(_temporalFacetEmbedded);
      		}
 
