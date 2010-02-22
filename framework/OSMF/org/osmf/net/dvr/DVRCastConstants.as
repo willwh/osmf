@@ -23,6 +23,8 @@ package org.osmf.net.dvr
 {
 	import org.osmf.metadata.FacetKey;
 	
+	[ExcludeClass]
+	
 	/**
 	 * @private
 	 * 
