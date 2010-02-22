@@ -59,6 +59,7 @@ package org.osmf.elements
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.DRMState;
+	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -388,15 +389,22 @@ package org.osmf.elements
 		private function finishLoad():void
 		{
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-
-			if (loadTrait.dvrTrait)
+			
+			var dvrTrait:DVRTrait = loadTrait.dvrTrait;
+			if (dvrTrait != null)
 			{
 	  			addTrait(MediaTraitType.DVR, loadTrait.dvrTrait);
   			}
+	    	
 	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
 	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
-			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, resource);
-			addTrait(MediaTraitType.TIME, timeTrait);
+			
+			var timeTrait:TimeTrait	= loadTrait.timeTrait; 
+			if (timeTrait != null)
+			{
+				addTrait(MediaTraitType.TIME, timeTrait);
+			}
+			
 			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 			displayObjectTrait = new NetStreamDisplayObjectTrait(stream, video, video.width, video.height);
 			addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);

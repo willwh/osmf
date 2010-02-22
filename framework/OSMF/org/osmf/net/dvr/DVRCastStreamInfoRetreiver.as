@@ -30,10 +30,19 @@ package org.osmf.net.dvr
 	
 	[ExcludeClass]
 	
+	/**
+	 * @private 
+	 */	
 	[Event(name="complete", type="flash.events.Event")]
 	
 	/**
-	 * @internal
+	 * @private
+	 * 
+	 * Helper class for obtaining a stream information record from an
+	 * FMS DVRCast application.
+	 * 
+	 * The object helps in facilitating multiple retries on a given
+	 * interval. By default, 5 attempts are made, 3 seconds apart.
 	 */
 	internal class DVRCastStreamInfoRetreiver extends EventDispatcher
 	{
@@ -48,7 +57,7 @@ package org.osmf.net.dvr
 			this.streamName = streamName;
 		}
 		
-		public function get streamInfo():Object
+		public function get streamInfo():DVRCastStreamInfo
 		{
 			return _streamInfo;
 		}
@@ -92,7 +101,7 @@ package org.osmf.net.dvr
 		private var retries:Number;
 		private var timer:Timer;
 		
-		private var _streamInfo:Object;
+		private var _streamInfo:DVRCastStreamInfo;
 		private var _error:Object;
 		
 		private function getStreamInfo():void
@@ -101,17 +110,17 @@ package org.osmf.net.dvr
 			
 			retries--;
 			
-			connection.call("DVRGetStreamInfo", responder, streamName);
+			connection.call(DVRCastConstants.RPC_GET_STREAM_INFO, responder, streamName);
 		}
 
 		private function onGetStreamInfoResult(result:Object):void
 		{
-			if (result && result.code == "NetStream.DVRStreamInfo.Success")
+			if (result && result.code == DVRCastConstants.RESULT_GET_STREAM_INFO_SUCCESS)
 			{ 
-				_streamInfo = result.data;
+				_streamInfo = new DVRCastStreamInfo(result.data);
 				complete();
 			}
-			else if (result && result.code == "NetStream.DVRStreamInfo.Retry")
+			else if (result && result.code == DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY)
 			{
 				if (retries != 0)
 				{

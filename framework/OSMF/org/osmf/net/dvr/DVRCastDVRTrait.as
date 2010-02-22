@@ -22,17 +22,18 @@
 package org.osmf.net.dvr
 {
 	import flash.events.Event;
+	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.metadata.Facet;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.FacetKey;
 	import org.osmf.traits.DVRTrait;
 	
 	[ExcludeClass]
@@ -43,7 +44,7 @@ package org.osmf.net.dvr
 	 * Defines a DVRTrait subclass that interacts with a DVRCast equiped
 	 * FMS server.
 	 */	
-	public class DVRCastDVRTrait extends DVRTrait
+	internal class DVRCastDVRTrait extends DVRTrait
 	{
 		/**
 		 * @inherited
@@ -53,19 +54,28 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DVRCastDVRTrait(streamInfo:Facet, connection:NetConnection, stream:NetStream)
+
+		public function DVRCastDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase)
 		{
 			this.connection = connection;
 			this.stream = DVRCastNetStream(stream);
+			this.resource = resource;
 			
-			updateProperties(streamInfo);
+			streamInfo 
+				= resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
+				. getValue(DVRCastConstants.KEY_STREAM_INFO);
 			
-			calculateOffset();
-			
-			streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamName); 
+			streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamInfo.streamName); 
 			streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
 			
-			configurateStreamInfoUpdateTimer(); 
+			streamInfoUpdateTimer = new Timer(DVRCastConstants.STREAM_INFO_UPDATE_DELAY);
+			streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
+			streamInfoUpdateTimer.start(); 
+			
+			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+			
+			super(streamInfo.isRecording);
+			updateProperties();
 		}
 		
 		// Overrides
@@ -81,22 +91,26 @@ package org.osmf.net.dvr
 		 */
 		override public function get livePosition():Number
 		{
-			return _livePosition;
+			return 0;
 		}
 		
-		/**
-		 * @inherited
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override protected function isRecordingChangeEnd():void
+		override protected function isRecordingChangeStart(value:Boolean):void
 		{
-			configurateStreamInfoUpdateTimer();
-			
-			super.isRecordingChangeEnd();
+			var recordingInfo:DVRCastRecordingInfo
+					=	resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
+					.	getValue(DVRCastConstants.KEY_RECORDING_INFO)
+					as 	DVRCastRecordingInfo;
+					
+			if (value)
+			{
+				// We're going into recording mode.
+				recordingInfo.startDuration = streamInfo.currentLength - recordingInfo.startOffset;
+				recordingInfo.startTimer = flash.utils.getTimer();
+			}
+			else
+			{
+				// We're leaving recording mode: nothing to do.
+			}
 		}
 		
 		// Internals
@@ -104,95 +118,17 @@ package org.osmf.net.dvr
 		
 		private var connection:NetConnection;
 		private var stream:DVRCastNetStream;
+		private var resource:MediaResourceBase;
+		
+		private var streamInfo:DVRCastStreamInfo;
 		private var streamInfoUpdateTimer:Timer;
 		private var streamInfoRetreiver:DVRCastStreamInfoRetreiver; 
 		
-		private var streamName:String;
-		private var beginOffset:Number;
-		private var endOffset:Number;
-		private var currentDuration:Number;
-		private var maxDuration:Number;
-		
-		private var _livePosition:Number;
-		
 		private var offset:Number;
 		
-		private static const STREAM_INFO_UPDATE_DELAY:Number		= 3000;
-		
-		private static const KEY_CALL_TIME:FacetKey 		= new FacetKey("callTime");
-		private static const KEY_OFFLINE:FacetKey 			= new FacetKey("offline");
-		private static const KEY_BEGIN_OFFSET:FacetKey 		= new FacetKey("beginOffset");
-		private static const KEY_END_OFFSET:FacetKey 		= new FacetKey("endOffset");
-		private static const KEY_RECORDING_START:FacetKey 	= new FacetKey("startRec");
-		private static const KEY_RECORDING_STOP:FacetKey 	= new FacetKey("stopRec");
-		private static const KEY_IS_RECORDING:FacetKey 		= new FacetKey("isRec");
-		private static const KEY_STREAM_NAME:FacetKey 		= new FacetKey("streamName");
-		private static const KEY_LAST_UPDATE:FacetKey 		= new FacetKey("lastUpdate");
-		private static const KEY_CURRENT_LENGTH:FacetKey 	= new FacetKey("currLen");
-		private static const KEY_MAX_LENGTH:FacetKey 		= new FacetKey("maxLen");
-		
-		private static const DVRCAST_GET_STREAM_INFO_RPC:String		= "DVRGetStreamInfo";
-		
-		private function updateProperties(streamInfo:Facet):void
+		private function updateProperties():void
 		{
-			trace("updateProperties!");
-			
-			streamName 			= streamInfo.getValue(KEY_STREAM_NAME);
-			beginOffset 		= streamInfo.getValue(KEY_BEGIN_OFFSET) || 0;
-			endOffset 			= streamInfo.getValue(KEY_END_OFFSET) || 0;
-			currentDuration		= streamInfo.getValue(KEY_CURRENT_LENGTH) || 0;
-			maxDuration			= streamInfo.getValue(KEY_MAX_LENGTH) || 0;
-			
-			setIsRecording(streamInfo.getValue(KEY_IS_RECORDING));
-		}
-		
-		private function calculateOffset():void
-		{
-			offset = 0;
-			
-			if (endOffset != 0)
-			{
-				if (currentDuration > endOffset)
-				{
-					offset = currentDuration - endOffset;
-				}
-				else
-				{
-					offset
-						= currentDuration > beginOffset
-							? beginOffset
-							: currentDuration;
-				}
-			}
-			else if (beginOffset != 0)
-			{
-				offset
-					= currentDuration > beginOffset
-						? beginOffset
-						: currentDuration;
-			}
-		}
-		
-		private function configurateStreamInfoUpdateTimer():void
-		{
-			if (isRecording)
-			{
-				if (streamInfoUpdateTimer == null)
-				{
-					streamInfoUpdateTimer = new Timer(STREAM_INFO_UPDATE_DELAY);
-					streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
-					streamInfoUpdateTimer.start();
-				}
-			}
-			else
-			{
-				if (streamInfoUpdateTimer != null)
-				{
-					streamInfoUpdateTimer.removeEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
-					streamInfoUpdateTimer.stop();
-					streamInfoUpdateTimer = null;
-				}
-			}
+			setIsRecording(streamInfo.isRecording);
 		}
 		
 		private function onStreamInfoUpdateTimer(event:TimerEvent):void
@@ -204,13 +140,9 @@ package org.osmf.net.dvr
 		{
 			if (streamInfoRetreiver.streamInfo != null)
 			{
-				var streamInfo:Facet = new Facet(MetadataNamespaces.DVRCAST_METADATA);
-				for (var key:String in streamInfoRetreiver.streamInfo)
-				{
-					streamInfo.addValue(new FacetKey(key), streamInfoRetreiver.streamInfo[key]);
-				}
-				
-				updateProperties(streamInfo);
+				streamInfo.readFromDVRCastStreamInfo(streamInfoRetreiver.streamInfo);
+				updateProperties();
+				//trace(streamInfoRetreiver.streamInfo);
 			}
 			else
 			{
@@ -221,6 +153,15 @@ package org.osmf.net.dvr
 						, new MediaError(MediaErrorCodes.DVRCAST_FAILED_RETREIVING_STREAM_INFO)
 						)
 					);
+			}
+		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			switch (event.info.code)
+			{
+				//case NetStreamCodes.NETSTREAM_PLAY_STOP:
+			//		break;	
 			}
 		}
 		

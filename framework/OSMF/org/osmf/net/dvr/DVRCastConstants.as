@@ -18,41 +18,29 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
+
 package org.osmf.net.dvr
 {
-	import flash.net.NetConnection;
-	import flash.net.NetStream;
-	
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.MetadataNamespaces;
-	
-	[ExcludeClass]
+	import org.osmf.metadata.FacetKey;
 	
 	/**
 	 * @private
-	 */
-	internal class DVRCastNetStream extends NetStream
+	 * 
+	 * Defines DVRCast related constants values
+	 */	
+	internal class DVRCastConstants
 	{
-		public function DVRCastNetStream(resource:MediaResourceBase, connection:NetConnection)
-		{
-			super(connection);
-			
-			recordingInfo
-				= resource
-				. metadata
-				. getFacet(MetadataNamespaces.DVRCAST_METADATA)
-				. getValue(DVRCastConstants.KEY_RECORDING_INFO)
-				as DVRCastRecordingInfo;
-		}
+		public static const KEY_STREAM_INFO:FacetKey				= new FacetKey("streamInfo");
+		public static const KEY_RECORDING_INFO:FacetKey				= new FacetKey("recordingInfo");
 		
-		override public function play(...arguments):void
-		{
-			super.play(arguments[0], recordingInfo.startOffset, -1);	
-		}
+		public static const RPC_GET_STREAM_INFO:String				= "DVRGetStreamInfo";
+		public static const RPC_SUBSCRIBE:String 					= "DVRSubscribe";
+		public static const RPC_UNSUBSCRIBE:String 					= "DVRUnsubscribe";
 		
-		// Internals
-		//
+		public static const RESULT_GET_STREAM_INFO_SUCCESS:String	="NetStream.DVRStreamInfo.Success";
+		public static const RESULT_GET_STREAM_INFO_RETRY:String		="NetStream.DVRStreamInfo.Retry";
 		
-		private var recordingInfo:DVRCastRecordingInfo;
+		public static const STREAM_INFO_UPDATE_DELAY:Number 		= 3000;
+		public static const LOCAL_DURATION_UPDATE_INTERVAL:Number 	= 500;
 	}
 }

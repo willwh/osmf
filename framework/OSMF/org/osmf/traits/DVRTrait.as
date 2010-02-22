@@ -45,8 +45,10 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */				
-		public function DVRTrait()
+		public function DVRTrait(isRecording:Boolean = false)
 		{
+			_isRecording = isRecording;
+			
 			super(MediaTraitType.DVR);
 		}
 		

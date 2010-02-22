@@ -23,16 +23,16 @@ package org.osmf.net.dvr
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.Responder;
+	import flash.utils.getTimer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.LocalFacet;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.NetConnectionFactory;
-	import org.osmf.net.NetNegotiator;
 	import org.osmf.net.NetStreamUtils;
 
 	[ExcludeClass]
@@ -44,7 +44,12 @@ package org.osmf.net.dvr
 	{
 		public function DVRCastNetConnectionFactory()
 		{
-			addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete, false, Number.MAX_VALUE);
+			addEventListener
+				( NetConnectionFactoryEvent.CREATION_COMPLETE
+				, onCreationComplete
+				, false
+				, Number.MAX_VALUE
+				);
 			
 			super();
 		}
@@ -56,13 +61,23 @@ package org.osmf.net.dvr
 			super.create(urlResource);
 		}
 		
+		override public function closeNetConnection(netConnection:NetConnection):void
+		{
+			if (this.netConnection == netConnection)
+			{
+				netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName); 
+			}
+			
+			super.closeNetConnection(netConnection);
+		}
+		
 		// Internals
 		//
 
 		private var urlResource:URLResource;
 		private var netConnection:NetConnection;
 		private var streamName:String;
-		
+			
 		private function onCreationComplete(event:NetConnectionFactoryEvent):void
 		{
 			// Capture this event, whithold it from the outside world until
@@ -78,13 +93,11 @@ package org.osmf.net.dvr
 					, onServerCallError
 					);
 			
-			event.netConnection.call("DVRSubscribe", responder, streamName); 	
+			event.netConnection.call(DVRCastConstants.RPC_SUBSCRIBE, responder, streamName); 	
 		}
 		
 		private function onStreamSubscriptionResult(result:Object):void
 		{
-			trace("onStreamSubscriptionResult: result.code", result ? result.code : "null");
-			
 			var streamInfoRetreiver:DVRCastStreamInfoRetreiver
 				= new DVRCastStreamInfoRetreiver
 					( netConnection
@@ -97,31 +110,66 @@ package org.osmf.net.dvr
 		
 		private function onStreamInfoRetreiverComplete(event:Event):void
 		{
-			var streamInfoRetreiver:DVRCastStreamInfoRetreiver 
-				= event.target as DVRCastStreamInfoRetreiver;
+			var streamInfoRetreiver:DVRCastStreamInfoRetreiver = event.target as DVRCastStreamInfoRetreiver;
 			
 			if (streamInfoRetreiver.streamInfo != null)
 			{
+				// Remove the completion listener:
 				removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
 			
-				var dvrcastFacet:Facet = new Facet(MetadataNamespaces.DVRCAST_METADATA);
-				for (var key:String in streamInfoRetreiver.streamInfo)
+				if (streamInfoRetreiver.streamInfo.offline == true)
 				{
-					dvrcastFacet.addValue(new FacetKey(key), streamInfoRetreiver.streamInfo[key]);
+					// The content is offline, signal this as a media error:
+					dispatchEvent
+						( new NetConnectionFactoryEvent
+							( NetConnectionFactoryEvent.CREATION_ERROR 
+							, false
+							, false
+							, netConnection
+							, urlResource
+							, new MediaError(MediaErrorCodes.DVRCAST_CONTENT_OFFLINE)
+							)
+						);
+						
+					// Unsubscribe:
+					netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName);
+					netConnection = null;
 				}
-				urlResource.metadata.addFacet(dvrcastFacet);
-				
-				// Now that we're done, signal completion, so the VideoElement will
-				// continue its loading process:
-				dispatchEvent
-					( new NetConnectionFactoryEvent
-						( NetConnectionFactoryEvent.CREATION_COMPLETE
-						, false
-						, false
-						, netConnection
-						, urlResource
-						)
-					);
+				else
+				{
+					// Create a DVR metadata object:
+					var dvrcastFacet:Facet = new LocalFacet(MetadataNamespaces.DVRCAST_METADATA);
+					urlResource.metadata.addFacet(dvrcastFacet);
+					
+					// Add a stream info field:
+					dvrcastFacet.addValue
+						( DVRCastConstants.KEY_STREAM_INFO
+						, streamInfoRetreiver.streamInfo
+						);
+					
+					var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
+					recordingInfo.startDuration = streamInfoRetreiver.streamInfo.currentLength;
+					recordingInfo.startOffset = calculateOffset(streamInfoRetreiver.streamInfo);
+					recordingInfo.startTimer = flash.utils.getTimer();
+					
+					// Add recording info:
+					dvrcastFacet.addValue
+						( DVRCastConstants.KEY_RECORDING_INFO
+						, recordingInfo
+						);
+						
+					// Now that we're done, signal completion, so the VideoElement will
+					// continue its loading process:
+					dispatchEvent
+						( new NetConnectionFactoryEvent
+							( NetConnectionFactoryEvent.CREATION_COMPLETE 
+							, false
+							, false
+							, netConnection
+							, urlResource
+							)
+						);
+				}
 			}
 			else
 			{
@@ -142,5 +190,39 @@ package org.osmf.net.dvr
 					)
 				);
 		}
+		
+		private function calculateOffset(streamInfo:DVRCastStreamInfo):Number
+		{
+			var offset:Number = 0;
+			var endOffset:Number = streamInfo.endOffset;
+			var beginOffset:Number = streamInfo.beginOffset;
+			var currentDuration:Number = streamInfo.currentLength;
+			
+			if (endOffset != 0)
+			{
+				if (currentDuration > endOffset)
+				{
+					offset = currentDuration - endOffset;
+				}
+				else
+				{
+					offset
+						= currentDuration > beginOffset
+							? beginOffset
+							: currentDuration;
+				}
+			}
+			else if (beginOffset != 0)
+			{
+				offset
+					= currentDuration > beginOffset
+						? beginOffset
+						: currentDuration;
+			}
+			
+			return offset;
+		}
+		
+	
 	}
 }

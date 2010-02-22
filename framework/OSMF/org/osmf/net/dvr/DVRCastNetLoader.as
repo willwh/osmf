@@ -32,6 +32,7 @@ package org.osmf.net.dvr
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.DVRTrait;
+	import org.osmf.traits.TimeTrait;
 
 	/**
 	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
@@ -40,7 +41,7 @@ package org.osmf.net.dvr
 	public class DVRCastNetLoader extends NetLoader
 	{
 		/**
-		 * Constructor.
+		 * @inherited 
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -53,38 +54,77 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @private
+		 * @inherited
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */		
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
 			var result:Boolean;
 			
-			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamingURLResource)
+			if (super.canHandleResource(resource))
 			{
-				result = streamingURLResource.streamType == StreamType.DVR;
+				var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
+				if (streamingURLResource)
+				{
+					result = streamingURLResource.streamType == StreamType.DVR;
+				}
 			}
 			
 			return result;
 		}
 		
 		/**
-		 * @private
+		 * @inherited
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			return new DVRCastNetStream(connection, resource);
+			return new DVRCastNetStream(resource, connection); 
 		}
 		
 		/**
-		 * @private
+		 * @inherited
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
 		 */
-		override protected function createDVRTrait(connection:NetConnection, netStream:NetStream, resource:URLResource):DVRTrait
+		override protected function createDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase):DVRTrait
 		{
-			var result:DVRTrait;
-	
+			return new DVRCastDVRTrait(connection, stream, resource);
+		}
+		
+		/**
+		 * @inherited
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		override protected function createTimeTrait(stream:NetStream, resource:MediaResourceBase):TimeTrait
+		{
+			return new DVRCastTimeTrait(resource, stream);
+		}
+		
+		// Internals
+		//
+		
+		private function isRecordingDVRCastStreamInfo(resource:MediaResourceBase):Boolean
+		{
+			var result:Boolean;
+			
 			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamingURLResource != null && connection != null)
+			if (streamingURLResource != null)
 			{
 				// See if a DVRCast facet is available on the resource's metadata:
 				var dvrcastFacet:Facet
@@ -93,11 +133,12 @@ package org.osmf.net.dvr
 					
 	  			if (dvrcastFacet != null)
 	  			{
-	  				result = new DVRCastDVRTrait(dvrcastFacet, connection, netStream);
+	  				var streamInfo:DVRCastStreamInfo = dvrcastFacet.getValue(DVRCastConstants.KEY_STREAM_INFO);
+	  				result = streamInfo && streamInfo.isRecording == true;	
 	  			}
-			}
-			
-			return result;
-		}
+	 		}
+	 		
+	 		return result;
+	 	}
 	}
 }

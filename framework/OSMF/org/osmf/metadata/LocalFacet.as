@@ -12,47 +12,57 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
+*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.net.dvr
+package org.osmf.metadata
 {
-	import flash.net.NetConnection;
-	import flash.net.NetStream;
-	
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.MetadataNamespaces;
-	
-	[ExcludeClass]
-	
 	/**
-	 * @private
-	 */
-	internal class DVRCastNetStream extends NetStream
+	 * Defines a facet that has a NullFacetSynthesizer.
+	 * 
+	 * LocalFacets are local to the metadata that they get added to. When
+	 * a local facet becomes part of a composition, the owning media element
+	 * will not be reflecting it.
+	 */	
+	public class LocalFacet extends Facet
 	{
-		public function DVRCastNetStream(resource:MediaResourceBase, connection:NetConnection)
+		/**
+		 * @inherited
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 		
+		public function LocalFacet(namespaceURL:String=null)
 		{
-			super(connection);
+			_synthesizer = new NullFacetSynthesizer(namespaceURL);
 			
-			recordingInfo
-				= resource
-				. metadata
-				. getFacet(MetadataNamespaces.DVRCAST_METADATA)
-				. getValue(DVRCastConstants.KEY_RECORDING_INFO)
-				as DVRCastRecordingInfo;
+			super(namespaceURL);
 		}
 		
-		override public function play(...arguments):void
+		// Overrides
+		//
+		
+		/**
+		 * @inherited
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		override public function get synthesizer():FacetSynthesizer
 		{
-			super.play(arguments[0], recordingInfo.startOffset, -1);	
+			return _synthesizer;
 		}
 		
 		// Internals
 		//
 		
-		private var recordingInfo:DVRCastRecordingInfo;
+		private var _synthesizer:FacetSynthesizer;
 	}
 }

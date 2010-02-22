@@ -41,6 +41,7 @@ package org.osmf.net
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.URL;
 
 	/**
@@ -168,18 +169,33 @@ package org.osmf.net
 		}
 		
 		/**
-		 * The factory function for creating a DVRTrait.
+		 * The factory function for creating a DVRTrait. Returns null by default.
 		 *
-		 * @param connection The NetConnection that's associated with the DVRTrait.
-		 * @param netStream The NetStream that's associated with the DVRTrait.
 		 * @param resource The URLResource that's associated with the DVRTrait.
+		 * @param connection The NetConnection that's associated with the DVRTrait.
+		 * @param stream The NetStream that's associated with the DVRTrait.
 		 *  
 		 * @return The DVRTrait for the NetStream, null if DVR is not enabled for
 		 * the NetStream.
 		 */		 		
-		protected function createDVRTrait(connection:NetConnection, netStream:NetStream, resource:URLResource):DVRTrait
+		protected function createDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase):DVRTrait
 		{
 			return null;
+		}
+		
+		/**
+		 * The factory function for creating a TimeTrait. Returns a NetStreamTimeTrait
+		 * instance by default.
+		 *
+		 * @param resource 
+		 * @param connection
+		 * @param stream
+		 * @return 
+		 * 
+		 */		 		
+		protected function createTimeTrait(stream:NetStream, resource:MediaResourceBase):TimeTrait
+		{
+			return new NetStreamTimeTrait(stream, resource);
 		}
 
 		/**
@@ -273,6 +289,7 @@ package org.osmf.net
 			netLoadTrait.netStream = netStream;
 			netLoadTrait.switchManager = createNetStreamSwitchManager(connection, netStream, netLoadTrait.resource as DynamicStreamingResource);
 			netLoadTrait.dvrTrait = createDVRTrait(connection, netStream, netLoadTrait.resource as URLResource);
+			netLoadTrait.timeTrait = createTimeTrait(netStream, netLoadTrait.resource as URLResource);
 			netLoadTrait.netConnectionFactory = factory;
 			
 			updateLoadTrait(loadTrait, LoadState.READY);

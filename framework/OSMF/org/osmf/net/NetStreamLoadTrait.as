@@ -31,6 +31,7 @@ package org.osmf.net
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.TimeTrait;
 
 	
 	[ExcludeClass]
@@ -105,7 +106,7 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-	   	 * Defines the object's DVRTrait
+	   	 * Defines the object's optional DVRTrait
 	   	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -120,6 +121,24 @@ package org.osmf.net
 	   	public function get dvrTrait():DVRTrait
 	   	{
 	   		return _dvrTrait; 
+	   	}
+	   	
+	   	/**
+	   	 * Defines the object's optional custom TimeTrait
+	   	 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+	   	 */	   	
+	   	public function set timeTrait(value:TimeTrait):void
+	   	{
+	   		_timeTrait = value;
+	   	}
+	   	
+	   	public function get timeTrait():TimeTrait
+	   	{
+	   		return _timeTrait; 
 	   	}
 	   	
 	   	/**
@@ -206,6 +225,7 @@ package org.osmf.net
 	   	private var _connection:NetConnection;
 	   	private var _switchManager:NetStreamSwitchManager;
 	   	private var _dvrTrait:DVRTrait;
+	   	private var _timeTrait:TimeTrait;
 	   	private var _netConnectionFactory:NetConnectionFactoryBase;
 
 		private var isStreamingResource:Boolean;

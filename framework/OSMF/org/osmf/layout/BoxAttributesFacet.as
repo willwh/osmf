@@ -23,6 +23,7 @@ package org.osmf.layout
 {
 	import org.osmf.events.FacetValueChangeEvent;
 	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.LocalFacet;
 	import org.osmf.metadata.MetadataNamespaces;
 
 	/**
@@ -37,7 +38,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class BoxAttributesFacet extends LayoutFacet
+	internal class BoxAttributesFacet extends LocalFacet
 	{
 		/**
 		 * @private

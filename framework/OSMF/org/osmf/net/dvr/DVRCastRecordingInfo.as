@@ -18,41 +18,21 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
+
 package org.osmf.net.dvr
 {
-	import flash.net.NetConnection;
-	import flash.net.NetStream;
-	
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.MetadataNamespaces;
-	
 	[ExcludeClass]
 	
 	/**
 	 * @private
-	 */
-	internal class DVRCastNetStream extends NetStream
+	 * 
+	 * Defines a recording record that holds the values that define a
+	 * recording state.
+	 */	
+	internal class DVRCastRecordingInfo
 	{
-		public function DVRCastNetStream(resource:MediaResourceBase, connection:NetConnection)
-		{
-			super(connection);
-			
-			recordingInfo
-				= resource
-				. metadata
-				. getFacet(MetadataNamespaces.DVRCAST_METADATA)
-				. getValue(DVRCastConstants.KEY_RECORDING_INFO)
-				as DVRCastRecordingInfo;
-		}
-		
-		override public function play(...arguments):void
-		{
-			super.play(arguments[0], recordingInfo.startOffset, -1);	
-		}
-		
-		// Internals
-		//
-		
-		private var recordingInfo:DVRCastRecordingInfo;
+		public var startTimer:int = 0;
+		public var startDuration:Number;
+		public var startOffset:Number;
 	}
 }
