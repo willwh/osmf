@@ -285,28 +285,7 @@ package org.osmf.net.drm
 				return NaN;
 			}		
 		}
-		
-		/**
-		 * Returns the URL of the server used to manage this content's DRM.  Returns "" if
-		 * the server is unknown.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get serverURL():String
-		{
-			if (drmContentData != null)
-			{
-				return drmContentData.serverURL;	
-			}
-			else
-			{
-				return "";
-			}		
-		}
-		
+	
 		/**
 		 * @private
 		 * 
@@ -415,8 +394,7 @@ package org.osmf.net.drm
 						forceRefreshVoucher();
 						break;
 					case DRM_NEEDS_AUTHENTICATION:
-						var voucherInfo:VoucherAccessInfo = event.contentData.getVoucherAccessInfo()[0];
-						updateDRMState(DRMState.AUTHENTICATION_NEEDED, null, null, null, 0, null, voucherInfo.displayName );
+						updateDRMState(DRMState.AUTHENTICATION_NEEDED, null, null, null, 0, null, event.contentData.serverURL );
 						break;
 					default:
 						removeEventListeners();							
@@ -476,7 +454,6 @@ package org.osmf.net.drm
 		private function onUpdateError(event:Event):void
 		{
 			toggleErrorListeners(updater, false);
-			//Error ID is supported in flash 10.1
 			updateDRMState(DRMState.AUTHENTICATION_ERROR, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString()));
 		}
 				

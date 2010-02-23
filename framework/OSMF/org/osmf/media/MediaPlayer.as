@@ -1461,21 +1461,7 @@ package org.osmf.media
 		{
 			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).period : NaN;
 		}	
-		
-		/**
-		 * Returns the URL of the server used to manage this content's DRM.  Returns ""
-		 * if the server is unknown.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get drmServerURL():String
-		{
-			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).serverURL : "";
-		}
-		
+
 		/**
 		 * Returns the position to seek to in order to reach the latest live content available
 		 * on the server.

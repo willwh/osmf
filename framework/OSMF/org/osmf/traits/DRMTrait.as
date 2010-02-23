@@ -163,58 +163,64 @@ package org.osmf.traits
 		{
 			return _period;
 		}
-		
-		/**
-		 * Returns the URL of the server used to manage this content's DRM.  Returns "" if
-		 * the server is unknown.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10.1
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */				
-		public function get serverURL():String
-		{
-			return _serverURL;
-		}
-				
+			
 		// Internals
 		//
 		
 		/**
-		 * Must be called by the implementing drm subsystem classes.  
-		 * Dispatches the change event, as well as updates the start,
-		 * end, period values.
+		 * Called to update the period value
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		protected final function setPeriod(value:Number):void
+		{
+			_period = value;
+		}
+		
+		/**
+		 * Called to update the start date
+		 *   
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected final function setStartDate(value:Date):void
+		{
+			_startDate = value;
+		}
+		
+		/**
+		 * Called to update the end date
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		protected final function setEndDate(value:Date):void
+		{
+			_endDate = value;
+		}
+		
+		
+		/**
+		 * Updates the drm state.  
+		 * Doesn't dispatch the state change event.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function drmStateChange(newState:String, token:Object, error:MediaError, start:Date=null, end:Date=null, period:Number=0, serverURL:String = null):void
+		protected final function setDrmState(newState:String):void
 		{
 			_drmState = newState;
-			_serverURL = serverURL;
-			_period = period;	
-			_endDate = end;	
-			_startDate = start;
-			dispatchEvent
-				( new DRMEvent
-					( DRMEvent.DRM_STATE_CHANGE,
-					newState,
-					false,
-					false,
-					_startDate,
-					_endDate,
-					_period,
-					_serverURL,
-					token,
-					error					
-					)
-				);
 		}
-		
-		private var _serverURL:String;
+
 		private var _drmState:String = DRMState.UNINITIALIZED;	
 		private var _period:Number = 0;	
 		private var _endDate:Date;	

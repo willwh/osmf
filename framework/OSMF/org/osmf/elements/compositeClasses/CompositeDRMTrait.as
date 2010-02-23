@@ -183,39 +183,6 @@ package org.osmf.elements.compositeClasses
 		{
 			return calculatedDrmState;			
 		}
-			
-		/**
-		 * @inheritDoc
-		 * 
-		 * In a composition, the server URL is the next
-		 * server to authenticate against, when authenticate() 
-		 * is called.  Once all children are authenticated, returns
-		 * the server for the last authenticated item.
-		 */ 
-		override public function get serverURL():String
-		{
-			if (mode == CompositionMode.SERIAL)
-			{
-				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
-				return listenedTrait ? listenedTrait.serverURL : "";
-			}
-			else
-			{				
-				var child:MediaElement = traitAggregator.getNextChildWithTrait(null, MediaTraitType.DRM);
-				var drmTrait:DRMTrait;
-				while (child != null)
-				{
-					drmTrait = child.getTrait(MediaTraitType.DRM) as DRMTrait;
-					if (drmTrait.drmState == DRMState.AUTHENTICATION_ERROR || 
-						drmTrait.drmState == DRMState.AUTHENTICATION_NEEDED )
-					{
-						return drmTrait.serverURL;
-					}			
-					child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.DRM);
-				}			
-				return drmTrait.serverURL;
-			}
-		}
 		
 		/**
 		 * @private 
@@ -323,8 +290,8 @@ package org.osmf.elements.compositeClasses
 			if (oldState != calculatedDrmState ||
 					(calculatedDrmState == DRMState.AUTHENTICATION_NEEDED &&  //If we authenticated one piece of content, and there are still others, disptatch another auth needed.
 					 newState == DRMState.AUTHENTICATION_COMPLETE))
-			{				
-				drmStateChange(calculatedDrmState, token, error, startDate, endDate, this.period, this.serverURL);
+			{					
+				dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, startDate, endDate, period, serverURL,  token, error));
 			}
 		}
 		

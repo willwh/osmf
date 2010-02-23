@@ -65,7 +65,6 @@ package org.osmf.elements
 			
 			Assert.assertEquals(trait.drmState, elem1Drm.drmState);
 			Assert.assertEquals(trait.endDate, elem1Drm.endDate);
-			Assert.assertEquals(trait.serverURL, elem1Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem1Drm.startDate);
 			Assert.assertEquals(trait.period, elem1Drm.period);
 			
@@ -78,7 +77,6 @@ package org.osmf.elements
 			
 			Assert.assertEquals(trait.drmState, elem2Drm.drmState);
 			Assert.assertEquals(trait.endDate, elem2Drm.endDate);
-			Assert.assertEquals(trait.serverURL, elem2Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem2Drm.startDate);
 			Assert.assertEquals(trait.period, elem2Drm.period);
 			
@@ -91,7 +89,6 @@ package org.osmf.elements
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_COMPLETE);
 			Assert.assertEquals(trait.endDate, end);
 			Assert.assertEquals(trait.startDate, start);
-			Assert.assertEquals(trait.serverURL, "server");
 			Assert.assertEquals(trait.period, 50);
 								
 		}

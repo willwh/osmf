@@ -106,14 +106,6 @@ package org.osmf.net.drm
 		
 		/**
 		 * @private
-		 */ 
-		override public function get serverURL():String
-		{
-			return drmServices.serverURL;
-		}
-		
-		/**
-		 * @private
 		 * Signals failures from the DRMsubsystem not captured though the 
 		 * DRMServices class.
 	
@@ -132,7 +124,11 @@ package org.osmf.net.drm
 						
 		private function onStateChange(event:DRMEvent):void
 		{
-			drmStateChange(drmServices.drmState, event.token, event.error, event.startDate, event.endDate, event.period);
+			setPeriod(event.period);
+			setStartDate(event.startDate);
+			setEndDate(event.endDate);	
+			setDrmState(event.drmState);
+			dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, startDate, endDate, period, event.serverURL,  event.token, event.error));
 		}
 															
 		private var drmServices:DRMServices = new DRMServices();

@@ -21,8 +21,7 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import flash.utils.ByteArray;
-	
+	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
@@ -36,33 +35,37 @@ package org.osmf.utils
 				
 		override public function authenticate(username:String=null, password:String=null):void
 		{
-			drmStateChange(DRMState.AUTHENTICATING, null, null);
+			invokeDrmStateChange(DRMState.AUTHENTICATING, null, null);
 			if (username == null)
 			{				
-				drmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
+				invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
 			}
 			else
 			{				
-				drmStateChange(DRMState.AUTHENTICATION_COMPLETE, null, null);
+				invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, null, null);
 			}
 		}
 
 		override public function authenticateWithToken(token:Object):void
-		{
-			drmStateChange(DRMState.AUTHENTICATING, token, null);
+		{		
+			invokeDrmStateChange(DRMState.AUTHENTICATING, token, null);
 			if (token == null)
 			{				
-				drmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
+				invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
 			}
 			else
 			{				
-				drmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null);
+				invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null);
 			}
 		}
 		
-		public function invokeDrmStateChange(state:String,  token:ByteArray, error:MediaError, start:Date, end:Date, period:Number, serverURL:String):void
-		{			
-			drmStateChange(state, token, error, start, end, period, serverURL);
+		public function invokeDrmStateChange(state:String,  token:Object, error:MediaError, start:Date = null, end:Date = null, period:Number = NaN, serverURL:String = null):void
+		{		
+			setStartDate(start);
+			setEndDate(end);
+			setPeriod(period);
+			setDrmState(state);	
+			dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, state,false, false, start, end, period,  serverURL, token, error));
 		}
 				
 		

@@ -65,7 +65,6 @@ package org.osmf.elements
 			
 			Assert.assertEquals(trait.drmState, elem1Drm.drmState);
 			Assert.assertEquals(trait.endDate, elem1Drm.endDate);
-			Assert.assertEquals(trait.serverURL, elem1Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem1Drm.startDate);
 			Assert.assertEquals(trait.period, elem1Drm.period);
 			
@@ -78,7 +77,6 @@ package org.osmf.elements
 			
 			Assert.assertEquals(trait.drmState, elem2Drm.drmState);
 			Assert.assertEquals(trait.endDate, elem2Drm.endDate);
-			Assert.assertEquals(trait.serverURL, elem2Drm.serverURL);
 			Assert.assertEquals(trait.startDate, elem2Drm.startDate);
 			Assert.assertEquals(trait.period, elem2Drm.period);
 						
@@ -93,7 +91,6 @@ package org.osmf.elements
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_COMPLETE);
 			Assert.assertEquals(trait.endDate, end2);
 			Assert.assertEquals(trait.startDate, start1);
-			Assert.assertEquals(trait.serverURL, "server2");
 			Assert.assertEquals(trait.period, 25);
 			
 			elem2Drm.invokeDrmStateChange(DRMState.UNINITIALIZED,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2");
@@ -122,7 +119,10 @@ package org.osmf.elements
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_ERROR);
 			
 			elem1Drm.invokeDrmStateChange(DRMState.UNINITIALIZED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
-			Assert.assertEquals(trait.drmState, DRMState.UNINITIALIZED);
+			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_ERROR);
+			
+			elem1Drm.invokeDrmStateChange(DRMState.DRM_SYSTEM_UPDATING,  null, null, start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.DRM_SYSTEM_UPDATING);
 									
 		}
 		
@@ -191,7 +191,7 @@ package org.osmf.elements
 			{
 				events++;
 				assertEquals(event.token, token);
-				assertEquals(event.period, 15);
+				assertEquals(event.period, 50);
 				assertEquals(event.serverURL, "SeverURL1");
 				assertEquals(trait.drmState, currentDRMTrait.drmState, event.drmState);	
 			}
@@ -213,7 +213,7 @@ package org.osmf.elements
 		public function testAuthentication():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [ DRMState.AUTHENTICATION_COMPLETE, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_ERROR];
+			var eventQueue:Array = [ DRMState.AUTHENTICATION_COMPLETE, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var parallel:ParallelElement = new ParallelElement();
@@ -236,6 +236,7 @@ package org.osmf.elements
 													
 			function onDRMStateChange(event:DRMEvent):void
 			{
+				
 				assertEquals(event.drmState, eventQueue.pop());
 				events++;						
 			}			
