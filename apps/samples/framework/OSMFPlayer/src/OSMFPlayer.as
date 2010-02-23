@@ -124,7 +124,7 @@ package
 			// Construct a MediaContainer that will be used to show the media
 			// on screen once it has loaded.
 			containerRenderer = new LayoutRenderer();
-			container = new MediaContainer(null, containerRenderer);
+			container = new MediaContainer(containerRenderer);
 			containerLayout = new LayoutRendererProperties(container);
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;

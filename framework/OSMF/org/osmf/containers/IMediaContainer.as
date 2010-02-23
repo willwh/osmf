@@ -41,7 +41,7 @@ package org.osmf.containers
 		 * ContainerChangeEvent via the element that is being
 		 * added to the container.
 		 * 
-		 * @param element The MediaElementInstance to add to the container.
+		 * @param element The MediaElement instance to add to the container.
 		 * @returns The added MediaElement instance.
 		 * @throws IllegalOperationError if the specified element is null,
 		 * or already a child of the container.

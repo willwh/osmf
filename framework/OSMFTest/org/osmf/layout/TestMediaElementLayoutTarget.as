@@ -53,7 +53,8 @@ package org.osmf.layout
 		{
 			var me:DynamicMediaElement = new DynamicMediaElement();
 				
-			var lts:LayoutTargetSprite = new LayoutTargetSprite(me.metadata);
+			var lts:LayoutTargetSprite = new LayoutTargetSprite();
+			lts.metadata = me.metadata;
 			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(lts, 100, 200);
 			me.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 

@@ -136,7 +136,9 @@ package org.osmf.elements.compositeClasses
 		
 		private function constructChildrenContainer():ILayoutTarget
 		{
-			return new LayoutTargetSprite(_owner.metadata);
+			var target:LayoutTargetSprite = new LayoutTargetSprite();
+			target.metadata = _owner.metadata;
+			return target;
 		}
 
 		private function onContainerDimensionChange(event:DisplayObjectEvent):void

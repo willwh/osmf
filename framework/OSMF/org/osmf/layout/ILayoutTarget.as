@@ -236,7 +236,7 @@ package org.osmf.layout
 	 	function get measuredWidth():Number;
 	 	
 	 	/**
-	 	 * Defines the width of the element without any transformations being
+	 	 * Defines the height of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
 	 	 * would be 768 pixels. A client may use this value to (for example)
 	 	 * keep ratio on scaling the element.

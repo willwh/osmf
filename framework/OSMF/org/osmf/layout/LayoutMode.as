@@ -31,7 +31,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class LayoutMode
+	public final class LayoutMode
 	{
 		/**
 		 * Identifier for the layout renderer's default) mode.

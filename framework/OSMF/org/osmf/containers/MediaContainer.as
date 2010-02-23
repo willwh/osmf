@@ -34,12 +34,11 @@ package org.osmf.containers
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
-	 * MediaContainer defines a Sprite based IMediaContainer implementation.
+	 * MediaContainer defines a Sprite-based IMediaContainer implementation.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -49,10 +48,8 @@ package org.osmf.containers
 	public class MediaContainer extends LayoutTargetSprite implements IMediaContainer
 	{
 		/**
-		 * Constructor
+		 * Constructor.
 		 *  
-		 * @param metadata The metadata that _layoutRenderer will be using on
-		 * calculating its layout.
 		 * @param layoutRenderer The layout renderer that will render
 		 * the MediaElement instances that get added to this container. If no
 		 * renderer is specified, a LayoutRenderer instance will be used.
@@ -62,17 +59,27 @@ package org.osmf.containers
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MediaContainer(metadata:Metadata=null, layoutRenderer:LayoutRendererBase=null)
+		public function MediaContainer(layoutRenderer:LayoutRendererBase=null)
 		{
-			super(metadata);
+			super();
 			
 			_layoutRenderer = layoutRenderer || new LayoutRenderer();
 			_layoutRenderer.container = this; 
 		}
 		
-		// IMediaContainer
-		//
-		
+		/**
+		 * Adds a MediaElement instance to the container.
+		 * 
+		 * @param element The MediaElement instance to add to the container.
+		 * @returns The added MediaElement instance.
+		 * @throws IllegalOperationError if the specified element is null,
+		 * or already a child of the container.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function addMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
@@ -108,6 +115,19 @@ package org.osmf.containers
 			return element;
 		}
 		
+		/**
+		 * Removes a MediaElement instance from the container.
+		 * 
+		 * @param element The element to remove from the container.
+		 * @returns The removed MediaElement instance.
+		 * @throws IllegalOperationError if the specified element isn't
+		 * a child element, or is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public function removeMediaElement(element:MediaElement):MediaElement
 		{
 			if (element == null)
@@ -148,14 +168,26 @@ package org.osmf.containers
 			return result;
 		}
 		
+		/**
+		 * Verifies if an element is a child of the container.
+		 *  
+		 * @param element Element to verify.
+		 * @return True if the element if a child of the container.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function containsMediaElement(element:MediaElement):Boolean
 		{
 			return layoutTargets[element] != undefined
 		}
 		
-		// Public API
-		//
-		
+		/**
+		 * The layout renderer that renders the MediaElement instances within
+		 * this container.
+		 **/
 		public function get layoutRenderer():LayoutRendererBase
 		{
 			return _layoutRenderer;
@@ -164,13 +196,17 @@ package org.osmf.containers
 		/**
 		 * Defines if the children of the container that display outside of its bounds 
 		 * will be clipped or not.
-		 * 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
+		public function get clipChildren():Boolean
+		{
+			return scrollRect != null;
+		}
+		
 		public function set clipChildren(value:Boolean):void
 		{
 			if (value && scrollRect == null)
@@ -183,9 +219,53 @@ package org.osmf.containers
 			} 
 		}
 		
-		public function get clipChildren():Boolean
+		/**
+		 * Defines the container's background color. By default, this value
+		 * is set to NaN, which results in no background being drawn.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		public function get backgroundColor():Number
 		{
-			return scrollRect != null;
+			return _backgroundColor;
+		}
+
+		public function set backgroundColor(value:Number):void
+		{
+			if (value != _backgroundColor)
+			{
+				_backgroundColor = value;
+				drawBackground();
+			}
+		}
+		
+		/**
+		 * Defines the container's background alpha. By default, this value
+		 * is set to 1, which results in the background being fully opaque.
+		 * 
+		 * Note that a container will not have a background drawn unless its
+		 * backgroundColor property is set.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get backgroundAlpha():Number
+		{
+			return _backgroundAlpha;
+		}
+
+		public function set backgroundAlpha(value:Number):void
+		{
+			if (value != _backgroundAlpha)
+			{
+				_backgroundAlpha = value;
+				drawBackground();
+			}
 		}
 		
 		// Overrides
@@ -218,56 +298,6 @@ package org.osmf.containers
 		override public function validateNow():void
 		{
 			_layoutRenderer.validateNow();
-		}
-		
-		// Public Interface
-		//
-		
-		/**
-		 * Defines the container's background color. By default, this value
-		 * is set to NaN, which results in no background being drawn.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		public function set backgroundColor(value:Number):void
-		{
-			if (value != _backgroundColor)
-			{
-				_backgroundColor = value;
-				drawBackground();
-			}
-		}
-		public function get backgroundColor():Number
-		{
-			return _backgroundColor;
-		}
-		
-		/**
-		 * Defines the container's background alpha. By default, this value
-		 * is set to 1, which results in the background being fully opaque.
-		 * 
-		 * Note that a container will not have a background drawn unless its
-		 * backgroundColor property is set.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function set backgroundAlpha(value:Number):void
-		{
-			if (value != _backgroundAlpha)
-			{
-				_backgroundAlpha = value;
-				drawBackground();
-			}
-		}
-		public function get backgroundAlpha():Number
-		{
-			return _backgroundAlpha;
 		}
 		
 		// Overrides

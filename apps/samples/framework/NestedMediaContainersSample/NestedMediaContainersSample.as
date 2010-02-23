@@ -38,10 +38,6 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class NestedMediaContainersSample extends Sprite
@@ -104,7 +100,6 @@ package
 			mainGroup.height = 352;
 			mainGroup.backgroundColor = 0xFFFFFF;
 			mainGroup.backgroundAlpha = .2;
-			setElementId(mainGroup.metadata, "mainGroup");
 			addChild(mainGroup);
 			
 				var bannerGroup:MediaContainer = new MediaContainer();
@@ -114,7 +109,6 @@ package
 				
 				var bannerGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(bannerGroup);
 				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
-				setElementId(bannerGroup.metadata, "bannerGroup");
 				
 				var skyScraperGroup:MediaContainer = new MediaContainer();
 				skyScraperGroup.backgroundColor = 0xFF00;
@@ -123,7 +117,6 @@ package
 				
 				var skyScraperGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraperGroup);
 				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
-				setElementId(skyScraperGroup.metadata, "skyScraperGroup");
 				
 			// Bind media elements to their target containers:
 			mainGroup.addMediaElement(mainContent);
@@ -169,19 +162,6 @@ package
 					);
 		}
 		
-		/**
-		 * Adds an element string identifier to a metadata instance.
-		 *  
-		 * @param target The metadata instance to set the id on.
-		 * @param id The id to set.
-		 */		
-		private static function setElementId(target:Metadata, id:String):void
-		{
-			var facet:Facet = new Facet(MetadataNamespaces.ELEMENT_ID);
-			facet.addValue(new FacetKey(MetadataNamespaces.ELEMENT_ID), id);
-			target.addFacet(facet);
-		}
-
 		private static const BANNER_INTERVAL:int = 5;
 		
 		private static const REMOTE_PROGRESSIVE:String

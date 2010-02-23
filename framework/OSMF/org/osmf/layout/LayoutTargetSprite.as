@@ -174,19 +174,16 @@ package org.osmf.layout
 	public class LayoutTargetSprite extends Sprite implements ILayoutTarget
 	{
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
-		 * @param metadata The metadata that an LayoutRenderer may be using on calculating
-		 * a layout using this context.
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function LayoutTargetSprite(metadata:Metadata=null)
+		public function LayoutTargetSprite()
 		{
-			_metadata = metadata || new Metadata();
+			_metadata = new Metadata();
 			
 			renderers = new LayoutTargetRenderers(this);
 			
@@ -203,26 +200,81 @@ package org.osmf.layout
 		// ILayoutTarget
 		//
 		
+		/**
+		 * @private
+		 **/
 		public function get metadata():Metadata
 		{
 			return _metadata;
 		}
 		
+		/**
+		 * @private
+		 **/
+		public function set metadata(value:Metadata):void
+		{
+			_metadata = value;
+		}
+		
+		/**
+		 * A reference to the display object that represents the target. A
+		 * client may use this reference to position or parent the target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function get displayObject():DisplayObject
 		{
 			return this;
 		}
 		
+	 	/**
+	 	 * Defines the width of the element without any transformations being
+	 	 * applied. For a JPG with an original resolution of 1024x768, this
+	 	 * would be 1024 pixels. A client may use this value to (for example)
+	 	 * keep ratio on scaling the element.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.5
+	 	 *  @productversion OSMF 1.0
+	 	 */	 	
 		public function get measuredWidth():Number
 		{
 			return _measuredWidth;
 		}
 		
+	 	/**
+	 	 * Defines the height of the element without any transformations being
+	 	 * applied. For a JPG with an original resolution of 1024x768, this
+	 	 * would be 768 pixels. A client may use this value to (for example)
+	 	 * keep ratio on scaling the element.
+	 	 *  
+	 	 *  @langversion 3.0
+	 	 *  @playerversion Flash 10
+	 	 *  @playerversion AIR 1.5
+	 	 *  @productversion OSMF 1.0
+	 	 */
 		public function get measuredHeight():Number
 		{
 			return _measuredHeight;
 		}
 		
+	 	/**
+		 * Method that informs the implementation that it should reassess its
+		 * measuredWidth and measuredHeight fields:
+		 * 
+		 * @param deep True if the measurement request is to be forwarded to
+		 * the target's potential inner layout system. The forwarding should take
+		 * place up front the target measuring itself.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function measure(deep:Boolean = true):void
 		{
 			if (deep && renderers.containerRenderer)
@@ -267,6 +319,21 @@ package org.osmf.layout
 			}
 		}
 		
+	 	/**
+		 * Method that informs the implementation that it should update its
+		 * display to adjust to the given available width and height.
+		 *  
+	 	 * @param availableWidth
+	 	 * @param availableHeight
+	 	 * @param deep True if the layout request is to be forwarded to
+		 * the target's potential inner layout system. The forwarding should take
+		 * place only after the target has laid itself out.
+	 	 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
 	 	public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void
 	 	{
 	 		if (renderers.containerRenderer == null)
@@ -279,9 +346,6 @@ package org.osmf.layout
 	 			renderers.containerRenderer.layout(availableWidth, availableHeight);
 	 		}
 	 	}
-	 	
-	 	// Public Interface
-	 	//
 	 	
 	 	/**
 		 * @private

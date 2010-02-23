@@ -41,10 +41,6 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
 
 	[SWF(backgroundColor='#333333', frameRate='30')]
 	public class MediaContainerSample extends Sprite
@@ -75,15 +71,6 @@ package
 				var skyScraper:MediaElement = constructImage(SKY_SCRAPER_1);
 				rootElement.addChild(skyScraper);
 				
-			// DEBUG: add id's to the elements at hand (these IDs will show in the logger
-			// traces, if the LOGGING conditional is set to 'true' on the OSMF project):
-			setElementId(rootElement.metadata, "rootElement");
-			setElementId(banners.metadata, "banners");
-			setElementId(skyScraper.metadata, "skyScraper");
-			setElementId(banners.getChildAt(0).metadata, "banner1");
-			setElementId(banners.getChildAt(1).metadata, "banner2");
-			setElementId(banners.getChildAt(2).metadata, "banner3");
-			
 			// Next, decorate the content tree with attributes:
 			
 			var bannersLayout:LayoutRendererProperties = new LayoutRendererProperties(banners);
@@ -125,11 +112,6 @@ package
 			skyScraperContainer.x = 610;
 			skyScraperContainer.y = 10;
 			addChild(skyScraperContainer);
-			
-			// DEBUG: add id's to the elements at hand:
-			setElementId(mainContainer.metadata, "mainContainer");
-			setElementId(bannerContainer.metadata, "bannerContainer");
-			setElementId(skyScraperContainer.metadata, "skyScraperContainer");
 			
 			// Bind media elements to their target regions:
 			
@@ -208,20 +190,7 @@ package
 					( new URLResource(url)
 					);
 		}
-		
-		/**
-		 * Adds an element string identifier to a metadata instance.
-		 *  
-		 * @param target The metadata instance to set the id on.
-		 * @param id The id to set.
-		 */		
-		private static function setElementId(target:Metadata, id:String):void
-		{
-			var facet:Facet = new Facet(MetadataNamespaces.ELEMENT_ID);
-			facet.addValue(new FacetKey(MetadataNamespaces.ELEMENT_ID), id);
-			target.addFacet(facet);
-		}
-		
+				
 		private static const BANNER_INTERVAL:int = 5;
 		
 		private static const REMOTE_PROGRESSIVE:String

@@ -31,7 +31,7 @@ package org.osmf.layout
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class HorizontalAlign
+	public final class HorizontalAlign
 	{
 		/**
 		 * Defines the left horizontal align mode.
