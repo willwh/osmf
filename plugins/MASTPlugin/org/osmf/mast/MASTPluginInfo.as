@@ -34,7 +34,11 @@ package org.osmf.mast
 	 * Encapsulation of a MAST plugin.
 	 **/
 	public class MASTPluginInfo extends PluginInfo
-	{	
+	{
+		// Constants for specifying the MAST document URL on the resource metadata
+		public static const MAST_METADATA_NAMESPACE:String = "http://www.akamai.com/mast/1.0";
+		public static const MAST_METADATA_KEY_URI:String = "uri";
+		
 		/**
 		 * Constructor.
 		 */	

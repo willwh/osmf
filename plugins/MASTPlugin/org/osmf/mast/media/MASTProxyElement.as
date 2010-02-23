@@ -31,10 +31,11 @@ package org.osmf.mast.media
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.loader.MASTDocumentProcessedEvent;
 	import org.osmf.mast.loader.MASTDocumentProcessor;
-	import org.osmf.mast.loader.MASTLoader;
 	import org.osmf.mast.loader.MASTLoadTrait;
+	import org.osmf.mast.loader.MASTLoader;
 	import org.osmf.mast.managers.MASTConditionManager;
 	import org.osmf.mast.model.*;
 	import org.osmf.mast.traits.MASTPlayTrait;
@@ -58,10 +59,7 @@ package org.osmf.mast.media
 	 * elements found in the MAST payload.
 	 */
 	public class MASTProxyElement extends ProxyElement
-	{
-		public static const MAST_METADATA_NAMESPACE:String = "http://www.akamai.com/mast";
-		public static const METADATA_KEY_URI:String = "url";
-		
+	{		
 		/**
 		 * Constructor.
 		 * 
@@ -113,13 +111,13 @@ package org.osmf.mast.media
 				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
 			}
 			
-			var facet:Facet = tempResource.metadata.getFacet(MAST_METADATA_NAMESPACE);
+			var facet:Facet = tempResource.metadata.getFacet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
 			if (facet == null)
 			{
 				throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);
 			}			
 			
-			var mastURL:String = facet.getValue(new FacetKey(METADATA_KEY_URI));
+			var mastURL:String = facet.getValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI));
 			
 			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(mastURL));
 			
