@@ -12,7 +12,7 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
+*
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
@@ -21,29 +21,24 @@
 
 package org.osmf.net.dvr
 {
-	import org.osmf.metadata.FacetKey;
-	
-	[ExcludeClass]
-	
-	/**
-	 * @private
-	 * 
-	 * Defines DVRCast related constants values
-	 */	
-	internal class DVRCastConstants
+	import org.osmf.flexunit.TestCaseEx;
+
+	public class TestDVRCastRecordingInfo extends TestCaseEx
 	{
-		public static const KEY_STREAM_INFO:FacetKey				= new FacetKey("streamInfo");
-		public static const KEY_RECORDING_INFO:FacetKey				= new FacetKey("recordingInfo");
+		public function testDVRCastRecordingInfo():void
+		{
+			var ri:DVRCastRecordingInfo = new DVRCastRecordingInfo();
+			assertNotNull(ri);
+			
+			ri.startDuration = 1;
+			assertEquals(ri.startDuration, 1);
+			
+			ri.startOffset = 2;
+			assertEquals(ri.startOffset, 2);
+			
+			ri.startTimer = 3;
+			assertEquals(ri.startTimer, 3);
+		}
 		
-		public static const RPC_GET_STREAM_INFO:String				= "DVRGetStreamInfo";
-		public static const RPC_SUBSCRIBE:String 					= "DVRSubscribe";
-		public static const RPC_UNSUBSCRIBE:String 					= "DVRUnsubscribe";
-		
-		public static const RESULT_GET_STREAM_INFO_SUCCESS:String	="NetStream.DVRStreamInfo.Success";
-		public static const RESULT_GET_STREAM_INFO_RETRY:String		="NetStream.DVRStreamInfo.Retry";
-		
-		public static const STREAM_INFO_UPDATE_DELAY:Number 		= 3000; // ms.
-		public static const LOCAL_DURATION_UPDATE_INTERVAL:Number 	= 500;	// ms.
-		public static const LIVE_POSITION_SEEK_DELAY:Number			= 1.5;	// secs.
 	}
 }

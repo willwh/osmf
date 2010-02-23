@@ -41,7 +41,7 @@ package org.osmf.net.dvr
 	public class DVRCastNetLoader extends NetLoader
 	{
 		/**
-		 * @inherited 
+		 * @private 
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -54,7 +54,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -78,7 +78,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -91,7 +91,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -104,7 +104,7 @@ package org.osmf.net.dvr
 		}
 		
 		/**
-		 * @inherited
+		 * @private
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

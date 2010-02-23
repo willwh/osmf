@@ -21,6 +21,10 @@
 
 package org.osmf.net.dvr
 {
+	import flash.errors.IllegalOperationError;
+	
+	import org.osmf.utils.OSMFStrings;
+	
 	[ExcludeClass]
 	
 	/**
@@ -49,32 +53,46 @@ package org.osmf.net.dvr
 		
 		public function readFromDynamicObject(value:Object):void
 		{
-			callTime = value.callTime;
-			offline = value.offline;
-			beginOffset = value.begOffset;
-			endOffset = value.endOffset;
-			recordingStart = value.startRec;
-			recordingEnd = value.stopRec;
-			isRecording = value.isRec;
-			streamName = value.streamName;
-			lastUpdate = value.lastUpdate;
-			currentLength = value.currLen;
-			maxLength = value.maxLen;
+			try
+			{
+				callTime = value.callTime;
+				offline = value.offline;
+				beginOffset = value.begOffset;
+				endOffset = value.endOffset;
+				recordingStart = value.startRec;
+				recordingEnd = value.stopRec;
+				isRecording = value.isRec;
+				streamName = value.streamName;
+				lastUpdate = value.lastUpdate;
+				currentLength = value.currLen;
+				maxLength = value.maxLen;
+			}
+			catch (e:Error)
+			{
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
 		}
 		
 		public function readFromDVRCastStreamInfo(value:DVRCastStreamInfo):void
 		{
-			callTime = value.callTime;
-			offline = value.offline;
-			beginOffset = value.beginOffset;
-			endOffset = value.endOffset;
-			recordingStart = value.recordingStart;
-			recordingEnd = value.recordingEnd;
-			isRecording = value.isRecording;
-			streamName = value.streamName;
-			lastUpdate = value.lastUpdate;
-			currentLength = value.currentLength;
-			maxLength = value.maxLength;
+			try
+			{
+				callTime = value.callTime;
+				offline = value.offline;
+				beginOffset = value.beginOffset;
+				endOffset = value.endOffset;
+				recordingStart = value.recordingStart;
+				recordingEnd = value.recordingEnd;
+				isRecording = value.isRecording;
+				streamName = value.streamName;
+				lastUpdate = value.lastUpdate;
+				currentLength = value.currentLength;
+				maxLength = value.maxLength;
+			}
+			catch (e:Error)
+			{
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
 		}
 		
 		public function toString():String

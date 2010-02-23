@@ -21,8 +21,8 @@
 
 package org.osmf.net.dvr
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
-	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
@@ -33,8 +33,10 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.DVRTrait;
+	import org.osmf.utils.OSMFStrings;
 	
 	[ExcludeClass]
 	
@@ -57,25 +59,32 @@ package org.osmf.net.dvr
 
 		public function DVRCastDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase)
 		{
-			this.connection = connection;
-			this.stream = DVRCastNetStream(stream);
-			this.resource = resource;
-			
-			streamInfo 
-				= resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
-				. getValue(DVRCastConstants.KEY_STREAM_INFO);
-			
-			streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamInfo.streamName); 
-			streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
-			
-			streamInfoUpdateTimer = new Timer(DVRCastConstants.STREAM_INFO_UPDATE_DELAY);
-			streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
-			streamInfoUpdateTimer.start(); 
-			
-			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			
-			super(streamInfo.isRecording);
-			updateProperties();
+			var dvrCastMetadata:Facet = resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA);
+			if (dvrCastMetadata != null)
+			{
+				this.connection = connection;
+				this.stream = stream;
+				this.resource = resource;
+				
+				streamInfo = dvrCastMetadata.getValue(DVRCastConstants.KEY_STREAM_INFO);
+				recordingInfo = dvrCastMetadata.getValue(DVRCastConstants.KEY_RECORDING_INFO);
+				
+				// Setup 
+				streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamInfo.streamName); 
+				streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
+				
+				streamInfoUpdateTimer = new Timer(DVRCastConstants.STREAM_INFO_UPDATE_DELAY);
+				streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
+				streamInfoUpdateTimer.start(); 
+				
+				super(streamInfo.isRecording);
+				
+				updateProperties();
+			}
+			else
+			{
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+			}
 		}
 		
 		// Overrides
@@ -91,19 +100,35 @@ package org.osmf.net.dvr
 		 */
 		override public function get livePosition():Number
 		{
-			return 0;
+			var result:Number;
+			
+			if (streamInfo.isRecording)
+			{
+				// When the stream is being recorded:
+				result 
+					= Math.max
+						(	0
+						,	// Initial duration available on play start:
+							( (recordingInfo.startDuration - recordingInfo.startOffset)
+							// Plus the timer measured elapsed time since play start:
+							+ (getTimer() - recordingInfo.startTimer) / 1000
+							// Substract the time needed in order to keep a buffer:
+							- stream.bufferTime
+							// Add an additional delta for network lag:
+							- DVRCastConstants.LIVE_POSITION_SEEK_DELAY
+							)
+						,	recordingInfo.startOffset
+						);
+			} // else, return NaN.
+			
+			return result;
 		}
 		
 		override protected function isRecordingChangeStart(value:Boolean):void
 		{
-			var recordingInfo:DVRCastRecordingInfo
-					=	resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
-					.	getValue(DVRCastConstants.KEY_RECORDING_INFO)
-					as 	DVRCastRecordingInfo;
-					
 			if (value)
 			{
-				// We're going into recording mode.
+				// We're going into recording mode: update the start duration, and timer:
 				recordingInfo.startDuration = streamInfo.currentLength - recordingInfo.startOffset;
 				recordingInfo.startTimer = flash.utils.getTimer();
 			}
@@ -117,10 +142,12 @@ package org.osmf.net.dvr
 		//
 		
 		private var connection:NetConnection;
-		private var stream:DVRCastNetStream;
+		private var stream:NetStream;
 		private var resource:MediaResourceBase;
 		
 		private var streamInfo:DVRCastStreamInfo;
+		private var recordingInfo:DVRCastRecordingInfo;
+		
 		private var streamInfoUpdateTimer:Timer;
 		private var streamInfoRetreiver:DVRCastStreamInfoRetreiver; 
 		
@@ -142,7 +169,6 @@ package org.osmf.net.dvr
 			{
 				streamInfo.readFromDVRCastStreamInfo(streamInfoRetreiver.streamInfo);
 				updateProperties();
-				//trace(streamInfoRetreiver.streamInfo);
 			}
 			else
 			{
@@ -155,15 +181,5 @@ package org.osmf.net.dvr
 					);
 			}
 		}
-		
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			switch (event.info.code)
-			{
-				//case NetStreamCodes.NETSTREAM_PLAY_STOP:
-			//		break;	
-			}
-		}
-		
 	}
 }

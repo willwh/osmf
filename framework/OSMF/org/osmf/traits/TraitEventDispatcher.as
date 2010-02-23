@@ -28,6 +28,7 @@ package org.osmf.traits
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DRMEvent;
+	import org.osmf.events.DVREvent;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.DynamicStreamEvent;
 	import org.osmf.events.LoadEvent;
@@ -260,7 +261,19 @@ package org.osmf.traits
  	 *  @playerversion AIR 1.5
  	 *  @productversion OSMF 1.0
  	 */ 
-	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]	
+	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
+	
+	/**
+	 * Dispatched when the <code>isRecording</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.DVREvent.IS_RECORDING_CHANGE
+ 	 *  
+ 	 *  @langversion 3.0
+ 	 *  @playerversion Flash 10.1
+ 	 *  @playerversion AIR 1.5
+ 	 *  @productversion OSMF 1.0
+ 	 */ 
+	[Event(name='isRecordingChange', type='org.osmf.events.DVREvent')]
 		
 	/**
 	 * TraitEventDispatcher is a utility class for redispatching
@@ -299,7 +312,8 @@ package org.osmf.traits
 				eventMaps[LoadEvent.BYTES_TOTAL_CHANGE]					= MediaTraitType.LOAD;	
 				eventMaps[BufferEvent.BUFFERING_CHANGE]					= MediaTraitType.BUFFER;
 				eventMaps[BufferEvent.BUFFER_TIME_CHANGE]				= MediaTraitType.BUFFER;
-				eventMaps[DRMEvent.DRM_STATE_CHANGE]					= MediaTraitType.DRM;						
+				eventMaps[DRMEvent.DRM_STATE_CHANGE]					= MediaTraitType.DRM;
+				eventMaps[DVREvent.IS_RECORDING_CHANGE]					= MediaTraitType.DVR;					
 			}						
 		}
 		
@@ -421,7 +435,10 @@ package org.osmf.traits
 					changeListeners(add, traitType, BufferEvent.BUFFER_TIME_CHANGE);						
 					break;	
 				case MediaTraitType.DRM:
-					changeListeners(add, traitType, DRMEvent.DRM_STATE_CHANGE);	
+					changeListeners(add, traitType, DRMEvent.DRM_STATE_CHANGE);
+					break;
+				case MediaTraitType.DVR:
+					changeListeners(add, traitType, DVREvent.IS_RECORDING_CHANGE);	
 					break;				
 			}		
 		}
