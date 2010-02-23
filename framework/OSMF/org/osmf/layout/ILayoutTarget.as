@@ -202,9 +202,7 @@ package org.osmf.layout
 	{
 		/**
 		 * A reference to the display object that represents the target. A
-		 * LayoutRenderer object may use this reference to position the target,
-		 * as well as to correctly parent the target on its context's display
-		 * object container.
+		 * client may use this reference to position or parent the target.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -227,8 +225,8 @@ package org.osmf.layout
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
-	 	 * would be 1024 pixels. An LayoutRenderer may use this value to
-	 	 * for example keep ratio on scaling the element.
+	 	 * would be 1024 pixels. A client may use this value to (for example)
+	 	 * keep ratio on scaling the element.
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
@@ -240,8 +238,8 @@ package org.osmf.layout
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
-	 	 * would be 768 pixels. An LayoutRenderer may use this value to
-	 	 * for example keep ratio on scaling the element.
+	 	 * would be 768 pixels. A client may use this value to (for example)
+	 	 * keep ratio on scaling the element.
 	 	 *  
 	 	 *  @langversion 3.0
 	 	 *  @playerversion Flash 10
@@ -251,8 +249,8 @@ package org.osmf.layout
 	 	function get measuredHeight():Number;
 	 	
 	 	/**
-		 * Method invoked by a LayoutRenderer object to inform the implementation
-		 * that it should reasses its measuredWidth and measuredHeight fields:
+		 * Method that informs the implementation that it should reassess its
+		 * measuredWidth and measuredHeight fields:
 		 * 
 		 * @param deep True if the measurement request is to be forwarded to
 		 * the target's potential inner layout system. The forwarding should take
@@ -266,9 +264,8 @@ package org.osmf.layout
 	 	function measure(deep:Boolean = true):void;
 	 	
 	 	/**
-		 * Method invoked by a LayoutRenderer object to inform the implementation
-		 * that it should update its display to adjust to the given available
-		 * width and height.
+		 * Method that informs the implementation that it should update its
+		 * display to adjust to the given available width and height.
 		 *  
 	 	 * @param availableWidth
 	 	 * @param availableHeight
