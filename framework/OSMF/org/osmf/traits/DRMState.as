@@ -40,7 +40,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const INITIALIZING:String 			= "initializing"; 
+		public static const UNINITIALIZED:String 			= "uninitialized"; 
 		
 		/**
 		 * The DRMTrait needs credential-based authentication.  Call authenticate()
@@ -76,7 +76,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const AUTHENTICATED:String			= "authenticated"; 
+		public static const AUTHENTICATION_COMPLETE:String			= "authenticationComplete"; 
 		
 		/**
 		 *  The authentication attempt failed.
@@ -86,7 +86,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const AUTHENTICATE_FAILED:String		= "authenticateFailed";
+		public static const AUTHENTICATION_ERROR:String		= "authenticationError";
 		
 		/**
 		 *  The DRM subsystem is updating itself.
@@ -96,7 +96,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const UPDATING:String					= "updating";
+		public static const DRM_SYSTEM_UPDATING:String					= "drmSystemUpdating";
 
 	}
 }

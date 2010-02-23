@@ -44,12 +44,12 @@ package org.osmf.elements.compositeClasses
 			if (drmLevels == null)
 			{
 				drmLevels = {};				
-				drmLevels[DRMState.UPDATING] = 0;
-				drmLevels[DRMState.AUTHENTICATE_FAILED] = 1;
+				drmLevels[DRMState.DRM_SYSTEM_UPDATING] = 0;
+				drmLevels[DRMState.AUTHENTICATION_ERROR] = 1;
 				drmLevels[DRMState.AUTHENTICATION_NEEDED] = 2;
-				drmLevels[DRMState.INITIALIZING]  = 3;
+				drmLevels[DRMState.UNINITIALIZED]  = 3;
 				drmLevels[DRMState.AUTHENTICATING] = 4;
-				drmLevels[DRMState.AUTHENTICATED] = 5;			
+				drmLevels[DRMState.AUTHENTICATION_COMPLETE] = 5;			
 				drmLevels[""] = 6;	 //Unknown is considered the highest state, giving it the least weight						
 			}	
 						
@@ -206,7 +206,7 @@ package org.osmf.elements.compositeClasses
 				while (child != null)
 				{
 					drmTrait = child.getTrait(MediaTraitType.DRM) as DRMTrait;
-					if (drmTrait.drmState == DRMState.AUTHENTICATE_FAILED || 
+					if (drmTrait.drmState == DRMState.AUTHENTICATION_ERROR || 
 						drmTrait.drmState == DRMState.AUTHENTICATION_NEEDED )
 					{
 						return drmTrait.serverURL;
@@ -250,7 +250,7 @@ package org.osmf.elements.compositeClasses
 				while (child != null)
 				{		
 					drmTrait = child.getTrait(MediaTraitType.DRM) as DRMTrait;							
-					if (drmTrait.drmState == DRMState.AUTHENTICATE_FAILED || 
+					if (drmTrait.drmState == DRMState.AUTHENTICATION_ERROR || 
 						drmTrait.drmState == DRMState.AUTHENTICATION_NEEDED)
 					{
 						(drmTrait[methodName]).apply(drmTrait, args);
@@ -283,7 +283,7 @@ package org.osmf.elements.compositeClasses
 			if (mode == CompositionMode.SERIAL)
 			{
 				var listenedTrait:DRMTrait = traitAggregator.listenedChild ? traitAggregator.listenedChild.getTrait(MediaTraitType.DRM) as DRMTrait : null;
-				calculatedDrmState = listenedTrait ? listenedTrait.drmState : DRMState.INITIALIZING;		
+				calculatedDrmState = listenedTrait ? listenedTrait.drmState : DRMState.UNINITIALIZED;		
 			}
 			else //Parallel
 			{			
@@ -322,7 +322,7 @@ package org.osmf.elements.compositeClasses
 			recalculateDRMState();		
 			if (oldState != calculatedDrmState ||
 					(calculatedDrmState == DRMState.AUTHENTICATION_NEEDED &&  //If we authenticated one piece of content, and there are still others, disptatch another auth needed.
-					 newState == DRMState.AUTHENTICATED))
+					 newState == DRMState.AUTHENTICATION_COMPLETE))
 			{				
 				drmStateChange(calculatedDrmState, token, error, startDate, endDate, this.period, this.serverURL);
 			}

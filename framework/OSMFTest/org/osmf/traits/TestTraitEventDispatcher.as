@@ -246,10 +246,10 @@ package org.osmf.traits
 		
 		public function  testDRMEvents():void
 		{
-			var event1:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATED, false, false, new Date(1), new Date(2), 4, "server1", null, null );
+			var event1:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATION_COMPLETE, false, false, new Date(1), new Date(2), 4, "server1", null, null );
 			var event2:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATING, false, false, new Date(8), new Date(9), 4, "server1", null, null );
 			var event3:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATION_NEEDED, false, false, new Date(11), new Date(12), 4, "server1", null, null );
-			var event4:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATE_FAILED, false, false, new Date(11), new Date(12), 4, "server1", null, new MediaError(1, "detail") );
+			var event4:DRMEvent = new DRMEvent(DRMEvent.DRM_STATE_CHANGE, DRMState.AUTHENTICATION_ERROR, false, false, new Date(11), new Date(12), 4, "server1", null, new MediaError(1, "detail") );
 						
 			var events:Vector.<Event> = new Vector.<Event>();
 			var properties:Vector.<String> = new Vector.<String>();

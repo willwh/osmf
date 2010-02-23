@@ -215,7 +215,7 @@ package org.osmf.traits
 		}
 		
 		private var _serverURL:String;
-		private var _drmState:String = DRMState.INITIALIZING;	
+		private var _drmState:String = DRMState.UNINITIALIZED;	
 		private var _period:Number = 0;	
 		private var _endDate:Date;	
 		private var _startDate:Date;	

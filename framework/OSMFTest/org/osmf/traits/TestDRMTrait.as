@@ -107,22 +107,22 @@ package org.osmf.traits
 		
 		protected function prodAuthNeeded():void
 		{
-			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, null, null, 0, "", "");
+			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, null, null, 0, "");
 		}
 		
 		protected function prodAuthFailed():void
 		{
-			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATE_FAILED, null, new MediaError(45, "Error"), null, null, 0,  "", "");
+			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR, null, new MediaError(45, "Error"), null, null, 0,  "");
 		}
 		
 		protected function prodAuthSuccess(start:Date, end:Date, period:Number):void
 		{
-			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATED, null, null, start, end, period,  "", "");
+			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, null, null, start, end, period,  "");
 		}
 		
 		protected function prodAuthSuccessToken(token:ByteArray):void
 		{
-			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATED, token, null, null, null, 0, "", "");
+			protectionTrait.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null, null, null, 0, "");
 		}
 		
 		protected function get protectionTrait():DynamicDRMTrait

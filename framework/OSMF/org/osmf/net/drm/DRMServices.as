@@ -136,7 +136,7 @@ package org.osmf.net.drm
 				catch (argError:ArgumentError)  // DRM ContentData is invalid
 				{		
 					updateDRMState		
-						( 	DRMState.AUTHENTICATE_FAILED,
+						( 	DRMState.AUTHENTICATION_ERROR,
 							new MediaError(argError.errorID, "DRMContentData invalid")
 						);
 						
@@ -320,7 +320,7 @@ package org.osmf.net.drm
 		 */	
 		public function inlineDRMFailed(error:MediaError):void
 		{
-			updateDRMState(DRMState.AUTHENTICATE_FAILED, error);
+			updateDRMState(DRMState.AUTHENTICATION_ERROR, error);
 		}
 		
 		/**
@@ -335,7 +335,7 @@ package org.osmf.net.drm
 		 */ 
 		public function update(type:String):SystemUpdater
 		{
-			updateDRMState(DRMState.UPDATING);		
+			updateDRMState(DRMState.DRM_SYSTEM_UPDATING);		
 			if (updater == null) //An update hasn't been triggered
 			{
 				updater = new SystemUpdater();
@@ -386,11 +386,11 @@ package org.osmf.net.drm
 								
 					if (voucher.playbackTimeWindow == null)
 					{					
-						updateDRMState(DRMState.AUTHENTICATED, null, voucher.voucherStartDate, voucher.voucherEndDate, period, lastToken);
+						updateDRMState(DRMState.AUTHENTICATION_COMPLETE, null, voucher.voucherStartDate, voucher.voucherEndDate, period, lastToken);
 					} 
 					else
 					{
-						updateDRMState(DRMState.AUTHENTICATED, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
+						updateDRMState(DRMState.AUTHENTICATION_COMPLETE, null, voucher.playbackTimeWindow.startDate, voucher.playbackTimeWindow.endDate, voucher.playbackTimeWindow.period, lastToken);
 					}								
 				}
 				else
@@ -420,7 +420,7 @@ package org.osmf.net.drm
 						break;
 					default:
 						removeEventListeners();							
-						updateDRMState(DRMState.AUTHENTICATE_FAILED,  new MediaError(event.errorID, event.text));	
+						updateDRMState(DRMState.AUTHENTICATION_ERROR,  new MediaError(event.errorID, event.text));	
 						break;
 				}
 			}	
@@ -445,7 +445,7 @@ package org.osmf.net.drm
 			drmManager.removeEventListener(DRMAuthenticationErrorEvent.AUTHENTICATION_ERROR, authError);
 			drmManager.removeEventListener(DRMAuthenticationCompleteEvent.AUTHENTICATION_COMPLETE, authComplete);
 			
-			updateDRMState(DRMState.AUTHENTICATE_FAILED);
+			updateDRMState(DRMState.AUTHENTICATION_ERROR);
 		}
 		
 		private function toggleErrorListeners(updater:SystemUpdater, on:Boolean):void
@@ -477,7 +477,7 @@ package org.osmf.net.drm
 		{
 			toggleErrorListeners(updater, false);
 			//Error ID is supported in flash 10.1
-			updateDRMState(DRMState.AUTHENTICATE_FAILED, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString()));
+			updateDRMState(DRMState.AUTHENTICATION_ERROR, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString()));
 		}
 				
 		
@@ -517,7 +517,7 @@ package org.osmf.net.drm
 		private static const DRM_CONTENT_NOT_YET_VALID:int				= 3331;
 		
 		
-		private var _drmState:String = DRMState.INITIALIZING;
+		private var _drmState:String = DRMState.UNINITIALIZED;
 		private var lastToken:ByteArray
 		private var drmContentData:DRMContentData;
 		private var voucher:DRMVoucher;

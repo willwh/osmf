@@ -87,42 +87,42 @@ package org.osmf.elements
 			var start2:Date = new Date(1);
 			var end2:Date = new Date(4);
 			
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATED,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2", DRMAuthenticationMethod.ANONYMOUS);
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2");
 			
-			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATED);
+			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_COMPLETE);
 			Assert.assertEquals(trait.endDate, end2);
 			Assert.assertEquals(trait.startDate, start1);
 			Assert.assertEquals(trait.serverURL, "server2");
 			Assert.assertEquals(trait.period, 25);
 			
-			elem2Drm.invokeDrmStateChange(DRMState.INITIALIZING,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
+			elem2Drm.invokeDrmStateChange(DRMState.UNINITIALIZED,  new ByteArray(), new MediaError(1, "test"), start2, end2, 50, "server2");
 			
 			
 			//Mixup drmStates:
-			elem1Drm.invokeDrmStateChange(DRMState.INITIALIZING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.drmState, DRMState.INITIALIZING);
+			elem1Drm.invokeDrmStateChange(DRMState.UNINITIALIZED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.UNINITIALIZED);
 			
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.drmState, DRMState.INITIALIZING);
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.UNINITIALIZED);
 			
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATING);
 			
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_NEEDED);
 			
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
 			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_NEEDED);
 			
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATED);
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_COMPLETE);
 			
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATE_FAILED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATE_FAILED);
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATION_ERROR);
 			
-			elem1Drm.invokeDrmStateChange(DRMState.INITIALIZING,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			Assert.assertEquals(trait.drmState, DRMState.AUTHENTICATE_FAILED);
+			elem1Drm.invokeDrmStateChange(DRMState.UNINITIALIZED,  new ByteArray(), new MediaError(1, "test"), start1, end1, 25, "server1");
+			Assert.assertEquals(trait.drmState, DRMState.UNINITIALIZED);
 									
 		}
 		
@@ -143,13 +143,13 @@ package org.osmf.elements
 			
 			Assert.assertTrue(parallel.getTrait(MediaTraitType.DRM) != null);
 			
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATED, token, null, new Date(), new Date(), 15, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);		
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null, new Date(), new Date(), 15, "SeverURL1");		
 			
 			var trait:DRMTrait = parallel.getTrait(MediaTraitType.DRM) as DRMTrait;
 			
 			trait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);
 							
-			Assert.assertEquals(trait.drmState, DRMState.INITIALIZING);
+			Assert.assertEquals(trait.drmState, DRMState.UNINITIALIZED);
 					
 			var currentDRMTrait:DRMTrait = 	elem1Drm;
 			
@@ -158,11 +158,11 @@ package org.osmf.elements
 			var events:Number = 0;		
 					
 					
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATE_FAILED, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATED, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATING, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem1Drm.invokeDrmStateChange(DRMState.INITIALIZING, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);		
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR, token, null, new Date(), new Date(), 50, "SeverURL1");
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null, new Date(), new Date(), 50, "SeverURL1");
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATING, token, null, new Date(), new Date(), 50, "SeverURL1");
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, token, null, new Date(), new Date(), 50, "SeverURL1");
+			elem1Drm.invokeDrmStateChange(DRMState.UNINITIALIZED, token, null, new Date(), new Date(), 50, "SeverURL1");		
 			
 			trait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);
 			
@@ -172,15 +172,15 @@ package org.osmf.elements
 			currentDRMTrait = elem2Drm;
 						
 			
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATED, token, null, new Date(), new Date(), 50, "SeverURL1", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);		
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null, new Date(), new Date(), 50, "SeverURL1");		
 			
 			trait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange2);
 				
-			elem2Drm.invokeDrmStateChange(DRMState.INITIALIZING, token, null, new Date(), new Date(), 25, "SeverURL2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);	
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATE_FAILED, token, null, new Date(), new Date(), 25, "SeverURL2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATED, token, null, new Date(), new Date(), 25, "SeverURL2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATING, token, null, new Date(), new Date(), 25, "SeverURL2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, token, null, new Date(), new Date(), 25, "SeverURL2", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
+			elem2Drm.invokeDrmStateChange(DRMState.UNINITIALIZED, token, null, new Date(), new Date(), 25, "SeverURL2");	
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_ERROR, token, null, new Date(), new Date(), 25, "SeverURL2");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null, new Date(), new Date(), 25, "SeverURL2");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATING, token, null, new Date(), new Date(), 25, "SeverURL2");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, token, null, new Date(), new Date(), 25, "SeverURL2");
 				
 				
 			parallel.removeChild(elem);
@@ -213,14 +213,14 @@ package org.osmf.elements
 		public function testAuthentication():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [ DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
+			var eventQueue:Array = [ DRMState.AUTHENTICATION_COMPLETE, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_ERROR];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var parallel:ParallelElement = new ParallelElement();
 			var elem1Drm:DynamicDRMTrait = elem.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;			
 			var elem2Drm:DynamicDRMTrait = elem2.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;		
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);	
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");	
 
 			parallel.addChild(elem);
 			parallel.addChild(elem2);
@@ -248,14 +248,14 @@ package org.osmf.elements
 		public function testAuthenticationToken():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
+			var eventQueue:Array = [DRMState.AUTHENTICATION_COMPLETE, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_NEEDED];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var parallel:ParallelElement = new ParallelElement();
 			var elem1Drm:DynamicDRMTrait = elem.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;			
 			var elem2Drm:DynamicDRMTrait = elem2.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;		
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);	
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");	
 
 			parallel.addChild(elem);
 			parallel.addChild(elem2);
@@ -282,14 +282,14 @@ package org.osmf.elements
 		public function testAuthFailure():void
 		{
 			var events:Number = 0;		
-			var eventQueue:Array = [DRMState.AUTHENTICATED, DRMState.AUTHENTICATING, DRMState.AUTHENTICATE_FAILED, DRMState.AUTHENTICATING];
+			var eventQueue:Array = [DRMState.AUTHENTICATION_COMPLETE, DRMState.AUTHENTICATING, DRMState.AUTHENTICATION_ERROR, DRMState.AUTHENTICATING];
 			var elem:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);
 			var elem2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.DRM, MediaTraitType.TIME, MediaTraitType.PLAY], null, null, true);			
 			var serial:SerialElement = new SerialElement();
 			var elem1Drm:DynamicDRMTrait = elem.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;			
 			var elem2Drm:DynamicDRMTrait = elem2.getTrait(MediaTraitType.DRM) as DynamicDRMTrait;		
-			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);
-			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL", DRMAuthenticationMethod.USERNAME_AND_PASSWORD);	
+			elem1Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");
+			elem2Drm.invokeDrmStateChange(DRMState.AUTHENTICATION_NEEDED, null, null, new Date(), new Date(), 50, "SeverURL");	
 
 			serial.addChild(elem);
 			serial.addChild(elem2);

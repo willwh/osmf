@@ -333,7 +333,7 @@ package org.osmf.elements
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
 	  		private function reloadAfterAuth(event:DRMEvent):void
 	  		{
-	  			if (drmTrait.drmState == DRMState.AUTHENTICATED)
+	  			if (drmTrait.drmState == DRMState.AUTHENTICATION_COMPLETE)
 	  			{	  				
 	  				var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 	  				if (loadTrait.loadState == LoadState.READY)
@@ -378,7 +378,7 @@ package org.osmf.elements
 			
 			private function onMetadataAuth(event:DRMEvent):void
 			{
-				if (drmTrait.drmState == DRMState.AUTHENTICATED)
+				if (drmTrait.drmState == DRMState.AUTHENTICATION_COMPLETE)
 				{
 					finishLoad();
 				}	

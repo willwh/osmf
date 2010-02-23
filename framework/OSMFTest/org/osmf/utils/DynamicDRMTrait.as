@@ -39,11 +39,11 @@ package org.osmf.utils
 			drmStateChange(DRMState.AUTHENTICATING, null, null);
 			if (username == null)
 			{				
-				drmStateChange(DRMState.AUTHENTICATE_FAILED, null, null);
+				drmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
 			}
 			else
 			{				
-				drmStateChange(DRMState.AUTHENTICATED, null, null);
+				drmStateChange(DRMState.AUTHENTICATION_COMPLETE, null, null);
 			}
 		}
 
@@ -52,21 +52,19 @@ package org.osmf.utils
 			drmStateChange(DRMState.AUTHENTICATING, token, null);
 			if (token == null)
 			{				
-				drmStateChange(DRMState.AUTHENTICATE_FAILED, null, null);
+				drmStateChange(DRMState.AUTHENTICATION_ERROR, null, null);
 			}
 			else
 			{				
-				drmStateChange(DRMState.AUTHENTICATED, token, null);
+				drmStateChange(DRMState.AUTHENTICATION_COMPLETE, token, null);
 			}
 		}
 		
-		public function invokeDrmStateChange(state:String,  token:ByteArray, error:MediaError, start:Date, end:Date, period:Number, serverURL:String, authenticationMethod:String):void
-		{
-			_authenticationMethod = authenticationMethod
-			this.drmStateChange(state, token, error, start, end, period, serverURL);
+		public function invokeDrmStateChange(state:String,  token:ByteArray, error:MediaError, start:Date, end:Date, period:Number, serverURL:String):void
+		{			
+			drmStateChange(state, token, error, start, end, period, serverURL);
 		}
-		
-		private var _authenticationMethod:String = "";
+				
 		
 	}
 }
