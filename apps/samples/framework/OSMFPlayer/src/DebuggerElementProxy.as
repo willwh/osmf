@@ -22,6 +22,7 @@
 
 package
 {
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DRMEvent;
@@ -34,10 +35,11 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.TraitEventDispatcher;
 
-	public class DebuggerElementProxy extends MediaElement
+	public class DebuggerElementProxy extends ProxyElement
 	{
 		public function DebuggerElementProxy(wrappedElement:MediaElement, debugger:Debugger)
 		{
+			super(wrappedElement);
 			this.debugger = debugger;
 			dispatcher = new TraitEventDispatcher();
 			dispatcher.media = wrappedElement;
