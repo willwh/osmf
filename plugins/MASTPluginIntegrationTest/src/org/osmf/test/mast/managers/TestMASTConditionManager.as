@@ -86,11 +86,10 @@ package org.osmf.test.mast.managers
 		private function loadMainVideo(url:String):void
 		{	
 			var resource:URLResource = new URLResource(url);
-
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var facet:Facet = new Facet("http://www.akamai.com/mast");
-			facet.addValue(new FacetKey("url"), MAST_URL_TEST);
+			var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_TEST);
 			resource.metadata.addFacet(facet);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
