@@ -21,11 +21,16 @@
 *****************************************************/
 package org.osmf.examples.buffering
 {
-	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.events.BufferEvent;
+	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.PlayEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.TraitEventDispatcher;
 	
 	/**
 	 * Proxy class which sets the IBufferable.bufferTime property to
@@ -33,7 +38,7 @@ package org.osmf.examples.buffering
 	 * an expanded value when the proxied MediaElement first exits
 	 * the buffer state.
 	 **/
-	public class DualThresholdBufferingProxyElement extends ListenerProxyElement
+	public class DualThresholdBufferingProxyElement extends ProxyElement
 	{
 		public function DualThresholdBufferingProxyElement(initialBufferTime:Number, expandedBufferTime:Number, wrappedElement:MediaElement)
 		{
@@ -41,9 +46,18 @@ package org.osmf.examples.buffering
 			
 			this.initialBufferTime = initialBufferTime;
 			this.expandedBufferTime = expandedBufferTime;
+			
+			var dispatcher:TraitEventDispatcher = new TraitEventDispatcher();
+			dispatcher.media = wrappedElement;
+			
+			wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, processTraitAdd);
+			dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+			dispatcher.addEventListener(SeekEvent.SEEKING_CHANGE, processSeekingChange);
+			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+						
 		}
 
-		override protected function processTraitAdd(traitType:String):void
+		private function processTraitAdd(traitType:String):void
 		{
 			if (traitType == MediaTraitType.BUFFER)
 			{
@@ -53,33 +67,33 @@ package org.osmf.examples.buffering
 			}
 		}
 
-		override protected function processBufferingChange(buffering:Boolean):void
+		private function processBufferingChange(event:BufferEvent):void
 		{
 			// As soon as we stop buffering, make sure our buffer time is
 			// set to the maximum.
-			if (buffering == false)
+			if (event.buffering == false)
 			{
 				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
 				bufferTrait.bufferTime = expandedBufferTime;
 			}
 		}
 		
-		override protected function processSeekingChange(seeking:Boolean, time:Number):void
+		private function processSeekingChange(event:SeekEvent):void
 		{
 			// Whenever we seek, reset our buffer time to the minimum so that
 			// playback starts quickly after the seek.
-			if (seeking == true)
+			if (event.seeking == true)
 			{
 				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
 				bufferTrait.bufferTime = initialBufferTime;
 			}
 		}
 		
-		override protected function processPlayStateChange(playState:String):void
+		private function processPlayStateChange(event:PlayEvent):void
 		{
 			// Whenever we pause, reset our buffer time to the minimum so that
 			// playback starts quickly after the unpause.
-			if (playState == PlayState.PAUSED)
+			if (event.playState == PlayState.PAUSED)
 			{
 				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
 				bufferTrait.bufferTime = initialBufferTime;

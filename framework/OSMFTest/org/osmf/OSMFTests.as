@@ -178,8 +178,6 @@ package org.osmf
 			addTestSuite(TestProxyElement);
 			addTestSuite(TestProxyElementAsDynamicProxy);
 			addTestSuite(TestDurationElement);
-			addTestSuite(TestListenerProxyElement);
-			addTestSuite(TestListenerProxyElementAsSubclass);
 			addTestSuite(TestLoadFromDocumentElement);
 			addTestSuite(TestLoadFromDocumentLoadTrait);
 			

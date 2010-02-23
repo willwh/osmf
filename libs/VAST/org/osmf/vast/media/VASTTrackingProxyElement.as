@@ -27,12 +27,16 @@ package org.osmf.vast.media
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.beaconClasses.Beacon;
-	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.events.AudioEvent;
+	import org.osmf.events.PlayEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.TraitEventDispatcher;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.vast.model.VASTTrackingEvent;
@@ -48,7 +52,7 @@ package org.osmf.vast.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */ 
-	public class VASTTrackingProxyElement extends ListenerProxyElement
+	public class VASTTrackingProxyElement extends ProxyElement
 	{
 		/**
 		 * Constructor.
@@ -75,7 +79,13 @@ package org.osmf.vast.media
 			playheadTimer.addEventListener(TimerEvent.TIMER, onPlayheadTimer);
 			
 			super(wrappedElement);
-
+			dispatcher = new TraitEventDispatcher();
+			dispatcher.media = wrappedElement;
+			dispatcher.addEventListener(AudioEvent.MUTED_CHANGE, processMutedChange);
+			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+			dispatcher.addEventListener(TimeEvent.COMPLETE, processComplete);
+			
+			
 			if (events == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
@@ -88,9 +98,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processMutedChange(muted:Boolean):void
+		private function processMutedChange(event:AudioEvent):void
 		{
-			if (muted)
+			if (event.muted)
 			{
 				fireEventOfType(VASTTrackingEventType.MUTE);
 			}
@@ -99,9 +109,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processPlayStateChange(playState:String):void
+		private function processPlayStateChange(event:PlayEvent):void
 		{
-			if (playState == PlayState.PLAYING)
+			if (event.playState == PlayState.PLAYING)
 			{
 				playheadTimer.start();
 				if (startReached == false)
@@ -111,7 +121,7 @@ package org.osmf.vast.media
 					fireEventOfType(VASTTrackingEventType.START);
 				}
 			}
-			else if (playState == PlayState.PAUSED)
+			else if (event.playState == PlayState.PAUSED)
 			{
 				fireEventOfType(VASTTrackingEventType.PAUSE);
 			}
@@ -124,7 +134,7 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processComplete():void
+		private function processComplete(event:TimeEvent):void
 		{
 			playheadTimer.stop();
 			
@@ -206,6 +216,7 @@ package org.osmf.vast.media
 			return 0;
 		}
 
+		private var dispatcher:TraitEventDispatcher;
 		private var eventsMap:Dictionary;
 			// Key:   VASTTrackingEventType
 			// Value: VASTTrackingEvent

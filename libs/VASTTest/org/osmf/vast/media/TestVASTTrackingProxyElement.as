@@ -23,11 +23,11 @@ package org.osmf.vast.media
 {
 	import flash.events.Event;
 	
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.TestProxyElement;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.elements.ProxyElement;
-	import org.osmf.elements.TestListenerProxyElement;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
@@ -42,7 +42,7 @@ package org.osmf.vast.media
 	import org.osmf.vast.model.VASTTrackingEventType;
 	import org.osmf.vast.model.VASTUrl;
 	
-	public class TestVASTTrackingProxyElement extends TestListenerProxyElement
+	public class TestVASTTrackingProxyElement extends TestProxyElement
 	{
 		public function testPlay():void
 		{
@@ -227,7 +227,7 @@ package org.osmf.vast.media
 			return new VASTTrackingProxyElement(new Vector.<VASTTrackingEvent>());
 		}
 		
-		override protected function createMediaElement():MediaElement
+		override  protected function createMediaElement():MediaElement
 		{
 			return new VASTTrackingProxyElement(new Vector.<VASTTrackingEvent>(), null, new MediaElement());
 		}

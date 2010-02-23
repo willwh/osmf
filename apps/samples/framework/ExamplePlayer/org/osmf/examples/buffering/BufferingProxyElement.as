@@ -21,24 +21,27 @@
 *****************************************************/
 package org.osmf.examples.buffering
 {
-	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.traits.TraitEventDispatcher;
 	
 	/**
 	 * Proxy class which sets the IBufferable.bufferTime property to
 	 * an initial value when the IBufferable trait is available.
 	 **/
-	public class BufferingProxyElement extends ListenerProxyElement
+	public class BufferingProxyElement extends ProxyElement
 	{
 		public function BufferingProxyElement(bufferTime:Number, wrappedElement:MediaElement)
 		{
 			super(wrappedElement);
 			
 			this.bufferTime = bufferTime;
+			wrappedElement.addEventListener(MediaElementEvent.TRAIT_ADD, processTraitAdd);
 		}
 
-		override protected function processTraitAdd(traitType:MediaTraitType):void
+		private function processTraitAdd(traitType:MediaTraitType):void
 		{
 			if (traitType == MediaTraitType.BUFFERABLE)
 			{
@@ -46,7 +49,7 @@ package org.osmf.examples.buffering
 				bufferable.bufferTime = bufferTime;
 			}
 		}
-		
+				
 		private var bufferTime:Number;
 	}
 }

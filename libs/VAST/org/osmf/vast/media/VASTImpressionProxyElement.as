@@ -23,13 +23,17 @@ package org.osmf.vast.media
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.beaconClasses.Beacon;
-	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.events.BufferEvent;
+	import org.osmf.events.LoadEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.TraitEventDispatcher;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.vast.model.VASTUrl;
@@ -47,7 +51,7 @@ package org.osmf.vast.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class VASTImpressionProxyElement extends ListenerProxyElement
+	public class VASTImpressionProxyElement extends ProxyElement
 	{
 		/**
 		 * Constructor.
@@ -73,7 +77,14 @@ package org.osmf.vast.media
 			waitForBufferingExit = false;
 			
 			super(wrappedElement);
-
+			dispatcher = new TraitEventDispatcher();
+			dispatcher.media = wrappedElement;
+			
+			dispatcher.addEventListener(LoadEvent.LOAD_STATE_CHANGE, processLoadStateChange);
+			dispatcher.addEventListener(PlayEvent.PLAY_STATE_CHANGE, processPlayStateChange);
+			dispatcher.addEventListener(BufferEvent.BUFFERING_CHANGE, processBufferingChange);
+			
+			
 			if (urls == null)
 			{
 				throw new ArgumentError(OSMFStrings.INVALID_PARAM);
@@ -86,9 +97,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processLoadStateChange(loadState:String):void
+		private function processLoadStateChange(event:LoadEvent):void
 		{
-			if (loadState == LoadState.READY)
+			if (event.loadState == LoadState.READY)
 			{
 				// Reset our internal flags so that we can record a new
 				// impression.
@@ -100,9 +111,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processPlayStateChange(playState:String):void
+		private function processPlayStateChange(event:PlayEvent):void
 		{
-			if (playState == PlayState.PLAYING && !impressionsRecorded)
+			if (event.playState == PlayState.PLAYING && !impressionsRecorded)
 			{
 				// Only record the impressions if we're not buffering.
 				var bufferTrait:BufferTrait = getTrait(MediaTraitType.BUFFER) as BufferTrait;
@@ -125,9 +136,9 @@ package org.osmf.vast.media
 		/**
 		 * @private
 		 */
-		override protected function processBufferingChange(buffering:Boolean):void
+		private function processBufferingChange(event:BufferEvent):void
 		{
-			if (	buffering == false
+			if (	event.buffering == false
 				&&  impressionsRecorded == false
 				&&  waitForBufferingExit
 				)
@@ -153,6 +164,7 @@ package org.osmf.vast.media
 			}
 		}
 
+		private var dispatcher:TraitEventDispatcher;
 		private var urls:Vector.<VASTUrl>;
 		private var httpLoader:HTTPLoader;
 		private var impressionsRecorded:Boolean;

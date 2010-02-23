@@ -23,9 +23,10 @@ package org.osmf.utils
 {
 	import flash.display.DisplayObject;
 	
-	import org.osmf.elements.ListenerProxyElement;
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.traits.TraitEventDispatcher;
 		
-	public class DynamicListenerProxyElement extends ListenerProxyElement
+	public class DynamicListenerProxyElement extends ProxyElement
 	{
 		public function DynamicListenerProxyElement(changeEventQueue:Array, processTraitEvents:Boolean = false)
 		{

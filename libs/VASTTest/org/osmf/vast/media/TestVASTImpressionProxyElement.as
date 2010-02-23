@@ -25,10 +25,10 @@ package org.osmf.vast.media
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
+	import org.osmf.elements.ProxyElement;
+	import org.osmf.elements.TestProxyElement;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
-	import org.osmf.elements.ProxyElement;
-	import org.osmf.elements.TestListenerProxyElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -42,7 +42,7 @@ package org.osmf.vast.media
 	import org.osmf.vast.VASTTestConstants;
 	import org.osmf.vast.model.VASTUrl;
 	
-	public class TestVASTImpressionProxyElement extends TestListenerProxyElement
+	public class TestVASTImpressionProxyElement extends TestProxyElement
 	{
 		public function testPlay():void
 		{
@@ -212,7 +212,7 @@ package org.osmf.vast.media
 		
 		private function createHTTPLoader():HTTPLoader
 		{
-			// Change to true to run against the network.
+			// Change to false to run against the network.
 			var useMockLoader:Boolean = true;
 			
 			if (useMockLoader == false)
