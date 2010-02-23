@@ -26,6 +26,7 @@ package org.osmf.examples.switchingproxy
 	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -50,6 +51,8 @@ package org.osmf.examples.switchingproxy
 			this.firstElement = firstElement;
 			this.secondElement = secondElement;
 			this.switchTime = switchTime;
+			
+			_metadata = new Metadata();
 			
 			switchTimer = new Timer(switchTime*1000, numSwitches);
 			switchTimer.addEventListener(TimerEvent.TIMER, onSwitchTimer);
@@ -89,9 +92,19 @@ package org.osmf.examples.switchingproxy
 			}
 		}
 		
+		override public function get metadata():Metadata
+		{
+			// In order to make sure that the element's layout appears consistently,
+			// provide one single metadata instance for both elements (instead of
+			// switching them):
+			return _metadata;
+		}
+		
 		private var firstElement:MediaElement;
 		private var secondElement:MediaElement;
 		private var switchTime:Number;
 		private var switchTimer:Timer;
+		
+		private var _metadata:Metadata;
 	}
 }
