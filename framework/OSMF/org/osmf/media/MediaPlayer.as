@@ -1703,7 +1703,7 @@ package org.osmf.media
 				
 		private function onPlayStateChange(event:PlayEvent):void
 		{			
-			if (event.playState == PlayState.PLAYING)
+			if (event.playState == PlayState.PLAYING)  
 			{				
 				setState(MediaPlayerState.PLAYING);				
 			}
@@ -1719,7 +1719,8 @@ package org.osmf.media
 		
 		private function onLoadState(event:LoadEvent):void
 		{		
-			if (event.loadState == LoadState.READY)
+			if (event.loadState == LoadState.READY && 
+				state == MediaPlayerState.LOADING)
 			{
 				processReadyState();
 			}
