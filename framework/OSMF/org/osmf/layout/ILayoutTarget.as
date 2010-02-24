@@ -24,7 +24,7 @@ package org.osmf.layout
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 	
-	import org.osmf.metadata.IMetadataProvider;
+	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * @private
@@ -190,15 +190,15 @@ package org.osmf.layout
 	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
-	 * ILayoutTarget defines the interface to the objects that an LayoutRenderer
-	 * implementing instance will be capable of laying out. 
+	 * ILayoutTarget defines the interface for an object that can be laid out
+	 * visually.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public interface ILayoutTarget extends IEventDispatcher, IMetadataProvider
+	public interface ILayoutTarget extends IEventDispatcher
 	{
 		/**
 		 * A reference to the display object that represents the target. A
@@ -210,17 +210,6 @@ package org.osmf.layout
 		 *  @productversion OSMF 1.0
 		 */		
 		function get displayObject():DisplayObject;
-		
-		/**
-	 	 * Defines the layout renderer that the implementing object uses to render
-	 	 * its children. Can be null.
-	 	function get layoutRenderer():LayoutRendererBase;
-	 	 */	 	
-	 	
-	 	/**
-	 	 * Defines the layout renderer that lays out the implementing object.
-	 	function get parentLayoutRenderer():LayoutRendererBase;
-	 	 */	 	
 		
 	 	/**
 	 	 * Defines the width of the element without any transformations being
@@ -279,5 +268,15 @@ package org.osmf.layout
 		 *  @productversion OSMF 1.0
 		 */	
 	 	function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void;
+	 	
+	 	/**
+	 	 * @private
+	 	 * 
+	 	 * The metadata that's used to hold information about the layout
+	 	 * of this layout target.  Since layout targets are currently an
+	 	 * OSMF-internal affair, this property is not part of the public
+	 	 * API.
+	 	 **/
+	 	function get metadata():Metadata;
 	}
 }

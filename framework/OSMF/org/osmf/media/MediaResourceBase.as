@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.metadata.IMetadataProvider;
 	import org.osmf.metadata.Metadata;
 	
 	/**
@@ -38,7 +37,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MediaResourceBase implements IMetadataProvider
+	public class MediaResourceBase
 	{
 		public function MediaResourceBase()
 		{
@@ -57,6 +56,7 @@ package org.osmf.media
 		{
 			return _metadata;
 		}
+		
 		private var _metadata:Metadata;
 	}
 }

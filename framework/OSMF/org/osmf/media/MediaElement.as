@@ -31,7 +31,6 @@ package org.osmf.media
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.metadata.IMetadataProvider;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
@@ -113,7 +112,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class MediaElement extends EventDispatcher implements IMetadataProvider
+	public class MediaElement extends EventDispatcher
 	{
 		// Public interface
 		//

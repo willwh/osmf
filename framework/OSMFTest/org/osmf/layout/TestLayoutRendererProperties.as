@@ -21,16 +21,45 @@
 *****************************************************/
 package org.osmf.layout
 {
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.display.ScaleMode;
 	import org.osmf.flexunit.TestCaseEx;
 	import org.osmf.media.MediaElement;
 
 	public class TestLayoutRendererProperties extends TestCaseEx
 	{
+		public function testConstructor():void
+		{
+			// Constructor arg must be a MediaElement or an ILayoutTarget.
+			//
+			
+			try
+			{
+				new LayoutRendererProperties(null);
+				
+				fail();
+			}
+			catch (error:ArgumentError)
+			{
+			}
+
+			try
+			{
+				new LayoutRendererProperties(new String("foo"));
+				
+				fail();
+			}
+			catch (error:ArgumentError)
+			{
+			}
+			
+			new LayoutRendererProperties(new MediaElement());
+			new LayoutRendererProperties(new LayoutTargetSprite());
+			new LayoutRendererProperties(new MediaContainer());
+		}
+		
 		public function testLayoutUtils():void
 		{
-			assertThrows(function():void{ new LayoutRendererProperties(null); });
-			
 			var lp:LayoutRendererProperties = new LayoutRendererProperties(new MediaElement());
 			assertNotNull(lp);
 			

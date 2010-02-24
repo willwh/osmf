@@ -395,6 +395,13 @@ package org.osmf.utils
 		 **/
 		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
 		
+		// LayoutRendererProperties
+		
+		/**
+		 * @private
+		 **/
+		public static const MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET:String = "mustBeMediaElementOrLayoutTarget";
+		
 		// MediaContainer
 		
 		/**
@@ -476,8 +483,8 @@ package org.osmf.utils
 			
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
 			
-			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance.";
-			
+			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance";
+			resourceDict[MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET]	= "Argument must be either a MediaElement or an ILayoutTarget"
 			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 			
 			resourceDict[CONTENT_IO_LOAD_ERROR]						= "I/O error when loading image or SWF";

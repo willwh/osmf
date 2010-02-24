@@ -21,26 +21,49 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import flash.errors.IllegalOperationError;
-	
-	import org.osmf.metadata.IMetadataProvider;
+	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Defines a utility object that is to be used to set properties on media elements
-	 * or layout targets that the layout renderer will base its layout on.
+	 * Defines a utility object that is to be used to set properties on MediaElements
+	 * or ILayoutTargets that the layout renderer will base its layout on.
 	 */	
 	public class LayoutRendererProperties
 	{
-		public function LayoutRendererProperties(target:IMetadataProvider)
+		/**
+		 * Constructor.
+		 * 
+		 * @param mediaElementOrILayoutTarget The MediaElement or ILayoutTarget to
+		 * which these layout renderer properties should be applied.
+		 * 
+		 * @throws ArgumentError If mediaElementOrILayoutTarget is null, or neither
+		 * a MediaElement nor an ILayoutTarget.
+		 **/
+		public function LayoutRendererProperties(mediaElementOrILayoutTarget:Object)
 		{
-			if (target == null)
+			var mediaElement:MediaElement = mediaElementOrILayoutTarget as MediaElement;
+			var layoutTarget:ILayoutTarget = mediaElementOrILayoutTarget as ILayoutTarget;
+			if (mediaElement != null)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+				metadata = mediaElement.metadata;
 			}
-			metadata = target.metadata;
+			else if (layoutTarget != null)
+			{
+				metadata = layoutTarget.metadata;
+			}
+			else
+			{
+				if (mediaElementOrILayoutTarget == null)
+				{
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+				}
+				else
+				{
+					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET));
+				}
+			}
 		}
 		
 		// LayoutAttributes
