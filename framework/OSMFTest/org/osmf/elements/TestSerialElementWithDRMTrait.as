@@ -28,7 +28,6 @@ package org.osmf.elements
 	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
-	import org.osmf.traits.DRMAuthenticationMethod;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
 	import org.osmf.traits.MediaTraitType;
