@@ -62,7 +62,7 @@ package org.osmf.net
 		 */
 		override public function get currentTime():Number
 		{
-			return netStream.time + timeOffset;
+			return netStream.time - audioDelay;
 		}
 		
 		private function onMetaData(value:Object):void
@@ -70,6 +70,10 @@ package org.osmf.net
 			// Determine the start time and duration for the
 			// resource.
 			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(resource);
+			
+			//Audio delay is sometimes passed along with the metadata.  The audio delay affects
+			//all netsTream.time related calculations, including seek().
+			audioDelay = value.hasOwnProperty("audiodelay") ? value.audiodelay : 0;
 			
 			// Ensure our start time is non-negative, we only use it for
 			// calculating the offset.
@@ -81,7 +85,9 @@ package org.osmf.net
 			{
 				subclipDuration = Number.MAX_VALUE;
 			}
-
+			
+			
+			
 			// If startTime is unspecified, our duration is everything
 			// up to the end of the subclip (or the entire duration, if
 			// no subclip end is specified).
@@ -113,16 +119,8 @@ package org.osmf.net
 					break;
 			}
 		}
-		
-		protected override function signalComplete():void
-		{
-			// Flash player bug, the PLAY.STOP is fired before the time is >= duration.
-			// https://bugs.adobe.com/jira/browse/FP-3724
-			timeOffset = duration - netStream.time;	
-			super.signalComplete();
-		}
-			
-		private var timeOffset:Number = 0;
+	
+		private var audioDelay:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
 	}

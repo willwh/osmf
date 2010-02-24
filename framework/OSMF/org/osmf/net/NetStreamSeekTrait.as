@@ -51,8 +51,10 @@ package org.osmf.net
 		public function NetStreamSeekTrait(temporal:TimeTrait, netStream:NetStream)
 		{
 			super(temporal);
+			temporalTrait = temporal;
 			
 			this.netStream = netStream;
+			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			seekBugTimer = new Timer(10, 100);
@@ -69,12 +71,12 @@ package org.osmf.net
 		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 			if (newSeeking)
-			{
-				previousTime = netStream.time;
+			{				
+				previousTime = temporalTrait.currentTime;
 				expectedTime = time;
-				netStream.seek(time);
+				netStream.seek(time + audioDelay);
 				
-				if (netStream.time == time)
+				if (temporalTrait.currentTime == time)
 				{
 					// Manually start the seekBugTimer, because NetStream seemingly
 					// doesn't trigger an event when seeking to its current position (FM-227), 
@@ -82,6 +84,11 @@ package org.osmf.net
 					seekBugTimer.start();
 				}
 			}
+		}
+		
+		private function onMetaData(value:Object):void
+		{						
+			audioDelay = value.hasOwnProperty("audiodelay") ? value.audiodelay : 0;
 		}
 				
 		private function onNetStatus(event:NetStatusEvent):void
@@ -109,8 +116,8 @@ package org.osmf.net
 			// We accept the NetStream.time within a margin of the desired seek.
 			// This fixes seeks where the value doesn't land directly on the desired time.
 			// This also fixes seeks backward.
-			if ((expectedTime - SEEK_MARGIN) <= netStream.time &&
-				netStream.time <= (expectedTime + SEEK_MARGIN))
+			if ((expectedTime - SEEK_MARGIN) <= temporalTrait.currentTime &&
+				temporalTrait.currentTime <= (expectedTime + SEEK_MARGIN))
 			{
 				seekBugTimer.reset();			
 				setSeeking(false, expectedTime);
@@ -122,9 +129,10 @@ package org.osmf.net
 			seekBugTimer.reset();
 			setSeeking(false, expectedTime);
 		}
-		
-		
+				
 		private const SEEK_MARGIN:Number = .25; // Seconds
+		private var temporalTrait:TimeTrait;
+		private var audioDelay:Number = 0;
 		private var seekBugTimer:Timer;
 		private var netStream:NetStream;
 		private var expectedTime:Number;
