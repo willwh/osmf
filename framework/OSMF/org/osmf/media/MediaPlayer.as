@@ -279,18 +279,6 @@ package org.osmf.media
  	 *  @productversion OSMF 1.0
  	 */ 
 	[Event(name='drmStateChange', type='org.osmf.events.DRMEvent')]
-	
-	/**
-	 * Dispatched when the <code>isRecording</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.DVREvent.IS_RECORDING_CHANGE
- 	 *  
- 	 *  @langversion 3.0
- 	 *  @playerversion Flash 10.1
- 	 *  @playerversion AIR 1.5
- 	 *  @productversion OSMF 1.0
- 	 */ 
-	[Event(name='isRecordingChange', type='org.osmf.events.DVREvent')]
 
     /**
 	 * Dispatched when the <code>canPlay</code> property has changed.
@@ -387,6 +375,18 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="hasDRMChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+	
+	/**
+	 * Dispatched when the <code>hasDVR</code> property has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DVR_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="hasDVRChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
 	 * Dispatched when the <code>hasDisplayObject</code> property has changed.
