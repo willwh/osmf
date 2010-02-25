@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.net
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.media.Video;
 	import flash.net.NetStream;
@@ -34,13 +35,16 @@ package org.osmf.net
 	 */
 	public class NetStreamDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:Video, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
 			super(view, mediaWidth, mediaHeight);
 			
 			this.netStream = netStream;
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
-			view.addEventListener(Event.ADDED_TO_STAGE, onStage);
+			if (view is Video)
+			{
+				view.addEventListener(Event.ADDED_TO_STAGE, onStage);
+			}
 		}
 		
 		private function onStage(event:Event):void
