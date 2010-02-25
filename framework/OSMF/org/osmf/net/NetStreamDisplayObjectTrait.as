@@ -21,7 +21,8 @@
 *****************************************************/
 package org.osmf.net
 {
-	import flash.display.DisplayObject;
+	import flash.events.Event;
+	import flash.media.Video;
 	import flash.net.NetStream;
 	
 	import org.osmf.traits.DisplayObjectTrait;
@@ -33,20 +34,41 @@ package org.osmf.net
 	 */
 	public class NetStreamDisplayObjectTrait extends DisplayObjectTrait
 	{
-		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:DisplayObject, mediaWidth:Number=0, mediaHeight:Number=0)
+		public function NetStreamDisplayObjectTrait(netStream:NetStream, view:Video, mediaWidth:Number=0, mediaHeight:Number=0)
 		{
 			super(view, mediaWidth, mediaHeight);
 			
 			this.netStream = netStream;
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
+			view.addEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
-
+		
+		private function onStage(event:Event):void
+		{
+			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			displayObject.addEventListener(Event.RENDER, onRender);			
+		}
+				
+		private function onRender(event:Event):void
+		{				
+			if (Video(displayObject).videoWidth != 0 &&
+				Video(displayObject).videoHeight != 0)
+			{				
+				displayObject.width = Video(displayObject).videoWidth;
+    			displayObject.height = Video(displayObject).videoHeight;
+    				
+				setMediaSize(displayObject.width, displayObject.height);
+				displayObject.removeEventListener(Event.RENDER, onRender);		
+			}
+		}
+	
 		private function onMetaData(info:Object):void 
-    	{   
-    		if 	(	info.width != mediaWidth
-    			||	info.height != mediaHeight
-    			)
-    		{	
+    	{       		
+    		if (!isNaN(info.width) &&
+    		    !isNaN(info.height))
+    		{	    			
+    			displayObject.removeEventListener(Event.RENDER, onRender);	
+    			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);	
     			displayObject.width = info.width;
     			displayObject.height = info.height;
     				

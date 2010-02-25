@@ -405,9 +405,11 @@ package org.osmf.elements
 				addTrait(MediaTraitType.TIME, timeTrait);
 			}
 			
-			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
+			
 			displayObjectTrait = new NetStreamDisplayObjectTrait(stream, video, video.width, video.height);
 			addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
+			
+			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 			
 			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
