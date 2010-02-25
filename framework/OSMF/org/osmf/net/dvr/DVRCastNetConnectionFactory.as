@@ -200,24 +200,28 @@ package org.osmf.net.dvr
 			
 			if (endOffset != 0)
 			{
+				// If an end-offset is set ...
 				if (currentDuration > endOffset)
 				{
+					// ... and more is recorded that the end offset allows
+					// to be exposed, than start playing as far back as
+					// is allowed:
 					offset = currentDuration - endOffset;
 				}
 				else
 				{
-					offset
-						= currentDuration > beginOffset
-							? beginOffset
-							: currentDuration;
+					// ... but no the recording is shorter than the 
+					// amount of time that is allowed to be viewed, then
+					// use the begin offset:
+					offset = Math.min(beginOffset, currentDuration);
 				}
 			}
 			else if (beginOffset != 0)
 			{
-				offset
-					= currentDuration > beginOffset
-						? beginOffset
-						: currentDuration;
+				// The starting point is whatever is lowest: the point from
+				// where the viewer is allowed to view the stream, or the
+				// available recorded time, so far:
+				offset = Math.min(beginOffset, currentDuration);
 			}
 			
 			return offset;
