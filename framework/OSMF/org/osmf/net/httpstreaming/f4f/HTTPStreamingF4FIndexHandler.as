@@ -79,7 +79,6 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			bootstrapBoxes = new Vector.<AdobeBootstrapBox>(f4fIndexInfo.streamInfos.length);
 			fragmentRunTablesUpdating= false;
-			totalDurationNotified = false;
 			pendingIndexLoads = 0;
 			
 			serverBaseURL = f4fIndexInfo.serverBaseURL;			
@@ -103,11 +102,6 @@ package org.osmf.net.httpstreaming.f4f
 						return;					
 					}
 					bootstrapBoxes[i] = bootstrapBox;
-					if (!totalDurationNotified)
-					{
-						notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale);						
-						totalDurationNotified = true;
-					}
 				}
 				else
 				{
@@ -175,12 +169,6 @@ package org.osmf.net.httpstreaming.f4f
 			
 			bootstrapBoxes[index] = bootstrapBox;
 
-			if (!totalDurationNotified)
-			{
-				notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale);						
-				totalDurationNotified = true;
-			}
-
 			if (pendingIndexLoads == 0 && !fragmentRunTablesUpdating)
 			{
 				dispatchEvent
@@ -208,6 +196,8 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
+			
+			checkMetadata(quality, abst);
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			if (	time >= 0
@@ -255,6 +245,8 @@ package org.osmf.net.httpstreaming.f4f
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
+			checkMetadata(quality, abst);
+
 			if (	(currentFAI.fragId + 1)  <= abst.totalFragments
 				&& 	quality >= 0
 				&&  quality < streamInfos.length
@@ -374,6 +366,14 @@ package org.osmf.net.httpstreaming.f4f
 			}
 		}
 		
+		private function checkMetadata(quality:int, abst:AdobeBootstrapBox):void
+		{
+			if (currentQuality != quality)
+			{
+				notifyTotalDuration(abst.totalDuration / abst.timeScale);
+			}
+		}
+		
 		private function checkFragmentInventory(
 			fragId:uint, abst:AdobeBootstrapBox, frt:AdobeFragmentRunTable):void
 		{
@@ -489,6 +489,12 @@ package org.osmf.net.httpstreaming.f4f
 			var sdo:FLVTagScriptDataObject = new FLVTagScriptDataObject();
 			var metaInfo:Object = new Object();
 			metaInfo.duration = duration;
+			
+			// TODO: the setting of width and height is a temporary hack. When stream metadata 
+			// becomes available, these two lines will be removed. 
+			metaInfo.width = 500;
+			metaInfo.height = 400;
+			
 			sdo.objects = ["onMetaData", metaInfo];
 			dispatchEvent
 				( new HTTPStreamingIndexHandlerEvent
@@ -508,7 +514,6 @@ package org.osmf.net.httpstreaming.f4f
 				);
 		}
 
-		private var totalDurationNotified:Boolean;
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;

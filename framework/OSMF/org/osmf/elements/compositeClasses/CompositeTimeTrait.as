@@ -48,7 +48,7 @@ package org.osmf.elements.compositeClasses
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	internal class CompositeTimeTrait extends TimeTrait
+	internal class CompositeTimeTrait extends TimeTrait implements IReusable
 	{
 		/**
 		 * Constructor.
@@ -78,12 +78,24 @@ package org.osmf.elements.compositeClasses
 				);
 		}
 		
-		override public function dispose():void
+		/**
+		 * @private
+		 */
+		public function attach():void
+		{
+			traitAggregationHelper.attach();
+		}
+		
+		/**
+		 * @private
+		 */
+		public function detach():void
 		{
 			traitAggregationHelper.detach();
-			traitAggregationHelper = null;
-			
-			super.dispose();
+		}
+
+		override public function dispose():void
+		{
 		}
 
 		/**
