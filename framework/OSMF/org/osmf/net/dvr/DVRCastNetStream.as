@@ -22,6 +22,7 @@ package org.osmf.net.dvr
 {
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.NetStreamPlayOptions;
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -48,6 +49,16 @@ package org.osmf.net.dvr
 		override public function play(...arguments):void
 		{
 			super.play(arguments[0], recordingInfo.startOffset, -1);	
+		}
+		
+		override public function play2(param:NetStreamPlayOptions):void
+		{
+			if (param)
+			{
+				param.start = recordingInfo.startOffset;
+				param.len = -1;
+			}	
+			super.play(param);
 		}
 		
 		// Internals
