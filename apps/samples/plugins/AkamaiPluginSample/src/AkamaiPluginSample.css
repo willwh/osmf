@@ -84,6 +84,13 @@ HSlider {
     dataTipOffset: 6;
 }
 
+TileList {
+	themeColor: "haloSilver";
+	backgroundColor: #000000;
+	color: #111111;
+	borderColor: #111111;
+}
+
 .dataTip {
     backgroundColor: black;
 }
