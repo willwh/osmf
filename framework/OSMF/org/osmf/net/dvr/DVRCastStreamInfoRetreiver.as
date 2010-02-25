@@ -28,6 +28,8 @@ package org.osmf.net.dvr
 	import flash.net.Responder;
 	import flash.utils.Timer;
 	
+	import org.osmf.utils.OSMFStrings;
+	
 	[ExcludeClass]
 	
 	/**
@@ -80,10 +82,7 @@ package org.osmf.net.dvr
 				
 				_streamInfo = null;
 				_error = _error 
-					= { message
-							: "Maximum DVRGetStreamInfo RPC attempts ("
-							+ retries
-							+ "reached."
+					= 	{ message : OSMFStrings.getString(OSMFStrings.DVR_MAXIMUM_RPC_ATTEMPTS).replace("%i", retries)
 						};
 				this.retries = retries;
 				
@@ -134,7 +133,7 @@ package org.osmf.net.dvr
 			}
 			else
 			{
-				_error = { message: "Unexpected server response:" + result.code};
+				_error = { message: OSMFStrings.getString(OSMFStrings.DVR_UNEXPECTED_SERVER_RESPONSE) + result.code}; // make const.
 				complete();
 			}
 		}

@@ -423,6 +423,18 @@ package org.osmf.utils
 		 **/
 		public static const DRM_METADATA_NOT_SET:String					= "drmMetadataNotSet";
 		
+		// DVR
+		
+		/**
+		 * @private
+		 **/
+		public static const DVR_MAXIMUM_RPC_ATTEMPTS:String				= "dvrMaximumRPCAttempts";
+		
+		/**
+		 * @private
+		 **/
+		public static const DVR_UNEXPECTED_SERVER_RESPONSE:String		= "dvrUnexpectedServerResponse";
+		
 		// Flash Media Manifest Errors
 		
 		/**
@@ -480,6 +492,9 @@ package org.osmf.utils
 			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";
 			
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
+			
+			resourceDict[DVR_MAXIMIM_RPC_ATTEMPTS] 					= "Maximum DVRGetStreamInfo RPC attempts (%i) reached";
+			resourceDict[DVR_UNEXPECTED_SERVER_RESPONSE]			= "Unexpected server response: ";
 			
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
 			
