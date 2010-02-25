@@ -493,7 +493,7 @@ package org.osmf.utils
 			
 			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
 			
-			resourceDict[DVR_MAXIMIM_RPC_ATTEMPTS] 					= "Maximum DVRGetStreamInfo RPC attempts (%i) reached";
+			resourceDict[DVR_MAXIMUM_RPC_ATTEMPTS] 					= "Maximum DVRGetStreamInfo RPC attempts (%i) reached";
 			resourceDict[DVR_UNEXPECTED_SERVER_RESPONSE]			= "Unexpected server response: ";
 			
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
