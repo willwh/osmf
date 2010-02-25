@@ -58,7 +58,7 @@ package org.osmf.net.dvr
 				param.start = recordingInfo.startOffset;
 				param.len = -1;
 			}	
-			super.play(param);
+			super.play2(param);
 		}
 		
 		// Internals
