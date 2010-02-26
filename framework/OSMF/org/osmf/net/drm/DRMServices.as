@@ -302,6 +302,23 @@ package org.osmf.net.drm
 			updateDRMState(DRMState.AUTHENTICATION_ERROR, error);
 		}
 		
+			
+		/**
+		 * @private
+		 * Signals DRM is available, taken from the inline netstream APIs.
+		 * Assumes the voucher is available.
+		 * 	
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function inlineOnVoucher(event:DRMStatusEvent):void
+		{
+			drmContentData = event.contentData;
+			onVoucherLoaded(event);
+		}
+		
 		/**
 		 * @private
 		 * 

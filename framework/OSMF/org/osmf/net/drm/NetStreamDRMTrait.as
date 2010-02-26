@@ -23,6 +23,8 @@ package org.osmf.net.drm
 {
 	
 	
+	import flash.events.DRMStatusEvent;
+	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.traits.DRMTrait;
@@ -117,6 +119,21 @@ package org.osmf.net.drm
 		public function inlineDRMFailed(error:MediaError):void
 		{
 			drmServices.inlineDRMFailed(error);
+		}
+		
+		/**
+		 * @private
+		 * Signals DRM is available, taken from the inline netstream APIs.
+		 * Assumes the voucher is available.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function inlineOnVoucher(event:DRMStatusEvent):void
+		{
+			drmServices.inlineOnVoucher(event);
 		}
 		
 		// Internals

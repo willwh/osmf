@@ -43,7 +43,6 @@ package org.osmf.net.drm
 			public function testConstructor():void
 			{
 				var services:DRMServices = new DRMServices();
-				Assert.assertNull(services.authenticationMethod);
 				Assert.assertNull(services.startDate);
 				Assert.assertNull(services.endDate);
 				Assert.assertEquals(services.period, NaN);
@@ -68,13 +67,11 @@ package org.osmf.net.drm
 						case DRMState.AUTHENTICATION_NEEDED:
 							services.authenticate("wrong", "credentials");
 							break;
-						case DRMState.AUTHENTICATE_FAILED:	
-							Assert.assertEquals(event.error.detail, OSMFStrings.getString(OSMFStrings.DRM_AUTHENTICATION_FAILED))
-							Assert.assertEquals(MediaErrorCodes.DRM_AUTHENTICATION_FAILED, event.error.errorID);
+						case DRMState.AUTHENTICATION_ERROR:								
 							services.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 							testFinished(null);
 							break;
-						case DRMState.AUTHENTICATED:
+						case DRMState.AUTHENTICATION_COMPLETE:
 							throw new Error("Shouldn't complete");		
 					}					
 				}
@@ -99,10 +96,9 @@ package org.osmf.net.drm
 					{
 						case DRMState.AUTHENTICATION_NEEDED:	
 							// Doesn't fire if the voucher is already present.							
-							Assert.assertTrue(AuthenticationMethod.USERNAME_AND_PASSWORD, services.authenticationMethod);
 							services.authenticate(USERNAME, PASSWORD);
 							break;
-						case DRMState.AUTHENTICATED:										
+						case DRMState.AUTHENTICATION_COMPLETE:										
 							Assert.assertTrue(services.startDate.time <= (new Date()).time);
 							Assert.assertTrue(services.endDate.time >= (new Date()).time);
 							Assert.assertTrue(services.period >= 0);	

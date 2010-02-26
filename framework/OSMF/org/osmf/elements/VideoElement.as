@@ -302,7 +302,7 @@ package org.osmf.elements
     			var metadataFacet:Facet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as Facet;
     			if (metadataFacet != null)
     			{    				
-    				var metadata:ByteArray = metadataFacet.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY));
+    				var metadata:ByteArray = metadataFacet.getValue(MetadataNamespaces.DRM_CONTENT_METADATA_KEY);
     				if (metadata != null)
     				{
     					setupDRMTrait(metadata);
@@ -313,6 +313,7 @@ package org.osmf.elements
 
     			// Non sidecar, we need to play before getting access to the DRMTrait.
    				stream.addEventListener(StatusEvent.STATUS, onStatus);
+   				stream.addEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
     		}
 			finishLoad();			
 		}
@@ -325,10 +326,14 @@ package org.osmf.elements
 				if (event.code == DRM_STATUS_CODE 
 					&& getTrait(MediaTraitType.DRM) == null)
 				{			
-					createDRMTrait();
-					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	  			
+					createDRMTrait(); 			
 	    		}
 	  		}
+	  		
+	  		private function onDRMStatus(event:DRMStatusEvent):void
+	  		{
+	  			drmTrait.inlineOnVoucher(event);
+	  		}	  		 
 	  		
 	  		// Inline metadata + credentials.  The NetStream is dead at this point, restart with new credentials
 	  		private function reloadAfterAuth(event:DRMEvent):void
@@ -360,6 +365,7 @@ package org.osmf.elements
 			{
 				if (event.errorID == DRM_NEEDS_AUTHENTICATION)  // Needs authentication
 				{					
+					drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, reloadAfterAuth);	 
 					drmTrait.drmMetadata = event.contentData;
 				}	
 				else if (event.drmUpdateNeeded)
@@ -454,6 +460,7 @@ package org.osmf.elements
 	    	CONFIG::FLASH_10_1
     		{    			
     			stream.removeEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
+    			stream.removeEventListener(DRMStatusEvent.DRM_STATUS, onDRMStatus);
     			stream.removeEventListener(StatusEvent.STATUS, onStatus);
     			if (drmTrait != null)
     			{    			

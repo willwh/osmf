@@ -43,7 +43,7 @@ package org.osmf
 			
 			
 			NetFactory.neverUseMockObjects = true;
-			
+		
 			CONFIG::FLASH_10_1
 			{
 				addTestSuite(TestDRMServices);
@@ -60,21 +60,24 @@ package org.osmf
 			addTestSuite(TestNetLoader);
 
 			addTestSuite(TestHTTPLoader);
-						
+					
 			// Tests that can't use mock objects, and are therefore only in the
 			// integration test suite:
 
 			addTestSuite(TestImageLoaderIntegration);
 			addTestSuite(TestImageElementIntegration);
-			
+		
 			addTestSuite(TestSWFLoaderIntegration);
 			addTestSuite(TestSWFElementIntegration)
 			
-			addTestSuite(TestDynamicPluginLoaderIntegration);
+//			addTestSuite(TestDynamicPluginLoaderIntegration);
 			
-			addTestSuite(TestPluginManagerIntegration);
+//			addTestSuite(TestPluginManagerIntegration);
+
+			addTestSuite(TestF4MLoader);	
 			
-			addTestSuite(TestF4MLoader);
+			
+					
 		}
 	}
 }

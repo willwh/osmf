@@ -32,6 +32,7 @@ package org.osmf.net.drm
 	import org.osmf.events.DRMEvent;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
+	import flash.net.drm.DRMContentData
 	import org.osmf.utils.InterfaceTestCase;
 
 	public class TestNetStreamDRMTrait extends InterfaceTestCase
@@ -53,14 +54,11 @@ package org.osmf.net.drm
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(ANONYMOUS_DRM_METADATA);
 			nsDRMTRait.drmMetadata =  decoder.toByteArray();
-			
-			assertEquals(nsDRMTRait.authenticationMethod, AuthenticationMethod.ANONYMOUS);
-			
+					
 			meta = new ByteArray();
 			decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);
 			nsDRMTRait.drmMetadata =  decoder.toByteArray();
-			assertEquals(nsDRMTRait.authenticationMethod, AuthenticationMethod.USERNAME_AND_PASSWORD);			
 		}	
 		
 		public function testMetadata():void
@@ -70,45 +68,40 @@ package org.osmf.net.drm
 			var meta:ByteArray = new ByteArray();
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(ANONYMOUS_DRM_METADATA);
-			var metadata:ByteArray = decoder.toByteArray();
-			nsDRMTRait.drmMetadata =  decoder.toByteArray();			
+			var metadata:DRMContentData = new DRMContentData(decoder.toByteArray());
+			nsDRMTRait.drmMetadata =  metadata;			
 			assertEquals(metadata, nsDRMTRait.drmMetadata);
 			
 			nsDRMTRait.drmMetadata = null;
 			
-			assertNull(nsDRMTRait.drmMetadata);
+			assertNotNull(nsDRMTRait.drmMetadata);
 		}	
 		
 		public function testAuthenticationEvents():void
 		{		
 			var testFinished:Function = addAsync( function (event:Event):void {}, 13000);
-			var drmTrait:DRMTrait = new NetStreamDRMTrait();
-						
-			drmTrait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);				
+									
+			nsDRMTRait.addEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);				
 			
 			var meta:ByteArray = new ByteArray();
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);
 			nsDRMTRait.drmMetadata =  decoder.toByteArray();
-			var authenticatingSeen:Boolean = false;
 			
 			function onStateChange(event:DRMEvent):void
 			{				
-				switch(drmTrait.drmState)
-				{
-					case DRMState.AUTHENTICATING:						
-						authenticatingSeen = true;
-						break;
-					case DRMState.AUTHENTICATION_NEEDED:	
+				switch(nsDRMTRait.drmState)
+				{					
+					case DRMState.AUTHENTICATION_NEEDED:			
 						// Doesn't fire if the voucher is already present.							
-						Assert.assertEquals(AuthenticationMethod.USERNAME_AND_PASSWORD, nsDRMTRait.authenticationMethod);
-						drmTrait.authenticate(USERNAME, PASSWORD);
+						nsDRMTRait.authenticate(USERNAME, PASSWORD);
 						break;
-					case DRMState.AUTHENTICATED:										
+					case DRMState.AUTHENTICATION_COMPLETE:
+													
 						Assert.assertTrue(nsDRMTRait.startDate.time <= (new Date()).time);
 						Assert.assertTrue(nsDRMTRait.endDate.time >= (new Date()).time);
 						Assert.assertTrue(nsDRMTRait.period >= 0);	
-						drmTrait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
+						nsDRMTRait.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onStateChange);
 						testFinished(null);				
 						break;
 				}			
