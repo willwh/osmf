@@ -22,6 +22,7 @@
 package org.osmf.net.dvr
 {
 	import flash.errors.IllegalOperationError;
+	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
@@ -48,6 +49,8 @@ package org.osmf.net.dvr
 			}
 			
 			this.stream = stream;
+			
+			stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			durationUpdateTimer = new Timer(DVRCastConstants.LOCAL_DURATION_UPDATE_INTERVAL);
 			durationUpdateTimer.addEventListener(TimerEvent.TIMER, onDurationUpdateTimer);
@@ -102,7 +105,16 @@ package org.osmf.net.dvr
 			if (newDuration != oldDuration)
 			{
 				oldDuration = newDuration;
-				dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, oldDuration));
+				dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, newDuration));
+			}
+		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (event.info.code == "NetStream.Play.Stop")
+			{
+				// It seems that this status code signals completion:
+				signalComplete();
 			}
 		}
 	}

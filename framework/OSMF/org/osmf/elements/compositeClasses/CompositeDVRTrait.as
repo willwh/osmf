@@ -43,6 +43,8 @@ package org.osmf.elements.compositeClasses
 			this.traitAggregator = traitAggregator;
 			this.mode = mode;
 			
+			super();
+			
 			traitAggregationHelper
 				= new TraitAggregationHelper
 					( traitType
@@ -50,8 +52,6 @@ package org.osmf.elements.compositeClasses
 					, processAggregatedChild
 					, processUnaggregatedChild
 					);
-					
-			super();
 		}
 	
 		// IReusable
