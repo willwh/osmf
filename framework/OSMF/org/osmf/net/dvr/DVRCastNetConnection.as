@@ -18,29 +18,23 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.net.dvr
 {
-	import org.osmf.metadata.FacetKey;
+	import flash.net.NetConnection;
 	
 	[ExcludeClass]
 	
 	/**
-	 * @private
-	 * 
-	 * Defines DVRCast related constants values
-	 */	
-	internal class DVRCastConstants
+	 * @private 
+	 */
+	internal class DVRCastNetConnection extends NetConnection
 	{
-		public static const RPC_GET_STREAM_INFO:String				= "DVRGetStreamInfo";
-		public static const RPC_SUBSCRIBE:String 					= "DVRSubscribe";
-		public static const RPC_UNSUBSCRIBE:String 					= "DVRUnsubscribe";
+		public function DVRCastNetConnection()
+		{
+			super();
+		}
 		
-		public static const RESULT_GET_STREAM_INFO_SUCCESS:String	="NetStream.DVRStreamInfo.Success";
-		public static const RESULT_GET_STREAM_INFO_RETRY:String		="NetStream.DVRStreamInfo.Retry";
-		
-		public static const STREAM_INFO_UPDATE_DELAY:Number 		= 3000; // ms.
-		public static const LOCAL_DURATION_UPDATE_INTERVAL:Number 	= 500;	// ms.
-		public static const LIVE_POSITION_SEEK_DELAY:Number			= 1.5;	// secs.
+		public var streamInfo:DVRCastStreamInfo;
+		public var recordingInfo:DVRCastRecordingInfo; 
 	}
 }

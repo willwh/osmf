@@ -34,7 +34,8 @@ package org.osmf.net.dvr
 		public function testDVRCastNetStream():void
 		{
 			// Pro forma (the class does a single override on 'play'):
-			
+			assertThrows(function():void{ new DVRCastNetStream(null); });
+			/*
 			var nc:MockNetConnection = new MockNetConnection();
 			nc.expectation = NetConnectionExpectation.VALID_CONNECTION;
 			nc.connect(null);
@@ -62,7 +63,8 @@ package org.osmf.net.dvr
 				);
 			facet.addValue(DVRCastConstants.KEY_RECORDING_INFO, new DVRCastRecordingInfo());
 			
-			var stream:DVRCastNetStream = new DVRCastNetStream(resource, nc);
+			var stream:DVRCastNetStream = new DVRCastNetStream(null);
+			*/
 		}
 		
 	}

@@ -54,6 +54,11 @@ package org.osmf.net.dvr
 			super();
 		}
 
+		override protected function createNetConnection():NetConnection
+		{
+			return new DVRCastNetConnection();
+		}
+
 		override public function create(resource:URLResource):void
 		{
 			urlResource = resource;
@@ -75,7 +80,7 @@ package org.osmf.net.dvr
 		//
 
 		private var urlResource:URLResource;
-		private var netConnection:NetConnection;
+		private var netConnection:DVRCastNetConnection;
 		private var streamName:String;
 			
 		private function onCreationComplete(event:NetConnectionFactoryEvent):void
@@ -84,7 +89,7 @@ package org.osmf.net.dvr
 			// we have succeeded subscribing to the DVRCast stream:
 			event.stopImmediatePropagation();
 			
-			netConnection = event.netConnection;
+			netConnection = event.netConnection as DVRCastNetConnection;
 			
 			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url);
 			var responder:Responder 
@@ -137,26 +142,15 @@ package org.osmf.net.dvr
 				}
 				else
 				{
-					// Create a DVR metadata object:
-					var dvrcastFacet:Facet = new LocalFacet(MetadataNamespaces.DVRCAST_METADATA);
-					urlResource.metadata.addFacet(dvrcastFacet);
-					
-					// Add a stream info field:
-					dvrcastFacet.addValue
-						( DVRCastConstants.KEY_STREAM_INFO
-						, streamInfoRetreiver.streamInfo
-						);
-					
+					// Instantiate a new recording info object:
 					var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
 					recordingInfo.startDuration = streamInfoRetreiver.streamInfo.currentLength;
 					recordingInfo.startOffset = calculateOffset(streamInfoRetreiver.streamInfo);
 					recordingInfo.startTimer = flash.utils.getTimer();
 					
-					// Add recording info:
-					dvrcastFacet.addValue
-						( DVRCastConstants.KEY_RECORDING_INFO
-						, recordingInfo
-						);
+					// Add the stream info and recording info to the net connection:
+					netConnection.streamInfo = streamInfoRetreiver.streamInfo;	
+					netConnection.recordingInfo = recordingInfo;
 						
 					// Now that we're done, signal completion, so the VideoElement will
 					// continue its loading process:

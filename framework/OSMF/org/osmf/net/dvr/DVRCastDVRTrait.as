@@ -32,9 +32,6 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -57,17 +54,14 @@ package org.osmf.net.dvr
 		 *  @productversion OSMF 1.0
 		 */		
 
-		public function DVRCastDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase)
+		public function DVRCastDVRTrait(connection:DVRCastNetConnection, stream:NetStream)
 		{
-			var dvrCastMetadata:Facet = resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA);
-			if (dvrCastMetadata != null)
+			if (connection != null && stream != null)
 			{
-				this.connection = connection;
 				this.stream = stream;
-				this.resource = resource;
-				
-				streamInfo = dvrCastMetadata.getValue(DVRCastConstants.KEY_STREAM_INFO);
-				recordingInfo = dvrCastMetadata.getValue(DVRCastConstants.KEY_RECORDING_INFO);
+					
+				streamInfo = connection.streamInfo;
+				recordingInfo = connection.recordingInfo;
 				
 				// Setup 
 				streamInfoRetreiver = new DVRCastStreamInfoRetreiver(connection, streamInfo.streamName); 
@@ -83,7 +77,7 @@ package org.osmf.net.dvr
 			}
 			else
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 		}
 		
@@ -143,7 +137,6 @@ package org.osmf.net.dvr
 		
 		private var connection:NetConnection;
 		private var stream:NetStream;
-		private var resource:MediaResourceBase;
 		
 		private var streamInfo:DVRCastStreamInfo;
 		private var recordingInfo:DVRCastRecordingInfo;

@@ -34,16 +34,11 @@ package org.osmf.net.dvr
 	 */
 	internal class DVRCastNetStream extends NetStream
 	{
-		public function DVRCastNetStream(resource:MediaResourceBase, connection:NetConnection)
+		public function DVRCastNetStream(connection:DVRCastNetConnection)
 		{
 			super(connection);
 			
-			recordingInfo
-				= resource
-				. metadata
-				. getFacet(MetadataNamespaces.DVRCAST_METADATA)
-				. getValue(DVRCastConstants.KEY_RECORDING_INFO)
-				as DVRCastRecordingInfo;
+			recordingInfo = connection.recordingInfo;
 		}
 		
 		override public function play(...arguments):void

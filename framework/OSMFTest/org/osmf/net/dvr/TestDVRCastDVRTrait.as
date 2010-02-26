@@ -33,22 +33,17 @@ package org.osmf.net.dvr
 	{
 		public function testDVRCastDVRTrait():void
 		{
+			assertThrows(function():void{ new DVRCastDVRTrait(null, null); });
+			/*
 			var nc:MockNetConnection = new MockNetConnection();
 			nc.expectation = NetConnectionExpectation.VALID_CONNECTION;
 			nc.connect(null);
 			
 			var stream:MockNetStream = new MockNetStream(nc);
 			
-			var resource:StreamingURLResource = new StreamingURLResource("");
-			
-			assertThrows(function():void{new DVRCastDVRTrait(nc, stream, resource);});
-			
 			var now:Date;
-			var facet:Facet = new Facet(MetadataNamespaces.DVRCAST_METADATA);
-			resource.metadata.addFacet(facet);
-			facet.addValue
-				( DVRCastConstants.KEY_STREAM_INFO
-				, new DVRCastStreamInfo
+			var streamInfo:DVRCastStreamInfo
+				= new DVRCastStreamInfo
 					(	{ callTime: now
 						, offline: false
 						, begOffset: 0
@@ -61,15 +56,14 @@ package org.osmf.net.dvr
 						, currLen: 0
 						, maxLen: 0
 						}
-					)
-				);
-			facet.addValue(DVRCastConstants.KEY_RECORDING_INFO, new DVRCastRecordingInfo());
-			
-			var dt:DVRCastDVRTrait = new DVRCastDVRTrait(nc, stream, resource);
+					);
+					
+			var dt:DVRCastDVRTrait = new DVRCastDVRTrait(, null);
 			
 			assertNotNull(dt);
 			assertEquals(NaN, dt.livePosition);
 			assertEquals(false, dt.isRecording);
+			*/
 		}
 	}
 }

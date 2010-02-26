@@ -59,7 +59,7 @@ package org.osmf
 			// DVR
 			//
 			
- 			addTestSuite(TestDVRCastConstants);
+			addTestSuite(TestDVRCastConstants);
  			addTestSuite(TestDVRCastDVRTrait);
  			addTestSuite(TestDVRCastNetConnectionFactory);
  			addTestSuite(TestDVRCastNetLoader);
@@ -68,7 +68,7 @@ package org.osmf
  			addTestSuite(TestDVRCastStreamInfo);
  			addTestSuite(TestDVRCastStreamInfoRetreiver);
  			addTestSuite(TestDVRCastTimeTrait);
-			
+ 			
 			// Logging
 			//
 			
@@ -83,6 +83,7 @@ package org.osmf
 			addTestSuite(TestBufferTrait);
 			addTestSuite(TestBufferTraitAsSubclass);
 			addTestSuite(TestDRMTrait);
+			addTestSuite(TestDVRTrait);
 			addTestSuite(TestDynamicStreamTrait);
 			addTestSuite(TestLoadTrait);
 			addTestSuite(TestLoaderBaseAsSubclass);

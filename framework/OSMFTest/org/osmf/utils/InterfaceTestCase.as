@@ -21,13 +21,13 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import flexunit.framework.TestCase;
+	import org.osmf.flexunit.TestCaseEx;
 	
 	/**
 	 * A subclass of TestCase which is specific to testing implementations of
 	 * an interface.
 	 **/
-	public class InterfaceTestCase extends TestCase
+	public class InterfaceTestCase extends TestCaseEx
 	{
 		/**
 		 * Constructor.

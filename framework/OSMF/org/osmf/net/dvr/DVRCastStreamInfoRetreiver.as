@@ -21,6 +21,7 @@
 
 package org.osmf.net.dvr
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -51,9 +52,14 @@ package org.osmf.net.dvr
 		// Public Interface
 		//
 		
-		public function DVRCastStreamInfoRetreiver(connection:NetConnection, streamName:String)
+		public function DVRCastStreamInfoRetreiver(connection:DVRCastNetConnection, streamName:String)
 		{
 			super();
+			
+			if (connection == null || streamName == null)
+			{
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
 			
 			this.connection = connection;
 			this.streamName = streamName;

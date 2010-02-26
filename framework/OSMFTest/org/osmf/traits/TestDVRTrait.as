@@ -12,22 +12,46 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*
+*   
+*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
 
-package org.osmf.net.dvr
+package org.osmf.traits
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.events.DVREvent;
+	import org.osmf.utils.InterfaceTestCase;
 
-	public class TestDVRCastNetConnectionFactory extends TestCaseEx //TestNetConnectionFactory
+	public class TestDVRTrait extends InterfaceTestCase
 	{
-		public function testDVRCastNetConnectionFactory():void
+		override protected function createInterfaceObject(...args):Object
 		{
-			//
+			return new DVRTrait();
 		}
+		
+		override public function setUp():void
+		{
+			super.setUp();
+			
+			dvrTrait = createInterfaceObject() as DVRTrait;
+		}
+		
+		// Public API
+		//
+		
+		public function testIsRecording():void
+		{
+			assertFalse(dvrTrait.isRecording);
+		}
+		
+		public function testLivePosition():void
+		{
+			assertThrows(function():void{ dvrTrait.livePosition; });
+		}
+		
+		private var dvrTrait:DVRTrait;
 	}
 }
