@@ -37,8 +37,8 @@ package org.osmf.elements
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.FacetKey;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.TemporalFacet;
 	import org.osmf.net.DynamicStreamingResource;
@@ -59,11 +59,11 @@ package org.osmf.elements
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.DRMState;
-	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
@@ -388,34 +388,44 @@ package org.osmf.elements
 		
 		private function finishLoad():void
 		{
+			var trait:MediaTraitBase;
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			
-			var dvrTrait:DVRTrait = loadTrait.dvrTrait;
-			if (dvrTrait != null)
+			trait = loadTrait.getTrait(MediaTraitType.DVR);
+			if (trait != null)
 			{
-	  			addTrait(MediaTraitType.DVR, loadTrait.dvrTrait);
+	  			addTrait(MediaTraitType.DVR, trait);
   			}
+  			
+	    	trait = loadTrait.getTrait(MediaTraitType.AUDIO);
+	    	addTrait(MediaTraitType.AUDIO, trait || new NetStreamAudioTrait(stream));
 	    	
-	    	addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));
-	    	addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
+	    	trait = loadTrait.getTrait(MediaTraitType.BUFFER);
+	    	addTrait(MediaTraitType.BUFFER, trait || new NetStreamBufferTrait(stream));
 			
-			var timeTrait:TimeTrait	= loadTrait.timeTrait; 
-			if (timeTrait != null)
+			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
+			addTrait(MediaTraitType.TIME, trait || new NetStreamTimeTrait(stream, loadTrait.resource));
+			
+			trait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT);
+			addTrait
+				(	MediaTraitType.DISPLAY_OBJECT
+				,	trait
+				||	new NetStreamDisplayObjectTrait(stream, video, video.width, video.height)
+				);
+			
+			trait = loadTrait.getTrait(MediaTraitType.PLAY);
+			addTrait(MediaTraitType.PLAY, trait || new NetStreamPlayTrait(stream, resource));
+			
+			trait = loadTrait.getTrait(MediaTraitType.SEEK);
+			if (trait == null && NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
 			{
-				addTrait(MediaTraitType.TIME, timeTrait);
-			}
-			
-			
-			displayObjectTrait = new NetStreamDisplayObjectTrait(stream, video, video.width, video.height);
-			addTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			
-			addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
-			
-			if (NetStreamUtils.getStreamType(resource) != StreamType.LIVE)
-			{
-	    		addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
+				trait = new NetStreamSeekTrait(timeTrait, stream);
 	  		}
-	  		
+	  		if (trait != null)
+	  		{
+	    		addTrait(MediaTraitType.SEEK, trait);
+	    	}
+	    	
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null && loadTrait.switchManager != null)
 			{

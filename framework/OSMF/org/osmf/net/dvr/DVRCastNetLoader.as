@@ -29,11 +29,10 @@ package org.osmf.net.dvr
 	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
-	import org.osmf.traits.DVRTrait;
-	import org.osmf.traits.TimeTrait;
-
+	
 	/**
 	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
 	 * FMS server.
@@ -97,23 +96,11 @@ package org.osmf.net.dvr
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */
-		override protected function createDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase):DVRTrait
+		 */		
+		override protected function processFinishLoading(loadTrait:NetStreamLoadTrait):void
 		{
-			return new DVRCastDVRTrait(connection, stream, resource);
-		}
-		
-		/**
-		 * @private
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		override protected function createTimeTrait(stream:NetStream, resource:MediaResourceBase):TimeTrait
-		{
-			return new DVRCastTimeTrait(resource, stream);
+			loadTrait.setTrait(new DVRCastDVRTrait(loadTrait.connection, loadTrait.netStream, loadTrait.resource));
+			loadTrait.setTrait(new DVRCastTimeTrait(loadTrait.resource, loadTrait.netStream));
 		}
 		
 		// Internals

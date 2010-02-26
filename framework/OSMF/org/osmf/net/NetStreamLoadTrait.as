@@ -21,17 +21,19 @@
 *****************************************************/
 package org.osmf.net
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.NetStatusEvent;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.utils.Dictionary;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
-	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.MediaTraitBase;
+	import org.osmf.utils.OSMFStrings;
 
 	
 	[ExcludeClass]
@@ -43,6 +45,8 @@ package org.osmf.net
 	{
 		public function NetStreamLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
+			traits = new Dictionary();
+			
 			super(loader, resource);
 			
 			isStreamingResource = NetStreamUtils.isStreamingResource(resource);
@@ -106,39 +110,43 @@ package org.osmf.net
 	   	}
 	   	
 	   	/**
-	   	 * Defines the object's optional DVRTrait
+	   	 * @private
+	   	 * 
+	   	 * Stores the given trait on the object. Only one trait object
+	   	 * can be stored per trait type. The last set trait is returned
+	   	 * by <code>getTrait</code>.
+	   	 * 
+	   	 * @param trait The trait object to store.
+	   	 * @throws IllegalOperationError if the specified trait is null.
 	   	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-	   	 */	   	
-	   	public function set dvrTrait(value:DVRTrait):void
+	   	 */
+	   	public function setTrait(trait:MediaTraitBase):void
 	   	{
-	   		_dvrTrait = value;
-	   	}
-	   	
-	   	public function get dvrTrait():DVRTrait
-	   	{
-	   		return _dvrTrait; 
+	   		if (trait == null)
+	   		{
+	   			throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+	   		}
+	   		
+	   		traits[trait.traitType] = trait;
 	   	}
 	   	
 	   	/**
-	   	 * Defines the object's optional custom TimeTrait
+	   	 * @private
+	   	 * 
+	   	 * Returns the stored trait object for the given trait type, if any.
 	   	 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-	   	 */	   	
-	   	public function set timeTrait(value:TimeTrait):void
+	   	 */
+	   	public function getTrait(traitType:String):MediaTraitBase
 	   	{
-	   		_timeTrait = value;
-	   	}
-	   	
-	   	public function get timeTrait():TimeTrait
-	   	{
-	   		return _timeTrait; 
+	   		return traits[traitType];
 	   	}
 	   	
 	   	/**
@@ -224,8 +232,7 @@ package org.osmf.net
 
 	   	private var _connection:NetConnection;
 	   	private var _switchManager:NetStreamSwitchManager;
-	   	private var _dvrTrait:DVRTrait;
-	   	private var _timeTrait:TimeTrait;
+	   	private var traits:Dictionary;
 	   	private var _netConnectionFactory:NetConnectionFactoryBase;
 
 		private var isStreamingResource:Boolean;
