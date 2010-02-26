@@ -102,30 +102,5 @@ package org.osmf.net.dvr
 			loadTrait.setTrait(new DVRCastDVRTrait(loadTrait.connection, loadTrait.netStream, loadTrait.resource));
 			loadTrait.setTrait(new DVRCastTimeTrait(loadTrait.resource, loadTrait.netStream));
 		}
-		
-		// Internals
-		//
-		
-		private function isRecordingDVRCastStreamInfo(resource:MediaResourceBase):Boolean
-		{
-			var result:Boolean;
-			
-			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
-			if (streamingURLResource != null)
-			{
-				// See if a DVRCast facet is available on the resource's metadata:
-				var dvrcastFacet:Facet
-					=	resource.metadata.getFacet(MetadataNamespaces.DVRCAST_METADATA)
-					as	Facet;
-					
-	  			if (dvrcastFacet != null)
-	  			{
-	  				var streamInfo:DVRCastStreamInfo = dvrcastFacet.getValue(DVRCastConstants.KEY_STREAM_INFO);
-	  				result = streamInfo && streamInfo.isRecording == true;	
-	  			}
-	 		}
-	 		
-	 		return result;
-	 	}
 	}
 }
