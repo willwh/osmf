@@ -23,12 +23,18 @@ package org.osmf.net.dvr
 {
 	import org.osmf.flexunit.TestCaseEx;
 
-	public class TestDVRCastNetConnectionFactory extends TestCaseEx
+	public class TestDVRCastNetConnection extends TestCaseEx
 	{
-		public function testDVRCastNetConnectionFactory():void
+		public function testDVRCastNetConnection(methodName:String=null):void
 		{
-			var ncf:DVRCastNetConnectionFactory = new DVRCastNetConnectionFactory();
-			assertNotNull(ncf);
-		} 
+			// Pro forma (the class derives from NetConnection, adding to properties:
+			var c:DVRCastNetConnection = new DVRCastNetConnection();
+			var ri:DVRCastRecordingInfo = new DVRCastRecordingInfo();
+			c.recordingInfo = ri;
+			assertEquals(ri, c.recordingInfo);
+			c.streamInfo = null;
+			assertNull(c.streamInfo);
+		}
+		
 	}
 }

@@ -12,23 +12,26 @@
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*
+*   
+*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.net.dvr
 {
-	import org.osmf.flexunit.TestCaseEx;
+	import flash.net.Responder;
 
-	public class TestDVRCastNetConnectionFactory extends TestCaseEx
+	public class MockDVRCastNetConnection extends DVRCastNetConnection
 	{
-		public function testDVRCastNetConnectionFactory():void
+		public function MockDVRCastNetConnection()
 		{
-			var ncf:DVRCastNetConnectionFactory = new DVRCastNetConnectionFactory();
-			assertNotNull(ncf);
-		} 
+			super();
+	
+			connect(null);
+		}
+		
+		
 	}
 }

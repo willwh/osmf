@@ -27,7 +27,8 @@ package org.osmf.net.dvr
 	{
 		public function testDVRCastNetLoader():void
 		{
-			
+			var nl:DVRCastNetLoader = new DVRCastNetLoader();
+			assertNotNull(nl);
 		}
 		
 	}

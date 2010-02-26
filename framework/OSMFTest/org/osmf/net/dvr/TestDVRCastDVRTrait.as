@@ -22,27 +22,18 @@
 package org.osmf.net.dvr
 {
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.StreamingURLResource;
-	import org.osmf.netmocker.MockNetConnection;
-	import org.osmf.netmocker.MockNetStream;
-	import org.osmf.netmocker.NetConnectionExpectation;
 
 	public class TestDVRCastDVRTrait extends TestCaseEx
 	{
 		public function testDVRCastDVRTrait():void
 		{
 			assertThrows(function():void{ new DVRCastDVRTrait(null, null); });
-			/*
-			var nc:MockNetConnection = new MockNetConnection();
-			nc.expectation = NetConnectionExpectation.VALID_CONNECTION;
-			nc.connect(null);
 			
-			var stream:MockNetStream = new MockNetStream(nc);
+			var nc:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			assertThrows(function():void{ new DVRCastDVRTrait(nc, null); });
 			
-			var now:Date;
-			var streamInfo:DVRCastStreamInfo
+			var now:Date = new Date();
+			nc.streamInfo 
 				= new DVRCastStreamInfo
 					(	{ callTime: now
 						, offline: false
@@ -57,13 +48,15 @@ package org.osmf.net.dvr
 						, maxLen: 0
 						}
 					);
-					
-			var dt:DVRCastDVRTrait = new DVRCastDVRTrait(, null);
 			
-			assertNotNull(dt);
-			assertEquals(NaN, dt.livePosition);
-			assertEquals(false, dt.isRecording);
-			*/
+			nc.recordingInfo = new DVRCastRecordingInfo();
+			
+			var stream:DVRCastNetStream = new DVRCastNetStream(nc);
+			var trait:DVRCastDVRTrait = new DVRCastDVRTrait(nc, stream);
+			assertNotNull(trait);
+			
+			assertFalse(trait.isRecording);
+			assertEquals(NaN, trait.livePosition);
 		}
 	}
 }

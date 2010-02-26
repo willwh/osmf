@@ -27,7 +27,29 @@ package org.osmf.net.dvr
 	{
 		public function testDVRCastTimeTrait():void
 		{
+			var nc:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			var now:Date = new Date();
+			nc.streamInfo 
+				= new DVRCastStreamInfo
+					(	{ callTime: now
+						, offline: false
+						, begOffset: 0
+						, endOffset: 0
+						, startRec: now
+						, stopRec: now
+						, isRec: false
+						, streamName: "test"
+						, lastUpdate: now
+						, currLen: 0
+						, maxLen: 0
+						}
+					);
+			nc.recordingInfo = new DVRCastRecordingInfo();
 			
+			var stream:DVRCastNetStream = new DVRCastNetStream(nc);
+			var tt:DVRCastTimeTrait = new DVRCastTimeTrait(nc, stream);
+			
+			assertNotNull(tt);
 		}
 		
 	}

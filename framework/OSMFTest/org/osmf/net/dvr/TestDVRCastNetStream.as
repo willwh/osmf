@@ -22,11 +22,6 @@
 package org.osmf.net.dvr
 {
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.StreamingURLResource;
-	import org.osmf.netmocker.MockNetConnection;
-	import org.osmf.netmocker.NetConnectionExpectation;
 
 
 	public class TestDVRCastNetStream extends TestCaseEx
@@ -35,36 +30,10 @@ package org.osmf.net.dvr
 		{
 			// Pro forma (the class does a single override on 'play'):
 			assertThrows(function():void{ new DVRCastNetStream(null); });
-			/*
-			var nc:MockNetConnection = new MockNetConnection();
-			nc.expectation = NetConnectionExpectation.VALID_CONNECTION;
-			nc.connect(null);
 			
-			var resource:StreamingURLResource = new StreamingURLResource("");
-			var now:Date;
-			var facet:Facet = new Facet(MetadataNamespaces.DVRCAST_METADATA);
-			resource.metadata.addFacet(facet);
-			facet.addValue
-				( DVRCastConstants.KEY_STREAM_INFO
-				, new DVRCastStreamInfo
-					(	{ callTime: now
-						, offline: false
-						, begOffset: 0
-						, endOffset: 0
-						, startRec: now
-						, stopRec: now
-						, isRec: false
-						, streamName: "test"
-						, lastUpdate: now
-						, currLen: 0
-						, maxLen: 0
-						}
-					)
-				);
-			facet.addValue(DVRCastConstants.KEY_RECORDING_INFO, new DVRCastRecordingInfo());
-			
-			var stream:DVRCastNetStream = new DVRCastNetStream(null);
-			*/
+			var c:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			var stream:DVRCastNetStream = new DVRCastNetStream(c);
+			assertNotNull(stream);
 		}
 		
 	}
