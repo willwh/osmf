@@ -29,9 +29,6 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.LocalFacet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetStreamUtils;
 
