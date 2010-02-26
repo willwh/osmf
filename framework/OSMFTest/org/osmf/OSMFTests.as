@@ -67,7 +67,7 @@ package org.osmf
  			addTestSuite(TestDVRCastNetConnection);
  			addTestSuite(TestDVRCastRecordingInfo);
  			addTestSuite(TestDVRCastStreamInfo);
- 			addTestSuite(TestDVRCastStreamInfoRetreiver);
+ 			addTestSuite(TestDVRCastStreamInfoRetriever);
  			addTestSuite(TestDVRCastTimeTrait);
  			
 			// Logging

@@ -23,12 +23,12 @@ package org.osmf.net.dvr
 {
 	import org.osmf.flexunit.TestCaseEx;
 
-	public class TestDVRCastStreamInfoRetreiver extends TestCaseEx
+	public class TestDVRCastStreamInfoRetriever extends TestCaseEx
 	{
 		public function testDVRCastStreamInfoRetreiver():void
 		{
 			var ncf:MockDVRCastNetConnection = new MockDVRCastNetConnection();
-			var sir:DVRCastStreamInfoRetreiver = new DVRCastStreamInfoRetreiver(ncf, "test");
+			var sir:DVRCastStreamInfoRetriever = new DVRCastStreamInfoRetriever(ncf, "test");
 			assertNotNull(sir);
 		}
 		

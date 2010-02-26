@@ -100,8 +100,8 @@ package org.osmf.net.dvr
 		
 		private function onStreamSubscriptionResult(result:Object):void
 		{
-			var streamInfoRetreiver:DVRCastStreamInfoRetreiver
-				= new DVRCastStreamInfoRetreiver
+			var streamInfoRetreiver:DVRCastStreamInfoRetriever
+				= new DVRCastStreamInfoRetriever
 					( netConnection
 					, streamName
 					);
@@ -112,7 +112,7 @@ package org.osmf.net.dvr
 		
 		private function onStreamInfoRetreiverComplete(event:Event):void
 		{
-			var streamInfoRetreiver:DVRCastStreamInfoRetreiver = event.target as DVRCastStreamInfoRetreiver;
+			var streamInfoRetreiver:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
 			
 			if (streamInfoRetreiver.streamInfo != null)
 			{

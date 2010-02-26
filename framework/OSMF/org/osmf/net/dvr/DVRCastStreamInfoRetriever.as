@@ -47,12 +47,12 @@ package org.osmf.net.dvr
 	 * The object helps in facilitating multiple retries on a given
 	 * interval. By default, 5 attempts are made, 3 seconds apart.
 	 */
-	internal class DVRCastStreamInfoRetreiver extends EventDispatcher
+	internal class DVRCastStreamInfoRetriever extends EventDispatcher
 	{
 		// Public Interface
 		//
 		
-		public function DVRCastStreamInfoRetreiver(connection:DVRCastNetConnection, streamName:String)
+		public function DVRCastStreamInfoRetriever(connection:DVRCastNetConnection, streamName:String)
 		{
 			super();
 			

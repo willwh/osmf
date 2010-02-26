@@ -49,7 +49,7 @@
     <classEntry path="org.osmf.elements.htmlClasses.HTMLLoadTrait"/>
     <classEntry path="org.osmf.utils.HTTPLoadTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.GlobalRandomAccessEntry"/>
-    <classEntry path="org.osmf.net.dvr.DVRCastStreamInfoRetreiver"/>
+    <classEntry path="org.osmf.net.dvr.DVRCastStreamInfoRetriever"/>
     <classEntry path="org.osmf.logging.TraceLogger"/>
     <classEntry path="org.osmf.elements.compositeClasses.CompositeDRMTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.FragmentDurationPair"/>
