@@ -113,6 +113,7 @@ package org.osmf.net
 			 * We assume being unable to handle the resource for conditions not mentioned above
 			 */
 			var res:URLResource = resource as URLResource;
+			var extensionPattern:RegExp = new RegExp("\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$", "i");
 			var url:URL = res != null ? new URL(res.url) : null;
 			if (url == null || url.rawUrl == null || url.rawUrl.length <= 0)
 			{
@@ -120,7 +121,7 @@ package org.osmf.net
 			}
 			if (url.protocol == "")
 			{
-				return url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1;
+				return extensionPattern.test(url.path);
 			}
 			if (NetStreamUtils.isRTMPStream(url.rawUrl))
 			{
@@ -128,10 +129,11 @@ package org.osmf.net
 			}
 			if (url.protocol.search(/file$|http$|https$/i) != -1)
 			{
+				
 				return (url.path == null ||
 						url.path.length <= 0 ||
 						url.path.indexOf(".") == -1 ||
-						url.path.search(/\.flv$|\.f4v$|\.mov$|\.mp4$|\.mp4v$|\.m4v$|\.3gp$|\.3gpp2$|\.3g2$/i) != -1);
+						extensionPattern.test(url.path));
 			}
 			
 			return false;

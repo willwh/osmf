@@ -418,8 +418,8 @@ package org.osmf.media
 			var results:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
 			for each (var item:MediaFactoryItem in items)
-			{
-				if (item.canHandleResourceFunction.call(item, resource) == true)
+			{			
+				if (item.canHandleResourceFunction(resource))
 				{
 					results.push(item);
 				}
