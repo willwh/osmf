@@ -410,7 +410,11 @@ package org.osmf.elements
 	    	addTrait(MediaTraitType.BUFFER, trait || new NetStreamBufferTrait(stream));
 			
 			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
-			addTrait(MediaTraitType.TIME, trait || new NetStreamTimeTrait(stream, loadTrait.resource));
+			if (timeTrait == null)
+			{
+				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource)
+			}
+			addTrait(MediaTraitType.TIME, timeTrait);
 			
 			trait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT);
 			addTrait
