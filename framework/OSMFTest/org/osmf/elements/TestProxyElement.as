@@ -117,7 +117,7 @@ package org.osmf.elements
 			assertTrue(traitsRemovedCount == 4);
 		}
 		
-		override public function testGateway():void
+		override public function testContainer():void
 		{
 			var mediaElement:ProxyElement = createMediaElement() as ProxyElement;
 			mediaElement.proxiedElement = new MediaElement();

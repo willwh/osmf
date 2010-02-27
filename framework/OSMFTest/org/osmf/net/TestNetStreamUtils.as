@@ -27,8 +27,6 @@ package org.osmf.net
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.NullResource;
 	
@@ -136,55 +134,39 @@ package org.osmf.net
 			// Now try with positive/non-default cases.
 			//
 			
-			resource = new StreamingURLResource("rtmp://example.com", StreamType.RECORDED);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
-					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
-
-			resource = new StreamingURLResource("rtmp://example.com", StreamType.LIVE);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			var streamingResource:StreamingURLResource = null;
+			
+			streamingResource = new StreamingURLResource("rtmp://example.com", StreamType.LIVE);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
-			resource = new DynamicStreamingResource("rtmp://example.com", StreamType.RECORDED);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			streamingResource = new DynamicStreamingResource("rtmp://example.com", StreamType.RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
-			resource = new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			streamingResource = new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
-					   
-			resource = new StreamingURLResource("rtmp://example.com");
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			resource.metadata.addFacet(facet);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
-					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
-			resource = new StreamingURLResource("rtmp://example.com");
-			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 15);
-			resource.metadata.addFacet(facet);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			streamingResource = new StreamingURLResource("rtmp://example.com");
+			streamingResource.clipStartTime = 10;
+			streamingResource.clipEndTime = 15;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == 10 &&
 					   result["len"] == 5);
 
-			resource = new StreamingURLResource("rtmp://example.com");
-			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);
-			resource.metadata.addFacet(facet);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			streamingResource = new StreamingURLResource("rtmp://example.com");
+			streamingResource.clipStartTime = 10;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == 10 &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
-			resource = new StreamingURLResource("rtmp://example.com");
-			facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 15);
-			resource.metadata.addFacet(facet);
-			result = NetStreamUtils.getPlayArgsForResource(resource);
+			streamingResource = new StreamingURLResource("rtmp://example.com");
+			streamingResource.clipEndTime = 15;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == 15);
 		}

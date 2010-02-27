@@ -230,8 +230,8 @@
 					{
 						// Assign to the resource, the metadata that indicates that it should have a MAST
 						// document applied (and include the URL of that MAST document).
-						var facet:Facet = createMASTFacet();
-						resource.metadata.addFacet(facet);
+						var metadata:Metadata = createMASTMetadata();
+						resource.addMetadataValue(metadata.namespaceURL, metadata);
 					}
 					
 					setupMediaElementListeners(false);
@@ -254,11 +254,11 @@
 				return (pluginResourceMap && pluginResourceMap[MAST_PLUGIN_INFOCLASS] != null);
 			}
 			
-			private function createMASTFacet():Facet
+			private function createMASTMetadata():Metadata
 			{
-				var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-				facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_PREROLL);
-				return facet;
+				var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+				metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_URL_PREROLL);
+				return metadata;
 			}
 			
 			private function loadPlaylist(url:String):void
@@ -307,14 +307,14 @@
 			private function playSelectedPlaylistItem():void
 			{
 				var playlistItem:PlaylistItem = tileList.selectedItem as PlaylistItem;
-				var facet:Facet;
+				var metadata:Metadata;
 				
 				if (MASTPluginLoaded)
 				{
-					facet = createMASTFacet();
+					metadata = createMASTMetadata();
 				}
 				
-				var mediaResolver:SyndicationMediaResolver = new SyndicationMediaResolver(facet);
+				var mediaResolver:SyndicationMediaResolver = new SyndicationMediaResolver(metadata);
 				var mediaGenerator:SyndicationMediaGenerator = new SyndicationMediaGenerator(mediaResolver);
 				
 				setupMediaElementListeners(false);

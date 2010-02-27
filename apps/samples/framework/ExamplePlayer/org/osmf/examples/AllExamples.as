@@ -50,11 +50,10 @@ package org.osmf.examples
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.net.NetLoader;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.NetLoader;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.LoadState;
@@ -455,7 +454,7 @@ package org.osmf.examples
 				  	   		var netLoader:NetLoader = new NetLoader();
 				  	   		
 							var serialElement:SerialElement = new SerialElement();
-				  	   		serialElement.addChild(new RTMPPosterFrameElement(new URLResource(REMOTE_STREAM), 5, netLoader));
+				  	   		serialElement.addChild(new RTMPPosterFrameElement(new StreamingURLResource(REMOTE_STREAM), 5, netLoader));
 							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM), netLoader));
 							return serialElement; 
 				  	   	} 
@@ -721,11 +720,9 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a subclip of a streaming video using metadata to specify the start and end times."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		var resource:URLResource = new URLResource(REMOTE_STREAM);
-							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);
-							facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 25);
-							resource.metadata.addFacet(facet);
+				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
+				  	   		resource.clipStartTime = 10;
+				  	   		resource.clipEndTime = 25;
 				  	   		return new VideoElement(resource);
 				  	   	}
 				  	)
@@ -741,27 +738,21 @@ package org.osmf.examples
 				  	   		
 							var serialElement:SerialElement = new SerialElement();
 
-				  	   		var resource:URLResource = new URLResource(REMOTE_STREAM);
-							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 15);
-							resource.metadata.addFacet(facet);
+				  	   		var resource:StreamingURLResource = new StreamingURLResource(REMOTE_STREAM);
+				  	   		resource.clipEndTime = 15;
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
 
-				  	   		resource = new URLResource(REMOTE_STREAM);
-							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 15);
-							facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 22);
-							resource.metadata.addFacet(facet);
+				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
+							resource.clipStartTime = 15;
+							resource.clipEndTime = 22;
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
 
-				  	   		resource = new URLResource(REMOTE_STREAM);
-							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 22);
-							resource.metadata.addFacet(facet);
+				  	   		resource = new StreamingURLResource(REMOTE_STREAM);
+							resource.clipStartTime = 22;
 				  	   		serialElement.addChild(new VideoElement(resource, netLoader));
 				  	   		
 							return serialElement; 
@@ -784,9 +775,7 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 10);
-							dsResource.metadata.addFacet(facet);
+				  	   		dsResource.clipEndTime = 10;
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1))));
@@ -796,10 +785,8 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 150);
-							facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 172);
-							dsResource.metadata.addFacet(facet);
+							dsResource.clipStartTime = 150;
+							dsResource.clipEndTime = 172;
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 
 							serialElement.addChild(new DurationElement(5, new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE2))));
@@ -809,9 +796,7 @@ package org.osmf.examples
 							{
 								dsResource.streamItems.push(MBR_STREAM_ITEMS[i]);
 							}
-							facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-							facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 640);
-							dsResource.metadata.addFacet(facet);
+							dsResource.clipStartTime = 640;
 				  	   		serialElement.addChild(new VideoElement(dsResource, netLoader));
 				  	   		
 							return new TraceListenerProxyElement(serialElement); 

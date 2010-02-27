@@ -87,7 +87,9 @@ package org.osmf.net
 			doTestCreateWithGoodResource(new URLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP));
 
 			// test with useInstance
-			doTestCreateWithGoodResource(new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP, null, true));
+			var streamingURLResource:StreamingURLResource = new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO_RTMP);
+			streamingURLResource.urlIncludesFMSApplicationInstance = true;
+			doTestCreateWithGoodResource(streamingURLResource);
 		}
 		
 		public function testCreateWithBadResource():void

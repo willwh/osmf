@@ -22,7 +22,6 @@
 package org.osmf.utils
 {
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Metadata;
 	
 	public class SimpleResource extends MediaResourceBase
 	{

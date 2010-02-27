@@ -36,11 +36,11 @@ package org.osmf.layout
 	 * Defines a layout renderer that sizes and positions its targets using the folowing
 	 * metadata facets it looks for on its targets:
 	 * 
-	 *  * LayoutAttributesFacet
-	 *  * AbsoluteLayoutFacet
-	 *  * RelativeLayoutFacet
-	 *  * AnchorLayoutFacet
-	 *  * PaddingLayoutFacet
+	 *  * LayoutAttributesMetadata
+	 *  * AbsoluteLayoutMetadata
+	 *  * RelativeLayoutMetadata
+	 *  * AnchorLayoutMetadata
+	 *  * PaddingLayoutMetadata
 	 * 
 	 * The documentation on each of these classes states how their respective properties
 	 * are interpreted by this renderer.
@@ -59,9 +59,9 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		override protected function get usedMetadataFacets():Vector.<String>
+		override protected function get usedMetadatas():Vector.<String>
 		{
-			return USED_METADATA_FACETS;
+			return USED_METADATAS;
 		}
 		
 		/**
@@ -94,7 +94,7 @@ package org.osmf.layout
 						( newContainer.metadata
 						, MetadataNamespaces.LAYOUT_ATTRIBUTES
 						, null
-						, function (facet:LayoutAttributesFacet):void
+						, function (facet:LayoutAttributesMetadata):void
 							{
 								layoutMode = facet ? facet.layoutMode : LayoutMode.NONE
 								invalidate();
@@ -127,29 +127,29 @@ package org.osmf.layout
 		 */
 		override protected function processTargetAdded(target:ILayoutTarget):void
 		{
-			var attributes:LayoutAttributesFacet = target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet;
+			var attributes:LayoutAttributesMetadata = target.metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesMetadata;
 			
 			// If no layout properties are set on the target ...
-			var relative:RelativeLayoutFacet = target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
+			var relative:RelativeLayoutMetadata = target.metadata.getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutMetadata;
 			if	(	layoutMode == LayoutMode.NONE
 				&&	relative == null
 				&&	attributes == null
-				&&	target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
-				&&	target.metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) == null
+				&&	target.metadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) == null
+				&&	target.metadata.getValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) == null
 				)
 			{
 				// Set target to take 100% of their container's width and height
-				relative = new RelativeLayoutFacet();
+				relative = new RelativeLayoutMetadata();
 				relative.width = 100;
 				relative.height = 100;
-				target.metadata.addFacet(relative);
+				target.metadata.addValue(relative.namespaceURL, relative);
 			
 				// Set target to scale letter box layoutMode, centered, by default:
-				attributes = new LayoutAttributesFacet();
+				attributes = new LayoutAttributesMetadata();
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
 				attributes.verticalAlign ||= VerticalAlign.MIDDLE;
 				attributes.horizontalAlign ||= HorizontalAlign.CENTER;
-				target.metadata.addFacet(attributes);
+				target.metadata.addValue(attributes.namespaceURL, attributes);
 			}
 			
 			// Watch the index metadata attribute for change:
@@ -158,7 +158,7 @@ package org.osmf.layout
 			var watcher:MetadataWatcher = new MetadataWatcher
 				( target.metadata
 				, MetadataNamespaces.LAYOUT_ATTRIBUTES
-				, LayoutAttributesFacet.INDEX
+				, LayoutAttributesMetadata.INDEX
 				, function(..._):void 
 					{
 						updateTargetOrder(target);
@@ -190,13 +190,13 @@ package org.osmf.layout
 		 */
 		override protected function compareTargets(x:ILayoutTarget, y:ILayoutTarget):Number
 		{
-			var attributesX:LayoutAttributesFacet
-				= x.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES)
-				as LayoutAttributesFacet;
+			var attributesX:LayoutAttributesMetadata
+				= x.metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES)
+				as LayoutAttributesMetadata;
 				
-			var attributesY:LayoutAttributesFacet
-				= y.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES)
-				as LayoutAttributesFacet;
+			var attributesY:LayoutAttributesMetadata
+				= y.metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES)
+				as LayoutAttributesMetadata;
 				
 			var indexX:Number = attributesX ? attributesX.index : NaN;
 			var indexY:Number = attributesY ? attributesY.index : NaN;
@@ -228,9 +228,9 @@ package org.osmf.layout
 		 */
 		override protected function calculateTargetBounds(target:ILayoutTarget, availableWidth:Number, availableHeight:Number):Rectangle
 		{
-			var attributes:LayoutAttributesFacet
-				= target.metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet
-				|| new LayoutAttributesFacet();
+			var attributes:LayoutAttributesMetadata
+				= target.metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesMetadata
+				|| new LayoutAttributesMetadata();
 			
 			if (attributes.includeInLayout == false)
 			{
@@ -239,9 +239,9 @@ package org.osmf.layout
 				
 			var rect:Rectangle = new Rectangle(0, 0, target.measuredWidth, target.measuredHeight);
 			
-			var absolute:AbsoluteLayoutFacet
-				= target.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
-				as AbsoluteLayoutFacet;
+			var absolute:AbsoluteLayoutMetadata
+				= target.metadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+				as AbsoluteLayoutMetadata;
 			
 			var deltaX:Number;
 			var deltaY:Number;
@@ -280,10 +280,10 @@ package org.osmf.layout
 			// processing relative parameters:
 			if (toDo != 0)
 			{
-				var box:BoxAttributesFacet;
-				var relative:RelativeLayoutFacet
-					= target.metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
-					as RelativeLayoutFacet;
+				var box:BoxAttributesMetadata;
+				var relative:RelativeLayoutMetadata
+					= target.metadata.getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS)
+					as RelativeLayoutMetadata;
 						
 				if (relative)
 				{
@@ -297,8 +297,8 @@ package org.osmf.layout
 					{
 						if (layoutMode == LayoutMode.HORIZONTAL)
 						{
-							box	= container.metadata.getFacet(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesFacet
-								|| new BoxAttributesFacet();
+							box	= container.metadata.getValue(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesMetadata
+								|| new BoxAttributesMetadata();
 								
 							rect.width 
 								=	( Math.max(0, availableWidth - box.absoluteSum)
@@ -324,8 +324,8 @@ package org.osmf.layout
 					{
 						if (layoutMode == LayoutMode.VERTICAL)
 						{
-							box	= container.metadata.getFacet(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesFacet
-								|| new BoxAttributesFacet();
+							box	= container.metadata.getValue(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES) as BoxAttributesMetadata
+								|| new BoxAttributesMetadata();
 								
 							rect.height
 								= 	( Math.max(0, availableHeight - box.absoluteSum)
@@ -348,9 +348,9 @@ package org.osmf.layout
 			// 'bottom')
 			if (toDo != 0)
 			{
-				var anchors:AnchorLayoutFacet
-					= target.metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS)
-					as AnchorLayoutFacet;
+				var anchors:AnchorLayoutMetadata
+					= target.metadata.getValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS)
+					as AnchorLayoutMetadata;
 				
 				// Process the anchor parameters:
 				if (anchors)
@@ -400,9 +400,9 @@ package org.osmf.layout
 			// Apply padding, if set. Note the bottom and right padding can only be
 			// applied when a height and width value are available!
 			
-			var padding:PaddingLayoutFacet
-				= target.metadata.getFacet(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS)
-				as PaddingLayoutFacet;
+			var padding:PaddingLayoutMetadata
+				= target.metadata.getValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS)
+				as PaddingLayoutMetadata;
 			
 			if (padding)
 			{
@@ -544,9 +544,9 @@ package org.osmf.layout
 		{
 			var size:Point = new Point(NaN, NaN);
 			
-			var absolute:AbsoluteLayoutFacet
-				= container.metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
-				as AbsoluteLayoutFacet;
+			var absolute:AbsoluteLayoutMetadata
+				= container.metadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS)
+				as AbsoluteLayoutMetadata;
 			
 			if (absolute)
 			{
@@ -556,8 +556,8 @@ package org.osmf.layout
 			
 			if (layoutMode != LayoutMode.NONE)
 			{
-				var boxAttributes:BoxAttributesFacet = new BoxAttributesFacet();
-				container.metadata.addFacet(boxAttributes);
+				var boxAttributes:BoxAttributesMetadata = new BoxAttributesMetadata();
+				container.metadata.addValue(boxAttributes.namespaceURL, boxAttributes);
 			}
 			
 			if (isNaN(size.x) || isNaN(size.y) || layoutMode != LayoutMode.NONE)
@@ -643,15 +643,15 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private static const USED_METADATA_FACETS:Vector.<String> = new Vector.<String>(5, true);
+		private static const USED_METADATAS:Vector.<String> = new Vector.<String>(5, true);
 		
 		/* static */
 		{
-			USED_METADATA_FACETS[0] = MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS;
-			USED_METADATA_FACETS[1] = MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS;
-			USED_METADATA_FACETS[2] = MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS;
-			USED_METADATA_FACETS[3] = MetadataNamespaces.PADDING_LAYOUT_PARAMETERS;
-			USED_METADATA_FACETS[4] = MetadataNamespaces.LAYOUT_ATTRIBUTES;
+			USED_METADATAS[0] = MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS;
+			USED_METADATAS[1] = MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS;
+			USED_METADATAS[2] = MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS;
+			USED_METADATAS[3] = MetadataNamespaces.PADDING_LAYOUT_PARAMETERS;
+			USED_METADATAS[4] = MetadataNamespaces.LAYOUT_ATTRIBUTES;
 		}
 		
 		private static const X:int = 0x1;

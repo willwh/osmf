@@ -22,8 +22,6 @@
 package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
@@ -100,10 +98,8 @@ package org.osmf.media
 			{
 				dsResource.streamItems.push(new DynamicStreamingItem(item["stream"], item["bitrate"]));
 			}
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 2);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 5);
-			dsResource.metadata.addFacet(facet);
+			dsResource.clipStartTime = 2;
+			dsResource.clipEndTime = 5;
 			return dsResource;
 		}
 

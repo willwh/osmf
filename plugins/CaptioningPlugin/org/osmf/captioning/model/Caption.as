@@ -25,7 +25,7 @@ package org.osmf.captioning.model
 	
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.metadata.TemporalFacetKey
+	import org.osmf.metadata.TimelineMarker;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -37,7 +37,7 @@ package org.osmf.captioning.model
 	 *  @playerversion AIR 1.0
 	 *  @productversion OSMF 1.0
 	 */
-	public class Caption extends TemporalFacetKey
+	public class Caption extends TimelineMarker
 	{
 		/**
 		 * Constructor.
@@ -54,7 +54,7 @@ package org.osmf.captioning.model
 		 */
 		public function Caption(id:uint, start:Number, end:Number, captionText:String)
 		{
-			var duration:Number = end > 0 ? (end - start) : TemporalFacetKey.DURATION_UNDEFINED;
+			var duration:Number = end > 0 ? (end - start) : NaN;
 			super(start, duration);
 			
 			_id = id;

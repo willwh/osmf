@@ -22,10 +22,8 @@
 package org.osmf.elements.compositeClasses
 {
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetGroup;
-	import org.osmf.metadata.FacetKey;
-	import org.osmf.metadata.FacetSynthesizer;
+	import org.osmf.metadata.MetadataGroup;
+	import org.osmf.metadata.MetadataSynthesizer;
 	import org.osmf.metadata.Metadata;
 
 	public class TestCompositeMetadata extends TestCaseEx
@@ -44,7 +42,7 @@ package org.osmf.elements.compositeClasses
 			cm.activeChild = metadata;
 			assertEquals(metadata, cm.activeChild);
 			
-			assertNull(cm.getFacetSynthesizer(null));
+			assertNull(cm.getMetadataSynthesizer(null));
 			
 			assertEquals(cm.numChildren, 0);
 			
@@ -59,38 +57,39 @@ package org.osmf.elements.compositeClasses
 			assertThrows(cm.removeChild, metadata);
 			assertThrows(cm.removeChild, null);
 			
-			assertEquals(0, cm.getFacetGroupNamespaceURLs().length);
-			assertNull(cm.getFacetSynthesizer(null));
-			assertThrows(cm.removeFacetSynthesizer, null);
-			assertThrows(cm.addFacetSynthesizer, null);
+			assertEquals(0, cm.getMetadataGroupNamespaceURLs().length);
+			assertNull(cm.getMetadataSynthesizer(null));
+			assertThrows(cm.removeMetadataSynthesizer, null);
+			assertThrows(cm.addMetadataSynthesizer, null);
 			
 			var url:String = "myURL";
-			var synth:AFacetSynthesizer = new AFacetSynthesizer(url);
-			cm.addFacetSynthesizer(synth);
-			assertEquals(synth, cm.getFacetSynthesizer(url));
-			assertThrows(function():void{cm.addFacetSynthesizer(synth)});
-			cm.removeFacetSynthesizer(synth);
-			assertNull(null, cm.getFacetSynthesizer(url));
-			cm.addFacetSynthesizer(synth);
+			var synth:AMetadataSynthesizer = new AMetadataSynthesizer(url);
+			cm.addMetadataSynthesizer(synth);
+			assertEquals(synth, cm.getMetadataSynthesizer(url));
+			assertThrows(function():void{cm.addMetadataSynthesizer(synth)});
+			cm.removeMetadataSynthesizer(synth);
+			assertNull(null, cm.getMetadataSynthesizer(url));
+			cm.addMetadataSynthesizer(synth);
 			
-			var facet:Facet = new Facet(url);
-			facet.addValue(new FacetKey(url),"test");
+			var childMetadata:Metadata = new Metadata(url);
+			childMetadata.addValue(url,"test");
 			cm.addChild(metadata);
 			assertDispatches
 				(	cm
-				,	[ CompositeMetadataEvent.FACET_GROUP_ADD
-					, CompositeMetadataEvent.CHILD_FACET_ADD
+				,	[ CompositeMetadataEvent.METADATA_GROUP_ADD
+					, CompositeMetadataEvent.CHILD_METADATA_ADD
 					]
-				,	metadata.addFacet
-				,	facet
+				,	metadata.addValue
+				,	childMetadata.namespaceURL
+				, 	childMetadata
 				);	
 			
 			var md2:Metadata = new Metadata();
-			md2.addFacet(facet);
+			md2.addValue(childMetadata.namespaceURL, childMetadata);
 			assertDispatches
 				( 	cm
 				, 	[ CompositeMetadataEvent.CHILD_ADD
-					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
+					, CompositeMetadataEvent.METADATA_GROUP_CHANGE	
 				  	]
 				, 	cm.addChild
 				,	md2
@@ -98,21 +97,21 @@ package org.osmf.elements.compositeClasses
 				
 			assertDispatches
 				( 	cm
-				, 	[ CompositeMetadataEvent.CHILD_FACET_REMOVE
-					, CompositeMetadataEvent.FACET_GROUP_CHANGE	
+				, 	[ CompositeMetadataEvent.CHILD_METADATA_REMOVE
+					, CompositeMetadataEvent.METADATA_GROUP_CHANGE	
 				  	]
-				, 	md2.removeFacet
-				,	facet
+				, 	md2.removeValue
+				,	childMetadata.namespaceURL
 				);
 				
 			assertDispatches
 				( 	cm
-				, 	[ CompositeMetadataEvent.CHILD_FACET_REMOVE
-					, CompositeMetadataEvent.FACET_GROUP_CHANGE
-					, CompositeMetadataEvent.FACET_GROUP_REMOVE
+				, 	[ CompositeMetadataEvent.CHILD_METADATA_REMOVE
+					, CompositeMetadataEvent.METADATA_GROUP_CHANGE
+					, CompositeMetadataEvent.METADATA_GROUP_REMOVE
 				  	]
-				, 	metadata.removeFacet
-				,	facet 
+				, 	metadata.removeValue
+				,	childMetadata.namespaceURL 
 				);
 			
 			assertDispatches
@@ -126,45 +125,43 @@ package org.osmf.elements.compositeClasses
 	
 		public function testCompositeMetadataEvent():void
 		{
-			var child:Metadata = new Metadata();
-			var facet:Facet = new Facet("test");
-			var facetGroup:FacetGroup = new FacetGroup("");
-			var facetSynthesizer:FacetSynthesizer = new AFacetSynthesizer("");
+			var metadata:Metadata = new Metadata();
+			var childMetadata:Metadata = new Metadata("test");
+			var metadataGroup:MetadataGroup = new MetadataGroup("");
+			var metadataSynthesizer:MetadataSynthesizer = new AMetadataSynthesizer("");
 			var e:CompositeMetadataEvent
 				= new CompositeMetadataEvent
 					( CompositeMetadataEvent.CHILD_ADD
 					, false, false
-					, child, facet, facetGroup, facetSynthesizer
+					, metadata, childMetadata, metadataGroup, metadataSynthesizer
 					);
 					
 			assertNotNull(e);
-			assertEquals(child, e.child);
-			assertEquals(facet, e.facet);
-			assertEquals(facetGroup, e.facetGroup);
-			assertEquals(facetSynthesizer, e.suggestedFacetSynthesizer);
+			assertEquals(metadata, e.child);
+			assertEquals(childMetadata, e.childMetadata);
+			assertEquals(metadataGroup, e.metadataGroup);
+			assertEquals(metadataSynthesizer, e.suggestedMetadataSynthesizer);
 		}
 	}
 }
 
-import org.osmf.elements.compositeClasses.CompositionMode;
-import org.osmf.metadata.Facet;
-import org.osmf.metadata.FacetGroup;
-import org.osmf.metadata.FacetSynthesizer;
+import org.osmf.metadata.MetadataGroup;
+import org.osmf.metadata.MetadataSynthesizer;
 import org.osmf.metadata.Metadata;
 
-class AFacetSynthesizer extends FacetSynthesizer
+class AMetadataSynthesizer extends MetadataSynthesizer
 {
-	public function AFacetSynthesizer(namespaceURL:String)
+	public function AMetadataSynthesizer(namespaceURL:String)
 	{
 		super(namespaceURL);
 	}
 	
 	override public function synthesize
-		( targetMetadata:Metadata
-		, facetGroup:FacetGroup
+		( targetParentMetadata:Metadata
+		, metadataGroup:MetadataGroup
 		, mode:String
-		, activeMetadata:Metadata
-		):Facet
+		, activeParentMetadata:Metadata
+		):Metadata
 	{
 		return null;
 	}

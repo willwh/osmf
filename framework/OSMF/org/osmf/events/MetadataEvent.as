@@ -22,12 +22,10 @@
 package org.osmf.events
 {
 	import flash.events.Event;
-	
-	import org.osmf.metadata.Facet;
 
 	/**
-	 * Metadata Events are dispatched by the IMetadata object when 
-	 * Facets are added or removed from the metadata collection.
+	 * Metadata Events are dispatched by the Metadata object when 
+	 * values are added, removed, or changed.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -37,38 +35,54 @@ package org.osmf.events
 	public class MetadataEvent extends Event
 	{
 		/**
-		 * The MetadataEvent.FACET_ADD constant defines the value of the
-		 * type property of the event object for a facetAdd event.
+		 * The MetadataEvent.VALUE_ADD constant defines the value of the
+		 * type property of the event object for a valueAdd event.
 		 * 
-		 * @eventType facetAdd 
+		 * @eventType valueAdd 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const FACET_ADD:String = "facetAdd";
+		public static const VALUE_ADD:String = "valueAdd";
 		
 		/**
-		 * The MetadataEvent.FACET_REMOVE constant defines the value of the
-		 * type property of the event object for a facetRemove event.
+		 * The MetadataEvent.VALUE_REMOVE constant defines the value of the
+		 * type property of the event object for a valueRemove event.
 		 * 
-		 * @eventType facetRemove 
+		 * @eventType valueRemove 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public static const FACET_REMOVE:String = "facetRemove";
-					
+		public static const VALUE_REMOVE:String = "valueRemove";
+		
+		/**
+		 * The MetadataEvent.VALUE_CHANGE constant defines the value
+		 * of the type property of the event object for a valueChange
+		 * event.
+		 * 
+		 * @eventType valueChange
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const VALUE_CHANGE:String = "valueChange";
+
 		/**
 		 * Constructor.
 		 * 
 		 * @param type Event type.
  		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
-		 * @param facet The metadata facet associated with this event.
+		 * @param key The key associated with the event.
+		 * @param value The value associated with the event.
+		 * @param oldValue The old value associated with the event.  Only valid for VALUE_CHANGE events.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -79,25 +93,55 @@ package org.osmf.events
 			( type:String
 			, bubbles:Boolean=false
 			, cancelable:Boolean=false
-			, facet:Facet=null
+			, key:String=null
+			, value:*=null
+			, oldValue:*=null
 			)
 		{
 			super(type, bubbles, cancelable);
 			
-			_facet = facet;			
+			_key = key;
+			_value = value;
+			_oldValue = oldValue;
 		}
 		
 		/**
-		 * The metadata facet associated with this event. 
+		 * The key associated with this event. 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get facet():Facet
+		public function get key():String
 		{
-			return _facet;
+			return _key;
+		}
+
+		/**
+		 * The value associated with this event. 
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function get value():*
+		{
+			return _value;
+		}
+
+		/**
+		 * The old value associated with this event.  Only valid for VALUE_CHANGE events.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function get oldValue():*
+		{
+			return _oldValue;
 		}
 		
 		/**
@@ -105,9 +149,11 @@ package org.osmf.events
 		 */ 
 		override public function clone():Event
 		{
-			return new MetadataEvent(type, bubbles, cancelable, _facet);
+			return new MetadataEvent(type, bubbles, cancelable, _key, _value, _oldValue);
 		}
 		
-		private var _facet:Facet;		
+		private var _key:String;
+		private var _value:*;
+		private var _oldValue:*;		
 	}
 }

@@ -588,82 +588,82 @@ package org.osmf.layout
 		
 		private var metadata:Metadata;
 		
-		private function get lazyAttributes():LayoutAttributesFacet
+		private function get lazyAttributes():LayoutAttributesMetadata
 		{
-			return metadata.getFacet(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesFacet;
+			return metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesMetadata;
 		}
 		
-		private function get eagerAttributes():LayoutAttributesFacet
+		private function get eagerAttributes():LayoutAttributesMetadata
 		{
-			var result:LayoutAttributesFacet = lazyAttributes;
+			var result:LayoutAttributesMetadata = lazyAttributes;
 			if (result == null)
 			{
-				result = new LayoutAttributesFacet();
-				metadata.addFacet(result);
+				result = new LayoutAttributesMetadata();
+				metadata.addValue(result.namespaceURL, result);
 			}
 			return result;
 		}
 		
-		private function get lazyAbsolute():AbsoluteLayoutFacet
+		private function get lazyAbsolute():AbsoluteLayoutMetadata
 		{
-			return metadata.getFacet(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) as AbsoluteLayoutFacet;
+			return metadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) as AbsoluteLayoutMetadata;
 		}
 		
-		private function get eagerAbsolute():AbsoluteLayoutFacet
+		private function get eagerAbsolute():AbsoluteLayoutMetadata
 		{
-			var result:AbsoluteLayoutFacet = lazyAbsolute;
+			var result:AbsoluteLayoutMetadata = lazyAbsolute;
 			if (result == null)
 			{
-				result = new AbsoluteLayoutFacet();
-				metadata.addFacet(result);
+				result = new AbsoluteLayoutMetadata();
+				metadata.addValue(result.namespaceURL, result);
 			}
 			return result;
 		}
 		
-		private function get lazyRelative():RelativeLayoutFacet
+		private function get lazyRelative():RelativeLayoutMetadata
 		{
-			return metadata.getFacet(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutFacet;
+			return metadata.getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutMetadata;
 		}
 		
-		private function get eagerRelative():RelativeLayoutFacet
+		private function get eagerRelative():RelativeLayoutMetadata
 		{
-			var result:RelativeLayoutFacet = lazyRelative;
+			var result:RelativeLayoutMetadata = lazyRelative;
 			if (result == null)
 			{
-				result = new RelativeLayoutFacet();
-				metadata.addFacet(result);
+				result = new RelativeLayoutMetadata();
+				metadata.addValue(result.namespaceURL, result);
 			}
 			return result;
 		}
 		
-		private function get lazyAnchor():AnchorLayoutFacet
+		private function get lazyAnchor():AnchorLayoutMetadata
 		{
-			return metadata.getFacet(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) as AnchorLayoutFacet;
+			return metadata.getValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) as AnchorLayoutMetadata;
 		}
 		
-		private function get eagerAnchor():AnchorLayoutFacet
+		private function get eagerAnchor():AnchorLayoutMetadata
 		{
-			var result:AnchorLayoutFacet = lazyAnchor;
+			var result:AnchorLayoutMetadata = lazyAnchor;
 			if (result == null)
 			{
-				result = new AnchorLayoutFacet();
-				metadata.addFacet(result);
+				result = new AnchorLayoutMetadata();
+				metadata.addValue(result.namespaceURL, result);
 			}
 			return result;
 		}
 		
-		private function get lazyPadding():PaddingLayoutFacet
+		private function get lazyPadding():PaddingLayoutMetadata
 		{
-			return metadata.getFacet(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS) as PaddingLayoutFacet;
+			return metadata.getValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS) as PaddingLayoutMetadata;
 		}
 		
-		private function get eagerPadding():PaddingLayoutFacet
+		private function get eagerPadding():PaddingLayoutMetadata
 		{
-			var result:PaddingLayoutFacet = lazyPadding;
+			var result:PaddingLayoutMetadata = lazyPadding;
 			if (result == null)
 			{
-				result = new PaddingLayoutFacet();
-				metadata.addFacet(result);
+				result = new PaddingLayoutMetadata();
+				metadata.addValue(result.namespaceURL, result);
 			}
 			return result;
 		}

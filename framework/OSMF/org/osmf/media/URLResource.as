@@ -23,8 +23,6 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.metadata.Metadata;
-	
 	/**
 	 * URLResource is a media resource that has a URL. It serves as a context object for MediaElements that expect a URL as input.	 
 	 *  

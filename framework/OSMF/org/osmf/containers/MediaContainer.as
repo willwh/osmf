@@ -34,7 +34,6 @@ package org.osmf.containers
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -99,7 +98,6 @@ package org.osmf.containers
 						)
 					);
 					
-				CONFIG::LOGGING { logger.debug("addMediaElement: {0} to {1}", element.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				var contentTarget:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(element);
 				
 				layoutTargets[element] = contentTarget;
@@ -140,7 +138,6 @@ package org.osmf.containers
 			
 			if (contentTarget)
 			{
-				CONFIG::LOGGING { logger.debug("removeMediaElement {0} from {1}", element.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				element.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onElementContainerChange);
 				_layoutRenderer.removeTarget(contentTarget);
 				delete layoutTargets[element];

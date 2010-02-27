@@ -27,13 +27,16 @@ package org.osmf.media
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.OSMFStrings;
 
 	public class TestMediaElement extends TestCaseEx
 	{
@@ -180,6 +183,122 @@ package org.osmf.media
 			assertTrue(mediaElement.resource == null);
 		}
 		
+		public function testAddMetadata():void
+		{
+			var mediaElement:MediaElement = createMediaElement();
+			mediaElement.addEventListener(MediaElementEvent.METADATA_ADD, onAdd);
+			var addCalled:Boolean = false;
+			
+			var nsurl1:String = "nsurl1";
+			var nsurl2:String = "nsurl2";
+			var meta1:Metadata = new Metadata(nsurl1);
+			var meta2:Metadata = new Metadata(nsurl2);
+			
+			mediaElement.addMetadata(nsurl1, meta1);
+			assertTrue(addCalled);
+			
+			mediaElement.addMetadata(nsurl2, meta2);
+			
+			assertEquals(mediaElement.getMetadata(nsurl1), meta1);
+			assertEquals(mediaElement.getMetadata(nsurl2), meta2);
+
+			// Test the Catching of Errors
+			try
+			{
+				mediaElement.addMetadata(null, meta1);
+				
+				fail();
+			}
+			catch(error:ArgumentError)
+			{
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			try
+			{
+				mediaElement.addMetadata(nsurl1, null);
+				
+				fail();
+			}
+			catch(error:ArgumentError)
+			{
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+
+			function onAdd(event:MediaElementEvent):void
+			{
+				addCalled = true;
+				assertNotNull(event.metadata);				
+			}				
+		}
+
+		public function testRemoveMetadata():void
+		{
+			var mediaElement:MediaElement = createMediaElement();
+			mediaElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onRemove);
+			var removeCalled:Boolean = false;
+			
+			var nsurl1:String = "nsurl1";
+			var nsurl2:String = "nsurl2";
+			var meta1:Metadata = new Metadata(nsurl1);
+			var meta2:Metadata = new Metadata(nsurl2);
+			
+			mediaElement.addMetadata(nsurl1, meta1);
+			mediaElement.addMetadata(nsurl2, meta2);
+			
+			assertFalse(removeCalled);
+			assertEquals(mediaElement.removeMetadata(nsurl2), meta2);
+			assertTrue(removeCalled);
+			assertEquals(mediaElement.removeMetadata(nsurl2), null);
+			assertEquals(mediaElement.removeMetadata(nsurl1), meta1);
+
+			// Test the Catching of Errors
+			try
+			{
+				mediaElement.removeMetadata(null);
+				
+				fail();
+			}
+			catch(error:ArgumentError)
+			{
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+
+			function onRemove(event:MediaElementEvent):void
+			{
+				removeCalled = true;
+				assertNotNull(event.metadata);				
+			}				
+		}
+		
+		public function testGetMetadata():void
+		{
+			var mediaElement:MediaElement = createMediaElement();
+			
+			var nsurl1:String = "nsurl1";
+			var nsurl2:String = "nsurl2";
+			var meta1:Metadata = new Metadata(nsurl1);
+			var meta2:Metadata = new Metadata(nsurl2);
+			
+			mediaElement.addMetadata(nsurl1, meta1);
+			mediaElement.addMetadata(nsurl2, meta2);
+			
+			assertEquals(mediaElement.getMetadata(nsurl2), meta2);
+			assertEquals(mediaElement.getMetadata(nsurl1), meta1);
+			assertEquals(mediaElement.getMetadata("foo"), null);
+
+			// Test the Catching of Errors
+			try
+			{
+				mediaElement.getMetadata(null);
+				
+				fail();
+			}
+			catch(error:ArgumentError)
+			{
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+		}
+
 		public function testMediaErrorEventDispatch():void
 		{
 			if (hasLoadTrait)
@@ -221,33 +340,33 @@ package org.osmf.media
 			}
 		}
 		
-		public function testGateway():void
+		public function testContainer():void
 		{
 			var mediaElement:MediaElement = createMediaElement();
-			var gatewayA:MediaContainer = new MediaContainer();
-			var gatewayB:MediaContainer = new MediaContainer();
+			var containerA:MediaContainer = new MediaContainer();
+			var containerB:MediaContainer = new MediaContainer();
 			
 			assertNull(mediaElement.container);
 			assertDispatches
 				( mediaElement
 				, [ContainerChangeEvent.CONTAINER_CHANGE]
-				, function():void{gatewayA.addMediaElement(mediaElement);}
+				, function():void{containerA.addMediaElement(mediaElement);}
 				);
 				
-			assertEquals(gatewayA, mediaElement.container);
+			assertEquals(containerA, mediaElement.container);
 			
 			assertDispatches
 				( mediaElement
 				, [ContainerChangeEvent.CONTAINER_CHANGE]
-				, function():void{gatewayB.addMediaElement(mediaElement);}
+				, function():void{containerB.addMediaElement(mediaElement);}
 				);
 			
-			assertEquals(gatewayB, mediaElement.container);
+			assertEquals(containerB, mediaElement.container);
 			
 			assertDispatches
 				( mediaElement
 				, [ContainerChangeEvent.CONTAINER_CHANGE]
-				, function():void{gatewayB.removeMediaElement(mediaElement);}
+				, function():void{containerB.removeMediaElement(mediaElement);}
 				);
 				
 			assertNull(mediaElement.container);

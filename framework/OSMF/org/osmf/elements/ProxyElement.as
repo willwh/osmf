@@ -276,7 +276,7 @@ package org.osmf.elements
 		 */
 		override public function get metadata():Metadata
 		{
-			return proxiedElement.metadata;
+			return proxiedElement ? proxiedElement.metadata : null;
 		}
 		
 		/**
@@ -370,6 +370,8 @@ package org.osmf.elements
 				_proxiedElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_proxiedElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataEvent);
+				_proxiedElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataEvent);
 				_proxiedElement.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 			else
@@ -377,6 +379,8 @@ package org.osmf.elements
 				_proxiedElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				_proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_proxiedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+				_proxiedElement.removeEventListener(MediaElementEvent.METADATA_ADD, onMetadataEvent);
+				_proxiedElement.removeEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataEvent);
 				_proxiedElement.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 		}
@@ -394,6 +398,11 @@ package org.osmf.elements
 		private function onTraitRemove(event:MediaElementEvent):void
 		{
 			processTraitsChangeEvent(event);
+		}
+
+		private function onMetadataEvent(event:MediaElementEvent):void
+		{
+			dispatchEvent(event.clone());
 		}
 		
 		private function onContainerChange(event:ContainerChangeEvent):void

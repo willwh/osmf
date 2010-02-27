@@ -29,7 +29,7 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.plugin.PluginInfo;
 
 	public class ControlBarPlugin extends Sprite
@@ -87,8 +87,8 @@ package
 			
 			if (resource != null)
 			{
-				var settings:Facet
-					= resource.metadata.getFacet(NS_CONTROL_BAR_SETTINGS);
+				var settings:Metadata
+					= resource.getMetadataValue(NS_CONTROL_BAR_SETTINGS) as Metadata;
 					
 				result = settings != null;
 			}

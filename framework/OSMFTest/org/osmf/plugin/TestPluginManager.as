@@ -27,7 +27,6 @@ package org.osmf.plugin
 	
 	import org.osmf.events.*;
 	import org.osmf.media.*;
-	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.utils.*;
@@ -163,31 +162,29 @@ package org.osmf.plugin
 			var metadataNS:String = "http://sentinel/namespace";
 			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
 			
-			assertNull(pluginInfo.pluginMetadata);
+			assertNull(pluginInfo.pluginResource);
 			
 			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
-			resource.metadata.addFacet(new Facet(metadataNS));
+			resource.addMetadataValue(metadataNS, "foo");
 			
 			pluginManager.loadPlugin(resource);
 			
-			assertNotNull(pluginInfo.pluginMetadata);
-			assertNotNull(pluginInfo.pluginMetadata.getFacet(metadataNS));
+			assertNotNull(pluginInfo.pluginResource);
+			assertNotNull(pluginInfo.pluginResource.getMetadataValue(metadataNS));
 		}
 		
 		public function testLoadPluginWithDefaultMetadata():void
 		{
 			var pluginInfo:CreateOnLoadPluginInfo = new CreateOnLoadPluginInfo();
 			
-			assertNull(pluginInfo.pluginMetadata);
+			assertNull(pluginInfo.pluginResource);
 			
 			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
 			
 			pluginManager.loadPlugin(resource);
 			
-			assertNotNull(pluginInfo.pluginMetadata);
-			var defaultFacet:Facet = pluginInfo.pluginMetadata.getFacet(MetadataNamespaces.PLUGIN_METADATA);
-			assertNotNull(defaultFacet);
-			var injectedFactory:MediaFactory = defaultFacet.getValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY);
+			assertNotNull(pluginInfo.pluginResource);
+			var injectedFactory:MediaFactory = pluginInfo.pluginResource.getMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
 			assertNotNull(injectedFactory);
 			assertEquals(injectedFactory, mediaFactory);
 		}

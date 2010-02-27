@@ -28,10 +28,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
@@ -52,36 +50,36 @@ package org.osmf.net.httpstreaming
 	public class HTTPStreamingUtils
 	{
 		/**
-		 * This is a convenience function to create the metadata facet for HTTP streaming.
+		 * This is a convenience function to create the Metadata object for HTTP streaming.
 		 * Usually, either abstUrl or abstData is not null. 
 		 * 
 		 * @param abstUrl The URL that points to the bootstrap information.
 		 * @param abstData The byte array that contains the bootstrap information
 		 * @param serverBaseUrls The list of server base URLs.
 		 * 
-		 * @return The facet.
+		 * @return The metadata.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function createHTTPStreamingMetadataFacet(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Facet
+		public static function createHTTPStreamingMetadata(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Metadata
 		{
-			var facet:Facet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+			var metadata:Metadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
 			var bootstrap:BootstrapInfo = new BootstrapInfo();
 			if (abstUrl != null && abstUrl.length > 0)
 			{
 				bootstrap.url = abstUrl;
 			}
 			bootstrap.data = abstData;
-			facet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), bootstrap);
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, bootstrap);
 			
 			if (serverBaseUrls != null && serverBaseUrls.length > 0)
 			{
-				facet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseUrls);
+				metadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseUrls);
 			}
-			return facet;
+			return metadata;
 		}
 		
 		/**
@@ -91,22 +89,22 @@ package org.osmf.net.httpstreaming
 		 * HTTP streaming. The criteria is as follows:
 		 * 
 		 * 1. If the resource is of type URLResource
-		 * 2. If the resource has a Facet under the namespace MetadataNamespaces.HTTP_STREAMING_METADATA
-		 * 3. If the Facet contains a URL that points to the bootstrap information or if the Facet
+		 * 2. If the resource has a Metadata object under the namespace MetadataNamespaces.HTTP_STREAMING_METADATA
+		 * 3. If the Metadata contains a URL that points to the bootstrap information or if the Metadata
 		 *    contains the bytes of the bootstrap information. Either is fine but cannot be absent at the same time.
 		 * 
-		 * If all three criteria are satisfied, the Facet will be returned. Otherwise, null.
+		 * If all three criteria are satisfied, the Metadata will be returned. Otherwise, null.
 		 * 
 		 * @param resource The MediaResourceBase to be loaded
 		 * 
-		 * @return The Facet if the resource can be loaded for HTTP streaming, null otherwise.
+		 * @return The Metadata if the resource can be loaded for HTTP streaming, null otherwise.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getHTTPStreamingMetadataFacet(resource:MediaResourceBase):Facet
+		public static function getHTTPStreamingMetadata(resource:MediaResourceBase):Metadata
 		{
 			// This is how we prevent HTTP streamed playback in pre-10.1 players.
 			var httpStreamingSupported:Boolean = false;
@@ -119,15 +117,15 @@ package org.osmf.net.httpstreaming
 				return null;
 			}
 			
-			var facet:Facet = null;
+			var metadata:Metadata = null;
 			
 			var urlResource:URLResource = resource as URLResource;
 			if (urlResource != null)
 			{
-				facet = urlResource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as Facet;
+				metadata = urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
 			}
 			
-			return facet;
+			return metadata;
 		}
 		
 		/**
@@ -137,11 +135,11 @@ package org.osmf.net.httpstreaming
 		{
 			var indexInfo:HTTPStreamingF4FIndexInfo = null;
 			
-			var httpFacet:Facet = getHTTPStreamingMetadataFacet(resource);
-			if (httpFacet != null)
+			var httpMetadata:Metadata = getHTTPStreamingMetadata(resource);
+			if (httpMetadata != null)
 			{
 				var serverBaseURLs:Vector.<String>
-					= httpFacet.getValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY)) as Vector.<String>;
+					= httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY) as Vector.<String>;
 				
 				var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = generateStreamInfos(resource);
 				
@@ -160,10 +158,10 @@ package org.osmf.net.httpstreaming
 		{
 			var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = new Vector.<HTTPStreamingF4FStreamInfo>();
 			
-			var drmFacet:Facet 
-				= resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as Facet;
-			var metadataFacet:Facet
-				= resource.metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA) as Facet;
+			var drmMetadata:Metadata 
+				= resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+			var httpMetadata:Metadata
+				= resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
 			var additionalHeader:ByteArray = null;
 			var bootstrap:BootstrapInfo = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
@@ -178,19 +176,19 @@ package org.osmf.net.httpstreaming
 					streamMetadata = null;
 					xmpMetadata = null;
 					
-					if (drmFacet != null)
+					if (drmMetadata != null)
 					{
-						additionalHeader = drmFacet.getValue(
-							new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName)) as ByteArray;
+						additionalHeader = drmMetadata.getValue(
+							MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + streamItem.streamName) as ByteArray;
 					}
-					if (metadataFacet != null)
+					if (httpMetadata != null)
 					{
-						bootstrap = metadataFacet.getValue(
-							new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName)) as BootstrapInfo;
-						streamMetadata = metadataFacet.getValue(
-							new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName)) as ByteArray;
-						xmpMetadata = metadataFacet.getValue(
-							new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName)) as ByteArray;
+						bootstrap = httpMetadata.getValue(
+							MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName) as BootstrapInfo;
+						streamMetadata = httpMetadata.getValue(
+							MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName) as ByteArray;
+						xmpMetadata = httpMetadata.getValue(
+							MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName) as ByteArray;
 					}
 					streamInfos.push(new HTTPStreamingF4FStreamInfo(
 						bootstrap, streamItem.streamName, streamItem.bitrate, additionalHeader, streamMetadata, xmpMetadata));
@@ -198,19 +196,19 @@ package org.osmf.net.httpstreaming
 			}
 			else
 			{
-				if (drmFacet != null)
+				if (drmMetadata != null)
 				{
 					additionalHeader 
-						= drmFacet.getValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY)) as ByteArray;
+						= drmMetadata.getValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY) as ByteArray;
 				}
-				if (metadataFacet != null)
+				if (httpMetadata != null)
 				{
-					bootstrap = metadataFacet.getValue(
-						new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY)) as BootstrapInfo;
-					streamMetadata = metadataFacet.getValue(
-						new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY)) as ByteArray;
-					xmpMetadata = metadataFacet.getValue(
-						new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY)) as ByteArray;
+					bootstrap = httpMetadata.getValue(
+						MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY) as BootstrapInfo;
+					streamMetadata = httpMetadata.getValue(
+						MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY) as ByteArray;
+					xmpMetadata = httpMetadata.getValue(
+						MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY) as ByteArray;
 				}
 				
 				var streamName:String = resource.url.substr(resource.url.lastIndexOf("/")+1);

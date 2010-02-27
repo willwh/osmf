@@ -116,9 +116,9 @@ package
 
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-			facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_PREROLL);
-			resource.metadata.addFacet(facet);
+			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_URL_PREROLL);
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 			

@@ -21,17 +21,13 @@
 *****************************************************/
 package org.osmf.metadata
 {
+	[ExcludeClass]
+	
 	/**
-	 * Contains the static constants for metadata namespaces and facet keys
-	 * used within OSMF.
+	 * @private
 	 * 
-	 * Each of these namespaces represents metadata that can be assigned to
-	 * a MediaResourceBase, and which certain MediaElement subclasses will
-	 * look for and upon detecting, adjust their behavior.  For example, if
-	 * the subclip metadata is assigned to a StreamingURLResource that is
-	 * passed to the VideoElement, then the VideoElement will play the
-	 * specified subclip, rather than the whole vide.
-	 *  
+	 * Contains the static constants for metadata namespaces used within OSMF.
+	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -40,69 +36,20 @@ package org.osmf.metadata
 	public final class MetadataNamespaces
 	{
 		/**
-		 * Metadata namespace that holds media type information.
+		 * Namespace URL for a MediaFactory that is passed from player to
+		 * plugin.  Client code can set this on the MediaResourceBase that
+		 * is passed to PluginManager.loadPlugin, and it will be exposed to
+		 * the plugin via PluginInfo.initializePlugin.
 		 **/
-		public static const MEDIATYPE_METADATA:String					= "http://www.osmf.org/mediatype/1.0";
-		
-		/**
-		 * Metadata namespace that holds subclip information.
-		 **/
-		public static const SUBCLIP_METADATA:String						= "http://www.osmf.org/subclip/1.0";
-		
-		/**
-		 * Metadata FacetKey for the subclip startTime property.
-		 **/
-		public static const SUBCLIP_START_TIME_KEY:FacetKey				= new FacetKey("startTime");
-
-		/**
-		 * Metadata FacetKey for the subclip endTime property.
-		 **/
-		public static const SUBCLIP_END_TIME_KEY:FacetKey				= new FacetKey("endTime");
-		
-		/**
-		 * Metadata namespace that holds DRM metadata.
-		 **/
-		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/1.0";
-		
-		/**
-		 * Metadata FacetKey for DRM content metadata.
-		 **/
-		public static const DRM_CONTENT_METADATA_KEY:FacetKey			= new FacetKey("DRMContentMetadata");
-
-		/**
-		 * Metadata FacetKey for the DRM additional header.
-		 **/
-		public static const DRM_ADDITIONAL_HEADER_KEY:FacetKey			= new FacetKey("DRMAdditionalHeader");
-		
-		/**
-		 * Metadata namespace that holds embedded temporal metadata.
-		 **/
-		public static const TEMPORAL_EMBEDDED_METADATA:String			= "http://www.osmf.org/metadata/temporalEmbedded/1.0";
-
-		/**
-		 * Metadata namespace that holds dynamic (runtime) temporal metadata.
-		 **/
-		public static const TEMPORAL_DYNAMIC_METADATA:String			= "http://www.osmf.org/metadata/temporalDynamic/1.0";
-
-		/**
-		 * Metadata namespace that holds parameters that are passed from OSMF to
-		 * plugins.
-		 **/
-		public static const PLUGIN_METADATA:String						= "http://www.osmf.org/plugin/parameters/1.0";
-
-		/**
-		 * Metadata FacetKey for a MediaFactory that is a parameter from the
-		 * player to a plugin. 
-		 **/
-		public static const PLUGIN_MEDIAFACTORY_KEY:FacetKey	= new FacetKey("pluginMediaFactory");
+		public static const PLUGIN_MEDIAFACTORY_NAMESPACE:String		= "http://www.osmf.org/plugin/mediaFactory/1.0";
 
 		// Internal OSMF Namespaces
 		//
-		
+
 		/**
 		 * @private
 		 **/
-		public static const DVRCAST_METADATA:String						= "http://www.osmf.org/dvr/dvrcast/1.0";
+		public static const MEDIA_ELEMENT_METADATA:String				= "http://www.osmf.org/mediaElement/1.0";
 
 		/**
 		 * @private
@@ -146,6 +93,16 @@ package org.osmf.metadata
 		 **/
 		public static const BOX_LAYOUT_ATTRIBUTES:String				= "http://www.osmf.org/layout/attributes/box/1.0";
 		
+		/**
+		 * @private
+		 **/
+		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/1.0";
+		
+		/**
+		 * @private
+		 **/
+		public static const DRM_ADDITIONAL_HEADER_KEY:String			= "DRMAdditionalHeader";
+
 		/**
 		 * @private
 		 **/

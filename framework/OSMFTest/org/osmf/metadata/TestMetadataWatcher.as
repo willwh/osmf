@@ -27,107 +27,98 @@ package org.osmf.metadata
 	{
 		public function testWatchFacet():void
 		{
-			var callbackArgument:Facet = null;
-			var callbackCount:int = 0;
-			function facetChangeCallback(facet:Facet):void
-			{
-				callbackArgument = facet;
-				callbackCount++;
-			}
-			
-			var facet1NS:String = new String("http://www.facet1NS.com");
-			var facet2NS:String = new String("http://www.facet2NS.com");
-			var metaData:Metadata = new Metadata();
-			var watcher:MetadataWatcher = new MetadataWatcher(metaData, facet1NS, null, facetChangeCallback);
-			watcher.watch();
-			
-			assertEquals(1,callbackCount);
-			assertNull(callbackArgument);
-			
-			var facet1:Facet = new Facet(facet1NS);
-			metaData.addFacet(facet1);
-			
-			assertEquals(2, callbackCount);
-			assertEquals(callbackArgument, facet1);
-			
-			metaData.removeFacet(facet1);
-			
-			assertEquals(3, callbackCount);
-			assertNull(callbackArgument);
-			
-			var facet2:Facet = new Facet(facet2NS);
-			metaData.addFacet(facet2);
-			
-			assertEquals(3, callbackCount);
-			assertNull(callbackArgument);
-			
-			metaData.addFacet(facet1);
-			
-			assertEquals(4, callbackCount);
-			assertEquals(callbackArgument, facet1);
-			
-			facet1.addValue(new FacetKey("myKey"),"someValue");
-			
-			assertEquals(5, callbackCount);
-			assertEquals(callbackArgument, facet1);
-		}
-		
-		public function testWatchFacetValue():void
-		{
 			var callbackArgument:* = null;
 			var callbackCount:int = 0;
-			function facetValueChangeCallback(value:*):void
+			function changeCallback(value:*):void
 			{
 				callbackArgument = value;
 				callbackCount++;
 			}
 			
-			var facet1NS:String = new String("http://www.facet1NS.com");
-			var facet2NS:String = new String("http://www.facet2NS.com");
-			var metaData:Metadata = new Metadata();
+			var ns1:String = new String("http://www.ns1.com");
+			var ns2:String = new String("http://www.ns2.com");
+			var parentMetadata:Metadata = new Metadata();
+			var watcher:MetadataWatcher = new MetadataWatcher(parentMetadata, ns1, null, changeCallback);
+			watcher.watch();
+			
+			assertEquals(1,callbackCount);
+			assertNull(callbackArgument);
+			
+			var m1:Metadata = new Metadata(ns1);
+			parentMetadata.addValue(ns1, m1);
+			
+			assertEquals(2, callbackCount);
+			assertEquals(callbackArgument, m1);
+			
+			parentMetadata.removeValue(ns1);
+			
+			assertEquals(3, callbackCount);
+			assertNull(callbackArgument);
+			
+			var m2:Metadata = new Metadata(ns2);
+			parentMetadata.addValue(ns2, m2);
+			
+			assertEquals(3, callbackCount);
+			assertNull(callbackArgument);
+			
+			// No event, we're not watching values.
+			m1.addValue("foo", "bar");
+			assertEquals(3, callbackCount);
+		}
+		
+		public function testWatchValue():void
+		{
+			var callbackArgument:* = null;
+			var callbackCount:int = 0;
+			function valueChangeCallback(value:*):void
+			{
+				callbackArgument = value;
+				callbackCount++;
+			}
+			
+			var ns1:String = new String("http://www.ns1.com");
+			var ns2:String = new String("http://www.ns2.com");
+			var parentMetadata:Metadata = new Metadata();
 			var watcher:MetadataWatcher
 				= new MetadataWatcher
-					( metaData
-					, facet1NS
-					, new FacetKey("myKey")
-					, facetValueChangeCallback
+					( parentMetadata
+					, ns1
+					, "myKey"
+					, valueChangeCallback
 					);
 			watcher.watch();
 			
 			assertEquals(1,callbackCount);
 			assertNull(callbackArgument);
 			
-			var facet1:Facet = new Facet(facet1NS);
-			metaData.addFacet(facet1);
+			var m1:Metadata = new Metadata(ns1);
+			parentMetadata.addValue(ns1, m1);
+			
+			assertEquals(2, callbackCount);
+			assertNull(callbackArgument);
+			
+			var m2:Metadata = new Metadata(ns2);
+			m2.addValue("myKey", "myValue");
+			parentMetadata.addValue(ns2, m2);
 			
 			assertEquals(2, callbackCount);
 			
-			metaData.removeFacet(facet1);
-			
+			// Event, we're watching values.
+			m1.addValue("myKey", "bar");
 			assertEquals(3, callbackCount);
-			
-			var facet2:Facet = new Facet(facet2NS);
-			metaData.addFacet(facet2);
-			
-			assertEquals(3, callbackCount);
-			
-			metaData.addFacet(facet1);
-			
+			assertEquals(callbackArgument, "bar");
+
+			m1.addValue("myKey", "23");
 			assertEquals(4, callbackCount);
-			
-			facet1.addValue(new FacetKey("myKey"),"someValue");
+			assertEquals(callbackArgument, "23");
+
+			m1.removeValue("myKey");
 			
 			assertEquals(5, callbackCount);
-			assertEquals(callbackArgument, "someValue");
-			
-			facet1.addValue(new FacetKey("myKey"),23);
-			
-			assertEquals(6, callbackCount);
-			assertEquals(callbackArgument,23);
-			
-			facet1.removeValue(new FacetKey("myKey"));
-			
-			assertEquals(7, callbackCount);
+			assertNull(callbackArgument);
+
+			m1.addValue("foo", "bar");
+			assertEquals(5, callbackCount);
 			assertNull(callbackArgument);
 		}
 	}

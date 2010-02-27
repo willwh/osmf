@@ -56,20 +56,6 @@ package org.osmf
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
 			
-			// DVR
-			//
-			
-			addTestSuite(TestDVRCastConstants);
- 			addTestSuite(TestDVRCastDVRTrait);
- 			addTestSuite(TestDVRCastNetConnectionFactory);
- 			addTestSuite(TestDVRCastNetLoader);
- 			addTestSuite(TestDVRCastNetStream);
- 			addTestSuite(TestDVRCastNetConnection);
- 			addTestSuite(TestDVRCastRecordingInfo);
- 			addTestSuite(TestDVRCastStreamInfo);
- 			addTestSuite(TestDVRCastStreamInfoRetriever);
- 			addTestSuite(TestDVRCastTimeTrait);
- 			
 			// Logging
 			//
 			
@@ -116,12 +102,13 @@ package org.osmf
 			addTestSuite(TestDefaultTraitResolver);
 			addTestSuite(TestMediaFactoryItem);
 			addTestSuite(TestMediaFactory);
+			addTestSuite(TestMediaType);
+			addTestSuite(TestMediaTypeUtil);
 			
 			// Video
 			//
 			
 			addTestSuite(TestVideoElement);
-			addTestSuite(TestCuePoint);
 			
 			// Audio
 			//
@@ -188,6 +175,8 @@ package org.osmf
 			
 			addTestSuite(TestCompositeAudioTrait);
 			
+			addTestSuite(TestCompositeMetadata);
+			
 			// Proxies
 			//
 			
@@ -212,14 +201,11 @@ package org.osmf
 			//
 
 			addTestSuite(TestMetadata);
-			addTestSuite(TestFacetKey);
-			addTestSuite(TestFacet);
-			addTestSuite(TestFacetGroup);
+			addTestSuite(TestMetadataGroup);
 			addTestSuite(TestMetadataWatcher);
-			addTestSuite(TestMediaType);
-			addTestSuite(TestMediaTypeUtil);
-			addTestSuite(TestCompositeMetadata);
-			addTestSuite(TestTemporalFacet);
+			addTestSuite(TestTimelineMetadata);
+			addTestSuite(TestCuePoint);
+			addTestSuite(TestTimelineMarker);
 
 			// NetStream
 			//
@@ -265,6 +251,20 @@ package org.osmf
 			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
 			
+			// DVR
+			//
+			
+			addTestSuite(TestDVRCastConstants);
+ 			addTestSuite(TestDVRCastDVRTrait);
+ 			addTestSuite(TestDVRCastNetConnectionFactory);
+ 			addTestSuite(TestDVRCastNetLoader);
+ 			addTestSuite(TestDVRCastNetStream);
+ 			addTestSuite(TestDVRCastNetConnection);
+ 			addTestSuite(TestDVRCastRecordingInfo);
+ 			addTestSuite(TestDVRCastStreamInfo);
+ 			addTestSuite(TestDVRCastStreamInfoRetriever);
+ 			addTestSuite(TestDVRCastTimeTrait);
+
 			// Plugins
 			//
 			
@@ -276,17 +276,18 @@ package org.osmf
 						
 			// Layout
 			//			
-				
-			addTestSuite(TestAbsoluteLayoutFacet);
-			addTestSuite(TestAnchorLayoutFacet);
+			
+			addTestSuite(TestBinarySearch);
+			addTestSuite(TestAbsoluteLayoutMetadata);
+			addTestSuite(TestAnchorLayoutMetadata);
 			addTestSuite(TestLayoutRendererBase);
 			addTestSuite(TestLayoutRenderer);
-			addTestSuite(TestLayoutAttributesFacet);
+			addTestSuite(TestLayoutAttributesMetadata);
 			addTestSuite(TestMediaElementLayoutTarget);
-			addTestSuite(TestPaddingLayoutFacet);
+			addTestSuite(TestPaddingLayoutMetadata);
 			addTestSuite(TestVerticalAlign);
 			addTestSuite(TestHorizontalAlign);
-			addTestSuite(TestRelativeLayoutFacet);
+			addTestSuite(TestRelativeLayoutMetadata);
 			addTestSuite(TestLayoutRendererProperties);
 			
 			// Containers
@@ -299,7 +300,6 @@ package org.osmf
 			// Utils
 			//
 			
-			addTestSuite(TestBinarySearch);
 			addTestSuite(TestOSMFStrings);
 			addTestSuite(TestVersion);		
 			addTestSuite(TestURL);

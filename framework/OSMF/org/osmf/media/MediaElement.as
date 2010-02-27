@@ -32,6 +32,7 @@ package org.osmf.media
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
 
@@ -59,6 +60,30 @@ package org.osmf.media
 	 */
 	[Event(name="traitRemove",type="org.osmf.events.MediaElementEvent")]
 
+	/**
+	 * Dispatched when a Metadata object has been added to this media element.
+	 * 
+	 * @eventType org.osmf.events.MediaElementEvent.METADATA_ADD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="metadataAdd",type="org.osmf.events.MediaElementEvent")]
+	
+	/**
+	 * Dispatched when a Metadata object has been removed from this media element.
+	 * 
+	 * @eventType org.osmf.events.MediaElementEvent.METADATA_REMOVE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="metadataRemove",type="org.osmf.events.MediaElementEvent")]
+	
 	/**
 	 * Dispatched when an error which impacts the operation of the media
 	 * element occurs.
@@ -126,7 +151,9 @@ package org.osmf.media
 		 *  @productversion OSMF 1.0
 		 */
 		public function MediaElement()
-		{	
+		{
+			super();
+			
 			_metadata = createMetadata();
 			setupTraitResolvers();		
 			setupTraits();
@@ -234,34 +261,112 @@ package org.osmf.media
 			return _container;
 		}
 		
-		/**
-		 * @returns The metadata container associated with this MediaElement
+		/** 
+		 * Adds a namespaced Metadata object to this MediaElement.
+		 * 
+		 * @param namespaceURL The namespace URL used to store the Metadata.
+		 * @param metadata The Metadata to add.
+		 * 
+		 * @throws ArgumentError if namespaceURL or metadata is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get metadata():Metadata
-		{			
-			return _metadata;
+		public function addMetadata(namespaceURL:String, metadata:Metadata):void
+		{
+			if (namespaceURL == null || metadata == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			
+			this.metadata.addValue(namespaceURL, metadata);
+			
+			dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_ADD, false, false, null, metadata));
+			
 		}
-				
+		
+		/**
+		 * Removes a namespaced Metadata object from this MediaElement.  
+		 * 
+		 * @param namespaceURL The namespace URL of the Metadata to remove.
+		 * 
+		 * @returns The removed Metadata, null if no Metadata with the given
+		 * namespaceURL exists one this MediaElement.
+		 * 
+		 * @throws ArgumentError If namespaceURL is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function removeMetadata(namespaceURL:String):Metadata
+		{
+			if (namespaceURL == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+
+			var result:Metadata = metadata.removeValue(namespaceURL) as Metadata;
+			if (result != null)
+			{
+				dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_REMOVE, false, false, null, result));
+			}
+			return result;
+		}
+		
+		/** 
+		 * Returns a namespaced Metadata object.
+		 * 
+		 * @param namespaceURL The namespace URL of the Metadata object to retrieve.
+		 * 
+		 * @returns The Metadata object with the specified namespace URL, null if
+		 * no such Metadata object exists on this MediaElement.
+		 * 
+		 * @throws ArgumentError If namespaceURL is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function getMetadata(namespaceURL:String):Metadata
+		{
+			if (namespaceURL == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+
+			return metadata.getValue(namespaceURL) as Metadata;
+		}
+			
 		// Protected
 		//
 		
 		/**
-		 * Creates metadata		
+		 * @private
+		 * 
+		 * Creates the metadata collection class.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		 protected function createMetadata():Metadata
-		 {
-		 	return new Metadata();
-		 }
+		protected function createMetadata():Metadata
+		{
+			return new Metadata(MetadataNamespaces.MEDIA_ELEMENT_METADATA);
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function get metadata():Metadata
+		{
+			return _metadata;
+		}
 		
 		/**
 		 * Adds a new media trait to this media element.  If successful,

@@ -25,16 +25,16 @@ package org.osmf.elements
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.MetadataEvent;
-	import org.osmf.events.TemporalFacetEvent;
+	import org.osmf.events.TimelineMetadataEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.TemporalFacet;
+	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.StreamType;
@@ -164,7 +164,7 @@ package org.osmf.elements
 			
 			var videoElement:VideoElement = createMediaElement() as VideoElement;
 			videoElement.resource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
-			videoElement.metadata.addEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
+			videoElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
 			
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
 
@@ -184,16 +184,16 @@ package org.osmf.elements
 				}
 			}
 
-			function onFacetAdd(event:MetadataEvent):void
+			function onMetadataAdd(event:MediaElementEvent):void
 			{
-				if (event.facet is TemporalFacet)
+				if (event.metadata is TimelineMetadata)
 				{
-					videoElement.metadata.removeEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
-					event.facet.addEventListener(TemporalFacetEvent.TIME_REACHED, onTimeReached);
+					videoElement.removeEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+					event.metadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onTimeReached);
 				}
 			}
 			
-			function onTimeReached(event:TemporalFacetEvent):void
+			function onTimeReached(event:TimelineMetadataEvent):void
 			{
 				if (testCuePoints)
 				{
@@ -206,7 +206,7 @@ package org.osmf.elements
 			}
 		}
 
-		public function testGetMetadata():void
+		public function testOnMetadata():void
 		{
 			var mediaElement:MediaElement = createMediaElement();
 			mediaElement.resource = resourceForMediaElement;

@@ -52,7 +52,7 @@ package org.osmf.net
 			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
 			assertTrue(resource.urlIncludesFMSApplicationInstance == false);
 			
-			resource = new StreamingURLResource("http://example.com", StreamType.ANY, true);
+			resource = new StreamingURLResource("http://example.com", StreamType.ANY, NaN, NaN, null, true);
 			assertTrue(resource.urlIncludesFMSApplicationInstance == true);
 		}
 	}

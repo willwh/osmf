@@ -23,8 +23,6 @@ package org.osmf.net
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.URL;
 	
@@ -90,7 +88,7 @@ package org.osmf.net
 				if (urlResource != null)
 				{
 					result = 		NetStreamUtils.isRTMPStream(urlResource.url)
-								||	HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) != null;
+								||	HTTPStreamingUtils.getHTTPStreamingMetadata(urlResource) != null;
 				}
 			}
 			
@@ -161,8 +159,8 @@ package org.osmf.net
 		 */
 		public static function getPlayArgsForResource(resource:MediaResourceBase):Object
 		{
-			var startArg:int = PLAY_START_ARG_ANY;
-			var lenArg:int = PLAY_LEN_ARG_ALL;
+			var startArg:Number = PLAY_START_ARG_ANY;
+			var lenArg:Number = PLAY_LEN_ARG_ALL;
 			
 			// Check for live vs. recorded.
 			switch (getStreamType(resource))
@@ -183,20 +181,21 @@ package org.osmf.net
 				&&	resource != null
 				)
 			{
-				var facet:Facet = resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA) as Facet;
-				if (facet != null)
+				var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+				if (streamingResource != null)
 				{
-					startArg = facet.getValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY);
-					if (isNaN(startArg))
+					if (!isNaN(streamingResource.clipStartTime))
 					{
-						startArg = PLAY_START_ARG_RECORDED;
+						startArg = streamingResource.clipStartTime;
 					}
-					var subclipEndTime:Number = facet.getValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY);
-					if (!isNaN(subclipEndTime))
+					if (!isNaN(streamingResource.clipEndTime))
 					{
-						// Disallow negative durations.  And make sure we don't
-						// subtract the startArg if it's ANY.
-						lenArg = Math.max(0, subclipEndTime - Math.max(0, startArg));
+						// The presence of any subclip info means that our startArg
+						// should be non-negative.
+						startArg = Math.max(0, startArg);
+						
+						// Disallow negative durations.
+						lenArg = Math.max(0, streamingResource.clipEndTime - startArg);
 					}
 				}
 			}

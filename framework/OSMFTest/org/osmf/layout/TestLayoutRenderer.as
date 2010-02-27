@@ -42,13 +42,13 @@ package org.osmf.layout
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
-			var mediaElementRelative:RelativeLayoutFacet = new RelativeLayoutFacet();
-			mediaElementRelative.x = 10;
-			mediaElementRelative.y = 10;
-			mediaElementRelative.width = 80;
-			mediaElementRelative.height = 80;
-			
-			mediaElement.metadata.addFacet(mediaElementRelative);
+			var lp:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
+			assertNotNull(lp);
+
+			lp.percentX = 10;
+			lp.percentY = 10;
+			lp.percentWidth = 80;
+			lp.percentHeight = 80;
 			
 			// Container
 			
@@ -75,16 +75,13 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			mediaElementRelative.x = 5;
+			lp.percentX = 5;
 			
 			layoutRenderer.validateNow();
 			
 			assertEquals(15, viewSprite.x);
 			
-			var mediaElementAbsolute:AbsoluteLayoutFacet = new AbsoluteLayoutFacet();
-			mediaElement.metadata.addFacet(mediaElementAbsolute);
-			
-			mediaElementAbsolute.x = 50;
+			lp.x = 50;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -92,7 +89,7 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			mediaElementAbsolute.y = 1;
+			lp.y = 1;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -100,7 +97,7 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			mediaElementAbsolute.width = 100;
+			lp.width = 100;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -108,7 +105,7 @@ package org.osmf.layout
 			assertEquals(100, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			mediaElementAbsolute.height = 51;
+			lp.height = 51;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -116,7 +113,10 @@ package org.osmf.layout
 			assertEquals(100, viewSprite.width);
 			assertEquals(51, viewSprite.height);
 			
-			mediaElement.metadata.removeFacet(mediaElementAbsolute);
+			lp.x = NaN;
+			lp.y = NaN;
+			lp.width = NaN;
+			lp.height = NaN;
 			layoutRenderer.validateNow();
 			
 			assertEquals(15, viewSprite.x);
@@ -124,13 +124,11 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			var mediaElementAnchor:AnchorLayoutFacet = new AnchorLayoutFacet();
-			mediaElementAnchor.left = 60;
-			mediaElementAnchor.top = 15;
-			mediaElementRelative.x = NaN; // Set NaN, for relative takes precedence over anchoring.
-			mediaElementRelative.y = NaN;
+			lp.left = 60;
+			lp.top = 15;
+			lp.percentX = NaN; // Set NaN, for relative takes precedence over anchoring.
+			lp.percentY = NaN;
 			
-			mediaElement.metadata.addFacet(mediaElementAnchor);
 			layoutRenderer.validateNow();
 			
 			assertEquals(60, viewSprite.x);
@@ -138,22 +136,20 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 		
-			mediaElementAnchor.right = 10;
-			mediaElementAnchor.bottom = 10;
-			mediaElementRelative.width = NaN; // Set NaN, for relative takes precedence over anchoring.
-			mediaElementRelative.height = NaN;
+			lp.right = 10;
+			lp.bottom = 10;
+			lp.percentWidth = NaN; // Set NaN, for relative takes precedence over anchoring.
+			lp.percentHeight = NaN;
 			layoutRenderer.validateNow();
 			
 			assertEquals(230, viewSprite.width);
 			assertEquals(175, viewSprite.height);
 			
-			var padding:PaddingLayoutFacet = new PaddingLayoutFacet();
-			padding.left = 1;
-			padding.top = 2;
-			padding.right = 3;
-			padding.bottom = 4;
+			lp.paddingLeft = 1;
+			lp.paddingTop = 2;
+			lp.paddingRight = 3;
+			lp.paddingBottom = 4;
 			
-			mediaElement.metadata.addFacet(padding);
 			layoutRenderer.validateNow();
 			
 			assertEquals(61, viewSprite.x);

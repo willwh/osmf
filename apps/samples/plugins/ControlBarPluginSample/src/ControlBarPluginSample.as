@@ -29,8 +29,7 @@ package
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.plugin.PluginInfoResource;
 	
 	[SWF(width="640", height="360", backgroundColor="0x000000",frameRate="25")]
@@ -94,11 +93,11 @@ package
 		
 		private function constructVideoElement():MediaElement
 		{
-			// Construct a metadata facet that we can append to the video's collection
+			// Construct a metadata object that we can append to the video's collection
 			// of metadata. The control bar plug-in will use the metadata to identify
 			// the video element as its target:
-			var controlBarTarget:Facet
-				= new Facet
+			var controlBarTarget:Metadata
+				= new Metadata
 					( ControlBarPlugin.NS_CONTROL_BAR_TARGET
 					);
 			controlBarTarget.addValue(ID, "mainContent");
@@ -106,32 +105,32 @@ package
 			// Construct a video element:
 			var video:MediaElement = osmf.factory.createMediaElement(new URLResource(VIDEO_URL));
 			
-			// Add the metadata facet to the video's metadata:
-			video.metadata.addFacet(controlBarTarget);
+			// Add the metadata to the video's metadata:
+			video.addMetadata(controlBarTarget.namespaceURL, controlBarTarget);
 			
 			return video;
 		}
 		
 		private function constructControlBarElement():MediaElement
 		{
-			// Construct a metadata facet that we'll send to the media factory on
+			// Construct a metadata object that we'll send to the media factory on
 			// requesting a control bar element to be instantiated. The factory
 			// will use it to parameterize the element. Specifically, the ID field
 			// will tell the plug-in what the ID of the content it should control
 			// is:
-			var controlBarSettings:Facet
-				= new Facet
+			var controlBarSettings:Metadata
+				= new Metadata
 					( ControlBarPlugin.NS_CONTROL_BAR_SETTINGS
 					);
 			controlBarSettings.addValue(ID, "mainContent");
 			
-			// Add the metadata facet to an otherwise empty media resource object:
+			// Add the metadata to an otherwise empty media resource object:
 			var resource:MediaResourceBase = new MediaResourceBase();
-			resource.metadata.addFacet(controlBarSettings);
+			resource.addMetadataValue(controlBarSettings.namespaceURL, controlBarSettings);
 			
 			// Request the media factory to construct a control bar element. The
 			// factory will infer a control bar element is requested by inspecting
-			// the resource's metadata (and encountering a facet of namespace
+			// the resource's metadata (and encountering a metadata object of namespace
 			// NS_CONTROL_BAR_SETTINGS there):
 			var controlBar:MediaElement = osmf.factory.createMediaElement(resource);
 			
@@ -153,7 +152,7 @@ package
 		private static const VIDEO_URL:String
 			= "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
 			
-		private static var ID:FacetKey = new FacetKey("ID");
+		private static var ID:String = "ID";
 		
 		// Comment out to load the plug-in for a SWF (instead of using static linking, for testing):	
 		//private static const pluginResource:URLResource = new URLResource(new URL("ControlBarPlugin.swf"));

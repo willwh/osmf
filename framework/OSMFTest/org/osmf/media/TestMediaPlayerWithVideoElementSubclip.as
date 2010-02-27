@@ -21,9 +21,8 @@
 package org.osmf.media
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.traits.MediaTraitType;
@@ -57,7 +56,7 @@ package org.osmf.media
 			{
 				// Give our mock loader an arbitrary duration and size to ensure
 				// we get metadata.
-				MockNetLoader(loader).netStreamExpectedDuration = 6;//TestConstants.REMOTE_STREAMING_VIDEO_EXPECTED_DURATION;
+				MockNetLoader(loader).netStreamExpectedDuration = 6; // TestConstants.REMOTE_STREAMING_VIDEO_EXPECTED_DURATION;
 				MockNetLoader(loader).netStreamExpectedSubclipDuration = 3;
 				MockNetLoader(loader).netStreamExpectedWidth = TestConstants.REMOTE_STREAMING_VIDEO_EXPECTED_WIDTH
 				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_STREAMING_VIDEO_EXPECTED_HEIGHT;
@@ -80,11 +79,9 @@ package org.osmf.media
 		{
 			// Use a valid URL so that the tests will pass if we use
 			// a real NetLoader rather than a MockNetLoader.
-			var resource:URLResource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 2);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 5);
-			resource.metadata.addFacet(facet);
+			var resource:StreamingURLResource = new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO);
+			resource.clipStartTime = 2;
+			resource.clipEndTime = 5;
 			return resource;
 		}
 

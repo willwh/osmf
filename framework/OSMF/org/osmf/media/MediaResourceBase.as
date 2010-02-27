@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.metadata.Metadata;
+	import flash.utils.Dictionary;
 	
 	/**
 	 * An MediaResourceBase is a base class for media that serves as input
@@ -39,24 +39,117 @@ package org.osmf.media
 	 */
 	public class MediaResourceBase
 	{
+		/**
+		 * Constructor.
+		 **/
 		public function MediaResourceBase()
 		{
-			_metadata = new Metadata();
+			super();
 		}
 		
 		/**
-		 * The metadata associated with this media resource.
+		 * The MediaType, if any, of this resource.
+		 **/
+		public function get mediaType():String
+		{
+			return _mediaType;
+		}
+		
+		public function set mediaType(value:String):void
+		{
+			_mediaType = value;
+		}
+
+		/**
+		 * The MIME type, if any, of this resource.
+		 **/
+		public function get mimeType():String
+		{
+			return _mimeType;
+		}
+		
+		public function set mimeType(value:String):void
+		{
+			_mimeType = value;
+		}
+
+		/**
+		 * Adds a metadata value to this resource.
+		 * 
+		 * @param namespaceURL A URL with which this metadata is associated,
+		 * and with which it can be retrieved.  If there is metadata that
+		 * is already associated with this URL, then it will be overwritten. 
+		 * @param value The metadata value.  It is recommended that this be a
+		 * strongly-typed class, rather than an untyped Object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function get metadata():Metadata
+		public function addMetadataValue(namespaceURL:String, value:Object):void
 		{
-			return _metadata;
+			if (_metadata == null)
+			{
+				_metadata = new Dictionary();
+			}
+
+			_metadata[namespaceURL] = value;			
 		}
+
+		/**
+		 * Retrieves a metadata value from this resource.
+		 * 
+		 * @param namespaceURL The URL with which the metadata is associated.
+		 * 
+		 * @return The retrieved metadata value, null if there is no metadata value
+		 * associated with the specified namespace URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function getMetadataValue(namespaceURL:String):Object
+		{
+			if (_metadata != null)
+			{
+				return _metadata[namespaceURL];
+			}
+			
+			return null;
+		}
+
+		/**
+		 * Removes a metadata value from this resource.
+		 * 
+		 * @param namespaceURL The URL with which the metadata value is associated.
+		 * 
+		 * @return The removed metadata value, null if there is no metadata value
+		 * associated with the specified namespace URL.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function removeMetadataValue(namespaceURL:String):Object
+		{
+			if (_metadata != null)
+			{
+				var value:Object = _metadata[namespaceURL];
+				delete _metadata[namespaceURL];
+				return value;
+			}
+			
+			return null;
+		}
+
+		// Internals
+		//
 		
-		private var _metadata:Metadata;
+		private var _metadata:Dictionary;
+		private var _mediaType:String;
+		private var _mimeType:String;
 	}
 }

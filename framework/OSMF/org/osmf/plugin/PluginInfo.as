@@ -24,7 +24,7 @@ package org.osmf.plugin
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.metadata.Metadata;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.Version;
 	
@@ -186,7 +186,7 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function initializePlugin(metadata:Metadata):void
+		public function initializePlugin(resource:MediaResourceBase):void
 		{
 		}
 		

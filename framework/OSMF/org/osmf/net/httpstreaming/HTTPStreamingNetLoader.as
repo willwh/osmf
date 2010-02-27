@@ -66,7 +66,7 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			return (HTTPStreamingUtils.getHTTPStreamingMetadataFacet(resource) != null);
+			return (HTTPStreamingUtils.getHTTPStreamingMetadata(resource) != null);
 		}
 		
 		/**

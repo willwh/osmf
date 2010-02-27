@@ -23,8 +23,7 @@
 package org.osmf.chrome.controlbar.widgets
 {
 	import org.osmf.chrome.controlbar.ControlBarBase;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	
 	public class PinDownButton extends PinUpButton
 	{
@@ -40,9 +39,9 @@ package org.osmf.chrome.controlbar.widgets
 			super(up || pinDownUpType, down || pinDownDownType, disabled || pinDownDisabledType);
 		}
 		
-		override protected function controlBarAutoHideChangeCallback(value:Facet):void
+		override protected function controlBarAutoHideChangeCallback(value:Metadata):void
 		{
-			visible = value && value.getValue(new FacetKey(ControlBarBase.METADATA_AUTO_HIDE_URL)) == true;
+			visible = value && value.getValue(ControlBarBase.METADATA_AUTO_HIDE_URL) == true;
 		}
 	}
 }

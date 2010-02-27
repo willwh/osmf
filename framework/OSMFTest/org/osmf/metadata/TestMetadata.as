@@ -23,8 +23,6 @@ package org.osmf.metadata
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.errors.IllegalOperationError;
-	
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.MetadataEvent;
@@ -36,31 +34,28 @@ package org.osmf.metadata
 		override public function setUp():void
 		{
 			super.setUp();			
-			collection = new Metadata();				
+			metadata = new Metadata();				
 		}
 		
-		public function testAddMetadata():void
+		public function testAddValue():void
 		{				
 			var addCalled:Boolean = false;	
-			var testNs:String = "dfs3424f#@$@D";
-			collection.addEventListener(MetadataEvent.FACET_ADD, onAdd);
-			var value:Facet = new Facet(testNs);
+			metadata.addEventListener(MetadataEvent.VALUE_ADD, onAdd);
+			var key:String = "thekey";
+			var value:String = "dfs3424f#@$@D";
 			
-			collection.addFacet(value);
+			metadata.addValue(key, value);
 			assertTrue(addCalled);
-					
-			var facet:Facet = 	collection.getFacet(testNs);
-									
-			assertEquals(value, facet, collection.getFacet("dfs3424f#@$@D"));		
+			assertEquals(value, metadata.getValue(key));		
 			
 			// Test the Catching of Errors
 			try
 			{
-				collection.addFacet(null);
+				metadata.addValue(null, "foo");
 				
 				fail();
 			}
-			catch(error:IllegalOperationError)
+			catch(error:ArgumentError)
 			{
 				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
@@ -68,39 +63,37 @@ package org.osmf.metadata
 			function onAdd(event:MetadataEvent):void
 			{
 				addCalled = true;
-				assertEquals(event.facet, value);				
+				assertEquals(event.value, value);				
 			}				
 		}
 		
-		public function testRemoveMetadata():void
+		public function testRemoveValue():void
 		{		
-			var removeCalled:Boolean = false;	
-			var testNs:String = "dfs3424f#@$@D";
-			var value:Facet = new Facet(testNs);
-			collection.addEventListener(MetadataEvent.FACET_REMOVE, onRemove);
-			collection.addFacet(value);
-			assertEquals(value, collection.removeFacet(value));
-			
-			assertTrue(removeCalled);
+			var removeCalled:Boolean = false;
+			var key:String = "thekey";	
+			var value:String = "dfs3424f#@$@D";
+			metadata.addEventListener(MetadataEvent.VALUE_REMOVE, onRemove);
+			metadata.addValue(key, value);
+			assertFalse(removeCalled);
+			assertEquals(value, metadata.getValue(key));
 					
-			value = new Facet("dfs3424f#@$@D");
+			value = "dfs3424f#@$@D";
 			
-			removeCalled = false;			
-			assertNull( collection.removeFacet(new Facet("unknown")));					
+			assertNull(metadata.removeValue("unknown"));					
 			assertFalse(removeCalled); // Make sure we didn't dispatch an event for an already removed item.
 								
-			var facet:Facet = 	collection.getFacet(testNs);
-									
-			assertEquals(value, facet, collection.getFacet("dfs3424f#@$@D"));		
+			assertEquals(metadata.removeValue(key), value);
+			assertTrue(removeCalled);				
+			assertNull(metadata.getValue(key));		
 			
 			// Test the Catching of Errors
 			try
 			{
-				collection.removeFacet(null);
+				metadata.removeValue(null);
 				
 				fail();
 			}
-			catch(error:IllegalOperationError)
+			catch(error:ArgumentError)
 			{
 				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
@@ -108,143 +101,123 @@ package org.osmf.metadata
 			function onRemove(event:MetadataEvent):void
 			{
 				removeCalled = true;
-				assertEquals(event.facet, value);				
+				assertEquals(event.value, value);				
 			}				
 		}
 		
-		public function testChangeMetadata():void
+		public function testChangeValue():void
 		{	
 			var addCalled:Boolean = false;	
-			var removeCalled:Boolean = false;	
-			var testNs:String = "dfs3424f#@$@D";
-		
-			collection.addEventListener(MetadataEvent.FACET_ADD, onAdd);
-			collection.addEventListener(MetadataEvent.FACET_REMOVE, onRemove);
-			var value:Facet = new Facet(testNs);
-			var value1:Facet = new Facet(testNs);
-			var adds:Array = [value1,value];
+			var removeCalled:Boolean = false;
+			var changeCalled:Boolean = false;
+			metadata.addEventListener(MetadataEvent.VALUE_ADD, onAdd);
+			metadata.addEventListener(MetadataEvent.VALUE_REMOVE, onRemove);
+			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onChange);
+			var key1:String = "thekey1";
+			var key2:String = "thekey2";
+			var value1:String = "dfs3424f#@$@D";
+			var value2:String = "dfdfdsff#@$@D";
 			
-			collection.addFacet(value);				
-			assertTrue(addCalled);			
+			metadata.addValue(key1, value1);
+			assertTrue(addCalled);
+			assertFalse(removeCalled);
+			assertFalse(changeCalled);
+			
 			addCalled = false;
-			collection.addFacet(value1);
-			assertTrue(removeCalled);	
-			assertTrue(addCalled);				
-								
-			var facet:Facet = 	collection.getFacet(testNs);
-									
-			assertEquals(value1, facet, collection.getFacet("dfs3424f#@$@D"));		
 			
+			metadata.addValue(key2, value2);				
+			assertTrue(addCalled);
+			assertFalse(removeCalled);
+			assertFalse(changeCalled);
+
+			addCalled = false;
+
+			// Overwriting an existing value with the same value should
+			// produce no events.
+			metadata.addValue(key1, value1);				
+			assertFalse(addCalled);
+			assertFalse(removeCalled);
+			assertFalse(changeCalled);
+
+			// Overwriting an existing value with a different value should
+			// produce a change event.
+			metadata.addValue(key1, value2);				
+			assertFalse(addCalled);
+			assertFalse(removeCalled);
+			assertTrue(changeCalled);
+								
 			function onAdd(event:MetadataEvent):void
 			{
 				addCalled = true;
-				assertEquals(event.facet, adds.pop());					
 			}	
 			
 			function onRemove(event:MetadataEvent):void
 			{
 				removeCalled = true;
-				assertEquals(event.facet, value);				
 			}
-			collection.removeEventListener(MetadataEvent.FACET_ADD, onAdd);
-			collection.removeEventListener(MetadataEvent.FACET_REMOVE, onRemove);	
+
+			function onChange(event:MetadataEvent):void
+			{
+				changeCalled = true;
+			}
+			
+			metadata.removeEventListener(MetadataEvent.VALUE_ADD, onAdd);
+			metadata.removeEventListener(MetadataEvent.VALUE_REMOVE, onRemove);
+			metadata.removeEventListener(MetadataEvent.VALUE_CHANGE, onChange);
 		}	
 			
-		public function testGetFacet():void
+		public function testGetValue():void
 		{
-			var adobe:String =  "http://www.adobe.com/";
-			var example:String = "http://www.example.com/";
-			var value:Facet = new Facet(adobe);
-			var value2:Facet = new Facet(example);
+			var key1:String =  "k1";
+			var key2:String = "k2";
+			var value1:String =  "http://www.adobe.com/";
+			var value2:String = "http://www.example.com/";
 			
-			collection.addFacet(value);
-			collection.addFacet(value2);
+			metadata.addValue(key1, value1);
+			metadata.addValue(key2, value2);
 			
-			var nameSpaces:Vector.<String> = collection.namespaceURLs;
-						
-			assertEquals(2, nameSpaces.length);
-			
-			assertTrue(adobe == nameSpaces[1] || example == nameSpaces[1] );
-			assertTrue(example == nameSpaces[0] || adobe == nameSpaces[0]  );
-			
-			var facet:Facet = collection.getFacet(adobe);
-			assertEquals(value, facet);
-			
-			facet = collection.getFacet(adobe);
-			assertEquals(value, facet);
-			
-			facet = collection.getFacet("testNamespace");
-			assertNull(facet);
-			
-			facet = collection.getFacet(example);
-			assertEquals(value2, facet);
-					
-					
+			assertEquals(metadata.getValue(key1), value1);
+			assertEquals(metadata.getValue(key2), value2);
+			assertEquals(metadata.getValue(value1), null);
+			assertEquals(metadata.getValue(value2), null);
+			assertEquals(metadata.getValue("blah"), null);
+
+			// Test the Catching of Errors
+			try
+			{
+				metadata.getValue(null);
+				
+				fail();
+			}
+			catch(error:ArgumentError)
+			{
+				assertEquals(error.message, OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
 		}
 		
-		public function testGetNamespaces():void
+		public function testGetKeys():void
 		{
-			var adobe:String =  "http://www.adobe.com/";
-			var example:String = "http://www.example.com/";
-			var value:Facet = new Facet(adobe);
-			var value2:Facet = new Facet(example);
-			var value3:CustomFacet = new CustomFacet(example);
+			var key1:String =  "k1";
+			var key2:String = "k2";
+			var value1:String =  "http://www.adobe.com/";
+			var value2:String = "http://www.example.com/";
 			
-			assertEquals(example, value3.namespaceURL)
-						
-			collection.addFacet(value);
-			collection.addFacet(value2);
-			collection.addFacet(value3);  //overwrites the second facet
+			metadata.addValue(key1, value1);
+			metadata.addValue(key2, value2);
+			metadata.addValue(key2, value1);
 			
-			var nameSpaces:Vector.<String> = collection.namespaceURLs;
+			var keys:Vector.<String> = metadata.keys;
+			assertEquals(keys.length, 2);
 			
-			assertEquals(2, nameSpaces.length); 
-			// Can't predict the order of the facet types, so we need to check for both.
-			assertTrue(value3 == collection.getFacet(nameSpaces[0]) || value3 == collection.getFacet(nameSpaces[1]));
-			assertTrue(value == collection.getFacet(nameSpaces[0]) || value == collection.getFacet(nameSpaces[1]));
-			assertTrue(collection.getFacet(nameSpaces[0]) != collection.getFacet(nameSpaces[1]));
-						
-			var facet:Facet = collection.getFacet(adobe);
-			assertEquals(value, facet);
-		
-					
-			collection.removeFacet(value2);
-			
+			// Can't predict the order of the keys, so we need to check for both.
+			assertTrue(		(keys[0] == key1 && keys[1] == key2)
+						||	(keys[1] == key1 && keys[0] == key2)
+					  );
 		}
 		
-		public function testNumFacets():void
-		{
-			var adobe:String =  "http://www.adobe.com/";
-			var example:String = "http://www.example.com/";
-			var value:Facet = new Facet(adobe);
-			var value2:Facet = new Facet(example);
-			var value3:CustomFacet = new CustomFacet(example);
-			
-			assertEquals(example, value3.namespaceURL)
-						
-			collection.addFacet(value);
-			collection.addFacet(value2);
-			collection.addFacet(value3);  //overwrites the second facet
-						
-		}
-					
-		// Utils
+		// Internals
 		//
 		
-		protected var collection:Metadata;	
+		private var metadata:Metadata;	
 	}
-}
-
-
-import org.osmf.metadata.Facet;
-
-internal class CustomFacet extends Facet
-{
-		
-	public function CustomFacet(ns:String)
-	{
-		super(ns);
-	}
-
-		
 }

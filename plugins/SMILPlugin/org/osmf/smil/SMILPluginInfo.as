@@ -26,8 +26,7 @@ package org.osmf.smil
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.Metadata;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.plugin.PluginInfo;
 	import org.osmf.smil.elements.SMILElement;
@@ -56,14 +55,10 @@ package org.osmf.smil
 			return new SMILElement(null, new SMILLoader(mediaFactory));
 		}
 		
-		override public function initializePlugin(metadata:Metadata):void
+		override public function initializePlugin(resource:MediaResourceBase):void
 		{
 			// We'll use the player-supplied MediaFactory for creating all MediaElements.
-			var pluginFacet:Facet = metadata.getFacet(MetadataNamespaces.PLUGIN_METADATA);
-			if (pluginFacet != null)
-			{
-				mediaFactory = pluginFacet.getValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY) as MediaFactory;
-			}
+			mediaFactory = resource.getMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
 		}
 		
 		private var mediaFactory:MediaFactory;

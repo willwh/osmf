@@ -23,13 +23,12 @@ package org.osmf.plugin
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.utils.Dictionary;
+	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.media.MediaFactoryItemType;
-	import org.osmf.metadata.Metadata;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.net.NetLoader;
-	import org.osmf.elements.VideoElement;
-	import org.osmf.utils.Version;
 
 	public class CreateOnLoadPluginInfo extends PluginInfo
 	{
@@ -42,14 +41,14 @@ package org.osmf.plugin
 			super(items);
 		}
 		
-		override public function initializePlugin(metadata:Metadata):void
+		override public function initializePlugin(resource:MediaResourceBase):void
 		{
-			_pluginMetadata = metadata;
+			_pluginResource = resource;
 		}
 		
-		public function get pluginMetadata():Metadata
+		public function get pluginResource():MediaResourceBase
 		{
-			return _pluginMetadata;
+			return _pluginResource;
 		}
 		
 		public function get createCount():Number
@@ -75,6 +74,6 @@ package org.osmf.plugin
 		
 		private var _createCount:Number = 0;
 		private var _callbackCount:Number = 0;
-		private var _pluginMetadata:Metadata;
+		private var _pluginResource:MediaResourceBase;
 	}
 }

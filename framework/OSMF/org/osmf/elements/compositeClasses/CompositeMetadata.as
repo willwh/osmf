@@ -29,17 +29,16 @@ package org.osmf.elements.compositeClasses
 	
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.logging.ILogger;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetGroup;
-	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.NullFacetSynthesizer;
+	import org.osmf.metadata.MetadataGroup;
+	import org.osmf.metadata.MetadataSynthesizer;
+	import org.osmf.metadata.NullMetadataSynthesizer;
 	import org.osmf.utils.OSMFStrings;
 
 	[ExcludeClass]
 	
 	/**
-	 * Event fired when a child metadata instance was added to the composite. 
+	 * Event fired when a child was added to the composite. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -49,7 +48,7 @@ package org.osmf.elements.compositeClasses
 	[Event(name="childAdd", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when a child metadata instance was removed from the composite. 
+	 * Event fired when a child was removed from the composite. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -59,82 +58,82 @@ package org.osmf.elements.compositeClasses
 	[Event(name="childRemove", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when a child metadata instance got a facet added. 
+	 * Event fired when a child got a Metadata added. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="childFacetAdd", type="org.osmf.events.CompositeMetadataEvent")]
+	[Event(name="childMetadataAdd", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when a child metadata instance got a facet removed. 
+	 * Event fired when a child got a Metadata removed. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="childFacetRemove", type="org.osmf.events.CompositeMetadataEvent")]
+	[Event(name="childMetadataRemove", type="org.osmf.events.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when a new facet group emerged. 
+	 * Event fired when a new metadata group emerged. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="facetGroupAdd", type="org.osmf.event.CompositeMetadataEvent")]
+	[Event(name="metadataGroupAdd", type="org.osmf.event.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when an existing facet group seized to exist. 
+	 * Event fired when an existing metadata group ceased to exist. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="facetGroupRemove", type="org.osmf.event.CompositeMetadataEvent")]
+	[Event(name="metadataGroupRemove", type="org.osmf.event.CompositeMetadataEvent")]
 	
 	/**
-	 * Event fired when a facet group changed. 
+	 * Event fired when a metadata group changed. 
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	[Event(name="facetGroupChange", type="org.osmf.event.CompositeMetadataEvent")]
+	[Event(name="metadataGroupChange", type="org.osmf.event.CompositeMetadataEvent")]
 	
 	/**
 	 * @private
 	 * 
-	 * Defines a piece of meta data that keeps track of a collection
+	 * Defines a collection of meta data that keeps track of a collection
 	 * of child meta data references as a plain list.
 	 * 
-	 * By default, no synthesis takes place. External clients can inspect facet
+	 * By default, no synthesis takes place. External clients can inspect metadata
 	 * groups at will, and monitor them for change. However, the class provides
 	 * an infrastructure for synthesis like so:
 	 * 
-	 * By using 'addFacetSynthesizer' and 'removeFacetSynthesizer', clients can
-	 * define how facets groups of a given name space will be synthesized into
-	 * a new facet. If a facet group changes that matches an added facet
+	 * By using 'addMetadataSynthesizer' and 'removeMetadataSynthesizer', clients can
+	 * define how metadata groups of a given name space will be synthesized into
+	 * a new metadata. If a metadata group changes that matches an added metadata
 	 * synthesizer's namespace, then this synthesizer is used to synthesize the
 	 * composite value. After synthesis, the value gets added as one of the
-	 * composite's own facets.
+	 * composite's own metadatas.
 	 * 
 	 * If a CompositeMetadata instance is itself a child of another
-	 * CompositeMetadata instance, then any facet synthesizer that is set on
+	 * CompositeMetadata instance, then any metadata synthesizer that is set on
 	 * the parent instance, will be used by the child instance automatically
-	 * too. If the child has its own facet synthesizer listed, than that
+	 * too. If the child has its own metadata synthesizer listed, than that
 	 * synthesizer takes precedence over the inherited one.
 	 * 
-	 * Last, facet synthesis occurs if the first facet from a FacetGroup
-	 * returns a facet synthesizer for it Facet.synthesizer property. Facet
-	 * synthesizer set on this class directly, or indirectly via its parent,
-	 * take precedence over the facet's suggested synthesizer.
+	 * Last, metadata synthesis occurs if the first metadata from a metadata group
+	 * returns a metadata synthesizer for its synthesizer property. Metadata
+	 * synthesizers set on this class directly, or indirectly via its parent,
+	 * take precedence over the metadata's suggested synthesizer.
 	 * 
 	 *  
 	 *  @langversion 3.0
@@ -160,9 +159,9 @@ package org.osmf.elements.compositeClasses
 			super();
 			
 			children = new Vector.<Metadata>();
-			childFacetGroups = new Dictionary();
+			childMetadataGroups = new Dictionary();
 			
-			facetSynthesizers = new Dictionary();
+			metadataSynthesizers = new Dictionary();
 		}
 		
 		/**
@@ -195,29 +194,29 @@ package org.osmf.elements.compositeClasses
 				children.push(child);
 				
 				child.addEventListener
-					( MetadataEvent.FACET_ADD
-					, onChildFacetAdd
+					( MetadataEvent.VALUE_ADD
+					, onChildMetadataAdd
 					);
 					
 				child.addEventListener
-					( MetadataEvent.FACET_REMOVE
-					, onChildFacetRemove
+					( MetadataEvent.VALUE_REMOVE
+					, onChildMetadataRemove
 					);
 					
 				if (child is CompositeMetadata)
 				{
 					child.addEventListener
-						( CompositeMetadataEvent.FACET_GROUP_CHANGE
-						, onChildFacetGroupChange
+						( CompositeMetadataEvent.METADATA_GROUP_CHANGE
+						, onChildMetadataGroupChange
 						);
 				}
 					
-				for each (var url:String in child.namespaceURLs)
+				for each (var url:String in child.keys)
 				{
-					processChildFacetAdd
+					processChildMetadataAdd
 						( child
-						, child.getFacet(url)
-						, false // Don't trigger child facet add events. 
+						, child.getValue(url) as Metadata
+						, false // Don't trigger child metadata add events. 
 						);
 				}
 				
@@ -261,29 +260,29 @@ package org.osmf.elements.compositeClasses
 				children.splice(childIndex,1);
 				
 				child.removeEventListener
-					( MetadataEvent.FACET_ADD
-					, onChildFacetAdd
+					( MetadataEvent.VALUE_ADD
+					, onChildMetadataAdd
 					);
 					
 				child.removeEventListener
-					( MetadataEvent.FACET_REMOVE
-					, onChildFacetRemove
+					( MetadataEvent.VALUE_ADD
+					, onChildMetadataRemove
 					);
 				
 				if (child is CompositeMetadata)
 				{
 					child.removeEventListener
-						( CompositeMetadataEvent.FACET_GROUP_CHANGE
-						, onChildFacetGroupChange
+						( CompositeMetadataEvent.METADATA_GROUP_CHANGE
+						, onChildMetadataGroupChange
 						);
 				}
 				
-				for each (var url:String in child.namespaceURLs)
+				for each (var url:String in child.keys)
 				{
-					processChildFacetRemove
+					processChildMetadataRemove
 						( child
-						, child.getFacet(url)
-						, false // Don't trigger child facet remove events.
+						, child.getValue(url) as Metadata
+						, false // Don't trigger child metadata remove events.
 						);
 				}
 				
@@ -298,7 +297,7 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Defines the number of metadata children.
+		 * Defines the number of children.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -334,8 +333,8 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Defines the composition mode that will be forwarded to facet
-		 * synthesizers when synthesizing a merged facet is required.
+		 * Defines the composition mode that will be forwarded to metadata
+		 * synthesizers when synthesizing a merged metadata is required.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -357,8 +356,8 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Defines the active piece of metadata that will be forwarded
-		 * to facet synthesizers when synthesizing a merged facet is
+		 * Defines the active metadata that will be forwarded
+		 * to metadata synthesizers when synthesizing a merged metadata is
 		 * required.
 		 *  
 		 *  @langversion 3.0
@@ -381,39 +380,39 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Adds a facet synthesizer.
+		 * Adds a metadata synthesizer.
 		 * 
-		 * A facet synthesizer can synthesize a facet from a given FacetGroup,
-		 * composition mode, and active metadata child (if any).
+		 * A metadata synthesizer can synthesize a metadata from a given MetadataGroup,
+		 * composition mode, and active child (if any).
 		 * 
 		 * Only one synthesizer can be registered for a given namespace URL.
 		 * 
-		 * @param synthesizer The facet synthesizer to add.
+		 * @param synthesizer The metadata synthesizer to add.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function addFacetSynthesizer(synthesizer:FacetSynthesizer):void
+		public function addMetadataSynthesizer(synthesizer:MetadataSynthesizer):void
 		{
 			if (synthesizer == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (getFacetSynthesizer(synthesizer.namespaceURL) != null)
+			if (getMetadataSynthesizer(synthesizer.namespaceURL) != null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_BE_UNIQUE));
 			}
 			
-			facetSynthesizers[synthesizer.namespaceURL] = synthesizer;
+			metadataSynthesizers[synthesizer.namespaceURL] = synthesizer;
 		}
 		
 		/**
-		 * Removes a facet synthesizer.
+		 * Removes a metadata synthesizer.
 		 * 
-		 * @param synthesizer The facet synthesizer to remove.
+		 * @param synthesizer The metadata synthesizer to remove.
 		 * @throws ArgumentError If synthesizer is null.
 		 *  
 		 *  @langversion 3.0
@@ -421,21 +420,21 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function removeFacetSynthesizer(synthesizer:FacetSynthesizer):void
+		public function removeMetadataSynthesizer(synthesizer:MetadataSynthesizer):void
 		{
 			if (synthesizer == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (getFacetSynthesizer(synthesizer.namespaceURL) != null)
+			if (getMetadataSynthesizer(synthesizer.namespaceURL) != null)
 			{
-				delete facetSynthesizers[synthesizer.namespaceURL];
+				delete metadataSynthesizers[synthesizer.namespaceURL];
 			}
 		}
 		
 		/**
-		 * Fetches the facet synthesizer (if any) for the given namespace URL.
+		 * Fetches the metadata synthesizer (if any) for the given namespace URL.
 		 * 
 		 * @param namespaceURL The namespace to retreive the set synthesizer for.
 		 * @return The requested syntesizer, if it was set, null otherwise.
@@ -445,17 +444,17 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function getFacetSynthesizer(namespaceURL:String):FacetSynthesizer
+		public function getMetadataSynthesizer(namespaceURL:String):MetadataSynthesizer
 		{
-			var result:FacetSynthesizer;
+			var result:MetadataSynthesizer;
 			
 			if (namespaceURL != null)
 			{
-				for (var rawUrl:String in facetSynthesizers)
+				for (var rawUrl:String in metadataSynthesizers)
 				{
 					if (rawUrl == namespaceURL)
 					{
-						result = facetSynthesizers[rawUrl];
+						result = metadataSynthesizers[rawUrl];
 						break;
 					}
 				}
@@ -465,7 +464,7 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Collects the namespaces of the facet groups that are currently in existence.
+		 * Collects the namespaces of the metadata groups that are currently in existence.
 		 *  
 		 * @return The collected namespaces.
 		 *  
@@ -474,11 +473,11 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function getFacetGroupNamespaceURLs():Vector.<String>
+		public function getMetadataGroupNamespaceURLs():Vector.<String>
 		{
 			var result:Vector.<String> = new Vector.<String>();
 			
-			for (var url:String in childFacetGroups)
+			for (var url:String in childMetadataGroups)
 			{
 				result.push(url);
 			}
@@ -487,65 +486,65 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Fetches the facet group for the given namenspace.
+		 * Fetches the metadata group for the given namenspace.
 		 *  
-		 * @param namespaceURL The namespace to fetch the facet group for.
-		 * @return The requested facet group, or null if there is no such group.
+		 * @param namespaceURL The namespace to fetch the metadata group for.
+		 * @return The requested metadata group, or null if there is no such group.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getFacetGroup(namespaceURL:String):FacetGroup
+		public function getMetadataGroup(namespaceURL:String):MetadataGroup
 		{
 			if (namespaceURL == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			return childFacetGroups[namespaceURL];
+			return childMetadataGroups[namespaceURL];
 		}
 		
 		// Internals
 		//
 		
-		private function processChildFacetAdd(child:Metadata, facet:Facet, dispatchAddChildEvent:Boolean = true):void
+		private function processChildMetadataAdd(child:Metadata, metadata:Metadata, dispatchAddChildEvent:Boolean = true):void
 		{
 			var groupAddEvent:CompositeMetadataEvent;
 			
-			if (facet != null)
+			if (metadata != null)
 			{
-				var childrenNamespaceURL:String = facet.namespaceURL;
+				var childrenNamespaceURL:String = metadata.namespaceURL;
 				
-				var facetGroup:FacetGroup = childFacetGroups[childrenNamespaceURL];
-				if (facetGroup == null)
+				var metadataGroup:MetadataGroup = childMetadataGroups[childrenNamespaceURL];
+				if (metadataGroup == null)
 				{
-					childFacetGroups[childrenNamespaceURL]
-						= facetGroup
-						= new FacetGroup(childrenNamespaceURL);
+					childMetadataGroups[childrenNamespaceURL]
+						= metadataGroup
+						= new MetadataGroup(childrenNamespaceURL);
 						
-					facetGroup.addEventListener(Event.CHANGE, onFacetGroupChange);
+					metadataGroup.addEventListener(Event.CHANGE, onMetadataGroupChange);
 						
 					groupAddEvent
 						= new CompositeMetadataEvent
-							( CompositeMetadataEvent.FACET_GROUP_ADD
+							( CompositeMetadataEvent.METADATA_GROUP_ADD
 							, false, false
-							, child, facet, facetGroup
+							, child, metadata, metadataGroup
 							);
 				}
 				
-				facetGroup.addFacet(child, facet);
+				metadataGroup.addMetadata(child, metadata);
 			}
 			
 			if (dispatchAddChildEvent)
 			{
 				dispatchEvent
 					( new CompositeMetadataEvent
-						( CompositeMetadataEvent.CHILD_FACET_ADD
+						( CompositeMetadataEvent.CHILD_METADATA_ADD
 						, false, false
 						, child
-						, facet
+						, metadata
 						)
 					);
 			}
@@ -556,28 +555,28 @@ package org.osmf.elements.compositeClasses
 			}
 		}
 		
-		private function processChildFacetRemove(child:Metadata, facet:Facet, dispatchChildRemoveEvent:Boolean = true):void
+		private function processChildMetadataRemove(child:Metadata, metadata:Metadata, dispatchChildRemoveEvent:Boolean = true):void
 		{
 			var groupRemoveEvent:CompositeMetadataEvent;
 			
-			if (facet != null)
+			if (metadata != null)
 			{
-				var childrenNamespaceURL:String = facet.namespaceURL;
-				var facetGroup:FacetGroup = childFacetGroups[childrenNamespaceURL];
-				facetGroup.removeFacet(child, facet);
+				var childrenNamespaceURL:String = metadata.namespaceURL;
+				var metadataGroup:MetadataGroup = childMetadataGroups[childrenNamespaceURL];
+				metadataGroup.removeMetadata(child, metadata);
 				
-				if (facetGroup.length == 0)
+				if (metadataGroup.length == 0)
 				{
-					facetGroup.removeEventListener(Event.CHANGE, onFacetGroupChange);
+					metadataGroup.removeEventListener(Event.CHANGE, onMetadataGroupChange);
 					
 					groupRemoveEvent
 						= new CompositeMetadataEvent
-							( CompositeMetadataEvent.FACET_GROUP_REMOVE
+							( CompositeMetadataEvent.METADATA_GROUP_REMOVE
 							, false, false
-							, child, facet, facetGroup
+							, child, metadata, metadataGroup
 							);
 							
-					delete childFacetGroups[childrenNamespaceURL];
+					delete childMetadataGroups[childrenNamespaceURL];
 					
 				}
 			}
@@ -586,10 +585,10 @@ package org.osmf.elements.compositeClasses
 			{
 				dispatchEvent
 					( new CompositeMetadataEvent
-						( CompositeMetadataEvent.CHILD_FACET_REMOVE
+						( CompositeMetadataEvent.CHILD_METADATA_REMOVE
 						, false, false
 						, child
-						, facet
+						, metadata
 						)
 					);
 			}
@@ -602,31 +601,31 @@ package org.osmf.elements.compositeClasses
 		
 		private function processSynthesisDependencyChanged():void
 		{
-			for each (var facetGroup:FacetGroup in childFacetGroups)
+			for each (var metadataGroup:MetadataGroup in childMetadataGroups)
 			{
-				onFacetGroupChange(null, facetGroup);
+				onMetadataGroupChange(null, metadataGroup);
 			}
 		}
 		
 		// Event Handlers
 		//
 		
-		private function onChildFacetAdd(event:MetadataEvent):void
+		private function onChildMetadataAdd(event:MetadataEvent):void
 		{
-			processChildFacetAdd(event.target as Metadata, event.facet);	
+			processChildMetadataAdd(event.target as Metadata, event.value as Metadata);	
 		}
 		
-		private function onChildFacetRemove(event:MetadataEvent):void
+		private function onChildMetadataRemove(event:MetadataEvent):void
 		{
-			processChildFacetRemove(event.target as Metadata, event.facet);
+			processChildMetadataRemove(event.target as Metadata, event.value as Metadata);
 		}
 		
-		private function onChildFacetGroupChange(event:CompositeMetadataEvent):void
+		private function onChildMetadataGroupChange(event:CompositeMetadataEvent):void
 		{
-			// If no one before us was able to deliver a facet synthesizer, then perhaps we can:
-			if (event.suggestedFacetSynthesizer == null)
+			// If no one before us was able to deliver a metadata synthesizer, then perhaps we can:
+			if (event.suggestedMetadataSynthesizer == null)
 			{
-				event.suggestFacetSynthesizer(facetSynthesizers[event.facetGroup.namespaceURL]);
+				event.suggestedMetadataSynthesizer = metadataSynthesizers[event.metadataGroup.namespaceURL];
 			}
 						
 			var clonedEvent:CompositeMetadataEvent 
@@ -636,87 +635,87 @@ package org.osmf.elements.compositeClasses
 			// Re-dispatch the event:
 			dispatchEvent(clonedEvent);
 			
-			// If we didn't assign a facet synthesizer, then perhaps another handler did:
-			if (event.suggestedFacetSynthesizer == null)
+			// If we didn't assign a metadata synthesizer, then perhaps another handler did:
+			if (event.suggestedMetadataSynthesizer == null)
 			{
-				event.suggestFacetSynthesizer(clonedEvent.suggestedFacetSynthesizer);
+				event.suggestedMetadataSynthesizer = clonedEvent.suggestedMetadataSynthesizer;
 			}
 		}
 		
-		private function onFacetGroupChange(event:Event, facetGroup:FacetGroup = null):void
+		private function onMetadataGroupChange(event:Event, metadataGroup:MetadataGroup = null):void
 		{
 			// This method is invoked as both a regular event handler, as well as directly
 			// from processSynthesisDependencyChanged. In the latter case, the event will be
-			// null, and the facetGroup parameter will be set instead. To be prudent, check
-			// for a facet group being present either way:
-			facetGroup ||= event ? event.target as FacetGroup : null;
-			if (facetGroup == null)
+			// null, and the metadataGroup parameter will be set instead. To be prudent, check
+			// for a metadata group being present either way:
+			metadataGroup ||= event ? event.target as MetadataGroup : null;
+			if (metadataGroup == null)
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			var synthesizedFacet:Facet;
-			var facetSynthesizer:FacetSynthesizer = facetSynthesizers[facetGroup.namespaceURL];
+			var synthesizedMetadata:Metadata;
+			var metadataSynthesizer:MetadataSynthesizer = metadataSynthesizers[metadataGroup.namespaceURL];
 			
 			var localEvent:CompositeMetadataEvent
 				= new CompositeMetadataEvent
-					( CompositeMetadataEvent.FACET_GROUP_CHANGE
+					( CompositeMetadataEvent.METADATA_GROUP_CHANGE
 					, false, false
 					, null, null
-					, facetGroup
-					, facetSynthesizer
+					, metadataGroup
+					, metadataSynthesizer
 					)
 			
 			dispatchEvent(localEvent);
 			
-			// If no facet synthesizer is set yet, then first see if any of the
-			// event handlers provided us with one. If not, then use the facet's
+			// If no metadata synthesizer is set yet, then first see if any of the
+			// event handlers provided us with one. If not, then use the metadata's
 			// default synthesizer (if it provides for one):
-			facetSynthesizer
-				||= localEvent.suggestedFacetSynthesizer
+			metadataSynthesizer
+				||= localEvent.suggestedMetadataSynthesizer
 				// If no synthesizer has been suggested by our parents, then look
-				// at the facet group, and take the synthesizer set on the first
-				// Facet that we encounter:
-				||	(	(facetGroup.length > 0)
-							? facetGroup.getFacetAt(0).synthesizer
+				// at the metadata group, and take the synthesizer set on the first
+				// metadata that we encounter:
+				||	(	(metadataGroup.length > 0)
+							? metadataGroup.getMetadataAt(0).synthesizer
 							: null
 				 	)
 				// Last, revert to the default synthesizer:
-				|| new FacetSynthesizer(facetGroup.namespaceURL);
+				|| new MetadataSynthesizer(metadataGroup.namespaceURL);
 				
-			// Run the facet synthesizer:
-			synthesizedFacet
-				= facetSynthesizer.synthesize
+			// Run the metadata synthesizer:
+			synthesizedMetadata
+				= metadataSynthesizer.synthesize
 					( this
-					, facetGroup
+					, metadataGroup
 					, _mode
 					, _activeChild
 					);
 			
-			if (synthesizedFacet == null)
+			if (synthesizedMetadata == null)
 			{
 				// If the synthesized value is null, then we might need to clear
 				// out a previously set value. Don't clear out the value if the
 				// current synthesizer is a null synthesizer.
-				var currentFacet:Facet = getFacet(facetGroup.namespaceURL);
-				if	(	currentFacet != null
-					&&	currentFacet.synthesizer is NullFacetSynthesizer == false
+				var currentMetadata:Metadata = getValue(metadataGroup.namespaceURL) as Metadata;
+				if	(	currentMetadata != null
+					&&	currentMetadata.synthesizer is NullMetadataSynthesizer == false
 					)
 				{
-					CONFIG::LOGGING { logger.debug("removing facet {0}", facetGroup.namespaceURL); }
-					removeFacet(currentFacet);
+					CONFIG::LOGGING { logger.debug("removing metadata {0}", metadataGroup.namespaceURL); }
+					removeValue(currentMetadata.namespaceURL);
 				}
 			}
 			else
 			{
-				// Add, or overwrite the last set facet value:
-				addFacet(synthesizedFacet);
+				// Add, or overwrite the last set metadata value:
+				addValue(synthesizedMetadata.namespaceURL, synthesizedMetadata);
 			}
 		}
 		
 		private var children:Vector.<Metadata>;
-		private var childFacetGroups:Dictionary; 
-		private var facetSynthesizers:Dictionary;
+		private var childMetadataGroups:Dictionary; 
+		private var metadataSynthesizers:Dictionary;
 		
 		private var _mode:String;
 		private var _activeChild:Metadata;

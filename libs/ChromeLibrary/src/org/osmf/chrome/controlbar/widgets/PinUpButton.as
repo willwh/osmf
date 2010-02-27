@@ -24,8 +24,7 @@ package org.osmf.chrome.controlbar.widgets
 {
 	import org.osmf.chrome.controlbar.ControlBarBase;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataWatcher;
 	
 	public class PinUpButton extends Button
@@ -73,9 +72,9 @@ package org.osmf.chrome.controlbar.widgets
 		// Internals
 		//
 		
-		protected function controlBarAutoHideChangeCallback(value:Facet):void
+		protected function controlBarAutoHideChangeCallback(value:Metadata):void
 		{
-			visible = value && value.getValue(new FacetKey(ControlBarBase.METADATA_AUTO_HIDE_URL)) == false;
+			visible = value && value.getValue(ControlBarBase.METADATA_AUTO_HIDE_URL) == false;
 		}
 		
 		private var controlBarAutoHideWatcher:MetadataWatcher;

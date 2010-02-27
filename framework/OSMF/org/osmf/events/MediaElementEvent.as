@@ -21,9 +21,9 @@
 *****************************************************/
 package org.osmf.events
 {
-	import org.osmf.traits.MediaTraitType;
-	
 	import flash.events.Event;
+	
+	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * A MediaElementEvent is dispatched when properties of a MediaElement have changed.
@@ -62,6 +62,32 @@ package org.osmf.events
 		public static const TRAIT_REMOVE:String = "traitRemove";
 		
 		/**
+		 * The MediaElementEvent.METADATA_ADD constant defines the value of the type
+		 * property of the event object for a metadataAdd event.
+		 * 
+		 * @eventType metadataAdd
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const METADATA_ADD:String = "metadataAdd";
+		
+		/**
+		 * The MediaElementEvent.METADATA_REMOVE constant defines the value of the
+		 * type property of the event object for a metadataRemove event.
+		 * 
+		 * @eventType metadataRemove
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const METADATA_REMOVE:String = "metadataRemove";
+
+		/**
 		 * Constructor.
 		 * 
 		 * @param type Event type
@@ -69,18 +95,22 @@ package org.osmf.events
  		 * list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the
  		 * event can be prevented. 
-		 * @param traitType The MediaTraitType for the trait that was added or removed,.
+		 * @param traitType The MediaTraitType for the trait that was added or removed.  Null
+		 * if type is not TRAIT_ADD or TRAIT_REMOVE.
+		 * @param metadata The Metadata that was added or removed.  Null if type is not
+		 * METADATA_ADD or METADATA_REMOVE.
  		 *  
  		 *  @langversion 3.0
  		 *  @playerversion Flash 10
  		 *  @playerversion AIR 1.5
  		 *  @productversion OSMF 1.0
  		 */
-		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null)
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, metadata:Metadata=null)
 		{
 			super(type, bubbles, cancelable);
 
 			_traitType = traitType;
+			_metadata = metadata;
 		}
 		
 		/**
@@ -88,11 +118,12 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new MediaElementEvent(type, bubbles, cancelable, traitType);
+			return new MediaElementEvent(type, bubbles, cancelable, traitType, metadata);
 		}
 		
 		/**
-		 * The MediaTraitType for this event.
+		 * The MediaTraitType for the trait that was added or removed.  Null
+		 * if type is not TRAIT_ADD or TRAIT_REMOVE.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -104,9 +135,19 @@ package org.osmf.events
 			return _traitType;
 		}
 		
+		/**
+		 * The Metadata that was added or removed.  Null if type is not
+		 * METADATA_ADD or METADATA_REMOVE.
+		 **/
+		public function get metadata():Metadata
+		{
+			return _metadata;
+		}
+		
 		// Internals
 		//
 		
 		private var _traitType:String;
+		private var _metadata:Metadata;
 	}
 }

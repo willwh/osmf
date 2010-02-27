@@ -24,10 +24,10 @@ package org.osmf.elements
 	import flash.events.Event;
 	
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
-	import org.osmf.elements.proxyClasses.MetadataProxy;
+	import org.osmf.elements.proxyClasses.ProxyMetadata;
+	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 
@@ -59,7 +59,7 @@ package org.osmf.elements
 		public function LoadFromDocumentElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
 		{	
 			super(null);		
-			_metadata = new MetadataProxy();
+			_temporaryMetadata = new ProxyMetadata();
 			this.loader = loader;			
 			this.resource = resource;
 		}
@@ -67,14 +67,30 @@ package org.osmf.elements
 		private function onLoaderStateChange(event:Event):void
 		{			
 			removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
-			proxiedElement =  loadTrait.mediaElement;
-			_metadata.metadata = proxiedElement.metadata;
+			proxiedElement = loadTrait.mediaElement;
+			_temporaryMetadata = null;
+		}
+		
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			if (value != null && _temporaryMetadata != null)
+			{
+				// Copy the temporary metadata over.
+				for each (var key:String in _temporaryMetadata.keys)
+				{
+					value.addMetadata(key, _temporaryMetadata.getValue(key));
+				}
+				
+				_temporaryMetadata = null;
+			}
+			
+			super.proxiedElement = value;
 		}
 		
 		/**
 		 * @private
 		 * 
-		 * Overriding is neccessary because there is a null wrappedElement.
+		 * Overriding is necessary because there is a null wrappedElement.
 		 */ 
 		override public function set resource(value:MediaResourceBase):void 
 		{
@@ -107,11 +123,11 @@ package org.osmf.elements
 		 * will return null.
 		 */
 		override public function get metadata():Metadata
-		{			
-			return _metadata;
+		{
+			return proxiedElement ? proxiedElement.metadata : _temporaryMetadata;
 		}
 
-		private var _metadata:MetadataProxy;
+		private var _temporaryMetadata:ProxyMetadata;
 		private var _resource:MediaResourceBase;
 		private var loadTrait:LoadFromDocumentLoadTrait;
 		private var loader:LoaderBase;

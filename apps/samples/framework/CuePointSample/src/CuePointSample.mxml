@@ -28,13 +28,11 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import org.osmf.elements.CuePoint;
-			import org.osmf.elements.CuePointType;
-			import org.osmf.events.TemporalFacetEvent;
-			import org.osmf.metadata.Metadata;
-			import org.osmf.metadata.TemporalFacet;
-			import org.osmf.metadata.TemporalFacetKey;
-			import org.osmf.metadata.MetadataNamespaces;
+			import org.osmf.metadata.CuePoint;
+			import org.osmf.metadata.CuePointType;
+			import org.osmf.events.TimelineMetadataEvent;
+			import org.osmf.metadata.TimelineMetadata;
+			import org.osmf.metadata.TimelineMarker;
 			import org.osmf.traits.TimeTrait;
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.MediaTraitType;
@@ -58,7 +56,8 @@
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
 			private var ignoreDynamicCuePoints:Boolean;
-			private var _temporalFacet:TemporalFacet;
+			private var dynamicTimelineMetadata:TimelineMetadata;
+			private var embeddedTimelineMetadata:TimelineMetadata;
 			
 			[Bindable]
 			private var _cuePointsCollection:ArrayCollection;
@@ -95,25 +94,41 @@
 				videoElement = new VideoElement(new URLResource(REMOTE_STREAM_WITH_NAV));
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
-				// when ISeekable is added
+				// when the SeekTrait is added
 				videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
-				// Listen for metadata to be added so we can add any desired event listeners on any
-				// metadata facets we care about. For example, the temporalFacet.
-				videoElement.metadata.addEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
+				// Listen for cue points being added.
+				//
 				
-				// Listen for metadata to be removed so we remove an event listeners
-				videoElement.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onFacetRemove);
+				dynamicTimelineMetadata = new TimelineMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, videoElement);
+				videoElement.addMetadata(dynamicTimelineMetadata.namespaceURL, dynamicTimelineMetadata);
+				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
+				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
+
+				embeddedTimelineMetadata = new TimelineMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, videoElement);
+				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
+				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
+				videoElement.addMetadata(embeddedTimelineMetadata.namespaceURL, embeddedTimelineMetadata);
+				
+				// Show all the cue points found in the media.
+				_cuePointsCollection = new ArrayCollection();
+				for (var i:int = 0; i < dynamicTimelineMetadata.numMarkers; i++)
+				{
+					_cuePointsCollection.addItem(dynamicTimelineMetadata.getMarkerAt(i));
+				}
+				for (i = 0; i < embeddedTimelineMetadata.numMarkers; i++)
+				{
+					_cuePointsCollection.addItem(embeddedTimelineMetadata.getMarkerAt(i));
+				}
 																
 				mediaPlayerWrapper.element = videoElement;
 				enablePlayerControls(true);
 				
 			}
 			
-			private function onCuePoint(event:TemporalFacetEvent):void
+			private function onCuePoint(event:TimelineMetadataEvent):void
 			{
-				var cuePoint:CuePoint = event.key as CuePoint;
-				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
+				var cuePoint:CuePoint = event.marker as CuePoint;
 				
 				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.currentTime;
 				trace("cuePoint.time="+cuePoint.time+", currentTime time="+this.mediaPlayerWrapper.mediaPlayer.currentTime+", diff="+diff);
@@ -121,19 +136,19 @@
 				// If we are getting embedded cue points, let's ignore the dynamic cue points coming from
 				// the framework, these are being dispatched from the list of cue points found in the 
 				// metadata for the file.
-				if (ns == MetadataNamespaces.TEMPORAL_EMBEDDED_METADATA)
+				if (event.target == embeddedTimelineMetadata)
 				{
 					ignoreDynamicCuePoints = true;
 				}
-				else if (ignoreDynamicCuePoints && ns == MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA)
+				else if (ignoreDynamicCuePoints && event.target == dynamicTimelineMetadata)
 				{
 					return;
-				}				
+				}
 
-				showCuePointEvent(cuePoint, ns);
+				showCuePointEvent(cuePoint);
 			}
 			
-			private function showCuePointEvent(cuePoint:CuePoint, ns:String):void
+			private function showCuePointEvent(cuePoint:CuePoint):void
 			{
 				// Don't show navigation cue points in the cue point event display
 				if (cuePoint.type == CuePointType.NAVIGATION)
@@ -141,7 +156,7 @@
 					return;
 				}
 				
-				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePoint.type+"\", namespace: \""+ns+"\"";
+				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePoint.type;
 				taCuePointEvents.text += msg + "\n";
 				
 				callLater(autoScroll);
@@ -233,39 +248,7 @@
    						break;
    				}	
    			}
-   			
-   			private function onFacetAdd(event:MetadataEvent):void
-   			{
-				var temporalFacet:TemporalFacet = event.facet as TemporalFacet;
-				
-				if (temporalFacet)
-				{
-					trace(">>> Temporal facet added, namespace="+temporalFacet.namespaceURL);
-					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onCuePoint);
-					
-					// Show all the cue points found in the media (via an unsupported API).
-					if (_cuePointsCollection == null && temporalFacet.namespaceURL == MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA)
-					{
-						this._cuePointsCollection = new ArrayCollection();
-						for (var i:int = 0; i < temporalFacet.numValues; i++)
-						{
-							this._cuePointsCollection.addItem(temporalFacet.getValueAt(i));
-						}
-					}
-				}
-   			}
-   			
-   			private function onFacetRemove(event:MetadataEvent):void
-   			{
-   				var temporalFacet:TemporalFacet = event.facet as TemporalFacet;
-   				
-   				if (temporalFacet)
-   				{
-   					trace(">>> Temporal facet removed, namespace="+temporalFacet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onCuePoint);
-   				}
-   			}
-   									
+   								
 			private function onClickPlayBtn():void
 			{
 				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
@@ -282,18 +265,17 @@
 			
 			private function onClickAddCuePoint(event:Event):void
 			{
-				if (_temporalFacet == null)
-				{
-					_temporalFacet = new TemporalFacet(CUSTOM_NAMESPACE, videoElement);
-					videoElement.metadata.addFacet(_temporalFacet);				
-				}						
-			
 				var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, Number(tiCuePointTime.text), tiCuePointName.text, null);
-				_temporalFacet.addValue(cuePoint, cuePoint);
+				dynamicTimelineMetadata.addMarker(cuePoint);
 				
 				updateInternalCollection(cuePoint);
 				
 				tiCuePointTime.text = tiCuePointName.text = "";
+			}
+			
+			private function onCuePointAdd(event:TimelineMetadataEvent):void
+			{
+				updateInternalCollection(event.marker as CuePoint);
 			}
 			
 			private function updateInternalCollection(newCuePoint:CuePoint):void
@@ -301,7 +283,7 @@
 				// See if there is an existing value, if so replace it
 				for (var i:int = 0; i < _cuePointsCollection.length; i++)
 				{
-					if ((_cuePointsCollection[i] as TemporalFacetKey).time == newCuePoint.time)
+					if ((_cuePointsCollection[i] as TimelineMarker).time == newCuePoint.time)
 					{
 						_cuePointsCollection.removeItemAt(i);
 						break;

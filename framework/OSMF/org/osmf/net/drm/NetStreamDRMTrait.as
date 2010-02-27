@@ -21,16 +21,13 @@
 *****************************************************/
 package org.osmf.net.drm
 {
-	
-	
-	import flash.events.DRMStatusEvent;
-	
 	import org.osmf.events.DRMEvent;
 	import org.osmf.events.MediaError;
 	import org.osmf.traits.DRMTrait;
 
 	CONFIG::FLASH_10_1
 	{
+	import flash.events.DRMStatusEvent;
 	import flash.net.drm.DRMContentData;
 	import flash.system.SystemUpdater;
 	}

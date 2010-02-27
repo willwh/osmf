@@ -27,11 +27,11 @@ package org.osmf.elements.f4mClasses
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 
 	public class TestManifestParser extends TestCase
@@ -216,29 +216,20 @@ package org.osmf.elements.f4mClasses
 								<media url="http://example.com/myvideo/low.mp4" bitrate="408" width="640" height="480" drmAdditionalHeaderId="drmMetadata2052"/>
 							</manifest>
 			var manifest:Manifest = parser.parse(test);
-			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
-		
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 10);			
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 30);
-						
-			manifestResource.metadata.addFacet(facet);
+			var manifestResource:StreamingURLResource = new StreamingURLResource('http://example.com/manifest.f4m');
+			manifestResource.clipStartTime = 10;
+			manifestResource.clipEndTime = 30;
 			
 			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
+			assertTrue(resource is StreamingURLResource);
+			assertEquals(StreamingURLResource(resource).clipStartTime, 10);
+			assertEquals(StreamingURLResource(resource).clipEndTime, 30);
+			assertEquals("http://example.com/myvideo/low.mp4", StreamingURLResource(resource).url)
+			assertTrue(StreamingURLResource(resource).drmContentData != null);
 			
-			assertTrue(resource is URLResource)
-			assertEquals("http://example.com/myvideo/low.mp4", URLResource(resource).url)
-			
-			var facet2:Facet = URLResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
-			assertNotNull(facet2);
-			
-			assertTrue(facet2.getValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY)) != null);		
-			
-			assertEquals(facet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
-			
-			// Make sure we don't put on a HTTPStreaming bootstrap:
-			var bootStrapFacet:Facet = URLResource(resource).metadata.getFacet(MetadataNamespaces.HTTP_STREAMING_METADATA);
-			assertNull(bootStrapFacet);					
+			// Make sure we don't put on an HTTPStreaming bootstrap:
+			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+			assertNull(httpMetadata);					
 		}
 		
 		public function testResourceCreationSubClip():void
@@ -256,23 +247,19 @@ package org.osmf.elements.f4mClasses
 								<media url="http://example.com/myvideo/super_high.mp4" bitrate="1024" width="1920" height="1080" drmAdditionalHeaderId="drmMetadata2052"/>
 							</manifest>
 			var manifest:Manifest = parser.parse(test);
-			var manifestResource:URLResource = new URLResource('http://example.com/manifest.f4m');
-		
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, 50);			
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, 80);
-						
-			manifestResource.metadata.addFacet(facet);
+			var manifestResource:StreamingURLResource = new StreamingURLResource('http://example.com/manifest.f4m');
+			manifestResource.clipStartTime = 50;
+			manifestResource.clipEndTime = 80;
 			
 			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
 			
 			assertTrue(resource is DynamicStreamingResource)
+			assertEquals(DynamicStreamingResource(resource).clipStartTime, 50);
+			assertEquals(DynamicStreamingResource(resource).clipEndTime, 80);
 			
-			var facet2:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
-			assertNotNull(facet2);
-						
-			assertEquals(facet, resource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA));
-						
+			var drmMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+			assertNotNull(drmMetadata);
+			assertTrue(drmMetadata.keys.length == 2 * DynamicStreamingResource(resource).streamItems.length);
 		}
 		
 		
@@ -297,14 +284,14 @@ package org.osmf.elements.f4mClasses
 			assertEquals("medium", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[1]).streamName);
 			assertEquals("high", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[2]).streamName);
 			
-			var facet:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
-			assertNotNull(facet);
-			var keys:Vector.<FacetKey> = facet.keys;
+			var drmMetadata:Metadata = DynamicStreamingResource(resource).getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+			assertNotNull(drmMetadata);
+			var keys:Vector.<String> = drmMetadata.keys;
 			assertEquals(6, keys.length);
 			
-			assertTrue(facet.getValue(keys[0]) != null);
-			assertTrue(facet.getValue(keys[1]) != null);
-			assertTrue(facet.getValue(keys[2]) != null);
+			assertTrue(drmMetadata.getValue(keys[0]) != null);
+			assertTrue(drmMetadata.getValue(keys[1]) != null);
+			assertTrue(drmMetadata.getValue(keys[2]) != null);
 		}
 		
 		public function testDynamicResourceIDMatchingCreation():void
@@ -338,14 +325,14 @@ package org.osmf.elements.f4mClasses
 			
 			assertTrue(resource is DynamicStreamingResource);
 
-			var facet:Facet = DynamicStreamingResource(resource).metadata.getFacet(MetadataNamespaces.DRM_METADATA);
-			assertNotNull(facet);
-			var keys:Vector.<FacetKey> = facet.keys;
+			var drmMetadata:Metadata = DynamicStreamingResource(resource).getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
+			assertNotNull(drmMetadata);
+			var keys:Vector.<String> = drmMetadata.keys;
 			assertEquals(6, keys.length);
 
-			assertTrue(facet.getValue(keys[0]) != null);
-			assertTrue(facet.getValue(keys[1]) != null);
-			assertTrue(facet.getValue(keys[2]) != null);
+			assertTrue(drmMetadata.getValue(keys[0]) != null);
+			assertTrue(drmMetadata.getValue(keys[1]) != null);
+			assertTrue(drmMetadata.getValue(keys[2]) != null);
 		}
 		
 		public function testBaseURL():void

@@ -34,9 +34,8 @@ package org.osmf.captioning.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
-	import org.osmf.metadata.TemporalFacet;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -70,6 +69,7 @@ package org.osmf.captioning.media
 		public function CaptioningProxyElement(proxiedElement:MediaElement=null, continueLoadOnFailure:Boolean=true)
 		{
 			super(proxiedElement);
+			
 			_continueLoadOnFailure = continueLoadOnFailure;
 		}
 		
@@ -110,8 +110,8 @@ package org.osmf.captioning.media
 			}
 			else
 			{
-				var facet:Facet = tempResource.metadata.getFacet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
-				if (facet == null)
+				var metadata:Metadata = tempResource.getMetadataValue(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE) as Metadata;
+				if (metadata == null)
 				{
 					if (!_continueLoadOnFailure)
 					{
@@ -121,7 +121,7 @@ package org.osmf.captioning.media
 				}
 				else
 				{		
-					var timedTextURL:String = facet.getValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI));
+					var timedTextURL:String = metadata.getValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI);
 					if (timedTextURL != null)
 					{
 						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(timedTextURL));
@@ -146,17 +146,20 @@ package org.osmf.captioning.media
 				var document:CaptioningDocument = loadTrait.document;
 				var mediaElement:MediaElement = super.proxiedElement;
 				
-				// Create a new TemporalFacet, add it to the metadata for the media element
-				var temporalFacetDynamic:TemporalFacet = 
-						new TemporalFacet(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, super.proxiedElement);
+				// Create a TimelineMetadata object to associate the captions with
+				// the media element.
+				var captionMetadata:TimelineMetadata = proxiedElement.getMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
+				if (captionMetadata == null)
+				{
+					captionMetadata = new TimelineMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, proxiedElement);
+					proxiedElement.addMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, captionMetadata);
+				}
 				
 				for (var i:int = 0; i < document.numCaptions; i++)
 				{
 					var caption:Caption = document.getCaptionAt(i);
-					temporalFacetDynamic.addValue(caption, caption);
+					captionMetadata.addMarker(caption);
 				}
-				
-				mediaElement.metadata.addFacet(temporalFacetDynamic);			
 
 				cleanUp();
 			}

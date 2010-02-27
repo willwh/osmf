@@ -43,8 +43,7 @@ package org.osmf.mast.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -111,13 +110,13 @@ package org.osmf.mast.media
 				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
 			}
 			
-			var facet:Facet = tempResource.metadata.getFacet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-			if (facet == null)
+			var metadata:Metadata = tempResource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
+			if (metadata == null)
 			{
 				throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);
 			}			
 			
-			var mastURL:String = facet.getValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI));
+			var mastURL:String = metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI);
 			
 			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(mastURL));
 			

@@ -26,7 +26,7 @@ package org.osmf.elements
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
@@ -39,8 +39,8 @@ package org.osmf.elements
 			var resource:URLResource = new URLResource("http://example.com/blah");
 			var loader:LoaderBase = new LoaderBase();
 			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
-			var testFacet:Facet = new Facet("http://adobe.com/");
-			elem.metadata.addFacet(testFacet);
+			var testMetadata:Metadata = new Metadata(NS_URL);
+			elem.addMetadata(testMetadata.namespaceURL, testMetadata);
 						
 			var wrapped:MediaElement = new MediaElement();
 						
@@ -52,7 +52,7 @@ package org.osmf.elements
 									
 			assertTrue(elem.hasTrait(MediaTraitType.LOAD));
 			
-			assertNotNull(elem.metadata);
+			assertNotNull(elem.getMetadata(NS_URL));
 			
 			var load:LoadFromDocumentLoadTrait = elem.getTrait(MediaTraitType.LOAD) as LoadFromDocumentLoadTrait;
 			
@@ -62,10 +62,12 @@ package org.osmf.elements
 			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, load, LoadState.LOADING, LoadState.READY));
 			
 			// Ensure metadata proxy is functioning properly
-			assertEquals(elem.metadata.getFacet("http://adobe.com/"), testFacet);		
+			assertEquals(elem.getMetadata(NS_URL), testMetadata);		
 			
-			assertEquals(elem.metadata.namespaceURLs.length, wrapped.metadata.namespaceURLs.length);
+			assertEquals(elem.metadata.keys.length, wrapped.metadata.keys.length);
 						
 		}
+		
+		private static const NS_URL:String = "http://www.adobe.com";
 	}
 }

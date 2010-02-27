@@ -43,16 +43,6 @@ package org.osmf.media
 			assertTrue(resource.url == null);			
 		}
 		
-		public function testMetadata():void
-		{
-			// Simple URL
-			var resource:URLResource = createURLResource("http://www.example.com");
-			
-			//T est metadata list is valid, and empty.
-			assertNotNull(resource.metadata);
-			
-		}
-		
 		private function createURLResource(url:String):URLResource
 		{
 			return createInterfaceObject(url) as URLResource;

@@ -31,8 +31,7 @@ package org.osmf.test.captioning.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.test.captioning.CaptioningTestConstants;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -182,23 +181,25 @@ package org.osmf.test.captioning.media
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 	
-			var facet:Facet = new Facet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
-			facet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), captioningDoc);
-			resource.metadata.addFacet(facet);
+			var metadata:Metadata = new Metadata(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+			metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, captioningDoc);
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			
 			return resource;			
 		}
 		
 		private function createResourceWithBadFacet():URLResource
 		{
-			var resource:URLResource = new URLResource(REMOTE_STREAM);				
-			var facet:Facet = new Facet("http://www.osmf.bogus/captioning/1.0");
-			facet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), null);
-			resource.metadata.addFacet(facet);
+			var resource:URLResource = new URLResource(REMOTE_STREAM);
+			
+			var metadata:Metadata = new Metadata("http://www.osmf.bogus/captioning/1.0");
+			metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, null);
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
+
 			return resource;			
 		}
 
 		private static const REMOTE_STREAM:String = "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private static const TIMEOUT:int = 8000;
-		
 	}
 }

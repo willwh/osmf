@@ -14,8 +14,7 @@ package org.osmf.test.mast.managers
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.*;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.plugin.PluginManager;
@@ -88,9 +87,9 @@ package org.osmf.test.mast.managers
 			var resource:URLResource = new URLResource(url);
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-			facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_TEST);
-			resource.metadata.addFacet(facet);
+			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_URL_TEST);
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 			

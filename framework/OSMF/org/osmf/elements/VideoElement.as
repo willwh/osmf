@@ -32,15 +32,14 @@ package org.osmf.elements
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.TemporalFacetEvent;
+	import org.osmf.events.TimelineMetadataEvent;
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.CuePoint;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.TemporalFacet;
+	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
 	import org.osmf.net.NetClient;
@@ -56,6 +55,7 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.DRMState;
@@ -103,11 +103,6 @@ package org.osmf.elements
 	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
-	* The VideoElement can handle subclip metadata to create subclips of
-	* a piece of content. Subclip parameters should be specified 
-	* on the URLResource for the Video. More information at 
-	* MetadataNamespaces, SUBCLIP_METADATA.
-	* 
 	* 
 	* @see org.osmf.net.NetLoader
 	* @see org.osmf.media.URLResource
@@ -298,11 +293,12 @@ package org.osmf.elements
     			// Listen for all errors
     			stream.addEventListener(DRMErrorEvent.DRM_ERROR, onDRMErrorEvent);
     						    			 			
-    			// DRMContent data Sidecar
-    			var metadataFacet:Facet = resource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) as Facet;
-    			if (metadataFacet != null)
-    			{    				
-    				var metadata:ByteArray = metadataFacet.getValue(MetadataNamespaces.DRM_CONTENT_METADATA_KEY);
+    			// Check for DRMContentData
+    			// Check for DRMContentData
+    			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+    			if (streamingResource != null)
+    			{
+    				var metadata:ByteArray = streamingResource.drmContentData;
     				if (metadata != null)
     				{
     					setupDRMTrait(metadata);
@@ -488,7 +484,12 @@ package org.osmf.elements
 			
 			if (cuePoints != null && cuePoints.length > 0)
 			{
-				var temporalFacetDynamic:TemporalFacet = new TemporalFacet(MetadataNamespaces.TEMPORAL_DYNAMIC_METADATA, this);
+				var dynamicCuePoints:TimelineMetadata = getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+				if (dynamicCuePoints == null)
+				{
+					dynamicCuePoints = new TimelineMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, this);
+					addMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, dynamicCuePoints);
+				}
 				
 				for (var i:int = 0; i < cuePoints.length; i++)
 				{
@@ -498,19 +499,17 @@ package org.osmf.elements
 						, cuePoints[i].name
 						, cuePoints[i].parameters
 						);
-					temporalFacetDynamic.addValue(cuePoint, cuePoint);
+					dynamicCuePoints.addMarker(cuePoint);
 				}
-				
-				metadata.addFacet(temporalFacetDynamic);			
 			}			    		
      	}
      	
      	private function onCuePoint(info:Object):void
      	{
-     		if (_temporalFacetEmbedded == null)
+    		if (embeddedCuePoints == null)
      		{
-				_temporalFacetEmbedded = new TemporalFacet(MetadataNamespaces.TEMPORAL_EMBEDDED_METADATA, this);
-				metadata.addFacet(_temporalFacetEmbedded);
+     			embeddedCuePoints = new TimelineMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, this);
+     			addMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, embeddedCuePoints);
      		}
 
 			var cuePoint:CuePoint = new CuePoint
@@ -519,7 +518,8 @@ package org.osmf.elements
 				, info.name
 				, info.parameters
 				);
-			_temporalFacetEmbedded.dispatchEvent(new TemporalFacetEvent(TemporalFacetEvent.TIME_REACHED, cuePoint));     		
+				
+			embeddedCuePoints.addMarker(cuePoint);
      	}     	
      	     	
      	// Fired when the DRM subsystem is updated.  NetStream needs to be recreated.
@@ -585,7 +585,7 @@ package org.osmf.elements
      	private var stream:NetStream;
       	private var video:Video;
       	
-		private var _temporalFacetEmbedded:TemporalFacet;	// facet for cue points embedded in the stream
+		private var embeddedCuePoints:TimelineMetadata;
 		private var _smoothing:Boolean;
 		private var _deblocking:int;
 		

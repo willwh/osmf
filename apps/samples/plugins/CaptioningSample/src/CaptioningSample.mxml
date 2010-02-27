@@ -27,8 +27,6 @@
 	<mx:Style source="CaptioningSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.metadata.FacetKey;
-			import org.osmf.events.TemporalFacetEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.plugin.PluginInfoResource;
 			import mx.controls.Alert;
@@ -36,20 +34,18 @@
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;
-			import org.osmf.metadata.FacetKey;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaElement;
-			import org.osmf.metadata.Facet;
 			import org.osmf.media.URLResource;
 			import org.osmf.events.PluginManagerEvent;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
-			import org.osmf.metadata.TemporalFacet;
-			import org.osmf.events.TemporalFacetEvent;
+			import org.osmf.metadata.*;
+			import org.osmf.events.*;
 			import org.osmf.events.SeekEvent;
 			import org.osmf.events.MetadataEvent;
 			import org.osmf.events.TimeEvent;
@@ -72,7 +68,7 @@
 			private var pluginManager:PluginManager;
 			private var mediaFactory:MediaFactory;
 			private var captioningEnabled:Boolean;
-			private var temporalFacet:TemporalFacet; 	
+			private var captionMetadata:TimelineMetadata; 	
 			private var savedCaptionText:String;		
 			
 			[Bindable]
@@ -113,11 +109,10 @@
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
-				var facet:Facet = new Facet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+				var metadata:Metadata = new Metadata(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 												
-				facet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), 
-									CAPTION_URL);
-				resource.metadata.addFacet(facet);
+				metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, CAPTION_URL);
+				resource.addMetadataValue(metadata.namespaceURL, metadata);
 
 				var netLoader:NetLoader = new NetLoader();
 
@@ -125,15 +120,18 @@
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
-				// when ISeekable is added
+				// when the SeekTrait is added
 				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
-				// Listen for metadata to be added so we can add any desired event listeners on any
-				// metadata facets we care about. For example, the temporalFacet.
-				mediaElement.metadata.addEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
-				
-				// Listen for metadata to be removed so we remove an event listeners
-				mediaElement.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onFacetRemove);
+				// Listen for captions being added.
+				captionMetadata = mediaElement.getMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
+				if (captionMetadata == null)
+				{
+					captionMetadata = new TimelineMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, mediaElement);
+					mediaElement.addMetadata(captionMetadata.namespaceURL, captionMetadata);
+				}
+				captionMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption);
+				captionMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onHideCaption);
 
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 								
@@ -262,49 +260,13 @@
    				}	
    			}
    			
-   			private function onFacetAdd(event:MetadataEvent):void
-   			{
-				var facet:TemporalFacet = event.facet as TemporalFacet;
-				
-				if (facet)
-				{
-					trace(">>> Temporal facet added, namespace="+facet.namespaceURL);
-					temporalFacet = facet;
-					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
-					temporalFacet.addEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
-					
-					// If you wanted a list of all the captions added, 
-					// this code shows how that is possible
-					//for (var i:int=0; i < facet.numValues; i++)
-					//{
-					//	var caption:Caption = temporalFacet.getValueAt(i) as Caption;
-					//	trace("caption["+i+"].text="+caption.text);
-					//}
-				}
-   			}
-   			
-   			private function onFacetRemove(event:MetadataEvent):void
-   			{
-   				var facet:TemporalFacet = event.facet as TemporalFacet;
-   				
-   				if (facet && temporalFacet)
-   				{
-   					trace(">>> Temporal facet removed, namespace="+facet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
-   					temporalFacet = null;
-   				}
-   			}
-   									
-			private function onShowCaption(event:TemporalFacetEvent):void
+ 			private function onShowCaption(event:TimelineMetadataEvent):void
 			{
-				
-				var caption:Caption = event.key as Caption;
-				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
+				var caption:Caption = event.marker as Caption;
 
 				// Make sure this is a caption object, and just for good measure, we'll
 				// also check the namespace				
-				if (captioningEnabled && (caption != null) && (ns == CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE))
+				if (captioningEnabled && caption != null)
 				{
 					this.captionLabel.htmlText = caption.text;
 					this.captionLabel.validateNow();
@@ -363,7 +325,7 @@
 				}				
 			}
 			
-			private function onHideCaption(event:TemporalFacetEvent):void
+			private function onHideCaption(event:TimelineMetadataEvent):void
 			{
 				// Save the current caption text so we can easily re-display 
 				// if user is toggling the captioning button

@@ -32,7 +32,7 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -77,7 +77,7 @@ package org.osmf.elements.compositeClasses
 				( owner.metadata
 				, MetadataNamespaces.LAYOUT_RENDERER_TYPE
 				, null
-				, layoutRendererFacetChangeCallback
+				, layoutRendererMetadataChangeCallback
 				);
 			watcher.watch();
 		}
@@ -147,7 +147,7 @@ package org.osmf.elements.compositeClasses
 			dispatchEvent(event.clone());
 		}
 
-		private function layoutRendererFacetChangeCallback(facet:Facet):void
+		private function layoutRendererMetadataChangeCallback(metadata:Metadata):void
 		{
 			if (_layoutRenderer)
 			{
@@ -155,15 +155,15 @@ package org.osmf.elements.compositeClasses
 				_layoutRenderer = null;
 			}
 			
-			if (facet != null)
+			if (metadata != null)
 			{
 				try
 				{
-					// TODO: Fix this.  Presumably the layout renderer facet should have
+					// TODO: Fix this.  Presumably the layout renderer metadata should have
 					// a default key to which the layout renderer class is assigned.  But
 					// I'm not sure if this code is even being used.
 					_layoutRenderer
-						= new (facet.getValue(null) as Class)()
+						= new (metadata.getValue(null) as Class)()
 						as LayoutRendererBase;
 				}
 				catch (e:*)

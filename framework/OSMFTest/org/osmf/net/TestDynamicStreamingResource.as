@@ -23,9 +23,10 @@ package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.utils.Dictionary;
+	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.metadata.Metadata;
 	import org.osmf.utils.OSMFStrings;
 
 	public class TestDynamicStreamingResource extends TestCase
@@ -109,11 +110,6 @@ package org.osmf.net
 			}
 			
 						
-			// Test Metadata property
-			var metadata:Metadata = dsr.metadata;
-			assertNotNull(metadata);
-			assertNotNull(dsr.metadata);
-			
 			// Test indexFromName
 			assertEquals(5, dsr.indexFromName("stream_2"));
 			var index:int = dsr.indexFromName("bogus name");

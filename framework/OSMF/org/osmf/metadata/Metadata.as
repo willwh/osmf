@@ -21,156 +21,250 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.utils.OSMFStrings;
-	
-	/**
-	 * Dispatched when a facet has been added to this Metadata object.
+		 
+     /**
+	 * Signals that a new value has been added to the Metadata object.
 	 * 
-	 * @eventType org.osmf.events.MetadataEvent.FACET_ADD
+	 * @eventType org.osmf.events.MetadataEvent.VALUE_ADD
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="facetAdd",type="org.osmf.events.MetadataEvent")]
+	 */
+     [Event(name='valueAdd', type='org.osmf.events.MetadataEvent')]
 	
-	/**
-	 * Dispatched when a facet has been removed from this Metadata object.
+     /**
+	 * Signals that a value has been removed from the Metadata object.
 	 * 
-	 * @eventType org.osmf.events.MetadataEvent.FACET_REMOVE
+	 * @eventType org.osmf.events.MetadataEvent.VALUE_REMOVE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="facetRemove",type="org.osmf.events.MetadataEvent")]
+	 */
+     [Event(name='valueRemove', type='org.osmf.events.MetadataEvent')]
+	
+     /**
+	 * Signals that a value within the Metadata object has changed.
+	 * 
+	 * @eventType org.osmf.events.MetadataEvent.VALUE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+     [Event(name='valueChange', type='org.osmf.events.MetadataEvent')]
 	
 	/**
-	 *  The Metadata collection is the default implementation for metadata-carrying media.
+	 * Repository for metadata.  Metadata consists of key-value pairs,
+	 * where keys are Strings and value are arbitrary objects.  This class
+	 * provides a strongly-typed API for working with these key-value
+	 * pairs, as well as events for detecting changes to the metadata.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
-	 */ 
+	 */  
 	public class Metadata extends EventDispatcher
-	{		 
-			
-		/** 
-		 * @returns the facet of the given type, for data of the given namespace,
-		 * null if none exists.  The result can be cast to the class represented
-		 * by FacetType (similar to how we cast traits after calling getTrait).
-		 * Null if a facet doesn't exist at the specified index
+	{		
+		/**
+		 * Constructor.
+		 * 
+		 * @param namespaceURL The namespace for this Metadata object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function getFacet(namespaceURL:String):Facet
-		{				
-			return _list[namespaceURL] as Facet;			
-		}
-		
-		/** 
-		 * Returns adds a facet of the given type for data of the given namespace.
-		 * Will overwrite an existing Facet (acts as update), with the same type and same namespace.
-		 * 
-		 * @param value the facet to add
-		 * 
-		 * @throws IllegalOperation if the data or namespace is null.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function addFacet(data:Facet):void
-		{
-			if (data == null)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-				return;
-			}
-			if (data.namespaceURL == null)
-			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
-				return;
-			}	
-			var oldFacet:Facet = _list[data.namespaceURL];			
-			_list[data.namespaceURL] = data;
-			if (oldFacet)
-			{
-				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, oldFacet));		
-			}	
-			dispatchEvent(new MetadataEvent(MetadataEvent.FACET_ADD, false, false, data));							
+		public function Metadata(namespaceURL:String=null)		
+		{						
+			_namespaceURL = namespaceURL;
 		}
 		
 		/**
-		 * Removes the given facet from the specified namespace.  
-		 * 
-		 * @param The facet to remove.
-		 * 
-		 * @returns The removed facet.  Null if value is not in this IMetadata.
-		 * 
-		 * @throws IllegalOperation if the data or namespace is null.
+		 * The namespace for this Metadata object.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function removeFacet(data:Facet):Facet
-		{		
+		public function get namespaceURL():String
+		{
+			return _namespaceURL;
+		}
+		
+		/**
+		 * Returns the value associate with the specified key.
+		 * 
+		 * Returns 'undefined' if the Metadata object fails to resolve the key.
+		 * 
+		 * @throws ArgumentError If key is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function getValue(key:String):*
+		{
+			if (key == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			
+			return data != null ? data[key] : null
+		}
+		
+		/**
+		 * Stores the specified value in this Metadata object, using the specified
+		 * key.  The key can subsequently be used to retrieve the value.  If the
+		 * key is equal to the key of another object already in the Metadata object
+		 * this will overwrite the association with the new value.
+		 * 
+		 * @param key The key to associate the value with.
+		 * @param value The value to add to the Metadata object.
+		 * 
+		 * @throws ArgumentError If key is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function addValue(key:String, value:Object):void
+		{
+			if (key == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+			
 			if (data == null)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-				return;
+				data = new Dictionary();
 			}
-			if (data.namespaceURL == null)
+			
+			var oldValue:* = data[key];			
+			data[key] = value;
+			
+			if (oldValue != value)
+			{				
+				var event:Event
+					= oldValue === undefined
+						? new MetadataEvent
+							( MetadataEvent.VALUE_ADD
+							, false
+							, false
+							, key
+							, value
+							)
+						: new MetadataEvent
+							( MetadataEvent.VALUE_CHANGE
+							, false
+							, false
+							, key
+							, value
+							, oldValue
+							)
+						;
+						
+				dispatchEvent(event);
+			}
+		}
+		
+		/**
+		 * Removes the value associated with the specified key from this
+		 * Metadata object. Returns undefined if there is no value
+		 * associated with the key in this Metadata object.
+		 * 
+		 * @param key The key associated with the value to be removed.
+		 * @returns The removed item, null if no such item exists.
+		 * 
+		 * @throws ArgumentError If key is null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function removeValue(key:String):*
+		{
+			if (key == null)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_NOT_BE_EMPTY));
-				return;
-			}	
-			if (_list[data.namespaceURL])
-			{			
-				delete _list[data.namespaceURL];	
-				dispatchEvent(new MetadataEvent(MetadataEvent.FACET_REMOVE, false, false, data));	
-				return data;					
-			}				
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			}
+
+			var value:* = data[key];
+			if (value !== undefined)
+			{
+				delete data[key];
+								
+				dispatchEvent
+					( new MetadataEvent
+						( MetadataEvent.VALUE_REMOVE
+						, false
+						, false
+						, key
+						, value
+						)
+					);
+			}
+			return value;
+		}
+		
+		/**
+		 * All of the keys stored in this Metadata object.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public function get keys():Vector.<String>
+		{
+			var allKeys:Vector.<String> = new Vector.<String>;
+			if (data != null)
+			{
+				for (var key:Object in data)
+				{
+					allKeys.push(key);
+				}
+			}
+			return allKeys;
+		}
+
+		/**
+		 * @private
+		 * 
+		 * Defines the metadata synthesizer that will be used by default to
+		 * synthesize a new value based on a group of Metadata objects that share
+		 * the namespace that this metadata is registered under.
+		 * 
+		 * Note that metadata synthesizers that get set on the metadata's parent
+		 * take precedence over the one that is defined here.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		public function get synthesizer():MetadataSynthesizer
+		{
 			return null;
-		}	
-			
-		/**
-		 * Gets the namespaces that valid facets are stored in.
-		 * 
-		 * @returns The a list of all valid namespaces
-		 *
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get namespaceURLs():Vector.<String>
-		{
-			var spaces:Vector.<String> = new Vector.<String>;
-			for (var ns:String in _list)
-			{
-				spaces.push(ns);
-			}			
-			return spaces;
 		}
-			
-		private var _list:Dictionary = new Dictionary();	
+		
+		private var _namespaceURL:String;
+		private var data:Dictionary;
 	}
 }

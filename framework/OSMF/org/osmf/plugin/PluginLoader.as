@@ -28,7 +28,6 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -110,16 +109,14 @@ package org.osmf.plugin
 					try
 					{
 						// Make sure the plugin metadata has the expected default params
-						// (such as MediaFactory). 
-						var pluginFacet:Facet = loadTrait.resource.metadata.getFacet(MetadataNamespaces.PLUGIN_METADATA) as Facet;
-						if (pluginFacet == null)
+						// (such as MediaFactory).
+						var passedMediaFactory:MediaFactory = loadTrait.resource.getMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
+						if (passedMediaFactory == null)
 						{
-							pluginFacet = new Facet(MetadataNamespaces.PLUGIN_METADATA);
-							loadTrait.resource.metadata.addFacet(pluginFacet);
+							loadTrait.resource.addMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE, mediaFactory);
 						}
-						pluginFacet.addValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_KEY, mediaFactory);
 						
-						pluginInfo.initializePlugin(loadTrait.resource.metadata);
+						pluginInfo.initializePlugin(loadTrait.resource);
 					
 						for (var i:int = 0; i < pluginInfo.numMediaFactoryItems; i++)
 						{

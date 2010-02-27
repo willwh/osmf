@@ -25,9 +25,9 @@ package org.osmf.elements
 	
 	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.MediaType;
+	import org.osmf.media.MediaTypeUtil;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MediaType;
-	import org.osmf.metadata.MediaTypeUtil;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.URL;

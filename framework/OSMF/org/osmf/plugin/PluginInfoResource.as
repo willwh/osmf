@@ -22,7 +22,6 @@
 package org.osmf.plugin
 {
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * PluginInfoResource implements MediaResourceBase for static 

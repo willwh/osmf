@@ -22,10 +22,8 @@
 package org.osmf.examples.posterframe
 {
 	import org.osmf.elements.VideoElement;
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 
@@ -35,14 +33,11 @@ package org.osmf.examples.posterframe
 	 **/
 	public class RTMPPosterFrameElement extends VideoElement
 	{
-		public function RTMPPosterFrameElement(resource:MediaResourceBase, posterFrameTime:Number, loader:NetLoader=null)
+		public function RTMPPosterFrameElement(resource:StreamingURLResource, posterFrameTime:Number, loader:NetLoader=null)
 		{
-			// Add metadata to our resource so that it's treated as a zero-length
-			// subclip.
-			var facet:Facet = new Facet(MetadataNamespaces.SUBCLIP_METADATA);
-			facet.addValue(MetadataNamespaces.SUBCLIP_START_TIME_KEY, posterFrameTime);
-			facet.addValue(MetadataNamespaces.SUBCLIP_END_TIME_KEY, posterFrameTime);
-			resource.metadata.addFacet(facet);
+			// Treat this as a zero-length subclip.
+			resource.clipStartTime = posterFrameTime;
+			resource.clipEndTime = posterFrameTime;
 	
 			super(resource, loader);
 		}

@@ -23,14 +23,13 @@ package org.osmf.elements.compositeClasses
 {
 	import flash.events.Event;
 	
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetGroup;
-	import org.osmf.metadata.FacetSynthesizer;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataGroup;
+	import org.osmf.metadata.MetadataSynthesizer;
 
 	/**
 	 * Defines the event class that CompositeMetadata uses on signaling
-	 * various event.
+	 * various events.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -41,24 +40,15 @@ package org.osmf.elements.compositeClasses
 	{
 		public static const CHILD_ADD:String = "childAdd";
 		public static const CHILD_REMOVE:String = "childRemove";
-		public static const CHILD_FACET_ADD:String = "childFacetAdd";
-		public static const CHILD_FACET_REMOVE:String = "childFacetRemove";
-		public static const FACET_GROUP_ADD:String = "facetGroupAdd";
-		public static const FACET_GROUP_REMOVE:String = "facetGroupRemove";
-		public static const FACET_GROUP_CHANGE:String = "facetGroupChange";
+		public static const CHILD_METADATA_ADD:String = "childMetadataAdd";
+		public static const CHILD_METADATA_REMOVE:String = "childMetadataRemove";
+		public static const METADATA_GROUP_ADD:String = "metadataGroupAdd";
+		public static const METADATA_GROUP_REMOVE:String = "metadataGroupRemove";
+		public static const METADATA_GROUP_CHANGE:String = "metadataGroupChange";
 		
 		/**
-		 * Constructor
-		 *  
-		 * @param type
-		 * @param bubbles
-		 * @param cancelable
-		 * @param child
-		 * @param facet
-		 * @param facetGroup
-		 * @param facetSynthesizer
+		 * Constructor.
 		 * 
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -69,22 +59,21 @@ package org.osmf.elements.compositeClasses
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
 							, child:Metadata = null
-							, facet:Facet = null
-							, facetGroup:FacetGroup = null
-							, suggestedFacetSynthesizer:FacetSynthesizer = null
+							, childMetadata:Metadata = null
+							, metadataGroup:MetadataGroup = null
+							, suggestedMetadataSynthesizer:MetadataSynthesizer = null
 							)
 		{
 			super(type, bubbles, cancelable);
 			
 			_child = child;
-			_facet = facet;
-			_facetGroup = facetGroup;
-			
-			suggestFacetSynthesizer(suggestedFacetSynthesizer);
+			_childMetadata = childMetadata;
+			_metadataGroup = metadataGroup;
+			_suggestedMetadataSynthesizer = suggestedMetadataSynthesizer;
 		}
 		
 		/**
-		 * Defines the metadata child that is associated with the event.
+		 * Defines the child that is associated with the event.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -97,53 +86,53 @@ package org.osmf.elements.compositeClasses
 		}
 		
 		/**
-		 * Defines the facet that is associated with the event.
+		 * Defines the metadata of the child that is associated with the event.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get facet():Facet
+		public function get childMetadata():Metadata
 		{
-			return _facet;
+			return _childMetadata;
 		}
 		
 		/**
-		 * Defines the facetGroup that is associated with the event.
+		 * Defines the metadataGroup that is associated with the event.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get facetGroup():FacetGroup
+		public function get metadataGroup():MetadataGroup
 		{
-			return _facetGroup;
+			return _metadataGroup;
 		}
 		
 		/**
 		 * @private
 		 * 
-		 * Method for hanlder functions to suggest a facet synthesizer to
-		 * the dispatching composite metadata instance.
+		 * Method for handler functions to suggest a metadata synthesizer to
+		 * the dispatching composite metadata collection instance.
 		 * 
-		 * @param value The suggested facet synthesizer.
+		 * @param value The suggested metadata synthesizer.
 		 */		
-		public function suggestFacetSynthesizer(value:FacetSynthesizer):void
+		public function set suggestedMetadataSynthesizer(value:MetadataSynthesizer):void
 		{
-			_suggestedFacetSynthesizer = value;
+			_suggestedMetadataSynthesizer = value;
 		}
 		
 		/**
 		 * @private
 		 * 
-		 * Defines the facetSynthesizer that is to be used for synthesis. This
+		 * Defines the metadataSynthesizer that is to be used for synthesis. This
 		 * value can be set by listeners that wish to suggest a synthesizer. 
 		 */	
-		public function get suggestedFacetSynthesizer():FacetSynthesizer
+		public function get suggestedMetadataSynthesizer():MetadataSynthesizer
 		{
-			return _suggestedFacetSynthesizer;
+			return _suggestedMetadataSynthesizer;
 		}
 		
 		// Overrides
@@ -153,7 +142,7 @@ package org.osmf.elements.compositeClasses
 		{
 			return new CompositeMetadataEvent
 				( type , bubbles, cancelable
-				, _child, _facet, _facetGroup, _suggestedFacetSynthesizer
+				, _child, _childMetadata, _metadataGroup, _suggestedMetadataSynthesizer
 				);
 		}
 		
@@ -161,8 +150,8 @@ package org.osmf.elements.compositeClasses
 		//
 		
 		private var _child:Metadata;
-		private var _facet:Facet;
-		private var _facetGroup:FacetGroup;
-		private var _suggestedFacetSynthesizer:FacetSynthesizer;
+		private var _childMetadata:Metadata;
+		private var _metadataGroup:MetadataGroup;
+		private var _suggestedMetadataSynthesizer:MetadataSynthesizer;
 	}
 }

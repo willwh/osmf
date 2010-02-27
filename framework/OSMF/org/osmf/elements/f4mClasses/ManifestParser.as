@@ -26,16 +26,14 @@ package org.osmf.elements.f4mClasses
 	import flash.utils.ByteArray;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MediaType;
-	import org.osmf.metadata.MediaTypeFacet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.metadata.FacetKey;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
 	
@@ -323,9 +321,9 @@ package org.osmf.elements.f4mClasses
 		 */ 		
 		public function createResource(value:Manifest, manifestResource:URLResource):MediaResourceBase
 		{			
-			var drmFacet:Facet = null;
-			var metadataFacet:Facet = null;
-			var resource:MediaResourceBase;
+			var drmMetadata:Metadata = null;
+			var httpMetadata:Metadata = null;
+			var resource:StreamingURLResource;
 			var media:Media;
 			var serverBaseURLs:Vector.<String>;
 			var url:String;
@@ -359,15 +357,15 @@ package org.osmf.elements.f4mClasses
 				
 				if (isAbsoluteURL(url))
 				{
-					resource = new URLResource(url);
+					resource = new StreamingURLResource(url);
 				}				
 				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new URLResource(value.baseURL + "/" + url);
+					resource = new StreamingURLResource(value.baseURL + "/" + url);
 				}
 				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
 				{
-					resource = new URLResource(manifestFolder + "/" + url);
+					resource = new StreamingURLResource(manifestFolder + "/" + url);
 				}
 				
 				if (media.bootstrapInfo	!= null)
@@ -382,49 +380,50 @@ package org.osmf.elements.f4mClasses
 						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
-					metadataFacet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
-					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY), media.bootstrapInfo);
+					httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, media.bootstrapInfo);
 					if (serverBaseURLs.length > 0)
 					{
-						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseURLs);
 					}
 				}
 				
 				if (media.metadata != null)
 				{
-					if (metadataFacet == null)
+					if (httpMetadata == null)
 					{
-						metadataFacet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+						httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					}
-					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY), media.metadata);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, media.metadata);					
 				}
 				
 				if (media.xmp != null)
 				{
-					if (metadataFacet == null)
+					if (httpMetadata == null)
 					{
-						metadataFacet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
+						httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
 					}
-					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY), media.xmp);					
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, media.xmp);					
 				}
 
 				if (media.drmAdditionalHeader != null)
 				{					
-					drmFacet = new Facet(MetadataNamespaces.DRM_METADATA);
+					drmMetadata = new Metadata(MetadataNamespaces.DRM_METADATA);
 					if (Media(value.media[0]).drmAdditionalHeader != null && Media(value.media[0]).drmAdditionalHeader.data != null)
 					{
-						drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY), Media(value.media[0]).drmAdditionalHeader.data);
-						drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_CONTENT_METADATA_KEY), extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data));
+						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY, Media(value.media[0]).drmAdditionalHeader.data);
+						
+						resource.drmContentData = extractDRMMetadata(Media(value.media[0]).drmAdditionalHeader.data);
 					}
 				}
 				
-				if (metadataFacet != null)
+				if (httpMetadata != null)
 				{
-					resource.metadata.addFacet(metadataFacet);
+					resource.addMetadataValue(httpMetadata.namespaceURL, httpMetadata);
 				}
-				if (drmFacet != null)
+				if (drmMetadata != null)
 				{
-					resource.metadata.addFacet(drmFacet);
+					resource.addMetadataValue(drmMetadata.namespaceURL, drmMetadata);
 				}				
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
@@ -444,9 +443,9 @@ package org.osmf.elements.f4mClasses
 				// Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resources always get a generated base url.
 				if (NetStreamUtils.isRTMPStream(baseURL) == false)
 				{
-					metadataFacet = new Facet(MetadataNamespaces.HTTP_STREAMING_METADATA);
-					dynResource.metadata.addFacet(metadataFacet);
-					metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY), serverBaseURLs);
+					httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					dynResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
+					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseURLs);
 				}
 				
 				for each (media in value.media)
@@ -465,15 +464,15 @@ package org.osmf.elements.f4mClasses
 					dynResource.streamItems.push(item);
 					if (media.drmAdditionalHeader != null)
 					{						
-						if (dynResource.metadata.getFacet(MetadataNamespaces.DRM_METADATA) == null)
+						if (dynResource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
 						{
-							drmFacet = new Facet(MetadataNamespaces.DRM_METADATA);
-							dynResource.metadata.addFacet(drmFacet);
+							drmMetadata = new Metadata(MetadataNamespaces.DRM_METADATA);
+							dynResource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 						}						
 						if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)
 						{
-							drmFacet.addValue(new FacetKey(item), extractDRMMetadata(media.drmAdditionalHeader.data));	
-							drmFacet.addValue(new FacetKey(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName), media.drmAdditionalHeader.data);
+							drmMetadata.addValue(item.streamName, extractDRMMetadata(media.drmAdditionalHeader.data));	
+							drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY + item.streamName, media.drmAdditionalHeader.data);
 						} 						
 					}
 					
@@ -486,17 +485,17 @@ package org.osmf.elements.f4mClasses
 							bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 							media.bootstrapInfo.url = bootstrapInfoURLString; 
 						}
-						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName), media.bootstrapInfo);
+						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + item.streamName, media.bootstrapInfo);
 					}
 			
 					if (media.metadata != null)
 					{
-						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName), media.metadata);					
+						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + item.streamName, media.metadata);					
 					}
 					
 					if (media.xmp != null)
 					{
-						metadataFacet.addValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName), media.xmp);					
+						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);					
 					}
 				}
 				resource = dynResource;
@@ -509,14 +508,16 @@ package org.osmf.elements.f4mClasses
 			
 			if (value.mimeType != null)
 			{
-				resource.metadata.addFacet(new MediaTypeFacet(MediaType.VIDEO, value.mimeType));			
+				resource.mediaType = MediaType.VIDEO;
+				resource.mimeType = value.mimeType;			
 			}
 			
-			//Add subclip metadata from original resource
-			var subclipMeta:Facet = manifestResource.metadata.getFacet(MetadataNamespaces.SUBCLIP_METADATA);
-			if (subclipMeta != null)
+			// Add subclip info from original resource
+			var streamingManifestResource:StreamingURLResource = manifestResource as StreamingURLResource;
+			if (streamingManifestResource != null)
 			{
-				resource.metadata.addFacet(subclipMeta);
+				resource.clipStartTime = streamingManifestResource.clipStartTime;
+				resource.clipEndTime = streamingManifestResource.clipEndTime;
 			}		
 			
 			return resource;

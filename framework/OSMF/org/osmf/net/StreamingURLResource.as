@@ -21,8 +21,11 @@
 *****************************************************/
 package org.osmf.net
 {
+	import __AS3__.vec.Vector;
+	
+	import flash.utils.ByteArray;
+	
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * A URLResource which is capable of being streamed. StreamingURLResource adds a streamType property. 
@@ -45,6 +48,15 @@ package org.osmf.net
 		 * @param url The URL of the resource.
 		 * @param streamType The type of the stream. If null, defaults to
 		 * StreamType.ANY.
+		 * @param subclipStartTime Optional start time of the streaming
+		 * resource.  When specified, the stream will be presented as a
+		 * subclip, with playback beginning at the specified start time.
+		 * @param subclipEndTime Optional end time of the streaming resource.
+		 * When specified, the stream will be presented as a subclip, with
+		 * playback ending at the specified end time.
+		 * @param connectionArguments Optional set of arguments that will be
+		 * supplied to NetConnection.connect when establishing a connection
+		 * to the source of the stream.
 		 * @param urlIncludesFMSApplicationInstance Indicates, for RTMP streaming
 		 * URLs, whether the URL includes the FMS application instance or not.  If
 		 * true, then the second part of the URL path is considered the instance
@@ -54,6 +66,7 @@ package org.osmf.net
 		 * stream name, such as <code>rtmp://host/app/foo/bar/stream</code>. In this
 		 * case there is no instance name and the stream would be 'foo/bar/stream'.
 		 * The default is false.
+		 * @param drmContentData Content metadata for DRM-encrypted content.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -63,11 +76,18 @@ package org.osmf.net
 		public function StreamingURLResource
 							( url:String
 							, streamType:String = null
+							, clipStartTime:Number = NaN
+							, clipEndTime:Number = NaN
+							, connectionArguments:Vector.<Object> = null
 							, urlIncludesFMSApplicationInstance:Boolean = false
+							, drmContentData:ByteArray = null
 							)
 		{
 			_streamType = streamType || StreamType.ANY;
+			_clipStartTime = clipStartTime;
+			_clipEndTime = clipEndTime;
 			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
+			_drmContentData = drmContentData;
 			
 			super(url);
 		}
@@ -112,6 +132,68 @@ package org.osmf.net
 			return _streamType;
 		}
 		
+		public function set streamType(value:String):void
+		{
+			_streamType = value;
+		}
+		
+		/**
+		 * Optional start time of the streaming resource.  When specified,
+		 * the stream will be presented as a subclip, with playback beginning
+		 * at the specified start time.
+		 **/ 
+		public function get clipStartTime():Number
+		{
+			return _clipStartTime;
+		}
+
+		public function set clipStartTime(value:Number):void
+		{
+			_clipStartTime = value;
+		}
+
+		/**
+		 * Optional end time of the streaming resource.  When specified,
+		 * the stream will be presented as a subclip, with playback ending
+		 * at the specified end time.
+		 **/ 
+		public function get clipEndTime():Number
+		{
+			return _clipEndTime;
+		}
+
+		public function set clipEndTime(value:Number):void
+		{
+			_clipEndTime = value;
+		}
+		
+		/**
+		 * Optional set of arguments that will be supplied when making a
+		 * connection to the source of the stream.
+		 **/
+		public function get connectionArguments():Vector.<Object>
+		{
+			return _connectionArguments;
+		}
+
+		public function set connectionArguments(value:Vector.<Object>):void
+		{
+			_connectionArguments = value;
+		}
+		
+		/**
+		 * Content metadata for DRM-encrypted content.
+		 **/ 
+		public function get drmContentData():ByteArray
+		{
+			return _drmContentData;
+		}
+
+		public function set drmContentData(value:ByteArray):void
+		{
+			_drmContentData = value;
+		}
+
 		/**
 		 * Indicates, for RTMP streaming URLs, whether the URL includes the FMS
 		 * application instance or not.  If true, then the second part of the URL
@@ -127,7 +209,16 @@ package org.osmf.net
 			return _urlIncludesFMSApplicationInstance;
 		}
 		
+		public function set urlIncludesFMSApplicationInstance(value:Boolean):void
+		{
+			_urlIncludesFMSApplicationInstance = value;
+		}
+		
 		private var _streamType:String; // StreamType
+		private var _clipStartTime:Number;
+		private var _clipEndTime:Number;
+		private var _connectionArguments:Vector.<Object>;
+		private var _drmContentData:ByteArray;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
 	}
 }

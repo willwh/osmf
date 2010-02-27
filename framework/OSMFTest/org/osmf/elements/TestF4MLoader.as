@@ -26,7 +26,6 @@ package org.osmf.elements
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.MediaTypeFacet;
 	import org.osmf.traits.LoadTrait;
 
 	public class TestF4MLoader extends TestCase
@@ -47,15 +46,15 @@ package org.osmf.elements
 			var res1:URLResource = new URLResource('http://example.com/manifest.f4m');
 			
 			var res2:URLResource = new URLResource('http://example.com/manifest.f4m');
-			res2.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
+			res2.mimeType = F4MLoader.F4M_MIME_TYPE;
 			
 			var res3:URLResource = new URLResource('http://example.com/manifest.blah');
-			res3.metadata.addFacet(new MediaTypeFacet(null, F4MLoader.F4M_MIME_TYPE));
+			res3.mimeType = F4MLoader.F4M_MIME_TYPE;
 			
 			var res4:URLResource = new URLResource('http://example.com/manifest.blah');
 			
 			var res5:URLResource = new URLResource('http://example.com/manifest.blah');
-			res5.metadata.addFacet(new MediaTypeFacet(null, 'application/blah+xml'));
+			res5.mimeType = 'application/blah+xml';
 										
 			assertTrue(loader.canHandleResource(res1));
 			assertTrue(loader.canHandleResource(res2));

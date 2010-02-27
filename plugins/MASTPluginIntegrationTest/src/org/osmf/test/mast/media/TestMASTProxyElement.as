@@ -10,8 +10,7 @@ package org.osmf.test.mast.media
 	import org.osmf.mast.media.MASTProxyElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -111,9 +110,9 @@ package org.osmf.test.mast.media
 		{
 			var mediaElement:MediaElement = new VideoElement();
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
-			var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-			facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), "http://foo.com/bogus/badfile.xml");
-			resource.metadata.addFacet(facet);
+			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, "http://foo.com/bogus/badfile.xml");
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
 
 			mediaElement.resource = resource
 
@@ -174,9 +173,10 @@ package org.osmf.test.mast.media
 		private function createResourceWithMetadata(preroll:Boolean=true):URLResource
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
-			var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-			facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
-			resource.metadata.addFacet(facet);
+			
+			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
+			resource.addMetadataValue(metadata.namespaceURL, metadata);
 			
 			return resource;			
 		}

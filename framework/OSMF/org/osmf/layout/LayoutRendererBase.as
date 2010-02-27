@@ -34,7 +34,6 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
-	import org.osmf.metadata.Facet;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
@@ -98,7 +97,7 @@ package org.osmf.layout
 		 **/
 		final internal function setParent(value:LayoutRendererBase):void
 		{
-			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getFacet(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getFacet(MetadataNamespaces.ELEMENT_ID) : "null");}
+			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getValue(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getValue(MetadataNamespaces.ELEMENT_ID) : "null");}
 			_parent = value;
 			processParentChange(_parent);
 		}
@@ -203,7 +202,7 @@ package org.osmf.layout
 					)
 				);
 			
-			CONFIG::LOGGING { logger.debug("Adding target {0} to {1}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); } 
+			CONFIG::LOGGING { logger.debug("Adding target {0} to {1}", target.metadata.getValue(MetadataNamespaces.ELEMENT_ID), metadata.getValue(MetadataNamespaces.ELEMENT_ID)); } 
 			
 			// Get the index where the target should be inserted:
 			var index:int = Math.abs(BinarySearch.search(layoutTargets, compareTargets, target));
@@ -211,9 +210,9 @@ package org.osmf.layout
 			// Add the target to our listing:
 			layoutTargets.splice(index, 0, target);	
 			
-			// Watch the facets on the target's metadata that we're interested in:
+			// Watch the metadata on the target's collection that we're interested in:
 			var watchers:Array = metaDataWatchers[target] = new Array();
-			for each (var namespaceURL:String in usedMetadataFacets)
+			for each (var namespaceURL:String in usedMetadatas)
 			{
 				var watcher:MetadataWatcher =
 					new MetadataWatcher
@@ -467,13 +466,13 @@ package org.osmf.layout
 		 * @private
 		 * 
 		 * Subclasses may override this method to have it return the list
-		 * of URL namespaces that identify the metadata facets that the
+		 * of URL namespaces that identify the metadata objects that the
 		 * renderer uses on its calculations.
 		 * 
 		 * The base class will make sure that the renderer gets invalidated
-		 * when any of the specified facets change value.
+		 * when any of the specified metadatas' values change.
 		 * 
-		 * @return The list of URL namespaces that identify the metadata facets
+		 * @return The list of URL namespaces that identify the metadata objects
 		 * that the renderer uses on its calculations. 
 		 *  
 		 *  @langversion 3.0
@@ -481,7 +480,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function get usedMetadataFacets():Vector.<String>
+		protected function get usedMetadatas():Vector.<String>
 		{
 			return new Vector.<String>;
 		}
@@ -719,7 +718,7 @@ package org.osmf.layout
 			metadata = null;
 		}
 		
-		private function targetMetadataChangeCallback(facet:Facet):void
+		private function targetMetadataChangeCallback(metadata:Metadata):void
 		{
 			invalidate();
 		}

@@ -28,8 +28,7 @@ package
 	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.FacetKey;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 
@@ -49,14 +48,14 @@ package
 		{
 			if (target != null && settings != null)
 			{
-				// We use the NS_CONTROL_BAR_TARGET namespaced metadata facet in order
+				// We use the NS_CONTROL_BAR_TARGET namespaced metadata in order
 				// to find out if the instantiated element is the element that our
 				// control bar should control:
-				var targetFacet:Facet = target.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_TARGET);
-				if (targetFacet)
+				var targetMetadata:Metadata = target.getMetadata(ControlBarPlugin.NS_CONTROL_BAR_TARGET);
+				if (targetMetadata)
 				{
-					if 	(	targetFacet.getValue(ID) != null
-						&&	targetFacet.getValue(ID) == settings.getValue(ID)
+					if 	(	targetMetadata.getValue(ID) != null
+						&&	targetMetadata.getValue(ID) == settings.getValue(ID)
 						)
 					{
 						controlBar.element = target;
@@ -72,13 +71,13 @@ package
 		{
 			// Right after the media factory has instantiated us, it will set the
 			// resource that it used to do so. We look the NS_CONTROL_BAR_SETTINGS
-			// namespaced metadata facets, and retain it as our settings record 
+			// namespaced metadata, and retain it as our settings record 
 			// (containing only one field: "ID" that tells us the ID of the media
 			// element that we should be controlling):
 			if (value != null)
 			{
 				settings
-					= value.metadata.getFacet(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS);
+					= value.getMetadataValue(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS) as Metadata;
 					
 				processTarget();
 			}
@@ -151,7 +150,7 @@ package
 			widget.setPosition(1, 0);
 		}
 		
-		private var settings:Facet;
+		private var settings:Metadata;
 		
 		private var target:MediaElement;
 		private var controlBar:ControlBarBase;
@@ -159,7 +158,7 @@ package
 		
 		/* static */
 		
-		private static const ID:FacetKey = new FacetKey("ID");
+		private static const ID:String = "ID";
 		
 		private static const SCRUB_BAR:String = "scrubBar";
 		private static const PAUSE_BUTTON:String = "pauseButton";

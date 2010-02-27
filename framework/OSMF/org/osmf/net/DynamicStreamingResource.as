@@ -25,8 +25,6 @@ package org.osmf.net
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.metadata.Metadata;
-	import org.osmf.net.StreamType;
 	import org.osmf.utils.OSMFStrings;
 
 	/**
@@ -177,8 +175,6 @@ package org.osmf.net
 			
 			return result;
 		}
-
-		private var _metadata:Metadata;
 
 		private var _streamItems:Vector.<DynamicStreamingItem>;
 		private var _initialIndex:int;

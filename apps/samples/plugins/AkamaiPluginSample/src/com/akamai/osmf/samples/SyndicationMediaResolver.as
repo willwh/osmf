@@ -25,15 +25,15 @@ package com.akamai.osmf.samples
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.syndication.media.ISyndicationMediaResolver;
 	import org.osmf.syndication.model.Entry;
 
 	public class SyndicationMediaResolver implements ISyndicationMediaResolver
 	{
-		public function SyndicationMediaResolver(facet:Facet)
+		public function SyndicationMediaResolver(metadata:Metadata)
 		{
-			this.facet = facet;
+			this.metadata = metadata;
 		}
 
 		public function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement
@@ -48,9 +48,9 @@ package com.akamai.osmf.samples
 			
 			var resource:URLResource = new URLResource(entry.enclosure.url);
 			
-			if (facet)
+			if (metadata)
 			{
-				resource.metadata.addFacet(facet);
+				resource.addMetadataValue(metadata.namespaceURL, metadata);
 			}
 			
 			mediaElement = factory.createMediaElement(resource);
@@ -58,6 +58,6 @@ package com.akamai.osmf.samples
 			return mediaElement;
 		}
 		
-		private var facet:Facet;
+		private var metadata:Metadata;
 	}
 }

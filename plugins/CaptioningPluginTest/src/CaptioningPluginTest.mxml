@@ -27,7 +27,9 @@
 	<mx:Style source="CaptioningPluginTest.css" />
 	<mx:Script>
 		<![CDATA[
-			import org.osmf.metadata.FacetKey;
+			import org.osmf.metadata.Metadata;
+			import org.osmf.metadata.TimelineMetadata;
+			import org.osmf.events.TimelineMetadataEvent;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.plugin.PluginInfoResource;
@@ -40,20 +42,16 @@
 			import org.osmf.events.MediaElementEvent;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;	
-			import org.osmf.metadata.FacetKey;
 			import org.osmf.events.MediaErrorEvent;
 			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaElement;
-			import org.osmf.metadata.Facet;
 			import org.osmf.media.URLResource;
 			import org.osmf.events.PluginManagerEvent;
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.traits.LoadState;
-			import org.osmf.metadata.TemporalFacet;
-			import org.osmf.events.TemporalFacetEvent;
 			import org.osmf.events.SeekEvent;
 			import org.osmf.events.MetadataEvent;
 			import org.osmf.events.TimeEvent;
@@ -80,7 +78,7 @@
 			private var pluginManager:PluginManager;
 			private var mediaFactory:MediaFactory;
 			private var captioningEnabled:Boolean;
-			private var temporalFacet:TemporalFacet; 	
+			private var timelineMetadata:TimelineMetadata; 	
 			private var currentCaption:Caption;	
 			[Bindable]
 			private var timingTestFiles:Array = [	
@@ -292,36 +290,36 @@
    				}	
    			}
    			
-   			private function onFacetAdd(event:MetadataEvent):void
+   			private function onMetadataAdd(event:MediaElementEvent):void
    			{
-				var facet:TemporalFacet = event.facet as TemporalFacet;
+				var metadata:TimelineMetadata = event.metadata as TimelineMetadata;
 				
-				if (facet)
+				if (metadata)
 				{
-					debug(">>> Temporal facet added, namespace="+facet.namespaceURL);
-					temporalFacet = facet;
-					temporalFacet.addEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
-					temporalFacet.addEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
+					debug(">>> Timeline metadata added, namespace="+metadata.namespaceURL);
+					timelineMetadata = metadata;
+					timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption);
+					timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_DURATION_REACHED, onHideCaption);
 				}
    			}
    			
-   			private function onFacetRemove(event:MetadataEvent):void
+   			private function onMetadataRemove(event:MediaElementEvent):void
    			{
-   				var facet:TemporalFacet = event.facet as TemporalFacet;
+   				var metadata:TimelineMetadata = event.metadata as TimelineMetadata;
    				
-   				if (facet && temporalFacet)
+   				if (metadata && timelineMetadata)
    				{
-   					debug(">>> Temporal facet removed, namespace="+facet.namespaceURL);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.TIME_REACHED, onShowCaption);
-   					temporalFacet.removeEventListener(TemporalFacetEvent.DURATION_REACHED, onHideCaption);
-   					temporalFacet = null;
+   					debug(">>> Timeline metadata removed, namespace="+metadata.namespaceURL);
+   					timelineMetadata.removeEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption);
+   					timelineMetadata.removeEventListener(TimelineMetadataEvent.MARKER_DURATION_REACHED, onHideCaption);
+   					timelineMetadata = null;
    				}
    			}
    									
-			private function onShowCaption(event:TemporalFacetEvent):void
+			private function onShowCaption(event:TimelineMetadataEvent):void
 			{
-				var caption:Caption = event.key as Caption;
-				var ns:String = (event.currentTarget as TemporalFacet).namespaceURL;
+				var caption:Caption = event.marker as Caption;
+				var ns:String = (event.currentTarget as TimelineMetadata).namespaceURL;
 
 				// Make sure this is a caption object, and just for good measure, we'll
 				// also check the namespace				
@@ -407,11 +405,11 @@
 				}				
 			}
 			
-			private function onHideCaption(event:TemporalFacetEvent):void
+			private function onHideCaption(event:TimelineMetadataEvent):void
 			{
-				var caption:Caption = event.key as Caption;
+				var caption:Caption = event.marker as Caption;
 	
-				if (this.currentCaption.equals(caption))
+				if (this.currentCaption.time == caption.time)
 				{
 					clearCaptionText();				
 				}
@@ -445,10 +443,10 @@
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
-				var facet:Facet = new Facet(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+				var metadata:Metadata = new Metadata(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
 												
-				facet.addValue(new FacetKey(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI), dfxpFile);
-				resource.metadata.addFacet(facet);
+				metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, dfxpFile);
+				resource.addMetadataValue(metadata.namespaceURL, metadata);
 
 				var netLoader:NetLoader = new NetLoader();
 
@@ -456,15 +454,15 @@
 				var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
-				// when ISeekable is added
+				// when the SeekTrait is added
 				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
 				// Listen for metadata to be added so we can add any desired event listeners on any
-				// metadata facets we care about. For example, the temporalFacet.
-				mediaElement.metadata.addEventListener(MetadataEvent.FACET_ADD, onFacetAdd);
+				// metadata facets we care about.
+				mediaElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
 				
 				// Listen for metadata to be removed so we remove an event listeners
-				mediaElement.metadata.addEventListener(MetadataEvent.FACET_REMOVE, onFacetRemove);
+				mediaElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove);
 
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 								

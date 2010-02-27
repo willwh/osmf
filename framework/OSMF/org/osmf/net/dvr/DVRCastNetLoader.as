@@ -26,8 +26,6 @@ package org.osmf.net.dvr
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.metadata.Facet;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamType;
