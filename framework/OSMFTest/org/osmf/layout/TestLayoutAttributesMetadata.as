@@ -25,7 +25,6 @@ package org.osmf.layout
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 
 	public class TestLayoutAttributesMetadata extends TestCase
@@ -43,8 +42,6 @@ package org.osmf.layout
 			
 			var metadata:LayoutAttributesMetadata = new LayoutAttributesMetadata();
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataChange);
-						
-			assertEquals(metadata.namespaceURL, MetadataNamespaces.LAYOUT_ATTRIBUTES);
 			
 			metadata.verticalAlign = VerticalAlign.BOTTOM;
 			

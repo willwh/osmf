@@ -80,29 +80,13 @@ package org.osmf.metadata
 		/**
 		 * Constructor.
 		 * 
-		 * @param namespaceURL The namespace for this Metadata object.
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function Metadata(namespaceURL:String=null)		
+		public function Metadata()		
 		{						
-			_namespaceURL = namespaceURL;
-		}
-		
-		/**
-		 * The namespace for this Metadata object.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public function get namespaceURL():String
-		{
-			return _namespaceURL;
 		}
 		
 		/**
@@ -264,7 +248,6 @@ package org.osmf.metadata
 			return null;
 		}
 		
-		private var _namespaceURL:String;
 		private var data:Dictionary;
 	}
 }

@@ -34,7 +34,7 @@ package org.osmf.events
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class TimelineMetadataEvent extends Event
+	public class TimelineMetadataEvent extends MetadataEvent
 	{
 		/**
 		 * The TimelineMetadataEvent.MARKER_TIME_REACHED constant defines the value of the
@@ -93,7 +93,7 @@ package org.osmf.events
 		 */
 		public function TimelineMetadataEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, marker:TimelineMarker=null)
 		{
-			super(type, bubbles, cancelable);
+			super(type, bubbles, cancelable, "" + marker.time, marker);
 			
 			_marker = marker;
 		}

@@ -43,34 +43,15 @@ package org.osmf.metadata
 		/**
 		 * Constructor
 		 * 
-		 * @param namespaceURL Defines the namespace of the metadata values
-		 * that the synthesizer can interpret.
-		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function MetadataSynthesizer(namespaceURL:String)
+		public function MetadataSynthesizer()
 		{
-			_namespaceURL = namespaceURL;
 		}
-		
-		
-		/**
-		 * Defines the namespace of the metadata values that the synthesizer
-		 * can interpret.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get namespaceURL():String
-		{
-			return _namespaceURL;
-		}
-		
+				
 		/**
 		 * Synthesizes a metadata value from the passed arguments.
 		 * 
@@ -81,6 +62,7 @@ package org.osmf.metadata
 		 * unless the metadata group contains a single child, in which case the single child is
 		 * what is return as the synthesized metadata.
 		 * 
+		 * @param namespaceURL The namespace URL to synthesize values for.
 		 * @param targetParentMetadata The parent metadata that will have the synthesized
 		 * value appended.
 		 * @param metadataGroup The group of metadata objects the synthesized value should be based
@@ -96,7 +78,8 @@ package org.osmf.metadata
 		 *  @productversion OSMF 1.0
 		 */		
 		public function synthesize
-							( targetParentMetadata:Metadata
+							( namespaceURL:String
+							, targetParentMetadata:Metadata
 							, metadataGroup:MetadataGroup
 							, mode:String
 							, activeParentMetadata:Metadata
@@ -107,7 +90,7 @@ package org.osmf.metadata
 			if (mode == CompositionMode.SERIAL && activeParentMetadata)
 			{
 				// Return the currently active metadata:
-				result = activeParentMetadata.getValue(_namespaceURL) as Metadata;
+				result = activeParentMetadata.getValue(namespaceURL) as Metadata;
 			}
 			else // mode is PARALLEL
 			{
@@ -122,10 +105,5 @@ package org.osmf.metadata
 			
 			return result;
 		}
-
-		// Internals
-		//
-		
-		private var _namespaceURL:String;
 	}
 }

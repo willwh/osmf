@@ -63,15 +63,15 @@ package org.osmf.elements.compositeClasses
 			assertThrows(cm.addMetadataSynthesizer, null);
 			
 			var url:String = "myURL";
-			var synth:AMetadataSynthesizer = new AMetadataSynthesizer(url);
-			cm.addMetadataSynthesizer(synth);
+			var synth:AMetadataSynthesizer = new AMetadataSynthesizer();
+			cm.addMetadataSynthesizer(url, synth);
 			assertEquals(synth, cm.getMetadataSynthesizer(url));
-			assertThrows(function():void{cm.addMetadataSynthesizer(synth)});
-			cm.removeMetadataSynthesizer(synth);
+			assertThrows(function():void{cm.addMetadataSynthesizer(url, synth)});
+			cm.removeMetadataSynthesizer(url);
 			assertNull(null, cm.getMetadataSynthesizer(url));
-			cm.addMetadataSynthesizer(synth);
+			cm.addMetadataSynthesizer(url, synth);
 			
-			var childMetadata:Metadata = new Metadata(url);
+			var childMetadata:Metadata = new Metadata();
 			childMetadata.addValue(url,"test");
 			cm.addChild(metadata);
 			assertDispatches
@@ -80,12 +80,12 @@ package org.osmf.elements.compositeClasses
 					, CompositeMetadataEvent.CHILD_METADATA_ADD
 					]
 				,	metadata.addValue
-				,	childMetadata.namespaceURL
+				,	url
 				, 	childMetadata
 				);	
 			
 			var md2:Metadata = new Metadata();
-			md2.addValue(childMetadata.namespaceURL, childMetadata);
+			md2.addValue(url, childMetadata);
 			assertDispatches
 				( 	cm
 				, 	[ CompositeMetadataEvent.CHILD_ADD
@@ -101,7 +101,7 @@ package org.osmf.elements.compositeClasses
 					, CompositeMetadataEvent.METADATA_GROUP_CHANGE	
 				  	]
 				, 	md2.removeValue
-				,	childMetadata.namespaceURL
+				,	url
 				);
 				
 			assertDispatches
@@ -111,7 +111,7 @@ package org.osmf.elements.compositeClasses
 					, CompositeMetadataEvent.METADATA_GROUP_REMOVE
 				  	]
 				, 	metadata.removeValue
-				,	childMetadata.namespaceURL 
+				,	url
 				);
 			
 			assertDispatches
@@ -126,9 +126,9 @@ package org.osmf.elements.compositeClasses
 		public function testCompositeMetadataEvent():void
 		{
 			var metadata:Metadata = new Metadata();
-			var childMetadata:Metadata = new Metadata("test");
+			var childMetadata:Metadata = new Metadata();
 			var metadataGroup:MetadataGroup = new MetadataGroup("");
-			var metadataSynthesizer:MetadataSynthesizer = new AMetadataSynthesizer("");
+			var metadataSynthesizer:MetadataSynthesizer = new AMetadataSynthesizer();
 			var e:CompositeMetadataEvent
 				= new CompositeMetadataEvent
 					( CompositeMetadataEvent.CHILD_ADD
@@ -151,13 +151,14 @@ import org.osmf.metadata.Metadata;
 
 class AMetadataSynthesizer extends MetadataSynthesizer
 {
-	public function AMetadataSynthesizer(namespaceURL:String)
+	public function AMetadataSynthesizer()
 	{
-		super(namespaceURL);
+		super();
 	}
 	
 	override public function synthesize
-		( targetParentMetadata:Metadata
+		( namespaceURL:String
+		, targetParentMetadata:Metadata
 		, metadataGroup:MetadataGroup
 		, mode:String
 		, activeParentMetadata:Metadata

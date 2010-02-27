@@ -112,7 +112,6 @@ package org.osmf.metadata
 		/**
 		 * Constructor.
 		 * 
-		 * @param namespaceURL The namespace URL of the metadata.
 		 * @param media The media element this timeline metadata applies to.
 		 * 
 		 * @throws ArgumentError If media argument is null.
@@ -122,9 +121,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function TimelineMetadata(namespaceURL:String, media:MediaElement)
+		public function TimelineMetadata(media:MediaElement)
 		{
-			super(namespaceURL);
+			super();
 
 			if (media == null)
 			{

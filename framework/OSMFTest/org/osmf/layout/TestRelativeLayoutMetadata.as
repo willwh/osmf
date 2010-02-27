@@ -24,7 +24,6 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 
 	public class TestRelativeLayoutMetadata extends TestCase
@@ -42,8 +41,6 @@ package org.osmf.layout
 			
 			var metadata:RelativeLayoutMetadata = new RelativeLayoutMetadata();
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataChange);
-						
-			assertEquals(metadata.namespaceURL, MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS);
 			
 			metadata.x = 1;
 			

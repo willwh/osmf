@@ -31,8 +31,11 @@ package com.akamai.osmf.samples
 
 	public class SyndicationMediaResolver implements ISyndicationMediaResolver
 	{
-		public function SyndicationMediaResolver(metadata:Metadata)
+		public function SyndicationMediaResolver(namespaceURL:String, metadata:Metadata)
 		{
+			super();
+			
+			this.namespaceURL = namespaceURL;
 			this.metadata = metadata;
 		}
 
@@ -50,7 +53,7 @@ package com.akamai.osmf.samples
 			
 			if (metadata)
 			{
-				resource.addMetadataValue(metadata.namespaceURL, metadata);
+				resource.addMetadataValue(namespaceURL, metadata);
 			}
 			
 			mediaElement = factory.createMediaElement(resource);
@@ -58,6 +61,7 @@ package com.akamai.osmf.samples
 			return mediaElement;
 		}
 		
+		private var namespaceURL:String;
 		private var metadata:Metadata;
 	}
 }

@@ -97,6 +97,8 @@ package org.osmf.events
  		 * event can be prevented. 
 		 * @param traitType The MediaTraitType for the trait that was added or removed.  Null
 		 * if type is not TRAIT_ADD or TRAIT_REMOVE.
+		 * @param namespaceURL The namespace URL of the Metadata that was added or removed.
+		 * Null if type is not METADATA_ADD or METADATA_REMOVE.
 		 * @param metadata The Metadata that was added or removed.  Null if type is not
 		 * METADATA_ADD or METADATA_REMOVE.
  		 *  
@@ -105,11 +107,12 @@ package org.osmf.events
  		 *  @playerversion AIR 1.5
  		 *  @productversion OSMF 1.0
  		 */
-		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, metadata:Metadata=null)
+		public function MediaElementEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, traitType:String=null, namespaceURL:String=null, metadata:Metadata=null)
 		{
 			super(type, bubbles, cancelable);
 
 			_traitType = traitType;
+			_namespaceURL = namespaceURL;
 			_metadata = metadata;
 		}
 		
@@ -118,7 +121,7 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new MediaElementEvent(type, bubbles, cancelable, traitType, metadata);
+			return new MediaElementEvent(type, bubbles, cancelable, traitType, namespaceURL, metadata);
 		}
 		
 		/**
@@ -134,6 +137,15 @@ package org.osmf.events
 		{
 			return _traitType;
 		}
+
+		/**
+		 * The namespace URL for the Metadata that was added or removed.  Null if
+		 * type is not METADATA_ADD or METADATA_REMOVE.
+		 **/
+		public function get namespaceURL():String
+		{
+			return _namespaceURL;
+		}
 		
 		/**
 		 * The Metadata that was added or removed.  Null if type is not
@@ -148,6 +160,7 @@ package org.osmf.events
 		//
 		
 		private var _traitType:String;
+		private var _namespaceURL:String;
 		private var _metadata:Metadata;
 	}
 }

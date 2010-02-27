@@ -142,14 +142,14 @@ package org.osmf.layout
 				relative = new RelativeLayoutMetadata();
 				relative.width = 100;
 				relative.height = 100;
-				target.metadata.addValue(relative.namespaceURL, relative);
+				target.metadata.addValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS, relative);
 			
 				// Set target to scale letter box layoutMode, centered, by default:
 				attributes = new LayoutAttributesMetadata();
 				attributes.scaleMode ||= ScaleMode.LETTERBOX;
 				attributes.verticalAlign ||= VerticalAlign.MIDDLE;
 				attributes.horizontalAlign ||= HorizontalAlign.CENTER;
-				target.metadata.addValue(attributes.namespaceURL, attributes);
+				target.metadata.addValue(MetadataNamespaces.LAYOUT_ATTRIBUTES, attributes);
 			}
 			
 			// Watch the index metadata attribute for change:
@@ -557,7 +557,7 @@ package org.osmf.layout
 			if (layoutMode != LayoutMode.NONE)
 			{
 				var boxAttributes:BoxAttributesMetadata = new BoxAttributesMetadata();
-				container.metadata.addValue(boxAttributes.namespaceURL, boxAttributes);
+				container.metadata.addValue(MetadataNamespaces.BOX_LAYOUT_ATTRIBUTES, boxAttributes);
 			}
 			
 			if (isNaN(size.x) || isNaN(size.y) || layoutMode != LayoutMode.NONE)

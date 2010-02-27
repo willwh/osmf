@@ -100,15 +100,15 @@
 				// Listen for cue points being added.
 				//
 				
-				dynamicTimelineMetadata = new TimelineMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, videoElement);
-				videoElement.addMetadata(dynamicTimelineMetadata.namespaceURL, dynamicTimelineMetadata);
+				dynamicTimelineMetadata = new TimelineMetadata(videoElement);
+				videoElement.addMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, dynamicTimelineMetadata);
 				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
 				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
 
-				embeddedTimelineMetadata = new TimelineMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, videoElement);
+				embeddedTimelineMetadata = new TimelineMetadata(videoElement);
 				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
 				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
-				videoElement.addMetadata(embeddedTimelineMetadata.namespaceURL, embeddedTimelineMetadata);
+				videoElement.addMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, embeddedTimelineMetadata);
 				
 				// Show all the cue points found in the media.
 				_cuePointsCollection = new ArrayCollection();

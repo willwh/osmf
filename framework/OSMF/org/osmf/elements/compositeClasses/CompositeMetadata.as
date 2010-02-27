@@ -216,6 +216,7 @@ package org.osmf.elements.compositeClasses
 					processChildMetadataAdd
 						( child
 						, child.getValue(url) as Metadata
+						, url
 						, false // Don't trigger child metadata add events. 
 						);
 				}
@@ -282,6 +283,7 @@ package org.osmf.elements.compositeClasses
 					processChildMetadataRemove
 						( child
 						, child.getValue(url) as Metadata
+						, url
 						, false // Don't trigger child metadata remove events.
 						);
 				}
@@ -387,6 +389,7 @@ package org.osmf.elements.compositeClasses
 		 * 
 		 * Only one synthesizer can be registered for a given namespace URL.
 		 * 
+		 * @param namespaceURL The namespace URL to synthesize values for.
 		 * @param synthesizer The metadata synthesizer to add.
 		 *  
 		 *  @langversion 3.0
@@ -394,42 +397,42 @@ package org.osmf.elements.compositeClasses
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function addMetadataSynthesizer(synthesizer:MetadataSynthesizer):void
+		public function addMetadataSynthesizer(namespaceURL:String, synthesizer:MetadataSynthesizer):void
 		{
 			if (synthesizer == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (getMetadataSynthesizer(synthesizer.namespaceURL) != null)
+			if (getMetadataSynthesizer(namespaceURL) != null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_BE_UNIQUE));
 			}
 			
-			metadataSynthesizers[synthesizer.namespaceURL] = synthesizer;
+			metadataSynthesizers[namespaceURL] = synthesizer;
 		}
 		
 		/**
 		 * Removes a metadata synthesizer.
 		 * 
-		 * @param synthesizer The metadata synthesizer to remove.
-		 * @throws ArgumentError If synthesizer is null.
+		 * @param namespaceURL The namespace URL that corresponds to the synthesizer to remove.
+		 * @throws ArgumentError If namespaceURL is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function removeMetadataSynthesizer(synthesizer:MetadataSynthesizer):void
+		public function removeMetadataSynthesizer(namespaceURL:String):void
 		{
-			if (synthesizer == null)
+			if (namespaceURL == null)
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
 			
-			if (getMetadataSynthesizer(synthesizer.namespaceURL) != null)
+			if (getMetadataSynthesizer(namespaceURL) != null)
 			{
-				delete metadataSynthesizers[synthesizer.namespaceURL];
+				delete metadataSynthesizers[namespaceURL];
 			}
 		}
 		
@@ -509,13 +512,13 @@ package org.osmf.elements.compositeClasses
 		// Internals
 		//
 		
-		private function processChildMetadataAdd(child:Metadata, metadata:Metadata, dispatchAddChildEvent:Boolean = true):void
+		private function processChildMetadataAdd(child:Metadata, metadata:Metadata, metadataNamespaceURL:String, dispatchAddChildEvent:Boolean = true):void
 		{
 			var groupAddEvent:CompositeMetadataEvent;
 			
 			if (metadata != null)
 			{
-				var childrenNamespaceURL:String = metadata.namespaceURL;
+				var childrenNamespaceURL:String = metadataNamespaceURL;
 				
 				var metadataGroup:MetadataGroup = childMetadataGroups[childrenNamespaceURL];
 				if (metadataGroup == null)
@@ -555,13 +558,13 @@ package org.osmf.elements.compositeClasses
 			}
 		}
 		
-		private function processChildMetadataRemove(child:Metadata, metadata:Metadata, dispatchChildRemoveEvent:Boolean = true):void
+		private function processChildMetadataRemove(child:Metadata, metadata:Metadata, metadataNamespaceURL:String, dispatchChildRemoveEvent:Boolean = true):void
 		{
 			var groupRemoveEvent:CompositeMetadataEvent;
 			
 			if (metadata != null)
 			{
-				var childrenNamespaceURL:String = metadata.namespaceURL;
+				var childrenNamespaceURL:String = metadataNamespaceURL;
 				var metadataGroup:MetadataGroup = childMetadataGroups[childrenNamespaceURL];
 				metadataGroup.removeMetadata(child, metadata);
 				
@@ -612,12 +615,12 @@ package org.osmf.elements.compositeClasses
 		
 		private function onChildMetadataAdd(event:MetadataEvent):void
 		{
-			processChildMetadataAdd(event.target as Metadata, event.value as Metadata);	
+			processChildMetadataAdd(event.target as Metadata, event.value as Metadata, event.key);	
 		}
 		
 		private function onChildMetadataRemove(event:MetadataEvent):void
 		{
-			processChildMetadataRemove(event.target as Metadata, event.value as Metadata);
+			processChildMetadataRemove(event.target as Metadata, event.value as Metadata, event.key);
 		}
 		
 		private function onChildMetadataGroupChange(event:CompositeMetadataEvent):void
@@ -681,12 +684,13 @@ package org.osmf.elements.compositeClasses
 							: null
 				 	)
 				// Last, revert to the default synthesizer:
-				|| new MetadataSynthesizer(metadataGroup.namespaceURL);
+				|| new MetadataSynthesizer();
 				
 			// Run the metadata synthesizer:
 			synthesizedMetadata
 				= metadataSynthesizer.synthesize
-					( this
+					( metadataGroup.namespaceURL
+					, this
 					, metadataGroup
 					, _mode
 					, _activeChild
@@ -703,13 +707,13 @@ package org.osmf.elements.compositeClasses
 					)
 				{
 					CONFIG::LOGGING { logger.debug("removing metadata {0}", metadataGroup.namespaceURL); }
-					removeValue(currentMetadata.namespaceURL);
+					removeValue(metadataGroup.namespaceURL);
 				}
 			}
 			else
 			{
 				// Add, or overwrite the last set metadata value:
-				addValue(synthesizedMetadata.namespaceURL, synthesizedMetadata);
+				addValue(metadataGroup.namespaceURL, synthesizedMetadata);
 			}
 		}
 		

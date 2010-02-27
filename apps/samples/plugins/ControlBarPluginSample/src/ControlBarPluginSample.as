@@ -96,17 +96,14 @@ package
 			// Construct a metadata object that we can append to the video's collection
 			// of metadata. The control bar plug-in will use the metadata to identify
 			// the video element as its target:
-			var controlBarTarget:Metadata
-				= new Metadata
-					( ControlBarPlugin.NS_CONTROL_BAR_TARGET
-					);
+			var controlBarTarget:Metadata = new Metadata();
 			controlBarTarget.addValue(ID, "mainContent");
 			
 			// Construct a video element:
 			var video:MediaElement = osmf.factory.createMediaElement(new URLResource(VIDEO_URL));
 			
 			// Add the metadata to the video's metadata:
-			video.addMetadata(controlBarTarget.namespaceURL, controlBarTarget);
+			video.addMetadata(ControlBarPlugin.NS_CONTROL_BAR_TARGET, controlBarTarget);
 			
 			return video;
 		}
@@ -118,15 +115,12 @@ package
 			// will use it to parameterize the element. Specifically, the ID field
 			// will tell the plug-in what the ID of the content it should control
 			// is:
-			var controlBarSettings:Metadata
-				= new Metadata
-					( ControlBarPlugin.NS_CONTROL_BAR_SETTINGS
-					);
+			var controlBarSettings:Metadata = new Metadata();
 			controlBarSettings.addValue(ID, "mainContent");
 			
 			// Add the metadata to an otherwise empty media resource object:
 			var resource:MediaResourceBase = new MediaResourceBase();
-			resource.addMetadataValue(controlBarSettings.namespaceURL, controlBarSettings);
+			resource.addMetadataValue(ControlBarPlugin.NS_CONTROL_BAR_SETTINGS, controlBarSettings);
 			
 			// Request the media factory to construct a control bar element. The
 			// factory will infer a control bar element is requested by inspecting

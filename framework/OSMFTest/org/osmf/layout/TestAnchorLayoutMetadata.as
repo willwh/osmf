@@ -24,9 +24,7 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullMetadataSynthesizer;
-	import org.osmf.metadata.Metadata;
 
 	public class TestAnchorLayoutMetadata extends TestCase
 	{
@@ -43,8 +41,6 @@ package org.osmf.layout
 			
 			var metadata:AnchorLayoutMetadata = new AnchorLayoutMetadata();
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataChange);
-						
-			assertEquals(metadata.namespaceURL, MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS);
 			
 			metadata.left = 1;
 			

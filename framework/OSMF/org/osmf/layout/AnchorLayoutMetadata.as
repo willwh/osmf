@@ -22,9 +22,7 @@
 package org.osmf.layout
 {
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.NonSynthesizingMetadata;
-	import org.osmf.metadata.MetadataNamespaces;
 
 	/**
 	 * @private
@@ -98,7 +96,7 @@ package org.osmf.layout
 		 **/
 		public function AnchorLayoutMetadata()
 		{
-			super(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS);
+			super();
 		}
 		
 		/**

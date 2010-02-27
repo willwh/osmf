@@ -46,9 +46,9 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function NullMetadataSynthesizer(namespaceURL:String)
+		public function NullMetadataSynthesizer()
 		{
-			super(namespaceURL);
+			super();
 		}
 		
 		// Overrides
@@ -58,7 +58,8 @@ package org.osmf.metadata
 		 * @private
 		 */
 		override public function synthesize
-							( targetParentMetadata:Metadata
+							( namespaceURL:String
+							, targetParentMetadata:Metadata
 							, metadataGroup:MetadataGroup
 							, mode:String
 							, activeParentMetadata:Metadata

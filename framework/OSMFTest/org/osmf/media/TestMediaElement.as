@@ -191,8 +191,8 @@ package org.osmf.media
 			
 			var nsurl1:String = "nsurl1";
 			var nsurl2:String = "nsurl2";
-			var meta1:Metadata = new Metadata(nsurl1);
-			var meta2:Metadata = new Metadata(nsurl2);
+			var meta1:Metadata = new Metadata();
+			var meta2:Metadata = new Metadata();
 			
 			mediaElement.addMetadata(nsurl1, meta1);
 			assertTrue(addCalled);
@@ -239,8 +239,8 @@ package org.osmf.media
 			
 			var nsurl1:String = "nsurl1";
 			var nsurl2:String = "nsurl2";
-			var meta1:Metadata = new Metadata(nsurl1);
-			var meta2:Metadata = new Metadata(nsurl2);
+			var meta1:Metadata = new Metadata();
+			var meta2:Metadata = new Metadata();
 			
 			mediaElement.addMetadata(nsurl1, meta1);
 			mediaElement.addMetadata(nsurl2, meta2);
@@ -276,8 +276,8 @@ package org.osmf.media
 			
 			var nsurl1:String = "nsurl1";
 			var nsurl2:String = "nsurl2";
-			var meta1:Metadata = new Metadata(nsurl1);
-			var meta2:Metadata = new Metadata(nsurl2);
+			var meta1:Metadata = new Metadata();
+			var meta2:Metadata = new Metadata();
 			
 			mediaElement.addMetadata(nsurl1, meta1);
 			mediaElement.addMetadata(nsurl2, meta2);
@@ -299,6 +299,28 @@ package org.osmf.media
 			}
 		}
 
+		public function testGetMetadataNamespaceURLs():void
+		{
+			var mediaElement:MediaElement = createMediaElement();
+			
+			var nsurl1:String = "nsurl1";
+			var nsurl2:String = "nsurl2";
+			var meta1:Metadata = new Metadata();
+			var meta2:Metadata = new Metadata();
+			
+			mediaElement.addMetadata(nsurl1, meta1);
+			mediaElement.addMetadata(nsurl2, meta2);
+			
+			assertTrue(mediaElement.metadataNamespaceURLs.length == 2);
+			assertTrue(		(	mediaElement.metadataNamespaceURLs[0] == "nsurl1"
+							&&	mediaElement.metadataNamespaceURLs[1] == "nsurl2"
+							)
+					  	||	(	mediaElement.metadataNamespaceURLs[0] == "nsurl2"
+							&&	mediaElement.metadataNamespaceURLs[1] == "nsurl1"
+							)
+					  );
+		}
+		
 		public function testMediaErrorEventDispatch():void
 		{
 			if (hasLoadTrait)

@@ -30,6 +30,11 @@ package org.osmf.net
 	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.NullResource;
 	
+	CONFIG::FLASH_10_1
+	{
+	import org.osmf.metadata.MetadataNamespaces;
+	}
+	
 	public class TestNetStreamUtils extends TestCase
 	{
 		public function testGetStreamType():void
@@ -101,7 +106,10 @@ package org.osmf.net
 			{
 				var resource:URLResource = new URLResource("http://example.com");
 				var serverBaseURLs:Vector.<String> = new Vector.<String>();
-				resource.metadata.addFacet(HTTPStreamingUtils.createHTTPStreamingMetadataFacet("http://example.com/abstURL", null, serverBaseURLs));
+				resource.addMetadataValue
+					( MetadataNamespaces.HTTP_STREAMING_METADATA
+					, HTTPStreamingUtils.createHTTPStreamingMetadataFacet("http://example.com/abstURL", null, serverBaseURLs)
+					);
 				assertTrue(NetStreamUtils.isStreamingResource(resource));
 			}
 		}

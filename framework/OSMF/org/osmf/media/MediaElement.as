@@ -283,7 +283,7 @@ package org.osmf.media
 			
 			this.metadata.addValue(namespaceURL, metadata);
 			
-			dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_ADD, false, false, null, metadata));
+			dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_ADD, false, false, null, namespaceURL, metadata));
 			
 		}
 		
@@ -312,7 +312,7 @@ package org.osmf.media
 			var result:Metadata = metadata.removeValue(namespaceURL) as Metadata;
 			if (result != null)
 			{
-				dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_REMOVE, false, false, null, result));
+				dispatchEvent(new MediaElementEvent(MediaElementEvent.METADATA_REMOVE, false, false, null, namespaceURL, result));
 			}
 			return result;
 		}
@@ -341,6 +341,15 @@ package org.osmf.media
 
 			return metadata.getValue(namespaceURL) as Metadata;
 		}
+		
+		/**
+		 * A Vector containing the namespace URLs for all Metadata
+		 * objects within this MediaElement.
+		 **/
+		public function get metadataNamespaceURLs():Vector.<String>
+		{
+			return metadata.keys;
+		}
 			
 		// Protected
 		//
@@ -357,7 +366,7 @@ package org.osmf.media
 		 */ 
 		protected function createMetadata():Metadata
 		{
-			return new Metadata(MetadataNamespaces.MEDIA_ELEMENT_METADATA);
+			return new Metadata();
 		}
 		
 		/**

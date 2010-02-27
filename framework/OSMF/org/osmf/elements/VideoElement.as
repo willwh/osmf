@@ -487,7 +487,7 @@ package org.osmf.elements
 				var dynamicCuePoints:TimelineMetadata = getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
 				if (dynamicCuePoints == null)
 				{
-					dynamicCuePoints = new TimelineMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, this);
+					dynamicCuePoints = new TimelineMetadata(this);
 					addMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, dynamicCuePoints);
 				}
 				
@@ -508,7 +508,7 @@ package org.osmf.elements
      	{
     		if (embeddedCuePoints == null)
      		{
-     			embeddedCuePoints = new TimelineMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, this);
+     			embeddedCuePoints = new TimelineMetadata(this);
      			addMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, embeddedCuePoints);
      		}
 

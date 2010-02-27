@@ -44,7 +44,7 @@ package org.osmf.metadata
 			assertEquals(1,callbackCount);
 			assertNull(callbackArgument);
 			
-			var m1:Metadata = new Metadata(ns1);
+			var m1:Metadata = new Metadata();
 			parentMetadata.addValue(ns1, m1);
 			
 			assertEquals(2, callbackCount);
@@ -55,7 +55,7 @@ package org.osmf.metadata
 			assertEquals(3, callbackCount);
 			assertNull(callbackArgument);
 			
-			var m2:Metadata = new Metadata(ns2);
+			var m2:Metadata = new Metadata();
 			parentMetadata.addValue(ns2, m2);
 			
 			assertEquals(3, callbackCount);
@@ -91,13 +91,13 @@ package org.osmf.metadata
 			assertEquals(1,callbackCount);
 			assertNull(callbackArgument);
 			
-			var m1:Metadata = new Metadata(ns1);
+			var m1:Metadata = new Metadata();
 			parentMetadata.addValue(ns1, m1);
 			
 			assertEquals(2, callbackCount);
 			assertNull(callbackArgument);
 			
-			var m2:Metadata = new Metadata(ns2);
+			var m2:Metadata = new Metadata();
 			m2.addValue("myKey", "myValue");
 			parentMetadata.addValue(ns2, m2);
 			

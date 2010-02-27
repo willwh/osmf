@@ -197,7 +197,7 @@ package org.osmf.metadata
 		{
 			// See if this is the metadata that we're watching:
 			var metadata:Metadata = event.value as Metadata;
-			if (metadata && metadata.namespaceURL == namespaceURL)
+			if (metadata && event.key == namespaceURL)
 			{
 				processWatchedMetadataChange(metadata);
 				
@@ -218,7 +218,7 @@ package org.osmf.metadata
 		{
 			// See if this is the metadata that we're watching:
 			var metadata:Metadata = event.value as Metadata;
-			if (metadata && metadata.namespaceURL == namespaceURL)
+			if (metadata && event.key == namespaceURL)
 			{
 				processWatchedMetadataChange(null);
 				

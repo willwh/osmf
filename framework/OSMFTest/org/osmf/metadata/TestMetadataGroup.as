@@ -42,7 +42,7 @@ package org.osmf.metadata
 			
 			var metadata1:Metadata = new Metadata();
 			var metadata2:Metadata = new Metadata();
-			var child:Metadata = new Metadata(url);
+			var child:Metadata = new Metadata();
 			child.addValue(url,"hello");
 			
 			metadata1.addValue(url, child);

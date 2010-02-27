@@ -66,7 +66,7 @@ package org.osmf.net.httpstreaming
 		 */
 		public static function createHTTPStreamingMetadata(abstUrl:String, abstData:ByteArray, serverBaseUrls:Vector.<String>):Metadata
 		{
-			var metadata:Metadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+			var metadata:Metadata = new Metadata();
 			var bootstrap:BootstrapInfo = new BootstrapInfo();
 			if (abstUrl != null && abstUrl.length > 0)
 			{

@@ -599,7 +599,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new LayoutAttributesMetadata();
-				metadata.addValue(result.namespaceURL, result);
+				metadata.addValue(MetadataNamespaces.LAYOUT_ATTRIBUTES, result);
 			}
 			return result;
 		}
@@ -615,7 +615,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new AbsoluteLayoutMetadata();
-				metadata.addValue(result.namespaceURL, result);
+				metadata.addValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
@@ -631,7 +631,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new RelativeLayoutMetadata();
-				metadata.addValue(result.namespaceURL, result);
+				metadata.addValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
@@ -647,7 +647,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new AnchorLayoutMetadata();
-				metadata.addValue(result.namespaceURL, result);
+				metadata.addValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
@@ -663,7 +663,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new PaddingLayoutMetadata();
-				metadata.addValue(result.namespaceURL, result);
+				metadata.addValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}

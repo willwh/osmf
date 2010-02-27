@@ -22,9 +22,7 @@
 package org.osmf.layout
 {
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.NonSynthesizingMetadata;
-	import org.osmf.metadata.MetadataNamespaces;
 
 	/**
 	 * @private
@@ -99,7 +97,7 @@ package org.osmf.layout
 		 */		
 		public function PaddingLayoutMetadata()
 		{
-			super(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS);
+			super();
 		}
 		
 		override public function getValue(key:String):*

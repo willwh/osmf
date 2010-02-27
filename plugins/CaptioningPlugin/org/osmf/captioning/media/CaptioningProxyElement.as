@@ -151,7 +151,7 @@ package org.osmf.captioning.media
 				var captionMetadata:TimelineMetadata = proxiedElement.getMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
 				if (captionMetadata == null)
 				{
-					captionMetadata = new TimelineMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, proxiedElement);
+					captionMetadata = new TimelineMetadata(proxiedElement);
 					proxiedElement.addMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, captionMetadata);
 				}
 				

@@ -236,9 +236,9 @@ package org.osmf.chrome.controlbar
 		{
 			if (_element)
 			{
-				var metadata:Metadata = new Metadata(METADATA_AUTO_HIDE_URL);
+				var metadata:Metadata = new Metadata();
 				metadata.addValue(METADATA_AUTO_HIDE_URL, _autoHide);
-				_element.addMetadata(metadata.namespaceURL, metadata);
+				_element.addMetadata(METADATA_AUTO_HIDE_URL, metadata);
 			}
 		}
 	}

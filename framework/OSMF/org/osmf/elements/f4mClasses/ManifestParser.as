@@ -380,7 +380,7 @@ package org.osmf.elements.f4mClasses
 						bootstrapInfoURLString = manifestFolder + "/" + bootstrapInfoURLString;
 						media.bootstrapInfo.url = bootstrapInfoURLString;
 					}
-					httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					httpMetadata = new Metadata();
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY, media.bootstrapInfo);
 					if (serverBaseURLs.length > 0)
 					{
@@ -392,7 +392,7 @@ package org.osmf.elements.f4mClasses
 				{
 					if (httpMetadata == null)
 					{
-						httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+						httpMetadata = new Metadata();
 					}
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY, media.metadata);					
 				}
@@ -401,14 +401,14 @@ package org.osmf.elements.f4mClasses
 				{
 					if (httpMetadata == null)
 					{
-						httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+						httpMetadata = new Metadata();
 					}
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY, media.xmp);					
 				}
 
 				if (media.drmAdditionalHeader != null)
 				{					
-					drmMetadata = new Metadata(MetadataNamespaces.DRM_METADATA);
+					drmMetadata = new Metadata();
 					if (Media(value.media[0]).drmAdditionalHeader != null && Media(value.media[0]).drmAdditionalHeader.data != null)
 					{
 						drmMetadata.addValue(MetadataNamespaces.DRM_ADDITIONAL_HEADER_KEY, Media(value.media[0]).drmAdditionalHeader.data);
@@ -419,11 +419,11 @@ package org.osmf.elements.f4mClasses
 				
 				if (httpMetadata != null)
 				{
-					resource.addMetadataValue(httpMetadata.namespaceURL, httpMetadata);
+					resource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
 				}
 				if (drmMetadata != null)
 				{
-					resource.addMetadataValue(drmMetadata.namespaceURL, drmMetadata);
+					resource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 				}				
 			}
 			else if (value.media.length > 1) // Dynamic Streaming
@@ -443,7 +443,7 @@ package org.osmf.elements.f4mClasses
 				// Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resources always get a generated base url.
 				if (NetStreamUtils.isRTMPStream(baseURL) == false)
 				{
-					httpMetadata = new Metadata(MetadataNamespaces.HTTP_STREAMING_METADATA);
+					httpMetadata = new Metadata();
 					dynResource.addMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA, httpMetadata);
 					httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY, serverBaseURLs);
 				}
@@ -466,7 +466,7 @@ package org.osmf.elements.f4mClasses
 					{						
 						if (dynResource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
 						{
-							drmMetadata = new Metadata(MetadataNamespaces.DRM_METADATA);
+							drmMetadata = new Metadata();
 							dynResource.addMetadataValue(MetadataNamespaces.DRM_METADATA, drmMetadata);
 						}						
 						if (media.drmAdditionalHeader != null && media.drmAdditionalHeader.data != null)

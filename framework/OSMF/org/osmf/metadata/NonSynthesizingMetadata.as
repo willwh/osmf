@@ -41,11 +41,11 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NonSynthesizingMetadata(namespaceURL:String=null)
+		public function NonSynthesizingMetadata()
 		{
-			_synthesizer = new NullMetadataSynthesizer(namespaceURL);
+			_synthesizer = new NullMetadataSynthesizer();
 			
-			super(namespaceURL);
+			super();
 		}
 		
 		// Overrides

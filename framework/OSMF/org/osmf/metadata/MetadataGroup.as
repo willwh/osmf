@@ -110,12 +110,7 @@ package org.osmf.metadata
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			
-			if (metadata.namespaceURL != _namespaceURL)
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_EQUAL_GROUP_NS));
-			}
-			
+						
 			metadatas.push({parentMetadata:parentMetadata, metadata:metadata});
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, changeDispatchingEventHandler);
 			

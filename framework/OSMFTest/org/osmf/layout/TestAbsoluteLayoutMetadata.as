@@ -24,7 +24,6 @@ package org.osmf.layout
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 
 	public class TestAbsoluteLayoutMetadata extends TestCase
@@ -43,8 +42,6 @@ package org.osmf.layout
 			var metadata:AbsoluteLayoutMetadata = new AbsoluteLayoutMetadata();
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, onMetadataChange);
 						
-			assertEquals(metadata.namespaceURL, MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS);
-			
 			metadata.x = 1;
 			
 			assertEquals(1, eventCounter);

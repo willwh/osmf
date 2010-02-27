@@ -74,7 +74,7 @@ package org.osmf.metadata
 			// Test passing null arguments
 			try
 			{
-				var timelineMetadata:TimelineMetadata = new TimelineMetadata(null, null);
+				var timelineMetadata:TimelineMetadata = new TimelineMetadata(null);
 				
 				fail();
 			}
@@ -83,14 +83,13 @@ package org.osmf.metadata
 			}
 			
 			// Test passing valid arguments
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			assertTrue(metadata != null);
-			assertEquals(NAMESPACE, metadata.namespaceURL);
 		}
 		
 		public function testAddValue():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			metadata.addEventListener(MetadataEvent.VALUE_ADD, onAdd);
 			var addCount:int = 0;
 			
@@ -141,7 +140,7 @@ package org.osmf.metadata
 		
 		public function testAddMarker():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			metadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onAdd);
 			var addCount:int = 0;
 			
@@ -192,7 +191,7 @@ package org.osmf.metadata
 		
 		public function testRemoveValue():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			metadata.addEventListener(MetadataEvent.VALUE_REMOVE, onRemove);
 			var removeCount:int = 0;
 			
@@ -235,7 +234,7 @@ package org.osmf.metadata
 		
 		public function testRemoveMarker():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			metadata.addEventListener(TimelineMetadataEvent.MARKER_REMOVE, onRemove);
 			var removeCount:int = 0;
 			
@@ -277,7 +276,7 @@ package org.osmf.metadata
 		
 		public function testGetValue():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 
 			metadata.addValue("" + 500, new TimelineMarker(500, 5));
 			metadata.addValue("" + 300, new TimelineMarker(300));
@@ -306,7 +305,7 @@ package org.osmf.metadata
 
 		public function testGetMarkerAt():void
 		{
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, new VideoElement());
+			var metadata:TimelineMetadata = new TimelineMetadata(new VideoElement());
 			
 			metadata.addMarker(new TimelineMarker(500, 5));
 			metadata.addMarker(new TimelineMarker(300));
@@ -344,7 +343,7 @@ package org.osmf.metadata
 			var videoElement:VideoElement = createMediaElement();
 			videoElement.resource = resourceForMediaElement;
 			
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, videoElement);
+			var metadata:TimelineMetadata = new TimelineMetadata(videoElement);
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TIMEOUT));
 
@@ -418,7 +417,7 @@ package org.osmf.metadata
 		{
 			var mediaElement:DynamicMediaElement = createDynamicMediaElement();
 																		 			
-			var metadata:TimelineMetadata = new TimelineMetadata(NAMESPACE, mediaElement);
+			var metadata:TimelineMetadata = new TimelineMetadata(mediaElement);
 
 			for each (var value:TimelineMarker in _testValues)
 			{
@@ -506,7 +505,6 @@ package org.osmf.metadata
 			return new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 		}
 		
-		private static const NAMESPACE:String = "http://www.osmf.org/test";
 		private static const TOLERANCE:Number = .25;
 		private static const TIMEOUT:Number = 9000;
 		
@@ -515,6 +513,5 @@ package org.osmf.metadata
 		private var netFactory:NetFactory;
 		private var loader:NetLoader;
 		private var eventDispatcher:EventDispatcher;
-		
 	}
 }

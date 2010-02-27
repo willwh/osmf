@@ -109,10 +109,10 @@
 			
 				// Assign to the resource the metadata that indicates that it should have a Timed Text
 				// document applied (and include the URL of that document).
-				var metadata:Metadata = new Metadata(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+				var metadata:Metadata = new Metadata();
 												
 				metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, CAPTION_URL);
-				resource.addMetadataValue(metadata.namespaceURL, metadata);
+				resource.addMetadataValue(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE, metadata);
 
 				var netLoader:NetLoader = new NetLoader();
 
@@ -127,8 +127,8 @@
 				captionMetadata = mediaElement.getMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE) as TimelineMetadata;
 				if (captionMetadata == null)
 				{
-					captionMetadata = new TimelineMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, mediaElement);
-					mediaElement.addMetadata(captionMetadata.namespaceURL, captionMetadata);
+					captionMetadata = new TimelineMetadata(mediaElement);
+					mediaElement.addMetadata(CaptioningPluginInfo.CAPTIONING_TEMPORAL_METADATA_NAMESPACE, captionMetadata);
 				}
 				captionMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onShowCaption);
 				captionMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onHideCaption);

@@ -181,9 +181,9 @@ package org.osmf.test.captioning.media
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 	
-			var metadata:Metadata = new Metadata(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE);
+			var metadata:Metadata = new Metadata();
 			metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, captioningDoc);
-			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			resource.addMetadataValue(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE, metadata);
 			
 			return resource;			
 		}
@@ -192,9 +192,9 @@ package org.osmf.test.captioning.media
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);
 			
-			var metadata:Metadata = new Metadata("http://www.osmf.bogus/captioning/1.0");
+			var metadata:Metadata = new Metadata();
 			metadata.addValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI, null);
-			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			resource.addMetadataValue("http://www.osmf.bogus/captioning/1.0", metadata);
 
 			return resource;			
 		}

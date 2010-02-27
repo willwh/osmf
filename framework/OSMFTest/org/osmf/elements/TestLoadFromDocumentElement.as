@@ -39,8 +39,8 @@ package org.osmf.elements
 			var resource:URLResource = new URLResource("http://example.com/blah");
 			var loader:LoaderBase = new LoaderBase();
 			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
-			var testMetadata:Metadata = new Metadata(NS_URL);
-			elem.addMetadata(testMetadata.namespaceURL, testMetadata);
+			var testMetadata:Metadata = new Metadata();
+			elem.addMetadata(NS_URL, testMetadata);
 						
 			var wrapped:MediaElement = new MediaElement();
 						

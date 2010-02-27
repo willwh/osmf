@@ -22,7 +22,6 @@
 package org.osmf.layout
 {
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.NonSynthesizingMetadata;
 
 	/**
@@ -94,7 +93,7 @@ package org.osmf.layout
 		 **/
 		public function AbsoluteLayoutMetadata()
 		{
-			super(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS);
+			super();
 		}
 		
 		/**
