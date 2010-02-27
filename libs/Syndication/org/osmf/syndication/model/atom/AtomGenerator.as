@@ -19,45 +19,54 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.model.atom
 {
-	import __AS3__.vec.Vector;
-	
-	import org.osmf.syndication.model.extensions.FeedExtension;
-	
 	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
+	 * Represents a generator element in an Atom feed.
 	 **/
-	public class Feed
-	{		
+	public class AtomGenerator
+	{
 		/**
-		 * The collection of Entry objects.
+		 * URL of generator.
 		 **/
-		public function get entries():Vector.<Entry>
+		public function get url():String
 		{
-			return _entries;
+			return _url;
 		}
 		
-		public function set entries(value:Vector.<Entry>):void
+		public function set url(value:String):void
 		{
-			_entries = value;
+			_url = value;
 		}
 		
 		/**
-		 * The collection of FeedExtension objects.
+		 * Version of the generator.
 		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
+		public function get version():String
 		{
-			return _feedExtensions;
+			return _version;
 		}
 		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
+		public function set version(value:String):void
 		{
-			_feedExtensions = value;	
+			_version = value;
 		}
 		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+		/**
+		 * The name of the software used to generate the feed.
+		 **/
+		public function get text():String
+		{
+			return _text;
+		}
+		
+		public function set text(value:String):void
+		{
+			_text = value;
+		}
+		
+		private var _url:String;
+		private var _version:String;
+		private var _text:String;
 	}
 }

@@ -19,45 +19,54 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.model.atom
 {
-	import __AS3__.vec.Vector;
-	
-	import org.osmf.syndication.model.extensions.FeedExtension;
-	
 	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
+	 * Represents a category element in an Atom feed.
 	 **/
-	public class Feed
-	{		
+	public class AtomCategory
+	{
 		/**
-		 * The collection of Entry objects.
+		 * Indentifies the category.
 		 **/
-		public function get entries():Vector.<Entry>
+		public function get term():String
 		{
-			return _entries;
+			return _term;
 		}
 		
-		public function set entries(value:Vector.<Entry>):void
+		public function set term(value:String):void
 		{
-			_entries = value;
+			_term = value;
 		}
 		
 		/**
-		 * The collection of FeedExtension objects.
+		 * Identifies teh categorization scheme via a URL.
 		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
+		public function get scheme():String
 		{
-			return _feedExtensions;
+			return _scheme;
 		}
 		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
+		public function set scheme(value:String):void
 		{
-			_feedExtensions = value;	
+			_scheme = value;
+		}
+
+		/**
+		 * A human readable label for display.
+		 **/
+		public function get label():String
+		{
+			return _label;
 		}
 		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+		public function set label(value:String):void
+		{
+			_label = value;
+		}
+
+		private var _term:String;
+		private var _scheme:String;
+		private var _label:String;	
 	}
 }

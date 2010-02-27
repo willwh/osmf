@@ -23,22 +23,35 @@ package org.osmf.syndication.model.atom
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.syndication.model.Feed;
-	
+	import org.osmf.syndication.model.Entry;
+
 	/**
-	 * This class represents the feed element
-	 * in an Atom 1.0 feed.
+	 * Represents an entry element in an Atom feed.
 	 **/
-	public class AtomFeed extends Feed
+	public class AtomEntry extends Entry
 	{
 		/**
 		 * Constructor.
 		 **/
-		public function AtomFeed()
+		public function AtomEntry()
 		{
 			super();
 		}
 		
+		/**
+		 * Identifies the entry using a universally unique and
+		 * permanent URI.
+		 **/
+		public function get id():String
+		{
+			return _id;
+		}
+		
+		public function set id(value:String):void
+		{
+			_id = value;
+		}
+		 
 		/**
 		 * The title of the feed.
 		 **/
@@ -51,24 +64,10 @@ package org.osmf.syndication.model.atom
 		{
 			_title = value;
 		}
-		
-		/**
-		 * Identifies the feed using a universally unique and
-		 * permanent URI.
-		 **/
-		public function get id():String
-		{
-			return _id;
-		}
-		
-		public function set id(value:String):void
-		{
-			_id = value;
-		}
 
 		/**
-		 * Indicates the last time the feed was modified
-		 * in a significant way.
+		 * Indicates the last time the entry was 
+		 * modified in a significant way.
 		 **/
 		public function get updated():String
 		{
@@ -94,7 +93,21 @@ package org.osmf.syndication.model.atom
 		}
 		
 		/**
-		 * Indentifies a related Web page.
+		 * Contains, or links to, the complete 
+		 * content of the entry.
+		 **/
+		public function get content():AtomContent
+		{
+			return _content;
+		}
+		
+		public function set content(value:AtomContent):void
+		{
+			_content = value;
+		}
+		
+		/**
+		 * Identifies a related Web page.
 		 **/
 		public function get link():AtomLink
 		{
@@ -107,7 +120,21 @@ package org.osmf.syndication.model.atom
 		}
 		
 		/**
-		 * Categories the feed belongs to.
+		 * A short summary, abstract, or excerpt of
+		 * the entry.
+		 **/
+		public function get summary():AtomText
+		{
+			return _summary;
+		}
+		
+		public function set summary(value:AtomText):void
+		{
+			_summary = value;
+		}
+		
+		/**
+		 * Categories the entry belongs to.
 		 **/
 		public function get categories():Vector.<AtomCategory>
 		{
@@ -120,7 +147,7 @@ package org.osmf.syndication.model.atom
 		}
 		
 		/**
-		 * Contributors to the feed.
+		 * Contributors to the entry.
 		 **/
 		public function get contributors():Vector.<AtomPerson>
 		{
@@ -133,43 +160,19 @@ package org.osmf.syndication.model.atom
 		}
 		
 		/**
-		 * The software used to generate the feed.
+		 * If an entry is copied from one feed into another
+		 * feed, then the source feed's metadata (all child
+		 * elements of a feed other than the entry elements)
+		 * should be preserved. 
 		 **/
-		public function get generator():AtomGenerator
+		public function get source():AtomFeed
 		{
-			return _generator;
+			return _source;
 		}
 		
-		public function set generator(value:AtomGenerator):void
+		public function set source(value:AtomFeed):void
 		{
-			_generator = value;
-		}
-		
-		/**
-		 * URL of a small image which provides iconic visual 
-		 * identification for the feed. 
-		 **/
-		public function get icon():String
-		{
-			return _icon;
-		}
-		
-		public function set icon(value:String):void
-		{
-			_icon = value;
-		}
-
-		/**
-		 * URL of a logo.
-		 **/
-		public function get logo():String
-		{
-			return _logo;
-		}
-		
-		public function set logo(value:String):void
-		{
-			_logo = value;
+			_source = value;
 		}
 		
 		/**
@@ -185,32 +188,18 @@ package org.osmf.syndication.model.atom
 		{
 			_rights = value;
 		}
-
-		/**
-		 * A human readable description or subtitle for 
-		 * the feed.
-		 **/
-		public function get subtitle():AtomText
-		{
-			return _subtitle;
-		}
 		
-		public function set subtitle(value:AtomText):void
-		{
-			_subtitle = value;
-		}
-		
-		private var _title:AtomText;
 		private var _id:String;
+		private var _title:AtomText;
 		private var _updated:String;
 		private var _authors:Vector.<AtomPerson>;
+		private var _content:AtomContent;
 		private var _link:AtomLink;
+		private var _summary:AtomText;
 		private var _categories:Vector.<AtomCategory>;
 		private var _contributors:Vector.<AtomPerson>;
-		private var _generator:AtomGenerator;
-		private var _icon:String;
-		private var _logo:String;
+		private var _source:AtomFeed;
 		private var _rights:AtomText;
-		private var _subtitle:AtomText;
+		
 	}
 }

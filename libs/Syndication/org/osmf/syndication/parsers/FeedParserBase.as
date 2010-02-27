@@ -63,6 +63,31 @@ package org.osmf.syndication.parsers
 			return null;
 		}
 		
+		/**
+		 * Iterates over the collection of FeedExtensionParser objects
+		 * and calls the parse method, passing in the node. Feed parsers
+		 * should call this method passing in the feed and entry tags so
+		 * any extension parsers added via the addFeedExtensionParser can 
+		 * be called.
+		 **/
+		internal function parseFeedExtensions(xml:XML):Vector.<FeedExtension>
+		{
+			var feedExtensions:Vector.<FeedExtension> = new Vector.<FeedExtension>();
+			var feedExtensionParsers:Vector.<FeedExtensionParser> = getFeedExtensionParsers();
+			
+			for each (var feedExtensionsParser:FeedExtensionParser in feedExtensionParsers)
+			{
+				var feedExtension:FeedExtension = feedExtensionsParser.parse(xml);
+				if (feedExtension != null)
+				{
+					feedExtensions.push(feedExtension);
+				}
+			}
+			
+			return feedExtensions;
+		}
+		
+		
 		private var _feedExtensionParsers:Vector.<FeedExtensionParser>;
 	}
 }

@@ -32,9 +32,25 @@ package org.osmf.syndication.model.rss20
 	 **/
 	public class RSSFeed extends Feed
 	{
+		/**
+		 * Constructor.
+		 **/
 		public function RSSFeed()
 		{
 			super();
+		}
+		
+		/**
+		 * The title of the feed.
+		 **/
+		public function get title():String
+		{
+			return _title;
+		}
+		
+		public function set title(value:String):void
+		{
+			_title = value;
 		}
 		
 		/**
@@ -255,6 +271,7 @@ package org.osmf.syndication.model.rss20
 			_rating = value;
 		}
 		
+		private var _title:String;
 		private var _link:String;
 		private var _description:String;
 		private var _categories:Vector.<RSSCategory>;		

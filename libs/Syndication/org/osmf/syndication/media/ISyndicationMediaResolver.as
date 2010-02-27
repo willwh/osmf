@@ -19,45 +19,14 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.media
 {
-	import __AS3__.vec.Vector;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
+	import org.osmf.syndication.model.Entry;
 	
-	import org.osmf.syndication.model.extensions.FeedExtension;
-	
-	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
-	 **/
-	public class Feed
-	{		
-		/**
-		 * The collection of Entry objects.
-		 **/
-		public function get entries():Vector.<Entry>
-		{
-			return _entries;
-		}
-		
-		public function set entries(value:Vector.<Entry>):void
-		{
-			_entries = value;
-		}
-		
-		/**
-		 * The collection of FeedExtension objects.
-		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
-		{
-			return _feedExtensions;
-		}
-		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
-		{
-			_feedExtensions = value;	
-		}
-		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+	public interface ISyndicationMediaResolver
+	{
+		function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement;
 	}
 }

@@ -2,6 +2,7 @@
 <flexLibProperties version="1">
 <includeClasses>
 <classEntry path="org.osmf.syndication.model.extensions.itunes.ITunesExplicitType"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomGenerator"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSCredit"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSHashType"/>
 <classEntry path="org.osmf.syndication.parsers.FeedParser"/>
@@ -18,11 +19,14 @@
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSTextBase"/>
 <classEntry path="org.osmf.syndication.parsers.extensions.FeedExtensionParser"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSMediumType"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomTextType"/>
 <classEntry path="org.osmf.syndication.model.Feed"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSExtension"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSStatus"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSLanguageCodes"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSRestrictionType"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomLink"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomCategory"/>
 <classEntry path="org.osmf.syndication.parsers.FeedParserBase"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSElementBase"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSExpressionType"/>
@@ -35,6 +39,8 @@
 <classEntry path="org.osmf.syndication.model.extensions.itunes.ITunesExtension"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSDescription"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSCopyright"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomEntry"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomContent"/>
 <classEntry path="org.osmf.syndication.model.extensions.itunes.ITunesOwner"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSImage"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSRating"/>
@@ -43,15 +49,17 @@
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSSubtitle"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSFeed"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSText"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomPerson"/>
 <classEntry path="org.osmf.syndication.parsers.extensions.MediaRSSExtensionParser"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSPlayer"/>
+<classEntry path="org.osmf.syndication.model.atom.AtomText"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSTitle"/>
-<classEntry path="org.osmf.syndication.media.MediaGenerator"/>
+<classEntry path="org.osmf.syndication.media.SyndicationMediaGenerator"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSScene"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSCloud"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSSource"/>
 <classEntry path="org.osmf.syndication.model.extensions.mrss.MediaRSSPeerLink"/>
-<classEntry path="org.osmf.syndication.media.DefaultMediaResolver"/>
+<classEntry path="org.osmf.syndication.media.DefaultSyndicationMediaResolver"/>
 <classEntry path="org.osmf.syndication.parsers.RSS20Parser"/>
 <classEntry path="org.osmf.syndication.model.extensions.FeedExtension"/>
 <classEntry path="org.osmf.syndication.model.rss20.RSSItem"/>

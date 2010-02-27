@@ -170,18 +170,21 @@ package org.osmf.syndication.parsers
 				}
 			}
 			
-			if (items.length > 0)
+			if (channel != null)
 			{
-				channel.entries = items;
+				if (items.length > 0)
+				{
+					channel.entries = items;
+				}
+				
+				if (categories.length > 0)
+				{
+					channel.categories = categories;
+				}
+				
+				var feedExtensionsCollection:Vector.<FeedExtension> = parseFeedExtensions(channelNode);
+				channel.feedExtensions = feedExtensionsCollection;
 			}
-			
-			if (categories.length > 0)
-			{
-				channel.categories = categories;
-			}
-			
-			var feedExtensionsCollection:Vector.<FeedExtension> = parseFeedExtensions(channelNode);
-			channel.feedExtensions = feedExtensionsCollection;
 			
 			return channel;
 		}
@@ -237,7 +240,7 @@ package org.osmf.syndication.parsers
 									item.guid = childNode;
 									break;
 								case TAG_NAME_PUB_DATE:
-									item.pubDate = childNode;
+									item.published = childNode;
 									break;
 								case TAG_NAME_SOURCE:
 									var source:RSSSource = new RSSSource();
@@ -250,36 +253,18 @@ package org.osmf.syndication.parsers
 				}
 			}
 			
-			if (categories.length > 0)
+			if (item != null)
 			{
-				item.categories = categories;
+				if (categories.length > 0)
+				{
+					item.categories = categories;
+				}
+				
+				var feedExtensionsCollection:Vector.<FeedExtension> = parseFeedExtensions(itemNode);
+				item.feedExtensions = feedExtensionsCollection;
 			}
-			
-			var feedExtensionsCollection:Vector.<FeedExtension> = parseFeedExtensions(itemNode);
-			item.feedExtensions = feedExtensionsCollection;
 			
 			return item;
-		}
-		
-		/**
-		 * Iterates over the collection of FeedExtensionParser objects
-		 * and calls the parse method, passing in the node.
-		 **/
-		private function parseFeedExtensions(xml:XML):Vector.<FeedExtension>
-		{
-			var feedExtensions:Vector.<FeedExtension> = new Vector.<FeedExtension>();
-			var feedExtensionParsers:Vector.<FeedExtensionParser> = getFeedExtensionParsers();
-			
-			for each (var feedExtensionsParser:FeedExtensionParser in feedExtensionParsers)
-			{
-				var feedExtension:FeedExtension = feedExtensionsParser.parse(xml);
-				if (feedExtension != null)
-				{
-					feedExtensions.push(feedExtension);
-				}
-			}
-			
-			return feedExtensions;
 		}
 		
 		private function debugLog(msg:String):void

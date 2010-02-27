@@ -40,6 +40,19 @@ package org.osmf.syndication.model.rss20
 		}		
 		
 		/**
+		 * The title of the item.
+		 **/
+		public function get title():String
+		{
+			return _title;
+		}
+		
+		public function set title(value:String):void
+		{
+			_title = value;
+		}
+		
+		/**
 		 * An email address of the author of the item.
 		 **/
 		public function get author():String
@@ -119,19 +132,6 @@ package org.osmf.syndication.model.rss20
 		}
 		
 		/**
-		 * Indicates when the item was published.
-		 **/
-		public function get pubDate():String
-		{
-			return _pubDate;
-		}
-		
-		public function set pubDate(value:String):void
-		{
-			_pubDate = value;
-		}
-		
-		/**
 		 * The source of the syndication item.
 		 **/
 		public function get source():RSSSource
@@ -144,13 +144,13 @@ package org.osmf.syndication.model.rss20
 			_source = value;
 		}
 		
+		private var _title:String;
 		private var _link:String;
 		private var _description:String;		
 		private var _author:String;
 		private var _categories:Vector.<RSSCategory>;
 		private var _comments:String;
 		private var _guid:String;
-		private var _pubDate:String;		
 		private var _source:RSSSource;
 	}
 }

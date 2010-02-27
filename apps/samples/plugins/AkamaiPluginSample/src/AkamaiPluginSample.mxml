@@ -29,8 +29,10 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import com.akamai.osmf.samples.SyndicationMediaResolver;
+			import org.osmf.syndication.media.SyndicationMediaGenerator;
 			import org.osmf.traits.TimeTrait;
-			import org.osmf.syndication.media.MediaGenerator;
+			import org.osmf.syndication.media.SyndicationMediaGenerator;
 			import org.osmf.syndication.model.extensions.mrss.MediaRSSThumbnail;
 			import org.osmf.syndication.model.extensions.mrss.MediaRSSExtension;
 			import org.osmf.syndication.model.extensions.FeedExtension;
@@ -197,7 +199,6 @@
 				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.COMPLETE, onMediaComplete);
 				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				
 				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
@@ -206,11 +207,6 @@
 				waitForSeek = false;
 				
 				clearInfoText();
-			}
-			
-			private function get MASTPluginLoaded():Boolean
-			{
-				return (pluginResourceMap && pluginResourceMap[MAST_PLUGIN_INFOCLASS] != null);
 			}
 			
 			private function loadMedia():void
@@ -234,8 +230,7 @@
 					{
 						// Assign to the resource, the metadata that indicates that it should have a MAST
 						// document applied (and include the URL of that MAST document).
-						var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
-						facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_PREROLL);
+						var facet:Facet = createMASTFacet();
 						resource.metadata.addFacet(facet);
 					}
 					
@@ -252,6 +247,18 @@
 						playMediaElement();
 					}
 				}
+			}
+			
+			private function get MASTPluginLoaded():Boolean
+			{
+				return (pluginResourceMap && pluginResourceMap[MAST_PLUGIN_INFOCLASS] != null);
+			}
+			
+			private function createMASTFacet():Facet
+			{
+				var facet:Facet = new Facet(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+				facet.addValue(new FacetKey(MASTPluginInfo.MAST_METADATA_KEY_URI), MAST_URL_PREROLL);
+				return facet;
 			}
 			
 			private function loadPlaylist(url:String):void
@@ -300,10 +307,18 @@
 			private function playSelectedPlaylistItem():void
 			{
 				var playlistItem:PlaylistItem = tileList.selectedItem as PlaylistItem;
-				var mediaGenerator:MediaGenerator = new MediaGenerator();
+				var facet:Facet;
+				
+				if (MASTPluginLoaded)
+				{
+					facet = createMASTFacet();
+				}
+				
+				var mediaResolver:SyndicationMediaResolver = new SyndicationMediaResolver(facet);
+				var mediaGenerator:SyndicationMediaGenerator = new SyndicationMediaGenerator(mediaResolver);
 				
 				setupMediaElementListeners(false);
-				mediaElement = mediaGenerator.createMediaElement(playlistItem.entry);
+				mediaElement = mediaGenerator.createMediaElement(playlistItem.entry, mediaFactory);
 				setupMediaElementListeners();
 				playMediaElement();
 			}
@@ -471,7 +486,7 @@
 			
 			private function onMediaComplete(event:TimeEvent):void
 			{
-				if (playlist.length)
+				if (event.type == TimeEvent.COMPLETE && playlist.length)
 				{
 					var newIndex:int = (tileList.selectedIndex == (playlist.length - 1)) ? 0 : tileList.selectedIndex + 1;
 					tileList.selectedIndex = newIndex; 
@@ -514,6 +529,10 @@
    						var dsTrait:DynamicStreamTrait = (event.target as MediaElement).getTrait(event.traitType) as DynamicStreamTrait;   					
    						setupSwitchingChangeListener(dsTrait);
    						break;
+   					case MediaTraitType.TIME:
+   						var timeTrait:TimeTrait = (event.target as MediaElement).getTrait(event.traitType) as TimeTrait;
+   						timeTrait.addEventListener(TimeEvent.COMPLETE, onMediaComplete);
+   						break;
    				}	
    			}
    			
@@ -527,6 +546,10 @@
    					case MediaTraitType.DYNAMIC_STREAM:
    						var dsTrait:DynamicStreamTrait = (event.target as MediaElement).getTrait(event.traitType) as DynamicStreamTrait;
    						setupSwitchingChangeListener(dsTrait, false);
+   						break;
+   					case MediaTraitType.TIME:
+   						var timeTrait:TimeTrait = (event.target as MediaElement).getTrait(event.traitType) as TimeTrait;
+   						timeTrait.removeEventListener(TimeEvent.COMPLETE, onMediaComplete);
    						break;
    				}	
    			}

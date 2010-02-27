@@ -19,45 +19,37 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.model.atom
 {
-	import __AS3__.vec.Vector;
-	
-	import org.osmf.syndication.model.extensions.FeedExtension;
-	
 	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
+	 * Enumerates all possible values for the text type
+	 * attribute in an Atom feed.
 	 **/
-	public class Feed
-	{		
+	public class AtomTextType
+	{
 		/**
-		 * The collection of Entry objects.
+		 * Indicates the element contains plain text 
+		 * with no entity escaped html.
 		 **/
-		public function get entries():Vector.<Entry>
-		{
-			return _entries;
-		}
-		
-		public function set entries(value:Vector.<Entry>):void
-		{
-			_entries = value;
-		}
+		public static const TEXT:String = "text";
 		
 		/**
-		 * The collection of FeedExtension objects.
+		 * Indicates the element contains entity
+		 * escaped html.
 		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
-		{
-			return _feedExtensions;
-		}
+		public static const HTML:String = "html";
 		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
-		{
-			_feedExtensions = value;	
-		}
+		/**
+		 * Indicates the element contains inline xhtml,
+		 * wrapped in a div element.
+		 **/
+		public static const XHTML:String = "xhtml";
 		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+		/**
+		 * @private
+		 * 
+		 * Collection of all types.
+		 **/
+		public static const ALL_TYPES:Vector.<String> = Vector.<String>([TEXT, HTML, XHTML]);		
 	}
 }

@@ -36,7 +36,7 @@ package com.akamai.osmf.samples
 		
 		public function get title():String
 		{
-			return entry.title;	
+			return (entry as RSSItem).title;	
 		}
 		
 		public function get thumbnail():MediaRSSThumbnail

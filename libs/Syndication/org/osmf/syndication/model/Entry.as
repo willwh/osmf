@@ -26,19 +26,6 @@ package org.osmf.syndication.model
 	public class Entry
 	{
 		/**
-		 * The title of the item.
-		 **/
-		public function get title():String
-		{
-			return _title;
-		}
-		
-		public function set title(value:String):void
-		{
-			_title = value;
-		}
-		
-		/**
 		 * Describes a media object that is attached
 		 * to the item.
 		 **/
@@ -50,6 +37,20 @@ package org.osmf.syndication.model
 		public function set enclosure(value:Enclosure):void
 		{
 			_enclosure = value;
+		}
+		
+		/**
+		 * The time and date of the initial creation or
+		 * first availability of the entry.
+		 **/
+		public function get published():String
+		{
+			return _published;
+		}
+		
+		public function set published(value:String):void
+		{
+			_published = value;
 		}
 
 		/**
@@ -65,8 +66,8 @@ package org.osmf.syndication.model
 			_feedExtensions = value;	
 		}
 
-		private var _title:String;
 		private var _enclosure:Enclosure;
+		private var _published:String;
 		private var _feedExtensions:Vector.<FeedExtension>;
 	}
 }

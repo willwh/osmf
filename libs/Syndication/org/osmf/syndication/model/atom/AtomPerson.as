@@ -19,45 +19,55 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.model.atom
 {
-	import __AS3__.vec.Vector;
-	
-	import org.osmf.syndication.model.extensions.FeedExtension;
-	
 	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
+	 * Represents a person in an Atom feed such as
+	 * author and contributor.
 	 **/
-	public class Feed
-	{		
+	public class AtomPerson
+	{
 		/**
-		 * The collection of Entry objects.
+		 * Human-readable name for the person.
 		 **/
-		public function get entries():Vector.<Entry>
+		public function get name():String
 		{
-			return _entries;
+			return _name;
 		}
 		
-		public function set entries(value:Vector.<Entry>):void
+		public function set name(value:String):void
 		{
-			_entries = value;
+			_name = value;
 		}
 		
 		/**
-		 * The collection of FeedExtension objects.
+		 * email address for the person.
 		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
+		public function get email():String
 		{
-			return _feedExtensions;
+			return _email;
 		}
 		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
+		public function set email(value:String):void
 		{
-			_feedExtensions = value;	
+			_email = value;
 		}
 		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+		/**
+		 * Home page for the person.
+		 **/
+		public function get url():String
+		{
+			return _url;
+		}
+		
+		public function set url(value:String):void
+		{
+			_url = value;
+		}
+		
+		private var _name:String;
+		private var _email:String;
+		private var _url:String;
 	}
 }

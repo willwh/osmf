@@ -19,45 +19,61 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.model
+package org.osmf.syndication.model.atom
 {
-	import __AS3__.vec.Vector;
-	
-	import org.osmf.syndication.model.extensions.FeedExtension;
+	import org.osmf.syndication.model.Enclosure;
 	
 	/**
-	 * This class represents the root level object
-	 * of the syndication document object model.
+	 * Represents a link element in an Atom feed.
 	 **/
-	public class Feed
-	{		
+	public class AtomLink extends Enclosure
+	{
 		/**
-		 * The collection of Entry objects.
+		 * A single link relationship type. It can be
+		 * a full URL or one of the predefined
+		 * values.
+		 * 
+		 * @see http://www.atomenabled.org/developers/syndication/#link
 		 **/
-		public function get entries():Vector.<Entry>
+		public function get rel():String
 		{
-			return _entries;
+			return _rel
 		}
 		
-		public function set entries(value:Vector.<Entry>):void
+		public function set rel(value:String):void
 		{
-			_entries = value;
+			_rel = value;
 		}
 		
 		/**
-		 * The collection of FeedExtension objects.
+		 * The language of the referenced resource.
 		 **/
-		public function get feedExtensions():Vector.<FeedExtension>
+		public function get hreflang():String
 		{
-			return _feedExtensions;
+			return _hreflang;
 		}
 		
-		public function set feedExtensions(value:Vector.<FeedExtension>):void
+		public function set hreflang(value:String):void
 		{
-			_feedExtensions = value;	
+			_hreflang = value;
+		}
+
+		/**
+		 * Human readable information about the link, typically
+		 * for display purposes.
+		 **/
+		public function get title():String
+		{
+			return _title
 		}
 		
-		private var _entries:Vector.<Entry>;
-		private var _feedExtensions:Vector.<FeedExtension>;
+		public function set title(value:String):void
+		{
+			_title = value;
+		}
+
+		private var _rel:String;
+		private var _hreflang:String;
+		private var _title:String;
 	}
 }

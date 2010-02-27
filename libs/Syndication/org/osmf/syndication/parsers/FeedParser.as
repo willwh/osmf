@@ -74,9 +74,11 @@ package org.osmf.syndication.parsers
 			
 			// Add the Atom  parser
 			var atomParser:AtomParser = new AtomParser();
+			atomParser.addFeedExtensionParser(new ITunesExtensionParser());
+			atomParser.addFeedExtensionParser(new MediaRSSExtensionParser());
 			feedParsers.push(atomParser);
 			
-			// Add the RSS 2.0 parser and it's feed extensions
+			// Add the RSS 2.0 parser and all available feed extensions
 			var rss20Parser:RSS20Parser = new RSS20Parser();
 			rss20Parser.addFeedExtensionParser(new ITunesExtensionParser());
 			rss20Parser.addFeedExtensionParser(new MediaRSSExtensionParser());
