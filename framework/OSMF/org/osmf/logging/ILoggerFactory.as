@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.logging
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * ILoggerFactory defines a logger factory that serves as the initial contact
 	 * point for OSMF applications to get a hold on various loggers. Usually in an OSMF
 	 * application there is one instance of ILoggerFactory object and multiple instances

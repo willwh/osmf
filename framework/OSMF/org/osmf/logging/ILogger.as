@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.logging
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * ILogger interface defines the capabilities of a logger, the 
 	 * object that OSMF applications interact to write logging messages.
 	 * 

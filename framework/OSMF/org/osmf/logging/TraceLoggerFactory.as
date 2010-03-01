@@ -23,7 +23,11 @@ package org.osmf.logging
 {
 	import flash.utils.Dictionary;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * This class implements ILoggerFactory. It is the associated logger factory
 	 * for the TraceLogger. 
 	 *  

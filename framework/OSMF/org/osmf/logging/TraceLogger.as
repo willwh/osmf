@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.logging
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * This class implements the ILogger interface. This is just a 
 	 * "bare-bone" implementation. It intends to provide a quick out-of-box
 	 * logging solution. It writes all the messages to the debug console. 

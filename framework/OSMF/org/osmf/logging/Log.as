@@ -21,7 +21,11 @@
 *****************************************************/
 package org.osmf.logging
 {
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Usually, there is one instance of ILoggerFactory per OSMF application. Log is the
 	 * designated holder of the logger factory for the OSMF application as well as OSMF 
 	 * media framework to access the global logger factory. 
