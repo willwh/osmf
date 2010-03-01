@@ -27,6 +27,8 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.osmf.events.*;
+	import org.osmf.net.StreamType;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 	   
@@ -168,6 +170,18 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
+	
+	/**
+	 * Dispatched when the MediaPlayer's play mode has changed.
+	 * 
+	 * @eventType org.osmf.events.MediaPlayerPlayModeChangeEvent.MEDIA_PLAYER_PLAY_MODE_CHANGE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */	
+	[Event(name="mediaPlayerPlayModeChange", type="org.osmf.events.MediaPlayerPlayModeChangeEvent")]
 
     /**
 	 * Dispatched when the <code>currentTime</code> property of the media has changed.
@@ -377,18 +391,6 @@ package org.osmf.media
 	[Event(name="hasDRMChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
 	
 	/**
-	 * Dispatched when the <code>hasDVR</code> property has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DVR_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="hasDVRChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-	
-	/**
 	 * Dispatched when the <code>hasDisplayObject</code> property has changed.
 	 * 
 	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT
@@ -449,6 +451,8 @@ package org.osmf.media
 			super();
 			
 			_state = MediaPlayerState.UNINITIALIZED;
+			_playMode = MediaPlayerPlayMode.UNKNOWN;
+			
 			this.media = media;
 			
 			_currentTimeTimer.addEventListener(TimerEvent.TIMER, onCurrentTimeTimer);			
@@ -789,19 +793,6 @@ package org.osmf.media
 			return _hasDRM;
 		}	
 		
-		/**
-		 *  Return if the the media element has the DVRTrait.
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get hasDVR():Boolean
-		{
-			return _hasDVR;
-		}	
-				
 		/**
 		 * Volume of the media.
 		 * Ranges from 0 (silent) to 1 (full volume). 
@@ -1473,24 +1464,23 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
-		public function get livePosition():Number
+		public function get liveTime():Number
 		{
-			return hasDVR ? DVRTrait(media.getTrait(MediaTraitType.DVR)).livePosition : NaN;
+			var result:Number;
+			if (_dvrTrait != null && _dvrTrait.isRecording)
+			{
+				result = _dvrTrait.livePosition;
+			}
+			else if (_playMode == MediaPlayerPlayMode.LIVE)
+			{
+				result = currentTime;
+			}
+			return result;
 		}
 		
-		/**
-		 * Returns <code>true</code> if the media is currently being recorded by its server.
-		 * 
-		 * Media without a DVRTrait will always return <code>false</code>. 
-		 * 
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */		
-		public function get isRecording():Boolean
+		public function get playMode():String
 		{
-			return hasDVR ? DVRTrait(media.getTrait(MediaTraitType.DVR)).isRecording : false;
+			return _playMode;
 		}
 
 		// Internals
@@ -1498,7 +1488,7 @@ package org.osmf.media
 	    
 	    private function getTraitOrThrow(traitType:String):MediaTraitBase
 	    {
-	    	if (!media || !media.hasTrait(traitType))
+	    	if (!media || !media.hasTrait(traitType)) 
 	    	{
 	    		var error:String = OSMFStrings.getString(OSMFStrings.TRAIT_NOT_SUPPORTED);
 	    		var traitName:String = traitType.replace("[class ", "");
@@ -1644,8 +1634,10 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;	
 					break;
 				case MediaTraitType.DVR:
-					_hasDVR = add;
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DVR_CHANGE;	
+					_dvrTrait = add ? media.getTrait(traitType) as DVRTrait : null;
+					changeListeners(add, traitType, DVREvent.IS_RECORDING_CHANGE, onIsRecordingChange);
+					updatePlayMode();
+					break;
 			}					 
 			if (eventType != null)
 			{
@@ -1864,6 +1856,64 @@ package org.osmf.media
 				setState(MediaPlayerState.PLAYBACK_ERROR);
 			}
 		}
+		
+		private function onIsRecordingChange(event:DVREvent):void
+		{
+			updatePlayMode();
+		}
+		
+		private function updatePlayMode():void
+		{
+			var oldMode:String = _playMode;
+			
+			_playMode =  MediaPlayerPlayMode.UNKNOWN;
+			
+			var streamType:String
+				= media && media.resource is StreamingURLResource
+					? StreamingURLResource(media.resource).streamType
+					: null;
+			
+			if	(	streamType == StreamType.LIVE
+				||	(	streamType == StreamType.DVR
+					&&	_dvrTrait != null
+					&&	_dvrTrait.isRecording == false
+					//&& isFullyPrercorded != false
+					)
+				)
+			{
+				_playMode = MediaPlayerPlayMode.LIVE;
+			} 
+			else if
+				(	streamType == StreamType.DVR
+				&&	_dvrTrait != null
+				&&	_dvrTrait.isRecording
+				)
+			{
+				_playMode = MediaPlayerPlayMode.LIVE_AND_RECORDING;
+			}
+			else if
+				(	streamType == StreamType.RECORDED
+				||	(	streamType == StreamType.DVR
+					&&	_dvrTrait != null
+					&&	_dvrTrait.isRecording == false
+					//&& isFullyPrercorded
+					)
+				)
+			{
+				_playMode = MediaPlayerPlayMode.RECORDED;
+			}
+			
+			if (_playMode != oldMode)
+			{
+				dispatchEvent
+					( new MediaPlayerPlayModeChangeEvent
+						( MediaPlayerPlayModeChangeEvent.MEDIA_PLAYER_PLAY_MODE_CHANGE
+						, false, false
+						, _playMode
+						)
+					);
+			}
+		}
 					
 	    private static const DEFAULT_UPDATE_INTERVAL:Number = 250;
 	      
@@ -1875,6 +1925,7 @@ package org.osmf.media
 		private var _currentTimeUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _currentTimeTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var _state:String; // MediaPlayerState
+		private var _playMode:String; // MediaPlayerPlayMode
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		
@@ -1897,6 +1948,7 @@ package org.osmf.media
 		private var _canBuffer:Boolean;
 		private var _isDynamicStream:Boolean;
 		private var _hasDRM:Boolean;
-		private var _hasDVR:Boolean;
+		
+		private var _dvrTrait:DVRTrait;
 	}
 }
