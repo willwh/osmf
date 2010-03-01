@@ -23,7 +23,6 @@
 package org.osmf.chrome.controlbar.widgets
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import org.osmf.events.DVREvent;
 	import org.osmf.events.SeekEvent;
@@ -34,21 +33,21 @@ package org.osmf.chrome.controlbar.widgets
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	
-	public class RecordButton extends Button
+	public class LiveButton extends Button
 	{
-		[Embed("../assets/images/record_up.png")]
-		public var recordUpType:Class;
-		[Embed("../assets/images/record_down.png")]
-		public var recordDownType:Class;
-		[Embed("../assets/images/record_disabled.png")]
-		public var recordDisabledType:Class;
+		[Embed("../assets/images/live_up.png")]
+		public var liveUpType:Class;
+		[Embed("../assets/images/live_down.png")]
+		public var liveDownType:Class;
+		[Embed("../assets/images/live_disabled.png")]
+		public var liveDisabledType:Class;
 		
-		public function RecordButton(up:Class = null, down:Class = null, disabled:Class = null)
+		public function LiveButton(up:Class = null, down:Class = null, disabled:Class = null)
 		{
 			super
-				( up || recordUpType
-				, down || recordDownType
-				, disabled || recordDisabledType
+				( up || liveUpType
+				, down || liveDownType
+				, disabled || liveDisabledType
 				);
 		}
 		
@@ -76,8 +75,8 @@ package org.osmf.chrome.controlbar.widgets
 			
 			if (timeTrait)
 			{
-				timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, visibilityDeterminingEventHandler);
 				timeTrait = null;
+				timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, visibilityDeterminingEventHandler);
 			}
 			
 			visibilityDeterminingEventHandler();
@@ -86,35 +85,6 @@ package org.osmf.chrome.controlbar.widgets
 		override protected function get requiredTraits():Vector.<String>
 		{
 			return _requiredTraits;
-		}
-		
-		override protected function onMouseClick(event:MouseEvent):void
-		{
-			var seekable:SeekTrait = element.getTrait(MediaTraitType.SEEK) as SeekTrait;
-			if (seekable && dvrTrait)
-			{
-				var livePosition:Number = dvrTrait.livePosition;
-				if (seekable.canSeekTo(livePosition))
-				{
-					// While seeking, disable the button:
-					enabled = false;
-					seekable.addEventListener
-						( SeekEvent.SEEKING_CHANGE
-						, function(event:SeekEvent):void
-							{
-								if (event.seeking == false)
-								{
-									// Re-enable the button:
-									removeEventListener(event.type, arguments.callee);
-									enabled = true;
-								}
-							}
-						);
-						
-					// Seek to the live position:
-					seekable.seek(livePosition);
-				}
-			}
 		}
 		
 		// Internals
@@ -126,9 +96,7 @@ package org.osmf.chrome.controlbar.widgets
 				=	dvrTrait != null
 				&&	dvrTrait.isRecording == true
 				&&	timeTrait
-				&&	timeTrait.currentTime < Math.max(0, dvrTrait.livePosition - 5);
-			
-			enabled = element && element.hasTrait(MediaTraitType.SEEK);
+				&&	timeTrait.currentTime >= Math.max(0, dvrTrait.livePosition - 5);
 		}
 		
 		private var dvrTrait:DVRTrait;
