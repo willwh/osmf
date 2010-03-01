@@ -144,7 +144,7 @@ package
 		/* static */
 		
 		private static const VIDEO_URL:String
-			= "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
+			= "http://mediapm.edgesuite.net/osmf/content/test/logo_animated.flv";
 			
 		private static var ID:String = "ID";
 		

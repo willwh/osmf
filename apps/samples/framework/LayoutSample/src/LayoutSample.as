@@ -98,6 +98,6 @@ package
 		}
 		
 		private static const LOGO_PNG:String = "http://dl.dropbox.com/u/2980264/OSMF/logo_white.png";
-		private static const LOGO_VID:String = "http://dl.dropbox.com/u/2980264/OSMF/logo_animated.flv";
+		private static const LOGO_VID:String = "http://mediapm.edgesuite.net/osmf/content/test/logo_animated.flv";
 	}
 }
