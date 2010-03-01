@@ -59,7 +59,7 @@ package org.osmf.net
 		public static const RECORDED:String = "recorded";
 
 		/**
-		 * The ANY stream type represents any possible stream type.
+		 * The LIVE_OR_RECORDED stream type represents any possible stream type.
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -67,7 +67,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static const ANY:String = "any";
+		public static const LIVE_OR_RECORDED:String = "liveOrRecorded";
 		
 		/**
 		 * The DVR stream type represents a possibly server side

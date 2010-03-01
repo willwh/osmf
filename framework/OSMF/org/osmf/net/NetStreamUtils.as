@@ -133,7 +133,7 @@ package org.osmf.net
 		public static function getStreamType(resource:MediaResourceBase):String
 		{
 			// Default to ANY.
-			var streamType:String = StreamType.ANY;
+			var streamType:String = StreamType.LIVE_OR_RECORDED;
 			
 			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
 
@@ -165,7 +165,7 @@ package org.osmf.net
 			// Check for live vs. recorded.
 			switch (getStreamType(resource))
 			{
-				case StreamType.ANY:
+				case StreamType.LIVE_OR_RECORDED:
 					startArg = PLAY_START_ARG_ANY;
 					break;
 				case StreamType.LIVE:

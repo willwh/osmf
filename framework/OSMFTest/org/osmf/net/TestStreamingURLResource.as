@@ -41,7 +41,7 @@ package org.osmf.net
 		public function testStreamType():void
 		{
 			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
-			assertTrue(resource.streamType == StreamType.ANY);
+			assertTrue(resource.streamType == StreamType.LIVE_OR_RECORDED);
 			
 			resource = new StreamingURLResource("http://example.com", StreamType.LIVE);
 			assertTrue(resource.streamType == StreamType.LIVE);
@@ -52,7 +52,7 @@ package org.osmf.net
 			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
 			assertTrue(resource.urlIncludesFMSApplicationInstance == false);
 			
-			resource = new StreamingURLResource("http://example.com", StreamType.ANY, NaN, NaN, null, true);
+			resource = new StreamingURLResource("http://example.com", StreamType.LIVE_OR_RECORDED, NaN, NaN, null, true);
 			assertTrue(resource.urlIncludesFMSApplicationInstance == true);
 		}
 	}

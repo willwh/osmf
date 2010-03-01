@@ -83,7 +83,7 @@ package org.osmf.net
 							, drmContentData:ByteArray = null
 							)
 		{
-			_streamType = streamType || StreamType.ANY;
+			_streamType = streamType || StreamType.LIVE_OR_RECORDED;
 			_clipStartTime = clipStartTime;
 			_clipEndTime = clipEndTime;
 			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;

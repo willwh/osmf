@@ -39,15 +39,15 @@ package org.osmf.net
 	{
 		public function testGetStreamType():void
 		{
-			assertTrue(NetStreamUtils.getStreamType(null) == StreamType.ANY);
-			assertTrue(NetStreamUtils.getStreamType(new NullResource()) == StreamType.ANY);
-			assertTrue(NetStreamUtils.getStreamType(new URLResource("rtmp://example.com")) == StreamType.ANY);
-			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com")) == StreamType.ANY);
-			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.ANY)) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(null) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new NullResource()) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new URLResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED)) == StreamType.LIVE_OR_RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.LIVE)) == StreamType.LIVE);
 			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.RECORDED)) == StreamType.RECORDED);
-			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com")) == StreamType.ANY);
-			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.ANY)) == StreamType.ANY);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED)) == StreamType.LIVE_OR_RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE)) == StreamType.LIVE);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.RECORDED)) == StreamType.RECORDED);
 		}
