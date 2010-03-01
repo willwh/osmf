@@ -24,7 +24,6 @@ package org.osmf.plugin
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.utils.Version;
 	
 	public class InvalidImplementationPluginInfo extends PluginInfo
 	{

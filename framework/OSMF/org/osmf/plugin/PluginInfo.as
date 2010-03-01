@@ -167,10 +167,7 @@ package org.osmf.plugin
 			
 			return 		playerFrameworkVersion.major > pluginFrameworkVersion.major
 					||	(	playerFrameworkVersion.major == pluginFrameworkVersion.major
-						&&	( 	playerFrameworkVersion.minor > pluginFrameworkVersion.minor
-							||	(	playerFrameworkVersion.minor == pluginFrameworkVersion.minor
-								&&	playerFrameworkVersion.subMinor >= pluginFrameworkVersion.subMinor
-								)
+						&&	( 	playerFrameworkVersion.minor >= pluginFrameworkVersion.minor
 							)
 						);
 		}
@@ -209,12 +206,8 @@ package org.osmf.plugin
 			{
 				minor = parseInt(versionInfo[1]);
 			}
-			if (versionInfo.length >= 3)
-			{
-				subMinor = parseInt(versionInfo[2]);
-			}
 
-			return {major:major, minor:minor, subMinor:subMinor};
+			return {major:major, minor:minor};
 		}
 		
 		private var mediaFactoryItems:Vector.<MediaFactoryItem>;

@@ -22,18 +22,14 @@
 package org.osmf.utils
 {
 	/**
-	 * Class that contains Open Source Media Framework version information. There are three fields:
-	 * major, minor and subminor. The version comparison rules are
-	 * as follows, assume there are v1 and v2:
+	 * Class that contains Open Source Media Framework version information. There are two fields:
+	 * major and minor. The version comparison rules are as follows, assuming there are v1 and v2:
 	 * <listing>
 	 * v1 &#62; v2, if ((v1.major &#62; v2.major) || 
-	 *              (v1.major == v2.major &#38;&#38; v1.minor &#62; v2.minor) || 
-	 *              (v1.major == v2.major &#38;&#38; v1.minor == v2.minor &#38;&#38; 
-	 *               v1.subminor &#62; v2.subminor)) 
+	 *              (v1.major == v2.major &#38;&#38; v1.minor &#62; v2.minor)
 	 * 
-	 * v1 = v2, if (v1.major == v2.major &#38;&#38; 
-	 *              v1.minor == v2.minor &#38;&#38; 
-	 *              v1.subminor == v2.subminor) 
+	 * v1 == v2, if (v1.major == v2.major &#38;&#38; 
+	 *              v1.minor == v2.minor) 
 	 * 
 	 * v1 &#60; v2 //otherwise
 	 * </listing>
@@ -47,7 +43,7 @@ package org.osmf.utils
 	{
 		/**
 		 * returns the version string in the format of 
-		 * 	[major][FIELD_SEPARATOR][minor][FIELD_SEPARATOR][subminor]
+		 * 	[major][FIELD_SEPARATOR][minor]
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -56,7 +52,7 @@ package org.osmf.utils
 		 */
 		public static function get version():String
 		{
-			return _major + FIELD_SEPARATOR + _minor + FIELD_SEPARATOR + _subminor;
+			return _major + FIELD_SEPARATOR + _minor;
 		}
 		
 		/**
@@ -71,13 +67,12 @@ package org.osmf.utils
 		 */
 		public static function get lastAPICompatibleVersion():String
 		{
-			// TODO: This should probably be set to "1.0.0" for final release. 
+			// TODO: This should probably be set to "1.0" for final release. 
 			return Version.version;
 		}
 				
 		private static const _major:String = "0";
-		private static const _minor:String = "9";
-		private static const _subminor:String = "1";	
+		private static const _minor:String = "93";
 		
 		private static const FIELD_SEPARATOR:String = ".";	
 	}
