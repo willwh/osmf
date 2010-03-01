@@ -24,6 +24,7 @@ package org.osmf.syndication.model.atom
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.syndication.model.Feed;
+	import org.osmf.syndication.model.FeedText;
 	
 	/**
 	 * This class represents the feed element
@@ -39,33 +40,6 @@ package org.osmf.syndication.model.atom
 			super();
 		}
 		
-		/**
-		 * The title of the feed.
-		 **/
-		public function get title():AtomText
-		{
-			return _title;
-		}
-		
-		public function set title(value:AtomText):void
-		{
-			_title = value;
-		}
-		
-		/**
-		 * Identifies the feed using a universally unique and
-		 * permanent URI.
-		 **/
-		public function get id():String
-		{
-			return _id;
-		}
-		
-		public function set id(value:String):void
-		{
-			_id = value;
-		}
-
 		/**
 		 * Indicates the last time the feed was modified
 		 * in a significant way.
@@ -176,12 +150,12 @@ package org.osmf.syndication.model.atom
 		 * Information about rights, such as
 		 * copyrights.
 		 **/
-		public function get rights():AtomText
+		public function get rights():FeedText
 		{
 			return _rights;
 		}
 		
-		public function set rights(value:AtomText):void
+		public function set rights(value:FeedText):void
 		{
 			_rights = value;
 		}
@@ -190,18 +164,16 @@ package org.osmf.syndication.model.atom
 		 * A human readable description or subtitle for 
 		 * the feed.
 		 **/
-		public function get subtitle():AtomText
+		public function get subtitle():FeedText
 		{
 			return _subtitle;
 		}
 		
-		public function set subtitle(value:AtomText):void
+		public function set subtitle(value:FeedText):void
 		{
 			_subtitle = value;
 		}
 		
-		private var _title:AtomText;
-		private var _id:String;
 		private var _updated:String;
 		private var _authors:Vector.<AtomPerson>;
 		private var _link:AtomLink;
@@ -210,7 +182,7 @@ package org.osmf.syndication.model.atom
 		private var _generator:AtomGenerator;
 		private var _icon:String;
 		private var _logo:String;
-		private var _rights:AtomText;
-		private var _subtitle:AtomText;
+		private var _rights:FeedText;
+		private var _subtitle:FeedText;
 	}
 }

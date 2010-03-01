@@ -25,6 +25,8 @@ package org.osmf.syndication.parsers
 	
 	import org.osmf.syndication.model.Entry;
 	import org.osmf.syndication.model.Feed;
+	import org.osmf.syndication.model.FeedText;
+	import org.osmf.syndication.model.FeedTextType;
 	import org.osmf.syndication.model.atom.AtomCategory;
 	import org.osmf.syndication.model.atom.AtomContent;
 	import org.osmf.syndication.model.atom.AtomEntry;
@@ -32,8 +34,6 @@ package org.osmf.syndication.parsers
 	import org.osmf.syndication.model.atom.AtomGenerator;
 	import org.osmf.syndication.model.atom.AtomLink;
 	import org.osmf.syndication.model.atom.AtomPerson;
-	import org.osmf.syndication.model.atom.AtomText;
-	import org.osmf.syndication.model.atom.AtomTextType;
 	import org.osmf.syndication.model.extensions.FeedExtension;
 	CONFIG::LOGGING
 	{
@@ -47,14 +47,22 @@ package org.osmf.syndication.parsers
 	public class AtomParser extends FeedParserBase
 	{
 		/**
-		 * Parses an Atom feed and returns a Feed object
+		 * Parses an Atom feed and returns a Feed object.
 		 **/
 		override public function parse(xml:XML):Feed
 		{
-			var feedTag:XMLList = xml.children();
-			var feedNode:XML = feedTag[0];
+			var atomFeed:AtomFeed;
 			
-			return parseFeed(feedNode);
+			// Look at the root node and it's namespace to verify this is 
+			// an Atom feed.
+			if (xml.localName() == TAG_NAME_FEED && xml.namespace().uri == ATOM_NAMESPACE_URI)
+			{
+				var feedTag:XMLList = xml.children();
+				var feedNode:XML = feedTag[0];
+				atomFeed = parseFeed(feedNode);
+			}
+			
+			return atomFeed;
 		}
 		
 		private function parseFeed(feedNode:XML):AtomFeed
@@ -142,7 +150,7 @@ package org.osmf.syndication.parsers
 									feed.rights = parseText(childNode);
 									break;
 								case TAG_NAME_SUBTITLE:
-									var subtitle:AtomText = parseText(childNode);
+									var subtitle:FeedText = parseText(childNode);
 									feed.subtitle = subtitle;
 									break;
 								case TAG_NAME_ENTRY:
@@ -247,7 +255,7 @@ package org.osmf.syndication.parsers
 									entry.link = link;
 									break;
 								case TAG_NAME_SUMMARY:
-									entry.summary = parseText(childNode);
+									entry.description = parseText(childNode);
 									break;
 								case TAG_NAME_CATEGORY:
 									var category:AtomCategory = new AtomCategory();
@@ -274,7 +282,7 @@ package org.osmf.syndication.parsers
 									entry.source = parseFeed(childNode);
 									break;
 								case TAG_NAME_RIGHTS:
-									var rights:AtomText = parseText(childNode);
+									var rights:FeedText = parseText(childNode);
 									entry.rights = rights;
 									break;
 							}
@@ -338,21 +346,21 @@ package org.osmf.syndication.parsers
 			return person;
 		}
 		
-		private function parseText(textNode:XML):AtomText
+		private function parseText(textNode:XML):FeedText
 		{
-			var atomText:AtomText = new AtomText();
-			atomText.type = textNode.@[ATTRIB_NAME_TYPE];
-			switch (atomText.type)
+			var feedText:FeedText = new FeedText();
+			feedText.type = textNode.@[ATTRIB_NAME_TYPE];
+			switch (feedText.type)
 			{
-				case AtomTextType.TEXT: // the element contains plain text with no entity escaped html
-				case AtomTextType.HTML: // the element contains entity escaped html
-					atomText.text = textNode;
+				case FeedTextType.TEXT: // the element contains plain text with no entity escaped html
+				case FeedTextType.HTML: // the element contains entity escaped html
+					feedText.text = textNode;
 					break;
-				case AtomTextType.XHTML: // the element contains inline xhtml, wrapped in a div element
-					atomText.text = textNode.toXMLString();
+				case FeedTextType.XHTML: // the element contains inline xhtml, wrapped in a div element
+					feedText.text = textNode.toXMLString();
 					break;
 			}
-			return atomText;
+			return feedText;
 		}
 		
 		private function debugLog(msg:String):void
@@ -371,6 +379,8 @@ package org.osmf.syndication.parsers
 			private static const logger:ILogger = org.osmf.logging.Log.getLogger("RSS20Parser");
 		}
 		
+		// Atom namespace
+		private static const ATOM_NAMESPACE_URI:String = "http://www.w3.org/2005/Atom";
 		// Tags names
 		private static const TAG_NAME_FEED:String = "feed";
 		private static const TAG_NAME_ID:String = "id";

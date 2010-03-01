@@ -46,9 +46,16 @@ package org.osmf.syndication.parsers
 		 * This method iterates over all available
 		 * parsers and tries each one until it
 		 * returns a non-null Feed object.
+		 * 
+		 * @throws ArgumentError If xml is null.
 		 **/
 		override public function parse(xml:XML):Feed
 		{
+			if (xml == null)
+			{
+				throw new ArgumentError();
+			}
+			
 			var feed:Feed;
 			
 			// Iterate over all parsers until one returns a Feed object

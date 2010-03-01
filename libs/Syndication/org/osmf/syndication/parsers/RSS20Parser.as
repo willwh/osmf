@@ -25,17 +25,17 @@ package org.osmf.syndication.parsers
 	
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	import org.osmf.syndication.model.Enclosure;
 	import org.osmf.syndication.model.Entry;
 	import org.osmf.syndication.model.Feed;
-	import org.osmf.syndication.model.Enclosure;
+	import org.osmf.syndication.model.FeedText;
 	import org.osmf.syndication.model.extensions.FeedExtension;
 	import org.osmf.syndication.model.rss20.RSSCategory;
 	import org.osmf.syndication.model.rss20.RSSCloud;
+	import org.osmf.syndication.model.rss20.RSSFeed;
 	import org.osmf.syndication.model.rss20.RSSImage;
 	import org.osmf.syndication.model.rss20.RSSItem;
-	import org.osmf.syndication.model.rss20.RSSFeed;
 	import org.osmf.syndication.model.rss20.RSSSource;
-	import org.osmf.syndication.parsers.extensions.FeedExtensionParser;
 	CONFIG::LOGGING
 	{
 		import org.osmf.logging.ILogger;
@@ -51,10 +51,17 @@ package org.osmf.syndication.parsers
 		 **/
 		override public function parse(xml:XML):Feed
 		{
-			var channelTag:XMLList = xml.children();
-			var channelNode:XML = channelTag[0];
+			var rssFeed:RSSFeed;
 			
-			return parseChannel(channelNode);
+			// Look at the root tag to verify this is an RSS feed
+			if (xml.localName() == TAG_NAME_RSS)
+			{
+				var channelTag:XMLList = xml.children();
+				var channelNode:XML = channelTag[0];
+				rssFeed = parseChannel(channelNode);
+			}
+			
+			return rssFeed;
 		}
 		
 		private function parseChannel(channelNode:XML):RSSFeed
@@ -80,13 +87,13 @@ package org.osmf.syndication.parsers
 							switch (childNode.localName())
 							{
 								case TAG_NAME_TITLE:
-									channel.title = childNode;
+									channel.title = parseFeedText(childNode);
 									break;
 								case TAG_NAME_LINK:
 									channel.link = childNode;
 									break;
 								case TAG_NAME_DESCRIPTION:
-									channel.description = childNode;
+									channel.description = parseFeedText(childNode);
 									break;
 								case TAG_NAME_LANGUAGE:
 									channel.language = childNode;
@@ -189,6 +196,13 @@ package org.osmf.syndication.parsers
 			return channel;
 		}
 		
+		private function parseFeedText(textNode:XML):FeedText
+		{
+			var feedText:FeedText = new FeedText();
+			feedText.text = textNode;
+			return feedText;
+		}
+		
 		private function parseItem(itemNode:XML):RSSItem
 		{
 			var children:XMLList = itemNode.children();
@@ -209,13 +223,13 @@ package org.osmf.syndication.parsers
 							switch (childNode.localName())
 							{
 								case TAG_NAME_TITLE:
-									item.title = childNode;
+									item.title = parseFeedText(childNode);
 									break;
 								case TAG_NAME_LINK:
 									item.link = childNode;
 									break;
 								case TAG_NAME_DESCRIPTION:
-									item.description = childNode;
+									item.description = parseFeedText(childNode);
 									break;
 								case TAG_NAME_AUTHOR:
 									item.author = childNode;
@@ -284,6 +298,7 @@ package org.osmf.syndication.parsers
 		}
 		
 		// Tags names
+		private static const TAG_NAME_RSS:String = "rss";
 		private static const TAG_NAME_CHANNEL:String = "channel";
 		private static const TAG_NAME_TITLE:String = "title";
 		private static const TAG_NAME_LINK:String = "link";

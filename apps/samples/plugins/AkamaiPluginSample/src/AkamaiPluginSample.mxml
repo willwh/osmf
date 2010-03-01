@@ -29,45 +29,38 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import com.akamai.osmf.samples.SyndicationMediaResolver;
-			import org.osmf.syndication.media.SyndicationMediaGenerator;
-			import org.osmf.traits.TimeTrait;
-			import org.osmf.syndication.media.SyndicationMediaGenerator;
-			import org.osmf.syndication.model.extensions.mrss.MediaRSSThumbnail;
-			import org.osmf.syndication.model.extensions.mrss.MediaRSSExtension;
-			import org.osmf.syndication.model.extensions.FeedExtension;
-			import org.osmf.syndication.model.rss20.RSSItem;
 			import __AS3__.vec.Vector;
-			import org.osmf.syndication.model.rss20.RSSFeed;
-			import com.akamai.osmf.samples.PlaylistItem;
-			import org.osmf.syndication.model.Entry;
-			import mx.collections.ArrayCollection;
-			import org.osmf.syndication.loader.FeedLoadTrait;
-			import org.osmf.traits.DynamicStreamTrait;
-			import org.osmf.syndication.model.Feed;
-			import org.osmf.syndication.loader.FeedLoader;
-			import org.osmf.net.StreamType;
-			import org.osmf.net.StreamingURLResource;
-			import mx.controls.Alert;
-			import org.osmf.media.DefaultMediaFactory;
-			import org.osmf.plugin.PluginInfoResource;
-			import org.osmf.traits.LoadTrait;
-			
 			import mx.events.DropdownEvent;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			
+			import org.osmf.traits.DynamicStreamTrait;
+			import org.osmf.traits.TimeTrait;
+			import org.osmf.traits.LoadTrait;
+			import org.osmf.traits.LoadState;
+			import org.osmf.traits.MediaTraitType;
 			import org.osmf.events.*;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaFactoryItem;
+			import org.osmf.media.DefaultMediaFactory;
 			import org.osmf.metadata.*;
 			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginManager;
-			import org.osmf.traits.LoadTrait;
-			import org.osmf.traits.LoadState;
-			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
+			import org.osmf.net.StreamType;
+			import org.osmf.net.StreamingURLResource;
+			import org.osmf.plugin.PluginInfoResource;
+
+			import org.osmf.syndication.loader.FeedLoader;
+			import org.osmf.syndication.model.Feed;
+			import org.osmf.syndication.model.Entry;
+			import org.osmf.syndication.loader.FeedLoadTrait;
+			
+			import com.akamai.osmf.samples.AkamaiSyndicationMediaGenerator;
+			import com.akamai.osmf.samples.PlaylistItem;
 			
 			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;
@@ -273,7 +266,7 @@
 					if (event.loadState == LoadState.READY)
 					{
 						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-						var feed:RSSFeed = loadTrait.feed as RSSFeed;
+						var feed:Feed = loadTrait.feed;
 						if (feed != null)
 						{
 							buildPlayList(feed);
@@ -283,7 +276,7 @@
 				
 			}
 			
-			private function buildPlayList(feed:RSSFeed):void
+			private function buildPlayList(feed:Feed):void
 			{
 				clearPlaylist();
 				
@@ -314,11 +307,11 @@
 					metadata = createMASTMetadata();
 				}
 				
-				var mediaResolver:SyndicationMediaResolver = new SyndicationMediaResolver(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
-				var mediaGenerator:SyndicationMediaGenerator = new SyndicationMediaGenerator(mediaResolver);
+				var mediaGenerator:AkamaiSyndicationMediaGenerator = 
+						new AkamaiSyndicationMediaGenerator(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata, mediaFactory);
 				
 				setupMediaElementListeners(false);
-				mediaElement = mediaGenerator.createMediaElement(playlistItem.entry, mediaFactory);
+				mediaElement = mediaGenerator.createMediaElement(playlistItem.entry);
 				setupMediaElementListeners();
 				playMediaElement();
 			}

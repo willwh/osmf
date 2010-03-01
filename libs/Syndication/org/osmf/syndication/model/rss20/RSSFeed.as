@@ -41,19 +41,6 @@ package org.osmf.syndication.model.rss20
 		}
 		
 		/**
-		 * The title of the feed.
-		 **/
-		public function get title():String
-		{
-			return _title;
-		}
-		
-		public function set title(value:String):void
-		{
-			_title = value;
-		}
-		
-		/**
 		 * The URL to a website corresponding to the
 		 * syndication element. Usually an HTML page.
 		 **/
@@ -65,20 +52,6 @@ package org.osmf.syndication.model.rss20
 		public function set link(value:String):void
 		{
 			_link = value;
-		}
-		
-		/**
-		 * A phrase or sentence describing the 
-		 * syndication element.
-		 **/
-		public function get description():String
-		{
-			return _description;
-		}
-		
-		public function set description(value:String):void
-		{
-			_description = value;
 		}
 		
 		/** 
@@ -271,9 +244,7 @@ package org.osmf.syndication.model.rss20
 			_rating = value;
 		}
 		
-		private var _title:String;
 		private var _link:String;
-		private var _description:String;
 		private var _categories:Vector.<RSSCategory>;		
 		private var _pubDate:String;
 		private var _language:String; // Should be a string const from org.osmf.rss.model.LanguageCodes

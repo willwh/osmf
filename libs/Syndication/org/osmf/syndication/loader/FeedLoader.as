@@ -27,8 +27,6 @@ package org.osmf.syndication.loader
 	import org.osmf.media.URLResource;
 	import org.osmf.syndication.model.Feed;
 	import org.osmf.syndication.parsers.FeedParser;
-	import org.osmf.syndication.parsers.extensions.ITunesExtensionParser;
-	import org.osmf.syndication.parsers.extensions.MediaRSSExtensionParser;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -57,6 +55,7 @@ package org.osmf.syndication.loader
 		{
 			super();
 			this.httpLoader = httpLoader != null ? httpLoader : new HTTPLoader();
+			feedParser = new FeedParser();
 		}
 		
 		/**
@@ -103,11 +102,18 @@ package org.osmf.syndication.loader
 					httpLoader.removeEventListener(LoaderEvent.LOAD_STATE_CHANGE, onHTTPLoaderStateChange);
 					httpLoadTrait.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onLoadTraitError);
 					
-					var parser:FeedParser = new FeedParser();
-
-					var feed:Feed = parser.parse(new XML(httpLoadTrait.urlLoader.data));
-					(loadTrait as FeedLoadTrait).feed = feed;
+					// Begin parsing the feed, the parse method will return a Feed object when it's finished
+					try
+					{
+						var feed:Feed = feedParser.parse(new XML(httpLoadTrait.urlLoader.data));
+					}
+					catch(e:Error)
+					{
+						updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
+						throw e;
+					}
 					
+					(loadTrait as FeedLoadTrait).feed = feed;
 					updateLoadTrait(loadTrait, LoadState.READY);
 				}
 				else if (event.newState == LoadState.LOAD_ERROR)
@@ -162,5 +168,6 @@ package org.osmf.syndication.loader
 		}
 		
 		private var httpLoader:HTTPLoader;
+		private var feedParser:FeedParser;
 	}
 }

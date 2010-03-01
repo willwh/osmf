@@ -33,9 +33,17 @@ package org.osmf.syndication.parsers
 	public class FeedParserBase
 	{
 		/**
+		 * Override this method in a specific feed parser class.
+		 **/
+		public function parse(xml:XML):Feed
+		{
+			return null;
+		}
+
+		/**
 		 * Add a feed extension parser. A feed extension parser knows how to
 		 * parse specific feed extension XML tags, such as
-		 * the iTunes or Media RSS extensions to RSS 2.0.
+		 * the iTunes or Media RSS extensions.
 		 **/
 		public function addFeedExtensionParser(parser:FeedExtensionParser):void
 		{
@@ -48,34 +56,17 @@ package org.osmf.syndication.parsers
 		}
 		
 		/**
-		 * Get all feed extension parsers.
-		 **/
-		protected function getFeedExtensionParsers():Vector.<FeedExtensionParser>
-		{
-			return _feedExtensionParsers;
-		}
-
-		/**
-		 * Override this method in a specific feed parser class.
-		 **/
-		public function parse(xml:XML):Feed
-		{
-			return null;
-		}
-		
-		/**
 		 * Iterates over the collection of FeedExtensionParser objects
 		 * and calls the parse method, passing in the node. Feed parsers
 		 * should call this method passing in the feed and entry tags so
 		 * any extension parsers added via the addFeedExtensionParser can 
 		 * be called.
 		 **/
-		internal function parseFeedExtensions(xml:XML):Vector.<FeedExtension>
+		protected function parseFeedExtensions(xml:XML):Vector.<FeedExtension>
 		{
 			var feedExtensions:Vector.<FeedExtension> = new Vector.<FeedExtension>();
-			var feedExtensionParsers:Vector.<FeedExtensionParser> = getFeedExtensionParsers();
 			
-			for each (var feedExtensionsParser:FeedExtensionParser in feedExtensionParsers)
+			for each (var feedExtensionsParser:FeedExtensionParser in _feedExtensionParsers)
 			{
 				var feedExtension:FeedExtension = feedExtensionsParser.parse(xml);
 				if (feedExtension != null)

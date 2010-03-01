@@ -24,6 +24,7 @@ package org.osmf.syndication.model.atom
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.syndication.model.Entry;
+	import org.osmf.syndication.model.FeedText;
 
 	/**
 	 * Represents an entry element in an Atom feed.
@@ -38,33 +39,6 @@ package org.osmf.syndication.model.atom
 			super();
 		}
 		
-		/**
-		 * Identifies the entry using a universally unique and
-		 * permanent URI.
-		 **/
-		public function get id():String
-		{
-			return _id;
-		}
-		
-		public function set id(value:String):void
-		{
-			_id = value;
-		}
-		 
-		/**
-		 * The title of the feed.
-		 **/
-		public function get title():AtomText
-		{
-			return _title;
-		}
-		
-		public function set title(value:AtomText):void
-		{
-			_title = value;
-		}
-
 		/**
 		 * Indicates the last time the entry was 
 		 * modified in a significant way.
@@ -120,20 +94,6 @@ package org.osmf.syndication.model.atom
 		}
 		
 		/**
-		 * A short summary, abstract, or excerpt of
-		 * the entry.
-		 **/
-		public function get summary():AtomText
-		{
-			return _summary;
-		}
-		
-		public function set summary(value:AtomText):void
-		{
-			_summary = value;
-		}
-		
-		/**
 		 * Categories the entry belongs to.
 		 **/
 		public function get categories():Vector.<AtomCategory>
@@ -179,27 +139,24 @@ package org.osmf.syndication.model.atom
 		 * Information about rights, such as
 		 * copyrights.
 		 **/
-		public function get rights():AtomText
+		public function get rights():FeedText
 		{
 			return _rights;
 		}
 		
-		public function set rights(value:AtomText):void
+		public function set rights(value:FeedText):void
 		{
 			_rights = value;
 		}
 		
-		private var _id:String;
-		private var _title:AtomText;
 		private var _updated:String;
 		private var _authors:Vector.<AtomPerson>;
 		private var _content:AtomContent;
 		private var _link:AtomLink;
-		private var _summary:AtomText;
 		private var _categories:Vector.<AtomCategory>;
 		private var _contributors:Vector.<AtomPerson>;
 		private var _source:AtomFeed;
-		private var _rights:AtomText;
+		private var _rights:FeedText;
 		
 	}
 }

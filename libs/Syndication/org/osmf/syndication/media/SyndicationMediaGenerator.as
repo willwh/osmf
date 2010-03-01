@@ -21,27 +21,59 @@
 *****************************************************/
 package org.osmf.syndication.media
 {
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.URLResource;
 	import org.osmf.syndication.model.Entry;
 	
+	/**
+	 * A utility class for creating MediaElement objects
+	 * given a syndication Entry object.
+	 * 
+	 * The class will use the MediaFactory supplied. If no
+	 * MediaFactory is supplied it will use the DefaultMediaFactory 
+	 * class.
+	 **/
 	public class SyndicationMediaGenerator
 	{
-		public function SyndicationMediaGenerator(mediaResolver:ISyndicationMediaResolver=null)
+		/**
+		 * Constructor.
+		 * 
+		 * @param mediaFactory The MediaFactory to use for creating MediaElement objects.
+		 **/
+		public function SyndicationMediaGenerator(mediaFactory:MediaFactory=null)
 		{
-			this.mediaResolver = mediaResolver;
-			if (this.mediaResolver == null)
+			_mediaFactory = mediaFactory;
+			if (_mediaFactory == null)
 			{
-				this.mediaResolver = new DefaultSyndicationMediaResolver();
+				_mediaFactory = new DefaultMediaFactory();
 			}
 		}
 		
-		public function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement
+		/**
+		 * Creates a MediaElement using the entry supplied.
+		 * The default behavior is to use the enclosure property of
+		 * the Entry object. Extend this class and
+		 * override this method to provide custom behavior.
+		 * 
+		 * @param entry The Entry object to use for creating the MediaElement.
+		 **/
+		public function createMediaElement(entry:Entry):MediaElement
 		{
-			return mediaResolver.createMediaElement(entry, mediaFactory);
+			var mediaElement:MediaElement;
+			mediaElement = _mediaFactory.createMediaElement(new URLResource(entry.enclosure.url));
+			return mediaElement;
+		}
+		
+		/**
+		 * The MediaFactory this class is using.
+		 **/
+		public function get mediaFactory():MediaFactory
+		{
+			return _mediaFactory;
 		}
 
-		private var mediaResolver:ISyndicationMediaResolver;
-		
+		private var _mediaFactory:MediaFactory;
 	}
 }

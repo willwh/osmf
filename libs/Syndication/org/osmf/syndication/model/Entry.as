@@ -26,8 +26,49 @@ package org.osmf.syndication.model
 	public class Entry
 	{
 		/**
+		 * The title of the entry.
+		 **/
+		public function get title():FeedText
+		{
+			return _title;
+		}
+		
+		public function set title(value:FeedText):void
+		{
+			_title = value;
+		}
+		
+		/**
+		 * Identifies the entry using a universally unique and
+		 * permanent URI.
+		 **/
+		public function get id():String
+		{
+			return _id;
+		}
+		
+		public function set id(value:String):void
+		{
+			_id = value;
+		}
+		
+		/**
+		 * A phrase or sentence describing the 
+		 * syndication element.
+		 **/
+		public function get description():FeedText
+		{
+			return _description;
+		}
+		
+		public function set description(value:FeedText):void
+		{
+			_description = value;
+		}
+		
+		/**
 		 * Describes a media object that is attached
-		 * to the item.
+		 * to the entry.
 		 **/
 		public function get enclosure():Enclosure
 		{
@@ -66,6 +107,9 @@ package org.osmf.syndication.model
 			_feedExtensions = value;	
 		}
 
+		private var _id:String;
+		private var _title:FeedText;
+		private var _description:FeedText;
 		private var _enclosure:Enclosure;
 		private var _published:String;
 		private var _feedExtensions:Vector.<FeedExtension>;

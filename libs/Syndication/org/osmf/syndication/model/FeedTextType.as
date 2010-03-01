@@ -19,31 +19,37 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.media
+package org.osmf.syndication.model
 {
-	import org.osmf.elements.VideoElement;
-	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
-	import org.osmf.media.URLResource;
-	import org.osmf.net.NetLoader;
-	import org.osmf.syndication.model.Entry;
-
-	public class DefaultSyndicationMediaResolver implements ISyndicationMediaResolver
+	/**
+	 * Enumerates all possible values for the text type
+	 * attribute in a syndication feed.
+	 **/
+	public class FeedTextType
 	{
-		public function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement
-		{
-			var mediaElement:MediaElement;
-			var factory:MediaFactory = mediaFactory;
-			
-			if (factory == null)
-			{
-				factory = new DefaultMediaFactory();
-			}
-			
-			mediaElement = factory.createMediaElement(new URLResource(entry.enclosure.url));
-			
-			return mediaElement;
-		}
+		/**
+		 * Indicates the element contains plain text 
+		 * with no entity escaped html.
+		 **/
+		public static const TEXT:String = "text";
+		
+		/**
+		 * Indicates the element contains entity
+		 * escaped html.
+		 **/
+		public static const HTML:String = "html";
+		
+		/**
+		 * Indicates the element contains inline xhtml,
+		 * wrapped in a div element.
+		 **/
+		public static const XHTML:String = "xhtml";
+		
+		/**
+		 * @private
+		 * 
+		 * Collection of all types.
+		 **/
+		public static const ALL_TYPES:Vector.<String> = Vector.<String>([TEXT, HTML, XHTML]);		
 	}
 }

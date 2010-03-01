@@ -26,29 +26,27 @@ package com.akamai.osmf.samples
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.syndication.media.ISyndicationMediaResolver;
+	import org.osmf.syndication.media.SyndicationMediaGenerator;
 	import org.osmf.syndication.model.Entry;
 
-	public class SyndicationMediaResolver implements ISyndicationMediaResolver
+	/**
+	 * This is an example of a custom syndication media generator.
+	 * The purpose of this class is to allow us to add metadata on
+	 * the resource for a MediaElement.
+	 **/
+	public class AkamaiSyndicationMediaGenerator extends SyndicationMediaGenerator
 	{
-		public function SyndicationMediaResolver(namespaceURL:String, metadata:Metadata)
+		public function AkamaiSyndicationMediaGenerator(namespaceURL:String, metadata:Metadata, mediaFactory:MediaFactory=null)
 		{
-			super();
+			super(mediaFactory);
 			
 			this.namespaceURL = namespaceURL;
 			this.metadata = metadata;
 		}
 
-		public function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement
+		override public function createMediaElement(entry:Entry):MediaElement
 		{
 			var mediaElement:MediaElement;
-			var factory:MediaFactory = mediaFactory;
-			
-			if (factory == null)
-			{
-				factory = new DefaultMediaFactory();
-			}
-			
 			var resource:URLResource = new URLResource(entry.enclosure.url);
 			
 			if (metadata)
@@ -56,8 +54,7 @@ package com.akamai.osmf.samples
 				resource.addMetadataValue(namespaceURL, metadata);
 			}
 			
-			mediaElement = factory.createMediaElement(resource);
-			
+			mediaElement = mediaFactory.createMediaElement(resource);
 			return mediaElement;
 		}
 		

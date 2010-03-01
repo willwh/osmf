@@ -19,14 +19,48 @@
 *  Technologies, Inc. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.syndication.media
+package org.osmf.syndication.model
 {
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
-	import org.osmf.syndication.model.Entry;
-	
-	public interface ISyndicationMediaResolver
+	/**
+	 * Represents the text information in a 
+	 * syndication feed such as title, description, etc.
+	 **/
+	public class FeedText
 	{
-		function createMediaElement(entry:Entry, mediaFactory:MediaFactory=null):MediaElement;
+		public function FeedText():void
+		{
+			_type = FeedTextType.TEXT;
+		}
+		
+		/**
+		 * The type attribute determines how
+		 * this information is encoded. Default
+		 * is "text".
+		 **/
+		public function get type():String
+		{
+			return _type;
+		}
+		
+		public function set type(value:String):void
+		{
+			_type = value;
+		}
+		
+		/**
+		 * The value of the element.
+		 **/
+		public function get text():String
+		{
+			return _text;
+		}
+		
+		public function set text(value:String):void
+		{
+			_text = value;
+		}
+
+		private var _type:String;
+		private var _text:String;
 	}
 }

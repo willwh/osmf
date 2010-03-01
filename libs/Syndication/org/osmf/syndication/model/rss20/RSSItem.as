@@ -40,19 +40,6 @@ package org.osmf.syndication.model.rss20
 		}		
 		
 		/**
-		 * The title of the item.
-		 **/
-		public function get title():String
-		{
-			return _title;
-		}
-		
-		public function set title(value:String):void
-		{
-			_title = value;
-		}
-		
-		/**
 		 * An email address of the author of the item.
 		 **/
 		public function get author():String
@@ -89,19 +76,6 @@ package org.osmf.syndication.model.rss20
 		public function set link(value:String):void
 		{
 			_link = value;
-		}
-		
-		/**
-		 * A phrase or sentence describing the item.
-		 **/
-		public function get description():String
-		{
-			return _description;
-		}
-		
-		public function set description(value:String):void
-		{
-			_description = value;
 		}
 		
 		/**
@@ -144,9 +118,7 @@ package org.osmf.syndication.model.rss20
 			_source = value;
 		}
 		
-		private var _title:String;
 		private var _link:String;
-		private var _description:String;		
 		private var _author:String;
 		private var _categories:Vector.<RSSCategory>;
 		private var _comments:String;

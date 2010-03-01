@@ -21,10 +21,12 @@
 *****************************************************/
 package org.osmf.syndication.model.atom
 {
+	import org.osmf.syndication.model.FeedText;
+	
 	/**
 	 * Represents a content element in an Atom feed.
 	 **/
-	public class AtomContent extends AtomText
+	public class AtomContent extends FeedText
 	{
 		/**
 		 * Constructor.

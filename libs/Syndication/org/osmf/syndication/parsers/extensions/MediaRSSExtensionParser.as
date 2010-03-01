@@ -60,10 +60,29 @@ package org.osmf.syndication.parsers.extensions
 	 **/
 	public class MediaRSSExtensionParser extends FeedExtensionParser
 	{
+		/**
+		 * Looks at the XML node supplied and returns a MediaRSSExtension
+		 * object if Media RSS extension XML tags are found on the node.
+		 * 
+		 * @throws ArgumentError If xml is null.
+		 **/
 		override public function parse(xml:XML):FeedExtension
 		{
-			var mediaRSSExtension:MediaRSSExtension;
+			if (xml == null)
+			{
+				throw new ArgumentError();
+			}
+
 			var media:Namespace = xml.namespace("media");
+
+			// If the namespace does not exist, there is no point
+			// in continuing.
+			if (media == null)
+			{
+				return null;
+			}
+			
+			var mediaRSSExtension:MediaRSSExtension;
 			var mediaGroups:Vector.<MediaRSSGroup> = new Vector.<MediaRSSGroup>();	
 			var children:XMLList = xml.children();
 			

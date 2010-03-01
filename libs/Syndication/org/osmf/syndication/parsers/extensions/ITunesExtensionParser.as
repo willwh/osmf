@@ -34,13 +34,37 @@ package org.osmf.syndication.parsers.extensions
 		import org.osmf.logging.ILogger;
 	}
 	
+	/**
+	 * Handles the parsing of iTunes extension XML tags.
+	 * 
+	 * @see http://www.apple.com/itunes/podcasts/specs.html#rss
+	 **/
 	public class ITunesExtensionParser extends FeedExtensionParser
 	{
+		/**
+		 * Looks at the XML node supplied and returns an ITunesExtension
+		 * object if iTunes extension XML tags are found on the node.
+		 * 
+		 * @throws ArgumentError If xml is null.
+		 **/
 		override public function parse(xml:XML):FeedExtension
 		{
+			if (xml == null)
+			{
+				throw new ArgumentError();
+			}
+			
+			var itunes:Namespace = xml.namespace("itunes");
+			
+			// If the namespace does not exist, there is no point
+			// in continuing.
+			if (itunes == null)
+			{
+				return null;
+			}
+			
 			var children:XMLList = xml.children();
 			var iTunesExtension:ITunesExtension;
-			var itunes:Namespace = xml.namespace("itunes");
 			var categories:Vector.<ITunesCategory> = new Vector.<ITunesCategory>;
 			
 			if (children.length() > 0)
