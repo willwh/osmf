@@ -82,7 +82,7 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function watch():void
+		public function watch(dispatchInitialChangeEvent:Boolean=true):void
 		{
 			if (watching == false)
 			{
@@ -100,7 +100,7 @@ package org.osmf.metadata
 				
 				// For convenience, always trigger a first change callback when
 				// start watching:
-				if (key)
+				if (dispatchInitialChangeEvent == true && key != null)
 				{
 					callback(currentMetadata ? currentMetadata.getValue(key) : undefined);
 				}
