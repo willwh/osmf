@@ -80,6 +80,8 @@
 			private var captioningEnabled:Boolean;
 			private var timelineMetadata:TimelineMetadata; 	
 			private var currentCaption:Caption;	
+			private var namespaces:Dictionary = new Dictionary();
+			
 			[Bindable]
 			private var timingTestFiles:Array = [	
 													/* Akamai sample */
@@ -317,8 +319,6 @@
    					timelineMetadata = null;
    				}
    			}
-   			
-   			private var namespaces:Dictionary = new Dictionary();
    			
 			private function onShowCaption(event:TimelineMetadataEvent):void
 			{
