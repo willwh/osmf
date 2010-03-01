@@ -288,7 +288,7 @@ package org.osmf
 			addTestSuite(TestVerticalAlign);
 			addTestSuite(TestHorizontalAlign);
 			addTestSuite(TestRelativeLayoutMetadata);
-			addTestSuite(TestLayoutRendererProperties);
+			addTestSuite(TestLayoutMetadata);
 			
 			// Containers
 			//

@@ -21,49 +21,26 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.utils.OSMFStrings;
 	
 	/**
-	 * Defines a utility object that is to be used to set properties on MediaElements
-	 * or ILayoutTargets that the layout renderer will base its layout on.
+	 * Defines a metadata object that contains the properties that a layout
+	 * renderer will base its layout on.
 	 */	
-	public class LayoutRendererProperties
+	public class LayoutMetadata extends Metadata
 	{
 		/**
-		 * Constructor.
-		 * 
-		 * @param mediaElementOrILayoutTarget The MediaElement or ILayoutTarget to
-		 * which these layout renderer properties should be applied.
-		 * 
-		 * @throws ArgumentError If mediaElementOrILayoutTarget is null, or neither
-		 * a MediaElement nor an ILayoutTarget.
+		 * Namespace URL for LayoutMetadata objects when added to a MediaElement.
 		 **/
-		public function LayoutRendererProperties(mediaElementOrILayoutTarget:Object)
+		public static const LAYOUT_NAMESPACE:String	= "http://www.osmf.org/layout/1.0";
+
+		/**
+		 * Constructor.
+		 **/
+		public function LayoutMetadata()
 		{
-			var mediaElement:MediaElement = mediaElementOrILayoutTarget as MediaElement;
-			var layoutTarget:ILayoutTarget = mediaElementOrILayoutTarget as ILayoutTarget;
-			if (mediaElement != null)
-			{
-				metadata = mediaElement.metadata;
-			}
-			else if (layoutTarget != null)
-			{
-				metadata = layoutTarget.metadata;
-			}
-			else
-			{
-				if (mediaElementOrILayoutTarget == null)
-				{
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-				}
-				else
-				{
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET));
-				}
-			}
+			super();
 		}
 		
 		// LayoutAttributes
@@ -552,7 +529,7 @@ package org.osmf.layout
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function toString():String
+		override public function toString():String
 		{
 			return "abs ["
 				 + x + ", "
@@ -586,11 +563,9 @@ package org.osmf.layout
 		// Internals
 		//
 		
-		private var metadata:Metadata;
-		
 		private function get lazyAttributes():LayoutAttributesMetadata
 		{
-			return metadata.getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesMetadata;
+			return getValue(MetadataNamespaces.LAYOUT_ATTRIBUTES) as LayoutAttributesMetadata;
 		}
 		
 		private function get eagerAttributes():LayoutAttributesMetadata
@@ -599,14 +574,14 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new LayoutAttributesMetadata();
-				metadata.addValue(MetadataNamespaces.LAYOUT_ATTRIBUTES, result);
+				addValue(MetadataNamespaces.LAYOUT_ATTRIBUTES, result);
 			}
 			return result;
 		}
 		
 		private function get lazyAbsolute():AbsoluteLayoutMetadata
 		{
-			return metadata.getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) as AbsoluteLayoutMetadata;
+			return getValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS) as AbsoluteLayoutMetadata;
 		}
 		
 		private function get eagerAbsolute():AbsoluteLayoutMetadata
@@ -615,14 +590,14 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new AbsoluteLayoutMetadata();
-				metadata.addValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS, result);
+				addValue(MetadataNamespaces.ABSOLUTE_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
 		
 		private function get lazyRelative():RelativeLayoutMetadata
 		{
-			return metadata.getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutMetadata;
+			return getValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS) as RelativeLayoutMetadata;
 		}
 		
 		private function get eagerRelative():RelativeLayoutMetadata
@@ -631,14 +606,14 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new RelativeLayoutMetadata();
-				metadata.addValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS, result);
+				addValue(MetadataNamespaces.RELATIVE_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
 		
 		private function get lazyAnchor():AnchorLayoutMetadata
 		{
-			return metadata.getValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) as AnchorLayoutMetadata;
+			return getValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS) as AnchorLayoutMetadata;
 		}
 		
 		private function get eagerAnchor():AnchorLayoutMetadata
@@ -647,14 +622,14 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new AnchorLayoutMetadata();
-				metadata.addValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS, result);
+				addValue(MetadataNamespaces.ANCHOR_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}
 		
 		private function get lazyPadding():PaddingLayoutMetadata
 		{
-			return metadata.getValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS) as PaddingLayoutMetadata;
+			return getValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS) as PaddingLayoutMetadata;
 		}
 		
 		private function get eagerPadding():PaddingLayoutMetadata
@@ -663,7 +638,7 @@ package org.osmf.layout
 			if (result == null)
 			{
 				result = new PaddingLayoutMetadata();
-				metadata.addValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS, result);
+				addValue(MetadataNamespaces.PADDING_LAYOUT_PARAMETERS, result);
 			}
 			return result;
 		}

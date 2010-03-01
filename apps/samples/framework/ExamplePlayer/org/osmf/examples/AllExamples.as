@@ -46,8 +46,8 @@ package org.osmf.examples
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutMode;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;
@@ -348,23 +348,26 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:ParallelElement = new ParallelElement();
-							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
+							var layout:LayoutMetadata = new LayoutMetadata();
 							layout.layoutMode = LayoutMode.HORIZONTAL;
 							layout.width = 640
 							layout.height = 352;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							
 							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							layout = new LayoutRendererProperties(mediaElement1);
+							layout = new LayoutMetadata();
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement1);
 							
 							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutRendererProperties(mediaElement2);
+							layout = new LayoutMetadata();
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement2);
 							
 							return parallelElement;
@@ -379,23 +382,26 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:SynchronizedParallelElement = new SynchronizedParallelElement();
-							var layout:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
+							var layout:LayoutMetadata = new LayoutMetadata();
 							layout.layoutMode = LayoutMode.HORIZONTAL;
 							layout.width = 640
 							layout.height = 352;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							
 							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutRendererProperties(mediaElement1);
+							layout = new LayoutMetadata();
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement1);
 							
 							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							layout = new LayoutRendererProperties(mediaElement2);
+							layout = new LayoutMetadata();
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
 							layout.scaleMode = ScaleMode.LETTERBOX;
+							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement2);
 							
 							return parallelElement;
@@ -619,19 +625,22 @@ package org.osmf.examples
 							parallelElement.addChild(video1);
 							parallelElement.addChild(video2);
 				  	   		
-				  	   		var layoutVideo1:LayoutRendererProperties = new LayoutRendererProperties(video1);
+				  	   		var layoutVideo1:LayoutMetadata = new LayoutMetadata();
 							layoutVideo1.percentWidth = 50;
 							layoutVideo1.percentHeight = 50;
+							video1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo1);
 							
-							var layoutVideo2:LayoutRendererProperties = new LayoutRendererProperties(video2);
+							var layoutVideo2:LayoutMetadata = new LayoutMetadata();
 							layoutVideo2.percentWidth = 50;
 							layoutVideo2.percentHeight = 50;
 							layoutVideo2.percentX = 50;
 							layoutVideo2.percentY = 25;
+							video2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutVideo2);
 							
-							var layoutParallelElement:LayoutRendererProperties = new LayoutRendererProperties(parallelElement);
+							var layoutParallelElement:LayoutMetadata = new LayoutMetadata();
 							layoutParallelElement.width = 640;
 							layoutParallelElement.height = 358;
+							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutParallelElement);
 				  	   		
 				  	   		var delta:int = 1;
 							

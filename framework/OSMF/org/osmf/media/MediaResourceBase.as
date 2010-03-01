@@ -72,6 +72,23 @@ package org.osmf.media
 		{
 			_mimeType = value;
 		}
+		
+		/**
+		 * A Vector containing the namespace URLs for all Metadata
+		 * objects within this resource.
+		 **/
+		public function get metadataNamespaceURLs():Vector.<String>
+		{
+			var allKeys:Vector.<String> = new Vector.<String>;
+			if (_metadata != null)
+			{
+				for (var key:String in _metadata)
+				{
+					allKeys.push(key);
+				}
+			}
+			return allKeys;
+		}
 
 		/**
 		 * Adds a metadata value to this resource.

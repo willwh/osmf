@@ -25,7 +25,7 @@ package
 	import org.osmf.chrome.controlbar.ControlBarWidget;
 	import org.osmf.chrome.controlbar.Direction;
 	import org.osmf.chrome.controlbar.widgets.*;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
@@ -99,9 +99,14 @@ package
 			addTrait(MediaTraitType.DISPLAY_OBJECT, viewable);
 			
 			// Set the control bar's width and height as absolute layout values:
-			var layoutProperties:LayoutRendererProperties = new LayoutRendererProperties(this);
-			layoutProperties.width = controlBar.measuredWidth;
-			layoutProperties.height = controlBar.measuredHeight;
+			var layoutMetadata:LayoutMetadata = getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+			if (layoutMetadata == null)
+			{
+				layoutMetadata = new LayoutMetadata();
+				addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+			}
+			layoutMetadata.width = controlBar.measuredWidth;
+			layoutMetadata.height = controlBar.measuredHeight;
 			
 			super.setupTraits();	
 		}

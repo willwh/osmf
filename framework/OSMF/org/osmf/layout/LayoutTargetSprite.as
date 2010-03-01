@@ -26,7 +26,6 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.logging.ILogger;
-	import org.osmf.metadata.Metadata;
 	
 	/**
 	 * @private
@@ -164,7 +163,7 @@ package org.osmf.layout
 	[Event(name="removeChild",type="org.osmf.layout.LayoutTargetEvent")]
 
 	/**
-	 * LayoutContextSprite defines a Sprite based ILayoutContext implementation.
+	 * LayoutTargetSprite defines a Sprite based ILayoutTarget implementation.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -176,15 +175,17 @@ package org.osmf.layout
 		/**
 		 * Constructor.
 		 * 
+		 * @param layoutMetadata The LayoutMetadata to use to layout this
+		 * sprite.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function LayoutTargetSprite()
+		public function LayoutTargetSprite(layoutMetadata:LayoutMetadata=null)
 		{
-			_metadata = new Metadata();
-			
+			_layoutMetadata = layoutMetadata || new LayoutMetadata();
 			renderers = new LayoutTargetRenderers(this);
 			
 			addEventListener(LayoutTargetEvent.ADD_CHILD_AT, onAddChildAt);
@@ -201,22 +202,6 @@ package org.osmf.layout
 		//
 		
 		/**
-		 * @private
-		 **/
-		public function get metadata():Metadata
-		{
-			return _metadata;
-		}
-		
-		/**
-		 * @private
-		 **/
-		public function set metadata(value:Metadata):void
-		{
-			_metadata = value;
-		}
-		
-		/**
 		 * A reference to the display object that represents the target. A
 		 * client may use this reference to position or parent the target.
 		 *  
@@ -229,7 +214,21 @@ package org.osmf.layout
 		{
 			return this;
 		}
-		
+
+	 	/**
+	 	 * The metadata that's used to hold information about the layout
+	 	 * of this layout target.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+	 	 **/
+	 	public function get layoutMetadata():LayoutMetadata
+	 	{
+	 		return _layoutMetadata;
+	 	}
+	 	
 	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
@@ -394,7 +393,7 @@ package org.osmf.layout
 		 **/
 		override public function set width(value:Number):void
 		{
-			new LayoutRendererProperties(this).width = value; 
+			_layoutMetadata.width = value; 
 		}
 		
 		/**
@@ -410,7 +409,7 @@ package org.osmf.layout
 		 **/
 		override public function set height(value:Number):void
 		{
-			new LayoutRendererProperties(this).height = value; 
+			_layoutMetadata.height = value; 
 		}
 		
 		/**
@@ -424,7 +423,7 @@ package org.osmf.layout
 		// Private
 		//
 		
-		private var _metadata:Metadata;
+		private var _layoutMetadata:LayoutMetadata;
 		private var _measuredWidth:Number = NaN;
 		private var _measuredHeight:Number = NaN;
 		private var renderers:LayoutTargetRenderers;

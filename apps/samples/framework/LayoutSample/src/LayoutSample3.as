@@ -28,7 +28,6 @@ package
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMode;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
@@ -49,10 +48,9 @@ package
 			// added to a renderer without any layout properties set,
 			// it is now defaulting to 100% width and height, letterbox
 			// scaled, and centering. Let's change this:
-			var ball3Layout:LayoutRendererProperties = new LayoutRendererProperties(ball3);
-			ball3Layout.percentWidth = 100;
-			ball3Layout.percentHeight = 50;
-			ball3Layout.scaleMode = ScaleMode.STRETCH;
+			ball3.layoutMetadata.percentWidth = 100;
+			ball3.layoutMetadata.percentHeight = 50;
+			ball3.layoutMetadata.scaleMode = ScaleMode.STRETCH;
 			
 			// Construct a layout target sprite that the renderer
 			// can use as its container:
@@ -63,9 +61,8 @@ package
 			addChild(container);
 			
 			// Set the container to operate in VERTICAL layoutMode:
-			var containerLayout:LayoutRendererProperties = new LayoutRendererProperties(container);
-			containerLayout.layoutMode = LayoutMode.VERTICAL;
-			containerLayout.horizontalAlign = HorizontalAlign.CENTER;
+			container.layoutMetadata.layoutMode = LayoutMode.VERTICAL;
+			container.layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 			
 			// Add a child container/renderer pair, and add targets
 			// to it too:
@@ -74,12 +71,11 @@ package
 			renderer2.addTarget(constructBall(0x152C52));
 			
 			var container2:LayoutTargetSprite = new LayoutTargetSprite();
-			var container2Layout:LayoutRendererProperties = new LayoutRendererProperties(container2);
-			container2Layout.layoutMode = LayoutMode.HORIZONTAL;
-			container2Layout.horizontalAlign = HorizontalAlign.CENTER;
+			container2.layoutMetadata.layoutMode = LayoutMode.HORIZONTAL;
+			container2.layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 			// By default, items appear in the order that they were added to
 			// the renderer. By setting an we override the order: 
-			container2Layout.index = -1;
+			container2.layoutMetadata.index = -1;
 			renderer2.container = container2;
 			renderer.addTarget(container2);
 			

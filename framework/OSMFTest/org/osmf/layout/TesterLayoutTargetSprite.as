@@ -32,11 +32,16 @@ package org.osmf.layout
 		// ILayoutTarget
 		//
 		
-		public function get metadata():Metadata
+		public function get layoutMetadata():LayoutMetadata
 		{
-			return _metadata;
+			return _layoutMetadata;
 		}
-		
+
+/* 		public function set layoutMetadata(value:LayoutMetadata):void
+		{
+			_layoutMetadata = value;
+		}
+ */		
 		public function get displayObject():DisplayObject
 		{
 			return this;
@@ -93,7 +98,7 @@ package org.osmf.layout
 				);	
 		}
 		
-		private var _metadata:Metadata = new Metadata();
+		private var _layoutMetadata:LayoutMetadata = new LayoutMetadata();
 		
 		private var renderers:LayoutTargetRenderers;
 		

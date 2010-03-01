@@ -36,7 +36,7 @@ package
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -73,14 +73,16 @@ package
 				
 			// Next, decorate the content tree with attributes:
 			
-			var bannersLayout:LayoutRendererProperties = new LayoutRendererProperties(banners);
+			var bannersLayout:LayoutMetadata = new LayoutMetadata();
+			banners.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, bannersLayout);
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.NONE;
 			bannersLayout.verticalAlign = VerticalAlign.BOTTOM;
 			bannersLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
-			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
+			var mainLayout:LayoutMetadata = new LayoutMetadata();
+			mainContent.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, mainLayout);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.LETTERBOX;

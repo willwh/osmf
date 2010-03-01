@@ -28,7 +28,7 @@ package org.osmf.containers
 	
 	import org.osmf.display.ScaleMode;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -88,7 +88,8 @@ package org.osmf.containers
 			var viewSprite:Sprite = new TesterSprite();
 			var viewTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 486, 60);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, viewTrait);
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
+			var layout:LayoutMetadata = new LayoutMetadata();
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			layout.scaleMode = ScaleMode.NONE;
 			layout.verticalAlign = VerticalAlign.MIDDLE;
 			layout.horizontalAlign = HorizontalAlign.CENTER;

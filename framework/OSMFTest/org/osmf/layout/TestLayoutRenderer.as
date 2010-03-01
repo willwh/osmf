@@ -42,14 +42,16 @@ package org.osmf.layout
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
-			var lp:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
-			assertNotNull(lp);
+			var lm:LayoutMetadata = new LayoutMetadata();
+			assertNotNull(lm);
 
-			lp.percentX = 10;
-			lp.percentY = 10;
-			lp.percentWidth = 80;
-			lp.percentHeight = 80;
-			
+			lm.percentX = 10;
+			lm.percentY = 10;
+			lm.percentWidth = 80;
+			lm.percentHeight = 80;
+
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, lm);
+						
 			// Container
 			
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
@@ -75,13 +77,13 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			lp.percentX = 5;
+			lm.percentX = 5;
 			
 			layoutRenderer.validateNow();
 			
 			assertEquals(15, viewSprite.x);
 			
-			lp.x = 50;
+			lm.x = 50;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -89,7 +91,7 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			lp.y = 1;
+			lm.y = 1;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -97,7 +99,7 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			lp.width = 100;
+			lm.width = 100;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -105,7 +107,7 @@ package org.osmf.layout
 			assertEquals(100, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			lp.height = 51;
+			lm.height = 51;
 			layoutRenderer.validateNow();
 			
 			assertEquals(50, viewSprite.x);
@@ -113,10 +115,10 @@ package org.osmf.layout
 			assertEquals(100, viewSprite.width);
 			assertEquals(51, viewSprite.height);
 			
-			lp.x = NaN;
-			lp.y = NaN;
-			lp.width = NaN;
-			lp.height = NaN;
+			lm.x = NaN;
+			lm.y = NaN;
+			lm.width = NaN;
+			lm.height = NaN;
 			layoutRenderer.validateNow();
 			
 			assertEquals(15, viewSprite.x);
@@ -124,10 +126,10 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 			
-			lp.left = 60;
-			lp.top = 15;
-			lp.percentX = NaN; // Set NaN, for relative takes precedence over anchoring.
-			lp.percentY = NaN;
+			lm.left = 60;
+			lm.top = 15;
+			lm.percentX = NaN; // Set NaN, for relative takes precedence over anchoring.
+			lm.percentY = NaN;
 			
 			layoutRenderer.validateNow();
 			
@@ -136,19 +138,19 @@ package org.osmf.layout
 			assertEquals(240, viewSprite.width);
 			assertEquals(160, viewSprite.height);
 		
-			lp.right = 10;
-			lp.bottom = 10;
-			lp.percentWidth = NaN; // Set NaN, for relative takes precedence over anchoring.
-			lp.percentHeight = NaN;
+			lm.right = 10;
+			lm.bottom = 10;
+			lm.percentWidth = NaN; // Set NaN, for relative takes precedence over anchoring.
+			lm.percentHeight = NaN;
 			layoutRenderer.validateNow();
 			
 			assertEquals(230, viewSprite.width);
 			assertEquals(175, viewSprite.height);
 			
-			lp.paddingLeft = 1;
-			lp.paddingTop = 2;
-			lp.paddingRight = 3;
-			lp.paddingBottom = 4;
+			lm.paddingLeft = 1;
+			lm.paddingTop = 2;
+			lm.paddingRight = 3;
+			lm.paddingBottom = 4;
 			
 			layoutRenderer.validateNow();
 			
@@ -167,12 +169,14 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite, 50, 50);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
+			var layout:LayoutMetadata = new LayoutMetadata();
 			layout.percentWidth = layout.percentHeight = 80;
 			layout.percentX = layout.percentY = 10;
 			layout.scaleMode = ScaleMode.NONE; // this is the default, actually.
 			layout.verticalAlign = VerticalAlign.MIDDLE;
 			layout.horizontalAlign = HorizontalAlign.RIGHT;
+			
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			
 			// Container
 			
@@ -263,9 +267,11 @@ package org.osmf.layout
 			var viewSprite:Sprite = new TesterSprite();
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
+			var layout:LayoutMetadata = new LayoutMetadata();
 			layout.width = 400;
 			layout.height = 800;
+			
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			
 			// Container without any dimenion settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
@@ -292,9 +298,11 @@ package org.osmf.layout
 			var displayObjectTrait:DisplayObjectTrait = new DisplayObjectTrait(viewSprite);
 			mediaElement.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 			
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(mediaElement);
+			var layout:LayoutMetadata = new LayoutMetadata();
 			layout.width = 400;
 			layout.height = 800;
+			
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			
 			// Container without any dimension settings: should bubble up from child element:
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
@@ -334,19 +342,14 @@ package org.osmf.layout
 			var container:LayoutTargetSprite = new LayoutTargetSprite();
 			renderer.container = container;
 			
-			var layout:LayoutRendererProperties;
-			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutRendererProperties(t1);
-			layout.index = 8;
+			t1.layoutMetadata.index = 8;
 			
 			var t2:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutRendererProperties(t2);
-			layout.index = 2;
+			t2.layoutMetadata.index = 2;
 			
 			var t3:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			layout = new LayoutRendererProperties(t3);
-			layout.index = 2;
+			t3.layoutMetadata.index = 2;
 			
 			var t4:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
 			
@@ -362,8 +365,7 @@ package org.osmf.layout
 			assertEquals(t2, container.getChildAt(2));
 			assertEquals(t1, container.getChildAt(3));
 			
-			layout = new LayoutRendererProperties(t4);
-			layout.index = 4;
+			t4.layoutMetadata.index = 4;
 			
 			renderer.validateNow();
 			
@@ -380,13 +382,12 @@ package org.osmf.layout
 			renderer.container = container;
 			
 			var t1:TesterLayoutTargetSprite = new TesterLayoutTargetSprite();
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(t1);
-			layout.width = layout.height = 100;
-			layout.paddingLeft = 9.6;
-			layout.paddingTop = 8.4;
-			layout.paddingRight = 5.6;
-			layout.paddingBottom = 3.8;
-			layout.snapToPixel = true;
+			t1.layoutMetadata.width = t1.layoutMetadata.height = 100;
+			t1.layoutMetadata.paddingLeft = 9.6;
+			t1.layoutMetadata.paddingTop = 8.4;
+			t1.layoutMetadata.paddingRight = 5.6;
+			t1.layoutMetadata.paddingBottom = 3.8;
+			t1.layoutMetadata.snapToPixel = true;
 			t1.setIntrinsicDimensions(100,100);
 			
 			renderer.addTarget(t1);
@@ -397,10 +398,10 @@ package org.osmf.layout
 			assertEquals(85, t1.width);
 			assertEquals(88, t1.height);
 			
-			layout.paddingLeft = NaN;
-			layout.paddingTop = NaN;
-			layout.paddingRight = NaN;
-			layout.paddingBottom = NaN;
+			t1.layoutMetadata.paddingLeft = NaN;
+			t1.layoutMetadata.paddingTop = NaN;
+			t1.layoutMetadata.paddingRight = NaN;
+			t1.layoutMetadata.paddingBottom = NaN;
 			
 			renderer.validateNow();
 			

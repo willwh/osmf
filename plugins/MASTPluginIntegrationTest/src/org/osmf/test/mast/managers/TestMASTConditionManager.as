@@ -87,9 +87,9 @@ package org.osmf.test.mast.managers
 			var resource:URLResource = new URLResource(url);
 			// Assign to the resource the metadata that indicates that it should have a MAST
 			// document applied (and include the URL of that MAST document).
-			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			var metadata:Metadata = new Metadata();
 			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, MAST_URL_TEST);
-			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			resource.addMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
 			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(resource);
 			

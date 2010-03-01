@@ -29,7 +29,6 @@ package org.osmf.chrome.controlbar
 	
 	import org.osmf.chrome.events.RequestLayoutEvent;
 	import org.osmf.chrome.utils.FadingSprite;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	
@@ -53,9 +52,8 @@ package org.osmf.chrome.controlbar
 			var backdropObject:DisplayObject = new backdropType();
 			addChild(backdropObject);
 			
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(this);
-			layout.width = backdropObject.width;
-			layout.height = backdropObject.height;
+			layoutMetadata.width = backdropObject.width;
+			layoutMetadata.height = backdropObject.height;
 			measure();
 			
 			addEventListener

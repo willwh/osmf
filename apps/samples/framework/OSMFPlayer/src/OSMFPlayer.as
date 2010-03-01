@@ -43,7 +43,6 @@ package
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.DefaultMediaFactory;
@@ -125,7 +124,6 @@ package
 			// on screen once it has loaded.
 			containerRenderer = new LayoutRenderer();
 			container = new MediaContainer(containerRenderer);
-			containerLayout = new LayoutRendererProperties(container);
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
@@ -139,10 +137,9 @@ package
 			overlay.graphics.drawRect(0, 0, 100, 100);
 			overlay.graphics.endFill();
 			
-			var overlayLayout:LayoutRendererProperties = new LayoutRendererProperties(overlay);
-			overlayLayout.percentWidth = 100;
-			overlayLayout.percentHeight = 100;
-			overlayLayout.index = 1;
+			overlay.layoutMetadata.percentWidth = 100;
+			overlay.layoutMetadata.percentHeight = 100;
+			overlay.layoutMetadata.index = 1;
 			
 			containerRenderer.addTarget(overlay);
 		}
@@ -155,11 +152,10 @@ package
 			controlBar = new ControlBar();
 			controlBar.autoHide = configuration.autoHideControlBar;
 			
-			var controlBarLayout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
-			controlBarLayout.index = 2;
-			controlBarLayout.bottom = 25;
-			controlBarLayout.verticalAlign = VerticalAlign.TOP;
-			controlBarLayout.horizontalAlign = HorizontalAlign.CENTER;
+			controlBar.layoutMetadata.index = 2;
+			controlBar.layoutMetadata.bottom = 25;
+			controlBar.layoutMetadata.verticalAlign = VerticalAlign.TOP;
+			controlBar.layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 			
 			containerRenderer.addTarget(controlBar);
 			
@@ -224,8 +220,8 @@ package
 		private function onStageResize(event:Event = null):void
 		{
 			// Propagate dimensions to the main container:
-			containerLayout.width = _stage.stageWidth;
-			containerLayout.height = _stage.stageHeight;
+			container.layoutMetadata.width = _stage.stageWidth;
+			container.layoutMetadata.height = _stage.stageHeight;
 		}
 		
 		private function onEjectButtonClick(event:MouseEvent):void
@@ -278,7 +274,6 @@ package
 		
 		private var container:MediaContainer;
 		private var containerRenderer:LayoutRenderer;
-		private var containerLayout:LayoutRendererProperties;
 		private var controlBar:ControlBarBase;
 		
 		private var overlay:LayoutTargetSprite;

@@ -110,9 +110,9 @@ package org.osmf.test.mast.media
 		{
 			var mediaElement:MediaElement = new VideoElement();
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
-			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			var metadata:Metadata = new Metadata();
 			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, "http://foo.com/bogus/badfile.xml");
-			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			resource.addMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
 
 			mediaElement.resource = resource
 
@@ -174,9 +174,9 @@ package org.osmf.test.mast.media
 		{
 			var resource:URLResource = new URLResource(REMOTE_STREAM);				
 			
-			var metadata:Metadata = new Metadata(MASTPluginInfo.MAST_METADATA_NAMESPACE);
+			var metadata:Metadata = new Metadata();
 			metadata.addValue(MASTPluginInfo.MAST_METADATA_KEY_URI, preroll ? MAST_URL_PREROLL : MAST_URL_POSTROLL);
-			resource.addMetadataValue(metadata.namespaceURL, metadata);
+			resource.addMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
 			
 			return resource;			
 		}

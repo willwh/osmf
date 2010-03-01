@@ -31,7 +31,6 @@ package org.osmf.layout
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
-	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
@@ -204,8 +203,12 @@ package org.osmf.layout
 				_mediaElement = mediaElement;
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
 				_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+				_mediaElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+				_mediaElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove);
 				
 				renderers = new LayoutTargetRenderers(this);
+				
+				_layoutMetadata = _mediaElement.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
 				
 				addEventListener(LayoutTargetEvent.ADD_CHILD_AT, onAddChildAt);
 				addEventListener(LayoutTargetEvent.SET_CHILD_INDEX, onSetChildIndex);
@@ -226,11 +229,18 @@ package org.osmf.layout
 		/**
 		 * @private
 		 */
-		public function get metadata():Metadata
+		public function get layoutMetadata():LayoutMetadata
 		{
-			return _mediaElement.metadata;
+			// Make sure we always return a non-null value.
+			if (_layoutMetadata == null)
+			{
+				_layoutMetadata = new LayoutMetadata();
+				_mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, _layoutMetadata);
+			}
+
+			return _layoutMetadata;
 		}
-		
+
 		/**
 		 * @private
 		 */
@@ -317,6 +327,7 @@ package org.osmf.layout
 		//
 		
 		private var _mediaElement:MediaElement;
+		private var _layoutMetadata:LayoutMetadata;
 		
 		private var displayObjectTrait:DisplayObjectTrait;
 		private var _displayObject:DisplayObject;
@@ -371,6 +382,22 @@ package org.osmf.layout
 							: null
 						);
 				}
+			}
+		}
+		
+		private function onMetadataAdd(event:MediaElementEvent):void
+		{
+			if (event.namespaceURL == LayoutMetadata.LAYOUT_NAMESPACE)
+			{
+				_layoutMetadata = event.metadata as LayoutMetadata;
+			}
+		}
+
+		private function onMetadataRemove(event:MediaElementEvent):void
+		{
+			if (event.namespaceURL == LayoutMetadata.LAYOUT_NAMESPACE)
+			{
+				_layoutMetadata = null;
 			}
 		}
 		

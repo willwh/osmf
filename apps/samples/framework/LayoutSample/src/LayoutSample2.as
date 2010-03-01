@@ -26,7 +26,6 @@ package
 	
 	import org.osmf.layout.LayoutMode;
 	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutRendererProperties;
 	import org.osmf.layout.LayoutTargetSprite;
 
 	[SWF(backgroundColor="0xC0C0C0", frameRate="25", width="640", height="360")]
@@ -55,9 +54,7 @@ package
 			addChild(container);
 			
 			// Set the container to operate in VERTICAL layoutMode:
-			var containerLayout:LayoutRendererProperties
-				= new LayoutRendererProperties(container);
-			containerLayout.layoutMode = LayoutMode.VERTICAL;
+			container.layoutMetadata.layoutMode = LayoutMode.VERTICAL;
 		}
 		
 		private function createBall(color:uint):LayoutTargetSprite
@@ -73,9 +70,8 @@ package
 			
 			// Inform the layout system that this layout target is a
 			// 100x100 pixels in size:
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(result);
-			layout.width = 100;
-			layout.height = 100;
+			result.layoutMetadata.width = 100;
+			result.layoutMetadata.height = 100;
 			
 			return result;
 		}

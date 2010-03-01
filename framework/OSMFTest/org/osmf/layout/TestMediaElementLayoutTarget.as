@@ -44,7 +44,8 @@ package org.osmf.layout
 			melt.measure();
 			
 			assertNull(melt.displayObject);
-			assertEquals(melt.metadata, me.metadata);
+			assertNotNull(melt.layoutMetadata);
+			assertEquals(melt.layoutMetadata, me.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata);
 			assertEquals(NaN, melt.measuredWidth);
 			assertEquals(NaN, melt.measuredHeight);
 		}
@@ -52,17 +53,16 @@ package org.osmf.layout
 		public function testMediaElementLayoutTargetWithDisplayObjectTrait():void
 		{
 			var me:DynamicMediaElement = new DynamicMediaElement();
+
+			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
 				
-			var lts:LayoutTargetSprite = new LayoutTargetSprite();
-			lts.metadata = me.metadata;
+			var lts:LayoutTargetSprite = new LayoutTargetSprite(me.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata);
 			var displayObjectTrait:DynamicDisplayObjectTrait = new DynamicDisplayObjectTrait(lts, 100, 200);
 			me.doAddTrait(MediaTraitType.DISPLAY_OBJECT, displayObjectTrait);
 
-			var lt:MediaElementLayoutTarget = MediaElementLayoutTarget.getInstance(me);
-			
 			lt.measure();
 			
-			assertEquals(lt.metadata, me.metadata);
+			assertEquals(lt.layoutMetadata, me.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata);
 			assertEquals(lt.displayObject, lts);
 			assertEquals(lt.measuredWidth, 100);
 			assertEquals(lt.measuredHeight, 200); 

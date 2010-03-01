@@ -27,7 +27,7 @@ package org.osmf.elements
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -184,12 +184,14 @@ package org.osmf.elements
 		public function testDisplayObjectTraitLayout():void
 		{
 			var parallel:ParallelElement = new ParallelElement();
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(parallel);
+			var layout:LayoutMetadata = new LayoutMetadata();
+			parallel.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			layout.width = 300;
 			layout.height = 200;
 			
 			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
-			layout = new LayoutRendererProperties(mediaElement1);
+			layout = new LayoutMetadata();
+			mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 			layout.x = 10;
 			layout.y = 10;
 			layout.bottom = 10;

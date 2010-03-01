@@ -25,7 +25,7 @@ package org.osmf.display
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -84,7 +84,13 @@ package org.osmf.display
 				{
 					mediaContainer.addMediaElement(_mediaElement);
 					
-					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
+					var layout:LayoutMetadata = _mediaElement.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+					if (layout == null)
+					{
+						layout = new LayoutMetadata();
+						_mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+					}
+					
 					layout.scaleMode = _scaleMode;
 					layout.verticalAlign = VerticalAlign.MIDDLE;
 					layout.horizontalAlign = HorizontalAlign.CENTER;
@@ -146,7 +152,13 @@ package org.osmf.display
 				_scaleMode = value;
 				if (_mediaElement != null)
 				{
-					var layout:LayoutRendererProperties = new LayoutRendererProperties(_mediaElement);
+					var layout:LayoutMetadata = _mediaElement.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+					if (layout == null)
+					{
+						layout = new LayoutMetadata();
+						_mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+					}
+
 					layout.scaleMode = _scaleMode;
 					layout.verticalAlign = VerticalAlign.MIDDLE;
 					layout.horizontalAlign = HorizontalAlign.CENTER;

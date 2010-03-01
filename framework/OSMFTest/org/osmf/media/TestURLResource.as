@@ -42,6 +42,28 @@ package org.osmf.media
 			assertTrue(resource != null);
 			assertTrue(resource.url == null);			
 		}
+
+		public function testMetadata():void
+		{
+			// Simple URL
+			var resource:URLResource = createURLResource("http://www.example.com");
+			assertTrue(resource != null);
+			
+			resource.addMetadataValue("foo1", "foovalue1");
+			resource.addMetadataValue("foo2", "foovalue2a");
+			resource.addMetadataValue("foo2", "foovalue2b");
+			resource.addMetadataValue("foo3", "foovalue3");
+			
+			assertTrue(resource.metadataNamespaceURLs.length == 3);
+			assertTrue(resource.getMetadataValue("foo1") == "foovalue1");
+			assertTrue(resource.getMetadataValue("foo2") == "foovalue2b");
+			assertTrue(resource.getMetadataValue("foo3") == "foovalue3");
+			
+			resource.removeMetadataValue("foo3");
+
+			assertTrue(resource.metadataNamespaceURLs.length == 2);
+			assertTrue(resource.getMetadataValue("foo3") == null);
+		}
 		
 		private function createURLResource(url:String):URLResource
 		{

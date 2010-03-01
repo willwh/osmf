@@ -26,7 +26,7 @@ package
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.events.PluginManagerEvent;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
 	import org.osmf.metadata.Metadata;
@@ -82,9 +82,10 @@ package
 			rootElement = new ParallelElement();
 			rootElement.addChild(constructVideoElement());
 			
-			// Use the layout api to set the parallel elements width and
+			// Use the layout api to set the parallel element's width and
 			// height. Make it as big as the stage currently is:
-			var rootElementLayout:LayoutRendererProperties = new LayoutRendererProperties(rootElement);
+			var rootElementLayout:LayoutMetadata = new LayoutMetadata();
+			rootElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, rootElementLayout);
 			rootElementLayout.width = stage.stageWidth;
 			rootElementLayout.height = stage.stageHeight;
 			
@@ -130,7 +131,12 @@ package
 			
 			// Set some layout properties on the control bar. Specifically, have it
 			// appear at the bottom of the parallel element, horizontally centererd:
-			var layout:LayoutRendererProperties = new LayoutRendererProperties(controlBar);
+			var layout:LayoutMetadata = controlBar.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+			if (layout == null)
+			{
+				layout = new LayoutMetadata();
+				controlBar.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+			}
 			layout.verticalAlign = VerticalAlign.BOTTOM;
 			layout.horizontalAlign = HorizontalAlign.CENTER;
 			

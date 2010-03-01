@@ -33,7 +33,7 @@ package
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
@@ -72,21 +72,24 @@ package
 			
 			// Next, decorate the content tree with attributes:
 			
-			var bannersLayout:LayoutRendererProperties = new LayoutRendererProperties(banners);
+			var bannersLayout:LayoutMetadata = new LayoutMetadata();
+			banners.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, bannersLayout);
 			bannersLayout.percentWidth = 100;
 			bannersLayout.percentHeight = 100;
 			bannersLayout.scaleMode = ScaleMode.LETTERBOX;
 			bannersLayout.verticalAlign = VerticalAlign.TOP;
 			bannersLayout.horizontalAlign = HorizontalAlign.CENTER;
 			
-			var skyScraperLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraper);
+			var skyScraperLayout:LayoutMetadata = new LayoutMetadata()
+			skyScraper.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, skyScraperLayout);
 			skyScraperLayout.percentWidth = 100;
 			skyScraperLayout.percentHeight = 100;
 			skyScraperLayout.scaleMode = ScaleMode.LETTERBOX;
 			skyScraperLayout.verticalAlign = VerticalAlign.MIDDLE;
 			skyScraperLayout.horizontalAlign = HorizontalAlign.RIGHT;
 			
-			var mainLayout:LayoutRendererProperties = new LayoutRendererProperties(mainContent);
+			var mainLayout:LayoutMetadata = new LayoutMetadata();
+			mainContent.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, mainLayout);
 			mainLayout.percentWidth = 100;
 			mainLayout.percentHeight = 100;
 			mainLayout.scaleMode = ScaleMode.STRETCH;
@@ -106,17 +109,15 @@ package
 				bannerGroup.backgroundColor = 0xFF;
 				bannerGroup.backgroundAlpha = .2;
 				bannerGroup.height = 60;
-				
-				var bannerGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(bannerGroup);
-				bannerGroupLayout.left = bannerGroupLayout.right = bannerGroupLayout.top = 5;
+
+				bannerGroup.layoutMetadata.left = bannerGroup.layoutMetadata.right = bannerGroup.layoutMetadata.top = 5;
 				
 				var skyScraperGroup:MediaContainer = new MediaContainer();
 				skyScraperGroup.backgroundColor = 0xFF00;
 				skyScraperGroup.backgroundAlpha = .2;
 				skyScraperGroup.width = 120;
 				
-				var skyScraperGroupLayout:LayoutRendererProperties = new LayoutRendererProperties(skyScraperGroup);
-				skyScraperGroupLayout.right = skyScraperGroupLayout.top = skyScraperGroupLayout.bottom = 5;
+				skyScraperGroup.layoutMetadata.right = skyScraperGroup.layoutMetadata.top = skyScraperGroup.layoutMetadata.bottom = 5;
 				
 			// Bind media elements to their target containers:
 			mainGroup.addMediaElement(mainContent);

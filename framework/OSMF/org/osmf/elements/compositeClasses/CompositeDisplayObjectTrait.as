@@ -27,6 +27,7 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.elements.CompositeElement;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.ILayoutTarget;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetSprite;
@@ -137,7 +138,19 @@ package org.osmf.elements.compositeClasses
 		private function constructChildrenContainer():ILayoutTarget
 		{
 			var target:LayoutTargetSprite = new LayoutTargetSprite();
-			target.metadata = _owner.metadata;
+			var layoutMetadata:LayoutMetadata = _owner.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+			if (layoutMetadata != null)
+			{
+				// Transfer all child metadata objects over.
+				for each (var key:String in layoutMetadata.keys)
+				{
+					var childMetadata:Metadata = layoutMetadata.getValue(key);
+					if (childMetadata != null)
+					{
+						layoutMetadata.addValue(key, childMetadata);
+					}
+				}
+			}
 			return target;
 		}
 

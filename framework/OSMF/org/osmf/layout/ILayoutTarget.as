@@ -24,8 +24,6 @@ package org.osmf.layout
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 	
-	import org.osmf.metadata.Metadata;
-	
 	/**
 	 * @private
 	 * 
@@ -212,6 +210,17 @@ package org.osmf.layout
 		function get displayObject():DisplayObject;
 		
 	 	/**
+	 	 * The metadata that's used to hold information about the layout
+	 	 * of this layout target.  Cannot be null.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+	 	 **/
+	 	function get layoutMetadata():LayoutMetadata;
+	 	
+	 	/**
 	 	 * Defines the width of the element without any transformations being
 	 	 * applied. For a JPG with an original resolution of 1024x768, this
 	 	 * would be 1024 pixels. A client may use this value to (for example)
@@ -268,15 +277,5 @@ package org.osmf.layout
 		 *  @productversion OSMF 1.0
 		 */	
 	 	function layout(availableWidth:Number, availableHeight:Number, deep:Boolean = true):void;
-	 	
-	 	/**
-	 	 * @private
-	 	 * 
-	 	 * The metadata that's used to hold information about the layout
-	 	 * of this layout target.  Since layout targets are currently an
-	 	 * OSMF-internal affair, this property is not part of the public
-	 	 * API.
-	 	 **/
-	 	function get metadata():Metadata;
 	}
 }

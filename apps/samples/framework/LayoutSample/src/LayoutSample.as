@@ -30,7 +30,7 @@ package
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
-	import org.osmf.layout.LayoutRendererProperties;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -45,7 +45,8 @@ package
 			logo.smoothing = true;
 
 			// Construct a layout properties object for the logo:			
-			var logoLayout:LayoutRendererProperties = new LayoutRendererProperties(logo);
+			var logoLayout:LayoutMetadata = new LayoutMetadata();
+			logo.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, logoLayout);;
 			
 			// Set the image to take 30% of its parent's width and height: 
 			logoLayout.percentWidth = 30;
@@ -82,7 +83,8 @@ package
 			// Give the parallel element a fixed width and height. Both the
 			// video element and the logo will base their appearance of these
 			// metrics:
-			var parallelLayout:LayoutRendererProperties = new LayoutRendererProperties(parallel);
+			var parallelLayout:LayoutMetadata = new LayoutMetadata();
+			parallel.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, parallelLayout);
 			parallelLayout.width = stage.stageWidth;
 			parallelLayout.height = stage.stageHeight;
 			

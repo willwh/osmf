@@ -97,7 +97,6 @@ package org.osmf.layout
 		 **/
 		final internal function setParent(value:LayoutRendererBase):void
 		{
-			CONFIG::LOGGING { logger.debug("set {0}'s parent to {1}", metadata.getValue(MetadataNamespaces.ELEMENT_ID), value ? value.metadata.getValue(MetadataNamespaces.ELEMENT_ID) : "null");}
 			_parent = value;
 			processParentChange(_parent);
 		}
@@ -143,7 +142,7 @@ package org.osmf.layout
 					
 				if (_container)
 				{
-					metadata = _container.metadata;
+					layoutMetadata = _container.layoutMetadata;
 					
 					_container.addEventListener
 						( DisplayObjectEvent.MEDIA_SIZE_CHANGE
@@ -202,8 +201,6 @@ package org.osmf.layout
 					)
 				);
 			
-			CONFIG::LOGGING { logger.debug("Adding target {0} to {1}", target.metadata.getValue(MetadataNamespaces.ELEMENT_ID), metadata.getValue(MetadataNamespaces.ELEMENT_ID)); } 
-			
 			// Get the index where the target should be inserted:
 			var index:int = Math.abs(BinarySearch.search(layoutTargets, compareTargets, target));
 			
@@ -216,7 +213,7 @@ package org.osmf.layout
 			{
 				var watcher:MetadataWatcher =
 					new MetadataWatcher
-						( target.metadata
+						( target.layoutMetadata
 						, namespaceURL
 						, null
 						, targetMetadataChangeCallback
@@ -260,8 +257,6 @@ package org.osmf.layout
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-			
-			CONFIG::LOGGING { logger.debug("Removing target {0} from {1}", target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 			
 			var removedTarget:ILayoutTarget;
 			var index:Number = layoutTargets.indexOf(target);
@@ -715,7 +710,7 @@ package org.osmf.layout
 			}
 			
 			_container = null;
-			metadata = null;
+			layoutMetadata = null;
 		}
 		
 		private function targetMetadataChangeCallback(metadata:Metadata):void
@@ -799,7 +794,6 @@ package org.osmf.layout
 			if (currentObject == object)
 			{
 				// Make sure that the object is at the right position in the display list:
-				CONFIG::LOGGING { logger.debug("[.] setChildIndex, {0} on {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				
 				_container.dispatchEvent
 					( new LayoutTargetEvent
@@ -816,7 +810,6 @@ package org.osmf.layout
 			{
 				if (currentObject != null)
 				{
-					CONFIG::LOGGING { logger.debug("[-] removeChild, {0} from {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 					
 					// Remove the current object:
 					_container.dispatchEvent
@@ -831,7 +824,6 @@ package org.osmf.layout
 				}
 				
 				// Add the new object:
-				CONFIG::LOGGING { logger.debug("[+] addChild, {0} to {1}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID), metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				stagedDisplayObjects[target] = object;
 				
 				_container.dispatchEvent
@@ -858,7 +850,6 @@ package org.osmf.layout
 			var currentObject:DisplayObject = stagedDisplayObjects[target];
 			if (currentObject != null)
 			{
-				CONFIG::LOGGING { logger.debug("[-] removeChild, {0}",target.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
 				delete stagedDisplayObjects[target];
 				
 				_container.dispatchEvent
@@ -875,7 +866,7 @@ package org.osmf.layout
 		
 		private var _parent:LayoutRendererBase;
 		private var _container:ILayoutTarget;		
-		private var metadata:Metadata;
+		private var layoutMetadata:LayoutMetadata;
 		
 		private var layoutTargets:Vector.<ILayoutTarget> = new Vector.<ILayoutTarget>;
 		private var stagedDisplayObjects:Dictionary = new Dictionary(true);
@@ -929,7 +920,7 @@ package org.osmf.layout
 				var renderer:LayoutRendererBase = dirtyRenderers.shift();
 				if (renderer.parent == null)
 				{
-					CONFIG::LOGGING { logger.debug("---------- VALIDATING LAYOUT ---------- {0}", renderer.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)); }
+					CONFIG::LOGGING { logger.debug("---------- VALIDATING LAYOUT ---------- "); }
 					renderer.validateNow();
 					CONFIG::LOGGING { logger.debug("---------- LAYOUT VALIDATED -----------"); }
 				}
