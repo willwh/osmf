@@ -100,13 +100,16 @@ package org.osmf.metadata
 				
 				// For convenience, always trigger a first change callback when
 				// start watching:
-				if (dispatchInitialChangeEvent == true && key != null)
+				if (dispatchInitialChangeEvent == true)
 				{
-					callback(currentMetadata ? currentMetadata.getValue(key) : undefined);
-				}
-				else
-				{
-					callback(currentMetadata ? currentMetadata : undefined);
+					if (key != null)
+					{
+						callback(currentMetadata ? currentMetadata.getValue(key) : undefined);
+					}
+					else
+					{
+						callback(currentMetadata ? currentMetadata : undefined);
+					}
 				}
 			}
 		}
