@@ -186,7 +186,20 @@ package org.osmf.elements.f4mClasses
 			{
 				decoder = new Base64Decoder();
 				decoder.decode(value.xmlns::metadata.text());
-				media.metadata = decoder.drain();	
+				
+				var data:ByteArray = decoder.drain();
+				data.position = 0;
+				data.objectEncoding = 0;
+				
+				try
+				{
+					var header:String = data.readObject() as String;
+					var metaInfo:Object = data.readObject();
+					media.metadata = metaInfo;			
+				}
+				catch (e:Error)
+				{
+				}			
 			}
 			
 			if (value.xmlns::xmpMetadata.length() > 0)

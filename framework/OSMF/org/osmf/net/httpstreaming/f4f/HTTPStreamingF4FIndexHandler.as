@@ -71,7 +71,7 @@ package org.osmf.net.httpstreaming.f4f
 		override public function initialize(indexInfo:Object):void
 		{
 			// Make sure we have an info object of the expected type.
-			var f4fIndexInfo:HTTPStreamingF4FIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
+			f4fIndexInfo = indexInfo as HTTPStreamingF4FIndexInfo;
 			if (f4fIndexInfo == null || f4fIndexInfo.streamInfos == null || f4fIndexInfo.streamInfos.length <= 0)
 			{
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
@@ -147,7 +147,7 @@ package org.osmf.net.httpstreaming.f4f
 		override public function processIndexData(data:*, indexContext:Object):void
 		{
 			var index:int = indexContext as int;
-			var bootstrapBox:AdobeBootstrapBox = this.processBootstrapData(data, index);
+			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
 			if (bootstrapBox == null)
 			{
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
@@ -206,7 +206,7 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
-				currentFAI = frt.findFragmentIdByTime(time * abst.timeScale);
+				currentFAI = frt.findFragmentIdByTime((time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale);
 				if (currentFAI == null)
 				{
 					return null;
@@ -220,7 +220,6 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					logger.debug("getFileForTime URL = " + requestUrl);
 				}
-
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 				checkFragmentInventory(currentFAI.fragId, abst, frt);
@@ -370,7 +369,7 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			if (currentQuality != quality)
 			{
-				notifyTotalDuration(abst.totalDuration / abst.timeScale);
+				notifyTotalDuration(abst.totalDuration / abst.timeScale, quality);
 			}
 		}
 		
@@ -484,16 +483,17 @@ package org.osmf.net.httpstreaming.f4f
 			return abst.fragmentRunTables[0];
 		}
 		
-		private function notifyTotalDuration(duration:Number):void
+		private function notifyTotalDuration(duration:Number, quality:int):void
 		{
 			var sdo:FLVTagScriptDataObject = new FLVTagScriptDataObject();
-			var metaInfo:Object = new Object();
+			var metaInfo:Object = this.f4fIndexInfo.streamInfos[quality].streamMetadata;
+			if (metaInfo == null)
+			{
+				metaInfo = new Object();
+				metaInfo.width = 500;
+				metaInfo.height = 400;
+			}
 			metaInfo.duration = duration;
-			
-			// TODO: the setting of width and height is a temporary hack. When stream metadata 
-			// becomes available, these two lines will be removed. 
-			metaInfo.width = 500;
-			metaInfo.height = 400;
 			
 			sdo.objects = ["onMetaData", metaInfo];
 			dispatchEvent
@@ -523,6 +523,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var currentFAI:FragmentAccessInformation;
 		private var fragmentsThreshold:uint;
 		private var fragmentRunTablesUpdating:Boolean;
+		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		

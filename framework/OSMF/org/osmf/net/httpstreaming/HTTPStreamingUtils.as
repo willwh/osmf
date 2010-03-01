@@ -30,6 +30,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexInfo;
@@ -165,7 +166,7 @@ package org.osmf.net.httpstreaming
 			var additionalHeader:ByteArray = null;
 			var bootstrap:BootstrapInfo = null;
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
-			var streamMetadata:ByteArray;
+			var streamMetadata:Object;
 			var xmpMetadata:ByteArray;
 			if (dsResource != null)
 			{
@@ -186,7 +187,7 @@ package org.osmf.net.httpstreaming
 						bootstrap = httpMetadata.getValue(
 							MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY + streamItem.streamName) as BootstrapInfo;
 						streamMetadata = httpMetadata.getValue(
-							MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName) as ByteArray;
+							MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY + streamItem.streamName);
 						xmpMetadata = httpMetadata.getValue(
 							MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + streamItem.streamName) as ByteArray;
 					}
@@ -206,7 +207,7 @@ package org.osmf.net.httpstreaming
 					bootstrap = httpMetadata.getValue(
 						MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY) as BootstrapInfo;
 					streamMetadata = httpMetadata.getValue(
-						MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY) as ByteArray;
+						MetadataNamespaces.HTTP_STREAMING_STREAM_METADATA_KEY);
 					xmpMetadata = httpMetadata.getValue(
 						MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY) as ByteArray;
 				}

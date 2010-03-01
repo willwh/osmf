@@ -37,7 +37,7 @@ package org.osmf.net.httpstreaming.f4f
 			streamName:String, 
 			bitrate:Number, 
 			additionalHeader:ByteArray,
-			streamMetadata:ByteArray,
+			streamMetadata:Object,
 			xmpMetadata:ByteArray)
 		{
 			super();
@@ -70,7 +70,7 @@ package org.osmf.net.httpstreaming.f4f
 			return _bootstrap;
 		}
 		
-		public function get streamMetadata():ByteArray
+		public function get streamMetadata():Object
 		{
 			return _streamMetadata;
 		}
@@ -84,7 +84,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var _bitrate:Number;
 		private var _bootstrap:BootstrapInfo;
 		private var _additionalHeader:ByteArray;
-		private var _streamMetadata:ByteArray;
+		private var _streamMetadata:Object;
 		private var _xmpMetadata:ByteArray;
 	}
 }
