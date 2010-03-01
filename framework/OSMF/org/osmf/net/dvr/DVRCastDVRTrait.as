@@ -27,7 +27,6 @@ package org.osmf.net.dvr
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
-	import flash.utils.getTimer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -70,7 +69,7 @@ package org.osmf.net.dvr
 				streamInfoUpdateTimer = new Timer(DVRCastConstants.STREAM_INFO_UPDATE_DELAY);
 				streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
 				streamInfoUpdateTimer.start(); 
-				
+					
 				super(streamInfo.isRecording);
 				
 				updateProperties();
@@ -105,13 +104,12 @@ package org.osmf.net.dvr
 						,	// Initial duration available on play start:
 							( (recordingInfo.startDuration - recordingInfo.startOffset)
 							// Plus the timer measured elapsed time since play start:
-							+ (getTimer() - recordingInfo.startTimer) / 1000
+							+ (new Date().time - recordingInfo.startTime.time) / 1000
 							// Substract the time needed in order to keep a buffer:
 							- stream.bufferTime
 							// Add an additional delta for network lag:
 							- DVRCastConstants.LIVE_POSITION_SEEK_DELAY
 							)
-						,	recordingInfo.startOffset
 						);
 			} // else, return NaN.
 			
@@ -124,7 +122,7 @@ package org.osmf.net.dvr
 			{
 				// We're going into recording mode: update the start duration, and timer:
 				recordingInfo.startDuration = streamInfo.currentLength - recordingInfo.startOffset;
-				recordingInfo.startTimer = flash.utils.getTimer();
+				recordingInfo.startTime = new Date();
 			}
 			else
 			{

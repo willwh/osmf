@@ -26,7 +26,6 @@ package org.osmf.net.dvr
 	import flash.events.TimerEvent;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
-	import flash.utils.getTimer;
 	
 	import org.osmf.events.TimeEvent;
 	import org.osmf.traits.TimeTrait;
@@ -71,7 +70,7 @@ package org.osmf.net.dvr
 					// Initial duration available on play start:
 					= (recordingInfo.startDuration - recordingInfo.startOffset)
 					// Plus the timer measured elapsed time since play start:
-					+ (getTimer() - recordingInfo.startTimer) / 1000;
+					+ (new Date().time - recordingInfo.startTime.time) / 1000;
 			}
 			else
 			{

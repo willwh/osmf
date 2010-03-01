@@ -31,7 +31,7 @@ package org.osmf.net.dvr
 	 */	
 	internal class DVRCastRecordingInfo
 	{
-		public var startTimer:int = 0;
+		public var startTime:Date = null;
 		public var startDuration:Number;
 		public var startOffset:Number;
 	}

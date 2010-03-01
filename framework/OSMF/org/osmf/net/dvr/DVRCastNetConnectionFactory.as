@@ -23,7 +23,6 @@ package org.osmf.net.dvr
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.Responder;
-	import flash.utils.getTimer;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
@@ -143,7 +142,7 @@ package org.osmf.net.dvr
 					var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
 					recordingInfo.startDuration = streamInfoRetreiver.streamInfo.currentLength;
 					recordingInfo.startOffset = calculateOffset(streamInfoRetreiver.streamInfo);
-					recordingInfo.startTimer = flash.utils.getTimer();
+					recordingInfo.startTime = new Date();
 					
 					// Add the stream info and recording info to the net connection:
 					netConnection.streamInfo = streamInfoRetreiver.streamInfo;	

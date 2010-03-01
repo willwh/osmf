@@ -36,8 +36,9 @@ package org.osmf.net.dvr
 			ri.startOffset = 2;
 			assertEquals(ri.startOffset, 2);
 			
-			ri.startTimer = 3;
-			assertEquals(ri.startTimer, 3);
+			var now:Date = new Date();
+			ri.startTime = now;
+			assertEquals(ri.startTime, now);
 		}
 		
 	}
