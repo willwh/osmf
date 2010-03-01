@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.net
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.NetConnection;
@@ -95,6 +97,11 @@ package org.osmf.net
 		public function testCreateWithBadResource():void
 		{
 			doTestCreateWithBadResource();
+		}
+
+		public function testCreateWithConnectionArguments():void
+		{
+			doTestCreateWithConnectionArguments();
 		}
 		
 		public function testDirectCreateWithBadResource():void
@@ -222,6 +229,30 @@ package org.osmf.net
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
+		
+		private function doTestCreateWithConnectionArguments():void
+		{
+			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
+			
+			var streamingResource:StreamingURLResource = new StreamingURLResource(SUCCESSFUL_RESOURCE.url);
+			streamingResource.connectionArguments = new Vector.<Object>();
+			streamingResource.connectionArguments.push("myUsername");
+			streamingResource.connectionArguments.push("myPassword");
+			
+			var factory:NetConnectionFactory = createNetConnectionFactory(true, NetConnectionExpectation.CONNECT_WITH_PARAMS);
+			factory.addEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE,onCreated);
+			factory.create(streamingResource);
+			function onCreated(event:NetConnectionFactoryEvent):void
+			{
+				assertTrue(event.type == NetConnectionFactoryEvent.CREATION_COMPLETE);
+				assertTrue(event.netConnection.connected);
+				assertStrictlyEquals(event.resource,streamingResource);
+				assertTrue(event.mediaError == null);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+
 		
 		private function doTestDirectCreateWithBadResource():void
 		{

@@ -28,6 +28,9 @@ package org.osmf.netmocker
 	{
 		/** Expect the connection to succeed. */
 		public static const VALID_CONNECTION:NetConnectionExpectation = new NetConnectionExpectation("validConnection");
+
+		/** Expect the connection to have parameters. */
+		public static const CONNECT_WITH_PARAMS:NetConnectionExpectation = new NetConnectionExpectation("connectWithParams");
 		
 		/** Expect the connection to fail due to an invalid server name */
 		public static const INVALID_FMS_SERVER:NetConnectionExpectation = new NetConnectionExpectation("invalidFMSServer");

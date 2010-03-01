@@ -43,7 +43,6 @@ package org.osmf.net
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.URL;
 	
 	/**
 	 * Dispatched when the factory has successfully created and connected a NetConnection.
@@ -106,6 +105,14 @@ package org.osmf.net
 			this.netConnectionURLs = netConnectionURLs;
 			this.netConnections = netConnections;
 			
+			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+			if (	streamingResource != null
+				&&	streamingResource.connectionArguments != null
+				&&	streamingResource.connectionArguments.length > 0)
+			{
+				this.netConnectionArguments = streamingResource.connectionArguments;
+			}
+			
 			initializeConnectionAttempts();
 			tryToConnect(null);
 		}
@@ -144,7 +151,15 @@ package org.osmf.net
 			try 
 			{
 				var host:String = netConnectionURLs[attemptIndex];
-				netConnections[attemptIndex].connect(host);
+				var args:Array = [host];
+				if (netConnectionArguments != null)
+				{
+					for each (var arg:Object in netConnectionArguments)
+					{
+						args.push(arg);
+					}
+				}
+				NetConnection(netConnections[attemptIndex]).connect.apply(this, args);
 				attemptIndex++;
 				if (attemptIndex >= netConnectionURLs.length) 
 				{
@@ -277,6 +292,7 @@ package org.osmf.net
 		private var resource:URLResource;
 		private var netConnectionURLs:Vector.<String>;
 		private var netConnections:Vector.<NetConnection>;
+		private var netConnectionArguments:Vector.<Object>;
 		
 		private var failedConnectionCount:int;
 		private var timeOutTimer:Timer;

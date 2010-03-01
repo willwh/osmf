@@ -93,6 +93,16 @@ package org.osmf.netmocker
 				case NetConnectionExpectation.VALID_CONNECTION:
 					connectToValidServer(command);
 					break;
+				case NetConnectionExpectation.CONNECT_WITH_PARAMS:
+					if (parameters.length > 0)
+					{
+						connectToValidServer(command);
+					}
+					else
+					{
+						throwIOError();
+					}
+					break;
 				case NetConnectionExpectation.INVALID_FMS_SERVER:
 					connectToInvalidServer();
 					break;

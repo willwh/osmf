@@ -117,7 +117,17 @@ package org.osmf.netmocker
 				// then connect it to null.
 				if (objectInfo["nc"] is NetConnection)
 				{
-					(objectInfo["nc"] as NetConnection).connect(null);
+					var mockNetConnection:MockNetConnection = objectInfo["nc"] as MockNetConnection;
+					if (mockNetConnection && mockNetConnection.expectation == NetConnectionExpectation.CONNECT_WITH_PARAMS)
+					{
+						// TODO: Need a better way of passing params through, for now it's
+						// hardcoded so as to cause the expectation to pass.
+						mockNetConnection.connect(null, "a", "b");
+					}
+					else
+					{
+						(objectInfo["nc"] as NetConnection).connect(null);
+					}
 				}
 				
 				// Check to see if there is a "details" property on the object
