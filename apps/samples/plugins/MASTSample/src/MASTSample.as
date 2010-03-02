@@ -42,7 +42,6 @@ package
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfoResource;
-	import org.osmf.plugin.PluginManager;
 
 	[SWF(backgroundColor="0x333333")]
 	public class MASTSample extends Sprite
@@ -53,7 +52,6 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			
 			mediaFactory = new MediaFactory();
-			pluginManager = new PluginManager(mediaFactory);
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
@@ -95,18 +93,18 @@ package
 		
 		private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 		{
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-			pluginManager.loadPlugin(pluginResource);
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+			mediaFactory.loadPlugin(pluginResource);
 		}
 		
-		private function onPluginLoaded(event:PluginManagerEvent):void
+		private function onPluginLoaded(event:MediaFactoryEvent):void
 		{
 			trace(">>> Plugin successfully loaded.");
 			loadMainVideo(REMOTE_STREAM);
 		}
 		
-		private function onPluginLoadFailed(event:PluginManagerEvent):void
+		private function onPluginLoadFailed(event:MediaFactoryEvent):void
 		{
 			trace(">>> Plugin failed to load.");
 		}
@@ -157,7 +155,6 @@ package
 			sprite.height = stage.stageHeight;
 		}
 		
-		private var pluginManager:PluginManager;
 		private var mediaFactory:MediaFactory;	
 		private var sprite:MediaContainer;
 		private var mediaPlayer:MediaPlayer = new MediaPlayer();

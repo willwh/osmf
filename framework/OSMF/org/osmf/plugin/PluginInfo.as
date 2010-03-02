@@ -73,6 +73,14 @@ package org.osmf.plugin
 	public class PluginInfo
 	{
 		/**
+		 * Metadata namespace URL for a MediaFactory that is passed from player
+		 * to plugin.  Client code can set this on the MediaResourceBase that
+		 * is passed to MediaFactory.loadPlugin, and it will be exposed to the
+		 * on the MediaResourceBase that is passed to PluginInfo.initializePlugin.
+		 **/
+		public static const PLUGIN_MEDIAFACTORY_NAMESPACE:String = "http://www.osmf.org/plugin/mediaFactory/1.0";
+
+		/**
 		 * Constructor.
 		 * 
 		 * @param mediaFactoryItems Vector of MediaFactoryItem objects that this plugin

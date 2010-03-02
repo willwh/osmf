@@ -26,6 +26,9 @@ package org.osmf.media
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
+	import org.osmf.events.MediaFactoryEvent;
+	import org.osmf.plugin.PluginInfoResource;
+	import org.osmf.plugin.SimpleVideoPluginInfo;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicReferenceMediaElement;
 	import org.osmf.utils.SampleResourceHandler;
@@ -182,6 +185,10 @@ package org.osmf.media
 
 		public function testCreateMediaElement():void
 		{
+			var createCount:int = 0;
+			
+			mediaFactory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onTestCreateMediaElement);
+			
 			var a1:MediaFactoryItem = createMediaFactoryItem("a1","http://www.example.com/a1");
 			mediaFactory.addItem(a1);
 			
@@ -189,11 +196,23 @@ package org.osmf.media
 			assertTrue(mediaFactory.createMediaElement(new URLResource("http://www.example.com/a2")) == null);
 			assertTrue(mediaFactory.createMediaElement(null) == null);
 			
+			assertTrue(createCount == 0);
+			
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/a1"));
 			assertTrue(mediaElement != null);
 			assertTrue(mediaElement.resource != null);
 			assertTrue(mediaElement.resource is URLResource);
 			assertTrue(URLResource(mediaElement.resource).url.toString() == "http://www.example.com/a1");
+			
+			assertTrue(createCount == 1);
+			
+			function onTestCreateMediaElement(event:MediaFactoryEvent):void
+			{
+				createCount++;
+				
+				assertTrue(event.type == MediaFactoryEvent.MEDIA_ELEMENT_CREATE);
+				assertTrue(event.mediaElement != null);
+			}
 		}
 
 		public function testCreateMediaElementWithItemsToResolve():void
@@ -381,6 +400,23 @@ package org.osmf.media
 			var createdElement5:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/yetAnotherStandardInfo"));
 			assertTrue(createdElement5 is DynamicMediaElement);
 			assertTrue(referenceElement.references.length == 3);
+		}
+		
+		public function testLoadPlugin():void
+		{
+			// Other plugin loading tests are in TestPluginManager.
+			//
+			
+			var pluginResource:PluginInfoResource = new PluginInfoResource(new SimpleVideoPluginInfo());
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, addAsync(onTestLoadPlugin, 500));
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onTestLoadPlugin);
+			mediaFactory.loadPlugin(pluginResource);
+			
+			function onTestLoadPlugin(event:MediaFactoryEvent):void
+			{	
+				assertTrue(event.type == MediaFactoryEvent.PLUGIN_LOAD);
+				assertTrue(event.resource == pluginResource);
+			}
 		}
 
 		//---------------------------------------------------------------------

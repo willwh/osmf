@@ -35,7 +35,6 @@
 			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginInfoResource;
 			import org.osmf.media.MediaFactory;
-			import org.osmf.plugin.PluginManager;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;
 			import mx.events.DropdownEvent;		
@@ -104,7 +103,6 @@
 			private var _autoSwitchBtnLabel:String = "Manual";
 			
 			private var _displayObjectTrait:DisplayObjectTrait;
-			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;
 			private var mediaElement:MediaElement;
 			private var mediaPlayer:MediaPlayer;
@@ -114,7 +112,6 @@
 				mediaContainerUIComponent.container = new MediaContainer();
 				
 				mediaFactory = new DefaultMediaFactory();
-				pluginManager = new PluginManager(mediaFactory);
 				mediaPlayer = new MediaPlayer();
 				
 				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
@@ -186,17 +183,17 @@
 			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-				pluginManager.loadPlugin(pluginResource);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+				mediaFactory.loadPlugin(pluginResource);
 			}
 			
-			private function onPluginLoaded(event:PluginManagerEvent):void
+			private function onPluginLoaded(event:MediaFactoryEvent):void
 			{
 				trace("Plugin LOADED!"); 
 			}
 
-			private function onPluginLoadFailed(event:PluginManagerEvent):void
+			private function onPluginLoadFailed(event:MediaFactoryEvent):void
 			{
 				trace("Plugin LOAD FAILED!");
 			}

@@ -110,10 +110,10 @@ package org.osmf.plugin
 					{
 						// Make sure the plugin metadata has the expected default params
 						// (such as MediaFactory).
-						var passedMediaFactory:MediaFactory = loadTrait.resource.getMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
+						var passedMediaFactory:MediaFactory = loadTrait.resource.getMetadataValue(PluginInfo.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
 						if (passedMediaFactory == null)
 						{
-							loadTrait.resource.addMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE, mediaFactory);
+							loadTrait.resource.addMetadataValue(PluginInfo.PLUGIN_MEDIAFACTORY_NAMESPACE, mediaFactory);
 						}
 						
 						pluginInfo.initializePlugin(loadTrait.resource);

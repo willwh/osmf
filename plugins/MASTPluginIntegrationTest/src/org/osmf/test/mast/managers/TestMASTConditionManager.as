@@ -9,14 +9,13 @@ package org.osmf.test.mast.managers
 	
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.PluginManagerEvent;
+	import org.osmf.events.MediaFactoryEvent;
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.*;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.plugin.PluginInfoResource;
-	import org.osmf.plugin.PluginManager;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 
@@ -38,7 +37,6 @@ package org.osmf.test.mast.managers
 		public function testConditionManager():void
 		{
 			mediaFactory = new MediaFactory();
-			pluginManager = new PluginManager(mediaFactory);
 			mediaPlayer = new MediaPlayer();
 
  			loadPlugin(MAST_PLUGIN_INFOCLASS);
@@ -64,18 +62,18 @@ package org.osmf.test.mast.managers
 		
 		private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 		{
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-			pluginManager.loadPlugin(pluginResource);
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+			mediaFactory.loadPlugin(pluginResource);
 		}
 		
-		private function onPluginLoaded(event:PluginManagerEvent):void
+		private function onPluginLoaded(event:MediaFactoryEvent):void
 		{
 			trace(">>> Plugin successfully loaded.");
 			loadMainVideo(REMOTE_STREAM);
 		}
 		
-		private function onPluginLoadFailed(event:PluginManagerEvent):void
+		private function onPluginLoadFailed(event:MediaFactoryEvent):void
 		{
 			trace(">>> Plugin failed to load.");
 		}
@@ -134,7 +132,6 @@ package org.osmf.test.mast.managers
    		}
 		
 		private var mediaPlayer:MediaPlayer;
-		private var pluginManager:PluginManager;
 		private var mediaFactory:MediaFactory;
 		private var _eventDispatcher:EventDispatcher;
 		private var _timer:Timer;

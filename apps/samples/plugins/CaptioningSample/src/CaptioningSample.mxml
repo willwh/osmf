@@ -37,11 +37,10 @@
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.events.MediaErrorEvent;
-			import org.osmf.plugin.PluginManager;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.URLResource;
-			import org.osmf.events.PluginManagerEvent;
+			import org.osmf.events.MediaFactoryEvent;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.net.NetLoader;
@@ -67,7 +66,6 @@
 									
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
-			private var pluginManager:PluginManager;
 			private var mediaFactory:MediaFactory;
 			private var captioningEnabled:Boolean;
 			private var captionMetadata:TimelineMetadata; 	
@@ -89,7 +87,6 @@
 			{
 				mediaContainerUIComponent.container = new MediaContainer();
 				mediaFactory = new MediaFactory();
-				pluginManager = new PluginManager(mediaFactory);
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
@@ -184,17 +181,17 @@
 			
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-				pluginManager.loadPlugin(pluginResource);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+				mediaFactory.loadPlugin(pluginResource);
 			}
 			
-			private function onPluginLoaded(event:PluginManagerEvent):void
+			private function onPluginLoaded(event:MediaFactoryEvent):void
 			{
 				trace("Plugin LOADED!"); 
 			}
 
-			private function onPluginLoadFailed(event:PluginManagerEvent):void
+			private function onPluginLoadFailed(event:MediaFactoryEvent):void
 			{
 				trace("Plugin LOAD FAILED!");
 			}

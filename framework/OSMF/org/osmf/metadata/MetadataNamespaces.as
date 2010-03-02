@@ -35,14 +35,6 @@ package org.osmf.metadata
 	 */
 	public final class MetadataNamespaces
 	{
-		/**
-		 * Namespace URL for a MediaFactory that is passed from player to
-		 * plugin.  Client code can set this on the MediaResourceBase that
-		 * is passed to PluginManager.loadPlugin, and it will be exposed to
-		 * the plugin via PluginInfo.initializePlugin.
-		 **/
-		public static const PLUGIN_MEDIAFACTORY_NAMESPACE:String		= "http://www.osmf.org/plugin/mediaFactory/1.0";
-
 		// Internal OSMF Namespaces
 		//
 

@@ -49,7 +49,6 @@ package org.osmf.plugin
 			super.setUp();
 			
 			mediaFactory = new MediaFactory();
-			pluginManager = new PluginManager(mediaFactory);
 			eventDispatcher = new EventDispatcher();
 		}
 
@@ -58,7 +57,6 @@ package org.osmf.plugin
 			super.tearDown();
 
 			mediaFactory = null;
-			pluginManager = null;
 			eventDispatcher = null;
 		}
 		
@@ -135,13 +133,13 @@ package org.osmf.plugin
 			assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) == null);
 			assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) == null);
 			
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
+			mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
 			
 			var pluginInfoRef:Class = flash.utils.getDefinitionByName(AKAMAI_BASIC_STREAMING_PLUGIN_INFO) as Class;
 			var pluginResource:MediaResourceBase = new PluginInfoResource(new pluginInfoRef);
-			pluginManager.loadPlugin(pluginResource);
+			mediaFactory.loadPlugin(pluginResource);
 			
-			function onPluginLoaded(event:PluginManagerEvent):void
+			function onPluginLoaded(event:MediaFactoryEvent):void
 			{
 				assertTrue(mediaFactory.getItemById(AKAMAI_VIDEO_MEDIA_INFO_ID) != null);
 				assertTrue(mediaFactory.getItemById(AKAMAI_AUDIO_MEDIA_INFO_ID) != null);
@@ -199,7 +197,6 @@ package org.osmf.plugin
 		}
 			
 		private var mediaFactory:MediaFactory;
-		private var pluginManager:PluginManager;
 		private var eventDispatcher:EventDispatcher;
 		
 		private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFO:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";

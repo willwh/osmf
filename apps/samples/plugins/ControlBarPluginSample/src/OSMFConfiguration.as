@@ -30,7 +30,6 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.plugin.PluginManager;
 	
 	/**
 	 * The Configuration class defines an object that simplifies setting up
@@ -40,7 +39,6 @@ package
 	 *    MediaPlayer (accessible from the player property)
 	 *    MediaContainer (accessible from the container property)
 	 *    DefaultMediaFactory (accessible from the factory property)
-	 *    PluginManager (accessible from the pluginManager property)
 	 * 
 	 * Furthermore, the object contains a 'view' property. When it is set,
 	 * the object will add the constructed media container as a child to
@@ -191,18 +189,6 @@ package
 			return _factory;
 		}
 		
-		/**
-		 * Defines the configuration's pluginManager object.
-		 */
-		public function get pluginManager():PluginManager
-		{
-			if (_pluginManager == null)
-			{
-				_pluginManager = new PluginManager(_factory);
-			}
-			return _pluginManager;
-		}
-		
 		// Subclass stubs
 		//
 		
@@ -222,7 +208,6 @@ package
 		private var _player:MediaPlayer;
 		private var _container:MediaContainer;
 		private var _factory:MediaFactory;
-		private var _pluginManager:PluginManager;
 		
 		private var _resource:MediaResourceBase;
 		private var _view:DisplayObjectContainer;

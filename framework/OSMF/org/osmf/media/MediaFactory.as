@@ -23,11 +23,51 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.events.MediaFactoryEvent;
+	import org.osmf.events.PluginManagerEvent;
+	import org.osmf.plugin.PluginManager;
 	import org.osmf.utils.OSMFStrings;
 	
+	/**
+	 * Dispatched when the MediaFactory has successfully loaded a plugin.
+	 *
+	 * @eventType org.osmf.events.MediaFactoryEvent.PLUGIN_LOAD
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="pluginLoad", type="org.osmf.events.MediaFactoryEvent")]
+
+	/**
+	 * Dispatched when the MediaFactory has failed to load a plugin due to an error.
+	 *
+	 * @eventType org.osmf.events.MediaFactoryEvent.PLUGIN_LOAD_ERROR
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="pluginLoadError", type="org.osmf.events.MediaFactoryEvent")]
+
+	/**
+	 * Dispatched when the MediaFactory has created a MediaElement.
+	 *
+	 * @eventType org.osmf.events.MediaFactoryEvent.MEDIA_ELEMENT_CREATE
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="mediaElementCreate", type="org.osmf.events.MediaFactoryEvent")]
+
 	/**
 	 * A MediaFactory represents a factory class for media elements.
 	 * 
@@ -40,7 +80,7 @@ package org.osmf.media
 	 * MediaFactoryItem object than can handle the specified MediaResourceBase.</p>
 	 *
 	 * <p>The factory interface also exposes methods for querying for specific MediaFactoryItem 
-	 * objects.</p>
+	 * objects, and for loading plugins (which hold MediaFactoryItems objects).</p>
 	 * 
 	 * @see MediaFactoryItem
 	 * @see MediaResourceBase
@@ -51,7 +91,7 @@ package org.osmf.media
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	public class MediaFactory
+	public class MediaFactory extends EventDispatcher
 	{
 		/**
 		 * Constructor.
@@ -63,6 +103,8 @@ package org.osmf.media
 		 */
 		public function MediaFactory()
 		{
+			super();
+			
 			allItems = new Dictionary();
 			
 			// Our created elements dictionary is set to store with weak keys, so
@@ -249,6 +291,39 @@ package org.osmf.media
 			
 			return result;
 		}
+		
+		/**
+		 * Load a plugin identified by the specified resource. The MediaFactory will not
+		 * reload the plugin if it has already been loaded. Upon successful loading, the
+		 * MediaFactoryItems within the plugin's PluginInfo property will be added to
+		 * this MediaFactory, and a MediaFactoryEvent.PLUGIN_LOAD event will be dispatched.
+		 * OtherwiseIf the load fails, a MediaFactoryEvent.PLUGIN_LOAD_ERROR event will be
+		 * dispatched.
+		 *
+		 * @param resource MediaResourceBase representing the plugin.  For remote (dynamic)
+		 * plugins, use an URLResource pointing to the remote SWF to load.  For local
+		 * (static) plugins, use a PluginInfoResource.  
+		 *
+		 * @throws ArgumentError If resource is null or resource is neither an URLResource
+		 * nor a PluginInfoResource. 
+		 *
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function loadPlugin(resource:MediaResourceBase):void
+		{
+			if (pluginManager == null)
+			{
+				pluginManager = new PluginManager(this);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoad);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
+			}
+
+			pluginManager.loadPlugin(resource);
+		}
 
 		/**
 		 * Returns a MediaElement that can be created based on the specified
@@ -294,7 +369,7 @@ package org.osmf.media
 				// Inform any MediaFactoryItems that need to know about newly
 				// created MediaElements about this one.
 				invokeMediaElementCreationNotifications(mediaElement);
-											
+				
 				// Add the newly created MediaElement (or its root proxy) to
 				// our list of created elements, so that it can be passed to the
 				// creation callback function for any subsequently added factory
@@ -302,6 +377,17 @@ package org.osmf.media
 				// will be GC'd if this is the only object that holds a 
 				// reference to it.  We set the value to an arbitrary Boolean.)
 				createdElements[mediaElement] = true;
+
+				// Inform clients of the creation.
+				dispatchEvent
+					( new MediaFactoryEvent
+						( MediaFactoryEvent.MEDIA_ELEMENT_CREATE
+						, false
+						, false
+						, null
+						, mediaElement
+						)
+					);
 			}
 			
 			return mediaElement;
@@ -441,6 +527,16 @@ package org.osmf.media
 			
 			return -1;
 		}
+		
+		private function onPluginLoad(event:PluginManagerEvent):void
+		{
+			dispatchEvent(new MediaFactoryEvent(MediaFactoryEvent.PLUGIN_LOAD, false, false, event.resource));
+		}
+
+		private function onPluginLoadError(event:PluginManagerEvent):void
+		{
+			dispatchEvent(new MediaFactoryEvent(MediaFactoryEvent.PLUGIN_LOAD_ERROR, false, false, event.resource));
+		}
 
 		/**
 		 * Invokes the creation callback on the given MediaFactoryItem, for
@@ -509,6 +605,8 @@ package org.osmf.media
 				// specified.  We'll continue as-is.
 			}
 		}
+		
+		private var pluginManager:PluginManager;
 
 		private var allItems:Dictionary;
 			// Keys are: String (MediaFactoryItemType)

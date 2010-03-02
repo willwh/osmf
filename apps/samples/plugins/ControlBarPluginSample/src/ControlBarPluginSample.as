@@ -24,7 +24,7 @@ package
 	import flash.display.Sprite;
 	
 	import org.osmf.elements.ParallelElement;
-	import org.osmf.events.PluginManagerEvent;
+	import org.osmf.events.MediaFactoryEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.VerticalAlign;
@@ -49,11 +49,11 @@ package
 			
 			// Add event listeners to the plug-in manager so we'll get
 			// a heads-up when the control bar plug-in finishes loading:
-			osmf.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-			osmf.pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
+			osmf.factory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+			osmf.factory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
 			
 			// Ask the plug-in manager to load the control bar plug-in:
-			osmf.pluginManager.loadPlugin(pluginResource);
+			osmf.factory.loadPlugin(pluginResource);
 		}
 		
 		// Internals
@@ -62,7 +62,7 @@ package
 		private var osmf:OSMFConfiguration;
 		private var rootElement:ParallelElement;
 		
-		private function onPluginLoaded(event:PluginManagerEvent):void
+		private function onPluginLoaded(event:MediaFactoryEvent):void
 		{
 			// The plugin loaded successfully. We can now construct a control
 			// bar media element, and add it as a child to the root parallel
@@ -70,7 +70,7 @@ package
 			rootElement.addChild(constructControlBarElement());
 		}
 		
-		private function onPluginLoadError(event:PluginManagerEvent):void
+		private function onPluginLoadError(event:MediaFactoryEvent):void
 		{
 			trace("ERROR: the control bar plugin failed to load.");
 		}

@@ -65,13 +65,11 @@
 			import org.osmf.media.MediaPlayer;
 			import org.osmf.metadata.*;
 			import org.osmf.net.NetLoader;
-			import org.osmf.plugin.PluginManager;
 			import org.osmf.traits.LoadTrait;
 			import org.osmf.traits.LoadState;
 			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
 			
-			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;
 			private var pluginElement:MediaElement;
 			private var sliderDragging:Boolean;
@@ -195,7 +193,6 @@
 				mediaContainerUIComponent.container = new MediaContainer();
 				
 				mediaFactory = new DefaultMediaFactory();
-				pluginManager = new PluginManager(mediaFactory);
 				playlist = new ArrayCollection();
 				
 				urlInput.text = plugins[0].url;
@@ -415,29 +412,29 @@
 						
 			private function loadPluginFromResource(pluginResource:MediaResourceBase):void
 			{
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
-				pluginManager.loadPlugin(pluginResource);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+				mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+				mediaFactory.loadPlugin(pluginResource);
 			}
 			
-			private function onPluginLoaded(event:PluginManagerEvent):void
+			private function onPluginLoaded(event:MediaFactoryEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
 				appendInfoText("Plugin LOADED: " + selection.label);
-				removePluginManagerEventListeners();
+				removeMediaFactoryEventListeners();
 			}
 			
-			private function onPluginLoadFailed(event:PluginManagerEvent):void
+			private function onPluginLoadFailed(event:MediaFactoryEvent):void
 			{
 				var selection:Object = cbPlugin.selectedItem;
 				appendInfoText("Plugin LOAD FAILED: " + selection.label);
-				removePluginManagerEventListeners();
+				removeMediaFactoryEventListeners();
 			}
 
-			private function removePluginManagerEventListeners():void
+			private function removeMediaFactoryEventListeners():void
 			{
-				pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoaded);
-				pluginManager.removeEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
+				mediaFactory.removeEventListener(MediaFactoryEvent.PLUGIN_LOAD, onPluginLoaded);
+				mediaFactory.removeEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onPluginLoadFailed);
 			}
 			
 			private function pluginComboBoxChanged(event:DropdownEvent):void

@@ -39,6 +39,8 @@ package org.osmf.plugin
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.Version;
 	
+	[ExcludeClass]
+	
 	/**
 	 * Dispatched when the PluginManager has successfully loaded a plugin.
 	 *
@@ -64,6 +66,8 @@ package org.osmf.plugin
 	[Event(name="pluginLoadError", type="org.osmf.events.PluginManagerEvent")]
 
 	/**
+	 * @private
+	 * 
 	 * This class is a manager that provide access to plugin related
 	 * features.
 	 *
@@ -79,8 +83,7 @@ package org.osmf.plugin
 		 * Constructor.
 		 *
 		 * @param mediaFactory MediaFactory within which the PluginManager will place the
-		 * information from loaded plugins.  If null, the PluginManager will create a
-		 * DefaultMediaFactory.
+		 * information from loaded plugins.
 		 *
 		 *  
 		 *  @langversion 3.0
@@ -88,9 +91,9 @@ package org.osmf.plugin
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginManager(mediaFactory:MediaFactory=null)
+		public function PluginManager(mediaFactory:MediaFactory)
 		{
-			_mediaFactory = mediaFactory != null ? mediaFactory : new DefaultMediaFactory();
+			_mediaFactory = mediaFactory;
 			minimumSupportedFrameworkVersion = Version.lastAPICompatibleVersion;
 			initPluginFactory();
 			_pluginMap = new Dictionary();
