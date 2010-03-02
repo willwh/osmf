@@ -2,6 +2,7 @@
 <flexLibProperties version="1">
   <includeClasses>
     <classEntry path="org.osmf.samples.MediaContainerUIComponent"/>
+    <classEntry path="org.osmf.samples.MediaContainerUIComponent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
