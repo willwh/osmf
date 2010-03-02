@@ -19,7 +19,7 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.plugin
+package org.osmf.media.pluginClasses
 {
 	import flash.display.Loader;
 	

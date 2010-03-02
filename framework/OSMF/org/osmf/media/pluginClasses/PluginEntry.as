@@ -19,26 +19,37 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.plugin
+package org.osmf.media.pluginClasses
 {
-	internal class PluginLoadingState
+	import org.osmf.media.MediaElement;
+	
+	internal class PluginEntry
 	{
-		public static const LOADING:PluginLoadingState = new PluginLoadingState("Loading");
-		public static const LOADED:PluginLoadingState = new PluginLoadingState("Loaded");
-		
-		public function PluginLoadingState(state:String)
+		public function PluginEntry(pluginElement:MediaElement, state:PluginLoadingState)
 		{
+			_pluginElement = pluginElement;
 			_state = state;
 		}
 		
-		public function get state():String
+		public function get pluginElement():MediaElement
+		{
+			return _pluginElement;
+		}
+		
+		public function get state():PluginLoadingState
 		{
 			return _state;
+		}
+		
+		public function set state(value:PluginLoadingState):void
+		{
+			_state = value;
 		}
 
 		// Internals
 		//
-
-		private var _state:String;
+		
+		private var _pluginElement:MediaElement;
+		private var _state:PluginLoadingState;
 	}
 }

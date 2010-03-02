@@ -19,37 +19,54 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.plugin
+package org.osmf.media.pluginClasses
 {
-	import org.osmf.media.MediaElement;
+	import flash.display.Loader;
 	
-	internal class PluginEntry
+	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfo;
+	
+	[ExcludeClass]
+	
+	/**
+	 * @private
+	 */
+	internal class PluginLoadTrait extends LoadTrait
 	{
-		public function PluginEntry(pluginElement:MediaElement, state:PluginLoadingState)
+		public function PluginLoadTrait(loader:LoaderBase, resource:MediaResourceBase)
 		{
-			_pluginElement = pluginElement;
-			_state = state;
-		}
-		
-		public function get pluginElement():MediaElement
-		{
-			return _pluginElement;
-		}
-		
-		public function get state():PluginLoadingState
-		{
-			return _state;
-		}
-		
-		public function set state(value:PluginLoadingState):void
-		{
-			_state = value;
+			super(loader, resource);
 		}
 
-		// Internals
-		//
-		
-		private var _pluginElement:MediaElement;
-		private var _state:PluginLoadingState;
+		/**
+		 * The <code>PluginInfo</code> reference.
+		 */
+		public function get pluginInfo():PluginInfo
+		{
+			return _pluginInfo;
+		}
+	
+		public function set pluginInfo(value:PluginInfo):void
+		{
+			_pluginInfo = value;
+		}
+
+		/**
+		 * The <code>Loader</code> used to load the plugin
+		 */
+		public function get loader():Loader
+		{
+			return _loader;
+		}
+
+		public function set loader(value:Loader):void
+		{
+			_loader = value;
+		}
+
+		private var _pluginInfo:PluginInfo;
+		private var _loader:Loader;
 	}
 }
