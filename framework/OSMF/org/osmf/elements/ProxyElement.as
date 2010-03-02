@@ -290,6 +290,8 @@ package org.osmf.elements
 		}
 
 		/**
+		 * @private
+		 * 
 		 * Sets up overridden traits and finalizes them to ensure a consistent initialization
 		 * process.  Clients should subclass <code>setupOverriddenTraits()</code>
 		 * instead of this method.
@@ -304,6 +306,11 @@ package org.osmf.elements
 		}
 		
 		/**
+		 * @private
+		 * 
+		 * TODO: Figure out if we can do away with this in some other way.
+		 * Temporarily marked as private.
+		 * 
 		 * Sets up the traits for this proxy.  The proxy's traits will always
 		 * override (i.e. take precedence over) the traits of the wrapped
 		 * element.

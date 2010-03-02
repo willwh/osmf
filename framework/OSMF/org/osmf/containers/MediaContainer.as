@@ -27,12 +27,12 @@ package org.osmf.containers
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.ContainerChangeEvent;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetEvent;
 	import org.osmf.layout.LayoutTargetSprite;
 	import org.osmf.layout.MediaElementLayoutTarget;
-	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.utils.OSMFStrings;
 
@@ -52,15 +52,17 @@ package org.osmf.containers
 		 * @param layoutRenderer The layout renderer that will render
 		 * the MediaElement instances that get added to this container. If no
 		 * renderer is specified, a LayoutRenderer instance will be used.
-		 *  
+		 * @param layoutMetadata The LayoutMetadata to use to layout this
+		 * sprite.  Optional.
+		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function MediaContainer(layoutRenderer:LayoutRendererBase=null)
+		public function MediaContainer(layoutRenderer:LayoutRendererBase=null, layoutMetadata:LayoutMetadata=null)
 		{
-			super();
+			super(layoutMetadata);
 			
 			_layoutRenderer = layoutRenderer || new LayoutRenderer();
 			_layoutRenderer.container = this; 

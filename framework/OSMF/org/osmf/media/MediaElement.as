@@ -262,7 +262,7 @@ package org.osmf.media
 		}
 		
 		/** 
-		 * Adds a namespaced Metadata object to this MediaElement.
+		 * Adds a Metadata object to this MediaElement under the specified namespace URL.
 		 * 
 		 * @param namespaceURL The namespace URL used to store the Metadata.
 		 * @param metadata The Metadata to add.
@@ -288,7 +288,8 @@ package org.osmf.media
 		}
 		
 		/**
-		 * Removes a namespaced Metadata object from this MediaElement.  
+		 * Removes the Metadata object that was stored under this MediaElement with
+		 * the specified namespace URL.
 		 * 
 		 * @param namespaceURL The namespace URL of the Metadata to remove.
 		 * 
@@ -318,7 +319,8 @@ package org.osmf.media
 		}
 		
 		/** 
-		 * Returns a namespaced Metadata object.
+		 * Returns the Metadata object that is stored under this MediaElement with
+		 * the specified namespace URL.
 		 * 
 		 * @param namespaceURL The namespace URL of the Metadata object to retrieve.
 		 * 
@@ -344,7 +346,7 @@ package org.osmf.media
 		
 		/**
 		 * A Vector containing the namespace URLs for all Metadata
-		 * objects within this MediaElement.
+		 * objects stored within this MediaElement.
 		 **/
 		public function get metadataNamespaceURLs():Vector.<String>
 		{

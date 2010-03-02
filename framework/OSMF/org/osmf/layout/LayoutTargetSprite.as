@@ -176,7 +176,7 @@ package org.osmf.layout
 		 * Constructor.
 		 * 
 		 * @param layoutMetadata The LayoutMetadata to use to layout this
-		 * sprite.
+		 * sprite.  Optional.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

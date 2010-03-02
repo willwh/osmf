@@ -18,19 +18,49 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-
 package org.osmf.events
 {
 	import flash.events.Event;
 	
+	/**
+	 * A DRMEvent is dispatched when a DVRTrait's properties change.
+	 *
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10.1
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0	 
+	 */ 
 	public class DVREvent extends Event
 	{
+		/**
+		 * The DVREvent.IS_RECORDING_CHANGE constant defines the value
+		 * of the type property of the event object for an isRecordingChange
+		 * event.
+		 * 
+		 * @eventType IS_RECORDING_CHANGE
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10.1
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		public static const IS_RECORDING_CHANGE:String = "isRecordingChange";
 		
+		/**
+		 * Constructor
+		 * 
+		 * @param type The type of the event.
+		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
+ 		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
 		public function DVREvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 		}
-
 	}
 }
