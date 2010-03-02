@@ -27,7 +27,6 @@ package org.osmf.plugin
 	
 	import org.osmf.events.*;
 	import org.osmf.media.*;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.utils.*;
 
@@ -184,7 +183,7 @@ package org.osmf.plugin
 			pluginManager.loadPlugin(resource);
 			
 			assertNotNull(pluginInfo.pluginResource);
-			var injectedFactory:MediaFactory = pluginInfo.pluginResource.getMetadataValue(MetadataNamespaces.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
+			var injectedFactory:MediaFactory = pluginInfo.pluginResource.getMetadataValue(PluginInfo.PLUGIN_MEDIAFACTORY_NAMESPACE) as MediaFactory;
 			assertNotNull(injectedFactory);
 			assertEquals(injectedFactory, mediaFactory);
 		}
