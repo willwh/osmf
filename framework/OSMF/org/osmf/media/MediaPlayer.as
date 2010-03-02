@@ -1229,6 +1229,8 @@ package org.osmf.media
 		}	
 
 		/**
+		 * @private
+		 * 
 		 * Returns the position to seek to in order to reach the latest live content available
 		 * on the server.
 		 * 

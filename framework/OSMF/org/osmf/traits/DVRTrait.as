@@ -93,6 +93,8 @@ package org.osmf.traits
 		}
 		
 		/**
+		 * @private
+		 * 
 		 * Defines the position to seek to in order to reach the end
 		 * of the recording, which resembles the live position in case
 		 * the recording is ongoing.

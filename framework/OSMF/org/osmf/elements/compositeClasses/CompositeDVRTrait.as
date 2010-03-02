@@ -76,6 +76,9 @@ package org.osmf.elements.compositeClasses
 		// Overrides
 		//
 		
+		/**
+		 * @private 
+		 */		
 		override public function get lastRecordedTime():Number
 		{
 			var result:Number;

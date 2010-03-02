@@ -84,6 +84,7 @@ package org.osmf.net.dvr
 		//
 		
 		/**
+		 * @private
 		 * @inherited
 		 *
 		 *  @langversion 3.0
