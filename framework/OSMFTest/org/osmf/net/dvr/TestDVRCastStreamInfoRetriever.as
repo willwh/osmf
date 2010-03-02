@@ -21,16 +21,81 @@
 
 package org.osmf.net.dvr
 {
+	import flash.events.Event;
+	
 	import org.osmf.flexunit.TestCaseEx;
 
 	public class TestDVRCastStreamInfoRetriever extends TestCaseEx
 	{
-		public function testDVRCastStreamInfoRetreiver():void
+		public function testDVRCastStreamInfoRetreiverSucceed():void
 		{
 			var ncf:MockDVRCastNetConnection = new MockDVRCastNetConnection();
-			var sir:DVRCastStreamInfoRetriever = new DVRCastStreamInfoRetriever(ncf, "test");
+			
+			ncf.pushCallResult(true, { code: DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY });
+			ncf.pushCallResult(true, { code: DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY });
+			ncf.pushCallResult(true, { code: DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY });
+			ncf.pushCallResult(true, { code: DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY });
+			
+			var response:Object 
+				= 	{ code: DVRCastConstants.RESULT_GET_STREAM_INFO_SUCCESS
+					, data:
+						{ callTime: null
+						, offline: false
+						, begOffset: 0
+						, endOffset: 0
+						, startRec: null
+						, stopRec: null
+						, isRec: false
+						, streamName: "test"
+						, lastUpdate: null
+						, currLen: 0
+						, maxLen: 0
+						}
+					};
+			
+			ncf.pushCallResult(true, response);
+			
+			sir = new DVRCastStreamInfoRetriever(ncf, "test");
 			assertNotNull(sir);
+			
+			sir.addEventListener
+				( Event.COMPLETE
+				, addAsync(onSIRComplete, 5 * 1000 + 5000)
+				);
+				
+			sir.retreive(5, 1);
+			
+			function onSIRComplete(...args):void
+			{
+				assertNotNull(sir.streamInfo); 
+				assertNull(sir.error);
+			}
 		}
 		
+		public function testDVRCastStreamInfoRetreiverFail():void
+		{
+			var ncf:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			
+			ncf.pushCallResult(true, { code: DVRCastConstants.RESULT_GET_STREAM_INFO_RETRY });
+			ncf.pushCallResult(true, { code: "someUnknownCode" });
+			
+			sir = new DVRCastStreamInfoRetriever(ncf, "test");
+			assertNotNull(sir);
+			
+			sir.addEventListener
+				( Event.COMPLETE
+				, addAsync(onSIRComplete, 2 * 1000 + 5000)
+				);
+				
+			sir.retreive(5, 1);
+			
+			function onSIRComplete(...args):void
+			{
+				assertNull(sir.streamInfo);
+				assertNotNull(sir.error);
+			}
+		}
+		
+		private var sir:DVRCastStreamInfoRetriever;
 	}
 }

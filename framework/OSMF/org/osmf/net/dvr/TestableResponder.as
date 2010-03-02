@@ -13,55 +13,44 @@
 *  License for the specific language governing rights and limitations
 *  under the License.
 *   
-*  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
 *  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
+
 package org.osmf.net.dvr
 {
 	import flash.net.Responder;
 
-	public class MockDVRCastNetConnection extends DVRCastNetConnection
+	[ExcludeClass]
+
+	/**
+	 * @private 
+	 * 
+	 * Subclasses Responder in a way that allows unit testing.
+	 */	
+	public class TestableResponder extends Responder
 	{
-		public function MockDVRCastNetConnection()
+		public function TestableResponder(result:Function, status:Function=null)
 		{
-			super();
+			_result = result;
+			_status = status;
+			
+			super(result, status);
+		}
 	
-			connect(null);
-		}
-		
-		public function pushCallResult(succeed:Boolean, response:Object):void
+		internal function get result():Function
 		{
-			successStack.push(succeed);
-			responseStack.push(response);
+			return _result;
 		}
 		
-		override public function call(command:String, responder:Responder, ...parameters):void
+		internal function get status():Function
 		{
-			if (successStack.length)
-			{
-				var fail:Boolean = !successStack.shift();
-				var response:Object = responseStack.shift();
-				
-				var testableResponder:TestableResponder = responder as TestableResponder;
-				if (testableResponder)
-				{
-					if (fail && testableResponder.status != null)
-					{
-						testableResponder.status(response);
-					}
-					else if (fail == false && testableResponder.result != null)
-					{
-						testableResponder.result(response);
-					}
-				}
-			}
+			return _status;
 		}
 		
-		private var successStack:Array = new Array();
-		private var responseStack:Array = new Array(); 
-		
+		private var _result:Function;
+		private var _status:Function;	
 	}
 }

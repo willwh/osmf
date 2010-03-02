@@ -79,8 +79,7 @@ package org.osmf.net.dvr
 		{
 			if (!isNaN(this.retries))
 			{
-				// Ignore the request: a retreival attempt is
-				// ongoing..
+				// Ignore the request: a retreival attempt is ongoing..
 			}
 			else
 			{
@@ -92,7 +91,7 @@ package org.osmf.net.dvr
 						};
 				this.retries = retries;
 				
-				var timer:Timer = new Timer(timeOut * 1000, 1);
+				timer = new Timer(timeOut * 1000, 1);
 				
 				getStreamInfo();
 			}
@@ -111,7 +110,7 @@ package org.osmf.net.dvr
 		
 		private function getStreamInfo():void
 		{
-			var responder:Responder = new Responder(onGetStreamInfoResult, onServerCallError);
+			var responder:Responder = new TestableResponder(onGetStreamInfoResult, onServerCallError);
 			
 			retries--;
 			
@@ -121,7 +120,8 @@ package org.osmf.net.dvr
 		private function onGetStreamInfoResult(result:Object):void
 		{
 			if (result && result.code == DVRCastConstants.RESULT_GET_STREAM_INFO_SUCCESS)
-			{ 
+			{
+				_error = null;
 				_streamInfo = new DVRCastStreamInfo(result.data);
 				complete();
 			}
