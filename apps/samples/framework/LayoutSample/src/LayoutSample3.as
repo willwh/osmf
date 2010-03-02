@@ -24,11 +24,11 @@ package
 {
 	import flash.display.Sprite;
 	
-	import org.osmf.display.ScaleMode;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMode;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutTargetSprite;
+	import org.osmf.layout.ScaleMode;
 
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="360")]
 	public class LayoutSample3 extends Sprite

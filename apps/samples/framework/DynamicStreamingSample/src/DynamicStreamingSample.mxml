@@ -29,6 +29,8 @@
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.media.MediaPlayer;
 			import org.osmf.media.DefaultMediaFactory;
 			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginInfoResource;
@@ -105,19 +107,23 @@
 			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;
 			private var mediaElement:MediaElement;
+			private var mediaPlayer:MediaPlayer;
 						
 			private function initApp():void
 			{
+				mediaContainerUIComponent.container = new MediaContainer();
+				
 				mediaFactory = new DefaultMediaFactory();
 				pluginManager = new PluginManager(mediaFactory);
+				mediaPlayer = new MediaPlayer();
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
 				
-				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -140,10 +146,25 @@
 				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 								
-				mediaPlayerWrapper.element = mediaElement;
-				mediaPlayerWrapper.alpha = 1.0;
+				setMediaElement(mediaElement);
+				mediaContainerUIComponent.alpha = 1.0;
 			}
 			
+			private function setMediaElement(value:MediaElement):void
+			{
+				if (mediaPlayer.media != null)
+				{
+					mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
+				}
+				
+				if (value != null)
+				{
+					mediaContainerUIComponent.container.addMediaElement(value);
+				}
+					
+				mediaPlayer.media = value;
+			}
+
 			private function loadPlugin(source:String):void
 			{
 				var pluginResource:MediaResourceBase;
@@ -200,7 +221,7 @@
    				switch (event.traitType)
    				{
    					case MediaTraitType.DYNAMIC_STREAM:
-						_dsTrait = mediaPlayerWrapper.element.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
+						_dsTrait = mediaPlayer.media.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
 
 						if (_dsTrait != null)
 						{
@@ -209,7 +230,7 @@
 						}
    						break;
    					case MediaTraitType.DISPLAY_OBJECT:
-						_displayObjectTrait = mediaPlayerWrapper.element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;						
+						_displayObjectTrait = mediaPlayer.media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;						
    						break;
    				}	
    			}
@@ -316,8 +337,8 @@
 				{
 					clearDebugText();
 				}
-				mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-				mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+				mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+				mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 			}
 			
 			private function unload():void
@@ -329,7 +350,7 @@
 				{
 					loadTrait.unload();
 				}
-				mediaPlayerWrapper.alpha = MEDIA_PLAYER_UNLOADED_ALPHA;
+				mediaContainerUIComponent.alpha = MEDIA_PLAYER_UNLOADED_ALPHA;
 				clear(false);
 			}			
 			
@@ -343,19 +364,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+						mediaContainerUIComponent.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+						mediaContainerUIComponent.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 					}
 				}
 				else if (width > 0 && height > 0)
 				{
-					mediaPlayerWrapper.width = event.newWidth;
-					mediaPlayerWrapper.height = event.newHeight;			
+					mediaContainerUIComponent.width = event.newWidth;
+					mediaContainerUIComponent.height = event.newHeight;			
 				}
 			}
 			
@@ -363,12 +384,12 @@
 			{
 				seekBar.maximum = event.time;
 				lblDuration.text = timeCode(event.time);
-				seekBar.enabled = seekBar.visible = mediaPlayerWrapper.mediaPlayer.canSeek;
+				seekBar.enabled = seekBar.visible = mediaPlayer.canSeek;
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = timeCode(event.time);
@@ -390,9 +411,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
+   					if (mediaPlayer.canSeek)
    					{
-   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -459,15 +480,15 @@
 			
 			private function onClickPlayBtn():void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
+				if (mediaPlayer.playing && mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
-					mediaPlayerWrapper.mediaPlayer.pause();
+					mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
+				else if (mediaPlayer.paused && mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					mediaPlayerWrapper.mediaPlayer.play();
+					mediaPlayer.play();
 				}
 			}
 						
@@ -494,8 +515,8 @@
 		<mx:HBox>
 			<mx:VBox id="videoContainer" paddingLeft="20">
 				<mx:Spacer width="10" />
-				<mx:Canvas id="wrapperContainer">
-				    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="640" height="360"  />				
+				<mx:Canvas id="mediaContainerHolder">
+				    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="640" height="360"  />				
 				</mx:Canvas>
 			    <mx:VBox id="controlsContainer">
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" />
@@ -504,7 +525,7 @@
 						<mx:Label id="lblPlayhead" width="100" styleName="timeCode" />
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
-						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="{mediaPlayerWrapper.mediaPlayer.canPlay}" />
+						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" />
 						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{_dsTrait!=null}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />

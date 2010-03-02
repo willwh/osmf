@@ -29,38 +29,47 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import __AS3__.vec.Vector;
-			import mx.events.DropdownEvent;
-			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
-			
-			import org.osmf.traits.DynamicStreamTrait;
+			import com.akamai.osmf.samples.AkamaiSyndicationMediaGenerator;
+			import org.osmf.syndication.media.SyndicationMediaGenerator;
 			import org.osmf.traits.TimeTrait;
+			import org.osmf.syndication.media.SyndicationMediaGenerator;
+			import org.osmf.syndication.model.extensions.mrss.MediaRSSThumbnail;
+			import org.osmf.syndication.model.extensions.mrss.MediaRSSExtension;
+			import org.osmf.syndication.model.extensions.FeedExtension;
+			import org.osmf.syndication.model.rss20.RSSItem;
+			import __AS3__.vec.Vector;
+			import org.osmf.syndication.model.rss20.RSSFeed;
+			import com.akamai.osmf.samples.PlaylistItem;
+			import org.osmf.syndication.model.Entry;
+			import mx.collections.ArrayCollection;
+			import org.osmf.syndication.loader.FeedLoadTrait;
+			import org.osmf.traits.DynamicStreamTrait;
+			import org.osmf.syndication.model.Feed;
+			import org.osmf.syndication.loader.FeedLoader;
+			import org.osmf.net.StreamType;
+			import org.osmf.net.StreamingURLResource;
+			import mx.controls.Alert;
+			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.plugin.PluginInfoResource;
 			import org.osmf.traits.LoadTrait;
-			import org.osmf.traits.LoadState;
-			import org.osmf.traits.MediaTraitType;
+			
+			import mx.events.DropdownEvent;
+			
 			import org.osmf.events.*;
+			import org.osmf.containers.MediaContainer;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.media.MediaElement;
 			import org.osmf.media.MediaFactory;
 			import org.osmf.media.MediaFactoryItem;
-			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.media.MediaPlayer;
 			import org.osmf.metadata.*;
 			import org.osmf.net.NetLoader;
 			import org.osmf.plugin.PluginManager;
+			import org.osmf.traits.LoadTrait;
+			import org.osmf.traits.LoadState;
+			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
-			import org.osmf.net.StreamType;
-			import org.osmf.net.StreamingURLResource;
-			import org.osmf.plugin.PluginInfoResource;
-
-			import org.osmf.syndication.loader.FeedLoader;
-			import org.osmf.syndication.model.Feed;
-			import org.osmf.syndication.model.Entry;
-			import org.osmf.syndication.loader.FeedLoadTrait;
-			
-			import com.akamai.osmf.samples.AkamaiSyndicationMediaGenerator;
-			import com.akamai.osmf.samples.PlaylistItem;
 			
 			private var pluginManager:PluginManager;
 			private var mediaFactory:DefaultMediaFactory;
@@ -178,10 +187,13 @@
 			[Bindable]
 			private var playlist:ArrayCollection;	
 			
-			private var mediaElement:MediaElement;												
+			private var mediaElement:MediaElement;
+			private var mediaPlayer:MediaPlayer;										
 			
 			private function initApp():void
-			{	
+			{
+				mediaContainerUIComponent.container = new MediaContainer();
+				
 				mediaFactory = new DefaultMediaFactory();
 				pluginManager = new PluginManager(mediaFactory);
 				playlist = new ArrayCollection();
@@ -189,12 +201,13 @@
 				urlInput.text = plugins[0].url;
 				mediaInput.text = media[0].url;
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				
-				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -266,7 +279,7 @@
 					if (event.loadState == LoadState.READY)
 					{
 						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-						var feed:Feed = loadTrait.feed;
+						var feed:Feed = loadTrait.feed as Feed;
 						if (feed != null)
 						{
 							buildPlayList(feed);
@@ -306,10 +319,10 @@
 				{
 					metadata = createMASTMetadata();
 				}
-				
+								
 				var mediaGenerator:AkamaiSyndicationMediaGenerator = 
 						new AkamaiSyndicationMediaGenerator(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata, mediaFactory);
-				
+
 				setupMediaElementListeners(false);
 				mediaElement = mediaGenerator.createMediaElement(playlistItem.entry);
 				setupMediaElementListeners();
@@ -341,23 +354,30 @@
 			
 			private function playMediaElement():void
 			{
-				mediaPlayerWrapper.element = mediaElement;
+				setMediaElement(mediaElement);
 				enablePlayerControls();
 			}
 			
-			private function unloadMedia():void
+			private function setMediaElement(value:MediaElement):void
 			{
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
+				if (mediaPlayer.media != null)
 				{
-					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-					if (loadTrait.loadState == LoadState.READY)
-					{
-						loadTrait.unload();
-					}
+					mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
 				}
 				
+				if (value != null)
+				{
+					mediaContainerUIComponent.container.addMediaElement(value);
+				}
+					
+				mediaPlayer.media = value;
+			}
+
+			private function unloadMedia():void
+			{
+				setMediaElement(null);
+				
 				setupMediaElementListeners(false);
-				mediaPlayerWrapper.element = null;
 				mediaElement = null;
 				enablePlayerControls(false);
 				clearPlaylist();
@@ -446,19 +466,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+						mediaContainerUIComponent.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+						mediaContainerUIComponent.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 					}
 				}
 				else if (width > 0 && height > 0)
 				{
-					mediaPlayerWrapper.width = event.newWidth;
-					mediaPlayerWrapper.height = event.newHeight;			
+					mediaContainerUIComponent.width = event.newWidth;
+					mediaContainerUIComponent.height = event.newHeight;			
 				}
 			}
 			
@@ -470,7 +490,7 @@
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = TimeUtil.formatAsTimeCode(event.time);
@@ -502,9 +522,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
+   					if (mediaPlayer.canSeek)
    					{
-   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -622,22 +642,22 @@
 
 			private function onClickPlayBtn():void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing)
+				if (mediaPlayer.playing)
 				{
 					playBtn.label = "Play";
-					mediaPlayerWrapper.mediaPlayer.pause();
+					mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
+				else if (mediaPlayer.paused && mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					mediaPlayerWrapper.mediaPlayer.play();
+					mediaPlayer.play();
 				}
 			}   			
 				
 			private function enablePlayerControls(enable:Boolean=true):void
 			{
 				playBtn.enabled = enable;
-				mediaPlayerContainer.alpha = (enable ? 1.0 : .33);
+				mediaContainerHolder.alpha = (enable ? 1.0 : .33);
 			}
 		]]>
 	</mx:Script>
@@ -687,9 +707,9 @@
 		<mx:Spacer height="4" />
 		<mx:HBox>
 			<mx:VBox paddingLeft="20">
-				<mx:VBox id="mediaPlayerContainer" alpha=".33">
+				<mx:VBox id="mediaContainerHolder" alpha=".33">
 					<mx:Spacer width="10" />
-				    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="{MAX_VIDEO_WIDTH}" height="{MAX_VIDEO_HEIGHT}"  />
+				    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="{MAX_VIDEO_WIDTH}" height="{MAX_VIDEO_HEIGHT}"  />
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
 		    			enabled="false" visible="false" />
 		    		<mx:HBox horizontalAlign="right" width="100%">

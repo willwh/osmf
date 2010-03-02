@@ -21,8 +21,6 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import org.osmf.display.ScaleMode;
-	
 	import flash.geom.Point;
 	
 	/**

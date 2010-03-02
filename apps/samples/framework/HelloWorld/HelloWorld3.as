@@ -26,13 +26,14 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
+	import org.osmf.containers.MediaContainer;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.SWFElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 
 	/**
@@ -47,28 +48,33 @@ package
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-            
-  			// Create the Sprite class that holds our MediaPlayer.
- 			sprite = new MediaPlayerSprite();
-			addChild(sprite);
-			
-			// Set the Sprite's size to match that of the stage, and
+ 
+ 			// Create the container class that displays the media.
+ 			var container:MediaContainer = new MediaContainer();
+			addChild(container);
+
+			// Set the container's size to match that of the stage, and
 			// prevent the content from being scaled.
-			sprite.scaleMode = ScaleMode.NONE;
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
-			
-			// Make sure we resize the Sprite when the stage dimensions
+			container.width = stage.stageWidth;
+			container.height = stage.stageHeight;
+			container.layoutMetadata.scaleMode = ScaleMode.NONE;
+
+			// Make sure we resize the container when the stage dimensions
 			// change.
-			stage.addEventListener(Event.RESIZE, onStageResize);
-            
+			container.addEventListener(Event.RESIZE, onStageResize);
+
+			// Create the resource to play.
+			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
+			
 			// Create a composite MediaElement, consisting of a video
 			// followed by a SWF, followed by another video.
 			var mediaElement:MediaElement = createMediaElement();
+			container.addMediaElement(mediaElement);
 			
-			// Set the MediaElement on the MediaPlayer.  Because
-			// autoPlay defaults to true, playback begins immediately.
-			sprite.mediaElement = mediaElement;
+			// Set the MediaElement on a MediaPlayer.  Because autoPlay
+			// defaults to true, playback begins immediately.
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.media = mediaElement;
 		}
 		
 		private function createMediaElement():MediaElement
@@ -104,11 +110,11 @@ package
 		
 		private function onStageResize(event:Event):void
 		{
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
+			container.width = stage.stageWidth;
+			container.height = stage.stageHeight;
 		}
 		
-		private var sprite:MediaPlayerSprite;
+		private var container:MediaContainer;
 		
 		private static const REMOTE_PROGRESSIVE:String
 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";

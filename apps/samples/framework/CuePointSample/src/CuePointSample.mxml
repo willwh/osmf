@@ -27,6 +27,9 @@
 	<mx:Style source="CuePointSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.containers.MediaContainer;
 			import mx.collections.ArrayCollection;
 			import org.osmf.metadata.CuePoint;
 			import org.osmf.metadata.CuePointType;
@@ -63,6 +66,7 @@
 			private var _cuePointsCollection:ArrayCollection;
 			
 			private var videoElement:VideoElement;
+			private var mediaPlayer:MediaPlayer;
 			
 			public static function timeCode(sec:Number):String 
 			{
@@ -80,12 +84,15 @@
 				
 			private function init():void
 			{
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaContainerUIComponent.container = new MediaContainer();
 				
-				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				
+				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -121,17 +128,31 @@
 					_cuePointsCollection.addItem(embeddedTimelineMetadata.getMarkerAt(i));
 				}
 																
-				mediaPlayerWrapper.element = videoElement;
+				setMediaElement(videoElement);
 				enablePlayerControls(true);
-				
 			}
 			
+			private function setMediaElement(value:MediaElement):void
+			{
+				if (mediaPlayer.media != null)
+				{
+					mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
+				}
+				
+				if (value != null)
+				{
+					mediaContainerUIComponent.container.addMediaElement(value);
+				}
+					
+				mediaPlayer.media = value;
+			}
+
 			private function onCuePoint(event:TimelineMetadataEvent):void
 			{
 				var cuePoint:CuePoint = event.marker as CuePoint;
 				
-				var diff:Number = cuePoint.time - mediaPlayerWrapper.mediaPlayer.currentTime;
-				trace("cuePoint.time="+cuePoint.time+", currentTime time="+this.mediaPlayerWrapper.mediaPlayer.currentTime+", diff="+diff);
+				var diff:Number = cuePoint.time - mediaPlayer.currentTime;
+				trace("cuePoint.time="+cuePoint.time+", currentTime time="+this.mediaPlayer.currentTime+", diff="+diff);
 								
 				// If we are getting embedded cue points, let's ignore the dynamic cue points coming from
 				// the framework, these are being dispatched from the list of cue points found in the 
@@ -187,19 +208,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+						mediaContainerUIComponent.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+						mediaContainerUIComponent.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 					}
 				}
 				else if (width > 0 && height > 0)
 				{
-					mediaPlayerWrapper.width = event.newWidth;
-					mediaPlayerWrapper.height = event.newHeight;			
+					mediaContainerUIComponent.width = event.newWidth;
+					mediaContainerUIComponent.height = event.newHeight;			
 				}
 			}
 			
@@ -211,7 +232,7 @@
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = timeCode(event.time);
@@ -232,9 +253,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
+   					if (mediaPlayer.canSeek)
    					{
-   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -251,15 +272,15 @@
    								
 			private function onClickPlayBtn():void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
+				if (mediaPlayer.playing && mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
-					mediaPlayerWrapper.mediaPlayer.pause();
+					mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
+				else if (mediaPlayer.paused && mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					mediaPlayerWrapper.mediaPlayer.play();
+					mediaPlayer.play();
 				}
 			}
 			
@@ -297,9 +318,9 @@
 			{
 				var cuePoint:CuePoint = this.gridCuePoints.selectedItem as CuePoint;
 				
-				if (cuePoint.type == CuePointType.NAVIGATION && this.mediaPlayerWrapper.mediaPlayer.canSeek)
+				if (cuePoint.type == CuePointType.NAVIGATION && this.mediaPlayer.canSeek)
 				{
-					this.mediaPlayerWrapper.mediaPlayer.seek(cuePoint.time);
+					this.mediaPlayer.seek(cuePoint.time);
 				}
 			}
 			
@@ -318,7 +339,7 @@
 		<mx:Spacer height="5" />
 		<mx:HBox>
 			<mx:VBox>
-			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
+			    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="480" height="270"  />
 	    		<mx:HSlider id="seekBar" width="480" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" enabled="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
 	    			<mx:Label text="Position: " />

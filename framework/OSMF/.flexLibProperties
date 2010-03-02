@@ -4,7 +4,6 @@
     <classEntry path="org.osmf.containers.HTMLMediaContainer"/>
     <classEntry path="org.osmf.containers.IMediaContainer"/>
     <classEntry path="org.osmf.containers.MediaContainer"/>
-    <classEntry path="org.osmf.display.MediaPlayerSprite"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.elements.AudioElement"/>
     <classEntry path="org.osmf.elements.BeaconElement"/>
@@ -122,6 +121,7 @@
     <classEntry path="org.osmf.layout.MediaElementLayoutTarget"/>
     <classEntry path="org.osmf.layout.PaddingLayoutMetadata"/>
     <classEntry path="org.osmf.layout.RelativeLayoutMetadata"/>
+    <classEntry path="org.osmf.layout.ScaleMode"/>
     <classEntry path="org.osmf.layout.ScaleModeUtils"/>
     <classEntry path="org.osmf.layout.VerticalAlign"/>
     <classEntry path="org.osmf.logging.ILogger"/>

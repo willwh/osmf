@@ -27,8 +27,8 @@
 	xmlns:samples				="org.osmf.samples.*"
 	>
 	
-	<samples:MediaPlayerWrapper
-		id 						="mediaPlayerWrapper"
+	<samples:MediaContainerUIComponent
+		id 						="mediaContainerUIComponent"
 		top 					="0"
 		left 					="0"
 		bottom 					="0"

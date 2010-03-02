@@ -70,6 +70,8 @@ package org.osmf.layout
 		 * The default layout renderer interprets this value as follows:
 		 * 
 		 * Defines the desired scale layoutMode to be applied to the target.
+		 * 
+		 * Possible values are on org.osmf.layout.ScaleMode.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

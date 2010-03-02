@@ -26,12 +26,16 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.layout.HorizontalAlign;
+	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.ScaleMode;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.vast.loader.VASTLoadTrait;
@@ -51,12 +55,16 @@ package
 			stage.align = StageAlign.TOP_LEFT;
             
   			// Create the Sprite class that holds our MediaPlayer.
- 			sprite = new MediaPlayerSprite();
+ 			sprite = new MediaContainer();
 			addChild(sprite);
 			
 			// Set the Sprite's size to match that of the stage, and
 			// prevent the content from being scaled.
-			sprite.scaleMode = ScaleMode.NONE;
+			var layoutMetadata:LayoutMetadata = sprite.layoutMetadata;
+			layoutMetadata.scaleMode = ScaleMode.NONE;
+			layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
+			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
+			
 			sprite.width = stage.stageWidth;
 			sprite.height = stage.stageHeight;
 			
@@ -122,7 +130,8 @@ package
 
 			// Set the MediaElement on the MediaPlayer.  Because
 			// autoPlay defaults to true, playback begins immediately.
-			sprite.mediaElement = serialElement;
+			sprite.addMediaElement(serialElement);
+			mediaPlayer.media = serialElement;
 		}
 		
 		private function onStageResize(event:Event):void
@@ -131,7 +140,8 @@ package
 			sprite.height = stage.stageHeight;
 		}
 		
-		private var sprite:MediaPlayerSprite;
+		private var sprite:MediaContainer;
+		private var mediaPlayer:MediaPlayer = new MediaPlayer();
 
 		// Sample VAST documents.  The first has an inline ad, the second a wrapper.
 		private static const VAST_DOCUMENT_URL1:String = "http://ad.doubleclick.net/pfadx/N270.135279.6816128834321/B3442378.2;dcadv=1379578;sz=0x0;ord=123;dcmt=text/html";

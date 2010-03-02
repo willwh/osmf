@@ -25,7 +25,6 @@ package org.osmf.examples
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import org.osmf.display.ScaleMode;
 	import org.osmf.elements.AudioElement;
 	import org.osmf.elements.BeaconElement;
 	import org.osmf.elements.DurationElement;
@@ -48,6 +47,7 @@ package org.osmf.examples
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutMode;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;

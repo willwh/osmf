@@ -26,7 +26,6 @@ package
 	import flash.display.StageScaleMode;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
@@ -34,6 +33,7 @@ package
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;

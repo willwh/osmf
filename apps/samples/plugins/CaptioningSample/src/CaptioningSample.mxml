@@ -27,6 +27,8 @@
 	<mx:Style source="CaptioningSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.media.MediaPlayer;
 			import org.osmf.events.DisplayObjectEvent;
 			import org.osmf.plugin.PluginInfoResource;
 			import mx.controls.Alert;
@@ -69,7 +71,8 @@
 			private var mediaFactory:MediaFactory;
 			private var captioningEnabled:Boolean;
 			private var captionMetadata:TimelineMetadata; 	
-			private var savedCaptionText:String;		
+			private var savedCaptionText:String;
+			private var mediaPlayer:MediaPlayer;
 			
 			[Bindable]
 			private var sampleDescription:String = "<p>This sample application loads the OSMF captioning plugin,"+
@@ -84,17 +87,19 @@
 							
 			private function init():void
 			{
+				mediaContainerUIComponent.container = new MediaContainer();
 				mediaFactory = new MediaFactory();
 				pluginManager = new PluginManager(mediaFactory);
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				
-				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -135,8 +140,23 @@
 
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 								
-				mediaPlayerWrapper.element = mediaElement;
+				setMediaElement(mediaElement);
 				enablePlayerControls(true);
+			}
+
+			private function setMediaElement(value:MediaElement):void
+			{
+				if (mediaPlayer.media != null)
+				{
+					mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
+				}
+				
+				if (value != null)
+				{
+					mediaContainerUIComponent.container.addMediaElement(value);
+				}
+					
+				mediaPlayer.media = value;
 			}
 
 			private function createVideoElement():MediaElement
@@ -194,19 +214,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+						mediaContainerUIComponent.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+						mediaContainerUIComponent.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 					}
 				}
 				else if (width > 0 && height > 0)
 				{
-					mediaPlayerWrapper.width = event.newWidth;
-					mediaPlayerWrapper.height = event.newHeight;			
+					mediaContainerUIComponent.width = event.newWidth;
+					mediaContainerUIComponent.height = event.newHeight;			
 				}
 			}
 			
@@ -218,7 +238,7 @@
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = timeCode(event.time);
@@ -243,9 +263,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
+   					if (mediaPlayer.canSeek)
    					{
-   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -335,15 +355,15 @@
    									
 			private function onClickPlayBtn(event:Event):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
+				if (mediaPlayer.playing && mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
-					mediaPlayerWrapper.mediaPlayer.pause();
+					mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
+				else if (mediaPlayer.paused && mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					mediaPlayerWrapper.mediaPlayer.play();
+					mediaPlayer.play();
 				}
 			}
 			
@@ -399,7 +419,7 @@
 		<mx:Spacer height="5" />
 		<mx:HBox>
 			<mx:VBox id="videoContainer">
-			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
+			    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="480" height="270"  />
 	    		<mx:HSlider id="seekBar" width="480" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
 	    			dataTipFormatFunction="showScrubTime" enabled="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
@@ -418,7 +438,7 @@
 	    		</mx:HBox>
 				<mx:TextArea id="captionLabel" wordWrap="true" styleName="captionStyle"
 					width="100%" height="44" borderStyle="none" horizontalScrollPolicy="off" verticalScrollPolicy="off" visible="true"
-					creationComplete="captionLabel.x=mediaPlayerWrapper.x; captionLabel.y=mediaPlayerWrapper.height-captionLabel.height"/>						    					
+					creationComplete="captionLabel.x=mediaContainerUIComponent.x; captionLabel.y=mediaContainerUIComponent.height-captionLabel.height"/>						    					
 			</mx:VBox>
 			<mx:Spacer width="20" />
 			<mx:VBox id="infoContainer">

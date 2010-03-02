@@ -23,7 +23,7 @@ package org.osmf.layout
 {
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.ScaleMode;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 

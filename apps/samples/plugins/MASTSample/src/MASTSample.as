@@ -28,14 +28,15 @@ package
 	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
 	
-	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.*;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
@@ -58,12 +59,12 @@ package
 			stage.align = StageAlign.TOP_LEFT;
             
   			// Create the Sprite class that holds our MediaPlayer.
- 			sprite = new MediaPlayerSprite();
+ 			sprite = new MediaContainer();
 			addChild(sprite);
 			
 			// Set the Sprite's size to match that of the stage, and
 			// prevent the content from being scaled.
-			sprite.scaleMode = ScaleMode.NONE;
+			sprite.layoutMetadata.scaleMode = ScaleMode.NONE;
 			sprite.width = stage.stageWidth;
 			sprite.height = stage.stageHeight;
 			
@@ -133,7 +134,8 @@ package
 			
 			mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 			
-			sprite.mediaElement = mediaElement;
+			sprite.addMediaElement(mediaElement);
+			mediaPlayer.media = mediaElement;
 		}
 		
 		private function createVideoElement():MediaElement
@@ -157,7 +159,8 @@ package
 		
 		private var pluginManager:PluginManager;
 		private var mediaFactory:MediaFactory;	
-		private var sprite:MediaPlayerSprite;
+		private var sprite:MediaContainer;
+		private var mediaPlayer:MediaPlayer = new MediaPlayer();
 
 		private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";		
 		private static const loadTestRef:MASTPluginInfo = null;

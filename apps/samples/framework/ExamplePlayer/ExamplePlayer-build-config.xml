@@ -50,7 +50,7 @@
          <path-element>${flexlib}/libs</path-element>
          <path-element>${flexlib}/locale/{locale}</path-element>
          <path-element>../../../../build/lib/OSMF.swc</path-element>
-         <path-element>../../../../build/samples/framework/MediaPlayerWrapper/MediaPlayerWrapper.swc</path-element>
+         <path-element>../../../../build/samples/framework/MediaContainerUIComponent/MediaContainerUIComponent.swc</path-element>
          <path-element>${flexlib}/libs/air/servicemonitor.swc</path-element>
          <path-element>${flexlib}/libs/air/airframework.swc</path-element>
       </library-path>

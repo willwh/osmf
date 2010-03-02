@@ -25,12 +25,12 @@ package
 	import flash.display.Sprite;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.elements.ImageElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;

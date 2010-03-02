@@ -27,6 +27,8 @@
 	<mx:Style source="CaptioningPluginTest.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.media.MediaPlayer;
 			import org.osmf.metadata.Metadata;
 			import org.osmf.metadata.TimelineMetadata;
 			import org.osmf.events.TimelineMetadataEvent;
@@ -81,6 +83,7 @@
 			private var timelineMetadata:TimelineMetadata; 	
 			private var currentCaption:Caption;	
 			private var namespaces:Dictionary = new Dictionary();
+			private var mediaPlayer:MediaPlayer;
 			
 			[Bindable]
 			private var timingTestFiles:Array = [	
@@ -145,18 +148,21 @@
 							
 			private function init():void
 			{
+				mediaContainerUIComponent.container = new MediaContainer();
+				
 				mediaFactory = new MediaFactory();
 				pluginManager = new PluginManager(mediaFactory);
 				
 				loadPlugin("org.osmf.captioning.CaptioningPluginInfo");
 				
-				mediaPlayerWrapper.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
-				mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-				mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onMediaPlayerStateChange);
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);		
+				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
+				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onMediaPlayerStateChange);
 				
-				mediaPlayerWrapper.mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
+				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
@@ -226,19 +232,19 @@
 				{
 					if ((width/height) >= (MAX_VIDEO_WIDTH/MAX_VIDEO_HEIGHT))
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_WIDTH;
-						mediaPlayerWrapper.height = MAX_VIDEO_WIDTH * (height/width);
+						mediaContainerUIComponent.width = MAX_VIDEO_WIDTH;
+						mediaContainerUIComponent.height = MAX_VIDEO_WIDTH * (height/width);
 					}
 					else
 					{
-						mediaPlayerWrapper.width = MAX_VIDEO_HEIGHT * (width/height);
-						mediaPlayerWrapper.height = MAX_VIDEO_HEIGHT;
+						mediaContainerUIComponent.width = MAX_VIDEO_HEIGHT * (width/height);
+						mediaContainerUIComponent.height = MAX_VIDEO_HEIGHT;
 					}
 				}
 				else if (width > 0 && height > 0)
 				{
-					mediaPlayerWrapper.width = width;
-					mediaPlayerWrapper.height = height;			
+					mediaContainerUIComponent.width = width;
+					mediaContainerUIComponent.height = height;			
 				}
 			}
 			
@@ -250,7 +256,7 @@
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.temporal && !sliderDragging && !waitForSeek)
+				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = timeCode(event.time);
@@ -275,9 +281,9 @@
    				if (!state)
    				{
    					waitForSeek = true;
-   					if (mediaPlayerWrapper.mediaPlayer.canSeek)
+   					if (mediaPlayer.canSeek)
    					{
-   						mediaPlayerWrapper.mediaPlayer.seek(seekBar.value); 
+   						mediaPlayer.seek(seekBar.value); 
    					}
    				}
    			}
@@ -428,15 +434,15 @@
    									
 			private function onClickPlayBtn(event:Event):void
 			{
-				if (mediaPlayerWrapper.mediaPlayer.playing && mediaPlayerWrapper.mediaPlayer.canPause)
+				if (mediaPlayer.playing && mediaPlayer.canPause)
 				{
 					playBtn.label = "Play";
-					mediaPlayerWrapper.mediaPlayer.pause();
+					mediaPlayer.pause();
 				}
-				else if (mediaPlayerWrapper.mediaPlayer.paused && mediaPlayerWrapper.mediaPlayer.canPlay)
+				else if (mediaPlayer.paused && mediaPlayer.canPlay)
 				{
 					playBtn.label = "Pause";
-					mediaPlayerWrapper.mediaPlayer.play();
+					mediaPlayer.play();
 				}
 			}
 			
@@ -470,7 +476,7 @@
 
 				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
 								
-				mediaPlayerWrapper.element = mediaElement;
+				setMediaElement(mediaElement);
 				enablePlayerControls(true);
 				
 				// Now load the DFXP file separately so we can show it in the UI (note this has
@@ -479,18 +485,24 @@
 				var fileRenderer:FileRenderer = new FileRenderer(this.dxfpFileContents, dfxpFile);
 			}
 			
-			private function unloadMedia():void
+			private function setMediaElement(value:MediaElement):void
 			{
-				var mediaElement:MediaElement = mediaPlayerWrapper.element;
-				if (mediaElement != null && mediaElement.hasTrait(MediaTraitType.LOAD))
+				if (mediaPlayer.media != null)
 				{
-					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-					if (loadTrait.loadState == LoadState.READY)
-					{
-						loadTrait.unload();
-					}
+					mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
 				}
 				
+				if (value != null)
+				{
+					mediaContainerUIComponent.container.addMediaElement(value);
+				}
+					
+				mediaPlayer.media = value;
+			}
+
+			private function unloadMedia():void
+			{
+				setMediaElement(null);
 				enablePlayerControls(false);
 				clearCaptionText();
 			}			
@@ -551,7 +563,7 @@
 		</mx:VBox>
 		<mx:HBox>
 			<mx:VBox id="videoContainer">
-			    <samples:MediaPlayerWrapper id="mediaPlayerWrapper" width="480" height="270"  />
+			    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="480" height="270"  />
 	    		<mx:HSlider id="seekBar" width="480" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
 	    			dataTipFormatFunction="showScrubTime" enabled="false" />
 	    		<mx:HBox horizontalAlign="right" width="100%">
@@ -563,7 +575,7 @@
 	    		</mx:HBox>
 				<mx:TextArea id="captionLabel" wordWrap="true" editable="false" styleName="captionStyle" backgroundColor="{captionBackgroundColor}"
 					width="100%" height="44" borderStyle="none" horizontalScrollPolicy="off" verticalScrollPolicy="off" visible="true"
-					creationComplete="captionLabel.x=mediaPlayerWrapper.x; captionLabel.y=mediaPlayerWrapper.height-captionLabel.height"/>						    					
+					creationComplete="captionLabel.x=mediaContainerUIComponent.x; captionLabel.y=mediaContainerUIComponent.height-captionLabel.height"/>						    					
 			</mx:VBox>
 			<mx:VBox id="dfxpFileContainer">
 				<mx:TextArea id="dxfpFileContents" editable="false" width="560" height="270" wordWrap="true" />

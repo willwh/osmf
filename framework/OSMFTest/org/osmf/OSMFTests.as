@@ -295,7 +295,6 @@ package org.osmf
 			
 			addTestSuite(TestMediaContainer);
 			addTestSuite(TestHTMLMediaContainer);
-			addTestSuite(TestMediaPlayerSprite);
 
 			// Utils
 			//

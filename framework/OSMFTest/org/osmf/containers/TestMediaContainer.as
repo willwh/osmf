@@ -26,9 +26,9 @@ package org.osmf.containers
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.ScaleMode;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.layout.TesterSprite;
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.traits.DisplayObjectTrait;

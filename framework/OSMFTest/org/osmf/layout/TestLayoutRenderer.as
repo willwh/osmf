@@ -25,7 +25,7 @@ package org.osmf.layout
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.ScaleMode;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;

@@ -35,7 +35,7 @@ package
 
 	/**
 	 * Variation on HelloWorld, using MediaElement + DisplayObjectTrait
-	 * rather than MediaPlayerSprite.
+	 * rather than MediaContainer.
 	 **/
 	[SWF(width="640", height="352")]
 	public class HelloWorld4 extends Sprite

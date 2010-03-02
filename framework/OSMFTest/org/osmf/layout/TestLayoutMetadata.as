@@ -21,10 +21,7 @@
 *****************************************************/
 package org.osmf.layout
 {
-	import org.osmf.containers.MediaContainer;
-	import org.osmf.display.ScaleMode;
 	import org.osmf.flexunit.TestCaseEx;
-	import org.osmf.media.MediaElement;
 
 	public class TestLayoutMetadata extends TestCaseEx
 	{

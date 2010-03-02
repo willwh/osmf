@@ -26,7 +26,7 @@ package org.osmf.view
 	import mx.events.ListEvent;
 	import mx.events.SliderEvent;
 	
-	import org.osmf.display.ScaleMode;
+	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.LoadEvent;
@@ -36,6 +36,9 @@ package org.osmf.view
 	import org.osmf.events.TimeEvent;
 	import org.osmf.examples.AllExamples;
 	import org.osmf.examples.Example;
+	import org.osmf.layout.ScaleMode;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.utils.Version;
 	
 	public class MainWindow extends MainWindowLayout
@@ -46,6 +49,13 @@ package org.osmf.view
 		override protected function childrenCreated():void
 		{
 			super.childrenCreated();
+			
+			// Set up our MediaPlayer.
+			//
+			
+			mediaPlayer = new MediaPlayer();
+			mediaPlayer.autoPlay = false;
+			mediaPlayer.autoRewind = true;
 			
 			// Set up our list of examples.
 			//
@@ -72,29 +82,29 @@ package org.osmf.view
 			// Add MediaPlayer event handlers.
 			//
 			
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE, onCapabilityChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE, onCapabilityChange);
+			mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 
-			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
-			mediaPlayerWrapper.mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
+			mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+			mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
+			mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onMutedChange);
+			mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferingChange);
+			mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
+			mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
+			mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
 
-			// Set up the MediaPlayer.
+			// Set up the container
 			//
 			
-			mediaPlayerWrapper.scaleMode = ScaleMode.NONE;
-			mediaPlayerWrapper.mediaPlayer.autoPlay = false;
-			mediaPlayerWrapper.mediaPlayer.autoRewind = true;
+			var container:MediaContainer = new MediaContainer();
+			container.layoutMetadata.scaleMode = ScaleMode.NONE;
+			mediaContainerUIComponent.container = container;
 			
 			// Sync the UI to the current (empty) state.
 			//
@@ -109,35 +119,50 @@ package org.osmf.view
 		
 		private function onPan(event:SliderEvent):void
 		{
-			mediaPlayerWrapper.mediaPlayer.audioPan = event.value;
+			mediaPlayer.audioPan = event.value;
 		}
 				
 		private function onVolume(event:SliderEvent):void
 		{
-			mediaPlayerWrapper.mediaPlayer.volume = event.value;
+			mediaPlayer.volume = event.value;
 		}
 
 		private function onPlayClick(event:MouseEvent):void
 		{
-			mediaPlayerWrapper.mediaPlayer.play();
+			mediaPlayer.play();
 		}
 		
 		private function onPauseClick(event:MouseEvent):void
 		{
-			mediaPlayerWrapper.mediaPlayer.pause();
+			mediaPlayer.pause();
 		}
 		
 		private function onToggleMuteClick(event:MouseEvent):void
 		{
-			mediaPlayerWrapper.mediaPlayer.muted = muteToggle.selected;
+			mediaPlayer.muted = muteToggle.selected;
 		}
 		
 		private function onSeek(event:SliderEvent):void
 		{
-			if (mediaPlayerWrapper.mediaPlayer.canSeek)
+			if (mediaPlayer.canSeek)
 			{
-				mediaPlayerWrapper.mediaPlayer.seek(event.value);
+				mediaPlayer.seek(event.value);
 			}	
+		}
+		
+		private function setMediaElement(value:MediaElement):void
+		{
+			if (mediaPlayer.media != null)
+			{
+				mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
+			}
+			
+			if (value != null)
+			{
+				mediaContainerUIComponent.container.addMediaElement(value);
+			}
+				
+			mediaPlayer.media = value;
 		}
 
 		private function onExampleListSelect(event:ListEvent):void
@@ -151,12 +176,12 @@ package org.osmf.view
 			{
 				example = examples[exampleList.selectedIndex] as Example;
 				
-				mediaPlayerWrapper.element = example.mediaElement;
+				setMediaElement(example.mediaElement);
 				exampleDescription.text = example.description;
 			}
 			else
 			{
-				mediaPlayerWrapper.element = null;
+				setMediaElement(null);
 				exampleDescription.text = "";
 			}
 			
@@ -202,12 +227,12 @@ package org.osmf.view
 		{
 			position.text = "" + Math.round(event.time);
 
-			seekBar.value = 	mediaPlayerWrapper.mediaPlayer.temporal
-							? 	mediaPlayerWrapper.mediaPlayer.currentTime
+			seekBar.value = 	mediaPlayer.temporal
+							? 	mediaPlayer.currentTime
 							:	0;
 			
-			bufferLength.text = mediaPlayerWrapper.mediaPlayer.canBuffer
-							? 	mediaPlayerWrapper.mediaPlayer.bufferLength.toFixed(1)
+			bufferLength.text = mediaPlayer.canBuffer
+							? 	mediaPlayer.bufferLength.toFixed(1)
 							: "";
 		}
 		
@@ -223,7 +248,7 @@ package org.osmf.view
 
 		private function onBufferTimeChange(event:BufferEvent):void
 		{
-			bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
+			bufferTime.text = mediaPlayer.bufferTime.toFixed(1);
 		}
 		
 		private function onBytesTotalChange(event:LoadEvent):void
@@ -238,18 +263,18 @@ package org.osmf.view
 		
 		private function updateControls():void
 		{
-			buttonPlay.visible 			= mediaPlayerWrapper.mediaPlayer.canPlay;
-			buttonPause.visible 		= mediaPlayerWrapper.mediaPlayer.canPlay && mediaPlayerWrapper.mediaPlayer.canPause;
-			audioTraitControls.visible 	= mediaPlayerWrapper.mediaPlayer.hasAudio;
-			timeTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.temporal;
-			bufferTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.canBuffer;
-			loadTraitControls.visible	= mediaPlayerWrapper.mediaPlayer.canLoad;
-			seekBar.enabled 			= mediaPlayerWrapper.mediaPlayer.canSeek;
+			buttonPlay.visible 			= mediaPlayer.canPlay;
+			buttonPause.visible 		= mediaPlayer.canPlay && mediaPlayer.canPause;
+			audioTraitControls.visible 	= mediaPlayer.hasAudio;
+			timeTraitControls.visible	= mediaPlayer.temporal;
+			bufferTraitControls.visible	= mediaPlayer.canBuffer;
+			loadTraitControls.visible	= mediaPlayer.canLoad;
+			seekBar.enabled 			= mediaPlayer.canSeek;
 			
-			if (mediaPlayerWrapper.mediaPlayer.temporal)
+			if (mediaPlayer.temporal)
 			{
-				seekBar.maximum = mediaPlayerWrapper.mediaPlayer.duration;
-				duration.text = "" + Math.round(mediaPlayerWrapper.mediaPlayer.duration);
+				seekBar.maximum = mediaPlayer.duration;
+				duration.text = "" + Math.round(mediaPlayer.duration);
 			}
 			else
 			{
@@ -257,19 +282,19 @@ package org.osmf.view
 				duration.text = "0";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.canLoad)
+			if (mediaPlayer.canLoad)
 			{
-				bytesTotal.text = "" + mediaPlayerWrapper.mediaPlayer.bytesTotal;
+				bytesTotal.text = "" + mediaPlayer.bytesTotal;
 			}
 			else
 			{
 				bytesTotal.text = "";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.canBuffer)
+			if (mediaPlayer.canBuffer)
 			{
-				bufferTime.text = mediaPlayerWrapper.mediaPlayer.bufferTime.toFixed(1);
-				bufferLength.text = mediaPlayerWrapper.mediaPlayer.bufferLength.toFixed(1);
+				bufferTime.text = mediaPlayer.bufferTime.toFixed(1);
+				bufferLength.text = mediaPlayer.bufferLength.toFixed(1);
 			}
 			else
 			{
@@ -277,20 +302,21 @@ package org.osmf.view
 				bufferLength.text = "";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.canLoad == false)
+			if (mediaPlayer.canLoad == false)
 			{
 				bytesTotal.text = "";
 				bytesLoaded.text = "";
 			}
 			
-			if (mediaPlayerWrapper.mediaPlayer.hasAudio)
+			if (mediaPlayer.hasAudio)
 			{
-				muteToggle.selected = mediaPlayerWrapper.mediaPlayer.muted;
-				volumeSlider.value = mediaPlayerWrapper.mediaPlayer.volume;
-				panControl.value = mediaPlayerWrapper.mediaPlayer.audioPan;
+				muteToggle.selected = mediaPlayer.muted;
+				volumeSlider.value = mediaPlayer.volume;
+				panControl.value = mediaPlayer.audioPan;
 			}
 		}
 		
+		private var mediaPlayer:MediaPlayer;
 		private var examples:Array;
 		private var example:Example;
 	}

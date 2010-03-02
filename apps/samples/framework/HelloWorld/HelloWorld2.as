@@ -25,9 +25,10 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
-	import org.osmf.display.MediaPlayerSprite;
-	import org.osmf.display.ScaleMode;
+	import org.osmf.containers.MediaContainer;
+	import org.osmf.layout.ScaleMode;
 	import org.osmf.elements.VideoElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 
 	/**
@@ -43,23 +44,28 @@ package
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-  
-  			// Create the Sprite class that holds our MediaPlayer.
- 			var sprite:MediaPlayerSprite = new MediaPlayerSprite();
-			addChild(sprite);
-			
-			// Set the Sprite's size to match that of the stage, and
+ 
+ 			// Create the container class that displays the media.
+ 			var container:MediaContainer = new MediaContainer();
+			addChild(container);
+
+			// Set the container's size to match that of the stage, and
 			// prevent the content from being scaled.
-			sprite.width = stage.stageWidth;
-			sprite.height = stage.stageHeight;
-			sprite.scaleMode = ScaleMode.NONE;
+			container.width = stage.stageWidth;
+			container.height = stage.stageHeight;
+			container.layoutMetadata.scaleMode = ScaleMode.NONE;
 
 			// Create the resource to play.
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
 			
-			// Create the MediaElement and set it on the MediaPlayer.  Because
-			// autoPlay defaults to true, playback begins immediately.
-			sprite.mediaElement = new VideoElement(resource);
+			// Create the MediaElement and add it to our container class.
+			var videoElement:VideoElement =  new VideoElement(resource);
+			container.addMediaElement(videoElement);
+			
+			// Set the MediaElement on a MediaPlayer.  Because autoPlay
+			// defaults to true, playback begins immediately.
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.media = videoElement;
 		}
 	}
 }

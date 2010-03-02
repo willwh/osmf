@@ -23,12 +23,11 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="HelloWorld2.as"/>
+    <application path="HelloWorld4.as"/>
+    <application path="HelloWorld3.as"/>
     <application path="HelloWorld5.as"/>
     <application path="HelloWorld.as"/>
-    <application path="HelloWorld6.as"/>
-    <application path="HelloWorld4.as"/>
-    <application path="HelloWorld2.as"/>
-    <application path="HelloWorld3.as"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

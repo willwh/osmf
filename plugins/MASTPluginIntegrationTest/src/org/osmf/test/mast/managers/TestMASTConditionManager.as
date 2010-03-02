@@ -7,7 +7,6 @@ package org.osmf.test.mast.managers
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.display.MediaPlayerSprite;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.PluginManagerEvent;
@@ -40,10 +39,9 @@ package org.osmf.test.mast.managers
 		{
 			mediaFactory = new MediaFactory();
 			pluginManager = new PluginManager(mediaFactory);
+			mediaPlayer = new MediaPlayer();
 
- 			sprite = new MediaPlayerSprite();
-
-			loadPlugin(MAST_PLUGIN_INFOCLASS);
+ 			loadPlugin(MAST_PLUGIN_INFOCLASS);
 		}
 		
 		private function loadPlugin(source:String):void
@@ -109,7 +107,7 @@ package org.osmf.test.mast.managers
 			_timer.addEventListener(TimerEvent.TIMER, onTimer);
 			_timer.start();
 			
-			sprite.mediaElement = mediaElement;
+			mediaPlayer.media = mediaElement;
 		}
 		
 		private function createVideoElement():MediaElement
@@ -135,7 +133,7 @@ package org.osmf.test.mast.managers
    			trace(errMsg);
    		}
 		
-		private var sprite:MediaPlayerSprite;
+		private var mediaPlayer:MediaPlayer;
 		private var pluginManager:PluginManager;
 		private var mediaFactory:MediaFactory;
 		private var _eventDispatcher:EventDispatcher;

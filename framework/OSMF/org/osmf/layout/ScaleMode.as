@@ -19,21 +19,16 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.display
+package org.osmf.layout
 {
-	[ExcludeClass]
-	
 	/**
-	 * @private
-	 * 
-	 * NOTE: THIS CLASS HAS BEEN DEPRECATED, DO NOT USE!
-	 * 
-	 * Instead, use org.osmf.layout.ScaleMode.  We are keeping this class around
-	 * in order to be backwards compatible with Flex, which publicly exposes
-	 * org.osmf.display.ScaleMode (the previous home of org.osmf.layout.ScaleMode).
-	 * 
-	 * As such, OSMF engineers should *not* delete this class until and unless
-	 * Flex deprecates it.
+	 * <code>ScaleMode</code> controls the layout of out a single piece of content within a container.
+	 * There are four enumeration values, <code>NONE</code>, <code>STRETCH</code>, <code>LETTERBOX</code>, and <code>ZOOM</code>.
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
 	 */ 
 	public final class ScaleMode
 	{				

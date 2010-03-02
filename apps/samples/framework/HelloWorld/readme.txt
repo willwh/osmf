@@ -8,9 +8,8 @@ features:
 
 HelloWorld2.as: Centers the content.
 HelloWorld3.as: Plays a video, then shows a SWF, then plays another video.
-HelloWorld4.as: Uses MediaElement and IViewable, rather than MediaPlayerSprite.
-HelloWorld5.as: Uses MediaPlayer and IViewable, rather than MediaPlayerSprite.
-HelloWorld6.as: Uses MediaElementSprite, rather than MediaPlayerSprite.
+HelloWorld4.as: Uses MediaElement and DisplayObjectTrait, rather than MediaContainer.
+HelloWorld5.as: Uses MediaPlayer and DisplayObjectTrait, rather than MediaContainer.
 
 For more detail on this sample, please refer to:
 http://blogs.adobe.com/osmf/2009/09/building_a_helloworld_app_with_osmf.html
