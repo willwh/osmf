@@ -86,7 +86,7 @@ package org.osmf.net
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeStart(newSwitching:Boolean, index:int, reason:String=null):void
+		override protected function switchingChangeStart(newSwitching:Boolean, index:int):void
 		{
 			if (newSwitching && !inSetSwitching)
 			{
@@ -100,9 +100,9 @@ package org.osmf.net
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeEnd(index:int, reason:String=null):void
+		override protected function switchingChangeEnd(index:int):void
 		{
-			super.switchingChangeEnd(index, reason);
+			super.switchingChangeEnd(index);
 			
 			if (switching && !inSetSwitching)
 			{
@@ -153,7 +153,7 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					// When a switch finishes, make sure our current index and
 					// switching state reflect the changes to the NetStream.
-					setSwitching(false, switchManager.currentIndex, switchManager.lastSwitchReason);
+					setSwitching(false, switchManager.currentIndex);
 					break;
 			}
 		}

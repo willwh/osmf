@@ -180,8 +180,6 @@ package org.osmf.traits
 			{
 				assertTrue(dynamicStreamTrait.switching);
 				
-				assertTrue(event.reason != null && event.reason.length > 0);
-				
 				if (processesSwitchCompletion == false)
 				{
 					dynamicStreamTrait.removeEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);

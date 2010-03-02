@@ -271,11 +271,6 @@
 					showCurrentIndex = true;
 				}
 				
-				if (event.reason != null)
-				{
-					msg += ", " + event.reason;
-				}
-				
 				debug(msg);
 				
 				if (showCurrentIndex)

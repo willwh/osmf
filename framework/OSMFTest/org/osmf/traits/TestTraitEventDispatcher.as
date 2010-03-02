@@ -262,15 +262,15 @@ package org.osmf.traits
 		
 		public function  testDynamicStreamEvents():void
 		{
-			var event1:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, "", false);
-			var event2:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, false, "", true );
-			var event3:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, true, "", true );
+			var event1:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, false);
+			var event2:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, false, true );
+			var event3:DynamicStreamEvent = new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, true, true );
 						
 			var events:Vector.<Event> = new Vector.<Event>();
 			var properties:Vector.<String> = new Vector.<String>();
 			events.push(event1, event2, event3);
 			
-			properties.push("autoSwitch", "reason", "switching");
+			properties.push("autoSwitch", "switching");
 			
 			testWithElement(events, properties, MediaTraitType.DYNAMIC_STREAM);										 
 		}

@@ -83,7 +83,6 @@ package org.osmf.net.rtmpstreaming
 				}
 				
 				newIndex = 0;
-				setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_BUFFER_INSUFFICIENT));
 			}
 			
 			if (newIndex != -1)

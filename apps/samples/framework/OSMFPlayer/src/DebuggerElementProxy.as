@@ -146,7 +146,7 @@ package
 		
 		private function processSwitchingChange(event:DynamicStreamEvent):void
 		{
-			debugger.send("switchingChange", event.switching, event.reason);
+			debugger.send("switchingChange", event.switching);
 		}
 		
 		private function processVolumeChange(event:AudioEvent):void

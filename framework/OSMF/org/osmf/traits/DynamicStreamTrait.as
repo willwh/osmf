@@ -274,11 +274,7 @@ package org.osmf.traits
 
 				// This method sets the switching state to true.  The processing
 				// and completion of the switch are up to the implementing media.
-				setSwitching
-					( true
-					, index
-					, OSMFStrings.getString(OSMFStrings.SWITCHING_MANUAL)
-					);
+				setSwitching(true, index);
 			}			
 		}
 				
@@ -332,18 +328,17 @@ package org.osmf.traits
 		 * methods.
 		 * @param newSwitching New <code>switching</code> value for the trait.
 		 * @param index The index to which the switch shall (or did) occur.
-		 * @param reason Optional reason for the switching change.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected final function setSwitching(newSwitching:Boolean, index:int, reason:String=null):void
+		protected final function setSwitching(newSwitching:Boolean, index:int):void
 		{
 			if (newSwitching != _switching)
 			{
-				switchingChangeStart(newSwitching, index, reason);
+				switchingChangeStart(newSwitching, index);
 				
 				_switching = newSwitching;
 				
@@ -353,7 +348,7 @@ package org.osmf.traits
 					setCurrentIndex(index);
 				}
 				
-				switchingChangeEnd(index, reason);
+				switchingChangeEnd(index);
 			}
 		}
 
@@ -385,7 +380,7 @@ package org.osmf.traits
 		 */		
 		protected function autoSwitchChangeEnd():void
 		{
-			dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, null, _autoSwitch));	
+			dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, false, _autoSwitch));	
 		}
 		
 		/**
@@ -393,14 +388,13 @@ package org.osmf.traits
 		 * <p>Subclasses can override this method to communicate the change to the media.</p>
          * @param newSwitching New value for the <code>switching</code> property.
          * @param index The index of the stream to switch to.
-         * @param reason Optional reason for the switching change.
-		 *  
+ 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function switchingChangeStart(newSwitching:Boolean, index:int, reason:String=null):void
+		protected function switchingChangeStart(newSwitching:Boolean, index:int):void
 		{			
 		}
 		
@@ -412,14 +406,13 @@ package org.osmf.traits
 		 * dispatch the change event.</p>
 		 * 
 		 * @param index The index of the switched-to stream.
-		 * @param reason Optional reason for the switching change.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		protected function switchingChangeEnd(index:int, reason:String=null):void
+		protected function switchingChangeEnd(index:int):void
 		{
 			dispatchEvent
 				( new DynamicStreamEvent
@@ -427,7 +420,6 @@ package org.osmf.traits
 					, false
 					, false
 					, switching
-					, reason
 					)
 				);
 		}

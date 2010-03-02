@@ -93,8 +93,6 @@ package org.osmf.net.rtmpstreaming
 				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 				{
 					debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBytesPerSecond) + " < " + bitrateMultiplier + " * rendition bitrate");
-
-					setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT));
 	        	}
         	} 
         	

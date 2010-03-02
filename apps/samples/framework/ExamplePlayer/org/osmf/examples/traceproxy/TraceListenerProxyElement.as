@@ -141,7 +141,7 @@ package org.osmf.examples.traceproxy
 		
 		private function processSwitchingChange(event:DynamicStreamEvent):void
 		{
-			trace("switchingChange", event.switching, event.reason);
+			trace("switchingChange", event.switching);
 		}
 		
 		private function processVolumeChange(event:AudioEvent):void

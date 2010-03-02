@@ -66,29 +66,6 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Returns the reason why the rule is suggesting the new index.  
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get reason():String
-		{
-			return _reason;
-		}
-
-		/**
-		 * Sets the reason why the rule is suggesting the new index.  Should
-		 * be called by subclasses prior to returning a non-default value from
-		 * getNewIndex.
-		 **/
-		protected function setReason(value:String):void
-		{
-			_reason = value;
-		}
-		
-		/**
 		 * The provider of metrics which the rule can use to determine
 		 * whether to suggest a switch.
 		 **/
@@ -98,6 +75,5 @@ package org.osmf.net
 		}
 		
 		private var _metrics:NetStreamMetricsBase;
-		private var _reason:String;
 	}
 }

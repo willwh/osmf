@@ -168,7 +168,6 @@ package org.osmf.net
 				else
 				{
 					debug("switchTo() - manually switching to index: " + index);
-					reason = null;
 					
 					if (actualIndex == -1)
 					{
@@ -182,14 +181,6 @@ package org.osmf.net
 			{
 				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE));
 			}
-		}
-		
-		/**
-		 * @private
-		 **/
-		internal function get lastSwitchReason():String
-		{
-			return reason;
 		}
 		
 		// Protected
@@ -320,7 +311,6 @@ package org.osmf.net
 				if (n != -1 && n < newIndex) 
 				{
 					newIndex = n;
-					reason = switchingRules[i].reason;
 				} 
 			}
 			
@@ -332,7 +322,7 @@ package org.osmf.net
 				&&  canAutoSwitchNow(newIndex)
 			   ) 
 			{
-				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps, reason: " + reason);
+				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
 				
 				executeSwitch(newIndex);
 			}  
@@ -494,7 +484,6 @@ package org.osmf.net
 		private var _currentIndex:int;
 		private var pendingTransitionsArray:Array;
 		private var connection:NetConnection;
-		private var reason:String;
 		private var _maxAllowedIndex:int;
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource

@@ -47,13 +47,13 @@ package org.osmf.utils
 			return _bitrates[index];
 		}
 		
-		override protected function switchingChangeEnd(index:int, reason:String=null):void
+		override protected function switchingChangeEnd(index:int):void
 		{
-			super.switchingChangeEnd(index, reason);
+			super.switchingChangeEnd(index);
 			
 			if (switching)
 			{
-				setSwitching(false, index, reason);
+				setSwitching(false, index);
 			}
 		}
 		

@@ -83,7 +83,6 @@ package org.osmf.events
 		 * @param bubbles Specifies whether the event can bubble up the display list hierarchy.
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented. 
 		 * @param switching The new switching value.
-		 * @param reason A String that provides the reason for the switch.
 		 * @param autoSwitch The new autoSwitch value.
 		 *  
 		 *  @langversion 3.0
@@ -96,13 +95,11 @@ package org.osmf.events
 			, bubbles:Boolean=false
 			, cancelable:Boolean=false
 			, switching:Boolean=false
-			, reason:String=null
 			, autoSwitch:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 			
 			_switching = switching;
-			_reason = reason;
 			_autoSwitch = autoSwitch;
 		}
 		
@@ -117,19 +114,6 @@ package org.osmf.events
 		public function get switching():Boolean
 		{
 			return _switching;
-		}
-		
-		/**
-		 * A String that provides the reason for the switch.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get reason():String
-		{
-			return _reason;
 		}
 		
 		/**
@@ -150,11 +134,10 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new DynamicStreamEvent(type, bubbles, cancelable, _switching, _reason, _autoSwitch);
+			return new DynamicStreamEvent(type, bubbles, cancelable, _switching, _autoSwitch);
 		}
 		
 		private var _switching:Boolean;	
-		private var _reason:String;
 		private var _autoSwitch:Boolean;
 	}
 }

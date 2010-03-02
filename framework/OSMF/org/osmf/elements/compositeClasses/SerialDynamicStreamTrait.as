@@ -95,7 +95,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */
-		override protected function switchingChangeEnd(index:int, reason:String=null):void
+		override protected function switchingChangeEnd(index:int):void
 		{
 			if (switching && !preventSwitchingChangePropagate)
 			{
@@ -103,7 +103,7 @@ package org.osmf.elements.compositeClasses
 				traitOfCurrentChild.switchTo(index);
 			}
 
-			super.switchingChangeEnd(index, reason);
+			super.switchingChangeEnd(index);
 		}
 		
 		/**
@@ -169,7 +169,7 @@ package org.osmf.elements.compositeClasses
 		{
 			// Propagate to composite trait.
 			preventSwitchingChangePropagate = true;
-			setSwitching(event.switching, traitOfCurrentChild.currentIndex, event.reason);
+			setSwitching(event.switching, traitOfCurrentChild.currentIndex);
 			preventSwitchingChangePropagate = false;
 		}
 		

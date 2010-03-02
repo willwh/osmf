@@ -87,7 +87,6 @@ package org.osmf.net.rtmpstreaming
 	        		if (newIndex != -1)
 	        		{
 	        			debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.netStream.bufferTime);
-	        			setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_UP_BANDWIDTH_SUFFICIENT));
 	        		}
 	        	}
 	        	else

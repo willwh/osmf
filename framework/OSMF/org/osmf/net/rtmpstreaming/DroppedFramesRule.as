@@ -112,8 +112,6 @@ package org.osmf.net.rtmpstreaming
         	if (newIndex != -1 && newIndex < rtmpMetrics.currentIndex) 
         	{
         		lockIndex(newIndex);
- 				
- 				setReason(OSMFStrings.getString(OSMFStrings.SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE));
 			}
 			
 			// If the rule says no change, but we're locked at the current index,

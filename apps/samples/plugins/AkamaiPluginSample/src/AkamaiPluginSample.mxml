@@ -595,11 +595,6 @@
 					showCurrentIndex = true;
 				}
 				
-				if (event.reason != null)
-				{
-					msg += ", " + event.reason;
-				}
-				
 				appendInfoText(msg);
 				
 				if (showCurrentIndex)

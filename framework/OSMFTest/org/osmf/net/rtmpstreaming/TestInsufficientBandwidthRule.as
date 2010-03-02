@@ -72,7 +72,6 @@ package org.osmf.net.rtmpstreaming
 			metrics.currentIndex = 3;
 			result = bwRule.getNewIndex();
 			assertEquals(2, result);
-			assertNotNull(bwRule.reason);
 			
 			// Another test with very low bandwidth
 			metrics.averageMaxBytesPerSecond = 500 * 1024 / 8;

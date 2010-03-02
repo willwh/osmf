@@ -107,7 +107,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */ 
-		override protected function switchingChangeStart(newSwitching:Boolean, index:int, reason:String=null):void
+		override protected function switchingChangeStart(newSwitching:Boolean, index:int):void
 		{
 			if (newSwitching)
 			{
@@ -147,16 +147,16 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */ 
-		override protected function switchingChangeEnd(index:int, reason:String=null):void
+		override protected function switchingChangeEnd(index:int):void
 		{
-			super.switchingChangeEnd(index, reason);
+			super.switchingChangeEnd(index);
 			
 			// If a switch didn't trigger the switch of any children, or if all
 			// children finished their switches immediately, then we can
 			// terminate the switch now.
 			if (switching == true && numChildrenSwitching == 0)
 			{
-				setSwitching(false, index, reason);
+				setSwitching(false, index);
 			}
 		}
 		
