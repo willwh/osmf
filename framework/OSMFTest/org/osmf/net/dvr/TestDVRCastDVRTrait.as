@@ -56,7 +56,7 @@ package org.osmf.net.dvr
 			assertNotNull(trait);
 			
 			assertFalse(trait.isRecording);
-			assertEquals(NaN, trait.livePosition);
+			assertEquals(NaN, trait.lastRecordedTime);
 		}
 	}
 }

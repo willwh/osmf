@@ -91,7 +91,7 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override public function get livePosition():Number
+		override public function get lastRecordedTime():Number
 		{
 			var result:Number;
 			

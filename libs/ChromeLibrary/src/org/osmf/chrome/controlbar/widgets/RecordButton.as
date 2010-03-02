@@ -93,7 +93,7 @@ package org.osmf.chrome.controlbar.widgets
 			var seekable:SeekTrait = element.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			if (seekable && dvrTrait)
 			{
-				var livePosition:Number = dvrTrait.livePosition;
+				var livePosition:Number = dvrTrait.lastRecordedTime;
 				if (seekable.canSeekTo(livePosition))
 				{
 					// While seeking, disable the button:
@@ -126,7 +126,7 @@ package org.osmf.chrome.controlbar.widgets
 				=	dvrTrait != null
 				&&	dvrTrait.isRecording == true
 				&&	timeTrait
-				&&	timeTrait.currentTime < Math.max(0, dvrTrait.livePosition - 5);
+				&&	timeTrait.currentTime < Math.max(0, dvrTrait.lastRecordedTime - 5);
 			
 			enabled = element && element.hasTrait(MediaTraitType.SEEK);
 		}

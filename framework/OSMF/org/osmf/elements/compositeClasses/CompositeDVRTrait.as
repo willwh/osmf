@@ -76,7 +76,7 @@ package org.osmf.elements.compositeClasses
 		// Overrides
 		//
 		
-		override public function get livePosition():Number
+		override public function get lastRecordedTime():Number
 		{
 			var result:Number;
 			
@@ -85,7 +85,7 @@ package org.osmf.elements.compositeClasses
 				if (traitAggregator.listenedChild != null)
 				{
 					var dvrTrait:DVRTrait = DVRTrait(traitAggregator.listenedChild.getTrait(MediaTraitType.DVR));
-					result = dvrTrait.livePosition;
+					result = dvrTrait.lastRecordedTime;
 					
 					var timeTrait:TimeTrait = TimeTrait(traitAggregator.listenedChild.getTrait(MediaTraitType.TIME));
 					
@@ -120,7 +120,7 @@ package org.osmf.elements.compositeClasses
 				traitAggregator.forEachChildTrait
 					( function(dvrTrait:DVRTrait):void
 						{
-							var childPosition:Number = dvrTrait.livePosition;
+							var childPosition:Number = dvrTrait.lastRecordedTime;
 							
 							result
 								= isNaN(result)

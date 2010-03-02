@@ -105,7 +105,7 @@ package org.osmf.traits
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */	
-		public function get livePosition():Number
+		public function get lastRecordedTime():Number
 		{
 			throw new IllegalOperationError
 				(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));

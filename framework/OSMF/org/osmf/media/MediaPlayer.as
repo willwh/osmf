@@ -44,18 +44,6 @@ package org.osmf.media
 	 */	
 	[Event(name="mediaPlayerStateChange", type="org.osmf.events.MediaPlayerStateChangeEvent")]
 	
-	/**
-	 * Dispatched when the MediaPlayer's play mode has changed.
-	 * 
-	 * @eventType org.osmf.events.MediaPlayerPlayModeChangeEvent.MEDIA_PLAYER_PLAY_MODE_CHANGE
-	 *  
-	 *  @langversion 3.0
-	 *  @playerversion Flash 10
-	 *  @playerversion AIR 1.5
-	 *  @productversion OSMF 1.0
-	 */	
-	[Event(name="mediaPlayerPlayModeChange", type="org.osmf.events.MediaPlayerPlayModeChangeEvent")]
-
     /**
 	 * Dispatched when the <code>currentTime</code> property of the media has changed.
 	 * This value is updated at the interval set by 
@@ -239,7 +227,6 @@ package org.osmf.media
 			super();
 			
 			_state = MediaPlayerState.UNINITIALIZED;
-			_playMode = MediaPlayerPlayMode.UNKNOWN;
 			
 			this.media = media;
 			
@@ -1252,25 +1239,18 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */			
-		public function get liveTime():Number
+		public function get lastRecordedTime():Number
 		{
 			var result:Number;
+			
 			if (_dvrTrait != null && _dvrTrait.isRecording)
 			{
-				result = _dvrTrait.livePosition;
+				result = _dvrTrait.lastRecordedTime;
 			}
-			else if (_playMode == MediaPlayerPlayMode.LIVE)
-			{
-				result = currentTime;
-			}
+			
 			return result;
 		}
 		
-		public function get playMode():String
-		{
-			return _playMode;
-		}
-
 		// Internals
 		//
 	    
@@ -1423,8 +1403,6 @@ package org.osmf.media
 					break;
 				case MediaTraitType.DVR:
 					_dvrTrait = add ? media.getTrait(traitType) as DVRTrait : null;
-					changeListeners(add, traitType, DVREvent.IS_RECORDING_CHANGE, onIsRecordingChange);
-					updatePlayMode();
 					break;
 			}					 
 			if (eventType != null)
@@ -1644,64 +1622,6 @@ package org.osmf.media
 				setState(MediaPlayerState.PLAYBACK_ERROR);
 			}
 		}
-		
-		private function onIsRecordingChange(event:DVREvent):void
-		{
-			updatePlayMode();
-		}
-		
-		private function updatePlayMode():void
-		{
-			var oldMode:String = _playMode;
-			
-			_playMode =  MediaPlayerPlayMode.UNKNOWN;
-			
-			var streamType:String
-				= media && media.resource is StreamingURLResource
-					? StreamingURLResource(media.resource).streamType
-					: null;
-			
-			if	(	streamType == StreamType.LIVE
-				||	(	streamType == StreamType.DVR
-					&&	_dvrTrait != null
-					&&	_dvrTrait.isRecording == false
-					//&& isFullyPrercorded != false
-					)
-				)
-			{
-				_playMode = MediaPlayerPlayMode.LIVE;
-			} 
-			else if
-				(	streamType == StreamType.DVR
-				&&	_dvrTrait != null
-				&&	_dvrTrait.isRecording
-				)
-			{
-				_playMode = MediaPlayerPlayMode.LIVE_AND_RECORDING;
-			}
-			else if
-				(	streamType == StreamType.RECORDED
-				||	(	streamType == StreamType.DVR
-					&&	_dvrTrait != null
-					&&	_dvrTrait.isRecording == false
-					//&& isFullyPrercorded
-					)
-				)
-			{
-				_playMode = MediaPlayerPlayMode.RECORDED;
-			}
-			
-			if (_playMode != oldMode)
-			{
-				dispatchEvent
-					( new MediaPlayerPlayModeChangeEvent
-						( MediaPlayerPlayModeChangeEvent.MEDIA_PLAYER_PLAY_MODE_CHANGE
-						, false, false
-						, _playMode
-						)
-					);
-			}
-		}
 					
 	    private static const DEFAULT_UPDATE_INTERVAL:Number = 250;
 	      
@@ -1713,7 +1633,6 @@ package org.osmf.media
 		private var _currentTimeUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _currentTimeTimer:Timer  = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var _state:String; // MediaPlayerState
-		private var _playMode:String; // MediaPlayerPlayMode
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		

@@ -96,7 +96,7 @@ package org.osmf.chrome.controlbar.widgets
 				=	dvrTrait != null
 				&&	dvrTrait.isRecording == true
 				&&	timeTrait
-				&&	timeTrait.currentTime >= Math.max(0, dvrTrait.livePosition - 5);
+				&&	timeTrait.currentTime >= Math.max(0, dvrTrait.lastRecordedTime - 5);
 		}
 		
 		private var dvrTrait:DVRTrait;

@@ -49,7 +49,7 @@ package org.osmf.traits
 		
 		public function testLivePosition():void
 		{
-			assertThrows(function():void{ dvrTrait.livePosition; });
+			assertThrows(function():void{ dvrTrait.lastRecordedTime; });
 		}
 		
 		private var dvrTrait:DVRTrait;
