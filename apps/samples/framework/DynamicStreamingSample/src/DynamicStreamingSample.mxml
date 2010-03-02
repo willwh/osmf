@@ -33,7 +33,7 @@
 			import org.osmf.media.MediaPlayer;
 			import org.osmf.media.DefaultMediaFactory;
 			import org.osmf.net.NetLoader;
-			import org.osmf.plugin.PluginInfoResource;
+			import org.osmf.media.PluginInfoResource;
 			import org.osmf.media.MediaFactory;
 			import mx.events.StateChangeEvent;
 			import mx.controls.sliderClasses.Slider;

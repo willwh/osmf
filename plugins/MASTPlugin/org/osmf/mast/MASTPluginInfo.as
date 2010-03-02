@@ -28,7 +28,7 @@ package org.osmf.mast
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 
 	/**
 	 * Encapsulation of a MAST plugin.

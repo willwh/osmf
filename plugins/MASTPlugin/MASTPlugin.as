@@ -25,7 +25,7 @@ package
 	import flash.system.Security;
 	
 	import org.osmf.mast.MASTPluginInfo;
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 
 	/**
 	 * The root level object of the MAST plugin.

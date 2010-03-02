@@ -30,7 +30,6 @@ package
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.*;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.plugin.PluginInfoResource;
 	
 	[SWF(width="640", height="360", backgroundColor="0x000000",frameRate="25")]
 	public class ControlBarPluginSample extends Sprite

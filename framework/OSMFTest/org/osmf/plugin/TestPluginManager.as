@@ -260,7 +260,7 @@ package org.osmf.plugin
 import __AS3__.vec.Vector;
 import org.osmf.media.MediaFactoryItem;
 		
-class OldPluginInfo extends org.osmf.plugin.PluginInfo
+class OldPluginInfo extends org.osmf.media.PluginInfo
 {
 	public function OldPluginInfo(items:Vector.<MediaFactoryItem>)
 	{

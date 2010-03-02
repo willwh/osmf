@@ -26,8 +26,8 @@ package org.osmf.test.smil
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.media.URLResource;
-	import org.osmf.plugin.PluginInfo;
 	import org.osmf.smil.SMILPluginInfo;	
 
 	public class TestSMILPluginInfo extends TestCase

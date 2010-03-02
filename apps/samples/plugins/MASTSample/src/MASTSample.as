@@ -38,10 +38,10 @@ package
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfoResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.*;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginInfoResource;
 
 	[SWF(backgroundColor="0x333333")]
 	public class MASTSample extends Sprite

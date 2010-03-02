@@ -29,8 +29,8 @@ package
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.plugin.PluginInfo;
 
 	public class ControlBarPlugin extends Sprite
 	{

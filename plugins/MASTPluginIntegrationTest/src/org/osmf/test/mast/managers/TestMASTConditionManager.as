@@ -15,7 +15,6 @@ package org.osmf.test.mast.managers
 	import org.osmf.media.*;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.traits.*;
 	import org.osmf.utils.*;
 

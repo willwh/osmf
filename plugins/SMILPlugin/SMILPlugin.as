@@ -24,7 +24,7 @@ package
 	import flash.display.Sprite;
 	import flash.system.Security;
 	
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.smil.SMILPluginInfo;
 
 	/**

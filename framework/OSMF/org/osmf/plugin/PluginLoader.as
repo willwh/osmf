@@ -28,6 +28,7 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;

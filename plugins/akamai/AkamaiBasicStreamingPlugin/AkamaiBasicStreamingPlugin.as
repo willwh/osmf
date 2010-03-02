@@ -20,13 +20,13 @@
 *  
 *****************************************************/
 
-package {
-		
+package
+{
+	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+	
 	import flash.display.Sprite;
 	
-	import org.osmf.plugin.PluginInfo;
-
-	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+	import org.osmf.media.PluginInfo;
 
 	/**
 	 * The Akamai Basic Streaming Plugin for OSMF supports Akamai-specific behavior and functionality for streaming live and ondemand 

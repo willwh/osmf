@@ -19,10 +19,8 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.plugin
+package org.osmf.media
 {
-	import org.osmf.media.MediaResourceBase;
-	
 	/**
 	 * PluginInfoResource implements MediaResourceBase for static 
 	 * plugins. A static plugin is a plugin that is compiled within the application that uses it,

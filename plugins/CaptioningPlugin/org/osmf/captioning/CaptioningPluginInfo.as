@@ -27,8 +27,8 @@ package org.osmf.captioning
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaFactoryItemType;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.net.NetLoader;
-	import org.osmf.plugin.PluginInfo;
 
 	/**
 	 * Encapsulation of a Captioning plugin.

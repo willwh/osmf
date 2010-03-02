@@ -29,6 +29,7 @@ package org.osmf.plugin
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfoResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;

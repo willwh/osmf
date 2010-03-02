@@ -26,6 +26,7 @@ package org.osmf.plugin
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfo;
 	
 	[ExcludeClass]
 	

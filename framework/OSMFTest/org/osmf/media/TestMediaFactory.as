@@ -27,7 +27,6 @@ package org.osmf.media
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaFactoryEvent;
-	import org.osmf.plugin.PluginInfoResource;
 	import org.osmf.plugin.SimpleVideoPluginInfo;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicReferenceMediaElement;

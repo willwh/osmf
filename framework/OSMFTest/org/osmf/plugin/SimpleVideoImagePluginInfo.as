@@ -28,6 +28,7 @@ package org.osmf.plugin
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.net.NetLoader;
 	
 	public class SimpleVideoImagePluginInfo extends PluginInfo

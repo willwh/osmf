@@ -4,7 +4,7 @@ package org.osmf.test.captioning
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
 	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 
 	public class TestCaptioningPluginInfo extends TestCase
 	{

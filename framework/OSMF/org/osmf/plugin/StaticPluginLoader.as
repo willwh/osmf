@@ -21,8 +21,10 @@
 *****************************************************/
 package org.osmf.plugin
 {
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaFactory;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.PluginInfo;
+	import org.osmf.media.PluginInfoResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	

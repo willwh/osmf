@@ -19,12 +19,10 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.plugin
+package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.MediaFactoryItem;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.Version;
 	

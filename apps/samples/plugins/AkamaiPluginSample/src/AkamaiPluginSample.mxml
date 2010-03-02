@@ -50,7 +50,7 @@
 			import org.osmf.net.StreamingURLResource;
 			import mx.controls.Alert;
 			import org.osmf.media.DefaultMediaFactory;
-			import org.osmf.plugin.PluginInfoResource;
+			import org.osmf.media.PluginInfoResource;
 			import org.osmf.traits.LoadTrait;
 			
 			import mx.events.DropdownEvent;

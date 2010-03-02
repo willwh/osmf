@@ -27,8 +27,7 @@ package org.osmf.smil
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
-	import org.osmf.metadata.MetadataNamespaces;
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 	import org.osmf.smil.elements.SMILElement;
 	import org.osmf.smil.loader.SMILLoader;
 

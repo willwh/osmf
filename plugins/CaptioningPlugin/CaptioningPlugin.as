@@ -24,7 +24,7 @@ package
 	import flash.display.Sprite;
 	
 	import org.osmf.captioning.CaptioningPluginInfo;
-	import org.osmf.plugin.PluginInfo;
+	import org.osmf.media.PluginInfo;
 
 	/**
 	 * The root level object of the Caption Plugin.
