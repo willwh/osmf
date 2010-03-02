@@ -36,6 +36,7 @@ package org.osmf
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
 	import org.osmf.media.*;
+	import org.osmf.media.pluginClasses.*;
 	import org.osmf.metadata.*;
 	import org.osmf.net.*;
 	import org.osmf.net.dvr.*;
