@@ -96,6 +96,29 @@ package org.osmf.net.dvr
 			}
 		}
 		
+		public function testDVRCastStreamInfoRetreiverFail2():void
+		{
+			var ncf:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			
+			ncf.pushCallResult(false, null);
+			
+			sir = new DVRCastStreamInfoRetriever(ncf, "test");
+			assertNotNull(sir);
+			
+			sir.addEventListener
+				( Event.COMPLETE
+				, addAsync(onSIRComplete, 2 * 1000 + 5000)
+				);
+				
+			sir.retreive(0, 1);
+			
+			function onSIRComplete(...args):void
+			{
+				assertNull(sir.streamInfo);
+				assertNull(sir.error);
+			}
+		}
+		
 		private var sir:DVRCastStreamInfoRetriever;
 	}
 }

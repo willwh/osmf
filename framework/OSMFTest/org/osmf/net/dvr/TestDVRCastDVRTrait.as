@@ -21,6 +21,7 @@
 
 package org.osmf.net.dvr
 {
+	import org.osmf.events.DVREvent;
 	import org.osmf.flexunit.TestCaseEx;
 
 	public class TestDVRCastDVRTrait extends TestCaseEx
@@ -57,6 +58,66 @@ package org.osmf.net.dvr
 			
 			assertFalse(trait.isRecording);
 			assertEquals(NaN, trait.lastRecordedTime);
+			
+			var f1:Function =  addAsync(onIsRecordingChange1, 10000);
+			
+			trait.addEventListener
+				( DVREvent.IS_RECORDING_CHANGE
+				, f1
+				);
+				
+			var f2:Function = addAsync(onIsRecordingChange2, 12000)
+			
+			function onIsRecordingChange1(event:DVREvent):void
+			{
+				trait.removeEventListener(DVREvent.IS_RECORDING_CHANGE, f1);
+				assertTrue(trait.isRecording);	
+				trait.addEventListener(DVREvent.IS_RECORDING_CHANGE, f2);
+			}
+			
+			function onIsRecordingChange2(event:DVREvent):void
+			{
+				assertFalse(trait.isRecording);	
+			}
+			
+			var response:Object 
+				= 	{ code: DVRCastConstants.RESULT_GET_STREAM_INFO_SUCCESS
+					, data:
+						{ callTime: null
+						, offline: false
+						, begOffset: 0
+						, endOffset: 0
+						, startRec: null
+						, stopRec: null
+						, isRec: true
+						, streamName: "test"
+						, lastUpdate: null
+						, currLen: 0
+						, maxLen: 0
+						}
+					};
+			
+			nc.pushCallResult(true, response);
+			
+			var response2:Object 
+				= 	{ code: DVRCastConstants.RESULT_GET_STREAM_INFO_SUCCESS
+					, data:
+						{ callTime: null
+						, offline: false
+						, begOffset: 0
+						, endOffset: 0
+						, startRec: null
+						, stopRec: null
+						, isRec: false
+						, streamName: "test"
+						, lastUpdate: null
+						, currLen: 0
+						, maxLen: 0
+						}
+					};
+			
+			nc.pushCallResult(true, response2);
+			
 		}
 	}
 }
