@@ -29,7 +29,7 @@ package org.osmf.media
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.MediaFactoryEvent;
 	import org.osmf.events.PluginManagerEvent;
-	import org.osmf.plugin.PluginManager;
+	import org.osmf.media.pluginClasses.PluginManager;
 	import org.osmf.utils.OSMFStrings;
 	
 	/**
