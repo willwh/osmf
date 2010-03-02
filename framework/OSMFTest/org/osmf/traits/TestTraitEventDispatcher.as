@@ -255,7 +255,7 @@ package org.osmf.traits
 			var properties:Vector.<String> = new Vector.<String>();
 			events.push(event1,event2, event3, event4);
 			
-			properties.push("drmState", "error", "endDate", "period", "serverURL", "startDate", "token");
+			properties.push("drmState", "mediaError", "endDate", "period", "serverURL", "startDate", "token");
 			
 			testWithElement(events, properties, MediaTraitType.DRM);													 
 		}
