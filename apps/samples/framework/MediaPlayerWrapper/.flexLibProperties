@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<flexLibProperties version="1">
-  <includeClasses>
-    <classEntry path="org.osmf.samples.MediaPlayerWrapper"/>
-    <classEntry path="org.osmf.samples.MediaPlayerWrapper"/>
-  </includeClasses>
-  <includeResources/>
-  <namespaceManifests/>
-</flexLibProperties>
