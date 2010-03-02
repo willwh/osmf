@@ -280,7 +280,7 @@ package org.osmf.elements.compositeClasses
 		
 		private function onDRMStateChange(event:DRMEvent):void
 		{			
-			onChildDRMChange(event.drmState, event.token, event.error, event.startDate, event.endDate, event.period, event.serverURL);
+			onChildDRMChange(event.drmState, event.token, event.mediaError, event.startDate, event.endDate, event.period, event.serverURL);
 		}
 		
 		private function onChildDRMChange(newState:String, token:Object = null, error:MediaError = null, start:Date=null, end:Date=null, period:Number=0, serverURL:String = null):void

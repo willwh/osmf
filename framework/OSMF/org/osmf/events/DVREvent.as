@@ -23,7 +23,7 @@ package org.osmf.events
 	import flash.events.Event;
 	
 	/**
-	 * A DRMEvent is dispatched when a DVRTrait's properties change.
+	 * A DVREvent is dispatched when a DVRTrait's properties change.
 	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10.1

@@ -142,7 +142,7 @@ package org.osmf.net.drm
 			setStartDate(event.startDate);
 			setEndDate(event.endDate);	
 			setDrmState(event.drmState);
-			dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, startDate, endDate, period, event.serverURL,  event.token, event.error));
+			dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, startDate, endDate, period, event.serverURL,  event.token, event.mediaError));
 		}
 															
 		private var drmServices:DRMServices = new DRMServices();

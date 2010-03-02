@@ -55,20 +55,20 @@ package org.osmf.events
  		 * @param cancelable Specifies whether the behavior associated with the event can be prevented.
  		 * @param licenseID Specified the unique identifier for this content
  		 * @param prompt The authentication prompt associated with this content.
-		 * @param error The error that describes an authentication failure.
+		 * @param mediaError The error that describes an authentication failure.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10.1
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DRMEvent(type:String, state:String, bubbles:Boolean=false, cancelable:Boolean=false, start:Date=null, end:Date=null, period:Number=0, serverURL:String=null, token:Object=null, error:MediaError=null)
+		public function DRMEvent(type:String, state:String, bubbles:Boolean=false, cancelable:Boolean=false, start:Date=null, end:Date=null, period:Number=0, serverURL:String=null, token:Object=null, mediaError:MediaError=null)
 		{
 			super(type, bubbles, cancelable);
 			
 			_drmState = state;
 			_token = token;
-			_error = error;
+			_mediaError = mediaError;
 			_startDate = start;
 			_endDate = end;
 			_period = period;
@@ -96,9 +96,9 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get error():MediaError
+		public function get mediaError():MediaError
 		{
-			return _error;
+			return _mediaError;
 		}
 		
 			/**
@@ -177,7 +177,7 @@ package org.osmf.events
 		 */
 		override public function clone():Event
 		{
-			return new DRMEvent(type, _drmState, bubbles, cancelable, _startDate, _endDate, _period, _serverURL, _token, _error);
+			return new DRMEvent(type, _drmState, bubbles, cancelable, _startDate, _endDate, _period, _serverURL, _token, _mediaError);
 		}
 		
 		private var _drmState:String;
@@ -186,6 +186,6 @@ package org.osmf.events
 		private var _period:Number;
 		private var _serverURL:String;		
 		private var _token:Object;
-		private var _error:MediaError;
+		private var _mediaError:MediaError;
 	}
 }
