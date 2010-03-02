@@ -33,6 +33,7 @@ package org.osmf.syndication.parsers.extensions
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSCredit;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSDescription;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSElementBase;
+	import org.osmf.syndication.model.extensions.mrss.MediaRSSEmbed;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSExtension;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSGroup;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSHash;
@@ -48,10 +49,6 @@ package org.osmf.syndication.parsers.extensions
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSText;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSThumbnail;
 	import org.osmf.syndication.model.extensions.mrss.MediaRSSTitle;
-	CONFIG::LOGGING
-	{
-		import org.osmf.logging.ILogger;
-	}
 	
 	/**
 	 * Parser for Media RSS Extentions.
@@ -113,9 +110,6 @@ package org.osmf.syndication.parsers.extensions
 										var content:MediaRSSContent = parseContent(childNode);
 										mediaRSSExtension.content = content;
 										break;
-									default:
-										debugLog("Ignoring this tag in parse(): "+childNode.localName());
-										break;
 								}
 						}
 					}
@@ -126,7 +120,7 @@ package org.osmf.syndication.parsers.extensions
 			{
 				if (mediaGroups.length > 0)
 				{
-					mediaRSSExtension.mediaGroups = mediaGroups;
+					mediaRSSExtension.groups = mediaGroups;
 				}
 				parseOptionalElements(mediaRSSExtension, xml);			
 			}
@@ -287,7 +281,7 @@ package org.osmf.syndication.parsers.extensions
 									categories.push(category);									
 									break;
 								case TAG_NAME_MRSS_HASH:
-									var hash:MediaRSSHash;
+									var hash:MediaRSSHash = new MediaRSSHash();
 									hash.algo = childNode.@[ATTRIB_NAME_ALGORITHM];
 									hash.text = childNode;
 									if (hashes == null)
@@ -352,7 +346,7 @@ package org.osmf.syndication.parsers.extensions
 									element.comments = parseComments(childNode);
 									break;
 								case TAG_NAME_MRSS_EMBED:
-									element.embedValues = parseEmbed(childNode);
+									element.embed = parseEmbed(childNode);
 									break;
 								case TAG_NAME_MRSS_RESPONSES:
 									element.responses = parseResponses(childNode);
@@ -383,7 +377,7 @@ package org.osmf.syndication.parsers.extensions
 									license.type = childNode.@[ATTRIB_NAME_TYPE];
 									license.url = childNode.@[ATTRIB_NAME_HREF];
 									license.text = childNode;
-									element.license;
+									element.license = license;
 									break;
 								case TAG_NAME_MRSS_SUBTITLE:
 									var subtitle:MediaRSSSubtitle = new MediaRSSSubtitle();
@@ -445,6 +439,11 @@ package org.osmf.syndication.parsers.extensions
 				element.texts = texts;
 			}
 			
+			if (restrictions != null && restrictions.length > 0)
+			{
+				element.restrictions = restrictions;
+			}
+			
 			if (prices != null && prices.length > 0)
 			{
 				element.prices = prices;
@@ -482,10 +481,10 @@ package org.osmf.syndication.parsers.extensions
 							switch (childNode.localName())
 							{
 								case TAG_NAME_MRSS_STAR_RATING:
-									community.starRatingAverage = childNode.@[ATTRIB_NAME_AVERAGE];
-									community.starRatingCount = childNode.@[ATTRIB_NAME_COUNT];
-									community.starRatingMin = childNode.@[ATTRIB_NAME_MIN];
-									community.starRatingMax = childNode.@[ATTRIB_NAME_MAX];
+									community.starRatingAverage = Number(childNode.@[ATTRIB_NAME_AVERAGE]);
+									community.starRatingCount = parseInt(childNode.@[ATTRIB_NAME_COUNT]);
+									community.starRatingMin = parseInt(childNode.@[ATTRIB_NAME_MIN]);
+									community.starRatingMax = parseInt(childNode.@[ATTRIB_NAME_MAX]);
 									break;
 								case TAG_NAME_MRSS_STATISTICS:
 									community.statisticsViews = childNode.@[ATTRIB_NAME_VIEWS];
@@ -539,10 +538,15 @@ package org.osmf.syndication.parsers.extensions
 		 * 
 		 * @see http://video.search.yahoo.com/mrss
 		 **/
-		private function parseEmbed(embedNode:XML):Dictionary
+		private function parseEmbed(embedNode:XML):MediaRSSEmbed
 		{
+			var embed:MediaRSSEmbed = new MediaRSSEmbed();
 			var embedValues:Dictionary = new Dictionary();
 			var children:XMLList = embedNode.children();
+			
+			embed.url = embedNode.@[ATTRIB_NAME_URL];
+			embed.width = parseInt(embedNode.@[ATTRIB_NAME_WIDTH]);
+			embed.height = parseInt(embedNode.@[ATTRIB_NAME_HEIGHT]);
 			
 			if (children.length() > 0)
 			{
@@ -567,7 +571,8 @@ package org.osmf.syndication.parsers.extensions
 				}
 			}
 			
-			return embedValues;
+			embed.embedValues = embedValues;
+			return embed;
 		}
 
 		/**
@@ -622,7 +627,7 @@ package org.osmf.syndication.parsers.extensions
 						case "element":
 							switch (childNode.localName())
 							{
-								case TAG_NAME_MRSS_BACK_LINKS:
+								case TAG_NAME_MRSS_BACK_LINK:
 									var backLink:String = childNode;
 									backLinks.push(backLink);
 									break;
@@ -670,23 +675,6 @@ package org.osmf.syndication.parsers.extensions
 			return scenes;
 		}
 		
-
-		private function debugLog(msg:String):void
-		{
-			CONFIG::LOGGING
-			{
-				if (logger != null)
-				{
-					logger.debug(msg);
-				}
-			}
-		}
-		
-		CONFIG::LOGGING
-		{
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("MediaRSSExtensionParser");
-		}
-		
 		private static const TAG_NAME_MRSS_GROUP:String 		= "group";
 		private static const TAG_NAME_MRSS_CONTENT:String 		= "content";
 		private static const TAG_NAME_MRSS_RATING:String 		= "rating";
@@ -709,6 +697,7 @@ package org.osmf.syndication.parsers.extensions
 		private static const TAG_NAME_MRSS_RESPONSES:String 	= "responses";
 		private static const TAG_NAME_MRSS_RESPONSE:String 		= "response";		
 		private static const TAG_NAME_MRSS_BACK_LINKS:String 	= "backLinks";
+		private static const TAG_NAME_MRSS_BACK_LINK:String		= "backLink";
 		private static const TAG_NAME_MRSS_STATUS:String 		= "status";
 		private static const TAG_NAME_MRSS_PRICE:String 		= "price";
 		private static const TAG_NAME_MRSS_LICENSE:String 		= "license";

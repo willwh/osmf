@@ -38,7 +38,7 @@ package org.osmf.syndication.model.extensions.mrss
 		
 		public function set starRatingAverage(value:Number):void
 		{
-			_starRatingAvg;
+			_starRatingAvg = value;
 		}
 		
 		/**

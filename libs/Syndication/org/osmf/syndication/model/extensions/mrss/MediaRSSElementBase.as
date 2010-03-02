@@ -23,8 +23,6 @@ package org.osmf.syndication.model.extensions.mrss
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.utils.Dictionary;
-	
 	import org.osmf.syndication.model.extensions.FeedExtension;
 	
 	/**
@@ -230,16 +228,16 @@ package org.osmf.syndication.model.extensions.mrss
 		}
 		
 		/**
-		 * The media:embad element's key value pairs.
+		 * The media object embed element.
 		 **/
-		public function get embedValues():Dictionary
+		public function get embed():MediaRSSEmbed
 		{
-			return _embedValues;
+			return _embed;
 		}
 		
-		public function set embedValues(values:Dictionary):void
+		public function set embed(value:MediaRSSEmbed):void
 		{
-			_embedValues = values;
+			_embed = value;
 		}
 		
 		/**
@@ -389,7 +387,7 @@ package org.osmf.syndication.model.extensions.mrss
 		private var _restrictions:Vector.<MediaRSSRestriction>;
 		private var _community:MediaRSSCommunity;
 		private var _comments:Vector.<String>;
-		private var _embedValues:Dictionary;
+		private var _embed:MediaRSSEmbed;
 		private var _responses:Vector.<String>;
 		private var _backLinks:Vector.<String>;
 		private var _status:MediaRSSStatus;

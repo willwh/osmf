@@ -93,7 +93,7 @@ package org.osmf.syndication.parsers.extensions
 										iTunesExtension.block = childNode;
 										break;
 									case TAG_NAME_ITUNES_CATEGORY:
-										var category:ITunesCategory = parseCategory(childNode, itunes);
+										var category:ITunesCategory = parseCategory(childNode);
 										if (category != null)
 										{
 											categories.push(category);
@@ -115,7 +115,7 @@ package org.osmf.syndication.parsers.extensions
 										iTunesExtension.newFeedURL = childNode;
 										break;
 									case TAG_NAME_ITUNES_OWNER:
-										parseOwner(childNode, itunes);
+										iTunesExtension.owner = parseOwner(childNode);
 										break;
 									case TAG_NAME_ITUNES_SUBTITLE:
 										iTunesExtension.subtitle = childNode;
@@ -124,7 +124,7 @@ package org.osmf.syndication.parsers.extensions
 										iTunesExtension.summary = childNode;
 										break;
 									default:
-										debugLog("Ignoring this iTunes tag in parse(): "+childNode.localName());
+										debugLog("Ignoring this tag in parse(): "+childNode.namespace().prefix+":"+childNode.localName());
 										break;
 								}
 						}
@@ -140,7 +140,7 @@ package org.osmf.syndication.parsers.extensions
 			return iTunesExtension;
 		}
 		
-		private function parseCategory(categoryNode:XML, itunes:Namespace):ITunesCategory
+		private function parseCategory(categoryNode:XML):ITunesCategory
 		{
 			var category:ITunesCategory = new ITunesCategory();
 			category.name = categoryNode.@text;
@@ -152,21 +152,17 @@ package org.osmf.syndication.parsers.extensions
 			{
 				var childNode:XML = children[i];
 										
-				// Ignore any tags outside the itunes namespace
-				if (itunes == childNode.namespace())
+				switch (childNode.nodeKind())
 				{
-					switch (childNode.nodeKind())
-					{
-						case "element":
-							switch (childNode.localName())
-							{
-								case TAG_NAME_ITUNES_CATEGORY:
-									var subCategory:ITunesCategory = new ITunesCategory();
-									subCategory.name = childNode.@text;
-									subCategories.push(subCategory);
-									break;
-							}
-					}
+					case "element":
+						switch (childNode.localName())
+						{
+							case TAG_NAME_ITUNES_CATEGORY:
+								var subCategory:ITunesCategory = new ITunesCategory();
+								subCategory.name = childNode.@text;
+								subCategories.push(subCategory);
+								break;
+						}
 				}
 			}
 			
@@ -174,7 +170,7 @@ package org.osmf.syndication.parsers.extensions
 			return category;			
 		}
 		
-		private function parseOwner(ownerNode:XML, itunes:Namespace):ITunesOwner
+		private function parseOwner(ownerNode:XML):ITunesOwner
 		{
 			var owner:ITunesOwner = new ITunesOwner();
 			var children:XMLList = ownerNode.children();
@@ -183,22 +179,18 @@ package org.osmf.syndication.parsers.extensions
 			{
 				var childNode:XML = children[i];
 				
-				// Ignore any tags outside the itunes namespace
-				if (itunes == childNode.namespace())
+				switch (childNode.nodeKind())
 				{
-					switch (childNode.nodeKind())
-					{
-						case "element":
-							switch (childNode.localName())
-							{
-								case TAG_NAME_ITUNES_NAME:
-									owner.name = childNode;
-									break;
-								case TAG_NAME_ITUNES_EMAIL:
-									owner.email = childNode;
-									break;
-							}
-					}
+					case "element":
+						switch (childNode.localName())
+						{
+							case TAG_NAME_ITUNES_NAME:
+								owner.name = childNode;
+								break;
+							case TAG_NAME_ITUNES_EMAIL:
+								owner.email = childNode;
+								break;
+						}
 				}
 			}
 			

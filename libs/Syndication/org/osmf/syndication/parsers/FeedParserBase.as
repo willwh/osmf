@@ -64,13 +64,17 @@ package org.osmf.syndication.parsers
 		 **/
 		protected function parseFeedExtensions(xml:XML):Vector.<FeedExtension>
 		{
-			var feedExtensions:Vector.<FeedExtension> = new Vector.<FeedExtension>();
+			var feedExtensions:Vector.<FeedExtension>;
 			
 			for each (var feedExtensionsParser:FeedExtensionParser in _feedExtensionParsers)
 			{
 				var feedExtension:FeedExtension = feedExtensionsParser.parse(xml);
 				if (feedExtension != null)
 				{
+					if (feedExtensions == null)
+					{
+						feedExtensions = new Vector.<FeedExtension>();
+					}
 					feedExtensions.push(feedExtension);
 				}
 			}

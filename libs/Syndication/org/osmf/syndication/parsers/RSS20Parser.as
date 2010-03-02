@@ -24,7 +24,6 @@ package org.osmf.syndication.parsers
 	import __AS3__.vec.Vector;
 	
 	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.syndication.model.Enclosure;
 	import org.osmf.syndication.model.Entry;
 	import org.osmf.syndication.model.Feed;
@@ -80,6 +79,17 @@ package org.osmf.syndication.parsers
 				for (var i:int = 0; i < children.length(); i++)
 				{
 					var childNode:XML = children[i];
+					
+					var ns:Namespace = childNode.namespace();
+					var prefix:String = ns.prefix;
+					
+					// Ignore this tag if it has a prefix since RSS 2.0 tags
+					// are not namespaced. This keeps us from grabing a duplicate
+					// tag name in an extension, such as <media:description>
+					if (prefix != "")
+					{
+						continue;
+					}
 					
 					switch (childNode.nodeKind())
 					{
@@ -144,11 +154,7 @@ package org.osmf.syndication.parsers
 									channel.ttl = childNode;
 									break;
 								case TAG_NAME_IMAGE:
-									var image:RSSImage = new RSSImage();
-									image.height = childNode.@[ATTRIB_NAME_HEIGHT];
-									image.title = childNode.@[ATTRIB_NAME_TITLE];
-									image.width = childNode.@[ATTRIB_NAME_WIDTH];
-									image.url = childNode.@[ATTRIB_NAME_URL];
+									var image:RSSImage = parseImage(childNode);
 									channel.image = image;
 									break;
 								case TAG_NAME_RATING:
@@ -170,7 +176,7 @@ package org.osmf.syndication.parsers
 									}
 									break;
 								default:
-									debugLog("Ignoring this tag in parseChannel(): "+childNode.localName());
+									debugLog("Ignoring this tag in parseChannel(): "+childNode.namespace().prefix+":"+childNode.localName());
 									break;
 							}
 					}
@@ -201,6 +207,42 @@ package org.osmf.syndication.parsers
 			var feedText:FeedText = new FeedText();
 			feedText.text = textNode;
 			return feedText;
+		}
+		
+		private function parseImage(imageNode:XML):RSSImage
+		{
+			var children:XMLList = imageNode.children();
+			var image:RSSImage = new RSSImage();
+			
+			for (var i:int = 0; i < children.length(); i++)
+			{
+				var childNode:XML = children[i];
+				
+				switch (childNode.nodeKind())
+				{
+					case "element":
+						switch (childNode.localName())
+						{
+							case TAG_NAME_URL:
+								image.url = childNode;
+								break;
+							case TAG_NAME_TITLE:
+								image.title = childNode;
+								break;
+							case TAG_NAME_LINK:
+								image.link = childNode;
+								break;
+							case TAG_NAME_WIDTH:
+								image.width = childNode;
+								break;
+							case TAG_NAME_HEIGHT:
+								image.height = childNode
+								break;
+						}
+				}
+			}
+			
+			return image;
 		}
 		
 		private function parseItem(itemNode:XML):RSSItem
@@ -325,6 +367,9 @@ package org.osmf.syndication.parsers
 		private static const TAG_NAME_SOURCE:String = "source";
 		private static const TAG_NAME_ITEM:String = "item";
 		private static const TAG_NAME_ENCLOSURE:String = "enclosure";
+		private static const TAG_NAME_URL:String = "url";
+		private static const TAG_NAME_HEIGHT:String = "height";
+		private static const TAG_NAME_WIDTH:String = "width";
 		
 		// Attribute names
 		private static const ATTRIB_NAME_URL:String = "url";

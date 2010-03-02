@@ -47,6 +47,20 @@ package org.osmf.syndication.model.rss20
 		}
 		
 		/**
+		 * The URL of the site, when the channel is 
+		 * rendered, the image is a link to the site.
+		 **/
+		public function get link():String
+		{
+			return _link;
+		}
+		
+		public function set link(value:String):void
+		{
+			_link = value;
+		}
+		
+		/**
 		 * The title of the image.
 		 **/
 		public function get title():String
@@ -86,6 +100,7 @@ package org.osmf.syndication.model.rss20
 		}
 		
 		private var _url:String;
+		private var _link:String;
 		private var _title:String;
 		private var _width:Object;
 		private var _height:Object;

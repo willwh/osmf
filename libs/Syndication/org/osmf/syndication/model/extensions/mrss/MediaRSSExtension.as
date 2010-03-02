@@ -36,14 +36,14 @@ package org.osmf.syndication.model.extensions.mrss
 		/** 
 		 * The MediaGroup collection. 
 		 **/
-		public function get mediaGroups():Vector.<MediaRSSGroup>
+		public function get groups():Vector.<MediaRSSGroup>
 		{
-			return _mediaGroups;
+			return _groups;
 		}
 		
-		public function set mediaGroups(value:Vector.<MediaRSSGroup>):void
+		public function set groups(value:Vector.<MediaRSSGroup>):void
 		{
-			_mediaGroups = value;
+			_groups = value;
 		}
 				
 		/**
@@ -56,10 +56,10 @@ package org.osmf.syndication.model.extensions.mrss
 		
 		public function set content(value:MediaRSSContent):void
 		{
-			_content = content;
+			_content = value;
 		}
 		
-		private var _mediaGroups:Vector.<MediaRSSGroup>;
+		private var _groups:Vector.<MediaRSSGroup>;
 		private var _content:MediaRSSContent;
 	}
 }

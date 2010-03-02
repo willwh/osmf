@@ -57,9 +57,7 @@ package org.osmf.syndication.parsers
 			// an Atom feed.
 			if (xml.localName() == TAG_NAME_FEED && xml.namespace().uri == ATOM_NAMESPACE_URI)
 			{
-				var feedTag:XMLList = xml.children();
-				var feedNode:XML = feedTag[0];
-				atomFeed = parseFeed(feedNode);
+				atomFeed = parseFeed(xml);
 			}
 			
 			return atomFeed;
@@ -120,7 +118,7 @@ package org.osmf.syndication.parsers
 									link.rel = childNode.@[ATTRIB_NAME_REL];
 									link.title = childNode.@[ATTRIB_NAME_TITLE];
 									link.type = childNode.@[ATTRIB_NAME_TYPE];
-									link.url = childNode.@[ATTRIB_NAME_URI];
+									link.url = childNode.@[ATTRIB_NAME_HREF];
 									feed.link = link;
 									break;
 								case TAG_NAME_CATEGORY:
@@ -132,6 +130,7 @@ package org.osmf.syndication.parsers
 									{
 										categories = new Vector.<AtomCategory>;
 									}
+									categories.push(category);
 									break;
 								case TAG_NAME_GENERATOR:
 									var generator:AtomGenerator = new AtomGenerator();
@@ -159,7 +158,7 @@ package org.osmf.syndication.parsers
 									{
 										if (entries == null)
 										{
-											entries = new Vector.<AtomEntry>();
+											entries = new Vector.<Entry>();
 										}
 										
 										entries.push(entry);
@@ -251,7 +250,7 @@ package org.osmf.syndication.parsers
 									link.rel = childNode.@[ATTRIB_NAME_REL];
 									link.title = childNode.@[ATTRIB_NAME_TITLE];
 									link.type = childNode.@[ATTRIB_NAME_TYPE];
-									link.url = childNode.@[ATTRIB_NAME_URI];
+									link.url = childNode.@[ATTRIB_NAME_HREF];
 									entry.link = link;
 									break;
 								case TAG_NAME_SUMMARY:
@@ -266,6 +265,7 @@ package org.osmf.syndication.parsers
 									{
 										categories = new Vector.<AtomCategory>;
 									}
+									categories.push(category);
 									break;
 								case TAG_NAME_CONTRIBUTOR:
 									var contributor:AtomPerson = parsePerson(childNode);
@@ -352,12 +352,13 @@ package org.osmf.syndication.parsers
 			feedText.type = textNode.@[ATTRIB_NAME_TYPE];
 			switch (feedText.type)
 			{
-				case FeedTextType.TEXT: // the element contains plain text with no entity escaped html
-				case FeedTextType.HTML: // the element contains entity escaped html
-					feedText.text = textNode;
-					break;
 				case FeedTextType.XHTML: // the element contains inline xhtml, wrapped in a div element
 					feedText.text = textNode.toXMLString();
+					break;
+				case FeedTextType.HTML: // the element contains entity escaped html
+				case FeedTextType.TEXT: // the element contains plain text with no entity escaped html
+				default:
+					feedText.text = textNode;
 					break;
 			}
 			return feedText;
