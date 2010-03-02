@@ -35,7 +35,7 @@ package org.osmf.net
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	internal class PortProtocol
+	public class PortProtocol
 	{
 		/**
 		 * The port.
