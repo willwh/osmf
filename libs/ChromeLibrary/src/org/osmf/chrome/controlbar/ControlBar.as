@@ -88,8 +88,18 @@ package org.osmf.chrome.controlbar
 			widget.hint = "Click to lock the control bar in place";
 			widget.addEventListener(MouseEvent.CLICK, onPinButtonClick);
 			
-			widget = addWidget(QUALITY_BUTTON, new QualityModeToggle());
+			widget = addWidget(RECORD_BUTTON, new RecordButton());
 			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
+			widget.setPosition(3, 0);
+			widget.hint = "This live stream is currently being recorded on the server. Click to seek to the live position.";
+			
+			widget = addWidget(LIVE_BUTTON, new LiveButton());
+			widget.setRegistrationTarget(PIN_DOWN_BUTTON, Direction.RIGHT);
+			widget.setPosition(3, 0);
+			widget.hint = "This live stream is currently being recorded on the server. The current position is the live position.";
+			
+			widget = addWidget(QUALITY_BUTTON, new QualityModeToggle());
+			widget.setRegistrationTarget(LIVE_BUTTON, Direction.RIGHT);
 			widget.hint = "Click to toggle between automatic and manual quality mode";
 			widget.setPosition(3, 0);
 			
@@ -120,16 +130,6 @@ package org.osmf.chrome.controlbar
 			widget = addWidget(SOUND_MORE, new SoundMoreButton());
 			widget.setRegistrationTarget(SOUND_LESS, Direction.LEFT);
 			widget.setPosition(1, 0);
-			
-			widget = addWidget(RECORD_BUTTON, new RecordButton());
-			widget.setRegistrationTarget(SOUND_MORE, Direction.LEFT);
-			widget.setPosition(3, 0);
-			widget.hint = "This live stream is currently being recorded on the server. Click to seek to the live position.";
-			
-			widget = addWidget(LIVE_BUTTON, new LiveButton());
-			widget.setRegistrationTarget(SOUND_MORE, Direction.LEFT);
-			widget.setPosition(3, 0);
-			widget.hint = "This live stream is currently being recorded on the server. The current position is the live position.";
 		}
 		
 		private function onPinButtonClick(event:MouseEvent):void
