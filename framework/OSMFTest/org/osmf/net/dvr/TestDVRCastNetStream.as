@@ -21,6 +21,8 @@
 
 package org.osmf.net.dvr
 {
+	import flash.net.NetStreamPlayOptions;
+	
 	import org.osmf.flexunit.TestCaseEx;
 
 
@@ -32,8 +34,22 @@ package org.osmf.net.dvr
 			assertThrows(function():void{ new DVRCastNetStream(null); });
 			
 			var c:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			c.recordingInfo = new DVRCastRecordingInfo();
+			
 			var stream:DVRCastNetStream = new DVRCastNetStream(c);
 			assertNotNull(stream);
+			
+			stream.play("test", 0, 0);
+			
+			var options:NetStreamPlayOptions = new NetStreamPlayOptions();
+			stream.play2(options);
+			try
+			{
+				stream.play2(null);
+			}
+			catch(e:Error)
+			{
+			}
 		}
 		
 	}

@@ -21,13 +21,21 @@
 
 package org.osmf.net.dvr
 {
+	import org.osmf.events.DVREvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.flexunit.TestCaseEx;
 
 	public class TestDVRCastTimeTrait extends TestCaseEx
 	{
 		public function testDVRCastTimeTrait():void
 		{
+			assertThrows(function():void{ new DVRCastTimeTrait(null, null); });
+			
 			var nc:MockDVRCastNetConnection = new MockDVRCastNetConnection();
+			
+			
+			assertThrows(function():void{ new DVRCastTimeTrait(nc, null); });
+			
 			var now:Date = new Date();
 			nc.streamInfo 
 				= new DVRCastStreamInfo
@@ -45,11 +53,23 @@ package org.osmf.net.dvr
 						}
 					);
 			nc.recordingInfo = new DVRCastRecordingInfo();
+			nc.recordingInfo.startTime = now;
 			
 			var stream:DVRCastNetStream = new DVRCastNetStream(nc);
 			var tt:DVRCastTimeTrait = new DVRCastTimeTrait(nc, stream);
+			assertEquals(0, tt.currentTime);
+			assertEquals(NaN, tt.duration);
 			
 			assertNotNull(tt);
+			
+			nc.streamInfo.isRecording = true;
+			
+			tt.addEventListener(TimeEvent.DURATION_CHANGE, addAsync(onDurationChange, 7000));
+			
+			function onDurationChange(event:TimeEvent):void
+			{
+				//
+			} 
 		}
 		
 	}

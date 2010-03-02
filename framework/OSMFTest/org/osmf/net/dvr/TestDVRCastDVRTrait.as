@@ -23,6 +23,10 @@ package org.osmf.net.dvr
 {
 	import org.osmf.events.DVREvent;
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.media.DefaultMediaFactory;
+	import org.osmf.media.MediaElement;
+	import org.osmf.net.StreamType;
+	import org.osmf.net.StreamingURLResource;
 
 	public class TestDVRCastDVRTrait extends TestCaseEx
 	{
@@ -118,6 +122,14 @@ package org.osmf.net.dvr
 			
 			nc.pushCallResult(true, response2);
 			
+		}
+		
+		public function testDVRCastDVRTrait2():void
+		{
+			var dmf:DefaultMediaFactory = new DefaultMediaFactory();
+			var me:MediaElement = dmf.createMediaElement(new StreamingURLResource("rtmp://example.com", StreamType.DVR));
+			
+			assertNotNull(me);
 		}
 	}
 }
