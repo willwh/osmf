@@ -61,7 +61,6 @@ package org.osmf.net.dvr
 			assertNotNull(trait);
 			
 			assertFalse(trait.isRecording);
-			assertEquals(NaN, trait.lastRecordedTime);
 			
 			var f1:Function =  addAsync(onIsRecordingChange1, 10000);
 			

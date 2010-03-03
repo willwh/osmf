@@ -1226,31 +1226,6 @@ package org.osmf.media
 		public function get drmPeriod():Number
 		{
 			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).period : NaN;
-		}	
-
-		/**
-		 * @private
-		 * 
-		 * Returns the position to seek to in order to reach the latest live content available
-		 * on the server.
-		 * 
-		 * Media without a DVRTrait will always return <code>NaN</code>.
-		 *   
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */			
-		public function get lastRecordedTime():Number
-		{
-			var result:Number;
-			
-			if (_dvrTrait != null && _dvrTrait.isRecording)
-			{
-				result = _dvrTrait.lastRecordedTime;
-			}
-			
-			return result;
 		}
 		
 		// Internals

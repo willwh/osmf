@@ -92,31 +92,6 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override public function get lastRecordedTime():Number
-		{
-			var result:Number;
-			
-			if (streamInfo.isRecording)
-			{
-				// When the stream is being recorded:
-				result 
-					= Math.max
-						(	0
-						,	// Initial duration available on play start:
-							( (recordingInfo.startDuration - recordingInfo.startOffset)
-							// Plus the timer measured elapsed time since play start:
-							+ (new Date().time - recordingInfo.startTime.time) / 1000
-							// Substract the time needed in order to keep a buffer:
-							- stream.bufferTime
-							// Add an additional delta for network lag:
-							- DVRCastConstants.LIVE_POSITION_SEEK_DELAY
-							)
-						);
-			} // else, return NaN.
-			
-			return result;
-		}
-		
 		override protected function isRecordingChangeStart(value:Boolean):void
 		{
 			if (value)

@@ -29,6 +29,7 @@ package org.osmf.chrome.controlbar.widgets
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekTrait;
@@ -93,7 +94,8 @@ package org.osmf.chrome.controlbar.widgets
 			var seekable:SeekTrait = element.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			if (seekable && dvrTrait)
 			{
-				var livePosition:Number = dvrTrait.lastRecordedTime;
+				var bufferTime:Number = getBufferTime();
+				var livePosition:Number = Math.max(0, timeTrait.duration - bufferTime - 2); 
 				if (seekable.canSeekTo(livePosition))
 				{
 					// While seeking, disable the button:
@@ -126,9 +128,22 @@ package org.osmf.chrome.controlbar.widgets
 				=	dvrTrait != null
 				&&	dvrTrait.isRecording == true
 				&&	timeTrait
-				&&	timeTrait.currentTime < Math.max(0, dvrTrait.lastRecordedTime - 5);
+				&&	timeTrait.currentTime < Math.max(0, timeTrait.duration - getBufferTime() - 5);
 			
 			enabled = element && element.hasTrait(MediaTraitType.SEEK);
+		}
+		
+		private function getBufferTime():Number
+		{
+			var result:Number = 0;
+			
+			var loadable:NetStreamLoadTrait = element.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			if (loadable)
+			{
+				result = loadable.netStream.bufferTime;
+			}
+			
+			return result;
 		}
 		
 		private var dvrTrait:DVRTrait;

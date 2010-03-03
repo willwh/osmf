@@ -92,27 +92,6 @@ package org.osmf.traits
 			}
 		}
 		
-		/**
-		 * @private
-		 * 
-		 * Defines the position to seek to in order to reach the end
-		 * of the recording, which resembles the live position in case
-		 * the recording is ongoing.
-		 * 
-		 * It is mandatory for subclasses to provide an override for this
-		 * method.
-		 *
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function get lastRecordedTime():Number
-		{
-			throw new IllegalOperationError
-				(OSMFStrings.getString(OSMFStrings.FUNCTION_MUST_BE_OVERRIDDEN));
-		}
-		
 		// Subclass stubs
 		//
 		

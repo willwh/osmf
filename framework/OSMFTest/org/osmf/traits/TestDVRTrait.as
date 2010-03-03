@@ -47,11 +47,6 @@ package org.osmf.traits
 			assertFalse(dvrTrait.isRecording);
 		}
 		
-		public function testLivePosition():void
-		{
-			assertThrows(function():void{ dvrTrait.lastRecordedTime; });
-		}
-		
 		private var dvrTrait:DVRTrait;
 	}
 }
