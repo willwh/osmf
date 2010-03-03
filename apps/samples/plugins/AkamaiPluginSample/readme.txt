@@ -2,9 +2,8 @@ Sample Application: AkamaiPluginSample
 
 A. Overview
 
-This sample application demonstrates loading the Akamai plugin and the MAST plugin within the OSMF framework. 
-Its purpose is to demonstrate loading the plugins dynamically and statically as well as demonstrate the functionality
-of the plugins.
+This sample application demonstrates loading OSMF plugins and can also display,
+and play a playlist from a Media RSS feed.
 
 The Akamai plugin handles secure streaming for both live and on-demand content over the Akamai network.  
 There is a sample stream containing an auth token in the sample.
@@ -12,6 +11,12 @@ There is a sample stream containing an auth token in the sample.
 The MAST plugin loads a MAST document, parses it, and loads it's payload (a VAST document containing a sample ad pre-roll).
 You will see an ad pre-roll before each video when this plugin is loaded.  In the "loadMedia" function, you can see
 the URL of the MAST document being set as metadata on the media element's resource.
+
+The SMIL plugin loads a SMIL document, parses it, and creates MediaElement(s) based on the contents of the SMIL.
+This includes a serial composition of videos and RTMP dynamic streaming.
+
+*NOTE: there is a bug in the MAST plugin that prevents it from working with the SMIL plugin.  If both of these are loaded
+you will not be able to play SMIL content, but all other media samples should work fine with the MAST plugin loaded.
 
 B. Installation Instructions (Flex Builder)
 
@@ -24,5 +29,10 @@ B. Installation Instructions (Flex Builder)
 
 C. Usage Instructions
 
-* IMPORTANT NOTE: Due to Flash Player security, you will not be able to load the plugins dynamically unless you 
-run the sample app from a Web server or localhost, i.e., "http://localhost/AkamaiPluginSample.html".
+Select a plugin to load, and/or select a peice of media from the combo box.
+There are two sample RSS feeds, if you select these, the OSMF Syndication library
+will be used to parse and generate an object model used by the sample app. You can
+add a pre-roll for each item in the playlist by loading the MAST plugin before selecting
+an RSS feed.
+
+ 
