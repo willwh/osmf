@@ -127,20 +127,6 @@ package org.osmf.media
 			assertTrue(element1 != element2);
 		}
 
-		public function testGetMediaElementCreationNotificationFunction():void
-		{
-			var item:MediaFactoryItem = createMediaFactoryItem("id");
-			var func:Function = item.mediaElementCreationNotificationFunction;
-			assertTrue(func != null);
-			
-			assertTrue(createdElements.length == 0);
-			
-			var element:MediaElement = new MediaElement();
-			func.call(item, element);
-			assertTrue(createdElements.length == 1);
-			assertTrue(createdElements[0] == element);
-		}
-		
 		public function testGetType():void
 		{
 			var item:MediaFactoryItem = createMediaFactoryItem("id");
@@ -153,7 +139,6 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler(canHandleResource).canHandleResource
 					, createDynamicMediaElement
-					, creationCallback
 					);
 		}
 		

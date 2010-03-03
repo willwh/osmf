@@ -23,8 +23,6 @@ package org.osmf.media.pluginClasses
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.utils.Dictionary;
-	
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaResourceBase;
@@ -35,7 +33,7 @@ package org.osmf.media.pluginClasses
 	{
 		public function CreateOnLoadPluginInfo()
 		{
-			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement, creationCallback);
+			var item:MediaFactoryItem = new MediaFactoryItem("org.osmf.plugin.CreateOnLoadPlugin", new NetLoader().canHandleResource, createElement);
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(item);
 			
@@ -57,24 +55,13 @@ package org.osmf.media.pluginClasses
 			return _createCount;
 		}
 
-		public function get callbackCount():Number
-		{
-			return _callbackCount;
-		}
-		
 		private function createElement():MediaElement
 		{
 			_createCount++;
 			return null;
 		}
 		
-		private function creationCallback(element:MediaElement):void
-		{
-			_callbackCount++;
-		}
-		
 		private var _createCount:Number = 0;
-		private var _callbackCount:Number = 0;
 		private var _pluginResource:MediaResourceBase;
 	}
 }

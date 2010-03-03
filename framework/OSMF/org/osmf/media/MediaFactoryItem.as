@@ -47,13 +47,6 @@ package org.osmf.media
 		 * @param mediaElementCreationFunction Function which creates a new instance
 		 * of the desired MediaElement.  The function must take no params, and
 		 * return a MediaElement.
-		 * @param mediaElementCreationNotificationFunction Optional function which,
-		 * if specified, is invoked for each MediaElement that is created from the
-		 * MediaFactory to which this MediaFactoryItem is added.  If specified,
-		 * the function must take one param of type MediaElement, and return void.
-		 * This callback function is useful for MediaFactoryItems who want to be
-		 * notified when other MediaElement are created (e.g. so as to listen to
-		 * or control them).
 		 * @param type The type of this MediaFactoryItem.  If null, the default is
 		 * <code>MediaFactoryItemType.STANDARD</code>.
 		 * 
@@ -68,7 +61,6 @@ package org.osmf.media
 							( id:String
 							, canHandleResourceFunction:Function
 							, mediaElementCreationFunction:Function
-							, mediaElementCreationNotificationFunction:Function=null
 							, type:String=null
 							)
 		{
@@ -86,7 +78,6 @@ package org.osmf.media
 			_id = id;
 			_canHandleResourceFunction = canHandleResourceFunction;
 			_mediaElementCreationFunction = mediaElementCreationFunction;
-			_mediaElementCreationNotificationFunction = mediaElementCreationNotificationFunction;
 			_type = type;
 		}
 		
@@ -131,24 +122,6 @@ package org.osmf.media
 		{
 			return _mediaElementCreationFunction;
 		}
-
-		/**
-		 * Optional function which is invoked for each MediaElement that is
-		 * created from the MediaFactory to which this MediaFactoryItem is
-		 * added.  The function must take one param of type MediaElement, and
-		 * return void. This callback function is useful for MediaFactoryItems
-		 * who want to be notified when other MediaElement are created (e.g.
-		 * so as to listen to or control them).
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get mediaElementCreationNotificationFunction():Function
-		{
-			return _mediaElementCreationNotificationFunction;
-		}
 		
 		/**
 		 * The MediaFactoryItemType for this MediaFactoryItem.
@@ -169,7 +142,6 @@ package org.osmf.media
 		private var _id:String;
 		private var _canHandleResourceFunction:Function;
 		private var _mediaElementCreationFunction:Function;
-		private var _mediaElementCreationNotificationFunction:Function;
 		private var _type:String;
 	}
 }

@@ -106,11 +106,6 @@ package org.osmf.media
 			super();
 			
 			allItems = new Dictionary();
-			
-			// Our created elements dictionary is set to store with weak keys, so
-			// that if this object is the only object that references a created
-			// MediaElement, then the MediaElement will still be garbage collected.
-			createdElements = new Dictionary(false);
 		}
 		
 		/**
@@ -150,13 +145,6 @@ package org.osmf.media
 			else
 			{
 				items.push(item);		
-			}
-
-			if (item.mediaElementCreationNotificationFunction != null)
-			{
-				// Inform the newly added item about all previously created
-				// MediaElements.
-				invokeMediaElementCreationNotificationForCreatedMediaElements(item);
 			}
 		}
 		
@@ -315,13 +303,8 @@ package org.osmf.media
 		 */
 		public function loadPlugin(resource:MediaResourceBase):void
 		{
-			if (pluginManager == null)
-			{
-				pluginManager = new PluginManager(this);
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoad);
-				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
-			}
-
+			createPluginManager();
+			
 			pluginManager.loadPlugin(resource);
 		}
 
@@ -345,6 +328,10 @@ package org.osmf.media
 		 */
 		public function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
+			// Make sure we have a plugin manager before creating a MediaElement, so
+			// that it will catch the mediaElementCreate event.
+			createPluginManager();
+			
 			// Note that proxies are resolved before creation callbacks are called:
 			// if a media element is proxied, then the creation callback will be invoked
 			// with the root proxy, not the wrapped media element.
@@ -366,18 +353,6 @@ package org.osmf.media
 				// PROXY element as the wrapper for the STANDARD element.
 				mediaElement = (proxyElement != null ? proxyElement : mediaElement);
 				
-				// Inform any MediaFactoryItems that need to know about newly
-				// created MediaElements about this one.
-				invokeMediaElementCreationNotifications(mediaElement);
-				
-				// Add the newly created MediaElement (or its root proxy) to
-				// our list of created elements, so that it can be passed to the
-				// creation callback function for any subsequently added factory
-				// items.  (Note that we store it as the key only, so that it
-				// will be GC'd if this is the only object that holds a 
-				// reference to it.  We set the value to an arbitrary Boolean.)
-				createdElements[mediaElement] = true;
-
 				// Inform clients of the creation.
 				dispatchEvent
 					( new MediaFactoryEvent
@@ -538,46 +513,6 @@ package org.osmf.media
 			dispatchEvent(new MediaFactoryEvent(MediaFactoryEvent.PLUGIN_LOAD_ERROR, false, false, event.resource));
 		}
 
-		/**
-		 * Invokes the creation callback on the given MediaFactoryItem, for
-		 * all created MediaElements.
-		 **/
-		private function invokeMediaElementCreationNotificationForCreatedMediaElements(item:MediaFactoryItem):void
-		{
-			if (item.mediaElementCreationNotificationFunction != null)
-			{
-				// Remember, the MediaElements are stored as the keys (so
-				// that they can be GC'd if the Dictionary holds the only
-				// reference), hence we need to do a for..in.
-				for (var elem:Object in createdElements)
-				{
-					invokeMediaElementCreationNotificationFunction(item, elem as MediaElement);
-				}
-			}
-		}
-		
-		/**
-		 * Invokes the creation callback on all MediaFactoryItems, for the given
-		 * MediaElement.
-		 **/
-		private function invokeMediaElementCreationNotifications(mediaElement:MediaElement):void
-		{
-			for each (var type:String in MediaFactoryItemType.ALL_TYPES)
-			{
-				var items:Vector.<MediaFactoryItem> = allItems[type];
-				if (items != null)
-				{
-					for each (var item:MediaFactoryItem in items)
-					{
-						if (item.mediaElementCreationNotificationFunction != null)
-						{
-							invokeMediaElementCreationNotificationFunction(item, mediaElement);
-						}
-					}
-				}
-			}
-		}
-		
 		private function invokeMediaElementCreationFunction(item:MediaFactoryItem):MediaElement
 		{
 			var mediaElement:MediaElement = null;
@@ -592,17 +527,14 @@ package org.osmf.media
 			}
 			return mediaElement;
 		}
-
-		private function invokeMediaElementCreationNotificationFunction(item:MediaFactoryItem, mediaElement:MediaElement):void
+		
+		private function createPluginManager():void
 		{
-			try
+			if (pluginManager == null)
 			{
-				item.mediaElementCreationNotificationFunction.call(item, mediaElement);
-			}
-			catch (error:Error)
-			{
-				// Swallow, the creation callback function is wrongly
-				// specified.  We'll continue as-is.
+				pluginManager = new PluginManager(this);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoad);
+				pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadError);
 			}
 		}
 		
@@ -611,9 +543,5 @@ package org.osmf.media
 		private var allItems:Dictionary;
 			// Keys are: String (MediaFactoryItemType)
 			// Values are: Vector.<MediaFactoryItem>
-		
-		private var createdElements:Dictionary;
-			// Keys are: MediaElement
-			// Values are: Boolean (just a placeholder, the important part is the key)
 	}
 }

@@ -21,13 +21,15 @@
 *****************************************************/
 package org.osmf.media.pluginClasses
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaFactoryEvent;
 	import org.osmf.events.PluginManagerEvent;
-	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
@@ -94,7 +96,11 @@ package org.osmf.media.pluginClasses
 		 */
 		public function PluginManager(mediaFactory:MediaFactory)
 		{
+			super();
+			
 			_mediaFactory = mediaFactory;
+			_mediaFactory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
+			
 			minimumSupportedFrameworkVersion = Version.lastAPICompatibleVersion;
 			initPluginFactory();
 			_pluginMap = new Dictionary();
@@ -172,6 +178,22 @@ package org.osmf.media.pluginClasses
 				{
 					pluginEntry.state = PluginLoadingState.LOADED;
 					_pluginList.push(pluginEntry);
+					
+					var pluginLoadTrait:PluginLoadTrait = pluginElement.getTrait(MediaTraitType.LOAD) as PluginLoadTrait;
+					if (pluginLoadTrait.pluginInfo.mediaElementCreationNotificationFunction != null)
+					{
+						// Inform the newly added plugin about all previously created
+						// MediaElements.
+						invokeMediaElementCreationNotificationForCreatedMediaElements(pluginLoadTrait.pluginInfo.mediaElementCreationNotificationFunction);
+						
+						// Add our notification function to the list of functions to
+						// call for future-created MediaElements.
+						if (notificationFunctions == null)
+						{
+							notificationFunctions = new Vector.<Function>();
+						}
+						notificationFunctions.push(pluginLoadTrait.pluginInfo.mediaElementCreationNotificationFunction);
+					}
 					
 					dispatchEvent
 						( new PluginManagerEvent
@@ -274,11 +296,75 @@ package org.osmf.media.pluginClasses
 		{
 			return new PluginElement(dynamicPluginLoader);
 		}
+		
+		private function onMediaElementCreate(event:MediaFactoryEvent):void
+		{
+			// Inform any plugins that need to know about newly-created
+			// MediaElements about this one.
+			invokeMediaElementCreationNotifications(event.mediaElement);
+			
+			// Add the newly created MediaElement to our list of created
+			// elements, so that it can be passed to the creation notification
+			// function for any subsequently added plugins.  (Note that we
+			// store it as the key only, so that it will be GC'd if this is
+			// the only object that holds a reference to it.  We set the
+			// value to an arbitrary Boolean.)
+			if (createdElements == null)
+			{
+				createdElements = new Dictionary(true);
+			}
+			createdElements[event.mediaElement] = true;			
+		}
+
+		/**
+		 * Invokes the callback for all stored notification functions, for the given
+		 * MediaElement.
+		 **/
+		private function invokeMediaElementCreationNotifications(mediaElement:MediaElement):void
+		{
+			for each (var func:Function in notificationFunctions)
+			{
+				invokeMediaElementCreationNotificationFunction(func, mediaElement);
+			}
+		}
+		
+		private function invokeMediaElementCreationNotificationFunction(func:Function, mediaElement:MediaElement):void
+		{
+			try
+			{
+				func.call(null, mediaElement);
+			}
+			catch (error:Error)
+			{
+				// Swallow, the notification function is wrongly
+				// specified.  We'll continue as-is.
+			}
+		}
+
+		/**
+		 * Invokes the creation callback on the given MediaFactoryItem, for
+		 * all created MediaElements.
+		 **/
+		private function invokeMediaElementCreationNotificationForCreatedMediaElements(func:Function):void
+		{
+			// Remember, the MediaElements are stored as the keys (so
+			// that they can be GC'd if the Dictionary holds the only
+			// reference), hence we need to do a for..in.
+			for (var elem:Object in createdElements)
+			{
+				invokeMediaElementCreationNotificationFunction(func, elem as MediaElement);
+			}
+		}
 
 		private var _mediaFactory:MediaFactory;	
 		private var _pluginFactory:MediaFactory;	
 		private var _pluginMap:Dictionary;
 		private var _pluginList:Vector.<PluginEntry>;
+		
+		private var notificationFunctions:Vector.<Function>;
+		private var createdElements:Dictionary;
+			// Keys are: MediaElement
+			// Values are: Boolean (just a placeholder, the important part is the key)
 		
 		private var minimumSupportedFrameworkVersion:String;
 		private var staticPluginLoader:StaticPluginLoader;

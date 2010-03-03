@@ -83,17 +83,25 @@ package org.osmf.media
 		 * 
 		 * @param mediaFactoryItems Vector of MediaFactoryItem objects that this plugin
 		 * exposes.
+		 * @param mediaElementCreationNotificationFunction Optional function which,
+		 * if specified, is invoked for each MediaElement that is created from the
+		 * MediaFactory to which this MediaFactoryItem is added.  If specified,
+		 * the function must take one param of type MediaElement, and return void.
+		 * This callback function is useful for MediaFactoryItems who want to be
+		 * notified when other MediaElement are created (e.g. so as to listen to
+		 * or control them).
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginInfo(mediaFactoryItems:Vector.<MediaFactoryItem>)
+		public function PluginInfo(mediaFactoryItems:Vector.<MediaFactoryItem>, mediaElementCreationNotificationFunction:Function=null)
 		{
 			super();
 			
 			this.mediaFactoryItems = mediaFactoryItems;
+			_mediaElementCreationNotificationFunction = mediaElementCreationNotificationFunction;
 		}
 		
 		/**
@@ -193,6 +201,24 @@ package org.osmf.media
 		{
 		}
 		
+		/**
+		 * Optional function which is invoked for every MediaElement that is
+		 * created from the MediaFactory to which this plugin's MediaFactoryItem
+		 * objects are added.  The function must take one param of type
+		 * MediaElement, and return void. This callback function is useful for
+		 * plugins who want to be notified when other MediaElement are created
+		 * (e.g. so as to listen to or control them).
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get mediaElementCreationNotificationFunction():Function
+		{
+			return _mediaElementCreationNotificationFunction;
+		}
+
 		// Internals
 		//
 		
@@ -217,5 +243,6 @@ package org.osmf.media
 		}
 		
 		private var mediaFactoryItems:Vector.<MediaFactoryItem>;
+		private var _mediaElementCreationNotificationFunction:Function;
 	}
 }

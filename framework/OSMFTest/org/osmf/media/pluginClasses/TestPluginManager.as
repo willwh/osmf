@@ -25,6 +25,7 @@ package org.osmf.media.pluginClasses
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.*;
 	import org.osmf.media.*;
 	import org.osmf.net.DynamicStreamingResource;
@@ -196,19 +197,15 @@ package org.osmf.media.pluginClasses
 			
 			pluginManager.loadPlugin(resource);
 			assertEquals(0, pluginInfo.createCount);
-			assertEquals(0, pluginInfo.callbackCount);
 			
 			pluginManager.loadPlugin(resource); // No-op, plugin already loaded.
 			assertEquals(0, pluginInfo.createCount);
-			assertEquals(0, pluginInfo.callbackCount);
 			
 			// Creating a MediaElement that the plugin can handle should trigger
 			// the creation  function.
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/video.flv"));
 			assertTrue(mediaElement == null);
 			assertEquals(1, pluginInfo.createCount);
-			assertEquals(0, pluginInfo.callbackCount);
-
 		}
 		
 		public function testLoadCreateOnLoadPluginWithCallbacks():void
@@ -222,21 +219,62 @@ package org.osmf.media.pluginClasses
 			
 			pluginManager.loadPlugin(resource);
 			assertEquals(0, pluginInfo.createCount);
-			assertEquals(0, pluginInfo.callbackCount);
 
 			// Creating a MediaElement that a default factory item can handle
 			// should trigger the callback function.
 			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/image1.jpg"));
 			assertTrue(mediaElement != null);
 			assertEquals(0, pluginInfo.createCount);
-			assertEquals(1, pluginInfo.callbackCount);
 
 			mediaElement = mediaFactory.createMediaElement(new URLResource("http://example.com/image2.jpg"));
 			assertTrue(mediaElement != null);
 			assertEquals(0, pluginInfo.createCount);
-			assertEquals(2, pluginInfo.callbackCount);
 		}
 		
+		public function testLoadPluginWithCreationCallback():void
+		{
+			mediaFactory  = new DefaultMediaFactory();
+			pluginManager = new PluginManager(mediaFactory);
+
+			var createdElements:Array = [];
+			
+			// First create a MediaElement from the PluginManager.
+			var createdElement:MediaElement = pluginManager.mediaFactory.createMediaElement(new URLResource("http://example.com/image.jpg"));
+			assertTrue(createdElement != null);
+			
+			// Then load a plugin with a creation callback.
+			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
+			items.push
+				( new MediaFactoryItem
+					( "id"
+					, function(_:MediaResourceBase):Boolean {return true;}
+					, function():VideoElement {return new VideoElement();}
+					)
+				);
+			var pluginInfo:PluginInfo = new PluginInfo(items, onMediaElementCreate);
+			
+			var resource:PluginInfoResource = new PluginInfoResource(pluginInfo);
+			
+			pluginManager.loadPlugin(resource);
+			
+			// Once it's loaded, it should have been informed of the previously created
+			// element.
+			assertTrue(createdElements.length == 1);
+			assertTrue(createdElements[0] == createdElement);
+			
+			// If we create another MediaElement, the plugin should be informed again.
+			var createdElement2:MediaElement = pluginManager.mediaFactory.createMediaElement(new URLResource("http://example.com/audio.mp3"));
+			assertTrue(createdElement2 != null);
+
+			assertTrue(createdElements.length == 2);
+			assertTrue(createdElements[1] == createdElement2);
+			
+			function onMediaElementCreate(mediaElement:MediaElement):void
+			{
+				createdElements.push(mediaElement);
+			}
+		}
+
 		private function doLoadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
 		{
 			try 
@@ -259,6 +297,7 @@ package org.osmf.media.pluginClasses
 	
 import __AS3__.vec.Vector;
 import org.osmf.media.MediaFactoryItem;
+import org.osmf.elements.VideoElement;
 		
 class OldPluginInfo extends org.osmf.media.PluginInfo
 {

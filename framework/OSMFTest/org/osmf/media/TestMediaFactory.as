@@ -318,89 +318,6 @@ package org.osmf.media
 			assertTrue(((mediaElement as ProxyElement).proxiedElement as ProxyElement).proxiedElement is DynamicMediaElement);
 		}
 		
-		public function testCreateMediaElementWithCreationCallback():void
-		{
-			var standardInfo:MediaFactoryItem = createMediaFactoryItem("standardInfo","http://www.example.com/standardInfo");
-			mediaFactory.addItem(standardInfo);
-			var otherStandardInfo:MediaFactoryItem = createMediaFactoryItem("otherStandardInfo","http://www.example.com/otherStandardInfo");
-			mediaFactory.addItem(otherStandardInfo);
-			
-			// Create some standard media elements through the factory so that we
-			// have things to reference.
-			var createdElement1:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/standardInfo"));
-			assertTrue(createdElement1 is DynamicMediaElement);
-			var createdElement2:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
-			assertTrue(createdElement2 is DynamicMediaElement);
-			var createdElement3:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
-			assertTrue(createdElement3 is DynamicMediaElement);
-
-			// If we add a media info whose media element is not a reference,
-			// then createMediaElement should return an unreferencing element.
-			var invalidReferenceInfo:MediaFactoryItem = createMediaFactoryItem("invalidReferenceInfo", "http://www.example.com/invalidReferenceInfo");
-			mediaFactory.addItem(invalidReferenceInfo);
-			
-			var mediaElement:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/invalidReferenceInfo"));
-			assertTrue(mediaElement != null);
-			
-			// Now create a referencing element that should match a previously
-			// created one.
-			var referenceInfo:MediaFactoryItem = createReferenceMediaFactoryItem("referenceInfo1","http://www.example.com/referenceInfo1", "http://www.example.com/standardInfo");
-			mediaFactory.addItem(referenceInfo);
-			
-			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo1"));
-			assertTrue(mediaElement != null);
-			var dynamicElement:DynamicReferenceMediaElement = mediaElement as DynamicReferenceMediaElement;
-			assertTrue(dynamicElement);
-			assertTrue(dynamicElement.references.length == 1);
-			assertTrue(dynamicElement.references[0] == createdElement1);
-			
-			// It's possible to have multiple references too.
-			referenceInfo = createReferenceMediaFactoryItem("referenceInfo2","http://www.example.com/referenceInfo2", "http://www.example.com/otherStandardInfo");
-			mediaFactory.addItem(referenceInfo);
-			
-			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo2"));
-			assertTrue(mediaElement != null);
-			dynamicElement = mediaElement as DynamicReferenceMediaElement;
-			assertTrue(dynamicElement);
-			assertTrue(dynamicElement.references.length == 2);
-			assertTrue(dynamicElement.references[0] == createdElement2 ||
-					   dynamicElement.references[0] == createdElement3);
-			assertTrue(dynamicElement.references[1] == createdElement2 ||
-					   dynamicElement.references[1] == createdElement3);
-			assertTrue(dynamicElement.references[0] != dynamicElement.references[1]);
-			
-			var referenceElement:DynamicReferenceMediaElement = dynamicElement;
-			
-			// It's possible for a reference element to reference another
-			// reference element.
-			referenceInfo = createReferenceMediaFactoryItem("referenceInfo3","http://www.example.com/referenceInfo3", "http://www.example.com/referenceInfo2");
-			mediaFactory.addItem(referenceInfo);
-			
-			mediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/referenceInfo3"));
-			assertTrue(mediaElement != null);
-			dynamicElement = mediaElement as DynamicReferenceMediaElement;
-			assertTrue(dynamicElement);
-			assertTrue(dynamicElement.references.length == 1);
-			assertTrue(dynamicElement.references[0] == referenceElement);
-			
-			// Creating a new element will result in it being added to any
-			// existing reference that matches it.
-			var createdElement4:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/otherStandardInfo"));
-			assertTrue(createdElement4 is DynamicMediaElement);
-			assertTrue(referenceElement.references.length == 3);
-			assertTrue(referenceElement.references[0] == createdElement4 ||
-					   referenceElement.references[1] == createdElement4 ||
-					   referenceElement.references[2] == createdElement4);
-			
-			// Creating a non-matching element will not add a new reference.
-			var yetAnotherStandardInfo:MediaFactoryItem = createMediaFactoryItem("yetAnotherStandardInfo","http://www.example.com/yetAnotherStandardInfo");
-			mediaFactory.addItem(yetAnotherStandardInfo);
-			
-			var createdElement5:MediaElement = mediaFactory.createMediaElement(new URLResource("http://www.example.com/yetAnotherStandardInfo"));
-			assertTrue(createdElement5 is DynamicMediaElement);
-			assertTrue(referenceElement.references.length == 3);
-		}
-		
 		public function testLoadPlugin():void
 		{
 			// Other plugin loading tests are in TestPluginManager.
@@ -426,7 +343,6 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler((urlToMatch ? null : canNeverHandleResource), urlToMatch).canHandleResource
 					, createDynamicMediaElement
-					, null
 					, type != null ? type : MediaFactoryItemType.STANDARD
 					);
 		}
@@ -442,7 +358,6 @@ package org.osmf.media
 					( id
 					, new SampleResourceHandler((urlToMatch ? null : canNeverHandleResource), urlToMatch).canHandleResource
 					, createProxyElement
-					, null
 					, MediaFactoryItemType.PROXY
 					);
 		}
@@ -485,7 +400,7 @@ class ReferenceMediaFactoryItem extends MediaFactoryItem
 {
 	public function ReferenceMediaFactoryItem(id:String, handler:Function, type:String, referenceUrlToMatch:String)
 	{
-		super(id, handler, createDynamicReferenceMediaElement, creationCallback, type);
+		super(id, handler, createDynamicReferenceMediaElement, type);
 		
 		refElement = new DynamicReferenceMediaElement(referenceUrlToMatch);
 	}
