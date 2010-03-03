@@ -335,10 +335,16 @@ package org.osmf.net.drm
 			if (updater == null) //An update hasn't been triggered
 			{
 				updater = new SystemUpdater();
+				//If there is an update already happening, just wait for it to finish.			
+				toggleErrorListeners(updater, true);	
 				updater.update(type);
 			}
-			//If there is an update already happening, just wait for it to finish.			
-			toggleErrorListeners(updater, true);					
+			else
+			{
+				//If there is an update already happening, just wait for it to finish.			
+				toggleErrorListeners(updater, true);	
+			}
+			
 			return updater;		
 		}
 		
