@@ -58,13 +58,12 @@ package
 						( ID
 						, canHandleResourceCallback
 						, mediaElementCreationCallback
-						, mediaElementCreationNotificationCallback
 						);
 						
 				var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 				items.push(item);
 				
-				_pluginInfo = new PluginInfo(items);	
+				_pluginInfo = new PluginInfo(items, mediaElementCreationNotificationCallback);	
 			}
 			
 			return _pluginInfo;
