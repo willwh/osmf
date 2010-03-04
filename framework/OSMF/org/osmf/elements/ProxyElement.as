@@ -352,10 +352,69 @@ package org.osmf.elements
 		
 		protected final function set blockedTraits(value:Vector.<String>):void
 		{
+			if (value == _blockedTraits) return;
+			
+			var newlyBlockedTraitTypes:Array = [];
+			var previouslyBlockedTraitTypes:Array = [];
+			var traitType:String;
+			
+			// If we already have a proxied element, then setting a new
+			// set of blocked traits might unblock certain traits or block
+			// others.  So we need to determine which traits are now being
+			// blocked or unblocked.
+			if (_proxiedElement != null)
+			{
+				for each (traitType in MediaTraitType.ALL_TYPES)
+				{
+					// If it's in the list of new traits...
+					if (value.indexOf(traitType) != -1)
+					{
+						// ... and not in the list of old traits...
+						if (_blockedTraits == null || _blockedTraits.indexOf(traitType) == -1)
+						{
+							// ... add to our list of newly blocked traits.
+							newlyBlockedTraitTypes.push(traitType);
+						}
+					}
+					else
+					{
+						// It's not in the list of new traits.
+						//
+						
+						// If it's in the list of old traits...
+						if (_blockedTraits != null && _blockedTraits.indexOf(traitType) != -1)
+						{
+							// ... add to our list of previously blocked traits.
+							previouslyBlockedTraitTypes.push(traitType);
+						}
+					}
+				}
+			}
+			
 			_blockedTraits = value;
 			
-			// TODO: Need to handle the case where this is set after the
-			// proxiedElement is set (i.e. the dynamic case).
+			if (_proxiedElement != null)
+			{
+				// For each newly blocked trait that the proxied element is currently
+				// exposing, signal removal of the old trait.
+				for each (traitType in newlyBlockedTraitTypes)
+				{
+					if (proxiedElement.hasTrait(traitType) || super.hasTrait(traitType))
+					{
+						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
+					}
+				}
+
+				// For each previously blocked trait that the proxied element is
+				// currently exposing, signal addition of the new trait.
+				for each (traitType in previouslyBlockedTraitTypes)
+				{
+					if (proxiedElement.hasTrait(traitType) || super.hasTrait(traitType))
+					{
+						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
+					}
+				}
+			}
 		}
 		
 		// Internals

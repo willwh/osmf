@@ -21,21 +21,21 @@
 *****************************************************/
 package org.osmf.utils
 {
-	import flash.utils.Dictionary;
+	import __AS3__.vec.Vector;
 	
-	import org.osmf.media.MediaResourceBase;
-	import org.osmf.media.MediaElement;
 	import org.osmf.elements.ProxyElement;
+	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
-	import org.osmf.traits.LoaderBase;
+	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
-	import org.osmf.traits.DisplayObjectTrait;
 	
 	public class DynamicProxyElement extends ProxyElement
 	{
@@ -59,16 +59,11 @@ package org.osmf.utils
 			return this.removeTrait(type);
 		}
 		
-		public function doBlockTrait(type:String):void
+		public function setBlockedTraits(traits:Vector.<String>):void
 		{
-			if (blockedTraits.indexOf(type) == -1)
-			{
-				blockedTraits.push(type);
-				
-				// Refresh.
-				super.blockedTraits = blockedTraits;
-			}
+			super.blockedTraits = traits;
 		}
+		
 		private function initialize(traitTypes:Array, loader:LoaderBase, resource:MediaResourceBase):void
 		{
 			this.resource = resource;

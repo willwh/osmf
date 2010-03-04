@@ -154,17 +154,17 @@ package org.osmf.examples.traceproxy
 			trace("drmStateChange", event.drmState);
 		}
 		
-		private function processTraitAdd(traitType:String):void
+		private function processTraitAdd(event:MediaElementEvent):void
 		{
-			trace("Trait Add: " + traitType);
+			trace("Trait Add: " + event.traitType);
 		}
 	
-		private function processTraitRemove(traitType:String):void
+		private function processTraitRemove(event:MediaElementEvent):void
 		{
-			trace("Trait Remove: " + traitType);
+			trace("Trait Remove: " + event.traitType);
 		}
 	
 		
-		private var dispatcher:TraitEventDispatcher ;
+		private var dispatcher:TraitEventDispatcher;
 	}
 }

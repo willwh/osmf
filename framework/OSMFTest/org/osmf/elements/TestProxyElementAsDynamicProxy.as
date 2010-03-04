@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import __AS3__.vec.Vector;
+	
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.BufferTrait;
@@ -37,15 +39,22 @@ package org.osmf.elements
 	{
 		public function testBlockedTraits():void
 		{
+			var events:Array = [];
+			
 			var wrappedElement:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
 			var proxyElement:DynamicProxyElement = new DynamicProxyElement(wrappedElement);
-			proxyElement.doBlockTrait(MediaTraitType.PLAY);
-			proxyElement.doBlockTrait(MediaTraitType.LOAD);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitEvent);
+			proxyElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitEvent);
 			
+			var blockedTraits:Vector.<String> = new Vector.<String>();
+			blockedTraits.push(MediaTraitType.PLAY);
+			blockedTraits.push(MediaTraitType.LOAD);
+			proxyElement.setBlockedTraits(blockedTraits);
+
 			// The proxy blocks LOAD.
 			//
 			
@@ -56,15 +65,21 @@ package org.osmf.elements
 			assertTrue(wrappedElement.hasTrait(MediaTraitType.LOAD));
 			assertTrue(wrappedElement.getTrait(MediaTraitType.LOAD) != null);
 
+			assertTrue(events.length == 1);
+			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_REMOVE);
+			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.LOAD);
+
 			// TIME, LOAD
 			assertTrue(wrappedElement.traitTypes.length == 2);
 			
 			// TIME
 			assertTrue(proxyElement.traitTypes.length == 1);
+			
+			events = [];
 						
 			// If we now replace the wrapped element, then the traits of the
 			// wrapped element should be reflected in the proxy's traits,
-			// though the blocked traits should remain the same.
+			// though the blocked traits should remain the same. 
 			//
 			
 			var proxiedElement2:DynamicMediaElement
@@ -78,6 +93,40 @@ package org.osmf.elements
 			assertTrue(proxyElement.hasTrait(MediaTraitType.SEEK));
 			assertFalse(proxyElement.hasTrait(MediaTraitType.LOAD));
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
+			
+			// The TIME trait gets removed, then the PLAY and SEEK are added.
+			// There should be no event for LOAD, since it's blocked.
+			// TODO: Reenable once this is implemented.
+			/*assertTrue(events.length == 3);
+			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_REMOVE);
+			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.TIME);
+			assertTrue(MediaElementEvent(events[1]).type == MediaElementEvent.TRAIT_ADD);
+			assertTrue(MediaElementEvent(events[1]).traitType == MediaTraitType.PLAY);
+			assertTrue(MediaElementEvent(events[2]).type == MediaElementEvent.TRAIT_ADD);
+			assertTrue(MediaElementEvent(events[2]).traitType == MediaTraitType.SEEK);
+			*/
+			
+			events = [];
+			
+			// Changing the blocked traits can cause the dispatch of trait events.
+			blockedTraits = new Vector.<String>();
+			blockedTraits.push(MediaTraitType.TIME);
+			blockedTraits.push(MediaTraitType.PLAY);
+			proxyElement.setBlockedTraits(blockedTraits);
+			
+			assertFalse(proxyElement.hasTrait(MediaTraitType.PLAY));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.SEEK));
+			assertTrue(proxyElement.hasTrait(MediaTraitType.LOAD));
+			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
+			
+			assertTrue(events.length == 1);
+			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_ADD);
+			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.LOAD);
+
+			function onTraitEvent(event:MediaElementEvent):void
+			{
+				events.push(event);
+			}
 		}
 		
 		public function testOverriddenTraits():void
@@ -141,7 +190,9 @@ package org.osmf.elements
 										 );
 
 			var proxyElement:DynamicProxyElement = new DynamicProxyElement(wrappedElement);
-			proxyElement.doBlockTrait(MediaTraitType.PLAY);
+			var blockedTraits:Vector.<String> = new Vector.<String>();
+			blockedTraits.push(MediaTraitType.PLAY);
+			proxyElement.setBlockedTraits(blockedTraits);
 
 			var timeTrait:TimeTrait = new TimeTrait(30);
 			proxyElement.doAddTrait(MediaTraitType.TIME, timeTrait);

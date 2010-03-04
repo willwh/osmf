@@ -1406,8 +1406,8 @@ package org.osmf.media
 				var priority:int = 1;				
 				media.getTrait(traitType).addEventListener(event, listener, false, priority);
 			}
-			else
-			{			
+			else if (media.hasTrait(traitType))
+			{		
 				media.getTrait(traitType).removeEventListener(event, listener);
 			}		
 		}
