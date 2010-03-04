@@ -52,9 +52,13 @@ package org.osmf.examples.loaderproxy
 			
 			loadTrait = new VideoProxyLoadTrait(new VideoProxyLoader(), resource);
 			
+			// Use a higher priority so that we can handle the event before
+			// clients of the VideoProxyElement. This ensures we can expose
+			// a consistent state to clients.
 			loadTrait.addEventListener
 				( LoadEvent.LOAD_STATE_CHANGE
 				, onLoadStateChange
+				, false, int.MAX_VALUE
 				);
 			
 			addTrait(MediaTraitType.LOAD, loadTrait); 
@@ -62,6 +66,8 @@ package org.osmf.examples.loaderproxy
 		
 		private function onLoadStateChange(event:LoadEvent):void
 		{
+			//event.stopPropagation();
+			
 			if (event.loadState == LoadState.READY)
 			{
 				// Replace the resource with the new URL.
@@ -70,16 +76,14 @@ package org.osmf.examples.loaderproxy
 				// Our work is done, remove the custom LoadTrait.  This will
 				// expose the base LoadTrait, which we can then use to do
 				// the actual load.
-
-				var traitsToBlock:Vector.<String> = new Vector.<String>();
-				traitsToBlock.push(MediaTraitType.LOAD);
-				
-				// Block the LoadTrait while we remove the temporary trait.
-				blockedTraits = traitsToBlock;
 				removeTrait(MediaTraitType.LOAD);
-				blockedTraits = new Vector.<String>();
 				
-				(getTrait(MediaTraitType.LOAD) as LoadTrait).load();
+				// Tell the base trait to load (if it hasn't already).
+				var baseLoadTrait:LoadTrait = getTrait(MediaTraitType.LOAD) as LoadTrait;
+				if (baseLoadTrait.loadState != LoadState.READY)
+				{
+					baseLoadTrait.load();
+				}
 				
 				loadTrait = null;
 			}

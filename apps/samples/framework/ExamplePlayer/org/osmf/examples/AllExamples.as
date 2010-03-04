@@ -38,6 +38,7 @@ package org.osmf.examples
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.buffering.SynchronizedParallelElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
+	import org.osmf.examples.loaderproxy.AsynchLoadingProxyElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
@@ -554,6 +555,17 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 				  	   		return new VideoProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
+				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Preflight Video Loader"
+					, 	"Demonstrates the use of a custom ProxyElement to perform preflight operations on a MediaElement in a non-invasive way.  In this example, the custom ProxyElement performs some custom asynchronous logic after the video is loaded.  (In this case, it simply runs a Timer for 2 seconds.)  The proxy prevents the outside world from being aware that the video is loaded until that custom logic is completed."
+				  	,  	function():MediaElement
+				  	   	{
+				  	   		return new AsynchLoadingProxyElement(new VideoElement(new URLResource(REMOTE_STREAM)));
 				  	   	} 
 				  	)
 				);
