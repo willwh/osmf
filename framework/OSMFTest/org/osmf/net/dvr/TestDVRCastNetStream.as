@@ -21,6 +21,7 @@
 
 package org.osmf.net.dvr
 {
+	import flash.events.NetStatusEvent;
 	import flash.net.NetStreamPlayOptions;
 	
 	import org.osmf.flexunit.TestCaseEx;
@@ -38,6 +39,7 @@ package org.osmf.net.dvr
 			
 			var stream:DVRCastNetStream = new DVRCastNetStream(c);
 			assertNotNull(stream);
+			stream.addEventListener(NetStatusEvent.NET_STATUS, function(..._):void{});
 			
 			stream.play("test", 0, 0);
 			
