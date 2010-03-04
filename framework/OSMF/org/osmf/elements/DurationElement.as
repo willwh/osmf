@@ -133,7 +133,10 @@ package org.osmf.elements
 			super.setupOverriddenTraits();
 			
 			timeTrait = new DurationTimeTrait(_duration);
-			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
+			
+			// Increase the priority for our onComplete handler, so that we can get the
+			// event first and present a consistent view to clients.
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete, false, int.MAX_VALUE);
 			addTrait(MediaTraitType.TIME, timeTrait);
 
 			seekTrait = new DurationSeekTrait(timeTrait);
@@ -151,27 +154,20 @@ package org.osmf.elements
 		
 		// Internals
 		//
-		
-		private function get time():Number
-		{
-			// Return value is in seconds.
-			return playTrait.playState == PlayState.PLAYING
-						? (elapsedTime + (flash.utils.getTimer() - absoluteTimeAtLastPlay))/1000
-						: elapsedTime;
-		}
 
 		private function onPlayheadTimer(event:TimerEvent):void
 		{
-			if (time >= _duration)
+			if (currentTime >= _duration)
 			{
 				playheadTimer.stop();
 				playTrait.stop();
 
-				elapsedTime = _duration;
+				currentTime = _duration;
 			}
 			else
 			{
-				elapsedTime = time;
+				// Increment our currentTime on each Timer tick.
+				currentTime = (flash.utils.getTimer() - absoluteStartTime)/1000;
 			}
 		}
 		
@@ -179,17 +175,13 @@ package org.osmf.elements
 		{
 			if (event.playState == PlayState.PLAYING)
 			{
-				absoluteTimeAtLastPlay = flash.utils.getTimer();
+				// When play starts, we reset our absoluteStartTime based on
+				// what our currentTime is.
+				absoluteStartTime = flash.utils.getTimer() - currentTime*1000;
 				playheadTimer.start();
-			}
-			else if (event.playState == PlayState.PAUSED)
-			{
-				elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
-				playheadTimer.stop();
 			}
 			else
 			{
-				elapsedTime += ((flash.utils.getTimer() - absoluteTimeAtLastPlay) /1000);
 				playheadTimer.stop();
 			}			
 		}
@@ -197,32 +189,36 @@ package org.osmf.elements
 		private function onSeekingChange(event:SeekEvent):void
 		{
 			if (event.seeking)
-			{				
-				elapsedTime = event.time;
-				absoluteTimeAtLastPlay = flash.utils.getTimer();
+			{
+				// Adjust the currentTime and absoluteStartTime by the seek amount.
+				var diff:Number = event.time - currentTime;
+				currentTime = event.time;
+				absoluteStartTime -= diff*1000;
 			}
 		}
 		
 		private function onComplete(event:TimeEvent):void
 		{
 			playheadTimer.stop();
+			playTrait.stop();
 		}
 				
-		private function get elapsedTime():Number
+		private function get currentTime():Number
 		{
-			return _elapsedTime;
+			return _currentTime;
 		}
 		
-		private function set elapsedTime(value:Number):void
+		private function set currentTime(value:Number):void
 		{
-			_elapsedTime = timeTrait.currentTime = value;
+			_currentTime = value;
+			timeTrait.currentTime = value;
 		}
 		
 		private static const DEFAULT_PLAYHEAD_UPDATE_INTERVAL:Number = 250;
 		
-		private var _elapsedTime:Number = 0; // seconds
+		private var _currentTime:Number = 0; // seconds
 		private var _duration:Number = 0;	// seconds
-		private var absoluteTimeAtLastPlay:Number = 0; // milliseconds
+		private var absoluteStartTime:Number = 0; // milliseconds
 		private var playheadTimer:Timer;
 		
 		private var timeTrait:DurationTimeTrait;
