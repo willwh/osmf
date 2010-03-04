@@ -110,6 +110,30 @@ package org.osmf.netmocker
 			}
 		}
 
+		public function testGetMetaDataWithNegativeDuration():void
+		{
+			startAsyncTest(2000);
+			
+			var client:NetClient = new NetClient();
+			client.addHandler("onMetaData", onMetaData);
+			netStream.client = client;
+			
+			netStream.expectedDuration = -1;
+			netStream.expectedWidth = 1920;
+			netStream.expectedHeight = 1080;
+			
+			netStream.play();
+			
+			function onMetaData(info:Object):void
+			{
+				assertTrue(info.duration == -1);
+				assertTrue(info.width == 1920);
+				assertTrue(info.height == 1080);
+				
+				endAsyncTest();
+			}
+		}
+
 		public function testPlay():void
 		{
 			startAsyncTest(2000);

@@ -404,13 +404,12 @@ package org.osmf.netmocker
 		
 		private function commonPlay():void
 		{
-			if (expectedDuration > 0)
+			if (expectedDuration != 0)
 			{
 				var info:Object = {};
-				if (expectedDuration > 0)
-				{
-					info["duration"] = expectedDuration;
-				}
+				
+				info["duration"] = expectedDuration;
+
 				if (expectedWidth > 0)
 				{
 					info["width"] = expectedWidth;
