@@ -81,8 +81,15 @@ package org.osmf.samples
 				{
 					measuredWidth = renderer.measuredWidth;
 					measuredHeight = renderer.measuredHeight;
-				}
+				}				
 			}
+			if (measuredWidth == 0 || isNaN(measuredWidth) ||
+				measuredHeight == 0 || isNaN(measuredHeight) )
+			{
+				measuredWidth = DEFAULT_WIDTH;
+				measuredHeight = DEFAULT_HEIGHT;
+			}
+			
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -104,6 +111,10 @@ package org.osmf.samples
 			invalidateSize();
 			invalidateDisplayList();
 		}
+		
+		private static const DEFAULT_WIDTH:Number = 320;
+		private static const DEFAULT_HEIGHT:Number = 240;
+		
 
 		private var _container:MediaContainer;
 	}
