@@ -78,6 +78,10 @@ package org.osmf.elements
 	 * bannerSequence.addChild(new DurationElement(20,new ImageElement(new ImageLoader(),
 	 * 	new URLResource("http://www.examplebanners.com/banner3.jpg")));
 	 * </listing>
+	 * 
+	 * The DurationElement will not work with elements that already have a Time trait, such
+	 * as VideoElement.  Use the subclips feature for modyifying these elements.
+	 * 
 	 * @see ProxyElement
 	 * @see org.osmf.elements.SerialElement
 	 *  
