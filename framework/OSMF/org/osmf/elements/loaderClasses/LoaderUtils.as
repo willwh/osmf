@@ -60,52 +60,26 @@ package org.osmf.elements.loaderClasses
 			var displayObject:DisplayObject = null;
 			var mediaWidth:Number = 0;
 			var mediaHeight:Number = 0;
+						
+			var info:LoaderInfo = loader.contentLoaderInfo;  
 			
-			try
-			{
 			
-				// Note that it's critical that the DisplayObjectTrait's
-				// displayObject be set to the Loader's content property (and
-				// not to a container Sprite, as was the case with a previous fix),
-				// since player-to-SWF communication is based on the player's
-				// ability to reference the SWF's API.
-				var info:LoaderInfo = loader.contentLoaderInfo;  
-								
-				if (info.contentType == SWF_MIME_TYPE &&
-					info.actionScriptVersion == ActionScriptVersion.ACTIONSCRIPT2)
-				{
-					// You can't change the parent of an AVM1 SWF, instead you have
-					// to add the Loader directly. 
-					displayObject = loader;
-				}
-				else
-				{
-					displayObject = loader.content;
-				}
-				
-				// Add a scroll rect, to allow the loaded content to
-				// overdraw its bounds, while maintaining scale, and size
-				// with the layout system.
-				//
-				displayObject.scrollRect = new Rectangle(0, 0, info.width, info.height);
-				
-				mediaWidth = info.width;
-				mediaHeight = info.height;
-			}
-			catch (error:SecurityError)
-			{
-				mediaElement.dispatchEvent
-					( new MediaErrorEvent
-						( MediaErrorEvent.MEDIA_ERROR
-						, false
-						, false
-						, new MediaError
-							( MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR
-							, error.message
-							)
-						)
-					);
-			}
+			//The display object must be a loader in order to support crossdomain
+			//swf loading.
+			
+			//The content of a loaded swf can be accessed (at the developers discrection) 
+			// by casting the display object back to a loader and accessing it's content property.
+			displayObject = loader;
+			
+			
+			// Add a scroll rect, to allow the loaded content to
+			// overdraw its bounds, while maintaining scale, and size
+			// with the layout system.
+			//
+			displayObject.scrollRect = new Rectangle(0, 0, info.width, info.height);
+			
+			mediaWidth = info.width;
+			mediaHeight = info.height;
 
 			return new DisplayObjectTrait(displayObject, mediaWidth, mediaHeight);
 		}
