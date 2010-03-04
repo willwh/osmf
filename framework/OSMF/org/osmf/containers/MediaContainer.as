@@ -35,7 +35,7 @@ package org.osmf.containers
 	import org.osmf.layout.MediaElementLayoutTarget;
 	import org.osmf.media.MediaElement;
 	import org.osmf.utils.OSMFStrings;
-
+	
 	/**
 	 * MediaContainer defines a Sprite-based IMediaContainer implementation.
 	 *  
@@ -400,7 +400,5 @@ package org.osmf.containers
 		
 		private var lastAvailableWidth:Number;
 		private var lastAvailableHeight:Number;
-		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaContainer");
 	}
 }
