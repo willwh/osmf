@@ -22,6 +22,7 @@
 package org.osmf.examples.chromeless
 {
 	import flash.display.DisplayObject;
+	import flash.display.Loader;
 	import flash.events.Event;
 	
 	import org.osmf.elements.SWFElement;
@@ -101,7 +102,7 @@ package org.osmf.examples.chromeless
 		private function get swfRoot():DisplayObject
 		{
 			var displayObjectTrait:DisplayObjectTrait = getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-			return displayObjectTrait != null ? displayObjectTrait.displayObject : null;
+			return displayObjectTrait != null ? Loader(displayObjectTrait.displayObject).content : null;
 		}
 		
 		override protected function processUnloadingState():void
