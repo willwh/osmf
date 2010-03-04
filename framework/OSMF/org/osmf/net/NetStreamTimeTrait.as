@@ -85,13 +85,11 @@ package org.osmf.net
 			{
 				subclipDuration = Number.MAX_VALUE;
 			}
-			
-			
-			
+						
 			// If startTime is unspecified, our duration is everything
 			// up to the end of the subclip (or the entire duration, if
-			// no subclip end is specified).
-			setDuration(Math.min(value.duration - subclipStartTime, subclipDuration));
+			// no subclip end is specified).  Take into account audio delay.
+			setDuration(Math.min((value.duration - audioDelay) - subclipStartTime, subclipDuration));
 		}
 		
 		private function onPlayStatus(event:Object):void
@@ -119,7 +117,22 @@ package org.osmf.net
 					break;
 			}
 		}
-	
+		
+		/**
+		 * We have to change the duration , given that audioDelay isn't enough to 
+		 * fix that netStream.time has from the detected duration.  This isn't
+		 * pre computable, since PLAY_STOP is fired at
+		 * non-deterministic intervals when the video is near ending.
+		 **/
+		override protected function signalComplete():void
+		{
+			if (currentTime != duration)
+			{
+				setDuration(currentTime);
+			}
+			super.signalComplete();
+		}
+			
 		private var audioDelay:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
