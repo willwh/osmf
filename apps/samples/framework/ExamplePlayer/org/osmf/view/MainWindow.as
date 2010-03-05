@@ -36,7 +36,10 @@ package org.osmf.view
 	import org.osmf.events.TimeEvent;
 	import org.osmf.examples.AllExamples;
 	import org.osmf.examples.Example;
+	import org.osmf.layout.HorizontalAlign;
+	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.ScaleMode;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.utils.Version;
@@ -159,6 +162,16 @@ package org.osmf.view
 			
 			if (value != null)
 			{
+				// If there's no explicit layout metadata, center the content. 
+				var layoutMetadata:LayoutMetadata = value.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+				if (layoutMetadata == null)
+				{
+					layoutMetadata = new LayoutMetadata();
+					layoutMetadata.scaleMode = ScaleMode.NONE;
+					layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
+					layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
+					value.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+				}
 				mediaContainerUIComponent.container.addMediaElement(value);
 			}
 				

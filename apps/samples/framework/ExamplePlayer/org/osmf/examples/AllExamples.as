@@ -46,9 +46,11 @@ package org.osmf.examples
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
 	import org.osmf.examples.traceproxy.TraceListenerProxyElement;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutMode;
 	import org.osmf.layout.ScaleMode;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;
@@ -296,25 +298,6 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), where each video is loaded up front, enabling a quicker transition from one to the other."
 				  	,  	function():MediaElement
 				  	   	{
-				  	   		function preload(mediaElement:MediaElement):void
-				  	   		{
-								var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-								loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-								loadTrait.load();
-								
-								function onLoadStateChange(event:LoadEvent):void
-								{
-									if (event.loadState == LoadState.READY)
-									{
-										loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-										
-										var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
-										playTrait.play();
-										playTrait.pause();
-									}
-								}
-				  	   		}
-				  	   		
 							var serialElement:SerialElement = new SerialElement();
 							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
 							preload(videoElement);
@@ -340,8 +323,7 @@ package org.osmf.examples
 				  	   	}
 				  	)
 				);
-
-			
+				 
 			examples.push
 				( new Example
 					( 	"Parallel Composition (Adjacent)"
@@ -351,6 +333,8 @@ package org.osmf.examples
 							var parallelElement:ParallelElement = new ParallelElement();
 							var layout:LayoutMetadata = new LayoutMetadata();
 							layout.layoutMode = LayoutMode.HORIZONTAL;
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.verticalAlign = VerticalAlign.MIDDLE;
 							layout.width = 640
 							layout.height = 352;
 							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
@@ -379,31 +363,50 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					( 	"Synchronized Parallel Composition"
-					, 	"Demonstrates playback of a ParallelElement that contains the same streaming video twice, where both videos get paused when one of them is in a buffering state."
+					, 	"Demonstrates playback of a ParallelElement that contains four videos, where all videos get paused when one of them is in a buffering state.  Note the use of LayoutMetadata to show the videos in a grid."
 				  	,  	function():MediaElement
 				  	   	{
 							var parallelElement:SynchronizedParallelElement = new SynchronizedParallelElement();
 							var layout:LayoutMetadata = new LayoutMetadata();
-							layout.layoutMode = LayoutMode.HORIZONTAL;
-							layout.width = 640
-							layout.height = 352;
+							layout.horizontalAlign = HorizontalAlign.CENTER;
+							layout.verticalAlign = VerticalAlign.MIDDLE;
 							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							
-							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							var mediaElement1:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
 							layout = new LayoutMetadata();
+							layout.left = 0;
+							layout.top = 0;
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
-							layout.scaleMode = ScaleMode.LETTERBOX;
 							mediaElement1.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement1);
 							
 							var mediaElement2:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
 							layout = new LayoutMetadata();
+							layout.left = 0;
+							layout.bottom = 0;
 							layout.percentWidth = 50;
 							layout.percentHeight = 50;
-							layout.scaleMode = ScaleMode.LETTERBOX;
 							mediaElement2.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
 							parallelElement.addChild(mediaElement2);
+
+							var mediaElement3:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM));
+							layout = new LayoutMetadata();
+							layout.right = 0;
+							layout.top = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement3.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement3);
+							
+							var mediaElement4:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE2));
+							layout = new LayoutMetadata();
+							layout.right = 0;
+							layout.bottom = 0;
+							layout.percentWidth = 50;
+							layout.percentHeight = 50;
+							mediaElement4.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+							parallelElement.addChild(mediaElement4);
 							
 							return parallelElement;
 				  	   	} 
@@ -445,7 +448,7 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
-							serialElement.addChild(new PosterFrameElement(new URLResource(REMOTE_IMAGE2)));
+							serialElement.addChild(new PosterFrameElement(new URLResource(REMOTE_IMAGE)));
 							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
 							return serialElement; 
 				  	   	} 
@@ -652,6 +655,8 @@ package org.osmf.examples
 							var layoutParallelElement:LayoutMetadata = new LayoutMetadata();
 							layoutParallelElement.width = 640;
 							layoutParallelElement.height = 358;
+							layoutParallelElement.horizontalAlign = HorizontalAlign.CENTER;
+							layoutParallelElement.verticalAlign = VerticalAlign.MIDDLE;
 							parallelElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutParallelElement);
 				  	   		
 				  	   		var delta:int = 1;
@@ -894,16 +899,35 @@ package org.osmf.examples
 			return examples;
 		}
 		
+     	private static function preload(mediaElement:MediaElement):void
+		{
+			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			loadTrait.load();
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				if (event.loadState == LoadState.READY)
+				{
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
+					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+					playTrait.play();
+					playTrait.pause();
+				}
+			}
+     	}
+
+		
 		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private static const REMOTE_AUDIO_STREAM:String 		= "rtmp://cp67126.edgefcs.net/ondemand/mp3:mediapm/strobe/content/test/train_1500";
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
-		private static const REMOTE_IMAGE:String 				= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
-		private static const REMOTE_IMAGE2:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
-		private static const REMOTE_SLIDESHOW_IMAGE1:String 	= "http://mediapm.edgesuite.net/osmf/image/flash_player_50x50.gif";
-		private static const REMOTE_SLIDESHOW_IMAGE2:String 	= "http://mediapm.edgesuite.net/osmf/image/flash_cs3_48x45.jpg";
+		private static const REMOTE_IMAGE:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
+		private static const REMOTE_SLIDESHOW_IMAGE1:String 	= "http://mediapm.edgesuite.net/osmf/swf/OSMFPlayer/images/vegetation.jpg";
+		private static const REMOTE_SLIDESHOW_IMAGE2:String 	= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
 		private static const REMOTE_SLIDESHOW_IMAGE3:String 	= "http://mediapm.edgesuite.net/osmf/image/flex_48x45.gif";
 		private static const REMOTE_SWF:String 					= "http://mediapm.edgesuite.net/osmf/swf/ReferenceSampleSWF.swf";
 		private static const REMOTE_INVALID_PROGRESSIVE:String 	= "http://mediapm.edgesuite.net/strobe/content/test/fail.flv";
