@@ -50,11 +50,11 @@ package org.osmf.net
 		private function onStage(event:Event):void
 		{
 			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			displayObject.addEventListener(Event.RENDER, onRender);			
+			displayObject.addEventListener(Event.ENTER_FRAME, onFrame);				
 		}
 				
-		private function onRender(event:Event):void
-		{				
+		private function onFrame(event:Event):void
+		{	
 			if	(	Video(displayObject).videoWidth != 0
 				&&	Video(displayObject).videoHeight != 0
 				)
@@ -62,8 +62,8 @@ package org.osmf.net
 				displayObject.width = Video(displayObject).videoWidth;
     			displayObject.height = Video(displayObject).videoHeight;
     				
-				setMediaSize(displayObject.width, displayObject.height);
-				displayObject.removeEventListener(Event.RENDER, onRender);		
+				setMediaSize(displayObject.width, displayObject.height);	
+				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);	
 			}
 		}
 	
@@ -76,8 +76,8 @@ package org.osmf.net
     				)
     			)
     		{	    			
-    			displayObject.removeEventListener(Event.RENDER, onRender);	
-    			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);	
+    			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
+				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);	
     			displayObject.width = info.width;
     			displayObject.height = info.height;
     				
