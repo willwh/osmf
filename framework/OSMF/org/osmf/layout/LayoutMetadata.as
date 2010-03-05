@@ -23,6 +23,8 @@ package org.osmf.layout
 {
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.metadata.MetadataSynthesizer;
+	import org.osmf.metadata.NullMetadataSynthesizer;
 	
 	/**
 	 * Defines a metadata object that contains the properties that a layout
@@ -561,6 +563,10 @@ package org.osmf.layout
 				 + "snap: " + snapToPixel;
 		}
 		
+		override public function get synthesizer():MetadataSynthesizer
+		{
+			return SYNTHESIZER;
+		}
 		
 		// Internals
 		//
@@ -644,5 +650,8 @@ package org.osmf.layout
 			}
 			return result;
 		}
+		
+		/* static */
+		private static const SYNTHESIZER:NullMetadataSynthesizer = new NullMetadataSynthesizer();
 	}
 }
