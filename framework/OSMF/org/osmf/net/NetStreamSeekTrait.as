@@ -70,17 +70,25 @@ package org.osmf.net
 		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
 		{
 			if (newSeeking)
-			{				
+			{
+				suppressSeekNotifyEvent  = false;
 				previousTime = timeTrait.currentTime;
 				expectedTime = time;
 				netStream.seek(time + audioDelay);
 				
-				if (timeTrait.currentTime == time)
+				if (previousTime == expectedTime)
 				{
-					// Manually start the seekBugTimer, because NetStream seemingly
-					// doesn't trigger an event when seeking to its current position (FM-227), 
-					// causing the seek to never get closed:
+					// Manually start the seekBugTimer, because NetStream
+					// sometimes doesn't trigger an event when seeking to
+					// its current position (FM-227), causing the seek to
+					// never get closed.
 					seekBugTimer.start();
+					
+					// Note that this event gets triggered "sometimes".
+					// If it does, then we want to suppress it (until the
+					// next seek operation, hence the clearing of it
+					// earlier in this method).
+					suppressSeekNotifyEvent = true;
 				}
 			}
 		}
@@ -101,7 +109,16 @@ package org.osmf.net
 					// NetStream's state is consistent, so we use a Timer to
 					// delay the processing until the NetStream.time property
 					// is up-to-date.
-					seekBugTimer.start();
+					// Note that we don't start the Timer if we've been
+					// instructed to suppress the event.
+					if (suppressSeekNotifyEvent == false)
+					{
+						seekBugTimer.start();
+					}
+					else
+					{
+						suppressSeekNotifyEvent = false;
+					}
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
@@ -112,28 +129,32 @@ package org.osmf.net
 				
 		private function onSeekBugTimer(event:TimerEvent):void
 		{
-			// We accept the NetStream.time within a margin of the desired seek.
-			// This fixes seeks where the value doesn't land directly on the desired time.
-			// This also fixes seeks backward.
-			if ((expectedTime - SEEK_MARGIN) <= timeTrait.currentTime &&
-				timeTrait.currentTime <= (expectedTime + SEEK_MARGIN))
+			// As soon as our NetStream.time value has changed from the value
+			// it had when the seek was initiated, we assume the seek has
+			// completed. Note that the playhead may not actually be at the
+			// seeked-to position, since it will land on the nearest keyframe
+			// (which might be seconds away).   Addresses bug FM-258.
+			// The second condition is to cover the case where the seek time
+			// is the same as the current time (bug FM-227).
+			if (   previousTime != netStream.time
+				|| previousTime == expectedTime
+			   )
 			{
-				seekBugTimer.reset();			
-				setSeeking(false, expectedTime);
+				onSeekBugTimerDone(null);
 			}			
 		}
 		
 		private function onSeekBugTimerDone(event:TimerEvent):void
-		{		
+		{
 			seekBugTimer.reset();
 			setSeeking(false, expectedTime);
 		}
-				
-		private const SEEK_MARGIN:Number = .25; // Seconds
+		
 		private var audioDelay:Number = 0;
 		private var seekBugTimer:Timer;
 		private var netStream:NetStream;
 		private var expectedTime:Number;
 		private var previousTime:Number;
+		private var suppressSeekNotifyEvent:Boolean = false;
 	}
 }
