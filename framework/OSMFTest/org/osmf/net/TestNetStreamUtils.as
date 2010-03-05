@@ -61,6 +61,8 @@ package org.osmf.net
 			assertTrue(NetStreamUtils.getStreamNameFromURL("rtmp://example.com/app/stream") == "stream");
 			assertTrue(NetStreamUtils.getStreamNameFromURL("rtmp://example.com/app/stream?foo=bar") == "stream?foo=bar");
 			assertTrue(NetStreamUtils.getStreamNameFromURL("rtmp://example.com/app/stream1/stream2") == "stream1/stream2");
+			assertTrue(NetStreamUtils.getStreamNameFromURL("rtmp://example.com/app/stream1/stream2", true) == "stream2");
+			assertTrue(NetStreamUtils.getStreamNameFromURL("rtmp://example.com/app/stream1/stream2?foo=bar", true) == "stream2?foo=bar");
 		}
 		
 		public function testIsRTMPStream():void

@@ -95,7 +95,9 @@ package org.osmf.net
 				else if (urlResource != null) 
 				{
 					// Map the resource to the NetStream.play/play2 arguments.
-					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url);
+					var streamingResource:StreamingURLResource = urlResource as StreamingURLResource;
+					var urlIncludesFMSApplicationInstance:Boolean = streamingResource ? streamingResource.urlIncludesFMSApplicationInstance : false;
+					var streamName:String = NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance);
 					
 					playArgs = NetStreamUtils.getPlayArgsForResource(urlResource);
 					

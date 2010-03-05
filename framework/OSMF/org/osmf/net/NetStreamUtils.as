@@ -42,7 +42,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getStreamNameFromURL(url:String):String
+		public static function getStreamNameFromURL(url:String, urlIncludesFMSApplicationInstance:Boolean=false):String
 		{
 			var streamName:String = "";
 			
@@ -51,7 +51,7 @@ package org.osmf.net
 			{
 				if (isRTMPStream(url))
 				{
-					var fmsURL:FMSURL = new FMSURL(url);
+					var fmsURL:FMSURL = new FMSURL(url, urlIncludesFMSApplicationInstance);
 	
 					streamName = fmsURL.streamName;
 	

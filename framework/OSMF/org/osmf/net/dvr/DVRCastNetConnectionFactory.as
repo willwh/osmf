@@ -30,6 +30,7 @@ package org.osmf.net.dvr
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.StreamingURLResource;
 
 	[ExcludeClass]
 
@@ -87,7 +88,9 @@ package org.osmf.net.dvr
 			
 			netConnection = event.netConnection as DVRCastNetConnection;
 			
-			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url);
+			var streamingResource:StreamingURLResource = urlResource as StreamingURLResource;
+			var urlIncludesFMSApplicationInstance:Boolean = streamingResource ? streamingResource.urlIncludesFMSApplicationInstance : false;
+			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance);
 			var responder:Responder 
 				= new Responder
 					( onStreamSubscriptionResult
