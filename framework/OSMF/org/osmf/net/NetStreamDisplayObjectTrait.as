@@ -55,8 +55,9 @@ package org.osmf.net
 				
 		private function onRender(event:Event):void
 		{				
-			if (Video(displayObject).videoWidth != 0 &&
-				Video(displayObject).videoHeight != 0)
+			if	(	Video(displayObject).videoWidth != 0
+				&&	Video(displayObject).videoHeight != 0
+				)
 			{				
 				displayObject.width = Video(displayObject).videoWidth;
     			displayObject.height = Video(displayObject).videoHeight;
@@ -68,8 +69,12 @@ package org.osmf.net
 	
 		private function onMetaData(info:Object):void 
     	{       		
-    		if (!isNaN(info.width) &&
-    		    !isNaN(info.height))
+    		if	(	!isNaN(info.width)
+    			&&  !isNaN(info.height)
+    			&&	(	info.width != mediaWidth
+    				||	info.height != mediaHeight
+    				)
+    			)
     		{	    			
     			displayObject.removeEventListener(Event.RENDER, onRender);	
     			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);	
