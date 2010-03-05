@@ -563,6 +563,9 @@ package org.osmf.layout
 				 + "snap: " + snapToPixel;
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function get synthesizer():MetadataSynthesizer
 		{
 			return SYNTHESIZER;
