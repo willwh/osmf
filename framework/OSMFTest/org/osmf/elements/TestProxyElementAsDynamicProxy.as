@@ -94,17 +94,13 @@ package org.osmf.elements
 			assertFalse(proxyElement.hasTrait(MediaTraitType.LOAD));
 			assertFalse(proxyElement.hasTrait(MediaTraitType.TIME));
 			
-			// The TIME trait gets removed, then the PLAY and SEEK are added.
-			// There should be no event for LOAD, since it's blocked.
-			// TODO: Reenable once this is implemented.
-			/*assertTrue(events.length == 3);
+			// The TIME trait gets removed, then the SEEK trait is added.
+			// There should be no event for PLAY or LOAD, since they're blocked.
+			assertTrue(events.length == 2);
 			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_REMOVE);
 			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.TIME);
 			assertTrue(MediaElementEvent(events[1]).type == MediaElementEvent.TRAIT_ADD);
-			assertTrue(MediaElementEvent(events[1]).traitType == MediaTraitType.PLAY);
-			assertTrue(MediaElementEvent(events[2]).type == MediaElementEvent.TRAIT_ADD);
-			assertTrue(MediaElementEvent(events[2]).traitType == MediaTraitType.SEEK);
-			*/
+			assertTrue(MediaElementEvent(events[1]).traitType == MediaTraitType.SEEK);
 			
 			events = [];
 			
@@ -122,6 +118,23 @@ package org.osmf.elements
 			assertTrue(events.length == 1);
 			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_ADD);
 			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.LOAD);
+			
+			events = [];
+			
+			// But if we add a trait for a type that's blocked, we should get
+			// no traitAdd event.
+			proxyElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
+			assertTrue(events.length == 0);
+			
+			// However, as soon as we unblock that trait, it's exposed, so
+			// we should get an event.
+			blockedTraits = new Vector.<String>();
+			blockedTraits.push(MediaTraitType.TIME);
+			proxyElement.setBlockedTraits(blockedTraits);
+			
+			assertTrue(events.length == 1);
+			assertTrue(MediaElementEvent(events[0]).type == MediaElementEvent.TRAIT_ADD);
+			assertTrue(MediaElementEvent(events[0]).traitType == MediaTraitType.PLAY);
 
 			function onTraitEvent(event:MediaElementEvent):void
 			{
@@ -254,13 +267,13 @@ package org.osmf.elements
 			assertTrue(traitRemoveEventCount == 4);
 			
 			// Last, if we add or remove a trait to the proxy which the proxy
-			// also blocks, then we should get events. 
+			// also blocks, then we should not get events. 
 			proxyElement.doAddTrait(MediaTraitType.PLAY, new PlayTrait());
-			assertTrue(traitAddEventCount == 5);
+			assertTrue(traitAddEventCount == 4);
 			assertTrue(traitRemoveEventCount == 4);
 			proxyElement.doRemoveTrait(MediaTraitType.PLAY);
-			assertTrue(traitAddEventCount == 5);
-			assertTrue(traitRemoveEventCount == 5);
+			assertTrue(traitAddEventCount == 4);
+			assertTrue(traitRemoveEventCount == 4);
 		}
 		
 		// Overrides

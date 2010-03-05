@@ -100,6 +100,11 @@ package org.osmf.elements
 		{
 			super();
 			
+			// Set a higher priority for our own listeners, so that we get a
+			// chance to stop propagation of the events if necessary.
+			this.addEventListener(MediaElementEvent.TRAIT_ADD, onProxyTraitAdd, false, int.MAX_VALUE);
+			this.addEventListener(MediaElementEvent.TRAIT_REMOVE, onProxyTraitRemove, false, int.MAX_VALUE);
+			
 			this.proxiedElement = proxiedElement;
 		}
 		
@@ -391,8 +396,6 @@ package org.osmf.elements
 				}
 			}
 			
-			_blockedTraits = value;
-			
 			if (_proxiedElement != null)
 			{
 				// For each newly blocked trait that the proxied element is currently
@@ -401,9 +404,11 @@ package org.osmf.elements
 				{
 					if (proxiedElement.hasTrait(traitType) || super.hasTrait(traitType))
 					{
-						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
+						dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
 					}
 				}
+				
+				_blockedTraits = value;
 
 				// For each previously blocked trait that the proxied element is
 				// currently exposing, signal addition of the new trait.
@@ -411,9 +416,13 @@ package org.osmf.elements
 				{
 					if (proxiedElement.hasTrait(traitType) || super.hasTrait(traitType))
 					{
-						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
+						dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
 					}
 				}
+			}
+			else
+			{
+				_blockedTraits = value;
 			}
 		}
 		
@@ -475,6 +484,16 @@ package org.osmf.elements
 		{
 			dispatchEvent(event.clone());
 		}
+
+		private function onProxyTraitAdd(event:MediaElementEvent):void
+		{
+			processProxyTraitsChangeEvent(event);
+		}
+
+		private function onProxyTraitRemove(event:MediaElementEvent):void
+		{
+			processProxyTraitsChangeEvent(event);
+		}
 		
 		private function processTraitsChangeEvent(event:MediaElementEvent):void
 		{
@@ -485,6 +504,15 @@ package org.osmf.elements
 				)
 			{
 				super.dispatchEvent(event.clone());
+			}
+		}
+		
+		private function processProxyTraitsChangeEvent(event:MediaElementEvent):void
+		{
+			// Prevent the event from propagating if it's for a blocked trait.
+			if (blocksTrait(event.traitType) == true)
+			{
+				event.stopImmediatePropagation();
 			}
 		}
 		
