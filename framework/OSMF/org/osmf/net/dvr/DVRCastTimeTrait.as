@@ -118,13 +118,16 @@ package org.osmf.net.dvr
 			
 			if (event.info.code == "NetStream.Play.Stop")
 			{
-				// It seems that this status code signals completion:
+				if (durationUpdateTimer)
+				{
+					durationUpdateTimer.stop();
+				}
 				signalComplete();
 			}
 		}
 		
 		CONFIG::LOGGING
-		{	
+		{
 			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DVRCastTimeTrait");		
 		}	
 	}
