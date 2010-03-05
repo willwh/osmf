@@ -141,10 +141,15 @@ package org.osmf.net
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
+			var streamingResource:StreamingURLResource = new StreamingURLResource("http://example.com");
+			streamingResource.clipStartTime = 10;
+			streamingResource.clipEndTime = 15;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
 			// Now try with positive/non-default cases.
 			//
-			
-			var streamingResource:StreamingURLResource = null;
 			
 			streamingResource = new StreamingURLResource("rtmp://example.com", StreamType.LIVE);
 			result = NetStreamUtils.getPlayArgsForResource(streamingResource);

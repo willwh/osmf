@@ -182,7 +182,7 @@ package org.osmf.net
 				)
 			{
 				var streamingResource:StreamingURLResource = resource as StreamingURLResource;
-				if (streamingResource != null)
+				if (streamingResource != null && isStreamingResource(streamingResource))
 				{
 					if (!isNaN(streamingResource.clipStartTime))
 					{
