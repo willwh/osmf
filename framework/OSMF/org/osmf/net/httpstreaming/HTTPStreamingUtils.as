@@ -212,7 +212,7 @@ package org.osmf.net.httpstreaming
 						MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY) as ByteArray;
 				}
 				
-				var streamName:String = resource.url.substr(resource.url.lastIndexOf("/")+1);
+				var streamName:String = resource.url;
 				streamInfos.push(new HTTPStreamingF4FStreamInfo(bootstrap, streamName, NaN, additionalHeader, streamMetadata, xmpMetadata));
 			}
 

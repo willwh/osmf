@@ -353,7 +353,13 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		public function get totalDuration():uint
 		{
-			return (_fragmentRunTables.length < 1) ? 0 : _fragmentRunTables[0].totalDuration;
+			if (_fragmentRunTables.length < 1)
+			{
+				return 0;
+			}
+			
+			var frt:AdobeFragmentRunTable = _fragmentRunTables[0];
+			return _currentMediaTime - (frt.fragmentDurationPairs)[0].durationAccrued;
 		}
 
 		// Internal

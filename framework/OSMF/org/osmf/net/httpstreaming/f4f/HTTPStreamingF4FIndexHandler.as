@@ -153,7 +153,7 @@ package org.osmf.net.httpstreaming.f4f
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 				return;					
 			}
-			
+
 			if (!fragmentRunTablesUpdating) 
 			{
 				pendingIndexLoads--;
@@ -164,6 +164,7 @@ package org.osmf.net.httpstreaming.f4f
 				if (pendingIndexUpdates == 0)
 				{
 					fragmentRunTablesUpdating = false;
+					notifyTotalDuration(bootstrapBox.totalDuration / bootstrapBox.timeScale, indexContext as int);
 				}
 			}
 			
@@ -201,7 +202,7 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			if (	time >= 0
-				&&	time * abst.timeScale <= frt.totalDuration
+				&&	time * abst.timeScale <= abst.totalDuration
 				&& 	quality >= 0
 				&&  quality < streamInfos.length
 			   )
@@ -214,15 +215,25 @@ package org.osmf.net.httpstreaming.f4f
 				
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				
-				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+				var requestUrl:String = "";
+				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
+				{
+					requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+				}
+				else
+				{
+					requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+				}
 				
 				CONFIG::LOGGING
 				{
 					logger.debug("getFileForTime URL = " + requestUrl);
 				}
+
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 				checkFragmentInventory(currentFAI.fragId, abst, frt);
+				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 			}
 			
 			CONFIG::LOGGING
@@ -246,10 +257,7 @@ package org.osmf.net.httpstreaming.f4f
 			
 			checkMetadata(quality, abst);
 
-			if (	(currentFAI.fragId + 1)  <= abst.totalFragments
-				&& 	quality >= 0
-				&&  quality < streamInfos.length
-			   )
+			if (quality >= 0 && quality < streamInfos.length)
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 				currentFAI = frt.validateFragment(currentFAI.fragId + 1);
@@ -259,11 +267,20 @@ package org.osmf.net.httpstreaming.f4f
 				}
 		
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
-				var requestUrl:String = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
-				
+				var requestUrl:String = "";
+				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
+				{
+					requestUrl = serverBaseURL + "/" + streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+				}
+				else
+				{
+					requestUrl = streamInfos[quality].streamName + "Seg" + segId + "-Frag" + currentFAI.fragId;
+				}
+			
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
 				checkFragmentInventory(currentFAI.fragId, abst, frt);
+				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 					
 				CONFIG::LOGGING
 				{
@@ -376,6 +393,15 @@ package org.osmf.net.httpstreaming.f4f
 		private function checkFragmentInventory(
 			fragId:uint, abst:AdobeBootstrapBox, frt:AdobeFragmentRunTable):void
 		{
+			CONFIG::LOGGING
+			{
+				logger.debug(
+					"fragmentRunTablesUpdating: " + fragmentRunTablesUpdating + 
+					" live: " + abst.live +
+					" frt.tableComplete(): " + frt.tableComplete() + 
+					" frt.fragmentsLeft: " + frt.fragmentsLeft(fragId, abst.currentMediaTime));
+			}		
+			
 			if (fragmentRunTablesUpdating ||
 				!abst.live || 
 				frt.tableComplete() || 
@@ -388,6 +414,11 @@ package org.osmf.net.httpstreaming.f4f
 			pendingIndexUpdates = streamInfos.length;
 			for (var i:uint = 0; i < streamInfos.length; i++)
 			{
+				CONFIG::LOGGING
+				{
+					logger.debug("refresh frt: " + (streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url);
+				}
+				
 				dispatchEvent
 					(	new HTTPStreamingIndexHandlerEvent
 							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
@@ -395,7 +426,7 @@ package org.osmf.net.httpstreaming.f4f
 							, false
 							, null
 							, null
-							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url)
+							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url + "?rand=" + new Date().getTime())
 							, i
 							, true
 							)
@@ -512,6 +543,23 @@ package org.osmf.net.httpstreaming.f4f
 					, true
 					)
 				);
+		}
+		
+		private function notifyFragmentDuration(duration:Number):void
+		{
+			dispatchEvent
+				(	new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION 
+						, false
+						, false
+						, null
+						, null
+						, null
+						, null
+						, true
+						, duration
+						)
+				);				
 		}
 
 		private var pendingIndexLoads:int;

@@ -136,6 +136,21 @@ package org.osmf.net.httpstreaming.f4f
 		}
 		
 		/**
+		 * The total number of fragments contained in this fragment run table.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function get totalFragments():uint
+		{
+			var lastFdp:FragmentDurationPair 
+				= _fragmentDurationPairs.length <= 0 ? null : _fragmentDurationPairs[_fragmentDurationPairs.length - 1];
+			return lastFdp.firstFragment; 
+		}
+
+		/**
 		 * Given a time spot in terms of the time scale used by the fragment table, returns the corresponding
 		 * Id of the fragment that contains the time spot.
 		 * 
@@ -193,6 +208,7 @@ package org.osmf.net.httpstreaming.f4f
 					if (curFdp.duration > 0)
 					{
 						fai.fragId = fragId;
+						fai.fragDuration = curFdp.duration;
 						fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration * (fragId - curFdp.firstFragment + 1);
 						return fai;
 					}
@@ -205,6 +221,7 @@ package org.osmf.net.httpstreaming.f4f
 					
 					fai.fragId = curFdp.firstFragment;
 					fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration;
+					fai.fragDuration = curFdp.duration;
 					
 					return fai;
 				}
@@ -213,7 +230,8 @@ package org.osmf.net.httpstreaming.f4f
 			if (fragId >= _fragmentDurationPairs[size].firstFragment && _fragmentDurationPairs[size].duration > 0)
 			{
 				fai.fragId = fragId;
-				fai.fragmentEndTime = 
+				fai.fragDuration = 
+				fai.fragmentEndTime = _fragmentDurationPairs[size].duration;
 					_fragmentDurationPairs[size].durationAccrued + 
 					_fragmentDurationPairs[size].duration * (fragId - _fragmentDurationPairs[size].firstFragment + 1);
 			}

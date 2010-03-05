@@ -31,5 +31,7 @@ package org.osmf.net.httpstreaming.f4f
 		public var fragId:uint
 		
 		public var fragmentEndTime:Number;
+		
+		public var fragDuration:uint;
 	}
 }
