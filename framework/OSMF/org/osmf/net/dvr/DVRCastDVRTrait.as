@@ -31,6 +31,7 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.logging.ILogger;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -94,10 +95,12 @@ package org.osmf.net.dvr
 		 */
 		override protected function isRecordingChangeStart(value:Boolean):void
 		{
+			CONFIG::LOGGING { logger.debug("isRecordingChangeStart({0})", streamInfo.isRecording); }
+			
 			if (value)
 			{
 				// We're going into recording mode: update the start duration, and timer:
-				recordingInfo.startDuration = streamInfo.currentLength - recordingInfo.startOffset;
+				recordingInfo.startDuration = streamInfo.currentLength;
 				recordingInfo.startTime = new Date();
 			}
 			else
@@ -147,6 +150,11 @@ package org.osmf.net.dvr
 						)
 					);
 			}
+		}
+		
+		CONFIG::LOGGING
+		{	
+			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DVRCastDVRTrait");		
 		}
 	}
 }

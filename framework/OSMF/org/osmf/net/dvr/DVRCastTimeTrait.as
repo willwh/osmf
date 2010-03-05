@@ -28,6 +28,7 @@ package org.osmf.net.dvr
 	import flash.utils.Timer;
 	
 	import org.osmf.events.TimeEvent;
+	import org.osmf.logging.ILogger;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
@@ -78,6 +79,9 @@ package org.osmf.net.dvr
 				// last known length minus the starting offset:
 				result = streamInfo.currentLength - recordingInfo.startOffset;				
 			}
+			
+			// Make sure that the result is not negative:
+			result = isNaN(result) ? NaN : Math.max(0, result);
 										
 			return result;
 		}
@@ -110,11 +114,18 @@ package org.osmf.net.dvr
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
+			CONFIG::LOGGING { logger.debug("NetStatus: {0}", event.info.code); }
+			
 			if (event.info.code == "NetStream.Play.Stop")
 			{
 				// It seems that this status code signals completion:
 				signalComplete();
 			}
 		}
+		
+		CONFIG::LOGGING
+		{	
+			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DVRCastTimeTrait");		
+		}	
 	}
 }
