@@ -25,7 +25,6 @@ package
 	
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadState;
@@ -43,25 +42,28 @@ package
 		public function HelloWorld4()
 		{
 			var resource:URLResource = new URLResource("http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv");
-			var element:MediaElement = new VideoElement(resource);
+			videoElement = new VideoElement(resource);
 			
-			var loadTrait:LoadTrait = element.getTrait(MediaTraitType.LOAD) as LoadTrait;
+			var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
 			loadTrait.load();
-			
-			function onReady(event:LoadEvent):void
+		}
+		
+		private function onReady(event:LoadEvent):void
+		{
+			if (event.loadState == LoadState.READY)
 			{
-				if (event.loadState == LoadState.READY)
-				{
-					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
-					
-					var playTrait:PlayTrait = element.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					playTrait.play();
-					
-					var displayObjectTrait:DisplayObjectTrait = element.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-					addChild(displayObjectTrait.displayObject);
-				}
+				var loadTrait:LoadTrait = videoElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onReady);
+				
+				var playTrait:PlayTrait = videoElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				playTrait.play();
+				
+				var displayObjectTrait:DisplayObjectTrait = videoElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
+				addChild(displayObjectTrait.displayObject);
 			}
 		}
+		
+		private var videoElement:VideoElement;
 	}
 }

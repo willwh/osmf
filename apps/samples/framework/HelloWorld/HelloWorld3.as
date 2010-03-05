@@ -27,11 +27,14 @@ package
 	import flash.events.Event;
 	
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.layout.ScaleMode;
 	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.SWFElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
+	import org.osmf.layout.HorizontalAlign;
+	import org.osmf.layout.LayoutMetadata;
+	import org.osmf.layout.ScaleMode;
+	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -57,7 +60,6 @@ package
 			// prevent the content from being scaled.
 			container.width = stage.stageWidth;
 			container.height = stage.stageHeight;
-			container.layoutMetadata.scaleMode = ScaleMode.NONE;
 
 			// Make sure we resize the container when the stage dimensions
 			// change.
@@ -69,6 +71,17 @@ package
 			// Create a composite MediaElement, consisting of a video
 			// followed by a SWF, followed by another video.
 			var mediaElement:MediaElement = createMediaElement();
+			
+			// Assign some layout metadata to the MediaElement.  This will cause
+			// it to be centered in the container, with no scaling of content.
+			var layoutMetadata:LayoutMetadata = new LayoutMetadata();
+			layoutMetadata.scaleMode = ScaleMode.NONE;
+			layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
+			layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
+			mediaElement.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+			
+			// Add the MediaElement to our container class, so that it gets
+			// displayed.
 			container.addMediaElement(mediaElement);
 			
 			// Set the MediaElement on a MediaPlayer.  Because autoPlay
