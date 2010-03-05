@@ -30,6 +30,7 @@ package org.osmf.elements
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * The LoadFromDocumentElement is the base class for MediaElements that load documents
@@ -40,6 +41,8 @@ package org.osmf.elements
 	 * Because of the dynamic nature of this operation, a LoadFromDocumentElement extends
 	 * ProxyElement.  When the load is complete, it will set the proxiedElement property to
 	 * the MediaElement that was generated from the document.
+	 * 
+	 * This is an abstract base class, and should be subclassed.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -49,7 +52,12 @@ package org.osmf.elements
 	public class LoadFromDocumentElement extends ProxyElement
 	{
 		/**
-		 * Creates a new LoadFromDocumentElement.  This is an abstract base class, and should be subclassed.
+		 * Constructor.
+		 * 
+		 * @param resource The resource associated with this element.
+		 * @param loader The LoaderBase used to load the resource.  Cannot be null.
+		 * 
+		 * @throws ArgumentError If loader is null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -58,10 +66,16 @@ package org.osmf.elements
 		 */ 
 		public function LoadFromDocumentElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
 		{	
-			super(null);		
+			super(null);
+			
 			_temporaryMetadata = new ProxyMetadata();
 			this.loader = loader;			
 			this.resource = resource;
+			
+			if (loader == null)
+			{
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
+			} 
 		}
 	
 		private function onLoaderStateChange(event:Event):void
