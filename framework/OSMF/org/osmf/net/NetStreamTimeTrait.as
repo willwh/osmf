@@ -62,7 +62,16 @@ package org.osmf.net
 		 */
 		override public function get currentTime():Number
 		{
-			return netStream.time - audioDelay;
+			// If at the end of the video, make sure the duration matches the currentTime.  
+			// Work around for FP-3724.  Only apply duration offset at the end - or else the seek(0) doesn't goto 0.
+			if (durationOffset == (duration - (netStream.time - audioDelay)))  
+			{
+				return netStream.time - audioDelay + durationOffset;
+			}
+			else
+			{
+				return netStream.time - audioDelay;
+			}
 		}
 		
 		private function onMetaData(value:Object):void
@@ -126,13 +135,14 @@ package org.osmf.net
 		 **/
 		override protected function signalComplete():void
 		{
-			if (currentTime != duration)
+			if ((netStream.time - audioDelay) != duration)
 			{
-				setDuration(currentTime);
+				durationOffset = duration - (netStream.time - audioDelay);
 			}
 			super.signalComplete();
 		}
-			
+		
+		private var durationOffset:Number = 0;
 		private var audioDelay:Number = 0;
 		private var netStream:NetStream;
 		private var resource:MediaResourceBase;
