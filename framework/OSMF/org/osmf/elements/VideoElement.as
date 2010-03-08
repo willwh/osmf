@@ -103,6 +103,14 @@ package org.osmf.elements
 	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
+	*
+	* The VideoElement has support for the DRMTrait.  The DRMTrait implementation on 
+	* this element will use the NetStreamDRMTrait, which contains The flash player's specific DRM
+	* implementation.  The startDate, endDate, and period properties of this trait correspond
+	* to the voucher validity before playback starts.  Once playback beigns these properties reflect the 
+	* playback time window, as found on flash.net.drm.DRMVoucher.
+	*  
+	* 
 	* 
 	* @see org.osmf.net.NetLoader
 	* @see org.osmf.media.URLResource
