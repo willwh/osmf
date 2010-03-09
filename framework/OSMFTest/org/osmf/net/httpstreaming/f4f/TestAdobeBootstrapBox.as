@@ -63,7 +63,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		public function testTotalDuration():void
 		{
-			assertTrue(abst.totalDuration == 60923);
+			assertTrue(abst.totalDuration == 60905);
 		}
 
 		public function testTotalFragments():void
