@@ -418,7 +418,7 @@ package org.osmf.net.httpstreaming
 			// this is the new common FLVTag Parser's tag handler
 			var i:int;
 			
-			if (_playForDuration > 0)
+			if (_playForDuration >= 0)
 			{
 				if (_initialTime >= 0)	// until we know this, we don't know where to stop, and if we're enhanced-seeking then we need that logic to be what sets this up
 				{
@@ -468,7 +468,7 @@ package org.osmf.net.httpstreaming
 					_seekTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
 				}
 			}		
-			else
+			else // doing enhanced seek
 			{
 				if (tag is FLVTagVideo)
 				{	
@@ -537,9 +537,9 @@ package org.osmf.net.httpstreaming
 						tag.write(bytes);
 						_flvParserProcessed += bytes.length;
 						attemptAppendBytes(bytes);
-						if (_playForDuration > 0)
+						if (_playForDuration >= 0)
 						{
-							return true;	// need to continue seeing the tags
+							return true;	// need to continue seeing the tags, and can't shortcut because we're being dropped off mid-segment
 						}
 						_flvParserDone = true;
 						return false;	// and end of parsing (caller must dump rest, unparsed)
@@ -567,12 +567,37 @@ package org.osmf.net.httpstreaming
 			_flvParserProcessed += bytes.length;
 			tag.write(bytes);
 			attemptAppendBytes(bytes);
-			if (_playForDuration > 0)
+			
+			// probably done seeing the tags, unless we are in playForDuration mode...
+			if (_playForDuration >= 0)
 			{
-				return true;	// need to continue seeing the tags
+				if (_segmentDuration >= 0 && _flvParserIsSegmentStart)
+				{
+					// if the segmentDuration has been reported, it is possible that we might be able to shortcut
+					// but we need to be careful that this is the first tag of the segment, otherwise we don't know what duration means in relation to the tag timestamp
+
+					_flvParserIsSegmentStart = false; // also used by enhanced seek, but not generally set/cleared for everyone. be careful.
+					currentTime = (tag.timestamp / 1000.0) + _fileTimeAdjustment;
+					if (currentTime + _segmentDuration >= (_initialTime + _playForDuration))
+					{
+						// it stops somewhere in this segment, so we need to keep seeing the tags
+						return true;
+					}
+					else
+					{
+						// stop is past the end of this segment, can shortcut and stop seeing tags
+						_flvParserDone = true;
+						return false;
+					}
+				}
+				else
+				{
+					return true;	// need to continue seeing the tags because either we don't have duration, or started mid-segment so don't know what duration means
+				}
 			}
+			// else not in playForDuration mode...
 			_flvParserDone = true;
-			return false; // until we do anything more, we always do one and only one
+			return false;
 		}
 	
 		/**
@@ -884,6 +909,7 @@ package org.osmf.net.httpstreaming
 			
 					// XXX the double test of _prevState in here is a little weird... might want to factor differently
 					
+					_segmentDuration = -1;	// we now track whether or not this has been reported yet for this segment by the Index or File handler
 					switch (_prevState)
 					{
 						case HTTPStreamingState.LOAD_SEEK:
@@ -942,11 +968,12 @@ package org.osmf.net.httpstreaming
 				case HTTPStreamingState.PLAY_START_COMMON:
 					
 					// need to run the common FLVParser?
-					if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags || _enhancedSeekTarget >= 0)
+
+					if (_initialTime < 0 || _seekTime < 0 || _insertScriptDataTags || _enhancedSeekTarget >= 0 || _playForDuration >= 0)
 					{
-						if (_enhancedSeekTarget >= 0)
+						if (_enhancedSeekTarget >= 0 || _playForDuration >= 0)
 						{
-							_flvParserIsSegmentStart = true;
+							_flvParserIsSegmentStart = true;	// warning, this isn't generally set/cleared, just used by these two cooperating things
 						}
 						_flvParser = new FLVParser(false);
 						_flvParserDone = false;
@@ -1287,7 +1314,7 @@ package org.osmf.net.httpstreaming
 		private var _numQualityLevels:int = 0;
 		private var _qualityRates:Array; 	
 		private var _streamNames:Array;
-		private var _segmentDuration:Number;
+		private var _segmentDuration:Number = -1;
 		private var _urlStreamVideo:URLStream = null;
 		private var _loadComplete:Boolean = false;
 		private var mainTimer:Timer;
