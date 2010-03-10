@@ -146,8 +146,9 @@ package org.osmf.elements
 		}
 		       	
        	/**
-       	 * The NetClient used by this VideoElement's NetStream.  Available after the 
-       	 * element has been loaded.
+       	 * The NetClient used by this VideoElement's NetStream.  Will be null until the 
+       	 * VideoElement has been loaded (as indicated by its LoadTrait entering the READY
+       	 * state).
        	 *  
        	 *  @langversion 3.0
        	 *  @playerversion Flash 10
@@ -156,9 +157,9 @@ package org.osmf.elements
        	 */ 
        	public function get client():NetClient
        	{
-       		return stream.client as NetClient;
+       		return stream != null ? stream.client as NetClient : null;
        	}
-       	
+       	       	
        	/**
        	 * Defines the duration that the element's TimeTrait will expose until the
        	 * element's content is loaded.
