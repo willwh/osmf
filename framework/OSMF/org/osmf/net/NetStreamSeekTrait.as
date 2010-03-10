@@ -26,6 +26,7 @@ package org.osmf.net
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
 	
@@ -48,17 +49,39 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NetStreamSeekTrait(temporal:TimeTrait, netStream:NetStream)
+		public function NetStreamSeekTrait(temporal:TimeTrait, loadTrait:LoadTrait, netStream:NetStream)
 		{
 			super(temporal);
 			
 			this.netStream = netStream;
+			this.loadTrait = loadTrait;
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			seekBugTimer = new Timer(10, 100);
 			seekBugTimer.addEventListener(TimerEvent.TIMER, onSeekBugTimer, false, 0, true);	
 			seekBugTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onSeekBugTimerDone, false, 0, true);		
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function canSeekTo(time:Number):Boolean
+		{
+			var result:Boolean = super.canSeekTo(time);
+			
+			if (	result
+				 && !isNaN(loadTrait.bytesTotal)
+				 && loadTrait.bytesTotal > 0
+			   )
+			{
+				// Check the progress of the download, as you can't seek past
+				// the last downloaded byte.
+				var maxSeekTime:Number = timeTrait.duration * loadTrait.bytesLoaded / loadTrait.bytesTotal;
+				result = time <= maxSeekTime;
+			}
+			
+			return result;
 		}
 
 		/**
@@ -150,6 +173,7 @@ package org.osmf.net
 			setSeeking(false, expectedTime);
 		}
 		
+		private var loadTrait:LoadTrait;
 		private var audioDelay:Number = 0;
 		private var seekBugTimer:Timer;
 		private var netStream:NetStream;

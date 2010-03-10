@@ -187,7 +187,7 @@ package org.osmf.elements
 				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 				timeTrait = new NetStreamTimeTrait(stream, resource);
 				addTrait(MediaTraitType.TIME, timeTrait);
-				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, stream));
+				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, loadTrait, stream));
 				addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));	
 				addTrait(MediaTraitType.BUFFER, new NetStreamBufferTrait(stream));
 			}

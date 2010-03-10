@@ -26,13 +26,53 @@ package org.osmf.net
 	
 	import org.osmf.media.URLResource;
 	import org.osmf.netmocker.MockNetStream;
+	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.TestSeekTrait;
 	import org.osmf.traits.TimeTrait;
+	import org.osmf.utils.DynamicLoadTrait;
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 
 	public class TestNetStreamSeekTrait extends TestSeekTrait
 	{
+		public function testCanSeekToWithBytesLoaded():void
+		{
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			var stream:NetStream = netFactory.createNetStream(connection);
+			
+			if (stream is MockNetStream)
+			{
+				MockNetStream(stream).expectedDuration = 20;
+			}
+			
+			var loadTrait:DynamicLoadTrait = new DynamicLoadTrait(null, null);
+			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
+			var seekTrait:NetStreamSeekTrait =  new NetStreamSeekTrait(timeTrait, loadTrait, stream);	
+			
+			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
+			stream.pause();
+
+			assertTrue(seekTrait.canSeekTo(1) == true);
+			assertTrue(seekTrait.canSeekTo(20) == true);
+			assertTrue(seekTrait.canSeekTo(21) == false);
+			
+			// Set the byte count so that our canSeekTo returns false for some values.
+			loadTrait.bytesTotal = 100;
+			
+			loadTrait.bytesLoaded = 10;
+			assertTrue(seekTrait.canSeekTo(2) == true);
+			assertTrue(seekTrait.canSeekTo(3) == false);
+			
+			loadTrait.bytesLoaded = 50;
+			assertTrue(seekTrait.canSeekTo(10) == true);
+			assertTrue(seekTrait.canSeekTo(11) == false);
+
+			loadTrait.bytesLoaded = 99;
+			assertTrue(seekTrait.canSeekTo(19) == true);
+			assertTrue(seekTrait.canSeekTo(20) == false);
+		}
+		
 		override public function setUp():void
 		{
 			netFactory = new NetFactory();
@@ -64,8 +104,9 @@ package org.osmf.net
 				MockNetStream(stream).expectedDuration = maxSeekValue;
 			}
 			
+			var loadTrait:DynamicLoadTrait = new DynamicLoadTrait(null, null);
 			var timeTrait:TimeTrait = new NetStreamTimeTrait(stream, new URLResource(TestConstants.REMOTE_PROGRESSIVE_VIDEO));
-			var seekTrait:NetStreamSeekTrait =  new NetStreamSeekTrait(timeTrait, stream);		
+			var seekTrait:NetStreamSeekTrait =  new NetStreamSeekTrait(timeTrait, loadTrait, stream);	
 			
 			stream.play(TestConstants.REMOTE_PROGRESSIVE_VIDEO);
 			stream.pause();
