@@ -1330,6 +1330,12 @@ package org.osmf.media
 					{
 						play();
 					}
+					else if(playing)
+					{
+						dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, add ? PlayState.PLAYING : PlayState.STOPPED));
+					}
+					dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, null, canPause));
+										
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;												
 					break;	
 				case MediaTraitType.AUDIO:					
@@ -1392,8 +1398,8 @@ package org.osmf.media
 				case MediaTraitType.DISPLAY_OBJECT:							
 					_hasDisplayObject = add;
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;	
-					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject));
-					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, NaN, NaN, mediaWidth, mediaHeight));
+					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
+					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					break;	
 				case MediaTraitType.LOAD:					
 					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);									

@@ -52,10 +52,12 @@ package org.osmf.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicBufferTrait;
 	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicPlayTrait;
 	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.NetFactory;
 	
@@ -1360,7 +1362,51 @@ package org.osmf.media
 			assertEquals(TimeEvent(events[2]).time,  mediaPlayer.currentTime);		
 			assertEquals(TimeEvent(events[3]).time,  mediaPlayer.duration);		
 		}
-					
+			
+		
+		public function testPlayEventGeneration():void
+		{
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, eventCatcher);
+						
+			var playTrait:DynamicPlayTrait = new DynamicPlayTrait();
+			
+			playTrait.canPause = true;
+			
+			assertFalse(mediaPlayer.playing);
+			
+			media.doAddTrait(MediaTraitType.PLAY, playTrait);
+			
+			assertEquals(1, events.length);
+			assertTrue(events[0] is PlayEvent);	
+			assertEquals(events[0].type, PlayEvent.CAN_PAUSE_CHANGE);
+			
+			media.doRemoveTrait(MediaTraitType.PLAY);
+			
+			assertEquals(2, events.length);
+			assertTrue(events[1] is PlayEvent);	
+			assertEquals(events[1].type, PlayEvent.CAN_PAUSE_CHANGE);
+			
+			assertFalse(mediaPlayer.canPause);
+			assertFalse(mediaPlayer.canPlay);
+			
+			playTrait.canPause = false;
+			playTrait.play();
+			
+			media.doAddTrait(MediaTraitType.PLAY, playTrait);
+			
+			assertEquals(4, events.length);
+			assertTrue(events[2] is PlayEvent);	
+			assertEquals(events[2].type, PlayEvent.PLAY_STATE_CHANGE);
+			assertTrue(events[3] is PlayEvent);	
+			assertEquals(events[3].type, PlayEvent.CAN_PAUSE_CHANGE);
+			
+			assertTrue(mediaPlayer.playing);	
+				
+			
+		}
 		
 		public function testLoop():void
 		{

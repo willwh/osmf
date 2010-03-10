@@ -58,12 +58,9 @@ package org.osmf.net
 			if	(	Video(displayObject).videoWidth != 0
 				&&	Video(displayObject).videoHeight != 0
 				)
-			{				
-				displayObject.width = Video(displayObject).videoWidth;
-    			displayObject.height = Video(displayObject).videoHeight;
-    				
-				setMediaSize(displayObject.width, displayObject.height);	
-				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);	
+			{	
+				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);
+				newMediaSize(Video(displayObject).videoWidth, Video(displayObject).videoHeight);					
 			}
 		}
 	
@@ -75,15 +72,23 @@ package org.osmf.net
     				||	info.height != mediaHeight
     				)
     			)
-    		{	    			
+    		{	    				
     			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
 				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);	
-    			displayObject.width = info.width;
-    			displayObject.height = info.height;
-    				
-				setMediaSize(info.width, info.height);
+				newMediaSize(info.width, info.height);
     		}
     	}
+		
+		private function newMediaSize(width:Number, height:Number):void
+		{
+			if(displayObject.width == 0 &&
+				displayObject.height == 0)  //If there is no layout, set as no scale.
+			{
+				displayObject.width = width;
+				displayObject.height = height;				
+			}
+			setMediaSize(width, height);
+		}
     	
 		private var netStream:NetStream;
 	}
