@@ -207,12 +207,12 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const CONTENT_IO_LOAD_ERROR:String				= "contentIOLoadError";
+		public static const IMAGE_OR_SWF_IO_LOAD_ERROR:String			= "imageOrSWFIOLoadError";
 
 		/**
 		 * @private
 		 **/
-		public static const CONTENT_SECURITY_LOAD_ERROR:String			= "contentSecurityLoadError";
+		public static const IMAGE_OR_SWF_SECURITY_LOAD_ERROR:String		= "imageOrSWFSecurityLoadError";
 
 		/**
 		 * @private
@@ -312,11 +312,6 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const STREAMSWITCH_STREAM_NOT_FOUND:String		= "streamSwitchStreamNotFound";
-
-		/**
-		 * @private
-		 **/
 		public static const STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE:String = "streamSwitchStreamNotInManualMode";
 
 		/**
@@ -337,22 +332,22 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const HTTP_IO_LOAD_ERROR:String					= "httpIOLoadError";
+		public static const HTTP_GET_IO_ERROR:String					= "httpGetIOError";
 
 		/**
 		 * @private
 		 **/
-		public static const HTTP_SECURITY_LOAD_ERROR:String				= "httpSecurityLoadError";
+		public static const HTTP_GET_SECURITY_ERROR:String				= "httpGetSecurityError";
 
 		/**
 		 * @private
 		 **/
-		public static const BEACON_FAILURE_ERROR:String					= "beaconFailureError";
+		public static const HTTP_GET_CLIENT_ERROR:String				= "httpGetClientError";
 
 		/**
 		 * @private
 		 **/
-		public static const DRM_UPDATE_ERROR:String						= "drmUpdateError";
+		public static const DRM_SYSTEM_UPDATE_ERROR:String				= "drmSystemUpdateError";
 		
 		// Switching Reasons
 		
@@ -502,8 +497,8 @@ package org.osmf.utils
 			resourceDict[MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET]	= "Argument must be either a MediaElement or an ILayoutTarget"
 			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 			
-			resourceDict[CONTENT_IO_LOAD_ERROR]						= "I/O error when loading image or SWF";
-			resourceDict[CONTENT_SECURITY_LOAD_ERROR]				= "Security error when loading image or SWF";
+			resourceDict[IMAGE_OR_SWF_IO_LOAD_ERROR]				= "I/O error when loading image or SWF";
+			resourceDict[IMAGE_OR_SWF_SECURITY_LOAD_ERROR]			= "Security error when loading image or SWF";
 			resourceDict[SWF_IO_LOAD_ERROR]							= "I/O error when loading SWF";
 			resourceDict[SWF_SECURITY_LOAD_ERROR]					= "Security error when loading SWF";
 			resourceDict[INVALID_PLUGIN_VERSION]					= "Plugin failed to load due to version mismatch";
@@ -523,20 +518,18 @@ package org.osmf.utils
 			resourceDict[NETCONNECTION_IO_ERROR]					= "Received an IO error while attempting to establish a NetConnection";
 			resourceDict[NETCONNECTION_ARGUMENT_ERROR]				= "Received an argument error while attempting to establish a NetConnection";
 			resourceDict[STREAMSWITCH_INVALID_INDEX]				= "Dynamic Stream Switching - Invalid index requested";
-			resourceDict[STREAMSWITCH_STREAM_NOT_FOUND]				= "Dynamic Stream Switching - stream not found";
 			resourceDict[STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE]	= "Dynamic Stream Switching - stream is not in manual mode";
 			resourceDict[AUDIO_IO_LOAD_ERROR]						= "I/O error when loading audio file";
 			resourceDict[AUDIO_SECURITY_LOAD_ERROR]					= "Security error when loading audio file";
 			resourceDict[PLAY_FAILED_NO_SOUND_CHANNELS]				= "Playback failed due to no sound channels being available";
-			resourceDict[HTTP_IO_LOAD_ERROR]						= "I/O error when loading URL over HTTP";
-			resourceDict[HTTP_SECURITY_LOAD_ERROR]					= "Security error when loading URL over HTTP";
-			resourceDict[BEACON_FAILURE_ERROR]						= "Beacon failed to successfully ping its HTTP URL";
-			resourceDict[DRM_UPDATE_ERROR]							= "The upadte of the DRM subsystem failed";
+			resourceDict[HTTP_GET_IO_ERROR]							= "I/O error when retrieving URL over HTTP";
+			resourceDict[HTTP_GET_SECURITY_ERROR]					= "Security error when retrieving URL over HTTP";
+			resourceDict[HTTP_GET_CLIENT_ERROR]						= "HTTP GET failed due to a Client Error";
+			resourceDict[DRM_SYSTEM_UPDATE_ERROR]					= "The update of the DRM subsystem failed";
 			
 			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
 			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
 			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
-		
 
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}

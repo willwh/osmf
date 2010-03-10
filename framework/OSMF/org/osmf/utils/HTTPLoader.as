@@ -172,7 +172,7 @@ package org.osmf.utils
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.HTTP_IO_LOAD_ERROR
+							( MediaErrorCodes.HTTP_GET_IO_ERROR
 							, ioEvent ? ioEvent.text : ioEventDetail
 							)
 						)
@@ -190,7 +190,7 @@ package org.osmf.utils
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
+							( MediaErrorCodes.HTTP_GET_SECURITY_ERROR
 							, securityEvent ? securityEvent.text : securityEventDetail
 							)
 						)

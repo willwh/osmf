@@ -23,7 +23,6 @@ package org.osmf.net.drm
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
-	import flash.net.drm.AuthenticationMethod;
 	import flash.utils.ByteArray;
 	
 	import flexunit.framework.Assert;
@@ -32,9 +31,7 @@ package org.osmf.net.drm
 	import mx.utils.Base64Decoder;
 	
 	import org.osmf.events.DRMEvent;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.traits.DRMState;
-	import org.osmf.utils.OSMFStrings;
 
 	public class TestDRMServices extends TestCase
 	{	

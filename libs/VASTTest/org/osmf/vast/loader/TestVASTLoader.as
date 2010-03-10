@@ -27,13 +27,11 @@ package org.osmf.vast.loader
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.TestLoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.MockHTTPLoader;
@@ -464,13 +462,6 @@ package org.osmf.vast.loader
 		override protected function get unhandledResource():MediaResourceBase
 		{
 			return UNHANDLED_RESOURCE;
-		}
-		
-		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
-		{
-			assertTrue(		error.errorID == MediaErrorCodes.HTTP_IO_LOAD_ERROR
-						||	error.errorID == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
-					  );
 		}
 		
 		override public function testCanHandleResource():void

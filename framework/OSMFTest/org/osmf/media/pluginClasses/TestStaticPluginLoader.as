@@ -82,8 +82,8 @@ package org.osmf.media.pluginClasses
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(error.errorID == MediaErrorCodes.CONTENT_IO_LOAD_ERROR ||
-					   error.errorID == MediaErrorCodes.CONTENT_SECURITY_LOAD_ERROR ||
+			assertTrue(error.errorID == MediaErrorCodes.IMAGE_OR_SWF_IO_LOAD_ERROR ||
+					   error.errorID == MediaErrorCodes.IMAGE_OR_SWF_SECURITY_LOAD_ERROR ||
 					   error.errorID == MediaErrorCodes.INVALID_PLUGIN_VERSION ||
 					   error.errorID == MediaErrorCodes.INVALID_PLUGIN_IMPLEMENTATION);
 		}

@@ -27,7 +27,6 @@ package org.osmf.test.captioning.loader
 	import org.osmf.captioning.model.*;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.test.captioning.CaptioningTestConstants;
@@ -137,9 +136,6 @@ package org.osmf.test.captioning.loader
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(		error.errorID == MediaErrorCodes.HTTP_IO_LOAD_ERROR
-						||	error.errorID == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
-					  );
 		}
 		
 		override public function testCanHandleResource():void

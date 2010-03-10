@@ -85,8 +85,8 @@ package org.osmf.utils
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(		error.errorID == MediaErrorCodes.HTTP_IO_LOAD_ERROR
-						||	error.errorID == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
+			assertTrue(		error.errorID == MediaErrorCodes.HTTP_GET_IO_ERROR
+						||	error.errorID == MediaErrorCodes.HTTP_GET_SECURITY_ERROR
 					  );
 		}
 		

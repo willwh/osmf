@@ -29,7 +29,6 @@ package org.osmf.captioning.media
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
@@ -52,6 +51,12 @@ package org.osmf.captioning.media
 	 */
 	public class CaptioningProxyElement extends ProxyElement
 	{
+		/**
+		 * Constant for the MediaError that is triggered when the proxiedElement
+		 * is invalid (e.g. doesn't have the captioning metadata).
+		 **/ 
+		public static const MEDIA_ERROR_INVALID_PROXIED_ELEMENT:int = 2201;
+		
 		/**
 		 * Constructor.
 		 * 
@@ -106,7 +111,7 @@ package org.osmf.captioning.media
 			if (tempResource == null)
 			{
 				dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-								new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
+								new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
 			}
 			else
 			{
@@ -116,7 +121,7 @@ package org.osmf.captioning.media
 					if (!_continueLoadOnFailure)
 					{
 						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-										new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
+										new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
 					}
 				}
 				else
@@ -132,7 +137,7 @@ package org.osmf.captioning.media
 					else if (!_continueLoadOnFailure)
 					{
 						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-										new MediaError(MediaErrorCodes.HTTP_IO_LOAD_ERROR)));
+										new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
 					}
  
 				}

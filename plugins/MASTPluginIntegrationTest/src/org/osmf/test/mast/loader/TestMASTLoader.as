@@ -24,8 +24,6 @@ package org.osmf.test.mast.loader
 	import flash.events.*;
 	
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.events.MediaError;
-	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.mast.loader.*;
 	import org.osmf.mast.model.*;
 	import org.osmf.media.MediaResourceBase;
@@ -134,14 +132,7 @@ package org.osmf.test.mast.loader
 		{
 			return UNHANDLED_RESOURCE;
 		}
-		
-		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
-		{
-			assertTrue(		error.errorID == MediaErrorCodes.HTTP_IO_LOAD_ERROR
-						||	error.errorID == MediaErrorCodes.HTTP_SECURITY_LOAD_ERROR
-					  );
-		}
-		
+				
 		override public function testCanHandleResource():void
 		{
 			super.testCanHandleResource();

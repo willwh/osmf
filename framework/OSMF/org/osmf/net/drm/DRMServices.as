@@ -477,7 +477,7 @@ package org.osmf.net.drm
 		private function onUpdateError(event:Event):void
 		{
 			toggleErrorListeners(updater, false);
-			updateDRMState(DRMState.AUTHENTICATION_ERROR, new MediaError(MediaErrorCodes.DRM_UPDATE_ERROR, event.toString()));
+			updateDRMState(DRMState.AUTHENTICATION_ERROR, new MediaError(MediaErrorCodes.DRM_SYSTEM_UPDATE_ERROR, event.toString()));
 		}
 				
 		
