@@ -1319,15 +1319,9 @@ package org.osmf.media
 						_currentTimeTimer.stop();					
 					}
 					_temporal = add;
-					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;	
-					if (currentTime != 0)
-					{						
-						dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
-					}
-					if (duration != 0)
-					{
-						dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));		
-					}
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;												
+					dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
+					dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));		
 					break;
 				case MediaTraitType.PLAY:						
 					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);			
@@ -1346,7 +1340,7 @@ package org.osmf.media
 						{
 							volume = mediaPlayerVolume;
 						}
-						else if(volume != 1)
+						else
 						{
 							dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, muted, volume, audioPan));
 						}
@@ -1354,7 +1348,7 @@ package org.osmf.media
 						{
 							muted = mediaPlayerMuted;
 						}
-						else if(muted)
+						else
 						{
 							dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, muted, volume, audioPan));
 						}
@@ -1362,7 +1356,7 @@ package org.osmf.media
 						{
 							audioPan = mediaPlayerAudioPan;
 						}
-						else if(audioPan != 0)
+						else
 						{
 							dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
 						}
@@ -1385,7 +1379,7 @@ package org.osmf.media
 					{
 						autoDynamicStreamSwitch = mediaPlayerAutoDynamicStreamSwitch;
 					}
-					else if (autoDynamicStreamSwitch) //Only dispatch if the new trait has auto == true.
+					else if (autoDynamicStreamSwitch) //Only dispatch if the trait has auto == true.
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch)); 
 					}
