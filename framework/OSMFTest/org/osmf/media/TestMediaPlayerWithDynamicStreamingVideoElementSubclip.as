@@ -115,7 +115,6 @@ package org.osmf.media
 				   , MediaTraitType.DYNAMIC_STREAM
 				   , MediaTraitType.LOAD
 				   , MediaTraitType.PLAY
-				   , MediaTraitType.SEEK
 				   , MediaTraitType.TIME
 				   , MediaTraitType.DISPLAY_OBJECT
 				   ];

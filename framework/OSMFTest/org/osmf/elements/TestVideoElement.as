@@ -332,7 +332,6 @@ package org.osmf.elements
 				   , MediaTraitType.BUFFER
 				   , MediaTraitType.LOAD
 				   , MediaTraitType.PLAY
-				   , MediaTraitType.SEEK
 				   , MediaTraitType.TIME
 				   , MediaTraitType.DISPLAY_OBJECT
 				   ];

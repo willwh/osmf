@@ -32,13 +32,12 @@ package org.osmf.elements
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.TimelineMetadataEvent;
+	import org.osmf.events.TimeEvent;
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.CuePoint;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.TimelineMetadata;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.ModifiableTimeTrait;
@@ -438,7 +437,24 @@ package org.osmf.elements
 	  		}
 	  		if (trait != null)
 	  		{
-	    		addTrait(MediaTraitType.SEEK, trait);
+	  			// Only add the SeekTrait if/when the TimeTrait has a duration,
+	  			// otherwise the user might try to seek when a seek cannot actually
+	  			// be executed (FM-440).
+	  			if (isNaN(timeTrait.duration) || timeTrait.duration == 0)
+	  			{
+	  				timeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+	  				
+	  				function onDurationChange(event:TimeEvent):void
+	  				{
+	  					timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
+	  					
+	  					addTrait(MediaTraitType.SEEK, trait);
+	  				}
+	  			}
+	  			else
+	  			{
+	    			addTrait(MediaTraitType.SEEK, trait);
+	    		}
 	    	}
 	    	
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
