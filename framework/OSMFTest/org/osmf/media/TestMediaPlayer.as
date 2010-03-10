@@ -1127,9 +1127,9 @@ package org.osmf.media
 				assertTrue(mediaPlayer.maxAllowedDynamicStreamIndex == 0);
 				assertTrue(mediaPlayer.dynamicStreamSwitching == false);
 
-				// Setting autoDynamicStreamSwitch should have no effect.
+				// Setting autoDynamicStreamSwitch should have an effect.
 				mediaPlayer.autoDynamicStreamSwitch = false;
-				assertTrue(mediaPlayer.autoDynamicStreamSwitch == true);
+				assertTrue(mediaPlayer.autoDynamicStreamSwitch == false);
 								
 				try
 				{
@@ -1171,6 +1171,15 @@ package org.osmf.media
 			assertEquals(DisplayObjectEvent(events[0]).newDisplayObject, doTrait.displayObject );
 			assertEquals(DisplayObjectEvent(events[1]).newHeight, doTrait.mediaHeight );
 			assertEquals(DisplayObjectEvent(events[1]).newWidth, doTrait.mediaWidth );
+			
+			media.doRemoveTrait(MediaTraitType.DISPLAY_OBJECT);
+			
+			assertEquals(4, events.length);	
+			assertTrue(events[2] is DisplayObjectEvent);		
+			assertTrue(events[3] is DisplayObjectEvent);
+			assertEquals(events[2].type, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE);		
+			assertEquals(events[3].type, DisplayObjectEvent.MEDIA_SIZE_CHANGE);
+			
 							
 		}
 		
@@ -1202,6 +1211,14 @@ package org.osmf.media
 			assertEquals(BufferEvent(events[1]).type, BufferEvent.BUFFERING_CHANGE);
 			assertEquals(BufferEvent(events[1]).buffering, bufferTrait.buffering, mediaPlayer.buffering);
 			
+			media.doRemoveTrait(MediaTraitType.BUFFER);
+			
+			//Should get a buffer time change, back to the default of 0.
+			
+			assertEquals(3, events.length);	
+			assertTrue(events[2] is BufferEvent);	
+			assertEquals(events[2].type, BufferEvent.BUFFER_TIME_CHANGE);	
+						
 		}
 		
 		public function testDynamicStreamEventGeneration():void
@@ -1223,20 +1240,42 @@ package org.osmf.media
 			dynamicTrait.maxAllowedIndex = 10;
 			dynamicTrait.autoSwitch = true;
 						
-			assertFalse(dynamicTrait.switching);
+			media.doAddTrait(MediaTraitType.DYNAMIC_STREAM, dynamicTrait);
+			
+			assertFalse(dynamicTrait.switching);					
+			assertEquals(8, mediaPlayer.maxAllowedDynamicStreamIndex, dynamicTrait.maxAllowedIndex);
+			
+			assertEquals(1, events.length);	
+			assertTrue(events[0] is DynamicStreamEvent);	
+			assertTrue(dynamicTrait.autoSwitch);
+			assertTrue(mediaPlayer.autoDynamicStreamSwitch);
+			assertEquals(dynamicTrait.numDynamicStreams, 20, mediaPlayer.numDynamicStreams);	
+			assertEquals(events[0].type, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
+			
+			mediaPlayer.autoDynamicStreamSwitch = true;
+			
+			media.doRemoveTrait(MediaTraitType.DYNAMIC_STREAM);
+			
+			assertTrue(mediaPlayer.autoDynamicStreamSwitch);
+			
+			dynamicTrait.autoSwitch = false;
+			
+			assertEquals(2, events.length);	
+			assertTrue(events[1] is DynamicStreamEvent);
+			assertEquals(events[1].type, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
 			
 			media.doAddTrait(MediaTraitType.DYNAMIC_STREAM, dynamicTrait);
 			
-			assertEquals(8, mediaPlayer.maxAllowedDynamicStreamIndex, dynamicTrait.maxAllowedIndex);
+			//Should make it true.
 			
-			assertEquals(2, events.length);	
-			assertTrue(events[0] is DynamicStreamEvent);	
-			assertTrue(events[1] is DynamicStreamEvent);
-					
-			assertEquals(DynamicStreamEvent(events[0]).autoSwitch, dynamicTrait.autoSwitch, mediaPlayer.autoDynamicStreamSwitch, true);
-			assertEquals(events[0].type, DynamicStreamEvent.AUTO_SWITCH_CHANGE);
-			assertEquals(dynamicTrait.numDynamicStreams, 20, mediaPlayer.numDynamicStreams);	
-			assertEquals(events[1].type, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
+			assertTrue(dynamicTrait.autoSwitch);
+			
+			assertEquals(4, events.length);	
+			assertTrue(events[2] is DynamicStreamEvent);
+			assertEquals(events[2].type, DynamicStreamEvent.AUTO_SWITCH_CHANGE);
+			assertTrue(events[3] is DynamicStreamEvent);
+			assertEquals(events[3].type, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
+			
 		}
 		
 		public function testAudioEventGeneration():void
@@ -1274,6 +1313,12 @@ package org.osmf.media
 			assertEquals(AudioEvent(events[0]).volume,  mediaPlayer.volume);
 			assertEquals(AudioEvent(events[0]).pan,  mediaPlayer.audioPan);
 			assertEquals(AudioEvent(events[0]).muted,  mediaPlayer.muted);			
+			
+			//No event generation from removal.
+			media.doRemoveTrait(MediaTraitType.AUDIO);
+			
+			assertEquals(3, events.length);
+			
 		}
 		
 		public function testTimeEventGeneration():void
@@ -1301,6 +1346,19 @@ package org.osmf.media
 			assertTrue(events[1].type, TimeEvent.DURATION_CHANGE);	
 			assertEquals(TimeEvent(events[0]).time,  mediaPlayer.currentTime);		
 			assertEquals(TimeEvent(events[1]).time,  mediaPlayer.duration);		
+			
+			//Removal Events
+			
+			media.doRemoveTrait(MediaTraitType.TIME);
+			
+			assertEquals(4, events.length);	
+			assertTrue(events[2] is TimeEvent);	
+			assertTrue(events[3] is TimeEvent);	
+			
+			assertTrue(events[2].type, TimeEvent.CURRENT_TIME_CHANGE);	
+			assertTrue(events[3].type, TimeEvent.DURATION_CHANGE);	
+			assertEquals(TimeEvent(events[2]).time,  mediaPlayer.currentTime);		
+			assertEquals(TimeEvent(events[3]).time,  mediaPlayer.duration);		
 		}
 					
 		

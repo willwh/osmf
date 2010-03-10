@@ -860,7 +860,7 @@ package org.osmf.media
 		 */
 		public function get autoDynamicStreamSwitch():Boolean
 		{
-			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch : true;
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch : mediaPlayerAutoDynamicStreamSwitch;
 		}
 		
 		public function set autoDynamicStreamSwitch(value:Boolean):void
@@ -872,7 +872,7 @@ package org.osmf.media
 				(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch = value;
 			}
 						
-			else if (value != mediaPlayerAudioPan)
+			else if (value != mediaPlayerAutoDynamicStreamSwitch)
 			{
 				doDispatchEvent = true;
 			}
@@ -1379,7 +1379,7 @@ package org.osmf.media
 					{
 						autoDynamicStreamSwitch = mediaPlayerAutoDynamicStreamSwitch;
 					}
-					else if (autoDynamicStreamSwitch) //Only dispatch if the trait has auto == true.
+					else if (!autoDynamicStreamSwitch)  //If the new trait has auto == false
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch)); 
 					}
@@ -1689,7 +1689,7 @@ package org.osmf.media
 		private var mediaPlayerBufferTimeSet:Boolean = false;
 		private var mediaPlayerMaxAllowedDynamicStreamIndex:int = 0;
 		private var mediaPlayerMaxAllowedDynamicStreamIndexSet:Boolean = false;
-		private var mediaPlayerAutoDynamicStreamSwitch:Boolean = false;
+		private var mediaPlayerAutoDynamicStreamSwitch:Boolean = true;
 		private var mediaPlayerAutoDynamicStreamSwitchSet:Boolean = false;
 		
 		private var _canPlay:Boolean;
