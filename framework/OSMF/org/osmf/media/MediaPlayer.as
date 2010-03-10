@@ -165,6 +165,7 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="hasDRMChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
+		
 	
 	/**
 	 * Dispatched when the <code>hasDisplayObject</code> property has changed.
@@ -177,7 +178,7 @@ package org.osmf.media
 	 *  @productversion OSMF 1.0
 	 */	
 	[Event(name="hasDisplayObjectChange", type="org.osmf.events.MediaPlayerCapabilityChangeEvent")]
-				
+		
 	/**
 	 * Dispatched when an error which impacts the operation of the media
 	 * player occurs.
@@ -864,10 +865,25 @@ package org.osmf.media
 		
 		public function set autoDynamicStreamSwitch(value:Boolean):void
 		{
+			var doDispatchEvent:Boolean = false;
+			
 			if (isDynamicStream)
 			{
 				(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).autoSwitch = value;
 			}
+						
+			else if (value != mediaPlayerAudioPan)
+			{
+				doDispatchEvent = true;
+			}
+			
+			mediaPlayerAutoDynamicStreamSwitch = value;
+			mediaPlayerAutoDynamicStreamSwitchSet = true;
+			
+			if (doDispatchEvent)
+			{
+				dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, mediaPlayerAutoDynamicStreamSwitch));
+			}			
 		}
 		
 		/**
@@ -930,12 +946,18 @@ package org.osmf.media
 		 */
 		public function get maxAllowedDynamicStreamIndex():int
 		{
-			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex : 0;
+			return isDynamicStream ? (getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex : mediaPlayerMaxAllowedDynamicStreamIndex;
 		}
 		
 		public function set maxAllowedDynamicStreamIndex(value:int):void
-		{
-			(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex = value; 
+		{			
+			if (isDynamicStream)
+			{
+				(getTraitOrThrow(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait).maxAllowedIndex = value;
+			}	
+			
+			mediaPlayerMaxAllowedDynamicStreamIndex = value;
+			mediaPlayerMaxAllowedDynamicStreamIndexSet = true;
 		}
 		
 		/**
@@ -1062,15 +1084,29 @@ package org.osmf.media
 		 */		
 		public function get bufferTime():Number
 		{
-			return canBuffer ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime : 0;		    	
+			return canBuffer ? (getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime : mediaPlayerBufferTime;		    	
 		}
 		
 		public function set bufferTime(value:Number):void
 		{
+			var doDispatchEvent:Boolean = false;
+			
 			if (canBuffer)
 			{
 				(getTraitOrThrow(MediaTraitType.BUFFER) as BufferTrait).bufferTime = value;
-			}	    	
+			}	
+			else if (value != mediaPlayerBufferTime)
+			{
+				doDispatchEvent = true;
+			}
+					
+			mediaPlayerBufferTime = value;
+			mediaPlayerBufferTimeSet = true;
+			
+			if (doDispatchEvent)
+			{
+				dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, buffering, mediaPlayerBufferTime));
+			}			
 		}
 		
 		/**
@@ -1227,7 +1263,7 @@ package org.osmf.media
 		{
 			return hasDRM ? DRMTrait(media.getTrait(MediaTraitType.DRM)).period : NaN;
 		}
-		
+	
 		// Internals
 		//
 	    
@@ -1283,7 +1319,15 @@ package org.osmf.media
 						_currentTimeTimer.stop();					
 					}
 					_temporal = add;
-					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;		
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;	
+					if (currentTime != 0)
+					{						
+						dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
+					}
+					if (duration != 0)
+					{
+						dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));		
+					}
 					break;
 				case MediaTraitType.PLAY:						
 					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);			
@@ -1297,22 +1341,30 @@ package org.osmf.media
 				case MediaTraitType.AUDIO:					
 					_hasAudio = add;
 					if (hasAudio)
-					{
-						// When AudioTrait is added, we should tell it to reflect any
-						// explicitly-specified MediaPlayer-level audio properties.
-						// Note that we don't do so if the current MediaPlayer-level
-						// audio properties are implicit (i.e. not set by the client).
+					{						
 						if (mediaPlayerVolumeSet)
 						{
 							volume = mediaPlayerVolume;
+						}
+						else if(volume != 1)
+						{
+							dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, muted, volume, audioPan));
 						}
 						if (mediaPlayerMutedSet)
 						{
 							muted = mediaPlayerMuted;
 						}
+						else if(muted)
+						{
+							dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, muted, volume, audioPan));
+						}
 						if (mediaPlayerAudioPanSet)
 						{
 							audioPan = mediaPlayerAudioPan;
+						}
+						else if(audioPan != 0)
+						{
+							dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
 						}
 					}
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
@@ -1324,23 +1376,30 @@ package org.osmf.media
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:						
 					_isDynamicStream = add;						
-					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;					
+					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;	
+					if (mediaPlayerMaxAllowedDynamicStreamIndexSet)
+					{
+						maxAllowedDynamicStreamIndex = mediaPlayerMaxAllowedDynamicStreamIndex;
+					}					
+					if (mediaPlayerAutoDynamicStreamSwitchSet)
+					{
+						autoDynamicStreamSwitch = mediaPlayerAutoDynamicStreamSwitch;
+					}
+					else if (autoDynamicStreamSwitch) //Only dispatch if the new trait has auto == true.
+					{
+						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch)); 
+					}
+					if (dynamicStreamSwitching) //If we are in the middle of a switch, notify.
+					{
+						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
+					}
+					dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
 					break;						
 				case MediaTraitType.DISPLAY_OBJECT:							
 					_hasDisplayObject = add;
-					if (add)
-					{
-						// Force the dispatch of the DisplayObject events, so that clients
-						// will be notified.  This is particularly important when a MediaElement
-						// removes a DisplayObjectTrait and then re-adds it.
-						var displayObjectTrait:DisplayObjectTrait = media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-						if (displayObjectTrait.displayObject != null)
-						{
-							dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObjectTrait.displayObject));
-						}
-						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, NaN, NaN, displayObjectTrait.mediaWidth, displayObjectTrait.mediaHeight));
-					}	
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;		
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;	
+					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject));
+					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, null, NaN, NaN, mediaWidth, mediaHeight));
 					break;	
 				case MediaTraitType.LOAD:					
 					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);									
@@ -1366,21 +1425,31 @@ package org.osmf.media
 						{
 							_bytesLoadedTimer.stop();					
 						}			
-					}						
+					}					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
 					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);						
 					_canBuffer = add;
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;									
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;		
+					if (mediaPlayerBufferTimeSet)
+					{
+						bufferTime = mediaPlayerBufferTime;	
+					}
+					else
+					{
+						dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, true, bufferTime));
+					}
+					if (buffering)
+					{
+						dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, true, bufferTime));
+					}
 					break;	
 				case MediaTraitType.DRM:					
 					_hasDRM	= add;
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;	
-					break;
-				case MediaTraitType.DVR:
-					_dvrTrait = add ? media.getTrait(traitType) as DVRTrait : null;
-					break;
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;
+					dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, drmStartDate, drmEndDate, drmPeriod));
+					break;			
 			}					 
 			if (eventType != null)
 			{
@@ -1622,6 +1691,12 @@ package org.osmf.media
 		private var mediaPlayerMutedSet:Boolean = false;
 		private var mediaPlayerAudioPan:Number = 0;
 		private var mediaPlayerAudioPanSet:Boolean = false;
+		private var mediaPlayerBufferTime:Number = 0;
+		private var mediaPlayerBufferTimeSet:Boolean = false;
+		private var mediaPlayerMaxAllowedDynamicStreamIndex:int = 0;
+		private var mediaPlayerMaxAllowedDynamicStreamIndexSet:Boolean = false;
+		private var mediaPlayerAutoDynamicStreamSwitch:Boolean = false;
+		private var mediaPlayerAutoDynamicStreamSwitchSet:Boolean = false;
 		
 		private var _canPlay:Boolean;
 		private var _canSeek:Boolean;
@@ -1633,6 +1708,5 @@ package org.osmf.media
 		private var _isDynamicStream:Boolean;
 		private var _hasDRM:Boolean;
 		
-		private var _dvrTrait:DVRTrait;
 	}
 }

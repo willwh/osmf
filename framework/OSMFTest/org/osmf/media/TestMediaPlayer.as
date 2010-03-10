@@ -23,12 +23,15 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.AudioElement;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DisplayObjectEvent;
@@ -41,10 +44,19 @@ package org.osmf.media
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
+	import org.osmf.traits.AudioTrait;
+	import org.osmf.traits.BufferTrait;
+	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.traits.TimeTrait;
+	import org.osmf.utils.DynamicBufferTrait;
+	import org.osmf.utils.DynamicDynamicStreamTrait;
+	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.NetFactory;
 	
 	public class TestMediaPlayer extends TestCase
@@ -1036,9 +1048,9 @@ package org.osmf.media
 				assertEquals(0, mediaPlayer.bufferLength);
 				assertEquals(0, mediaPlayer.bufferTime);
 
-				// Setting the bufferTime has no effect.			
+				// Setting the bufferTime has an effect.			
 				mediaPlayer.bufferTime = 5;
-				assertEquals(0, mediaPlayer.bufferTime);
+				assertEquals(5, mediaPlayer.bufferTime);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -1133,6 +1145,164 @@ package org.osmf.media
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
 		}
+		
+		public function testDisplayObjectEventGeneration():void
+		{
+			
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, eventCatcher);
+						
+			assertEquals(0, mediaPlayer.mediaHeight);
+			assertEquals(0, mediaPlayer.mediaWidth);
+			assertEquals(null, mediaPlayer.displayObject);
+			var display:Sprite = new Sprite();
+			var doTrait:DisplayObjectTrait = new DisplayObjectTrait(display, 150, 200);
+						
+			media.doAddTrait(MediaTraitType.DISPLAY_OBJECT, doTrait);
+								
+			assertEquals(2, events.length);		
+			assertTrue(events[0] is DisplayObjectEvent);		
+			assertTrue(events[1] is DisplayObjectEvent);
+			assertEquals(events[0].type, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE);		
+			assertEquals(events[1].type, DisplayObjectEvent.MEDIA_SIZE_CHANGE);
+			
+			assertEquals(DisplayObjectEvent(events[0]).newDisplayObject, doTrait.displayObject );
+			assertEquals(DisplayObjectEvent(events[1]).newHeight, doTrait.mediaHeight );
+			assertEquals(DisplayObjectEvent(events[1]).newWidth, doTrait.mediaWidth );
+							
+		}
+		
+		public function testBufferEventGeneration():void
+		{			
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, eventCatcher);
+					
+			assertFalse(mediaPlayer.buffering);
+			assertEquals(0, mediaPlayer.bufferTime);
+			assertEquals(0, mediaPlayer.bufferLength);
+			
+			var bufferTrait:DynamicBufferTrait = new DynamicBufferTrait();
+			bufferTrait.bufferTime = 25;
+			bufferTrait.bufferLength = 15;
+			bufferTrait.buffering = true;
+			
+			media.doAddTrait(MediaTraitType.BUFFER, bufferTrait);
+			
+			assertEquals(2, events.length);	
+			assertTrue(events[0] is BufferEvent);	
+			assertTrue(events[1] is BufferEvent);		
+						
+			assertEquals(BufferEvent(events[0]).bufferTime, bufferTrait.bufferTime, mediaPlayer.bufferTime);
+			assertEquals(BufferEvent(events[0]).type, BufferEvent.BUFFER_TIME_CHANGE);
+			assertEquals(bufferTrait.bufferLength, mediaPlayer.bufferLength);
+			assertEquals(BufferEvent(events[1]).type, BufferEvent.BUFFERING_CHANGE);
+			assertEquals(BufferEvent(events[1]).buffering, bufferTrait.buffering, mediaPlayer.buffering);
+			
+		}
+		
+		public function testDynamicStreamEventGeneration():void
+		{			
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, eventCatcher);
+						
+			mediaPlayer.maxAllowedDynamicStreamIndex = 8;
+			
+			assertFalse(mediaPlayer.dynamicStreamSwitching);
+			assertEquals(0, mediaPlayer.numDynamicStreams);
+			assertEquals(8, mediaPlayer.maxAllowedDynamicStreamIndex);
+			
+			var dynamicTrait:DynamicDynamicStreamTrait = new DynamicDynamicStreamTrait(true, 5, 20);
+			dynamicTrait.currentIndex = 5;
+			dynamicTrait.maxAllowedIndex = 10;
+			dynamicTrait.autoSwitch = true;
+						
+			assertFalse(dynamicTrait.switching);
+			
+			media.doAddTrait(MediaTraitType.DYNAMIC_STREAM, dynamicTrait);
+			
+			assertEquals(8, mediaPlayer.maxAllowedDynamicStreamIndex, dynamicTrait.maxAllowedIndex);
+			
+			assertEquals(2, events.length);	
+			assertTrue(events[0] is DynamicStreamEvent);	
+			assertTrue(events[1] is DynamicStreamEvent);
+					
+			assertEquals(DynamicStreamEvent(events[0]).autoSwitch, dynamicTrait.autoSwitch, mediaPlayer.autoDynamicStreamSwitch, true);
+			assertEquals(events[0].type, DynamicStreamEvent.AUTO_SWITCH_CHANGE);
+			assertEquals(dynamicTrait.numDynamicStreams, 20, mediaPlayer.numDynamicStreams);	
+			assertEquals(events[1].type, DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE);
+		}
+		
+		public function testAudioEventGeneration():void
+		{			
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(AudioEvent.PAN_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, eventCatcher);
+						
+			assertEquals(1, mediaPlayer.volume);
+			assertEquals(0, mediaPlayer.audioPan);
+			assertFalse(mediaPlayer.muted);
+			
+			var audioTrait:AudioTrait = new AudioTrait();
+			audioTrait.volume = .5;
+			audioTrait.pan = 1;
+			audioTrait.muted = true;
+					
+			media.doAddTrait(MediaTraitType.AUDIO, audioTrait);
+			
+			assertEquals(.5, mediaPlayer.volume, audioTrait.volume);
+			assertEquals(1, mediaPlayer.audioPan, audioTrait.pan);
+			assertEquals(true, mediaPlayer.muted, audioTrait.muted);
+			
+			assertEquals(3, events.length);	
+			assertTrue(events[0] is AudioEvent);	
+			assertTrue(events[1] is AudioEvent);
+			assertTrue(events[2] is AudioEvent);
+			
+			assertTrue(events[0].type, AudioEvent.VOLUME_CHANGE);	
+			assertTrue(events[1].type, AudioEvent.MUTED_CHANGE);
+			assertTrue(events[2].type, AudioEvent.PAN_CHANGE);
+			
+			assertEquals(AudioEvent(events[0]).volume,  mediaPlayer.volume);
+			assertEquals(AudioEvent(events[0]).pan,  mediaPlayer.audioPan);
+			assertEquals(AudioEvent(events[0]).muted,  mediaPlayer.muted);			
+		}
+		
+		public function testTimeEventGeneration():void
+		{	
+			var media:DynamicMediaElement = new DynamicMediaElement();
+			mediaPlayer.media = media;
+			mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, eventCatcher);
+			mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, eventCatcher);
+			
+			assertEquals(1, mediaPlayer.volume);
+			assertEquals(0, mediaPlayer.audioPan);
+			assertFalse(mediaPlayer.muted);
+			
+			var timeTrait:TimeTrait = new TimeTrait(20);
+						
+			media.doAddTrait(MediaTraitType.TIME, timeTrait);
+			
+			assertEquals(20, mediaPlayer.duration, timeTrait.duration);
+			
+			assertEquals(2, events.length);	
+			assertTrue(events[0] is TimeEvent);	
+			assertTrue(events[1] is TimeEvent);	
+			
+			assertTrue(events[0].type, TimeEvent.CURRENT_TIME_CHANGE);	
+			assertTrue(events[1].type, TimeEvent.DURATION_CHANGE);	
+			assertEquals(TimeEvent(events[0]).time,  mediaPlayer.currentTime);		
+			assertEquals(TimeEvent(events[1]).time,  mediaPlayer.duration);		
+		}
+					
 		
 		public function testLoop():void
 		{

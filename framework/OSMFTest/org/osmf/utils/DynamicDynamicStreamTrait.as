@@ -25,6 +25,11 @@ package org.osmf.utils
 	
 	public class DynamicDynamicStreamTrait extends DynamicStreamTrait
 	{
+		public function DynamicDynamicStreamTrait(autoSwitch:Boolean = false, currentIndex:int = 0, numDynamicStreams:int = 1)
+		{
+			super(autoSwitch,currentIndex, numDynamicStreams);
+		}
+		
 		public function set currentIndex(value:int):void
 		{
 			setCurrentIndex(value);
