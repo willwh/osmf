@@ -184,6 +184,10 @@ package org.osmf.view
 			{
 				example.dispose();
 			}
+
+			errorIDBox.visible = errorMessageBox.visible = errorDetailBox.visible = false;
+			errorID.text = errorMessage.text = errorDetail.text = "";
+			duration.text = "";
 			
 			if (exampleList.selectedIndex >= 0)
 			{
@@ -197,10 +201,6 @@ package org.osmf.view
 				setMediaElement(null);
 				exampleDescription.text = "";
 			}
-			
-			errorIDBox.visible = errorMessageBox.visible = errorDetailBox.visible = false;
-			errorID.text = errorMessage.text = errorDetail.text = "";
-			duration.text = "";
 			
 			updateControls();
 		}

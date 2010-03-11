@@ -185,7 +185,12 @@ package org.osmf.events
 		 * Error constant for when an HTTP GET request fails due to a security error.
 		 **/
 		public static const HTTP_GET_SECURITY_ERROR:int					= 28;
-						
+		
+		/**
+		 * Error constant for when the loading of a MediaElement fails.
+		 **/
+		public static const MEDIA_LOAD_FAILED:int 						= 29;
+
 		/**
 		 * @private
 		 * 
@@ -244,6 +249,7 @@ package org.osmf.events
 			, {errorID:HTTP_GET_CLIENT_ERROR,					message:OSMFStrings.HTTP_GET_CLIENT_ERROR}
 			, {errorID:HTTP_GET_IO_ERROR,						message:OSMFStrings.HTTP_GET_IO_ERROR}
 			, {errorID:HTTP_GET_SECURITY_ERROR,					message:OSMFStrings.HTTP_GET_SECURITY_ERROR}
+			, {errorID:MEDIA_LOAD_FAILED,						message:OSMFStrings.MEDIA_LOAD_FAILED}
 		];
 	}
 }

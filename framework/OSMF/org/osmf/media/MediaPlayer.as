@@ -27,8 +27,6 @@ package org.osmf.media
 	import flash.utils.Timer;
 	
 	import org.osmf.events.*;
-	import org.osmf.net.StreamType;
-	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.*;
 	import org.osmf.utils.OSMFStrings;
 	 	 
@@ -1661,11 +1659,29 @@ package org.osmf.media
 		{
 			try
 			{
-				(media.getTrait(MediaTraitType.LOAD) as LoadTrait).load();
+				var loadTrait:LoadTrait = media.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				
+				// If it's LOADING, then let's wait for it to load.  If it's
+				// READY, then there's nothing for us to do.
+				if (	loadTrait.loadState != LoadState.LOADING
+					&&	loadTrait.loadState != LoadState.READY
+				   )
+				{
+					loadTrait.load();
+				}
 			}
-			catch (error:Error)
+			catch (error:IllegalOperationError)
 			{
 				setState(MediaPlayerState.PLAYBACK_ERROR);
+				
+				dispatchEvent
+					( new MediaErrorEvent
+						( MediaErrorEvent.MEDIA_ERROR
+						, false
+						, false
+						, new MediaError(MediaErrorCodes.MEDIA_LOAD_FAILED, error.message)
+						)
+					);
 			}
 		}
 					

@@ -148,6 +148,11 @@ package org.osmf.utils
 		 * @private
 		 **/
 		public static const LOADER_CANT_HANDLE_RESOURCE:String 			= "loaderCantHandleResource";
+
+		/**
+		 * @private
+		 **/
+		public static const MEDIA_LOAD_FAILED:String 					= "mediaLoadFailed";
 		
 		// LoaderBase
 		
@@ -465,6 +470,7 @@ package org.osmf.utils
 			resourceDict[MUST_SET_LOADER_FOR_LOAD] 					= "Must set LoaderBase on a LoadTrait before calling LoaderBase.load";
 			resourceDict[MUST_SET_LOADER_FOR_UNLOAD] 				= "Must set LoaderBase on a LoadTrait before calling LoaderBase.unload";
 			resourceDict[LOADER_CANT_HANDLE_RESOURCE]				= "LoaderBase unable to handle the given MediaResourceBase";
+			resourceDict[MEDIA_LOAD_FAILED]							= "The loading of a MediaElement failed";
 
 			resourceDict[ALREADY_READY] 							= "Loader - attempt to load an already loaded object";
 			resourceDict[ALREADY_LOADING] 							= "Loader - attempt to load a loading object";

@@ -22,9 +22,9 @@
 package org.osmf.media
 {
 	import org.osmf.events.LoadEvent;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -52,7 +52,9 @@ package org.osmf.media
 		 * the appropriate loader to use is unknown (e.g. because loader is null),
 		 * this list will be used to locate and set the appropriate loader.  Note
 		 * that multiple loaders in the list might be able to handle a resource,
-		 * in which case the first loader in the list to do so will be selected.
+		 * in which case the first loader in the list to do so will be selected.  If
+		 * no loader in the list can handle a resource, then the last one will
+		 * be set (simply so that errors are generated consistently).
 		 * 
 		 * @throws ArgumentError If both loader and loaderClasses are null.
 		 *  
@@ -196,6 +198,15 @@ package org.osmf.media
 							break;
 						}
 					}
+				}
+				
+				// If none was found that can handle the resource, pick the
+				// last one, if only so that errors will be dispatched
+				// further downstream.
+				if (loader == null)
+				{
+					loaderClass = loaderClasses[loaderClasses.length - 1];
+					loader = new loaderClass() as LoaderBase;
 				}
 			}
 		}

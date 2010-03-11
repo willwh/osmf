@@ -280,6 +280,17 @@ package org.osmf.examples
 
 			examples.push
 				( new Example
+					( 	"Invalid MediaElement/MediaResource Pair"
+					, 	"Demonstrates load failures and error handling for when the resource passed to a MediaElement is of the wrong type.  In this case, an MP3 resource is passed to a VideoElement."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new URLResource(REMOTE_MP3));
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
 					( 	"Serial Composition"
 					, 	"Demonstrates playback of a SerialElement that contains two videos (one progressive, one streaming), using the default layout settings.  Note that the duration of the second video is not incorporated into the SerialElement until its playback begins (because we don't know the duration until it is loaded)."
 				  	,  	function():MediaElement

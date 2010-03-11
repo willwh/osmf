@@ -119,5 +119,13 @@ package org.osmf.media
 			mediaElement.resource = new SimpleResource("foo");
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);
 		}
+		
+		public function testSetResourceWithUnhandleResourceSetsLoader():void
+		{
+			var mediaElement:MediaElement = new LoadableElementBase(null, null, [MockHTTPLoader, SimpleLoader]);
+			
+			mediaElement.resource = new SimpleResource(SimpleResource.UNHANDLED);
+			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);
+		}
 	}
 }
