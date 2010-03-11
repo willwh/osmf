@@ -56,6 +56,7 @@ package org.osmf.examples
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.BufferTrait;
@@ -116,6 +117,17 @@ package org.osmf.examples
 							}
 							
 				  	   		return new VideoElement(dsResource);
+				  	   	}
+					)
+				);
+
+			examples.push
+				( new Example
+					( 	"Live Streaming Video"
+					, 	"Demonstrates playback of a live video stream."
+					, 	function():MediaElement
+				  	   	{
+							return new VideoElement(new StreamingURLResource(REMOTE_LIVE_STREAM, StreamType.LIVE));
 				  	   	}
 					)
 				);
@@ -934,6 +946,7 @@ package org.osmf.examples
 		private static const REMOTE_PROGRESSIVE2:String 		= "http://mediapm.edgesuite.net/strobe/content/test/elephants_dream_768x428_24_short.flv";
 		private static const REMOTE_STREAM:String 				= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private static const REMOTE_AUDIO_STREAM:String 		= "rtmp://cp67126.edgefcs.net/ondemand/mp3:mediapm/strobe/content/test/train_1500";
+		private static const REMOTE_LIVE_STREAM:String			= "rtmp://cp34973.live.edgefcs.net/live/Flash_Live_Benchmark@632";
 		private static const REMOTE_MBR_STREAM_HOST:String 		= "rtmp://cp67126.edgefcs.net/ondemand";
 		private static const REMOTE_MP3:String 					= "http://mediapm.edgesuite.net/osmf/content/test/train_1500.mp3";
 		private static const REMOTE_IMAGE:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";

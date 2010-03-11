@@ -84,6 +84,7 @@ package org.osmf.net
 					break;
 				case NetStreamCodes.NETSTREAM_BUFFER_FLUSH:
 				case NetStreamCodes.NETSTREAM_BUFFER_FULL:
+				case NetStreamCodes.NETSTREAM_PLAY_PUBLISHNOTIFY: // For the Live case, we get a PublishNotify rather than a buffer event
 					setBuffering(false);
 					break;
 			}
