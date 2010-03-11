@@ -35,6 +35,7 @@ package org.osmf.examples
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.PlayEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.buffering.SynchronizedParallelElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
@@ -98,7 +99,7 @@ package org.osmf.examples
 					( 	"Streaming Video"
 					, 	"Demonstrates playback of a streaming video using VideoElement and NetLoader."
 				  	,  	function():MediaElement
-				  	   	{
+				  	   	{							
 				  	   		return new VideoElement(new URLResource(REMOTE_STREAM));
 				  	   	}
 				  	)
@@ -925,20 +926,26 @@ package org.osmf.examples
      	private static function preload(mediaElement:MediaElement):void
 		{
 			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-			loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+						
+			if (!org.osmf.net.NetStreamUtils.isStreamingResource(mediaElement.resource))
+			{
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			}
+			
 			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
-				{
+				{					
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					
 					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					playTrait.play();
+					playTrait.play();	
 					playTrait.pause();
+				
 				}
 			}
+			
      	}
 
 		
