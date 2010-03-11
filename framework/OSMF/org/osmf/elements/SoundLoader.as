@@ -27,6 +27,7 @@ package org.osmf.elements
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.media.Sound;
+	import flash.media.SoundLoaderContext;
 	import flash.net.URLRequest;
 	
 	import org.osmf.elements.audioClasses.SoundLoadTrait;
@@ -63,16 +64,22 @@ package org.osmf.elements
 	public class SoundLoader extends LoaderBase
 	{
 		/**
-		 * Constructs a new SoundLoader.
+		 * Constructor.
+		 * 
+		 * @param checkPolicyFile Indicates whether the SoundLoader should try to download
+		 * a URL policy file from the loaded sound's server before beginning to load the
+		 * sound.  The default is false.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function SoundLoader()
+		public function SoundLoader(checkPolicyFile:Boolean=false)
 		{
 			super();
+			
+			this.checkPolicyFile = checkPolicyFile;
 		}
 		
 		/**
@@ -142,10 +149,11 @@ package org.osmf.elements
 			toggleSoundListeners(sound, true);
 
 			var urlRequest:URLRequest = new URLRequest((soundLoadTrait.resource as URLResource).url.toString());
+			var context:SoundLoaderContext = new SoundLoaderContext(1000, checkPolicyFile);
 			
 			try
 			{
-				sound.load(urlRequest);
+				sound.load(urlRequest, context);
 			}
 			catch (ioError:IOError)
 			{
@@ -254,5 +262,7 @@ package org.osmf.elements
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["audio/mpeg"]);
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.AUDIO]);
+		
+		private var checkPolicyFile:Boolean;
 	}
 }
