@@ -24,25 +24,39 @@ package org.osmf.events
 {
 	import flash.events.Event;
 
+	[ExcludeClass]
+
 	public class DVRStreamInfoEvent extends Event
 	{
 		public static const DVRSTREAMINFO:String = "DVRStreamInfo";
 		
+		/** 
+		 * @private
+		 */
 		public function DVRStreamInfoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, info:Object = null)
 		{
 			super(type, bubbles, cancelable);
 			_info = info;
 		}
 		
+		/** 
+		 * @private
+		 */
 		override public function clone():Event
 		{
 			return new DVRStreamInfoEvent(type, bubbles, cancelable, info)
 		}
 		
+		/** 
+		 * @private
+		 */
 		public function get info():Object
 		{
 			return info;
 		}
+		
+		//
+		// Internal
 		
 		private var _info:Object;
 	}
