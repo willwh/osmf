@@ -79,12 +79,20 @@ package org.osmf.net
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_START:   // Once playing starts, we will be buffering (streaming and progressive, until we receive a Buffer.Full or Buffer.flush
 				case NetStreamCodes.NETSTREAM_BUFFER_EMPTY:	 //Grab buffertime once again, since VOD will force it up to .1 from 0				
-					bufferTime = netStream.bufferTime;				
+					bufferTime = netStream.bufferTime;
 					setBuffering(true);
+
+					// If we have a zero buffer time (e.g. for a live stream)
+					// immediately exit buffer mode.  Note that we don't cancel
+					// both setBuffering calls, because clients will typically
+					// expect the buffering==false event.  See FM-530.
+					if (netStream.bufferTime == 0)
+					{				
+						setBuffering(false);
+					}
 					break;
 				case NetStreamCodes.NETSTREAM_BUFFER_FLUSH:
 				case NetStreamCodes.NETSTREAM_BUFFER_FULL:
-				case NetStreamCodes.NETSTREAM_PLAY_PUBLISHNOTIFY: // For the Live case, we get a PublishNotify rather than a buffer event
 					setBuffering(false);
 					break;
 			}
