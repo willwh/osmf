@@ -24,12 +24,15 @@ package org.osmf.elements
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.LoaderEvent;
-	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.SimpleLoader;
+	import org.osmf.utils.SimpleResource;
 	
 	public class TestLoadFromDocumentElement extends TestProxyElement
 	{
@@ -41,8 +44,15 @@ package org.osmf.elements
 			var elem:LoadFromDocumentElement = new LoadFromDocumentElement(resource, loader);
 			var testMetadata:Metadata = new Metadata();
 			elem.addMetadata(NS_URL, testMetadata);
+			
+			var loadStates:Array = [];
+			
+			var mediaPlayer:MediaPlayer = new MediaPlayer();
+			mediaPlayer.autoPlay = false;
+			mediaPlayer.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+			mediaPlayer.media = elem;
 						
-			var wrapped:MediaElement = new MediaElement();
+			var wrapped:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.LOAD], new SimpleLoader(), new SimpleResource(SimpleResource.SUCCESSFUL));
 						
 			assertEquals(resource, elem.resource);
 				
@@ -54,18 +64,26 @@ package org.osmf.elements
 			
 			assertNotNull(elem.getMetadata(NS_URL));
 			
-			var load:LoadFromDocumentLoadTrait = elem.getTrait(MediaTraitType.LOAD) as LoadFromDocumentLoadTrait;
+			var loadTrait:LoadFromDocumentLoadTrait = elem.getTrait(MediaTraitType.LOAD) as LoadFromDocumentLoadTrait;
+			assertNotNull(loadTrait);
 			
-			assertNotNull(load);
-			
-			load.mediaElement = wrapped;
-			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, load, LoadState.LOADING, LoadState.READY));
+			loadTrait.mediaElement = wrapped;
+			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, loadTrait, LoadState.UNINITIALIZED, LoadState.LOADING));
+			loader.dispatchEvent(new LoaderEvent(LoadEvent.LOAD_STATE_CHANGE, false, false, loader, loadTrait, LoadState.LOADING, LoadState.READY));
 			
 			// Ensure metadata proxy is functioning properly
 			assertEquals(elem.getMetadata(NS_URL), testMetadata);		
 			
 			assertEquals(elem.metadata.keys.length, wrapped.metadata.keys.length);
-						
+			
+			assertTrue(loadStates.length == 2);
+			assertTrue(loadStates[0] == LoadState.LOADING);
+			assertTrue(loadStates[1] == LoadState.READY);
+			
+			function onLoadStateChange(event:LoadEvent):void
+			{
+				loadStates.push(event.loadState);
+			}
 		}
 		
 		private static const NS_URL:String = "http://www.adobe.com";
