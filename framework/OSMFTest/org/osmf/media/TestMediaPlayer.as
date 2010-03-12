@@ -192,10 +192,8 @@ package org.osmf.media
 					{
 						assertTrue(event.loadState == LoadState.LOAD_ERROR);
 						assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
-						
-						// TODO: Reenable once this works for dynamic streams.  Probably
-						// need to have the error event dispatched in NetLoader.
-						//assertTrue(errorCount == 1);
+
+						assertTrue(errorCount == 1);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -563,7 +561,14 @@ package org.osmf.media
 				
 				assertTrue(mediaPlayer.playing == true);
 				assertTrue(event.playState == PlayState.PLAYING);
-				assertTrue(mediaPlayer.state == MediaPlayerState.PLAYING);
+				
+				// Note that the MediaPlayerState might not be PLAYING yet
+				// because the MediaPlayer waits until some data has buffered
+				// before changing to PLAYING, so that we don't signal a
+				// PLAYING state before we're truly PLAYING.
+				assertTrue(		(mediaPlayer.state == MediaPlayerState.READY && mediaPlayer.canBuffer)
+							||	(mediaPlayer.state == MediaPlayerState.PLAYING && !mediaPlayer.canBuffer)
+						  );
 				
 				if (pauseAfterPlay)
 				{
@@ -657,7 +662,14 @@ package org.osmf.media
 					
 					assertTrue(mediaPlayer.playing == true);
 					assertTrue(event.playState == PlayState.PLAYING);
-					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYING);
+					
+					// Note that the MediaPlayerState might not be PLAYING yet
+					// because the MediaPlayer waits until some data has buffered
+					// before changing to PLAYING, so that we don't signal a
+					// PLAYING state before we're truly PLAYING.
+					assertTrue(		(mediaPlayer.state == MediaPlayerState.READY && mediaPlayer.canBuffer)
+								||	(mediaPlayer.state == MediaPlayerState.PLAYING && !mediaPlayer.canBuffer)
+							  );
 
 					var hasStopped:Boolean = false;
 					var hasSeeked:Boolean = false;
@@ -781,8 +793,7 @@ package org.osmf.media
 					{
 						assertTrue(mediaPlayer.seeking == false);
 						assertTrue(event.seeking == false);
-						assertTrue(mediaPlayer.state == MediaPlayerState.READY ||
-								   mediaPlayer.state == MediaPlayerState.PAUSED);
+						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
 					}
@@ -1181,8 +1192,6 @@ package org.osmf.media
 			assertTrue(events[3] is DisplayObjectEvent);
 			assertEquals(events[2].type, DisplayObjectEvent.DISPLAY_OBJECT_CHANGE);		
 			assertEquals(events[3].type, DisplayObjectEvent.MEDIA_SIZE_CHANGE);
-			
-							
 		}
 		
 		public function testBufferEventGeneration():void
@@ -1215,12 +1224,11 @@ package org.osmf.media
 			
 			media.doRemoveTrait(MediaTraitType.BUFFER);
 			
-			//Should get a buffer time change, back to the default of 0.
+			// Should get a buffer time change, back to the default of 0.
 			
 			assertEquals(3, events.length);	
 			assertTrue(events[2] is BufferEvent);	
-			assertEquals(events[2].type, BufferEvent.BUFFER_TIME_CHANGE);	
-						
+			assertEquals(events[2].type, BufferEvent.BUFFER_TIME_CHANGE);			
 		}
 		
 		public function testDynamicStreamEventGeneration():void
@@ -1268,7 +1276,7 @@ package org.osmf.media
 			
 			media.doAddTrait(MediaTraitType.DYNAMIC_STREAM, dynamicTrait);
 			
-			//Should make it true.
+			// Should make it true.
 			
 			assertTrue(dynamicTrait.autoSwitch);
 			
@@ -1316,7 +1324,7 @@ package org.osmf.media
 			assertEquals(AudioEvent(events[0]).pan,  mediaPlayer.audioPan);
 			assertEquals(AudioEvent(events[0]).muted,  mediaPlayer.muted);			
 			
-			//No event generation from removal.
+			// No event generation from removal.
 			media.doRemoveTrait(MediaTraitType.AUDIO);
 			
 			assertEquals(3, events.length);
@@ -1349,7 +1357,7 @@ package org.osmf.media
 			assertEquals(TimeEvent(events[0]).time,  mediaPlayer.currentTime);		
 			assertEquals(TimeEvent(events[1]).time,  mediaPlayer.duration);		
 			
-			//Removal Events
+			// Removal Events
 			
 			media.doRemoveTrait(MediaTraitType.TIME);
 			
@@ -1404,8 +1412,6 @@ package org.osmf.media
 			assertEquals(events[3].type, PlayEvent.CAN_PAUSE_CHANGE);
 			
 			assertTrue(mediaPlayer.playing);	
-				
-			
 		}
 		
 		public function testLoop():void
@@ -1456,17 +1462,15 @@ package org.osmf.media
 				{
 					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestLoop);
+					
+					assertTrue(mediaPlayer.paused == false);
+					
 					var statesStr:String = states.join(" ");
-					if (mediaPlayer.paused)
-					{
-						assertTrue(mediaPlayer.playing == false);
-						assertTrue(statesStr == "playing paused"); 
-					}
-					else
-					{
-						assertTrue(	   statesStr == "playing ready"
-									|| statesStr == "playing ready playing"); 
-					}
+					
+					// TODO: DurationElement currently generates the second set of
+					// states.  We should fix this, then remove the second condition.
+					assertTrue(statesStr == "playing ready" || statesStr == "playing ready playing"); 
+
 					mediaPlayer.pause();
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -1526,9 +1530,7 @@ package org.osmf.media
 					
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");
-					assertTrue(		statesStr == "playing ready"
-								||	statesStr == "playing paused ready"
-							  ); 
+					assertTrue(statesStr == "playing ready"); 
 
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
 				}
@@ -1574,12 +1576,31 @@ package org.osmf.media
 					}				
 					else if (eventCount == 2)
 					{
+						if (mediaPlayer.canBuffer)
+						{
+							assertTrue(event.state == MediaPlayerState.READY);
+						}
+						else
+						{
+							assertTrue(event.state == MediaPlayerState.PLAYING);
+
+							mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+							
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+					}
+					else if (eventCount == 3)
+					{
+						assertTrue(event.state == MediaPlayerState.BUFFERING);
+					}				
+					else if (eventCount == 4)
+					{
 						assertTrue(event.state == MediaPlayerState.PLAYING);
 						
 						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 						
 						eventDispatcher.dispatchEvent(new Event("testComplete"));
-					}
+					}				
 					else
 					{
 						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);

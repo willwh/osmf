@@ -24,6 +24,7 @@ package org.osmf.elements
 	import __AS3__.vec.Vector;
 	
 	import flash.errors.IOError;
+	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.media.Sound;
@@ -183,14 +184,23 @@ package org.osmf.elements
 				// There's no "loaded" event associated with the Sound class.
 				// We can't rely on the "open" event, because that can get
 				// fired prior to an "ioError" event (which seems like a bug).
-				// But we can assume that if we get a progress event, then the
-				// load has succeeded.
+				// But we can assume that if we get a progress event with some
+				// bytes, then the load has succeeded.
 				//
-				 
-				toggleSoundListeners(sound, false);
+				
+				// Note that we check that we'll receive at least 15 bytes.  Why?
+				// If the request returns a 404, there's no way for us to know
+				// that (without waiting for an IO Error event, by which time we
+				// want to have already signaled READY).  15 bytes is roughly the
+				// size of a 404, and presumably we'll never need to load content
+				// so small, so this seems like a safe heuristic to use.
+				if (event.bytesTotal >= MIN_BYTES_TO_RECEIVE)
+				{
+					toggleSoundListeners(sound, false);
 
-				soundLoadTrait.sound = sound;
-				updateLoadTrait(soundLoadTrait, LoadState.READY);
+					soundLoadTrait.sound = sound;
+					updateLoadTrait(soundLoadTrait, LoadState.READY);
+				}
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -262,6 +272,8 @@ package org.osmf.elements
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["audio/mpeg"]);
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.AUDIO]);
+		
+		private static const MIN_BYTES_TO_RECEIVE:int = 16;
 		
 		private var checkPolicyFile:Boolean;
 	}

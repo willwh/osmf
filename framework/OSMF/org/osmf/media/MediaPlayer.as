@@ -1506,8 +1506,12 @@ package org.osmf.media
 		private function onPlayStateChange(event:PlayEvent):void
 		{			
 			if (event.playState == PlayState.PLAYING)  
-			{				
-				setState(MediaPlayerState.PLAYING);				
+			{
+				// Don't signal playing until we've buffered some data.
+				if (canBuffer == false || bufferLength > 0)
+				{
+					setState(MediaPlayerState.PLAYING);
+				}
 			}
 			else if (event.playState == PlayState.PAUSED)
 			{

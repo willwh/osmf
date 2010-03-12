@@ -21,6 +21,7 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	
 	import org.osmf.elements.audioClasses.AudioAudioTrait;
@@ -29,6 +30,9 @@ package org.osmf.elements
 	import org.osmf.elements.audioClasses.AudioTimeTrait;
 	import org.osmf.elements.audioClasses.SoundAdapter;
 	import org.osmf.elements.audioClasses.SoundLoadTrait;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.DefaultTraitResolver;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
@@ -175,6 +179,9 @@ package org.osmf.elements
 
 			var timeTrait:TimeTrait;
 			
+			soundAdapter = null;
+			stream = null;
+			
 			// Different paths for streaming vs. progressive.
 			var netLoadTrait:NetStreamLoadTrait = loadTrait as NetStreamLoadTrait;
 			if (netLoadTrait)
@@ -182,7 +189,9 @@ package org.osmf.elements
 				// Streaming Audio
 				//
 				
-				var stream:NetStream = netLoadTrait.netStream;
+				stream = netLoadTrait.netStream;
+				
+				stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 				
 				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
 				timeTrait = new NetStreamTimeTrait(stream, resource);
@@ -213,6 +222,11 @@ package org.osmf.elements
 		 */ 
 		override protected function processUnloadingState():void
 		{
+			if (stream != null)
+			{
+				stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
+			}
+			
 			removeTrait(MediaTraitType.PLAY);
 			removeTrait(MediaTraitType.SEEK);
 			removeTrait(MediaTraitType.TIME);
@@ -225,9 +239,37 @@ package org.osmf.elements
 				soundAdapter.pause();
 			}
 			soundAdapter = null;
+			stream = null;
 		}	
+		
+     	private function onNetStatusEvent(event:NetStatusEvent):void
+     	{     		
+     		var error:MediaError = null;
+ 			switch (event.info.code)
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
+				case NetStreamCodes.NETSTREAM_FAILED:
+					error = new MediaError(MediaErrorCodes.PLAY_FAILED, event.info.description);
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
+					error = new MediaError(MediaErrorCodes.STREAM_NOT_FOUND, event.info.description);
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID:
+					error = new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID, event.info.description);
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
+					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND, event.info.description);
+					break;	
+			}
 					
+			if (error != null)
+			{
+				dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, error));
+			}
+     	}
+     	
 		private var soundAdapter:SoundAdapter;
+		private var stream:NetStream;
 		private var defaultTimeTrait:ModifiableTimeTrait;
 	}
 }

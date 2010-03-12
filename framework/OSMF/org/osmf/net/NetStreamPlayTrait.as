@@ -128,7 +128,7 @@ package org.osmf.net
 				netStream.pause();
 			}
 		}
-		
+
 		// Needed to detect when the stream didn't play:  i.e. complete or error cases.
 		private function onNetStatus(event:NetStatusEvent):void
 		{
@@ -139,9 +139,12 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:				
 				case NetStreamCodes.NETSTREAM_FAILED:
+					// Pause the stream and reset our state, but don't
+					// signal stop().  The MediaElement's netStatus
+					// event handler will catch the error, and coerce
+					// to a MediaError.
 					netStream.pause();
 					streamStarted = false;
-					stop();
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					// Fired when streaming connections buffer, but also when

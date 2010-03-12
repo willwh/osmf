@@ -21,13 +21,21 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.events.Event;
+	
 	import org.osmf.elements.audioClasses.*;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.TestMediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamLoadTrait;
+	import org.osmf.netmocker.EventInfo;
+	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.NetFactory;
@@ -39,6 +47,7 @@ package org.osmf.elements
 		override public function setUp():void
 		{
 			netFactory = new NetFactory();
+			loader = netFactory.createNetLoader();
 
 			super.setUp();
 		}
@@ -47,12 +56,20 @@ package org.osmf.elements
 		{
 			super.tearDown();
 			
+			loader = null;
 			netFactory = null;
 		}
 
 		override protected function createMediaElement():MediaElement
 		{
-			return new AudioElement(null, netFactory.createNetLoader()); 
+			if (loader is MockNetLoader)
+			{
+				// Give our mock loader an arbitrary duration to ensure
+				// we get metadata.
+				MockNetLoader(loader).netStreamExpectedDuration = TestConstants.REMOTE_STREAMING_VIDEO_EXPECTED_DURATION;
+			}
+			
+			return new AudioElement(null, loader);
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -130,6 +147,52 @@ package org.osmf.elements
 			assertNull(timeTrait);
 		}
 		
+		public function testMediaErrorPlayFailed():void
+		{
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FAILED, MediaErrorCodes.PLAY_FAILED);
+		}
+
+		public function testMediaErrorStreamNotFound():void
+		{
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, MediaErrorCodes.STREAM_NOT_FOUND);
+		}
+		
+		public function testMediaErrorFileStructureInvalid():void
+		{
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, MediaErrorCodes.FILE_STRUCTURE_INVALID);
+		}
+
+		public function testMediaErrorNoSupportedTrackFound():void
+		{
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND, MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
+		}
+
+		private function doTestMediaError(netStreamCode:String, errorID:int, level:String="error"):void
+		{
+			var mockLoader:MockNetLoader = loader as MockNetLoader;
+			if (mockLoader != null)
+			{
+				mockLoader.netStreamExpectedEvents = [ new EventInfo(netStreamCode, level, 0) ];
+					
+				var mediaElement:MediaElement = createMediaElement();
+				mediaElement.resource = resourceForMediaElement;
+				
+				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onTestMediaError);
+				
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
+				
+				var mediaPlayer:MediaPlayer = new MediaPlayer(mediaElement);
+				
+				function onTestMediaError(event:MediaErrorEvent):void
+				{
+					assertTrue(event.error.errorID == errorID);
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+			}
+		}
+		
 		private var netFactory:NetFactory;
+		private var loader:NetLoader;
 	}
 }

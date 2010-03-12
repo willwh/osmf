@@ -471,7 +471,7 @@ package org.osmf.elements
 		{
 			NetClient(stream.client).removeHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			
-			stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent)
+			stream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 			
 	    	removeTrait(MediaTraitType.AUDIO);
 	    	removeTrait(MediaTraitType.BUFFER);
@@ -562,16 +562,16 @@ package org.osmf.elements
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 				case NetStreamCodes.NETSTREAM_FAILED:
-					error = new MediaError(MediaErrorCodes.PLAY_FAILED);
+					error = new MediaError(MediaErrorCodes.PLAY_FAILED, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
-					error = new MediaError(MediaErrorCodes.STREAM_NOT_FOUND);
+					error = new MediaError(MediaErrorCodes.STREAM_NOT_FOUND, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID:
-					error = new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID);
+					error = new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
-					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
+					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND, event.info.description);
 					break;	
 			}
 					

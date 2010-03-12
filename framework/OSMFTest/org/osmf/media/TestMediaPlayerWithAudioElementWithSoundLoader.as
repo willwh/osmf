@@ -23,11 +23,9 @@ package org.osmf.media
 {
 	import flash.media.SoundMixer;
 	
-	import org.osmf.audio.AudioElement;
-	import org.osmf.audio.SoundLoader;
+	import org.osmf.elements.AudioElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.TestConstants;
-	import org.osmf.utils.URL;
 	
 	public class TestMediaPlayerWithAudioElementWithSoundLoader extends TestMediaPlayer
 	{
@@ -42,9 +40,9 @@ package org.osmf.media
 			SoundMixer.stopAll();
 		}
 
-		override protected function createMediaElement(resource:IMediaResource):MediaElement
+		override protected function createMediaElement(resource:MediaResourceBase):MediaElement
 		{
-			return new AudioElement(new SoundLoader(), resource as IURLResource);
+			return new AudioElement(resource as URLResource);
 		}
 		
 		override protected function get hasLoadTrait():Boolean
@@ -52,12 +50,12 @@ package org.osmf.media
 			return true;
 		}
 		
-		override protected function get resourceForMediaElement():IMediaResource
+		override protected function get resourceForMediaElement():MediaResourceBase
 		{
-			return new URLResource(new URL(TestConstants.LOCAL_SOUND_FILE));
+			return new URLResource(TestConstants.LOCAL_SOUND_FILE);
 		}
 
-		override protected function get invalidResourceForMediaElement():IMediaResource
+		override protected function get invalidResourceForMediaElement():MediaResourceBase
 		{
 			return INVALID_RESOURCE;
 		}
@@ -80,6 +78,6 @@ package org.osmf.media
 		// Internals
 		//
 
-		private static const INVALID_RESOURCE:URLResource = new URLResource(new URL(TestConstants.LOCAL_INVALID_SOUND_FILE));
+		private static const INVALID_RESOURCE:URLResource = new URLResource(TestConstants.LOCAL_INVALID_SOUND_FILE);
 	}
 }

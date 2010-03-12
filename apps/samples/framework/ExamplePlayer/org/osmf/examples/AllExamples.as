@@ -35,7 +35,6 @@ package org.osmf.examples
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
-	import org.osmf.events.PlayEvent;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.buffering.SynchronizedParallelElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
@@ -231,7 +230,7 @@ package org.osmf.examples
 					, 	"Demonstrates playback of a streaming audio file using AudioElement and NetLoader."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new URLResource(REMOTE_AUDIO_STREAM));
+							return new AudioElement(new StreamingURLResource(REMOTE_AUDIO_STREAM));
 				  	   	}
 				  	)
 				);
@@ -249,11 +248,22 @@ package org.osmf.examples
 
 			examples.push
 				( new Example
-					( 	"Invalid Streaming Video"
-					, 	"Demonstrates load failures and error handling for a streaming video with an invalid URL."
+					( 	"Invalid Streaming Video (Bad Server)"
+					, 	"Demonstrates load failures and error handling for a streaming video with an invalid server."
 				  	,  	function():MediaElement
 				  	   	{
-							return new VideoElement(new URLResource(REMOTE_INVALID_STREAM));
+							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_FMS_SERVER));
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Invalid Streaming Video (Bad Stream)"
+					, 	"Demonstrates load failures and error handling for a streaming video with an valid server but an invalid stream."
+				  	,  	function():MediaElement
+				  	   	{
+							return new VideoElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
 				  	   	}
 				  	)
 				);
@@ -286,7 +296,7 @@ package org.osmf.examples
 					, 	"Demonstrates load failures and error handling for a streaming audio file with an invalid URL."
 				  	,  	function():MediaElement
 				  	   	{
-							return new AudioElement(new URLResource(REMOTE_INVALID_STREAM));
+							return new AudioElement(new StreamingURLResource(REMOTE_INVALID_STREAM));
 				  	   	}
 				  	)
 				);
@@ -324,10 +334,10 @@ package org.osmf.examples
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
 							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							preload(videoElement);
+							preload(videoElement, false);
 							serialElement.addChild(videoElement);
 							videoElement = new VideoElement(new URLResource(REMOTE_STREAM));
-							preload(videoElement);
+							preload(videoElement, true);
 							serialElement.addChild(videoElement);
 							return serialElement;
 				  	   	} 
@@ -923,11 +933,11 @@ package org.osmf.examples
 			return examples;
 		}
 		
-     	private static function preload(mediaElement:MediaElement):void
+     	private static function preload(mediaElement:MediaElement, doPlayPause:Boolean):void
 		{
 			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 						
-			if (!org.osmf.net.NetStreamUtils.isStreamingResource(mediaElement.resource))
+			if (doPlayPause)
 			{
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			}
@@ -939,10 +949,10 @@ package org.osmf.examples
 				if (event.loadState == LoadState.READY)
 				{					
 					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+					
 					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
 					playTrait.play();	
 					playTrait.pause();
-				
 				}
 			}
 			
@@ -962,7 +972,8 @@ package org.osmf.examples
 		private static const REMOTE_SLIDESHOW_IMAGE3:String 	= "http://mediapm.edgesuite.net/osmf/image/flex_48x45.gif";
 		private static const REMOTE_SWF:String 					= "http://mediapm.edgesuite.net/osmf/swf/ReferenceSampleSWF.swf";
 		private static const REMOTE_INVALID_PROGRESSIVE:String 	= "http://mediapm.edgesuite.net/strobe/content/test/fail.flv";
-		private static const REMOTE_INVALID_STREAM:String 		= "rtmp://cp67126.fail.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
+		private static const REMOTE_INVALID_FMS_SERVER:String 	= "rtmp://cp67126.fail.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
+		private static const REMOTE_INVALID_STREAM:String 		= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/fail/SpaceAloneHD_sounas_640_500_short";
 		private static const REMOTE_INVALID_IMAGE:String 		= "http://mediapm.edgesuite.net/osmf/image/fail.png";
 		private static const REMOTE_INVALID_MP3:String 			= "http://mediapm.edgesuite.net/osmf/content/test/fail.mp3";
 		private static const LOCAL_PROGRESSIVE:String 			= "video.flv";
