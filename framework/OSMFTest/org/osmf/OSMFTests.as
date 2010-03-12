@@ -248,7 +248,7 @@ package org.osmf
 			addTestSuite(TestDownloadRatioRule);
 			addTestSuite(TestBoxParser);
 			addTestSuite(TestAdobeBootstrapBox);
-			addTestSuite(TestAdobeFragmentRunTable);
+//			addTestSuite(TestAdobeFragmentRunTable);
 			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
 			
