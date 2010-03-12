@@ -161,7 +161,7 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function findFragmentIdByTime(time:Number):FragmentAccessInformation
+		public function findFragmentIdByTime(time:Number, totalDuration:Number):FragmentAccessInformation
 		{
 			if (_fragmentDurationPairs.length <= 0)
 			{
@@ -175,11 +175,11 @@ package org.osmf.net.httpstreaming.f4f
 				fdp = _fragmentDurationPairs[i];
 				if (fdp.durationAccrued >= time)
 				{
-					return validateFragment(calculateFragmentId(_fragmentDurationPairs[i - 1], time));
+					return validateFragment(calculateFragmentId(_fragmentDurationPairs[i - 1], time), totalDuration);
 				}
 			}
 			
-			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time));
+			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time), totalDuration);
 		}
 		
 		/**
@@ -193,11 +193,11 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function validateFragment(fragId:uint):FragmentAccessInformation
+		public function validateFragment(fragId:uint, totalDuration:Number):FragmentAccessInformation
 		{
 			var size:uint = _fragmentDurationPairs.length - 1;
 			var fai:FragmentAccessInformation = new FragmentAccessInformation();
-			
+
 			for (var i:uint = 0; i < size; i++)
 			{
 				var curFdp:FragmentDurationPair = _fragmentDurationPairs[i];
@@ -227,7 +227,24 @@ package org.osmf.net.httpstreaming.f4f
 				}
 			}
 			
-			if (fragId >= _fragmentDurationPairs[size].firstFragment && _fragmentDurationPairs[size].duration > 0)
+			CONFIG::LOGGING
+			{
+				logger.debug("total duration: " + totalDuration);
+				logger.debug("fragment timestamp: " + _fragmentDurationPairs[size].durationAccrued);
+				logger.debug("fragId: " + fragId);
+				logger.debug("firstFragment: " + _fragmentDurationPairs[size].firstFragment);
+				
+				logger.debug("time residue: " + 
+					(totalDuration - 
+					_fragmentDurationPairs[size].durationAccrued - 
+					(fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration));
+					
+				logger.debug("fragment duration: " + _fragmentDurationPairs[size].duration);
+			}
+			
+			if (fragId >= _fragmentDurationPairs[size].firstFragment && 
+				((totalDuration - _fragmentDurationPairs[size].durationAccrued - (fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration) > _fragmentDurationPairs[size].duration) && 
+				_fragmentDurationPairs[size].duration > 0)
 			{
 				fai.fragId = fragId;
 				fai.fragDuration = 
@@ -316,5 +333,10 @@ package org.osmf.net.httpstreaming.f4f
 		private var _timeScale:uint;
 		private var _qualitySegmentURLModifiers:Vector.<String>;
 		private var _fragmentDurationPairs:Vector.<FragmentDurationPair>;
+
+		CONFIG::LOGGING
+		{
+			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.AdobeFragmentRunTable");
+		}
 	}
 }

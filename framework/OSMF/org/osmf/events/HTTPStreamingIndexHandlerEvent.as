@@ -44,6 +44,8 @@ package org.osmf.events
 			type:String, 
 			bubbles:Boolean=false, 
 			cancelable:Boolean=false,
+			live:Boolean = false,
+			offset:Number = NaN,
 			streamNames:Array = null, 
 			rates:Array = null, 
 			request:URLRequest = null,
@@ -56,6 +58,8 @@ package org.osmf.events
 		{
 			super(type, bubbles, cancelable);
 			
+			_live = live;
+			_offset = offset;
 			_streamNames = streamNames;
 			_rates = rates;
 			_request = request;
@@ -66,7 +70,17 @@ package org.osmf.events
 			_scriptDataFirst = scriptDataFirst;
 			_scriptDataImmediate = scriptDataImmediate
 		}
+		
+		public function get live():Boolean
+		{
+			return _live;
+		}
 
+		public function get offset():Number
+		{
+			return _offset;
+		}
+		
 		public function get streamNames():Array
 		{
 			return _streamNames;
@@ -118,6 +132,8 @@ package org.osmf.events
 				( type
 				, bubbles
 				, cancelable
+				, live
+				, offset
 				, streamNames
 				, rates
 				, request
@@ -142,5 +158,7 @@ package org.osmf.events
 		private var _scriptDataObject:FLVTagScriptDataObject;
 		private var _scriptDataFirst:Boolean;
 		private var _scriptDataImmediate:Boolean;	
+		private var _live:Boolean;
+		private var _offset:Number;
 	}
 }

@@ -370,15 +370,15 @@ package org.osmf.elements.f4mClasses
 				
 				if (isAbsoluteURL(url))
 				{
-					resource = new StreamingURLResource(url);
+					resource = new StreamingURLResource(url, value.streamType);
 				}				
 				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new StreamingURLResource(value.baseURL + "/" + url);
+					resource = new StreamingURLResource(value.baseURL + "/" + url, value.streamType);
 				}
 				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
 				{
-					resource = new StreamingURLResource(manifestFolder + "/" + url);
+					resource = new StreamingURLResource(manifestFolder + "/" + url, value.streamType);
 				}
 				
 				if (media.bootstrapInfo	!= null)

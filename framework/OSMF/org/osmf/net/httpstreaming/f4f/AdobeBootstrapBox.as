@@ -340,7 +340,9 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var afrt:AdobeFragmentRunTable = _fragmentRunTables[_fragmentRunTables.length - 1];
 			var fdps:Vector.<FragmentDurationPair> = afrt.fragmentDurationPairs;
-			return fdps[fdps.length - 1].firstFragment;
+			var deltaTime:Number = _currentMediaTime - fdps[fdps.length - 1].durationAccrued;
+			var fragCount:uint = deltaTime / fdps[fdps.length - 1].duration;
+			return fdps[fdps.length - 1].firstFragment + fragCount - 1;
 		}
 		
 		/**

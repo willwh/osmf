@@ -926,6 +926,12 @@ package org.osmf.net.httpstreaming
 					if (nextRequest != null && nextRequest.urlRequest != null)
 					{
 						_loadComplete = false;	
+
+						CONFIG::LOGGING
+						{
+							logger.debug("loading: " + 	nextRequest.urlRequest.url.toString());
+						}
+											
 						_urlStreamVideo.load(nextRequest.urlRequest);
 						
 						var date:Date = new Date();
@@ -1167,6 +1173,11 @@ package org.osmf.net.httpstreaming
 		{
 			if (!indexIsReady)
 			{
+				if (event.live && !isNaN(event.offset))
+				{
+					_seekTarget = event.offset;
+				}
+				
 				_urlStreamVideo = new URLStream();
 			
 				_urlStreamVideo.addEventListener(ProgressEvent.PROGRESS				, onURLStatus		, false, 0, true);	
@@ -1180,7 +1191,7 @@ package org.osmf.net.httpstreaming
 		}
 		
 		private function onVideoURLError(event:Event):void
-		{
+		{			
 			handleURLError();
 		}
 		

@@ -111,9 +111,11 @@ package org.osmf.net.httpstreaming.f4f
 								( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
 								, false
 								, false
+								, false
+								, NaN
 								, null
 								, null
-								, new URLRequest(bootstrap.url)
+								, new URLRequest(bootstrap.url + "?rand=" + new Date().getTime())
 								, i
 								, true
 								)
@@ -128,16 +130,14 @@ package org.osmf.net.httpstreaming.f4f
 						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
 						, false
 						, false
+						, false
+						, NaN
 						, getStreamNames(streamInfos)
 						, getQualityRates(streamInfos)
 						)
 					);
-	
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
-						)
-					);
+
+				notifyIndexReady();
 			}
 		}
 		
@@ -148,6 +148,15 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var index:int = indexContext as int;
 			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
+			
+			CONFIG::LOGGING
+			{			
+				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
+				logger.debug("abst version: " + bootstrapBox.bootstrapVersion + 
+					" fragments calculated: " + bootstrapBox.totalFragments +
+					" fragments from segment run table: " + bootstrapBox.segmentRunTables[0].totalFragments);
+			}
+			
 			if (bootstrapBox == null)
 			{
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
@@ -177,16 +186,14 @@ package org.osmf.net.httpstreaming.f4f
 						( HTTPStreamingIndexHandlerEvent.NOTIFY_RATES
 						, false
 						, false
+						, false
+						, NaN
 						, getStreamNames(streamInfos)
 						, getQualityRates(streamInfos)
 						)
 					);
-	
-				dispatchEvent
-					( new HTTPStreamingIndexHandlerEvent
-						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
-						)
-					);
+
+				notifyIndexReady();
 			}
 		}	
 		
@@ -207,7 +214,8 @@ package org.osmf.net.httpstreaming.f4f
 				&&  quality < streamInfos.length
 			   )
 			{
-				currentFAI = frt.findFragmentIdByTime((time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale);
+				currentFAI = frt.findFragmentIdByTime(
+					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime);
 				if (currentFAI == null)
 				{
 					return null;
@@ -260,7 +268,7 @@ package org.osmf.net.httpstreaming.f4f
 			if (quality >= 0 && quality < streamInfos.length)
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-				currentFAI = frt.validateFragment(currentFAI.fragId + 1);
+				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime);
 				if (currentFAI == null)
 				{
 					return null;
@@ -367,6 +375,8 @@ package org.osmf.net.httpstreaming.f4f
 							( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
 							, false
 							, false
+							, false
+							, NaN
 							, null
 							, null
 							, null
@@ -424,6 +434,8 @@ package org.osmf.net.httpstreaming.f4f
 							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
 							, false
 							, false
+							, false
+							, NaN
 							, null
 							, null
 							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url + "?rand=" + new Date().getTime())
@@ -530,8 +542,10 @@ package org.osmf.net.httpstreaming.f4f
 			dispatchEvent
 				( new HTTPStreamingIndexHandlerEvent
 					( HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA
-					,false
 					, false
+					, false
+					, false
+					, NaN
 					, null
 					, null
 					, null
@@ -552,6 +566,8 @@ package org.osmf.net.httpstreaming.f4f
 						( HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION 
 						, false
 						, false
+						, false
+						, NaN
 						, null
 						, null
 						, null
@@ -560,6 +576,21 @@ package org.osmf.net.httpstreaming.f4f
 						, duration
 						)
 				);				
+		}
+		
+		private function notifyIndexReady():void
+		{
+			var abst:AdobeBootstrapBox = bootstrapBoxes[0];
+			
+			dispatchEvent
+				( new HTTPStreamingIndexHandlerEvent
+					( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
+					, false
+					, false
+					, abst.live
+					, (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN 
+					)
+				);
 		}
 
 		private var pendingIndexLoads:int;
@@ -572,6 +603,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var fragmentsThreshold:uint;
 		private var fragmentRunTablesUpdating:Boolean;
 		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
+		private var offsetFromCurrent:Number = 20;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		

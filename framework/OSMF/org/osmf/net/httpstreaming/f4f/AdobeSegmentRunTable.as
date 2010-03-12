@@ -133,16 +133,35 @@ package org.osmf.net.httpstreaming.f4f
 
 			return calculateSegmentId(_segmentFragmentPairs[_segmentFragmentPairs.length - 1], fragmentId);
 		}
+		
+		public function get totalFragments():uint
+		{
+			return _segmentFragmentPairs[_segmentFragmentPairs.length - 1].fragmentsPerSegment;
+		}
 
 		// Internals
 		//
 		
 		private function calculateSegmentId(sfp:SegmentFragmentPair, fragmentId:uint):uint
 		{
-			return sfp.firstSegment +  (fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment;
+			CONFIG::LOGGING
+			{
+				logger.debug("first segment: " + sfp.firstSegment);
+				logger.debug("fragId: " + fragmentId);
+				logger.debug("fragmentsAccrued: " + sfp.fragmentsAccrued);
+				logger.debug("fragmentsPerSegment: " + sfp.fragmentsPerSegment);
+				logger.debug("segId: " + (sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment)));
+			}
+			
+			return sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment);
 		}	
 		
 		private var _qualitySegmentURLModifiers:Vector.<String>;
 		private var _segmentFragmentPairs:Vector.<SegmentFragmentPair>;
+
+		CONFIG::LOGGING
+		{
+			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.AdobeSegmentRunTable");
+		}
 	}
 }
