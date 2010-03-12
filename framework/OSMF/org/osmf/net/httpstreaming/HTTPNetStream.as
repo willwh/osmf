@@ -40,6 +40,7 @@ package org.osmf.net.httpstreaming
 	import flash.utils.IDataInput;
 	import flash.utils.Timer;
 	
+	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.NetStreamCodes;
@@ -49,6 +50,8 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 	import org.osmf.net.httpstreaming.flv.FLVTagVideo;
 
+	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
+	
 	CONFIG::LOGGING 
 	{	
 		import org.osmf.logging.ILogger;
@@ -114,6 +117,8 @@ package org.osmf.net.httpstreaming
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR, onIndexError);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromIndexHandler);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_SCRIPT_DATA, onScriptDataFromIndexHandler);
+			
+			indexHandler.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
 			
 			// removed NOTIFY_TIME_BIAS
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_SEGMENT_DURATION, onSegmentDurationFromFileHandler);
@@ -199,6 +204,23 @@ package org.osmf.net.httpstreaming
 		public function set indexInfo(value:HTTPStreamingIndexInfoBase):void
 		{
 			_indexInfo = value;
+		}
+		
+		// new functionality
+			
+		public function DVRGetStreamInfo(streamName:Object):void
+		{
+			if (indexIsReady)
+			{
+				// TODO: should there be indexHandler.DVRGetStreamInfo() to re-trigger the event?
+			}
+			else
+			{
+				// TODO: should there be a guard to protect the case where indexIsReady is not yet true BUT play has already been called, so we are in an
+				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
+				// event back, go ahead and call play()
+				indexHandler.initialize(_indexInfo != null ? _indexInfo : streamName);
+			}
 		}
 		
 		// Overrides
@@ -310,7 +332,7 @@ package org.osmf.net.httpstreaming
 				super.play2(param);
 			}
 		} 
-		
+
 		/**
 		 * @private
 		 */
@@ -347,6 +369,8 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function close():void
 		{
+			indexIsReady = false;
+			
 			switch (_state)
 			{
 				case HTTPStreamingState.PLAY:
@@ -1239,6 +1263,11 @@ package org.osmf.net.httpstreaming
 			{
 				insertScriptDataTag(scriptDataObject, scriptDataFirst);
 			}
+		}
+		
+		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+		{
+			dispatchEvent(event.clone());
 		}
 
 		/**

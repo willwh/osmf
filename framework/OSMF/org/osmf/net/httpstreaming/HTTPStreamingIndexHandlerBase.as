@@ -23,8 +23,6 @@ package org.osmf.net.httpstreaming
 {
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
-	import flash.net.URLRequest;
-	import flash.utils.ByteArray;
 
 	/**
 	 * Dispatched when the bootstrap information has been downloaded and parsed.
@@ -79,6 +77,16 @@ package org.osmf.net.httpstreaming
 	 */
 	[Event(name="notifyError", type="org.osmf.events.HTTPStreamingFileIndexHandlerEvent")]
 
+	/**
+	 * Dispatched whenever the index handler learns of (new) DVR metadata 
+	 *  
+	 *  @langversion 3.0
+	 *  @playerversion Flash 10
+	 *  @playerversion AIR 1.5
+	 *  @productversion OSMF 1.0
+	 */
+	[Event(name="DVRStreamInfo", type="org.osmf.events.DVRStreamInfoEvent")]
+	
 	[ExcludeClass]
 	
 	/**
@@ -179,6 +187,6 @@ package org.osmf.net.httpstreaming
 		public function getNextFile(quality:int):HTTPStreamRequest
 		{
 			throw new IllegalOperationError("The getNextFile() method must be overridden by the derived class.");
-		}				
+		}			
 	}
 }
