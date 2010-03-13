@@ -143,6 +143,11 @@ package org.osmf.traits
 			return _timeTrait;
 		}
 		
+		protected final function set timeTrait(value:TimeTrait):void
+		{
+			_timeTrait = value;
+		}
+		
 		/**
 		 * Must be called by the implementing media on completing a seek.
 		 * Calls the <code>seekingChangeStart()</code> and <code>seekingChangeEnd()</code>

@@ -25,7 +25,6 @@ package org.osmf.elements
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekTrait;
@@ -184,6 +183,21 @@ package org.osmf.elements
 			serial.addChildAt(mediaElement5, 0);
 			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			assertTrue(seekTrait.canSeekTo(0) == true);
+			assertTrue(seekTrait.canSeekTo(9) == true);
+			assertTrue(seekTrait.canSeekTo(11) == false);
+			
+			// A SerialElement whose TimeTrait is added later should be seekable later.
+			var mediaElement7:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.SEEK], null, null, true);
+			assertTrue(mediaElement7.getTrait(MediaTraitType.SEEK) != null);
+			serial = new SerialElement();
+			serial.addChild(mediaElement7);
+			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			assertTrue(seekTrait != null);
+			assertTrue(seekTrait.canSeekTo(0) == false);
+			assertTrue(seekTrait.canSeekTo(9) == false);
+			mediaElement7.doAddTrait(MediaTraitType.TIME, new TimeTrait(10));
+			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			assertTrue(seekTrait != null);
 			assertTrue(seekTrait.canSeekTo(9) == true);
 			assertTrue(seekTrait.canSeekTo(11) == false);
 		}

@@ -23,6 +23,7 @@ package org.osmf.elements.compositeClasses
 {
 	import flash.errors.IllegalOperationError;
 	
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitBase;
@@ -45,7 +46,10 @@ package org.osmf.elements.compositeClasses
 		{
 			super(owner.getTrait(MediaTraitType.TIME) as TimeTrait);
 			
-			// TODO: Add listener for traitAdd/remove, in case TimeTrait doesn't exist yet.
+			// Add listener for traitAdd/remove, in case TimeTrait changes (or
+			// doesn't exist yet).
+			owner.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			owner.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 			
 			_traitAggregator = traitAggregator;
 			this.mode = mode;
@@ -108,6 +112,22 @@ package org.osmf.elements.compositeClasses
 
 		// Internals
 		//
+		
+		private function onTraitAdd(event:MediaElementEvent):void
+		{
+			if (event.traitType == MediaTraitType.TIME)
+			{
+				super.timeTrait = MediaElement(event.target).getTrait(MediaTraitType.TIME) as TimeTrait;
+			}
+		}
+
+		private function onTraitRemove(event:MediaElementEvent):void
+		{
+			if (event.traitType == MediaTraitType.TIME)
+			{
+				super.timeTrait = null;
+			}
+		}
 		
 		private function processAggregatedChild(child:MediaTraitBase):void
 		{
@@ -187,75 +207,6 @@ package org.osmf.elements.compositeClasses
 		{
 			return _traitAggregator;
 		}
-
-		/**
-		 * This function sets the seeking state of the composite trait.
-		 * 
-		 * @param value		Whether the composite trait is in seeking state.
-		 * @param seekTo	The time that the seek operation will seek to.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		/*
-		protected function setSeeking(value:Boolean, seekTo:Number = 0):void
-		{
-			if (_seeking != value)
-			{
-				_seeking	= value;
-				
-				// Child seek traits will be instructed to seek and the composite
-				// seek trait will dispatch a lot of SeekEvents. So the
-				// composite trait needs to remember where the composition seeks to.
-				seekToTime	= seekTo;
-				
-				dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, seeking, seekTo));
-			}
-		}
-		*  
-		*  @langversion 3.0
-		*  @playerversion Flash 10
-		*  @playerversion AIR 1.5
-		*  @productversion OSMF 1.0
-		*/
-		
-		/**
-		 * Given the SeekTrait of a child media element, this function 
-		 * returns the TimeTrait of the child media element.
-		 * 
-		 * @param childSeekable		The SeekTrait of the child media element.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		/*
-		protected function getChildTemporal(childSeekable:SeekTrait):TimeTrait
-		{
-			// Given the SeekableTrait of a child, retrieve the corresponding TempoeralTrait.
-			for (var index:int = 0; index < traitAggregator.numChildren; index++)
-			{
-				var child:MediaElement = traitAggregator.getChildAt(index);
-				if (child.getTrait(MediaTraitType.SEEKABLE) == childSeekable)
-				{
-					return child.getTrait(MediaTraitType.TEMPORAL) as TimeTrait;
-				}
-			}
-			
-			return null;
-		}
-		*  
-		*  @langversion 3.0
-		*  @playerversion Flash 10
-		*  @playerversion AIR 1.5
-		*  @productversion OSMF 1.0
-		*/
-
-		// The time that the seek operation seeks to.
-		//protected var seekToTime:Number;
 
 		// Internals
 		//
