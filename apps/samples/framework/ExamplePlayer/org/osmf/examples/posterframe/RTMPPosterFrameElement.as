@@ -21,51 +21,74 @@
 *****************************************************/
 package org.osmf.examples.posterframe
 {
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
 
 	/**
-	 * A PosterFrameElement is a playable Image Element.  Making it playable
-	 * ensures it shows up as a poster frame.
+	 * An RTMPPosterFrameElement is a proxy that wraps up a VideoElement that only
+	 * shows a single frame.
 	 **/
-	public class RTMPPosterFrameElement extends VideoElement
+	public class RTMPPosterFrameElement extends ProxyElement
 	{
-		public function RTMPPosterFrameElement(resource:StreamingURLResource, posterFrameTime:Number, loader:NetLoader=null)
+		public function RTMPPosterFrameElement(resource:StreamingURLResource, posterFrameTime:Number, netLoader:NetLoader)
 		{
+			super();
+
 			// Treat this as a zero-length subclip.
 			resource.clipStartTime = posterFrameTime;
 			resource.clipEndTime = posterFrameTime;
-	
-			super(resource, loader);
+			
+			proxiedElement = new VideoElement(resource, netLoader);
 		}
 		
 		/**
 		 * @private
 		 **/
-		override protected function processReadyState():void
+		override protected function setupOverriddenTraits():void
 		{
-			super.processReadyState();
-
-			// First, remove the time and play traits.  Doing so
-			// will ensure that our "play" call to display the poster
-			// frame won't cause this MediaElement to complete (and therefore
-			// trigger the playback of the next child, when in a SerialElement).
-			removeTrait(MediaTraitType.TIME);
-			var playTrait:PlayTrait = removeTrait(MediaTraitType.PLAY) as PlayTrait;
+			super.setupOverriddenTraits();
 			
-			// Calling play() on our removed trait will cause the poster frame
-			// to be displayed.  But because this play trait is detached, no
-			// events are dispatched to the client.  From a traits perspective,
-			// this is functionally equivalent to an ImageElement, where there's
-			// a DisplayObjectTrait but no PlayTrait.
-			playTrait.play();
+			// Block all traits other than LOAD (so we can load the base
+			// VideoElement), DISPLAY_OBJECT (so we can display its view),
+			// and PLAY (which we'll override).  This makes this element
+			// the functional equivalent of a playable ImageElement.
+			var traitsToBlock:Vector.<String> = new Vector.<String>();
+			traitsToBlock.push(MediaTraitType.AUDIO);
+			traitsToBlock.push(MediaTraitType.BUFFER);
+			traitsToBlock.push(MediaTraitType.DRM);
+			traitsToBlock.push(MediaTraitType.DVR);
+			traitsToBlock.push(MediaTraitType.DYNAMIC_STREAM);
+			traitsToBlock.push(MediaTraitType.SEEK);
+			traitsToBlock.push(MediaTraitType.TIME);
+			super.blockedTraits = traitsToBlock;
 			
-			// Last, to ensure that the user can complete playback of this item,
-			// we add a dummy PlayTrait trait.
+			// To ensure that the user can complete playback of this item
+			// (and can't interact with the VideoElement), we add a dummy
+			// PlayTrait trait.
 			addTrait(MediaTraitType.PLAY, new PosterFramePlayTrait());
+			
+			// Wait for the PlayTrait to be added.
+			proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+		}
+		
+		private function onTraitAdd(event:MediaElementEvent):void
+		{
+			if (event.traitType == MediaTraitType.PLAY)
+			{
+				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				
+				// Calling play() on the proxied VideoElement's trait will
+				// cause the poster frame to be displayed.  But because the
+				// base play trait is overridden, no events are dispatched
+				// to the client.
+				var playTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				playTrait.play();
+			}
 		}
 	}
 }

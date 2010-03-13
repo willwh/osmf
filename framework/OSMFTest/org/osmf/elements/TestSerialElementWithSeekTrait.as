@@ -172,6 +172,20 @@ package org.osmf.elements
 			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			assertTrue(seekTrait.canSeekTo(0) == false);
 			assertTrue(seekTrait4.canSeekTo(0) == false);
+			
+			// A SerialElement where the first child is unseekable but the second
+			// is seekable should be seekable.
+			var mediaElement5:MediaElement = new DynamicMediaElement();
+			var mediaElement6:MediaElement = new DynamicMediaElement([MediaTraitType.TIME, MediaTraitType.SEEK], null, null, true);
+			var timeTrait6:DynamicTimeTrait = mediaElement6.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait6.duration = 10;
+			serial = new SerialElement();
+			serial.addChild(mediaElement6);
+			serial.addChildAt(mediaElement5, 0);
+			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			assertTrue(seekTrait.canSeekTo(0) == true);
+			assertTrue(seekTrait.canSeekTo(9) == true);
+			assertTrue(seekTrait.canSeekTo(11) == false);
 		}
 				
 		private function eventCatcher(event:Event):void

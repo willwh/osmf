@@ -195,6 +195,19 @@ package org.osmf.elements.compositeClasses
 	
 					currentTime += timeTrait.duration;
 				}
+				else
+				{
+					// Push an empty segment so that we maintain one segment
+					// for each child.
+					serialSegments.push
+						( new SerialElementSegment
+							( mediaElement
+							, currentTime
+							, currentTime
+							, mediaElement.hasTrait(MediaTraitType.SEEK)
+							)
+						);
+				}
 			}
 			
 			return serialSegments;
