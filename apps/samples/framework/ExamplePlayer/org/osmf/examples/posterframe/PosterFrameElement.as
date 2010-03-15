@@ -40,9 +40,21 @@ package org.osmf.examples.posterframe
 		/**
 		 * @private
 		 **/
-		override protected function setupTraits():void
+		override protected function processReadyState():void
 		{
+			super.processReadyState();
+			
 			addTrait(MediaTraitType.PLAY, new PosterFramePlayTrait());
+		}
+		
+		/**
+		 *  @private 
+		 */ 
+		override protected function processUnloadingState():void
+		{
+			super.processUnloadingState();
+			
+			removeTrait(MediaTraitType.PLAY);	
 		}
 	}
 }
