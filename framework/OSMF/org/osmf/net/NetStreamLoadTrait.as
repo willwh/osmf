@@ -214,7 +214,7 @@ package org.osmf.net
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			if (netStream.bytesTotal > 0)
+			if (netStream != null && netStream.bytesTotal > 0)
 			{
 				dispatchEvent
 					( new LoadEvent

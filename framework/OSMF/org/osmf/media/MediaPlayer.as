@@ -166,9 +166,9 @@ package org.osmf.media
 		
 	
 	/**
-	 * Dispatched when the <code>hasDisplayObject</code> property has changed.
+	 * Dispatched when the <code>hasDisplayObjectChange</code> property has changed.
 	 * 
-	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT
+	 * @eventType org.osmf.events.MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -264,7 +264,7 @@ package org.osmf.media
 					{
 						media.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 						media.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
-						media.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);	
+						media.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 						for each (traitType in media.traitTypes)
 						{
 							updateTraitListeners(traitType, false);
@@ -1301,8 +1301,22 @@ package org.osmf.media
 			updateTraitListeners(event.traitType, false);						
 		}
 		
-		private function updateTraitListeners(traitType:String, add:Boolean):void
-		{		
+		private function updateTraitListeners(traitType:String, add:Boolean, skipIfInErrorState:Boolean=true):void
+		{
+			// We circumvent this process if we're in an error state (and told
+			// to skip this process if we're in an error state), under the
+			/// assumption that we've already updated the trait listeners to
+			// "hide" the traits as a result of entering the error state.  The
+			// one exception to this is the LoadTrait, which is not hidden as
+			// the result of a playback error.
+			if (	state == MediaPlayerState.PLAYBACK_ERROR
+				 && skipIfInErrorState
+				 &&	traitType != MediaTraitType.LOAD
+			   )
+			{
+				return;
+			}
+			
 			var eventType:String;	
 			switch (traitType)
 			{
@@ -1395,7 +1409,7 @@ package org.osmf.media
 					break;						
 				case MediaTraitType.DISPLAY_OBJECT:							
 					_hasDisplayObject = add;
-					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT;	
+					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
 					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					break;	
@@ -1656,6 +1670,22 @@ package org.osmf.media
 						, _state
 						)
 					);
+				
+				// If we're entering an error state, we "disable" all traits
+				// but the LoadTrait.  The reasoning is that the MediaElement
+				// is in an inconsistent, possibly unusable state, and we don't
+				// want to expose capabilities (e.g. canPlay) which don't
+				// reflect reality.
+				if (newState == MediaPlayerState.PLAYBACK_ERROR)
+				{
+					for each (var traitType:String in media.traitTypes)
+					{
+						if (traitType != MediaTraitType.LOAD)
+						{
+							updateTraitListeners(traitType, false, false);
+						}
+					}
+				}
 			}
 		}
 		

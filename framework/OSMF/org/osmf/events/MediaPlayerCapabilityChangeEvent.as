@@ -146,7 +146,7 @@ package org.osmf.events
 		public static const HAS_DRM_CHANGE:String = "hasDRMChange";
 		
 		/**
-		 * The MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT constant defines
+		 * The MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE constant defines
 		 * the value of the type property of the event object for a hasDisplayObjectChange
 		 * event.
 		 * 
@@ -157,7 +157,7 @@ package org.osmf.events
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public static const HAS_DISPLAY_OBJECT:String = "hasDisplayObjectChange";
+		public static const HAS_DISPLAY_OBJECT_CHANGE:String = "hasDisplayObjectChange";
 						
 		/**
 		 * Constructor.

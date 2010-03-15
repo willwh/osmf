@@ -23,7 +23,6 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -31,7 +30,6 @@ package org.osmf.media
 	
 	import flexunit.framework.TestCase;
 	
-	import org.osmf.elements.AudioElement;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
 	import org.osmf.events.DisplayObjectEvent;
@@ -45,20 +43,16 @@ package org.osmf.media
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.traits.AudioTrait;
-	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.DisplayObjectTrait;
-	import org.osmf.traits.DynamicStreamTrait;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
-	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.DynamicBufferTrait;
 	import org.osmf.utils.DynamicDynamicStreamTrait;
 	import org.osmf.utils.DynamicMediaElement;
 	import org.osmf.utils.DynamicPlayTrait;
-	import org.osmf.utils.DynamicTimeTrait;
 	import org.osmf.utils.NetFactory;
 	
 	public class TestMediaPlayer extends TestCase
@@ -1628,34 +1622,67 @@ package org.osmf.media
 		{
 			if (hasLoadTrait)
 			{
-				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
 				
 				var mediaElement:MediaElement = createMediaElement(resourceForMediaElement);
 				
-				mediaPlayer.media = mediaElement;
-	
 				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 				assertTrue(loadTrait);
-	
-				var testComplete:Boolean = false;
+
+				mediaPlayer.media = mediaElement;
 				
-				// Make sure error events dispatched on the trait are redispatched
-				// on the MediaPlayer.
-				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
-				
-				function onMediaError(event:MediaErrorEvent):void
+				function onLoadStateChange(event:LoadEvent):void
 				{
-					assertTrue(event.error.errorID == 99);
-					assertTrue(event.error.message == "");
-					
-					assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
-					
-					assertTrue(event.target == mediaPlayer);
-					
-					testComplete = true;
+					if (event.loadState == LoadState.READY)
+					{
+						var testComplete:Boolean = false;
+						var capabilityEvents:Array = [];
+		
+						mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onCapabilityChange);
+						mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE, onCapabilityChange);
+						
+						// Make sure error events dispatched on the trait are redispatched
+						// on the MediaPlayer.
+						loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
+						
+						function onMediaError(event:MediaErrorEvent):void
+						{
+							assertTrue(event.error.errorID == 99);
+							assertTrue(event.error.message == "");
+							
+							assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
+							
+							assertTrue(event.target == mediaPlayer);
+							
+							testComplete = true;
+						}
+						
+						function onCapabilityChange(event:MediaPlayerCapabilityChangeEvent):void
+						{
+							if (event.enabled == false)
+							{
+								capabilityEvents.push(event);
+							}
+						}
+						
+						assertTrue(testComplete);
+
+						// We should have disabled events for each expected trait (except
+						// for the LoadTrait).
+						assertTrue(capabilityEvents.length == existentTraitTypesAfterLoad.length - 1);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
 				}
-				
-				assertTrue(testComplete);
 			}
 		}
 		
