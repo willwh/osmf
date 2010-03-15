@@ -32,8 +32,13 @@ package org.osmf.media
 	import org.osmf.elements.VideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.dvr.DVRCastNetLoader;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
+	
+	CONFIG::FLASH_10_1
+	{
+	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
+	}
+
 	
 	/**
 	 * <p>Defines a default media factory.</p>
@@ -131,7 +136,9 @@ package org.osmf.media
 						}
 					)
 				);
-				
+			
+			CONFIG::FLASH_10_1
+			{
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.httpstreaming"
@@ -142,7 +149,8 @@ package org.osmf.media
 						}
 					)
 				);
-
+			}
+			
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.rtmpdynamicStreaming"
@@ -175,7 +183,7 @@ package org.osmf.media
 						}
 					)
 				);
-				
+			
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.audio.streaming"
@@ -186,7 +194,7 @@ package org.osmf.media
 						}
 					)
 				);
-				
+			
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.image"

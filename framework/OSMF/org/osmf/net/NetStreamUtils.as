@@ -23,8 +23,12 @@ package org.osmf.net
 {
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
 	import org.osmf.utils.URL;
+	
+	CONFIG::FLASH_10_1
+	{
+	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	}
 	
 	[ExcludeClass]
 	
@@ -87,8 +91,15 @@ package org.osmf.net
 				var urlResource:URLResource = resource as URLResource;
 				if (urlResource != null)
 				{
-					result = 		NetStreamUtils.isRTMPStream(urlResource.url)
-								||	HTTPStreamingUtils.getHTTPStreamingMetadata(urlResource) != null;
+					result = NetStreamUtils.isRTMPStream(urlResource.url);
+					
+					CONFIG::FLASH_10_1
+					{
+					if (result == false)
+					{
+						result = HTTPStreamingUtils.getHTTPStreamingMetadata(urlResource) != null;
+					}
+					}
 				}
 			}
 			

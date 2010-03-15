@@ -55,7 +55,6 @@ package org.osmf.elements
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
-	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DisplayObjectTrait;
@@ -76,6 +75,7 @@ package org.osmf.elements
 	import flash.system.SystemUpdaterType;
 	import flash.system.SystemUpdater;	
 	import org.osmf.net.drm.NetStreamDRMTrait;
+	import org.osmf.net.httpstreaming.HTTPStreamingNetLoader;
 	}
 	
 	/**
@@ -135,8 +135,14 @@ package org.osmf.elements
 		 *  @productversion OSMF 1.0
 		 */
 		public function VideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
-		{	
-			super(resource, loader, [HTTPStreamingNetLoader, RTMPDynamicStreamingNetLoader, NetLoader]);
+		{
+			var loaders:Array = [RTMPDynamicStreamingNetLoader, NetLoader];
+			CONFIG::FLASH_10_1
+			{
+				loaders.splice(0, 0, HTTPStreamingNetLoader);
+			}
+			
+			super(resource, loader, loaders);
 			
 			if (!(resource == null || resource is URLResource))			
 			{
