@@ -165,6 +165,34 @@ package org.osmf.elements
 			assertTrue(playStateChangedEventCount == 8);
 		}
 		
+		public function testPlayTraitWithNonPlayableChild():void
+		{
+			var serial:SerialElement = new SerialElement();
+			
+			// Create a media element with the PlayTrait and one without.
+			//
+			
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY], null, null, true);
+			var playTrait1:DynamicPlayTrait = mediaElement1.getTrait(MediaTraitType.PLAY) as DynamicPlayTrait;
+
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
+			
+			// Add them to the composite element.
+			serial.addChild(mediaElement1);
+			serial.addChild(mediaElement2);
+			
+			// Play the first child.
+			playTrait1.play();
+			assertTrue(playTrait1.playState == PlayState.PLAYING);
+			
+			// Now stop it.  This should cause the next child (even though it's
+			// not playable) to be the new current child.
+			playTrait1.stop();
+			
+			assertTrue(serial.hasTrait(MediaTraitType.PLAY) == false);
+			assertTrue(serial.hasTrait(MediaTraitType.DISPLAY_OBJECT) == true);
+		}
+		
 		public function testPlayTraitWithCanPause():void
 		{
 			var serial:SerialElement = new SerialElement();

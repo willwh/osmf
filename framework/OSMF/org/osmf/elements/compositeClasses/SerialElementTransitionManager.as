@@ -125,6 +125,13 @@ package org.osmf.elements.compositeClasses
 				}
 				else
 				{
+					// There's no next playable child.  However, we should still
+					// move to the next child (which isn't playable).
+					if (nextChildren.length > 0)
+					{
+						traitAggregator.listenedChild = nextChildren[0] as MediaElement;
+					}
+
 					if (noNextPlayableChildCallback != null)
 					{
 						noNextPlayableChildCallback();

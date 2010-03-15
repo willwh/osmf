@@ -485,7 +485,7 @@ package org.osmf.examples
 							var serialElement:SerialElement = new SerialElement();
 							serialElement.addChild(new PosterFrameElement(new URLResource(REMOTE_IMAGE)));
 							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
-							return serialElement; 
+							return serialElement;
 				  	   	} 
 				  	)
 				);
@@ -503,6 +503,20 @@ package org.osmf.examples
 							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM), netLoader));
 							return serialElement; 
 				  	   	} 
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Poster Frame At End"
+					, 	"Demonstrates the use of a SerialElement to present a poster frame at the end of playback."
+				  	,  	function():MediaElement
+				  	   	{
+							var serialElement:SerialElement = new SerialElement();
+							serialElement.addChild(new VideoElement(new URLResource(REMOTE_STREAM)));
+							serialElement.addChild(new ImageElement(new URLResource(REMOTE_SLIDESHOW_IMAGE1)));
+							return serialElement;
+						} 
 				  	)
 				);
 
