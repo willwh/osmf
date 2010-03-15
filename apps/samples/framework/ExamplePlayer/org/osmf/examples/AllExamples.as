@@ -334,11 +334,12 @@ package org.osmf.examples
 				  	   	{
 							var serialElement:SerialElement = new SerialElement();
 							var videoElement:VideoElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
-							preload(videoElement, false);
-							serialElement.addChild(videoElement);
-							videoElement = new VideoElement(new URLResource(REMOTE_STREAM));
 							preload(videoElement, true);
+							var videoElement2:VideoElement  = new VideoElement(new URLResource(REMOTE_STREAM));
+							preload(videoElement2, false);
+							
 							serialElement.addChild(videoElement);
+							serialElement.addChild(videoElement2);
 							return serialElement;
 				  	   	} 
 				  	)
@@ -936,24 +937,22 @@ package org.osmf.examples
      	private static function preload(mediaElement:MediaElement, doPlayPause:Boolean):void
 		{
 			var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-						
 			if (doPlayPause)
-			{
+			{			
 				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-			}
-			
+			}			
 			loadTrait.load();
 			
 			function onLoadStateChange(event:LoadEvent):void
 			{
 				if (event.loadState == LoadState.READY)
-				{					
-					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-					
+				{	
 					var playTrait:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
-					playTrait.play();	
-					playTrait.pause();
-				}
+					loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+										
+					playTrait.play();					
+					playTrait.pause();						
+				}				
 			}
 			
      	}
