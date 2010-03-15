@@ -280,7 +280,7 @@ package org.osmf.net.httpstreaming.f4f
 				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime);
 				if (currentFAI == null)
 				{
-					if (abst.contentComplete())
+					if (!abst.live || abst.contentComplete())
 					{
 						return null;
 					}
