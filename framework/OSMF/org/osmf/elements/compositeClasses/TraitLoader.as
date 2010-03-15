@@ -21,10 +21,14 @@
 *****************************************************/
 package org.osmf.elements.compositeClasses
 {
+	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -104,12 +108,8 @@ package org.osmf.elements.compositeClasses
 					// trait gets added and listen to that.
 					mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 					
-					// If it's already loading, then we only need to wait for
-					// the event.
-					if (loadTrait.loadState != LoadState.LOADING)
-					{
-						loadTrait.load();
-					}
+					// Execute the load operation.
+					executeLoad(loadTrait, mediaElement);
 					
 					// Stop iterating, we need to wait until the load completes.
 					break;
@@ -162,10 +162,7 @@ package org.osmf.elements.compositeClasses
 							
 							loadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 							loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-							if (loadTrait.loadState != LoadState.LOADING)
-							{
-								loadTrait.load();
-							}
+							executeLoad(loadTrait, mediaElement);
 						}
 					}
 				}
@@ -174,6 +171,33 @@ package org.osmf.elements.compositeClasses
 			if (noSuchTrait)
 			{
 				dispatchFindOrLoadEvent(null);
+			}
+		}
+		
+		private function executeLoad(loadTrait:LoadTrait, mediaElement:MediaElement):void
+		{
+			// If it's already loading, then we only need to wait for
+			// the event.
+			if (loadTrait.loadState != LoadState.LOADING)
+			{
+				try
+				{
+					loadTrait.load();
+				}
+				catch (error:IllegalOperationError)
+				{
+					// Translate this to a MediaError.
+					mediaElement.dispatchEvent
+						( new MediaErrorEvent
+							( MediaErrorEvent.MEDIA_ERROR
+							, false
+							, false
+							, new MediaError(MediaErrorCodes.MEDIA_LOAD_FAILED, error.message)
+							)
+						);
+						
+					dispatchFindOrLoadEvent(null);
+				}
 			}
 		}
 		

@@ -24,6 +24,8 @@ package org.osmf.elements.compositeClasses
 	import flexunit.framework.TestCase;
 	
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaErrorCodes;
+	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.AudioTrait;
@@ -32,7 +34,9 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.utils.DynamicMediaElement;
+	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.SimpleLoader;
+	import org.osmf.utils.SimpleResource;
 	
 	public class TestTraitLoader extends TestCase
 	{
@@ -200,6 +204,41 @@ package org.osmf.elements.compositeClasses
 				// the third one, because the second one's new LoadTrait caused the
 				// SEEK trait to get added.
 				assertTrue(event.mediaElement == mediaElement2);
+			}
+		}
+		
+		public function testFindOrLoadMediaElementWithTraitWithInvalidLoad():void
+		{
+			var traitLoader:TraitLoader = new TraitLoader();
+			traitLoader.addEventListener(TraitLoaderEvent.TRAIT_FOUND, onTraitFound);
+			
+			var mediaErrorEvents:Array = [];
+			var mediaElements:Array = [];
+			
+			// Create a media element with an unhandled resource.
+			//
+
+			var loader1:SimpleLoader = new SimpleLoader();
+			var mediaElement1:MediaElement =
+				new DynamicMediaElement([MediaTraitType.LOAD, MediaTraitType.TIME],
+										loader1,
+										new SimpleResource(SimpleResource.UNHANDLED));
+			mediaElement1.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			
+			mediaElements = [mediaElement1]; 
+
+			traitLoader.findOrLoadMediaElementWithTrait(mediaElements, MediaTraitType.SEEK);
+			
+			assertTrue(traitFoundEvents.length == 1);
+			assertTrue(traitFoundEvents[0].mediaElement == null);
+
+			assertTrue(mediaErrorEvents.length == 1);
+			assertTrue(MediaErrorEvent(mediaErrorEvents[0]).error.errorID == MediaErrorCodes.MEDIA_LOAD_FAILED);
+			assertTrue(MediaErrorEvent(mediaErrorEvents[0]).error.detail == OSMFStrings.getString(OSMFStrings.LOADER_CANT_HANDLE_RESOURCE));
+			
+			function onMediaError(event:MediaErrorEvent):void
+			{
+				mediaErrorEvents.push(event);
 			}
 		}
 		
