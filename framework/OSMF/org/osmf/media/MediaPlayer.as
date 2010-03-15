@@ -1585,23 +1585,30 @@ package org.osmf.media
 		
 		private function executeAutoRewind(playAfterAutoRewind:Boolean):void
 		{
- 			addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-			function onSeekingChange(event:SeekEvent):void
+			if (inExecuteAutoRewind == false)
 			{
-				if (event.seeking == false)
+				inExecuteAutoRewind = true;
+				
+	 			addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				function onSeekingChange(event:SeekEvent):void
 				{
-					removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-					if (playAfterAutoRewind)
+					if (event.seeking == false)
 					{
-						play();
-					}
-					else
-					{
-						setState(MediaPlayerState.READY);
-					}
-				}	
-			}
-			seek(0);									
+						removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+						if (playAfterAutoRewind)
+						{
+							play();
+						}
+						else
+						{
+							setState(MediaPlayerState.READY);
+						}
+						
+						inExecuteAutoRewind = false;
+					}	
+				}
+				seek(0);
+			}							
 		}		
 								
 		private function onCurrentTimeTimer(event:TimerEvent):void
@@ -1731,6 +1738,7 @@ package org.osmf.media
 		private var _state:String; // MediaPlayerState
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
+		private var inExecuteAutoRewind:Boolean = false;
 		
 		// Properties of the MediaPlayer, as opposed to properties that apply
 		// to a specific MediaElement.  We use xxxSet Booleans to distinguish
@@ -1757,6 +1765,5 @@ package org.osmf.media
 		private var _canBuffer:Boolean;
 		private var _isDynamicStream:Boolean;
 		private var _hasDRM:Boolean;
-		
 	}
 }
