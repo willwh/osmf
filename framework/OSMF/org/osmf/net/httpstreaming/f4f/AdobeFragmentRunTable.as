@@ -203,8 +203,14 @@ package org.osmf.net.httpstreaming.f4f
 				var curFdp:FragmentDurationPair = _fragmentDurationPairs[i];
 				var nextFdp:FragmentDurationPair = _fragmentDurationPairs[i+1];
 				
-				if (curFdp.firstFragment <= fragId && fragId < nextFdp.firstFragment)
+				if (curFdp.firstFragment <= fragId &&
+					((fragId < nextFdp.firstFragment) || (curFdp.firstFragment >= nextFdp.firstFragment)))
 				{
+					if ((curFdp.durationAccrued + (fragId - curFdp.firstFragment + 1) * curFdp.duration) >= totalDuration)
+					{
+						return null;
+					}
+					
 					if (curFdp.duration > 0)
 					{
 						fai.fragId = fragId;
@@ -301,6 +307,15 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var fdp:FragmentDurationPair = _fragmentDurationPairs[fragmentDurationPairs.length - 1] as FragmentDurationPair;
 			return (fdp.duration == 0 && fdp.discontinuityIndicator == 0);
+		}
+		
+		public function adjustEndEntryDurationAccrued(value:Number):void
+		{
+			var fdp:FragmentDurationPair = _fragmentDurationPairs[_fragmentDurationPairs.length - 1];
+			if (fdp.duration == 0 && fdp.discontinuityIndicator == 0)
+			{
+				fdp.durationAccrued = value;
+			}
 		}
 		
 		// Internal

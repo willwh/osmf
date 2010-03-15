@@ -937,9 +937,11 @@ package org.osmf.net.httpstreaming
 					switch (_prevState)
 					{
 						case HTTPStreamingState.LOAD_SEEK:
+						case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
 							nextRequest = indexHandler.getFileForTime(_seekTarget, qualityLevel);
 							break;
 						case HTTPStreamingState.LOAD_NEXT:
+						case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
 							nextRequest = indexHandler.getNextFile(qualityLevel);
 							break;
 						default:
@@ -958,19 +960,40 @@ package org.osmf.net.httpstreaming
 											
 						_urlStreamVideo.load(nextRequest.urlRequest);
 						
-						var date:Date = new Date();
+						date = new Date();
 						_lastDownloadStartTime = date.getTime();
 			
 						switch (_prevState)
 						{
 							case HTTPStreamingState.LOAD_SEEK:
+							case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
 								setState(HTTPStreamingState.PLAY_START_SEEK);
 								break;
 							case HTTPStreamingState.LOAD_NEXT:
+							case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
 								setState(HTTPStreamingState.PLAY_START_NEXT);
 								break;
 							default:
 								throw new Error("in HTTPStreamState.LOAD(2) with unknown _prevState " + _prevState);
+								break;
+						}
+					}
+					else if(nextRequest != null && nextRequest.retryAfter >= 0)
+					{
+						date = new Date();
+						_retryAfterWaitUntil = date.getTime() + (1000.0 * nextRequest.retryAfter);
+						switch (_prevState)
+						{
+							case HTTPStreamingState.LOAD_SEEK:
+							case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:
+								setState(HTTPStreamingState.LOAD_SEEK_RETRY_WAIT);
+								break;
+							case HTTPStreamingState.LOAD_NEXT:
+							case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
+								setState(HTTPStreamingState.LOAD_NEXT_RETRY_WAIT);
+								break;
+							default:
+								throw new Error("in HTTPStreamState.LOAD(3) with unknown _prevState " + _prevState);
 								break;
 						}
 					}
@@ -980,9 +1003,17 @@ package org.osmf.net.httpstreaming
 						processAndAppend(bytes);
 						setState(HTTPStreamingState.STOP);
 					}
-					
 					break;
 				
+				case HTTPStreamingState.LOAD_SEEK_RETRY_WAIT:								
+				case HTTPStreamingState.LOAD_NEXT_RETRY_WAIT:
+					var date:Date = new Date();
+					if (date.getTime() > _retryAfterWaitUntil)
+					{
+						setState(HTTPStreamingState.LOAD);			
+					}
+					break;					
+
 				case HTTPStreamingState.PLAY_START_NEXT:
 
 					fileHandler.beginProcessFile(false, 0);
@@ -1389,6 +1420,7 @@ package org.osmf.net.httpstreaming
 													// XXX an event to set the _fileTimestampAdjustment is needed
 		private var _playForDuration:Number = -1;
 		private var _lastValidTimeTime:Number = 0;
+		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
 
 		
 		CONFIG::LOGGING

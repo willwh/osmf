@@ -218,7 +218,15 @@ package org.osmf.net.httpstreaming.f4f
 					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime);
 				if (currentFAI == null)
 				{
-					return null;
+					if (abst.contentComplete())
+					{
+						return null;
+					}
+					else
+					{
+						refreshBootstrapInfo();
+						return new HTTPStreamRequest(null, quality, 0, 5);
+					}
 				}
 				
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
@@ -268,12 +276,22 @@ package org.osmf.net.httpstreaming.f4f
 			if (quality >= 0 && quality < streamInfos.length)
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
+				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
 				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime);
 				if (currentFAI == null)
 				{
-					return null;
+					if (abst.contentComplete())
+					{
+						return null;
+					}
+					else
+					{
+						currentFAI = oldCurrentFAI;
+						refreshBootstrapInfo();
+						return new HTTPStreamRequest(null, quality, 0, 5);
+					}
 				}
-		
+
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				var requestUrl:String = "";
 				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
@@ -420,6 +438,11 @@ package org.osmf.net.httpstreaming.f4f
 				return;
 			}
 			
+			refreshBootstrapInfo();			
+		}
+		
+		private function refreshBootstrapInfo():void
+		{
 			fragmentRunTablesUpdating = true;
 			pendingIndexUpdates = streamInfos.length;
 			for (var i:uint = 0; i < streamInfos.length; i++)
@@ -581,6 +604,11 @@ package org.osmf.net.httpstreaming.f4f
 		private function notifyIndexReady():void
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[0];
+			var offset:Number = 0;
+			if (abst.live)
+			{
+				offset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
+			}
 			
 			dispatchEvent
 				( new HTTPStreamingIndexHandlerEvent
@@ -588,7 +616,7 @@ package org.osmf.net.httpstreaming.f4f
 					, false
 					, false
 					, abst.live
-					, (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN 
+					, offset 
 					)
 				);
 		}
@@ -603,7 +631,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var fragmentsThreshold:uint;
 		private var fragmentRunTablesUpdating:Boolean;
 		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
-		private var offsetFromCurrent:Number = 20;
+		private var offsetFromCurrent:Number = 10;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		

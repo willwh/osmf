@@ -125,7 +125,7 @@ package org.osmf.net.httpstreaming.f4f
 			for (var i:uint = 1; i < _segmentFragmentPairs.length; i++)
 			{
 				curSfp = _segmentFragmentPairs[i];
-				if (curSfp.fragmentsAccrued > fragmentId)
+				if (curSfp.fragmentsAccrued >= fragmentId)
 				{
 					return calculateSegmentId(_segmentFragmentPairs[i-1], fragmentId);
 				}
@@ -153,7 +153,7 @@ package org.osmf.net.httpstreaming.f4f
 				logger.debug("segId: " + (sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment)));
 			}
 			
-			return sfp.firstSegment +  int((fragmentId-1 - sfp.fragmentsAccrued) / sfp.fragmentsPerSegment);
+			return sfp.firstSegment +  int((fragmentId - sfp.fragmentsAccrued - 1) / sfp.fragmentsPerSegment);
 		}	
 		
 		private var _qualitySegmentURLModifiers:Vector.<String>;

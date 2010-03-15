@@ -61,6 +61,8 @@ package org.osmf.net.httpstreaming
 		 */
 		internal static const LOAD_SEEK:String = "loadSeek";
 
+		internal static const LOAD_SEEK_RETRY_WAIT:String = "loadSeekRetryWait";
+		
 		/**
 		 * Indicates the HTTPNetStream is loading a new file.
 		 *  
@@ -92,6 +94,10 @@ package org.osmf.net.httpstreaming
 		 *  @productversion OSMF 1.0
 		 */
 		internal static const LOAD_NEXT:String = "loadNext";
+		
+		internal static const LOAD_NEXT_RETRY_WAIT:String = "loadNextRetryWait";
+		
+
 		
 		/**
 		 * Indicates the HTTPNetStream is preparing to play a new file in

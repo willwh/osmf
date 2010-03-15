@@ -308,6 +308,9 @@ package org.osmf.net.httpstreaming.f4f
 		public function set fragmentRunTables(value:Vector.<AdobeFragmentRunTable>):void
 		{
 			_fragmentRunTables = value;
+			
+			var frt:AdobeFragmentRunTable = value[value.length - 1];
+			frt.adjustEndEntryDurationAccrued(_currentMediaTime);			
 		}
 
 		/**
@@ -362,6 +365,12 @@ package org.osmf.net.httpstreaming.f4f
 			
 			var frt:AdobeFragmentRunTable = _fragmentRunTables[0];
 			return _currentMediaTime - (frt.fragmentDurationPairs)[0].durationAccrued;
+		}
+		
+		public function contentComplete():Boolean
+		{
+			var frt:AdobeFragmentRunTable = _fragmentRunTables[_fragmentRunTables.length - 1];
+			return frt.tableComplete();			
 		}
 
 		// Internal
