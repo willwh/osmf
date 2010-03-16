@@ -40,6 +40,7 @@ package org.osmf.net
 	import flash.utils.Timer;
 	
 	import org.osmf.events.MediaError;
+	import org.osmf.utils.URL;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
@@ -113,6 +114,24 @@ package org.osmf.net
 				this.netConnectionArguments = streamingResource.connectionArguments;
 			}
 			
+			var url:URL = new URL(resource.url);
+			var query:String = url.query;
+						
+			if (asAdobe.test(query) && 
+				teConnect.test(query))
+			{
+				var args:Array = query.split("&");
+				if (netConnectionArguments == null)
+				{
+					netConnectionArguments = new Vector.<Object>;
+				}
+				for each(var item:Object in args)
+				{
+					netConnectionArguments.push(item);	
+				}				
+			}
+			
+			
 			initializeConnectionAttempts();
 			tryToConnect(null);
 		}
@@ -158,8 +177,9 @@ package org.osmf.net
 					{
 						args.push(arg);
 					}
-				}
-				NetConnection(netConnections[attemptIndex]).connect.apply(this, args);
+				}				
+				
+				NetConnection(netConnections[attemptIndex]).connect.apply(netConnections[attemptIndex], args);
 				attemptIndex++;
 				if (attemptIndex >= netConnectionURLs.length) 
 				{
@@ -288,7 +308,10 @@ package org.osmf.net
 		{
 			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT,"Failed to establish a NetConnection within the timeout period of " + DEFAULT_TIMEOUT + " ms."));
 		}
-		
+				
+		private var asAdobe:RegExp = /as=adobe/;
+		private var teConnect:RegExp = /te=connect/;
+				
 		private var resource:URLResource;
 		private var netConnectionURLs:Vector.<String>;
 		private var netConnections:Vector.<NetConnection>;

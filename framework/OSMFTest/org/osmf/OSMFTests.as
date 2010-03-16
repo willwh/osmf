@@ -213,6 +213,7 @@ package org.osmf
 			
 			addTestSuite(TestNetLoader);
 			addTestSuite(TestNetConnectionFactory);
+			addTestSuite(TestNetNegotiator);
  			addTestSuite(TestNetClient);
 			addTestSuite(TestNetStreamUtils);
 			addTestSuite(TestStreamingURLResource);

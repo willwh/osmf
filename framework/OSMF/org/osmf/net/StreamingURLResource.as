@@ -89,6 +89,9 @@ package org.osmf.net
 			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
 			_drmContentData = drmContentData;
 			
+			_connectionArguments = connectionArguments;
+			
+			
 			super(url);
 		}
 
