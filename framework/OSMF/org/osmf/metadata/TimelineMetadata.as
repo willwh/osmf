@@ -27,7 +27,6 @@ package org.osmf.metadata
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
-	import org.osmf.elements.CompositeElement;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MetadataEvent;
 	import org.osmf.events.PlayEvent;
@@ -718,11 +717,10 @@ package org.osmf.metadata
 					timeTrait = null;
 					// This is a work around for FM-171. Traits are added and removed for
 					// each child in a composition element when transitioning between child
-					// elements. So don't stop the timer if the MediaElement is a composition.
-					//
-					// $$$todo: remove this 'if' statement and the import for
-					// 'org.osmf.composition.CompositeElement' when FM-171 is fixed.
-					if (!(media is CompositeElement))
+					// elements. So don't stop the timer if the MediaElement is a composition
+					// (which we determine by looking for the numChildren property, since
+					// we don't want to link the composition classes in by default).
+					if (media.hasOwnProperty("numChildren") == false)
 					{
 						startTimer(false);
 					}
