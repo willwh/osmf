@@ -60,7 +60,7 @@ package org.osmf.net
 			
 			if (netStream == null)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_NETSTREAM));					
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));					
 			}
 			this.netStream = netStream;
 			this.urlResource = resource as URLResource;

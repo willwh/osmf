@@ -175,14 +175,7 @@ package org.osmf.utils
 		 * @private
 		 **/
 		public static const ALREADY_UNLOADING:String 					= "alreadyUnloading";
-		
-		// NetLoader
-		
-		/**
-		 * @private
-		 **/
-		public static const NULL_NETSTREAM:String 						= "nullNetStream";
-		
+				
 		// MediaPlayer
 		
 		/**
@@ -195,17 +188,7 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const NAMESPACE_MUST_NOT_BE_EMPTY:String			= "namespaceMustNotBeEmpty";
-
-		/**
-		 * @private
-		 **/
 		public static const NAMESPACE_MUST_BE_UNIQUE:String				= "namespaceMustBeUnique";
-
-		/**
-		 * @private
-		 **/
-		public static const NAMESPACE_MUST_EQUAL_GROUP_NS:String		= "namespaceMustEqualGroupNS";		
 		
 		// MediaErrorCodes
 		
@@ -395,13 +378,6 @@ package org.osmf.utils
 		 **/
 		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
 		
-		// LayoutRendererProperties
-		
-		/**
-		 * @private
-		 **/
-		public static const MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET:String = "mustBeMediaElementOrLayoutTarget";
-		
 		// MediaContainer
 		
 		/**
@@ -462,7 +438,6 @@ package org.osmf.utils
 			resourceDict[UNSUPPORTED_TRAIT_TYPE]					= "The specified trait type is not supported";
 			resourceDict[UNSUPPORTED_MEDIA_ELEMENT_TYPE]			= "The specified media element type is not supported";
 			
-			
 			resourceDict[TRAIT_INSTANCE_ALREADY_ADDED]				= "An instance of this trait class has already been added to this MediaElement";
 			resourceDict[TRAIT_RESOLVER_ALREADY_ADDED]				= "A trait resolver for the specified trait type has already been added to this MediaElement";
 			resourceDict[TRAIT_TYPE_MISMATCH]						= "The specified trait instance is of an unexpectted type";
@@ -477,12 +452,8 @@ package org.osmf.utils
 			resourceDict[ALREADY_UNLOADED] 							= "Loader - attempt to unload an already unloaded object";
 			resourceDict[ALREADY_UNLOADING] 						= "Loader - attempt to unload a unloading object";
 			
-			resourceDict[NULL_NETSTREAM]							= "NetStream on trait is null";
-			
 			resourceDict[TRAIT_NOT_SUPPORTED]						= "MediaPlayer - method called on null media or media that isn't *trait*";
-			resourceDict[NAMESPACE_MUST_NOT_BE_EMPTY]				= "The namespace string must not be empty";
 			resourceDict[NAMESPACE_MUST_BE_UNIQUE]					= "The namespace string must be unique";
-			resourceDict[NAMESPACE_MUST_EQUAL_GROUP_NS]				= "The namespace string must be equal to the group namespace";		
 
 			resourceDict[SWITCHING_UP_BANDWIDTH_SUFFICIENT]			= "Switching up since average bandwidth is sufficient";
 			resourceDict[SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT]		= "Average bandwith is insufficient for the current stream's bitrate";
@@ -500,7 +471,6 @@ package org.osmf.utils
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
 			
 			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance";
-			resourceDict[MUST_BE_MEDIA_ELEMENT_OR_LAYOUT_TARGET]	= "Argument must be either a MediaElement or an ILayoutTarget"
 			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 			
 			resourceDict[IMAGE_OR_SWF_IO_LOAD_ERROR]				= "I/O error when loading image or SWF";
