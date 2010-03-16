@@ -26,6 +26,7 @@ package org.osmf.netmocker
 	import flash.net.NetConnection;
 	import flash.net.Responder;
 	
+	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionCodes;
 	
 	/**
@@ -46,11 +47,11 @@ package org.osmf.netmocker
 		public function MockNetConnection()
 		{
 			_expectation = NetConnectionExpectation.VALID_CONNECTION;
-			
+		
 			// Intercept all NetStatusEvents dispatched from the base class.
 			eventInterceptor = new NetStatusEventInterceptor(this);
 		}
-		
+				
 		/**
 		 * The client's expectation for how this NetConnection will
 		 * behave after connect() is called.
@@ -103,6 +104,17 @@ package org.osmf.netmocker
 						throwIOError();
 					}
 					break;
+				case NetConnectionExpectation.CONNECT_WITH_FMTA:
+					if ((parameters.length > 0) &&
+						hasFMTA(parameters) )
+					{
+						connectToValidServer(command, parameters);
+					}
+					else
+					{
+						throwIOError();
+					}					
+					break;
 				case NetConnectionExpectation.INVALID_FMS_SERVER:
 					connectToInvalidServer();
 					break;
@@ -129,7 +141,26 @@ package org.osmf.netmocker
 		// Internals
 		//
 		
-		private function connectToValidServer(command:String):void
+		private function hasFMTA(parameters:Array):Boolean
+		{
+			var asAdobeSeen:Boolean = false;
+			var teConnectSeen:Boolean = false;
+			
+			for each( var item:String in parameters)
+			{
+				if (asAdobe.test(item))
+				{
+					asAdobeSeen = true;
+				}
+				if (teConnect.test(item))
+				{
+					teConnectSeen = true;
+				}				
+			}
+			return asAdobeSeen && teConnectSeen;
+		}
+		
+		private function connectToValidServer(command:String, params:Array = null):void
 		{
 			if (command == null)
 			{
@@ -143,7 +174,7 @@ package org.osmf.netmocker
 				// Streaming
 				// Pass a reference to this NetConnection, so that the connection can be established just prior
 				// to dispatching the delayed event.
-				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, EVENT_DELAY, this);
+				eventInterceptor.dispatchNetStatusEvent(NetConnectionCodes.CONNECT_SUCCESS, LEVEL_STATUS, EVENT_DELAY, this, params);
 			}
 		}
 
@@ -184,6 +215,12 @@ package org.osmf.netmocker
 		{
 			throw new SecurityError(SECURITY_MESSAGE);
 		}
+		
+		private var _resource:URLResource;
+		
+		private static const asAdobe:RegExp = /as=adobe/;
+		private static const teConnect:RegExp = /te=connect/;
+		
 		
 		private static const EVENT_DELAY:int = 100;
 		

@@ -49,6 +49,9 @@ package org.osmf.netmocker
 		
 		/** Expect the connection to throw an IO Error*/
 		public static const SECURITY_ERROR:NetConnectionExpectation = new NetConnectionExpectation("securityError");
+		
+		/** Expect the connect with FMTA parameters*/
+		public static const CONNECT_WITH_FMTA:NetConnectionExpectation = new NetConnectionExpectation("connectWithFMTA");
 
 		/**
 		 * @private
