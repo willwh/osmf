@@ -406,7 +406,7 @@ package org.osmf.elements.compositeClasses
 			
 			if (getMetadataSynthesizer(namespaceURL) != null)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NAMESPACE_MUST_BE_UNIQUE));
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			metadataSynthesizers[namespaceURL] = synthesizer;

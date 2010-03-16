@@ -150,7 +150,7 @@ package org.osmf.media
 			}
 			if (instance.traitType != type)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			processAddTrait(instance);
@@ -180,7 +180,7 @@ package org.osmf.media
 			}
 			if (instance.traitType != type)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			return processRemoveTrait(instance);

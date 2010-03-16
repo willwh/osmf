@@ -172,7 +172,7 @@ package org.osmf.elements.compositeClasses
 				}
 				catch (e:*)
 				{
-					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_LAYOUTRENDERER_CONSTRUCTOR));
+					throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_LAYOUT_RENDERER_CONSTRUCTOR));
 				}
 			}
 			

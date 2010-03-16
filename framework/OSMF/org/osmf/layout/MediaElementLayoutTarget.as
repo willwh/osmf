@@ -196,7 +196,7 @@ package org.osmf.layout
 		{
 			if (constructorLock != ConstructorLock)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILLEGAL_CONSTRUCTOR_INVOKATION));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ILLEGAL_CONSTRUCTOR_INVOCATION));
 			}
 			else
 			{

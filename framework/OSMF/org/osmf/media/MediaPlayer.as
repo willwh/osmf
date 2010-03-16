@@ -1269,7 +1269,7 @@ package org.osmf.media
 	    {
 	    	if (!media || !media.hasTrait(traitType)) 
 	    	{
-	    		var error:String = OSMFStrings.getString(OSMFStrings.TRAIT_NOT_SUPPORTED);
+	    		var error:String = OSMFStrings.getString(OSMFStrings.CAPABILITY_NOT_SUPPORTED);
 	    		var traitName:String = traitType.replace("[class ", "");
 	    		traitName = traitName.replace("]", "").toLowerCase();	
 	    				

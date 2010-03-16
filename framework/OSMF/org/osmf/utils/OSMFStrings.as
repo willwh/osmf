@@ -102,19 +102,13 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const ALREADY_LISTED:String						= "alreadyListed";
+		public static const ALREADY_ADDED:String						= "alreadyAdded";
 
 		/**
 		 * @private
 		 **/
 		public static const UNSUPPORTED_MEDIA_ELEMENT_TYPE:String		= "unsupportedMediaElementType";
 
-		/**
-		 * @private
-		 **/
-		public static const UNSUPPORTED_TRAIT_TYPE:String				= "unsupportedTraitType";
-		
-				
 		// MediaElement
 		
 		/**
@@ -126,33 +120,30 @@ package org.osmf.utils
 		 * @private
 		 **/
 		public static const TRAIT_RESOLVER_ALREADY_ADDED:String 		= "traitResolverAlreadyAdded";
-
+		
+		// MediaPlayer
+		
 		/**
 		 * @private
 		 **/
-		public static const TRAIT_TYPE_MISMATCH:String					= "traitTypeMismatch";
-								
+		public static const CAPABILITY_NOT_SUPPORTED:String				= "capabilityNotSupported";
+		
+				/**
+		 * @private
+		 **/
+		public static const MEDIA_LOAD_FAILED:String 					= "mediaLoadFailed";
+
 		// LoadTrait
 		
 		/**
 		 * @private
 		 **/
-		public static const MUST_SET_LOADER_FOR_LOAD:String 			= "mustSetLoaderForLoad"
-
-		/**
-		 * @private
-		 **/
-		public static const MUST_SET_LOADER_FOR_UNLOAD:String 			= "mustSetLoaderForUnload";
+		public static const MUST_SET_LOADER:String 						= "mustSetLoader";
 
 		/**
 		 * @private
 		 **/
 		public static const LOADER_CANT_HANDLE_RESOURCE:String 			= "loaderCantHandleResource";
-
-		/**
-		 * @private
-		 **/
-		public static const MEDIA_LOAD_FAILED:String 					= "mediaLoadFailed";
 		
 		// LoaderBase
 		
@@ -175,20 +166,73 @@ package org.osmf.utils
 		 * @private
 		 **/
 		public static const ALREADY_UNLOADING:String 					= "alreadyUnloading";
-				
-		// MediaPlayer
+		
+		// CompositeDisplayObjectTrait
 		
 		/**
 		 * @private
 		 **/
-		public static const TRAIT_NOT_SUPPORTED:String 					= "traitNotSupported";		
+		public static const INVALID_LAYOUT_RENDERER_CONSTRUCTOR:String 	= "invalidLayoutRendererConstructor";	
 		
-		// Metadata
+		// MediaElementLayoutTarget
 		
 		/**
 		 * @private
 		 **/
-		public static const NAMESPACE_MUST_BE_UNIQUE:String				= "namespaceMustBeUnique";
+		public static const ILLEGAL_CONSTRUCTOR_INVOCATION:String		= "illegalConstructorInvocation";
+		
+		// MediaContainer
+		
+		/**
+		 * @private
+		 **/
+		public static const DIRECT_DISPLAY_LIST_MOD_ERROR:String		= "directDisplayListModError";
+		
+		// HTMLLoadTrait
+		
+		/**
+		 * @private
+		 **/
+		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
+		
+		// DRM
+		
+		CONFIG::FLASH_10_1
+		{
+		/**
+		 * @private
+		 **/
+		public static const DRM_METADATA_NOT_SET:String					= "drmMetadataNotSet";
+		}
+		
+		// DVR
+		
+		/**
+		 * @private
+		 **/
+		public static const DVR_MAXIMUM_RPC_ATTEMPTS:String				= "dvrMaximumRPCAttempts";
+		
+		/**
+		 * @private
+		 **/
+		public static const DVR_UNEXPECTED_SERVER_RESPONSE:String		= "dvrUnexpectedServerResponse";
+		
+		// Flash Media Manifest Errors
+		
+		/**
+		 * @private
+		 **/
+		public static const F4M_PARSE_PROFILE_MISSING:String			= "f4mProfileMissing";
+
+		/**
+		 * @private
+		 **/
+		public static const F4M_PARSE_MEDIA_URL_MISSING:String			= "f4mMediaURLMissing";
+
+		/**
+		 * @private
+		 **/
+		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
 		
 		// MediaErrorCodes
 		
@@ -337,142 +381,48 @@ package org.osmf.utils
 		 **/
 		public static const DRM_SYSTEM_UPDATE_ERROR:String				= "drmSystemUpdateError";
 		
-		// Switching Reasons
-		
-		/**
-		 * @private
-		 **/
-		public static const SWITCHING_UP_BANDWIDTH_SUFFICIENT:String	= "switchingUpBandwidthSufficient";
-
-		/**
-		 * @private
-		 **/
-		public static const SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT:String= "switchingDownBandwidthInsufficient";
-
-		/**
-		 * @private
-		 **/
-		public static const SWITCHING_DOWN_BUFFER_INSUFFICIENT:String	= "switchingDownBufferInsufficient";
-
-		/**
-		 * @private
-		 **/
-		public static const SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE:String= "switchingDownFrameDropUnacceptable";
-
-		/**
-		 * @private
-		 **/
-		public static const SWITCHING_MANUAL:String						= "switchingManual";
-
-		// CompositeDisplayObjectTrait
-		
-		/**
-		 * @private
-		 **/
-		public static const INVALID_LAYOUTRENDERER_CONSTRUCTOR:String 	= "invalidLayoutRendererConstructor";	
-		
-		// MediaElementLayoutTarget
-		
-		/**
-		 * @private
-		 **/
-		public static const ILLEGAL_CONSTRUCTOR_INVOKATION:String		= "illegalConstructorInvocation";
-		
-		// MediaContainer
-		
-		/**
-		 * @private
-		 **/
-		public static const DIRECT_DISPLAY_LIST_MOD_ERROR:String		= "directDisplayListModError";
-		
-		// HTMLLoadTrait
-		
-		/**
-		 * @private
-		 **/
-		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
-		
-		// DRM
-		
-		/**
-		 * @private
-		 **/
-		public static const DRM_METADATA_NOT_SET:String					= "drmMetadataNotSet";
-		
-		// DVR
-		
-		/**
-		 * @private
-		 **/
-		public static const DVR_MAXIMUM_RPC_ATTEMPTS:String				= "dvrMaximumRPCAttempts";
-		
-		/**
-		 * @private
-		 **/
-		public static const DVR_UNEXPECTED_SERVER_RESPONSE:String		= "dvrUnexpectedServerResponse";
-		
-		// Flash Media Manifest Errors
-		
-		/**
-		 * @private
-		 **/
-		public static const F4M_PARSE_PROFILE_MISSING:String			= "f4mProfileMissing";
-
-		/**
-		 * @private
-		 **/
-		public static const F4M_PARSE_MEDIA_URL_MISSING:String			= "f4mMediaURLMissing";
-
-		/**
-		 * @private
-		 **/
-		public static const F4M_PARSE_BITRATE_MISSING:String			= "f4mBitrateMissing";
 		
 		private static const resourceDict:Dictionary = new Dictionary();
 		{
-			resourceDict[COMPOSITE_TRAIT_NOT_FOUND]	 				= "A composite trait was not found for the given trait";
-			resourceDict[INVALID_PARAM]								= "Invalid param passed to method";
-			resourceDict[NULL_PARAM]								= "Null param passed to method";
-			resourceDict[FUNCTION_MUST_BE_OVERRIDDEN]				= "This function must be overridden";
-			resourceDict[ALREADY_LISTED]							= "The item is already listed";
-			resourceDict[UNSUPPORTED_TRAIT_TYPE]					= "The specified trait type is not supported";
+			resourceDict[COMPOSITE_TRAIT_NOT_FOUND]	 				= "There is no composite trait for the given trait type";
+			resourceDict[INVALID_PARAM]								= "Invalid parameter passed to method";
+			resourceDict[NULL_PARAM]								= "Unexpected null parameter passed to method";
+			resourceDict[FUNCTION_MUST_BE_OVERRIDDEN]				= "Function must be overridden";
+			resourceDict[ALREADY_ADDED]								= "Child has already been added";
 			resourceDict[UNSUPPORTED_MEDIA_ELEMENT_TYPE]			= "The specified media element type is not supported";
 			
 			resourceDict[TRAIT_INSTANCE_ALREADY_ADDED]				= "An instance of this trait class has already been added to this MediaElement";
 			resourceDict[TRAIT_RESOLVER_ALREADY_ADDED]				= "A trait resolver for the specified trait type has already been added to this MediaElement";
-			resourceDict[TRAIT_TYPE_MISMATCH]						= "The specified trait instance is of an unexpectted type";
 			
-			resourceDict[MUST_SET_LOADER_FOR_LOAD] 					= "Must set LoaderBase on a LoadTrait before calling LoaderBase.load";
-			resourceDict[MUST_SET_LOADER_FOR_UNLOAD] 				= "Must set LoaderBase on a LoadTrait before calling LoaderBase.unload";
-			resourceDict[LOADER_CANT_HANDLE_RESOURCE]				= "LoaderBase unable to handle the given MediaResourceBase";
+			resourceDict[CAPABILITY_NOT_SUPPORTED]					= "The specified capability is not currently supported";
 			resourceDict[MEDIA_LOAD_FAILED]							= "The loading of a MediaElement failed";
+			
+			resourceDict[MUST_SET_LOADER] 							= "Must set LoaderBase on a LoadTrait before calling load or unload";
+			resourceDict[LOADER_CANT_HANDLE_RESOURCE]				= "LoaderBase unable to handle the given MediaResourceBase";
 
 			resourceDict[ALREADY_READY] 							= "Loader - attempt to load an already loaded object";
 			resourceDict[ALREADY_LOADING] 							= "Loader - attempt to load a loading object";
 			resourceDict[ALREADY_UNLOADED] 							= "Loader - attempt to unload an already unloaded object";
 			resourceDict[ALREADY_UNLOADING] 						= "Loader - attempt to unload a unloading object";
 			
-			resourceDict[TRAIT_NOT_SUPPORTED]						= "MediaPlayer - method called on null media or media that isn't *trait*";
-			resourceDict[NAMESPACE_MUST_BE_UNIQUE]					= "The namespace string must be unique";
+			resourceDict[INVALID_LAYOUT_RENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";
+			resourceDict[ILLEGAL_CONSTRUCTOR_INVOCATION]			= "Use the static getInstance method to obtain a class instance";
+			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 
-			resourceDict[SWITCHING_UP_BANDWIDTH_SUFFICIENT]			= "Switching up since average bandwidth is sufficient";
-			resourceDict[SWITCHING_DOWN_BANDWIDTH_INSUFFICIENT]		= "Average bandwith is insufficient for the current stream's bitrate";
-			resourceDict[SWITCHING_DOWN_BUFFER_INSUFFICIENT]		= "Buffer length is insufficient";
-			resourceDict[SWITCHING_DOWN_FRAMEDROP_UNACCEPTABLE]		= "Average dropped Frames per Second is unacceptable for the current stream";
-			resourceDict[SWITCHING_MANUAL]							= "Switching Manual";
-
-			resourceDict[INVALID_LAYOUTRENDERER_CONSTRUCTOR]		= "Unable to construct LayoutRenderer implementation";
+			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path";
 			
-			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";	
+			CONFIG::FLASH_10_1
+			{
+			resourceDict[DRM_METADATA_NOT_SET]						= "Metadata not set on DRMServices";
+			}	
 			
 			resourceDict[DVR_MAXIMUM_RPC_ATTEMPTS] 					= "Maximum DVRGetStreamInfo RPC attempts (%i) reached";
 			resourceDict[DVR_UNEXPECTED_SERVER_RESPONSE]			= "Unexpected server response: ";
 			
-			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path to be set";
-			
-			resourceDict[ILLEGAL_CONSTRUCTOR_INVOKATION]			= "Use the static getInstance method to obtain a class instance";
-			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
-			
+			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
+			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
+			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
+
 			resourceDict[IMAGE_OR_SWF_IO_LOAD_ERROR]				= "I/O error when loading image or SWF";
 			resourceDict[IMAGE_OR_SWF_SECURITY_LOAD_ERROR]			= "Security error when loading image or SWF";
 			resourceDict[SWF_IO_LOAD_ERROR]							= "I/O error when loading SWF";
@@ -503,10 +453,6 @@ package org.osmf.utils
 			resourceDict[HTTP_GET_CLIENT_ERROR]						= "HTTP GET failed due to a Client Error";
 			resourceDict[DRM_SYSTEM_UPDATE_ERROR]					= "The update of the DRM subsystem failed";
 			
-			resourceDict[F4M_PARSE_PROFILE_MISSING]					= "Profile missing from Bootstrap info tag";
-			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
-			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
-
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}
 

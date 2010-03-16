@@ -194,7 +194,7 @@ package org.osmf.elements
 			}
 			if (children.indexOf(child) != -1)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_LISTED));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.ALREADY_ADDED));
 			}
 			
 			children.splice(index, 0, child);

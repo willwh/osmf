@@ -176,7 +176,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER_FOR_LOAD));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER));
 			}
 		}
 		
@@ -218,7 +218,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER_FOR_UNLOAD));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.MUST_SET_LOADER));
 			}
 		}
 		

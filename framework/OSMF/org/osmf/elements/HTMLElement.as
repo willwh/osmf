@@ -248,7 +248,7 @@ package org.osmf.elements
 		{
 			if (switchableTraitTypes.indexOf(type) == -1)
 			{
-				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.UNSUPPORTED_TRAIT_TYPE));
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			var trait:MediaTraitBase = switchableTraits[type];

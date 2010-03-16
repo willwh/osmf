@@ -78,7 +78,7 @@ package org.osmf.media
 			
 			if (defaultTrait.traitType != type)
 			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.TRAIT_TYPE_MISMATCH));
+				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
 			this.defaultTrait = defaultTrait;
