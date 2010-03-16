@@ -22,6 +22,11 @@
 package org.osmf.net.httpstreaming.f4f
 {
 	import __AS3__.vec.Vector;
+
+	CONFIG::LOGGING 
+	{	
+		import org.osmf.logging.ILogger;
+	}
 	
 	[ExcludeClass]
 	
@@ -204,7 +209,7 @@ package org.osmf.net.httpstreaming.f4f
 				var nextFdp:FragmentDurationPair = _fragmentDurationPairs[i+1];
 				
 				if (curFdp.firstFragment <= fragId &&
-					((fragId < nextFdp.firstFragment) || (curFdp.firstFragment >= nextFdp.firstFragment)))
+					((fragId < nextFdp.firstFragment) || ((curFdp.firstFragment >= nextFdp.firstFragment) && (curFdp.duration > 0))))
 				{
 					if ((curFdp.durationAccrued + (fragId - curFdp.firstFragment + 1) * curFdp.duration) >= totalDuration)
 					{
