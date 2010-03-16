@@ -44,7 +44,7 @@ package org.osmf.media
 	 * <p>Defines a default media factory.</p>
 	 * <p/>
 	 * <p>
-         * The default media factory can construct media elements of
+     * The default media factory can construct media elements of
 	 * the following types:
 	 * 
 	 * <ul>
@@ -113,7 +113,7 @@ package org.osmf.media
 		
 		private function init():void
 		{
-			var f4mLoader:F4MLoader = new F4MLoader(this);
+			f4mLoader = new F4MLoader(this);
 			addItem 
 				( new MediaFactoryItem
 					( "org.osmf.elements.f4m"
@@ -125,7 +125,7 @@ package org.osmf.media
 					)
 				);
 			
-			var dvrCastLoader:DVRCastNetLoader = new DVRCastNetLoader();
+			dvrCastLoader = new DVRCastNetLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.dvr.dvrcast"
@@ -139,47 +139,51 @@ package org.osmf.media
 			
 			CONFIG::FLASH_10_1
 			{
+			httpStreamingNetLoader = new HTTPStreamingNetLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.httpstreaming"
-					, new HTTPStreamingNetLoader().canHandleResource
+					, httpStreamingNetLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new VideoElement();
+							return new VideoElement(null, httpStreamingNetLoader);
 						}
 					)
 				);
 			}
 			
+			rtmpStreamingNetLoader = new RTMPDynamicStreamingNetLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video.rtmpdynamicStreaming"
-					, new RTMPDynamicStreamingNetLoader().canHandleResource
+					, rtmpStreamingNetLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new VideoElement()
+							return new VideoElement(null, rtmpStreamingNetLoader);
 						}
 					)
 				);
 			
+			netLoader = new NetLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.video"
-					, new NetLoader().canHandleResource
+					, netLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new VideoElement()
+							return new VideoElement(null, netLoader);
 						}
 					)
 				);		
 			
+			soundLoader = new SoundLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.audio"
-					, new SoundLoader().canHandleResource
+					, soundLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new AudioElement()
+							return new AudioElement(null, soundLoader);
 						}
 					)
 				);
@@ -187,35 +191,48 @@ package org.osmf.media
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.audio.streaming"
-					, new NetLoader().canHandleResource
+					, netLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new AudioElement()
+							return new AudioElement(null, netLoader);
 						}
 					)
 				);
 			
+			imageLoader = new ImageLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.image"
-					, new ImageLoader().canHandleResource
+					, imageLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new ImageElement()
+							return new ImageElement(null, imageLoader);
 						}
 					)
 				);
-				
+			
+			swfLoader = new SWFLoader();
 			addItem
 				( new MediaFactoryItem
 					( "org.osmf.elements.swf"
-					, new SWFLoader().canHandleResource
+					, swfLoader.canHandleResource
 					, function():MediaElement
 						{
-							return new SWFElement()
+							return new SWFElement(null, swfLoader);
 						}
 					)
 				);
 		}
+		
+		private var rtmpStreamingNetLoader:RTMPDynamicStreamingNetLoader;
+		private var f4mLoader:F4MLoader;
+		private var dvrCastLoader:DVRCastNetLoader;
+		private var netLoader:NetLoader;
+		private var imageLoader:ImageLoader;
+		private var swfLoader:SWFLoader;
+		private var soundLoader:SoundLoader;
+		
+		CONFIG::FLASH_10_1
+		private var httpStreamingNetLoader:HTTPStreamingNetLoader;
 	}
 }
