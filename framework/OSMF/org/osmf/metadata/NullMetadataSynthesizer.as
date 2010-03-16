@@ -21,7 +21,7 @@
 *****************************************************/
 package org.osmf.metadata
 {
-	import org.osmf.elements.compositeClasses.CompositionMode;
+	import __AS3__.vec.Vector;
 
 	[ExcludeClass]
 	
@@ -60,7 +60,7 @@ package org.osmf.metadata
 		override public function synthesize
 							( namespaceURL:String
 							, targetParentMetadata:Metadata
-							, metadataGroup:MetadataGroup
+							, metadatas:Vector.<Metadata>
 							, mode:String
 							, activeParentMetadata:Metadata
 							):Metadata

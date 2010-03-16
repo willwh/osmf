@@ -30,8 +30,9 @@ package org.osmf.metadata
 	 * 
 	 * Defines an algorithm that can synthesize a metadata value
 	 * from any number of metadata values of a given namespace, in
-	 * the context of a target parent Metadata, MetadataGroup, CompositionMode, 
-	 * and active parent Metadata context.
+	 * the context of a target parent Metadata, child Metadatas,
+	 * CompositionMode, and active child Metadata context (for
+	 * SerialElements).
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -41,7 +42,7 @@ package org.osmf.metadata
 	public class MetadataSynthesizer
 	{
 		/**
-		 * Constructor
+		 * Constructor.
 		 * 
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -65,10 +66,10 @@ package org.osmf.metadata
 		 * @param namespaceURL The namespace URL to synthesize values for.
 		 * @param targetParentMetadata The parent metadata that will have the synthesized
 		 * value appended.
-		 * @param metadataGroup The group of metadata objects the synthesized value should be based
+		 * @param metadatas The metadata objects the synthesized value should be based
 		 * on.
 		 * @param mode The CompositionMode of synthesis that should be applied.
-		 * @param activeParentMetadata If the targetParentMetadata value belongs to a
+		 * @param serialElementActiveChildMetadata If the targetParentMetadata value belongs to a
 		 * SerialElement this value references the metadata of its currently active child.
 		 * @return The synthesized value.
 		 *  
@@ -80,26 +81,26 @@ package org.osmf.metadata
 		public function synthesize
 							( namespaceURL:String
 							, targetParentMetadata:Metadata
-							, metadataGroup:MetadataGroup
+							, metadatas:Vector.<Metadata>
 							, mode:String
-							, activeParentMetadata:Metadata
+							, serialElementActiveChildMetadata:Metadata
 							):Metadata
 		{	
 			var result:Metadata;
 			
-			if (mode == CompositionMode.SERIAL && activeParentMetadata)
+			if (mode == CompositionMode.SERIAL && serialElementActiveChildMetadata)
 			{
 				// Return the currently active metadata:
-				result = activeParentMetadata.getValue(namespaceURL) as Metadata;
+				result = serialElementActiveChildMetadata.getValue(namespaceURL) as Metadata;
 			}
 			else // mode is PARALLEL
 			{
-				// If the metadata group contains a single Metadata, then
+				// If the metadatas consist of a single Metadata, then
 				// return that as the synthesized metadata. Otherwise
 				// return null:
 				result
-					= (metadataGroup && metadataGroup.length == 1)
-						? metadataGroup.getMetadataAt(0)
+					= (metadatas.length == 1)
+						? metadatas[0]
 						: null;
 			}
 			

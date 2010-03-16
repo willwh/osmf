@@ -74,7 +74,8 @@ package org.osmf.metadata
 		{
 			_namespaceURL = namespaceURL;
 			
-			metadatas = new Vector.<Object>();
+			_parentMetadatas = new Vector.<Metadata>();
+			_metadatas = new Vector.<Metadata>();
 		}
 		
 		/**
@@ -110,8 +111,9 @@ package org.osmf.metadata
 			{
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			}
-						
-			metadatas.push({parentMetadata:parentMetadata, metadata:metadata});
+			
+			_parentMetadatas.push(parentMetadata);
+			_metadatas.push(metadata);
 			metadata.addEventListener(MetadataEvent.VALUE_CHANGE, changeDispatchingEventHandler);
 			
 			dispatchEvent(new Event(Event.CHANGE));
@@ -138,7 +140,8 @@ package org.osmf.metadata
 			
 			if (index != -1)
 			{
-				result = metadatas.splice(index,1)[0].metadata;
+				_parentMetadatas.splice(index, 1);
+				result = _metadatas.splice(index, 1)[0];
 				metadata.removeEventListener(MetadataEvent.VALUE_CHANGE, changeDispatchingEventHandler);
 				dispatchEvent(new Event(Event.CHANGE));
 			}
@@ -147,60 +150,29 @@ package org.osmf.metadata
 		}
 	
 		/**
-		 * Defines the number of Metadata objects that are in the group.
+		 * The Metadata objects that are in the group.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get length():int
+		public function get metadatas():Vector.<Metadata>
 		{
-			return metadatas.length;
+			return _metadatas;
 		}
-		
+
 		/**
-		 * Gets a parent metadata reference.
-		 * 
-		 * @param index The index of the metadata collection reference to return.
-		 * @return The metadata collection reference at the specified index.
-		 * @throws RangeError if the specified index is out of bounds. 
+		 * The parents of the Metadata objects that are in the group.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
-		 */	
-		public function getParentMetadataAt(index:int):Metadata
+		 */		
+		public function get parentMetadatas():Vector.<Metadata>
 		{
-			if (index >= metadatas.length)
-			{
-				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));	
-			}
-			
-			return metadatas[index].parentMetadata;
-		}
-		
-		/**
-		 * Gets a metadata reference.
-		 * 
-		 * @param index The index of the metadata to return.
-		 * @return The metadata at the specified index.
-		 * @throws RangeError if the specified index is out of bounds. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */	
-		public function getMetadataAt(index:int):Metadata
-		{
-			if (index >= metadatas.length)
-			{
-				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));	
-			}
-			
-			return metadatas[index].metadata;
+			return _parentMetadatas;
 		}
 		
 		/**
@@ -218,14 +190,13 @@ package org.osmf.metadata
 		public function indexOf(parentMetadata:Metadata, metadata:Metadata):int
 		{
 			var result:int = -1;
-			var record:Object;
 			
-			for (var i:int = 0; i < metadatas.length; i++)
+			for (var i:int = 0; i < _metadatas.length; i++)
 			{
-				record = metadatas[i];
+				var iterMetadata:Metadata = _metadatas[i];
 				
-				if 	(	record.parentMetadata == parentMetadata
-					&&	record.metadata == metadata
+				if 	(	iterMetadata == metadata
+					&&	parentMetadatas[i] == parentMetadata
 					)
 				{
 					result = i;
@@ -245,6 +216,7 @@ package org.osmf.metadata
 		}
 		
 		private var _namespaceURL:String;
-		private var metadatas:Vector.<Object>;
+		private var _parentMetadatas:Vector.<Metadata>;
+		private var _metadatas:Vector.<Metadata>;
 	}
 }

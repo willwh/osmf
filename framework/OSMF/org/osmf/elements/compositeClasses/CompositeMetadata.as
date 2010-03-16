@@ -568,7 +568,7 @@ package org.osmf.elements.compositeClasses
 				var metadataGroup:MetadataGroup = childMetadataGroups[childrenNamespaceURL];
 				metadataGroup.removeMetadata(child, metadata);
 				
-				if (metadataGroup.length == 0)
+				if (metadataGroup.metadatas.length == 0)
 				{
 					metadataGroup.removeEventListener(Event.CHANGE, onMetadataGroupChange);
 					
@@ -671,7 +671,7 @@ package org.osmf.elements.compositeClasses
 			
 			dispatchEvent(localEvent);
 			
-			// If no metadata synthesizer is set yet, then first see if any of the
+ 			// If no metadata synthesizer is set yet, then first see if any of the
 			// event handlers provided us with one. If not, then use the metadata's
 			// default synthesizer (if it provides for one):
 			metadataSynthesizer
@@ -679,8 +679,8 @@ package org.osmf.elements.compositeClasses
 				// If no synthesizer has been suggested by our parents, then look
 				// at the metadata group, and take the synthesizer set on the first
 				// metadata that we encounter:
-				||	(	(metadataGroup.length > 0)
-							? metadataGroup.getMetadataAt(0).synthesizer
+				||	(	(metadataGroup.metadatas.length > 0)
+							? metadataGroup.metadatas[0].synthesizer
 							: null
 				 	)
 				// Last, revert to the default synthesizer:
@@ -691,11 +691,11 @@ package org.osmf.elements.compositeClasses
 				= metadataSynthesizer.synthesize
 					( metadataGroup.namespaceURL
 					, this
-					, metadataGroup
+					, metadataGroup.metadatas
 					, _mode
 					, _activeChild
 					);
-			
+ 		
 			if (synthesizedMetadata == null)
 			{
 				// If the synthesized value is null, then we might need to clear

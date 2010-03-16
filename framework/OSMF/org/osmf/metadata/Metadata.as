@@ -243,11 +243,11 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function get synthesizer():MetadataSynthesizer
+ 		public function get synthesizer():MetadataSynthesizer
 		{
 			return null;
 		}
-		
+ 				
 		private var data:Dictionary;
 	}
 }

@@ -33,10 +33,8 @@ package org.osmf.metadata
 			var mg:MetadataGroup = new MetadataGroup(url);
 			
 			assertNotNull(mg);
-			assertEquals(0, mg.length);
+			assertEquals(0, mg.metadatas.length);
 			assertEquals(url, mg.namespaceURL);
-			assertThrows(mg.getMetadataAt, 0);
-			assertThrows(mg.getParentMetadataAt, 0);
 			assertEquals(-1, mg.indexOf(null, null));	
 			assertEquals(null, mg.removeMetadata(null, null));
 			
@@ -49,15 +47,15 @@ package org.osmf.metadata
 			metadata2.addValue(url, child);
 			
 			assertDispatches(mg, [Event.CHANGE], mg.addMetadata, metadata1, child);
-			assertEquals(1, mg.length);
-			assertEquals(child, mg.getMetadataAt(0));
-			assertEquals(metadata1, mg.getParentMetadataAt(0));
+			assertEquals(1, mg.metadatas.length);
+			assertEquals(child, mg.metadatas[0]);
+			assertEquals(metadata1, mg.parentMetadatas[0]);
 			assertEquals(0, mg.indexOf(metadata1, child));	
 			
 			assertDispatches(mg, [Event.CHANGE], mg.addMetadata, metadata2, child);
-			assertEquals(2, mg.length);
-			assertEquals(child, mg.getMetadataAt(1));
-			assertEquals(metadata2, mg.getParentMetadataAt(1));
+			assertEquals(2, mg.metadatas.length);
+			assertEquals(child, mg.metadatas[1]);
+			assertEquals(metadata2, mg.parentMetadatas[1]);
 			assertEquals(1, mg.indexOf(metadata2, child));
 			
 			assertEquals
@@ -65,9 +63,9 @@ package org.osmf.metadata
 				, assertDispatches(mg, [Event.CHANGE], mg.removeMetadata, metadata1, child)
 				);
 				
-			assertEquals(1, mg.length);
-			assertEquals(child, mg.getMetadataAt(0));
-			assertEquals(metadata2, mg.getParentMetadataAt(0));
+			assertEquals(1, mg.metadatas.length);
+			assertEquals(child, mg.metadatas[0]);
+			assertEquals(metadata2, mg.parentMetadatas[0]);
 			assertEquals(0, mg.indexOf(metadata2, child));	
 		}
 	}

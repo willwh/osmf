@@ -22,9 +22,9 @@
 package org.osmf.elements.compositeClasses
 {
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataGroup;
 	import org.osmf.metadata.MetadataSynthesizer;
-	import org.osmf.metadata.Metadata;
 
 	public class TestCompositeMetadata extends TestCaseEx
 	{
@@ -145,9 +145,9 @@ package org.osmf.elements.compositeClasses
 	}
 }
 
-import org.osmf.metadata.MetadataGroup;
 import org.osmf.metadata.MetadataSynthesizer;
 import org.osmf.metadata.Metadata;
+import __AS3__.vec.Vector;
 
 class AMetadataSynthesizer extends MetadataSynthesizer
 {
@@ -159,7 +159,7 @@ class AMetadataSynthesizer extends MetadataSynthesizer
 	override public function synthesize
 		( namespaceURL:String
 		, targetParentMetadata:Metadata
-		, metadataGroup:MetadataGroup
+		, metadatas:Vector.<Metadata>
 		, mode:String
 		, activeParentMetadata:Metadata
 		):Metadata
