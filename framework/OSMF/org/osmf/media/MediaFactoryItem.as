@@ -39,7 +39,14 @@ package org.osmf.media
 		
 		/**
 		 * Constructor.
-		 * @param id An identifier that represents this MediaFactoryItem.
+		 * @param id An identifier that represents this MediaFactoryItem.  Identifiers should reflect
+		 * the plugin makers name, and the specific name of the element it generates.  The convention
+		 * is to use the package namespace scheme. Two examples:
+		 * com.example.MyAdPlugin
+		 * com.example.MyAnalyticsPlugin
+		 * 
+		 * Note: org.osmf should be avoided since the MediaFactory gives precedence to 
+		 * non-osmf plugins.
 		 * @param canHandleResourceFunction Function which is used to determine
 		 * whether this MediaFactoryItem can handle a particular resource.  The
 		 * function must take a single parameter of type MediaResourceBase, and
