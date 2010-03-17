@@ -64,6 +64,13 @@ package org.osmf.net
 			}
 			this.netStream = netStream;
 			this.urlResource = resource as URLResource;
+			
+			// Live streams can't be paused.
+			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
+			if (streamingResource != null && streamingResource.streamType == StreamType.LIVE)
+			{
+				setCanPause(false);
+			}
 
 			// Note that we add the listener (and handler) with a slightly
 			// higher priority.  The reason for this is that we want to process
