@@ -249,7 +249,11 @@ package org.osmf.media
 			{
 				var traitType:String;
 				if (media != null)
-				{											
+				{		
+					if (playing)
+					{
+						stop();
+					}
 					if (canLoad)
 					{	 
 						var loadTrait:LoadTrait = media.getTrait(MediaTraitType.LOAD) as LoadTrait;
