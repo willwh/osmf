@@ -38,34 +38,6 @@ package org.osmf.net
 	 */ 
 	public final class NetConnectionCodes
 	{
-		/**
-		 * "error"	Packet encoded in an unidentified format.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const CALL_BADVERSION:String = "NetConnection.Call.BadVersion";  		
-		
-		/**
-		 * "error"	The NetConnection.call method was not able to invoke the server-side method or command.
-		 * */
-		public static const CALL_FAILED:String = "NetConnection.Call.Failed";	    	
-	
-		/**
-		 * "error"	An Action Message Format (AMF) operation is prevented for security reasons. 
-		 * Either the AMF URL is not in the same domain as the file containing the code calling the NetConnection.call() method, 
-		 * or the AMF server does not have a policy file that trusts the domain of the the
-		 * file containing the code calling the NetConnection.call() method.		
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const CALL_PROHIBITED:String = "NetConnection.Call.Prohibited"; 	
-		
 		/** 
 		 * "status"	The connection was closed successfully.	
 		 *  
@@ -105,17 +77,7 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const CONNECT_REJECTED:String = "NetConnection.Connect.Rejected";		
-		
-		/**
-		 * 	"error"	The specified application is shutting down.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const CONNECT_APPSHUTDOWN:String = "NetConnection.Connect.AppShutdown";
-		
+				
 		/** 
 		 * "error"	The application name specified during connect is invalid.
 		 *  

@@ -75,8 +75,10 @@ package org.osmf.net
 		 */
 		public static const NETSTREAM_BUFFER_FLUSH:String 			= "NetStream.Buffer.Flush";
 		
+		CONFIG::FLASH_10_1
+		{
 		/**
-		 * This code is sent by the netstream when the DRM subsystem needs to be
+		 * This code is sent by the NetStream when the DRM subsystem needs to be
 		 * updated.
 		 *  
 		 *  @langversion 3.0
@@ -85,6 +87,7 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_DRM_UPDATE:String 			= "DRM.UpdateNeeded";
+		}
 		
 		/** 
 		 * "error"	
@@ -97,38 +100,6 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_FAILED:String 				= "NetStream.Failed"; 
-		
-		/** 
-		 * "status"
-		 * 	Publish was successful. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_PUBLISH_START:String			= "NetStream.Publish.Start"; 
-		
-		/** 
-		 * "error"
-		 * 	Attempt to publish a stream which is already being published by someone else.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_PUBLISH_BADNAME:String		= "NetStream.Publish.BadName";
-		
-		/** 
-		 * "status"
-		 * 	The publisher of the stream is idle and not transmitting data. */
-		public static const NETSTREAM_PUBLISH_IDLE:String 			= "NetStream.Publish.Idle";
-		
-		/**
-		 * "status"	
-		 * The unpublish operation was successful. */
-		public static const NETSTREAM_UNPUBLISH_SUCCESS:String		= "NetStream.Unpublish.Success"; 
 		
 		/** 
 		 * "status"
@@ -183,28 +154,6 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_RESET:String				= "NetStream.Play.Reset";
-		
-		/** 
-		 * "status"	
-		 * The initial publish to a stream is sent to all subscribers.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_PLAY_PUBLISHNOTIFY:String		= "NetStream.Play.PublishNotify"; 
-		
-		/** 
-		 * "status"	
-		 * An unpublish from a stream is sent to all subscribers.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_PLAY_UNPUBLISHNOTIFY:String	= "NetStream.Play.UnpublishNotify";
 		
 		/** 
 		 * "warning"	
@@ -276,50 +225,6 @@ package org.osmf.net
 		 */
 		public static const NETSTREAM_UNPAUSE_NOTIFY:String			= "NetStream.Unpause.Notify";
 		
-		 /** 
-		 * "status"	
-		 * Recording has started. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const NETSTREAM_RECORD_START:String			= "NetStream.Record.Start";
-		
-		/**
-		 * "error"	
-		 * Attempt to record a stream that is still playing or the client has no access right. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_RECORD_NOACCESS:String		= "NetStream.Record.NoAccess";
-		
-		/** 
-		 * "status"	
-		 * Recording stopped. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const NETSTREAM_RECORD_STOP:String			= "NetStream.Record.Stop";
-		
-		/** 
-		 * "error"
-		 * 	An attempt to record a stream failed. 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const NETSTREAM_RECORD_FAILED:String			= "NetStream.Record.Failed";
-		
 		/** 
 		 * "error"	
 		 * The seek fails, which happens if the stream is not seekable. 
@@ -379,19 +284,8 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */ 
 		public static const NETSTREAM_PLAY_TRANSITION_COMPLETE:String = "NetStream.Play.TransitionComplete"; 
-		
-		/** 
-		 * "status"	
-		 * 	The subscriber is switching from one stream to another in a playlist.. Fires only for streaming connections.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const NETSTREAM_PLAY_SWITCH:String			= "NetStream.Play.Switch"; 
-				
-		//NetStream events
+			
+		// NetStream events
 		
 		/**
 		 * Dispatched when the application receives descriptive information embedded in the video being played. 
@@ -414,17 +308,6 @@ package org.osmf.net
 		 */ 
 		public static const ON_CUE_POINT:String						= "onCuePoint";
 		
-		/**
-		 * Establishes a listener to respond when Flash Player receives image data 
-		 * as a byte array embedded in a media file that is playing.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const ON_IMAGE_DATA:String					= "onImageData";
-		
 		/**		
 		 *  * Establishes a listener to respond when a NetStream object has completely played a stream.
 		 *  
@@ -434,49 +317,5 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const ON_PLAY_STATUS:String					= "onPlayStatus";
-	
-		/**
-		 * Establishes a listener to respond when Flash Player receives text data embedded in a media file that is playing.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const ON_TEXT_DATA:String						= "onTextData";
-		
-		/**
-		 * 	Establishes a listener to respond when Flash Player receives information specific to
-		 *  Adobe Extensible Metadata Platform (XMP) embedded in the video being played.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const ON_XMP_DATA:String						= "onXMPData";	
-		
-		/**
-		 * The ID3 information contained within a sound file
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const ON_ID3:String							= "onID3Data"; 
-		
-		/**
-		 * Called when the DRMContent data is encountered in a DRM encypyted file
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */ 
-		public static const ON_DRM_CONTENT_DATA:String				= "onDRMContentData";
-				
-		
-
 	}
 }
