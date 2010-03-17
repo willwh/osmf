@@ -1436,6 +1436,14 @@ package org.osmf.media
 				case MediaTraitType.LOAD:					
 					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);			
 					_canLoad = add;		
+					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesLoaded > 0)
+					{
+						dispatchEvent(new LoadEvent(LoadEvent.BYTES_LOADED_CHANGE, false, false, null, bytesLoaded));
+					}
+					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesTotal > 0)
+					{
+						dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
+					}	
 					if (add)
 					{
 						var loadState:String = (media.getTrait(traitType) as LoadTrait).loadState;
@@ -1457,15 +1465,7 @@ package org.osmf.media
 						{
 							_bytesLoadedTimer.stop();					
 						}			
-					}	
-					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesLoaded > 0)
-					{
-						dispatchEvent(new LoadEvent(LoadEvent.BYTES_LOADED_CHANGE, false, false, null, bytesLoaded));
-					}
-					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesTotal > 0)
-					{
-						dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
-					}					
+					}										
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
