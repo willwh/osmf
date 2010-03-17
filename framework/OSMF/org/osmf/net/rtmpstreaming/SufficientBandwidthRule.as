@@ -121,7 +121,7 @@ package org.osmf.net.rtmpstreaming
 		{
 		private function debug(...args):void
 		{
-			_logger.debug(args);
+			logger.debug("", args);
 		}
 		}
 		
