@@ -217,15 +217,15 @@ package org.osmf.media
 			if (loadTrait != null)
 			{
 				// Remove (and unload) any existing LoadTrait.
-				loadTrait.removeEventListener
-					( LoadEvent.LOAD_STATE_CHANGE
-					, onLoadStateChange
-					);
-					
 				if (loadTrait.loadState == LoadState.READY)
 				{	    			   
 					loadTrait.unload();	 
 				}
+
+				loadTrait.removeEventListener
+					( LoadEvent.LOAD_STATE_CHANGE
+					, onLoadStateChange
+					);
 				
 				removeTrait(MediaTraitType.LOAD);
 			}
