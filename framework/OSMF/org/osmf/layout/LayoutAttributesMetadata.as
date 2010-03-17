@@ -41,7 +41,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 * 
-		 * Intentifier for the index property.
+		 * Identifier for the index property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -53,19 +53,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the registrationPoint property.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static const REGISTRATION_POINT:String = "registrationPoint";
-		
-		/**
-		 * @private
-		 *
-		 * Intentifier for the index property.
+		 * Identifier for the index property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -77,7 +65,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the vertical align property.
+		 * Identifier for the vertical align property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -89,7 +77,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the horizontal align property.
+		 * Identifier for the horizontal align property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -101,7 +89,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the snapToPixel property.
+		 * Identifier for the snapToPixel property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -113,7 +101,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the layoutMode property.
+		 * Identifier for the layoutMode property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -125,7 +113,7 @@ package org.osmf.layout
 		/**
 		 * @private
 		 *
-		 * Intentifier for the facet's includeInLayout property.
+		 * Identifier for the facet's includeInLayout property.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
