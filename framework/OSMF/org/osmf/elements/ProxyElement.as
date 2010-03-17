@@ -23,6 +23,7 @@ package org.osmf.elements
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.elements.proxyClasses.ProxyMetadata;
 	import org.osmf.events.ContainerChangeEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.MediaErrorEvent;
@@ -104,6 +105,7 @@ package org.osmf.elements
 			// chance to stop propagation of the events if necessary.
 			this.addEventListener(MediaElementEvent.TRAIT_ADD, onProxyTraitAdd, false, int.MAX_VALUE);
 			this.addEventListener(MediaElementEvent.TRAIT_REMOVE, onProxyTraitRemove, false, int.MAX_VALUE);
+			this.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onProxyContainerChange);		
 			
 			this.proxiedElement = proxiedElement;
 		}
@@ -144,6 +146,14 @@ package org.osmf.elements
 				
 				if (_proxiedElement != null)
 				{
+					ProxyMetadata(metadata).metadata = _proxiedElement.metadata;
+					_proxiedElement.dispatchEvent
+						( new ContainerChangeEvent
+							( ContainerChangeEvent.CONTAINER_CHANGE
+								, false, false
+								, _proxiedElement.container, container
+							)
+						);
 					// Add listeners for the new wrapped element, so that
 					// events from the wrapped element are also dispatched by
 					// the proxy.
@@ -160,7 +170,7 @@ package org.osmf.elements
 					{
 						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_ADD, false, false, traitType));
 					}
-				}
+				}				
 			}
 		}
 		
@@ -241,7 +251,7 @@ package org.osmf.elements
 				proxiedElement.resource = value;
 			}
 		}
-		
+			
 		override protected function addTrait(type:String, instance:MediaTraitBase):void
 		{
 			// If we're adding a trait that already exists on the proxied
@@ -278,20 +288,12 @@ package org.osmf.elements
 		
 		/**
 		 * @private
-		 */
-		override public function get metadata():Metadata
-		{
-			return proxiedElement ? proxiedElement.metadata : null;
-		}
-		
-		/**
-		 * @private
 		 * 
 		 * Don't create any metadata, since we will be using the wrapped element's data only.
 		 */
 		override protected function createMetadata():Metadata
 		{
-			return null;
+			return new ProxyMetadata();;
 		}
 
 		/**
@@ -446,8 +448,7 @@ package org.osmf.elements
 				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				_proxiedElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 				_proxiedElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataEvent);
-				_proxiedElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataEvent);
-				_proxiedElement.addEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
+				_proxiedElement.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataEvent);				
 			}
 			else
 			{
@@ -456,7 +457,6 @@ package org.osmf.elements
 				_proxiedElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 				_proxiedElement.removeEventListener(MediaElementEvent.METADATA_ADD, onMetadataEvent);
 				_proxiedElement.removeEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataEvent);
-				_proxiedElement.removeEventListener(ContainerChangeEvent.CONTAINER_CHANGE, onContainerChange);
 			}
 		}
 		
@@ -480,12 +480,14 @@ package org.osmf.elements
 			dispatchEvent(event.clone());
 		}
 		
-		private function onContainerChange(event:ContainerChangeEvent):void
+		private function onProxyContainerChange(event:ContainerChangeEvent):void
 		{
-			dispatchEvent(event.clone());
+			if (proxiedElement != null)  //Notifies proxied element of container change.
+			{
+				proxiedElement.dispatchEvent(event.clone());			
+			}
 		}
-
-		private function onProxyTraitAdd(event:MediaElementEvent):void
+				private function onProxyTraitAdd(event:MediaElementEvent):void
 		{
 			processProxyTraitsChangeEvent(event);
 		}
@@ -521,6 +523,7 @@ package org.osmf.elements
 			return _blockedTraits && _blockedTraits.indexOf(traitType) != -1;
 		}
 		
+		private var _proxiedMetadata:ProxyMetadata;
 		private var _proxiedElement:MediaElement;
 		private var _blockedTraits:Vector.<String>;
 	}

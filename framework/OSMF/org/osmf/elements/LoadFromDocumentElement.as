@@ -21,6 +21,8 @@
 *****************************************************/
 package org.osmf.elements
 {
+	import flash.events.Event;
+	
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.elements.proxyClasses.ProxyMetadata;
 	import org.osmf.events.LoadEvent;
@@ -68,8 +70,7 @@ package org.osmf.elements
 		public function LoadFromDocumentElement(resource:MediaResourceBase = null, loader:LoaderBase = null)
 		{	
 			super(null);
-			
-			_temporaryMetadata = new ProxyMetadata();
+						
 			this.loader = loader;			
 			this.resource = resource;
 			
@@ -78,26 +79,13 @@ package org.osmf.elements
 				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
 			} 
 		}
-			
-		/**
-		 * @private
-		 **/
-		override public function set proxiedElement(value:MediaElement):void
-		{
-			if (value != null && _temporaryMetadata != null)
-			{
-				// Copy the temporary metadata over.
-				for each (var key:String in _temporaryMetadata.keys)
-				{
-					value.addMetadata(key, _temporaryMetadata.getValue(key));
-				}
+	
+		private function onLoaderStateChange(event:Event):void
+		{			
+			removeTrait(MediaTraitType.LOAD); // Remove the temporary LoadTrait.
+			proxiedElement = loadTrait.mediaElement;
+		}		
 				
-				_temporaryMetadata = null;
-			}
-			
-			super.proxiedElement = value;
-		}
-		
 		/**
 		 * @private
 		 * 
@@ -125,18 +113,7 @@ package org.osmf.elements
 		override public function get resource():MediaResourceBase
 		{
 			return _resource;
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * Returns the MediaElement's metadata, if the media element hasn't been created yet this
-		 * will return null.
-		 */
-		override public function get metadata():Metadata
-		{
-			return proxiedElement ? proxiedElement.metadata : _temporaryMetadata;
-		}
+		}		
 		
 		// Internals
 		//
@@ -162,8 +139,7 @@ package org.osmf.elements
 				
 				// Expose the proxied element.
 				proxiedElement = loadTrait.mediaElement;
-				_temporaryMetadata = null;
-				
+								
 				// If our proxied element hasn't started loading yet, we should
 				// initiate the load.
 				if (proxiedLoadTrait.loadState == LoadState.UNINITIALIZED)
@@ -185,7 +161,6 @@ package org.osmf.elements
 			}
 		}
 
-		private var _temporaryMetadata:ProxyMetadata;
 		private var _resource:MediaResourceBase;
 		private var loadTrait:LoadFromDocumentLoadTrait;
 		private var loader:LoaderBase;

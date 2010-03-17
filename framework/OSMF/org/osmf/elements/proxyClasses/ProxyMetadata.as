@@ -44,11 +44,12 @@ package org.osmf.elements.proxyClasses
 			
 		public function set metadata(value:Metadata):void
 		{			
+			
 			// Transfer all old values to new:
 			for each (var url:String in proxiedMetadata.keys)
 			{
 				value.addValue(url, proxiedMetadata.getValue(url));
-			}
+			}			
 			proxiedMetadata = value;		
 			proxiedMetadata.addEventListener(MetadataEvent.VALUE_ADD, redispatchEvent);
 			proxiedMetadata.addEventListener(MetadataEvent.VALUE_CHANGE, redispatchEvent);
