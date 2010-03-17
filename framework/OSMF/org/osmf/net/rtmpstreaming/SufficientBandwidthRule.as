@@ -119,9 +119,9 @@ package org.osmf.net.rtmpstreaming
 
 		CONFIG::LOGGING
 		{
-		private function debug(...args):void
+		private function debug(s:String):void
 		{
-			logger.debug("", args);
+			logger.debug(s);
 		}
 		}
 		
