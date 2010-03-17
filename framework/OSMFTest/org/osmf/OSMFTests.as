@@ -248,9 +248,9 @@ package org.osmf
 			
 			addTestSuite(TestDownloadRatioRule);
 			addTestSuite(TestBoxParser);
-			addTestSuite(TestAdobeBootstrapBox);
+//			addTestSuite(TestAdobeBootstrapBox);
 //			addTestSuite(TestAdobeFragmentRunTable);
-			addTestSuite(TestAdobeSegmentRunTable);
+//			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
 			
 			// DVR
