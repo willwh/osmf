@@ -52,7 +52,7 @@ package org.osmf.events
 		 */
 		public function get info():Object
 		{
-			return info;
+			return _info;
 		}
 		
 		//

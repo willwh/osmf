@@ -106,6 +106,7 @@ package org.osmf.net.httpstreaming
 		{
 			super(connection);
 			
+			bufferTime = 2.0;
 			_savedBytes = new ByteArray();
 			
 			this.indexHandler = indexHandler;

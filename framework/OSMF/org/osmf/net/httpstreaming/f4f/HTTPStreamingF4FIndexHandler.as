@@ -149,6 +149,8 @@ package org.osmf.net.httpstreaming.f4f
 			var index:int = indexContext as int;
 			var bootstrapBox:AdobeBootstrapBox = processBootstrapData(data, index);
 			
+			delay = 0.05; 
+			
 			CONFIG::LOGGING
 			{			
 				logger.debug("processIndexData: " + index + " pendingIndexUpdates: " + pendingIndexUpdates);
@@ -224,8 +226,17 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					else
 					{
+						if (delay < 1.0)
+						{
+							delay = delay * 2.0;
+							if (delay > 1.0)
+							{
+								delay = 1.0;
+							} 
+						}
+						
 						refreshBootstrapInfo();
-						return new HTTPStreamRequest(null, quality, 0, 5);
+						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
 				}
 				
@@ -286,9 +297,18 @@ package org.osmf.net.httpstreaming.f4f
 					}
 					else
 					{
+						if (delay < 1.0)
+						{
+							delay = delay * 2.0;
+							if (delay > 1.0)
+							{
+								delay = 1.0;
+							} 
+						}
+
 						currentFAI = oldCurrentFAI;
 						refreshBootstrapInfo();
-						return new HTTPStreamRequest(null, quality, 0, 5);
+						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
 				}
 
@@ -631,7 +651,9 @@ package org.osmf.net.httpstreaming.f4f
 		private var fragmentsThreshold:uint;
 		private var fragmentRunTablesUpdating:Boolean;
 		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
-		private var offsetFromCurrent:Number = 10;
+		
+		private var offsetFromCurrent:Number = 20;
+		private var delay:Number = 0.05;
 		
 		public static const DEFAULT_FRAGMENTS_THRESHOLD:uint = 5;
 		
