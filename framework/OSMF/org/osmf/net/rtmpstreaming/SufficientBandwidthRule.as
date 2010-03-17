@@ -21,10 +21,13 @@
 *****************************************************/
 package org.osmf.net.rtmpstreaming
 {
+	import org.osmf.net.SwitchingRuleBase;
+
+	CONFIG::LOGGING
+	{
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
-	import org.osmf.net.SwitchingRuleBase;
-	import org.osmf.utils.OSMFStrings;
+	}
 	
 	/**
 	 * Switching rule that switches up when the user has sufficient bandwidth to do so.
@@ -86,7 +89,10 @@ package org.osmf.net.rtmpstreaming
 	        		
 	        		if (newIndex != -1)
 	        		{
-	        			debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.netStream.bufferTime);
+	        			CONFIG::LOGGING
+	        			{
+	        				debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.netStream.bufferTime);
+	        			}
 	        		}
 	        	}
 	        	else
@@ -97,7 +103,10 @@ package org.osmf.net.rtmpstreaming
         	
         	if (newIndex != -1)
         	{
-        		debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
+        		CONFIG::LOGGING
+	        	{
+        			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
+        		}
         	}
         	         	 
         	return newIndex;
@@ -108,16 +117,12 @@ package org.osmf.net.rtmpstreaming
 			return metrics as RTMPNetStreamMetrics;
 		}
 
+		CONFIG::LOGGING
+		{
 		private function debug(...args):void
 		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.SufficientBandwidthRule");
-				}
-				_logger.debug(">>> SwitchUpRule."+args);
-			}
+			_logger.debug(args);
+		}
 		}
 		
 		private static const BANDWIDTH_SAFETY_MULTIPLE:Number = 1.15;
@@ -125,7 +130,7 @@ package org.osmf.net.rtmpstreaming
 		
 		CONFIG::LOGGING
 		{
-			private var _logger:ILogger;
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.SufficientBandwidthRule");
 		}
 	}
 }

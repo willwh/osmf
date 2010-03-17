@@ -31,7 +31,6 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutRendererBase;
 	import org.osmf.layout.LayoutTargetSprite;
-	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -189,7 +188,5 @@ package org.osmf.elements.compositeClasses
 		private var _childrenContainer:ILayoutTarget;
 		private var _layoutRenderer:LayoutRendererBase;
 		private var watcher:MetadataWatcher;
-		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CompositeDisplayObjectTrait");
 	}
 }

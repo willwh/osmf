@@ -29,7 +29,6 @@ package org.osmf.layout
 	
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.logging.ILogger;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.MediaTraitType;
@@ -303,17 +302,6 @@ package org.osmf.layout
 		{
 			var instance:* = layoutTargets[mediaElement];
 			
-			/*
-			CONFIG::LOGGING 
-			{
-				logger.debug
-					( "getInstance, elem.ID: {0}, instance: {1}"
-					, mediaElement.metadata.getFacet(MetadataNamespaces.ELEMENT_ID)
-					, instance
-					);
-			}
-			*/
-			
 			if (instance == undefined)
 			{
 				instance = new MediaElementLayoutTarget(mediaElement, ConstructorLock);
@@ -490,8 +478,6 @@ package org.osmf.layout
 		/* Static */
 		
 		private static const layoutTargets:Dictionary = new Dictionary(true);
-		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MediaElementLayoutTarget");
 	}
 }
 	

@@ -26,11 +26,15 @@ package org.osmf.net.rtmpstreaming
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamMetricsBase;
 	import org.osmf.net.StreamType;
+	
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Log;
+	}
 	
 	/**
 	 * The RTMPNetStreamMetrics makes use of the metrics offered by NetStream.info,
@@ -219,22 +223,13 @@ package org.osmf.net.rtmpstreaming
 			}
 			catch (e:Error) 
 			{
-				debug(".update() - " + e);
+				CONFIG::LOGGING
+				{
+					logger.debug(".update() - " + e);
+				}
 				throw(e);	
 			}
 			
-		}
-		
-		private function debug(...args):void
-		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.MetricsProvider");
-				}
-				_logger.debug(">>> MetricsProvider."+args);
-			}
 		}
 		
 		private function get isLive():Boolean
@@ -258,7 +253,7 @@ package org.osmf.net.rtmpstreaming
 		
 		CONFIG::LOGGING
 		{
-			private static var _logger:ILogger;
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.RTMPNetStreamMetrics");
 		}
 	}
 }

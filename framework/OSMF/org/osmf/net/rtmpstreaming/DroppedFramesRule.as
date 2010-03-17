@@ -23,8 +23,12 @@ package org.osmf.net.rtmpstreaming
 {
 	import flash.utils.getTimer;
 	
+	CONFIG::LOGGING
+	{
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	}
+	
 	import org.osmf.net.NetStreamMetricsBase;
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
@@ -118,14 +122,20 @@ package org.osmf.net.rtmpstreaming
 			// ensure that we stay locked by returning the current index.
 			if (newIndex == -1 && isLocked(rtmpMetrics.currentIndex))
 			{
-				debug("getNewIndex() - locked at: " + metrics.currentIndex); 
+				CONFIG::LOGGING
+				{
+					debug("getNewIndex() - locked at: " + metrics.currentIndex);
+				} 
 				
 				newIndex = rtmpMetrics.currentIndex;
 			}
         	
         	if (newIndex != -1)
         	{
-        		debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail); 
+        		CONFIG::LOGGING
+				{
+        			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
+    			} 
         	}
         	
         	return newIndex;
@@ -157,18 +167,14 @@ package org.osmf.net.rtmpstreaming
 			return metrics as RTMPNetStreamMetrics;
 		}
 
+		CONFIG::LOGGING
+		{
 		private function debug(...args):void
 		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.DroppedFramesRule");
-				}
-				_logger.debug(">>> FrameDropRule."+args);
-			}
-		}        
-		
+			logger.debug(args);
+		}
+		}
+				
 		private var downSwitchByOne:int;
 		private var downSwitchByTwo:int;
 		private var downSwitchToZero:int;
@@ -180,7 +186,7 @@ package org.osmf.net.rtmpstreaming
 
 		CONFIG::LOGGING
 		{
-			private var _logger:ILogger;
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.DroppedFramesRule");
 		}
 	}
 }

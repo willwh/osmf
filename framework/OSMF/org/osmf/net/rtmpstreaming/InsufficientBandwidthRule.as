@@ -21,8 +21,12 @@
 *****************************************************/
 package org.osmf.net.rtmpstreaming
 {
+	CONFIG::LOGGING
+	{
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	}
+	
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
 
@@ -92,13 +96,19 @@ package org.osmf.net.rtmpstreaming
 				
 				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 				{
-					debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBytesPerSecond) + " < " + bitrateMultiplier + " * rendition bitrate");
+					CONFIG::LOGGING
+					{
+						debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBytesPerSecond) + " < " + bitrateMultiplier + " * rendition bitrate");
+					}
 	        	}
         	} 
         	
         	if (newIndex != -1)
         	{
-        		debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
+        		CONFIG::LOGGING
+				{
+        			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
+    			}
         	}
         	 
         	return newIndex;
@@ -108,24 +118,20 @@ package org.osmf.net.rtmpstreaming
 		{
 			return metrics as RTMPNetStreamMetrics;
 		}
-				
+		
+		CONFIG::LOGGING
+		{
 		private function debug(...args):void
 		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.InsufficientBandwidthRule");
-				}
-				_logger.debug(">>> BandwidthRule."+args);
-			}
+			logger.debug(args);
+		}
 		}
 
 		private var bitrateMultiplier:Number;
 			
 		CONFIG::LOGGING
 		{
-			private var _logger:ILogger;
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.InsufficientBandwidthRule");
 		}
 	}
 }

@@ -21,11 +21,6 @@
 *****************************************************/
 package org.osmf.net
 {
-	CONFIG::LOGGING 
-	{	
-		import org.osmf.logging.ILogger;
-	}
-	
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	import flash.net.NetConnection;

@@ -25,7 +25,6 @@ package org.osmf.layout
 	import flash.display.Sprite;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.logging.ILogger;
 	
 	/**
 	 * @private
@@ -427,9 +426,5 @@ package org.osmf.layout
 		private var _measuredWidth:Number = NaN;
 		private var _measuredHeight:Number = NaN;
 		private var renderers:LayoutTargetRenderers;
-		
-		/* static */
-		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutTargetSprite");
 	}
 }

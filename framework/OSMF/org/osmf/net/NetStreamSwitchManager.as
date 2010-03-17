@@ -109,17 +109,26 @@ package org.osmf.net
 		
 		public function set autoSwitch(value:Boolean):void
 		{
-			debug("autoSwitch() - setting to " + value);
+			CONFIG::LOGGING
+			{
+				debug("autoSwitch() - setting to " + value);
+			}
 			
 			_autoSwitch = value;
 			if (_autoSwitch)
 			{
-				debug("autoSwitch() - starting check rules timer.");
+				CONFIG::LOGGING
+				{
+					debug("autoSwitch() - starting check rules timer.");
+				}
 				checkRulesTimer.start();
 			}
 			else
 			{
-				debug("autoSwitch() - stopping check rules timer.");
+				CONFIG::LOGGING
+				{
+					debug("autoSwitch() - stopping check rules timer.");
+				}
 				checkRulesTimer.stop();
 			}
 		}
@@ -167,7 +176,10 @@ package org.osmf.net
 				}
 				else
 				{
-					debug("switchTo() - manually switching to index: " + index);
+					CONFIG::LOGGING
+					{
+						debug("switchTo() - manually switching to index: " + index);
+					}
 					
 					if (actualIndex == -1)
 					{
@@ -214,7 +226,10 @@ package org.osmf.net
 				var current:int = getTimer();
 				if (current - failedDSI[newIndex] < DEFAULT_WAIT_DURATION_AFTER_DOWN_SWITCH)
 				{
-					debug("canAutoSwitchNow() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
+					CONFIG::LOGGING
+					{
+						debug("canAutoSwitchNow() - ignoring switch request because index has " + dsiFailedCounts[newIndex]+" failure(s) and only "+ (current - failedDSI[newIndex])/1000 + " seconds have passed since the last failure.");
+					}
 					return false;
 				}
 			}
@@ -264,7 +279,10 @@ package org.osmf.net
 			nso.oldStreamName = oldStreamName;
 			nso.transition = NetStreamPlayTransitions.SWITCH;
 			
-			debug("executeSwitch() - Switching to index " + (targetIndex) + " at " + Math.round(dsResource.streamItems[targetIndex].bitrate) + " kbps");
+			CONFIG::LOGGING
+			{
+				debug("executeSwitch() - Switching to index " + (targetIndex) + " at " + Math.round(dsResource.streamItems[targetIndex].bitrate) + " kbps");
+			}
 						
 			switching = true;
 		
@@ -322,7 +340,10 @@ package org.osmf.net
 				&&  canAutoSwitchNow(newIndex)
 			   ) 
 			{
-				debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
+				CONFIG::LOGGING
+				{
+					debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
+				}
 				
 				executeSwitch(newIndex);
 			}  
@@ -330,7 +351,10 @@ package org.osmf.net
 		
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			debug("onNetStatus() - event.info.code=" + event.info.code);
+			CONFIG::LOGGING
+			{
+				debug("onNetStatus() - event.info.code=" + event.info.code);
+			}
 			
 			switch (event.info.code) 
 			{
@@ -356,21 +380,30 @@ package org.osmf.net
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					checkRulesTimer.stop();
-					debug("onNetStatus() - Stopping rules since server has stopped sending data");
+					CONFIG::LOGGING
+					{
+						debug("onNetStatus() - Stopping rules since server has stopped sending data");
+					}
 					break;
 			}			
 		}
 				
 		private function onPlayStatus(info:Object):void
 		{
-			debug("onPlayStatus() - info.code=" + info.code);
+			CONFIG::LOGGING
+			{
+				debug("onPlayStatus() - info.code=" + info.code);
+			}
 			
 			switch (info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
 					_currentIndex = pendingTransitionsArray[0];
 					
-					debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
+					CONFIG::LOGGING
+					{
+						debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
+					}
 					pendingTransitionsArray.shift();
 
 					break;
@@ -401,7 +434,10 @@ package org.osmf.net
 			}
 			
 			setThrottleLimits(dsResource.streamItems.length - 1);
-			debug("prepareForSwitching() - Starting with stream index " + actualIndex + " at " + Math.round(dsResource.streamItems[actualIndex].bitrate) + " kbps");
+			CONFIG::LOGGING
+			{
+				debug("prepareForSwitching() - Starting with stream index " + actualIndex + " at " + Math.round(dsResource.streamItems[actualIndex].bitrate) + " kbps");
+			}
 			metrics.currentIndex = actualIndex;
 		}
 		
@@ -455,20 +491,12 @@ package org.osmf.net
 			connection.call("setBandwidthLimit", null, _bandwidthLimit, _bandwidthLimit);
 		}
 
-		/**
-		 * If DEBUG is true, traces out debug messages.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
+		CONFIG::LOGGING
+		{
 		private function debug(...args):void
 		{
-			CONFIG::LOGGING
-			{
-				logger.debug(new Date().toTimeString() + ">>> NetStreamSwitchManager." + args);
-			}
+			logger.debug(new Date().toTimeString() + ">>> NetStreamSwitchManager." + args);
+		}
 		}
 				
 		private var netStream:NetStream;

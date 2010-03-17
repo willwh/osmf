@@ -23,11 +23,16 @@ package org.osmf.net.rtmpstreaming
 {
 	import flash.events.NetStatusEvent;
 	
+	CONFIG::LOGGING
+	{
 	import org.osmf.logging.ILogger;
 	import org.osmf.logging.Log;
+	}
+	
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
+	import org.osmf.logging.ILogger;
 	
 	/**
 	 * Switching rule for Buffer detection.
@@ -79,7 +84,10 @@ package org.osmf.net.rtmpstreaming
 			{
 				if (!_panic)
 				{
-					debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + minBufferLength + " seconds");
+					CONFIG::LOGGING
+					{
+						debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + minBufferLength + " seconds");
+					}
 				}
 				
 				newIndex = 0;
@@ -87,7 +95,10 @@ package org.osmf.net.rtmpstreaming
 			
 			if (newIndex != -1)
 			{
-				debug("getNewIndex() - about to return: " + newIndex + ", detail=" + _moreDetail);
+				CONFIG::LOGGING
+				{
+					debug("getNewIndex() - about to return: " + newIndex + ", detail=" + _moreDetail);
+				}
 			} 
 			
 			return newIndex;
@@ -119,17 +130,13 @@ package org.osmf.net.rtmpstreaming
 			return metrics as RTMPNetStreamMetrics;
 		}
 
+		CONFIG::LOGGING
+		{
 		private function debug(...args):void
 		{
-			CONFIG::LOGGING
-			{
-				if (_logger == null)
-				{
-					_logger = Log.getLogger("org.osmf.net.InsufficientBufferRule");
-				}
-				_logger.debug(">>> BufferRule."+args);
-			}
-		}		
+			logger.debug(args);
+		}
+		}
 				
 		private var _panic:Boolean;
 		private var _moreDetail:String;
@@ -137,7 +144,7 @@ package org.osmf.net.rtmpstreaming
 				
 		CONFIG::LOGGING
 		{
-			private var _logger:ILogger;
+			private static var logger:ILogger = Log.getLogger("org.osmf.net.InsufficientBufferRule");
 		}
 	}
 }
