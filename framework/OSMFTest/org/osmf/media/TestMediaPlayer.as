@@ -1220,9 +1220,11 @@ package org.osmf.media
 			
 			// Should get a buffer time change, back to the default of 0.
 			
-			assertEquals(3, events.length);	
+			assertEquals(4, events.length);	
 			assertTrue(events[2] is BufferEvent);	
 			assertEquals(events[2].type, BufferEvent.BUFFER_TIME_CHANGE);			
+			assertTrue(events[3] is BufferEvent);	
+			assertEquals(events[3].type, BufferEvent.BUFFERING_CHANGE);			
 		}
 		
 		public function testDynamicStreamEventGeneration():void
@@ -1321,7 +1323,15 @@ package org.osmf.media
 			// No event generation from removal.
 			media.doRemoveTrait(MediaTraitType.AUDIO);
 			
-			assertEquals(3, events.length);
+			assertEquals(6, events.length);
+			
+			assertTrue(events[3].type, AudioEvent.VOLUME_CHANGE);	
+			assertTrue(events[4].type, AudioEvent.MUTED_CHANGE);
+			assertTrue(events[5].type, AudioEvent.PAN_CHANGE);
+			
+			assertEquals(AudioEvent(events[3]).volume,  mediaPlayer.volume);
+			assertEquals(AudioEvent(events[3]).pan,  mediaPlayer.audioPan);
+			assertEquals(AudioEvent(events[3]).muted,  mediaPlayer.muted);			
 			
 		}
 		
@@ -1399,11 +1409,9 @@ package org.osmf.media
 			
 			media.doAddTrait(MediaTraitType.PLAY, playTrait);
 			
-			assertEquals(4, events.length);
+			assertEquals(3, events.length);
 			assertTrue(events[2] is PlayEvent);	
 			assertEquals(events[2].type, PlayEvent.PLAY_STATE_CHANGE);
-			assertTrue(events[3] is PlayEvent);	
-			assertEquals(events[3].type, PlayEvent.CAN_PAUSE_CHANGE);
 			
 			assertTrue(mediaPlayer.playing);	
 		}

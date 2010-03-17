@@ -1325,7 +1325,8 @@ package org.osmf.media
 			switch (traitType)
 			{
 				case MediaTraitType.TIME:									
-					changeListeners(add, traitType, TimeEvent.COMPLETE, onComplete);								
+					changeListeners(add, traitType, TimeEvent.COMPLETE, onComplete);		
+					_temporal = add;
 					if (add && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval) )
 					{
 						_currentTimeTimer.start();
@@ -1333,66 +1334,73 @@ package org.osmf.media
 					else
 					{
 						_currentTimeTimer.stop();					
+					}					
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;	
+					if (TimeTrait(media.getTrait(MediaTraitType.TIME)).currentTime != 0)
+					{
+						dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
 					}
-					_temporal = add;
-					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;												
-					dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
-					dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));		
+					if (TimeTrait(media.getTrait(MediaTraitType.TIME)).duration != 0)
+					{
+						dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));	
+					}					
 					break;
 				case MediaTraitType.PLAY:						
-					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);			
-					_canPlay = add;							
+					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
+					_canPlay = add;	
 					if (autoPlay && canPlay && !playing)
 					{
 						play();
 					}
-					else if(playing)
+					else if (PlayTrait(media.getTrait(MediaTraitType.PLAY)).playState != PlayState.STOPPED)
 					{
-						dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, add ? PlayState.PLAYING : PlayState.STOPPED));
+						dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, add ? PlayTrait(media.getTrait(MediaTraitType.PLAY)).playState : PlayState.STOPPED));
 					}
-					dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, null, canPause));
-										
+					if (PlayTrait(media.getTrait(MediaTraitType.PLAY)).canPause)
+					{
+						dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, null, add));
+					}							
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE;												
 					break;	
-				case MediaTraitType.AUDIO:					
+				case MediaTraitType.AUDIO:		
 					_hasAudio = add;
-					if (hasAudio)
-					{						
-						if (mediaPlayerVolumeSet)
-						{
-							volume = mediaPlayerVolume;
-						}
-						else
-						{
-							dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, muted, volume, audioPan));
-						}
-						if (mediaPlayerMutedSet)
-						{
-							muted = mediaPlayerMuted;
-						}
-						else
-						{
-							dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, muted, volume, audioPan));
-						}
-						if (mediaPlayerAudioPanSet)
-						{
-							audioPan = mediaPlayerAudioPan;
-						}
-						else
-						{
-							dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
-						}
+					if (mediaPlayerVolumeSet)
+					{
+						volume = mediaPlayerVolume;
 					}
+					else if (mediaPlayerVolume != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).volume)
+					{
+						dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, muted, volume, audioPan));
+					}
+					if (mediaPlayerMutedSet)
+					{
+						muted = mediaPlayerMuted;
+					}
+					else if (mediaPlayerMuted != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).muted)
+					{
+						dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, muted,  volume, audioPan));
+					}
+					if (mediaPlayerAudioPanSet)
+					{
+						audioPan = mediaPlayerAudioPan;
+					}
+					else if (mediaPlayerAudioPan != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).pan)
+					{
+						dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
+					}				
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_AUDIO_CHANGE;		
 					break;
 				case MediaTraitType.SEEK:
 					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE, onSeeking);
 					_canSeek = add;					
+					if ( SeekTrait(media.getTrait(MediaTraitType.SEEK)).seeking != false)
+					{
+						dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, add));
+					}					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_SEEK_CHANGE;							
 					break;
-				case MediaTraitType.DYNAMIC_STREAM:						
-					_isDynamicStream = add;						
-					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;	
+				case MediaTraitType.DYNAMIC_STREAM:					
+					_isDynamicStream = add;	
 					if (mediaPlayerMaxAllowedDynamicStreamIndexSet)
 					{
 						maxAllowedDynamicStreamIndex = mediaPlayerMaxAllowedDynamicStreamIndex;
@@ -1401,24 +1409,32 @@ package org.osmf.media
 					{
 						autoDynamicStreamSwitch = mediaPlayerAutoDynamicStreamSwitch;
 					}
-					else if (!autoDynamicStreamSwitch)  //If the new trait has auto == false
+					else if (mediaPlayerAutoDynamicStreamSwitch != DynamicStreamTrait(media.getTrait(MediaTraitType.DYNAMIC_STREAM)).autoSwitch)
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch)); 
 					}
-					if (dynamicStreamSwitching) //If we are in the middle of a switch, notify.
+					if (DynamicStreamTrait(media.getTrait(MediaTraitType.DYNAMIC_STREAM)).switching) //If we are in the middle of a switch, notify.
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
 					}
 					dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
+					eventType = MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE;						
 					break;						
-				case MediaTraitType.DISPLAY_OBJECT:							
-					_hasDisplayObject = add;
+				case MediaTraitType.DISPLAY_OBJECT:						
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
-					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
-					dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
+					_hasDisplayObject = add;
+					if (DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).displayObject != null)
+					{
+						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
+					}
+					if (DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).mediaHeight != 0 ||
+						DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).mediaWidth != 0)
+					{
+						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
+					}					
 					break;	
 				case MediaTraitType.LOAD:					
-					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);									
+					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);			
 					_canLoad = add;		
 					if (add)
 					{
@@ -1441,29 +1457,41 @@ package org.osmf.media
 						{
 							_bytesLoadedTimer.stop();					
 						}			
+					}	
+					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesLoaded > 0)
+					{
+						dispatchEvent(new LoadEvent(LoadEvent.BYTES_LOADED_CHANGE, false, false, null, bytesLoaded));
+					}
+					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesTotal > 0)
+					{
+						dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
 					}					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE;				
 					break;		
 				case MediaTraitType.BUFFER:
-					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);						
+					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);					
+					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;	
 					_canBuffer = add;
-					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;		
 					if (mediaPlayerBufferTimeSet)
 					{
 						bufferTime = mediaPlayerBufferTime;	
 					}
-					else
+					else if (mediaPlayerBufferTime != BufferTrait(media.getTrait(MediaTraitType.BUFFER)).bufferTime)
 					{
-						dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, false, false, true, bufferTime));
+						dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, 
+							false, 
+							false, 
+							false,
+							bufferTime));
 					}
-					if (buffering)
+					if (BufferTrait(media.getTrait(MediaTraitType.BUFFER)).buffering)
 					{
-						dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, true, bufferTime));
-					}
+						dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, buffering));
+					}					
 					break;	
 				case MediaTraitType.DRM:					
-					_hasDRM	= add;
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DRM_CHANGE;
+					_hasDRM	= add; 
 					dispatchEvent(new DRMEvent(DRMEvent.DRM_STATE_CHANGE, drmState, false, false, drmStartDate, drmEndDate, drmPeriod));
 					break;			
 			}					 
