@@ -50,7 +50,6 @@ package org.osmf.elements
 		// Tests
 		//
 
-		/* TODO: Reenable these two tests once we have a composite DRM trait.
 		public function testGetTraitTypesDynamically():void
 		{
 			var serial:SerialElement = createSerialElement();
@@ -190,7 +189,6 @@ package org.osmf.elements
 			serial.addChild(child5);
 			assertHasTraits(serial, allTraitTypes);
 		}
-		*/
 		
 		override public function testMediaErrorEventDispatch():void
 		{

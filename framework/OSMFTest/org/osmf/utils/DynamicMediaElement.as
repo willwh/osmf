@@ -28,10 +28,11 @@ package org.osmf.utils
 	import org.osmf.traits.AudioTrait;
 	import org.osmf.traits.BufferTrait;
 	import org.osmf.traits.DRMTrait;
+	import org.osmf.traits.DVRTrait;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.DynamicStreamTrait;
-	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayTrait;
@@ -81,7 +82,10 @@ package org.osmf.utils
 							break;
 						case MediaTraitType.DRM:
 							trait = useDynamicTraits ? new DynamicDRMTrait() : new DRMTrait();
-							break;	
+							break;
+						case MediaTraitType.DVR:
+							trait = new DVRTrait();
+							break;
 						default:
 							break;
 					}
