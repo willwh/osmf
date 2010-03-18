@@ -46,16 +46,12 @@
 			import org.osmf.media.URLResource;
 			import org.osmf.events.*;
 						
-			private static const REMOTE_PDL:String = "http://mediapm.edgesuite.net/osmf/content/test/cuepoints/spacealonehd_sounas_640_400.flv";
-			private static const REMOTE_STREAM:String = "rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/cuepoints/spacealonehd_sounas_640.f4v";
 			private static const REMOTE_STREAM_WITH_NAV:String = "rtmp://cp67126.edgefcs.net/ondemand/mp4:mediapm/osmf/content/test/cuepoints/spacealonehd_sounas_640_with_nav.f4v";
 						
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
 			private static const MAX_VIDEO_WIDTH:int = 480;
 			private static const MAX_VIDEO_HEIGHT:int = 270;
 			
-			private static const CUSTOM_NAMESPACE:String = "org.osmf.cuePointSample.ascuepoint";	
-						
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
 			private var ignoreDynamicCuePoints:Boolean;
@@ -65,7 +61,6 @@
 			[Bindable]
 			private var _cuePointsCollection:ArrayCollection;
 			
-			private var videoElement:VideoElement;
 			private var mediaPlayer:MediaPlayer;
 			
 			public static function timeCode(sec:Number):String 
@@ -98,38 +93,74 @@
 				waitForSeek = false;
 				ignoreDynamicCuePoints = false;
 
-				videoElement = new VideoElement(new URLResource(REMOTE_STREAM_WITH_NAV));
+				var mediaElement:MediaElement = new VideoElement(new URLResource(REMOTE_STREAM_WITH_NAV));
 				
 				// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
 				// when the SeekTrait is added
-				videoElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
 				// Listen for cue points being added.
 				//
 				
-				dynamicTimelineMetadata = new TimelineMetadata(videoElement);
-				videoElement.addMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE, dynamicTimelineMetadata);
-				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
-				dynamicTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
-
-				embeddedTimelineMetadata = new TimelineMetadata(videoElement);
-				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
-				embeddedTimelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
-				videoElement.addMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE, embeddedTimelineMetadata);
-				
-				// Show all the cue points found in the media.
-				_cuePointsCollection = new ArrayCollection();
-				for (var i:int = 0; i < dynamicTimelineMetadata.numMarkers; i++)
+				embeddedTimelineMetadata = mediaElement.getMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+				if (embeddedTimelineMetadata == null)
 				{
-					_cuePointsCollection.addItem(dynamicTimelineMetadata.getMarkerAt(i));
+					mediaElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
 				}
-				for (i = 0; i < embeddedTimelineMetadata.numMarkers; i++)
+				else
 				{
-					_cuePointsCollection.addItem(embeddedTimelineMetadata.getMarkerAt(i));
+					processMetadata(mediaElement, true);
+				}
+				
+				dynamicTimelineMetadata = mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+				if (dynamicTimelineMetadata == null)
+				{
+					mediaElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+				}
+				else
+				{
+					processMetadata(mediaElement, false);
 				}
 																
-				setMediaElement(videoElement);
+				setMediaElement(mediaElement);
 				enablePlayerControls(true);
+			}
+			
+			private function onMetadataAdd(event:MediaElementEvent):void
+			{
+				if (event.namespaceURL == CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE)
+				{
+					processMetadata(event.target as MediaElement, true);
+				}
+				else if (event.namespaceURL == CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE)
+				{
+					processMetadata(event.target as MediaElement, false);
+				}
+			}
+			
+			private function processMetadata(mediaElement:MediaElement, isEmbeddedMetadata:Boolean):void
+			{
+				var timelineMetadata:TimelineMetadata = null;
+				if (isEmbeddedMetadata)
+				{
+					embeddedTimelineMetadata = mediaElement.getMetadata(CuePoint.EMBEDDED_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+					timelineMetadata = embeddedTimelineMetadata;
+				}
+				else
+				{
+					dynamicTimelineMetadata = mediaElement.getMetadata(CuePoint.DYNAMIC_CUEPOINTS_NAMESPACE) as TimelineMetadata;
+					timelineMetadata = dynamicTimelineMetadata;
+				}
+				
+				timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_TIME_REACHED, onCuePoint);
+				timelineMetadata.addEventListener(TimelineMetadataEvent.MARKER_ADD, onCuePointAdd);
+
+				// Show all the cue points found in the media.
+				_cuePointsCollection = new ArrayCollection();
+				for (var i:int = 0; i < timelineMetadata.numMarkers; i++)
+				{
+					_cuePointsCollection.addItem(timelineMetadata.getMarkerAt(i));
+				}
 			}
 			
 			private function setMediaElement(value:MediaElement):void
