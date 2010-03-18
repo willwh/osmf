@@ -59,7 +59,7 @@ package org.osmf.net
 		public static const RECORDED:String = "recorded";
 
 		/**
-		 * The LIVE_OR_RECORDED stream type represents any possible stream type.
+		 * The LIVE_OR_RECORDED stream type represents a live or a recorded stream.
 		 * 
 		 *  
 		 *  @langversion 3.0

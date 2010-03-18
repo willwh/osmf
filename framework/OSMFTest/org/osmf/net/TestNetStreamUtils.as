@@ -39,14 +39,14 @@ package org.osmf.net
 	{
 		public function testGetStreamType():void
 		{
-			assertTrue(NetStreamUtils.getStreamType(null) == StreamType.LIVE_OR_RECORDED);
-			assertTrue(NetStreamUtils.getStreamType(new NullResource()) == StreamType.LIVE_OR_RECORDED);
-			assertTrue(NetStreamUtils.getStreamType(new URLResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
-			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(null) == StreamType.RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new NullResource()) == StreamType.RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new URLResource("rtmp://example.com")) == StreamType.RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com")) == StreamType.RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED)) == StreamType.LIVE_OR_RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.LIVE)) == StreamType.LIVE);
 			assertTrue(NetStreamUtils.getStreamType(new StreamingURLResource("rtmp://example.com", StreamType.RECORDED)) == StreamType.RECORDED);
-			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com")) == StreamType.LIVE_OR_RECORDED);
+			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com")) == StreamType.RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED)) == StreamType.LIVE_OR_RECORDED);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE)) == StreamType.LIVE);
 			assertTrue(NetStreamUtils.getStreamType(new DynamicStreamingResource("rtmp://example.com", StreamType.RECORDED)) == StreamType.RECORDED);
@@ -123,29 +123,29 @@ package org.osmf.net
 			
 			var resource:MediaResourceBase = null;
 			var result:Object = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			resource = new NullResource();
 			result = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			resource = new URLResource("http://example.com");
 			result = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			resource = new StreamingURLResource("rtmp://example.com");
 			result = NetStreamUtils.getPlayArgsForResource(resource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			var streamingResource:StreamingURLResource = new StreamingURLResource("http://example.com");
 			streamingResource.clipStartTime = 10;
 			streamingResource.clipEndTime = 15;
 			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
-			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			// Now try with positive/non-default cases.
@@ -156,6 +156,16 @@ package org.osmf.net
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
+			streamingResource = new StreamingURLResource("rtmp://example.com", StreamType.RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			streamingResource = new StreamingURLResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
 			streamingResource = new DynamicStreamingResource("rtmp://example.com", StreamType.RECORDED);
 			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
@@ -164,6 +174,11 @@ package org.osmf.net
 			streamingResource = new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE);
 			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_LIVE &&
+					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
+
+			streamingResource = new DynamicStreamingResource("rtmp://example.com", StreamType.LIVE_OR_RECORDED);
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_ANY &&
 					   result["len"] == NetStreamUtils.PLAY_LEN_ARG_ALL);
 
 			streamingResource = new StreamingURLResource("rtmp://example.com");

@@ -47,7 +47,7 @@ package org.osmf.net
 		 * 
 		 * @param url The URL of the resource.
 		 * @param streamType The type of the stream. If null, defaults to
-		 * StreamType.ANY.
+		 * StreamType.RECORDED.
 		 * @param subclipStartTime Optional start time of the streaming
 		 * resource.  When specified, the stream will be presented as a
 		 * subclip, with playback beginning at the specified start time.
@@ -83,7 +83,7 @@ package org.osmf.net
 							, drmContentData:ByteArray = null
 							)
 		{
-			_streamType = streamType || StreamType.LIVE_OR_RECORDED;
+			_streamType = streamType || StreamType.RECORDED;
 			_clipStartTime = clipStartTime;
 			_clipEndTime = clipEndTime;
 			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
@@ -96,7 +96,7 @@ package org.osmf.net
 		}
 
 		/**
-         * <p>The StreamType for this resource. The default value is <code>StreamType.ANY</code>.
+         * <p>The StreamType for this resource. The default value is <code>StreamType.RECORDED</code>.
 		 * The StreamType class enumerates the valid stream types.</p>
 		 * <p/>
          * <p>This property may return the following string values:</p> 
@@ -106,8 +106,8 @@ package org.osmf.net
 		 *     <th>Description</th>
 		 *   </tr>
 		 *   <tr>
-		 * 	<td><code>StreamType.ANY</code></td>
-		 * 	<td>The StreamingURLResource represents any possible stream type (except DVR).</td>
+		 * 	<td><code>StreamType.LIVE_OR_RECORDED</code></td>
+		 * 	<td>The StreamingURLResource represents either a live or a recorded stream.</td>
 		 *   </tr>
 		 *   <tr>
 		 * 	<td><code>StreamType.LIVE</code></td>

@@ -44,7 +44,7 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param host A URL representing the host of the dynamic streaming resource.
-		 * @param streamType The type of the stream.  If null, defaults to StreamType.ANY.
+		 * @param streamType The type of the stream.  If null, defaults to StreamType.RECORDED.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10

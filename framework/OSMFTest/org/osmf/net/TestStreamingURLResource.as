@@ -41,7 +41,7 @@ package org.osmf.net
 		public function testStreamType():void
 		{
 			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
-			assertTrue(resource.streamType == StreamType.LIVE_OR_RECORDED);
+			assertTrue(resource.streamType == StreamType.RECORDED);
 			
 			resource = new StreamingURLResource("http://example.com", StreamType.LIVE);
 			assertTrue(resource.streamType == StreamType.LIVE);

@@ -80,7 +80,7 @@ package org.osmf.elements.f4mClasses
 		
 		/**
 		 * The &lt;streamType&gt; element is a string representing the way in which the media is streamed.
-		 * Valid values include "live", "recorded", and "any". It is assumed that all representations 
+		 * Valid values include "live", "recorded", and "liveOrRecorded". It is assumed that all representations 
 		 * of the media have the same stream type, hence its placement under the document root. 
 		 * It is optional.
 		 *  
