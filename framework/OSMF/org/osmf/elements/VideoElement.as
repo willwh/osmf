@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -122,7 +122,7 @@ package org.osmf.elements
 		/**
 		 * Constructor.
 		 * 
-		 * @param resource URLResource that points to the video source that the VideooElement
+		 * @param resource URLResource that points to the video source that the VideoElement
 		 * will use.  For dynamic streaming content, use a DynamicStreamingResource.
 		 * @param loader NetLoader used to load the video.  If null, the appropriate NetLoader
 		 * will be created based on the resource type.
