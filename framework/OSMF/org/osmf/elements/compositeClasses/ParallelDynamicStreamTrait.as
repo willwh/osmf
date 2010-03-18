@@ -223,8 +223,11 @@ package org.osmf.elements.compositeClasses
 			,   MediaTraitType.DYNAMIC_STREAM
 			);
 			
-			setNumDynamicStreams(bitrates.length);
-			maxAllowedIndex = bitrates.length -1;
+			if (bitrates.length > 0)
+			{
+				setNumDynamicStreams(bitrates.length);
+				maxAllowedIndex = bitrates.length -1;
+			}
 			
 			// Currently doesn't detect in place changes.
 			// since this is never called after an in place change, this check is good enough.

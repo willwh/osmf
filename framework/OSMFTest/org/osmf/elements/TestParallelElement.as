@@ -21,14 +21,9 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.events.Event;
-	
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.events.TimeEvent;
-	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.utils.DynamicMediaElement;
 	
@@ -47,7 +42,6 @@ package org.osmf.elements
 		// Tests
 		//
 		
-		/* TODO: Reenable these two tests once we have a composite DRM trait.
 		public function testGetTraitTypesDynamically():void
 		{
 			var parallel:ParallelElement = createParallelElement();
@@ -87,10 +81,7 @@ package org.osmf.elements
 			var mediaElement3:MediaElement = new DynamicMediaElement(allTraitTypes);
 			parallel.addChild(mediaElement3);
 			assertTrue(parallel.traitTypes.length == allTraitTypes.length);
-			for (var i:int = 0; i < allTraitTypes.length; i++)
-			{
-				assertTrue(parallel.traitTypes[i] == allTraitTypes[i]);
-			}
+			assertHasTraits(parallel, allTraitTypes);
 			
 			assertTrue(traitAddEventCount == allTraitTypes.length);
 			assertTrue(traitRemoveEventCount == 0);
@@ -100,10 +91,7 @@ package org.osmf.elements
 			// traits.
 			parallel.removeChild(mediaElement2);
 			assertTrue(parallel.traitTypes.length == allTraitTypes.length);
-			for (i = 0; i < allTraitTypes.length; i++)
-			{
-				assertTrue(MediaTraitType(parallel.traitTypes[i]) == allTraitTypes[i]);
-			}
+			assertHasTraits(parallel, allTraitTypes);
 			
 			assertTrue(traitAddEventCount == allTraitTypes.length);
 			assertTrue(traitRemoveEventCount == 0);
@@ -169,7 +157,105 @@ package org.osmf.elements
 			parallel.removeChild(mediaElement1);
 			assertHasTraits(parallel,[]);
 		}
-		*/
+		
+		public function testCompositeMetadata():void
+		{
+			var metadataAddCount:int = 0;
+			var metadataRemoveCount:int = 0;
+			
+			var composite:CompositeElement = createCompositeElement();
+			composite.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+			composite.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove);
+
+			var mediaElement1:MediaElement = new MediaElement();
+			var m1:Metadata = new Metadata();
+			m1.addValue("foo1", "foo2");
+			mediaElement1.addMetadata("ns1", m1);
+			
+			var mediaElement2:MediaElement = new MediaElement();
+			var m2:Metadata = new Metadata();
+			m2.addValue("bar1", "bar2");
+			mediaElement2.addMetadata("ns1", m2);
+			
+			assertTrue(composite.getMetadata("ns1") == null);
+
+			// Add the first child, this should give us our composite metadata.
+			composite.addChild(mediaElement1);
+			
+			var cm:Metadata = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == "foo2");
+			assertTrue(cm.getValue("bar1") == null);
+			
+			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataRemoveCount == 0);
+			
+			// Adding the second child shouldn't have an impact, since
+			// the composite metadata reflects the first child (in the
+			// absence of a non-default synthesizer).
+			composite.addChild(mediaElement2);
+			
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == "foo2");
+			assertTrue(cm.getValue("bar1") == null);
+			
+			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataRemoveCount == 0);
+			
+			// Adding and removing metadata on a child should trigger
+			// some events.
+			mediaElement1.addMetadata("ns2", new Metadata());
+			assertTrue(metadataAddCount == 1);
+			assertTrue(metadataRemoveCount == 0);
+
+			mediaElement2.addMetadata("ns2", new Metadata());
+			
+			// TODO: This probably shouldn't register as an add, given that
+			// we're adding it to the second child.  But I'm not sure how
+			// (or if) to fix this.  (Ditto for the second remove, below.)
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 0);
+
+			mediaElement1.removeMetadata("ns2");
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 1);
+
+			mediaElement2.removeMetadata("ns2");
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+			
+			// If we remove the first child, the metadata of the second
+			// child will be reflected through the composite.
+			composite.removeChild(mediaElement1);
+
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == null);
+			assertTrue(cm.getValue("bar1") == "bar2");
+			
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+
+			// And if we remove the last child, the metadata is gone.
+			composite.removeChild(mediaElement2);
+
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm == null);
+
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+			
+			function onMetadataAdd(event:MediaElementEvent):void
+			{
+				metadataAddCount++;
+			} 
+
+			function onMetadataRemove(event:MediaElementEvent):void
+			{
+				metadataRemoveCount++;
+			} 
+		}
 		
 		override public function testMediaErrorEventDispatch():void
 		{

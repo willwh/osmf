@@ -300,7 +300,7 @@ package org.osmf.traits
 				// is now out of range.
 				if (maxAllowedIndex >= _numDynamicStreams)
 				{
-					maxAllowedIndex = _numDynamicStreams - 1;
+					maxAllowedIndex = Math.max(0, _numDynamicStreams - 1);
 				}
 				
 				dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE));

@@ -28,7 +28,7 @@ package org.osmf.elements.compositeClasses
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MetadataEvent;
-	import org.osmf.logging.ILogger;
+	import org.osmf.media.MediaElement;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataGroup;
 	import org.osmf.metadata.MetadataSynthesizer;
@@ -533,7 +533,10 @@ package org.osmf.elements.compositeClasses
 						= new CompositeMetadataEvent
 							( CompositeMetadataEvent.METADATA_GROUP_ADD
 							, false, false
-							, child, metadata, metadataGroup
+							, child
+							, metadataNamespaceURL
+							, metadata
+							, metadataGroup
 							);
 				}
 				
@@ -547,6 +550,7 @@ package org.osmf.elements.compositeClasses
 						( CompositeMetadataEvent.CHILD_METADATA_ADD
 						, false, false
 						, child
+						, metadataNamespaceURL
 						, metadata
 						)
 					);
@@ -576,7 +580,10 @@ package org.osmf.elements.compositeClasses
 						= new CompositeMetadataEvent
 							( CompositeMetadataEvent.METADATA_GROUP_REMOVE
 							, false, false
-							, child, metadata, metadataGroup
+							, child
+							, metadataNamespaceURL
+							, metadata
+							, metadataGroup
 							);
 							
 					delete childMetadataGroups[childrenNamespaceURL];
@@ -591,6 +598,7 @@ package org.osmf.elements.compositeClasses
 						( CompositeMetadataEvent.CHILD_METADATA_REMOVE
 						, false, false
 						, child
+						, metadataNamespaceURL
 						, metadata
 						)
 					);
@@ -664,7 +672,7 @@ package org.osmf.elements.compositeClasses
 				= new CompositeMetadataEvent
 					( CompositeMetadataEvent.METADATA_GROUP_CHANGE
 					, false, false
-					, null, null
+					, null, null, null
 					, metadataGroup
 					, metadataSynthesizer
 					)
@@ -685,7 +693,15 @@ package org.osmf.elements.compositeClasses
 				 	)
 				// Last, revert to the default synthesizer:
 				|| new MetadataSynthesizer();
-				
+			
+			// If the activeChild was just removed, don't let it influence the
+			// synthesis decision.
+			var serialElementActiveChild:Metadata = _activeChild;
+			if (_activeChild != null && metadataGroup.parentMetadatas.indexOf(_activeChild) == -1)
+			{
+				serialElementActiveChild = null;
+			}
+			
 			// Run the metadata synthesizer:
 			synthesizedMetadata
 				= metadataSynthesizer.synthesize
@@ -693,7 +709,7 @@ package org.osmf.elements.compositeClasses
 					, this
 					, metadataGroup.metadatas
 					, _mode
-					, _activeChild
+					, serialElementActiveChild
 					);
  		
 			if (synthesizedMetadata == null)

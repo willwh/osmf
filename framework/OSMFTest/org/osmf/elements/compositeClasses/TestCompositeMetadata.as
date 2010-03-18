@@ -126,6 +126,7 @@ package org.osmf.elements.compositeClasses
 		public function testCompositeMetadataEvent():void
 		{
 			var metadata:Metadata = new Metadata();
+			var childMetadataNamespaceURL:String = "foo";
 			var childMetadata:Metadata = new Metadata();
 			var metadataGroup:MetadataGroup = new MetadataGroup("");
 			var metadataSynthesizer:MetadataSynthesizer = new AMetadataSynthesizer();
@@ -133,11 +134,12 @@ package org.osmf.elements.compositeClasses
 				= new CompositeMetadataEvent
 					( CompositeMetadataEvent.CHILD_ADD
 					, false, false
-					, metadata, childMetadata, metadataGroup, metadataSynthesizer
+					, metadata, childMetadataNamespaceURL, childMetadata, metadataGroup, metadataSynthesizer
 					);
 					
 			assertNotNull(e);
 			assertEquals(metadata, e.child);
+			assertEquals(childMetadataNamespaceURL, e.childMetadataNamespaceURL);
 			assertEquals(childMetadata, e.childMetadata);
 			assertEquals(metadataGroup, e.metadataGroup);
 			assertEquals(metadataSynthesizer, e.suggestedMetadataSynthesizer);

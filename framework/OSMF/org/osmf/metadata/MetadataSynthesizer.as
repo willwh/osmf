@@ -95,11 +95,9 @@ package org.osmf.metadata
 			}
 			else // mode is PARALLEL
 			{
-				// If the metadatas consist of a single Metadata, then
-				// return that as the synthesized metadata. Otherwise
-				// return null:
+				// Return the first metadata as the synthesized metadata:
 				result
-					= (metadatas.length == 1)
+					= (metadatas.length >= 1)
 						? metadatas[0]
 						: null;
 			}

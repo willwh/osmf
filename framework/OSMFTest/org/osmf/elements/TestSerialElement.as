@@ -21,19 +21,11 @@
 *****************************************************/
 package org.osmf.elements
 {
-	import __AS3__.vec.Vector;
-	
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	
 	import org.osmf.events.*;
 	import org.osmf.media.MediaElement;
-	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.*;
 	import org.osmf.utils.DynamicMediaElement;
-	import org.osmf.utils.SimpleLoader;
-	import org.osmf.utils.URL;
 
 	public class TestSerialElement extends TestCompositeElement
 	{
@@ -204,6 +196,105 @@ package org.osmf.elements
 			super.testNestedMediaErrorEventDispatch();
 		}
 
+		
+		public function testCompositeMetadata():void
+		{
+			var metadataAddCount:int = 0;
+			var metadataRemoveCount:int = 0;
+			
+			var composite:CompositeElement = createCompositeElement();
+			composite.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
+			composite.addEventListener(MediaElementEvent.METADATA_REMOVE, onMetadataRemove);
+
+			var mediaElement1:MediaElement = new MediaElement();
+			var m1:Metadata = new Metadata();
+			m1.addValue("foo1", "foo2");
+			mediaElement1.addMetadata("ns1", m1);
+			
+			var mediaElement2:MediaElement = new MediaElement();
+			var m2:Metadata = new Metadata();
+			m2.addValue("bar1", "bar2");
+			mediaElement2.addMetadata("ns1", m2);
+			
+			assertTrue(composite.getMetadata("ns1") == null);
+
+			// Add the first child, this should give us our composite metadata.
+			composite.addChild(mediaElement1);
+			
+			var cm:Metadata = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == "foo2");
+			assertTrue(cm.getValue("bar1") == null);
+			
+			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataRemoveCount == 0);
+			
+			// Adding the second child shouldn't have an impact, since
+			// the composite metadata reflects the active child.
+			composite.addChild(mediaElement2);
+			
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == "foo2");
+			assertTrue(cm.getValue("bar1") == null);
+			
+			assertTrue(metadataAddCount == 0);
+			assertTrue(metadataRemoveCount == 0);
+			
+			// Adding and removing metadata on a child should trigger
+			// some events.
+			mediaElement1.addMetadata("ns2", new Metadata());
+			assertTrue(metadataAddCount == 1);
+			assertTrue(metadataRemoveCount == 0);
+
+			mediaElement2.addMetadata("ns2", new Metadata());
+			
+			// TODO: This probably shouldn't register as an add, given that
+			// we're adding it to a non-active child.  But I'm not sure how
+			// (or if) to fix this.  (Ditto for the second remove, below.)
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 0);
+
+			mediaElement1.removeMetadata("ns2");
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 1);
+
+			mediaElement2.removeMetadata("ns2");
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+			
+			// If we remove the first child, the second child will
+			// become active.
+			composite.removeChild(mediaElement1);
+
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm != null);
+			assertTrue(cm.getValue("foo1") == null);
+			assertTrue(cm.getValue("bar1") == "bar2");
+			
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+
+			// And if we remove the last child, the metadata is gone.
+			composite.removeChild(mediaElement2);
+
+			cm = composite.getMetadata("ns1");
+			assertTrue(cm == null);
+
+			assertTrue(metadataAddCount == 2);
+			assertTrue(metadataRemoveCount == 2);
+			
+			function onMetadataAdd(event:MediaElementEvent):void
+			{
+				metadataAddCount++;
+			} 
+
+			function onMetadataRemove(event:MediaElementEvent):void
+			{
+				metadataRemoveCount++;
+			} 
+		}
+		
 		// Internals
 		//
 

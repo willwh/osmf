@@ -27,7 +27,11 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.metadata.MetadataGroup;
 	import org.osmf.metadata.MetadataSynthesizer;
 
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Defines the event class that CompositeMetadata uses on signaling
 	 * various events.
 	 *  
@@ -36,7 +40,7 @@ package org.osmf.elements.compositeClasses
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */	
-	internal class CompositeMetadataEvent extends Event
+	public class CompositeMetadataEvent extends Event
 	{
 		public static const CHILD_ADD:String = "childAdd";
 		public static const CHILD_REMOVE:String = "childRemove";
@@ -59,6 +63,7 @@ package org.osmf.elements.compositeClasses
 							, bubbles:Boolean=false
 							, cancelable:Boolean=false
 							, child:Metadata = null
+							, childMetadataNamespaceURL:String = null
 							, childMetadata:Metadata = null
 							, metadataGroup:MetadataGroup = null
 							, suggestedMetadataSynthesizer:MetadataSynthesizer = null
@@ -67,6 +72,7 @@ package org.osmf.elements.compositeClasses
 			super(type, bubbles, cancelable);
 			
 			_child = child;
+			_childMetadataNamespaceURL = childMetadataNamespaceURL;
 			_childMetadata = childMetadata;
 			_metadataGroup = metadataGroup;
 			_suggestedMetadataSynthesizer = suggestedMetadataSynthesizer;
@@ -85,6 +91,19 @@ package org.osmf.elements.compositeClasses
 			return _child;
 		}
 		
+		/**
+		 * Defines the namespaceURL of the childMetadata associated with the event.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function get childMetadataNamespaceURL():String
+		{
+			return _childMetadataNamespaceURL;
+		}
+
 		/**
 		 * Defines the metadata of the child that is associated with the event.
 		 *  
@@ -142,7 +161,8 @@ package org.osmf.elements.compositeClasses
 		{
 			return new CompositeMetadataEvent
 				( type , bubbles, cancelable
-				, _child, _childMetadata, _metadataGroup, _suggestedMetadataSynthesizer
+				, _child, _childMetadataNamespaceURL, _childMetadata
+				, _metadataGroup, _suggestedMetadataSynthesizer
 				);
 		}
 		
@@ -150,6 +170,7 @@ package org.osmf.elements.compositeClasses
 		//
 		
 		private var _child:Metadata;
+		private var _childMetadataNamespaceURL:String;
 		private var _childMetadata:Metadata;
 		private var _metadataGroup:MetadataGroup;
 		private var _suggestedMetadataSynthesizer:MetadataSynthesizer;
