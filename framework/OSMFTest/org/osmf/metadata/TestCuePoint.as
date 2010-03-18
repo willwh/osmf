@@ -27,18 +27,18 @@ package org.osmf.metadata
 	{
 		public function testCuePoint():void
 		{
-			var testArray:Array = [{key:100, value:"a"}, {key:101, value:"b"}];
-			var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, 120, "test cue point", testArray, 5);
+			var params:Object = new Object();
+			params["100"] = "a";
+			params["101"] = "b";
+			var cuePoint:CuePoint = new CuePoint(CuePointType.ACTIONSCRIPT, 120, "test cue point", params, 5);
 			
 			assertEquals(CuePointType.ACTIONSCRIPT, cuePoint.type);
 			assertEquals(120, cuePoint.time);
 			assertEquals("test cue point", cuePoint.name);
 			
-			var params:Array = cuePoint.parameters;
-			assertEquals(100, params[0].key);
-			assertEquals("a", params[0].value);
-			assertEquals(101, params[1].key);
-			assertEquals("b", params[1].value);
+			params = cuePoint.parameters;
+			assertEquals("a", params["100"]);
+			assertEquals("b", params["101"]);
 			
 			assertEquals(5, cuePoint.duration);
 		}

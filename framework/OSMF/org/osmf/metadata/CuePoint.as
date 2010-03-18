@@ -61,7 +61,7 @@ package org.osmf.metadata
 			( type:String
 			, time:Number
 			, name:String
-			, parameters:Array
+			, parameters:Object
 			, duration:Number=NaN
 			)
 		{
@@ -106,13 +106,13 @@ package org.osmf.metadata
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get parameters():Array
+		public function get parameters():Object
 		{
 			return _parameters;
 		}
 		
 		private var _name:String;
 		private var _type:String;
-		private var _parameters:Array;	// Custom name/value data for the cue point
+		private var _parameters:Object;	// Custom name/value data for the cue point
 	}
 }
