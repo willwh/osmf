@@ -190,6 +190,8 @@ package org.osmf.net
 			else if (newState == LoadState.UNINITIALIZED)
 			{
 				netStream = null;
+				dispatchEvent(new LoadEvent(LoadEvent.BYTES_LOADED_CHANGE, false, false, null, bytesLoaded));
+				dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));	
 			}
 		}
 		
