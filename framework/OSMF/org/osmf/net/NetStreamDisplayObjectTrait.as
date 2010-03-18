@@ -55,12 +55,16 @@ package org.osmf.net
 				
 		private function onFrame(event:Event):void
 		{	
-			if	(	Video(displayObject).videoWidth != 0
-				&&	Video(displayObject).videoHeight != 0
+			if	(  Video(displayObject).videoWidth != 0
+				&& Video(displayObject).videoHeight != 0			
 				)
 			{	
-				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);
-				newMediaSize(Video(displayObject).videoWidth, Video(displayObject).videoHeight);					
+				if (Video(displayObject).videoWidth != mediaWidth
+					&& Video(displayObject).videoHeight != mediaHeight)
+				{
+					newMediaSize(Video(displayObject).videoWidth, Video(displayObject).videoHeight);		
+				}
+				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);							
 			}
 		}
 	
@@ -72,9 +76,7 @@ package org.osmf.net
     				||	info.height != mediaHeight
     				)
     			)
-    		{	    				
-    			displayObject.removeEventListener(Event.ADDED_TO_STAGE, onStage);
-				displayObject.removeEventListener(Event.ENTER_FRAME, onFrame);	
+    		{	    			
 				newMediaSize(info.width, info.height);
     		}
     	}

@@ -1772,9 +1772,9 @@ package org.osmf.media
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var inExecuteAutoRewind:Boolean = false;
 		
-		// Properties of the MediaPlayer, as opposed to properties that apply
-		// to a specific MediaElement.  We use xxxSet Booleans to distinguish
-		// between explicit properties and implicit properties.
+		// Persistent properties of the MediaPlayer, as opposed to properties that apply
+		// to a specific MediaElement.  We use xxxSet Booleans to determine
+		// if a property has been set by a 
 		private var mediaPlayerVolume:Number = 1;
 		private var mediaPlayerVolumeSet:Boolean = false;
 		private var mediaPlayerMuted:Boolean = false;
