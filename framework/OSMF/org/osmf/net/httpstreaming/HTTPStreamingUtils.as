@@ -21,15 +21,11 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
-	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
@@ -82,53 +78,7 @@ package org.osmf.net.httpstreaming
 			}
 			return metadata;
 		}
-		
-		/**
-		 * @private
-		 * 
-		 * Given a resource of type MediaResourceBase, it checks whether the resource is suitable for 
-		 * HTTP streaming. The criteria is as follows:
-		 * 
-		 * 1. If the resource is of type URLResource
-		 * 2. If the resource has a Metadata object under the namespace MetadataNamespaces.HTTP_STREAMING_METADATA
-		 * 3. If the Metadata contains a URL that points to the bootstrap information or if the Metadata
-		 *    contains the bytes of the bootstrap information. Either is fine but cannot be absent at the same time.
-		 * 
-		 * If all three criteria are satisfied, the Metadata will be returned. Otherwise, null.
-		 * 
-		 * @param resource The MediaResourceBase to be loaded
-		 * 
-		 * @return The Metadata if the resource can be loaded for HTTP streaming, null otherwise.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static function getHTTPStreamingMetadata(resource:MediaResourceBase):Metadata
-		{
-			// This is how we prevent HTTP streamed playback in pre-10.1 players.
-			var httpStreamingSupported:Boolean = false;
-			CONFIG::FLASH_10_1
-			{
-				httpStreamingSupported = true;
-			}
-			if (httpStreamingSupported == false)
-			{
-				return null;
-			}
-			
-			var metadata:Metadata = null;
-			
-			var urlResource:URLResource = resource as URLResource;
-			if (urlResource != null)
-			{
-				metadata = urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
-			}
-			
-			return metadata;
-		}
-		
+
 		/**
 		 * @private
 		 **/
@@ -136,7 +86,7 @@ package org.osmf.net.httpstreaming
 		{
 			var indexInfo:HTTPStreamingF4FIndexInfo = null;
 			
-			var httpMetadata:Metadata = getHTTPStreamingMetadata(resource);
+			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
 			if (httpMetadata != null)
 			{
 				var serverBaseURLs:Vector.<String>

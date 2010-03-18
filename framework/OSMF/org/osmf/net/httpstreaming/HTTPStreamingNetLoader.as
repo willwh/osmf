@@ -21,13 +21,13 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamSwitchManager;
@@ -66,7 +66,7 @@ package org.osmf.net.httpstreaming
 		 */
 		override public function canHandleResource(resource:MediaResourceBase):Boolean
 		{
-			return (HTTPStreamingUtils.getHTTPStreamingMetadata(resource) != null);
+			return (resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata) != null;
 		}
 		
 		/**

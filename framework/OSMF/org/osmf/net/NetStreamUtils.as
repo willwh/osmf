@@ -27,7 +27,7 @@ package org.osmf.net
 	
 	CONFIG::FLASH_10_1
 	{
-	import org.osmf.net.httpstreaming.HTTPStreamingUtils;
+	import org.osmf.metadata.MetadataNamespaces;
 	}
 	
 	[ExcludeClass]
@@ -93,14 +93,14 @@ package org.osmf.net
 				{
 					result = NetStreamUtils.isRTMPStream(urlResource.url);
 					
-					CONFIG::FLASH_10_1
+ 					CONFIG::FLASH_10_1
 					{
 					if (result == false)
 					{
-						result = HTTPStreamingUtils.getHTTPStreamingMetadata(urlResource) != null;
+						result = urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) != null;
 					}
 					}
-				}
+ 				}
 			}
 			
 			return result;
@@ -143,7 +143,7 @@ package org.osmf.net
 		 */
 		public static function getStreamType(resource:MediaResourceBase):String
 		{
-			// Default to ANY.
+			// Default to LIVE_OR_RECORDED.
 			var streamType:String = StreamType.LIVE_OR_RECORDED;
 			
 			var streamingURLResource:StreamingURLResource = resource as StreamingURLResource;
