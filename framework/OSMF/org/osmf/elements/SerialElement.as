@@ -131,6 +131,33 @@ package org.osmf.elements
 			reusableTraits = new Dictionary();
 		}
 		
+		// Protected
+		//
+		
+		/**
+		 * The currently active child of this SerialElement.
+		 * 
+		 * This is not exposed as a public API because clients of a SerialElement
+		 * should be able to work with the base MediaElement API, and not rely
+		 * on subclass methods.  It's exposed as a protected method so that
+		 * implementors can subclass SerialElement use the indication of which child
+		 * is the current child to change the behavior of the SerialElement as a whole.
+		 **/
+		protected final function get currentChild():MediaElement
+		{
+			return traitAggregator.listenedChild;
+		}
+		
+		/**
+		 * Method invoked when the currentChild property changes.  The base implementation
+		 * does nothing.
+		 * 
+		 * Clients can override this to do custom processing when the current child changes. 
+		 **/
+		protected function currentChildChange():void
+		{
+		}
+		
 		// Overrides
 		//
 		
@@ -158,9 +185,9 @@ package org.osmf.elements
 			if (traitAggregator.listenedChild == null)
 			{
 				traitAggregator.listenedChild = child;
-				
-				updateListenedChildIndex();
 			}
+			
+			updateListenedChildIndex();
 		}
 
 		/**
@@ -267,6 +294,9 @@ package org.osmf.elements
 					
 			// Update the index of the current child.
 			updateListenedChildIndex();
+			
+			// Inform any interested subclasses of the change.
+			currentChildChange();
 		}
 
 		private function updateListenedChildIndex():void
