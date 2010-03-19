@@ -84,6 +84,7 @@
     <classEntry path="org.osmf.events.ContainerChangeEvent"/>
     <classEntry path="org.osmf.events.DRMEvent"/>
     <classEntry path="org.osmf.events.DVREvent"/>
+    <classEntry path="org.osmf.events.DVRStreamInfoEvent"/>
     <classEntry path="org.osmf.events.DisplayObjectEvent"/>
     <classEntry path="org.osmf.events.DynamicStreamEvent"/>
     <classEntry path="org.osmf.events.HTTPStreamingFileHandlerEvent"/>
@@ -137,6 +138,7 @@
     <classEntry path="org.osmf.media.MediaFactoryItem"/>
     <classEntry path="org.osmf.media.MediaFactoryItemType"/>
     <classEntry path="org.osmf.media.MediaPlayer"/>
+    <classEntry path="org.osmf.media.MediaPlayerSprite"/>
     <classEntry path="org.osmf.media.MediaPlayerState"/>
     <classEntry path="org.osmf.media.MediaResourceBase"/>
     <classEntry path="org.osmf.media.MediaTraitResolver"/>

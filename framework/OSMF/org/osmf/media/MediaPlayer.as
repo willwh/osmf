@@ -23,6 +23,7 @@ package org.osmf.media
 {
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -294,6 +295,7 @@ package org.osmf.media
 						updateTraitListeners(traitType, true);
 					}
 				}
+				dispatchEvent(new Event("mediaChange"));				
 			}
 		}
 		

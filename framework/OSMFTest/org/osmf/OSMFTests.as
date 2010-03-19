@@ -25,13 +25,13 @@ package org.osmf
 	
 	import org.osmf.containers.*;
 	import org.osmf.display.*;
+	import org.osmf.elements.*;
 	import org.osmf.elements.audioClasses.*;
 	import org.osmf.elements.beaconClasses.*;
 	import org.osmf.elements.compositeClasses.*;
 	import org.osmf.elements.f4mClasses.*;
 	import org.osmf.elements.htmlClasses.*;
 	import org.osmf.elements.proxyClasses.*;
-	import org.osmf.elements.*;
 	import org.osmf.events.*;
 	import org.osmf.layout.*;
 	import org.osmf.logging.*;
@@ -56,7 +56,7 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-			
+									
 			// Logging
 			//
 			
@@ -321,6 +321,9 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithProxyElement);
 			addTestSuite(TestMediaPlayerWithDurationElement);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
+
+			// MediaPlayerSprite
+			addTestSuite(TestMediaPlayerSprite);
 
 			// This test fails intermittently on the build machine.
 			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
