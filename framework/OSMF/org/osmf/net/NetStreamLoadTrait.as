@@ -99,12 +99,12 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-	    public function get switchManager():NetStreamSwitchManager
+	    public function get switchManager():NetStreamSwitchManagerBase
 	    {	   	
 	   		return _switchManager;
 	   	}
 	   	
-	   	public function set switchManager(value:NetStreamSwitchManager):void
+	   	public function set switchManager(value:NetStreamSwitchManagerBase):void
 	   	{
 	   		_switchManager = value;
 	   	}
@@ -233,7 +233,7 @@ package org.osmf.net
 		}
 
 	   	private var _connection:NetConnection;
-	   	private var _switchManager:NetStreamSwitchManager;
+	   	private var _switchManager:NetStreamSwitchManagerBase;
 	   	private var traits:Dictionary;
 	   	private var _netConnectionFactory:NetConnectionFactoryBase;
 

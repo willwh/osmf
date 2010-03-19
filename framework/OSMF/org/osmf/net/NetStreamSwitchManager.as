@@ -24,7 +24,6 @@ package org.osmf.net
 	import __AS3__.vec.Vector;
 	
 	import flash.errors.IllegalOperationError;
-	import flash.events.EventDispatcher;
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.net.NetConnection;
@@ -44,19 +43,10 @@ package org.osmf.net
 	}
 	
 	/**
-	 * Class which manages transitions between multi-bitrate (MBR) streams.
-	 * 
-	 * The NetStreamSwitchManager can work in manual or auto mode.  For the
-	 * former, it will execute the NetStream call that performs the switch
-	 * upon request.  For the latter, it will execute the switch based on
-	 * a set of configurable switching rules.
-	 * 
-	 * A NetStreamSwitchManager doesn't dispatch any events indicating state
-	 * changes.  The assumption is that a client will already be listening
-	 * to events on the NetStream, so there's no need for duplicative events
-	 * here.  
+	 * Class which manages transitions between multi-bitrate (MBR) streams
+	 * using configurable switching rules.
 	 **/
-	public class NetStreamSwitchManager extends EventDispatcher
+	public class NetStreamSwitchManager extends NetStreamSwitchManagerBase
 	{
 		/**
 		 * Constructor.
@@ -74,18 +64,17 @@ package org.osmf.net
 			, metrics:NetStreamMetricsBase
 			, switchingRules:Vector.<SwitchingRuleBase>)
 		{
+			super();
+			
 			this.connection = connection;
 			this.netStream = netStream;
 			this.dsResource = resource;
 			this.metrics = metrics;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
 
-			_autoSwitch = true;
-			_maxAllowedIndex = int.MAX_VALUE;
-			
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
-									
+			
 			failedDSI = new Dictionary();
 			
 			// We set the bandwidth in both directions based on a multiplier applied to the bitrate level. 
@@ -99,23 +88,18 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Indicates whether the switching manager should automatically
-		 * switch between streams.
+		 * @private
 		 */
-		public function get autoSwitch():Boolean
+		override public function set autoSwitch(value:Boolean):void
 		{
-			return _autoSwitch;
-		}
-		
-		public function set autoSwitch(value:Boolean):void
-		{
+			super.autoSwitch = value;
+			
 			CONFIG::LOGGING
 			{
 				debug("autoSwitch() - setting to " + value);
 			}
 			
-			_autoSwitch = value;
-			if (_autoSwitch)
+			if (autoSwitch)
 			{
 				CONFIG::LOGGING
 				{
@@ -134,39 +118,36 @@ package org.osmf.net
 		}
 		
 		/**
-		 * Returns the current stream index that is rendering on the client. Note this may 
-		 * differ from the last index requested if this property is queried after a switch
-		 * has begun but before it has completed.
+		 * @private
 		 */
-		public function get currentIndex():uint
+		override public function get currentIndex():uint
 		{
 			return _currentIndex;
 		}
 
 		/**
-		 * The highest stream index that the switching manager is
-		 * allowed to switch to.
+		 * @private
 		 */
-		public function get maxAllowedIndex():int 
+		override public function get maxAllowedIndex():int 
 		{
 			var count:int = dsResource.streamItems.length - 1;
-			return (count < _maxAllowedIndex ? count : _maxAllowedIndex);
+			return (count < super.maxAllowedIndex ? count : super.maxAllowedIndex);
 		}
 		
-		public function set maxAllowedIndex(value:int):void
+		override public function set maxAllowedIndex(value:int):void
 		{
 			if (value > dsResource.streamItems.length)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.STREAMSWITCH_INVALID_INDEX));
 			}
-			_maxAllowedIndex = value;
+			super.maxAllowedIndex = value;
 			metrics.maxAllowedIndex = value;
 		}
 		
 		/**
-		 * Initiate a switch to the stream with the given index.
+		 * @private
 		 **/
-		public function switchTo(index:int):void
+		override public function switchTo(index:int):void
 		{
 			if (!autoSwitch)
 			{
@@ -507,12 +488,10 @@ package org.osmf.net
 		private var clearFailedCountsTimer:Timer;
 		private var actualIndex:int = -1;
 		private var oldStreamName:String;
-		private var _autoSwitch:Boolean;
 		private var switching:Boolean;
 		private var _currentIndex:int;
 		private var pendingTransitionsArray:Array;
 		private var connection:NetConnection;
-		private var _maxAllowedIndex:int;
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource
 		private var failedDSI:Dictionary;

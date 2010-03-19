@@ -44,7 +44,7 @@ package org.osmf.net
 		 * Constructor.
 		 * 
 		 * @param netStream The NetStream object the class will work with.
-		 * @param switchingManager The NetStreamSwitchingManager which will perform MBR switches.
+		 * @param switchManager The NetStreamSwitchManagerBase which will perform MBR switches.
 		 * @param dsResource The DynamicStreamingResource the class will use.
 		 *  
 		 *  @langversion 3.0
@@ -52,7 +52,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function NetStreamDynamicStreamTrait(netStream:NetStream, switchManager:NetStreamSwitchManager, dsResource:DynamicStreamingResource)
+		public function NetStreamDynamicStreamTrait(netStream:NetStream, switchManager:NetStreamSwitchManagerBase, dsResource:DynamicStreamingResource)
 		{
 			super(switchManager.autoSwitch, switchManager.currentIndex, dsResource.streamItems.length);	
 			
@@ -159,7 +159,7 @@ package org.osmf.net
 		}
 		
 		private var netStream:NetStream;
-		private var switchManager:NetStreamSwitchManager;
+		private var switchManager:NetStreamSwitchManagerBase;
 		private var inSetSwitching:Boolean;
 		private var dsResource:DynamicStreamingResource;
 		private var indexToSwitchTo:int;	

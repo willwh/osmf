@@ -1,0 +1,108 @@
+/*****************************************************
+*  
+*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  
+*****************************************************
+*  The contents of this file are subject to the Mozilla Public License
+*  Version 1.1 (the "License"); you may not use this file except in
+*  compliance with the License. You may obtain a copy of the License at
+*  http://www.mozilla.org/MPL/
+*   
+*  Software distributed under the License is distributed on an "AS IS"
+*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+*  License for the specific language governing rights and limitations
+*  under the License.
+*   
+*  
+*  The Initial Developer of the Original Code is Adobe Systems Incorporated.
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Incorporated. All Rights Reserved. 
+*  
+*****************************************************/
+package org.osmf.net
+{
+	import flash.events.EventDispatcher;
+	
+	/**
+	 * Base class for managing transitions between multi-bitrate (MBR) streams.
+	 * 
+	 * A NetStreamSwitchManagerBase can work in manual or auto mode.  For the
+	 * former, it will execute the NetStream call that performs the switch
+	 * upon request.  For the latter, it will execute the switch based on
+	 * its own internal logic.
+	 * 
+	 * A NetStreamSwitchManagerBase doesn't dispatch any events indicating state
+	 * changes.  The assumption is that a client will already be listening
+	 * to events on the NetStream, so there's no need for duplicative events
+	 * here.
+	 * 
+	 * This is an abstract base class, clients must subclass it to implement
+	 * their own switching logic.
+	 **/
+	public class NetStreamSwitchManagerBase extends EventDispatcher
+	{
+		/**
+		 * Constructor.
+		 **/
+		public function NetStreamSwitchManagerBase()
+		{
+			super();
+			
+			_autoSwitch = true;
+			_maxAllowedIndex = int.MAX_VALUE;
+		}
+
+		/**
+		 * Indicates whether the switching manager should automatically
+		 * switch between streams.  The default is true.
+		 */
+		public function get autoSwitch():Boolean
+		{
+			return _autoSwitch;
+		}
+		
+		public function set autoSwitch(value:Boolean):void
+		{
+			_autoSwitch = value;
+		}
+		
+		/**
+		 * Returns the current stream index that is rendering on the client.
+		 * Note this may differ from the last index requested if this property
+		 * is queried after a switch has begun but before it has completed.
+		 */
+		public function get currentIndex():uint
+		{
+			// Subclasses must override.
+			return 0;
+		}
+
+		/**
+		 * The highest stream index that the switching manager is
+		 * allowed to switch to.
+		 */
+		public function get maxAllowedIndex():int 
+		{
+			return _maxAllowedIndex;
+		}
+		
+		public function set maxAllowedIndex(value:int):void
+		{
+			_maxAllowedIndex = value;
+		}
+
+		/**
+		 * Initiate a switch to the stream with the given index.
+		 **/
+		public function switchTo(index:int):void
+		{
+			// Subclasses must override.
+		}
+		
+		// Internals
+		//
+		
+		private var _autoSwitch:Boolean;
+		private var _maxAllowedIndex:int;
+	}
+}

@@ -33,6 +33,7 @@ package org.osmf.net.rtmpstreaming
 	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamSwitchManager;
+	import org.osmf.net.NetStreamSwitchManagerBase;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.SwitchingRuleBase;
 	
@@ -96,7 +97,7 @@ package org.osmf.net.rtmpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManagerBase
 		{
 			// Only generate the switching manager if the resource is truly
 			// switchable.

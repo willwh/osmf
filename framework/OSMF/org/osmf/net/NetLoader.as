@@ -154,20 +154,20 @@ package org.osmf.net
 		}
 
 		/**
-		 * The factory function for creating a NetStreamSwitchManager.
+		 * The factory function for creating a NetStreamSwitchManagerBase.
 		 * 
-		 * @param connection The NetConnection that's associated with the NetStreamSwitchManager.
-		 * @param netStream The NetStream upon which the NetStreamSwitchManager will operate.
-		 * @param dsResource The resource upon which the NetStreamSwitchManager will operate.
+		 * @param connection The NetConnection that's associated with the NetStreamSwitchManagerBase.
+		 * @param netStream The NetStream upon which the NetStreamSwitchManagerBase will operate.
+		 * @param dsResource The resource upon which the NetStreamSwitchManagerBase will operate.
 		 * 
-		 * @return The NetStreamSwitchManager for the NetStream, null if multi-bitrate switching
+		 * @return The NetStreamSwitchManagerBase for the NetStream, null if multi-bitrate switching
 		 * is not enabled for the NetStream.
 		 **/
-		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
+ 		protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManagerBase
 		{
 			return null;
 		}
-		
+				
 		/**
 		 * @private
 		 * 

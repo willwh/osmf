@@ -31,6 +31,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamSwitchManager;
+	import org.osmf.net.NetStreamSwitchManagerBase;
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
@@ -92,7 +93,7 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManager
+		override protected function createNetStreamSwitchManager(connection:NetConnection, netStream:NetStream, dsResource:DynamicStreamingResource):NetStreamSwitchManagerBase
 		{
 			// Only generate the switching manager if the resource is truly
 			// switchable.

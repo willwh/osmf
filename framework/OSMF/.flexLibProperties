@@ -187,6 +187,7 @@
     <classEntry path="org.osmf.net.NetStreamPlayTrait"/>
     <classEntry path="org.osmf.net.NetStreamSeekTrait"/>
     <classEntry path="org.osmf.net.NetStreamSwitchManager"/>
+    <classEntry path="org.osmf.net.NetStreamSwitchManagerBase"/>
     <classEntry path="org.osmf.net.NetStreamTimeTrait"/>
     <classEntry path="org.osmf.net.NetStreamUtils"/>
     <classEntry path="org.osmf.net.PortProtocol"/>
