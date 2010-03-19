@@ -543,7 +543,15 @@ package org.osmf.elements.compositeClasses
 				metadataGroup.addMetadata(child, metadata);
 			}
 			
-			if (dispatchAddChildEvent)
+			// Don't dispatch the event if the metadata doesn't synthesize.
+			// Note that this is a highly fragile approach, which would be
+			// improved if we refactored the synthesizer code in light of
+			// the changes to how metadata is exposed from the MediaElement
+			// (i.e. via add/remove APIs, rather than through a property
+			// on the MediaElement).  The property-based approach allowed us
+			// to funnel everything through the synthesizer, but that constraint
+			// no longer holds. 
+			if (dispatchAddChildEvent && !(metadata.synthesizer is NullMetadataSynthesizer))
 			{
 				dispatchEvent
 					( new CompositeMetadataEvent
@@ -591,7 +599,7 @@ package org.osmf.elements.compositeClasses
 				}
 			}
 			
-			if (dispatchChildRemoveEvent)
+			if (dispatchChildRemoveEvent && !(metadata.synthesizer is NullMetadataSynthesizer))
 			{
 				dispatchEvent
 					( new CompositeMetadataEvent
