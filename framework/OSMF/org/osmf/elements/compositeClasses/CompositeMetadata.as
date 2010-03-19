@@ -34,6 +34,11 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.metadata.MetadataSynthesizer;
 	import org.osmf.metadata.NullMetadataSynthesizer;
 	import org.osmf.utils.OSMFStrings;
+	
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.ILogger;
+	}
 
 	[ExcludeClass]
 	

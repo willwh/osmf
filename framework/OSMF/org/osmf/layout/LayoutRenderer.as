@@ -30,6 +30,11 @@ package org.osmf.layout
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
 
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.ILogger;
+	}
+
 	/**
 	 * Defines a layout renderer that sizes and positions its targets using the folowing
 	 * metadata facets it looks for on its targets:
