@@ -70,9 +70,24 @@ package org.osmf.elements.compositeClasses
 			_toChildTime = value;
 		}
 		
+		public function set inBetweenChildren(value:Array):void
+		{
+			_inBetweenChildren = value;
+		}
+
+		public function get inBetweenChildren():Array
+		{
+			if (_inBetweenChildren == null)
+			{
+				_inBetweenChildren = new Array();
+			}
+			return _inBetweenChildren;
+		}
+		
 		private var _seekForward:Boolean
 		private var _fromChild:MediaElement;
 		private var _toChild:MediaElement;
-		private var _toChildTime:Number;	
+		private var _toChildTime:Number;
+		private var _inBetweenChildren:Array;
 	}
 }

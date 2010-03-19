@@ -89,6 +89,19 @@ package org.osmf.elements.compositeClasses
 				}
 				else
 				{
+					// Place all in-between children at the start.
+					for each (var inBetweenChild:SerialElementSegment in serialSeek.inBetweenChildren)
+					{
+						if (inBetweenChild.mediaElement.hasTrait(MediaTraitType.SEEK))
+						{
+							var inBetweenSeekTrait:SeekTrait = inBetweenChild.mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+							if (inBetweenSeekTrait.canSeekTo(0))
+							{
+								inBetweenSeekTrait.seek(0);
+							}
+						}
+					}
+					
 					// Seeking backward means to move the playhead to the beginning.
 					childSeekTrait.seek(0);
 				}
@@ -306,6 +319,8 @@ package org.osmf.elements.compositeClasses
 				}	
 				else
 				{
+					seekToOp.inBetweenChildren.push(curSegment);
+					
 					curSegment = serialSegments[index];
 				}
 			}
@@ -363,6 +378,8 @@ package org.osmf.elements.compositeClasses
 				}	
 				else
 				{
+					seekToOp.inBetweenChildren.push(curSegment);
+					
 					curSegment = serialSegments[index];
 				}
 			}

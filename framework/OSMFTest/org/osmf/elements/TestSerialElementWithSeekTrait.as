@@ -107,7 +107,11 @@ package org.osmf.elements
 			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;			
 
 			seekTrait.seek(5);
+			assertTrue(seekTrait3.seeking == true);
 			seekTrait3.completeSeek(0);
+			// Intermediate children will seek too.
+			assertTrue(seekTrait2.seeking == true);
+			assertTrue(seekTrait1.seeking == true);
 			seekTrait1.completeSeek(5);
 			timeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
 			seekTrait = serial.getTrait(MediaTraitType.SEEK) as SeekTrait;
