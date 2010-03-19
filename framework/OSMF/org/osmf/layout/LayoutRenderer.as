@@ -27,7 +27,6 @@ package org.osmf.layout
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import org.osmf.logging.ILogger;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
 
@@ -243,7 +242,9 @@ package org.osmf.layout
 				as AbsoluteLayoutMetadata;
 			
 			var deltaX:Number;
+			var deltaXExclude:Number = 0;
 			var deltaY:Number;
+			var deltaYExclude:Number = 0;
 			
 			var toDo:int = ALL;
 			
@@ -342,7 +343,7 @@ package org.osmf.layout
 				}
 			}
 			
-			// Last, do anchors: (doing them last is a natural index because we require
+			// Last, do anchors: (doing them last is a natural order because we require
 			// a set width and x to do 'right', as well as a set height and y to do
 			// 'bottom')
 			if (toDo != 0)
@@ -366,7 +367,7 @@ package org.osmf.layout
 						toDo ^= Y;
 					}
 					
-					if (!isNaN(anchors.right))
+					if (!isNaN(anchors.right) && availableWidth)
 					{
 						if ((toDo & X) && !(toDo & WIDTH))
 						{
@@ -378,9 +379,15 @@ package org.osmf.layout
 							rect.width = Math.max(0, availableWidth - anchors.right - rect.x);
 							toDo ^= WIDTH;
 						}
+						else
+						{
+							rect.x = Math.max(0, availableWidth - target.measuredWidth - anchors.right);
+							toDo ^= X;
+						}
+						deltaXExclude += anchors.right;
 					}
 					
-					if (!isNaN(anchors.bottom))
+					if (!isNaN(anchors.bottom) && availableHeight)
 					{
 						if ((toDo & Y) && !(toDo & HEIGHT)) 
 						{
@@ -392,6 +399,12 @@ package org.osmf.layout
 							rect.height = Math.max(0, availableHeight - anchors.bottom - rect.y);
 							toDo ^= HEIGHT;
 						}
+						else
+						{
+							rect.y = Math.max(0, availableHeight - target.measuredHeight - anchors.bottom);
+							toDo ^= Y;
+						}
+						deltaYExclude += anchors.bottom;
 					}
 				}
 			}
@@ -450,12 +463,12 @@ package org.osmf.layout
 			// Set deltas:
 			if (layoutMode != LayoutMode.HORIZONTAL)
 			{
-				deltaX ||= availableWidth - (rect.x || 0) - (rect.width || 0);
+				deltaX ||= availableWidth - (rect.x || 0) - (rect.width || 0) - deltaXExclude;
 			}
 			
 			if (layoutMode != LayoutMode.VERTICAL)
 			{
-				deltaY ||= availableHeight - (rect.y || 0) - (rect.height || 0);
+				deltaY ||= availableHeight - (rect.y || 0) - (rect.height || 0) - deltaYExclude;
 			}
 			
 			// Apply alignment (if there's surpluss space reported:)
@@ -568,50 +581,53 @@ package org.osmf.layout
 				
 				for each (var target:ILayoutTarget in targets)
 				{
-					targetBounds = calculateTargetBounds(target, size.x, size.y);
-					targetBounds.x ||= 0;
-					targetBounds.y ||= 0;
-					targetBounds.width ||= target.measuredWidth || 0;
-					targetBounds.height ||= target.measuredHeight || 0;
-					
-					if (layoutMode == LayoutMode.HORIZONTAL)
+					if (target.layoutMetadata.includeInLayout)
 					{
-						if (!isNaN(target.layoutMetadata.percentWidth))
+						targetBounds = calculateTargetBounds(target, size.x, size.y);
+						targetBounds.x ||= 0;
+						targetBounds.y ||= 0;
+						targetBounds.width ||= target.measuredWidth || 0;
+						targetBounds.height ||= target.measuredHeight || 0;
+						
+						if (layoutMode == LayoutMode.HORIZONTAL)
 						{
-							boxAttributes.relativeSum += target.layoutMetadata.percentWidth;
+							if (!isNaN(target.layoutMetadata.percentWidth))
+							{
+								boxAttributes.relativeSum += target.layoutMetadata.percentWidth;
+							}
+							else
+							{
+								boxAttributes.absoluteSum += targetBounds.width;	
+							}
+							
+							if (lastBounds)
+							{
+								targetBounds.x = lastBounds.x + lastBounds.width;		
+							}
+							
+							lastBounds = targetBounds;
 						}
-						else
+						else if (layoutMode == LayoutMode.VERTICAL)
 						{
-							boxAttributes.absoluteSum += targetBounds.width;	
+							if (!isNaN(target.layoutMetadata.percentHeight))
+							{
+								boxAttributes.relativeSum += target.layoutMetadata.percentHeight;
+							}
+							else
+							{
+								boxAttributes.absoluteSum += targetBounds.height;	
+							}
+							
+							if (lastBounds)
+							{
+								targetBounds.y = lastBounds.y + lastBounds.height;
+							}
+							
+							lastBounds = targetBounds;
 						}
 						
-						if (lastBounds)
-						{
-							targetBounds.x = lastBounds.x + lastBounds.width;		
-						}
-						
-						lastBounds = targetBounds;
+						containerBounds = containerBounds.union(targetBounds);
 					}
-					else if (layoutMode == LayoutMode.VERTICAL)
-					{
-						if (!isNaN(target.layoutMetadata.percentHeight))
-						{
-							boxAttributes.relativeSum += target.layoutMetadata.percentHeight;
-						}
-						else
-						{
-							boxAttributes.absoluteSum += targetBounds.height;	
-						}
-						
-						if (lastBounds)
-						{
-							targetBounds.y = lastBounds.y + lastBounds.height;
-						}
-						
-						lastBounds = targetBounds;
-					}
-					
-					containerBounds = containerBounds.union(targetBounds);
 				}
 				
 				size.x ||= (absolute == null || isNaN(absolute.width))
