@@ -127,6 +127,13 @@ package org.osmf.net.httpstreaming.f4f
 		public function findSegmentIdByFragmentId(fragmentId:uint):uint
 		{
 			var curSfp:SegmentFragmentPair;
+			if (fragmentId < 1)
+			{
+				// fragmentId should never be smaller than 1, same for segmentId. So 
+				// return 0 to signal an error condition.
+				return 0;
+			}
+			
 			for (var i:uint = 1; i < _segmentFragmentPairs.length; i++)
 			{
 				curSfp = _segmentFragmentPairs[i];

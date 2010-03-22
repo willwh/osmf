@@ -68,7 +68,7 @@ package org.osmf.net.httpstreaming.f4f
 
 		public function testTotalFragments():void
 		{
-			assertTrue(abst.totalFragments == 15);
+			assertTrue(abst.totalFragments == 14);
 		}
 		
 		// Internals
