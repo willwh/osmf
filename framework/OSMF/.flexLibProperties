@@ -6,6 +6,7 @@
     <classEntry path="org.osmf.containers.MediaContainer"/>
     <classEntry path="org.osmf.display.ScaleMode"/>
     <classEntry path="org.osmf.elements.AudioElement"/>
+    <classEntry path="org.osmf.elements.BasicVideoElement"/>
     <classEntry path="org.osmf.elements.BeaconElement"/>
     <classEntry path="org.osmf.elements.CompositeElement"/>
     <classEntry path="org.osmf.elements.DurationElement"/>

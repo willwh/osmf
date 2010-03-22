@@ -101,7 +101,7 @@ package org.osmf.elements
 		 */ 
 		public function AudioElement(resource:URLResource=null, loader:LoaderBase=null)
 		{
-			super(resource, loader, [SoundLoader, NetLoader]);
+			super(resource, loader);
 			
 			if (!(loader == null || loader is NetLoader || loader is SoundLoader))
 			{
@@ -159,6 +159,17 @@ package org.osmf.elements
 			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
 		}
 		
+		/**
+		 * @private
+		 **/
+		override public function set resource(value:MediaResourceBase):void
+		{
+			// Make sure the appropriate loader is set up front.
+			loader = getLoaderForResource(value, alternateLoaders);
+			
+			super.resource = value;
+		}
+
 		/**
 		 * @private
 		 */
@@ -268,8 +279,22 @@ package org.osmf.elements
 			}
      	}
      	
+		private function get alternateLoaders():Vector.<LoaderBase>
+		{
+			if (_alternateLoaders == null)
+			{
+				_alternateLoaders = new Vector.<LoaderBase>()
+			
+				_alternateLoaders.push(new SoundLoader());
+				_alternateLoaders.push(new NetLoader());
+			}
+
+			return _alternateLoaders;
+		}
+		
 		private var soundAdapter:SoundAdapter;
 		private var stream:NetStream;
 		private var defaultTimeTrait:ModifiableTimeTrait;
+		private var _alternateLoaders:Vector.<LoaderBase>;
 	}
 }

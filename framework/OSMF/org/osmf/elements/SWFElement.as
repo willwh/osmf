@@ -83,7 +83,11 @@ package org.osmf.elements
 		 */		
 		public function SWFElement(resource:URLResource=null, loader:SWFLoader=null)
 		{
-			super(resource, loader, [SWFLoader]);
+			if (loader == null)
+			{
+				loader = new SWFLoader();
+			}
+			super(resource, loader);
 		}
 		
 		/**

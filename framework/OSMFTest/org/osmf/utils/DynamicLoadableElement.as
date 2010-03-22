@@ -19,32 +19,31 @@
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
-package org.osmf.elements
+package org.osmf.utils
 {
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.TestMediaElement;
-	import org.osmf.netmocker.MockNetLoader;
-	import org.osmf.utils.TestConstants;
-
-	public class TestVideoElement extends TestBasicVideoElement
+	import __AS3__.vec.Vector;
+	
+	import org.osmf.media.LoadableElementBase;
+	import org.osmf.media.MediaResourceBase;
+	import org.osmf.traits.LoaderBase;
+	
+	public class DynamicLoadableElement extends LoadableElementBase
 	{
-		override protected function createMediaElement():MediaElement
+		public function DynamicLoadableElement(resource:MediaResourceBase, loader:LoaderBase, alternateLoaders:Vector.<LoaderBase>)
 		{
-			if (loader is MockNetLoader)
-			{
-				// Give our mock loader an arbitrary duration and size to ensure
-				// we get metadata.
-				MockNetLoader(loader).netStreamExpectedDuration = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_DURATION;
-				MockNetLoader(loader).netStreamExpectedWidth = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_WIDTH;
-				MockNetLoader(loader).netStreamExpectedHeight = TestConstants.REMOTE_PROGRESSIVE_VIDEO_EXPECTED_HEIGHT;
-				
-				if (cuePoints != null && cuePoints.length > 0)
-				{
-					MockNetLoader(loader).netStreamExpectedCuePoints = cuePoints;
-				}
-			}
-
-			return new VideoElement(null, loader); 
+			super(resource, loader);
+			
+			this.alternateLoaders = alternateLoaders;
 		}
+		
+		override public function set resource(value:MediaResourceBase):void
+		{
+			// Make sure the appropriate loader is set up front.
+			loader = getLoaderForResource(value, alternateLoaders);
+			
+			super.resource = value;
+		}
+		
+		private var alternateLoaders:Vector.<LoaderBase>;
 	}
 }

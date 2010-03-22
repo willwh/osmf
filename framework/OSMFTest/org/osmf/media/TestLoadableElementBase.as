@@ -21,12 +21,16 @@
 *****************************************************/
 package org.osmf.media
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.events.Event;
 	
 	import org.osmf.events.LoadEvent;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
+	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
+	import org.osmf.utils.DynamicLoadableElement;
 	import org.osmf.utils.MockHTTPLoader;
 	import org.osmf.utils.NullResource;
 	import org.osmf.utils.SimpleLoader;
@@ -61,19 +65,8 @@ package org.osmf.media
 		
 		public function testConstructor():void
 		{
-			new LoadableElementBase(null, new SimpleLoader(), null);
-			new LoadableElementBase(null, null, [SimpleLoader]);
-			
-			try
-			{
-				var mediaElement:MediaElement = new LoadableElementBase();
-				
-				fail();
-			}
-			catch (error:ArgumentError)
-			{
-				// Swallow.
-			}
+			new LoadableElementBase(null, new SimpleLoader());
+			new LoadableElementBase(null, null);
 		}
 		
 		public function testSetResourceUnloadsPreviousLoadTrait():void
@@ -111,7 +104,10 @@ package org.osmf.media
 		
 		public function testSetResourceSetsLoader():void
 		{
-			var mediaElement:MediaElement = new LoadableElementBase(null, null, [MockHTTPLoader, SimpleLoader]);
+			var alternateLoaders:Vector.<LoaderBase> = new Vector.<LoaderBase>();
+			alternateLoaders.push(new MockHTTPLoader());
+			alternateLoaders.push(new SimpleLoader());
+			var mediaElement:MediaElement = new DynamicLoadableElement(null, null, alternateLoaders);
 			
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) == null);
 			mediaElement.resource = new URLResource("http://example.com");
@@ -122,7 +118,10 @@ package org.osmf.media
 		
 		public function testSetResourceWithUnhandleResourceSetsLoader():void
 		{
-			var mediaElement:MediaElement = new LoadableElementBase(null, null, [MockHTTPLoader, SimpleLoader]);
+			var alternateLoaders:Vector.<LoaderBase> = new Vector.<LoaderBase>();
+			alternateLoaders.push(new MockHTTPLoader());
+			alternateLoaders.push(new SimpleLoader());
+			var mediaElement:MediaElement = new DynamicLoadableElement(null, null, alternateLoaders);
 			
 			mediaElement.resource = new SimpleResource(SimpleResource.UNHANDLED);
 			assertTrue(mediaElement.getTrait(MediaTraitType.LOAD) != null);

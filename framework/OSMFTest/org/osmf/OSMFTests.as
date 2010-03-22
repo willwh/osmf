@@ -109,6 +109,7 @@ package org.osmf
 			// Video
 			//
 			
+			addTestSuite(TestBasicVideoElement);
 			addTestSuite(TestVideoElement);
 			
 			// Audio
@@ -314,6 +315,7 @@ package org.osmf
 			//
 			
 			addTestSuite(TestMediaPlayerWithAudioElement);
+			addTestSuite(TestMediaPlayerWithBasicVideoElement);
 			addTestSuite(TestMediaPlayerWithVideoElement);
 			addTestSuite(TestMediaPlayerWithVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);

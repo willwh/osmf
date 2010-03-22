@@ -26,7 +26,6 @@ package org.osmf.media
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.traits.MediaTraitType;
-	import org.osmf.utils.OSMFStrings;
 	
 	/**
 	 * A base implementation of a MediaElement that has a LoadTrait.
@@ -43,37 +42,19 @@ package org.osmf.media
 		 * 
 		 * @param resource The MediaResourceBase that represents the piece of
 		 * media to load into this media element.
-		 * @param loader Loader used to load the media.  If null, the loader will
-		 * be dynamically generated from the loaderClasses Array based on the type
-		 * of the resource.
-		 * @param loaderClasses An Array of Class objects representing all possible
-		 * LoaderBase classes that this MediaElement can use to load media.  If null,
-		 * then loader must be specified (and will be used for all resources).  When
-		 * the appropriate loader to use is unknown (e.g. because loader is null),
-		 * this list will be used to locate and set the appropriate loader.  Note
-		 * that multiple loaders in the list might be able to handle a resource,
-		 * in which case the first loader in the list to do so will be selected.  If
-		 * no loader in the list can handle a resource, then the last one will
-		 * be set (simply so that errors are generated consistently).
-		 * 
-		 * @throws ArgumentError If both loader and loaderClasses are null.
+		 * @param loader Loader used to load the media.  If null, then this class
+		 * is responsible for selecting/generating the appropriate loader.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function LoadableElementBase(resource:MediaResourceBase=null, loader:LoaderBase=null, loaderClasses:Array=null)
+		public function LoadableElementBase(resource:MediaResourceBase=null, loader:LoaderBase=null)
 		{
 			super();
 			
-			if (loader == null && loaderClasses == null)
-			{
-				throw new ArgumentError(OSMFStrings.getString(OSMFStrings.NULL_PARAM));
-			}
-			
-			this.loader = loader;
-			this.loaderClasses = loaderClasses || [];
+			_loader = loader;
 			this.resource = resource;
 		}
 		
@@ -84,13 +65,24 @@ package org.osmf.media
 	    {
 			super.resource = value;
 			
-			setLoaderForResource(value);
-			
 			updateLoadTrait();
 		}
 		
 		// Protected
 		//
+		
+		/**
+		 * The LoaderBase used by this element to load resources.
+		 **/
+		protected final function get loader():LoaderBase
+		{
+			return _loader;
+		}
+
+		protected final function set loader(value:LoaderBase):void
+		{
+			_loader = value;
+		}
 		
 		/**
 		 * Subclasses can override this method to return a custom LoadTrait
@@ -103,7 +95,7 @@ package org.osmf.media
 		 */
 		protected function createLoadTrait(resource:MediaResourceBase, loader:LoaderBase):LoadTrait
 		{
-			return new LoadTrait(loader, resource);
+			return new LoadTrait(_loader, resource);
 		}
 				
 		/**
@@ -149,6 +141,48 @@ package org.osmf.media
 			// Subclass stub
 		}
 		
+		/**
+		 * @private
+		 * 
+		 * Given a resource, this method will locate the first LoaderBase which can handle
+		 * the resource and set it as the loader for this class.  Gives precedence to the
+		 * current loader first, then the alternateLoaders, in order.
+		 **/
+		protected function getLoaderForResource(resource:MediaResourceBase, alternateLoaders:Vector.<LoaderBase>):LoaderBase
+		{
+			// Assume it's the original loader.
+			var result:LoaderBase = loader;
+			
+			if (resource != null && (loader == null || loader.canHandleResource(resource) == false))
+			{
+				// Don't call canHandleResource twice on the same loader.
+				var loaderFound:Boolean = false;
+				
+				for each (var alternateLoader:LoaderBase in alternateLoaders)
+				{
+					// Skip this one if it's the same as the current loader.
+					if (loader == null || loader != alternateLoader)
+					{
+						if (alternateLoader.canHandleResource(resource))
+						{
+							result = alternateLoader;
+							break;
+						}
+					}
+				}
+				
+				// If none was found that can handle the resource, pick the
+				// last one, if only so that errors will be dispatched
+				// further downstream.
+				if (result == null && alternateLoaders != null)
+				{
+					result = alternateLoaders[alternateLoaders.length - 1];
+				}
+			}
+			
+			return result;
+		}
+		
 		// Private
 		//
 		
@@ -171,43 +205,6 @@ package org.osmf.media
 			else if (event.loadState == LoadState.UNLOADING)
 			{
 				processUnloadingState();
-			}
-		}
-
-		/**
-		 * Given a resource, this method will locate the first LoaderBase which can handle
-		 * the resource and set it as the LoaderBase for this class.  Gives precedence to
-		 * the current loader first, then the constructor-supplied loaderClasses, in order.
-		 **/
-		private function setLoaderForResource(resource:MediaResourceBase):void
-		{
-			if (resource != null && (loader == null || loader.canHandleResource(resource) == false))
-			{
-				// Don't call canHandleResource twice on the same loader.
-				var loaderFound:Boolean = false;
-				
-				for each (var loaderClass:Class in loaderClasses)
-				{
-					// Skip this one if it's the same type as the current loader.
-					if (loader == null || !(loader is loaderClass))
-					{
-						var iterLoader:LoaderBase = new loaderClass() as LoaderBase;
-						if (iterLoader.canHandleResource(resource))
-						{
-							loader = iterLoader;
-							break;
-						}
-					}
-				}
-				
-				// If none was found that can handle the resource, pick the
-				// last one, if only so that errors will be dispatched
-				// further downstream.
-				if (loader == null)
-				{
-					loaderClass = loaderClasses[loaderClasses.length - 1];
-					loader = new loaderClass() as LoaderBase;
-				}
 			}
 		}
 
@@ -243,7 +240,6 @@ package org.osmf.media
 			}
 		}
 
-		private var loader:LoaderBase;
-		private var loaderClasses:Array;
+		private var _loader:LoaderBase;
 	}
 }

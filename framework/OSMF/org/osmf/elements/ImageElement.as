@@ -23,11 +23,11 @@ package org.osmf.elements
 {
 	import flash.display.Bitmap;
 	
+	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
+	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.media.LoadableElementBase;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
-	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
-	import org.osmf.elements.loaderClasses.LoaderUtils;
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -87,7 +87,11 @@ package org.osmf.elements
 		 */		
 		public function ImageElement(resource:URLResource=null, loader:ImageLoader=null)
 		{
-			super(resource, loader, [ImageLoader]);
+			if (loader == null)
+			{
+				loader = new ImageLoader();
+			}
+			super(resource, loader);
 		}
 		
 		public function set smoothing(value:Boolean):void
