@@ -163,12 +163,12 @@ package org.osmf.media.pluginClasses
 					}
 					else
 					{
-						dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR));
+						dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR, false, false, resource));
 					}
 				}
 				else
 				{
-					throw new ArgumentError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
+					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR, false, false, resource));
 				}
 			}
 			
@@ -208,7 +208,7 @@ package org.osmf.media.pluginClasses
 				{
 					// Remove from the pluginMap when the load failed!!!!
 					delete _pluginMap[identifier];
-					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR));
+					dispatchEvent(new PluginManagerEvent(PluginManagerEvent.PLUGIN_LOAD_ERROR, false, false, resource));
 				}
 			}
 			function onMediaError(event:MediaErrorEvent):void

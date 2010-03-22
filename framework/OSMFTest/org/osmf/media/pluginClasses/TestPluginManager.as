@@ -95,6 +95,7 @@ package org.osmf.media.pluginClasses
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
 				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+				assertTrue(event.resource == pluginResource);
 			}
 		}
 	
@@ -107,14 +108,8 @@ package org.osmf.media.pluginClasses
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					assertTrue(false);
-				}
-				else
-				{
-					// expected
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+				assertTrue(event.resource == pluginResource);
 			}
 		}
 	
@@ -127,14 +122,8 @@ package org.osmf.media.pluginClasses
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{	
-				if (event.type == PluginManagerEvent.PLUGIN_LOAD)
-				{
-					assertTrue(false);
-				}
-				else
-				{
-					// expected
-				}
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+				assertTrue(event.resource == pluginResource);
 			}
 		}
 
@@ -147,14 +136,23 @@ package org.osmf.media.pluginClasses
 			
 			function onPluginManagerEvent(event:PluginManagerEvent):void
 			{
-				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR)
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+				assertTrue(event.resource == pluginResource);
 			}
 		}
 		
-		public function testLoadPluginWithInvalidParameters():void
+		public function testLoadPluginWithInvalidParameter():void
 		{
-			assertTrue(doLoadPluginWithInvalidParameter(null));
-			assertTrue(doLoadPluginWithInvalidParameter(new DynamicStreamingResource("rtmp://example.com/vod")));
+			var pluginResource:URLResource = new DynamicStreamingResource("rtmp://example.com/vod");
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginManagerEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginManagerEvent, 500));
+			pluginManager.loadPlugin(pluginResource);
+			
+			function onPluginManagerEvent(event:PluginManagerEvent):void
+			{
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+				assertTrue(event.resource == pluginResource);
+			}
 		}
 		
 		public function testLoadPluginWithCustomMetadata():void
@@ -273,21 +271,6 @@ package org.osmf.media.pluginClasses
 			{
 				createdElements.push(mediaElement);
 			}
-		}
-
-		private function doLoadPluginWithInvalidParameter(resource:MediaResourceBase):Boolean
-		{
-			try 
-			{
-				pluginManager.loadPlugin(resource);
-				return false;
-			}
-			catch(e:ArgumentError)
-			{
-				return true;
-			}
-			
-			return false;
 		}
 
 		private var mediaFactory:MediaFactory;
