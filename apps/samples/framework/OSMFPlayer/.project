@@ -3,6 +3,7 @@
 	<name>OSMFPlayer</name>
 	<comment></comment>
 	<projects>
+		<project>ChromeLibrary</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

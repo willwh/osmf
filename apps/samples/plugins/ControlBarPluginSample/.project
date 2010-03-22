@@ -3,6 +3,7 @@
 	<name>ControlBarPluginSample</name>
 	<comment></comment>
 	<projects>
+		<project>ControlBarPlugin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -27,6 +27,8 @@ package
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
 	import flash.utils.getDefinitionByName;
+	
+	import org.osmf.chrome.configuration.Configuration;
 
 	public class Preloader extends MovieClip
 	{
@@ -64,6 +66,8 @@ package
 		private static const WIDTH:Number = 150;
 		private static const HEIGHT:Number = 12;
 		
+		public const configuration:Configuration = new Configuration();
+		
 		private function progressDrawingEventHandler(event:Event = null):void
 		{
 			graphics.clear();
@@ -86,11 +90,20 @@ package
 			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progressDrawingEventHandler);
 			loaderInfo.removeEventListener(Event.COMPLETE, onLoaderComplete);
 			
+			configuration.addEventListener(Event.COMPLETE, onConfigurationComplete);
+			var configurationFileURL:String = loaderInfo.parameters.configuration;
+			if (configurationFileURL)
+			{
+				configuration.loadFromFile(configurationFileURL, true)
+			}
+		}
+		
+		private function onConfigurationComplete(event:Event):void
+		{
 			graphics.clear();
-			
 			nextFrame();
 			
-			var player:Class = flash.utils.getDefinitionByName("OSMFPlayer") as Class;
+			var player:Class = getDefinitionByName("OSMFPlayer") as Class;
 			addChild(new player(this));
 		}
 	}

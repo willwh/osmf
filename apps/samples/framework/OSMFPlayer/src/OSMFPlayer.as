@@ -27,30 +27,25 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
-	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
-	import flash.net.URLRequest;
-	import flash.net.navigateToURL;
-	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import org.osmf.chrome.controlbar.*;
-	import org.osmf.chrome.controlbar.widgets.*;
+	import org.osmf.chrome.configuration.WidgetsParser;
+	import org.osmf.chrome.widgets.EjectButton;
+	import org.osmf.chrome.widgets.URLInput;
+	import org.osmf.chrome.widgets.Widget;
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutRenderer;
 	import org.osmf.layout.LayoutTargetSprite;
-	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
-	import org.osmf.utils.Version;
 	
 	[Frame(factoryClass="Preloader")]
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="380")]
@@ -65,7 +60,7 @@ package
 			
 			// Parse configuration from the parameters passed on
 			// embedding OSMFPlayer.swf:
-			configuration = new Configuration(preloader.loaderInfo.parameters);
+			configuration = new PlayerConfiguration(preloader.loaderInfo.parameters);
 			
 			// Set the SWF scale mode, and listen to the _stage change
 			// dimensions:
@@ -73,18 +68,9 @@ package
 			_stage.align = StageAlign.TOP_LEFT;
 			_stage.addEventListener(Event.RESIZE, onStageResize);
 			
-			setupContextMenu();
-			
 			setupMediaFactory();
-			
-			// Construct a media player instance. This will help in loading
-			// the element that the factory will construct:
-			player = new MediaPlayer();
-			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
-			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
-			
+			setupMediaPlayer();
 			setupMediaContainer();
-			
 			setupUserInterface();
 			
 			// Simulate the _stage resizing, to update the dimensions of the
@@ -98,24 +84,20 @@ package
 		// Internals
 		//
 		
-		private function setupContextMenu():void
-		{
-			// Setup a context menu:
-			osmfMenuItem = new ContextMenuItem("OSMF Player v." + Version.version);
-			osmfMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onOSMFContextMenuItemSelect);
-			
-			customContextMenu = new ContextMenu();
-			customContextMenu.hideBuiltInItems();
-			customContextMenu.customItems.push(osmfMenuItem);
-			
-			contextMenu = customContextMenu;	
-		}
-		
 		private function setupMediaFactory():void
 		{
 			// Construct a media factory. A media factory can create
 			// media elements on being passed a resource.
 			factory = new DefaultMediaFactory();
+		}
+		
+		private function setupMediaPlayer():void
+		{
+			// Construct a media player instance. This will help in loading
+			// the element that the factory will construct:
+			player = new MediaPlayer();
+			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
 		}
 		
 		private function setupMediaContainer():void
@@ -128,49 +110,38 @@ package
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
 			addChild(container);
-			
-			// Create a transparent overlay. This is a work-around for the
-			// context menu otherwise not triggering MENU_ITEM_SELECT when being
-			// invoked while over a Video object:
-			overlay = new LayoutTargetSprite();
-			overlay.graphics.beginFill(0, 0);
-			overlay.graphics.drawRect(0, 0, 100, 100);
-			overlay.graphics.endFill();
-			
-			overlay.layoutMetadata.percentWidth = 100;
-			overlay.layoutMetadata.percentHeight = 100;
-			overlay.layoutMetadata.index = 1;
-			
-			containerRenderer.addTarget(overlay);
 		}
 		
 		private function setupUserInterface():void
 		{
-			// Construct a default control bar, and add extra listeners to
-			// to some of its widgets:
+			widgetsParser = new WidgetsParser();
+			widgetsParser.parse
+				( preloader.configuration.configuration.widgets.*
+				, preloader.configuration.assetsManager
+				); 
 			
-			controlBar = new ControlBar();
-			controlBar.autoHide = configuration.autoHideControlBar;
+			var index:Number = 10000;
+			for each (var widget:Widget in widgetsParser.widgets)
+			{
+				widget.layoutMetadata.index = index++;
+				trace(widget.id);
+				containerRenderer.addTarget(widget);
+			}
 			
-			controlBar.layoutMetadata.index = 2;
-			controlBar.layoutMetadata.bottom = 25;
-			controlBar.layoutMetadata.verticalAlign = VerticalAlign.TOP;
-			controlBar.layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
-			
-			containerRenderer.addTarget(controlBar);
-			
-			var urlInput:URLInput = controlBar.getWidget(ControlBar.URL_INPUT) as URLInput;
+			var urlInput:URLInput = widgetsParser.getWidget("urlInput") as URLInput;
 			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
-			
 			urlInput.url = configuration.url;
 			
-			var button:Button = controlBar.getWidget(ControlBar.EJECT_BUTTON) as Button;
-			button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
+			var button:EjectButton = widgetsParser.getWidget("ejectButton") as EjectButton;
+			if (button)
+			{
+				button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
+			}
 		}
 		
 		private function loadURL(url:String):void
 		{
-			updateTargetElement(factory.createMediaElement(new URLResource(url)));	
+			updateTargetElement(factory.createMediaElement(new URLResource(url)));
 		}
 		
 		private function updateTargetElement(value:MediaElement):void
@@ -187,9 +158,11 @@ package
 					player.stop();
 				}
 				
-				player.media
-					= controlBar.element
-					= null;
+				player.media = null;
+				for each (var widget:Widget in widgetsParser.widgets)
+				{
+					widget.mediaElement = null;
+				}
 				
 				CONFIG::DEBUG
 				{
@@ -203,11 +176,15 @@ package
 				
 				element
 					= player.media 
-					= controlBar.element
 					= value;
 					
 				if (element)
 				{
+					for each (widget in widgetsParser.widgets)
+					{
+						widget.mediaElement = element;
+					}
+					
 					// Add the element to the media container:
 					container.addMediaElement(element);
 				}
@@ -239,11 +216,6 @@ package
 			}
 		}
 		
-		private function onOSMFContextMenuItemSelect(event:ContextMenuEvent):void
-		{
-			flash.net.navigateToURL(new URLRequest("http://www.osmf.org"), "_blank");
-		}
-		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			if (ExternalInterface.available)
@@ -263,10 +235,9 @@ package
 		private var preloader:Preloader;
 		private var _stage:Stage;
 		
-		private var customContextMenu:ContextMenu;
 		private var osmfMenuItem:ContextMenuItem;
 		
-		private var configuration:Configuration;
+		private var configuration:PlayerConfiguration;
 		private var factory:MediaFactory;
 		private var player:MediaPlayer;
 		
@@ -274,7 +245,8 @@ package
 		
 		private var container:MediaContainer;
 		private var containerRenderer:LayoutRenderer;
-		private var controlBar:ControlBarBase;
+		
+		private var widgetsParser:WidgetsParser; 
 		
 		private var overlay:LayoutTargetSprite;
 	}

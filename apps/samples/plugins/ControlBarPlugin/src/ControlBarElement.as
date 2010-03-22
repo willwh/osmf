@@ -21,10 +21,10 @@
 *****************************************************/
 package
 {
-	import org.osmf.chrome.controlbar.ControlBarBase;
-	import org.osmf.chrome.controlbar.ControlBarWidget;
-	import org.osmf.chrome.controlbar.Direction;
-	import org.osmf.chrome.controlbar.widgets.*;
+	import org.osmf.chrome.assets.AssetsManager;
+	import org.osmf.chrome.configuration.LayoutAttributesParser;
+	import org.osmf.chrome.configuration.WidgetsParser;
+	import org.osmf.chrome.widgets.Widget;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaResourceBase;
@@ -34,6 +34,51 @@ package
 
 	public class ControlBarElement extends MediaElement
 	{
+		// Embedded assets (see configuration.xml for their assignments):
+		//
+		
+		[Embed(source="../assets/configuration.xml", mimeType="application/octet-stream")]
+		private static const CONFIGURATION_XML:Class;
+		
+		[Embed(source="../assets/Standard0755.swf#Standard0755")]
+		private static const DEFAULT_FONT:Class;
+		
+		[Embed(source="../assets/backDrop.png")]
+		private static const BACKDROP:Class;
+		
+		[Embed(source="../assets/pause_disabled.png")]
+		private static const PAUSE_DISABLED:Class;
+		[Embed(source="../assets/pause_up.png")]
+		private static const PAUSE_UP:Class;
+		[Embed(source="../assets/pause_down.png")]
+		private static const PAUSE_DOWN:Class;
+		
+		[Embed(source="../assets/stop_disabled.png")]
+		private static const STOP_DISABLED:Class;
+		[Embed(source="../assets/stop_up.png")]
+		private static const STOP_UP:Class;
+		[Embed(source="../assets/stop_down.png")]
+		private static const STOP_DOWN:Class;
+		
+		[Embed(source="../assets/play_disabled.png")]
+		private static const PLAY_DISABLED:Class;
+		[Embed(source="../assets/play_up.png")]
+		private static const PLAY_UP:Class;
+		[Embed(source="../assets/play_down.png")]
+		private static const PLAY_DOWN:Class;
+		
+		[Embed(source="../assets/scrubber_disabled.png")]
+		private static const SCRUBBER_DISABLED:Class;
+		[Embed(source="../assets/scrubber_up.png")]
+		private static const SCRUBBER_UP:Class;
+		[Embed(source="../assets/scrubber_down.png")]
+		private static const SCRUBBER_DOWN:Class;
+		[Embed(source="../assets/scrubBarTrack.png")]
+		private static const SCRUB_BAR_TRACK:Class;
+		
+		// Public interface
+		//
+		
 		public function addReference(target:MediaElement):void
 		{
 			if (this.target == null)
@@ -58,7 +103,7 @@ package
 						&&	targetMetadata.getValue(ID) == settings.getValue(ID)
 						)
 					{
-						controlBar.element = target;
+						controlBar.mediaElement = target;
 					}
 				}
 			}
@@ -90,6 +135,11 @@ package
 			// Setup a control bar using the ChromeLibrary:
 			setupControlBar();
 			
+			// Use the control bar's layout metadata as the element's layout metadata:
+			var layoutMetadata:LayoutMetadata = new LayoutMetadata();
+			LayoutAttributesParser.parse(controlBar.configuration, layoutMetadata);
+			addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+			
 			// Signal that this media element is viewable: create a DisplayObjectTrait.
 			// Assign controlBar (which is a Sprite) to be our view's displayObject.
 			// Additionally, use its current width and height for the trait's mediaWidth
@@ -98,15 +148,7 @@ package
 			// Add the trait:
 			addTrait(MediaTraitType.DISPLAY_OBJECT, viewable);
 			
-			// Set the control bar's width and height as absolute layout values:
-			var layoutMetadata:LayoutMetadata = getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
-			if (layoutMetadata == null)
-			{
-				layoutMetadata = new LayoutMetadata();
-				addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
-			}
-			layoutMetadata.width = controlBar.measuredWidth;
-			layoutMetadata.height = controlBar.measuredHeight;
+			controlBar.measure();
 			
 			super.setupTraits();	
 		}
@@ -116,49 +158,29 @@ package
 		
 		private function setupControlBar():void
 		{
-			controlBar = new ControlBarBase();
-			
-			var widget:ControlBarWidget;
-
-			widget = controlBar.addWidget(SCRUB_BAR, new ScrubBar());
-			widget.setPosition(0, SCRUBBAR_VERTICAL_OFFSET);
-						
-			widget = controlBar.addWidget(PLAY_BUTTON, new PlayButton());
-			widget.setPosition(BORDER_SPACE, BUTTONS_VERTICAL_OFFSET);
-
-			widget = controlBar.addWidget(PAUSE_BUTTON, new PauseButton());
-			widget.setRegistrationTarget(PLAY_BUTTON, Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
-			widget = controlBar.addWidget(QUALITY_BUTTON, new QualityModeToggle());
-			widget.setRegistrationTarget(PAUSE_BUTTON, Direction.RIGHT);
-			widget.setPosition(3, 0);
-			widget.hint = "Click to toggle between automatic and manual quality mode";
-			
-			widget = controlBar.addWidget(QUALITY_INCREASE, new QualityIncreaseButton());
-			widget.setRegistrationTarget(QUALITY_BUTTON, Direction.RIGHT);
-			widget.setPosition(-2, 4);
-			
-			widget = controlBar.addWidget(QUALITY_DECREASE, new QualityDecreaseButton());
-			widget.setRegistrationTarget(QUALITY_INCREASE, Direction.RIGHT);
-			widget.setPosition(1, 0);
-			
-			widget = controlBar.addWidget(QUALITY_LABEL, new QualityLabel());
-			widget.setRegistrationTarget(QUALITY_DECREASE, Direction.RIGHT);
-			widget.setPosition(0, -3);
-						
-			widget = controlBar.addWidget(SOUND_MORE, new SoundMoreButton());
-			widget.setPosition(292, BUTTONS_VERTICAL_OFFSET);
-			
-			widget = controlBar.addWidget(SOUND_LESS, new SoundLessButton());
-			widget.setRegistrationTarget(SOUND_MORE, Direction.LEFT);
-			widget.setPosition(1, 0);
+			try
+			{
+				var configuration:XML = XML(new CONFIGURATION_XML());
+				
+				var assetsManager:AssetsManager = new AssetsManager();
+				assetsManager.addConfigurationAssets(configuration);
+				assetsManager.load();
+				
+				var widgetsParser:WidgetsParser = new WidgetsParser()
+				widgetsParser.parse(configuration.widgets.*, assetsManager);
+				
+				controlBar = widgetsParser.getWidget("controlBar");
+			}
+			catch (error:Error)
+			{
+				trace("WARNING: failed setting up control bar:", error.message);
+			}
 		}
 		
 		private var settings:Metadata;
 		
 		private var target:MediaElement;
-		private var controlBar:ControlBarBase;
+		private var controlBar:Widget;
 		private var viewable:DisplayObjectTrait;
 		
 		/* static */
