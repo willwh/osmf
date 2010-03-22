@@ -120,11 +120,11 @@ package
 				, preloader.configuration.assetsManager
 				); 
 			
+			// Add widgets on top of the media:
 			var index:Number = 10000;
 			for each (var widget:Widget in widgetsParser.widgets)
 			{
 				widget.layoutMetadata.index = index++;
-				trace(widget.id);
 				containerRenderer.addTarget(widget);
 			}
 			
