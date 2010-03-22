@@ -278,7 +278,7 @@ package org.osmf.net.drm
 		{
 			if (voucher != null)
 			{
-				return voucher.playbackTimeWindow ? voucher.playbackTimeWindow.period : (voucher.voucherEndDate.time - voucher.voucherStartDate.time)/1000;	
+				return voucher.playbackTimeWindow ? voucher.playbackTimeWindow.period : (voucher.voucherEndDate && voucher.voucherStartDate) ? (voucher.voucherEndDate.time - voucher.voucherStartDate.time)/1000 : 0;	
 			}
 			else
 			{
@@ -378,10 +378,13 @@ package org.osmf.net.drm
 				var now:Date = new Date();
 				this.voucher = event.voucher;		
 				if (	voucher
-					 && voucher.voucherEndDate != null
+					 && (voucher.voucherEndDate != null
 					 && voucher.voucherEndDate.time >= now.time
 					 && voucher.voucherStartDate != null
-					 && voucher.voucherStartDate.time <= now.time
+					 && voucher.voucherStartDate.time <= now.time)
+					 || (voucher.offlineLeaseStartDate.time <= now.time 
+					 	&& (!voucher.offlineLeaseEndDate ||
+							voucher.offlineLeaseEndDate.time > now.time))
 				    )
 				{
 					removeEventListeners();
