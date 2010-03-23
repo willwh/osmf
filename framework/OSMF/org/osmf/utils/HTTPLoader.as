@@ -88,7 +88,9 @@ package org.osmf.utils
 			}
 			
 			var url:URL = new URL(urlResource.url);		
-			if (url.protocol.search(/http$|https$/i) == -1)
+			if (	url.protocol.search(/http$|https$/i) == -1
+				&&  url.protocol != ""
+			   )
 			{
 				return false;
 			}
