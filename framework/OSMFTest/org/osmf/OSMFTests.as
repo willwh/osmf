@@ -59,7 +59,7 @@ package org.osmf
 									
 			// Logging
 			//
-			
+
 			addTestSuite(TestLog);
 			addTestSuite(TestTraceLogger);
 			addTestSuite(TestTraceLoggerFactory);
@@ -251,7 +251,7 @@ package org.osmf
 			
 			addTestSuite(TestDownloadRatioRule);
 			addTestSuite(TestBoxParser);
-//			addTestSuite(TestAdobeBootstrapBox);
+			addTestSuite(TestAdobeBootstrapBox);
 //			addTestSuite(TestAdobeFragmentRunTable);
 //			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
@@ -329,7 +329,6 @@ package org.osmf
 
 			// This test fails intermittently on the build machine.
 			//addTestSuite(TestMediaPlayerWithAudioElementWithSoundLoader);
-			
 		}
 	}
 }

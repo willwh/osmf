@@ -25,17 +25,14 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import flexunit.framework.TestCase;
 	
-	import mx.utils.Base64Decoder;
-	
 	import org.osmf.utils.TestConstants;
+	import org.osmf.net.httpstreaming.HTTPStreamingTestsHelper;
 	
 	public class TestAdobeBootstrapBox extends TestCase
 	{
 		override public function setUp():void
 		{
-			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(TestConstants.ABST_BOX_DATA);
-			var bytes:ByteArray = decoder.drain();
+			var bytes:ByteArray = HTTPStreamingTestsHelper.createAdobeBootstrapBox(false, false);
 
 			var parser:BoxParser = new BoxParser();
 			parser.init(bytes);
@@ -50,25 +47,24 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			// Segment number increases every 15 fragments.
 			assertTrue(abst.findSegmentId(0) == 0);
-			for (var i:int = 1; i <= 15; i++)
+			for (var i:int = 1; i <= 16; i++)
 			{			
 				assertTrue(abst.findSegmentId(i) == 1);
 			}
-			for (i = 16; i <= 30; i++)
+			for (i = 17; i <= 18; i++)
 			{			
 				assertTrue(abst.findSegmentId(i) == 2);
 			}
-			assertTrue(abst.findSegmentId(31) == 3);
 		}
 		
 		public function testTotalDuration():void
 		{
-			assertTrue(abst.totalDuration == 60905);
+			assertTrue(abst.totalDuration == 22000);
 		}
 
 		public function testTotalFragments():void
 		{
-			assertTrue(abst.totalFragments == 14);
+			assertTrue(abst.totalFragments == 15);
 		}
 		
 		// Internals
