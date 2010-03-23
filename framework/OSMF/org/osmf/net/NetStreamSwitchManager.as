@@ -350,7 +350,10 @@ package org.osmf.net
 			switch (event.info.code) 
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_START:
-					prepareForSwitching();
+					if (actualIndex == -1)
+					{
+						prepareForSwitching();
+					}
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION:
 					switching  = false;
