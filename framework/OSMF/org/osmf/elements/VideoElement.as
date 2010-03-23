@@ -104,7 +104,13 @@ package org.osmf.elements
 		 */
 		public function VideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{
-			super(resource, loader);
+			// Ensure that the base class doesn't create its own Loader
+			// (by passing in null, then overwriting the created loader
+			// with ours (or null)).
+			super(null, null);
+			super.loader = loader;
+			
+			this.resource = resource;
 		}
 		
 		/**
