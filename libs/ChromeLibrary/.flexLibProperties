@@ -30,10 +30,12 @@
     <classEntry path="org.osmf.chrome.assets.SymbolResource"/>
     <classEntry path="org.osmf.chrome.widgets.PinUpButton"/>
     <classEntry path="org.osmf.chrome.configuration.AssetsParser"/>
+    <classEntry path="org.osmf.chrome.widgets.FPSMeter"/>
     <classEntry path="org.osmf.chrome.assets.SymbolAsset"/>
     <classEntry path="org.osmf.chrome.widgets.Scrubber"/>
     <classEntry path="org.osmf.chrome.widgets.StopButton"/>
     <classEntry path="org.osmf.chrome.widgets.AuthenticationDialog"/>
+    <classEntry path="org.osmf.chrome.widgets.MemoryMeter"/>
     <classEntry path="org.osmf.chrome.assets.BitmapResource"/>
     <classEntry path="org.osmf.chrome.assets.AssetResource"/>
     <classEntry path="org.osmf.chrome.widgets.FullScreenLeaveButton"/>

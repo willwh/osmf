@@ -24,11 +24,18 @@ package org.osmf.chrome.configuration
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.utils.getDefinitionByName;
+	
 	import org.osmf.chrome.assets.AssetsManager;
 	import org.osmf.chrome.widgets.*;
 	
 	public class WidgetsParser
 	{
+		public function addType(id:String, type:Class):void
+		{
+			widgetTypes[id.toLowerCase()] = type;
+		}
+		
 		public function get widgets():Vector.<Widget>
 		{
 			return _widgets;
@@ -134,7 +141,20 @@ package org.osmf.chrome.configuration
 		private function constructWidget(xml:XML, assetsManager:AssetsManager):Widget
 		{
 			var typeString:String = String(xml.@type == undefined ? "" : xml.@type).toLowerCase(); 
-			var type:Class = widgetTypes[typeString] || Widget;
+			var type:Class = widgetTypes[typeString]
+			if (type == null)
+			{
+				try 
+				{
+					type = flash.utils.getDefinitionByName(xml.@type || "") as Class;
+					trace("found: ", type);
+				}
+				catch(error:Error)
+				{
+					trace("WARNING: type not found", xml.@type);
+					type = Widget;
+				}
+			}
 			var widget:Widget = new type();
 			
 			// Parse child widgets:
