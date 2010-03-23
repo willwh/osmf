@@ -70,6 +70,7 @@ package org.osmf.net.httpstreaming.f4f
 		public function init(ba:ByteArray):void
 		{
 			_ba = ba;
+			_ba.position = 0;
 		}
 		
 		/**
