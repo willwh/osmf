@@ -397,5 +397,19 @@
 			
 		</widget>
 		
+		<widget
+			id="memoryMeter"
+			type="memoryMeter"
+			top="10"
+			left="10"
+			/>
+			
+		<widget
+			id="fpsMeter"
+			type="fpsMeter"
+			top="24"
+			left="10"
+			/>
+		
 	</widgets>
 </chrome>

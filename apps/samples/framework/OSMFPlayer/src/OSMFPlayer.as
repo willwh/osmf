@@ -34,6 +34,8 @@ package
 	
 	import org.osmf.chrome.configuration.WidgetsParser;
 	import org.osmf.chrome.widgets.EjectButton;
+	import org.osmf.chrome.widgets.FPSMeter;
+	import org.osmf.chrome.widgets.MemoryMeter;
 	import org.osmf.chrome.widgets.URLInput;
 	import org.osmf.chrome.widgets.Widget;
 	import org.osmf.containers.MediaContainer;
@@ -115,6 +117,8 @@ package
 		private function setupUserInterface():void
 		{
 			widgetsParser = new WidgetsParser();
+			widgetsParser.addType("memoryMeter", MemoryMeter);
+			widgetsParser.addType("fpsMeter", FPSMeter);
 			widgetsParser.parse
 				( preloader.configuration.configuration.widgets.*
 				, preloader.configuration.assetsManager
