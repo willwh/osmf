@@ -409,6 +409,17 @@ package org.osmf.elements
 					finishLoad();
 				}	
 			}	
+			
+			private function update(type:String):void
+			{
+				if (drmTrait == null)
+				{
+					createDRMTrait();	
+				}	
+				var updater:SystemUpdater = drmTrait.update(type);	
+				updater.addEventListener(Event.COMPLETE, onUpdateComplete);			
+			}
+		
 		}
 			
 		
@@ -606,21 +617,6 @@ package org.osmf.elements
 			}
      	}
      	
-     	CONFIG::FLASH_10_1
-		{
-     	private function update(type:String):void
-     	{
-     		if (drmTrait == null)
-			{
-				createDRMTrait();	
-			}	
-			var updater:SystemUpdater = drmTrait.update(type);	
-			updater.addEventListener(Event.COMPLETE, onUpdateComplete);			
-     	}
-     	}
-     	
-     	private static const DRM_STATUS_CODE:String = "DRM.encryptedFLV";
-     	
      	private var displayObjectTrait:DisplayObjectTrait;
      	private var defaultTimeTrait:ModifiableTimeTrait;
      	
@@ -632,8 +628,9 @@ package org.osmf.elements
 		private var _deblocking:int;
 		
 		CONFIG::FLASH_10_1
-		{		
-		private static const DRM_NEEDS_AUTHENTICATION:int				= 3330; 
+		{	
+		private static const DRM_STATUS_CODE:String 		= "DRM.encryptedFLV";
+		private static const DRM_NEEDS_AUTHENTICATION:int	= 3330; 
 		private var drmTrait:NetStreamDRMTrait;	
 		}
 	}
