@@ -66,6 +66,13 @@ function onHTMLMediaContainerConstructed(container)
 				element.setPlayable(true);
 				element.setCanPause(true);
 				
+				// Define that we now support the temporal trait:
+				this.setTemporal(true);
+				
+				// Set the duration of the element.
+				this.setDuration(5);
+				this.setCurrentTime(0);
+
 				this.setLoadState(osmf.constants.loadState.READY);
 			}
 			
@@ -74,6 +81,7 @@ function onHTMLMediaContainerConstructed(container)
 				osmf.trace(element.elementId + " UNloading.");
 				
 				element.setPlayable(false);
+				element.setTemporal(false);
 				
 				if (activeBanner == element) 
 				{
@@ -89,6 +97,24 @@ function onHTMLMediaContainerConstructed(container)
 			element.onPlayStateChange = function(newPlayState)
 			{
 				osmf.trace(element.elementId + " onPlayStateChange, new state: " + newPlayState);
+				
+				if (newPlayState == osmf.constants.playState.PLAYING)
+				{
+					// Cater for a callback that will signal
+					// when its duration is reached. This will
+					// cause the next banner to be loaded from
+					// Flash:
+					
+					function complete()
+					{
+						osmf.trace(element.elementId + " completion callback");
+						
+						bannerImage.src = null;
+						element.setCurrentTime(5); // seconds
+					}
+					
+					element.timeoutId = setTimeout(complete, 5 * 1000 /* milliseconds */);
+				}
 			}
 		}
 	}

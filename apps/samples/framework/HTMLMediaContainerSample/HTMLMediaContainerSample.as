@@ -23,7 +23,6 @@ package
 {
 	import org.osmf.containers.HTMLMediaContainer;
 	import org.osmf.containers.MediaContainer;
-	import org.osmf.elements.DurationElement;
 	import org.osmf.elements.HTMLElement;
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SerialElement;
@@ -50,15 +49,15 @@ package
 				
 					var banner1:HTMLElement = new HTMLElement();
 					banner1.resource = new URLResource(BANNER_1);
-					banners.addChild(new DurationElement(9, banner1));
+					banners.addChild(banner1);
 					
 					var banner2:HTMLElement = new HTMLElement();
 					banner2.resource = new URLResource(BANNER_2);
-					banners.addChild(new DurationElement(3, banner2));
+					banners.addChild(banner2);
 					
 					var banner3:HTMLElement = new HTMLElement();
 					banner3.resource = new URLResource(BANNER_3);
-					banners.addChild(new DurationElement(15, banner3));
+					banners.addChild(banner3);
 				
 				var video:VideoElement = constructVideo(REMOTE_PROGRESSIVE);
 				rootElement.addChild(video);
