@@ -25,8 +25,10 @@ package org.osmf.media
 	import flash.events.Event;
 	
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.ScaleMode;
+	import org.osmf.layout.VerticalAlign;
 	
 	/**
 	 * <code>MediaPlayerSprite</code> provides MediaPlayer, MediaContainer, and MediaFactory
@@ -74,12 +76,19 @@ package org.osmf.media
 					_mediaContainer.removeMediaElement(_media);
 				}
 				_media = value;				
+				if (_media && _media.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) == null)
+				{
+					var layout:LayoutMetadata = new LayoutMetadata();
+					layout.scaleMode = _scaleMode;
+					layout.percentWidth = 100;
+					layout.percentHeight = 100;
+					_media.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+				}				
 				_mediaPlayer.media = value;
 				if (value && !_mediaContainer.containsMediaElement(value) )
 				{
 					_mediaContainer.addMediaElement(value);
-				}
-				scaleMode = _scaleMode;
+				}				
 			}		
 		}
 		
@@ -180,11 +189,6 @@ package org.osmf.media
 			if (_media)
 			{
 				var layout:LayoutMetadata = _media.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
-				if (!layout)
-				{
-					layout = new LayoutMetadata();
-					_media.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-				}
 				_scaleMode = layout.scaleMode = value;
 			}			
 		}
@@ -194,17 +198,23 @@ package org.osmf.media
 		 */ 
 		override public function set width(value:Number):void
 		{
-			_mediaContainer.layout(value, height);
+			_mediaContainer.width = value;
 		}
 		
 		/**
 		 * @private
 		 */ 
 		override public function set height(value:Number):void
-		{
-			_mediaContainer.layout(width, value);
+		{	
+			_mediaContainer.height = value;			
+			
 		}
 		
+		public function layout(w:Number, h:Number):void
+		{
+			_mediaContainer.layout(w, h);
+		}
+				
 		/**
 		 * @private
 		 */ 
