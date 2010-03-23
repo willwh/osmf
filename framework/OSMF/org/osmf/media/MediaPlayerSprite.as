@@ -80,6 +80,8 @@ package org.osmf.media
 				{
 					var layout:LayoutMetadata = new LayoutMetadata();
 					layout.scaleMode = _scaleMode;
+					layout.verticalAlign = VerticalAlign.MIDDLE;
+					layout.horizontalAlign = HorizontalAlign.CENTER;
 					layout.percentWidth = 100;
 					layout.percentHeight = 100;
 					_media.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
