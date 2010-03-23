@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
 	xmlns:mx				="http://www.adobe.com/2006/mxml"
-	layout					="absolute"
-	 applicationComplete	="init()"
+	layout					="vertical"
+	applicationComplete		="init()"
+	paddingLeft				="0"
+	paddingTop				="0"
+	paddingRight			="0"
+	paddingBottom			="5"
 	>
 	
 	<mx:DataGrid
@@ -13,10 +17,15 @@
 		<mx:columns>
 			<mx:DataGridColumn width="25" headerText="ID" dataField="0"/>
 			<mx:DataGridColumn width="25" headerText="Time" dataField="1"/>
-			<mx:DataGridColumn width="75" headerText="Message" dataField="2"/>
+			<mx:DataGridColumn headerText="Message" dataField="2"/>
 			<mx:DataGridColumn headerText="Parameters" dataField="3"/>
 		</mx:columns>
 	</mx:DataGrid>
+	
+	<mx:Button
+		label	="Clear"
+		click	="{grid.dataProvider = log = new ArrayCollection()}"
+		/>
 	
 	<mx:Script>
 		<![CDATA[

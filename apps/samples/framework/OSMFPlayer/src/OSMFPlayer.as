@@ -49,6 +49,11 @@ package
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
 	
+	CONFIG::DEBUG 
+	{
+	import org.osmf.logging.Log;
+	}
+	
 	[Frame(factoryClass="Preloader")]
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="380")]
 	public class OSMFPlayer extends Sprite
@@ -59,6 +64,11 @@ package
 			
 			this.preloader = preloader;
 			_stage = preloader.stage;
+			
+			CONFIG::DEBUG
+			{
+				Log.loggerFactory = new DebuggerLoggerFactory(preloader.debugger);
+			}
 			
 			// Parse configuration from the parameters passed on
 			// embedding OSMFPlayer.swf:

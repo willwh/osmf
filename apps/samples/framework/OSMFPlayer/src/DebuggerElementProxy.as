@@ -113,7 +113,6 @@ package
 			debugger.send("bytesTotalChange", event.bytes);
 		}
 		
-		
 		private function processMediaSizeChange(event:DisplayObjectEvent):void
 		{
 			debugger.send("mediaSizeChange", event.newWidth, event.newHeight);
@@ -158,8 +157,6 @@ package
 		{
 			debugger.send("drmStateChange", event.drmState);
 		}
-		
-		
 		
 		// Internals
 		//
