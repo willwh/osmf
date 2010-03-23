@@ -95,7 +95,7 @@ package org.osmf.examples.traceproxy
 		
 		private function processDurationChange(event:TimeEvent):void
 		{
-			trace("durantionChange", event.time);
+			trace("durationChange", event.time);
 		}
 		
 		private function processLoadStateChange(event:LoadEvent):void

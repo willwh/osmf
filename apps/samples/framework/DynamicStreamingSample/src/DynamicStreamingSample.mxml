@@ -30,43 +30,22 @@
 	<mx:Script>
 		<![CDATA[
 			import org.osmf.containers.MediaContainer;
-			import org.osmf.media.MediaPlayer;
-			import org.osmf.media.DefaultMediaFactory;
-			import org.osmf.net.NetLoader;
-			import org.osmf.media.PluginInfoResource;
-			import org.osmf.media.MediaFactory;
-			import mx.events.StateChangeEvent;
-			import mx.controls.sliderClasses.Slider;
-			import mx.events.DropdownEvent;		
-			import mx.events.SliderEvent;
-			import mx.controls.Alert;
-			import mx.core.UIComponent;
-			
-			import org.osmf.traits.MediaTraitType;
-			import org.osmf.traits.LoadState;
-			import org.osmf.traits.LoadTrait;
-			import org.osmf.traits.MediaTraitType;			
-			import org.osmf.traits.DynamicStreamTrait;
-			import org.osmf.traits.DisplayObjectTrait;
-
 			import org.osmf.events.*;
-
-			import org.osmf.media.MediaFactoryItem;
-			import org.osmf.media.MediaElement;
-			import org.osmf.media.MediaResourceBase;
-			import org.osmf.media.URLResource;			
-
 			import org.osmf.elements.VideoElement;
-			
-			import org.osmf.utils.*;
-			
+ 			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.media.MediaElement;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.MediaPlayerState;
+			import org.osmf.media.MediaResourceBase;
+			import org.osmf.media.PluginInfoResource;
+			import org.osmf.media.URLResource;			
 			import org.osmf.net.DynamicStreamingResource;
+			import org.osmf.net.NetLoader;
 			
 			// Force the inclusion of the PluginInfo class so we can 
 			// load the plugin statically
 			import org.osmf.smil.SMILPluginInfo;
 			private static const forceReference:SMILPluginInfo = null;
-			
 			
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
@@ -91,10 +70,7 @@
 			private var smilFiles:Array = [ SMIL_TEST1, SMIL_TEST2, PROGRESSIVE_FLV, STREAMING_F4V ];
 			
 			[Bindable]
-			private var _mediaFileLoadState:String = "Not Loaded";
-			
-			[Bindable]
-			private var _dsTrait:DynamicStreamTrait;
+			private var _mediaPlayerState:String = "Not Loaded";
 			
 			[Bindable]
 			private var _isAutoSwitchable:Boolean = true;
@@ -102,7 +78,9 @@
 			[Bindable]
 			private var _autoSwitchBtnLabel:String = "Manual";
 			
-			private var _displayObjectTrait:DisplayObjectTrait;
+			[Bindable]
+			private var isDynamicStream:Boolean = false;
+			
 			private var mediaFactory:DefaultMediaFactory;
 			private var mediaElement:MediaElement;
 			private var mediaPlayer:MediaPlayer;
@@ -119,6 +97,9 @@
 				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
 				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE, onPlayingChange);
+				mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				
 				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
@@ -137,12 +118,6 @@
 
 				mediaElement = mediaFactory.createMediaElement(resource);
 
-				mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError, false, 0, true);
-				mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
-				
-				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-								
 				setMediaElement(mediaElement);
 				mediaContainerUIComponent.alpha = 1.0;
 			}
@@ -198,7 +173,6 @@
 				trace("Plugin LOAD FAILED!");
 			}
 			
-			
 			private function onPlayingChange(event:MediaPlayerCapabilityChangeEvent):void
 			{
 				if (event.type == MediaPlayerCapabilityChangeEvent.CAN_PLAY_CHANGE)
@@ -213,42 +187,30 @@
 					switchDownBtn.enabled = switchUpBtn.enabled = enable;
 			}
 			
-   			private function onTraitAdd(event:MediaElementEvent):void
+   			private function onIsDynamicStreamChange(event:MediaPlayerCapabilityChangeEvent):void
    			{
-   				switch (event.traitType)
+   				isDynamicStream = event.enabled;
+   				if (event.enabled)
    				{
-   					case MediaTraitType.DYNAMIC_STREAM:
-						_dsTrait = mediaPlayer.media.getTrait(MediaTraitType.DYNAMIC_STREAM) as DynamicStreamTrait;
-
-						if (_dsTrait != null)
-						{
-							_dsTrait.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
-							updateSwitchingControls();
-						}
-   						break;
-   					case MediaTraitType.DISPLAY_OBJECT:
-						_displayObjectTrait = mediaPlayer.media.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;						
-   						break;
-   				}	
+   					var streamMsg:String = "Current streaming profile index: " + mediaPlayer.currentDynamicStreamIndex + " of " + mediaPlayer.maxAllowedDynamicStreamIndex;
+					debug(streamMsg);
+					
+					mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onSwitchingChange);
+					updateSwitchingControls();
+				}
    			}
-
-			private function onLoadStateChange(event:LoadEvent):void
+   			
+ 			private function onStateChange(event:MediaPlayerStateChangeEvent):void
 			{
-				debug("onLoadStateChange() - loadState="+event.loadState);
+				debug("onStateChange() - state=" + event.state);
 
-				switch (event.loadState)
+				switch (event.state)
 				{
-					case LoadState.READY:
-						_mediaFileLoadState = "Ready";
+					case MediaPlayerState.READY:
+						_mediaPlayerState = "Ready";
 						break;					
-					case LoadState.LOAD_ERROR:
-						_mediaFileLoadState = "Load Error";
-						break;
-					case LoadState.UNINITIALIZED:
-						_mediaFileLoadState = "Not Loaded";
-						break;
-					case LoadState.UNLOADING:
-						_mediaFileLoadState = "Unloading";
+					case MediaPlayerState.PLAYBACK_ERROR:
+						_mediaPlayerState = "Error";
 						break;
 				}
 			}
@@ -272,10 +234,10 @@
 				
 				if (showCurrentIndex)
 				{
-					var streamMsg:String = "Current streaming profile index: " + _dsTrait.currentIndex + " of " + _dsTrait.maxAllowedIndex;
+					var streamMsg:String = "Current streaming profile index: " + mediaPlayer.currentDynamicStreamIndex + " of " + mediaPlayer.maxAllowedDynamicStreamIndex;
 					debug(streamMsg);
 					
-					streamMsg = "Current bitrate = " + _dsTrait.getBitrateForIndex(_dsTrait.currentIndex) + "kbps";
+					streamMsg = "Current bitrate = " + mediaPlayer.getBitrateForDynamicStreamIndex(mediaPlayer.currentDynamicStreamIndex) + "kbps";
 					debug(streamMsg);
 				}
 				
@@ -285,17 +247,17 @@
 			private function updateSwitchingControls():void
 			{				
 				// Disable if a switch is pending or the video is not switchable
-				if (_dsTrait == null || _dsTrait.switching)
+				if (mediaPlayer.isDynamicStream == false || mediaPlayer.dynamicStreamSwitching)
 				{
 					autoSwitchBtn.enabled = false;
 					switchUpBtn.enabled = false;
 					switchDownBtn.enabled = false;
 				}
-				else if (!_dsTrait.autoSwitch)
+				else if (!mediaPlayer.autoDynamicStreamSwitch)
 				{
 					autoSwitchBtn.enabled = true;
-					switchUpBtn.enabled = (_dsTrait.currentIndex == _dsTrait.maxAllowedIndex) ? false : true;
-					switchDownBtn.enabled = (_dsTrait.currentIndex == 0) ? false : true;
+					switchUpBtn.enabled = (mediaPlayer.currentDynamicStreamIndex == mediaPlayer.maxAllowedDynamicStreamIndex) ? false : true;
+					switchDownBtn.enabled = (mediaPlayer.currentDynamicStreamIndex  == 0) ? false : true;
 				}
 				else
 				{
@@ -335,13 +297,7 @@
 			
 			private function unload():void
 			{
-				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
-				loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-				
-				if (loadTrait && (loadTrait.loadState == LoadState.READY))
-				{
-					loadTrait.unload();
-				}
+				mediaPlayer.media = null;
 				mediaContainerUIComponent.alpha = MEDIA_PLAYER_UNLOADED_ALPHA;
 				clear(false);
 			}			
@@ -435,34 +391,32 @@
    			
 			private function onSwitchUp():void
 			{
-				if (_dsTrait && !_dsTrait.autoSwitch && !_dsTrait.switching)
+				if (mediaPlayer.isDynamicStream && !mediaPlayer.autoDynamicStreamSwitch && !mediaPlayer.dynamicStreamSwitching)
 				{
-					var max:int = _dsTrait.maxAllowedIndex;
-					if (_dsTrait.currentIndex < max)
+					if (mediaPlayer.currentDynamicStreamIndex < mediaPlayer.maxAllowedDynamicStreamIndex)
 					{
-						_dsTrait.switchTo(_dsTrait.currentIndex + 1);
+						mediaPlayer.switchDynamicStreamIndex(mediaPlayer.currentDynamicStreamIndex + 1);
 					}
 				}
-				
 			}
 			
 			private function onSwitchDown():void
 			{
-				if (_dsTrait && !_dsTrait.autoSwitch && !_dsTrait.switching)
+				if (mediaPlayer.isDynamicStream && !mediaPlayer.autoDynamicStreamSwitch && !mediaPlayer.dynamicStreamSwitching)
 				{
-					if (_dsTrait.currentIndex > 0)
+					if (mediaPlayer.currentDynamicStreamIndex > 0)
 					{
-						_dsTrait.switchTo(_dsTrait.currentIndex - 1);
+						mediaPlayer.switchDynamicStreamIndex(mediaPlayer.currentDynamicStreamIndex - 1);
 					}
 				}				
 			}
 			
 			private function onAutoSwitchable():void
 			{
-				if (_dsTrait)
+				if (mediaPlayer.isDynamicStream)
 				{
 					this._isAutoSwitchable = !this._isAutoSwitchable;
-					_dsTrait.autoSwitch = this._isAutoSwitchable; 
+					mediaPlayer.autoDynamicStreamSwitch = this._isAutoSwitchable; 
 					debug("Setting auto switch mode to " + this._isAutoSwitchable);
 					
 					_autoSwitchBtnLabel = (_isAutoSwitchable ? "Manual" : "Auto");
@@ -500,7 +454,7 @@
 			<mx:ComboBox id="cbMediaURL" editable="true" dataProvider="{this.smilFiles}" />
 			<mx:Button label="Load" click="{loadMedia(cbMediaURL.text)}"/>
 			<mx:Button label="Unload" click="{unload()}"/>
-			<mx:Label text="{_mediaFileLoadState}"/>
+			<mx:Label text="{_mediaPlayerState}"/>
 		</mx:HBox>	
 
 		<mx:Spacer height="5" />
@@ -518,7 +472,7 @@
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
 						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" />
-						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{_dsTrait!=null}" />
+						<mx:Button id="autoSwitchBtn" label="{_autoSwitchBtnLabel}" click="onAutoSwitchable()" enabled="{isDynamicStream}" />
 						<mx:Button id="switchUpBtn" label="+" click="onSwitchUp()" enabled="false" />
 						<mx:Button id="switchDownBtn" label="-" click="onSwitchDown()" enabled="false" />
 	    			</mx:HBox>
