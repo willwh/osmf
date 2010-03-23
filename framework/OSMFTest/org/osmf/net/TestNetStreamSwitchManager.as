@@ -88,6 +88,31 @@ package org.osmf.net
 			stream = null;
 		}
 		
+		public function testConstructorWithInitialIndex():void
+		{
+			dsResource.initialIndex = 3;
+			
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+			var stream:NetStream = netFactory.createNetStream(connection);
+			stream.client = new NetClient();
+			
+			if (stream is MockNetStream)
+			{
+				(stream as MockNetStream).expectedDuration = 2;
+			}
+			
+			metrics = new MockRTMPNetStreamMetrics(stream);
+
+			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
+			switchingRule = new DynamicSwitchingRule(metrics);
+			rules.push(switchingRule);
+
+			switchManager = new NetStreamSwitchManager(connection, stream, dsResource, metrics, rules);
+
+			assertTrue(switchManager.currentIndex == 3);
+		}
+		
 		public function testMaxAllowedIndexToWithInvalidValue():void
 		{
 			try
@@ -245,6 +270,31 @@ package org.osmf.net
 			}
 		}
 
+		public function testAutoSwitchWithSwitchUpWithMaxIndex():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			
+			assertTrue(switchManager.autoSwitch);
+			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUpWithMaxIndex);
+			
+			playStream(1);
+			
+			// Set our max index.
+			switchManager.maxAllowedIndex = 2;
+			
+			// Suggest an up-switch.
+			switchingRule.newIndex = 3;
+		}
+		
+		private function onTestAutoSwitchWithSwitchUpWithMaxIndex(info:Object):void
+		{
+			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
+			{
+				assertTrue(switchManager.currentIndex == 2);
+				
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
 		private function mustReceiveEvent(event:Event):void
 		{
 			// Placeholder to ensure an event is received.

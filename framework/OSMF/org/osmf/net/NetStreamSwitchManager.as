@@ -71,6 +71,8 @@ package org.osmf.net
 			this.dsResource = resource;
 			this.metrics = metrics;
 			this.switchingRules = switchingRules || new Vector.<SwitchingRuleBase>();
+			
+			_currentIndex = Math.max(0, Math.min(maxAllowedIndex, dsResource.initialIndex));
 
 			checkRulesTimer = new Timer(RULE_CHECK_INTERVAL);
 			checkRulesTimer.addEventListener(TimerEvent.TIMER, checkRules);
@@ -311,6 +313,14 @@ package org.osmf.net
 				{
 					newIndex = n;
 				} 
+			}
+			
+			if (	newIndex != -1
+				&& 	newIndex != int.MAX_VALUE
+				&&	newIndex != actualIndex
+			   )
+			{
+				newIndex = Math.min(newIndex, maxAllowedIndex);
 			}
 			
 			if (	newIndex != -1
