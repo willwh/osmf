@@ -50,6 +50,9 @@ package org.osmf.net
 	 * NetConnections may be shared between LoadTrait instances.
 	 * If the resource URL is HTTP, performs a <code>connect(null)</code>
 	 * for progressive downloads.</p>
+	 * The NetLoader supports Flash Media Token Authentication,  
+	 * for passing authentication tokens through the NetConnection.
+	 *
 	 * 
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10

@@ -107,6 +107,9 @@ package org.osmf.elements
 	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
+	* 
+	* The VideoElement supports Flash Media Token Authentication,  
+	* for passing authentication tokens through the NetConnection.
 	*
 	* The BasicVideoElement has support for the DRMTrait.  The DRMTrait implementation on 
 	* this element will use the NetStreamDRMTrait, which contains the Flash Player's specific DRM
