@@ -113,25 +113,7 @@ package org.osmf.net
 			{
 				this.netConnectionArguments = streamingResource.connectionArguments;
 			}
-			
-			var url:URL = new URL(resource.url);
-			var query:String = url.query;
-						
-			if (asAdobe.test(query) && 
-				teConnect.test(query))
-			{
-				var args:Array = query.split("&");
-				if (netConnectionArguments == null)
-				{
-					netConnectionArguments = new Vector.<Object>;
-				}
-				for each(var item:Object in args)
-				{
-					netConnectionArguments.push(item);	
-				}				
-			}
-			
-			
+		
 			initializeConnectionAttempts();
 			tryToConnect(null);
 		}
@@ -350,10 +332,7 @@ package org.osmf.net
 				, ""
 				);
 		}
-				
-		private var asAdobe:RegExp = /as=adobe/;
-		private var teConnect:RegExp = /te=connect/;
-				
+		
 		private var resource:URLResource;
 		private var netConnectionURLs:Vector.<String>;
 		private var netConnections:Vector.<NetConnection>;
