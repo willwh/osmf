@@ -106,7 +106,7 @@ package org.osmf.logging
 			msg += new Date().toLocaleString() + " [" + level + "] ";
 			
 			// add category and params
-			msg += "[" + _category + "] " + applyParams(message, params);
+			msg += "[" + category + "] " + applyParams(message, params);
 			
 			// trace the message
 			trace(msg);
@@ -132,8 +132,6 @@ package org.osmf.logging
 			
 			return result;
 		}
-		
-		private var _category:String;
 		
 		private static const LEVEL_DEBUG:String = "DEBUG";
 		private static const LEVEL_WARN:String = "WARN";
