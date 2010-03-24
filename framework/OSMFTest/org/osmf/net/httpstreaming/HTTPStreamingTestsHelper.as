@@ -21,106 +21,123 @@
 *****************************************************/
 package org.osmf.net.httpstreaming
 {
-	import flash.utils.ByteArray;
+	import __AS3__.vec.Vector;
 	
-	import org.osmf.net.httpstreaming.f4f.F4FConstants;
+	import flash.utils.ByteArray;
 	
 	public class HTTPStreamingTestsHelper
 	{
-		public static function createAdobeBootstrapBox(live:Boolean, update:Boolean):ByteArray
+		public static function createAdobeBootstrapBox(descriptor:AdobeBootstrapBoxDescriptor):ByteArray
 		{
 			var ba:ByteArray = new ByteArray();
-			
-			writeAbstAttributes(live, update, ba);
+			writeAbstAttributes(descriptor, ba);
 			
 			return ba;
 		}
-		
-		private static function writeAbstAttributes(live:Boolean, update:Boolean, ba:ByteArray):void
-		{
+
+		private static function writeAbstAttributes(descriptor:AdobeBootstrapBoxDescriptor, ba:ByteArray):void
+		{			
 			writeFullBox("abst", ba);
 			// bootstrapinfo_version = 100
-			ba.writeUnsignedInt(100);
-			wrteAbstFlags(live, update, ba);
+			ba.writeUnsignedInt(descriptor.bootstrapInfoVersion);
+			writeAbstFlags(descriptor.profile, descriptor.live, descriptor.update, ba);
 			// timescale is ms
-			ba.writeUnsignedInt(1000);
+			ba.writeUnsignedInt(descriptor.timeScale);
 			// current media time
-			ba.writeUnsignedInt(0);
-			ba.writeUnsignedInt(22000);
+			ba.writeUnsignedInt(descriptor.currentMediaTimeH);
+			ba.writeUnsignedInt(descriptor.currentMediaTimeL);
 			// smpte time code offset
-			ba.writeUnsignedInt(0);
-			ba.writeUnsignedInt(0);
+			ba.writeUnsignedInt(descriptor.smpteTimeCodeOffsetH);
+			ba.writeUnsignedInt(descriptor.smpteTimeCodeOffsetL);
 			// movie identifier
-			ba.writeUTFBytes("movie");
+			ba.writeUTFBytes(descriptor.movieIdentifier);
 			ba.writeByte(0);
-				
-			// server entry count
-			ba.writeByte(1);
-			// server base url
-			ba.writeUTFBytes("http://www.httpstreaming.net/server_base_url");
-			ba.writeByte(0);
-			// quality entry count
-			ba.writeByte(0);
+
+			// server base urls
+			writeStrings(descriptor.serverBaseUrls, ba);
+			// quality segment url modifiers
+			writeStrings(descriptor.qualitySegmentUrlModifiers, ba);
+							
 			// drm data
-			ba.writeUTFBytes("");
+			ba.writeUTFBytes(descriptor.drmData);
 			ba.writeByte(0);
 			// metadata
-			ba.writeUTFBytes("");
+			ba.writeUTFBytes(descriptor.metadata);
 			ba.writeByte(0);
 			
-			writeSegmentRuntables(ba);
-			writeFragmentRuntables(ba);		
+			writeSegmentRunTables(descriptor, ba);
+			writeFragmentRunTables(descriptor, ba);					
 		}
 		
-		private static function writeSegmentRuntables(ba:ByteArray):void
+		private static function writeStrings(strings:Vector.<String>, ba:ByteArray):void
+		{
+			ba.writeByte(strings.length);
+			for (var i:int = 0; i < strings.length; i++)
+			{
+				ba.writeUTFBytes(strings[i]);
+				ba.writeByte(0);
+			}
+		}
+		
+		private static function writeSegmentRunTables(descriptor:AdobeBootstrapBoxDescriptor, ba:ByteArray):void
 		{
 			// segment runtable count
-			ba.writeByte(1);
-
-			writeFullBox("asrt", ba);
-			// quality entry count
-			ba.writeByte(0);
-			// entry count
-			ba.writeUnsignedInt(1);
-			// entries
-			// first segment
-			ba.writeUnsignedInt(1);
-			// fragments per segment
-			ba.writeUnsignedInt(16);
+			ba.writeByte(descriptor.segmentRunTables.length);
+			for (var i:int = 0; i < descriptor.segmentRunTables.length; i++)
+			{
+				writeSegmentRunTable(descriptor.segmentRunTables[i], ba);
+			}
 		}
 		
-		private static function writeFragmentRuntables(ba:ByteArray):void
+		private static function writeSegmentRunTable(table:AdobeSegmentRunTableDescriptor, ba:ByteArray):void
+		{
+			writeFullBox("asrt", ba);
+			
+			// quality segment url modifiers
+			writeStrings(table.qualitySegmentUrlModifiers, ba);
+			
+			// entry count
+			ba.writeUnsignedInt(table.segmentRunTableEntries.length);
+			for (var i:int = 0; i < table.segmentRunTableEntries.length; i++)
+			{
+				// first segment
+				ba.writeUnsignedInt(table.segmentRunTableEntries[i].firstSegment);
+				// fragments per segment
+				ba.writeUnsignedInt(table.segmentRunTableEntries[i].fragmentsPerSegment);
+			}
+		}
+		
+		private static function writeFragmentRunTables(descriptor:AdobeBootstrapBoxDescriptor, ba:ByteArray):void
 		{
 			// fragment runtable count
-			ba.writeByte(1);
-			
+			ba.writeByte(descriptor.fragmentRunTables.length);
+			for (var i:int = 0; i < descriptor.fragmentRunTables.length; i++)
+			{
+				writeFragmentRunTable(descriptor.fragmentRunTables[i], ba);
+			}
+		}
+
+		private static function writeFragmentRunTable(table:AdobeFragmentRunTableDescriptor, ba:ByteArray):void
+		{
 			writeFullBox("afrt", ba);
 			// time scale ms
-			ba.writeUnsignedInt(1000);
-			// quality entry count
-			ba.writeByte(0);
-			// entry count
-			ba.writeUnsignedInt(7);
+			ba.writeUnsignedInt(table.timeScale);
+			// quality segment url modifiers
+			writeStrings(table.qualitySegmentUrlModifiers, ba);
 
-			/**
-			 *	Fragment runtable entries
-			 *  
-			 *  first_fragment		first_fragment_time_stamp		fragment_duration		discontinuity_indicator
-			 *  	1					0								4000					-
-			 * 		5					16000							0						1
-			 * 		6					16000							0						2
-			 * 		7					16000							500						-
-			 * 		11					18000							0						3
-			 * 		12					18000							1000					-
-			 * 		16					22000							0						0 
-			 */
-			writeFragmentRuntableEntry(1, 0, 0, 4000, 0, ba);
-			writeFragmentRuntableEntry(5, 0, 16000, 0, 1, ba);
-			writeFragmentRuntableEntry(6, 0, 16000, 0, 2, ba);
-			writeFragmentRuntableEntry(7, 0, 16000, 500, 0, ba);
-			writeFragmentRuntableEntry(11, 0, 18000, 0, 3, ba);
-			writeFragmentRuntableEntry(12, 0, 18000, 1000, 0, ba);
-			writeFragmentRuntableEntry(16, 0, 22000, 0, 0, ba);
+			// entry count
+			ba.writeUnsignedInt(table.fragmentRunTableEntries.length);
+			for (var i:int = 0; i < table.fragmentRunTableEntries.length; i++)
+			{
+				var entry:FragmentRunTableEntryDescriptor = table.fragmentRunTableEntries[i];
+				writeFragmentRuntableEntry(
+					entry.firstFragment, 
+					entry.firstFragmentTimeStampH, 
+					entry.firstFragmentTimeStampL, 
+					entry.duration, 
+					entry.discontinuityIndicator,
+					ba);
+			}
 		}
 
 		private static function writeFragmentRuntableEntry(
@@ -148,30 +165,22 @@ package org.osmf.net.httpstreaming
 			ba.writeByte(0);			
 		}	
 			
-		private static function wrteAbstFlags(live:Boolean, update:Boolean, ba:ByteArray):void
+		private static function writeAbstFlags(profile:uint, live:Boolean, update:Boolean, ba:ByteArray):void
 		{
+			var data:uint = 0;
 			if (live)
 			{
-				if (update)
-				{
-					ba.writeByte(0x0300);
-				}
-				else
-				{
-					ba.writeByte(0x0200);
-				}
+				data |= 0x0200;
 			}
-			else
+			if (update)
 			{
-				if (update)
-				{
-					ba.writeByte(0x0100);
-				}
-				else
-				{
-					ba.writeByte(0x0000);
-				}
+				data |= 0x0100;
 			}
+			if (profile == 1)
+			{
+				data |= 0x1000;
+			}
+			ba.writeByte(data);
 		}
 	}
 }
