@@ -115,7 +115,7 @@ package
 		
 		private function processMediaSizeChange(event:DisplayObjectEvent):void
 		{
-			debugger.send("EVENT","mediaSizeChange", event.newWidth, event.newHeight);
+			debugger.send("EVENT","mediaSizeChange", "[" + event.newWidth + ", " + event.newHeight + "]");
 		}
 		
 		private function processMutedChange(event:AudioEvent):void
@@ -140,7 +140,7 @@ package
 		
 		private function processSeekingChange(event:SeekEvent):void
 		{
-			debugger.send("EVENT","seekingChange", event.seeking, event.time);
+			debugger.send("EVENT","seekingChange", event.seeking + ", " + event.time);
 		}
 		
 		private function processSwitchingChange(event:DynamicStreamEvent):void
