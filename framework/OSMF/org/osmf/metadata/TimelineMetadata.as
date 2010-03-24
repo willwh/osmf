@@ -607,13 +607,6 @@ package org.osmf.metadata
 				return false;
 			}
 			
-			// Get the next time value after this one so we can decide to adjust the timer interval
-			var nextTime:Number =
-				temporalValueCollection [   index + 1 < temporalKeyCollection.length
-									  	  ? index + 1
-									  	  : temporalKeyCollection.length - 1
-									 	].time;
-					
 			var result:Boolean = false;																				
 		
 			if ( 	(temporalValueCollection[index].time >= (now - TOLERANCE))
@@ -627,6 +620,9 @@ package org.osmf.metadata
 				
 				// Adjust the timer interval if necessary
 				var thisTime:Number = temporalKeyCollection[index];
+				// Get the next time value after this one so we can decide to adjust the timer interval
+				var nextTime:Number = calcNextTime(index);
+				
 				var newDelay:Number = ((nextTime - thisTime)*1000)/4;
 				newDelay = (newDelay > CHECK_INTERVAL) ? newDelay : CHECK_INTERVAL;
 								
@@ -649,7 +645,7 @@ package org.osmf.metadata
 			//    if it happens to fall between this check and next one.
 			// See if we are going to miss a data point (meaning there is one between now and the 
 			//    next interval timer event).  If so, drop back down to the default check interval.
-			else if ((intervalTimer.delay != CHECK_INTERVAL) && ((now + (intervalTimer.delay/1000)) > nextTime)) 
+			else if ((intervalTimer.delay != CHECK_INTERVAL) && ((now + (intervalTimer.delay/1000)) > calcNextTime(index))) 
 			{
 				this.intervalTimer.reset();
 				this.intervalTimer.delay = CHECK_INTERVAL;
@@ -658,6 +654,14 @@ package org.osmf.metadata
 			return result;				
    		}		
 
+		private function calcNextTime(index:int):Number
+		{
+			return temporalValueCollection [ index + 1 < temporalKeyCollection.length
+										  	 ? index + 1
+					  		  				 : temporalKeyCollection.length - 1
+					 						].time;
+		}
+		
 		/**
 		 * The interval timer event handler.
 		 *  
