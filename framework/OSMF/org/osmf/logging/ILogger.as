@@ -21,11 +21,7 @@
 *****************************************************/
 package org.osmf.logging
 {
-	[ExcludeClass]
-	
 	/**
-	 * @private
-	 * 
 	 * ILogger interface defines the capabilities of a logger, the 
 	 * object that OSMF applications interact to write logging messages.
 	 * 
@@ -46,7 +42,7 @@ package org.osmf.logging
 	 * 		to application failure.
 	 * 
 	 * The message logging functions take the format of 
-	 * 	function_name(message:String, ...params):void
+	 * 	function_name(message:String, ...rest):void
 	 * 
 	 * Where:
 	 * 		message:String — The information to log. This string can contain 
@@ -54,7 +50,7 @@ package org.osmf.logging
 	 * 			based index that will be replaced with the additional parameters 
 	 * 			found at that index if specified.
 	 * 
-	 * 		...params — Additional parameters that can be subsituted in the str 
+	 * 		...rest — Additional parameters that can be subsituted in the str 
 	 * 			parameter at each "{x}" location, where x is an integer (zero based) 
 	 * 			index value into the Array of values specified. 
 	 * 
@@ -71,6 +67,16 @@ package org.osmf.logging
 	public interface ILogger
 	{
 		/**
+		 * The category value for the logger.
+		 * 
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 **/
+		function get category():String;
+		
+		/**
 		 * Logs a message with a "debug" level.
 		 *  
 		 *  @langversion 3.0
@@ -78,7 +84,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function debug(message:String, ... params):void;
+		function debug(message:String, ... rest):void;
 		
 		/**
 		 * Logs a message with a "info" level.
@@ -88,7 +94,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function info(message:String, ... params):void;
+		function info(message:String, ... rest):void;
 		
 		/**
 		 * Logs a message with a "warn" level.
@@ -98,7 +104,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function warn(message:String, ... params):void;
+		function warn(message:String, ... rest):void;
 		
 		/**
 		 * Logs a message with a "error" level.
@@ -108,7 +114,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function error(message:String, ... params):void;
+		function error(message:String, ... rest):void;
 		
 		/**
 		 * Logs a message with a "fatal" level.
@@ -118,56 +124,6 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function fatal(message:String, ... params):void;
-
-		/**
-		 * Is debug logging currently enabled?
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		function get debugEnabled():Boolean;
-		
-		/**
-		 * Is info logging currently enabled?
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		function get infoEnabled():Boolean;
-		
-		/**
-		 * Is warn logging currently enabled?
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		function get warnEnabled():Boolean;
-		
-		/**
-		 * Is error logging currently enabled?
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		function get errorEnabled():Boolean;
-		
-		/**
-		 * Is fatal logging currently enabled?
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		function get fatalEnabled():Boolean;
+		function fatal(message:String, ... rest):void;
 	}
 }

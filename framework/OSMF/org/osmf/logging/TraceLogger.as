@@ -26,11 +26,7 @@ package org.osmf.logging
 	/**
 	 * @private
 	 * 
-	 * This class implements the ILogger interface. This is just a 
-	 * "bare-bone" implementation. It intends to provide a quick out-of-box
-	 * logging solution. It writes all the messages to the debug console. 
-	 * However, it does not allow users to do message-level-based logging
-	 * control.
+	 * An ILogger implementation which sends log messages to the trace console.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -39,9 +35,14 @@ package org.osmf.logging
 	 */
 	public class TraceLogger implements ILogger
 	{
-		public function TraceLogger(name:String)
+		/**
+		 * Constructor.
+		 * 
+		 * @param category The category value for the Logger.
+		 **/
+		public function TraceLogger(category:String)
 		{
-			this.name = name;
+			_category = category;
 		}
 
 		/**
@@ -52,9 +53,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function debug(message:String, ...params):void
+		public function debug(message:String, ...rest):void
 		{
-			log(LEVEL_DEBUG, message, params);
+			log(LEVEL_DEBUG, message, rest);
 		}
 		
 		/**
@@ -65,9 +66,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function info(message:String, ...params):void
+		public function info(message:String, ...rest):void
 		{
-			log(LEVEL_INFO, message, params);
+			log(LEVEL_INFO, message, rest);
 		}
 		
 		/**
@@ -78,9 +79,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function warn(message:String, ...params):void
+		public function warn(message:String, ...rest):void
 		{
-			log(LEVEL_WARN, message, params);
+			log(LEVEL_WARN, message, rest);
 		}
 		
 		/**
@@ -91,9 +92,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function error(message:String, ...params):void
+		public function error(message:String, ...rest):void
 		{
-			log(LEVEL_ERROR, message, params);
+			log(LEVEL_ERROR, message, rest);
 		}
 		
 		/**
@@ -104,9 +105,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function fatal(message:String, ...params):void
+		public function fatal(message:String, ...rest):void
 		{
-			log(LEVEL_FATAL, message, params);
+			log(LEVEL_FATAL, message, rest);
 		}
 		
 		/**
@@ -117,64 +118,12 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function get debugEnabled():Boolean
+		public function get category():String
 		{
-			return true;
+			return _category;
 		}
 		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get infoEnabled():Boolean
-		{
-			return true;
-		}
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get warnEnabled():Boolean
-		{
-			return true;
-		}
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get errorEnabled():Boolean
-		{
-			return true;
-		}
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get fatalEnabled():Boolean
-		{
-			return true;
-		}
-
-		// internal
+		// Internals
 		//
 		
 		/**
@@ -187,15 +136,15 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function log(level:String, message:String, params:Array):void
+		private function log(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
 			// add datetime
 			msg += new Date().toLocaleString() + " [" + level + "] ";
 			
-			// add name and params
-			msg += "[" + name + "] " + applyParams(message, params);
+			// add category and params
+			msg += "[" + _category + "] " + applyParams(message, params);
 			
 			// trace the message
 			trace(msg);
@@ -209,7 +158,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function applyParams(message:String, params:Array):String
+		private function applyParams(message:String, params:Array):String
 		{
 			var result:String = message;
 			var numParams:int = params.length;
@@ -222,7 +171,7 @@ package org.osmf.logging
 			return result;
 		}
 		
-		private var name:String;
+		private var _category:String;
 		
 		private static const LEVEL_DEBUG:String = "DEBUG";
 		private static const LEVEL_WARN:String = "WARN";

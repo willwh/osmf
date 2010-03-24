@@ -38,6 +38,9 @@ package org.osmf.logging
 	 */
 	public class TraceLoggerFactory implements ILoggerFactory
 	{
+		/**
+		 * Constructor.
+		 **/
 		public function TraceLoggerFactory()
 		{
 			loggers = new Dictionary();
@@ -51,20 +54,20 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function getLogger(name:String):ILogger
+		public function getLogger(category:String):ILogger
 		{
-			var logger:ILogger = loggers[name];
+			var logger:ILogger = loggers[category];
 			
 			if (logger == null)
 			{
-				logger = new TraceLogger(name);
-				loggers[name] = logger;
+				logger = new TraceLogger(category);
+				loggers[category] = logger;
 			}
 			
 			return logger;
 		}
 		
-		// internal
+		// Internals
 		//
 		
 		private var loggers:Dictionary;

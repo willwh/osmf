@@ -21,11 +21,10 @@
 *****************************************************/
 package org.osmf.logging.flex
 {
-	import mx.logging.ILoggingTarget;
 	import mx.logging.Log;
 	
-	import org.osmf.logging.ILoggerFactory;
 	import org.osmf.logging.ILogger;
+	import org.osmf.logging.ILoggerFactory;
 	
 	/**
 	 * This class implements ILoggerFactory of the OSMF logging framework and it
@@ -40,14 +39,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function getLogger(name:String):ILogger
+		public function getLogger(category:String):ILogger
 		{
-			return new FlexLoggerWrapper(mx.logging.Log.getLogger(name));
-		}
-		
-		public function addTarget(target:ILoggingTarget):void
-		{
-			mx.logging.Log.addTarget(target);
+			return new FlexLoggerWrapper(mx.logging.Log.getLogger(category));
 		}
 	}
 }

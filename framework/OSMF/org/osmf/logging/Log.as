@@ -21,14 +21,8 @@
 *****************************************************/
 package org.osmf.logging
 {
-	[ExcludeClass]
-	
 	/**
-	 * @private
-	 * 
-	 * Usually, there is one instance of ILoggerFactory per OSMF application. Log is the
-	 * designated holder of the logger factory for the OSMF application as well as OSMF 
-	 * media framework to access the global logger factory. 
+	 * Log is the central access point for logging messages.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
@@ -38,27 +32,8 @@ package org.osmf.logging
 	public class Log
 	{
 		/**
-		 * OSMF application, if decides to use the logging framework, should call this function
-		 * to set logger factory once at the start of the application. 
+		 * The ILoggerFactory used across the application. 
 		 * 
-		 * @param factory Reference to the logger factory
-		 * 
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public static function set loggerFactory(factory:ILoggerFactory):void
-		{
-			_loggerFactory = factory;
-		}
-		
-		/**
-		 * Once the loggerFactory property has been initialized, the rest of the application
-		 * should use this property to access the logger factory.
-		 * 
-		 * @return the loggerFactory
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -69,20 +44,24 @@ package org.osmf.logging
 		{
 			return _loggerFactory;
 		}
+
+		public static function set loggerFactory(value:ILoggerFactory):void
+		{
+			_loggerFactory = value;
+		}
 		
 		/**
-		 * This is a convenient function for the OSMF application developer to call to 
-		 * get a hold on a logger.
+		 * Returns a logger for the specified category. 
 		 * 
-		 * @param name The name that identifies a particular logger
-		 * @return the logger identified by the name
+		 * @param category The category that identifies a particular logger
+		 * @return the logger identified by the category
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getLogger(name:String):ILogger
+		public static function getLogger(category:String):ILogger
 		{
 			CONFIG::LOGGING
 			{
@@ -92,7 +71,7 @@ package org.osmf.logging
 				}
 			}
 			
-			return (_loggerFactory == null)? null : _loggerFactory.getLogger(name);
+			return (_loggerFactory == null)? null : _loggerFactory.getLogger(category);
 		}
 
 		// Internals

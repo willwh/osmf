@@ -36,9 +36,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function debug(message:String, ...parameters):void
+		public function debug(message:String, ...rest):void
 		{
-			var args:Array = parameters.concat();
+			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.debug.apply(logger, args);
 		}
@@ -46,9 +46,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function info(message:String, ...parameters):void
+		public function info(message:String, ...rest):void
 		{
-			var args:Array = parameters.concat();
+			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.info.apply(logger, args);
 		}
@@ -56,9 +56,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function warn(message:String, ...parameters):void
+		public function warn(message:String, ...rest):void
 		{
-			var args:Array = parameters.concat();
+			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.warn.apply(logger, args);
 		}
@@ -66,9 +66,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function error(message:String, ...parameters):void
+		public function error(message:String, ...rest):void
 		{
-			var args:Array = parameters.concat();
+			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.error.apply(logger, args);
 		}
@@ -76,9 +76,9 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function fatal(message:String, ...parameters):void
+		public function fatal(message:String, ...rest):void
 		{
-			var args:Array = parameters.concat();
+			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.fatal.apply(logger, args);
 		}
@@ -86,44 +86,12 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function get debugEnabled():Boolean
+		public function get category():String
 		{
-			return mx.logging.Log.isDebug();
+			return logger.category;
 		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get infoEnabled():Boolean
-		{
-			return mx.logging.Log.isInfo();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get warnEnabled():Boolean
-		{
-			return mx.logging.Log.isWarn();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get errorEnabled():Boolean
-		{
-			return mx.logging.Log.isError();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get fatalEnabled():Boolean
-		{
-			return mx.logging.Log.isFatal();
-		}
-		
-		// internal
+
+		// Internals
 		//
 		
 		private var logger:mx.logging.ILogger;
