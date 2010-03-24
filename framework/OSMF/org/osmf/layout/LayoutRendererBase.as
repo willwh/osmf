@@ -913,23 +913,23 @@ package org.osmf.layout
 			
 			cleaningRenderers = true;
 			
-			CONFIG::LOGGING { logger.debug("------------ ON EXIT FRAME ------------"); }
+			CONFIG::LOGGING { logger.debug("ON EXIT FRAME: BEGIN"); }
 			
 			while (dirtyRenderers.length != 0)
 			{
 				var renderer:LayoutRendererBase = dirtyRenderers.shift();
 				if (renderer.parent == null)
 				{
-					CONFIG::LOGGING { logger.debug("---------- VALIDATING LAYOUT ---------- "); }
+					CONFIG::LOGGING { logger.debug("VALIDATING LAYOUT"); }
 					renderer.validateNow();
-					CONFIG::LOGGING { logger.debug("---------- LAYOUT VALIDATED -----------"); }
+					CONFIG::LOGGING { logger.debug("LAYOUT VALIDATED"); }
 				}
 				else
 				{
 					renderer.dirty = false;
 				}
 			}
-			CONFIG::LOGGING { logger.debug("--------------------------------------"); }
+			CONFIG::LOGGING { logger.debug("ON EXIT FRAME: END"); }
 			
 			cleaningRenderers = false;
 		}
@@ -938,6 +938,6 @@ package org.osmf.layout
 		private static var cleaningRenderers:Boolean;
 		private static var dirtyRenderers:Vector.<LayoutRendererBase> = new Vector.<LayoutRendererBase>;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRenderer");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRendererBase");
 	}
 }
