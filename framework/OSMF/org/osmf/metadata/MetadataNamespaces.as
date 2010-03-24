@@ -114,16 +114,6 @@ package org.osmf.metadata
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_XMP_METADATA_KEY:String 		= "xmpMetadata";
-		
-		/**
-		 * @private
-		 **/
-		public static const HTTP_STREAMING_ABST_URL_KEY:String			= "abstUrl";
-
-		/**
-		 * @private
-		 **/
-		public static const HTTP_STREAMING_ABST_DATA_KEY:String			= "abstData";
 
 		/**
 		 * @private

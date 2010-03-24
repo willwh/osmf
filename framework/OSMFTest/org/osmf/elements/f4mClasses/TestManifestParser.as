@@ -383,10 +383,13 @@ package org.osmf.elements.f4mClasses
 			assertEquals(urlResource.url, "http://example.com/myvideo/low.flv");
 			CONFIG::FLASH_10_1
 			{
-				var hsFacet:KeyValueFacet = HTTPStreamingUtils.getHTTPStreamingMetadataFacet(urlResource) as KeyValueFacet;
-				assertTrue(hsFacet != null);
-				var abstURL:String = hsFacet.getValue(new FacetKey(MetadataNamespaces.HTTP_STREAMING_ABST_URL_KEY)) as String;
-				assertTrue(abstURL == "http://example.com/foo");
+				var httpMetadata:Metadata = urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+				assertTrue(httpMetadata != null);
+				var bootstrapInfo:BootstrapInfo = httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_BOOTSTRAP_KEY) as BootstrapInfo;
+				assertTrue(bootstrapInfo != null);
+				assertTrue(bootstrapInfo.url == "http://example.com/foo");
+				assertTrue(bootstrapInfo.profile == "named");
+				assertTrue(bootstrapInfo.id == "1");
 			}
 		}
 		

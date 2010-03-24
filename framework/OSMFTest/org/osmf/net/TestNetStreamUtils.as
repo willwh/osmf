@@ -110,7 +110,7 @@ package org.osmf.net
 				var serverBaseURLs:Vector.<String> = new Vector.<String>();
 				resource.addMetadataValue
 					( MetadataNamespaces.HTTP_STREAMING_METADATA
-					, HTTPStreamingUtils.createHTTPStreamingMetadataFacet("http://example.com/abstURL", null, serverBaseURLs)
+					, HTTPStreamingUtils.createHTTPStreamingMetadata("http://example.com/abstURL", null, serverBaseURLs)
 					);
 				assertTrue(NetStreamUtils.isStreamingResource(resource));
 			}
