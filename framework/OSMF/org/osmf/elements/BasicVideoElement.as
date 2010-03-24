@@ -184,6 +184,11 @@ package org.osmf.elements
        	 *  @playerversion AIR 1.5
        	 *  @productversion OSMF 1.0
        	 */       	
+		public function get defaultDuration():Number
+		{
+			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
+		}
+
        	public function set defaultDuration(value:Number):void
 		{
 			if (isNaN(value) || value < 0)
@@ -215,12 +220,7 @@ package org.osmf.elements
 		  		defaultTimeTrait.duration = value; 
 			}	
 		}
-		
-		public function get defaultDuration():Number
-		{
-			return defaultTimeTrait ? defaultTimeTrait.duration : NaN;
-		}
-		
+				
 		/**
 		 * Specifies whether the video should be smoothed (interpolated) when it is scaled. 
 		 * For smoothing to work, the runtime must be in high-quality mode (the default). 
@@ -234,6 +234,11 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		**/
+		public function get smoothing():Boolean
+		{
+			return _smoothing;			
+		}
+
 		public function set smoothing(value:Boolean):void
 		{
 			_smoothing = value;
@@ -241,11 +246,6 @@ package org.osmf.elements
 			{
 				video.smoothing = value;
 			}
-		}
-		
-		public function get smoothing():Boolean
-		{
-			return _smoothing;			
 		}
 		
 		/**
@@ -260,6 +260,11 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
+		public function get deblocking():int
+		{
+			return _deblocking;			
+		}
+
 		public function set deblocking(value:int):void
 		{
 			_deblocking = value;
@@ -269,11 +274,6 @@ package org.osmf.elements
 			}
 		}
 
-		public function get deblocking():int
-		{
-			return _deblocking;			
-		}
-		
        	// Overrides
        	//
        	

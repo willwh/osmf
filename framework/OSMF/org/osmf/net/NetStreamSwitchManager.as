@@ -136,6 +136,9 @@ package org.osmf.net
 			return (count < super.maxAllowedIndex ? count : super.maxAllowedIndex);
 		}
 		
+		/**
+		 * @private
+		 */
 		override public function set maxAllowedIndex(value:int):void
 		{
 			if (value > dsResource.streamItems.length)

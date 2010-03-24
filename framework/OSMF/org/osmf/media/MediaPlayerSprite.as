@@ -38,10 +38,11 @@ package org.osmf.media
 	public class MediaPlayerSprite extends Sprite
 	{	
 		/**
-		 * Constructs a <code>MediaPlayerSprite</code>  
-		 * @param player A custom MediaPlayer can be provided. if null, defaults to new MediaPlayer
-		 * @param container A custom MediaContainer can be provided. if null defaults to a new MediaContainer
-		 * @param factory A custom MediaFactory can be provided. if null defaults to a new DefaultMediaFactory
+		 * Constructor.
+		 * 
+		 * @param mediaPlayer A custom MediaPlayer can be provided. if null, defaults to new MediaPlayer
+		 * @param mediaContainer A custom MediaContainer can be provided. if null defaults to a new MediaContainer
+		 * @param mediaFactory A custom MediaFactory can be provided. if null defaults to a new DefaultMediaFactory
 		 **/
 		public function MediaPlayerSprite(mediaPlayer:MediaPlayer = null, mediaContainer:MediaContainer = null, mediaFactory:MediaFactory = null)
 		{
@@ -67,6 +68,11 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
+		public function get media():MediaElement
+		{
+			return _media;
+		}
+
 		public function set media(value:MediaElement):void
 		{
 			if (_media != value)
@@ -93,12 +99,7 @@ package org.osmf.media
 				}				
 			}		
 		}
-		
-		public function get media():MediaElement
-		{
-			return _media
-		}
-			
+					
 		/**
 		 * This function creates a new media element from the supplied
 		 * media resource.  It uses the media factory, and sets the mediaElement
@@ -112,14 +113,14 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function set resource(value:MediaResourceBase):void
-		{
-			media = _mediaFactory.createMediaElement(value);			
-		}
-		
 		public function get resource():MediaResourceBase
 		{
 			return _media ? _media.resource : null;
+		}
+
+		public function set resource(value:MediaResourceBase):void
+		{
+			media = _mediaFactory.createMediaElement(value);			
 		}
 			
 		/**
@@ -171,7 +172,7 @@ package org.osmf.media
 		}
 			
 		/**
-		 * The <code>scaleMode</code> property describes different ways of laying out the media content within a this sprite.
+		 * The <code>scaleMode</code> property describes different ways of laying out the media content within this sprite.
 		 * <code>scaleMode</code> can be set to <code>none</code>, <code>stretch</code>, <code>letterbox</code> or <code>zoom</code>.
 		 * <code>MediaElementSprite</code> uses the value to calculate the layout.   This property is persistent between media element.
 		 * By default the MediaContainer sets the layout to be 100% width, 100% height , and centered.  
@@ -214,11 +215,6 @@ package org.osmf.media
 			
 		}
 		
-		public function layout(w:Number, h:Number):void
-		{
-			_mediaContainer.layout(w, h);
-		}
-				
 		/**
 		 * @private
 		 */ 
