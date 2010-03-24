@@ -35,6 +35,7 @@ package org.osmf.chrome.widgets
 	import org.osmf.chrome.assets.FontAsset;
 	import org.osmf.chrome.events.ScrubberEvent;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.events.SeekEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
@@ -200,13 +201,13 @@ package org.osmf.chrome.widgets
 			}
 		}
 		
-		private function onTimerTick(event:Event):void
+		private function onTimerTick(event:Event = null):void
 		{
 			var temporal:TimeTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait : null;
 			if (temporal != null)
 			{
 				var duration:Number = temporal.duration;
-				var position:Number = temporal.currentTime;
+				var position:Number = isNaN(seekToTime) ? temporal.currentTime : seekToTime;
 			
 				currentTime.text
 					= prettyPrintSeconds(position);
@@ -261,8 +262,24 @@ package org.osmf.chrome.widgets
 			var seekable:SeekTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait : null;
 			if (temporal && seekable)
 			{
-				var time:Number = temporal.duration * (scrubber.x - scrubberStart) / (scrubberEnd - scrubberStart);
-				seekable.seek(time);
+				var time:Number = temporal.duration * (scrubber.x + scrubber.width / 2 - scrubberStart) / (scrubberEnd - scrubberStart);
+				if (seekable.canSeekTo(time))
+				{
+					seekable.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange)
+					seekToTime = time;
+					seekable.seek(time);
+				}
+			}
+		}
+		
+		private function onSeekingChange(event:SeekEvent):void
+		{
+			var seekable:SeekTrait = event.target as SeekTrait;
+			if (event.seeking == false)
+			{
+				seekable.removeEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				seekToTime = NaN;
+				onTimerTick();
 			}
 		}
 		
@@ -324,6 +341,8 @@ package org.osmf.chrome.widgets
 		
 		private var lastWidth:Number;
 		private var lastHeight:Number;
+		
+		private var seekToTime:Number;
 		
 		/* static */
 		private static const _requiredTraits:Vector.<String> = new Vector.<String>;
