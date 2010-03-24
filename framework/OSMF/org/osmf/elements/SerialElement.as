@@ -135,7 +135,7 @@ package org.osmf.elements
 		//
 		
 		/**
-		 * The index of the currently active child of this SerialElement.
+		 * The currently active child of this SerialElement.
 		 * 
 		 * This is not exposed as a public API because clients of a SerialElement
 		 * should be able to work with the base MediaElement API, and not rely
@@ -143,18 +143,18 @@ package org.osmf.elements
 		 * implementors can subclass SerialElement and use the indication of which child
 		 * is the current child to change the behavior of the SerialElement as a whole.
 		 **/
-		protected final function get currentChildIndex():int
+		protected final function get currentChild():MediaElement
 		{
-			return _currentChildIndex;
+			return traitAggregator.listenedChild;
 		}
 		
 		/**
-		 * Method invoked when the currentChildIndex property changes.  The base implementation
+		 * Method invoked after the currentChild property has changed.  The base implementation
 		 * does nothing.
 		 * 
 		 * Clients can override this to do custom processing when the current child changes. 
 		 **/
-		protected function currentChildIndexChange():void
+		protected function currentChildChange():void
 		{
 		}
 		
@@ -187,7 +187,7 @@ package org.osmf.elements
 				traitAggregator.listenedChild = child;
 			}
 			
-			updateCurrentChildIndex();
+			updateListenedChildIndex();
 		}
 
 		/**
@@ -203,14 +203,14 @@ package org.osmf.elements
 			{
 				// Our first choice for the new current child is the next
 				// child.
-				var newListenedChild:MediaElement = getChildAt(currentChildIndex);
+				var newListenedChild:MediaElement = getChildAt(listenedChildIndex);
 				
 				// If there is no next child, then we pick the first child.
 				if (newListenedChild == null)
 				{
-					_currentChildIndex = (numChildren > 0) ? 0 : -1;
+					listenedChildIndex = (numChildren > 0) ? 0 : -1;
 
-					newListenedChild = getChildAt(_currentChildIndex);
+					newListenedChild = getChildAt(listenedChildIndex);
 				}
 				
 				traitAggregator.listenedChild = newListenedChild;
@@ -293,18 +293,18 @@ package org.osmf.elements
 					: null;
 					
 			// Update the index of the current child.
-			updateCurrentChildIndex();
+			updateListenedChildIndex();
 			
 			// Inform any interested subclasses of the change.
-			currentChildIndexChange();
+			currentChildChange();
 		}
 
-		private function updateCurrentChildIndex():void
+		private function updateListenedChildIndex():void
 		{
-			_currentChildIndex = traitAggregator.getChildIndex(traitAggregator.listenedChild);
+			listenedChildIndex = traitAggregator.getChildIndex(traitAggregator.listenedChild);
 		}
 		
-		private var _currentChildIndex:int = -1;
+		private var listenedChildIndex:int = -1;
 		private var reusableTraits:Dictionary;
 	}
 }
