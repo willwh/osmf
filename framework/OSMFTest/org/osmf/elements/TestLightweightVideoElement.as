@@ -51,7 +51,7 @@ package org.osmf.elements
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 
-	public class TestBasicVideoElement extends TestMediaElement
+	public class TestLightweightVideoElement extends TestMediaElement
 	{
 		override public function setUp():void
 		{
@@ -77,7 +77,7 @@ package org.osmf.elements
 		
 		public function testDefaultDuration():void
 		{
-			var element:BasicVideoElement = createMediaElement() as BasicVideoElement;
+			var element:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
 			assertEquals(NaN, element.defaultDuration);
 			
 			element.defaultDuration = 100;
@@ -96,7 +96,7 @@ package org.osmf.elements
 		
 		public function testGetClient():void
 		{
-			var videoElement:BasicVideoElement = createMediaElement() as BasicVideoElement;
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
 			videoElement.resource = resourceForMediaElement;
 
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 4000));
@@ -119,7 +119,7 @@ package org.osmf.elements
 		
 		public function testLiveTraits():void
 		{
-			var videoElement:BasicVideoElement = createMediaElement() as BasicVideoElement;
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
 			videoElement.resource = new StreamingURLResource(TestConstants.REMOTE_STREAMING_VIDEO_LIVE,
 															 StreamType.LIVE);
 
@@ -149,7 +149,7 @@ package org.osmf.elements
 		
 		/**
 		 * This test is for the in-stream onCuePoint callback
-		 * in BasicVideoElement.
+		 * in LightweightVideoElement.
 		 */
 		public function testOnCuePoint():void
 		{
@@ -163,7 +163,7 @@ package org.osmf.elements
 				cuePoints = testCuePoints;
 			}
 			
-			var videoElement:BasicVideoElement = createMediaElement() as BasicVideoElement;
+			var videoElement:LightweightVideoElement = createMediaElement() as LightweightVideoElement;
 			videoElement.resource = new URLResource(TestConstants.REMOTE_STREAMING_VIDEO);
 			videoElement.addEventListener(MediaElementEvent.METADATA_ADD, onMetadataAdd);
 			
@@ -307,7 +307,7 @@ package org.osmf.elements
 				}
 			}
 
-			return new BasicVideoElement(null, loader); 
+			return new LightweightVideoElement(null, loader); 
 		}
 		
 		override protected function get hasLoadTrait():Boolean

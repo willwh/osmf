@@ -26,7 +26,7 @@ package org.osmf.elements
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.utils.TestConstants;
 
-	public class TestVideoElement extends TestBasicVideoElement
+	public class TestVideoElement extends TestLightweightVideoElement
 	{
 		override protected function createMediaElement():MediaElement
 		{

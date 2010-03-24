@@ -78,32 +78,32 @@ package org.osmf.elements
 	}
 	
 	/**
-	* BasicVideoElement is a media element specifically created for video playback.
+	* LightweightVideoElement is a media element specifically created for video playback.
 	* It supports both streaming and progressive formats.
 	*
-	* <p>BasicVideoElement is a lightweight alternative to VideoElement.  Whereas
-	* BasicVideoElement supports only a subset of video delivery modes (specifically
+	* <p>LightweightVideoElement is a lightweight alternative to VideoElement.  Whereas
+	* LightweightVideoElement supports only a subset of video delivery modes (specifically
 	* progressive and simple RTMP streaming), VideoElement supports all video delivery
 	* modes.</p>   
 	* 
-	* <p>The BasicVideoElement uses a NetLoader class to load and unload its media.
+	* <p>The LightweightVideoElement uses a NetLoader class to load and unload its media.
 	* Developers requiring custom loading logic for video
-	* can pass their own loaders to the BasicVideoElement constructor. 
+	* can pass their own loaders to the LightweightVideoElement constructor. 
 	* These loaders should subclass NetLoader.</p>
-	* <p>The basic steps for creating and using a BasicVideoElement are:
+	* <p>The basic steps for creating and using a LightweightVideoElement are:
 	* <ol>
 	* <li>Create a new URLResource pointing to the URL of the video stream or file
 	* containing the video to be loaded.</li>
 	* <li>Create a new NetLoader.</li>
-	* <li>Create the new BasicVideoElement, 
+	* <li>Create the new LightweightVideoElement, 
 	* passing the NetLoader and URLResource
 	* as parameters.</li>
-	* <li>Get the BasicVideoElement's LoadTrait using the 
+	* <li>Get the LightweightVideoElement's LoadTrait using the 
 	* <code>MediaElement.getTrait(MediaTraitType.LOAD)</code> method.</li>
 	* <li>Load the video using the LoadTrait's <code>load()</code> method.</li>
-	* <li>Control the media using the BasicVideoElement's traits and handle its trait
+	* <li>Control the media using the LightweightVideoElement's traits and handle its trait
 	* change events.</li>
-	* <li>When done with the BasicVideoElement, unload the video using the  
+	* <li>When done with the LightweightVideoElement, unload the video using the  
 	* using the LoadTrait's <code>unload()</code> method.</li>
 	* </ol>
 	* </p>
@@ -111,7 +111,7 @@ package org.osmf.elements
 	* The VideoElement supports Flash Media Token Authentication,  
 	* for passing authentication tokens through the NetConnection.
 	*
-	* The BasicVideoElement has support for the DRMTrait.  The DRMTrait implementation on 
+	* The LightweightVideoElement has support for the DRMTrait.  The DRMTrait implementation on 
 	* this element will use the NetStreamDRMTrait, which contains the Flash Player's specific DRM
 	* implementation.  The startDate, endDate, and period properties of this trait correspond
 	* to the voucher validity before playback starts.  Once playback beigns these properties reflect the 
@@ -124,12 +124,12 @@ package org.osmf.elements
 	* @see org.osmf.media.MediaElement
 	* @see org.osmf.traits
 	**/
-	public class BasicVideoElement extends LoadableElementBase
+	public class LightweightVideoElement extends LoadableElementBase
 	{
 		/**
 		 * Constructor.
 		 * 
-		 * @param resource URLResource that points to the video source that the BasicVideoElement
+		 * @param resource URLResource that points to the video source that the LightweightVideoElement
 		 * will use.  For dynamic streaming content, use a DynamicStreamingResource.
 		 * @param loader NetLoader used to load the video.  If null, then a base NetLoader will
 		 * be used.
@@ -141,7 +141,7 @@ package org.osmf.elements
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function BasicVideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
+		public function LightweightVideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{
 			if (loader == null)
 			{

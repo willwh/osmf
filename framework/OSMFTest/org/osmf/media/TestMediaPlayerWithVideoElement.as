@@ -25,7 +25,7 @@ package org.osmf.media
 	import org.osmf.netmocker.NetConnectionExpectation;
 	import org.osmf.utils.TestConstants;
 	
-	public class TestMediaPlayerWithVideoElement extends TestMediaPlayerWithBasicVideoElement
+	public class TestMediaPlayerWithVideoElement extends TestMediaPlayerWithLightweightVideoElement
 	{
 		// Overrides
 		//

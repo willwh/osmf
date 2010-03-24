@@ -45,8 +45,8 @@ package org.osmf.elements
 	* It supports streaming and progressive formats, as well as HTTP streaming
 	* and MBR streaming (for both RTMP and HTTP).
 	* 
-	* <p>VideoElement is a more full-featured alternative to BasicVideoElement.
-	* Whereas BasicVideoElement supports only a subset of video delivery modes
+	* <p>VideoElement is a more full-featured alternative to LightweightVideoElement.
+	* Whereas LightweightVideoElement supports only a subset of video delivery modes
 	* (specifically progressive and simple RTMP streaming), VideoElement supports
 	* all video delivery modes.</p>
 	*    
@@ -85,7 +85,7 @@ package org.osmf.elements
 	* @see org.osmf.media.MediaElement
 	* @see org.osmf.traits
 	**/
-	public class VideoElement extends BasicVideoElement
+	public class VideoElement extends LightweightVideoElement
 	{
 		/**
 		 * Constructor.

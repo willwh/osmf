@@ -20,7 +20,7 @@
 *****************************************************/
 package org.osmf.media
 {
-	import org.osmf.elements.BasicVideoElement;
+	import org.osmf.elements.LightweightVideoElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.netmocker.MockNetLoader;
 	import org.osmf.netmocker.NetConnectionExpectation;
@@ -28,7 +28,7 @@ package org.osmf.media
 	import org.osmf.utils.NetFactory;
 	import org.osmf.utils.TestConstants;
 	
-	public class TestMediaPlayerWithBasicVideoElement extends TestMediaPlayer
+	public class TestMediaPlayerWithLightweightVideoElement extends TestMediaPlayer
 	{
 		// Overrides
 		//
@@ -65,7 +65,7 @@ package org.osmf.media
 				}
 			}
 
-			return new BasicVideoElement(resource, loader);
+			return new LightweightVideoElement(resource, loader);
 		}
 		
 		override protected function get hasLoadTrait():Boolean
