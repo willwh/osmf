@@ -103,7 +103,9 @@ package org.osmf.media
 		 * This function creates a new media element from the supplied
 		 * media resource.  It uses the media factory, and sets the mediaElement
 		 * property on this MediaPlayerSprite.  If null, it will remove the existing 
-		 * mediaElement and resource from the player and container.
+		 * mediaElement and resource from the player and container.  If the MediaFactory 
+		 * can't create a MediaElement from the given resource, it will set the media 
+		 * and resource to null.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
