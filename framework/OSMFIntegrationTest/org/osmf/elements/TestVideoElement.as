@@ -25,7 +25,6 @@ package org.osmf.elements
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import flexunit.flexui.patterns.AssertNotNullPattern;
 	import flexunit.framework.TestCase;
 	
 	import mx.utils.Base64Decoder;
@@ -34,6 +33,7 @@ package org.osmf.elements
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.*;
 	import org.osmf.metadata.*;
+	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.*;
 
 	public class TestVideoElement extends TestCase
@@ -57,11 +57,9 @@ package org.osmf.elements
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(ANONYMOUS_METADATA);				
 			//Separate DRM metadata										
-			var facet:Facet = new Facet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(MetadataNamespaces.DRM_CONTENT_METADATA_KEY,  decoder.toByteArray());
 			
-			var resource:URLResource = new URLResource(ANONYMOUS_ENCRYPTED);
-			resource.metadata.addFacet(facet);
+			var resource:StreamingURLResource = new StreamingURLResource(ANONYMOUS_ENCRYPTED);
+			resource.drmContentData = decoder.toByteArray();
 			
 			testElementAnon(resource);								
 		}
@@ -78,11 +76,8 @@ package org.osmf.elements
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);				
 			// Separate DRM metadata										
-			var facet:Facet = new Facet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(MetadataNamespaces.DRM_CONTENT_METADATA_KEY,  decoder.toByteArray());
-			
-			var resource:URLResource = new URLResource(IDENT_ENCRYPTED);
-			resource.metadata.addFacet(facet);
+			var resource:StreamingURLResource = new StreamingURLResource(IDENT_ENCRYPTED);
+			resource.drmContentData = decoder.toByteArray();
 			
 			testElementCred(resource, "dmo", "password");
 		}	
@@ -132,12 +127,9 @@ package org.osmf.elements
 			var decoder:Base64Decoder = new Base64Decoder();
 			decoder.decode(IDENT_METADATA);				
 			// Separate DRM metadata										
-			var facet:Facet = new Facet(MetadataNamespaces.DRM_METADATA);
-			facet.addValue(MetadataNamespaces.DRM_CONTENT_METADATA_KEY,  decoder.toByteArray());
-			
-			var resource:URLResource = new URLResource(IDENT_ENCRYPTED);
-			resource.metadata.addFacet(facet);
-						
+			var resource:StreamingURLResource = new StreamingURLResource(IDENT_ENCRYPTED);
+			resource.drmContentData = decoder.toByteArray();
+
 			var elem:VideoElement = new VideoElement(resource);
 			var protectable:DRMTrait;
 		
