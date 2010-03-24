@@ -26,8 +26,6 @@ package org.osmf.vast.loader
 	import flash.events.EventDispatcher;
 	
 	import org.osmf.events.LoadEvent;
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -39,6 +37,12 @@ package org.osmf.vast.loader
 	import org.osmf.vast.model.VASTUrl;
 	import org.osmf.vast.model.VASTWrapperAd;
 	import org.osmf.vast.parser.VASTParser;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
 
 	[Event("processed")]
 	[Event("processingFailed")]
@@ -305,6 +309,6 @@ package org.osmf.vast.loader
 		private var httpLoader:HTTPLoader;
 
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("VASTDocumentProcessor");
+		private static const logger:Logger = Log.getLogger("org.osmf.vast.loader.VASTDocumentProcessor");
 	}
 }

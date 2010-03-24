@@ -164,7 +164,7 @@ package org.osmf.syndication.loader
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("FeedLoader");
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.syndication.loader.FeedLoader");
 		}
 		
 		private var httpLoader:HTTPLoader;

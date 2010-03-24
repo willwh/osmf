@@ -26,14 +26,14 @@ package org.osmf.logging
 	/**
 	 * @private
 	 * 
-	 * An ILogger implementation which sends log messages to the trace console.
+	 * A Logger implementation which sends log messages to the trace console.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class TraceLogger implements ILogger
+	public class TraceLogger extends Logger
 	{
 		/**
 		 * Constructor.
@@ -42,85 +42,47 @@ package org.osmf.logging
 		 **/
 		public function TraceLogger(category:String)
 		{
-			_category = category;
+			super(category);
 		}
 
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function debug(message:String, ...rest):void
+		override public function debug(message:String, ...rest):void
 		{
-			log(LEVEL_DEBUG, message, rest);
+			logMessage(LEVEL_DEBUG, message, rest);
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function info(message:String, ...rest):void
+		override public function info(message:String, ...rest):void
 		{
-			log(LEVEL_INFO, message, rest);
+			logMessage(LEVEL_INFO, message, rest);
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function warn(message:String, ...rest):void
+		override public function warn(message:String, ...rest):void
 		{
-			log(LEVEL_WARN, message, rest);
+			logMessage(LEVEL_WARN, message, rest);
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function error(message:String, ...rest):void
+		override public function error(message:String, ...rest):void
 		{
-			log(LEVEL_ERROR, message, rest);
+			logMessage(LEVEL_ERROR, message, rest);
 		}
 		
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function fatal(message:String, ...rest):void
+		override public function fatal(message:String, ...rest):void
 		{
-			log(LEVEL_FATAL, message, rest);
-		}
-		
-		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get category():String
-		{
-			return _category;
+			logMessage(LEVEL_FATAL, message, rest);
 		}
 		
 		// Internals
@@ -136,7 +98,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		private function log(level:String, message:String, params:Array):void
+		private function logMessage(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			

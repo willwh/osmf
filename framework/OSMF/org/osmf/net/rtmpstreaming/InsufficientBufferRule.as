@@ -25,14 +25,13 @@ package org.osmf.net.rtmpstreaming
 	
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.logging.Log;
 	}
 	
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.utils.OSMFStrings;
-	import org.osmf.logging.ILogger;
 	
 	/**
 	 * Switching rule for Buffer detection.
@@ -144,7 +143,7 @@ package org.osmf.net.rtmpstreaming
 				
 		CONFIG::LOGGING
 		{
-			private static var logger:ILogger = Log.getLogger("org.osmf.net.InsufficientBufferRule");
+			private static const logger:Logger = Log.getLogger("org.osmf.net.rtmpstreaming.InsufficientBufferRule");
 		}
 	}
 }

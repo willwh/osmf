@@ -25,7 +25,7 @@ package org.osmf.net
 {
 	CONFIG::LOGGING
 	{
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 	
 	import __AS3__.vec.Vector;
@@ -326,7 +326,7 @@ package org.osmf.net
 		private static const DEFAULT_TIMEOUT:Number = 10000;
 		private static const CONNECTION_ATTEMPT_INTERVAL:Number = 50;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetNegotiator");
 	}
 }
 

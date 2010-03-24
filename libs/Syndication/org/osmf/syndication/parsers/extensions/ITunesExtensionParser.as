@@ -31,7 +31,7 @@ package org.osmf.syndication.parsers.extensions
 	import org.osmf.utils.TimeUtil;
 	CONFIG::LOGGING
 	{
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 	
 	/**
@@ -210,7 +210,7 @@ package org.osmf.syndication.parsers.extensions
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("ITunesExtensionParser");
+			private static const logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.syndication.parsers.extensions.ITunesExtensionParser");
 		}
 		
 		private static const TAG_NAME_ITUNES_AUTHOR:String = "author";

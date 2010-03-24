@@ -511,7 +511,7 @@ package org.osmf.mast.managers
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MASTConditionManager");			
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.mast.managers.MASTConditionManager");			
 		}
 	}
 }

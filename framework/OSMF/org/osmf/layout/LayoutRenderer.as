@@ -32,7 +32,7 @@ package org.osmf.layout
 
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	}
 
 	/**
@@ -685,6 +685,6 @@ package org.osmf.layout
 		private var containerAbsoluteWatcher:MetadataWatcher;
 		private var containerAttributesWatcher:MetadataWatcher;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRenderer");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.layout.LayoutRenderer");
 	}
 }

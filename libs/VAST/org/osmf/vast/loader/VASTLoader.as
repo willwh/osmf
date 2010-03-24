@@ -25,8 +25,6 @@ package org.osmf.vast.loader
 {
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.traits.LoadState;
@@ -34,6 +32,12 @@ package org.osmf.vast.loader
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.HTTPLoader;
 	import org.osmf.utils.HTTPLoadTrait;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
 	
 	/**
 	 * Loader for a VAST Document.  The load process is complete when
@@ -208,7 +212,7 @@ package org.osmf.vast.loader
 		
 
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("VASTLoader");
+		private static const logger:Logger = Log.getLogger("org.osmf.vast.loader.VASTLoader");
 
 		private var maxNumWrapperRedirects:int;
 		private var httpLoader:HTTPLoader;

@@ -28,7 +28,7 @@ package org.osmf.logging
 	/**
 	 * @private
 	 * 
-	 * This class implements ILoggerFactory. It is the associated logger factory
+	 * This class extends LoggerFactory. It is the associated logger factory
 	 * for the TraceLogger. 
 	 *  
 	 *  @langversion 3.0
@@ -36,27 +36,24 @@ package org.osmf.logging
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public class TraceLoggerFactory implements ILoggerFactory
+	public class TraceLoggerFactory extends LoggerFactory
 	{
 		/**
 		 * Constructor.
 		 **/
 		public function TraceLoggerFactory()
 		{
+			super();
+			
 			loggers = new Dictionary();
 		}
 
 		/**
-		 * @inheritDoc
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
+		 * @private
 		 */
-		public function getLogger(category:String):ILogger
+		override public function getLogger(category:String):Logger
 		{
-			var logger:ILogger = loggers[category];
+			var logger:Logger = loggers[category];
 			
 			if (logger == null)
 			{

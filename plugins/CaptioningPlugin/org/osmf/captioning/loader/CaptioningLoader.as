@@ -207,7 +207,7 @@ package org.osmf.captioning.loader
 		
 		CONFIG::LOGGING
 		{	
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("CaptioningLoader");		
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.captioning.loader.CaptioningLoader");		
 		}	
 	}
 }

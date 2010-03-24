@@ -40,7 +40,7 @@ package org.osmf.logging
 		public function testAccessLoggerFactory():void
 		{
 			var traceLoggerFactory:TraceLoggerFactory = new TraceLoggerFactory;
-			var logger:ILogger = traceLoggerFactory.getLogger("testLogger");
+			var logger:Logger = traceLoggerFactory.getLogger("testLogger");
 			assertTrue(logger != null);
 			assertTrue(logger == traceLoggerFactory.getLogger("testLogger"));
 		}

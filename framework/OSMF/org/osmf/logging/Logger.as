@@ -22,10 +22,10 @@
 package org.osmf.logging
 {
 	/**
-	 * ILogger interface defines the capabilities of a logger, the 
-	 * object that OSMF applications interact to write logging messages.
+	 * Logger defines the capabilities of a logger, the object that OSMF
+	 * applications interact with to write logging messages.
 	 * 
-	 * Logging messages are designated with the following levels
+	 * Logging messages are designated with the following levels:
 	 * 
 	 * DEBUG: Designates informational level messages that are fine 
 	 * 		grained and most helpful when debugging an application.
@@ -64,8 +64,20 @@ package org.osmf.logging
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public interface ILogger
+	public class Logger
 	{
+		/**
+		 * Constructor.
+		 * 
+		 * @param category The category value for the logger.
+		 **/
+		public function Logger(category:String)
+		{
+			super();
+			
+			_category = category;
+		}
+		
 		/**
 		 * The category value for the logger.
 		 * 
@@ -74,7 +86,10 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 **/
-		function get category():String;
+		public function get category():String
+		{
+			return _category;
+		}
 		
 		/**
 		 * Logs a message with a "debug" level.
@@ -84,7 +99,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function debug(message:String, ... rest):void;
+		public function debug(message:String, ... rest):void
+		{
+		}
 		
 		/**
 		 * Logs a message with a "info" level.
@@ -94,7 +111,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function info(message:String, ... rest):void;
+		public function info(message:String, ... rest):void
+		{
+		}
 		
 		/**
 		 * Logs a message with a "warn" level.
@@ -104,7 +123,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function warn(message:String, ... rest):void;
+		public function warn(message:String, ... rest):void
+		{
+		}
 		
 		/**
 		 * Logs a message with a "error" level.
@@ -114,7 +135,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function error(message:String, ... rest):void;
+		public function error(message:String, ... rest):void
+		{
+		}
 		
 		/**
 		 * Logs a message with a "fatal" level.
@@ -124,6 +147,10 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function fatal(message:String, ... rest):void;
+		public function fatal(message:String, ... rest):void
+		{
+		}
+		
+		private var _category:String;
 	}
 }

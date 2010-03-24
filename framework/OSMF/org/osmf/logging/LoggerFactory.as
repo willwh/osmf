@@ -22,17 +22,20 @@
 package org.osmf.logging
 {
 	/**
-	 * ILoggerFactory defines a logger factory that serves as the initial contact
+	 * LoggerFactory defines a logger factory that serves as the initial contact
 	 * point for OSMF applications to get a hold on various loggers. Usually in an OSMF
-	 * application there is one instance of ILoggerFactory and multiple instances
-	 * of ILogger.
+	 * application there is one instance of LoggerFactory and multiple instances
+	 * of Logger.
+	 * 
+	 * Clients are expected to subclass LoggerFactory to generate their own Logger
+	 * objects.
 	 *  
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	public interface ILoggerFactory
+	public class LoggerFactory
 	{
 		/**
 		 * Creates and returns a logger for the specified category.
@@ -45,6 +48,9 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		function getLogger(category:String):ILogger;
+		public function getLogger(category:String):Logger
+		{
+			return null;
+		}
 	}
 }

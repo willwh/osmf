@@ -23,14 +23,18 @@ package org.osmf.smil.parser
 {
 	import flash.errors.IllegalOperationError;
 	
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
 	import org.osmf.utils.TimeUtil;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
 	
 	/**
 	 * Parses a SMIL file and creates a document object
@@ -230,7 +234,7 @@ package org.osmf.smil.parser
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("SMILParser");
+			private static const logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.smil.parser.SMILParser");
 		}
 		
 		// SMIL tag attributes

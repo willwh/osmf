@@ -29,7 +29,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 	CONFIG::LOGGING
 	{
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 		import org.osmf.logging.Log;
 	}
 
@@ -613,7 +613,7 @@ package org.osmf.net.httpstreaming.f4f
 
 		CONFIG::LOGGING
 		{
-			private static const logger:ILogger = Log.getLogger("org.osmf.net.httpstreaming.f4f.BoxParser");;
+			private static const logger:Logger = Log.getLogger("org.osmf.net.httpstreaming.f4f.BoxParser");;
 		}
 	}
 }

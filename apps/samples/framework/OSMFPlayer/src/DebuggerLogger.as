@@ -22,57 +22,51 @@
 
 package
 {
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	
-	public class DebuggerLogger implements ILogger
+	public class DebuggerLogger extends Logger
 	{
-		public function DebuggerLogger(name:String, debugger:Debugger)
+		public function DebuggerLogger(category:String, debugger:Debugger)
 		{
-			_category = name;
+			super(category);
 			
-			this.name = name;
 			this.debugger = debugger;
 		}
 		
-		public function debug(message:String, ...rest):void
+		override public function debug(message:String, ...rest):void
 		{
-			log(LEVEL_DEBUG, message, rest);
+			logMessage(LEVEL_DEBUG, message, rest);
 		}
 		
-		public function info(message:String, ...rest):void
+		override public function info(message:String, ...rest):void
 		{
-			log(LEVEL_INFO, message, rest);
+			logMessage(LEVEL_INFO, message, rest);
 		}
 		
-		public function warn(message:String, ...rest):void
+		override public function warn(message:String, ...rest):void
 		{
-			log(LEVEL_WARN, message, rest);
+			logMessage(LEVEL_WARN, message, rest);
 		}
 		
-		public function error(message:String, ...rest):void
+		override public function error(message:String, ...rest):void
 		{
-			log(LEVEL_ERROR, message, rest);
+			logMessage(LEVEL_ERROR, message, rest);
 		}
 		
-		public function fatal(message:String, ...rest):void
+		override public function fatal(message:String, ...rest):void
 		{
-			log(LEVEL_FATAL, message, rest);
-		}
-		
-		public function get category():String
-		{
-			return _category;
+			logMessage(LEVEL_FATAL, message, rest);
 		}
 		
 		// Internals
 		//
 		
-		public function log(level:String, message:String, params:Array):void
+		private function logMessage(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
 			// add name and params
-			msg += "[" + name + "] " + applyParams(message, params);
+			msg += "[" + category + "] " + applyParams(message, params);
 			
 			// trace the message
 			debugger.send(level, msg);
@@ -99,8 +93,6 @@ package
 			return result;
 		}
 		
-		private var _category:String;
-		private var name:String;
 		private var debugger:Debugger;
 		
 		private static const LEVEL_DEBUG:String = "DEBUG";

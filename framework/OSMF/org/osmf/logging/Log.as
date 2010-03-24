@@ -32,7 +32,7 @@ package org.osmf.logging
 	public class Log
 	{
 		/**
-		 * The ILoggerFactory used across the application. 
+		 * The LoggerFactory used across the application. 
 		 * 
 		 *  
 		 *  @langversion 3.0
@@ -40,12 +40,12 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function get loggerFactory():ILoggerFactory
+		public static function get loggerFactory():LoggerFactory
 		{
 			return _loggerFactory;
 		}
 
-		public static function set loggerFactory(value:ILoggerFactory):void
+		public static function set loggerFactory(value:LoggerFactory):void
 		{
 			_loggerFactory = value;
 		}
@@ -61,7 +61,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public static function getLogger(category:String):ILogger
+		public static function getLogger(category:String):Logger
 		{
 			CONFIG::LOGGING
 			{
@@ -77,6 +77,6 @@ package org.osmf.logging
 		// Internals
 		//
 		
-		private static var _loggerFactory:ILoggerFactory;
+		private static var _loggerFactory:LoggerFactory;
 	}
 }

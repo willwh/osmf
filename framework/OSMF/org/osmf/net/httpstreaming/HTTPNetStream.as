@@ -54,7 +54,7 @@ package org.osmf.net.httpstreaming
 	
 	CONFIG::LOGGING 
 	{	
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 
 	CONFIG::FLASH_10_1	
@@ -1426,7 +1426,7 @@ package org.osmf.net.httpstreaming
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.HTTPNetStream");
 			
 			private var previouslyLoggedState:String;
 		}

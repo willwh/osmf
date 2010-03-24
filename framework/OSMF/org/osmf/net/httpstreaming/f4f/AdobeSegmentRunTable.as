@@ -25,7 +25,7 @@ package org.osmf.net.httpstreaming.f4f
 	
 	CONFIG::LOGGING 
 	{	
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 
 	[ExcludeClass]
@@ -173,7 +173,7 @@ package org.osmf.net.httpstreaming.f4f
 
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.AdobeSegmentRunTable");
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.httpstreaming.f4f.AdobeSegmentRunTable");
 		}
 	}
 }

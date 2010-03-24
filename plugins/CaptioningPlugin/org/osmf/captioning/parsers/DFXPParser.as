@@ -30,7 +30,7 @@ package org.osmf.captioning.parsers
 	import org.osmf.utils.TimeUtil;
 	CONFIG::LOGGING
 	{
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 
 	/**
@@ -746,7 +746,7 @@ package org.osmf.captioning.parsers
 		
 		CONFIG::LOGGING
 		{	
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("DFXPParser");		
+			private static const logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.captioning.parsers.DFXPParser");		
 		}	
 		
 	}

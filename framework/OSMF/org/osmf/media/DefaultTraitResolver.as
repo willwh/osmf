@@ -23,7 +23,7 @@ package org.osmf.media
 {
 	CONFIG::LOGGING 
 	{	
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 	import org.osmf.traits.MediaTraitBase;
 	import org.osmf.utils.OSMFStrings;
@@ -139,6 +139,6 @@ package org.osmf.media
 		private var defaultTrait:MediaTraitBase;
 		private var trait:MediaTraitBase;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultTraitResolver");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.media.DefaultTraitResolver");
 	}
 }

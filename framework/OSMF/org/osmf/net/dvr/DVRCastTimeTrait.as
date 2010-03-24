@@ -28,7 +28,7 @@ package org.osmf.net.dvr
 	import flash.utils.Timer;
 	
 	import org.osmf.events.TimeEvent;
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
@@ -128,7 +128,7 @@ package org.osmf.net.dvr
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DVRCastTimeTrait");		
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.dvr.DVRCastTimeTrait");		
 		}	
 	}
 }

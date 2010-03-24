@@ -26,7 +26,7 @@ package org.osmf.net
 {
 	CONFIG::LOGGING 
 	{	
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 	
 	import __AS3__.vec.Vector;
@@ -443,7 +443,7 @@ package org.osmf.net
 		private static const MP3_EXTENSION:String = ".mp3";
 
 		CONFIG::LOGGING
-		private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("org.osmf.net.NetConnectionFactory");
+		private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.NetConnectionFactory");
 	}
 }
 

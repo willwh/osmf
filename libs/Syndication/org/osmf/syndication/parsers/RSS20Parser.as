@@ -23,7 +23,6 @@ package org.osmf.syndication.parsers
 {	
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.logging.ILogger;
 	import org.osmf.syndication.model.Enclosure;
 	import org.osmf.syndication.model.Entry;
 	import org.osmf.syndication.model.Feed;
@@ -37,7 +36,7 @@ package org.osmf.syndication.parsers
 	import org.osmf.syndication.model.rss20.RSSSource;
 	CONFIG::LOGGING
 	{
-		import org.osmf.logging.ILogger;
+		import org.osmf.logging.Logger;
 	}
 	
 	/**
@@ -336,7 +335,7 @@ package org.osmf.syndication.parsers
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("RSS20Parser");
+			private static const logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.syndication.parsers.RSS20Parser");
 		}
 		
 		// Tags names

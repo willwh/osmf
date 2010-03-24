@@ -157,7 +157,7 @@ package org.osmf.mast.loader
 		
 		CONFIG::LOGGING
 		{	
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MASTLoader");		
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.mast.loader.MASTLoader");		
 		}	
 	}
 }

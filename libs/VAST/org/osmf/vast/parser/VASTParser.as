@@ -25,8 +25,6 @@ package org.osmf.vast.parser
 {
 	import __AS3__.vec.Vector;
 	
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.vast.model.VASTAd;
 	import org.osmf.vast.model.VASTAdBase;
 	import org.osmf.vast.model.VASTAdPackageBase;
@@ -42,6 +40,12 @@ package org.osmf.vast.parser
 	import org.osmf.vast.model.VASTVideo;
 	import org.osmf.vast.model.VASTVideoClick;
 	import org.osmf.vast.model.VASTWrapperAd;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
 
 	/**
 	 * This class parses a VAST 1.0 document into a VAST object model.
@@ -1058,6 +1062,6 @@ package org.osmf.vast.parser
 		private static const TYPE:String 						= "type";
 
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("VASTParser");
+		private static const logger:Logger = Log.getLogger("org.osmf.vast.parser.VASTParser");
 	}
 }

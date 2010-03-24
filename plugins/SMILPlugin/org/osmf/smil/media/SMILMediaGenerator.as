@@ -26,8 +26,6 @@ package org.osmf.smil.media
 	import org.osmf.elements.ParallelElement;
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
@@ -40,6 +38,12 @@ package org.osmf.smil.media
 	import org.osmf.smil.model.SMILElementType;
 	import org.osmf.smil.model.SMILMediaElement;
 	import org.osmf.smil.model.SMILMetaElement;
+
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
 	
 	/**
 	 * A utility class for creating MediaElements from a <code>SMILDocument</code>.
@@ -243,7 +247,7 @@ package org.osmf.smil.media
 		
 		CONFIG::LOGGING
 		{
-			private static const logger:ILogger = org.osmf.logging.Log.getLogger("SMILParser");
+			private static const logger:Logger = org.osmf.logging.Log.getLogger("org.osmf.smil.media.SMILMediaGenerator");
 		}
 
 		private var factory:MediaFactory;		

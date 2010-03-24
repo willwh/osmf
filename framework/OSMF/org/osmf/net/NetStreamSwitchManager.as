@@ -38,7 +38,7 @@ package org.osmf.net
 	
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.logging.Log;
 	}
 	
@@ -517,7 +517,7 @@ package org.osmf.net
 		
 		CONFIG::LOGGING
 		{
-			private static var logger:ILogger = Log.getLogger("org.osmf.net.NetStreamSwitchManager");
+			private static const logger:Logger = Log.getLogger("org.osmf.net.NetStreamSwitchManager");
 		}
 	}
 }

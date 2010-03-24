@@ -31,7 +31,7 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -154,7 +154,7 @@ package org.osmf.net.dvr
 		
 		CONFIG::LOGGING
 		{	
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DVRCastDVRTrait");		
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.net.dvr.DVRCastDVRTrait");		
 		}
 	}
 }

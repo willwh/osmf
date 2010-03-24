@@ -22,17 +22,19 @@
 
 package
 {
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.ILoggerFactory;
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.LoggerFactory;
 
-	public class DebuggerLoggerFactory implements ILoggerFactory
+	public class DebuggerLoggerFactory extends LoggerFactory
 	{
 		public function DebuggerLoggerFactory(debugger:Debugger)
-		{	
+		{
+			super();
+			
 			this.debugger = debugger;
 		}
 
-		public function getLogger(name:String):ILogger
+		override public function getLogger(name:String):Logger
 		{
 			return new DebuggerLogger(name, debugger);
 		}

@@ -23,23 +23,24 @@ package org.osmf.logging.flex
 {
 	import mx.logging.Log;
 	
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.ILoggerFactory;
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.LoggerFactory;
 	
 	/**
-	 * This class implements ILoggerFactory of the OSMF logging framework and it
-	 * wraps the Log class of the FLEX logging API.
+	 * This class extends LoggerFactory of the OSMF logging framework and it
+	 * wraps the Log class of the Flex logging API.
 	 */
-	public class FlexLogWrapper implements ILoggerFactory
+	public class FlexLogWrapper extends LoggerFactory
 	{
 		public function FlexLogWrapper()
 		{
+			super();
 		}
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
-		public function getLogger(category:String):ILogger
+		override public function getLogger(category:String):Logger
 		{
 			return new FlexLoggerWrapper(mx.logging.Log.getLogger(category));
 		}

@@ -47,7 +47,7 @@ package org.osmf.logging
 		
 		public function testGetLogger():void
 		{
-			var logger:ILogger = Log.getLogger("testLogger");
+			var logger:Logger = Log.getLogger("testLogger");
 			CONFIG::LOGGING
 			{
 				assertTrue(logger != null);

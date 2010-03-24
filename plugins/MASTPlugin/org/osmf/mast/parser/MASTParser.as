@@ -324,7 +324,7 @@ package org.osmf.mast.parser
 						
 		CONFIG::LOGGING
 		{
-			private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("MASTParser");	
+			private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.mast.parser.MASTParser");	
 		}		
 	}
 	

@@ -39,13 +39,8 @@ package org.osmf.logging
 		
 		public function testLevelEnablements():void
 		{
-			var logger:ILogger = new TraceLoggerFactory().getLogger("testLogger");
-			assertTrue(logger.debugEnabled);
-			assertTrue(logger.errorEnabled);
-			assertTrue(logger.fatalEnabled);
-			assertTrue(logger.infoEnabled);
-			assertTrue(logger.warnEnabled);
-			
+			var logger:Logger = new TraceLoggerFactory().getLogger("testLogger");
+
 			logger.debug("message");
 			logger.error("message");
 			logger.info("message");

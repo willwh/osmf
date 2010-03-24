@@ -13,7 +13,7 @@ B. Usage Instructions
 On building an application with OSMF and Flex, this library can be used to route OSMF
 logging messages to Flex, like so:
 
-private var logger:ILogger;
+private var logger:Logger;
 private var loggerFactory:FlexLogWrapper;
 
 ...

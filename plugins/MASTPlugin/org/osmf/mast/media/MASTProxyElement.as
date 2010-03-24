@@ -29,8 +29,6 @@ package org.osmf.mast.media
 	import org.osmf.elements.SerialElement;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaElementEvent;
-	import org.osmf.logging.ILogger;
-	import org.osmf.logging.Log;
 	import org.osmf.mast.MASTPluginInfo;
 	import org.osmf.mast.loader.MASTDocumentProcessedEvent;
 	import org.osmf.mast.loader.MASTDocumentProcessor;
@@ -51,6 +49,12 @@ package org.osmf.mast.media
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.TimeTrait;
 
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Logger;
+	import org.osmf.logging.Log;
+	}
+	
 	/**
 	 * The MASTProxyElement class is a wrapper for the media supplied.
 	 * It's purpose is to override the loadable and playable traits to 
@@ -283,7 +287,7 @@ package org.osmf.mast.media
 		private static const ERROR_MISSING_RESOURCE:String = "Media Element is missing a valid resource";
 		
 		CONFIG::LOGGING
-		private static const logger:ILogger = Log.getLogger("MASTProxyElement");			
+		private static const logger:Logger = Log.getLogger("org.osmf.mast.media.MASTProxyElement");			
 		
 	}
 }

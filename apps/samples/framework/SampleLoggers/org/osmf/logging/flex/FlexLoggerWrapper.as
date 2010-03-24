@@ -22,21 +22,22 @@
 package org.osmf.logging.flex
 {
 	import mx.logging.ILogger;
-	import mx.logging.Log;
 	
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	
-	public class FlexLoggerWrapper implements org.osmf.logging.ILogger
+	public class FlexLoggerWrapper extends Logger
 	{
-		public function FlexLoggerWrapper(logger:mx.logging.ILogger)
+		public function FlexLoggerWrapper(logger:ILogger)
 		{
+			super(logger.category);
+			
 			this.logger = logger;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function debug(message:String, ...rest):void
+		override public function debug(message:String, ...rest):void
 		{
 			var args:Array = rest.concat();
 			args.unshift(message);
@@ -46,7 +47,7 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function info(message:String, ...rest):void
+		override public function info(message:String, ...rest):void
 		{
 			var args:Array = rest.concat();
 			args.unshift(message);
@@ -56,7 +57,7 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function warn(message:String, ...rest):void
+		override public function warn(message:String, ...rest):void
 		{
 			var args:Array = rest.concat();
 			args.unshift(message);
@@ -66,7 +67,7 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function error(message:String, ...rest):void
+		override public function error(message:String, ...rest):void
 		{
 			var args:Array = rest.concat();
 			args.unshift(message);
@@ -76,24 +77,16 @@ package org.osmf.logging.flex
 		/**
 		 * @inheritDoc
 		 */
-		public function fatal(message:String, ...rest):void
+		override public function fatal(message:String, ...rest):void
 		{
 			var args:Array = rest.concat();
 			args.unshift(message);
 			logger.fatal.apply(logger, args);
 		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get category():String
-		{
-			return logger.category;
-		}
 
 		// Internals
 		//
 		
-		private var logger:mx.logging.ILogger;
+		private var logger:ILogger;
 	}
 }

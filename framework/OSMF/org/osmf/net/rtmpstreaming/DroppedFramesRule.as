@@ -25,7 +25,7 @@ package org.osmf.net.rtmpstreaming
 	
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.logging.Log;
 	}
 	
@@ -186,7 +186,7 @@ package org.osmf.net.rtmpstreaming
 
 		CONFIG::LOGGING
 		{
-			private static var logger:ILogger = Log.getLogger("org.osmf.net.DroppedFramesRule");
+			private static const logger:Logger = Log.getLogger("org.osmf.net.rtmpstreaming.DroppedFramesRule");
 		}
 	}
 }

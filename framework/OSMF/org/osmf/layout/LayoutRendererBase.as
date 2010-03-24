@@ -33,7 +33,7 @@ package org.osmf.layout
 	import flash.utils.Dictionary;
 	
 	import org.osmf.events.DisplayObjectEvent;
-	import org.osmf.logging.ILogger;
+	import org.osmf.logging.Logger;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.metadata.MetadataWatcher;
@@ -938,6 +938,6 @@ package org.osmf.layout
 		private static var cleaningRenderers:Boolean;
 		private static var dirtyRenderers:Vector.<LayoutRendererBase> = new Vector.<LayoutRendererBase>;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRendererBase");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.Logger = org.osmf.logging.Log.getLogger("org.osmf.layout.LayoutRendererBase");
 	}
 }
