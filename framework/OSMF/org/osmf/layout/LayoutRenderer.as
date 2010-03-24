@@ -685,6 +685,6 @@ package org.osmf.layout
 		private var containerAbsoluteWatcher:MetadataWatcher;
 		private var containerAttributesWatcher:MetadataWatcher;
 		
-		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("DefaultLayoutRenderer");
+		CONFIG::LOGGING private static const logger:org.osmf.logging.ILogger = org.osmf.logging.Log.getLogger("LayoutRenderer");
 	}
 }
