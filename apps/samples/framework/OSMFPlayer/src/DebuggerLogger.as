@@ -22,19 +22,52 @@
 
 package
 {
-	import org.osmf.logging.TraceLogger;
+	import org.osmf.logging.ILogger;
 	
-	public class DebuggerLogger extends TraceLogger
+	public class DebuggerLogger implements ILogger
 	{
 		public function DebuggerLogger(name:String, debugger:Debugger)
 		{
-			super(name);
+			_category = name;
 			
 			this.name = name;
 			this.debugger = debugger;
 		}
 		
-		override protected function log(level:String, message:String, params:Array):void
+		public function debug(message:String, ...rest):void
+		{
+			log(LEVEL_DEBUG, message, rest);
+		}
+		
+		public function info(message:String, ...rest):void
+		{
+			log(LEVEL_INFO, message, rest);
+		}
+		
+		public function warn(message:String, ...rest):void
+		{
+			log(LEVEL_WARN, message, rest);
+		}
+		
+		public function error(message:String, ...rest):void
+		{
+			log(LEVEL_ERROR, message, rest);
+		}
+		
+		public function fatal(message:String, ...rest):void
+		{
+			log(LEVEL_FATAL, message, rest);
+		}
+		
+		public function get category():String
+		{
+			return _category;
+		}
+		
+		// Internals
+		//
+		
+		public function log(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
@@ -45,10 +78,35 @@ package
 			debugger.send(level, msg);
 		}
 		
-		// Internals
-		//
+		/**
+		 * Returns a string with the parameters replaced.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		private function applyParams(message:String, params:Array):String
+		{
+			var result:String = message;
+			var numParams:int = params.length;
+			
+			for (var i:int = 0; i < numParams; i++)
+			{
+				result = result.replace(new RegExp("\\{" + i + "\\}", "g"), params[i]);
+			}
+			
+			return result;
+		}
 		
+		private var _category:String;
 		private var name:String;
 		private var debugger:Debugger;
+		
+		private static const LEVEL_DEBUG:String = "DEBUG";
+		private static const LEVEL_WARN:String = "WARN";
+		private static const LEVEL_INFO:String = "INFO";
+		private static const LEVEL_ERROR:String = "ERROR";
+		private static const LEVEL_FATAL:String = "FATAL";
 	}
 }
