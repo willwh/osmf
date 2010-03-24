@@ -37,7 +37,7 @@ package org.osmf.elements
 			var currentChildChangeCount:int = 0;
 			
 			var serial:DynamicSerialElement = new DynamicSerialElement();
-			serial.addEventListener("currentChildChange", onCurrentChildChange);
+			serial.addEventListener("currentChildIndexChange", onCurrentChildIndexChange);
 			
 			assertTrue(serial.getCurrentChild() == null);
 			assertTrue(currentChildChangeCount == 0);
@@ -112,7 +112,7 @@ package org.osmf.elements
 			assertTrue(serial.getCurrentChild() == null);
 			assertTrue(currentChildChangeCount == 7);
 			
-			function onCurrentChildChange(event:Event):void
+			function onCurrentChildIndexChange(event:Event):void
 			{
 				currentChildChangeCount++;
 			}

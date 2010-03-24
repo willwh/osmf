@@ -26,7 +26,7 @@ package org.osmf.utils
 	import org.osmf.elements.SerialElement;
 	import org.osmf.media.MediaElement;
 	
-	[Event("currentChildChange")]
+	[Event("currentChildIndexChange")]
 	
 	public class DynamicSerialElement extends SerialElement
 	{
@@ -37,12 +37,12 @@ package org.osmf.utils
 
 		public function getCurrentChild():MediaElement
 		{
-			return super.currentChild;
+			return getChildAt(currentChildIndex);
 		}
 		
-		override protected function currentChildChange():void
+		override protected function currentChildIndexChange():void
 		{
-			dispatchEvent(new Event("currentChildChange"));
+			dispatchEvent(new Event("currentChildIndexChange"));
 		}
 	}
 }
