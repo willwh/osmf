@@ -146,7 +146,7 @@ package org.osmf.net.dvr
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false, false
-						, new MediaError(MediaErrorCodes.DVRCAST_FAILED_RETREIVING_STREAM_INFO)
+						, new MediaError(MediaErrorCodes.DVRCAST_FAILED_RETRIEVING_STREAM_INFO)
 						)
 					);
 			}

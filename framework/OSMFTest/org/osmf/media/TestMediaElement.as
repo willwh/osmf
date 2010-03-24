@@ -337,7 +337,7 @@ package org.osmf.media
 				// Make sure error events dispatched on the trait are redispatched
 				// on the MediaElement.
 				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(99)));
-				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID)));
+				loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(MediaErrorCodes.NETSTREAM_FILE_STRUCTURE_INVALID)));
 				
 				function onMediaError(event:MediaErrorEvent):void
 				{
@@ -351,7 +351,7 @@ package org.osmf.media
 					}
 					else if (eventCtr == 2)
 					{
-						assertTrue(event.error.errorID == MediaErrorCodes.FILE_STRUCTURE_INVALID);
+						assertTrue(event.error.errorID == MediaErrorCodes.NETSTREAM_FILE_STRUCTURE_INVALID);
 						assertTrue(event.error.message == "File has invalid structure");
 						assertTrue(event.target == mediaElement);
 						

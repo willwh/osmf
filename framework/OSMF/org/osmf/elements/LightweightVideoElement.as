@@ -593,16 +593,16 @@ package org.osmf.elements
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 				case NetStreamCodes.NETSTREAM_FAILED:
-					error = new MediaError(MediaErrorCodes.PLAY_FAILED, event.info.description);
+					error = new MediaError(MediaErrorCodes.NETSTREAM_PLAY_FAILED, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND:
-					error = new MediaError(MediaErrorCodes.STREAM_NOT_FOUND, event.info.description);
+					error = new MediaError(MediaErrorCodes.NETSTREAM_STREAM_NOT_FOUND, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID:
-					error = new MediaError(MediaErrorCodes.FILE_STRUCTURE_INVALID, event.info.description);
+					error = new MediaError(MediaErrorCodes.NETSTREAM_FILE_STRUCTURE_INVALID, event.info.description);
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND:
-					error = new MediaError(MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND, event.info.description);
+					error = new MediaError(MediaErrorCodes.NETSTREAM_NO_SUPPORTED_TRACK_FOUND, event.info.description);
 					break;	
 			}
 					

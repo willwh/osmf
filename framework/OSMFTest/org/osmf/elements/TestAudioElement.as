@@ -149,22 +149,22 @@ package org.osmf.elements
 		
 		public function testMediaErrorPlayFailed():void
 		{
-			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FAILED, MediaErrorCodes.PLAY_FAILED);
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FAILED, MediaErrorCodes.NETSTREAM_PLAY_FAILED);
 		}
 
 		public function testMediaErrorStreamNotFound():void
 		{
-			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, MediaErrorCodes.STREAM_NOT_FOUND);
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_STREAMNOTFOUND, MediaErrorCodes.NETSTREAM_STREAM_NOT_FOUND);
 		}
 		
 		public function testMediaErrorFileStructureInvalid():void
 		{
-			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, MediaErrorCodes.FILE_STRUCTURE_INVALID);
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_FILESTRUCTUREINVALID, MediaErrorCodes.NETSTREAM_FILE_STRUCTURE_INVALID);
 		}
 
 		public function testMediaErrorNoSupportedTrackFound():void
 		{
-			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND, MediaErrorCodes.NO_SUPPORTED_TRACK_FOUND);
+			doTestMediaError(NetStreamCodes.NETSTREAM_PLAY_NOSUPPORTEDTRACKFOUND, MediaErrorCodes.NETSTREAM_NO_SUPPORTED_TRACK_FOUND);
 		}
 
 		private function doTestMediaError(netStreamCode:String, errorID:int, level:String="error"):void

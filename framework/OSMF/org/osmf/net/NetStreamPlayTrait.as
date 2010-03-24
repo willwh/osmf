@@ -196,8 +196,8 @@ package org.osmf.net
 				// other errors will be treated generically.
 				var mediaErrorCode:int =
 						error.errorID == NETCONNECTION_FAILURE_ERROR_CODE
-					?	MediaErrorCodes.PLAY_FAILED_NETCONNECTION_FAILURE
-					:	MediaErrorCodes.PLAY_FAILED;
+					?	MediaErrorCodes.NETSTREAM_PLAY_FAILED_NETCONNECTION_FAILURE
+					:	MediaErrorCodes.NETSTREAM_PLAY_FAILED;
 				
 				dispatchEvent
 					( new MediaErrorEvent

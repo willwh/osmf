@@ -214,7 +214,7 @@ package org.osmf.elements
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.AUDIO_IO_LOAD_ERROR
+							( MediaErrorCodes.AUDIO_IO_ERROR
 							, ioEvent ? ioEvent.text : ioEventDetail
 							)
 						)
@@ -232,7 +232,7 @@ package org.osmf.elements
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.AUDIO_SECURITY_LOAD_ERROR
+							( MediaErrorCodes.AUDIO_SECURITY_ERROR
 							, securityErrorDetail
 							)
 						)
