@@ -40,10 +40,10 @@ package org.osmf.net
 	import flash.utils.Timer;
 	
 	import org.osmf.events.MediaError;
-	import org.osmf.utils.URL;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
+	import org.osmf.utils.URL;
 	
 	/**
 	 * Dispatched when the factory has successfully created and connected a NetConnection.
@@ -177,7 +177,12 @@ package org.osmf.net
 					{
 						args.push(arg);
 					}
-				}				
+				}
+				
+				CONFIG::LOGGING
+				{
+					logger.info("Attempting connection to " + netConnectionURLs[attemptIndex]);
+				}
 				
 				NetConnection(netConnections[attemptIndex]).connect.apply(netConnections[attemptIndex], args);
 				attemptIndex++;
@@ -188,15 +193,24 @@ package org.osmf.net
 			}
 			catch (ioError:IOError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_IO_ERROR, ioError.message));
+				handleFailedConnectionSession
+					( new MediaError(MediaErrorCodes.NETCONNECTION_IO_ERROR, ioError.message)
+					, netConnectionURLs[attemptIndex]
+					);
 			}
 			catch (argumentError:ArgumentError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR, argumentError.message));
+				handleFailedConnectionSession
+					( new MediaError(MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR, argumentError.message)
+					, netConnectionURLs[attemptIndex]
+					);
 			}
 			catch (securityError:SecurityError) 
 			{
-				handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, securityError.message));
+				handleFailedConnectionSession
+					( new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, securityError.message)
+					, netConnectionURLs[attemptIndex]
+					);
 			}
 		}
 		
@@ -209,17 +223,36 @@ package org.osmf.net
 			switch (event.info.code) 
 			{
 				case NetConnectionCodes.CONNECT_INVALIDAPP:
-					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APP, event.info.description));
+					handleFailedConnectionSession
+						( new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APP, event.info.description)
+						, NetConnection(event.target).uri
+						);
 					break;
 				case NetConnectionCodes.CONNECT_REJECTED:
-					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED, event.info.description));
+					handleFailedConnectionSession
+						( new MediaError(MediaErrorCodes.NETCONNECTION_REJECTED, event.info.description)
+						, NetConnection(event.target).uri
+						);
     				break;
     			case NetConnectionCodes.CONNECT_FAILED:
     				failedConnectionCount++;
+    				
+ 					CONFIG::LOGGING
+					{
+						if (failedConnectionCount < netConnectionURLs.length)
+						{
+							logger.info("NetConnection attempt failed: " + NetConnection(event.target).uri);
+						}
+					}
+
     				if (failedConnectionCount >= netConnectionURLs.length) 
     				{
-    					handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_FAILED));
+    					handleFailedConnectionSession
+    						( new MediaError(MediaErrorCodes.NETCONNECTION_FAILED)
+    						, NetConnection(event.target).uri
+    						);
     				}
+
     				break;
 				case NetConnectionCodes.CONNECT_SUCCESS:
 					shutDownUnsuccessfulConnections();
@@ -263,11 +296,11 @@ package org.osmf.net
 		 * Handles a failed connection session and dispatches a CONNECTION_FAILED event
 		 * @private
 		 */
-		private function handleFailedConnectionSession(mediaError:MediaError = null):void
+		private function handleFailedConnectionSession(mediaError:MediaError, url:String):void
 		{
 			CONFIG::LOGGING
 			{
-				logger.info("NetConnection attempt failed (" + mediaError.errorID + "): " + mediaError.message);
+				logger.info("NetConnection attempt failed: " + url + " (" + mediaError.errorID + "): " + mediaError.message);
 			}
 			shutDownUnsuccessfulConnections();
 			dispatchEvent
@@ -288,7 +321,10 @@ package org.osmf.net
 		 */
 		private function onNetSecurityError(event:SecurityErrorEvent):void
 		{
-			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR,event.text));
+			handleFailedConnectionSession
+				( new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, event.text)
+				, NetConnection(event.target).uri
+				);
 		}
 
     	/** 
@@ -297,7 +333,10 @@ package org.osmf.net
     	 */
 		private function onAsyncError(event:AsyncErrorEvent):void 
 		{
-			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_ASYNC_ERROR,event.text));
+			handleFailedConnectionSession
+				( new MediaError(MediaErrorCodes.NETCONNECTION_ASYNC_ERROR, event.text)
+				, NetConnection(event.target).uri
+				);
 		}
 
 		/** 
@@ -306,7 +345,10 @@ package org.osmf.net
 		 */
 		private function masterTimeout(event:TimerEvent):void 
 		{
-			handleFailedConnectionSession(new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT,"Failed to establish a NetConnection within the timeout period of " + DEFAULT_TIMEOUT + " ms."));
+			handleFailedConnectionSession
+				( new MediaError(MediaErrorCodes.NETCONNECTION_TIMEOUT, "" + DEFAULT_TIMEOUT)
+				, ""
+				);
 		}
 				
 		private var asAdobe:RegExp = /as=adobe/;
