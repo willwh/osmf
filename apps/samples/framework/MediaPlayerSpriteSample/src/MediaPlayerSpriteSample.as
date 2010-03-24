@@ -38,15 +38,16 @@ package
 	import org.osmf.media.URLResource;
 	
 	/**
-	 * A simple demonstration of the MediaPlayerSprite
+	 * A simple demonstration of the MediaPlayerSprite.  This sample will
+	 * show how the MediaPlayerSprite can take a URLResource, and create a video
+	 * with a letterbox layout, and scaling capability in 9 lines of code.
 	 **/
 	[SWF(backgroundColor=0x000000)]
 	public class MediaPlayerSpriteSample extends Sprite
-	{
-		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
-		
+	{	
 		public function MediaPlayerSpriteSample()
-		{				
+		{		
+			//Neccesary to prevent the MPS from scaling via ScaleX and ScaleY.
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 						
@@ -57,17 +58,22 @@ package
 			stage.addEventListener(Event.RESIZE, onResize);
 			
 			mps.resource = new URLResource(REMOTE_PROGRESSIVE);		
-									
-			mps.width = stage.stageWidth;
-			mps.height = stage.stageHeight;			
+				
+			//Update the MPS to the initial size.
+			onResize();		
 		}
 		
-		private function onResize(event:Event):void
+		/**
+		 * Resizes the component when the stage resizes.  Matches
+		 * the width and height the stage.
+		 */ 
+		private function onResize(event:Event = null):void
 		{			
 			mps.width = stage.stageWidth;
 			mps.height = stage.stageHeight;
 		}
 		
+		private static const REMOTE_PROGRESSIVE:String 			= "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		private var mps:MediaPlayerSprite;				
 	}
 }
