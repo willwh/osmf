@@ -607,6 +607,13 @@ package org.osmf.metadata
 				return false;
 			}
 			
+			// Get the next time value after this one so we can decide to adjust the timer interval
+			var nextTime:Number =
+				temporalValueCollection [   index + 1 < temporalKeyCollection.length
+									  	  ? index + 1
+									  	  : temporalKeyCollection.length - 1
+									 	].time;
+					
 			var result:Boolean = false;																				
 		
 			if ( 	(temporalValueCollection[index].time >= (now - TOLERANCE))
@@ -620,11 +627,11 @@ package org.osmf.metadata
 				
 				// Adjust the timer interval if necessary
 				var thisTime:Number = temporalKeyCollection[index];
-				var newDelay:Number = ((getNextTimeValue(index) - thisTime)*1000)/4;
+				var newDelay:Number = ((nextTime - thisTime)*1000)/4;
 				newDelay = (newDelay > CHECK_INTERVAL) ? newDelay : CHECK_INTERVAL;
 								
 				// If no more data, stop the timer
-				if (thisTime == getNextTimeValue(index)) 
+				if (thisTime == nextTime) 
 				{
 					startTimer(false);
 					restartTimer = false;
@@ -642,26 +649,14 @@ package org.osmf.metadata
 			//    if it happens to fall between this check and next one.
 			// See if we are going to miss a data point (meaning there is one between now and the 
 			//    next interval timer event).  If so, drop back down to the default check interval.
-			else if ((intervalTimer.delay != CHECK_INTERVAL) && ((now + (intervalTimer.delay/1000)) > getNextTimeValue(index))) 
+			else if ((intervalTimer.delay != CHECK_INTERVAL) && ((now + (intervalTimer.delay/1000)) > nextTime)) 
 			{
 				this.intervalTimer.reset();
 				this.intervalTimer.delay = CHECK_INTERVAL;
 				startTimer();
 			}
 			return result;				
-   		}
-   		
-   		/**
-   		 * Given the supplied index, returns the next time
-   		 * value in the internal collection of time values.
-   		 **/
-   		private function getNextTimeValue(index:int):int
-   		{
-   			return temporalValueCollection [  index + 1 < temporalKeyCollection.length
-									  	  	? index + 1
-									  	  	: temporalKeyCollection.length - 1
-										 	].time;
-   		}
+   		}		
 
 		/**
 		 * The interval timer event handler.
