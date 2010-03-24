@@ -70,92 +70,92 @@ package
 		
 		private function processAutoSwitchChange(event:DynamicStreamEvent):void
 		{
-			debugger.send("autoSwitchChange", event.autoSwitch);
+			debugger.send("EVENT","autoSwitchChange", event.autoSwitch);
 		}
 		
 		private function processBufferingChange(event:BufferEvent):void
 		{
-			debugger.send("bufferingChange", event.buffering);
+			debugger.send("EVENT","bufferingChange", event.buffering);
 		}
 		
 		private function processBufferTimeChange(event:BufferEvent):void
 		{
-			debugger.send("bufferTimeChange", event.bufferTime);
+			debugger.send("EVENT","bufferTimeChange", event.bufferTime);
 		}
 		
 		private function processComplete(event:TimeEvent):void
 		{
-			debugger.send("complete");
+			debugger.send("EVENT","complete");
 		}
 		
 		private function processCanPauseChange(event:PlayEvent):void
 		{
-			debugger.send("canPauseChange", event.canPause);
+			debugger.send("EVENT","canPauseChange", event.canPause);
 		}
 		
 		private function processDisplayObjectChange(event:DisplayObjectEvent):void
 		{
-			debugger.send("displayObjectChange");
+			debugger.send("EVENT","displayObjectChange");
 		}
 		
 		private function processDurationChange(event:TimeEvent):void
 		{
-			debugger.send("durantionChange", event.time);
+			debugger.send("EVENT","durantionChange", event.time);
 		}
 		
 		private function processLoadStateChange(event:LoadEvent):void
 		{
-			debugger.send("loadStateChange", event.loadState);
+			debugger.send("EVENT","loadStateChange", event.loadState);
 		}
 		
 		private function processBytesTotalChange(event:LoadEvent):void
 		{
-			debugger.send("bytesTotalChange", event.bytes);
+			debugger.send("EVENT","bytesTotalChange", event.bytes);
 		}
 		
 		private function processMediaSizeChange(event:DisplayObjectEvent):void
 		{
-			debugger.send("mediaSizeChange", event.newWidth, event.newHeight);
+			debugger.send("EVENT","mediaSizeChange", event.newWidth, event.newHeight);
 		}
 		
 		private function processMutedChange(event:AudioEvent):void
 		{
-			debugger.send("mutedChange", event.muted);
+			debugger.send("EVENT","mutedChange", event.muted);
 		}
 		
 		private function processNumDynamicStreamsChange(event:DynamicStreamEvent):void
 		{
-			debugger.send("numDynamicStreamsChange");
+			debugger.send("EVENT","numDynamicStreamsChange");
 		}
 		
 		private function processPanChange(event:AudioEvent):void
 		{
-			debugger.send("panChange", event.pan);
+			debugger.send("EVENT","panChange", event.pan);
 		}
 		
 		private function processPlayStateChange(event:PlayEvent):void
 		{
-			debugger.send("playStateChange", event.playState);
+			debugger.send("EVENT","playStateChange", event.playState);
 		}
 		
 		private function processSeekingChange(event:SeekEvent):void
 		{
-			debugger.send("seekingChange", event.seeking, event.time);
+			debugger.send("EVENT","seekingChange", event.seeking, event.time);
 		}
 		
 		private function processSwitchingChange(event:DynamicStreamEvent):void
 		{
-			debugger.send("switchingChange", event.switching);
+			debugger.send("EVENT","switchingChange", event.switching);
 		}
 		
 		private function processVolumeChange(event:AudioEvent):void
 		{
-			debugger.send("volumeChange", event.volume);
+			debugger.send("EVENT","volumeChange", event.volume);
 		}
 		
 		private function processDRMStateChange(event:DRMEvent):void
 		{
-			debugger.send("drmStateChange", event.drmState);
+			debugger.send("EVENT","drmStateChange", event.drmState);
 		}
 		
 		// Internals

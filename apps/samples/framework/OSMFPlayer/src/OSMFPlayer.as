@@ -185,7 +185,7 @@ package
 						value = new DebuggerElementProxy(value, preloader.debugger);
 					}
 					
-					preloader.debugger.send("media change", value);
+					preloader.debugger.send("TRACE", "media change", value);
 				}
 				
 				element

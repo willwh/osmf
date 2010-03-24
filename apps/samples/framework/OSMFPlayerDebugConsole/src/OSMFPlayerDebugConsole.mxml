@@ -7,6 +7,8 @@
 	paddingTop				="0"
 	paddingRight			="0"
 	paddingBottom			="5"
+	width					="800"
+	height					="500"
 	>
 	
 	<mx:DataGrid
@@ -17,15 +19,25 @@
 		<mx:columns>
 			<mx:DataGridColumn width="25" headerText="ID" dataField="0"/>
 			<mx:DataGridColumn width="25" headerText="Time" dataField="1"/>
-			<mx:DataGridColumn headerText="Message" dataField="2"/>
-			<mx:DataGridColumn headerText="Parameters" dataField="3"/>
+			<mx:DataGridColumn width="50" headerText="Type" dataField="2"/>
+			<mx:DataGridColumn headerText="Message" dataField="3"/>
+			<mx:DataGridColumn width="50" headerText="Parameters" dataField="4"/>
 		</mx:columns>
 	</mx:DataGrid>
 	
-	<mx:Button
-		label	="Clear"
-		click	="{grid.dataProvider = log = new ArrayCollection()}"
-		/>
+	<mx:HBox>
+	
+		<mx:Button
+			label	="Clear"
+			click	="{grid.dataProvider = log = new ArrayCollection()}"
+			/>
+			
+		<mx:Button
+			label	="{paused ? 'Resume' : 'Pause'}"
+			click	="{paused = !paused}"
+			/>
+		
+	</mx:HBox>
 	
 	<mx:Script>
 		<![CDATA[
@@ -45,13 +57,22 @@
 				receiver.connect("_OSMFWebPlayerDebugger");	
 			}
 			
-			private function receiverDebug(...args):void
+			private function receiverDebug(items:Array):void
 			{
-				log.addItemAt([args.shift(), args.shift(), args.shift(), args], 0);
+				if (paused == false)
+				{
+					for each (var args:Array in items)
+					{
+						log.addItemAt(args, 0);
+					}
+				}
 			}
 			
 			private var receiver:LocalConnection;
 			private var log:ArrayCollection;
+			
+			[Bindable]
+			private var paused:Boolean;
 		]]>
 	</mx:Script>
 	

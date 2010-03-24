@@ -1,6 +1,6 @@
 /*****************************************************
 *  
-*  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
+*  Copyright 2010 Adobe Systems Incorporated.  All Rights Reserved.
 *  
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
@@ -15,7 +15,7 @@
 *   
 *  
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2010 Adobe Systems 
 *  Incorporated. All Rights Reserved. 
 *  
 *****************************************************/
@@ -25,9 +25,9 @@ package
 	import flash.events.AsyncErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
+	import flash.events.TimerEvent;
 	import flash.net.LocalConnection;
-	
-	import org.osmf.media.MediaElement;
+	import flash.utils.Timer;
 	
 	public class Debugger
 	{
@@ -40,16 +40,22 @@ package
 			sender.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			sender.addEventListener(StatusEvent.STATUS, onStatus);
 			
-			send("debugger instance constructed", instanceId);
+			queue = [];
+			
+			timer = new Timer(500);
+			timer.addEventListener(TimerEvent.TIMER, onTimerTick);
+			timer.start();
+			
+			send("TRACE", "debugger instance constructed");
 		}
 		
-		public function send(...parameters):void
+		public function send(type:String, ...parameters):void
 		{
+			parameters.unshift(type);
 			parameters.unshift(new Date());
 			parameters.unshift(instanceId);
-			parameters.unshift("debug");
-			parameters.unshift(SENDER_NAME);
-			sender.send.apply(this, parameters);
+			
+			queue.push(parameters);	
 		}
 
 		// Internals
@@ -57,6 +63,9 @@ package
 		
 		private var sender:LocalConnection;
 		private var instanceId:String;
+		
+		private var queue:Array;
+		private var timer:Timer;
 		
 		private static const SENDER_NAME:String = "_OSMFWebPlayerDebugger";
 		
@@ -73,6 +82,21 @@ package
 		private function onStatus(event:StatusEvent):void
 		{
 			//
+		}
+		
+		private function flush():void
+		{
+			sender.send(SENDER_NAME, "debug", queue);
+			
+			queue = [];
+		}
+		
+		private function onTimerTick(event:TimerEvent):void
+		{
+			if (queue.length > 0)
+			{
+				flush();
+			}
 		}
 	}
 }
