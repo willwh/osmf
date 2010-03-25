@@ -36,45 +36,7 @@ package org.osmf.net.httpstreaming.f4f
 	{
 		override public function setUp():void
 		{
-			abstDescriptor = new AdobeBootstrapBoxDescriptor();
-			abstDescriptor.bootstrapInfoVersion = 100;
-			abstDescriptor.live = false;
-			abstDescriptor.update = false;
-			abstDescriptor.timeScale = 1000;
-			abstDescriptor.currentMediaTimeH = 0;
-			abstDescriptor.currentMediaTimeL = 22000;
-			abstDescriptor.smpteTimeCodeOffsetH = 0;
-			abstDescriptor.smpteTimeCodeOffsetL = 0;
-			abstDescriptor.movieIdentifier = "movie";
-			abstDescriptor.addServerBaseUrl("http://www.httpstreaming.net/server_base_url");
-
-			var segmentRunTable:AdobeSegmentRunTableDescriptor = new AdobeSegmentRunTableDescriptor();
-			segmentRunTable.addEntry(1, 16);
-			abstDescriptor.addSegmentRunTable(segmentRunTable);
-			
-			var fragmentRunTable:AdobeFragmentRunTableDescriptor = new AdobeFragmentRunTableDescriptor();
-			fragmentRunTable.timeScale = 1000;
-			//
-			//	Fragment runtable entries
-			//  
-			//  first_fragment		first_fragment_time_stamp		fragment_duration		discontinuity_indicator
-			//  	1					0								4000					-
-			// 		5					16000							0						1
-			// 		6					16000							0						2
-			// 		7					16000							500						-
-			// 		11					18000							0						3
-			// 		12					18000							1000					-
-			// 		16					22000							0						0 
-			//
-			fragmentRunTable.addEntry(1, 0, 0, 4000, 0);
-			fragmentRunTable.addEntry(5, 0, 16000, 0, 1);
-			fragmentRunTable.addEntry(6, 0, 16000, 0, 2);
-			fragmentRunTable.addEntry(7, 0, 16000, 500, 0);
-			fragmentRunTable.addEntry(11, 0, 18000, 0, 3);
-			fragmentRunTable.addEntry(12, 0, 18000, 1000, 0);
-			fragmentRunTable.addEntry(16, 0, 22000, 0, 0);
-			abstDescriptor.addFragmentRunTable(fragmentRunTable);
-						
+			abstDescriptor = HTTPStreamingTestsHelper.createBasicAdobeBootstrapBoxDescriptor(); 						
 			var bytes:ByteArray = HTTPStreamingTestsHelper.createAdobeBootstrapBox(abstDescriptor);
 
 			var parser:BoxParser = new BoxParser();
@@ -88,6 +50,14 @@ package org.osmf.net.httpstreaming.f4f
 
 		public function testBasicAttributes():void
 		{
+			// Box and FullBox attributes
+			assertTrue(abst.type == "abst");
+			assertTrue(abst.boxLength >= F4FConstants.FIELD_SIZE_LENGTH + F4FConstants.FIELD_TYPE_LENGTH);
+			assertTrue(abst.size == 0);
+			assertTrue(abst.flags == 0);
+			assertTrue(abst.version == 0);
+			
+			// AdobeBootstrapBox attributes 
 			assertTrue(abst.bootstrapVersion == abstDescriptor.bootstrapInfoVersion);
 			assertTrue(abst.currentMediaTime == abstDescriptor.currentMediaTimeL);
 			assertTrue(abst.contentComplete());
@@ -195,13 +165,17 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			// Segment number increases every 15 fragments.
 			assertTrue(abst.findSegmentId(0) == 0);
-			for (var i:int = 1; i <= 16; i++)
+			for (var i:int = 1; i <= 10; i++)
 			{			
 				assertTrue(abst.findSegmentId(i) == 1);
 			}
-			for (i = 17; i <= 18; i++)
+			for (i = 11; i <= 15; i++)
 			{			
 				assertTrue(abst.findSegmentId(i) == 2);
+			}
+			for (i = 16; i <= 18; i++)
+			{			
+				assertTrue(abst.findSegmentId(i) == 3);
 			}
 		}
 		

@@ -148,7 +148,7 @@ package org.osmf.net.httpstreaming.f4f
 		
 		public function get totalFragments():uint
 		{
-			return _segmentFragmentPairs[_segmentFragmentPairs.length - 1].fragmentsPerSegment;
+			return _segmentFragmentPairs[_segmentFragmentPairs.length - 1].fragmentsPerSegment + _segmentFragmentPairs[_segmentFragmentPairs.length - 1].fragmentsAccrued;
 		}
 
 		// Internals

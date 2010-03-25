@@ -25,24 +25,22 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import flexunit.framework.TestCase;
 	
-	import mx.utils.Base64Decoder;
-	
-	import org.osmf.utils.TestConstants;
+	import org.osmf.net.httpstreaming.AdobeBootstrapBoxDescriptor;
+	import org.osmf.net.httpstreaming.HTTPStreamingTestsHelper;
 	
 	public class TestAdobeSegmentRunTable extends TestCase
 	{
 		override public function setUp():void
 		{
-			var decoder:Base64Decoder = new Base64Decoder();
-			decoder.decode(TestConstants.ABST_BOX_DATA);
-			var bytes:ByteArray = decoder.drain();
+			abstDescriptor = HTTPStreamingTestsHelper.createBasicAdobeBootstrapBoxDescriptor(); 						
+			var bytes:ByteArray = HTTPStreamingTestsHelper.createAdobeBootstrapBox(abstDescriptor);
 
 			var parser:BoxParser = new BoxParser();
 			parser.init(bytes);
 			var boxes:Vector.<Box> = parser.getBoxes();
 			assertTrue(boxes.length == 1);
 			
-			var abst:AdobeBootstrapBox = boxes[0] as AdobeBootstrapBox;
+			abst = boxes[0] as AdobeBootstrapBox;
 			assertTrue(abst != null);
 			
 			assertTrue(abst.segmentRunTables.length == 1);
@@ -52,20 +50,28 @@ package org.osmf.net.httpstreaming.f4f
 		public function testFindSegmentIdByFragmentId():void
 		{
 			assertTrue(asrt.findSegmentIdByFragmentId(0) == 0);
-			for (var i:int = 1; i <= 15; i++)
+			for (var i:int = 1; i <= 10; i++)
 			{			
 				assertTrue(asrt.findSegmentIdByFragmentId(i) == 1);
 			}
-			for (i = 16; i <= 30; i++)
+			for (i = 11; i <= 15; i++)
 			{			
 				assertTrue(asrt.findSegmentIdByFragmentId(i) == 2);
 			}
-			assertTrue(asrt.findSegmentIdByFragmentId(31) == 3);
+			assertTrue(asrt.findSegmentIdByFragmentId(16) == 3);
+		}
+		
+		public function testTotalFragments():void
+		{
+			assertTrue(asrt.totalFragments == 15);
+			assertTrue(abst.totalFragments == asrt.totalFragments);
 		}
 		
 		// Internals
 		//
 		
 		private var asrt:AdobeSegmentRunTable;
+		private var abst:AdobeBootstrapBox;
+		private var abstDescriptor:AdobeBootstrapBoxDescriptor;
 	}
 }

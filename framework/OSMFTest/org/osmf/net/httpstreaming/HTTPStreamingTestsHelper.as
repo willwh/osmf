@@ -34,11 +34,56 @@ package org.osmf.net.httpstreaming
 			
 			return ba;
 		}
+		
+		public static function createBasicAdobeBootstrapBoxDescriptor():AdobeBootstrapBoxDescriptor
+		{
+			var abstDescriptor:AdobeBootstrapBoxDescriptor = new AdobeBootstrapBoxDescriptor();
+			abstDescriptor.bootstrapInfoVersion = 100;
+			abstDescriptor.live = false;
+			abstDescriptor.update = false;
+			abstDescriptor.timeScale = 1000;
+			abstDescriptor.currentMediaTimeH = 0;
+			abstDescriptor.currentMediaTimeL = 22000;
+			abstDescriptor.smpteTimeCodeOffsetH = 0;
+			abstDescriptor.smpteTimeCodeOffsetL = 0;
+			abstDescriptor.movieIdentifier = "movie";
+			abstDescriptor.addServerBaseUrl("http://www.httpstreaming.net/server_base_url");
+
+			var segmentRunTable:AdobeSegmentRunTableDescriptor = new AdobeSegmentRunTableDescriptor();
+			segmentRunTable.addEntry(1, 10);
+			segmentRunTable.addEntry(2, 5);
+			abstDescriptor.addSegmentRunTable(segmentRunTable);
+			
+			var fragmentRunTable:AdobeFragmentRunTableDescriptor = new AdobeFragmentRunTableDescriptor();
+			fragmentRunTable.timeScale = 1000;
+			//
+			//	Fragment runtable entries
+			//  
+			//  first_fragment		first_fragment_time_stamp		fragment_duration		discontinuity_indicator
+			//  	1					0								4000					-
+			// 		5					16000							0						1
+			// 		6					16000							0						2
+			// 		7					16000							500						-
+			// 		11					18000							0						3
+			// 		12					18000							1000					-
+			// 		16					22000							0						0 
+			//
+			fragmentRunTable.addEntry(1, 0, 0, 4000, 0);
+			fragmentRunTable.addEntry(5, 0, 16000, 0, 1);
+			fragmentRunTable.addEntry(6, 0, 16000, 0, 2);
+			fragmentRunTable.addEntry(7, 0, 16000, 500, 0);
+			fragmentRunTable.addEntry(11, 0, 18000, 0, 3);
+			fragmentRunTable.addEntry(12, 0, 18000, 1000, 0);
+			fragmentRunTable.addEntry(16, 0, 22000, 0, 0);
+			abstDescriptor.addFragmentRunTable(fragmentRunTable);
+			
+			return abstDescriptor;
+		}
 
 		private static function writeAbstAttributes(descriptor:AdobeBootstrapBoxDescriptor, ba:ByteArray):void
 		{			
 			writeFullBox("abst", ba);
-			// bootstrapinfo_version = 100
+			// bootstrapinfo_version 
 			ba.writeUnsignedInt(descriptor.bootstrapInfoVersion);
 			writeAbstFlags(descriptor.profile, descriptor.live, descriptor.update, ba);
 			// timescale is ms
