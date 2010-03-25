@@ -41,11 +41,27 @@ package org.osmf.logging
 		/**
 		 * Constructor.
 		 **/
-		public function TraceLoggerFactory()
+		public function TraceLoggerFactory(filter:String=null)
 		{
 			super();
 			
 			loggers = new Dictionary();
+			_filter = filter;
+		}
+		
+		/**
+		 * Optional filter to apply to all loggers.  If specified, then
+		 * only those Loggers whose category matches or contains this filter
+		 * string (which is case-sensitive) will be logged.
+		 **/
+		public function get filter():String
+		{
+			return _filter;
+		}
+		
+		public function set filter(value:String):void
+		{
+			_filter = value;
 		}
 
 		/**
@@ -57,7 +73,14 @@ package org.osmf.logging
 			
 			if (logger == null)
 			{
-				logger = new TraceLogger(category);
+				if (filter != null && category.indexOf(filter) == -1)
+				{
+					logger = new Logger(category);
+				}
+				else
+				{
+					logger = new TraceLogger(category);
+				}
 				loggers[category] = logger;
 			}
 			
@@ -68,5 +91,6 @@ package org.osmf.logging
 		//
 		
 		private var loggers:Dictionary;
+		private var _filter:String;
 	}
 }
