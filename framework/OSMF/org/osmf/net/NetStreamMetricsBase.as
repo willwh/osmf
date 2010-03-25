@@ -43,7 +43,7 @@ package org.osmf.net
 		 * Note that for correct operation of this class, the caller must set the
 		 * resource which the monitored stream is playing.
 		 * 
-		 * @param ns The NetStream instance the class will monitor.
+		 * @param netStream The NetStream instance the class will monitor.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
