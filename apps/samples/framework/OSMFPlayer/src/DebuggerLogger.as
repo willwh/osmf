@@ -22,64 +22,32 @@
 
 package
 {
-	import org.osmf.logging.Logger;
+	import org.osmf.logging.TraceLogger;
 	
-	public class DebuggerLogger extends Logger
+	public class DebuggerLogger extends TraceLogger
 	{
-		public function DebuggerLogger(category:String, debugger:Debugger)
+		public function DebuggerLogger(name:String, debugger:Debugger)
 		{
-			super(category);
+			super(name);
 			
+			this.name = name;
 			this.debugger = debugger;
-		}
-		
-		override public function debug(message:String, ...rest):void
-		{
-			logMessage(LEVEL_DEBUG, message, rest);
-		}
-		
-		override public function info(message:String, ...rest):void
-		{
-			logMessage(LEVEL_INFO, message, rest);
-		}
-		
-		override public function warn(message:String, ...rest):void
-		{
-			logMessage(LEVEL_WARN, message, rest);
-		}
-		
-		override public function error(message:String, ...rest):void
-		{
-			logMessage(LEVEL_ERROR, message, rest);
-		}
-		
-		override public function fatal(message:String, ...rest):void
-		{
-			logMessage(LEVEL_FATAL, message, rest);
 		}
 		
 		// Internals
 		//
 		
-		private function logMessage(level:String, message:String, params:Array):void
+		public function log(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
 			// add name and params
-			msg += "[" + category + "] " + applyParams(message, params);
+			msg += "[" + name + "] " + applyParams(message, params);
 			
 			// trace the message
 			debugger.send(level, msg);
 		}
 		
-		/**
-		 * Returns a string with the parameters replaced.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
 		private function applyParams(message:String, params:Array):String
 		{
 			var result:String = message;
@@ -93,12 +61,7 @@ package
 			return result;
 		}
 		
+		private var name:String;
 		private var debugger:Debugger;
-		
-		private static const LEVEL_DEBUG:String = "DEBUG";
-		private static const LEVEL_WARN:String = "WARN";
-		private static const LEVEL_INFO:String = "INFO";
-		private static const LEVEL_ERROR:String = "ERROR";
-		private static const LEVEL_FATAL:String = "FATAL";
 	}
 }

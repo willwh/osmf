@@ -31,6 +31,9 @@ package
 	
 	public class Debugger
 	{
+		public static const FLUSH_INTERVAL:Number = 200;
+		public static const MAX_QUEUE_LENGTH:Number = 30;
+		
 		public function Debugger(instanceId:String)
 		{
 			this.instanceId = instanceId;
@@ -42,7 +45,7 @@ package
 			
 			queue = [];
 			
-			timer = new Timer(500);
+			timer = new Timer(FLUSH_INTERVAL);
 			timer.addEventListener(TimerEvent.TIMER, onTimerTick);
 			timer.start();
 			
@@ -56,6 +59,10 @@ package
 			parameters.unshift(instanceId);
 			
 			queue.push(parameters);	
+			if (queue.length > MAX_QUEUE_LENGTH)
+			{
+				flush();
+			}
 		}
 
 		// Internals
