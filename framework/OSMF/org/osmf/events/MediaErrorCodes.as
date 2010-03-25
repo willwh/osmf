@@ -100,7 +100,7 @@ package org.osmf.events
 		/**
 		 * Error constant that corresponds to the NetConnection.Connect.InvalidApp status code.
 		 **/
-		public static const NETCONNECTION_INVALID_APPLICATION:int		= 12;
+		public static const NETCONNECTION_APPLICATION_INVALID:int		= 12;
 
 		/**
 		 * Error constant that corresponds to the NetConnection.Connect.Failed status code.
@@ -153,7 +153,7 @@ package org.osmf.events
 		/**
 		 * Error constant for when information about the DVRCast stream cannot be retrieved.
 		 **/
-		public static const DVRCAST_FAILED_RETRIEVING_STREAM_INFO:int	= 22;
+		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:int	= 22;
 
 
 		/**
@@ -200,7 +200,7 @@ package org.osmf.events
 			, {errorID:PLUGIN_IMPLEMENTATION_INVALID,			message:OSMFStrings.PLUGIN_IMPLEMENTATION_INVALID}
 			, {errorID:SOUND_PLAY_FAILED,						message:OSMFStrings.SOUND_PLAY_FAILED}
 			, {errorID:NETCONNECTION_REJECTED,					message:OSMFStrings.NETCONNECTION_REJECTED}
-			, {errorID:NETCONNECTION_INVALID_APPLICATION,		message:OSMFStrings.NETCONNECTION_INVALID_APPLICATION}
+			, {errorID:NETCONNECTION_APPLICATION_INVALID,		message:OSMFStrings.NETCONNECTION_APPLICATION_INVALID}
 			, {errorID:NETCONNECTION_FAILED,					message:OSMFStrings.NETCONNECTION_FAILED}
 			, {errorID:NETCONNECTION_TIMEOUT,					message:OSMFStrings.NETCONNECTION_TIMEOUT}
 			, {errorID:NETSTREAM_PLAY_FAILED, 					message:OSMFStrings.NETSTREAM_PLAY_FAILED}
@@ -210,7 +210,7 @@ package org.osmf.events
 			, {errorID:DRM_SYSTEM_UPDATE_ERROR,					message:OSMFStrings.DRM_SYSTEM_UPDATE_ERROR}
 			, {errorID:DVRCAST_SUBSCRIBE_FAILED,				message:OSMFStrings.DVRCAST_SUBSCRIBE_FAILED}
 			, {errorID:DVRCAST_CONTENT_OFFLINE,					message:OSMFStrings.DVRCAST_CONTENT_OFFLINE}
-			, {errorID:DVRCAST_FAILED_RETRIEVING_STREAM_INFO,	message:OSMFStrings.DVRCAST_FAILED_RETRIEVING_STREAM_INFO}
+			, {errorID:DVRCAST_STREAM_INFO_RETRIEVAL_FAILED,	message:OSMFStrings.DVRCAST_STREAM_INFO_RETRIEVAL_FAILED}
 		];
 	}
 }

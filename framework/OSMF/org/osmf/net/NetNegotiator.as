@@ -206,7 +206,7 @@ package org.osmf.net
 			{
 				case NetConnectionCodes.CONNECT_INVALIDAPP:
 					handleFailedConnectionSession
-						( new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APPLICATION, event.info.description)
+						( new MediaError(MediaErrorCodes.NETCONNECTION_APPLICATION_INVALID, event.info.description)
 						, NetConnection(event.target).uri
 						);
 					break;

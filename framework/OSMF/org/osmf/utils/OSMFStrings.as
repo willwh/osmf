@@ -301,7 +301,7 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_INVALID_APPLICATION:String	= "netConnectionInvalidApplication";
+		public static const NETCONNECTION_APPLICATION_INVALID:String	= "netConnectionApplicationInvalid";
 
 		/**
 		 * @private
@@ -352,7 +352,7 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const DVRCAST_FAILED_RETRIEVING_STREAM_INFO:String	= "dvrCastFailedRetrievingStreamInfo";
+		public static const DVRCAST_STREAM_INFO_RETRIEVAL_FAILED:String	= "dvrCastStreamInfoRetrievalFailed";
 		
 		
 		private static const resourceDict:Dictionary = new Dictionary();
@@ -409,7 +409,7 @@ package org.osmf.utils
 			resourceDict[PLUGIN_IMPLEMENTATION_INVALID]				= "Plugin failed to load due to improper or missing implementation of PluginInfo";
 			resourceDict[SOUND_PLAY_FAILED]							= "Playback failed due to no sound channels being available";
 			resourceDict[NETCONNECTION_REJECTED]					= "Connection attempt rejected by FMS server";
-			resourceDict[NETCONNECTION_INVALID_APPLICATION]			= "Attempting to connect to an invalid FMS application";
+			resourceDict[NETCONNECTION_APPLICATION_INVALID]			= "Attempting to connect to an invalid FMS application";
 			resourceDict[NETCONNECTION_FAILED]						= "All NetConnection attempts failed";
 			resourceDict[NETCONNECTION_TIMEOUT]						= "Timed-out trying to establish a NetConnection";
 			resourceDict[NETSTREAM_PLAY_FAILED] 					= "Playback failed";
@@ -419,7 +419,7 @@ package org.osmf.utils
 			resourceDict[DRM_SYSTEM_UPDATE_ERROR]					= "The update of the DRM subsystem failed";
 			resourceDict[DVRCAST_SUBSCRIBE_FAILED]					= "DVRCast subscribe failed";
 			resourceDict[DVRCAST_CONTENT_OFFLINE]					= "DVRCast content is offline and unavailable";
-			resourceDict[DVRCAST_FAILED_RETRIEVING_STREAM_INFO]		= "Unable to retrieve DVRCast stream info";
+			resourceDict[DVRCAST_STREAM_INFO_RETRIEVAL_FAILED]		= "Unable to retrieve DVRCast stream info";
 			
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}
