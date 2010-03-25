@@ -294,6 +294,27 @@ package org.osmf.elements.f4mClasses
 			assertTrue(drmMetadata.getValue(keys[2]) != null);
 		}
 		
+		public function testDynamicResourceCreationOutOfOrder():void
+		{
+			var test:XML = <manifest xmlns="http://ns.adobe.com/f4m/1.0">
+								<id>myvideo</id>
+								<duration>253</duration>
+								<mimeType>video/x-flv</mimeType>
+								<streamType>recorded</streamType>
+								<media url="rtmp://example.com/myvideo/medium" bitrate="908" width="800" height="600" drmAdditionalHeaderId="drmMetadata2052"/>
+								<media url="rtmp://example.com/myvideo/high" bitrate="1708" width="1920" height="1080" drmAdditionalHeaderId="drmMetadata2052"/>
+								<media url="rtmp://example.com/myvideo/low" bitrate="408" width="640" height="480" drmAdditionalHeaderId="drmMetadata2052"/>
+							</manifest>
+							
+			var manifest:Manifest = parser.parse(test);
+			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+			
+			assertTrue(resource is DynamicStreamingResource);
+			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
+			assertEquals("medium", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[1]).streamName);
+			assertEquals("high", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[2]).streamName);
+		}
+		
 		public function testDynamicResourceIDMatchingCreation():void
 		{
 			//Some Sample Data == U29tZSBTYW1wbGUgRGF0YQ==

@@ -451,7 +451,7 @@ package org.osmf.elements.f4mClasses
 				// add support for the former (absolute URLs with no base URL).
 				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
 				
-				dynResource.streamItems = new Vector.<DynamicStreamingItem>();
+				var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
 				
 				// Only put this on HTTPStreaming, not RTMPStreaming resources.   RTMP resources always get a generated base url.
 				if (NetStreamUtils.isRTMPStream(baseURL) == false)
@@ -474,7 +474,7 @@ package org.osmf.elements.f4mClasses
 						stream = media.url;
 					}					
 					var item:DynamicStreamingItem = new DynamicStreamingItem(stream, media.bitrate, media.width, media.height);
-					dynResource.streamItems.push(item);
+					streamItems.push(item);
 					if (media.drmAdditionalHeader != null)
 					{						
 						if (dynResource.getMetadataValue(MetadataNamespaces.DRM_METADATA) == null)
@@ -511,6 +511,9 @@ package org.osmf.elements.f4mClasses
 						httpMetadata.addValue(MetadataNamespaces.HTTP_STREAMING_XMP_METADATA_KEY + item.streamName, media.xmp);					
 					}
 				}
+				
+				dynResource.streamItems = streamItems;
+				
 				resource = dynResource;
 			}
 			else if (value.baseURL == null)
