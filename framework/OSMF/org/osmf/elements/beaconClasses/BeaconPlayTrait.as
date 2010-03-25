@@ -68,7 +68,7 @@ package org.osmf.elements.beaconClasses
 								( MediaErrorEvent.MEDIA_ERROR
 								, false
 								, false
-								, new MediaError(MediaErrorCodes.HTTP_GET_CLIENT_ERROR, event.errorText)
+								, new MediaError(MediaErrorCodes.HTTP_GET_FAILED, event.errorText)
 								)
 							);
 					}

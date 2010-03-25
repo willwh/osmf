@@ -39,157 +39,122 @@ package org.osmf.events
 	public final class MediaErrorCodes
 	{
 		/**
-		 * Error constant for when a SWF or image fails to load due to an I/O error.
+		 * Error constant for when a MediaElement fails to load due to an I/O error.
 		 **/
-		public static const IMAGE_OR_SWF_IO_ERROR:int 						= 1;
+		public static const IO_ERROR:int 								= 1;
 		
 		/**
-		 * Error constant for when a SWF or image fails to load due to a security error.
+		 * Error constant for when a MediaElement fails to load due to a security error.
 		 **/
-		public static const IMAGE_OR_SWF_SECURITY_ERROR:int					= 2;
+		public static const SECURITY_ERROR:int							= 2;
 
 		/**
-		 * Error constant for when a progressive audio file fails to load due to an I/O error.
+		 * Error constant for when a MediaElement encounters an asynchronous error.
 		 **/
-		public static const AUDIO_IO_ERROR:int 								= 3;
+		public static const ASYNC_ERROR:int								= 3;
 
 		/**
-		 * Error constant for when a progressive audio file fails to load due to an I/O error.
+		 * Error constant for when a MediaElement encounters an argument error.
 		 **/
-		public static const AUDIO_SECURITY_ERROR:int						= 4;
+		public static const ARGUMENT_ERROR:int							= 4;
 
-		/**
-		 * Error constant for when an audio file fails to play due to no sound channels being
-		 * available.
-		 **/
-		public static const AUDIO_NO_SOUND_CHANNELS:int						= 5;
-		
 		/**
 		 * Error constant for when the NetLoader is unable to load a resource because
-		 * of an unknown or invalid URL protocol.
+		 * of an unknown or invalid URL scheme.
 		 **/
-		public static const INVALID_URL_PROTOCOL:int						= 6;
-		
-		/**
-		 * Error constant that corresponds to the NetConnection.Connect.Rejected status code.
-		 **/
-		public static const NETCONNECTION_REJECTED:int						= 7;
-
-		/**
-		 * Error constant that corresponds to the NetConnection.Connect.InvalidApp status code.
-		 **/
-		public static const NETCONNECTION_INVALID_APP:int					= 8;
-
-		/**
-		 * Error constant that corresponds to the NetConnection.Connect.Failed status code.
-		 **/
-		public static const NETCONNECTION_FAILED:int						= 9;
-
-		/**
-		 * Error constant for when a NetConnection cannot connect due to a timeout.
-		 * period.
-		 **/
-		public static const NETCONNECTION_TIMEOUT:int						= 10;
-
-		/**
-		 * Error constant for when a NetConnection cannot connect due to a security error. 
-		 **/
-		public static const NETCONNECTION_SECURITY_ERROR:int				= 11;
-
-		/**
-		 * Error constant for when a NetConnection cannot connect due to an asynchronous error.
-		 **/
-		public static const NETCONNECTION_ASYNC_ERROR:int					= 12;
-
-		/**
-		 * Error constant for when a NetConnection cannot connect due to an I/O error.
-		 **/
-		public static const NETCONNECTION_IO_ERROR:int						= 13;
-
-		/**
-		 * Error constant for when a NetConnection cannot connect due to an argument error (typically
-		 * an invalid connection URL).
-		 **/
-		public static const NETCONNECTION_ARGUMENT_ERROR:int				= 14;
-
-		/**
-		 * Error constant for when a NetStream cannot be played.
-		 **/
-		public static const NETSTREAM_PLAY_FAILED:int 						= 15;
-
-		/**
-		 * Error constant that corresponds to the NetStream.Play.StreamNotFound status code.
-		 **/
-		public static const NETSTREAM_STREAM_NOT_FOUND:int 					= 16;
-		
-		/**
-		 * Error constant that corresponds to the NetStream.Play.FileStructureInvalid status code.
-		 **/
-		public static const NETSTREAM_FILE_STRUCTURE_INVALID:int 			= 17;
-
-		/**
-		 * Error constant that corresponds to the NetStream.Play.NoSupportedTrackFound status code.
-		 **/
-		public static const NETSTREAM_NO_SUPPORTED_TRACK_FOUND:int 			= 18;
-
-		/**
-		 * Error constant for when a NetStream cannot be played due to a NetConnection failure.
-		 **/
-		public static const NETSTREAM_PLAY_FAILED_NETCONNECTION_FAILURE:int = 19;
-
-		/**
-		 * Error constant for when a DRM system update fails.
-		 **/
-		public static const DRM_SYSTEM_UPDATE_ERROR:int						= 20;
-
-		/**
-		 * Error constant for when a DVRCast NetConnection cannot connect because the attempt
-		 * to subscribe to the DVRCast stream fails.
-		 **/
-		public static const DVRCAST_SUBSCRIPTION_FAILED:int				= 21;
-		
-		/**
-		 * Error constant for when a DVRCast NetConnection cannot connect because the DVRCast
-		 * application is offline.
-		 **/
-		public static const DVRCAST_CONTENT_OFFLINE:int					= 22;
-		
-		/**
-		 * Error constant for when information about the DVRCast stream cannot be retrieved.
-		 **/
-		public static const DVRCAST_FAILED_RETRIEVING_STREAM_INFO:int	= 23;
-
-		/**
-		 * Error constant for when a plugin fails to load due to a version mismatch.
-		 **/
-		public static const INVALID_PLUGIN_VERSION:int					= 24;
-				
-		/**
-		 * Error constant for when a plugin fails to load due to the PluginInfo not
-		 * being exposed on the root Sprite of the plugin.
-		 **/
-		public static const INVALID_PLUGIN_IMPLEMENTATION:int			= 25;
+		public static const URL_SCHEME_INVALID:int						= 5;
 
 		/**
 		 * Error constant for when an HTTP GET request fails due to a client error
 		 * (i.e. returns a 4xx status code).
 		 **/
-		public static const HTTP_GET_CLIENT_ERROR:int 					= 26;
+		public static const HTTP_GET_FAILED:int 						= 6;
 
-		/**
-		 * Error constant for when an HTTP GET request fails due to an I/O error.
-		 **/
-		public static const HTTP_GET_IO_ERROR:int 						= 27;
-		
-		/**
-		 * Error constant for when an HTTP GET request fails due to a security error.
-		 **/
-		public static const HTTP_GET_SECURITY_ERROR:int					= 28;
-		
 		/**
 		 * Error constant for when the loading of a MediaElement fails.
 		 **/
-		public static const MEDIA_LOAD_FAILED:int 						= 29;
+		public static const MEDIA_LOAD_FAILED:int 						= 7;
+
+		/**
+		 * Error constant for when a plugin fails to load due to a version mismatch.
+		 **/
+		public static const PLUGIN_VERSION_INVALID:int					= 8;
+				
+		/**
+		 * Error constant for when a plugin fails to load due to the PluginInfo not
+		 * being exposed on the root Sprite of the plugin.
+		 **/
+		public static const PLUGIN_IMPLEMENTATION_INVALID:int			= 9;
+
+		/**
+		 * Error constant for when an audio file fails to play (e.g. due to no sound channels
+		 * or no sound card being available).
+		 **/
+		public static const SOUND_PLAY_FAILED:int						= 10;
+		
+		/**
+		 * Error constant that corresponds to the NetConnection.Connect.Rejected status code.
+		 **/
+		public static const NETCONNECTION_REJECTED:int					= 11;
+
+		/**
+		 * Error constant that corresponds to the NetConnection.Connect.InvalidApp status code.
+		 **/
+		public static const NETCONNECTION_INVALID_APPLICATION:int		= 12;
+
+		/**
+		 * Error constant that corresponds to the NetConnection.Connect.Failed status code.
+		 **/
+		public static const NETCONNECTION_FAILED:int					= 13;
+
+		/**
+		 * Error constant for when a NetConnection cannot connect due to a timeout.
+		 * period.
+		 **/
+		public static const NETCONNECTION_TIMEOUT:int					= 14;
+
+		/**
+		 * Error constant for when a NetStream cannot be played.
+		 **/
+		public static const NETSTREAM_PLAY_FAILED:int 					= 15;
+
+		/**
+		 * Error constant that corresponds to the NetStream.Play.StreamNotFound status code.
+		 **/
+		public static const NETSTREAM_STREAM_NOT_FOUND:int 				= 16;
+		
+		/**
+		 * Error constant that corresponds to the NetStream.Play.FileStructureInvalid status code.
+		 **/
+		public static const NETSTREAM_FILE_STRUCTURE_INVALID:int 		= 17;
+
+		/**
+		 * Error constant that corresponds to the NetStream.Play.NoSupportedTrackFound status code.
+		 **/
+		public static const NETSTREAM_NO_SUPPORTED_TRACK_FOUND:int 		= 18;
+
+		/**
+		 * Error constant for when a DRM system update fails.
+		 **/
+		public static const DRM_SYSTEM_UPDATE_ERROR:int					= 19;
+
+		/**
+		 * Error constant for when a DVRCast NetConnection cannot connect because the attempt
+		 * to subscribe to the DVRCast stream fails.
+		 **/
+		public static const DVRCAST_SUBSCRIBE_FAILED:int				= 20;
+		
+		/**
+		 * Error constant for when a DVRCast NetConnection cannot connect because the DVRCast
+		 * application is offline.
+		 **/
+		public static const DVRCAST_CONTENT_OFFLINE:int					= 21;
+		
+		/**
+		 * Error constant for when information about the DVRCast stream cannot be retrieved.
+		 **/
+		public static const DVRCAST_FAILED_RETRIEVING_STREAM_INFO:int	= 22;
+
 
 		/**
 		 * @private
@@ -224,32 +189,28 @@ package org.osmf.events
 
 		private static const errorMap:Array =
 		[
-			  {errorID:IMAGE_OR_SWF_IO_ERROR,					message:OSMFStrings.IMAGE_OR_SWF_IO_LOAD_ERROR}
-			, {errorID:IMAGE_OR_SWF_SECURITY_ERROR,				message:OSMFStrings.IMAGE_OR_SWF_SECURITY_LOAD_ERROR}
-			, {errorID:AUDIO_IO_ERROR,							message:OSMFStrings.AUDIO_IO_LOAD_ERROR}
-			, {errorID:AUDIO_SECURITY_ERROR,					message:OSMFStrings.AUDIO_SECURITY_LOAD_ERROR}
-			, {errorID:AUDIO_NO_SOUND_CHANNELS,					message:OSMFStrings.PLAY_FAILED_NO_SOUND_CHANNELS}
-			, {errorID:INVALID_URL_PROTOCOL,					message:OSMFStrings.INVALID_URL_PROTOCOL}
+			  {errorID:IO_ERROR,								message:OSMFStrings.IO_ERROR}
+			, {errorID:SECURITY_ERROR,							message:OSMFStrings.SECURITY_ERROR}
+			, {errorID:ASYNC_ERROR,								message:OSMFStrings.ASYNC_ERROR}
+			, {errorID:ARGUMENT_ERROR,							message:OSMFStrings.ARGUMENT_ERROR}
+			, {errorID:URL_SCHEME_INVALID,						message:OSMFStrings.URL_SCHEME_INVALID}
+			, {errorID:HTTP_GET_FAILED,							message:OSMFStrings.HTTP_GET_FAILED}
+			, {errorID:MEDIA_LOAD_FAILED,						message:OSMFStrings.MEDIA_LOAD_FAILED}
+			, {errorID:PLUGIN_VERSION_INVALID,					message:OSMFStrings.PLUGIN_VERSION_INVALID}
+			, {errorID:PLUGIN_IMPLEMENTATION_INVALID,			message:OSMFStrings.PLUGIN_IMPLEMENTATION_INVALID}
+			, {errorID:SOUND_PLAY_FAILED,						message:OSMFStrings.SOUND_PLAY_FAILED}
 			, {errorID:NETCONNECTION_REJECTED,					message:OSMFStrings.NETCONNECTION_REJECTED}
-			, {errorID:NETCONNECTION_INVALID_APP,				message:OSMFStrings.NETCONNECTION_INVALID_APP}
+			, {errorID:NETCONNECTION_INVALID_APPLICATION,		message:OSMFStrings.NETCONNECTION_INVALID_APPLICATION}
 			, {errorID:NETCONNECTION_FAILED,					message:OSMFStrings.NETCONNECTION_FAILED}
 			, {errorID:NETCONNECTION_TIMEOUT,					message:OSMFStrings.NETCONNECTION_TIMEOUT}
-			, {errorID:NETCONNECTION_SECURITY_ERROR,			message:OSMFStrings.NETCONNECTION_SECURITY_ERROR}
-			, {errorID:NETCONNECTION_ASYNC_ERROR,				message:OSMFStrings.NETCONNECTION_ASYNC_ERROR}
-			, {errorID:NETCONNECTION_IO_ERROR,					message:OSMFStrings.NETCONNECTION_IO_ERROR}
-			, {errorID:NETCONNECTION_ARGUMENT_ERROR,			message:OSMFStrings.NETCONNECTION_ARGUMENT_ERROR}
-			, {errorID:NETSTREAM_PLAY_FAILED, 					message:OSMFStrings.PLAY_FAILED}
-			, {errorID:NETSTREAM_STREAM_NOT_FOUND,	 			message:OSMFStrings.STREAM_NOT_FOUND}
-			, {errorID:NETSTREAM_FILE_STRUCTURE_INVALID,		message:OSMFStrings.FILE_STRUCTURE_INVALID}
-			, {errorID:NETSTREAM_NO_SUPPORTED_TRACK_FOUND,		message:OSMFStrings.NO_SUPPORTED_TRACK_FOUND}
-			, {errorID:NETSTREAM_PLAY_FAILED_NETCONNECTION_FAILURE, message:OSMFStrings.PLAY_FAILED_NETCONNECTION_FAILURE}
+			, {errorID:NETSTREAM_PLAY_FAILED, 					message:OSMFStrings.NETSTREAM_PLAY_FAILED}
+			, {errorID:NETSTREAM_STREAM_NOT_FOUND,	 			message:OSMFStrings.NETSTREAM_STREAM_NOT_FOUND}
+			, {errorID:NETSTREAM_FILE_STRUCTURE_INVALID,		message:OSMFStrings.NETSTREAM_FILE_STRUCTURE_INVALID}
+			, {errorID:NETSTREAM_NO_SUPPORTED_TRACK_FOUND,		message:OSMFStrings.NETSTREAM_NO_SUPPORTED_TRACK_FOUND}
 			, {errorID:DRM_SYSTEM_UPDATE_ERROR,					message:OSMFStrings.DRM_SYSTEM_UPDATE_ERROR}
-			, {errorID:INVALID_PLUGIN_VERSION,					message:OSMFStrings.INVALID_PLUGIN_VERSION}
-			, {errorID:INVALID_PLUGIN_IMPLEMENTATION,			message:OSMFStrings.INVALID_PLUGIN_IMPLEMENTATION}
-			, {errorID:HTTP_GET_CLIENT_ERROR,					message:OSMFStrings.HTTP_GET_CLIENT_ERROR}
-			, {errorID:HTTP_GET_IO_ERROR,						message:OSMFStrings.HTTP_GET_IO_ERROR}
-			, {errorID:HTTP_GET_SECURITY_ERROR,					message:OSMFStrings.HTTP_GET_SECURITY_ERROR}
-			, {errorID:MEDIA_LOAD_FAILED,						message:OSMFStrings.MEDIA_LOAD_FAILED}
+			, {errorID:DVRCAST_SUBSCRIBE_FAILED,				message:OSMFStrings.DVRCAST_SUBSCRIBE_FAILED}
+			, {errorID:DVRCAST_CONTENT_OFFLINE,					message:OSMFStrings.DVRCAST_CONTENT_OFFLINE}
+			, {errorID:DVRCAST_FAILED_RETRIEVING_STREAM_INFO,	message:OSMFStrings.DVRCAST_FAILED_RETRIEVING_STREAM_INFO}
 		];
 	}
 }

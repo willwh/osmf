@@ -19,7 +19,7 @@
 		<link>
 			<name>[source path] OSMFTest</name>
 			<type>2</type>
-			<location>/Users/oconnell/src/osmf-public/trunk/framework/OSMFTest</location>
+			<locationURI>DOCUMENTS/framework/OSMFTest</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

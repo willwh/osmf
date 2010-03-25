@@ -195,6 +195,18 @@ package org.osmf.utils
 		 **/
 		public static const NULL_SCRIPT_PATH:String						= "nullScriptPath";
 		
+		// Dynamic Streaming
+		
+		/**
+		 * @private
+		 **/
+		public static const STREAMSWITCH_INVALID_INDEX:String			= "streamSwitchInvalidIndex";
+
+		/**
+		 * @private
+		 **/
+		public static const STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE:String = "streamSwitchStreamNotInManualMode";
+
 		// DRM
 		
 		CONFIG::FLASH_10_1
@@ -239,62 +251,47 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const IMAGE_OR_SWF_IO_LOAD_ERROR:String			= "imageOrSWFIOLoadError";
+		public static const IO_ERROR:String								= "ioError";
 
 		/**
 		 * @private
 		 **/
-		public static const IMAGE_OR_SWF_SECURITY_LOAD_ERROR:String		= "imageOrSWFSecurityLoadError";
+		public static const SECURITY_ERROR:String						= "securityError";
 
 		/**
 		 * @private
 		 **/
-		public static const SWF_IO_LOAD_ERROR:String					= "swfIOLoadError";
+		public static const ASYNC_ERROR:String							= "asyncError";
 
 		/**
 		 * @private
 		 **/
-		public static const SWF_SECURITY_LOAD_ERROR:String				= "swfSecurityError";
+		public static const ARGUMENT_ERROR:String						= "argumentError";
 
 		/**
 		 * @private
 		 **/
-		public static const INVALID_PLUGIN_VERSION:String				= "invalidPluginVersion";
+		public static const URL_SCHEME_INVALID:String					= "urlSchemeInvalid";
 
 		/**
 		 * @private
 		 **/
-		public static const INVALID_PLUGIN_IMPLEMENTATION:String		= "invalidPluginImplementation";
+		public static const HTTP_GET_FAILED:String						= "httpGetFailed";
 
 		/**
 		 * @private
 		 **/
-		public static const INVALID_URL_PROTOCOL:String					= "invalidURLProtocol";
+		public static const PLUGIN_VERSION_INVALID:String				= "pluginVersionInvalid";
 
 		/**
 		 * @private
 		 **/
-		public static const PLAY_FAILED:String 							= "playbackFailed";
+		public static const PLUGIN_IMPLEMENTATION_INVALID:String		= "pluginImplementationInvalid";
 
 		/**
 		 * @private
 		 **/
-		public static const STREAM_NOT_FOUND:String	 					= "streamNotFound";
-
-		/**
-		 * @private
-		 **/
-		public static const FILE_STRUCTURE_INVALID:String				= "fileStructureInvalid";
-
-		/**
-		 * @private
-		 **/
-		public static const NO_SUPPORTED_TRACK_FOUND:String				= "noSupportedTrackFound";
-
-		/**
-		 * @private
-		 **/
-		public static const PLAY_FAILED_NETCONNECTION_FAILURE:String 	= "playFailedNetConnectionFailure";
+		public static const SOUND_PLAY_FAILED:String					= "soundPlayFailed";
 
 		/**
 		 * @private
@@ -304,7 +301,7 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_INVALID_APP:String			= "netConnectionInvalidApp";
+		public static const NETCONNECTION_INVALID_APPLICATION:String	= "netConnectionInvalidApplication";
 
 		/**
 		 * @private
@@ -319,67 +316,43 @@ package org.osmf.utils
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_SECURITY_ERROR:String			= "netConnectionSecurityError";
+		public static const NETSTREAM_PLAY_FAILED:String 				= "netStreamPlayFailed";
 
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_ASYNC_ERROR:String			= "netConnectionAsyncError";
+		public static const NETSTREAM_STREAM_NOT_FOUND:String	 		= "netStreamStreamNotFound";
 
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_IO_ERROR:String				= "netConnectionIOError";
+		public static const NETSTREAM_FILE_STRUCTURE_INVALID:String		= "netStreamFileStructureInvalid";
 
 		/**
 		 * @private
 		 **/
-		public static const NETCONNECTION_ARGUMENT_ERROR:String			= "netConnectionArgumentError";
-
-		/**
-		 * @private
-		 **/
-		public static const STREAMSWITCH_INVALID_INDEX:String			= "streamSwitchInvalidIndex";
-
-		/**
-		 * @private
-		 **/
-		public static const STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE:String = "streamSwitchStreamNotInManualMode";
-
-		/**
-		 * @private
-		 **/
-		public static const AUDIO_IO_LOAD_ERROR:String					= "audioIOLoadError";
-
-		/**
-		 * @private
-		 **/
-		public static const AUDIO_SECURITY_LOAD_ERROR:String			= "audioSecurityLoadError";
-
-		/**
-		 * @private
-		 **/
-		public static const PLAY_FAILED_NO_SOUND_CHANNELS:String		= "playFailedNoSoundChannels";
-
-		/**
-		 * @private
-		 **/
-		public static const HTTP_GET_IO_ERROR:String					= "httpGetIOError";
-
-		/**
-		 * @private
-		 **/
-		public static const HTTP_GET_SECURITY_ERROR:String				= "httpGetSecurityError";
-
-		/**
-		 * @private
-		 **/
-		public static const HTTP_GET_CLIENT_ERROR:String				= "httpGetClientError";
+		public static const NETSTREAM_NO_SUPPORTED_TRACK_FOUND:String	= "netStreamNoSupportedTrackFound";
 
 		/**
 		 * @private
 		 **/
 		public static const DRM_SYSTEM_UPDATE_ERROR:String				= "drmSystemUpdateError";
+
+		/**
+		 * @private
+		 **/
+		public static const DVRCAST_SUBSCRIBE_FAILED:String				= "dvrCastSubscribeFailed";
+
+		/**
+		 * @private
+		 **/
+		public static const DVRCAST_CONTENT_OFFLINE:String				= "dvrCastContentOffline";
+
+
+		/**
+		 * @private
+		 **/
+		public static const DVRCAST_FAILED_RETRIEVING_STREAM_INFO:String	= "dvrCastFailedRetrievingStreamInfo";
 		
 		
 		private static const resourceDict:Dictionary = new Dictionary();
@@ -410,6 +383,9 @@ package org.osmf.utils
 			resourceDict[DIRECT_DISPLAY_LIST_MOD_ERROR]				= "The direct addition or removal of display objects onto a MediaContainer is prohibited.";
 
 			resourceDict[NULL_SCRIPT_PATH]							= "Operation requires a valid script path";
+
+			resourceDict[STREAMSWITCH_INVALID_INDEX]				= "Dynamic Stream Switching - Invalid index requested";
+			resourceDict[STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE]	= "Dynamic Stream Switching - stream is not in manual mode";
 			
 			CONFIG::FLASH_10_1
 			{
@@ -423,35 +399,27 @@ package org.osmf.utils
 			resourceDict[F4M_PARSE_MEDIA_URL_MISSING]				= "URL missing from Media tag";
 			resourceDict[F4M_PARSE_BITRATE_MISSING]					= "Bitrate missing from Media tag";
 
-			resourceDict[IMAGE_OR_SWF_IO_LOAD_ERROR]				= "I/O error when loading image or SWF";
-			resourceDict[IMAGE_OR_SWF_SECURITY_LOAD_ERROR]			= "Security error when loading image or SWF";
-			resourceDict[SWF_IO_LOAD_ERROR]							= "I/O error when loading SWF";
-			resourceDict[SWF_SECURITY_LOAD_ERROR]					= "Security error when loading SWF";
-			resourceDict[INVALID_PLUGIN_VERSION]					= "Plugin failed to load due to version mismatch";
-			resourceDict[INVALID_PLUGIN_IMPLEMENTATION]				= "Plugin failed to load due to improper or missing implementation of PluginInfo";
-			resourceDict[INVALID_URL_PROTOCOL]						= "Invalid URL protocol";
-			resourceDict[PLAY_FAILED] 								= "Playback failed";
-			resourceDict[STREAM_NOT_FOUND]	 						= "Stream not found";
-			resourceDict[FILE_STRUCTURE_INVALID]					= "File has invalid structure";
-			resourceDict[NO_SUPPORTED_TRACK_FOUND]					= "No supported track found";
-			resourceDict[PLAY_FAILED_NETCONNECTION_FAILURE] 		= "Playback failed due to a NetConnection failure";
+			resourceDict[IO_ERROR]									= "I/O error when loading media";
+			resourceDict[SECURITY_ERROR]							= "Security error when loading media";
+			resourceDict[ASYNC_ERROR]								= "Async error when loading media";
+			resourceDict[ARGUMENT_ERROR]							= "Argument error when loading media";
+			resourceDict[URL_SCHEME_INVALID]						= "Invalid URL scheme";
+			resourceDict[HTTP_GET_FAILED]							= "HTTP GET failed due to a Client Error (4xx Status Code)";
+			resourceDict[PLUGIN_VERSION_INVALID]					= "Plugin failed to load due to version mismatch";
+			resourceDict[PLUGIN_IMPLEMENTATION_INVALID]				= "Plugin failed to load due to improper or missing implementation of PluginInfo";
+			resourceDict[SOUND_PLAY_FAILED]							= "Playback failed due to no sound channels being available";
 			resourceDict[NETCONNECTION_REJECTED]					= "Connection attempt rejected by FMS server";
-			resourceDict[NETCONNECTION_INVALID_APP]					= "Attempting to connect to an invalid application";
+			resourceDict[NETCONNECTION_INVALID_APPLICATION]			= "Attempting to connect to an invalid FMS application";
 			resourceDict[NETCONNECTION_FAILED]						= "All NetConnection attempts failed";
-			resourceDict[NETCONNECTION_TIMEOUT]						= "Timed-out trying to establish a good NetConnection";
-			resourceDict[NETCONNECTION_SECURITY_ERROR]				= "Received a net security error while attempting to establish a NetConnection";
-			resourceDict[NETCONNECTION_ASYNC_ERROR]					= "Received an async error while attempting to establish a NetConnection";
-			resourceDict[NETCONNECTION_IO_ERROR]					= "Received an IO error while attempting to establish a NetConnection";
-			resourceDict[NETCONNECTION_ARGUMENT_ERROR]				= "Received an argument error while attempting to establish a NetConnection";
-			resourceDict[STREAMSWITCH_INVALID_INDEX]				= "Dynamic Stream Switching - Invalid index requested";
-			resourceDict[STREAMSWITCH_STREAM_NOT_IN_MANUAL_MODE]	= "Dynamic Stream Switching - stream is not in manual mode";
-			resourceDict[AUDIO_IO_LOAD_ERROR]						= "I/O error when loading audio file";
-			resourceDict[AUDIO_SECURITY_LOAD_ERROR]					= "Security error when loading audio file";
-			resourceDict[PLAY_FAILED_NO_SOUND_CHANNELS]				= "Playback failed due to no sound channels being available";
-			resourceDict[HTTP_GET_IO_ERROR]							= "I/O error when retrieving URL over HTTP";
-			resourceDict[HTTP_GET_SECURITY_ERROR]					= "Security error when retrieving URL over HTTP";
-			resourceDict[HTTP_GET_CLIENT_ERROR]						= "HTTP GET failed due to a Client Error";
+			resourceDict[NETCONNECTION_TIMEOUT]						= "Timed-out trying to establish a NetConnection";
+			resourceDict[NETSTREAM_PLAY_FAILED] 					= "Playback failed";
+			resourceDict[NETSTREAM_STREAM_NOT_FOUND]	 			= "Stream not found";
+			resourceDict[NETSTREAM_FILE_STRUCTURE_INVALID]			= "File has invalid structure";
+			resourceDict[NETSTREAM_NO_SUPPORTED_TRACK_FOUND]		= "No supported track found";
 			resourceDict[DRM_SYSTEM_UPDATE_ERROR]					= "The update of the DRM subsystem failed";
+			resourceDict[DVRCAST_SUBSCRIBE_FAILED]					= "DVRCast subscribe failed";
+			resourceDict[DVRCAST_CONTENT_OFFLINE]					= "DVRCast content is offline and unavailable";
+			resourceDict[DVRCAST_FAILED_RETRIEVING_STREAM_INFO]		= "Unable to retrieve DVRCast stream info";
 			
 			resourceDict["missingStringResource"]					= "No string for resource {0}";
 		}

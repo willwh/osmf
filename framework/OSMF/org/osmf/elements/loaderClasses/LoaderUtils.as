@@ -154,7 +154,7 @@ package org.osmf.elements.loaderClasses
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.IMAGE_OR_SWF_IO_ERROR
+							( MediaErrorCodes.IO_ERROR
 							, ioEvent ? ioEvent.text : ioEventDetail
 							)
 						)
@@ -173,7 +173,7 @@ package org.osmf.elements.loaderClasses
 						, false
 						, false
 						, new MediaError
-							( MediaErrorCodes.IMAGE_OR_SWF_SECURITY_ERROR
+							( MediaErrorCodes.SECURITY_ERROR
 							, securityEvent ? securityEvent.text : securityEventDetail
 							)
 						)

@@ -179,7 +179,7 @@ package org.osmf.net.dvr
 					, false
 					, netConnection
 					, urlResource
-					, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIPTION_FAILED, error.message)
+					, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIBE_FAILED, error.message)
 					)
 				);
 		}

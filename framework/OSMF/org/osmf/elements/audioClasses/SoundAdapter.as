@@ -181,7 +181,7 @@ package org.osmf.elements.audioClasses
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
 							, false
-							, new MediaError(MediaErrorCodes.AUDIO_NO_SOUND_CHANNELS)
+							, new MediaError(MediaErrorCodes.SOUND_PLAY_FAILED)
 							)
 						);
 				}
@@ -270,7 +270,7 @@ package org.osmf.elements.audioClasses
 					( MediaErrorEvent.MEDIA_ERROR
 					, false
 					, false
-					, new MediaError(MediaErrorCodes.AUDIO_IO_ERROR)
+					, new MediaError(MediaErrorCodes.IO_ERROR)
 					)
 				);
 		}

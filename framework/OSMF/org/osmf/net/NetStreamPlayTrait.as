@@ -192,19 +192,12 @@ package org.osmf.net
 				streamStarted = false;
 				stop();
 				
-				// There's one specific error that may have happened.  Any
-				// other errors will be treated generically.
-				var mediaErrorCode:int =
-						error.errorID == NETCONNECTION_FAILURE_ERROR_CODE
-					?	MediaErrorCodes.NETSTREAM_PLAY_FAILED_NETCONNECTION_FAILURE
-					:	MediaErrorCodes.NETSTREAM_PLAY_FAILED;
-				
 				dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
 						, false
-						, new MediaError(mediaErrorCode)
+						, new MediaError(MediaErrorCodes.NETSTREAM_PLAY_FAILED)
 						)
 					);
 			}

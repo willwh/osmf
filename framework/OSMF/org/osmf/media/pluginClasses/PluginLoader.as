@@ -152,7 +152,7 @@ package org.osmf.media.pluginClasses
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
 							, false
-							, new MediaError(MediaErrorCodes.INVALID_PLUGIN_VERSION)
+							, new MediaError(MediaErrorCodes.PLUGIN_VERSION_INVALID)
 							)
 						);
 				}
@@ -171,7 +171,7 @@ package org.osmf.media.pluginClasses
 						( MediaErrorEvent.MEDIA_ERROR
 						, false
 						, false
-						, new MediaError(MediaErrorCodes.INVALID_PLUGIN_IMPLEMENTATION)
+						, new MediaError(MediaErrorCodes.PLUGIN_IMPLEMENTATION_INVALID)
 						)
 					);
 			}

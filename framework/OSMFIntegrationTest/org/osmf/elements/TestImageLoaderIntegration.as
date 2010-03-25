@@ -60,8 +60,8 @@ package org.osmf.elements
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(error.errorID == MediaErrorCodes.IMAGE_OR_SWF_IO_ERROR ||
-					   error.errorID == MediaErrorCodes.IMAGE_OR_SWF_SECURITY_ERROR);
+			assertTrue(error.errorID == MediaErrorCodes.IO_ERROR ||
+					   error.errorID == MediaErrorCodes.SECURITY_ERROR);
 		}
 	}
 }

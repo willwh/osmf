@@ -115,19 +115,19 @@ package org.osmf.net
 		public function testCreateWithIOError():void
 		{
 			// test IO Error
-			doTestError(NetConnectionExpectation.IO_ERROR,MediaErrorCodes.NETCONNECTION_IO_ERROR);
+			doTestError(NetConnectionExpectation.IO_ERROR,MediaErrorCodes.IO_ERROR);
 		}
 		
 		public function testCreateWithArgumentError():void
 		{
 			// test Argument Error
-			doTestError(NetConnectionExpectation.ARGUMENT_ERROR,MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
+			doTestError(NetConnectionExpectation.ARGUMENT_ERROR,MediaErrorCodes.ARGUMENT_ERROR);
 		}
 		
 		public function testCreateWithSecurityError():void
 		{
 			// test Security Error
-			doTestError(NetConnectionExpectation.SECURITY_ERROR,MediaErrorCodes.NETCONNECTION_SECURITY_ERROR);
+			doTestError(NetConnectionExpectation.SECURITY_ERROR,MediaErrorCodes.SECURITY_ERROR);
 		}
 		
 		/////////////////////////////////////////

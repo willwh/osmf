@@ -592,15 +592,15 @@ package org.osmf.net
 		
 		override protected function verifyMediaErrorOnLoadFailure(error:MediaError):void
 		{
-			assertTrue(error.errorID == MediaErrorCodes.INVALID_URL_PROTOCOL ||
+			assertTrue(error.errorID == MediaErrorCodes.URL_SCHEME_INVALID ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_REJECTED ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_INVALID_APP ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_INVALID_APPLICATION ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_FAILED ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_TIMEOUT ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_SECURITY_ERROR ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_ASYNC_ERROR ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_IO_ERROR ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR);
+					   error.errorID == MediaErrorCodes.SECURITY_ERROR ||
+					   error.errorID == MediaErrorCodes.ASYNC_ERROR ||
+					   error.errorID == MediaErrorCodes.IO_ERROR ||
+					   error.errorID == MediaErrorCodes.ARGUMENT_ERROR);
 		}
 		
 		protected function createNetFactory():NetFactory

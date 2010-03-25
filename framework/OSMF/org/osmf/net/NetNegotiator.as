@@ -176,21 +176,21 @@ package org.osmf.net
 			catch (ioError:IOError) 
 			{
 				handleFailedConnectionSession
-					( new MediaError(MediaErrorCodes.NETCONNECTION_IO_ERROR, ioError.message)
+					( new MediaError(MediaErrorCodes.IO_ERROR, ioError.message)
 					, netConnectionURLs[attemptIndex]
 					);
 			}
 			catch (argumentError:ArgumentError) 
 			{
 				handleFailedConnectionSession
-					( new MediaError(MediaErrorCodes.NETCONNECTION_ARGUMENT_ERROR, argumentError.message)
+					( new MediaError(MediaErrorCodes.ARGUMENT_ERROR, argumentError.message)
 					, netConnectionURLs[attemptIndex]
 					);
 			}
 			catch (securityError:SecurityError) 
 			{
 				handleFailedConnectionSession
-					( new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, securityError.message)
+					( new MediaError(MediaErrorCodes.SECURITY_ERROR, securityError.message)
 					, netConnectionURLs[attemptIndex]
 					);
 			}
@@ -206,7 +206,7 @@ package org.osmf.net
 			{
 				case NetConnectionCodes.CONNECT_INVALIDAPP:
 					handleFailedConnectionSession
-						( new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APP, event.info.description)
+						( new MediaError(MediaErrorCodes.NETCONNECTION_INVALID_APPLICATION, event.info.description)
 						, NetConnection(event.target).uri
 						);
 					break;
@@ -304,7 +304,7 @@ package org.osmf.net
 		private function onNetSecurityError(event:SecurityErrorEvent):void
 		{
 			handleFailedConnectionSession
-				( new MediaError(MediaErrorCodes.NETCONNECTION_SECURITY_ERROR, event.text)
+				( new MediaError(MediaErrorCodes.SECURITY_ERROR, event.text)
 				, NetConnection(event.target).uri
 				);
 		}
@@ -316,7 +316,7 @@ package org.osmf.net
 		private function onAsyncError(event:AsyncErrorEvent):void 
 		{
 			handleFailedConnectionSession
-				( new MediaError(MediaErrorCodes.NETCONNECTION_ASYNC_ERROR, event.text)
+				( new MediaError(MediaErrorCodes.ASYNC_ERROR, event.text)
 				, NetConnection(event.target).uri
 				);
 		}

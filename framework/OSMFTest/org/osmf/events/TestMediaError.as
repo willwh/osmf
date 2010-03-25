@@ -32,9 +32,9 @@ package org.osmf.events
 			assertTrue(mediaError.message == "");
 			assertTrue(mediaError.detail == null);
 			
-			mediaError = createMediaError(MediaErrorCodes.INVALID_URL_PROTOCOL, "Here are some details...");
-			assertTrue(mediaError.errorID == MediaErrorCodes.INVALID_URL_PROTOCOL);
-			assertTrue(mediaError.message == "Invalid URL protocol");
+			mediaError = createMediaError(MediaErrorCodes.URL_SCHEME_INVALID, "Here are some details...");
+			assertTrue(mediaError.errorID == MediaErrorCodes.URL_SCHEME_INVALID);
+			assertTrue(mediaError.message == "Invalid URL scheme");
 			assertTrue(mediaError.detail == "Here are some details...");
 
 			mediaError = createMediaError(33, "");

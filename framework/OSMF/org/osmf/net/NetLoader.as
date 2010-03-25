@@ -223,7 +223,7 @@ package org.osmf.net
 							( MediaErrorEvent.MEDIA_ERROR
 							, false
 							, false
-							, new MediaError(MediaErrorCodes.INVALID_URL_PROTOCOL)
+							, new MediaError(MediaErrorCodes.URL_SCHEME_INVALID)
 							)
 						);
 					break;
