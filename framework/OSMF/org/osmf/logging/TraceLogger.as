@@ -98,7 +98,7 @@ package org.osmf.logging
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		private function logMessage(level:String, message:String, params:Array):void
+		protected function logMessage(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
