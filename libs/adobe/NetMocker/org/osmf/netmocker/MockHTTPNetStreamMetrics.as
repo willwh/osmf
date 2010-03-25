@@ -21,13 +21,14 @@
 *****************************************************/
 package org.osmf.netmocker
 {
+	import org.osmf.net.httpstreaming.HTTPNetStream;
 	import org.osmf.net.httpstreaming.HTTPNetStreamMetrics;
 	
 	public class MockHTTPNetStreamMetrics extends HTTPNetStreamMetrics
 	{
-		public function MockHTTPNetStreamMetrics()
+		public function MockHTTPNetStreamMetrics(ns:HTTPNetStream)
 		{
-			super(null);
+			super(ns);
 		}
 
 		public function set downloadRatio(value:Number):void
@@ -40,6 +41,36 @@ package org.osmf.netmocker
 			return _downloadRatio;
 		}
 		
+		override public function get maxFPS():Number
+		{
+			return _maxFPS;
+		}
+		
+		public function set maxFPS(value:Number):void
+		{
+			_maxFPS = value;
+		}
+		
+		override public function get droppedFPS():Number
+		{
+			return _droppedFPS;
+		}
+		
+		public function set droppedFPS(value:Number):void
+		{
+			_droppedFPS = value;
+		}
+		
+		override public function get averageDroppedFPS():Number
+		{
+			return _averageDroppedFPS;
+		}
+		
+		public function set averageDroppedFPS(value:Number):void
+		{
+			_averageDroppedFPS = value;
+		}
+		
 		override public function getBitrateForIndex(index:int):Number
 		{
 			return resource.streamItems[index].bitrate;
@@ -47,5 +78,8 @@ package org.osmf.netmocker
 		
 		private var _downloadRatio:Number = 0;
 		private var _bitrates:Array;
+		private var _averageDroppedFPS:Number;
+		private var _droppedFPS:Number;
+		private var _maxFPS:Number;
 	}
 }

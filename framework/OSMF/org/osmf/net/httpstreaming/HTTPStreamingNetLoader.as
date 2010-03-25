@@ -35,6 +35,7 @@ package org.osmf.net.httpstreaming
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
+	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
 
 	/**
 	 * A NetLoader subclass which adds support for HTTP streaming.
@@ -109,6 +110,7 @@ package org.osmf.net.httpstreaming
 		{
 			var rules:Vector.<SwitchingRuleBase> = new Vector.<SwitchingRuleBase>();
 			rules.push(new DownloadRatioRule(metrics));
+			rules.push(new DroppedFramesRule(metrics));
 			return rules;
 		}
 	}

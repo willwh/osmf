@@ -35,10 +35,8 @@ package org.osmf.netmocker
 			super(netStream);
 			
 			_droppedFPS = 0;
-			_lastFrameDropCounter = 0;
-			_lastFrameDropValue = 0;
 			_maxFPS = 0;
-			_averageDroppedFPSArray = new Array();
+			_averageDroppedFPS = 0;
 			_enabled = true;
 			_currentIndex = 0;
 			_averageMaxBytesPerSecond = 0;
@@ -117,11 +115,8 @@ package org.osmf.netmocker
 		}
 		
 		private var _averageMaxBytesPerSecond:Number;
-		private var _averageDroppedFPSArray:Array;
 		private var _averageDroppedFPS:Number;
 		private var _droppedFPS:Number;
-		private var _lastFrameDropValue:Number;
-		private var _lastFrameDropCounter:Number;
 		private var _maxFPS:Number;
 		private var _currentIndex:int;
 		private var _dsResource:DynamicStreamingResource;

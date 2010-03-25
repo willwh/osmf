@@ -34,7 +34,11 @@ package org.osmf.net.httpstreaming
 	{
 		public function testGetNewIndex():void
 		{
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics();
+			var netFactory:NetFactory = new NetFactory();
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new HTTPStreamingIndexHandlerBase(), new HTTPStreamingFileHandlerBase()));
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics);
 			
@@ -92,7 +96,11 @@ package org.osmf.net.httpstreaming
 		
 		public function testGetNewIndexWithAggressiveUpswitchingDisabled():void
 		{
-			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics();
+			var netFactory:NetFactory = new NetFactory();
+			var connection:NetConnection = netFactory.createNetConnection();
+			connection.connect(null);
+
+			var metrics:MockHTTPNetStreamMetrics = new MockHTTPNetStreamMetrics(new HTTPNetStream(connection, new HTTPStreamingIndexHandlerBase(), new HTTPStreamingFileHandlerBase()));
 			
 			var drRule:DownloadRatioRule = new DownloadRatioRule(metrics, false);
 			

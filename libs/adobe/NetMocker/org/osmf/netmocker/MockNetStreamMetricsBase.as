@@ -69,7 +69,7 @@ package org.osmf.netmocker
 			this._maxFrameRate = value;
 		}
 		
-		public function get droppedFPS():Number
+		override public function get droppedFPS():Number
 		{
 			return this._frameDropRate;
 		}
@@ -79,7 +79,7 @@ package org.osmf.netmocker
 			this._frameDropRate = value;
 		}
 		
-		public function get averageDroppedFPS():Number
+		override public function get averageDroppedFPS():Number
 		{
 			return this._avgDroppedFrameRate;
 		}
