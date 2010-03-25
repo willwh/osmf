@@ -114,7 +114,7 @@ package org.osmf.net.rtmpstreaming
 		{
 			assertTrue(error.errorID == MediaErrorCodes.URL_SCHEME_INVALID ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_REJECTED ||
-					   error.errorID == MediaErrorCodes.NETCONNECTION_INVALID_APPLICATION ||
+					   error.errorID == MediaErrorCodes.NETCONNECTION_APPLICATION_INVALID ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_FAILED ||
 					   error.errorID == MediaErrorCodes.NETCONNECTION_TIMEOUT ||
 					   error.errorID == MediaErrorCodes.SECURITY_ERROR ||
