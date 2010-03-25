@@ -69,6 +69,7 @@ package org.osmf.chrome.widgets
 			_open = false;
 			updateVisibility();
 			
+			authenticating = true;
 			drm.authenticate(userName.text, password.text);
 		}
 		
@@ -105,6 +106,7 @@ package org.osmf.chrome.widgets
 			{
 				drm.removeEventListener(DRMEvent.DRM_STATE_CHANGE, onDRMStateChange);
 				drm = null;
+				authenticating = false;
 			}
 			
 			updateVisibility();
@@ -114,6 +116,7 @@ package org.osmf.chrome.widgets
 		//
 		
 		private var drm:DRMTrait;
+		private var authenticating:Boolean;
 		
 		/* static */
 		private static const _requiredTraits:Vector.<String> = new Vector.<String>;
@@ -124,6 +127,18 @@ package org.osmf.chrome.widgets
 			if (drm)
 			{
 				_open = drm.drmState == DRMState.AUTHENTICATION_NEEDED;
+				if (_open == false && authenticating == true)
+				{
+					if (drm.drmState == DRMState.AUTHENTICATION_COMPLETE)
+					{
+						authenticating = false;
+					}
+					else if (drm.drmState == DRMState.AUTHENTICATION_ERROR)
+					{
+						authenticating = false;
+						_open = true;	
+					}
+				}
 			}
 			else
 			{

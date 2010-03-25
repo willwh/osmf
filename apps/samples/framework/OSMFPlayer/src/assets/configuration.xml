@@ -132,7 +132,7 @@
 			type="autoHideWidget"
 			face="backdrop"
 			fadeSteps="15"
-			percentWidth="80"
+			width="320"
 			height="50"
 			horizontalAlign="center"
 			bottom="20"
