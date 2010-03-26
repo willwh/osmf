@@ -121,8 +121,13 @@ package org.osmf.net
 					// has completed.  But this isn't fired for streaming.
 					if (NetStreamUtils.isStreamingResource(resource) == false)
 					{						
-						signalComplete();				
+						signalComplete();
 					}
+					break;
+				case NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY:
+					// When a live stream is unpublished, we should signal that
+					// the stream has stopped.
+					signalComplete();
 					break;
 			}
 		}

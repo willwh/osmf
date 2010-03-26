@@ -213,6 +213,28 @@ package org.osmf.net
 		 *  @productversion OSMF 1.0
 		 */
 		public static const NETSTREAM_PAUSE_NOTIFY:String			= "NetStream.Pause.Notify"; 
+
+		/** 
+		 * "status"	
+		 * The initial publish to a stream is sent to all subscribers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const NETSTREAM_PLAY_PUBLISH_NOTIFY:String	= "NetStream.Play.PublishNotify"; 
+
+		/** 
+		 * "status"	
+		 * An unpublish from a stream is sent to all subscribers.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static const NETSTREAM_PLAY_UNPUBLISH_NOTIFY:String	= "NetStream.Play.UnpublishNotify"; 
 		
 		/** 
 		 * "status"	
