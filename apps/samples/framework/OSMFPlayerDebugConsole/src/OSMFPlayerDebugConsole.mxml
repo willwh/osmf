@@ -18,34 +18,52 @@
 		>
 		<mx:columns>
 			<mx:DataGridColumn width="25" headerText="ID" dataField="0"/>
-			<mx:DataGridColumn width="25" headerText="Time" dataField="1"/>
+			<mx:DataGridColumn width="25" headerText="Time" dataField="1" sortCompareFunction="{ObjectUtil.dateCompare}"/>
 			<mx:DataGridColumn width="50" headerText="Type" dataField="2"/>
 			<mx:DataGridColumn headerText="Message" dataField="3"/>
 			<mx:DataGridColumn width="50" headerText="Parameters" dataField="4"/>
 		</mx:columns>
 	</mx:DataGrid>
 	
-	<mx:HBox>
+	<mx:HBox
+		width			="100%"
+		verticalAlign	="middle"
+		paddingLeft		="10"
+		paddingRight	="10"
+		>
 	
-		<mx:Button
-			label	="Clear"
-			click	="{grid.dataProvider = log = new ArrayCollection()}"
-			/>
-			
 		<mx:Button
 			label	="{paused ? 'Resume' : 'Pause'}"
 			click	="{paused = !paused}"
 			/>
-		
+		<mx:Button
+			label	="Clear"
+			click	="{grid.dataProvider = log = new ArrayCollection()}"
+			/>
+		<mx:Label
+			text	="message filter (reg. ex.):"			
+			/>
+		<mx:TextInput
+			id		="messageFilter"
+			width	="100%"
+			text	="\[org.osmf.layout.LayoutRender"
+			change	="messageFilterChange()"
+			/>
+			
 	</mx:HBox>
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.ObjectUtil;
+			import mx.validators.RegExpValidator;
 			import mx.collections.ArrayCollection;
 			
 			private function init():void
 			{
 				log = new ArrayCollection();
+				log.filterFunction = filterFunction;
+				messageFilterChange();
+				
 				grid.dataProvider = log;
 				
 				receiver = new LocalConnection();
@@ -68,8 +86,25 @@
 				}
 			}
 			
+			private function messageFilterChange():void
+			{
+				regExp = new RegExp(messageFilter.text || "");
+				log.refresh();
+			}
+			
+			private function filterFunction(value:Array):Boolean
+			{
+				var result:Boolean = true;
+				if (regExp)
+				{
+					result = !regExp.test(value[3].toString());
+				}
+				return result;
+			}
+			
 			private var receiver:LocalConnection;
 			private var log:ArrayCollection;
+			private var regExp:RegExp;
 			
 			[Bindable]
 			private var paused:Boolean;

@@ -37,7 +37,7 @@ package
 		// Internals
 		//
 		
-		public function log(level:String, message:String, params:Array):void
+		override protected function logMessage(level:String, message:String, params:Array):void
 		{
 			var msg:String = "";
 			
