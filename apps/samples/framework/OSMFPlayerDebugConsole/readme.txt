@@ -5,4 +5,6 @@ Usage
 * Compile the application, and run it outside of Flex Builder.
 * Compile the OSMFPlayer application, and run it. On media loading and playing back, debug messages will appear on the debug console.
 
+The enclosed testCertificate's password is "Test".
+
 OSMFPlayer debug console support can be disabled by changing the OSMFPlayer project's compiler arguments to "-define CONFIG::DEBUG false".
