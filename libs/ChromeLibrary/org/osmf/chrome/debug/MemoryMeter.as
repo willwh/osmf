@@ -20,36 +20,25 @@
 *  
 *****************************************************/
 
-package org.osmf.chrome.widgets
+package org.osmf.chrome.debug
 {
 	import flash.events.Event;
-	import flash.utils.getTimer;
+	import flash.system.System;
 	
-	public class FPSMeter extends LabelWidget
+	import org.osmf.chrome.widgets.LabelWidget;
+	
+	public class MemoryMeter extends LabelWidget
 	{
-		public function FPSMeter()
+		public function MemoryMeter()
 		{
 			super();
-		
-			ticks = getTimer();
-			frames = 0;	
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
 		private function onEnterFrame(event:Event):void
 		{
-			frames++;
-			var currentTicks:uint = getTimer();
-			if (currentTicks - ticks > 1000)
-			{
-				text = (frames / ((currentTicks - ticks) / 1000)).toFixed(3) + " fps."; 
-				frames = 0;
-				ticks = currentTicks;
-			} 
+			text = (System.totalMemory / (1024 * 1024)).toFixed(3) + " mb.";
 		}
-		
-		private var frames:uint;
-		private var ticks:uint;
-		private var timer:uint; 
 	}
 }

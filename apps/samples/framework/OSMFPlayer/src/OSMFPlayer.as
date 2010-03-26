@@ -33,9 +33,9 @@ package
 	import flash.ui.ContextMenuItem;
 	
 	import org.osmf.chrome.configuration.WidgetsParser;
+	import org.osmf.chrome.debug.FPSMeter;
+	import org.osmf.chrome.debug.MemoryMeter;
 	import org.osmf.chrome.widgets.EjectButton;
-	import org.osmf.chrome.widgets.FPSMeter;
-	import org.osmf.chrome.widgets.MemoryMeter;
 	import org.osmf.chrome.widgets.URLInput;
 	import org.osmf.chrome.widgets.Widget;
 	import org.osmf.containers.MediaContainer;
