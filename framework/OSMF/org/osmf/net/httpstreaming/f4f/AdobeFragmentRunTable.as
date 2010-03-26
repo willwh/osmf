@@ -123,39 +123,6 @@ package org.osmf.net.httpstreaming.f4f
 		}
 		
 		/**
-		 * The total duration of the movie in terms of the time scale used. It is basically
-		 * the duration accrued until the last fragment duration pair plus the duration for the
-		 * last fragment duration pair.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get totalDuration():uint
-		{
-			var lastFdp:FragmentDurationPair 
-				= _fragmentDurationPairs.length <= 0 ? null : _fragmentDurationPairs[_fragmentDurationPairs.length - 1];
-				
-			return (lastFdp != null) ? lastFdp.durationAccrued + lastFdp.duration : 0;
-		}
-		
-		/**
-		 * The total number of fragments contained in this fragment run table.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		public function get totalFragments():uint
-		{
-			var lastFdp:FragmentDurationPair 
-				= _fragmentDurationPairs.length <= 0 ? null : _fragmentDurationPairs[_fragmentDurationPairs.length - 1];
-			return lastFdp.firstFragment; 
-		}
-
-		/**
 		 * Given a time spot in terms of the time scale used by the fragment table, returns the corresponding
 		 * Id of the fragment that contains the time spot.
 		 * 
@@ -211,7 +178,7 @@ package org.osmf.net.httpstreaming.f4f
 				if (curFdp.firstFragment <= fragId &&
 					((fragId < nextFdp.firstFragment) || ((curFdp.firstFragment >= nextFdp.firstFragment) && (curFdp.duration > 0))))
 				{
-					if ((curFdp.durationAccrued + (fragId - curFdp.firstFragment + 1) * curFdp.duration) >= totalDuration)
+					if ((curFdp.durationAccrued + (fragId - curFdp.firstFragment + 1) * curFdp.duration) > totalDuration)
 					{
 						return null;
 					}
@@ -254,7 +221,7 @@ package org.osmf.net.httpstreaming.f4f
 			}
 			
 			if (fragId >= _fragmentDurationPairs[size].firstFragment && 
-				((totalDuration - _fragmentDurationPairs[size].durationAccrued - (fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration) > _fragmentDurationPairs[size].duration) && 
+				((totalDuration - _fragmentDurationPairs[size].durationAccrued - (fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration) >= 0) && 
 				_fragmentDurationPairs[size].duration > 0)
 			{
 				fai.fragId = fragId;
@@ -284,13 +251,13 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		public function fragmentsLeft(fragId:uint, currentMediaTime:Number):uint
 		{
-			if (_fragmentDurationPairs == null)
+			if (_fragmentDurationPairs == null || _fragmentDurationPairs.length == 0)
 			{
 				return 0;
 			}
 			
 			var fdp:FragmentDurationPair = _fragmentDurationPairs[fragmentDurationPairs.length - 1] as FragmentDurationPair;
-			var fragments:uint = (currentMediaTime - fdp.durationAccrued) / fdp.duration + fdp.firstFragment - fragId;
+			var fragments:uint = (currentMediaTime - fdp.durationAccrued) / fdp.duration + fdp.firstFragment - fragId -1;
 			
 			return fragments;
 		}		
@@ -305,7 +272,7 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		public function tableComplete():Boolean
 		{
-			if (_fragmentDurationPairs == null)
+			if (_fragmentDurationPairs == null || _fragmentDurationPairs.length <= 0)
 			{
 				return false;
 			}
@@ -317,12 +284,12 @@ package org.osmf.net.httpstreaming.f4f
 		public function adjustEndEntryDurationAccrued(value:Number):void
 		{
 			var fdp:FragmentDurationPair = _fragmentDurationPairs[_fragmentDurationPairs.length - 1];
-			if (fdp.duration == 0 && fdp.discontinuityIndicator == 0)
+			if (fdp.duration == 0)
 			{
 				fdp.durationAccrued = value;
 			}
 		}
-		
+
 		// Internal
 		//
 		
@@ -347,7 +314,13 @@ package org.osmf.net.httpstreaming.f4f
 				return fdp.firstFragment;
 			}
 			
-			return fdp.firstFragment + ((uint)(time - fdp.durationAccrued)) / fdp.duration;
+			var deltaTime:Number = time - fdp.durationAccrued;
+			var count:uint = (deltaTime > 0)? deltaTime / fdp.duration : 1;
+			if ((deltaTime % fdp.duration) > 0)
+			{
+				count++;
+			}
+			return fdp.firstFragment + count - 1;
 		}
 
 		private var _timeScale:uint;

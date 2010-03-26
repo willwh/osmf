@@ -309,8 +309,11 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			_fragmentRunTables = value;
 			
-			var frt:AdobeFragmentRunTable = value[value.length - 1];
-			frt.adjustEndEntryDurationAccrued(_currentMediaTime);			
+			if (value != null && value.length > 0)
+			{
+				var frt:AdobeFragmentRunTable = value[value.length - 1];
+				frt.adjustEndEntryDurationAccrued(_currentMediaTime);
+			}			
 		}
 
 		/**
@@ -343,9 +346,16 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var afrt:AdobeFragmentRunTable = _fragmentRunTables[_fragmentRunTables.length - 1];
 			var fdps:Vector.<FragmentDurationPair> = afrt.fragmentDurationPairs;
-			var deltaTime:Number = _currentMediaTime - fdps[fdps.length - 1].durationAccrued;
-			var fragCount:uint = deltaTime / fdps[fdps.length - 1].duration;
-			return fdps[fdps.length - 1].firstFragment + fragCount - 1;
+			var lastValidFdp:FragmentDurationPair = fdps[fdps.length - 1];
+			
+			if (lastValidFdp.duration == 0)
+			{
+				lastValidFdp = fdps[fdps.length - 2];
+			}
+			
+			var deltaTime:Number = _currentMediaTime - lastValidFdp.durationAccrued;
+			var fragCount:uint = (deltaTime <= 0)? 0: deltaTime / lastValidFdp.duration;
+			return lastValidFdp.firstFragment + fragCount - 1;
 		}
 		
 		/**
@@ -358,7 +368,7 @@ package org.osmf.net.httpstreaming.f4f
 		 */
 		public function get totalDuration():uint
 		{
-			if (_fragmentRunTables.length < 1)
+			if (_fragmentRunTables == null || _fragmentRunTables.length < 1)
 			{
 				return 0;
 			}

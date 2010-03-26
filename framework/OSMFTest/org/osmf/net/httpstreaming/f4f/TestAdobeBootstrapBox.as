@@ -182,6 +182,12 @@ package org.osmf.net.httpstreaming.f4f
 		public function testTotalDuration():void
 		{
 			assertTrue(abst.totalDuration == 22000);
+			
+			var newFragmentRunTables:Vector.<AdobeFragmentRunTable> = new Vector.<AdobeFragmentRunTable>();
+			abst.fragmentRunTables = newFragmentRunTables;
+			assertTrue(abst.totalDuration == 0);
+			abst.fragmentRunTables = null;
+			assertTrue(abst.totalDuration == 0);
 		}
 
 		public function testTotalFragments():void

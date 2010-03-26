@@ -74,7 +74,7 @@ package org.osmf.net.httpstreaming
 			fragmentRunTable.addEntry(7, 0, 16000, 500, 0);
 			fragmentRunTable.addEntry(11, 0, 18000, 0, 3);
 			fragmentRunTable.addEntry(12, 0, 18000, 1000, 0);
-			fragmentRunTable.addEntry(16, 0, 22000, 0, 0);
+			fragmentRunTable.addEntry(0, 0, 22000, 0, 0);
 			abstDescriptor.addFragmentRunTable(fragmentRunTable);
 			
 			return abstDescriptor;
