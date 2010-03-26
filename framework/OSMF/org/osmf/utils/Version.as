@@ -89,6 +89,25 @@ package org.osmf.utils
 			}
 			return false;
 		}
+		
+		/**
+		 * @private
+		 * 
+		 * Defines the value of the LOGGING configuration constant.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public static function get LOGGING():Boolean
+		{
+			CONFIG::LOGGING
+			{
+				return true;
+			}
+			return false;
+		}
 				
 		private static const _major:String = "0";
 		private static const _minor:String = "93";

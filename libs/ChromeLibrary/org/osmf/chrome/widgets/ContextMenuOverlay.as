@@ -76,6 +76,17 @@ package org.osmf.chrome.widgets
 							);
 					customItems.push(menuItem);
 				}
+				
+				if (Version.LOGGING == true)
+				{
+					menuItem
+						= new ContextMenuItem
+							( "LOGGING"
+							, false
+							, false
+							);
+					customItems.push(menuItem);
+				}
 			}
 			
 			customContextMenu.customItems = customItems;
