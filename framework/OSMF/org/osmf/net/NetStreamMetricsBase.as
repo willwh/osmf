@@ -213,9 +213,11 @@ package org.osmf.net
 		//
 		
 		/**
-		 * Method invoked when the metrics should be updated
+		 * Method invoked when the metrics should be recalculated.  If
+		 * updateInterval is set, this method will be invoked whenever the
+		 * updateInterval is reached.
 		 **/
-		protected function update():void
+		protected function calculateMetrics():void
 		{
 			try 
 			{
@@ -247,7 +249,7 @@ package org.osmf.net
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug(".update() - " + error);
+					logger.debug(".calculateMetrics() - " + error);
 				}
 				throw(error);
 			}
@@ -280,7 +282,7 @@ package org.osmf.net
 			}
 			else
 			{
-				update();
+				calculateMetrics();
 			}
 		}
 		

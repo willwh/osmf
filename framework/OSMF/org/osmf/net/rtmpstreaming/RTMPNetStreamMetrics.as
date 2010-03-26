@@ -72,9 +72,9 @@ package org.osmf.net.rtmpstreaming
 		/**
 		 * @private
 		 **/
-		override protected function update():void 
+		override protected function calculateMetrics():void 
 		{
-			super.update();
+			super.calculateMetrics();
 			
 			try 
 			{
@@ -107,7 +107,7 @@ package org.osmf.net.rtmpstreaming
 			{
 				CONFIG::LOGGING
 				{
-					logger.debug(".update() - " + error);
+					logger.debug(".calculateMetrics() - " + error);
 				}
 				throw(error);
 			}
