@@ -158,13 +158,11 @@ package org.osmf.elements
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
 					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
 				}
-				
-				// Load externals
-				
-				var unfinishedLoads:Number = 0;
-				
 				if (manifest != null)
 				{
+					var unfinishedLoads:Number = 0;
+
+					// Load externals
 					for each (var item:DRMAdditionalHeader in manifest.drmAdditionalHeaders)
 					{										
 						// DRM Metadata  - we may make this load on demand in the future.					
@@ -187,35 +185,35 @@ package org.osmf.elements
 							loadAdditionalHeader(item, completionCallback, onError);										
 						}					
 					}
-				}
-				if (unfinishedLoads == 0) // No external resources
-				{
-					finishLoad();
+				
+					if (unfinishedLoads == 0) // No external resources
+					{
+						finishLoad();
+					}
 				}														
 			}	
 
 			
 			function finishLoad():void
 			{			
-				var netResource:MediaResourceBase = parser.createResource(manifest, URLResource(loadTrait.resource));	
-				
 				try
 				{
+					var netResource:MediaResourceBase = parser.createResource(manifest, URLResource(loadTrait.resource));	
 					var loadedElem:MediaElement = factory.createMediaElement(netResource);	
+
+					if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
+					{
+						loadedElem["defaultDuration"] = manifest.duration;	
+					}									
+					
+					LoadFromDocumentLoadTrait(loadTrait).mediaElement = loadedElem;																		
+					updateLoadTrait(loadTrait, LoadState.READY);		
 				}
-				catch (parseError:Error)
+				catch (error:Error)
 				{					
 					updateLoadTrait(loadTrait, LoadState.LOAD_ERROR);
-					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(parseError.errorID, parseError.message)));
+					loadTrait.dispatchEvent(new MediaErrorEvent(MediaErrorEvent.MEDIA_ERROR, false, false, new MediaError(error.errorID, error.message)));
 				}			
-				
-				if (loadedElem.hasOwnProperty("defaultDuration")  && !isNaN(manifest.duration))
-				{
-					loadedElem["defaultDuration"] = manifest.duration;	
-				}									
-				
-				LoadFromDocumentLoadTrait(loadTrait).mediaElement = loadedElem;																		
-				updateLoadTrait(loadTrait, LoadState.READY);		
 			}				
 		}
 		
