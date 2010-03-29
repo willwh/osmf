@@ -148,11 +148,13 @@ package org.osmf.chrome.configuration
 				try 
 				{
 					type = flash.utils.getDefinitionByName(xml.@type || "") as Class;
-					trace("found: ", type);
 				}
 				catch(error:Error)
 				{
-					trace("WARNING: type not found", xml.@type);
+					if (xml.@type != undefined)
+					{
+						trace("WARNING: type not found", xml.@type);
+					}
 					type = Widget;
 				}
 			}
