@@ -168,74 +168,105 @@ package org.osmf.net.httpstreaming.f4f
 		public function validateFragment(fragId:uint, totalDuration:Number):FragmentAccessInformation
 		{
 			var size:uint = _fragmentDurationPairs.length - 1;
-			var fai:FragmentAccessInformation = new FragmentAccessInformation();
+			var fai:FragmentAccessInformation = null;
 
 			for (var i:uint = 0; i < size; i++)
 			{
 				var curFdp:FragmentDurationPair = _fragmentDurationPairs[i];
 				var nextFdp:FragmentDurationPair = _fragmentDurationPairs[i+1];
-				
-				if (curFdp.firstFragment <= fragId &&
-					((fragId < nextFdp.firstFragment) || ((curFdp.firstFragment >= nextFdp.firstFragment) && (curFdp.duration > 0))))
+				if ((curFdp.firstFragment <= fragId) && (fragId < nextFdp.firstFragment))
 				{
-					if ((curFdp.durationAccrued + (fragId - curFdp.firstFragment + 1) * curFdp.duration) > totalDuration)
+					if (curFdp.duration <= 0)
 					{
-						return null;
+						fai = getNextValidFragment(i+1, totalDuration);
 					}
-					
-					if (curFdp.duration > 0)
+					else
 					{
+						fai = new FragmentAccessInformation();
 						fai.fragId = fragId;
 						fai.fragDuration = curFdp.duration;
 						fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration * (fragId - curFdp.firstFragment + 1);
-						return fai;
 					}
 					
-					curFdp = findValidFragmentDurationPair(i + 1);
-					if (curFdp == null)
+					break;
+				}
+				else if ((curFdp.firstFragment <= fragId) && endOfStreamEntry(nextFdp))
+				{
+					if (curFdp.duration > 0)
 					{
-						return null;
+						var timeResidue:Number = totalDuration - curFdp.durationAccrued;
+						var timeDistance:Number = (fragId - curFdp.firstFragment + 1) * curFdp.duration;
+						var fragStartTime:Number = (fragId - curFdp.firstFragment) * curFdp.duration;
+						if (timeResidue > fragStartTime)
+						{
+							fai = new FragmentAccessInformation();
+							fai.fragId = fragId;
+							fai.fragDuration = curFdp.duration;
+							if (timeResidue >= timeDistance)
+							{
+								fai.fragmentEndTime = curFdp.durationAccrued + timeDistance;
+							}
+							else
+							{
+								fai.fragmentEndTime = curFdp.durationAccrued + timeResidue;
+							}
+						}						
 					}
 					
-					fai.fragId = curFdp.firstFragment;
-					fai.fragmentEndTime = curFdp.durationAccrued + curFdp.duration;
-					fai.fragDuration = curFdp.duration;
+					break;				
+				}
+			}
+			if (fai == null)
+			{
+				var lastFdp:FragmentDurationPair = _fragmentDurationPairs[size];
+				if (lastFdp.duration > 0 && fragId >= lastFdp.firstFragment)
+				{
+					timeResidue = totalDuration - lastFdp.durationAccrued;
+					timeDistance = (fragId - lastFdp.firstFragment + 1) * lastFdp.duration;
+					fragStartTime = (fragId - lastFdp.firstFragment) * lastFdp.duration;
+					if (timeResidue > fragStartTime)
+					{
+						fai = new FragmentAccessInformation();
+						fai.fragId = fragId;
+						fai.fragDuration = lastFdp.duration;
+						if (timeResidue >= timeDistance)
+						{
+							fai.fragmentEndTime = lastFdp.durationAccrued + timeDistance;
+						}
+						else
+						{
+							fai.fragmentEndTime = lastFdp.durationAccrued + timeResidue;
+						}
+					}						
+				}
+			}
+
+			return fai;
+		}
+		
+		private function getNextValidFragment(startIdx:uint, totalDuration:Number):FragmentAccessInformation
+		{
+			var fai:FragmentAccessInformation = null;
+			for (var i:uint = startIdx; i < _fragmentDurationPairs.length; i++)
+			{
+				var fdp:FragmentDurationPair = _fragmentDurationPairs[i];
+				if (fdp.duration > 0)
+				{
+					fai = new FragmentAccessInformation();
+					fai.fragId = fdp.firstFragment;
+					fai.fragDuration = fdp.duration;
+					fai.fragmentEndTime = fdp.durationAccrued + fdp.duration;
 					
-					return fai;
+					break;
 				}
 			}
 			
-			CONFIG::LOGGING
-			{
-				logger.debug("total duration: " + totalDuration);
-				logger.debug("fragment timestamp: " + _fragmentDurationPairs[size].durationAccrued);
-				logger.debug("fragId: " + fragId);
-				logger.debug("firstFragment: " + _fragmentDurationPairs[size].firstFragment);
-				
-				logger.debug("time residue: " + 
-					(totalDuration - 
-					_fragmentDurationPairs[size].durationAccrued - 
-					(fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration));
-					
-				logger.debug("fragment duration: " + _fragmentDurationPairs[size].duration);
-			}
-			
-			if (fragId >= _fragmentDurationPairs[size].firstFragment && 
-				((totalDuration - _fragmentDurationPairs[size].durationAccrued - (fragId - _fragmentDurationPairs[size].firstFragment + 1) * _fragmentDurationPairs[size].duration) >= 0) && 
-				_fragmentDurationPairs[size].duration > 0)
-			{
-				fai.fragId = fragId;
-				fai.fragDuration = 
-				fai.fragmentEndTime = _fragmentDurationPairs[size].duration;
-					_fragmentDurationPairs[size].durationAccrued + 
-					_fragmentDurationPairs[size].duration * (fragId - _fragmentDurationPairs[size].firstFragment + 1);
-			}
-			else
-			{
-				fai = null;
-			}
-			
 			return fai;
+		}
+		
+		private function endOfStreamEntry(fdp:FragmentDurationPair):Boolean
+		{
+			return (fdp.duration == 0 && fdp.discontinuityIndicator == 0);
 		}
 		
 		/**

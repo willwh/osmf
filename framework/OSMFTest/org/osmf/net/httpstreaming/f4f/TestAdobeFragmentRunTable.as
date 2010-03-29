@@ -146,7 +146,7 @@ package org.osmf.net.httpstreaming.f4f
 			assertTrue(afrt.validateFragment(12, abst.totalDuration).fragId == 12);
 			assertTrue(afrt.validateFragment(13, abst.totalDuration).fragId == 13);
 			assertTrue(afrt.validateFragment(14, abst.totalDuration).fragId == 14);
-			assertTrue(afrt.validateFragment(15, abst.totalDuration) == null);
+			assertTrue(afrt.validateFragment(15, abst.totalDuration).fragId == 15);
 			assertTrue(afrt.validateFragment(16, abst.totalDuration) == null);
 		}
 		
