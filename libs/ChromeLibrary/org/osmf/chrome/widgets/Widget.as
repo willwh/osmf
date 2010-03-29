@@ -298,7 +298,7 @@ package org.osmf.chrome.widgets
 		override protected function setSuperVisible(value:Boolean):void
 		{
 			super.setSuperVisible(value);
-			layoutMetadata.includeInLayout = value && (configuration.@includeInLayout != "false");
+			layoutMetadata.includeInLayout = value && (configuration ? configuration.@includeInLayout != "false" : true);
 		}
 				
 		// Stubs

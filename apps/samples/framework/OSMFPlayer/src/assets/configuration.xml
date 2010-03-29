@@ -327,6 +327,7 @@
 			height="120"
 			verticalAlign="middle"
 			horizontalAlign="center"
+			fadeSteps="8"
 			>
 			
 			<widget

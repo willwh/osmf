@@ -53,11 +53,7 @@ package org.osmf.chrome.widgets
 				
 				if (_fadeSteps <= 0)
 				{
-					removeEventListener(Event.ENTER_FRAME, onEnterFrame);		
-					_mode = MODE_IDLE;
-					remainingSteps = 0;
-					super.alpha = _alpha;
-					setSuperVisible(_visible);	
+					setIdle();	
 				}
 				else
 				{
@@ -74,9 +70,16 @@ package org.osmf.chrome.widgets
 			if (value != _visible)
 			{
 				_visible = value;
-				mode = _visible
-					? MODE_IN
-					: MODE_OUT;
+				if (parent)
+				{
+					mode = _visible
+						? MODE_IN
+						: MODE_OUT;
+				}
+				else
+				{
+					setIdle();
+				}
 			}
 		}
 		
@@ -114,7 +117,7 @@ package org.osmf.chrome.widgets
 		private static const MODE_OUT:String = "out";
 		
 		private var _fadeSteps:Number = 15;
-		private var _visible:Boolean;
+		private var _visible:Boolean = true;
 		private var _alpha:Number;
 		private var _mode:String;
 		
@@ -155,18 +158,27 @@ package org.osmf.chrome.widgets
 				}
 				else
 				{
-					removeEventListener(Event.ENTER_FRAME, onEnterFrame);		
-					_mode = MODE_IDLE;
-					remainingSteps = 0;
-					setSuperVisible(_visible);
+					setIdle();
 				}	
 			}
 		}
 		
+		private function setIdle():void
+		{
+			removeEventListener(Event.ENTER_FRAME, onEnterFrame);		
+			_mode = MODE_IDLE;
+			remainingSteps = 0;
+			super.alpha = _visible ? _alpha : 0;
+			setSuperVisible(_visible);
+		}
+		
 		private function onAddedToStage(event:Event):void
 		{
-			super.alpha = 0;
-			mode = MODE_IN;
+			if (visible)
+			{
+				super.alpha = 0;
+				mode = MODE_IN;
+			}
 		}
 		
 		private function onEnterFrame(event:Event = null):void
