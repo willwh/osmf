@@ -25,6 +25,7 @@ package
 	import flash.display.*;
 	import flash.events.*;
 	
+	import org.osmf.chrome.application.*;
 	import org.osmf.chrome.configuration.*;
 	import org.osmf.chrome.debug.*;
 	import org.osmf.chrome.widgets.*;
@@ -43,156 +44,96 @@ package
 	
 	[Frame(factoryClass="org.osmf.player.preloader.Preloader")]
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="380")]
-	public class OSMFPlayer extends Sprite
+	public class OSMFPlayer extends ChromeApplication
 	{
 		public function OSMFPlayer(preloader:Preloader)
 		{
 			super();
 			
-			this.preloader = preloader;
-			_stage = preloader.stage;
-			
+			// Store pre-loader references:
 			CONFIG::DEBUG
 			{
+				debugger = preloader.debugger;
 				Log.loggerFactory = new DebuggerLoggerFactory(preloader.debugger);
 			}
 			
-			// Parse configuration from the parameters passed on
-			// embedding OSMFPlayer.swf:
-			configuration = new PlayerConfiguration(preloader.loaderInfo.parameters);
-			
 			// Set the SWF scale mode, and listen to the _stage change
 			// dimensions:
+			_stage = preloader.stage;
 			_stage.scaleMode = StageScaleMode.NO_SCALE;
 			_stage.align = StageAlign.TOP_LEFT;
 			_stage.addEventListener(Event.RESIZE, onStageResize);
 			
-			setupMediaFactory();
-			setupMediaPlayer();
-			setupMediaContainer();
-			setupUserInterface();
+			// Parse configuration from the parameters passed on embedding
+			// OSMFPlayer.swf:
+			configuration = new PlayerConfiguration(preloader.loaderInfo.parameters);
 			
-			// Simulate the _stage resizing, to update the dimensions of the
-			// container and overlay:
+			// Setup the ChromeApplication (base class):		
+			setup(preloader.configuration);
+			
+			// Simulate the stage resizing, to update the dimensions of the
+			// container:
 			onStageResize();
 			
-			// Try to load the currently set URL (if any):
-			loadURL(configuration.url);
+			// Try to load the URL set on the configuration:
+			url = configuration.url;
 		}
 		
 		// Internals
 		//
 		
-		private function setupMediaFactory():void
+		override protected function constructWidgetsParser():WidgetsParser
 		{
-			// Construct a media factory. A media factory can create
-			// media elements on being passed a resource.
-			factory = new DefaultMediaFactory();
+			var widgets:WidgetsParser = super.constructWidgetsParser();
+			
+			// Add a number of (debug) type widgets:
+			widgets.addType("memoryMeter", MemoryMeter);
+			widgets.addType("fpsMeter", FPSMeter);
+			
+			return widgets;
 		}
 		
-		private function setupMediaPlayer():void
+		override protected function processSetupComplete():void
 		{
-			// Construct a media player instance. This will help in loading
-			// the media that the factory will construct:
-			player = new MediaPlayer();
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
-		}
-		
-		private function setupMediaContainer():void
-		{
-			// Construct a MediaContainer that will be used to show the media
-			// on screen once it has loaded.
-			containerRenderer = new LayoutRenderer();
-			container = new MediaContainer(containerRenderer);
+			
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
 			container.backgroundAlpha = isNaN(configuration.backgroundColor) ? 0 : 1;
-			addChild(container);
-		}
-		
-		private function setupUserInterface():void
-		{
-			widgetsParser = new WidgetsParser();
-			widgetsParser.addType("memoryMeter", MemoryMeter);
-			widgetsParser.addType("fpsMeter", FPSMeter);
-			widgetsParser.parse
-				( preloader.configuration.configuration.widgets.*
-				, preloader.configuration.assetsManager
-				); 
 			
-			// Add widgets on top of the media:
-			var index:Number = 10000;
-			for each (var widget:Widget in widgetsParser.widgets)
-			{
-				widget.layoutMetadata.index = index++;
-				containerRenderer.addTarget(widget);
-			}
-			
-			var urlInput:URLInput = widgetsParser.getWidget("urlInput") as URLInput;
+			var urlInput:URLInput = widgets.getWidget("urlInput") as URLInput;
 			if (urlInput)
 			{
 				urlInput.addEventListener(Event.CHANGE, onInputURLChange);
 				urlInput.url = configuration.url;
 			}
 			
-			var button:EjectButton = widgetsParser.getWidget("ejectButton") as EjectButton;
+			var button:EjectButton = widgets.getWidget("ejectButton") as EjectButton;
 			if (button)
 			{
 				button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
 			}
 			
-			alert = widgetsParser.getWidget("alert") as AlertDialog;
+			alert = widgets.getWidget("alert") as AlertDialog;
 		}
 		
-		private function loadURL(url:String):void
+		override protected function processNewMedia(value:MediaElement):MediaElement
 		{
-			updateTargetElement(factory.createMediaElement(new URLResource(url)));
-		}
-		
-		private function updateTargetElement(value:MediaElement):void
-		{
-			if (value != media)
+			var result:MediaElement;
+			if (value != null)
 			{
-				// Remove the current media from the container:
-				if (media)
-				{
-					container.removeMediaElement(media);
-				}
-				
-				// Remove the current media reference from all widgets: 
-				for each (var widget:Widget in widgetsParser.widgets)
-				{
-					widget.media = null;
-				}
-				
-				// When debugging, wrap the media in a proxy, so its events
-				// can be reflected:
 				CONFIG::DEBUG
 				{
 					if (value)
 					{
-						value = new DebuggerElementProxy(value, preloader.debugger);
+						result = new DebuggerElementProxy(value, debugger);
 					}
 					
-					preloader.debugger.send("TRACE", "media change", value);
-				}
-				
-				// Set the new main media element:
-				media = player.media = value;
-					
-				if (media)
-				{
-					// Forward a reference to all chrome widgets:
-					for each (widget in widgetsParser.widgets)
-					{
-						widget.media = media;
-					}
-					
-					// Add the media to the media container:
-					container.addMediaElement(media);
+					debugger.send("TRACE", "media change", value);
 				}
 			}
+			return result;
 		}
 				
 		// Handlers
@@ -201,14 +142,17 @@ package
 		private function onStageResize(event:Event = null):void
 		{
 			// Propagate dimensions to the main container:
-			container.layoutMetadata.width = _stage.stageWidth;
-			container.layoutMetadata.height = _stage.stageHeight;
+			width = _stage.stageWidth;
+			height = _stage.stageHeight;
 		}
 		
 		private function onEjectButtonClick(event:MouseEvent):void
 		{
+			// Escape full-screen mode (if applicable):
 			_stage.displayState = StageDisplayState.NORMAL;
-			updateTargetElement(null);
+			
+			// Reset the current media:
+			media = null;
 		}
 		
 		private function onInputURLChange(event:Event):void
@@ -216,13 +160,16 @@ package
 			var urlInput:URLInput = event.target as URLInput;
 			if (urlInput)
 			{
-				loadURL(urlInput.url);
+				url = urlInput.url;
 			}
 		}
 		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
+			// Compose error message:
 			var message:String = event.error.message + "\n" + event.error.detail;
+			
+			// If an alert widget is available, use it. Otherwise, trace the message:
 			if (alert)
 			{
 				alert.alert("Error", message);
@@ -235,23 +182,17 @@ package
 		
 		private function onIsDynamicStreamChange(event:MediaPlayerCapabilityChangeEvent):void
 		{
+			// Apply the configuration's autoSwitchQuality setting:
 			if (player.isDynamicStream)
 			{
 				player.autoDynamicStreamSwitch = configuration.autoSwitchQuality;
 			}
 		}
 		
-		private var preloader:Preloader;
 		private var _stage:Stage;
+		CONFIG::DEBUG {	private var debugger:Debugger; }
 		
 		private var configuration:PlayerConfiguration;
-		private var factory:MediaFactory;
-		private var media:MediaElement;
-		private var player:MediaPlayer;
-		private var containerRenderer:LayoutRenderer;
-		private var container:MediaContainer;
-		
-		private var widgetsParser:WidgetsParser; 
 		private var alert:AlertDialog;
 	}
 }            
