@@ -186,19 +186,5 @@ package
 		/* static */
 		
 		private static const ID:String = "ID";
-		
-		private static const SCRUB_BAR:String = "scrubBar";
-		private static const PAUSE_BUTTON:String = "pauseButton";
-		private static const PLAY_BUTTON:String = "playButton";
-		private static const QUALITY_BUTTON:String = "qualityButton";
-		private static const QUALITY_INCREASE:String = "qualityIncrease";
-		private static const QUALITY_DECREASE:String = "qualityDecrease";
-		private static const QUALITY_LABEL:String = "qualityLabel";
-		private static const SOUND_LESS:String = "soundLess";
-		private static const SOUND_MORE:String = "soundMore";
-		
-		private static const BUTTONS_VERTICAL_OFFSET:Number = 10;
-		private static const SCRUBBAR_VERTICAL_OFFSET:Number = 22;
-		private static const BORDER_SPACE:Number = 9;
 	}
 }
