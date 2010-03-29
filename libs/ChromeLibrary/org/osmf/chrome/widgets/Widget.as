@@ -75,12 +75,12 @@ package org.osmf.chrome.widgets
 			return _id;
 		}
 		
-		public function set mediaElement(value:MediaElement):void
+		public function set media(value:MediaElement):void
 		{
-			if (_mediaElement != value)
+			if (_media != value)
 			{
-				var oldValue:MediaElement = _mediaElement;
-				_mediaElement = null;
+				var oldValue:MediaElement = _media;
+				_media = null;
 								
 				if (oldValue)
 				{
@@ -89,17 +89,17 @@ package org.osmf.chrome.widgets
 					onMediaElementTraitsChange(null);
 				}
 				
-				_mediaElement = value;
+				_media = value;
 				
-				if (_mediaElement)
+				if (_media)
 				{
-					_mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
-					_mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
+					_media.addEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitsChange);
+					_media.addEventListener(MediaElementEvent.TRAIT_REMOVE, onMediaElementTraitsChange);
 				}
 				
 				for each (var child:Widget in children)
 				{
-					child.mediaElement = _mediaElement;
+					child.media = _media;
 				}
 				
 				processMediaElementChange(oldValue);
@@ -107,9 +107,9 @@ package org.osmf.chrome.widgets
 			}
 		}
 		
-		public function get mediaElement():MediaElement
+		public function get media():MediaElement
 		{
-			return _mediaElement;
+			return _media;
 		}
 		
 		public function set face(value:DisplayObject):void
@@ -159,7 +159,7 @@ package org.osmf.chrome.widgets
 			{
 				layoutRenderer.addTarget(widget);
 				children.push(widget);
-				widget.mediaElement = _mediaElement;
+				widget.media = _media;
 			}
 		}
 		
@@ -341,7 +341,7 @@ package org.osmf.chrome.widgets
 		// Internals
 		//
 		
-		private var _mediaElement:MediaElement;
+		private var _media:MediaElement;
 		
 		private var _configuration:XML;
 		private var _assetManager:AssetsManager;
@@ -371,7 +371,7 @@ package org.osmf.chrome.widgets
 			var element:MediaElement
 				= event 
 					? event.target as MediaElement
-					: _mediaElement;
+					: _media;
 					
 			var priorRequiredTraitsAvailable:Boolean = _requiredTraitsAvailable;
 			

@@ -49,11 +49,11 @@ package org.osmf.chrome.widgets
 				autoHideWatcher = null;
 			}
 			
-			if (mediaElement != null)
+			if (media != null)
 			{
 				autoHideWatcher
 					= new MetadataWatcher
-						( mediaElement.metadata
+						( media.metadata
 						, ChromeMetadata.CHROME_METADATA_KEY
 						, ChromeMetadata.AUTO_HIDE
 						, autoHideChangeCallback

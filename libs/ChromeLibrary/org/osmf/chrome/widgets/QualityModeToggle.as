@@ -72,7 +72,7 @@ package org.osmf.chrome.widgets
 			enabled = dynamicStream != null;
 			
 			visible
-				=	mediaElement != null 
+				=	media != null 
 				&&	enabled == true
 		}
 		

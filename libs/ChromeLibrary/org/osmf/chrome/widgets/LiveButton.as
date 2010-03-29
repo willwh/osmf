@@ -87,7 +87,7 @@ package org.osmf.chrome.widgets
 		{
 			var result:Number = 0;
 			
-			var loadable:NetStreamLoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			var loadable:NetStreamLoadTrait = media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			if (loadable)
 			{
 				result = loadable.netStream.bufferTime;

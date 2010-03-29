@@ -75,7 +75,7 @@ package org.osmf.chrome.widgets
 		
 		override protected function onMouseClick(event:MouseEvent):void
 		{
-			var seekable:SeekTrait = mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			var seekable:SeekTrait = media.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			if (seekable && dvrTrait)
 			{
 				var bufferTime:Number = getBufferTime();
@@ -114,14 +114,14 @@ package org.osmf.chrome.widgets
 				&&	timeTrait
 				&&	timeTrait.currentTime < Math.max(0, timeTrait.duration - getBufferTime() - 5);
 			
-			enabled = mediaElement && mediaElement.hasTrait(MediaTraitType.SEEK);
+			enabled = media && media.hasTrait(MediaTraitType.SEEK);
 		}
 		
 		private function getBufferTime():Number
 		{
 			var result:Number = 0;
 			
-			var loadable:NetStreamLoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+			var loadable:NetStreamLoadTrait = media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			if (loadable)
 			{
 				result = loadable.netStream.bufferTime;

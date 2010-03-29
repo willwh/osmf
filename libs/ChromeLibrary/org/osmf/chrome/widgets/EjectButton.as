@@ -28,7 +28,7 @@ package org.osmf.chrome.widgets
 	{
 		override protected function processMediaElementChange(oldElement:MediaElement):void
 		{
-			visible = mediaElement != null;
+			visible = media != null;
 		}
 	}
 }

@@ -42,11 +42,11 @@ package org.osmf.chrome.widgets
 				autoHideWatcher = null;
 			}
 			
-			if (mediaElement != null)
+			if (media != null)
 			{
 				autoHideWatcher
 					= new MetadataWatcher
-						( mediaElement.metadata
+						( media.metadata
 						, ChromeMetadata.CHROME_METADATA_KEY
 						, ChromeMetadata.AUTO_HIDE
 						, autoHideChangeCallback
@@ -64,9 +64,9 @@ package org.osmf.chrome.widgets
 		
 		override protected function onMouseClick(event:MouseEvent):void
 		{
-			if (mediaElement)
+			if (media)
 			{
-				var metadata:Metadata = mediaElement.getMetadata(ChromeMetadata.CHROME_METADATA_KEY);
+				var metadata:Metadata = media.getMetadata(ChromeMetadata.CHROME_METADATA_KEY);
 				if (metadata)
 				{
 					metadata.addValue(ChromeMetadata.AUTO_HIDE, !matchingAutoHideValue);
@@ -75,7 +75,7 @@ package org.osmf.chrome.widgets
 				{
 					metadata = new Metadata();
 					metadata.addValue(ChromeMetadata.AUTO_HIDE, !matchingAutoHideValue);
-					mediaElement.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata);
+					media.addMetadata(ChromeMetadata.CHROME_METADATA_KEY, metadata);
 				}
 			}
 		}

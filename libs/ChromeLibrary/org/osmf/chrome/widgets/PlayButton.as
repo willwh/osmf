@@ -39,7 +39,7 @@ package org.osmf.chrome.widgets
 		
 		override protected function onMouseClick(event:MouseEvent):void
 		{
-			var playable:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var playable:PlayTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			playable.play();
 		}
 		

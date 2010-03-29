@@ -37,13 +37,13 @@ package org.osmf.chrome.widgets
 		
 		override protected function onMouseClick(event:MouseEvent):void
 		{
-			var playable:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var playable:PlayTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			playable.stop();
 			
 			// On stop being invoked, rewind manually. NOTE: this is a work-around
 			// for the PlayTrait currently not doing so automatically. See bug report
 			// FM-350.
-			var seekable:SeekTrait = mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait;
+			var seekable:SeekTrait = media.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			if (seekable && seekable.canSeekTo(0))
 			{
 				seekable.seek(0);

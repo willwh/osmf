@@ -22,36 +22,19 @@
 
 package
 {
-	import flash.display.Sprite;
-	import flash.display.Stage;
-	import flash.display.StageAlign;
-	import flash.display.StageDisplayState;
-	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.ui.ContextMenuItem;
+	import flash.display.*;
+	import flash.events.*;
 	
-	import org.osmf.chrome.configuration.WidgetsParser;
-	import org.osmf.chrome.debug.FPSMeter;
-	import org.osmf.chrome.debug.MemoryMeter;
-	import org.osmf.chrome.widgets.AlertDialog;
-	import org.osmf.chrome.widgets.EjectButton;
-	import org.osmf.chrome.widgets.URLInput;
-	import org.osmf.chrome.widgets.Widget;
-	import org.osmf.containers.MediaContainer;
-	import org.osmf.events.MediaErrorEvent;
-	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
-	import org.osmf.layout.LayoutRenderer;
-	import org.osmf.layout.LayoutTargetSprite;
-	import org.osmf.media.DefaultMediaFactory;
-	import org.osmf.media.MediaElement;
-	import org.osmf.media.MediaFactory;
-	import org.osmf.media.MediaPlayer;
-	import org.osmf.media.URLResource;
-	import org.osmf.player.configuration.PlayerConfiguration;
-	import org.osmf.player.debug.DebuggerElementProxy;
-	import org.osmf.player.debug.DebuggerLoggerFactory;
-	import org.osmf.player.preloader.Preloader;
+	import org.osmf.chrome.configuration.*;
+	import org.osmf.chrome.debug.*;
+	import org.osmf.chrome.widgets.*;
+	import org.osmf.containers.*;
+	import org.osmf.events.*;
+	import org.osmf.layout.*;
+	import org.osmf.media.*;
+	import org.osmf.player.configuration.*;
+	import org.osmf.player.debug.*;
+	import org.osmf.player.preloader.*;
 	
 	CONFIG::DEBUG 
 	{
@@ -110,7 +93,7 @@ package
 		private function setupMediaPlayer():void
 		{
 			// Construct a media player instance. This will help in loading
-			// the element that the factory will construct:
+			// the media that the factory will construct:
 			player = new MediaPlayer();
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
@@ -147,8 +130,11 @@ package
 			}
 			
 			var urlInput:URLInput = widgetsParser.getWidget("urlInput") as URLInput;
-			urlInput.addEventListener(Event.CHANGE, onInputURLChange);
-			urlInput.url = configuration.url;
+			if (urlInput)
+			{
+				urlInput.addEventListener(Event.CHANGE, onInputURLChange);
+				urlInput.url = configuration.url;
+			}
 			
 			var button:EjectButton = widgetsParser.getWidget("ejectButton") as EjectButton;
 			if (button)
@@ -166,24 +152,22 @@ package
 		
 		private function updateTargetElement(value:MediaElement):void
 		{
-			if (value != element)
+			if (value != media)
 			{
-				if (element)
+				// Remove the current media from the container:
+				if (media)
 				{
-					container.removeMediaElement(element);
+					container.removeMediaElement(media);
 				}
 				
-				if (player.playing)
-				{
-					player.stop();
-				}
-				
-				player.media = null;
+				// Remove the current media reference from all widgets: 
 				for each (var widget:Widget in widgetsParser.widgets)
 				{
-					widget.mediaElement = null;
+					widget.media = null;
 				}
 				
+				// When debugging, wrap the media in a proxy, so its events
+				// can be reflected:
 				CONFIG::DEBUG
 				{
 					if (value)
@@ -194,19 +178,19 @@ package
 					preloader.debugger.send("TRACE", "media change", value);
 				}
 				
-				element
-					= player.media 
-					= value;
+				// Set the new main media element:
+				media = player.media = value;
 					
-				if (element)
+				if (media)
 				{
+					// Forward a reference to all chrome widgets:
 					for each (widget in widgetsParser.widgets)
 					{
-						widget.mediaElement = element;
+						widget.media = media;
 					}
 					
-					// Add the element to the media container:
-					container.addMediaElement(element);
+					// Add the media to the media container:
+					container.addMediaElement(media);
 				}
 			}
 		}
@@ -260,20 +244,14 @@ package
 		private var preloader:Preloader;
 		private var _stage:Stage;
 		
-		private var osmfMenuItem:ContextMenuItem;
-		
 		private var configuration:PlayerConfiguration;
 		private var factory:MediaFactory;
+		private var media:MediaElement;
 		private var player:MediaPlayer;
-		
-		private var element:MediaElement;
-		
-		private var container:MediaContainer;
 		private var containerRenderer:LayoutRenderer;
+		private var container:MediaContainer;
 		
 		private var widgetsParser:WidgetsParser; 
-		
 		private var alert:AlertDialog;
-		private var overlay:LayoutTargetSprite;
 	}
 }            

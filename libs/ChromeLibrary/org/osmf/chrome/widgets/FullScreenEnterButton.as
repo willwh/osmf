@@ -72,12 +72,12 @@ package org.osmf.chrome.widgets
 		private function onAddedToStage(event:Event):void
 		{
 			stage.addEventListener(FullScreenEvent.FULL_SCREEN, onFullScreenEvent);
-			processRequiredTraitsAvailable(mediaElement);
+			processRequiredTraitsAvailable(media);
 		}
 		
 		private function onFullScreenEvent(event:FullScreenEvent):void
 		{
-			processRequiredTraitsAvailable(mediaElement);
+			processRequiredTraitsAvailable(media);
 		}
 		
 		/* static */

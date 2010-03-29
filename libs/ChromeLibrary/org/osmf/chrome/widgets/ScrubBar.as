@@ -156,12 +156,12 @@ package org.osmf.chrome.widgets
 			return _requiredTraits;
 		}
 		
-		override protected function processRequiredTraitsAvailable(mediaElement:MediaElement):void
+		override protected function processRequiredTraitsAvailable(media:MediaElement):void
 		{
 			updateState();
 		}
 		
-		override protected function processRequiredTraitsUnavailable(mediaElement:MediaElement):void
+		override protected function processRequiredTraitsUnavailable(media:MediaElement):void
 		{
 			updateState();
 		}
@@ -181,14 +181,14 @@ package org.osmf.chrome.widgets
 		
 		private function updateState():void
 		{
-			visible = mediaElement != null;
-			scrubber.enabled = mediaElement ? mediaElement.hasTrait(MediaTraitType.SEEK) : false;
+			visible = media != null;
+			scrubber.enabled = media ? media.hasTrait(MediaTraitType.SEEK) : false;
 			updateTimerState();
 		}
 		
 		private function updateTimerState():void
 		{
-			var temporal:TimeTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait : null;
+			var temporal:TimeTrait = media ? media.getTrait(MediaTraitType.TIME) as TimeTrait : null;
 			if (temporal == null)
 			{
 				currentPositionTimer.stop();
@@ -203,7 +203,7 @@ package org.osmf.chrome.widgets
 		
 		private function onTimerTick(event:Event = null):void
 		{
-			var temporal:TimeTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait : null;
+			var temporal:TimeTrait = media ? media.getTrait(MediaTraitType.TIME) as TimeTrait : null;
 			if (temporal != null)
 			{
 				var duration:Number = temporal.duration;
@@ -245,7 +245,7 @@ package org.osmf.chrome.widgets
 		
 		private function onScrubberStart(event:ScrubberEvent):void
 		{
-			var playable:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			var playable:PlayTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (playable)
 			{
 				preScrubPlayState = playable.playState;
@@ -258,8 +258,8 @@ package org.osmf.chrome.widgets
 		
 		private function onScrubberUpdate(event:ScrubberEvent = null):void
 		{
-			var temporal:TimeTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.TIME) as TimeTrait : null;
-			var seekable:SeekTrait = mediaElement ? mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait : null;
+			var temporal:TimeTrait = media ? media.getTrait(MediaTraitType.TIME) as TimeTrait : null;
+			var seekable:SeekTrait = media ? media.getTrait(MediaTraitType.SEEK) as SeekTrait : null;
 			if (temporal && seekable)
 			{
 				var time:Number = temporal.duration * (scrubber.x + scrubber.width / 2 - scrubberStart) / (scrubberEnd - scrubberStart);
@@ -289,7 +289,7 @@ package org.osmf.chrome.widgets
 			
 			if (preScrubPlayState)
 			{
-				var playable:PlayTrait = mediaElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+				var playable:PlayTrait = media.getTrait(MediaTraitType.PLAY) as PlayTrait;
 				if (playable)
 				{
 					if (playable.playState != preScrubPlayState)
