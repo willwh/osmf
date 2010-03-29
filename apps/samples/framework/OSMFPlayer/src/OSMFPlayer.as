@@ -57,7 +57,7 @@ package
 				Log.loggerFactory = new DebuggerLoggerFactory(preloader.debugger);
 			}
 			
-			// Set the SWF scale mode, and listen to the _stage change
+			// Set the SWF scale mode, and listen to the stage change
 			// dimensions:
 			_stage = preloader.stage;
 			_stage.scaleMode = StageScaleMode.NO_SCALE;
