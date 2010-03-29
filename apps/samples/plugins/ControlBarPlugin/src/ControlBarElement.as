@@ -103,7 +103,7 @@ package
 						&&	targetMetadata.getValue(ID) == settings.getValue(ID)
 						)
 					{
-						controlBar.mediaElement = target;
+						controlBar.media = target;
 					}
 				}
 			}
