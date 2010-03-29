@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package
+package org.osmf.player.debug
 {
 	import flash.events.AsyncErrorEvent;
 	import flash.events.SecurityErrorEvent;

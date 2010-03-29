@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package
+package org.osmf.player.configuration
 {
 	public class PlayerConfiguration
 	{

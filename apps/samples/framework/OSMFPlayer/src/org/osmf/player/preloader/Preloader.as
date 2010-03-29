@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package
+package org.osmf.player.preloader
 {
 	import flash.display.MovieClip;
 	import flash.display.StageAlign;
@@ -29,6 +29,7 @@ package
 	import flash.utils.getDefinitionByName;
 	
 	import org.osmf.chrome.configuration.Configuration;
+	import org.osmf.player.debug.Debugger;
 
 	public class Preloader extends MovieClip
 	{

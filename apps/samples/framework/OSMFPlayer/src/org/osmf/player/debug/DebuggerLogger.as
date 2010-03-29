@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package
+package org.osmf.player.debug
 {
 	import org.osmf.logging.TraceLogger;
 	

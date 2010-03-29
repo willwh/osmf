@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package
+package org.osmf.player.application
 {
 	import flash.display.Sprite;
 	import flash.display.Stage;
