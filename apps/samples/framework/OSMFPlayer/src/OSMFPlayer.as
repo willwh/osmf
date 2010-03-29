@@ -20,7 +20,7 @@
 *  
 *****************************************************/
 
-package org.osmf.player.application
+package
 {
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -29,7 +29,6 @@ package org.osmf.player.application
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.external.ExternalInterface;
 	import flash.ui.ContextMenuItem;
 	
 	import org.osmf.chrome.configuration.WidgetsParser;
@@ -49,13 +48,17 @@ package org.osmf.player.application
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
+	import org.osmf.player.configuration.PlayerConfiguration;
+	import org.osmf.player.debug.DebuggerElementProxy;
+	import org.osmf.player.debug.DebuggerLoggerFactory;
+	import org.osmf.player.preloader.Preloader;
 	
 	CONFIG::DEBUG 
 	{
 	import org.osmf.logging.Log;
 	}
 	
-	[Frame(factoryClass="Preloader")]
+	[Frame(factoryClass="org.osmf.player.preloader.Preloader")]
 	[SWF(backgroundColor="0x000000", frameRate="25", width="640", height="380")]
 	public class OSMFPlayer extends Sprite
 	{
