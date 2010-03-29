@@ -238,7 +238,15 @@ package
 		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
-			alert.alert("Error", event.error.message + "\n" + event.error.detail);
+			var message:String = event.error.message + "\n" + event.error.detail;
+			if (alert)
+			{
+				alert.alert("Error", message);
+			}
+			else
+			{
+				trace("Error:",event.error.message + "\n" + event.error.detail); 
+			}
 		}
 		
 		private function onIsDynamicStreamChange(event:MediaPlayerCapabilityChangeEvent):void
