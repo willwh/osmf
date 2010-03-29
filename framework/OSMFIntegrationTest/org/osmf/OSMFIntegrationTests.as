@@ -25,8 +25,8 @@ package org.osmf
 	
 	import org.osmf.elements.*;
 	import org.osmf.media.*;
+	import org.osmf.media.pluginClasses.*;
 	import org.osmf.net.*;
-	import org.osmf.plugin.*;
 	import org.osmf.utils.*;
 
 	CONFIG::FLASH_10_1
@@ -70,14 +70,11 @@ package org.osmf
 			addTestSuite(TestSWFLoaderIntegration);
 			addTestSuite(TestSWFElementIntegration)
 			
-//			addTestSuite(TestDynamicPluginLoaderIntegration);
+			addTestSuite(TestDynamicPluginLoaderIntegration);
 			
-//			addTestSuite(TestPluginManagerIntegration);
+			addTestSuite(TestPluginManagerIntegration);
 
 			addTestSuite(TestF4MLoader);	
-			
-			
-					
 		}
 	}
 }
