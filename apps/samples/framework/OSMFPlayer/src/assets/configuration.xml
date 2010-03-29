@@ -98,6 +98,14 @@
 		<asset id="cancelDown" type="bitmapFile" url="cancel_down.png"/>
 		<asset id="cancelDisabled" type="bitmapFile" url="cancel_disabled.png"/>
 		
+		<!-- ok button -->
+		<asset id="okUp" type="bitmapFile" url="ok_up.png"/>
+		<asset id="okDown" type="bitmapFile" url="ok_down.png"/>
+		<asset id="okDisabled" type="bitmapFile" url="ok_disabled.png"/>
+		
+		<!-- warning glyph -->
+		<asset id="warning" type="bitmapFile" url="warning.png"/>
+		
 	</assets>
 	
 	<!-- font assets -->
@@ -309,6 +317,55 @@
 				scrubberDisabled="scrubberDisabled"
 				track="scrubBarTrack"
 				/>
+		</widget>
+		
+		<widget
+			id="alert"
+			type="alert"
+			face="backdrop"
+			width="320"
+			height="120"
+			verticalAlign="middle"
+			horizontalAlign="center"
+			>
+			
+			<widget
+				left="10"
+				top="10"
+				face="warning"
+				/>
+				
+			<widget
+				id="captionLabel"
+				type="label"
+				top="15"
+				left="40"
+				right="10"
+				height="16"
+				/>
+				
+			<widget
+				id="messageLabel"
+				type="label"
+				top="34"
+				left="40"
+				right="10"
+				bottom="28"
+				multiline="true"
+				textAlpha="0.4"
+				selectable="true"
+				/>
+				
+			<widget
+				id="closeButton"
+				type="button"
+				upFace="okUp"
+				downFace="okDown"
+				disabledFace="okDisabled"
+				right="10"
+				bottom="10"
+				/>
+			
 		</widget>
 		
 		<widget

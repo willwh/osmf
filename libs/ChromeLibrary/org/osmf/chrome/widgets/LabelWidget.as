@@ -70,6 +70,8 @@ package org.osmf.chrome.widgets
 			textField.backgroundColor = Number(xml.@backgroundColor || NaN);
 			textField.alpha = Number(xml.@textAlpha) || 1;
 			textField.text = xml.@text;
+			textField.multiline = String(parseAttribute(xml, "multiline", "false")).toLocaleLowerCase()=="true";
+			textField.wordWrap = textField.multiline;
 		}
 		
 		override public function layout(availableWidth:Number, availableHeight:Number, deep:Boolean=true):void

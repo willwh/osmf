@@ -110,7 +110,8 @@ package org.osmf.chrome.configuration
 		//
 		
 		private static const widgetTypes:Object
-			=	{ button: ButtonWidget
+			=	{ alert: AlertDialog
+				, button: ButtonWidget
 				, pinupbutton: PinUpButton
 				, pindownbutton: PinDownButton
 				, qualitymodetoggle: QualityModeToggle

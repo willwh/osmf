@@ -35,6 +35,7 @@ package
 	import org.osmf.chrome.configuration.WidgetsParser;
 	import org.osmf.chrome.debug.FPSMeter;
 	import org.osmf.chrome.debug.MemoryMeter;
+	import org.osmf.chrome.widgets.AlertDialog;
 	import org.osmf.chrome.widgets.EjectButton;
 	import org.osmf.chrome.widgets.URLInput;
 	import org.osmf.chrome.widgets.Widget;
@@ -151,6 +152,8 @@ package
 			{
 				button.addEventListener(MouseEvent.CLICK, onEjectButtonClick);
 			}
+			
+			alert = widgetsParser.getWidget("alert") as AlertDialog;
 		}
 		
 		private function loadURL(url:String):void
@@ -232,10 +235,7 @@ package
 		
 		private function onMediaError(event:MediaErrorEvent):void
 		{
-			if (ExternalInterface.available)
-			{
-				ExternalInterface.call("onOSMFPlayerMediaError", event.error.message, event.error.detail);
-			}
+			alert.alert("Error", event.error.message + "\n" + event.error.detail);
 		}
 		
 		private function onIsDynamicStreamChange(event:MediaPlayerCapabilityChangeEvent):void
@@ -262,6 +262,7 @@ package
 		
 		private var widgetsParser:WidgetsParser; 
 		
+		private var alert:AlertDialog;
 		private var overlay:LayoutTargetSprite;
 	}
 }            
