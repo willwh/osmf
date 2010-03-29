@@ -21,7 +21,6 @@
 *****************************************************/
 package org.osmf.elements.loaderClasses
 {
-	import flash.display.ActionScriptVersion;
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
@@ -87,7 +86,7 @@ package org.osmf.elements.loaderClasses
 		/**
 		 * Loads the given LoadTrait.
 		 **/
-		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function, useCurrentSecurityDomain:Boolean):void
+		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function, useCurrentSecurityDomain:Boolean, checkPolicyFile:Boolean):void
 		{
 			var loaderLoadTrait:LoaderLoadTrait = loadTrait as LoaderLoadTrait;
 
@@ -99,8 +98,12 @@ package org.osmf.elements.loaderClasses
 			var context:LoaderContext 	= new LoaderContext();
 			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as URLResource).url.toString());
 			
-			context.checkPolicyFile = true;
-			if (useCurrentSecurityDomain)
+			context.checkPolicyFile = checkPolicyFile;
+			
+			// Local files should never be loaded into the current security domain.
+			if (	useCurrentSecurityDomain
+				&&	urlReq.url.search(/^file:\//i) == -1
+			   )
 			{
 				context.securityDomain = SecurityDomain.currentDomain;
 			}

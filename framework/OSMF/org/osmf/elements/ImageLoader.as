@@ -101,7 +101,10 @@ package org.osmf.elements
 		 */ 
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, false);
+			// No need to import into the current security domain, this is an
+			// image file.  But we do check for a policy file, since we may need
+			// pixel-level access to the image.
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, false, true);
 		}
 
 		/**

@@ -112,7 +112,9 @@ package org.osmf.elements
 		 */ 
 		override protected function executeLoad(loadTrait:LoadTrait):void
 		{
-			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain);
+			// We never check the policy file for SWFs, since SWF permissions are based
+			// on the Security.allowDomain method, not checkPolicyFile.
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain, false);
 		}
 
 		/**
