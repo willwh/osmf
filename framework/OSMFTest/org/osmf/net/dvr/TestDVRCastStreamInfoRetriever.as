@@ -63,7 +63,7 @@ package org.osmf.net.dvr
 				, addAsync(onSIRComplete, 5 * 1000 + 5000)
 				);
 				
-			sir.retreive(5, 1);
+			sir.retrieve(5, 1);
 			
 			function onSIRComplete(...args):void
 			{
@@ -87,7 +87,7 @@ package org.osmf.net.dvr
 				, addAsync(onSIRComplete, 2 * 1000 + 5000)
 				);
 				
-			sir.retreive(5, 1);
+			sir.retrieve(5, 1);
 			
 			function onSIRComplete(...args):void
 			{
@@ -110,7 +110,7 @@ package org.osmf.net.dvr
 				, addAsync(onSIRComplete, 2 * 1000 + 5000)
 				);
 				
-			sir.retreive(0, 1);
+			sir.retrieve(0, 1);
 			
 			function onSIRComplete(...args):void
 			{

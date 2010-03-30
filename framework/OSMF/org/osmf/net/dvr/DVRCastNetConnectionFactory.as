@@ -37,8 +37,11 @@ package org.osmf.net.dvr
 	/**
 	 * @private
 	 */	
-	internal class DVRCastNetConnectionFactory extends NetConnectionFactory
+	public class DVRCastNetConnectionFactory extends NetConnectionFactory
 	{
+		/**
+		 * Constructor.
+		 **/
 		public function DVRCastNetConnectionFactory()
 		{
 			addEventListener
@@ -51,11 +54,17 @@ package org.osmf.net.dvr
 			super();
 		}
 
+		/**
+		 * @private
+		 **/
 		override protected function createNetConnection():NetConnection
 		{
 			return new DVRCastNetConnection();
 		}
 
+		/**
+		 * @private
+		 **/
 		override public function create(resource:URLResource):void
 		{
 			urlResource = resource;
@@ -63,6 +72,9 @@ package org.osmf.net.dvr
 			super.create(urlResource);
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function closeNetConnection(netConnection:NetConnection):void
 		{
 			if (this.netConnection == netConnection)
@@ -102,26 +114,26 @@ package org.osmf.net.dvr
 		
 		private function onStreamSubscriptionResult(result:Object):void
 		{
-			var streamInfoRetreiver:DVRCastStreamInfoRetriever
+			var streamInfoRetriever:DVRCastStreamInfoRetriever
 				= new DVRCastStreamInfoRetriever
 					( netConnection
 					, streamName
 					);
 			
-			streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
-			streamInfoRetreiver.retreive();
+			streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
+			streamInfoRetriever.retrieve();
 		}
 		
-		private function onStreamInfoRetreiverComplete(event:Event):void
+		private function onStreamInfoRetrieverComplete(event:Event):void
 		{
-			var streamInfoRetreiver:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
+			var streamInfoRetriever:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
 			
-			if (streamInfoRetreiver.streamInfo != null)
+			if (streamInfoRetriever.streamInfo != null)
 			{
 				// Remove the completion listener:
 				removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
 			
-				if (streamInfoRetreiver.streamInfo.offline == true)
+				if (streamInfoRetriever.streamInfo.offline == true)
 				{
 					// The content is offline, signal this as a media error:
 					dispatchEvent
@@ -143,12 +155,12 @@ package org.osmf.net.dvr
 				{
 					// Instantiate a new recording info object:
 					var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
-					recordingInfo.startDuration = streamInfoRetreiver.streamInfo.currentLength;
-					recordingInfo.startOffset = calculateOffset(streamInfoRetreiver.streamInfo);
+					recordingInfo.startDuration = streamInfoRetriever.streamInfo.currentLength;
+					recordingInfo.startOffset = calculateOffset(streamInfoRetriever.streamInfo);
 					recordingInfo.startTime = new Date();
 					
 					// Add the stream info and recording info to the net connection:
-					netConnection.streamInfo = streamInfoRetreiver.streamInfo;	
+					netConnection.streamInfo = streamInfoRetriever.streamInfo;	
 					netConnection.recordingInfo = recordingInfo;
 						
 					// Now that we're done, signal completion, so the VideoElement will
@@ -166,7 +178,7 @@ package org.osmf.net.dvr
 			}
 			else
 			{
-				onServerCallError(streamInfoRetreiver.error);
+				onServerCallError(streamInfoRetriever.error);
 			}
 		}
 		

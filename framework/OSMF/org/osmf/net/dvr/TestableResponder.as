@@ -30,7 +30,7 @@ package org.osmf.net.dvr
 	 * 
 	 * Subclasses Responder in a way that allows unit testing.
 	 */	
-	public class TestableResponder extends Responder
+	internal class TestableResponder extends Responder
 	{
 		public function TestableResponder(result:Function, status:Function=null)
 		{

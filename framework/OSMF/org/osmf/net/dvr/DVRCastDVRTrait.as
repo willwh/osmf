@@ -64,8 +64,8 @@ package org.osmf.net.dvr
 				recordingInfo = connection.recordingInfo;
 				
 				// Setup 
-				streamInfoRetreiver = new DVRCastStreamInfoRetriever(connection, streamInfo.streamName); 
-				streamInfoRetreiver.addEventListener(Event.COMPLETE, onStreamInfoRetreiverComplete);
+				streamInfoRetriever = new DVRCastStreamInfoRetriever(connection, streamInfo.streamName); 
+				streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
 				
 				streamInfoUpdateTimer = new Timer(DVRCastConstants.STREAM_INFO_UPDATE_DELAY);
 				streamInfoUpdateTimer.addEventListener(TimerEvent.TIMER, onStreamInfoUpdateTimer);
@@ -119,7 +119,7 @@ package org.osmf.net.dvr
 		private var recordingInfo:DVRCastRecordingInfo;
 		
 		private var streamInfoUpdateTimer:Timer;
-		private var streamInfoRetreiver:DVRCastStreamInfoRetriever; 
+		private var streamInfoRetriever:DVRCastStreamInfoRetriever; 
 		
 		private var offset:Number;
 		
@@ -130,14 +130,14 @@ package org.osmf.net.dvr
 		
 		private function onStreamInfoUpdateTimer(event:TimerEvent):void
 		{
-			streamInfoRetreiver.retreive();
+			streamInfoRetriever.retrieve();
 		}
 		
-		private function onStreamInfoRetreiverComplete(event:Event):void
+		private function onStreamInfoRetrieverComplete(event:Event):void
 		{
-			if (streamInfoRetreiver.streamInfo != null)
+			if (streamInfoRetriever.streamInfo != null)
 			{
-				streamInfo.readFromDVRCastStreamInfo(streamInfoRetreiver.streamInfo);
+				streamInfo.readFromDVRCastStreamInfo(streamInfoRetriever.streamInfo);
 				updateProperties();
 			}
 			else

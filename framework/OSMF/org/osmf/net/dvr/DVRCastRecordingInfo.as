@@ -29,7 +29,7 @@ package org.osmf.net.dvr
 	 * Defines a recording record that holds the values that define a
 	 * recording state.
 	 */	
-	internal class DVRCastRecordingInfo
+	public class DVRCastRecordingInfo
 	{
 		public var startTime:Date = null;
 		public var startDuration:Number;

@@ -75,7 +75,7 @@ package org.osmf.net.dvr
 			return _error;
 		}
 		
-		public function retreive(retries:int = 5, timeOut:Number = 3):void
+		public function retrieve(retries:int = 5, timeOut:Number = 3):void
 		{
 			if (!isNaN(this.retries))
 			{

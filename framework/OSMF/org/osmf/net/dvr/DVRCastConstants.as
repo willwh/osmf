@@ -28,7 +28,7 @@ package org.osmf.net.dvr
 	 * 
 	 * Defines DVRCast related constants values
 	 */	
-	internal class DVRCastConstants
+	public class DVRCastConstants
 	{
 		public static const RPC_GET_STREAM_INFO:String				= "DVRGetStreamInfo";
 		public static const RPC_SUBSCRIBE:String 					= "DVRSubscribe";

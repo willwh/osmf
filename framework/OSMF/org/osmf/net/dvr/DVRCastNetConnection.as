@@ -27,7 +27,7 @@ package org.osmf.net.dvr
 	/**
 	 * @private 
 	 */
-	internal class DVRCastNetConnection extends NetConnection
+	public class DVRCastNetConnection extends NetConnection
 	{
 		public function DVRCastNetConnection()
 		{

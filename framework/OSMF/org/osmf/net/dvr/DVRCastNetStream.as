@@ -32,7 +32,7 @@ package org.osmf.net.dvr
 	/**
 	 * @private
 	 */
-	internal class DVRCastNetStream extends NetStream
+	public class DVRCastNetStream extends NetStream
 	{
 		public function DVRCastNetStream(connection:DVRCastNetConnection)
 		{
@@ -41,11 +41,17 @@ package org.osmf.net.dvr
 			recordingInfo = connection.recordingInfo;
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function play(...arguments):void
 		{
 			super.play(arguments[0], recordingInfo.startOffset, -1);	
 		}
 		
+		/**
+		 * @private
+		 **/
 		override public function play2(param:NetStreamPlayOptions):void
 		{
 			if (param)

@@ -26,6 +26,7 @@ package org.osmf.net.dvr
 	
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamType;
@@ -45,9 +46,13 @@ package org.osmf.net.dvr
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */		
-		public function DVRCastNetLoader()
+		public function DVRCastNetLoader(factory:DVRCastNetConnectionFactory=null)
 		{
-			super(new DVRCastNetConnectionFactory());
+			if (factory == null)
+			{
+				factory = new DVRCastNetConnectionFactory()
+			}
+			super(factory);
 		}
 		
 		/**

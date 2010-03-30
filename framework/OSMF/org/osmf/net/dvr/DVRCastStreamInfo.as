@@ -32,7 +32,7 @@ package org.osmf.net.dvr
 	 * 
 	 * Reflects the stream properties as exposed by DVRCast. 
 	 */	
-	internal class DVRCastStreamInfo
+	public class DVRCastStreamInfo
 	{
 		public var callTime:Date;
 		public var offline:Boolean;

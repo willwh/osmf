@@ -444,7 +444,7 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * Fetches the metadata synthesizer (if any) for the given namespace URL.
 		 * 
-		 * @param namespaceURL The namespace to retreive the set synthesizer for.
+		 * @param namespaceURL The namespace to retrieve the set synthesizer for.
 		 * @return The requested syntesizer, if it was set, null otherwise.
 		 *  
 		 *  @langversion 3.0
