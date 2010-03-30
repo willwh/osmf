@@ -24,6 +24,7 @@ package org.osmf.media.pluginClasses
 	import flash.display.DisplayObject;
 	
 	import org.osmf.elements.SWFLoader;
+	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.media.MediaFactory;
@@ -31,7 +32,6 @@ package org.osmf.media.pluginClasses
 	import org.osmf.media.PluginInfo;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
-	import org.osmf.elements.loaderClasses.LoaderLoadTrait;
 	
 	internal class DynamicPluginLoader extends PluginLoader
 	{
@@ -67,6 +67,7 @@ package org.osmf.media.pluginClasses
 			// SWF into the same security domain so that the class types are
 			// merged.
 			var swfLoader:SWFLoader = new SWFLoader(true);
+			swfLoader.validateLoadedContentFunction = validateLoadedContent;
 			swfLoader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onSWFLoaderStateChange);
 			
 			// Create a temporary LoadTrait for this purpose, so that our main
@@ -135,6 +136,14 @@ package org.osmf.media.pluginClasses
 			pluginLoadTrait.loader.unloadAndStop();
 
 			updateLoadTrait(loadTrait, LoadState.UNINITIALIZED);
+		}
+		
+		private function validateLoadedContent(displayObject:DisplayObject):Boolean
+		{
+			var pluginInfo:Object = 	displayObject.hasOwnProperty(PLUGININFO_PROPERTY_NAME)
+									?	displayObject[PLUGININFO_PROPERTY_NAME]
+									:	null;
+			return pluginInfo != null ? isPluginCompatible(pluginInfo) : false;
 		}
 		
 		private static const PLUGININFO_PROPERTY_NAME:String = "pluginInfo";

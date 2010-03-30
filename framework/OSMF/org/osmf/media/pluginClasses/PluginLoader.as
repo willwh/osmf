@@ -29,7 +29,6 @@ package org.osmf.media.pluginClasses
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.PluginInfo;
-	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.LoaderBase;
@@ -103,9 +102,8 @@ package org.osmf.media.pluginClasses
 			var invalidImplementation:Boolean = false;
 			
 			if (pluginInfo != null)
-			{				
-				if (pluginInfo.isFrameworkVersionSupported(Version.version) &&
-					isPluginVersionSupported(pluginInfo.frameworkVersion))
+			{
+				if (isPluginCompatible(pluginInfo))	
 				{
 					try
 					{
@@ -177,6 +175,37 @@ package org.osmf.media.pluginClasses
 			}
 		}
 		
+		protected function isPluginCompatible(pluginInfo:Object):Boolean
+		{
+			var isCompatible:Boolean = false;
+			
+			var version:String = 	pluginInfo.hasOwnProperty(FRAMEWORK_VERSION_PROPERTY_NAME)
+								 ?	pluginInfo[FRAMEWORK_VERSION_PROPERTY_NAME]
+								 : null;
+			if (isPluginVersionSupported(version))
+			{
+				var versionSupportedFunction:Function
+					= pluginInfo.hasOwnProperty(IS_FRAMEWORK_VERSION_SUPPORTED_PROPERTY_NAME)
+					? pluginInfo[IS_FRAMEWORK_VERSION_SUPPORTED_PROPERTY_NAME] as Function
+					: null
+				
+				if (versionSupportedFunction != null)
+				{
+					try
+					{
+						isCompatible = versionSupportedFunction(Version.version);
+					}
+					catch (error:Error)
+					{
+						// Swallow -- if the function is missing or incorrectly
+						// specified, then it's clearly not compatible.
+					}
+				}
+			}
+			
+			return isCompatible;
+		}
+
 		private function isPluginVersionSupported(pluginVersion:String):Boolean
 		{
 			if (pluginVersion == null || pluginVersion.length == 0)
@@ -223,5 +252,8 @@ package org.osmf.media.pluginClasses
 		
 		private var minimumSupportedFrameworkVersion:String;
 		private var mediaFactory:MediaFactory;
+		
+		private static const FRAMEWORK_VERSION_PROPERTY_NAME:String = "frameworkVersion";
+		private static const IS_FRAMEWORK_VERSION_SUPPORTED_PROPERTY_NAME:String = "isFrameworkVersionSupported";
 	}
 }

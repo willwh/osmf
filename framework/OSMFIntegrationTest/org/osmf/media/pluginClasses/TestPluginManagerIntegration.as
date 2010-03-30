@@ -47,7 +47,7 @@ package org.osmf.media.pluginClasses
 		{
 			var pluginResource:URLResource 
 				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, TEST_TIME));
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
@@ -56,12 +56,28 @@ package org.osmf.media.pluginClasses
 				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD);
 			}
 		}
+
+		public function testLoadDynamicPluginWithValidURLResourceAndInvalidVersion():void
+		{
+			// If this test fails, be sure to recompile the plugin SWF with an invalid version
+			// (e.g. 0.1).
+			var pluginResource:URLResource 
+				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_WITH_INVALID_VERSION_SWF_URL);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginLoadEvent, TEST_TIME));
+			pluginManager.loadPlugin(pluginResource);
+			
+			function onPluginLoadEvent(event:PluginManagerEvent):void
+			{	
+				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
+			}
+		}
 		
 		public function testLoadTwiceDynamicPluginWithValidURLResource():void
 		{
 			var pluginResource:URLResource 
 				= new URLResource(IntegrationTestUtils.REMOTE_VALID_PLUGIN_SWF_URL);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, addAsync(onPluginLoadEvent, TEST_TIME));
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, onPluginLoadEvent);
 			pluginManager.loadPlugin(pluginResource);
 			
@@ -81,7 +97,7 @@ package org.osmf.media.pluginClasses
 			var pluginResource:URLResource 
 				= new URLResource(IntegrationTestUtils.REMOTE_INVALID_PLUGIN_SWF_URL);
 			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD, onPluginLoadEvent);
-			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginLoadEvent, 500));
+			pluginManager.addEventListener(PluginManagerEvent.PLUGIN_LOAD_ERROR, addAsync(onPluginLoadEvent, TEST_TIME));
 			pluginManager.loadPlugin(pluginResource);
 			
 			function onPluginLoadEvent(event:PluginManagerEvent):void
@@ -89,6 +105,8 @@ package org.osmf.media.pluginClasses
 				assertTrue(event.type == PluginManagerEvent.PLUGIN_LOAD_ERROR);
 			}
 		}
+		
+		private static const TEST_TIME:int = 1000;
 
 		private var mediaFactory:MediaFactory;
 		private var pluginManager:PluginManager;

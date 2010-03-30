@@ -114,7 +114,7 @@ package org.osmf.elements
 		{
 			// We never check the policy file for SWFs, since SWF permissions are based
 			// on the Security.allowDomain method, not checkPolicyFile.
-			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain, false);
+			LoaderUtils.loadLoadTrait(loadTrait, updateLoadTrait, useCurrentSecurityDomain, false, validateLoadedContentFunction);
 		}
 
 		/**
@@ -137,7 +137,26 @@ package org.osmf.elements
 		// Internals
 		//
 		
+		/**
+		 * @private
+		 **/
+		public static var allowValidationOfLoadedContent:Boolean = true;  
+		
+		/**
+		 * @private
+		 **/
+		public function get validateLoadedContentFunction():Function
+		{
+			return allowValidationOfLoadedContent ? _validateLoadedContentFunction : null;
+		}
+		
+		public function set validateLoadedContentFunction(value:Function):void
+		{
+			_validateLoadedContentFunction = value;
+		}
+		
 		private var useCurrentSecurityDomain:Boolean = false;
+		private var _validateLoadedContentFunction:Function = null;
 
 		private static const MIME_TYPES_SUPPORTED:Vector.<String> = Vector.<String>(["application/x-shockwave-flash"]);
 		private static const MEDIA_TYPES_SUPPORTED:Vector.<String> = Vector.<String>([MediaType.SWF]);

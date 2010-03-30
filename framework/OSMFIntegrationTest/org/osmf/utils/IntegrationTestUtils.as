@@ -29,6 +29,7 @@ package org.osmf.utils
 		public static function set integrationTestAssetsRoot(value:String):void
 		{
 			REMOTE_VALID_PLUGIN_SWF_URL				= value + PLUGIN_NAME + "_valid.swf";
+			REMOTE_VALID_PLUGIN_WITH_INVALID_VERSION_SWF_URL = value + PLUGIN_NAME + "_validWithBadVersion.swf";
 			REMOTE_INVALID_PLUGIN_SWF_URL			= value + PLUGIN_NAME + "_invalid.swf";
 			REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL	= value + PLUGIN_NAME + "_unhandled.foo";
 		}
@@ -36,6 +37,7 @@ package org.osmf.utils
 		public static var REMOTE_VALID_SWF_URL:String = INTEGRATION_TEST_ASSET_ROOT + "BasicValid.swf";
 		
 		public static var REMOTE_VALID_PLUGIN_SWF_URL:String = INTEGRATION_TEST_ASSET_ROOT + PLUGIN_NAME + "_valid.swf";
+		public static var REMOTE_VALID_PLUGIN_WITH_INVALID_VERSION_SWF_URL:String = INTEGRATION_TEST_ASSET_ROOT + PLUGIN_NAME + "_validWithBadVersion.swf";
 		public static var REMOTE_INVALID_PLUGIN_SWF_URL:String = INTEGRATION_TEST_ASSET_ROOT + PLUGIN_NAME + "_invalid.swf";
 		public static var REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL:String = INTEGRATION_TEST_ASSET_ROOT + PLUGIN_NAME + "_unhandled.foo";
 		

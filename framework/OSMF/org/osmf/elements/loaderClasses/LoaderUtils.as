@@ -30,6 +30,7 @@ package org.osmf.elements.loaderClasses
 	import flash.events.SecurityErrorEvent;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
+	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 	import flash.system.SecurityDomain;
 	
@@ -62,14 +63,12 @@ package org.osmf.elements.loaderClasses
 						
 			var info:LoaderInfo = loader.contentLoaderInfo;  
 			
+			// The display object must be a loader in order to support crossdomain
+			// SWF loading.
 			
-			//The display object must be a loader in order to support crossdomain
-			//swf loading.
-			
-			//The content of a loaded swf can be accessed (at the developers discrection) 
-			// by casting the display object back to a loader and accessing it's content property.
+			// The content of a loaded SWF can be accessed (at the developer's discrection) 
+			// by casting the display object back to a loader and accessing its content property.
 			displayObject = loader;
-			
 			
 			// Add a scroll rect, to allow the loaded content to
 			// overdraw its bounds, while maintaining scale, and size
@@ -85,27 +84,55 @@ package org.osmf.elements.loaderClasses
 		
 		/**
 		 * Loads the given LoadTrait.
+		 * 
+		 * @param loadTrait The LoadTrait whose URL represents the image or SWF to load.
+		 * @param updateLoadTraitFunction Function to invoke when the LoadTrait's state changes.
+		 * @param useCurrentSecurityDomain Indicates whether the content should be loaded into
+		 * the current security domain, or the default.  The former should be used for SWFs whose
+		 * content needs to be accessed (and which needs to access player content).  The latter
+		 * should be used for images, or for SWFs that can be isolated.
+		 * @param checkPolicyFile Indicates whether the load operation should check for the
+		 * presence of a policy file on the server.  Should be true for images (if pixel-level
+		 * access is required, false for SWFs (since SWF security is handled in a different way).
+		 * @param validateLoadedContentFunction Function to invoke in order to validate loaded
+		 * content.  When this param is non-null, the content will be loaded into a separate
+		 * ApplicationDomain so that class types are not merged.  This allows the loading
+		 * application to inspect player and SWF classes separately.  If the function returns
+		 * true, then the content will be loaded into the current security domain.  If false,
+		 * then this will be treated as a load error.
 		 **/
-		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function, useCurrentSecurityDomain:Boolean, checkPolicyFile:Boolean):void
+		public static function loadLoadTrait(loadTrait:LoadTrait, updateLoadTraitFunction:Function, useCurrentSecurityDomain:Boolean, checkPolicyFile:Boolean, validateLoadedContentFunction:Function=null):void
 		{
 			var loaderLoadTrait:LoaderLoadTrait = loadTrait as LoaderLoadTrait;
 
 			var loader:Loader = new Loader();
 			loaderLoadTrait.loader = loader;
 			
-			updateLoadTraitCallback(loadTrait, LoadState.LOADING);
+			updateLoadTraitFunction(loadTrait, LoadState.LOADING);
 			
-			var context:LoaderContext 	= new LoaderContext();
-			var urlReq:URLRequest 		= new URLRequest((loadTrait.resource as URLResource).url.toString());
+			var context:LoaderContext = new LoaderContext();
+			var urlReq:URLRequest = new URLRequest((loadTrait.resource as URLResource).url.toString());
 			
 			context.checkPolicyFile = checkPolicyFile;
-			
+
 			// Local files should never be loaded into the current security domain.
 			if (	useCurrentSecurityDomain
 				&&	urlReq.url.search(/^file:\//i) == -1
+				&&  loader.contentLoaderInfo.loaderURL.search(/^file:\//i) == -1
 			   )
 			{
 				context.securityDomain = SecurityDomain.currentDomain;
+			}
+			
+			if (validateLoadedContentFunction != null)
+			{
+				// Don't load into the default ApplicationDomain.  Instead,
+				// we'll load into a child of the system ApplicationDomain
+				// (so that class types) don't get merged.  If the validation
+				// function returns true, then we'll execute a second load,
+				// this time into the default ApplicationDomain (so that class
+				// types are merged).
+				context.applicationDomain = new ApplicationDomain();
 			}
 			
 			toggleLoaderListeners(loader, true);
@@ -142,7 +169,40 @@ package org.osmf.elements.loaderClasses
 			{
 				toggleLoaderListeners(loader, false);
 				
-				updateLoadTraitCallback(loadTrait, LoadState.READY);
+				if (validateLoadedContentFunction != null)
+				{
+					var validated:Boolean = validateLoadedContentFunction(loader.content);
+					if (validated)
+					{
+						// Unload the loaded SWF, we don't need it anymore.
+						loader.unloadAndStop();
+						loader = null;
+						
+						loadLoadTrait(loadTrait, updateLoadTraitFunction, useCurrentSecurityDomain, false, null);
+					}
+					else
+					{
+						// Unload the loaded SWF, we don't need it anymore.
+						loader.unloadAndStop();
+						loader = null;
+						
+						updateLoadTraitFunction(loadTrait, LoadState.LOAD_ERROR);
+						loadTrait.dispatchEvent
+							( new MediaErrorEvent
+								( MediaErrorEvent.MEDIA_ERROR
+								, false
+								, false
+								, new MediaError
+									( MediaErrorCodes.IO_ERROR
+									)
+								)
+							);
+					}
+				}
+				else
+				{
+					updateLoadTraitFunction(loadTrait, LoadState.READY);
+				}
 			}
 
 			function onIOError(ioEvent:IOErrorEvent, ioEventDetail:String=null):void
@@ -150,7 +210,7 @@ package org.osmf.elements.loaderClasses
 				toggleLoaderListeners(loader, false);
 				loader = null;
 				
-				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR);
+				updateLoadTraitFunction(loadTrait, LoadState.LOAD_ERROR);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -169,7 +229,7 @@ package org.osmf.elements.loaderClasses
 				toggleLoaderListeners(loader, false);
 				loader = null;
 				
-				updateLoadTraitCallback(loadTrait, LoadState.LOAD_ERROR);
+				updateLoadTraitFunction(loadTrait, LoadState.LOAD_ERROR);
 				loadTrait.dispatchEvent
 					( new MediaErrorEvent
 						( MediaErrorEvent.MEDIA_ERROR
@@ -183,16 +243,16 @@ package org.osmf.elements.loaderClasses
 					);
 			}
 		}
-		
+
 		/**
 		 * Unloads the given LoadTrait.
 		 **/
-		public static function unloadLoadTrait(loadTrait:LoadTrait, updateLoadTraitCallback:Function):void
+		public static function unloadLoadTrait(loadTrait:LoadTrait, updateLoadTraitFunction:Function):void
 		{
 			var loaderLoadTrait:LoaderLoadTrait = loadTrait as LoaderLoadTrait;
-			updateLoadTraitCallback(loadTrait, LoadState.UNLOADING);			
+			updateLoadTraitFunction(loadTrait, LoadState.UNLOADING);			
 			loaderLoadTrait.loader.unloadAndStop();
-			updateLoadTraitCallback(loadTrait, LoadState.UNINITIALIZED);
+			updateLoadTraitFunction(loadTrait, LoadState.UNINITIALIZED);
 		}
 		
 		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
