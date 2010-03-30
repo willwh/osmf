@@ -295,7 +295,7 @@ package org.osmf.media
 						updateTraitListeners(traitType, true);
 					}
 				}
-				dispatchEvent(new Event("mediaChange"));				
+				dispatchEvent(new MediaElementChangeEvent(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE));				
 			}
 		}
 		
@@ -1323,6 +1323,10 @@ package org.osmf.media
 				return;
 			}
 			
+			// The default values on each trait property here are checked, events are dispatched if the traits values
+			// is different from the default MediaPlayer's values.  Default values are listed in the ASDocs for the various
+			// properties.
+			
 			var eventType:String;	
 			switch (traitType)
 			{
@@ -1337,12 +1341,15 @@ package org.osmf.media
 					{
 						_currentTimeTimer.stop();					
 					}					
-					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;	
-					if (TimeTrait(media.getTrait(MediaTraitType.TIME)).currentTime != 0)
+					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;
+					var timeTrait:TimeTrait = TimeTrait(media.getTrait(MediaTraitType.TIME));
+										
+					if (timeTrait.currentTime != 0)
 					{
 						dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
 					}
-					if (TimeTrait(media.getTrait(MediaTraitType.TIME)).duration != 0)
+					
+					if (timeTrait.duration != 0)
 					{
 						dispatchEvent(new TimeEvent(TimeEvent.DURATION_CHANGE, false, false, duration));	
 					}					
@@ -1350,15 +1357,16 @@ package org.osmf.media
 				case MediaTraitType.PLAY:						
 					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 					_canPlay = add;	
+					var playTrait:PlayTrait = PlayTrait(media.getTrait(MediaTraitType.PLAY));
 					if (autoPlay && canPlay && !playing)
 					{
 						play();
 					}
-					else if (PlayTrait(media.getTrait(MediaTraitType.PLAY)).playState != PlayState.STOPPED)
+					else if (playTrait.playState != PlayState.STOPPED)
 					{
-						dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, add ? PlayTrait(media.getTrait(MediaTraitType.PLAY)).playState : PlayState.STOPPED));
+						dispatchEvent(new PlayEvent(PlayEvent.PLAY_STATE_CHANGE, false, false, add ? playTrait.playState : PlayState.STOPPED));
 					}
-					if (PlayTrait(media.getTrait(MediaTraitType.PLAY)).canPause)
+					if (playTrait.canPause)
 					{
 						dispatchEvent(new PlayEvent(PlayEvent.CAN_PAUSE_CHANGE, false, false, null, add));
 					}							
@@ -1366,11 +1374,12 @@ package org.osmf.media
 					break;	
 				case MediaTraitType.AUDIO:		
 					_hasAudio = add;
+					var audioTrait:AudioTrait = AudioTrait(media.getTrait(MediaTraitType.AUDIO));
 					if (mediaPlayerVolumeSet)
 					{
 						volume = mediaPlayerVolume;
 					}
-					else if (mediaPlayerVolume != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).volume)
+					else if (mediaPlayerVolume != audioTrait.volume)
 					{
 						dispatchEvent(new AudioEvent(AudioEvent.VOLUME_CHANGE, false, false, muted, volume, audioPan));
 					}
@@ -1378,7 +1387,7 @@ package org.osmf.media
 					{
 						muted = mediaPlayerMuted;
 					}
-					else if (mediaPlayerMuted != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).muted)
+					else if (mediaPlayerMuted != audioTrait.muted)
 					{
 						dispatchEvent(new AudioEvent(AudioEvent.MUTED_CHANGE, false, false, muted,  volume, audioPan));
 					}
@@ -1386,7 +1395,7 @@ package org.osmf.media
 					{
 						audioPan = mediaPlayerAudioPan;
 					}
-					else if (mediaPlayerAudioPan != AudioTrait(media.getTrait(MediaTraitType.AUDIO)).pan)
+					else if (mediaPlayerAudioPan != audioTrait.pan)
 					{
 						dispatchEvent(new AudioEvent(AudioEvent.PAN_CHANGE, false, false, muted, volume, audioPan));
 					}				
@@ -1395,7 +1404,7 @@ package org.osmf.media
 				case MediaTraitType.SEEK:
 					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE, onSeeking);
 					_canSeek = add;					
-					if ( SeekTrait(media.getTrait(MediaTraitType.SEEK)).seeking != false)
+					if (SeekTrait(media.getTrait(MediaTraitType.SEEK)).seeking)
 					{
 						dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, add));
 					}					
@@ -1403,6 +1412,7 @@ package org.osmf.media
 					break;
 				case MediaTraitType.DYNAMIC_STREAM:					
 					_isDynamicStream = add;	
+					var dynamicStreamTrait:DynamicStreamTrait = DynamicStreamTrait(media.getTrait(MediaTraitType.DYNAMIC_STREAM));
 					if (mediaPlayerMaxAllowedDynamicStreamIndexSet)
 					{
 						maxAllowedDynamicStreamIndex = mediaPlayerMaxAllowedDynamicStreamIndex;
@@ -1411,11 +1421,11 @@ package org.osmf.media
 					{
 						autoDynamicStreamSwitch = mediaPlayerAutoDynamicStreamSwitch;
 					}
-					else if (mediaPlayerAutoDynamicStreamSwitch != DynamicStreamTrait(media.getTrait(MediaTraitType.DYNAMIC_STREAM)).autoSwitch)
+					else if (mediaPlayerAutoDynamicStreamSwitch != dynamicStreamTrait.autoSwitch)
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.AUTO_SWITCH_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch)); 
 					}
-					if (DynamicStreamTrait(media.getTrait(MediaTraitType.DYNAMIC_STREAM)).switching) //If we are in the middle of a switch, notify.
+					if (dynamicStreamTrait.switching) //If we are in the middle of a switch, notify.
 					{
 						dispatchEvent(new DynamicStreamEvent(DynamicStreamEvent.SWITCHING_CHANGE, false, false, dynamicStreamSwitching, autoDynamicStreamSwitch));
 					}
@@ -1425,12 +1435,12 @@ package org.osmf.media
 				case MediaTraitType.DISPLAY_OBJECT:						
 					eventType = MediaPlayerCapabilityChangeEvent.HAS_DISPLAY_OBJECT_CHANGE;	
 					_hasDisplayObject = add;
-					if (DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).displayObject != null)
+					var displayObjectTrait:DisplayObjectTrait = DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT));
+					if (displayObjectTrait.displayObject != null)
 					{
 						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					}
-					if (DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).mediaHeight != 0 ||
-						DisplayObjectTrait(media.getTrait(MediaTraitType.DISPLAY_OBJECT)).mediaWidth != 0)
+					if (displayObjectTrait.mediaHeight != 0 || displayObjectTrait.mediaWidth != 0)
 					{
 						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					}					
@@ -1438,11 +1448,12 @@ package org.osmf.media
 				case MediaTraitType.LOAD:					
 					changeListeners(add, traitType, LoadEvent.LOAD_STATE_CHANGE, onLoadState);			
 					_canLoad = add;		
-					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesLoaded > 0)
+					var loadTrait:LoadTrait = LoadTrait(media.getTrait(MediaTraitType.LOAD));
+					if (loadTrait.bytesLoaded > 0)
 					{
 						dispatchEvent(new LoadEvent(LoadEvent.BYTES_LOADED_CHANGE, false, false, null, bytesLoaded));
 					}
-					if (LoadTrait(media.getTrait(MediaTraitType.LOAD)).bytesTotal > 0)
+					if (loadTrait.bytesTotal > 0)
 					{
 						dispatchEvent(new LoadEvent(LoadEvent.BYTES_TOTAL_CHANGE, false, false, null, bytesTotal));
 					}	
@@ -1474,11 +1485,12 @@ package org.osmf.media
 					changeListeners(add, traitType, BufferEvent.BUFFERING_CHANGE, onBuffering);					
 					eventType = MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE;	
 					_canBuffer = add;
+					var bufferTrait:BufferTrait = BufferTrait(media.getTrait(MediaTraitType.BUFFER));
 					if (mediaPlayerBufferTimeSet)
 					{
 						bufferTime = mediaPlayerBufferTime;	
 					}
-					else if (mediaPlayerBufferTime != BufferTrait(media.getTrait(MediaTraitType.BUFFER)).bufferTime)
+					else if (mediaPlayerBufferTime != bufferTrait.bufferTime)
 					{
 						dispatchEvent(new BufferEvent(BufferEvent.BUFFER_TIME_CHANGE, 
 							false, 
@@ -1486,7 +1498,7 @@ package org.osmf.media
 							false,
 							bufferTime));
 					}
-					if (BufferTrait(media.getTrait(MediaTraitType.BUFFER)).buffering)
+					if (bufferTrait.buffering)
 					{
 						dispatchEvent(new BufferEvent(BufferEvent.BUFFERING_CHANGE, false, false, buffering));
 					}					

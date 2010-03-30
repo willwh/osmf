@@ -25,6 +25,7 @@ package org.osmf.media
 	import flash.events.Event;
 	
 	import org.osmf.containers.MediaContainer;
+	import org.osmf.events.MediaElementChangeEvent;
 	import org.osmf.layout.HorizontalAlign;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.ScaleMode;
@@ -47,9 +48,9 @@ package org.osmf.media
 		public function MediaPlayerSprite(mediaPlayer:MediaPlayer = null, mediaContainer:MediaContainer = null, mediaFactory:MediaFactory = null)
 		{
 			_mediaPlayer = mediaPlayer ? mediaPlayer : new MediaPlayer();
-			_mediaFactory = mediaFactory ? mediaFactory : new DefaultMediaFactory();
+			_mediaFactory = mediaFactory;
 			_mediaContainer = mediaContainer ? mediaContainer : new MediaContainer();
-			_mediaPlayer.addEventListener("mediaChange", onMediaElementChange);
+			_mediaPlayer.addEventListener(MediaElementChangeEvent.MEDIA_ELEMENT_CHANGE, onMediaElementChange);
 			addChild(_mediaContainer);
 			
 			if (_mediaPlayer.media != null)
@@ -62,7 +63,8 @@ package org.osmf.media
 		 * Source MediaElement displayed by this <code>MediaPlayerSprite</code> .  
 		 * Setting the element will set it as the media on the mediaPlayer, 
 		 * and add it to the media container.  Setting this property to null will remove it
-		 * both from the player and container.
+		 * both from the player and container.  Existing in properties, such as layout will be
+		 * preserved on media.
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
@@ -77,7 +79,7 @@ package org.osmf.media
 		{
 			if (_media != value)
 			{
-				if (_media)
+				if (_media && _mediaContainer.containsMediaElement(_media))
 				{
 					_mediaContainer.removeMediaElement(_media);
 				}
@@ -120,7 +122,7 @@ package org.osmf.media
 
 		public function set resource(value:MediaResourceBase):void
 		{
-			media = _mediaFactory.createMediaElement(value);			
+			media = value ? mediaFactory.createMediaElement(value) : null;			
 		}
 			
 		/**
@@ -168,6 +170,7 @@ package org.osmf.media
 		 */ 
 		public function get mediaFactory():MediaFactory
 		{
+			_mediaFactory = _mediaFactory ? _mediaFactory : new DefaultMediaFactory();
 			return _mediaFactory;
 		}
 			
@@ -191,11 +194,12 @@ package org.osmf.media
 		
 		public function set scaleMode(value:String):void
 		{
+			_scaleMode = value;
 			if (_media)
 			{
 				var layout:LayoutMetadata = _media.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
-				_scaleMode = layout.scaleMode = value;
-			}			
+				layout.scaleMode = value;
+			}		
 		}
 		
 		/**
@@ -231,7 +235,7 @@ package org.osmf.media
 			return _mediaContainer.height;
 		}
 		
-		private function onMediaElementChange(event:Event):void
+		private function onMediaElementChange(event:MediaElementChangeEvent):void
 		{
 			media = _mediaPlayer.media;
 		}
