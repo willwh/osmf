@@ -144,7 +144,8 @@ package org.osmf.net
 		 * Optional start time of the streaming resource.  When specified,
 		 * the stream will be presented as a subclip, with playback beginning
 		 * at the specified start time.  Note that clipStartTime is not
-		 * currently supported for progressive videos.
+		 * currently supported for progressive videos.  The default is NaN,
+		 * which is to start at the beginning.
 		 **/ 
 		public function get clipStartTime():Number
 		{
@@ -159,8 +160,9 @@ package org.osmf.net
 		/**
 		 * Optional end time of the streaming resource.  When specified,
 		 * the stream will be presented as a subclip, with playback ending
-		 * at the specified end time.  Note that clipStartTime is not
-		 * currently supported for progressive videos.
+		 * at the specified end time.  Note that clipEndTime is not
+		 * currently supported for progressive videos.  The default is NaN,
+		 * which is to play to the end.
 		 **/ 
 		public function get clipEndTime():Number
 		{

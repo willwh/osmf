@@ -199,6 +199,20 @@ package org.osmf.net
 			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
 			assertTrue(result["start"] == NetStreamUtils.PLAY_START_ARG_RECORDED &&
 					   result["len"] == 15);
+
+			streamingResource = new StreamingURLResource("rtmp://example.com");
+			streamingResource.clipStartTime = 10;
+			streamingResource.clipEndTime = 0;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == 10 &&
+					   result["len"] == 0);
+
+			streamingResource = new StreamingURLResource("rtmp://example.com");
+			streamingResource.clipStartTime = 10;
+			streamingResource.clipEndTime = 5;
+			result = NetStreamUtils.getPlayArgsForResource(streamingResource);
+			assertTrue(result["start"] == 10 &&
+					   result["len"] == 0);
 		}
 	}
 }
