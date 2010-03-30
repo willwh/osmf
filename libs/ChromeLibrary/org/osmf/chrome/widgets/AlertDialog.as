@@ -66,6 +66,15 @@ package org.osmf.chrome.widgets
 			update();
 		}
 		
+		public function close(all:Boolean=true):void
+		{
+			if (all)
+			{
+				queue = new Vector.<Object>;
+			}
+			onCloseButtonClick();
+		}
+		
 		// Internals
 		//
 		
@@ -76,7 +85,7 @@ package org.osmf.chrome.widgets
 		private var queue:Vector.<Object>;
 		private var currentAlert:Object;
 		
-		private function onCloseButtonClick(event:MouseEvent):void
+		private function onCloseButtonClick(event:MouseEvent=null):void
 		{
 			currentAlert = queue.length ? queue.pop() : null;
 			

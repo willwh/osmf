@@ -160,6 +160,10 @@ package
 			var urlInput:URLInput = event.target as URLInput;
 			if (urlInput)
 			{
+				if (alert)
+				{
+					alert.close();
+				}
 				url = urlInput.url;
 			}
 		}
