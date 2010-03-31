@@ -34,6 +34,12 @@ package org.osmf.media.pluginClasses
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.utils.Version;
 	
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Log;
+	import org.osmf.logging.Logger;
+	}
+
 	/**
 	 * The PluginLoader class extends LoaderBase to provide
 	 * loading support for plugins.
@@ -182,7 +188,8 @@ package org.osmf.media.pluginClasses
 			var version:String = 	pluginInfo.hasOwnProperty(FRAMEWORK_VERSION_PROPERTY_NAME)
 								 ?	pluginInfo[FRAMEWORK_VERSION_PROPERTY_NAME]
 								 : null;
-			if (isPluginVersionSupported(version))
+			var isSupported:Boolean = isPluginVersionSupported(version)
+			if (isSupported)
 			{
 				var versionSupportedFunction:Function
 					= pluginInfo.hasOwnProperty(IS_FRAMEWORK_VERSION_SUPPORTED_PROPERTY_NAME)
@@ -200,6 +207,22 @@ package org.osmf.media.pluginClasses
 						// Swallow -- if the function is missing or incorrectly
 						// specified, then it's clearly not compatible.
 					}
+				}
+				
+				CONFIG::LOGGING
+				{
+					if (!isCompatible)
+					{
+						logger.debug("Player version '" + Version.version + "' not supported by loaded plugin");
+					}
+				}
+			}
+			
+			CONFIG::LOGGING
+			{
+				if (!isSupported)
+				{
+					logger.debug("Plugin version '" + version + "' not supported by loading player (whose version is " + Version.version + ")");
 				}
 			}
 			
@@ -255,5 +278,10 @@ package org.osmf.media.pluginClasses
 		
 		private static const FRAMEWORK_VERSION_PROPERTY_NAME:String = "frameworkVersion";
 		private static const IS_FRAMEWORK_VERSION_SUPPORTED_PROPERTY_NAME:String = "isFrameworkVersionSupported";
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.elements.loaderClasses.PluginLoader");
+		}
 	}
 }

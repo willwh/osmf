@@ -43,6 +43,12 @@ package org.osmf.elements.loaderClasses
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.utils.*;
+	
+	CONFIG::LOGGING
+	{
+	import org.osmf.logging.Log;
+	import org.osmf.logging.Logger;
+	}
 
 	[ExcludeClass]
 	
@@ -118,7 +124,6 @@ package org.osmf.elements.loaderClasses
 			// Local files should never be loaded into the current security domain.
 			if (	useCurrentSecurityDomain
 				&&	urlReq.url.search(/^file:\//i) == -1
-				&&  loader.contentLoaderInfo.loaderURL.search(/^file:\//i) == -1
 			   )
 			{
 				context.securityDomain = SecurityDomain.currentDomain;
@@ -133,6 +138,18 @@ package org.osmf.elements.loaderClasses
 				// this time into the default ApplicationDomain (so that class
 				// types are merged).
 				context.applicationDomain = new ApplicationDomain();
+			}
+			
+			CONFIG::LOGGING
+			{
+				if (context.securityDomain != null)
+				{
+					logger.debug("Loading SWF into current security domain: " + urlReq.url);
+				}
+				if (context.applicationDomain != null)
+				{
+					logger.debug("Loading SWF into separate application domain: " + urlReq.url);
+				}
 			}
 			
 			toggleLoaderListeners(loader, true);
@@ -225,7 +242,12 @@ package org.osmf.elements.loaderClasses
 			}
 
 			function onSecurityError(securityEvent:SecurityErrorEvent, securityEventDetail:String=null):void
-			{	
+			{
+				CONFIG::LOGGING
+				{
+					logger.debug("Security error when loading image/SWF: " + (securityEvent ? securityEvent.text : securityEventDetail));
+				}
+
 				toggleLoaderListeners(loader, false);
 				loader = null;
 				
@@ -256,5 +278,10 @@ package org.osmf.elements.loaderClasses
 		}
 		
 		private static const SWF_MIME_TYPE:String = "application/x-shockwave-flash";
+		
+		CONFIG::LOGGING
+		{
+			private static const logger:Logger = Log.getLogger("org.osmf.elements.loaderClasses.LoaderUtils");
+		}
 	}
 }
