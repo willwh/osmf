@@ -179,6 +179,8 @@ package org.osmf.media
 			var playerFrameworkVersion:Object = parseVersionString(version);
 			var pluginFrameworkVersion:Object = parseVersionString(frameworkVersion);
 			
+			// A plugin supports the specified version if it's higher than or
+			// the same as the plugin's version.
 			return 		playerFrameworkVersion.major > pluginFrameworkVersion.major
 					||	(	playerFrameworkVersion.major == pluginFrameworkVersion.major
 						&&	( 	playerFrameworkVersion.minor >= pluginFrameworkVersion.minor
@@ -197,7 +199,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function initializePlugin(resource:MediaResourceBase):void
+		public function initializePlugin(resource:MediaResourceBasel):void
 		{
 		}
 		

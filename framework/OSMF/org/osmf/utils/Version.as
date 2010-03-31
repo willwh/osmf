@@ -67,7 +67,20 @@ package org.osmf.utils
 		 */
 		public static function get lastAPICompatibleVersion():String
 		{
-			// TODO: This should probably be set to "1.0" for final release. 
+			// Note that this is used as the minimum supported version for
+			// plugins.  In other words, if a player attempts to load a plugin
+			// whose version is less than this value, then the load will fail.
+			//
+			// Generally players will be able to load older plugins, since
+			// the player's class definition will take precedence over the
+			// plugin's class definition.  However, if we make a public API
+			// change (including adding a parameter to a non-final method),
+			// then we should increment this number to the latest version
+			// number.  If we don't do so, there's a chance that a plugin
+			// will use the old API and we'll get a VerifyError when we load
+			// it.
+
+			// TODO: This should be set to "1.0" for final release.
 			return Version.version;
 		}
 		

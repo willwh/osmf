@@ -239,6 +239,8 @@ package org.osmf.media.pluginClasses
 			var minVersion:Object = parseVersionString(minimumSupportedFrameworkVersion);
 			var pVersion:Object = parseVersionString(pluginVersion);
 			
+			// A player can load a plugin provided that the plugin's version is
+			// at least as great as the minimum supported framework version.
 			return 		pVersion.major > minVersion.major
 					||	(	pVersion.major == minVersion.major
 						&&	( 	pVersion.minor > minVersion.minor
