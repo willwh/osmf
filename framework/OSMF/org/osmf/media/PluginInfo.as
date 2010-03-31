@@ -199,7 +199,7 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 
-		public function initializePlugin(resource:MediaResourceBasel):void
+		public function initializePlugin(resource:MediaResourceBase):void
 		{
 		}
 		
