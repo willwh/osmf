@@ -815,7 +815,7 @@ package org.osmf.media
 	    {
 	    	(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
 
-			if (autoRewind && canSeek)
+			if (canSeek)
 			{
 				executeAutoRewind(false);
 			}
@@ -1576,10 +1576,6 @@ package org.osmf.media
 			else if (event.playState == PlayState.PAUSED)
 			{
 				setState(MediaPlayerState.PAUSED);				
-			}
-			else // STOPPED
-			{
-				setState(MediaPlayerState.READY);
 			}
 		}
 		

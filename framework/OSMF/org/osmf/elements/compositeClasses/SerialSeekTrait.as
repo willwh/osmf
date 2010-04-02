@@ -71,7 +71,9 @@ package org.osmf.elements.compositeClasses
 			{
 				// Now, the composite is going to do a seek that crosses multiple children.
 				crossChildrenSeeking = true;
-				var wasPlaying:Boolean = isCompositePlaying();
+				
+				// Remember the current state so that we can reapply it after the seek.
+				var previousPlayState:String = getCompositePlayState();
 							
 				// Since the playhead seeks out of the child, the child needs to be stopped.
 				var childPlayTrait:PlayTrait = serialSeek.fromChild.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -113,11 +115,11 @@ package org.osmf.elements.compositeClasses
 				var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
 				if (playTrait != null)
 				{
-					if (wasPlaying)
+					if (previousPlayState == PlayState.PLAYING)
 					{
 						playTrait.play();
 					}
-					else if (playTrait.canPause)
+					else if (previousPlayState == PlayState.PAUSED && playTrait.canPause)
 					{
 						playTrait.pause();
 					}
@@ -394,10 +396,10 @@ package org.osmf.elements.compositeClasses
 				   : null;			
 		}
 		
-		private function isCompositePlaying():Boolean
+		private function getCompositePlayState():String
 		{
 			var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
-			return (playTrait == null)? false : playTrait.playState == PlayState.PLAYING;
+			return (playTrait == null) ? null : playTrait.playState;
 		}
 		
 		private var owner:MediaElement;
