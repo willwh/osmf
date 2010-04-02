@@ -96,11 +96,11 @@ package org.osmf.media
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function PluginInfo(mediaFactoryItems:Vector.<MediaFactoryItem>, mediaElementCreationNotificationFunction:Function=null)
+		public function PluginInfo(mediaFactoryItems:Vector.<MediaFactoryItem>=null, mediaElementCreationNotificationFunction:Function=null)
 		{
 			super();
 			
-			this.mediaFactoryItems = mediaFactoryItems;
+			_mediaFactoryItems = mediaFactoryItems != null ? mediaFactoryItems : new Vector.<MediaFactoryItem>();
 			_mediaElementCreationNotificationFunction = mediaElementCreationNotificationFunction;
 		}
 		
@@ -115,7 +115,7 @@ package org.osmf.media
 		 */
 		public function get numMediaFactoryItems():int
 		{
-			return mediaFactoryItems.length;
+			return _mediaFactoryItems.length;
 		}
 		
 		/**
@@ -132,7 +132,6 @@ package org.osmf.media
 			return Version.version;
 		}
 
-
 		/**
 		 * Returns the MediaFactoryItem object at the specified index.
 		 * <p>If the index is out of range, throws a
@@ -148,12 +147,12 @@ package org.osmf.media
 		 */
 		public function getMediaFactoryItemAt(index:int):MediaFactoryItem
 		{
-			if (index < 0 || index >= mediaFactoryItems.length)
+			if (index < 0 || index >= _mediaFactoryItems.length)
 			{
 				throw new RangeError(OSMFStrings.getString(OSMFStrings.INVALID_PARAM));
 			}
 			
-			return mediaFactoryItems[index] as MediaFactoryItem;
+			return _mediaFactoryItems[index] as MediaFactoryItem;
 		}
 		
 		/**
@@ -220,6 +219,23 @@ package org.osmf.media
 		{
 			return _mediaElementCreationNotificationFunction;
 		}
+		
+		// Protected
+		//
+		
+		/**
+		 * The MediaFactoryItem objects that this PluginInfo exposes.
+		 **/
+		protected final function get mediaFactoryItems():Vector.<MediaFactoryItem>
+		{
+			return _mediaFactoryItems;
+		}
+		
+		protected final function set mediaFactoryItems(value:Vector.<MediaFactoryItem>):void
+		{
+			_mediaFactoryItems = value;
+		}
+		
 
 		// Internals
 		//
@@ -244,7 +260,7 @@ package org.osmf.media
 			return {major:major, minor:minor};
 		}
 		
-		private var mediaFactoryItems:Vector.<MediaFactoryItem>;
+		private var _mediaFactoryItems:Vector.<MediaFactoryItem>;
 		private var _mediaElementCreationNotificationFunction:Function;
 	}
 }

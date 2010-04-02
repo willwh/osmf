@@ -25,6 +25,7 @@ package org.osmf.media.pluginClasses
 	import org.osmf.elements.VideoElement;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.PluginInfo;
 	import org.osmf.net.NetLoader;
 	
@@ -34,13 +35,17 @@ package org.osmf.media.pluginClasses
 
 		public function SimpleVideoPluginInfo()
 		{
+		}
+		
+		override public function initializePlugin(resource:MediaResourceBase):void
+		{
 			var netLoader:NetLoader = new NetLoader();
 			var imageLoader:ImageLoader = new ImageLoader();
 
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			items.push(new MediaFactoryItem(MEDIA_FACTORY_ITEM_ID, netLoader.canHandleResource, createVideoElement));
 			
-			super(items);
+			mediaFactoryItems = items;
 		}
 
 		private function createVideoElement():MediaElement
