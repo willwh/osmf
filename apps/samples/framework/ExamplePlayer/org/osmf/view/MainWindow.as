@@ -42,6 +42,7 @@ package org.osmf.view
 	import org.osmf.layout.VerticalAlign;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaPlayer;
+	import org.osmf.metadata.MetadataWatcher;
 	import org.osmf.utils.Version;
 	
 	public class MainWindow extends MainWindowLayout
@@ -158,6 +159,7 @@ package org.osmf.view
 			if (mediaPlayer.media != null)
 			{
 				mediaContainerUIComponent.container.removeMediaElement(mediaPlayer.media);
+				recommendationsWatcher.unwatch();
 			}
 			
 			if (value != null)
@@ -173,12 +175,15 @@ package org.osmf.view
 					value.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
 				}
 				mediaContainerUIComponent.container.addMediaElement(value);
+				
+				recommendationsWatcher = new MetadataWatcher(value.metadata, "recommendations", "open", onRecomendationsOpenChange);
+				recommendationsWatcher.watch(false);
 			}
 				
 			mediaPlayer.media = value;
 		}
 
-		private function onExampleListSelect(event:ListEvent):void
+		private function onExampleListSelect(event:ListEvent = null):void
 		{
 			if (example != null)
 			{
@@ -329,8 +334,22 @@ package org.osmf.view
 			}
 		}
 		
+		private function onRecomendationsOpenChange(value:String):void
+		{
+			for each (var example:Example in examples)
+			{
+				if (example.name == value)
+				{
+					exampleList.selectedIndex = examples.indexOf(example);
+					onExampleListSelect();
+					break;
+				}		
+			}
+		}
+		
 		private var mediaPlayer:MediaPlayer;
 		private var examples:Array;
 		private var example:Example;
+		private var recommendationsWatcher:MetadataWatcher;
 	}
 }

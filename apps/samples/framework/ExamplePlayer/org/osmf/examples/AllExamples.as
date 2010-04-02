@@ -22,6 +22,7 @@
 package org.osmf.examples
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -35,6 +36,7 @@ package org.osmf.examples
 	import org.osmf.elements.SerialElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.examples.ads.PreMidPostRollElement;
 	import org.osmf.examples.buffering.DualThresholdBufferingProxyElement;
 	import org.osmf.examples.buffering.SynchronizedParallelElement;
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
@@ -42,6 +44,7 @@ package org.osmf.examples
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
+	import org.osmf.examples.recommendations.RecomendationsElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
@@ -927,8 +930,54 @@ package org.osmf.examples
 				  	   		return elem; 
 				  	   	}
 				  	)
-				);	
+				);
+				
+				
+			examples.push
+				( new Example
+					(	"Recommendations"
+					,	"Demonstrates how a recommendations bumper can be implemented."
+					,	function():MediaElement
+						{
+							var recommendations:RecomendationsElement = new RecomendationsElement();
+							var elem:SerialElement = new SerialElement();
+							elem.addChild(new VideoElement(new URLResource(OSMF_ANIMATION)));
+							elem.addChild(recommendations);
 							
+							var layoutMetadata:LayoutMetadata = new LayoutMetadata();
+							layoutMetadata.width = 640;
+							layoutMetadata.height = 360;
+							layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
+							layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
+							layoutMetadata.scaleMode = ScaleMode.LETTERBOX;
+							
+							elem.metadata.addValue(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
+							
+							return elem;
+						}
+					)
+				);
+							
+			examples.push
+				( new Example
+					(	"Ad insertion"
+					,	"Demonstrates how pre-, post- and midroll ads can be added in such a way that the adds aren't included in the main time line."
+					,	function():MediaElement
+						{
+							var elem:PreMidPostRollElement
+								= new PreMidPostRollElement
+									( new VideoElement(new URLResource(OSMF_ANIMATION))
+									, new VideoElement(new URLResource(REMOTE_PROGRESSIVE))
+									, new VideoElement(new URLResource(OSMF_ANIMATION))
+									, new VideoElement(new URLResource(REMOTE_PROGRESSIVE2))
+									, new VideoElement(new URLResource(OSMF_ANIMATION))
+									);
+									
+							return elem;
+						}
+					)
+				);
+				
 			/* TODO: Uncomment this once we have the VAST library integrated
 			   with the build system.
 			examples.push
@@ -995,6 +1044,7 @@ package org.osmf.examples
 		private static const BEACON_URL:String					= "http://mediapm.edgesuite.net/osmf/image/adobe-lq.png";
 		private static const REMOTE_MANIFEST:String				= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/progressive.f4m";
 		private static const REMOTE_MBR_MANIFEST:String			= "http://mediapm.edgesuite.net/osmf/content/test/manifest-files/dynamic_Streaming.f4m";
+		private static const OSMF_ANIMATION:String				= "http://mediapm.edgesuite.net/osmf/content/test/logo_animated.flv";
 		
 		private static const MBR_STREAM_ITEMS:Array =
 			[ new DynamicStreamingItem("mp4:mediapm/ovp/content/demo/video/elephants_dream/elephants_dream_768x428_24.0fps_408kbps.mp4", 408, 768, 428)
