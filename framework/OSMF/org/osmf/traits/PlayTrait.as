@@ -135,6 +135,10 @@ package org.osmf.traits
 		
 		/**
 		 * Stops the media if it is not already stopped.
+		 * 
+		 * <p>When media is stopped, then any subsequent call to
+		 * <code>play</code> should start from the beginning (though
+		 * this is up to the actual implementation).</p> 
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
