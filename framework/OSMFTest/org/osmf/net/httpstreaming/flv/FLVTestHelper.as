@@ -127,5 +127,41 @@ package org.osmf.net.httpstreaming.flv
 			
 			return ba;		
 		}
+
+		public static function createFLVVideoTag(
+			tagType:int,
+			dataSize:uint,
+			timeStamp:uint,
+			streamId:uint,
+			frameType:uint,
+			codecId:uint,
+			videoData:ByteArray):ByteArray
+		{
+			var ba:ByteArray = new ByteArray();
+			
+			ba.writeByte(tagType);
+			
+			ba.writeByte((dataSize >> 16) & 0xff);
+			ba.writeByte((dataSize >> 8) & 0xff);
+			ba.writeByte(dataSize & 0xff);	
+			
+			ba.writeByte((timeStamp >> 16) & 0xff);
+			ba.writeByte((timeStamp >> 8) & 0xff);
+			ba.writeByte(timeStamp & 0xff);
+			ba.writeByte((timeStamp >> 24) & 0xff);
+			
+			ba.writeByte((streamId >> 16) & 0xff);
+			ba.writeByte((streamId >> 8) & 0xff);
+			ba.writeByte(streamId & 0xff);
+			
+			var videoFlags:uint = 0;
+			videoFlags |= ((frameType << 4) & 0xf0);
+			videoFlags |= (codecId & 0x0f);
+			ba.writeByte(videoFlags);
+			ba.writeBytes(videoData, 0, videoData.length);
+			ba.writeUnsignedInt(ba.length);
+
+			return ba;			
+		}
 	}
 }

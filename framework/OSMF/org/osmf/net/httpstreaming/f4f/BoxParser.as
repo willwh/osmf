@@ -164,6 +164,23 @@ package org.osmf.net.httpstreaming.f4f
 			return afra;
 		}
 		
+		/**
+		 * Parse and returns ABST
+		 * 
+		 * @return ABST if the current byte array from the current position is indeed an ABST, null otherwise.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
+		public function readAdobeBootstrapBox(bi:BoxInfo):AdobeBootstrapBox
+		{
+			var abst:AdobeBootstrapBox = new AdobeBootstrapBox();
+			this.parseAdobeBootstrapBox(bi, abst);
+			return abst;
+		}
+		
 		// Internals
 		//
 		

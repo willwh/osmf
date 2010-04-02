@@ -76,8 +76,8 @@ package org.osmf.net.httpstreaming
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler();
-			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler(indexHandler);
+			var fileHandler:HTTPStreamingFileHandlerBase = new HTTPStreamingF4FFileHandler();
+			var indexHandler:HTTPStreamingIndexHandlerBase = new HTTPStreamingF4FIndexHandler(fileHandler);
 			var httpNetStream:HTTPNetStream = new HTTPNetStream(connection, indexHandler, fileHandler);
 			httpNetStream.manualSwitchMode = true;
 			httpNetStream.indexInfo = HTTPStreamingUtils.createF4FIndexInfo(resource);

@@ -133,7 +133,7 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function findFragmentIdByTime(time:Number, totalDuration:Number):FragmentAccessInformation
+		public function findFragmentIdByTime(time:Number, totalDuration:Number, live:Boolean=false):FragmentAccessInformation
 		{
 			if (_fragmentDurationPairs.length <= 0)
 			{
@@ -147,11 +147,11 @@ package org.osmf.net.httpstreaming.f4f
 				fdp = _fragmentDurationPairs[i];
 				if (fdp.durationAccrued >= time)
 				{
-					return validateFragment(calculateFragmentId(_fragmentDurationPairs[i - 1], time), totalDuration);
+					return validateFragment(calculateFragmentId(_fragmentDurationPairs[i - 1], time), totalDuration, live);
 				}
 			}
 			
-			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time), totalDuration);
+			return validateFragment(calculateFragmentId(_fragmentDurationPairs[_fragmentDurationPairs.length - 1], time), totalDuration, live);
 		}
 		
 		/**
@@ -165,7 +165,7 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function validateFragment(fragId:uint, totalDuration:Number):FragmentAccessInformation
+		public function validateFragment(fragId:uint, totalDuration:Number, live:Boolean=false):FragmentAccessInformation
 		{
 			var size:uint = _fragmentDurationPairs.length - 1;
 			var fai:FragmentAccessInformation = null;
@@ -199,21 +199,24 @@ package org.osmf.net.httpstreaming.f4f
 						var fragStartTime:Number = (fragId - curFdp.firstFragment) * curFdp.duration;
 						if (timeResidue > fragStartTime)
 						{
-							fai = new FragmentAccessInformation();
-							fai.fragId = fragId;
-							fai.fragDuration = curFdp.duration;
-							if (timeResidue >= timeDistance)
+							if (!live || ((fragStartTime + curFdp.duration + curFdp.durationAccrued) <= totalDuration))
 							{
-								fai.fragmentEndTime = curFdp.durationAccrued + timeDistance;
-							}
-							else
-							{
-								fai.fragmentEndTime = curFdp.durationAccrued + timeResidue;
+								fai = new FragmentAccessInformation();
+								fai.fragId = fragId;
+								fai.fragDuration = curFdp.duration;
+								if (timeResidue >= timeDistance)
+								{
+									fai.fragmentEndTime = curFdp.durationAccrued + timeDistance;
+								}
+								else
+								{
+									fai.fragmentEndTime = curFdp.durationAccrued + timeResidue;
+								}
+								break;				
 							}
 						}						
 					}
 					
-					break;				
 				}
 			}
 			if (fai == null)
@@ -226,16 +229,19 @@ package org.osmf.net.httpstreaming.f4f
 					fragStartTime = (fragId - lastFdp.firstFragment) * lastFdp.duration;
 					if (timeResidue > fragStartTime)
 					{
-						fai = new FragmentAccessInformation();
-						fai.fragId = fragId;
-						fai.fragDuration = lastFdp.duration;
-						if (timeResidue >= timeDistance)
+						if (!live || ((fragStartTime + lastFdp.duration + lastFdp.durationAccrued) <= totalDuration))
 						{
-							fai.fragmentEndTime = lastFdp.durationAccrued + timeDistance;
-						}
-						else
-						{
-							fai.fragmentEndTime = lastFdp.durationAccrued + timeResidue;
+							fai = new FragmentAccessInformation();
+							fai.fragId = fragId;
+							fai.fragDuration = lastFdp.duration;
+							if (timeResidue >= timeDistance)
+							{
+								fai.fragmentEndTime = lastFdp.durationAccrued + timeDistance;
+							}
+							else
+							{
+								fai.fragmentEndTime = lastFdp.durationAccrued + timeResidue;
+							}
 						}
 					}						
 				}

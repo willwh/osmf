@@ -106,11 +106,12 @@ package org.osmf.net.httpstreaming
 		{
 			super(connection);
 			
-			bufferTime = 2.0;
 			_savedBytes = new ByteArray();
 			
 			this.indexHandler = indexHandler;
 			this.fileHandler = fileHandler;
+			
+			this.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 			
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
@@ -443,6 +444,24 @@ package org.osmf.net.httpstreaming
 			// this is the new common FLVTag Parser's tag handler
 			var i:int;
 			
+			if (_insertScriptDataTags)
+			{
+				for (i = 0; i < _insertScriptDataTags.length; i++)
+				{
+					var t:FLVTagScriptDataObject;
+					var bytes:ByteArray;
+					
+					t = _insertScriptDataTags[i];
+					t.timestamp = tag.timestamp;
+					
+					bytes = new ByteArray();
+					t.write(bytes);
+					_flvParserProcessed += bytes.length;
+					attemptAppendBytes(bytes);
+				}
+				_insertScriptDataTags = null;			
+			}
+				
 			if (_playForDuration >= 0)
 			{
 				if (_initialTime >= 0)	// until we know this, we don't know where to stop, and if we're enhanced-seeking then we need that logic to be what sets this up
@@ -463,24 +482,6 @@ package org.osmf.net.httpstreaming
 				}
 			}
 			
-			if (_insertScriptDataTags)
-			{
-				for (i = 0; i < _insertScriptDataTags.length; i++)
-				{
-					var t:FLVTagScriptDataObject;
-					var bytes:ByteArray;
-					
-					t = _insertScriptDataTags[i];
-					t.timestamp = tag.timestamp;
-					
-					bytes = new ByteArray();
-					t.write(bytes);
-					_flvParserProcessed += bytes.length;
-					attemptAppendBytes(bytes);
-				}
-				_insertScriptDataTags = null;			
-			}
-				
 			if (_enhancedSeekTarget < 0)
 			{
 				if (_initialTime < 0)
@@ -1332,7 +1333,6 @@ package org.osmf.net.httpstreaming
 				{
 					_qualityLevel = value;
 					qualityLevelHasChanged = true;
-
 					dispatchEvent
 						( new NetStatusEvent
 							( NetStatusEvent.NET_STATUS
@@ -1377,6 +1377,22 @@ package org.osmf.net.httpstreaming
 			CONFIG::FLASH_10_1
 			{
 				super.appendBytes(bytes);
+			}
+		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			var code:String = event.info.code;
+			if (code == "NetStream.Buffer.Empty")
+			{
+				if (bufferTime >= 2.0)
+				{
+					bufferTime += 1.0;
+				}
+				else
+				{
+					bufferTime = 2.0;
+				}
 			}
 		}
 

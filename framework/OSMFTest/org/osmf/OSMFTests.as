@@ -55,7 +55,7 @@ package org.osmf
 			
 			// change to true to run all tests against the network.
 			NetFactory.neverUseMockObjects = false;
-									
+			
 			// Logging
 			//
 
@@ -250,9 +250,11 @@ package org.osmf
 			addTestSuite(TestDownloadRatioRule);
 			addTestSuite(TestBoxParser);
 			addTestSuite(TestAdobeBootstrapBox);
-//			addTestSuite(TestAdobeFragmentRunTable);
-//			addTestSuite(TestAdobeSegmentRunTable);
+			addTestSuite(TestAdobeFragmentRunTable);
+			addTestSuite(TestAdobeSegmentRunTable);
 			addTestSuite(TestFLVHeader);
+			addTestSuite(TestFLVTagAudio);
+			addTestSuite(TestFLVTagScriptDataObject);
 			
 			// DVR
 			//

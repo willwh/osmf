@@ -22,7 +22,9 @@
 package org.osmf.events
 {
 	import flash.events.Event;
+	
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
+	import org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox;
 
 	[ExcludeClass]
 	
@@ -33,13 +35,17 @@ package org.osmf.events
 	{
 		public static const NOTIFY_SEGMENT_DURATION:String = "notifySegmentDuration";
 		public static const NOTIFY_SCRIPT_DATA:String = "notifyScriptData";
+		public static const NOTIFY_BOOTSTRAP_BOX:String = "notifyBootstrapBox";
 		
 		public function HTTPStreamingFileHandlerEvent(
-			type:String, bubbles:Boolean=false, cancelable:Boolean=false, 
+			type:String, 
+			bubbles:Boolean=false, 
+			cancelable:Boolean=false, 
 			segmentDuration:Number=0,
 			scriptDataObject:FLVTagScriptDataObject = null,
 			scriptDataFirst:Boolean = false,
-			scriptDataImmediate:Boolean = false)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
+			scriptDataImmediate:Boolean = false,
+			abst:AdobeBootstrapBox = null)	// TODO: scriptDataFirst and scriptDataImmediate could instead be a three-entry enumeration (normal, first-in-timeline, immediate)
 		{
 			super(type, bubbles, cancelable);
 			
@@ -47,6 +53,7 @@ package org.osmf.events
 			_scriptDataObject = scriptDataObject;
 			_scriptDataFirst = scriptDataFirst;
 			_scriptDataImmediate = scriptDataImmediate
+			_abst = abst;
 		}
 
 		public function get segmentDuration():Number
@@ -69,6 +76,11 @@ package org.osmf.events
 		{
 			return _scriptDataImmediate;
 		}
+		
+		public function get bootstrapBox():AdobeBootstrapBox
+		{
+			return _abst;
+		}
 	
 		override public function clone():Event
 		{
@@ -82,5 +94,6 @@ package org.osmf.events
 		private var _scriptDataObject:FLVTagScriptDataObject;
 		private var _scriptDataFirst:Boolean;
 		private var _scriptDataImmediate:Boolean;	
+		private var _abst:AdobeBootstrapBox;
 	}
 }

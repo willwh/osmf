@@ -26,7 +26,6 @@ package org.osmf.net.httpstreaming.f4f
 	
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
-	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 
 	[ExcludeClass]
 
@@ -46,11 +45,10 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function HTTPStreamingF4FFileHandler(indexHandler:HTTPStreamingIndexHandlerBase)
+		public function HTTPStreamingF4FFileHandler()
 		{
 			super();
 			
-			_indexHandler = indexHandler as HTTPStreamingF4FIndexHandler;
 		}
 		
 		/** 
@@ -146,7 +144,20 @@ package org.osmf.net.httpstreaming.f4f
 				
 				if (_nextBox.type == F4FConstants.BOX_TYPE_ABST)
 				{
-					// TODO: update the _abst
+					var abst:AdobeBootstrapBox = _parser.readAdobeBootstrapBox(_nextBox);
+					if (abst != null)
+					{
+						dispatchEvent(
+							new HTTPStreamingFileHandlerEvent(
+								HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, 
+								false, 
+								false, 
+								0, 
+								null, 
+								false, 
+								false, 
+								abst));
+					}
 				} 
 				else if (_nextBox.type == F4FConstants.BOX_TYPE_AFRA)
 				{
@@ -288,7 +299,6 @@ package org.osmf.net.httpstreaming.f4f
 		private var _parser:BoxParser = new BoxParser();
 		private var _seekToTime:Number;
 		private var _mdatBytesOffset:Number;
-		private var _indexHandler:HTTPStreamingF4FIndexHandler;
 		private var _processRequestWasSeek:Boolean = false;
 		
 		private static const MAX_BYTES_PER_MDAT_READ:uint = 5*1024;

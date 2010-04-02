@@ -32,10 +32,10 @@ package org.osmf.net.httpstreaming.flv
 			super(methodName);
 		}
 		
-		public function testBasicAudioTagStructure():void
+		public function testAACAudioTagStructure():void
 		{
 			var soundData:ByteArray = new ByteArray();
-			soundData.writeByte(1);
+			soundData.writeByte(0);
 			for (var i:int = 0; i < 10; i++)
 			{
 				soundData.writeByte(i);
@@ -44,14 +44,14 @@ package org.osmf.net.httpstreaming.flv
 			
 			var timeStamp:uint = new Date().getTime();
 			var ba:ByteArray = FLVTestHelper.createFLVAudioTag(
-				8,	// audio 
+				FLVTag.TAG_TYPE_AUDIO, 
 				soundData.length + 1, 
 				timeStamp, 
 				0,	// always 0
-				10,	// AAC
-				3,	// 44 kHz
-				1,	// snd16Bit
-				1,	// sndStereo
+				FLVTagAudio.SOUND_FORMAT_AAC,
+				3,	// SoundRate 44kHz
+				1,	// SoundSize snd16Bit
+				1,	// SoundType sndStereo
 				soundData);  
 			ba.position = 0;
 			
@@ -60,8 +60,171 @@ package org.osmf.net.httpstreaming.flv
 				var audioTag:FLVTagAudio = new FLVTagAudio();
 				audioTag.read(ba);
 				
-				assertTrue(audioTag.tagType == 8);
+				assertTrue(audioTag.tagType == FLVTag.TAG_TYPE_AUDIO);
+				assertTrue(audioTag.dataSize == soundData.length + 1);
+				assertTrue(audioTag.timestamp == timeStamp);
+				assertTrue(audioTag.soundFormat == FLVTagAudio.SOUND_FORMAT_AAC);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_44K);
+				assertTrue(audioTag.soundSize == FLVTagAudio.SOUND_SIZE_16BITS);
+				assertTrue(audioTag.soundChannels == FLVTagAudio.SOUND_CHANNELS_STEREO);
+				assertTrue(audioTag.isAACSequenceHeader);
+				assertTrue(audioTag.soundFormatByte == 175);
+				assertTrue(FLVTestHelper.compareByteArray(soundData, audioTag.data, 1));
 				
+				var soundData2:ByteArray = new ByteArray();
+				for (i = 0; i < 10; i++)
+				{
+					soundData2.writeByte(15 - i);
+				}
+				soundData2.position = 0;
+				
+				audioTag.data = soundData2;
+				assertTrue(FLVTestHelper.compareByteArray(soundData2, audioTag.data, 0));
+
+				audioTag.soundFormatByte = 0xB8;				
+				assertTrue(audioTag.soundFormat == FLVTagAudio.SOUND_FORMAT_SPEEX);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_22K);
+				assertTrue(audioTag.soundSize == FLVTagAudio.SOUND_SIZE_8BITS);
+				assertTrue(audioTag.soundChannels == FLVTagAudio.SOUND_CHANNELS_MONO);
+				
+				audioTag.soundSize = FLVTagAudio.SOUND_SIZE_16BITS;
+				assertTrue(audioTag.soundFormatByte == 0xBA);
+				
+				audioTag.soundChannels = FLVTagAudio.SOUND_CHANNELS_STEREO;
+				assertTrue(audioTag.soundFormatByte == 0xBB);
+				
+				audioTag.soundChannels = FLVTagAudio.SOUND_CHANNELS_MONO;
+				assertTrue(audioTag.soundFormatByte == 0xBA);
+
+				audioTag.soundFormat = FLVTagAudio.SOUND_FORMAT_MP3_8K;
+				assertTrue(audioTag.soundFormatByte == 0xEA);
+				
+				audioTag.soundRate = FLVTagAudio.SOUND_RATE_11K;
+				assertTrue(audioTag.soundFormatByte == 0xE6);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_11K);
+				
+				audioTag.soundRate = FLVTagAudio.SOUND_RATE_5K;
+				assertTrue(audioTag.soundFormatByte == 0xE2);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_5K);
+				
+				audioTag.soundRate = FLVTagAudio.SOUND_RATE_22K;
+				assertTrue(audioTag.soundFormatByte == 0xEA);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_22K);
+				
+				audioTag.soundSize = FLVTagAudio.SOUND_SIZE_8BITS;
+				assertTrue(audioTag.soundFormatByte == 0xE8);
+
+				try
+				{
+					audioTag.soundRate = 5;
+					assertTrue(false);
+				}
+				catch (er:Error)
+				{				
+				}
+
+				try
+				{
+					audioTag.soundSize = 32;
+					assertTrue(false);
+				}
+				catch (er:Error)
+				{				
+				}
+
+				try
+				{
+					audioTag.soundChannels = 3;
+					assertTrue(false);
+				}
+				catch (er:Error)
+				{				
+				}
+
+				try
+				{
+					audioTag.isAACSequenceHeader = false;
+					assertTrue(false);
+				}
+				catch (er:Error)
+				{				
+				}
+				
+				try
+				{
+					assertTrue(audioTag.isAACSequenceHeader);
+					assertTrue(false);
+				}
+				catch (er:Error)
+				{				
+				}
+
+				audioTag.soundFormat = FLVTagAudio.SOUND_FORMAT_AAC;
+				audioTag.isAACSequenceHeader = false;
+				assertTrue(audioTag.isAACSequenceHeader == false);
+				audioTag.isAACSequenceHeader = true;
+				assertTrue(audioTag.isAACSequenceHeader == true);
+			}
+			catch (e:Error)
+			{
+				assertTrue(false);
+			}
+		}
+		
+		public function testNonAACAudioTagStructure():void
+		{
+			var soundData:ByteArray = new ByteArray();
+			for (var i:int = 0; i < 20; i++)
+			{
+				soundData.writeByte(i);
+			}
+			soundData.position = 0;
+			
+			var timeStamp:uint = new Date().getTime();
+			var ba:ByteArray = FLVTestHelper.createFLVAudioTag(
+				FLVTag.TAG_TYPE_AUDIO, 
+				soundData.length + 1, 
+				timeStamp, 
+				0,	// always 0
+				FLVTagAudio.SOUND_FORMAT_SPEEX,
+				3,	// SoundRate 44kHz
+				1,	// SoundSize snd16Bit
+				1,	// SoundType sndStereo
+				soundData);  
+			ba.position = 0;
+			
+			try
+			{
+				var audioTag:FLVTagAudio = new FLVTagAudio();
+				audioTag.read(ba);
+				
+				assertTrue(audioTag.tagType == FLVTag.TAG_TYPE_AUDIO);
+				assertTrue(audioTag.dataSize == soundData.length + 1);
+				assertTrue(audioTag.timestamp == timeStamp);
+				assertTrue(audioTag.soundFormat == FLVTagAudio.SOUND_FORMAT_SPEEX);
+				assertTrue(audioTag.soundRate == FLVTagAudio.SOUND_RATE_44K);
+				assertTrue(audioTag.soundSize == FLVTagAudio.SOUND_SIZE_16BITS);
+				assertTrue(audioTag.soundChannels == FLVTagAudio.SOUND_CHANNELS_STEREO);
+				try
+				{
+					assertTrue(audioTag.isAACSequenceHeader == false);
+					assertTrue(false);
+				}
+				catch(er:Error)
+				{
+				}
+				assertTrue(audioTag.soundFormatByte == 0xBF);
+				assertTrue(FLVTestHelper.compareByteArray(soundData, audioTag.data, 0));
+
+				var soundData2:ByteArray = new ByteArray();
+				for (i = 0; i < 10; i++)
+				{
+					soundData2.writeByte(15 - i);
+				}
+				soundData2.position = 0;
+				
+				audioTag.data = soundData2;
+				assertTrue(FLVTestHelper.compareByteArray(soundData2, audioTag.data, 0));
 			}
 			catch (e:Error)
 			{

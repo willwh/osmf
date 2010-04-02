@@ -30,7 +30,7 @@ package org.osmf.net.httpstreaming.f4f
 	 * 
 	 * This is the bootstrap information data structure.
 	 */	
-	internal class AdobeBootstrapBox extends FullBox
+	public class AdobeBootstrapBox extends FullBox
 	{
 		/**
 		 * Constructor.

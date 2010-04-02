@@ -186,13 +186,15 @@ package org.osmf.net.httpstreaming.flv
 			if (codecID == CODEC_ID_AVC)
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 5;	// resize array first
-				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 5, value.length); // copy in after format, AVC packet type, and composition time offset
+				bytes.position = TAG_HEADER_BYTE_COUNT + 5;
+				bytes.writeBytes(value, 0, value.length); // copy in after format, AVC packet type, and composition time offset
 				dataSize = value.length + 5;	// set dataSize field to new payload length plus format, AVC packet type, and composition time offset length
 			}
 			else
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 1;	// resize array first
-				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
+				bytes.position = TAG_HEADER_BYTE_COUNT + 1;
+				bytes.writeBytes(value, 0, value.length); // copy in after format
 				dataSize = value.length + 1;	// set dataSize field to new payload length plus format length
 			}	
 		}

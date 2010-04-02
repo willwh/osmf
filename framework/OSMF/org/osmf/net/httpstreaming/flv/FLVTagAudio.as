@@ -237,13 +237,15 @@ package org.osmf.net.httpstreaming.flv
 			if (soundFormat == SOUND_FORMAT_AAC)
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT + value.length + 2;	// resize array first
-				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 2, value.length); // copy in after format AND AACPacketType
+				bytes.position = TAG_HEADER_BYTE_COUNT + 2;
+				bytes.writeBytes(value, 0, value.length); // copy in after format AND AACPacketType
 				dataSize = value.length + 2;	// set dataSize field to new payload length plus format + AACPacketType length
 			}
 			else
 			{
 				bytes.length = TAG_HEADER_BYTE_COUNT+value.length + 1;	// resize array first
-				bytes.writeBytes(value, TAG_HEADER_BYTE_COUNT + 1, value.length); // copy in after format
+				bytes.position = TAG_HEADER_BYTE_COUNT + 1;
+				bytes.writeBytes(value, 0, value.length); // copy in after format
 				dataSize = value.length + 1;	// set dataSize field to new payload length plus format length
 			}		
 		}

@@ -27,8 +27,10 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
+	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
+	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
 	import org.osmf.net.httpstreaming.flv.FLVTagScriptDataObject;
 
@@ -55,14 +57,17 @@ package org.osmf.net.httpstreaming.f4f
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function HTTPStreamingF4FIndexHandler(fragmentsThreshold:uint = DEFAULT_FRAGMENTS_THRESHOLD)
+		public function HTTPStreamingF4FIndexHandler(fileHandler:HTTPStreamingFileHandlerBase, fragmentsThreshold:uint = DEFAULT_FRAGMENTS_THRESHOLD)
 		{
 			super();
 			
 			currentQuality = -1;
 			currentFAI = null;
-			fragmentRunTablesUpdating = false;			
+			fragmentRunTablesUpdating = false;		
+			this.fileHandler = fileHandler;	
 			this.fragmentsThreshold = fragmentsThreshold;
+			
+			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, onNewBootstrapBox);
 		}
 		
 		/**
@@ -217,8 +222,8 @@ package org.osmf.net.httpstreaming.f4f
 			   )
 			{
 				currentFAI = frt.findFragmentIdByTime(
-					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime);
-				if (currentFAI == null)
+					(time + (frt.fragmentDurationPairs)[0].durationAccrued / abst.timeScale) * abst.timeScale, abst.currentMediaTime, abst.live);
+				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (abst.contentComplete())
 					{
@@ -235,7 +240,7 @@ package org.osmf.net.httpstreaming.f4f
 							} 
 						}
 						
-						refreshBootstrapInfo();
+						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
 				}
@@ -259,7 +264,6 @@ package org.osmf.net.httpstreaming.f4f
 
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
-				checkFragmentInventory(currentFAI.fragId, abst, frt);
 				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 			}
 			
@@ -288,8 +292,8 @@ package org.osmf.net.httpstreaming.f4f
 			{
 				var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 				var oldCurrentFAI:FragmentAccessInformation = currentFAI;
-				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime);
-				if (currentFAI == null)
+				currentFAI = frt.validateFragment(currentFAI.fragId + 1, abst.currentMediaTime, abst.live);
+				if (currentFAI == null || fragmentOverflow(abst, currentFAI.fragId))
 				{
 					if (!abst.live || abst.contentComplete())
 					{
@@ -307,7 +311,7 @@ package org.osmf.net.httpstreaming.f4f
 						}
 
 						currentFAI = oldCurrentFAI;
-						refreshBootstrapInfo();
+						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
 				}
@@ -325,7 +329,6 @@ package org.osmf.net.httpstreaming.f4f
 			
 				streamRequest = new HTTPStreamRequest(requestUrl);
 				checkQuality(quality);
-				checkFragmentInventory(currentFAI.fragId, abst, frt);
 				notifyFragmentDuration(currentFAI.fragDuration / abst.timeScale);
 					
 				CONFIG::LOGGING
@@ -437,56 +440,28 @@ package org.osmf.net.httpstreaming.f4f
 				notifyTotalDuration(abst.totalDuration / abst.timeScale, quality);
 			}
 		}
-		
-		private function checkFragmentInventory(
-			fragId:uint, abst:AdobeBootstrapBox, frt:AdobeFragmentRunTable):void
+
+		private function refreshBootstrapInfo(quality:uint):void
 		{
+			pendingIndexUpdates++;
 			CONFIG::LOGGING
 			{
-				logger.debug(
-					"fragmentRunTablesUpdating: " + fragmentRunTablesUpdating + 
-					" live: " + abst.live +
-					" frt.tableComplete(): " + frt.tableComplete() + 
-					" frt.fragmentsLeft: " + frt.fragmentsLeft(fragId, abst.currentMediaTime));
-			}		
-			
-			if (fragmentRunTablesUpdating ||
-				!abst.live || 
-				frt.tableComplete() || 
-				(frt.fragmentsLeft(fragId, abst.currentMediaTime) > fragmentsThreshold))
-			{
-				return;
+				logger.debug("refresh frt: " + (streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url);
 			}
-			
-			refreshBootstrapInfo();			
-		}
-		
-		private function refreshBootstrapInfo():void
-		{
-			fragmentRunTablesUpdating = true;
-			pendingIndexUpdates = streamInfos.length;
-			for (var i:uint = 0; i < streamInfos.length; i++)
-			{
-				CONFIG::LOGGING
-				{
-					logger.debug("refresh frt: " + (streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url);
-				}
-				
-				dispatchEvent
-					(	new HTTPStreamingIndexHandlerEvent
-							( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
-							, false
-							, false
-							, false
-							, NaN
-							, null
-							, null
-							, new URLRequest((streamInfos[i] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url + "?rand=" + new Date().getTime())
-							, i
-							, true
-							)
-					);				
-			}
+			dispatchEvent
+				(	new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX 
+						, false
+						, false
+						, false
+						, NaN
+						, null
+						, null
+						, new URLRequest((streamInfos[quality] as HTTPStreamingF4FStreamInfo).bootstrapInfo.url + "?rand=" + new Date().getTime())
+						, quality
+						, true
+						)
+				);				
 		}
 		
 		private function processBootstrapData(data:*, indexContext:Object):AdobeBootstrapBox
@@ -576,8 +551,6 @@ package org.osmf.net.httpstreaming.f4f
 			if (metaInfo == null)
 			{
 				metaInfo = new Object();
-				metaInfo.width = 500;
-				metaInfo.height = 400;
 			}
 			metaInfo.duration = duration;
 			
@@ -641,6 +614,21 @@ package org.osmf.net.httpstreaming.f4f
 				);
 		}
 
+		private function onNewBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
+		{
+			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
+			if (abst.bootstrapVersion <= event.bootstrapBox.bootstrapVersion)
+			{
+				bootstrapBoxes[currentQuality] = event.bootstrapBox;
+			}
+		}
+		
+		private function fragmentOverflow(abst:AdobeBootstrapBox, fragId:uint):Boolean
+		{
+			var segmentRunTable:AdobeSegmentRunTable = abst.segmentRunTables[0];
+			return (segmentRunTable == null) || (segmentRunTable.totalFragments < fragId);
+		}
+		
 		private var pendingIndexLoads:int;
 		private var pendingIndexUpdates:int;
 		private var bootstrapBoxes:Vector.<AdobeBootstrapBox>;
@@ -651,6 +639,7 @@ package org.osmf.net.httpstreaming.f4f
 		private var fragmentsThreshold:uint;
 		private var fragmentRunTablesUpdating:Boolean;
 		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
+		private var fileHandler:HTTPStreamingFileHandlerBase;
 		
 		private var offsetFromCurrent:Number = 20;
 		private var delay:Number = 0.05;
