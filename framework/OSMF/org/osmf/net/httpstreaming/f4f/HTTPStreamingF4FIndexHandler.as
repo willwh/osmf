@@ -73,6 +73,14 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * @private
 		 */
+		public function get bootstrapInfo():AdobeBootstrapBox
+		{
+			return currentQuality < 0? null : bootstrapBoxes[currentQuality];
+		}
+		
+		/**
+		 * @private
+		 */
 		override public function initialize(indexInfo:Object):void
 		{
 			// Make sure we have an info object of the expected type.
