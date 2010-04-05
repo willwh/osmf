@@ -59,31 +59,32 @@ package org.osmf.elements
 			
 			displayObjectTrait1.setSize(10, 100);
 			
-			// TODO: Fix the rest of this test.  For some reason, setting the dimensions
-			// doesn't propagate to the container, it only affects the underlying trait. 
-			if (true) return;
-
-			assertEquals(1, dimensionsChangeEventCount);
+			// Force invalidation.
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
+			
+			assertEquals(1, sizeChangeEventCount);
 
 			assertEquals(10, displayObjectTrait.mediaWidth);
 			assertEquals(100, displayObjectTrait.mediaHeight);
 			
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
 			var displayObjectTrait2:DynamicDisplayObjectTrait = mediaElement2.getTrait(MediaTraitType.DISPLAY_OBJECT) as DynamicDisplayObjectTrait;
-			displayObjectTrait2.setDimensions(51, 52);
+			displayObjectTrait2.setSize(51, 52);
 			
 			serial.addChild(mediaElement2);
 			assertEquals(displayObjectTrait, serial.getTrait(MediaTraitType.DISPLAY_OBJECT));
-			assertNull(serial.getTrait(MediaTraitType.DISPLAY_OBJECT));
 			
 			serial.removeChild(mediaElement1);
+
+			// Force invalidation.
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
 			
 			assertNotNull(serial.getTrait(MediaTraitType.DISPLAY_OBJECT));
-			assertEquals(2, dimensionsChangeEventCount);
+			assertEquals(2, sizeChangeEventCount);
 			
 			// Child removal got us a new trait:
 			displayObjectTrait = serial.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
-			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onDimensionChange);
+			displayObjectTrait.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			
 			assertEquals(51, displayObjectTrait.mediaWidth);
 			assertEquals(52, displayObjectTrait.mediaHeight);
