@@ -48,14 +48,14 @@ package
 	{
 		public function OSMFPlayer(preloader:Preloader)
 		{
-			super();
-			
 			// Store pre-loader references:
 			CONFIG::DEBUG
 			{
 				debugger = preloader.debugger;
 				Log.loggerFactory = new DebuggerLoggerFactory(preloader.debugger);
 			}
+
+			super();
 			
 			// Set the SWF scale mode, and listen to the stage change
 			// dimensions:
