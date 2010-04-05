@@ -38,7 +38,11 @@ package org.osmf.elements.compositeClasses
 	import org.osmf.traits.DisplayObjectTrait;
 	import org.osmf.utils.OSMFStrings;
 	
+	[ExcludeClass]
+	
 	/**
+	 * @private
+	 * 
 	 * Composite CompositeDisplayObjectTrait.
 	 * 
 	 * The displayObject property of the composite trait refers to a
@@ -56,7 +60,7 @@ package org.osmf.elements.compositeClasses
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
 	 */
-	internal class CompositeDisplayObjectTrait extends DisplayObjectTrait
+	public class CompositeDisplayObjectTrait extends DisplayObjectTrait
 	{
 		public function CompositeDisplayObjectTrait(traitAggregator:TraitAggregator, owner:MediaElement)
 		{

@@ -26,6 +26,7 @@ package org.osmf.elements
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.compositeClasses.CompositeDisplayObjectTrait;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.layout.LayoutMetadata;
 	import org.osmf.layout.LayoutTargetSprite;
@@ -153,20 +154,13 @@ package org.osmf.elements
 			assertNotNull(displayObjectTrait);
 			
 			displayObjectTrait.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChanged);
-			
 			var view:DisplayObjectContainer = displayObjectTrait.displayObject as DisplayObjectContainer;
 			assertNotNull(view);
 			
-			// TODO: We should either enable the commented out lines, or remove them
-			// entirely (if they aren't appropriate to this test).  Note that the DisplayObjectTrait
-			// should not expose the layoutRenderer, so we would need some other way of
-			// validating (perhaps we just wait for an invalidation and make the test
-			// async>).
-			
 			// The display list is not updated until we validate. Force an update:
-			//displayObjectTrait.layoutRenderer.validateNow();
-			//assertTrue(view.contains(displayObjectTrait1.view));
-			
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
+			assertTrue(view.contains(displayObjectTrait1.displayObject));
+
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
 			var displayObjectTrait2:DynamicDisplayObjectTrait = mediaElement2.getTrait(MediaTraitType.DISPLAY_OBJECT) as DynamicDisplayObjectTrait;
 			var view2:Sprite =  new Sprite();
@@ -174,11 +168,9 @@ package org.osmf.elements
 			
 			parallel.addChild(mediaElement2);
 			
-			// TODO: See above comment.
-			
-			// The display list is not updated until we validat. Force an update:
-			//displayObjectTrait.layoutRenderer.validateNow();
-			//assertTrue(view.contains(displayObjectTrait2.view));
+			// The display list is not updated until we validate. Force an update:
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
+			assertTrue(view.contains(displayObjectTrait2.displayObject));
 		}
 		
 		public function testDisplayObjectTraitLayout():void

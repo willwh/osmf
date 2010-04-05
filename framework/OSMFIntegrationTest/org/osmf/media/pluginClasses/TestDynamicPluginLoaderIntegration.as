@@ -70,11 +70,6 @@ package org.osmf.media.pluginClasses
 		{
 			return new URLResource(IntegrationTestUtils.REMOTE_UNHANDLED_PLUGIN_RESOURCE_URL);
 		}
-		
-		public function testLoadOfPlugin():void
-		{
-			// TODO: Verify that class types are merged.
-		}
 
 		private var mediaFactory:MediaFactory;
 	}

@@ -26,6 +26,7 @@ package org.osmf.elements
 	
 	import flexunit.framework.TestCase;
 	
+	import org.osmf.elements.compositeClasses.CompositeDisplayObjectTrait;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.MediaTraitType;
@@ -118,11 +119,9 @@ package org.osmf.elements
 			// The view no longer changes: there's a fixed container sprite in between now:
 			assertEquals(0, viewChangedEventCount);
 			
-			// TODO: Fix!
-			
 			// The container should contain 'view1' though (once the layout has been updated!)
-			//CompositedisplayObjectTrait(viewable).layoutRenderer.validateNow();
-			//assertTrue(DisplayObjectContainer(viewable.displayObject).contains(view1));
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
+			assertTrue(DisplayObjectContainer(displayObjectTrait.displayObject).contains(view1));
 			
 			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.DISPLAY_OBJECT], null, null, true);
 			var displayObjectTrait2:DynamicDisplayObjectTrait = mediaElement2.getTrait(MediaTraitType.DISPLAY_OBJECT) as DynamicDisplayObjectTrait;
@@ -134,12 +133,10 @@ package org.osmf.elements
 			
 			assertEquals(0, viewChangedEventCount);
 			
-			// TODO: Fix!
-			
 			// The container should contain 'view2' now (once the layout has been updated!)
-			//CompositedisplayObjectTrait(viewable).layoutRenderer.validateNow();
-			//assertTrue(DisplayObjectContainer(viewable.displayObject).contains(view2));
-			//assertFalse(DisplayObjectContainer(viewable.displayObject).contains(view1));
+			CompositeDisplayObjectTrait(displayObjectTrait).layoutRenderer.validateNow();
+			assertTrue(DisplayObjectContainer(displayObjectTrait.displayObject).contains(view2));
+			assertFalse(DisplayObjectContainer(displayObjectTrait.displayObject).contains(view1));
 				
 			serial.removeChild(mediaElement2);
 			
