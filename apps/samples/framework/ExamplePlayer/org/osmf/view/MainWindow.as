@@ -23,12 +23,15 @@ package org.osmf.view
 {
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.events.ListEvent;
+	import mx.events.MenuEvent;
 	import mx.events.SliderEvent;
 	
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.events.AudioEvent;
 	import org.osmf.events.BufferEvent;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.events.MediaPlayerCapabilityChangeEvent;
@@ -83,6 +86,9 @@ package org.osmf.view
 			seekBar.addEventListener(SliderEvent.CHANGE, onSeek);
 			seekBar.addEventListener(SliderEvent.THUMB_DRAG, onSeek);
 			
+			scaleModeButton.dataProvider = new ArrayCollection([ScaleMode.NONE, ScaleMode.LETTERBOX, ScaleMode.STRETCH, ScaleMode.ZOOM]);
+			scaleModeButton.addEventListener(MenuEvent.ITEM_CLICK, onScaleModeSelect);
+
 			// Add MediaPlayer event handlers.
 			//
 			
@@ -102,13 +108,12 @@ package org.osmf.view
 			mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferTimeChange);
 			mediaPlayer.addEventListener(LoadEvent.BYTES_TOTAL_CHANGE, onBytesTotalChange);
 			mediaPlayer.addEventListener(LoadEvent.BYTES_LOADED_CHANGE, onBytesLoadedChange);
+			mediaPlayer.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
 
-			// Set up the container
+			// Set up the container.
 			//
 			
-			var container:MediaContainer = new MediaContainer();
-			container.layoutMetadata.scaleMode = ScaleMode.NONE;
-			mediaContainerUIComponent.container = container;
+			mediaContainerUIComponent.container = new MediaContainer();
 			
 			// Sync the UI to the current (empty) state.
 			//
@@ -154,6 +159,17 @@ package org.osmf.view
 			}	
 		}
 		
+		private function onScaleModeSelect(event:MenuEvent):void
+		{
+			scaleMode = event.item.toString();
+			
+			if (mediaPlayer.media != null)
+			{
+				var layoutMetadata:LayoutMetadata = mediaPlayer.media.getMetadata(LayoutMetadata.LAYOUT_NAMESPACE) as LayoutMetadata;
+				layoutMetadata.scaleMode = scaleMode;
+			}
+		}
+		
 		private function setMediaElement(value:MediaElement):void
 		{
 			if (mediaPlayer.media != null)
@@ -169,7 +185,8 @@ package org.osmf.view
 				if (layoutMetadata == null)
 				{
 					layoutMetadata = new LayoutMetadata();
-					layoutMetadata.scaleMode = ScaleMode.NONE;
+					layoutMetadata.scaleMode = scaleMode;
+					layoutMetadata.percentHeight = layoutMetadata.percentWidth = 100;
 					layoutMetadata.horizontalAlign = HorizontalAlign.CENTER;
 					layoutMetadata.verticalAlign = VerticalAlign.MIDDLE;
 					value.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layoutMetadata);
@@ -279,6 +296,11 @@ package org.osmf.view
 			bytesLoaded.text = event.bytes.toString();
 		}
 		
+		private function onDisplayObjectChange(event:DisplayObjectEvent):void
+		{
+			updateControls();
+		}
+		
 		private function updateControls():void
 		{
 			buttonPlay.visible 			= mediaPlayer.canPlay;
@@ -288,6 +310,7 @@ package org.osmf.view
 			bufferTraitControls.visible	= mediaPlayer.canBuffer;
 			loadTraitControls.visible	= mediaPlayer.canLoad;
 			seekBar.enabled 			= mediaPlayer.canSeek;
+			scaleModeBox.visible		= mediaPlayer.displayObject != null;
 			
 			if (mediaPlayer.temporal)
 			{
@@ -351,5 +374,6 @@ package org.osmf.view
 		private var examples:Array;
 		private var example:Example;
 		private var recommendationsWatcher:MetadataWatcher;
+		private var scaleMode:String = ScaleMode.NONE;
 	}
 }

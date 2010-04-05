@@ -99,7 +99,7 @@
 		right					="0"
 		width					="500"
 		height					="30"
-		bottom					="160"
+		bottom					="180"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -126,7 +126,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="140"
+		bottom					="160"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -154,7 +154,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="120"
+		bottom					="140"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -186,7 +186,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="100"
+		bottom					="120"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
 		>
@@ -211,7 +211,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="80"
+		bottom					="100"
 		color					="white"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
@@ -252,7 +252,7 @@
 		right					="0"
 		width					="500"
 		height					="20"
-		bottom					="60"
+		bottom					="80"
 		visible					="false"
 		verticalAlign			="middle"
 		horizontalScrollPolicy	="off"
@@ -267,6 +267,28 @@
 
 	</mx:HBox>
 	
+	<mx:HBox
+		id						="scaleModeBox"
+		color					="white"
+		right					="0"
+		width					="500"
+		height					="20"
+		bottom					="60"
+		visible					="false"
+		verticalAlign			="middle"
+		horizontalScrollPolicy	="off"
+		>
+
+		<mx:Label
+			text				="Scale Mode: "
+			/>
+		<mx:PopUpMenuButton
+			id					="scaleModeButton"
+			color				="black"
+			/>
+			
+	</mx:HBox>
+
 	<mx:HBox
 		id						="errorIDBox"
 		color					="white"
