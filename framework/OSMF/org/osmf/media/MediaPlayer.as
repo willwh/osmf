@@ -253,7 +253,8 @@ package org.osmf.media
 				{		
 					if (playing)
 					{
-						stop();
+						// Stop, but don't auto-rewind.
+						(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
 					}
 					if (canLoad)
 					{	 
@@ -1617,7 +1618,17 @@ package org.osmf.media
 			}
 			else if (!loop && canPlay)
 			{
-				stop();
+				// Stop, but don't auto-rewind unless autoRewind is true.
+				(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
+				
+				if (autoRewind)
+				{
+					executeAutoRewind(false);
+				}
+				else
+				{
+					setState(MediaPlayerState.READY);
+				}
 			}
 			else
 			{
