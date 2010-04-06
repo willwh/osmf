@@ -143,7 +143,7 @@ package org.osmf.chrome.widgets
 			scrubber.addEventListener(ScrubberEvent.SCRUB_END, onScrubberEnd);
 			addChild(scrubber);
 			
-			currentPositionTimer = new Timer(1000/50, 0);
+			currentPositionTimer = new Timer(CURRENT_POSITION_UPDATE_INTERVAL);
 			currentPositionTimer.addEventListener(TimerEvent.TIMER, onTimerTick);
 			
 			measure();
@@ -234,7 +234,7 @@ package org.osmf.chrome.widgets
 		
 		private function prettyPrintSeconds(seconds:Number):String
 		{
-			seconds = Math.round(isNaN(seconds) ? 0 : seconds);
+			seconds = Math.floor(isNaN(seconds) ? 0 : seconds);
 			return Math.floor(seconds / 3600) 
 				 + ":"
 				 + (seconds % 3600 < 600 ? "0" : "")
@@ -345,6 +345,7 @@ package org.osmf.chrome.widgets
 		private var seekToTime:Number;
 		
 		/* static */
+		private static const CURRENT_POSITION_UPDATE_INTERVAL:int = 100;
 		private static const _requiredTraits:Vector.<String> = new Vector.<String>;
 		_requiredTraits[0] = MediaTraitType.TIME;
 	}
