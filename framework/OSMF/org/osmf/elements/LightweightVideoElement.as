@@ -446,7 +446,7 @@ package org.osmf.elements
 			var timeTrait:TimeTrait = (trait = loadTrait.getTrait(MediaTraitType.TIME)) as TimeTrait; 
 			if (timeTrait == null)
 			{
-				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource)
+				timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration)
 			}
 			addTrait(MediaTraitType.TIME, timeTrait);
 			

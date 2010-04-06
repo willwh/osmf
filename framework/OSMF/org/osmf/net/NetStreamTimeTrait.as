@@ -46,7 +46,7 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */ 		
-		public function NetStreamTimeTrait(netStream:NetStream, resource:MediaResourceBase)
+		public function NetStreamTimeTrait(netStream:NetStream, resource:MediaResourceBase, defaultDuration:Number=NaN)
 		{
 			super();
 			
@@ -55,6 +55,11 @@ package org.osmf.net
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 0, true);
 			this.resource = resource;
+			
+			if (isNaN(defaultDuration) == false)
+			{
+				setDuration(defaultDuration);
+			}
 		}
 		
 		/**

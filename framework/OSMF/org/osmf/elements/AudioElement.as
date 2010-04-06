@@ -205,7 +205,7 @@ package org.osmf.elements
 				stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent);
 				
 				addTrait(MediaTraitType.PLAY, new NetStreamPlayTrait(stream, resource));
-				timeTrait = new NetStreamTimeTrait(stream, resource);
+				timeTrait = new NetStreamTimeTrait(stream, resource, defaultDuration);
 				addTrait(MediaTraitType.TIME, timeTrait);
 				addTrait(MediaTraitType.SEEK, new NetStreamSeekTrait(timeTrait, loadTrait, stream));
 				addTrait(MediaTraitType.AUDIO, new NetStreamAudioTrait(stream));	
