@@ -85,9 +85,10 @@ package org.osmf.elements.compositeClasses
 			var seekTrait2:SeekTrait = mediaElement2.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			assertTrue(seekTrait2 == null);
 			
-			// Third child already had the trait, so it wasn't loaded.
+			// Third child already had the trait, but it wasn't loaded.  So it
+			// should be loaded now.
 			var loadTrait3:LoadTrait = mediaElement3.getTrait(MediaTraitType.LOAD) as LoadTrait;
-			assertTrue(loadTrait3.loadState == LoadState.UNINITIALIZED);
+			assertTrue(loadTrait3.loadState == LoadState.READY);
 			var seekTrait3:SeekTrait = mediaElement3.getTrait(MediaTraitType.SEEK) as SeekTrait;
 			assertTrue(seekTrait3 != null);
 
@@ -103,6 +104,7 @@ package org.osmf.elements.compositeClasses
 			assertTrue(traitFoundEvent.mediaElement == mediaElement3);
 			
 			// Try again with a trait that gets loaded.
+			loadTrait3.unload();
 			loadTrait3.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 			function onLoadStateChange(event:LoadEvent):void
 			{

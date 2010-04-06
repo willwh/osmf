@@ -77,10 +77,14 @@ package org.osmf.elements.compositeClasses
 			{
 				var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
 				
-				if (mediaElement.hasTrait(traitType))
+				if (	mediaElement.hasTrait(traitType)
+					&&	(	loadTrait == null
+						 || loadTrait.loadState == LoadState.READY
+						)
+				   )
 				{
-					// If the next MediaElement has the requested trait, then
-					// we're done.
+					// If the next MediaElement has the requested trait (and is loaded),
+					// then we're done.
 					//
 					
 					noSuchTrait = false;

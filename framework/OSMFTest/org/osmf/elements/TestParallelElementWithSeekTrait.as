@@ -95,7 +95,7 @@ package org.osmf.elements
 			seekTrait.seek(currentTime);
 			seekTrait1.completeSeek(currentTime);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 2);
+			assertTrue(events.length == 1);
 			assertTrue(timeTrait1.currentTime == currentTime);
 			assertTrue(timeTrait2.currentTime == currentTime);
 
@@ -108,7 +108,7 @@ package org.osmf.elements
 			
 			seekTrait1.completeSeek(currentTime);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 5);
+			assertTrue(events.length == 2);
 			assertTrue(timeTrait1.currentTime == currentTime);
 			assertTrue(timeTrait2.currentTime == currentTime);
 
@@ -116,7 +116,7 @@ package org.osmf.elements
 			seekTrait.seek(currentTime);
 			seekTrait1.completeSeek(timeTrait1.duration);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 7);
+			assertTrue(events.length == 3);
 			assertTrue(timeTrait1.currentTime == timeTrait1.duration);
 			assertTrue(timeTrait2.currentTime == currentTime);
 			

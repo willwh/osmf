@@ -71,6 +71,7 @@ package org.osmf.elements.compositeClasses
 			{
 				// Now, the composite is going to do a seek that crosses multiple children.
 				crossChildrenSeeking = true;
+				allCrossChildrenSeeksInitiated = false;
 				
 				// Remember the current state so that we can reapply it after the seek.
 				var previousPlayState:String = getCompositePlayState();
@@ -85,6 +86,8 @@ package org.osmf.elements.compositeClasses
 				// Do the seek out of the current child first.
 				if (serialSeek.seekForward)
 				{
+					allCrossChildrenSeeksInitiated = true;
+					
 					// Seeking forward means to move the playhead to the end.
 					var childTimeTrait:TimeTrait = serialSeek.fromChild.getTrait(MediaTraitType.TIME) as TimeTrait;
 					childSeekTrait.seek(childTimeTrait.duration);
@@ -104,13 +107,16 @@ package org.osmf.elements.compositeClasses
 						}
 					}
 					
+					allCrossChildrenSeeksInitiated = true;
+					
 					// Seeking backward means to move the playhead to the beginning.
 					childSeekTrait.seek(0);
 				}
 				
 				// Now the composite does the seek into another child, where the destiny of the seek is.
 				childSeekTrait = serialSeek.toChild.getTrait(MediaTraitType.SEEK) as SeekTrait;
-				
+				childSeekTrait.seek(serialSeek.toChildTime);
+
 				traitAggregator.listenedChild = serialSeek.toChild;
 				var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
 				if (playTrait != null)
@@ -124,7 +130,6 @@ package org.osmf.elements.compositeClasses
 						playTrait.pause();
 					}
 				}
-				childSeekTrait.seek(serialSeek.toChildTime);
 			}
 		}
 		
@@ -235,20 +240,25 @@ package org.osmf.elements.compositeClasses
 			// Once all children finish seeking, then the seek is considered complete.
 			if (crossChildrenSeeking)
 			{
-				var child:MediaElement;
-				while (child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.SEEK))
-				{					
-					if ((child.getTrait(MediaTraitType.SEEK) as SeekTrait).seeking)
-					{
-						return; //return if any children haven't completed the seek.
+				// When executing a cross-child seek, we must wait until all of the seeks
+				// are initiated before checking to see if we should signal that the entire
+				// seek is complete, or else we'll end up with a false positive.
+				if (allCrossChildrenSeeksInitiated)
+				{
+					var child:MediaElement;
+					while (child = traitAggregator.getNextChildWithTrait(child, MediaTraitType.SEEK))
+					{					
+						if ((child.getTrait(MediaTraitType.SEEK) as SeekTrait).seeking)
+						{
+							return; //return if any children haven't completed the seek.
+						}
 					}
+					crossChildrenSeeking = false;		
+					
+					// The child is exiting the seeking state, so we just
+					// update the composite seeking state.
+					setSeeking(false, timeTrait.currentTime);		
 				}
-				crossChildrenSeeking = false;		
-				
-				// The child is exiting the seeking state, so we just
-				// update the composite seeking state.
-				setSeeking(false, timeTrait.currentTime);		
-				
 			}					
 			else
 			{
@@ -404,5 +414,6 @@ package org.osmf.elements.compositeClasses
 		
 		private var owner:MediaElement;
 		private var crossChildrenSeeking:Boolean;
+		private var allCrossChildrenSeeksInitiated:Boolean;
 	}
 }

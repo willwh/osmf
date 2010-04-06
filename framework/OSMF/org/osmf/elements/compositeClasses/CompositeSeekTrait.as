@@ -82,9 +82,9 @@ package org.osmf.elements.compositeClasses
 		/**
 		 * @private
 		 */
-		override protected function seekingChangeStart(newSeeking:Boolean, time:Number):void
+		override protected function seekingChangeEnd(time:Number):void
 		{
-			if (newSeeking)
+			if (seeking)
 			{
 				// Calls prepareSeekOperationInfo methods of the derived classes, ParallelSeekTrait
 				// and SerialSeekTrait. The prepareSeekOperationInfo returns whether the composite
@@ -96,6 +96,10 @@ package org.osmf.elements.compositeClasses
 				{
 					doSeek(seekOp);
 				}
+			}
+			else
+			{
+				super.seekingChangeEnd(time);
 			}
 		}
 		
