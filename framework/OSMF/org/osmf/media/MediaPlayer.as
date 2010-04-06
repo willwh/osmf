@@ -1345,7 +1345,7 @@ package org.osmf.media
 					eventType = MediaPlayerCapabilityChangeEvent.TEMPORAL_CHANGE;
 					var timeTrait:TimeTrait = TimeTrait(media.getTrait(MediaTraitType.TIME));
 										
-					if (timeTrait.currentTime != 0)
+					if (timeTrait.currentTime != 0 && _currentTimeUpdateInterval > 0 && !isNaN(_currentTimeUpdateInterval))
 					{
 						dispatchEvent(new TimeEvent(TimeEvent.CURRENT_TIME_CHANGE, false, false, currentTime));		
 					}

@@ -902,7 +902,7 @@ package org.osmf.media
 						// the timing model isn't precise, so we leave some wiggle
 						// room in our assertion (and in particular give ourselves
 						// more wiggle room if the duration is longer).
-						assertTrue(Math.abs(currentTimeUpdateCount - Math.floor(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
+						assertTrue(Math.abs(currentTimeUpdateCount - Math.ceil(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
 					}
 					else
 					{

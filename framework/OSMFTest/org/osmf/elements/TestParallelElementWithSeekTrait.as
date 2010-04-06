@@ -95,7 +95,9 @@ package org.osmf.elements
 			seekTrait.seek(currentTime);
 			seekTrait1.completeSeek(currentTime);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 1);
+			assertTrue(events.length == 2);
+			assertTrue(SeekEvent(events[0]).seeking == true);
+			assertTrue(SeekEvent(events[1]).seeking == false);
 			assertTrue(timeTrait1.currentTime == currentTime);
 			assertTrue(timeTrait2.currentTime == currentTime);
 
@@ -105,20 +107,26 @@ package org.osmf.elements
 			seekTrait.seek(10);
 			assertTrue(timeTrait1.currentTime != 10);
 			assertTrue(timeTrait2.currentTime != 10);
+			assertTrue(events.length == 4);
+			assertTrue(SeekEvent(events[2]).seeking == true);
+			assertTrue(SeekEvent(events[3]).seeking == true);
 			
 			seekTrait1.completeSeek(currentTime);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 2);
 			assertTrue(timeTrait1.currentTime == currentTime);
 			assertTrue(timeTrait2.currentTime == currentTime);
+			assertTrue(events.length == 5);
+			assertTrue(SeekEvent(events[4]).seeking == false);
 
 			currentTime = 25;
 			seekTrait.seek(currentTime);
 			seekTrait1.completeSeek(timeTrait1.duration);
 			seekTrait2.completeSeek(currentTime);
-			assertTrue(events.length == 3);
 			assertTrue(timeTrait1.currentTime == timeTrait1.duration);
 			assertTrue(timeTrait2.currentTime == currentTime);
+			assertTrue(events.length == 7);
+			assertTrue(SeekEvent(events[5]).seeking == true);
+			assertTrue(SeekEvent(events[6]).seeking == false);
 			
 			var invalidCurrentTime:Number = -100;
 			seekTrait.seek(invalidCurrentTime);
