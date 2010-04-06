@@ -1557,7 +1557,7 @@ package org.osmf.media
 			{
 				setState(MediaPlayerState.BUFFERING);
 			}					
-			else
+			else if (!inExecuteAutoRewind)
 			{
 				setState(MediaPlayerState.READY);
 			}				

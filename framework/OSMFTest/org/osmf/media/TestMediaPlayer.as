@@ -680,7 +680,6 @@ package org.osmf.media
 						assertTrue(mediaPlayer.paused == false);
 						assertTrue(mediaPlayer.playing == false);
 						assertTrue(event2.playState == PlayState.STOPPED);
-						assertTrue(mediaPlayer.state == MediaPlayerState.READY);
 						
 						if (autoRewind == false)
 						{
@@ -703,7 +702,6 @@ package org.osmf.media
 							assertTrue(mediaPlayer.playing == false);
 							assertTrue(mediaPlayer.seeking == true);
 							assertTrue(event3.seeking == true);
-							assertTrue(mediaPlayer.state == MediaPlayerState.BUFFERING);
 						}
 						else
 						{
@@ -715,8 +713,6 @@ package org.osmf.media
 							assertTrue(mediaPlayer.seeking == false);
 							assertTrue(event3.seeking == false);
 							
-							assertTrue(mediaPlayer.state == MediaPlayerState.READY);
-	
 							eventDispatcher.dispatchEvent(new Event("testComplete"));
 						}
 					}
@@ -1469,10 +1465,7 @@ package org.osmf.media
 					assertTrue(mediaPlayer.paused == false);
 					
 					var statesStr:String = states.join(" ");
-					
-					// TODO: DurationElement currently generates the second set of
-					// states.  We should fix this, then remove the second condition.
-					assertTrue(statesStr == "playing" || statesStr == "playing ready playing"); 
+					assertTrue(statesStr == "playing"); 
 
 					mediaPlayer.pause();
 					
@@ -1534,8 +1527,10 @@ package org.osmf.media
 					// These are all possible/permissible state sequences.
 					var statesStr:String = states.join(" ");
 
-					/// TODO: DurationElement currently generates the second set of
-					// states.  We should fix this, then remove the second condition.
+					// II most cases, the state change will only cover PLAYING.  But if the
+					// MediaElement can execute a synchronous rewind (e.g. DurationElement),
+					// then the MediaPlayer will enter the READY state before the autoRewind
+					// operation completes.  This is ok.
 					assertTrue(statesStr == "playing" || statesStr == "playing ready");
 					
 					eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -1630,6 +1625,66 @@ package org.osmf.media
 			}
 		}
 
+		public function testMediaPlayerState():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestMediaPlayerState, false);
+			}
+			else
+			{
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestMediaPlayerState();
+			}
+		}
+
+		private function doTestMediaPlayerState():void
+		{
+			if (traitExists(MediaTraitType.TIME))
+			{
+				var stateCount:int = 0;
+				var lastNonBufferingState:String;
+			
+				assertTrue(mediaPlayer.state == MediaPlayerState.READY);
+					
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.play();
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					// Ignore buffering events, they can occur at any time.
+					if (event.state == MediaPlayerState.BUFFERING ||
+						event.state == lastNonBufferingState)
+					{
+						return;
+					}
+					
+					lastNonBufferingState = event.state;
+						
+					stateCount++;
+					
+					if (stateCount == 1)
+					{
+						assertTrue(event.state == MediaPlayerState.PLAYING);
+					}
+					else if (stateCount == 2)
+					{
+						assertTrue(event.state == MediaPlayerState.READY);
+						
+						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+						
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		public function testMediaErrorEvent():void
 		{
 			if (hasLoadTrait)

@@ -321,7 +321,7 @@ package org.osmf
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElement);
 			addTestSuite(TestMediaPlayerWithDynamicStreamingVideoElementSubclip);
 			addTestSuite(TestMediaPlayerWithProxyElement);
-			//addTestSuite(TestMediaPlayerWithDurationElement);
+			addTestSuite(TestMediaPlayerWithDurationElement);
 			addTestSuite(TestMediaPlayerWithBeaconElement);
 
 			// MediaPlayerSprite
