@@ -22,7 +22,6 @@
 package org.osmf.examples
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -201,6 +200,17 @@ package org.osmf.examples
 				  	,  	function():MediaElement
 				  	   	{
 							return new ImageElement(new URLResource(REMOTE_IMAGE));
+				  	   	}
+				  	)
+				);
+
+			examples.push
+				( new Example
+					( 	"Timed Image"
+					, 	"Demonstrates display of an image for a fixed amount of time."
+				  	,  	function():MediaElement
+				  	   	{
+							return new DurationElement(4, new ImageElement(new URLResource(REMOTE_IMAGE)));
 				  	   	}
 				  	)
 				);
@@ -977,22 +987,6 @@ package org.osmf.examples
 						}
 					)
 				);
-				
-			/* TODO: Uncomment this once we have the VAST library integrated
-			   with the build system.
-			examples.push
-				( new Example
-					( 	"VASTImpressionProxyElement"
-					, 	"Demonstrates the use of VASTImpressionProxyElement to record a video impression in accordance with IAB guidelines.  The IAB dictates than an impression should be recorded after the video has finished its initial buffering.  We use a custom ProxyElement that sets the VideoElement's buffer time to a large value, so that it's possible to verify that the impression isn't recorded immediately."
-				  	,  	function():MediaElement
-				  	   	{
-				  	   		var urls:Vector.<VASTUrl> = new Vector.<VASTUrl>();
-				  	   		urls.push(new VASTUrl(BEACON_URL + "?random=" + Math.random()));
-				  	   		return new VASTImpressionProxyElement(urls, null, new BufferingProxyElement(20, new VideoElement(new URLResource(REMOTE_STREAM)))));
-				  	   	}
-				  	)
-				);
-			*/
 				
 			return examples;
 		}
