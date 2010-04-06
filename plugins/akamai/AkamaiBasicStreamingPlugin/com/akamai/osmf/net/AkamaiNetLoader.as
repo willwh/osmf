@@ -22,12 +22,17 @@
 
 package com.akamai.osmf.net
 {
+	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+	
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.utils.Dictionary;
 	
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetConnectionFactoryBase;
-	import org.osmf.net.NetLoader;
+	import org.osmf.net.rtmpstreaming.RTMPDynamicStreamingNetLoader;
+	import org.osmf.traits.LoadTrait;
 
 	/**
 	 * The AkamaiNetLoader class provides the means for
@@ -35,25 +40,69 @@ package com.akamai.osmf.net
 	 * in this case, an <code>AkamaiNetStream</code>.
 	 * 
 	 * @see AkamaiNetStream
-	 */ 
-	public class AkamaiNetLoader extends NetLoader
+	 **/ 
+	public class AkamaiNetLoader extends RTMPDynamicStreamingNetLoader
 	{
 		/**
 		 * @inheritDoc
-		 */
+		 **/
 		public function AkamaiNetLoader(factory:NetConnectionFactoryBase)
 		{
 			super(factory);
 		}
-
+		
+		/**
+		 * @private
+		 **/ 
+		public function get pluginMetadata():Metadata
+		{
+			return _pluginMetadata;
+		}
+		
+		public function set pluginMetadata(value:Metadata):void
+		{
+			_pluginMetadata = value;
+		}
+		
 		/**
 		 * @inheritDoc
 		**/
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			var ns:AkamaiNetStream =  new AkamaiNetStream(connection, resource);
+			var ns:AkamaiNetStream =  new AkamaiNetStream(connection, resource, this);
 			
 			return ns;
 		}
+		
+		/**
+		 * @inheritDoc
+		 **/
+		override protected function executeLoad(loadTrait:LoadTrait):void
+		{			
+			super.executeLoad(loadTrait);
+			
+			if (loadTraitMap == null)
+			{
+				loadTraitMap = new Dictionary();
+			}
+			
+			var resource:URLResource = (loadTrait.resource as URLResource);
+			if (resource != null)
+			{
+				loadTraitMap[resource] = loadTrait;
+			}
+		}
+		
+		/**
+		 * Internal function to return the LoadTrait associated with
+		 * the supplied resource.
+		 **/
+		internal function getLoadTrait(resource:URLResource):LoadTrait
+		{
+			return loadTraitMap[resource] as LoadTrait;
+		} 
+		
+		private var loadTraitMap:Dictionary;
+		private var _pluginMetadata:Metadata;
 	}
 }

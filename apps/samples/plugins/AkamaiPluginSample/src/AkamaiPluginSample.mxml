@@ -29,34 +29,38 @@
 	<mx:Style source="AkamaiPluginSample.css" />
 	<mx:Script>
 		<![CDATA[
-			import com.akamai.osmf.samples.AkamaiSyndicationMediaGenerator;
-			import org.osmf.syndication.media.SyndicationMediaGenerator;
+			import org.osmf.traits.PlayState;
+			// Flash / Flex / ActionScript classes
+			import mx.events.DropdownEvent;
+			import mx.collections.ArrayCollection;			
+			import __AS3__.vec.Vector;
+			import mx.controls.Alert;			
+			
+			// OSMF classes
 			import org.osmf.traits.TimeTrait;
+			import org.osmf.traits.LoadTrait;
+			import org.osmf.traits.LoadState;			
+			import org.osmf.traits.DynamicStreamTrait;			
+			import org.osmf.traits.MediaTraitType;
+			import org.osmf.traits.BufferTrait;
 			import org.osmf.syndication.media.SyndicationMediaGenerator;
 			import org.osmf.syndication.model.extensions.mrss.MediaRSSThumbnail;
 			import org.osmf.syndication.model.extensions.mrss.MediaRSSExtension;
 			import org.osmf.syndication.model.extensions.FeedExtension;
 			import org.osmf.syndication.model.rss20.RSSItem;
-			import __AS3__.vec.Vector;
 			import org.osmf.syndication.model.rss20.RSSFeed;
-			import com.akamai.osmf.samples.PlaylistItem;
 			import org.osmf.syndication.model.Entry;
-			import mx.collections.ArrayCollection;
 			import org.osmf.syndication.loader.FeedLoadTrait;
-			import org.osmf.traits.DynamicStreamTrait;
 			import org.osmf.syndication.model.Feed;
 			import org.osmf.syndication.loader.FeedLoader;
 			import org.osmf.net.StreamType;
 			import org.osmf.net.StreamingURLResource;
-			import mx.controls.Alert;
-			import org.osmf.media.DefaultMediaFactory;
-			import org.osmf.media.PluginInfoResource;
-			import org.osmf.traits.LoadTrait;
-			
-			import mx.events.DropdownEvent;
-			
+			import org.osmf.net.NetLoader;
+			import org.osmf.net.NetStreamLoadTrait;
 			import org.osmf.events.*;
 			import org.osmf.containers.MediaContainer;
+			import org.osmf.media.DefaultMediaFactory;
+			import org.osmf.media.PluginInfoResource;
 			import org.osmf.media.MediaResourceBase;
 			import org.osmf.media.URLResource;
 			import org.osmf.media.MediaElement;
@@ -64,21 +68,24 @@
 			import org.osmf.media.MediaFactoryItem;
 			import org.osmf.media.MediaPlayer;
 			import org.osmf.metadata.*;
-			import org.osmf.net.NetLoader;
-			import org.osmf.traits.LoadTrait;
-			import org.osmf.traits.LoadState;
-			import org.osmf.traits.MediaTraitType;
 			import org.osmf.utils.*;
+			
+			// Sample classes
+			import com.akamai.osmf.samples.AkamaiSyndicationMediaGenerator;
+			import com.akamai.osmf.samples.PlaylistItem;						
+
+			// PluginInfo classes
+			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+			import org.osmf.mast.MASTPluginInfo;
+			import org.osmf.smil.SMILPluginInfo;
 			
 			private var mediaFactory:DefaultMediaFactory;
 			private var pluginElement:MediaElement;
 			private var sliderDragging:Boolean;
 			private var waitForSeek:Boolean;
 			private var pluginResourceMap:Dictionary;
+			private var isLive:Boolean;
 		
-			import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
-			import org.osmf.mast.MASTPluginInfo;
-			import org.osmf.smil.SMILPluginInfo;
 			
 			private static const DEFAULT_PROGRESS_DELAY:uint = 100;
 			private static const MAX_VIDEO_WIDTH:int = 420;
@@ -86,6 +93,8 @@
 			private static const AKAMAI_BASIC_STREAMING_PLUGIN_INFOCLASS:String = "com.akamai.osmf.AkamaiBasicStreamingPluginInfo";	
 			private static const MAST_PLUGIN_INFOCLASS:String = "org.osmf.mast.MASTPluginInfo";
 			private static const SMIL_PLUGIN_INFOCLASS:String = "org.osmf.smil.SMILPluginInfo";
+			private static const RB_CONNECT_AUTH_VALUE:String = "connect-level-auth";
+			private static const RB_STREAM_AUTH_VALUE:String = "stream-level-auth";
 
 			// We need these or getDefinitionByName will fail:
 			private static const forceReferenceAkamai:AkamaiBasicStreamingPluginInfo = null;
@@ -186,7 +195,12 @@
 			private var playlist:ArrayCollection;	
 			
 			private var mediaElement:MediaElement;
-			private var mediaPlayer:MediaPlayer;										
+			private var mediaPlayer:MediaPlayer;
+			
+			[Bindable]
+			private var currentBufferLength:Number;
+			
+			private var bufferTrait:BufferTrait;
 			
 			private function initApp():void
 			{
@@ -203,12 +217,15 @@
 				mediaPlayer.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);	
 				mediaPlayer.addEventListener(TimeEvent.CURRENT_TIME_CHANGE, onCurrentTimeChange);
 				mediaPlayer.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+				mediaPlayer.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, onCanPauseChange);
+				mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 				
 				mediaPlayer.currentTimeUpdateInterval = DEFAULT_PROGRESS_DELAY;
 								
 				sliderDragging = false;
 				waitForSeek = false;
-				
+				isLive = false;
+								
 				clearInfoText();
 			}
 			
@@ -228,7 +245,9 @@
 				}
 				else
 				{
-					var resource:URLResource = new StreamingURLResource(url, (type == MEDIA_TYPE_LIVE) ? StreamType.LIVE : StreamType.RECORDED); 
+					isLive = (type == MEDIA_TYPE_LIVE);
+					var resource:URLResource = new StreamingURLResource(url, isLive ? StreamType.LIVE : StreamType.LIVE_OR_RECORDED); 
+					
 					if (MASTPluginLoaded)
 					{
 						// Assign to the resource, the metadata that indicates that it should have a MAST
@@ -237,12 +256,28 @@
 						resource.addMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE, metadata);
 					}
 					
+					if (authParams.length)
+					{
+						var authMetadata:Metadata = new Metadata();
+						
+						if (authType.selection.value == RB_CONNECT_AUTH_VALUE)
+						{
+							authMetadata.addValue(AkamaiBasicStreamingPluginInfo.AKAMAI_METADATA_KEY_CONNECT_AUTH_PARAMS, authParams.text);
+						}
+						else if (authType.selection.value == RB_STREAM_AUTH_VALUE)
+						{
+							authMetadata.addValue(AkamaiBasicStreamingPluginInfo.AKAMAI_METADATA_KEY_STREAM_AUTH_PARAMS, authParams.text);
+						}
+						
+						resource.addMetadataValue(AkamaiBasicStreamingPluginInfo.AKAMAI_METADATA_NAMESPACE, authMetadata);
+					}
+					
 					setupMediaElementListeners(false);
 					mediaElement = mediaFactory.createMediaElement(resource);
 					
 					if (mediaElement == null)
 					{
-						Alert.show("No MediaInfo was found for the media. Did you load the proper plugin?");
+						Alert.show("No MediaFactoryItem was found for the media. Did you load the proper plugin?");
 					}
 					else
 					{
@@ -340,6 +375,13 @@
 					mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 					mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
 					mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+					
+					var loadTrait:LoadTrait = mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+					if (loadTrait != null)
+					{
+						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMediaLoadStateChange);
+						
+					}
 				}
 				else
 				{
@@ -352,7 +394,6 @@
 			private function playMediaElement():void
 			{
 				setMediaElement(mediaElement);
-				enablePlayerControls();
 			}
 			
 			private function setMediaElement(value:MediaElement):void
@@ -491,20 +532,48 @@
 				{
 					seekBar.value = event.time;
 					lblPlayhead.text = TimeUtil.formatAsTimeCode(event.time);
+					
+					if (bufferTrait)
+					{
+						currentBufferLength = bufferTrait.bufferLength;
+					}
 				}
 			}
 			
 			private function onMediaComplete(event:TimeEvent):void
 			{
-				if (event.type == TimeEvent.COMPLETE && playlist.length)
+				if (event.type == TimeEvent.COMPLETE)
 				{
-					var newIndex:int = (tileList.selectedIndex == (playlist.length - 1)) ? 0 : tileList.selectedIndex + 1;
-					tileList.selectedIndex = newIndex; 
-					tileList.scrollToIndex(newIndex);
-					playSelectedPlaylistItem();
+					if (playlist.length)
+					{
+						var newIndex:int = (tileList.selectedIndex == (playlist.length - 1)) ? 0 : tileList.selectedIndex + 1;
+						tileList.selectedIndex = newIndex; 
+						tileList.scrollToIndex(newIndex);
+						playSelectedPlaylistItem();
+					}
+					else if (isLive)
+					{
+						// Handle the case where the primary and secondary encoders crashed
+						this.mediaPlayer.play();
+					}
 				}
 			}
 			
+			private function onMediaLoadStateChange(event:LoadEvent):void
+			{
+				var loadTrait:NetStreamLoadTrait;
+				
+				switch(event.loadState)
+				{
+					case LoadState.READY:
+						appendInfoText("Media loaded.");
+						break;
+					case LoadState.UNLOADING:
+						appendInfoText("Media unloaded.");
+						break;
+				}
+			}
+						
 			private function onSeekingChange(event:SeekEvent):void
 			{
 				if (event.seeking == false)
@@ -528,8 +597,6 @@
    			
    			private function onTraitAdd(event:MediaElementEvent):void
    			{
-   				trace(">>> onTraitAdd - event.traitType="+event.traitType);
-   				
    				switch (event.traitType)
    				{
    					case MediaTraitType.SEEK:
@@ -543,6 +610,16 @@
    						var timeTrait:TimeTrait = (event.target as MediaElement).getTrait(event.traitType) as TimeTrait;
    						timeTrait.addEventListener(TimeEvent.COMPLETE, onMediaComplete);
    						break;
+   					case MediaTraitType.LOAD:
+   						var loadTrait:LoadTrait = (event.target as MediaElement).getTrait(event.traitType) as LoadTrait;
+   						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onMediaLoadStateChange);
+   						break;
+   					case MediaTraitType.BUFFER:
+						bufferTrait = (event.target as MediaElement).getTrait(MediaTraitType.BUFFER) as BufferTrait;
+						// For experimentation purposes. If you'd like to set a custom buffer length, here is how
+						// to do it:
+						//bufferTrait.bufferTime = 3;
+						break;
    				}	
    			}
    			
@@ -560,6 +637,10 @@
    					case MediaTraitType.TIME:
    						var timeTrait:TimeTrait = (event.target as MediaElement).getTrait(event.traitType) as TimeTrait;
    						timeTrait.removeEventListener(TimeEvent.COMPLETE, onMediaComplete);
+   						break;
+   					case MediaTraitType.LOAD:
+   						var loadTrait:LoadTrait = (event.target as MediaElement).getTrait(event.traitType) as LoadTrait;
+   						loadTrait.removeEventListener(LoadEvent.LOAD_STATE_CHANGE, onMediaLoadStateChange);
    						break;
    				}	
    			}
@@ -604,11 +685,29 @@
 				}
 			}
 			
+			private function onCanPauseChange(event:PlayEvent):void
+			{
+				playBtn.enabled = event.canPause;
+			}
+			
+			private function onPlayStateChange(event:PlayEvent):void
+			{
+				if (event.playState == PlayState.PLAYING)
+				{
+					enablePlayerControls();
+				}	
+			}
+			
    			private function appendInfoText(...args):void
    			{
    				var lineNum:int = currentInfoLineNum++;
+
+   				if (taInfo.text.length)
+   				{
+   					taInfo.text += "\n";
+   				}
    				
-   				taInfo.text += lineNum + ":" + args + "\n";
+   				taInfo.text += lineNum + ":" + args;
    				callLater(autoScrollInfoText);
    			}
    			
@@ -625,11 +724,7 @@
    			
    			private function onMediaError(event:MediaErrorEvent):void
    			{
-   				if (taInfo.text.length)
-   				{
-   					taInfo.text += "\n";
-   				}
-   				taInfo.text += taInfo.text + "error ID="+event.error.errorID+" message="+event.error.message;
+   				appendInfoText("ERROR : error ID="+event.error.errorID+" message="+event.error.message);
    			}
 
 			private function onClickPlayBtn():void
@@ -648,8 +743,10 @@
 				
 			private function enablePlayerControls(enable:Boolean=true):void
 			{
-				playBtn.enabled = enable;
+				playBtn.enabled = (mediaPlayer != null) ? mediaPlayer.canPause : enable;
 				mediaContainerHolder.alpha = (enable ? 1.0 : .33);
+				
+				currentBufferLength = NaN; 
 			}
 		]]>
 	</mx:Script>
@@ -692,7 +789,20 @@
 								<mx:Button label="Unload Media" click="{unloadMedia()}"/>			
 							</mx:FormItem>
 						</mx:HBox>
-					</mx:Form>	
+					</mx:Form>
+					<mx:Form verticalGap="0">
+						<mx:FormHeading label="Auth Params" />
+						<mx:HBox>
+							<mx:FormItem>
+								<mx:TextInput id="authParams" width="400"/>
+							</mx:FormItem>
+							<mx:FormItem>
+								<mx:RadioButtonGroup id="authType" />
+								<mx:RadioButton groupName="authType" label="connection-level" selected="true" value="{RB_CONNECT_AUTH_VALUE}" />
+								<mx:RadioButton groupName="authType" label="stream-level" value="{RB_STREAM_AUTH_VALUE}" />
+							</mx:FormItem>
+						</mx:HBox>
+					</mx:Form>
 			</mx:VBox>	
 		</mx:HBox>
 		
@@ -704,11 +814,13 @@
 				    <samples:MediaContainerUIComponent id="mediaContainerUIComponent" width="{MAX_VIDEO_WIDTH}" height="{MAX_VIDEO_HEIGHT}"  />
 		    		<mx:HSlider id="seekBar" width="100%" thumbPress="toggleDragging(true)" thumbRelease="toggleDragging(false)" 
 		    			enabled="false" visible="false" />
-		    		<mx:HBox horizontalAlign="right" width="100%">
+		    		<mx:HBox horizontalAlign="center" width="100%">
 		    			<mx:Label text="Position: " />
-						<mx:Label id="lblPlayhead" width="100" styleName="timeCode" />
+						<mx:Label id="lblPlayhead" width="45" styleName="timeCode" />
 						<mx:Label text="Duration: " />
-		    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />			
+		    			<mx:Label id="lblDuration" width="45" styleName="timeCode" />			
+						<mx:Label text="Buffer: " />
+						<mx:Label text="{currentBufferLength}" styleName="timeCode" width="45" />
 						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="false" width="70" />
 		    		</mx:HBox>			
 				</mx:VBox>

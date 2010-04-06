@@ -193,6 +193,13 @@ package org.osmf.smil.loader
 				{
 					elementLoadTrait.mediaElement = loadedElement;
 				}
+				
+				// Make sure we transfer any resource metadata from the original resource
+				for each(var metadataNS:String in loadTrait.resource.metadataNamespaceURLs)
+				{
+					var metadata:Object = loadTrait.resource.getMetadataValue(metadataNS); 
+					loadedElement.resource.addMetadataValue(metadataNS, metadata);
+				}
 
 				updateLoadTrait(loadTrait, LoadState.READY);
 			}		

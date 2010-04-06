@@ -22,9 +22,12 @@
 
 package com.akamai.osmf.net
 {
+	import com.akamai.osmf.AkamaiBasicStreamingPluginInfo;
+	
 	import flash.net.NetConnection;
 	
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.utils.URL;
 
@@ -33,20 +36,21 @@ package com.akamai.osmf.net
 	 * provide the means to create a unique key for connection sharing and
 	 * support token authentication.
 	 * 
-	 */
+	 **/
 	public class AkamaiNetConnectionFactory extends NetConnectionFactory
 	{
 		/**
-		 * Constructor.
-		 */
-		public function AkamaiNetConnectionFactory()
+		 * Override so we can get to the resource metadata.
+		 **/
+		override public function create(resource:URLResource):void
 		{
-			super();
+			_resourceMetadata = resource.getMetadataValue(AkamaiBasicStreamingPluginInfo.AKAMAI_METADATA_NAMESPACE) as Metadata;
+			super.create(resource);			
 		}
-
+		
 		/**
 		 * @inheritDoc
-		 */
+		 **/
 		override protected function createNetConnectionKey(resource:URLResource):String
 		{
 			var theURL:URL = new URL(resource.url);
@@ -59,11 +63,12 @@ package com.akamai.osmf.net
 		
 		/**
 		 * @inheritDoc
-		 */
+		 **/
 		override protected function createNetConnection():NetConnection
 		{
-			return new AkamaiNetConnection();
+			return new AkamaiNetConnection(_resourceMetadata);
 		}
+		
+		private var _resourceMetadata:Metadata;
 	}
 }
-

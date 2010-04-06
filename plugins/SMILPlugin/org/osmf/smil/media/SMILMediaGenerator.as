@@ -32,6 +32,7 @@ package org.osmf.smil.media
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
+	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.model.SMILElement;
@@ -194,6 +195,7 @@ package org.osmf.smil.media
 			{
 				dsr = new DynamicStreamingResource(hostURL);
 				dsr.streamItems = streamItems;
+				dsr.streamType = StreamType.LIVE_OR_RECORDED;
 			}
 			
 			return dsr;		

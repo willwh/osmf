@@ -29,15 +29,17 @@ package
 	import org.osmf.media.PluginInfo;
 
 	/**
-	 * The Akamai Basic Streaming Plugin for OSMF supports Akamai-specific behavior and functionality for streaming live and ondemand 
-	 * content as well as progressive download content over the Akamai network.  Support for Akamai's connect-level and stream-level
-	 * token authentication is included in this plugin.
-	 */
+	 * The Akamai Basic Streaming Plugin for OSMF supports Akamai-specific 
+	 * behavior and functionality for streaming live and ondemand content 
+	 * as well as progressive download content over the Akamai network.  
+	 * Support for Akamai's connect-level and stream-level token 
+	 * authentication is included in this plugin.
+	 **/
 	public class AkamaiBasicStreamingPlugin extends Sprite
 	{	
 		/**
 		 * Constructor
-		 */
+		 **/
 		public function AkamaiBasicStreamingPlugin()
 		{
 			_akamaiPluginInfo = new AkamaiBasicStreamingPluginInfo();
@@ -45,7 +47,7 @@ package
 		
 		/**
 		 * Gives the player the PluginInfo.
-		 */
+		 **/
 		public function get pluginInfo():PluginInfo
 		{
 			return _akamaiPluginInfo;
