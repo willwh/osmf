@@ -164,7 +164,7 @@ package org.osmf.examples.ads
 				var timeTrait:TimeTrait = proxiedElement.getTrait(MediaTraitType.TIME) as TimeTrait
 				if (timeTrait && timeTrait.duration && (timeTrait.duration - timeTrait.currentTime) > 0.9)
 				{
-					labelText = "[ Advertisment - Remaining Time: "+ Math.round(timeTrait.duration - timeTrait.currentTime) + " seconds... ]";
+					labelText = "[ Advertisement - Remaining Time: "+ Math.round(timeTrait.duration - timeTrait.currentTime) + " seconds... ]";
 				}
 			}
 			label.text = labelText;

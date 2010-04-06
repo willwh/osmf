@@ -36,9 +36,9 @@ package org.osmf.examples.recommendations
 
 	[Event(name="click", type="flash.events.MouseEvent")]
 	
-	public class RecomendationsElement extends MediaElement
+	public class RecommendationsElement extends MediaElement
 	{
-		public function RecomendationsElement()
+		public function RecommendationsElement()
 		{
 			super();
 

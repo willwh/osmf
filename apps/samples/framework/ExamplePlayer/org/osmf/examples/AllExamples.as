@@ -43,7 +43,7 @@ package org.osmf.examples
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
-	import org.osmf.examples.recommendations.RecomendationsElement;
+	import org.osmf.examples.recommendations.RecommendationsElement;
 	import org.osmf.examples.seeking.UnseekableProxyElement;
 	import org.osmf.examples.switchingproxy.SwitchingProxyElement;
 	import org.osmf.examples.text.TextElement;
@@ -949,7 +949,7 @@ package org.osmf.examples
 					,	"Demonstrates how a recommendations bumper can be implemented."
 					,	function():MediaElement
 						{
-							var recommendations:RecomendationsElement = new RecomendationsElement();
+							var recommendations:RecommendationsElement = new RecommendationsElement();
 							var elem:SerialElement = new SerialElement();
 							elem.addChild(new VideoElement(new URLResource(OSMF_ANIMATION)));
 							elem.addChild(recommendations);
@@ -971,7 +971,7 @@ package org.osmf.examples
 			examples.push
 				( new Example
 					(	"Ad insertion"
-					,	"Demonstrates how pre-, post- and midroll ads can be added in such a way that the adds aren't included in the main time line."
+					,	"Demonstrates how pre-, post- and midroll ads can be added in such a way that the ad durations aren't included in the main timeline.  Instead, they're shown in an overlay countdown timer."
 					,	function():MediaElement
 						{
 							var elem:PreMidPostRollElement
