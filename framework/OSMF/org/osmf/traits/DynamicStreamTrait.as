@@ -250,6 +250,7 @@ package org.osmf.traits
 		 * </p>
 		 * @throws RangeError If the specified index is less than zero or
 		 * greater than <code>maxAllowedIndex</code>.
+    	 * Note:  If the media is paused, switching will not take place until after play resumes.		 
 		 * @throws IllegalOperationError If the stream is not in manual switch mode.
 		 * 
 		 * @see maxAllowedIndex

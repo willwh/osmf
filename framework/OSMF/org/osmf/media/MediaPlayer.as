@@ -989,6 +989,7 @@ package org.osmf.media
 		 * mediaPlayer.switchDynamicStreamIndex(mediaPlayer.currentDynamicStreamIndex + 1);
 		 * </code>
 		 * </p>
+		 * Note:  If the media is paused, switching will not take place until after play resumes. 
 		 * @throws RangeError If the specified dynamic stream index is less than zero or
 		 * greater than <code>maxAllowedDynamicStreamIndex</code>.
 		 * @throws IllegalOperationError If the media is not a dynamic stream, or if the dynamic

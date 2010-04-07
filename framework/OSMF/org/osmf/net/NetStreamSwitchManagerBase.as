@@ -93,6 +93,7 @@ package org.osmf.net
 
 		/**
 		 * Initiate a switch to the stream with the given index.
+    	 * Note:  If the media is paused, switching will not take place until after play resumes.		 
 		 **/
 		public function switchTo(index:int):void
 		{
