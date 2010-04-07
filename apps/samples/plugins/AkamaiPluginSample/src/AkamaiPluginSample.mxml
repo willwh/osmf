@@ -798,8 +798,10 @@
 							</mx:FormItem>
 							<mx:FormItem>
 								<mx:RadioButtonGroup id="authType" />
-								<mx:RadioButton groupName="authType" label="connection-level" selected="true" value="{RB_CONNECT_AUTH_VALUE}" />
-								<mx:RadioButton groupName="authType" label="stream-level" value="{RB_STREAM_AUTH_VALUE}" />
+								<mx:HBox>
+									<mx:RadioButton groupName="authType" label="connection-level" selected="true" value="{RB_CONNECT_AUTH_VALUE}" />
+									<mx:RadioButton groupName="authType" label="stream-level" value="{RB_STREAM_AUTH_VALUE}" />									
+								</mx:HBox>
 							</mx:FormItem>
 						</mx:HBox>
 					</mx:Form>
@@ -824,6 +826,7 @@
 						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="false" width="70" />
 		    		</mx:HBox>			
 				</mx:VBox>
+				<mx:Spacer height="4"/>
 				<mx:TextArea id="taInfo" wordWrap="true" editable="false" enabled="true" width="{MAX_VIDEO_WIDTH}" height="100"/>		
 			</mx:VBox>
 			<mx:VBox id="playlistContainer" paddingLeft="20" visible="{playlist.length > 0}">

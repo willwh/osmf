@@ -69,6 +69,10 @@ Button {
 	themeColor: "haloSilver";
 }
 
+RadioButton {
+	themeColor: "haloSilver";
+}
+
 TextInput {
 	color: #000000;
 }
