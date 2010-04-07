@@ -29,6 +29,7 @@
 	<mx:Style source="DynamicStreamingSample.css" />
 	<mx:Script>
 		<![CDATA[
+			import org.osmf.traits.MediaTraitType;
 			import org.osmf.containers.MediaContainer;
 			import org.osmf.events.*;
 			import org.osmf.elements.VideoElement;
@@ -41,6 +42,7 @@
 			import org.osmf.media.URLResource;			
 			import org.osmf.net.DynamicStreamingResource;
 			import org.osmf.net.NetLoader;
+			import org.osmf.utils.*;
 			
 			// Force the inclusion of the PluginInfo class so we can 
 			// load the plugin statically
@@ -117,7 +119,7 @@
 				var resource:URLResource = new URLResource(url);
 
 				mediaElement = mediaFactory.createMediaElement(resource);
-
+				setupMediaElementListeners();
 				setMediaElement(mediaElement);
 				mediaContainerUIComponent.alpha = 1.0;
 			}
@@ -136,6 +138,49 @@
 					
 				mediaPlayer.media = value;
 			}
+
+			private function setupMediaElementListeners(add:Boolean=true):void
+			{
+				if (mediaElement == null)
+				{
+					return;
+				}
+				
+				if (add)
+				{
+					// Listen for traits to be added, so we can adjust the UI. For example, enable the seek bar
+					// when the seekable trait is added
+					mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+					mediaElement.addEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+					mediaElement.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				}
+				else
+				{
+					mediaElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+					mediaElement.removeEventListener(MediaElementEvent.TRAIT_REMOVE, onTraitRemove);
+					mediaElement.removeEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
+				}
+			}
+
+   			private function onTraitAdd(event:MediaElementEvent):void
+   			{
+   				switch (event.traitType)
+   				{
+   					case MediaTraitType.SEEK:
+   						seekBar.enabled = seekBar.visible = true;
+   						break;
+   				}	
+   			}
+   			
+   			private function onTraitRemove(event:MediaElementEvent):void
+   			{
+   				switch (event.traitType)
+   				{
+   					case MediaTraitType.SEEK:
+   						seekBar.enabled = seekBar.visible = false;
+   						break;
+   				}	
+   			}
 
 			private function loadPlugin(source:String):void
 			{
@@ -297,6 +342,7 @@
 			
 			private function unload():void
 			{
+				setupMediaElementListeners(false);
 				mediaPlayer.media = null;
 				mediaContainerUIComponent.alpha = MEDIA_PLAYER_UNLOADED_ALPHA;
 				clear(false);
@@ -331,8 +377,7 @@
 			private function onDurationChange(event:TimeEvent):void
 			{
 				seekBar.maximum = event.time;
-				lblDuration.text = timeCode(event.time);
-				seekBar.enabled = seekBar.visible = mediaPlayer.canSeek;
+				lblDuration.text = TimeUtil.formatAsTimeCode(event.time);
 			}
 						
 			private function onCurrentTimeChange(event:TimeEvent):void
@@ -340,7 +385,7 @@
 				if (mediaPlayer.temporal && !sliderDragging && !waitForSeek)
 				{
 					seekBar.value = event.time;
-					lblPlayhead.text = timeCode(event.time);
+					lblPlayhead.text = TimeUtil.formatAsTimeCode(event.time);
 				}
 			}
 			
@@ -374,21 +419,7 @@
    				}
    				taDebug.text += taDebug.text + "error ID="+event.error.errorID+" message="+event.error.message;
    			}
-   			
-			private function timeCode(sec:Number):String 
-			{
-				var h:Number = Math.floor(sec/3600);
-				h = isNaN(h) ? 0 : h;
-				
-				var m:Number = Math.floor((sec%3600)/60);
-				m = isNaN(m) ? 0 : m;
-				
-				var s:Number = Math.floor((sec%3600)%60);
-				s = isNaN(s) ? 0 : s;
-				
-				return (h == 0 ? "":(h<10 ? "0"+h.toString()+":" : h.toString()+":"))+(m<10 ? "0"+m.toString() : m.toString())+":"+(s<10 ? "0"+s.toString() : s.toString());
-			}
-   			
+   			   			
 			private function onSwitchUp():void
 			{
 				if (mediaPlayer.isDynamicStream && !mediaPlayer.autoDynamicStreamSwitch && !mediaPlayer.dynamicStreamSwitching)

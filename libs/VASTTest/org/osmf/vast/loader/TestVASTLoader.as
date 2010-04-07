@@ -475,13 +475,13 @@ package org.osmf.vast.loader
 			assertTrue(loader.canHandleResource(new URLResource("https://example.com")));
 			assertTrue(loader.canHandleResource(new URLResource("https://example.com/video.flv")));
 			assertTrue(loader.canHandleResource(new URLResource("https://example.com/script.php?param=value")));
+			assertTrue(loader.canHandleResource(new URLResource("assets/audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("audio.mp3")));
+			assertTrue(loader.canHandleResource(new URLResource("foo")));
 			
 			// And some invalid ones.
 			assertFalse(loader.canHandleResource(new URLResource("file:///audio.mp3")));
-			assertFalse(loader.canHandleResource(new URLResource("assets/audio.mp3")));
-			assertFalse(loader.canHandleResource(new URLResource("audio.mp3")));
 			assertFalse(loader.canHandleResource(new URLResource("httpt://example.com")));
-			assertFalse(loader.canHandleResource(new URLResource("foo")));
 			assertFalse(loader.canHandleResource(new URLResource("")));
 			assertFalse(loader.canHandleResource(new URLResource(null)));
 			assertFalse(loader.canHandleResource(new NullResource()));

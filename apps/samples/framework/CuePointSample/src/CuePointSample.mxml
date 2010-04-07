@@ -208,7 +208,7 @@
 					return;
 				}
 				
-				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePoint.type;
+				var msg:String = "time: "+timeCode(cuePoint.time)+", name: \""+cuePoint.name+"\", type: \""+cuePoint.type+"\"";
 				taCuePointEvents.text += msg + "\n";
 				
 				callLater(autoScroll);
