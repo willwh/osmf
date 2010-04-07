@@ -27,8 +27,10 @@ package org.osmf.mast
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaFactoryItemType;
-	import org.osmf.net.NetLoader;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.PluginInfo;
+	import org.osmf.metadata.Metadata;
+	import org.osmf.net.NetLoader;
 
 	/**
 	 * Encapsulation of a MAST plugin.
@@ -46,10 +48,10 @@ package org.osmf.mast
 		{		
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
-			var loader:NetLoader = new NetLoader();
+			loader = new NetLoader();
 			var item:MediaFactoryItem = new MediaFactoryItem
 				( "org.osmf.mast.MASTPluginInfo"
-				, loader.canHandleResource
+				, canHandleResource
 				, createMASTProxyElement
 				, MediaFactoryItemType.PROXY
 				);
@@ -58,9 +60,20 @@ package org.osmf.mast
 			super(items);
 		}
 		
+		private function canHandleResource(resource:MediaResourceBase):Boolean
+		{
+			// We only handle the resource if it has MAST metadata.
+			var metadata:Metadata = resource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
+			return 		metadata != null
+					&&	metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI) != null
+					&& 	loader.canHandleResource(resource);
+		}
+		
 		private function createMASTProxyElement():MediaElement
 		{
 			return new MASTProxyElement();
 		}
+		
+		private var loader:NetLoader;
 	}
 }
