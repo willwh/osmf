@@ -822,7 +822,7 @@
 						<mx:Label text="Duration: " />
 		    			<mx:Label id="lblDuration" width="45" styleName="timeCode" />			
 						<mx:Label text="Buffer: " />
-						<mx:Label text="{currentBufferLength}" styleName="timeCode" width="45" />
+						<mx:Label text="{currentBufferLength.toFixed(1)}" styleName="timeCode" width="45" />
 						<mx:Button id="playBtn" label="Pause" click="onClickPlayBtn()" enabled="false" width="70" />
 		    		</mx:HBox>			
 				</mx:VBox>
