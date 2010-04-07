@@ -95,11 +95,12 @@ package org.osmf.chrome.widgets
 				
 				scrubBarClickArea.x = scrubBarTrack.x;
 				scrubBarClickArea.y = scrubBarTrack.y;
+				scrubBarClickArea.graphics.clear();
 				scrubBarClickArea.graphics.beginFill(0xFFFFFF, 0);
 				scrubBarClickArea.graphics.drawRect(0, 0, scrubBarWidth, scrubber.height);
 				scrubBarClickArea.graphics.endFill();
 				
-				onScrubberUpdate();
+				onTimerTick();
 			}
 		}		
 		
@@ -234,7 +235,7 @@ package org.osmf.chrome.widgets
 		
 		private function prettyPrintSeconds(seconds:Number):String
 		{
-			seconds = Math.floor(isNaN(seconds) ? 0 : seconds);
+			seconds = Math.floor(isNaN(seconds) ? 0 : Math.max(0, seconds));
 			return Math.floor(seconds / 3600) 
 				 + ":"
 				 + (seconds % 3600 < 600 ? "0" : "")
