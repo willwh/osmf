@@ -825,6 +825,7 @@ package org.osmf.media
 		/**
 		 * Intrinsic width of the media, in pixels.
 		 * The intrinsic width is the width of the media before any processing has been applied.
+		 * The default if no DisplayObjectTrait is present, is NaN.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -833,12 +834,13 @@ package org.osmf.media
 		 */
 	    public function get mediaWidth():Number
 	    {
-	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaWidth : 0;
+	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaWidth : NaN;
 	    }
 		   
 		/**
 		 * Intrinsic height of the media, in pixels.
 		 * The intrinsic height is the height of the media before any processing has been applied.
+		 * The default if no DisplayObjectTrait is present, is NaN.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -847,7 +849,7 @@ package org.osmf.media
 		 */	
 		public function get mediaHeight():Number
 	    {
-	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaHeight : 0;
+	    	return _hasDisplayObject ? (getTraitOrThrow(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).mediaHeight : NaN;
 	    }
 	    
 	    /**
@@ -1442,7 +1444,7 @@ package org.osmf.media
 					{
 						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					}
-					if (displayObjectTrait.mediaHeight != 0 || displayObjectTrait.mediaWidth != 0)
+					if (!isNaN(displayObjectTrait.mediaHeight) || !isNaN(displayObjectTrait.mediaWidth))
 					{
 						dispatchEvent(new DisplayObjectEvent(DisplayObjectEvent.MEDIA_SIZE_CHANGE, false, false, null, displayObject, NaN, NaN, mediaWidth, mediaHeight));
 					}					
