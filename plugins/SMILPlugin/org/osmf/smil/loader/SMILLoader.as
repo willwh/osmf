@@ -33,11 +33,13 @@ package org.osmf.smil.loader
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorEvent;
+	import org.osmf.events.MediaFactoryEvent;
 	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.smil.media.SMILMediaGenerator;
 	import org.osmf.smil.model.SMILDocument;
 	import org.osmf.smil.parser.SMILParser;
@@ -180,7 +182,13 @@ package org.osmf.smil.loader
 		private function finishLoad(loadTrait:LoadTrait, smilDocument:SMILDocument):void
 		{
 			var mediaGenerator:SMILMediaGenerator = createMediaGenerator();
+			
+			// Listen for created elements so that we can add the "derived" resource metadata
+			// to them.  Use a high priority so that we can add the metadata before clients
+			// get the event.
+			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate, false, int.MAX_VALUE);
 			var loadedElement:MediaElement = mediaGenerator.createMediaElement(smilDocument, factory);
+			factory.removeEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
 			
 			if (loadedElement == null)
 			{
@@ -203,6 +211,15 @@ package org.osmf.smil.loader
 
 				updateLoadTrait(loadTrait, LoadState.READY);
 			}		
+		
+			function onMediaElementCreate(event:MediaFactoryEvent):void
+			{
+				var derivedResource:MediaResourceBase = event.mediaElement.resource;
+				if (derivedResource != null)
+				{
+					derivedResource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, loadTrait.resource);
+				}
+			}
 		}
 				
 		private var supportedMimeTypes:Vector.<String> = new Vector.<String>();

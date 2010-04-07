@@ -23,12 +23,19 @@ package org.osmf.test.smil.loader
 {
 	import flash.events.*;
 	
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.elements.proxyClasses.LoadFromDocumentLoadTrait;
 	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaError;
+	import org.osmf.events.MediaFactoryEvent;
+	import org.osmf.media.DefaultMediaFactory;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.MetadataNamespaces;
+	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.smil.loader.*;
 	import org.osmf.smil.model.*;
 	import org.osmf.test.smil.SMILTestConstants;
@@ -43,6 +50,8 @@ package org.osmf.test.smil.loader
 		override public function setUp():void
 		{
 			eventDispatcher = new EventDispatcher();
+			factory = new DefaultMediaFactory();
+			createdElements = [];
 			
 			super.setUp();
 		}
@@ -51,6 +60,8 @@ package org.osmf.test.smil.loader
 		{
 			super.tearDown();
 			
+			createdElements = null;
+			factory = null;
 			eventDispatcher = null;
 		}
 		
@@ -63,7 +74,7 @@ package org.osmf.test.smil.loader
 		public function testLoadWithValidSMILDocument():void
 		{
 			eventDispatcher.addEventListener("testComplete",addAsync(mustReceiveEvent,TEST_TIME));
-			
+			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
 			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithValidSMILDocument);
 			loader.load(createLoadTrait(loader, SUCCESSFUL_MBR_RESOURCE));
 		}
@@ -71,13 +82,15 @@ package org.osmf.test.smil.loader
 		public function testLoadWithValidSMILDocument2():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
+			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
 			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithValidSMILDocument);
 			loader.load(createLoadTrait(loader, SUCCESSFUL_PAR_RESOURCE));
 		}
 
-		public function testLoadWithValidMBRDocument():void
+		public function testLoadWithValidSMILDocument3():void
 		{
 			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, TEST_TIME));
+			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
 			loader.addEventListener(LoaderEvent.LOAD_STATE_CHANGE, onTestLoadWithValidSMILDocument);
 			loader.load(createLoadTrait(loader, SUCCESSFUL_SEQ_RESOURCE));
 		}
@@ -90,19 +103,55 @@ package org.osmf.test.smil.loader
 				var trait:LoadFromDocumentLoadTrait = event.loadTrait as LoadFromDocumentLoadTrait;
 				assertTrue(trait != null);
 				
-				// Just check that we got a valid MediaElement
+				// Check that we got a valid MediaElement.
 				var element:MediaElement = trait.mediaElement;
 				assertTrue(element != null);
 				
+				// Also check that we got the expected created elements.
+				if (trait.resource == SUCCESSFUL_SEQ_RESOURCE)
+				{
+					assertTrue(createdElements.length == 3);
+					assertTrue(createdElements[0] is VideoElement);
+					assertTrue(createdElements[0].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+					assertTrue(createdElements[1] is VideoElement);
+					assertTrue(createdElements[1].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+					assertTrue(createdElements[2] is VideoElement);
+					assertTrue(createdElements[2].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+				}
+				else if (trait.resource == SUCCESSFUL_PAR_RESOURCE)
+				{
+					assertTrue(createdElements.length == 3);
+					assertTrue(createdElements[0] is VideoElement);
+					assertTrue(createdElements[0].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+					assertTrue(createdElements[1] is ImageElement);
+					assertTrue(createdElements[1].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+					assertTrue(createdElements[2] is VideoElement);
+					assertTrue(createdElements[2].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);					
+				}
+				else if (trait.resource == SUCCESSFUL_MBR_RESOURCE)
+				{
+					assertTrue(createdElements.length == 1);
+					assertTrue(createdElements[0] is VideoElement);
+					assertTrue(createdElements[0].resource is DynamicStreamingResource);
+					assertTrue(createdElements[0].resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == trait.resource);
+				}
+				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
+		}
+		
+		private function onMediaElementCreate(event:MediaFactoryEvent):void
+		{
+			assertTrue(event.mediaElement.resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) != null);
+			
+			createdElements.push(event.mediaElement);
 		}
 		
 		//---------------------------------------------------------------------
 		
 		override protected function createInterfaceObject(... args):Object
 		{
-			return new SMILLoader();
+			return new SMILLoader(factory);
 		}
 
 		override protected function get successfulResource():MediaResourceBase
@@ -152,6 +201,8 @@ package org.osmf.test.smil.loader
 		
 		private static const TEST_TIME:int = 8000;
 		
+		private var factory:MediaFactory;
+		private var createdElements:Array;
 		private var eventDispatcher:EventDispatcher;
 		
 		private static const SUCCESSFUL_SEQ_RESOURCE:URLResource = new URLResource(SMILTestConstants.SMIL_DOCUMENT_SEQ_URL);

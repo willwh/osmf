@@ -29,6 +29,7 @@ package org.osmf.smil.media
 	import org.osmf.media.MediaElement;
 	import org.osmf.media.MediaFactory;
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
@@ -102,6 +103,7 @@ package org.osmf.smil.media
 					break;
 				case SMILElementType.VIDEO:
 					var resource:StreamingURLResource = new StreamingURLResource((smilElement as SMILMediaElement).src);
+					resource.mediaType = MediaType.VIDEO;
 					var videoElement:MediaElement = factory.createMediaElement(resource);
 					var smilVideoElement:SMILMediaElement = smilElement as SMILMediaElement;
 					
@@ -120,7 +122,8 @@ package org.osmf.smil.media
 					(parentMediaElement as CompositeElement).addChild(videoElement);
 					break;
 				case SMILElementType.IMAGE:
-					var imageResource:URLResource = new URLResource((smilElement as SMILMediaElement).src); 
+					var imageResource:URLResource = new URLResource((smilElement as SMILMediaElement).src);
+					imageResource.mediaType = MediaType.IMAGE;
 					var imageElement:MediaElement = factory.createMediaElement(imageResource);
 					var dur:Number = (smilElement as SMILMediaElement).duration;
 					var durationElement:DurationElement = new DurationElement(dur, imageElement);
@@ -128,6 +131,7 @@ package org.osmf.smil.media
 					break;
 				case SMILElementType.AUDIO:
 					var audioResource:URLResource = new URLResource((smilElement as SMILMediaElement).src);
+					audioResource.mediaType = MediaType.AUDIO;
 					var audioElement:MediaElement = factory.createMediaElement(audioResource);
 					(parentMediaElement as CompositeElement).addChild(audioElement);
 					break;

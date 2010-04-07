@@ -45,6 +45,11 @@ package org.osmf.metadata
 
 		/**
 		 * @private
+		 **/
+		public static const DERIVED_RESOURCE_METADATA:String			= "http://www.osmf.org/derivedResource/1.0";
+
+		/**
+		 * @private
 		 * 
 		 * Used by the layout system to log individual IDs of regions.  For debugging only.
 		 **/

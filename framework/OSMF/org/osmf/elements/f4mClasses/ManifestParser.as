@@ -534,7 +534,12 @@ package org.osmf.elements.f4mClasses
 			{
 				resource.clipStartTime = streamingManifestResource.clipStartTime;
 				resource.clipEndTime = streamingManifestResource.clipEndTime;
-			}		
+			}
+			
+			// Add metadata to the created resource specifying the resource from
+			// which it was derived.  This allows interested clients to determine
+			// the origins of the resource.
+			resource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, manifestResource);
 			
 			return resource;
 		}

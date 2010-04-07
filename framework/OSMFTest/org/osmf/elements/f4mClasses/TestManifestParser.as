@@ -229,7 +229,9 @@ package org.osmf.elements.f4mClasses
 			
 			// Make sure we don't put on an HTTPStreaming bootstrap:
 			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
-			assertNull(httpMetadata);					
+			assertNull(httpMetadata);
+			
+			assertTrue(resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == manifestResource);			
 		}
 		
 		public function testResourceCreationSubClip():void
@@ -260,6 +262,8 @@ package org.osmf.elements.f4mClasses
 			var drmMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.DRM_METADATA) as Metadata;
 			assertNotNull(drmMetadata);
 			assertTrue(drmMetadata.keys.length == 2 * DynamicStreamingResource(resource).streamItems.length);
+			
+			assertTrue(resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == manifestResource);
 		}
 		
 		
@@ -277,7 +281,8 @@ package org.osmf.elements.f4mClasses
 							</manifest>
 							
 			var manifest:Manifest = parser.parse(test);
-			var resource:MediaResourceBase = parser.createResource(manifest, new URLResource('http://example.com/manifest.f4m'));
+			var manifestResource:StreamingURLResource = new StreamingURLResource('http://example.com/manifest.f4m');
+			var resource:MediaResourceBase = parser.createResource(manifest, manifestResource);
 			
 			assertTrue(resource is DynamicStreamingResource);
 			assertEquals("low", DynamicStreamingItem(DynamicStreamingResource(resource).streamItems[0]).streamName);
@@ -292,6 +297,8 @@ package org.osmf.elements.f4mClasses
 			assertTrue(drmMetadata.getValue(keys[0]) != null);
 			assertTrue(drmMetadata.getValue(keys[1]) != null);
 			assertTrue(drmMetadata.getValue(keys[2]) != null);
+			
+			assertTrue(resource.getMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA) == manifestResource);
 		}
 		
 		public function testDynamicResourceCreationOutOfOrder():void
