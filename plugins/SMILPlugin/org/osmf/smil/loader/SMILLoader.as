@@ -187,7 +187,7 @@ package org.osmf.smil.loader
 			// to them.  Use a high priority so that we can add the metadata before clients
 			// get the event.
 			factory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate, false, int.MAX_VALUE);
-			var loadedElement:MediaElement = mediaGenerator.createMediaElement(smilDocument, factory);
+			var loadedElement:MediaElement = mediaGenerator.createMediaElement(loadTrait.resource, smilDocument, factory);
 			factory.removeEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaElementCreate);
 			
 			if (loadedElement == null)
@@ -202,13 +202,6 @@ package org.osmf.smil.loader
 					elementLoadTrait.mediaElement = loadedElement;
 				}
 				
-				// Make sure we transfer any resource metadata from the original resource
-				for each(var metadataNS:String in loadTrait.resource.metadataNamespaceURLs)
-				{
-					var metadata:Object = loadTrait.resource.getMetadataValue(metadataNS); 
-					loadedElement.resource.addMetadataValue(metadataNS, metadata);
-				}
-
 				updateLoadTrait(loadTrait, LoadState.READY);
 			}		
 		

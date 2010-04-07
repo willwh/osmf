@@ -724,7 +724,18 @@
    			
    			private function onMediaError(event:MediaErrorEvent):void
    			{
-   				appendInfoText("ERROR : error ID="+event.error.errorID+" message="+event.error.message);
+   				var msg:String = "ERROR : error ID="+event.error.errorID;
+   				
+   				if (event.error.message != null && event.error.message.length > 0)
+   				{
+   					msg += " message="+event.error.message;
+   				}
+   				if (event.error.detail != null && event.error.detail.length > 0)
+   				{
+   					msg += " detail=" + event.error.detail;
+   				}
+   				
+   				appendInfoText(msg);
    			}
 
 			private function onClickPlayBtn():void

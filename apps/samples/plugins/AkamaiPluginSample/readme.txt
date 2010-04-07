@@ -6,7 +6,8 @@ This sample application demonstrates loading OSMF plugins and can also display,
 and play a playlist from a Media RSS feed.
 
 The Akamai plugin handles secure streaming for both live and on-demand content over the Akamai network.  
-There is a sample stream containing an auth token in the sample.
+There is a sample stream containing an auth token in the sample.  Auth tokens can be passed as query strings
+on the URL, or seperately as resource metadata using the auth token text input in the sample.
 
 The MAST plugin loads a MAST document, parses it, and loads it's payload (a VAST document containing a sample ad pre-roll).
 You will see an ad pre-roll before each video when this plugin is loaded.  In the "loadMedia" function, you can see
@@ -14,9 +15,6 @@ the URL of the MAST document being set as metadata on the media element's resour
 
 The SMIL plugin loads a SMIL document, parses it, and creates MediaElement(s) based on the contents of the SMIL.
 This includes a serial composition of videos and RTMP dynamic streaming.
-
-*NOTE: there is a bug in the MAST plugin that prevents it from working with the SMIL plugin.  If both of these are loaded
-you will not be able to play SMIL content, but all other media samples should work fine with the MAST plugin loaded.
 
 B. Installation Instructions (Flex Builder)
 

@@ -31,6 +31,7 @@ package org.osmf.smil.media
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.MediaType;
 	import org.osmf.media.URLResource;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.StreamType;
@@ -55,10 +56,13 @@ package org.osmf.smil.media
 		/**
 		 * Creates the relevant MediaElement from the SMILDocument.
 		 * 
+		 * @param resource The original resource that was given to the load trait. 
+		 * This resource might be a URLto a SMIL document, for example, and may 
+		 * contain metadata we need to retain.
 		 * @param smilDocument The SMILDocument to use for media creation.
 		 * @returns A new MediaElement based on the information found in the SMILDocument.
 		 */
-		public function createMediaElement(smilDocument:SMILDocument, factory:MediaFactory):MediaElement
+		public function createMediaElement(resource:MediaResourceBase, smilDocument:SMILDocument, factory:MediaFactory):MediaElement
 		{
 			this.factory = factory;
 			
@@ -72,7 +76,7 @@ package org.osmf.smil.media
 			for (var i:int = 0; i < smilDocument.numElements; i++)
 			{
 				var smilElement:SMILElement = smilDocument.getElementAt(i);
-				mediaElement = internalCreateMediaElement(null, smilDocument, smilElement);
+				mediaElement = internalCreateMediaElement(resource, null, smilDocument, smilElement);
 			}
 							
 			return mediaElement;
@@ -81,8 +85,8 @@ package org.osmf.smil.media
 		/**
 		 * Recursive function to create a media element and all of it's children.
 		 */
-		private function internalCreateMediaElement(parentMediaElement:MediaElement, smilDocument:SMILDocument, 
-													smilElement:SMILElement):MediaElement
+		private function internalCreateMediaElement(originalResource:MediaResourceBase, parentMediaElement:MediaElement, 
+													smilDocument:SMILDocument, smilElement:SMILElement):MediaElement
 		{
 			var mediaResource:MediaResourceBase = null;
 			
@@ -142,11 +146,18 @@ package org.osmf.smil.media
 				for (var i:int = 0; i < smilElement.numChildren; i++)
 				{
 					var childElement:SMILElement = smilElement.getChildAt(i);
-					internalCreateMediaElement(mediaElement, smilDocument, childElement);
+					internalCreateMediaElement(originalResource, mediaElement, smilDocument, childElement);
 				}
 			}
 			else if (mediaResource != null)
 			{
+				// Make sure we transfer any resource metadata from the original resource
+				for each (var metadataNS:String in originalResource.metadataNamespaceURLs)
+				{
+					var metadata:Object = originalResource.getMetadataValue(metadataNS); 
+					mediaResource.addMetadataValue(metadataNS, metadata);
+				}
+				
 				mediaElement = factory.createMediaElement(mediaResource);
 			}
 			
