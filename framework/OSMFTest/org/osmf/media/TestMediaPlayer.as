@@ -946,16 +946,10 @@ package org.osmf.media
 		private function doTestWidthHeight():void
 		{
 			if (traitExists(MediaTraitType.DISPLAY_OBJECT))
-			{
-				assertTrue(mediaPlayer.mediaWidth == 0);
-				assertTrue(mediaPlayer.mediaHeight == 0);
-				
+			{							
 				mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
-								
-				// For some media, triggering playback will cause the true
-				// dimensions to get set.
 				mediaPlayer.play();
-				
+												
 				function onTestWidthHeight(event:DisplayObjectEvent):void
 				{
 					mediaPlayer.removeEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onTestWidthHeight);
@@ -970,8 +964,8 @@ package org.osmf.media
 			}
 			else
 			{
-				assertTrue(mediaPlayer.mediaWidth == 0);
-				assertTrue(mediaPlayer.mediaHeight == 0);
+				assertTrue(isNaN(mediaPlayer.mediaWidth));
+				assertTrue(isNaN(mediaPlayer.mediaHeight));
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
 			}
@@ -1158,8 +1152,8 @@ package org.osmf.media
 			mediaPlayer.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, eventCatcher);
 			mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, eventCatcher);
 						
-			assertEquals(0, mediaPlayer.mediaHeight);
-			assertEquals(0, mediaPlayer.mediaWidth);
+			assertTrue(isNaN(mediaPlayer.mediaHeight));
+			assertTrue(isNaN(mediaPlayer.mediaWidth));
 			assertEquals(null, mediaPlayer.displayObject);
 			var display:Sprite = new Sprite();
 			var doTrait:DisplayObjectTrait = new DisplayObjectTrait(display, 150, 200);
