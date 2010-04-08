@@ -33,6 +33,7 @@ package org.osmf.elements.f4mClasses
 	import org.osmf.net.DynamicStreamingItem;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetStreamUtils;
+	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.URL;
@@ -98,6 +99,13 @@ package org.osmf.elements.f4mClasses
 			}
 			
 			var baseUrl:String = (manifest.baseURL != null) ? manifest.baseURL :  rootUrl;
+			
+			// DVRInfo
+			for each (var dvrInfo:XML in root.xmlns::dvrInfo)
+			{
+				parseDVRInfo(dvrInfo, baseUrl, manifest);	
+				break;		
+			}	
 			
 			// Media	
 			
@@ -210,6 +218,38 @@ package org.osmf.elements.f4mClasses
 			}
 
 			return media;
+		}
+		
+		private function parseDVRInfo(value:XML, baseUrl:String, manifest:Manifest):void
+		{
+			var dvrInfo:DVRInfo = new DVRInfo();
+			if (value.attribute("id").length() > 0)
+			{
+				dvrInfo.id = value.@id;
+			}
+			if (value.attribute("url").length() > 0)
+			{
+				var url:String = value.@url;
+				if (!isAbsoluteURL(url))
+				{
+					url = baseUrl + "/" + url;
+				}
+				dvrInfo.url = url;
+			}
+			if (value.attribute("beginOffset").length() > 0)
+			{
+				dvrInfo.beginOffset = value.@beginOffset;
+			}
+			if (value.attribute("endOffset").length() > 0)
+			{
+				dvrInfo.endOffset = value.@endOffset;
+			}
+			if (value.attribute("offline").length() > 0)
+			{
+				dvrInfo.offline = value.@offline;
+			}
+			
+			manifest.dvrInfo = dvrInfo;
 		}
 		
 		private function parseDRMAdditionalHeader(value:XML, allMedia:Vector.<Media>, baseUrl:String, manifest:Manifest):void
@@ -374,11 +414,11 @@ package org.osmf.elements.f4mClasses
 				}				
 				else if (value.baseURL != null)	// Relative to Base URL					
 				{
-					resource = new StreamingURLResource(value.baseURL + "/" + url, value.streamType);
+					resource = new StreamingURLResource(value.baseURL + "/" + url, streamType(value));
 				}
 				else // Relative to F4M file  (no absolute or base urls or rtmp urls).
 				{
-					resource = new StreamingURLResource(manifestFolder + "/" + url, value.streamType);
+					resource = new StreamingURLResource(manifestFolder + "/" + url, streamType(value));
 				}
 				
 				if (media.bootstrapInfo	!= null)
@@ -449,7 +489,7 @@ package org.osmf.elements.f4mClasses
 				// But we need to map them into the DynamicStreamingResource object model, which
 				// assumes the latter.  For now, we only support the latter input, but we should
 				// add support for the former (absolute URLs with no base URL).
-				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, value.streamType);
+				var dynResource:DynamicStreamingResource = new DynamicStreamingResource(baseURL, streamType(value));
 				
 				var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
 				
@@ -541,6 +581,8 @@ package org.osmf.elements.f4mClasses
 			// the origins of the resource.
 			resource.addMetadataValue(MetadataNamespaces.DERIVED_RESOURCE_METADATA, manifestResource);
 			
+			addDVRInfo(value, resource);
+			
 			return resource;
 		}
 		
@@ -577,6 +619,27 @@ package org.osmf.elements.f4mClasses
 			}
 			
 			return metadata;
+		}
+
+		private function addDVRInfo(manifest:Manifest, resource:StreamingURLResource):void
+		{
+			if (manifest.dvrInfo == null)
+			{
+				return;
+			}
+			
+			var metadata:Metadata = new Metadata();
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_BEGIN_OFFSET_KEY, manifest.dvrInfo.beginOffset);
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY, manifest.dvrInfo.endOffset);
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_OFFLINE_KEY, manifest.dvrInfo.offline);
+			metadata.addValue(MetadataNamespaces.HTTP_STREAMING_DVR_ID_KEY, manifest.dvrInfo.id);
+			
+			resource.addMetadataValue(MetadataNamespaces.DVR_METADATA, metadata);
+		}
+		
+		private function streamType(value:Manifest):String
+		{
+			return (value.streamType == StreamType.LIVE && value.dvrInfo != null)? StreamType.DVR : value.streamType; 
 		}
 	}
 }

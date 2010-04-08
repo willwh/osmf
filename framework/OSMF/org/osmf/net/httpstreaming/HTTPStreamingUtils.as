@@ -24,6 +24,7 @@ package org.osmf.net.httpstreaming
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
+	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
@@ -87,22 +88,56 @@ package org.osmf.net.httpstreaming
 			var indexInfo:HTTPStreamingF4FIndexInfo = null;
 			
 			var httpMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) as Metadata;
+			var dvrMetadata:Metadata = resource.getMetadataValue(MetadataNamespaces.DVR_METADATA) as Metadata;
 			if (httpMetadata != null)
 			{
 				var serverBaseURLs:Vector.<String>
 					= httpMetadata.getValue(MetadataNamespaces.HTTP_STREAMING_SERVER_BASE_URLS_KEY) as Vector.<String>;
-				
 				var streamInfos:Vector.<HTTPStreamingF4FStreamInfo> = generateStreamInfos(resource);
+				var dvrInfo:DVRInfo = generateDVRInfo(dvrMetadata);
 				
 				indexInfo =
 					new HTTPStreamingF4FIndexInfo
 						( 
 						serverBaseURLs != null && serverBaseURLs.length > 0 ? serverBaseURLs[0] : null
 						, streamInfos
+						, dvrInfo
 						);
 			}
 			
 			return indexInfo;
+		}
+		
+		private static function generateDVRInfo(metadata:Metadata):DVRInfo
+		{
+			if (metadata == null)
+			{
+				return null;
+			}
+			
+			var dvrInfo:DVRInfo = new DVRInfo();
+			dvrInfo.id = "";
+			dvrInfo.beginOffset = NaN;
+			dvrInfo.endOffset = NaN;
+			dvrInfo.offline = false;
+			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_ID_KEY) != null)
+			{
+				dvrInfo.id = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_ID_KEY) as String;
+			}
+			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_BEGIN_OFFSET_KEY) != null)
+			{
+				dvrInfo.beginOffset = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_BEGIN_OFFSET_KEY) as uint;
+			}
+			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY) != null)
+			{
+				dvrInfo.endOffset = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_END_OFFSET_KEY) as uint;
+			}
+			if (metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_OFFLINE_KEY) != null)
+			{
+				dvrInfo.offline = metadata.getValue(MetadataNamespaces.HTTP_STREAMING_DVR_OFFLINE_KEY) as String;
+			}
+			
+			return dvrInfo;
 		}
 		
 		private static function generateStreamInfos(resource:URLResource):Vector.<HTTPStreamingF4FStreamInfo>

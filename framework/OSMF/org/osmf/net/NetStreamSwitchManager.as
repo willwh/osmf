@@ -171,7 +171,6 @@ package org.osmf.net
 					{
 						prepareForSwitching();
 					}
-
 					executeSwitch(index);
 				}
 			}
@@ -338,7 +337,6 @@ package org.osmf.net
 				{
 					debug("checkRules() - Calling for switch to " + newIndex + " at " + dsResource.streamItems[newIndex].bitrate + " kbps");
 				}
-				
 				executeSwitch(newIndex);
 			}  
 		}
@@ -362,18 +360,17 @@ package org.osmf.net
 					switching  = false;
 					actualIndex = dsResource.indexFromName(event.info.details);
 					metrics.currentIndex = actualIndex;
-					pendingTransitionsArray.push(actualIndex);
+					lastTransitionIndex = actualIndex;
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_FAILED:
 					switching  = false;
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_NOTIFY:
 					switching  = false;
-					if (pendingTransitionsArray.length > 0) 
+					if (lastTransitionIndex >= 0)
 					{
-						_currentIndex = pendingTransitionsArray[0];
-						pendingTransitionsArray.shift();
-					}			
+						_currentIndex = lastTransitionIndex;
+					}					
 					break;
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
 					checkRulesTimer.stop();
@@ -395,13 +392,16 @@ package org.osmf.net
 			switch (info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE:
-					_currentIndex = pendingTransitionsArray[0];
+					if (lastTransitionIndex >= 0)
+					{
+						_currentIndex = lastTransitionIndex;
+						lastTransitionIndex = -1;
+					}
 					
 					CONFIG::LOGGING
 					{
 						debug("onPlayStatus() - Transition complete to index: " + currentIndex + " at " + Math.round(dsResource.streamItems[currentIndex].bitrate) + " kbps");
 					}
-					pendingTransitionsArray.shift();
 
 					break;
 			}
@@ -418,7 +418,7 @@ package org.osmf.net
 			metrics.resource = dsResource;
 			
 			actualIndex = 0;
-			pendingTransitionsArray = new Array();
+			lastTransitionIndex = -1;
 			
 			if ((dsResource.initialIndex >= 0) && (dsResource.initialIndex < dsResource.streamItems.length))
 			{
@@ -506,7 +506,7 @@ package org.osmf.net
 		private var oldStreamName:String;
 		private var switching:Boolean;
 		private var _currentIndex:int;
-		private var pendingTransitionsArray:Array;
+		private var lastTransitionIndex:int = -1;
 		private var connection:NetConnection;
 		private var dsiFailedCounts:Vector.<int>;		// This vector keeps track of the number of failures 
 														// for each DynamicStreamingItem in the DynamicStreamingResource

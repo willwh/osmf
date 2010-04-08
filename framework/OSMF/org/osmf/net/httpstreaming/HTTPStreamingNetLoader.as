@@ -24,18 +24,24 @@ package org.osmf.net.httpstreaming
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
+	import org.osmf.events.DVRStreamInfoEvent;
+	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.DynamicStreamingResource;
 	import org.osmf.net.NetLoader;
+	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.NetStreamSwitchManager;
 	import org.osmf.net.NetStreamSwitchManagerBase;
 	import org.osmf.net.SwitchingRuleBase;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FFileHandler;
 	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
+	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait;
+	import org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait;
 	import org.osmf.net.rtmpstreaming.DroppedFramesRule;
+	import org.osmf.traits.LoadState;
 
 	/**
 	 * A NetLoader subclass which adds support for HTTP streaming.
@@ -104,6 +110,49 @@ package org.osmf.net.httpstreaming
 				return new NetStreamSwitchManager(connection, netStream, dsResource, metrics, getDefaultSwitchingRules(metrics));
 			}
 			return null;
+		}
+		
+		/**
+		 * @private
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */		
+		override protected function processFinishLoading(loadTrait:NetStreamLoadTrait):void
+		{
+			var resource:URLResource = loadTrait.resource as URLResource;
+			
+			if (!dvrMetadataPresent(resource))
+			{
+				updateLoadTrait(loadTrait, LoadState.READY);
+				
+				return;
+			}
+
+			var netStream:HTTPNetStream = loadTrait.netStream as HTTPNetStream;
+			netStream.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+			netStream.DVRGetStreamInfo(null);
+			function onDVRStreamInfo(event:DVRStreamInfoEvent):void
+			{
+				netStream.removeEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+				
+				loadTrait.setTrait(new HTTPStreamingDVRCastDVRTrait(loadTrait.connection, netStream, event.info as DVRInfo));
+				loadTrait.setTrait(new HTTPStreamingDVRCastTimeTrait(loadTrait.connection, netStream, event.info as DVRInfo));
+				updateLoadTrait(loadTrait, LoadState.READY);
+			}
+		}
+		
+		//
+		// Internal
+		//
+
+		private function dvrMetadataPresent(resource:URLResource):Boolean
+		{
+			var metadata:Metadata = resource.getMetadataValue(MetadataNamespaces.DVR_METADATA) as Metadata;
+			
+			return (metadata != null);
 		}
 		
 		private function getDefaultSwitchingRules(metrics:HTTPNetStreamMetrics):Vector.<SwitchingRuleBase>

@@ -43,7 +43,9 @@ package org.osmf.net.httpstreaming
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.httpstreaming.f4f.HTTPStreamingF4FIndexHandler;
 	import org.osmf.net.httpstreaming.flv.FLVHeader;
 	import org.osmf.net.httpstreaming.flv.FLVParser;
 	import org.osmf.net.httpstreaming.flv.FLVTag;
@@ -221,7 +223,7 @@ package org.osmf.net.httpstreaming
 				// TODO: should there be a guard to protect the case where indexIsReady is not yet true BUT play has already been called, so we are in an
 				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
 				// event back, go ahead and call play()
-				indexHandler.initialize(_indexInfo != null ? _indexInfo : streamName);
+				(indexHandler as HTTPStreamingF4FIndexHandler).dvrGetStreamInfo(_indexInfo != null ? _indexInfo : streamName);
 			}
 		}
 		
@@ -280,6 +282,10 @@ package org.osmf.net.httpstreaming
 			setState(HTTPStreamingState.INIT);
 			_initialTime = -1;
 			_seekTime = -1;
+			if (_dvrInfo != null)
+			{
+				_seekTime = _dvrInfo.startTime;
+			}
 									
 			indexIsReady = false;
 			indexHandler.initialize(_indexInfo != null ? _indexInfo : args[0]);
@@ -1300,6 +1306,7 @@ package org.osmf.net.httpstreaming
 		
 		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
 		{
+			_dvrInfo = event.info as DVRInfo;
 			dispatchEvent(event.clone());
 		}
 
@@ -1438,7 +1445,8 @@ package org.osmf.net.httpstreaming
 		private var _playForDuration:Number = -1;
 		private var _lastValidTimeTime:Number = 0;
 		private var _retryAfterWaitUntil:Number = 0;	// millisecond timestamp (as per date.getTime) of when we retry next
-
+		
+		private var _dvrInfo:DVRInfo = null;
 		
 		CONFIG::LOGGING
 		{

@@ -148,5 +148,15 @@ package org.osmf.elements.f4mClasses
 		 *  @productversion OSMF 1.0
 		 */ 
 		public var media:Vector.<Media> = new Vector.<Media>();
+
+		/**
+		 * The dvrInfo element. It is needed to play DVR media.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */ 
+		public var dvrInfo:DVRInfo = null;
 	}
 }

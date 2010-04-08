@@ -31,6 +31,7 @@ package org.osmf.net.dvr
 	import org.osmf.net.NetStreamLoadTrait;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.traits.LoadState;
 	
 	/**
 	 * Defines a NetLoader sublcass for loading streams from a DVRCast equiped
@@ -104,6 +105,8 @@ package org.osmf.net.dvr
 		{
 			loadTrait.setTrait(new DVRCastDVRTrait(loadTrait.connection as DVRCastNetConnection, loadTrait.netStream));
 			loadTrait.setTrait(new DVRCastTimeTrait(loadTrait.connection as DVRCastNetConnection, loadTrait.netStream));
+
+			updateLoadTrait(loadTrait, LoadState.READY);
 		}
 	}
 }

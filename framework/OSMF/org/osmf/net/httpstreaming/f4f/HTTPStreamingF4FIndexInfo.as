@@ -26,6 +26,7 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexInfoBase;
+	import org.osmf.elements.f4mClasses.DVRInfo;
 	
 	[ExcludeClass]
 	
@@ -40,12 +41,14 @@ package org.osmf.net.httpstreaming.f4f
 			(
 			 serverBaseURL:String=null
 			, streamInfos:Vector.<HTTPStreamingF4FStreamInfo>=null
+			, dvrInfo:DVRInfo = null
 			)
 		{
 			super();
 			
 			_serverBaseURL = serverBaseURL;
 			_streamInfos = streamInfos;
+			_dvrInfo = dvrInfo;
 		}
 
 		public function get serverBaseURL():String
@@ -58,7 +61,13 @@ package org.osmf.net.httpstreaming.f4f
 			return _streamInfos;
 		}
 		
+		public function get dvrInfo():DVRInfo
+		{
+			return _dvrInfo;
+		}
+		
 		private var _serverBaseURL:String;
+		private var _dvrInfo:DVRInfo;
 		private var _streamInfos:Vector.<HTTPStreamingF4FStreamInfo>;
 	}
 }

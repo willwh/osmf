@@ -98,6 +98,11 @@ package org.osmf.metadata
 		/**
 		 * @private
 		 **/
+		public static const DVR_METADATA:String							= "http://www.osmf.org/dvr/1.0";
+
+		/**
+		 * @private
+		 **/
 		public static const DRM_ADDITIONAL_HEADER_KEY:String			= "DRMAdditionalHeader";
 
 		/**
@@ -124,5 +129,25 @@ package org.osmf.metadata
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_SERVER_BASE_URLS_KEY:String 	= "serverBaseUrls";
+
+		/**
+		 * @private
+		 **/
+		public static const HTTP_STREAMING_DVR_BEGIN_OFFSET_KEY:String 		= "beginOffset";
+
+		/**
+		 * @private
+		 **/
+		public static const HTTP_STREAMING_DVR_END_OFFSET_KEY:String 		= "endOffset";
+
+		/**
+		 * @private
+		 **/
+		public static const HTTP_STREAMING_DVR_OFFLINE_KEY:String 			= "dvrOffline";
+
+		/**
+		 * @private
+		 **/
+		public static const HTTP_STREAMING_DVR_ID_KEY:String 					= "dvrId";
 	}
 }

@@ -175,12 +175,14 @@ package org.osmf.net
 		 * @private
 		 * 
 		 * Subclass stub that can be used to do special processing just upfront
-		 * the loader finishing loading.
+		 * the loader finishing loading. Also, the overriding method must 
+		 * call the updateLoadTrait method at the end.
 		 *  
 		 * @param loadTrait
 		 */		
 		protected function processFinishLoading(loadTrait:NetStreamLoadTrait):void
 		{	
+			updateLoadTrait(loadTrait, LoadState.READY);
 		}
 
 		/**
@@ -276,8 +278,6 @@ package org.osmf.net
 			netLoadTrait.netConnectionFactory = factory;
 			
 			processFinishLoading(loadTrait as NetStreamLoadTrait);
-			
-			updateLoadTrait(loadTrait, LoadState.READY);
 		}	
 		
 		/**

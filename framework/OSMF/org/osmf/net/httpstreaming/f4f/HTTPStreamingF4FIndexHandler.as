@@ -27,8 +27,10 @@ package org.osmf.net.httpstreaming.f4f
 	import flash.utils.ByteArray;
 	
 	import org.osmf.elements.f4mClasses.BootstrapInfo;
+	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.events.HTTPStreamingFileHandlerEvent;
 	import org.osmf.events.HTTPStreamingIndexHandlerEvent;
+	import org.osmf.net.dvr.DVRUtils;
 	import org.osmf.net.httpstreaming.HTTPStreamRequest;
 	import org.osmf.net.httpstreaming.HTTPStreamingFileHandlerBase;
 	import org.osmf.net.httpstreaming.HTTPStreamingIndexHandlerBase;
@@ -66,6 +68,7 @@ package org.osmf.net.httpstreaming.f4f
 			fragmentRunTablesUpdating = false;		
 			this.fileHandler = fileHandler;	
 			this.fragmentsThreshold = fragmentsThreshold;
+			dvrGetStreamInfoCall = false;
 			
 			fileHandler.addEventListener(HTTPStreamingFileHandlerEvent.NOTIFY_BOOTSTRAP_BOX, onNewBootstrapBox);
 		}
@@ -81,6 +84,16 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * @private
 		 */
+		public function dvrGetStreamInfo(indexInfo:Object):void
+		{
+			dvrGetStreamInfoCall = true;
+			playInProgress = false;
+			initialize(indexInfo);
+		} 
+		
+		/**
+		 * @private
+		 */
 		override public function initialize(indexInfo:Object):void
 		{
 			// Make sure we have an info object of the expected type.
@@ -90,8 +103,10 @@ package org.osmf.net.httpstreaming.f4f
 				dispatchEvent(new HTTPStreamingIndexHandlerEvent(HTTPStreamingIndexHandlerEvent.NOTIFY_ERROR));
 				return;					
 			}
+			
 			bootstrapBoxes = new Vector.<AdobeBootstrapBox>(f4fIndexInfo.streamInfos.length);
 			fragmentRunTablesUpdating= false;
+			playInProgress = false;
 			pendingIndexLoads = 0;
 			
 			serverBaseURL = f4fIndexInfo.serverBaseURL;			
@@ -150,7 +165,7 @@ package org.osmf.net.httpstreaming.f4f
 						)
 					);
 
-				notifyIndexReady();
+				notifyIndexReady(0);
 			}
 		}
 		
@@ -208,7 +223,7 @@ package org.osmf.net.httpstreaming.f4f
 						)
 					);
 
-				notifyIndexReady();
+				notifyIndexReady(index);
 			}
 		}	
 		
@@ -253,8 +268,13 @@ package org.osmf.net.httpstreaming.f4f
 					}
 				}
 				
-				var segId:uint = abst.findSegmentId(currentFAI.fragId);
+				if (!playInProgress && stopPlaying(abst))
+				{
+					return null;
+				}
 				
+				playInProgress = true;
+				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				var requestUrl:String = "";
 				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
 				{
@@ -324,6 +344,12 @@ package org.osmf.net.httpstreaming.f4f
 					}
 				}
 
+				if (!playInProgress && stopPlaying(abst))
+				{
+					return null;
+				}
+
+				playInProgress = true;
 				var segId:uint = abst.findSegmentId(currentFAI.fragId);
 				var requestUrl:String = "";
 				if ((streamInfos[quality].streamName as String).indexOf("http") != 0)
@@ -602,26 +628,54 @@ package org.osmf.net.httpstreaming.f4f
 				);				
 		}
 		
-		private function notifyIndexReady():void
+		private function notifyIndexReady(quality:int):void
 		{
-			var abst:AdobeBootstrapBox = bootstrapBoxes[0];
-			var offset:Number = 0;
-			if (abst.live)
-			{
-				offset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
-			}
+			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
 			
-			dispatchEvent
-				( new HTTPStreamingIndexHandlerEvent
-					( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
-					, false
-					, false
-					, abst.live
-					, offset 
-					)
-				);
+			if (f4fIndexInfo.dvrInfo != null)
+			{
+				f4fIndexInfo.dvrInfo.isRecording = !frt.tableComplete();
+				f4fIndexInfo.dvrInfo.curLength = abst.totalDuration/abst.timeScale;
+				f4fIndexInfo.dvrInfo.startTime = 
+					frt.tableComplete()? 0 : DVRUtils.calculateOffset(
+						f4fIndexInfo.dvrInfo.beginOffset, f4fIndexInfo.dvrInfo.endOffset, abst.totalDuration/abst.timeScale);
+			}	
+
+			dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
+			dvrGetStreamInfoCall = false;
+
+			if (!dvrGetStreamInfoCall)
+			{
+				var offset:Number = 0;
+				if (abst.live && f4fIndexInfo.dvrInfo == null)
+				{
+					offset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
+				}
+			
+				dispatchEvent
+					( new HTTPStreamingIndexHandlerEvent
+						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
+						, false
+						, false
+						, abst.live
+						, offset 
+						)
+					);
+			}
 		}
 
+		private function stopPlaying(abst:AdobeBootstrapBox):Boolean
+		{
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
+			if (f4fIndexInfo.dvrInfo == null && abst.live && frt.tableComplete())
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
 		private function onNewBootstrapBox(event:HTTPStreamingFileHandlerEvent):void
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[currentQuality];
@@ -648,6 +702,8 @@ package org.osmf.net.httpstreaming.f4f
 		private var fragmentRunTablesUpdating:Boolean;
 		private var f4fIndexInfo:HTTPStreamingF4FIndexInfo;
 		private var fileHandler:HTTPStreamingFileHandlerBase;
+		private var dvrGetStreamInfoCall:Boolean;
+		private var playInProgress:Boolean;
 		
 		private var offsetFromCurrent:Number = 20;
 		private var delay:Number = 0.05;

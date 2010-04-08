@@ -198,40 +198,7 @@ package org.osmf.net.dvr
 		
 		private function calculateOffset(streamInfo:DVRCastStreamInfo):Number
 		{
-			var offset:Number = 0;
-			var endOffset:Number = streamInfo.endOffset;
-			var beginOffset:Number = streamInfo.beginOffset;
-			var currentDuration:Number = streamInfo.currentLength;
-			
-			if (endOffset != 0)
-			{
-				// If an end-offset is set ...
-				if (currentDuration > endOffset)
-				{
-					// ... and more is recorded that the end offset allows
-					// to be exposed, than start playing as far back as
-					// is allowed:
-					offset = currentDuration - endOffset;
-				}
-				else
-				{
-					// ... but no the recording is shorter than the 
-					// amount of time that is allowed to be viewed, then
-					// use the begin offset:
-					offset = Math.min(beginOffset, currentDuration);
-				}
-			}
-			else if (beginOffset != 0)
-			{
-				// The starting point is whatever is lowest: the point from
-				// where the viewer is allowed to view the stream, or the
-				// available recorded time, so far:
-				offset = Math.min(beginOffset, currentDuration);
-			}
-			
-			return offset;
+			return DVRUtils.calculateOffset(streamInfo.beginOffset, streamInfo.endOffset, streamInfo.currentLength);
 		}
-		
-	
 	}
 }
