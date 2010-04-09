@@ -59,8 +59,8 @@ package org.osmf.chrome.widgets
 			
 			if (timeTrait)
 			{
-				timeTrait = null;
 				timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, visibilityDeterminingEventHandler);
+				timeTrait = null;
 			}
 			
 			visibilityDeterminingEventHandler();
