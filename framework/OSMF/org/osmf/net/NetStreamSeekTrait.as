@@ -147,6 +147,18 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
 					setSeeking(false, previousTime);
 					break;
+				case NetStreamCodes.NETSTREAM_PLAY_START:
+				case NetStreamCodes.NETSTREAM_PLAY_RESET:
+				case NetStreamCodes.NETSTREAM_PAUSE_NOTIFY:
+				case NetStreamCodes.NETSTREAM_PLAY_STOP:
+				case NetStreamCodes.NETSTREAM_UNPAUSE_NOTIFY:
+					// On play being invoked while seeking is in progress, the
+					// seek will not complete (FM-475). Do so manually:
+					if (seeking)
+					{
+						setSeeking(false, previousTime);
+					}
+					break;
 			}
 		}
 				
