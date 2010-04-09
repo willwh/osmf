@@ -134,14 +134,7 @@ package org.osmf.net
 					// is up-to-date.
 					// Note that we don't start the Timer if we've been
 					// instructed to suppress the event.
-					if (suppressSeekNotifyEvent == false)
-					{
-						seekBugTimer.start();
-					}
-					else
-					{
-						suppressSeekNotifyEvent = false;
-					}
+					runSeekBugTimer();
 					break;
 				case NetStreamCodes.NETSTREAM_SEEK_INVALIDTIME:
 				case NetStreamCodes.NETSTREAM_SEEK_FAILED:
@@ -158,16 +151,21 @@ package org.osmf.net
 					{
 						// Use the same timer mechanism as on the regular
 						// NETSTREAM_SEEK_NOTIFY event:
-						if (suppressSeekNotifyEvent == false)
-						{
-							seekBugTimer.start();
-						}
-						else
-						{
-							suppressSeekNotifyEvent = false;
-						}
+						runSeekBugTimer();
 					}
 					break;
+			}
+		}
+		
+		private function runSeekBugTimer():void
+		{
+			if (suppressSeekNotifyEvent == false)
+			{
+				seekBugTimer.start();
+			}
+			else
+			{
+				suppressSeekNotifyEvent = false;
 			}
 		}
 				
