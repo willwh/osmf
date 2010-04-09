@@ -154,9 +154,18 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_UNPAUSE_NOTIFY:
 					// On play being invoked while seeking is in progress, the
 					// seek will not complete (FM-475). Do so manually:
-					if (seeking)
+					if (seeking && seekBugTimer.running == false)
 					{
-						setSeeking(false, previousTime);
+						// Use the same timer mechanism as on the regular
+						// NETSTREAM_SEEK_NOTIFY event:
+						if (suppressSeekNotifyEvent == false)
+						{
+							seekBugTimer.start();
+						}
+						else
+						{
+							suppressSeekNotifyEvent = false;
+						}
 					}
 					break;
 			}
