@@ -135,7 +135,7 @@ package org.osmf.chrome.widgets
 				= new Scrubber
 					( assetManager.getDisplayObject(xml.@scrubberUp) || new Sprite()
 					, assetManager.getDisplayObject(xml.@scrubberDown) || new Sprite()
-					, assetManager.getDisplayObject(xml.@disabled) || new Sprite()
+					, assetManager.getDisplayObject(xml.@scrubberDisabled) || new Sprite()
 					);
 					
 			scrubber.enabled = false;
