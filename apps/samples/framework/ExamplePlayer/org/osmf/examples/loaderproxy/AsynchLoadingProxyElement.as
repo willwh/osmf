@@ -25,6 +25,7 @@ package org.osmf.examples.loaderproxy
 	
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.LoadEvent;
+	import org.osmf.events.MediaElementEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.LoadState;
 	import org.osmf.traits.LoadTrait;
@@ -52,9 +53,9 @@ package org.osmf.examples.loaderproxy
 		/**
 		 * @private
 		 **/
-		override protected function setupOverriddenTraits():void
+		override protected function setupTraits():void
 		{
-			super.setupOverriddenTraits();
+			super.setupTraits();
 			
 			// First, block all traits but the LOAD trait from being exposed
 			// to clients.  The reason for this is that the proxied element
@@ -72,7 +73,41 @@ package org.osmf.examples.loaderproxy
 			traitsToBlock.push(MediaTraitType.SEEK);
 			traitsToBlock.push(MediaTraitType.TIME);
 			super.blockedTraits = traitsToBlock;
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			super.proxiedElement = value;
 			
+			if (value != null)
+			{
+				if (value.hasTrait(MediaTraitType.LOAD))
+				{
+					processLoadTrait();
+				}
+				else
+				{
+					// Wait for the LoadTrait to be added.
+					value.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				}
+			}
+		}
+		
+		private function onTraitAdd(event:MediaElementEvent):void
+		{
+			if (event.traitType == MediaTraitType.LOAD)
+			{
+				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				
+				processLoadTrait();
+			}
+		}
+
+		private function processLoadTrait():void
+		{
 			// Override the LoadTrait with our own custom trait, which provides
 			// hooks for executing asynchronous logic in conjunction with the
 			// load of the proxied element.

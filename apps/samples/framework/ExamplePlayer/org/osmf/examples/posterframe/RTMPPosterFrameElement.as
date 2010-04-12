@@ -24,6 +24,7 @@ package org.osmf.examples.posterframe
 	import org.osmf.elements.ProxyElement;
 	import org.osmf.elements.VideoElement;
 	import org.osmf.events.MediaElementEvent;
+	import org.osmf.media.MediaElement;
 	import org.osmf.net.NetLoader;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.MediaTraitType;
@@ -49,9 +50,9 @@ package org.osmf.examples.posterframe
 		/**
 		 * @private
 		 **/
-		override protected function setupOverriddenTraits():void
+		override protected function setupTraits():void
 		{
-			super.setupOverriddenTraits();
+			super.setupTraits();
 			
 			// Block all traits other than LOAD (so we can load the base
 			// VideoElement), DISPLAY_OBJECT (so we can display its view),
@@ -71,9 +72,27 @@ package org.osmf.examples.posterframe
 			// (and can't interact with the VideoElement), we add a dummy
 			// PlayTrait trait.
 			addTrait(MediaTraitType.PLAY, new PosterFramePlayTrait());
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function set proxiedElement(value:MediaElement):void
+		{
+			super.proxiedElement = value;
 			
-			// Wait for the PlayTrait to be added.
-			proxiedElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+			if (value != null)
+			{
+				if (value.hasTrait(MediaTraitType.PLAY))
+				{
+					processPlayTrait();
+				}
+				else
+				{
+					// Wait for the PlayTrait to be added.
+					value.addEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
+				}
+			}
 		}
 		
 		private function onTraitAdd(event:MediaElementEvent):void
@@ -82,13 +101,18 @@ package org.osmf.examples.posterframe
 			{
 				proxiedElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onTraitAdd);
 				
-				// Calling play() on the proxied VideoElement's trait will
-				// cause the poster frame to be displayed.  But because the
-				// base play trait is overridden, no events are dispatched
-				// to the client.
-				var playTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
-				playTrait.play();
+				processPlayTrait();
 			}
+		}
+		
+		private function processPlayTrait():void
+		{
+			// Calling play() on the proxied VideoElement's trait will
+			// cause the poster frame to be displayed.  But because the
+			// base play trait is overridden, no events are dispatched
+			// to the client.
+			var playTrait:PlayTrait = proxiedElement.getTrait(MediaTraitType.PLAY) as PlayTrait;
+			playTrait.play();
 		}
 	}
 }

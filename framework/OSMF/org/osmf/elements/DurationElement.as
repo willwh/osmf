@@ -128,9 +128,9 @@ package org.osmf.elements
 	 	 * 	new URLResource("http://www.examplebanners.com/banner1.jpg")));	
 	 	 * </listing>
 	 	 */	
-		override protected function setupOverriddenTraits():void
+		override protected function setupTraits():void
 		{
-			super.setupOverriddenTraits();
+			super.setupTraits();
 			
 			timeTrait = new DurationTimeTrait(_duration);
 			

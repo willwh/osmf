@@ -162,33 +162,24 @@ package org.osmf.elements
 			
 			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == overriddenTimeTrait);
 
-			// If we now replace the wrapped element, then the proxy should no
-			// longer have the same overridden traits.  (Why?  Changing the
-			// wrapped element first causes all overridden traits to be
-			// removed, so that we can readd the overridden traits once our new
-			// wrapped element is present, just in case the logic of readding
-			// them needs to take the wrapped element into account.  Typically
-			// overriding traits is the province of a ProxyElement subclass,
-			// but in this test case we add them externally through the
-			// doAddTrait helper function.  As a result, the overridden traits
-			// won't be readded since we don't call doAddTrait again.)
+			// If we now replace the wrapped element, then the proxy should still
+			// have the same overridden traits.
 			//
 			
-			var proxiedElement2:DynamicMediaElement
+			var wrappedElement2:DynamicMediaElement
 				= new DynamicMediaElement( [MediaTraitType.PLAY, MediaTraitType.TIME, MediaTraitType.LOAD]
 										 , new SimpleLoader()
 										 );
 
-			proxyElement.proxiedElement = proxiedElement2;
+			proxyElement.proxiedElement = wrappedElement2;
 
 			assertTrue(proxyElement.hasTrait(MediaTraitType.PLAY));
 			assertTrue(proxyElement.hasTrait(MediaTraitType.LOAD));
 			assertTrue(proxyElement.hasTrait(MediaTraitType.TIME));
 			
-			// The TimeTrait should now come from the wrapped element,
-			// not the proxy.
-			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) != overriddenTimeTrait);
-			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == proxiedElement2.getTrait(MediaTraitType.TIME));
+			// The TimeTrait should still come from the proxy element.
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) == overriddenTimeTrait);
+			assertTrue(proxyElement.getTrait(MediaTraitType.TIME) != wrappedElement2.getTrait(MediaTraitType.TIME));
 		}
 		
 		public function testDispatchEvent():void

@@ -42,9 +42,9 @@ package org.osmf.examples.loaderproxy
 			super(wrappedElement);
 		}
 
-		override protected function setupOverriddenTraits():void
+		override protected function setupTraits():void
 		{
-			super.setupOverriddenTraits();
+			super.setupTraits();
 			
 			// Override the LoadTrait trait with our own custom trait,
 			// which simply replaces the URL.

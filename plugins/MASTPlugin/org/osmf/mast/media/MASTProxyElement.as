@@ -78,65 +78,62 @@ package org.osmf.mast.media
 		 */
 		override public function set proxiedElement(value:MediaElement):void
 		{
+			var serialElement:SerialElement;
+			
 			if (value != null &&
 				!(value is SerialElement))
 			{
 				// Wrap any child in a SerialElement.
-				var serialElement:SerialElement = new SerialElement();
+				serialElement = new SerialElement();
 				serialElement.addChild(value);
 				
 				value = serialElement;
 			}
 			
 			super.proxiedElement = value;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override protected function setupOverriddenTraits():void
-		{
-			super.setupOverriddenTraits();
 			
-			// Override the ILoadable trait with our own custom ILoadable,
-			// which retrieves the MAST document, parses it, and sets up
-			// the triggers in relation to our wrapped MediaElement.
-			//
-			
-			// Get the MAST url resource from the metadata of the element
-			// that is wrapped.
-			var serialElement:SerialElement = super.proxiedElement as SerialElement;
-			var mediaElement:MediaElement = serialElement.getChildAt(0);
-			
-			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
-			if (tempResource == null)
+			if (value != null)
 			{
-				throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
+				// Override the LoadTrait with our own custom LoadTrait,
+				// which retrieves the MAST document, parses it, and sets up
+				// the triggers in relation to our wrapped MediaElement.
+				//
+				
+				// Get the MAST url resource from the metadata of the element
+				// that is wrapped.
+				serialElement = super.proxiedElement as SerialElement;
+				var mediaElement:MediaElement = serialElement.getChildAt(0);
+				
+				var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+				if (tempResource == null)
+				{
+					throw new IllegalOperationError(ERROR_MISSING_RESOURCE);
+				}
+				
+				var metadata:Metadata = tempResource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
+				if (metadata == null)
+				{
+					throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);
+				}			
+				
+				var mastURL:String = metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI);
+				
+				loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(mastURL));
+				
+				loadTrait.addEventListener
+					( LoadEvent.LOAD_STATE_CHANGE
+					, onLoadStateChange
+					);
+				
+				addTrait(MediaTraitType.LOAD, loadTrait); 
+				
+				// Override the PlayTrait so we can do any necessary
+				// pre-processing, such as a payload that would cause a 
+				// pre-roll.
+				
+				var playTrait:PlayTrait = new MASTPlayTrait();
+				addTrait(MediaTraitType.PLAY, playTrait);
 			}
-			
-			var metadata:Metadata = tempResource.getMetadataValue(MASTPluginInfo.MAST_METADATA_NAMESPACE) as Metadata;
-			if (metadata == null)
-			{
-				throw new IllegalOperationError(ERROR_MISSING_MAST_METADATA);
-			}			
-			
-			var mastURL:String = metadata.getValue(MASTPluginInfo.MAST_METADATA_KEY_URI);
-			
-			loadTrait = new MASTLoadTrait(new MASTLoader(), new URLResource(mastURL));
-			
-			loadTrait.addEventListener
-				( LoadEvent.LOAD_STATE_CHANGE
-				, onLoadStateChange
-				);
-			
-			addTrait(MediaTraitType.LOAD, loadTrait); 
-			
-			// Override the PlayTrait so we can do any necessary
-			// pre-processing, such as a payload that would cause a 
-			// pre-roll.
-			
-			var playTrait:PlayTrait = new MASTPlayTrait();
-			addTrait(MediaTraitType.PLAY, playTrait);
 		}
 		
 		private function removeCustomPlayTrait():void

@@ -94,54 +94,56 @@ package org.osmf.captioning.media
 		}
 				
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
-		override protected function setupOverriddenTraits():void
+		override public function set proxiedElement(value:MediaElement):void
 		{
-			super.setupOverriddenTraits();
+			super.proxiedElement = value;
 			
-			// Override the LoadTrait with our own custom LoadTrait,
-			// which retrieves the Timed Text document, parses it, and sets up
-			// the object model representing the caption data.
-			
-			// Get the Timed Text url resource from the metadata of the element
-			// that is wrapped.
-			var mediaElement:MediaElement = super.proxiedElement;
-			var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
-			if (tempResource == null)
+			if (value != null)
 			{
-				dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-								new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
-			}
-			else
-			{
-				var metadata:Metadata = tempResource.getMetadataValue(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE) as Metadata;
-				if (metadata == null)
+				// Override the LoadTrait with our own custom LoadTrait,
+				// which retrieves the Timed Text document, parses it, and sets up
+				// the object model representing the caption data.
+				
+				// Get the Timed Text url resource from the metadata of the element
+				// that is wrapped.
+				var mediaElement:MediaElement = super.proxiedElement;
+				var tempResource:MediaResourceBase = (mediaElement && mediaElement.resource != null) ? mediaElement.resource : resource;
+				if (tempResource == null)
 				{
-					if (!_continueLoadOnFailure)
-					{
-						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-										new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
-					}
+					dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+									new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
 				}
 				else
-				{		
-					var timedTextURL:String = metadata.getValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI);
-					if (timedTextURL != null)
+				{
+					var metadata:Metadata = tempResource.getMetadataValue(CaptioningPluginInfo.CAPTIONING_METADATA_NAMESPACE) as Metadata;
+					if (metadata == null)
 					{
-						loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(timedTextURL));
-						
-						loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99);
-						addTrait(MediaTraitType.LOAD, loadTrait);
+						if (!_continueLoadOnFailure)
+						{
+							dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+											new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
+						}
 					}
-					else if (!_continueLoadOnFailure)
-					{
-						dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
-										new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
+					else
+					{		
+						var timedTextURL:String = metadata.getValue(CaptioningPluginInfo.CAPTIONING_METADATA_KEY_URI);
+						if (timedTextURL != null)
+						{
+							loadTrait = new CaptioningLoadTrait(new CaptioningLoader(), new URLResource(timedTextURL));
+							
+							loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange, false, 99);
+							addTrait(MediaTraitType.LOAD, loadTrait);
+						}
+						else if (!_continueLoadOnFailure)
+						{
+							dispatchEvent(new MediaErrorEvent( MediaErrorEvent.MEDIA_ERROR, false, false, 
+											new MediaError(MEDIA_ERROR_INVALID_PROXIED_ELEMENT)));
+						}
 					}
- 
 				}
-			} 
+			}
 		}
 		
 		private function onLoadStateChange(event:LoadEvent):void

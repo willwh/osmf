@@ -67,13 +67,7 @@ package org.osmf.examples.ads
 			timer.addEventListener(TimerEvent.TIMER, onTimerTick);
 			timer.start();
 		}
-		
-		override protected function setupOverriddenTraits():void
-		{
-			super.setupOverriddenTraits();
-		}
-		
-		
+				
 		private function onProxiedTraitsChange(event:MediaElementEvent):void
 		{
 			if (event.type == MediaElementEvent.TRAIT_ADD)

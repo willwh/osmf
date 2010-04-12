@@ -44,9 +44,7 @@ package org.osmf.elements
 	 * one or more of the wrapped element's traits or by blocking them.</p>
 	 * <p>To override any of the wrapped element's traits, 
 	 * the subclass creates its own trait instances,
-	 * which it substitutes for the wrapped element's traits that it wishes to override.
-	 * It uses the ProxyElement's <code>setupOverriddenTraits()</code> method to arrange for
-	 * the wrapped element's traits to be overridden.</p>
+	 * which it substitutes for the wrapped element's traits that it wishes to override.</p>
 	 * <p>To block traits, the subclass prevents the traits of
 	 * the wrapped element from being exposed by setting the ProxyElement's
 	 * <code>blockedTraits</code> property for the trait
@@ -136,10 +134,6 @@ package org.osmf.elements
 					{
 						super.dispatchEvent(new MediaElementEvent(MediaElementEvent.TRAIT_REMOVE, false, false, traitType));
 					}
-					
-					// All traits that were overridden on the proxy must be
-					// removed.
-					removeOverriddenTraits();
 				}
 				
 				_proxiedElement = value;
@@ -158,12 +152,7 @@ package org.osmf.elements
 					// events from the wrapped element are also dispatched by
 					// the proxy.
 					toggleMediaElementListeners(_proxiedElement, true);
-					
-					// Set up the traits for the proxy, now that we're prepared
-					// to respond to change events.  (Note that this class's
-					// setupTraits prevents a call to the base class.)
-					setupOverriddenTraits();
-					
+
 					// The wrapped element has changed, signal trait addition
 					// for all traits.
 					for each (traitType in _proxiedElement.traitTypes)
@@ -252,6 +241,9 @@ package org.osmf.elements
 			}
 		}
 			
+		/**
+		 * @private
+		 */
 		override protected function addTrait(type:String, instance:MediaTraitBase):void
 		{
 			// If we're adding a trait that already exists on the proxied
@@ -268,6 +260,9 @@ package org.osmf.elements
 			super.addTrait(type, instance);
 		}
 
+		/**
+		 * @private
+		 */
 		override protected function removeTrait(type:String):MediaTraitBase
 		{
 			var result:MediaTraitBase = super.removeTrait(type);
@@ -294,44 +289,6 @@ package org.osmf.elements
 		override protected function createMetadata():Metadata
 		{
 			return new ProxyMetadata();;
-		}
-
-		/**
-		 * @private
-		 * 
-		 * Sets up overridden traits and finalizes them to ensure a consistent initialization
-		 * process.  Clients should subclass <code>setupOverriddenTraits()</code>
-		 * instead of this method.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		final override protected function setupTraits():void
-		{
-		}
-		
-		/**
-		 * @private
-		 * 
-		 * TODO: Figure out if we can do away with this in some other way.
-		 * Temporarily marked as private.
-		 * 
-		 * Sets up the traits for this proxy.  The proxy's traits will always
-		 * override (i.e. take precedence over) the traits of the wrapped
-		 * element.
-		 * 
-		 * Subclasses can override this method to set up their own traits.
-		 *  
-		 *  @langversion 3.0
-		 *  @playerversion Flash 10
-		 *  @playerversion AIR 1.5
-		 *  @productversion OSMF 1.0
-		 */
-		protected function setupOverriddenTraits():void
-		{
-			super.setupTraits();
 		}
 		
 		/**
@@ -430,16 +387,7 @@ package org.osmf.elements
 		
 		// Internals
 		//
-		
-		private function removeOverriddenTraits():void
-		{				
-			var overriddenTraitTypes:Vector.<String> = super.traitTypes;
-			for each (var traitType:String in overriddenTraitTypes)
-			{
-				removeTrait(traitType);
-			}
-		}
-		
+						
 		private function toggleMediaElementListeners(mediaElement:MediaElement, add:Boolean):void
 		{
 			if (add)
@@ -487,7 +435,8 @@ package org.osmf.elements
 				proxiedElement.dispatchEvent(event.clone());			
 			}
 		}
-				private function onProxyTraitAdd(event:MediaElementEvent):void
+		
+		private function onProxyTraitAdd(event:MediaElementEvent):void
 		{
 			processProxyTraitsChangeEvent(event);
 		}
