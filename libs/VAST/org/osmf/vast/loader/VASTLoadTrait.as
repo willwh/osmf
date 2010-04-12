@@ -26,8 +26,6 @@ package org.osmf.vast.loader
 	import org.osmf.traits.LoaderBase;
 	import org.osmf.vast.model.VASTDocument;
 	
-	[ExcludeClass]
-	
 	/**
 	 * LoadTrait for VAST documents.
 	 **/
