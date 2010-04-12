@@ -27,7 +27,6 @@ package org.osmf.netmocker
 	
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetClient;
-	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.net.NetLoader;
 	
 	/**
@@ -36,16 +35,11 @@ package org.osmf.netmocker
 	public class TracingNetLoader extends NetLoader
 	{
 		/**
-		 * Constructor
-		 * 
-		 * @param allowConnectionSharing true if the NetLoader can invoke a NetConnectionFactory which
-		 * re-uses (shares) an existing NetConnection. 
+		 * Constructor.
 		 */
 		public function TracingNetLoader()
 		{
-			var factory:NetConnectionFactory = new DefaultNetConnectionFactory();
-			
-			super(factory);
+			super(new DefaultNetConnectionFactory());
 		}
 	    
 	    /**
