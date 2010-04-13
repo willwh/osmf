@@ -84,7 +84,7 @@ package org.osmf.net.httpstreaming.f4f
 		/**
 		 * @private
 		 */
-		public function dvrGetStreamInfo(indexInfo:Object):void
+		override public function dvrGetStreamInfo(indexInfo:Object):void
 		{
 			dvrGetStreamInfoCall = true;
 			playInProgress = false;
@@ -250,7 +250,14 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					if (abst.contentComplete())
 					{
-						return null;
+						if (abst.live) // live/DVR playback stops
+						{
+							return new HTTPStreamRequest(null, quality, -1, -1, true);
+						}
+						else
+						{
+							return null;
+						}
 					}
 					else
 					{
@@ -325,7 +332,14 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					if (!abst.live || abst.contentComplete())
 					{
-						return null;
+						if (abst.live) // live/DVR playback stops
+						{
+							return new HTTPStreamRequest(null, quality, -1, -1, true);
+						}
+						else
+						{
+							return null;
+						}
 					}
 					else
 					{
@@ -639,11 +653,12 @@ package org.osmf.net.httpstreaming.f4f
 				f4fIndexInfo.dvrInfo.curLength = abst.totalDuration/abst.timeScale;
 				f4fIndexInfo.dvrInfo.startTime = 
 					frt.tableComplete()? 0 : DVRUtils.calculateOffset(
-						f4fIndexInfo.dvrInfo.beginOffset, f4fIndexInfo.dvrInfo.endOffset, abst.totalDuration/abst.timeScale);
-			}	
+						f4fIndexInfo.dvrInfo.beginOffset, 
+						f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
+						abst.totalDuration/abst.timeScale);
 
-			dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
-			dvrGetStreamInfoCall = false;
+				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
+			}	
 
 			if (!dvrGetStreamInfoCall)
 			{
@@ -652,7 +667,7 @@ package org.osmf.net.httpstreaming.f4f
 				{
 					offset = (abst.currentMediaTime - offsetFromCurrent * abst.timeScale) > 0? abst.currentMediaTime / abst.timeScale - offsetFromCurrent : NaN
 				}
-			
+
 				dispatchEvent
 					( new HTTPStreamingIndexHandlerEvent
 						( HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY
@@ -663,6 +678,7 @@ package org.osmf.net.httpstreaming.f4f
 						)
 					);
 			}
+			dvrGetStreamInfoCall = false;
 		}
 
 		private function stopPlaying(abst:AdobeBootstrapBox):Boolean

@@ -1625,7 +1625,7 @@ package org.osmf.media
 				// Stop, but don't auto-rewind unless autoRewind is true.
 				(getTraitOrThrow(MediaTraitType.PLAY) as PlayTrait).stop();
 				
-				if (autoRewind)
+				if (autoRewind && canSeek)
 				{
 					executeAutoRewind(false);
 				}

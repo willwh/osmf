@@ -41,7 +41,7 @@ package org.osmf.net.httpstreaming
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function HTTPStreamRequest(url:String = null, quality:int = -1, truncateAt:Number = -1, retryAfter:Number = -1)
+		public function HTTPStreamRequest(url:String = null, quality:int = -1, truncateAt:Number = -1, retryAfter:Number = -1, unpublishNotify:Boolean = false)
 		{
 			super();
 			
@@ -57,6 +57,7 @@ package org.osmf.net.httpstreaming
 			_quality = quality;
 			_truncateAt = truncateAt;
 			_retryAfter = retryAfter;
+			_unpublishNotify = unpublishNotify;
 		}
 		
 		public function get urlRequest():URLRequest
@@ -68,10 +69,16 @@ package org.osmf.net.httpstreaming
 		{
 			return _retryAfter;
 		}
+		
+		public function get unpublishNotify():Boolean
+		{
+			return _unpublishNotify;
+		}
 
 		private var _urlRequest:URLRequest;
 		private var _quality:int;
 		private var _truncateAt:Number;
 		private var _retryAfter:Number;
+		private var _unpublishNotify:Boolean;
 	}
 }

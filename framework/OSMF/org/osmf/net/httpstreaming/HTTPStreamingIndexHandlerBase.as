@@ -188,5 +188,23 @@ package org.osmf.net.httpstreaming
 		{
 			throw new IllegalOperationError("The getNextFile() method must be overridden by the derived class.");
 		}			
+
+		/**
+		 * Called when HTTPNetStream and/or its derived class needs to obtain DVR information. When information 
+		 * is ready available, it dispatches DVRStreamInfoEvent to pass the value back to HTTPNetStream.
+		 * 
+		 * Subclasses must override to provide a specific implementation.
+		 * 
+		 * @param the index information from which DVR information can be retrieve.
+		 *  
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */	
+		public function dvrGetStreamInfo(indexInfo:Object):void
+		{
+			throw new IllegalOperationError("The dvrGetStreamInfo() method must be overridden by the derived class.");
+		}
 	}
 }

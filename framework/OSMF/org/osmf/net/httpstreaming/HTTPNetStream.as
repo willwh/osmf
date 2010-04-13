@@ -223,7 +223,7 @@ package org.osmf.net.httpstreaming
 				// TODO: should there be a guard to protect the case where indexIsReady is not yet true BUT play has already been called, so we are in an
 				// "initializing but not yet ready" state? This is only needed if the caller is liable to call DVRGetStreamInfo and then, before getting the
 				// event back, go ahead and call play()
-				(indexHandler as HTTPStreamingF4FIndexHandler).dvrGetStreamInfo(_indexInfo != null ? _indexInfo : streamName);
+				indexHandler.dvrGetStreamInfo(_indexInfo != null ? _indexInfo : streamName);
 			}
 		}
 		
@@ -1010,6 +1010,17 @@ package org.osmf.net.httpstreaming
 						bytes = fileHandler.flushFileSegment(_savedBytes.bytesAvailable ? _savedBytes : null);
 						processAndAppend(bytes);
 						setState(HTTPStreamingState.STOP);
+						if (nextRequest != null && nextRequest.unpublishNotify)
+						{
+							dispatchEvent
+								( new NetStatusEvent
+									( NetStatusEvent.NET_STATUS
+									, false
+									, false
+									, {code:NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY, level:"status"}
+									)
+								); 
+						}
 					}
 					break;
 				
@@ -1236,7 +1247,7 @@ package org.osmf.net.httpstreaming
 		{
 			if (!indexIsReady)
 			{
-				if (event.live && !isNaN(event.offset))
+				if (event.live && _dvrInfo == null && !isNaN(event.offset))
 				{
 					_seekTarget = event.offset;
 				}
