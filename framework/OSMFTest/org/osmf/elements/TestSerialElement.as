@@ -23,6 +23,7 @@ package org.osmf.elements
 {
 	import org.osmf.events.*;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.*;
 	import org.osmf.utils.DynamicMediaElement;
@@ -41,6 +42,33 @@ package org.osmf.elements
 		
 		// Tests
 		//
+		
+		public function testGetResourceReturnsChildResource():void
+		{
+			var serial:SerialElement = createSerialElement();
+			
+			assertTrue(serial.resource == null);
+			
+			// The SerialElement's resource should always reflect the resource
+			// of the current child.
+			//
+			
+			var resource1:URLResource = new URLResource("http://example.com/1");
+			var child1:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO], null, resource1);
+			serial.addChild(child1);
+			assertTrue(serial.resource == resource1);
+
+			var resource2:URLResource = new URLResource("http://example.com/2");
+			var child2:DynamicMediaElement = new DynamicMediaElement([MediaTraitType.AUDIO], null, resource2);
+			serial.addChild(child2);
+			assertTrue(serial.resource == resource1);
+			
+			serial.removeChild(child1);
+			assertTrue(serial.resource == resource2);
+						
+			serial.removeChild(child2);
+			assertTrue(serial.resource == null);
+		}
 
 		public function testGetTraitTypesDynamically():void
 		{

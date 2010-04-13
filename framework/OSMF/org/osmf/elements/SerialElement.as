@@ -28,6 +28,7 @@ package org.osmf.elements
 	import org.osmf.elements.compositeClasses.IReusable;
 	import org.osmf.elements.compositeClasses.TraitAggregatorEvent;
 	import org.osmf.media.MediaElement;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.metadata.Metadata;
 	import org.osmf.traits.MediaTraitBase;
 	
@@ -129,6 +130,16 @@ package org.osmf.elements
 				);
 				
 			reusableTraits = new Dictionary();
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function get resource():MediaResourceBase
+		{
+			return 	  traitAggregator.listenedChild != null
+					? traitAggregator.listenedChild.resource
+					: null;
 		}
 		
 		// Protected
