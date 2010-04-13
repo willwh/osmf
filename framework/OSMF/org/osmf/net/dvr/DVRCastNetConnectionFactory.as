@@ -61,25 +61,20 @@ package org.osmf.net.dvr
 		{
 			return new DVRCastNetConnection();
 		}
-
-		/**
-		 * @private
-		 **/
-		override public function create(resource:URLResource):void
-		{
-			urlResource = resource;
-			
-			super.create(urlResource);
-		}
 		
 		/**
 		 * @private
 		 **/
 		override public function closeNetConnection(netConnection:NetConnection):void
 		{
-			if (this.netConnection == netConnection)
+			var dvrCastNetConnection:DVRCastNetConnection = netConnection as DVRCastNetConnection;
+			if (dvrCastNetConnection)
 			{
-				netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName); 
+				netConnection.call
+					( DVRCastConstants.RPC_UNSUBSCRIBE
+					, null
+					, dvrCastNetConnection.streamInfo.streamName
+					);	 
 			}
 			
 			super.closeNetConnection(netConnection);
@@ -88,12 +83,12 @@ package org.osmf.net.dvr
 		// Internals
 		//
 
-		private var urlResource:URLResource;
-		private var netConnection:DVRCastNetConnection;
-		private var streamName:String;
-			
 		private function onCreationComplete(event:NetConnectionFactoryEvent):void
 		{
+			var urlResource:URLResource = event.resource as URLResource;
+			var netConnection:DVRCastNetConnection = event.netConnection as DVRCastNetConnection
+			var streamName:String;
+			
 			// Capture this event, whithold it from the outside world until
 			// we have succeeded subscribing to the DVRCast stream:
 			event.stopImmediatePropagation();
@@ -101,99 +96,105 @@ package org.osmf.net.dvr
 			netConnection = event.netConnection as DVRCastNetConnection;
 			
 			var streamingResource:StreamingURLResource = urlResource as StreamingURLResource;
-			var urlIncludesFMSApplicationInstance:Boolean = streamingResource ? streamingResource.urlIncludesFMSApplicationInstance : false;
+			
+			var urlIncludesFMSApplicationInstance:Boolean
+				= streamingResource
+					? streamingResource.urlIncludesFMSApplicationInstance
+					: false;
+					
 			streamName = NetStreamUtils.getStreamNameFromURL(urlResource.url, urlIncludesFMSApplicationInstance);
+			
 			var responder:Responder 
 				= new Responder
 					( onStreamSubscriptionResult
 					, onServerCallError
 					);
 			
-			event.netConnection.call(DVRCastConstants.RPC_SUBSCRIBE, responder, streamName); 	
-		}
-		
-		private function onStreamSubscriptionResult(result:Object):void
-		{
-			var streamInfoRetriever:DVRCastStreamInfoRetriever
-				= new DVRCastStreamInfoRetriever
-					( netConnection
-					, streamName
-					);
+			event.netConnection.call(DVRCastConstants.RPC_SUBSCRIBE, responder, streamName);
 			
-			streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
-			streamInfoRetriever.retrieve();
-		}
-		
-		private function onStreamInfoRetrieverComplete(event:Event):void
-		{
-			var streamInfoRetriever:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
-			
-			if (streamInfoRetriever.streamInfo != null)
+			function onStreamSubscriptionResult(result:Object):void
 			{
-				// Remove the completion listener:
-				removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
-			
-				if (streamInfoRetriever.streamInfo.offline == true)
-				{
-					// The content is offline, signal this as a media error:
-					dispatchEvent
-						( new NetConnectionFactoryEvent
-							( NetConnectionFactoryEvent.CREATION_ERROR 
-							, false
-							, false
-							, netConnection
-							, urlResource
-							, new MediaError(MediaErrorCodes.DVRCAST_CONTENT_OFFLINE)
-							)
+				var streamInfoRetriever:DVRCastStreamInfoRetriever
+					= new DVRCastStreamInfoRetriever
+						( netConnection
+						, streamName
 						);
+				
+				streamInfoRetriever.addEventListener(Event.COMPLETE, onStreamInfoRetrieverComplete);
+				streamInfoRetriever.retrieve();
+			}
+			
+			function onStreamInfoRetrieverComplete(event:Event):void
+			{
+				var streamInfoRetriever:DVRCastStreamInfoRetriever = event.target as DVRCastStreamInfoRetriever;
+				
+				if (streamInfoRetriever.streamInfo != null)
+				{
+					// Remove the completion listener:
+					removeEventListener(NetConnectionFactoryEvent.CREATION_COMPLETE, onCreationComplete);
+				
+					if (streamInfoRetriever.streamInfo.offline == true)
+					{
+						// The content is offline, signal this as a media error:
+						dispatchEvent
+							( new NetConnectionFactoryEvent
+								( NetConnectionFactoryEvent.CREATION_ERROR 
+								, false
+								, false
+								, netConnection
+								, urlResource
+								, new MediaError(MediaErrorCodes.DVRCAST_CONTENT_OFFLINE)
+								)
+							);
+							
+						// Unsubscribe:
+						netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName);
+						netConnection = null;
+					}
+					else
+					{
+						// Instantiate a new recording info object:
+						var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
+						recordingInfo.startDuration = streamInfoRetriever.streamInfo.currentLength;
+						recordingInfo.startOffset = calculateOffset(streamInfoRetriever.streamInfo);
+						recordingInfo.startTime = new Date();
 						
-					// Unsubscribe:
-					netConnection.call(DVRCastConstants.RPC_UNSUBSCRIBE, null, streamName);
-					netConnection = null;
+						// Add the stream info and recording info to the net connection:
+						netConnection.streamInfo = streamInfoRetriever.streamInfo;	
+						netConnection.recordingInfo = recordingInfo;
+							
+						// Now that we're done, signal completion, so the VideoElement will
+						// continue its loading process:
+						dispatchEvent
+							( new NetConnectionFactoryEvent
+								( NetConnectionFactoryEvent.CREATION_COMPLETE 
+								, false
+								, false
+								, netConnection
+								, urlResource
+								)
+							);
+					}
 				}
 				else
 				{
-					// Instantiate a new recording info object:
-					var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
-					recordingInfo.startDuration = streamInfoRetriever.streamInfo.currentLength;
-					recordingInfo.startOffset = calculateOffset(streamInfoRetriever.streamInfo);
-					recordingInfo.startTime = new Date();
-					
-					// Add the stream info and recording info to the net connection:
-					netConnection.streamInfo = streamInfoRetriever.streamInfo;	
-					netConnection.recordingInfo = recordingInfo;
-						
-					// Now that we're done, signal completion, so the VideoElement will
-					// continue its loading process:
-					dispatchEvent
-						( new NetConnectionFactoryEvent
-							( NetConnectionFactoryEvent.CREATION_COMPLETE 
-							, false
-							, false
-							, netConnection
-							, urlResource
-							)
-						);
+					onServerCallError(streamInfoRetriever.error);
 				}
 			}
-			else
+			
+			function onServerCallError(error:Object):void
 			{
-				onServerCallError(streamInfoRetriever.error);
-			}
-		}
-		
-		private function onServerCallError(error:Object):void
-		{
-			dispatchEvent
-				( new NetConnectionFactoryEvent
-					( NetConnectionFactoryEvent.CREATION_ERROR
-					, false
-					, false
-					, netConnection
-					, urlResource
-					, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIBE_FAILED, error.message)
-					)
-				);
+				dispatchEvent
+					( new NetConnectionFactoryEvent
+						( NetConnectionFactoryEvent.CREATION_ERROR
+						, false
+						, false
+						, netConnection
+						, urlResource
+						, new MediaError(MediaErrorCodes.DVRCAST_SUBSCRIBE_FAILED, error.message)
+						)
+					);
+			}	
 		}
 		
 		private function calculateOffset(streamInfo:DVRCastStreamInfo):Number
