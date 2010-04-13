@@ -171,7 +171,9 @@ package
 		private function onMediaError(event:MediaErrorEvent):void
 		{
 			// Compose error message:
-			var message:String = event.error.message + "\n" + event.error.detail;
+			var message:String
+				= event.error.message
+				+ (event.error.detail ? "\n" + event.error.detail : "");
 			
 			// If an alert widget is available, use it. Otherwise, trace the message:
 			if (alert)
