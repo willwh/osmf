@@ -33,6 +33,7 @@ package org.osmf.net
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
+     *  @productversion FLEXOSMF 4.0 
 	 */
 	public final class StreamType
 	{
@@ -44,6 +45,7 @@ package org.osmf.net
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const LIVE:String = "live";
 
@@ -55,6 +57,7 @@ package org.osmf.net
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const RECORDED:String = "recorded";
 
@@ -66,6 +69,7 @@ package org.osmf.net
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const LIVE_OR_RECORDED:String = "liveOrRecorded";
 		
@@ -77,6 +81,7 @@ package org.osmf.net
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const DVR:String = "dvr";
 	}

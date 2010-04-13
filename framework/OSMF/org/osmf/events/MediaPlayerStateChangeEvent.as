@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -31,6 +31,7 @@ package org.osmf.events
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
+	 *  @productversion FLEXOSMF 4.0	 
 	 */		
 	public class MediaPlayerStateChangeEvent extends Event
 	{
@@ -45,6 +46,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */		
 		public static const MEDIA_PLAYER_STATE_CHANGE:String = "mediaPlayerStateChange";
 
@@ -60,6 +62,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
         public function MediaPlayerStateChangeEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, state:String=null)
         {
@@ -75,6 +78,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */		
         public function get state():String
         {

@@ -1,4 +1,4 @@
-/*****************************************************
+﻿/*****************************************************
 *  
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
 *  
@@ -30,6 +30,7 @@ package org.osmf.events
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
 	 *  @productversion OSMF 1.0
+	 *  @productversion FLEXOSMF 4.0
 	 */
 	public class LoadEvent extends Event
 	{
@@ -44,6 +45,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const LOAD_STATE_CHANGE:String = "loadStateChange";
 
@@ -58,6 +60,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const BYTES_LOADED_CHANGE:String = "bytesLoadedChange";
 		
@@ -72,6 +75,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public static const BYTES_TOTAL_CHANGE:String = "bytesTotalChange";
 		
@@ -88,6 +92,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public function LoadEvent
 							( type:String,
@@ -118,6 +123,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public function get loadState():String
 		{
@@ -131,6 +137,7 @@ package org.osmf.events
 		 *  @playerversion Flash 10
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
+		 *  @productversion FLEXOSMF 4.0
 		 */
 		public function get bytes():Number
 		{
