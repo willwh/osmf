@@ -65,6 +65,7 @@
     <classEntry path="org.osmf.elements.f4mClasses.Base64Decoder"/>
     <classEntry path="org.osmf.elements.f4mClasses.BootstrapInfo"/>
     <classEntry path="org.osmf.elements.f4mClasses.DRMAdditionalHeader"/>
+    <classEntry path="org.osmf.elements.f4mClasses.DVRInfo"/>
     <classEntry path="org.osmf.elements.f4mClasses.DateUtil"/>
     <classEntry path="org.osmf.elements.f4mClasses.Manifest"/>
     <classEntry path="org.osmf.elements.f4mClasses.ManifestParser"/>
@@ -92,6 +93,7 @@
     <classEntry path="org.osmf.events.HTTPStreamingIndexHandlerEvent"/>
     <classEntry path="org.osmf.events.LoadEvent"/>
     <classEntry path="org.osmf.events.LoaderEvent"/>
+    <classEntry path="org.osmf.events.MediaElementChangeEvent"/>
     <classEntry path="org.osmf.events.MediaElementEvent"/>
     <classEntry path="org.osmf.events.MediaError"/>
     <classEntry path="org.osmf.events.MediaErrorCodes"/>
@@ -156,6 +158,7 @@
     <classEntry path="org.osmf.media.pluginClasses.PluginLoadingState"/>
     <classEntry path="org.osmf.media.pluginClasses.PluginManager"/>
     <classEntry path="org.osmf.media.pluginClasses.StaticPluginLoader"/>
+    <classEntry path="org.osmf.media.pluginClasses.VersionUtils"/>
     <classEntry path="org.osmf.metadata.CuePoint"/>
     <classEntry path="org.osmf.metadata.CuePointType"/>
     <classEntry path="org.osmf.metadata.Metadata"/>
@@ -207,6 +210,7 @@
     <classEntry path="org.osmf.net.dvr.DVRCastStreamInfo"/>
     <classEntry path="org.osmf.net.dvr.DVRCastStreamInfoRetriever"/>
     <classEntry path="org.osmf.net.dvr.DVRCastTimeTrait"/>
+    <classEntry path="org.osmf.net.dvr.DVRUtils"/>
     <classEntry path="org.osmf.net.dvr.TestableResponder"/>
     <classEntry path="org.osmf.net.httpstreaming.DownloadRatioRule"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPNetStream"/>
@@ -218,6 +222,8 @@
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingNetLoader"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingState"/>
     <classEntry path="org.osmf.net.httpstreaming.HTTPStreamingUtils"/>
+    <classEntry path="org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastDVRTrait"/>
+    <classEntry path="org.osmf.net.httpstreaming.dvr.HTTPStreamingDVRCastTimeTrait"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeBootstrapBox"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeFragmentRandomAccessBox"/>
     <classEntry path="org.osmf.net.httpstreaming.f4f.AdobeFragmentRunTable"/>

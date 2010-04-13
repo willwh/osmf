@@ -235,44 +235,16 @@ package org.osmf.media.pluginClasses
 			{
 				return false;
 			}
-
-			var minVersion:Object = parseVersionString(minimumSupportedFrameworkVersion);
-			var pVersion:Object = parseVersionString(pluginVersion);
+			
+			var minVersion:Object = VersionUtils.parseVersionString(minimumSupportedFrameworkVersion);
+			var pVersion:Object = VersionUtils.parseVersionString(pluginVersion);
 			
 			// A player can load a plugin provided that the plugin's version is
 			// at least as great as the minimum supported framework version.
 			return 		pVersion.major > minVersion.major
 					||	(	pVersion.major == minVersion.major
-						&&	( 	pVersion.minor > minVersion.minor
-							||	(	pVersion.minor == minVersion.minor
-								&&	pVersion.subMinor >= minVersion.subMinor
-								)
-							)
+						&&	pVersion.minor >= minVersion.minor
 						);
-		}
-		
-		private static function parseVersionString(version:String):Object
-		{
-			var versionInfo:Array = version.split(".");
-			
-			var major:int = 0;
-			var minor:int = 0;
-			var subMinor:int = 0;
-			
-			if (versionInfo.length >= 1)
-			{
-				major = parseInt(versionInfo[0]);
-			}
-			if (versionInfo.length >= 2)
-			{
-				minor = parseInt(versionInfo[1]);
-			}
-			if (versionInfo.length >= 3)
-			{
-				subMinor = parseInt(versionInfo[2]);
-			}
-
-			return {major:major, minor:minor, subMinor:subMinor};
 		}
 		
 		private var minimumSupportedFrameworkVersion:String;

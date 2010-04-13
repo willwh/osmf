@@ -273,25 +273,52 @@ package org.osmf.media.pluginClasses
 			}
 		}
 
+		public function testLoadPluginWithDifferentVersions():void
+		{
+			// Note: This test will need updating any time the framework
+			// version number changes.  I've added the following assertion
+			// to make this explicit.
+			assertTrue(Version.version == "0.95");
+			
+			// First number is minimum supported framework version.
+			// Second number is plugin's framework version.
+			
+			// We can load older plugins.
+			assertPluginHasValidVersion("0.9", "0.9", true);
+			assertPluginHasValidVersion("0.9", "0.95", true);
+			
+			// But not newer plugins.
+			assertPluginHasValidVersion("0.9", "1.1", false);
+			
+			// And we can't load older plugins if their version is less
+			// than the minimum.
+			assertPluginHasValidVersion("0.95", "0.9", false);
+			
+			assertPluginHasValidVersion("0.95", "0.95", true);
+			assertPluginHasValidVersion("0.95", "1.1", false);
+			assertPluginHasValidVersion("1.1", "0.9", false);
+			assertPluginHasValidVersion("1.1", "0.95", false);
+			assertPluginHasValidVersion("1.1", "1.1", false);
+			
+			// Verify we take the number of digits in the minor version
+			// into account.
+			assertPluginHasValidVersion("0.90", "0.90", true);
+			assertPluginHasValidVersion("0.9", "0.90", true);
+			assertPluginHasValidVersion("0.90", "0.9", true);
+			assertPluginHasValidVersion("0.81", "0.90", true);
+			assertPluginHasValidVersion("0.81", "0.9", true);
+			assertPluginHasValidVersion("0.90", "0.81", false);
+			assertPluginHasValidVersion("0.9", "0.81", false);
+		}
+		
+		private function assertPluginHasValidVersion(minimumSupportedFrameworkVersion:String, pluginFrameworkVersion:String, mustBeTrue:Boolean):void
+		{
+			var loader:VersionCheckPluginLoader = new VersionCheckPluginLoader(minimumSupportedFrameworkVersion);
+			assertEquals(mustBeTrue, loader.isVersionValid(pluginFrameworkVersion));
+		}
+		
 		private var mediaFactory:MediaFactory;
 		private var pluginManager:PluginManager;
-	}
-}
-	
-import __AS3__.vec.Vector;
-import org.osmf.media.MediaFactoryItem;
-import org.osmf.elements.VideoElement;
-		
-class OldPluginInfo extends org.osmf.media.PluginInfo
-{
-	public function OldPluginInfo(items:Vector.<MediaFactoryItem>)
-	{
-		super(items);
-	}
-	
-	override public function get frameworkVersion():String
-	{
-		return "0.5.0";
 	}
 }
 

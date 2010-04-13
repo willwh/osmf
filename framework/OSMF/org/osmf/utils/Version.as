@@ -123,7 +123,7 @@ package org.osmf.utils
 		}
 				
 		private static const _major:String = "0";
-		private static const _minor:String = "93";
+		private static const _minor:String = "95";
 		
 		private static const FIELD_SEPARATOR:String = ".";	
 	}

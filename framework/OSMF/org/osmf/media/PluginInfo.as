@@ -23,6 +23,7 @@ package org.osmf.media
 {
 	import __AS3__.vec.Vector;
 	
+	import org.osmf.media.pluginClasses.VersionUtils;
 	import org.osmf.utils.OSMFStrings;
 	import org.osmf.utils.Version;
 	
@@ -175,8 +176,8 @@ package org.osmf.media
 				return false;
 			}
 
-			var playerFrameworkVersion:Object = parseVersionString(version);
-			var pluginFrameworkVersion:Object = parseVersionString(frameworkVersion);
+			var playerFrameworkVersion:Object = VersionUtils.parseVersionString(version);
+			var pluginFrameworkVersion:Object = VersionUtils.parseVersionString(frameworkVersion);
 			
 			// A plugin supports the specified version if it's higher than or
 			// the same as the plugin's version.
@@ -235,30 +236,9 @@ package org.osmf.media
 		{
 			_mediaFactoryItems = value;
 		}
-		
 
 		// Internals
 		//
-		
-		private static function parseVersionString(version:String):Object
-		{
-			var versionInfo:Array = version.split(".");
-			
-			var major:int = 0;
-			var minor:int = 0;
-			var subMinor:int = 0;
-			
-			if (versionInfo.length >= 1)
-			{
-				major = parseInt(versionInfo[0]);
-			}
-			if (versionInfo.length >= 2)
-			{
-				minor = parseInt(versionInfo[1]);
-			}
-
-			return {major:major, minor:minor};
-		}
 		
 		private var _mediaFactoryItems:Vector.<MediaFactoryItem>;
 		private var _mediaElementCreationNotificationFunction:Function;
