@@ -9,17 +9,22 @@ package
 	import mx.effects.Fade;
 	import mx.events.EffectEvent;
 	
+	import org.osmf.events.DisplayObjectEvent;
+	import org.osmf.events.LoadEvent;
+	import org.osmf.events.LoaderEvent;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.PlayEvent;
 	import org.osmf.events.SeekEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
 	import org.osmf.traits.DisplayObjectTrait;
+	import org.osmf.traits.LoadState;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
 	import org.osmf.traits.PlayTrait;
 	import org.osmf.traits.SeekTrait;
 	import org.osmf.traits.TimeTrait;
+	import org.osmf.traits.TraitEventDispatcher;
 	
 	public class MediaElementEffect
 	{
@@ -35,64 +40,43 @@ package
 		{	
 			mediaElement = element;
 			_padding = padding;
-						
-			if (mediaElement)
-			{
-				if (!mediaTimeTrait || !mediaSeekTrait || !mediaPlayTrait)
-				{
-					mediaElement.addEventListener(MediaElementEvent.TRAIT_ADD, onTrait);
-				}
-				if (mediaTimeTrait)
-				{
-					_duration =  mediaTimeTrait.duration - _padding;
-					mediaTimeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDuration);
-				}
-				if (mediaSeekTrait)
-				{
-					mediaSeekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-				}
-				if (mediaPlayTrait)
-				{		
-					mediaPlayTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayState);
-				}
-			}
-			
 			//Complete timer (give it a default duration until the video gets its real duration
 			complete = new Timer(50, 1);
+				
+			if (mediaTimeTrait)
+			{
+				_duration =  mediaTimeTrait.duration - _padding;
+			}
+						
+			var ted:TraitEventDispatcher = new TraitEventDispatcher();
+						
+			ted.addEventListener(TimeEvent.DURATION_CHANGE, onDuration);
+			ted.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
+			ted.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectChange);
+			ted.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayState);
+			ted.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadState);
+			
+			ted.media = element;
+			
 			complete.addEventListener(TimerEvent.TIMER_COMPLETE, onComplete);
 		}
-				
-		private function onTrait(event:MediaElementEvent):void
-		{
-			if (event.traitType == MediaTraitType.TIME)
-			{				
-				_duration =  mediaTimeTrait.duration - _padding;
-				mediaTimeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDuration);
-			}
-			if (event.traitType == MediaTraitType.SEEK)
-			{
-				mediaSeekTrait.addEventListener(SeekEvent.SEEKING_CHANGE, onSeekingChange);
-			}
-			if (event.traitType == MediaTraitType.PLAY)
-			{
-				mediaPlayTrait.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayState);
-			}
-		}
-				
+		
 		public function get padding():Number
 		{
 			return _padding;
 		}
 			
 		protected function resetTimer():void
-		{			
+		{				
 			complete.reset();
+			
+			//Treat NaN as 0, for currentTime.			
+			var currTime:Number = isNaN(mediaTimeTrait.currentTime) ? 0 : mediaTimeTrait.currentTime;
+			
 			if (!isNaN(mediaTimeTrait.duration) && 
-				!isNaN(mediaTimeTrait.currentTime) &&
-				mediaTimeTrait.currentTime < (mediaTimeTrait.duration - padding))
-			{
-				
-				complete.delay =  (mediaTimeTrait.duration - mediaTimeTrait.currentTime - padding)*1000;
+				(currTime < (mediaTimeTrait.duration - padding)))
+			{				
+				complete.delay =  (mediaTimeTrait.duration - currTime - padding)*1000;
 				complete.repeatCount = 1;
 				complete.start();
 			}			
@@ -112,6 +96,11 @@ package
 		{
 			return (mediaElement.getTrait(MediaTraitType.SEEK) as SeekTrait);
 		}
+		
+		protected function get mediaDisplayObjectTrait():DisplayObjectTrait
+		{
+			return (mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait);
+		}
 				
 		protected function doTransition(reversed:Boolean, startFrom:Number = 0):void
 		{			
@@ -120,10 +109,10 @@ package
 			{
 				effect.stop();
 			}			
-			if (mediaElement.hasTrait(MediaTraitType.DISPLAY_OBJECT))
+			if (mediaDisplayObjectTrait)
 			{
-				display = (mediaElement.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait).displayObject;
-			}
+				display = mediaDisplayObjectTrait.displayObject;
+			}			
 			if (display)
 			{		
 				var fade:Fade =  new Fade(display);
@@ -147,6 +136,28 @@ package
 			}
 		}
 		
+		private function onLoadState(event:LoadEvent):void
+		{
+			if (event.loadState == LoadState.READY)
+			{
+				startTransition();
+			}
+		}
+		
+		private function startTransition():void
+		{			
+			if (mediaTimeTrait.currentTime == 0 ||
+				isNaN(mediaTimeTrait.currentTime))
+			{
+				doTransition(false, 0);
+			}
+		}
+				
+		private function onDisplayObjectChange(event:DisplayObjectEvent):void
+		{
+			startTransition();
+		}
+		
 		/**
 		 * Fire the exit transition.
 		 */ 
@@ -161,13 +172,14 @@ package
 			if (value.playState == PlayState.PLAYING)
 			{				
 				resetTimer();
-				if (mediaTimeTrait.currentTime == 0)
-				{
+				if (mediaTimeTrait.currentTime == 0 ||
+					isNaN(mediaTimeTrait.currentTime))
+				{					
 					doTransition(false, 0);
 				}
 			}
-			else if (value.playState == PlayState.PAUSED)
-			{				
+			else 
+			{					
 				complete.stop();
 			}
 		}

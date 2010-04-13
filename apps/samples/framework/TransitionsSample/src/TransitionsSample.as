@@ -6,6 +6,10 @@ package
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import org.osmf.elements.DurationElement;
+	import org.osmf.elements.ImageElement;
+	import org.osmf.elements.SerialElement;
+	import org.osmf.elements.VideoElement;
 	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.LoadEvent;
 	import org.osmf.events.PlayEvent;
@@ -37,11 +41,17 @@ package
 			stage.addEventListener(Event.RESIZE, onResize);
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			
-			var videoElem:MediaElement = mps.mediaFactory.createMediaElement(new URLResource(REMOTE_PROGRESSIVE));
+			var imageElem:MediaElement = new DurationElement(30, new ImageElement(new URLResource(REMOTE_IMAGE)));
+			var videoElem:MediaElement = new VideoElement(new URLResource(REMOTE_PROGRESSIVE));
+			var serialElem:SerialElement = new SerialElement();
 			
+			serialElem.addChild(imageElem);
+			serialElem.addChild(videoElem);
+						
+			new MediaElementEffect(10, imageElem);
 			new MediaElementEffect(10, videoElem);
 			
-			mps.media = videoElem;	
+			mps.media = serialElem;	
 			
 			var layout:LayoutMetadata = new LayoutMetadata();
 			layout.scaleMode = ScaleMode.LETTERBOX;
@@ -50,12 +60,8 @@ package
 			layout.verticalAlign = VerticalAlign.MIDDLE;
 			layout.horizontalAlign = HorizontalAlign.CENTER;
 					
-			videoElem.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
-			
-			mps.mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onClick);
-			mps.mediaPlayer.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onClick);
-			mps.mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onClick);
-							
+			serialElem.addMetadata(LayoutMetadata.LAYOUT_NAMESPACE, layout);
+						
 			//Update the MPS to the initial size.
 			onResize();	
 		}
@@ -74,6 +80,7 @@ package
 			mps.height = stage.stageHeight;
 		}
 		
+		private static const REMOTE_IMAGE:String				= "http://mediapm.edgesuite.net/strobe/content/test/train.jpg";
 		private static const REMOTE_PROGRESSIVE:String 			= "rtmp://cp67126.edgefcs.net/ondemand/mediapm/strobe/content/test/SpaceAloneHD_sounas_640_500_short";
 		private var mps:MediaPlayerSprite;			
 		
