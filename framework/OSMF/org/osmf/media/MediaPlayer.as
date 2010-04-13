@@ -23,7 +23,6 @@ package org.osmf.media
 {
 	import flash.display.DisplayObject;
 	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -779,7 +778,9 @@ package org.osmf.media
 	     */	    
 	    public function seek(time:Number):void
 	    {
-	    	(getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).seek(time);	    				
+	    	inSeek = true;
+	    	(getTraitOrThrow(MediaTraitType.SEEK) as SeekTrait).seek(time);
+	    	inSeek = false;	    				
 	    }
 	    
 		/**
@@ -1362,7 +1363,7 @@ package org.osmf.media
 					changeListeners(add, traitType, PlayEvent.PLAY_STATE_CHANGE, onPlayStateChange);
 					_canPlay = add;	
 					var playTrait:PlayTrait = PlayTrait(media.getTrait(MediaTraitType.PLAY));
-					if (autoPlay && canPlay && !playing)
+					if (autoPlay && canPlay && !playing && !inSeek)
 					{
 						play();
 					}
@@ -1661,11 +1662,11 @@ package org.osmf.media
 						}
 						
 						inExecuteAutoRewind = false;
-					}	
+					}
 				}
 				seek(0);
 			}							
-		}		
+		}
 								
 		private function onCurrentTimeTimer(event:TimerEvent):void
 		{
@@ -1795,6 +1796,7 @@ package org.osmf.media
 		private var _bytesLoadedUpdateInterval:Number = DEFAULT_UPDATE_INTERVAL;
 		private var _bytesLoadedTimer:Timer = new Timer(DEFAULT_UPDATE_INTERVAL);
 		private var inExecuteAutoRewind:Boolean = false;
+		private var inSeek:Boolean = false;
 		
 		// Persistent properties of the MediaPlayer, as opposed to properties that apply
 		// to a specific MediaElement.  We use xxxSet Booleans to determine

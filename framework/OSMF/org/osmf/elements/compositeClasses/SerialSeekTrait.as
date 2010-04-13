@@ -70,6 +70,16 @@ package org.osmf.elements.compositeClasses
 			else
 			{
 				// Now, the composite is going to do a seek that crosses multiple children.
+				// The order of operations is as follows:
+				// 1) Seek any required in-between children to the appropriate time.
+				// 2) Seek the targeted child to the appropriate time.
+				// 3) Seek the previous current child to the appropriate time.
+				// 4) Set the new current child to be the targeted child.
+				//
+				// The reason for this order is to ensure that we seek all non-current
+				// children *first*, and the current child *last*, so that we trigger
+				// events last. 
+				
 				crossChildrenSeeking = true;
 				allCrossChildrenSeeksInitiated = false;
 				
@@ -82,15 +92,15 @@ package org.osmf.elements.compositeClasses
 				{
 					childPlayTrait.stop();
 				}
+								
+				var childSeekTargetTime:Number;
 				
 				// Do the seek out of the current child first.
 				if (serialSeek.seekForward)
 				{
-					allCrossChildrenSeeksInitiated = true;
-					
 					// Seeking forward means to move the playhead to the end.
 					var childTimeTrait:TimeTrait = serialSeek.fromChild.getTrait(MediaTraitType.TIME) as TimeTrait;
-					childSeekTrait.seek(childTimeTrait.duration);
+					childSeekTargetTime = childTimeTrait.duration;
 				}
 				else
 				{
@@ -107,17 +117,32 @@ package org.osmf.elements.compositeClasses
 						}
 					}
 					
-					allCrossChildrenSeeksInitiated = true;
-					
 					// Seeking backward means to move the playhead to the beginning.
-					childSeekTrait.seek(0);
+					childSeekTargetTime = 0;
+				}
+
+				// Now the composite does the seek into another child, where the destiny of the seek is.
+				var nextSeekTrait:SeekTrait = serialSeek.toChild.getTrait(MediaTraitType.SEEK) as SeekTrait;
+				nextSeekTrait.seek(serialSeek.toChildTime);
+
+				// For forward seeks, set the current child before seeking the old
+				// current child.  This ensures that a seek to the end doesn't trigger
+				// playback of the next child.
+				if (serialSeek.seekForward)
+				{
+					// Next, update our current child to the target child.
+					traitAggregator.listenedChild = serialSeek.toChild;	
 				}
 				
-				// Now the composite does the seek into another child, where the destiny of the seek is.
-				childSeekTrait = serialSeek.toChild.getTrait(MediaTraitType.SEEK) as SeekTrait;
-				childSeekTrait.seek(serialSeek.toChildTime);
+				// Now, seek the previously current child to the appropriate time.
+				allCrossChildrenSeeksInitiated = true;
+				childSeekTrait.seek(childSeekTargetTime);
 
-				traitAggregator.listenedChild = serialSeek.toChild;
+				if (serialSeek.seekForward == false)
+				{
+					traitAggregator.listenedChild = serialSeek.toChild;
+				}
+				
 				var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
 				if (playTrait != null)
 				{

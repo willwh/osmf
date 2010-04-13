@@ -1547,6 +1547,71 @@ package org.osmf.media
 			}
 		}
 		
+		public function testAutoRewindAndAutoPlay():void
+		{
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, testDelay));
+			
+			if (hasLoadTrait)
+			{
+				callAfterLoad(doTestAutoRewindAndAutoPlay, false);
+			}
+			else
+			{
+				mediaPlayer.media = createMediaElement(resourceForMediaElement);
+				doTestAutoRewindAndAutoPlay();
+			}
+		}
+		
+		private function doTestAutoRewindAndAutoPlay():void
+		{
+			if (traitExists(MediaTraitType.TIME))
+			{
+				mediaPlayer.autoRewind = true;
+				mediaPlayer.autoPlay = true;
+				
+				var states:Array = [];
+				
+				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestAutoRewind);
+				mediaPlayer.play();
+				
+				function onTestAutoRewind(event:TimeEvent):void
+				{
+					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestAutoRewind);
+					
+					assertTrue(mediaPlayer.paused == false);
+					assertTrue(mediaPlayer.playing == false);
+					
+					// These are all possible/permissible state sequences.
+					var statesStr:String = states.join(" ");
+
+					// II most cases, the state change will only cover PLAYING.  But if the
+					// MediaElement can execute a synchronous rewind (e.g. DurationElement),
+					// then the MediaPlayer will enter the READY state before the autoRewind
+					// operation completes.  This is ok.
+					assertTrue(statesStr == "playing" || statesStr == "playing ready");
+					
+					eventDispatcher.dispatchEvent(new Event("testComplete"));
+				}
+				
+				function onStateChange(event:MediaPlayerStateChangeEvent):void
+				{
+					// Ignore any buffering state changes, they can happen
+					// intermittently.
+					if (event.state != MediaPlayerState.BUFFERING &&
+						!(states.length > 0 && event.state == states[states.length-1]))
+					{
+						states.push(event.state);
+					}
+				}
+			}
+			else
+			{
+				eventDispatcher.dispatchEvent(new Event("testComplete"));
+			}
+		}
+		
 		public function testAutoPlay():void
 		{
 			if (hasLoadTrait)
