@@ -94,8 +94,14 @@ package org.osmf.net
 		{
 			if (newSeeking)
 			{
+				// Note that we set previousTime based on the NetStream's time
+				// and audioDelay, rather than pulling it from the TimeTrait.
+				// This is because the TimeTrait sometimes includes a duration
+				// offset (to compensate for the onMetaData-based duration
+				// differing from the actual duration), which throws off the
+				// calculation in the timer handler below.  See bug FM-708.
 				suppressSeekNotifyEvent  = false;
-				previousTime = timeTrait.currentTime;
+				previousTime = netStream.time - audioDelay;
 				expectedTime = time;
 				netStream.seek(time + audioDelay);
 				
@@ -175,10 +181,11 @@ package org.osmf.net
 			// it had when the seek was initiated, we assume the seek has
 			// completed. Note that the playhead may not actually be at the
 			// seeked-to position, since it will land on the nearest keyframe
-			// (which might be seconds away).   Addresses bug FM-258.
+			// (which might be seconds away).   Addresses bug FM-258.  The
+			// inclusion of audioDelay in the comparison is for bug FM-708.
 			// The second condition is to cover the case where the seek time
 			// is the same as the current time (bug FM-227).
-			if (   previousTime != netStream.time
+			if (   previousTime != netStream.time - audioDelay
 				|| previousTime == expectedTime
 			   )
 			{
