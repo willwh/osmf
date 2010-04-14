@@ -21,23 +21,23 @@
 
 package org.osmf.net.dvr
 {
-	import org.osmf.events.DVREvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.net.StreamingURLResource;
 
 	public class TestDVRCastTimeTrait extends TestCaseEx
 	{
 		public function testDVRCastTimeTrait():void
 		{
-			assertThrows(function():void{ new DVRCastTimeTrait(null, null); });
+			assertThrows(function():void{ new DVRCastTimeTrait(null, null, null); });
 			
 			var nc:MockDVRCastNetConnection = new MockDVRCastNetConnection();
 			
 			
-			assertThrows(function():void{ new DVRCastTimeTrait(nc, null); });
+			assertThrows(function():void{ new DVRCastTimeTrait(nc, null, null); });
 			
 			var now:Date = new Date();
-			nc.streamInfo 
+			var streamInfo:DVRCastStreamInfo 
 				= new DVRCastStreamInfo
 					(	{ callTime: now
 						, offline: false
@@ -52,17 +52,22 @@ package org.osmf.net.dvr
 						, maxLen: 0
 						}
 					);
-			nc.recordingInfo = new DVRCastRecordingInfo();
-			nc.recordingInfo.startTime = now;
 			
-			var stream:DVRCastNetStream = new DVRCastNetStream(nc);
-			var tt:DVRCastTimeTrait = new DVRCastTimeTrait(nc, stream);
+			var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
+			recordingInfo.startTime = now;
+			
+			var resource:StreamingURLResource = new StreamingURLResource("http://example.com");
+			resource.addMetadataValue(DVRCastConstants.STREAM_INFO_KEY, streamInfo);
+			resource.addMetadataValue(DVRCastConstants.RECORDING_INFO_KEY, recordingInfo);
+			
+			var stream:DVRCastNetStream = new DVRCastNetStream(nc, resource);
+			var tt:DVRCastTimeTrait = new DVRCastTimeTrait(nc, stream, resource);
 			assertEquals(0, tt.currentTime);
 			assertEquals(NaN, tt.duration);
 			
 			assertNotNull(tt);
 			
-			nc.streamInfo.isRecording = true;
+			streamInfo.isRecording = true;
 			
 			tt.addEventListener(TimeEvent.DURATION_CHANGE, addAsync(onDurationChange, 7000));
 			

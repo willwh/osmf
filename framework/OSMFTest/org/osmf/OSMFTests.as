@@ -264,7 +264,6 @@ package org.osmf
  			addTestSuite(TestDVRCastNetConnectionFactory);
  			addTestSuite(TestDVRCastNetLoader);
  			addTestSuite(TestDVRCastNetStream);
- 			addTestSuite(TestDVRCastNetConnection);
  			addTestSuite(TestDVRCastRecordingInfo);
  			addTestSuite(TestDVRCastStreamInfo);
  			addTestSuite(TestDVRCastStreamInfoRetriever);

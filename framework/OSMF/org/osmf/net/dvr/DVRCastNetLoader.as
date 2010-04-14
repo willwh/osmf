@@ -96,7 +96,7 @@ package org.osmf.net.dvr
 		 */
 		override protected function createNetStream(connection:NetConnection, resource:URLResource):NetStream
 		{
-			return new DVRCastNetStream(connection as DVRCastNetConnection); 
+			return new DVRCastNetStream(connection, resource); 
 		}
 		
 		/**
@@ -109,8 +109,8 @@ package org.osmf.net.dvr
 		 */		
 		override protected function processFinishLoading(loadTrait:NetStreamLoadTrait):void
 		{
-			loadTrait.setTrait(new DVRCastDVRTrait(loadTrait.connection as DVRCastNetConnection, loadTrait.netStream));
-			loadTrait.setTrait(new DVRCastTimeTrait(loadTrait.connection as DVRCastNetConnection, loadTrait.netStream));
+			loadTrait.setTrait(new DVRCastDVRTrait(loadTrait.connection, loadTrait.netStream, loadTrait.resource));
+			loadTrait.setTrait(new DVRCastTimeTrait(loadTrait.connection, loadTrait.netStream, loadTrait.resource));
 
 			updateLoadTrait(loadTrait, LoadState.READY);
 		}

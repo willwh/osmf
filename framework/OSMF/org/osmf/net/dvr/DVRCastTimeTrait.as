@@ -24,11 +24,13 @@ package org.osmf.net.dvr
 	import flash.errors.IllegalOperationError;
 	import flash.events.NetStatusEvent;
 	import flash.events.TimerEvent;
+	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
 	import org.osmf.events.TimeEvent;
 	import org.osmf.logging.Logger;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.TimeTrait;
 	import org.osmf.utils.OSMFStrings;
 
@@ -39,7 +41,7 @@ package org.osmf.net.dvr
 	 */	
 	internal class DVRCastTimeTrait extends TimeTrait
 	{
-		public function DVRCastTimeTrait(connection:DVRCastNetConnection, stream:NetStream)
+		public function DVRCastTimeTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase)
 		{
 			super(NaN);
 			
@@ -56,8 +58,8 @@ package org.osmf.net.dvr
 			durationUpdateTimer.addEventListener(TimerEvent.TIMER, onDurationUpdateTimer);
 			durationUpdateTimer.start();
 			
-			streamInfo = connection.streamInfo;
-			recordingInfo = connection.recordingInfo;
+			streamInfo = resource.getMetadataValue(DVRCastConstants.STREAM_INFO_KEY) as DVRCastStreamInfo;
+			recordingInfo = resource.getMetadataValue(DVRCastConstants.RECORDING_INFO_KEY) as DVRCastRecordingInfo;
 		}
 		
 		override public function get duration():Number

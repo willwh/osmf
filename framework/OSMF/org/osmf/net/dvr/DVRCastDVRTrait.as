@@ -32,6 +32,7 @@ package org.osmf.net.dvr
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.MediaErrorEvent;
 	import org.osmf.logging.Logger;
+	import org.osmf.media.MediaResourceBase;
 	import org.osmf.traits.DVRTrait;
 	import org.osmf.utils.OSMFStrings;
 	
@@ -54,14 +55,14 @@ package org.osmf.net.dvr
 		 *  @productversion OSMF 1.0
 		 */		
 
-		public function DVRCastDVRTrait(connection:DVRCastNetConnection, stream:NetStream)
+		public function DVRCastDVRTrait(connection:NetConnection, stream:NetStream, resource:MediaResourceBase)
 		{
 			if (connection != null && stream != null)
 			{
 				this.stream = stream;
 					
-				streamInfo = connection.streamInfo;
-				recordingInfo = connection.recordingInfo;
+				streamInfo = resource.getMetadataValue(DVRCastConstants.STREAM_INFO_KEY) as DVRCastStreamInfo;
+				recordingInfo = resource.getMetadataValue(DVRCastConstants.RECORDING_INFO_KEY) as DVRCastRecordingInfo;
 				
 				// Setup 
 				streamInfoRetriever = new DVRCastStreamInfoRetriever(connection, streamInfo.streamName); 

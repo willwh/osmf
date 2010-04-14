@@ -25,6 +25,7 @@ package org.osmf.net.dvr
 	import flash.net.NetStreamPlayOptions;
 	
 	import org.osmf.media.MediaResourceBase;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.metadata.MetadataNamespaces;
 	
 	[ExcludeClass]
@@ -34,11 +35,11 @@ package org.osmf.net.dvr
 	 */
 	public class DVRCastNetStream extends NetStream
 	{
-		public function DVRCastNetStream(connection:DVRCastNetConnection)
+		public function DVRCastNetStream(connection:NetConnection, resource:MediaResourceBase)
 		{
 			super(connection);
 			
-			recordingInfo = connection.recordingInfo;
+			recordingInfo = resource.getMetadataValue(DVRCastConstants.RECORDING_INFO_KEY) as DVRCastRecordingInfo;
 		}
 		
 		/**

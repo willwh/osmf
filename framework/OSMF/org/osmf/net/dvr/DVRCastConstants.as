@@ -37,6 +37,9 @@ package org.osmf.net.dvr
 		public static const RESULT_GET_STREAM_INFO_SUCCESS:String	="NetStream.DVRStreamInfo.Success";
 		public static const RESULT_GET_STREAM_INFO_RETRY:String		="NetStream.DVRStreamInfo.Retry";
 		
+		public static const STREAM_INFO_KEY:String					= "http://www.osmf.org/dvrCast/1.0/streamInfo";
+		public static const RECORDING_INFO_KEY:String				= "http://www.osmf.org/dvrCast/1.0/recordingInfo";
+		
 		public static const STREAM_INFO_UPDATE_DELAY:Number 		= 3000; // ms.
 		public static const LOCAL_DURATION_UPDATE_INTERVAL:Number 	= 500;	// ms.
 		public static const LIVE_POSITION_SEEK_DELAY:Number			= 1.5;	// secs.

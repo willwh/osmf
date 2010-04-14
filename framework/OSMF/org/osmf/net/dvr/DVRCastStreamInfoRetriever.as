@@ -52,7 +52,7 @@ package org.osmf.net.dvr
 		// Public Interface
 		//
 		
-		public function DVRCastStreamInfoRetriever(connection:DVRCastNetConnection, streamName:String)
+		public function DVRCastStreamInfoRetriever(connection:NetConnection, streamName:String)
 		{
 			super();
 			

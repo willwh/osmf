@@ -22,8 +22,10 @@
 package org.osmf.net.dvr
 {
 	import flash.net.Responder;
+	
+	import org.osmf.netmocker.MockNetConnection;
 
-	public class MockDVRCastNetConnection extends DVRCastNetConnection
+	public class MockDVRCastNetConnection extends MockNetConnection
 	{
 		public function MockDVRCastNetConnection()
 		{

@@ -23,12 +23,14 @@ package org.osmf.net.dvr
 	import flash.events.Event;
 	import flash.net.NetConnection;
 	import flash.net.Responder;
+	import flash.utils.Dictionary;
 	
 	import org.osmf.events.MediaError;
 	import org.osmf.events.MediaErrorCodes;
 	import org.osmf.events.NetConnectionFactoryEvent;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.NetConnectionFactory;
+	import org.osmf.net.NetConnectionFactoryBase;
 	import org.osmf.net.NetStreamUtils;
 	import org.osmf.net.StreamingURLResource;
 
@@ -37,18 +39,25 @@ package org.osmf.net.dvr
 	/**
 	 * @private
 	 */	
-	public class DVRCastNetConnectionFactory extends NetConnectionFactory
+	public class DVRCastNetConnectionFactory extends NetConnectionFactoryBase
 	{
 		/**
 		 * Constructor.
 		 **/
-		public function DVRCastNetConnectionFactory()
+		public function DVRCastNetConnectionFactory(factory:NetConnectionFactoryBase = null)
 		{
-			addEventListener
+			subscribedStreams = new Dictionary();
+			
+			innerFactory = factory || new NetConnectionFactory();
+			
+			innerFactory.addEventListener
 				( NetConnectionFactoryEvent.CREATION_COMPLETE
 				, onCreationComplete
-				, false
-				, Number.MAX_VALUE
+				);
+				
+			innerFactory.addEventListener
+				( NetConnectionFactoryEvent.CREATION_ERROR
+				, onCreationError
 				);
 			
 			super();
@@ -57,9 +66,9 @@ package org.osmf.net.dvr
 		/**
 		 * @private
 		 **/
-		override protected function createNetConnection():NetConnection
+		override public function create(resource:URLResource):void
 		{
-			return new DVRCastNetConnection();
+			innerFactory.create(resource);
 		}
 		
 		/**
@@ -67,17 +76,19 @@ package org.osmf.net.dvr
 		 **/
 		override public function closeNetConnection(netConnection:NetConnection):void
 		{
-			var dvrCastNetConnection:DVRCastNetConnection = netConnection as DVRCastNetConnection;
-			if (dvrCastNetConnection)
+			var streamName:String = subscribedStreams[netConnection];
+			if (streamName != null)
 			{
 				netConnection.call
 					( DVRCastConstants.RPC_UNSUBSCRIBE
 					, null
-					, dvrCastNetConnection.streamInfo.streamName
+					, streamName
 					);	 
+				
+				delete subscribedStreams[netConnection];
 			}
 			
-			super.closeNetConnection(netConnection);
+			innerFactory.closeNetConnection(netConnection);
 		}
 		
 		// Internals
@@ -86,14 +97,12 @@ package org.osmf.net.dvr
 		private function onCreationComplete(event:NetConnectionFactoryEvent):void
 		{
 			var urlResource:URLResource = event.resource as URLResource;
-			var netConnection:DVRCastNetConnection = event.netConnection as DVRCastNetConnection
+			var netConnection:NetConnection = event.netConnection;
 			var streamName:String;
 			
 			// Capture this event, whithold it from the outside world until
 			// we have succeeded subscribing to the DVRCast stream:
 			event.stopImmediatePropagation();
-			
-			netConnection = event.netConnection as DVRCastNetConnection;
 			
 			var streamingResource:StreamingURLResource = urlResource as StreamingURLResource;
 			
@@ -159,9 +168,12 @@ package org.osmf.net.dvr
 						recordingInfo.startOffset = calculateOffset(streamInfoRetriever.streamInfo);
 						recordingInfo.startTime = new Date();
 						
-						// Add the stream info and recording info to the net connection:
-						netConnection.streamInfo = streamInfoRetriever.streamInfo;	
-						netConnection.recordingInfo = recordingInfo;
+						// Add the stream info and recording info to the resource as metadata:
+						streamingResource.addMetadataValue(DVRCastConstants.STREAM_INFO_KEY, streamInfoRetriever.streamInfo);
+						streamingResource.addMetadataValue(DVRCastConstants.RECORDING_INFO_KEY, recordingInfo);
+						
+						// Store the subscribed stream with the connection instance:
+						subscribedStreams[netConnection] = streamName;
 							
 						// Now that we're done, signal completion, so the VideoElement will
 						// continue its loading process:
@@ -197,9 +209,17 @@ package org.osmf.net.dvr
 			}	
 		}
 		
+		private function onCreationError(event:NetConnectionFactoryEvent):void
+		{
+			dispatchEvent(event.clone());
+		}
+		
 		private function calculateOffset(streamInfo:DVRCastStreamInfo):Number
 		{
 			return DVRUtils.calculateOffset(streamInfo.beginOffset, streamInfo.endOffset, streamInfo.currentLength);
 		}
+		
+		private var innerFactory:NetConnectionFactoryBase;
+		private var subscribedStreams:Dictionary;
 	}
 }

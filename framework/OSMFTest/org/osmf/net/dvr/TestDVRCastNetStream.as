@@ -25,6 +25,7 @@ package org.osmf.net.dvr
 	import flash.net.NetStreamPlayOptions;
 	
 	import org.osmf.flexunit.TestCaseEx;
+	import org.osmf.net.StreamingURLResource;
 
 
 	public class TestDVRCastNetStream extends TestCaseEx
@@ -32,12 +33,13 @@ package org.osmf.net.dvr
 		public function testDVRCastNetStream():void
 		{
 			// Pro forma (the class does a single override on 'play'):
-			assertThrows(function():void{ new DVRCastNetStream(null); });
+			assertThrows(function():void{ new DVRCastNetStream(null, null); });
 			
 			var c:MockDVRCastNetConnection = new MockDVRCastNetConnection();
-			c.recordingInfo = new DVRCastRecordingInfo();
+			var r:StreamingURLResource = new StreamingURLResource("rtmp://example.com");
+			r.addMetadataValue(DVRCastConstants.RECORDING_INFO_KEY, new DVRCastRecordingInfo());
 			
-			var stream:DVRCastNetStream = new DVRCastNetStream(c);
+			var stream:DVRCastNetStream = new DVRCastNetStream(c, r);
 			assertNotNull(stream);
 			stream.addEventListener(NetStatusEvent.NET_STATUS, function(..._):void{});
 			

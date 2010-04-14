@@ -27,18 +27,19 @@ package org.osmf.net.dvr
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.StreamType;
 	import org.osmf.net.StreamingURLResource;
+	import org.osmf.netmocker.MockNetConnection;
 
 	public class TestDVRCastDVRTrait extends TestCaseEx
 	{
 		public function testDVRCastDVRTrait():void
 		{
-			assertThrows(function():void{ new DVRCastDVRTrait(null, null); });
+			assertThrows(function():void{ new DVRCastDVRTrait(null, null, null); });
 			
 			var nc:MockDVRCastNetConnection = new MockDVRCastNetConnection();
-			assertThrows(function():void{ new DVRCastDVRTrait(nc, null); });
+			assertThrows(function():void{ new DVRCastDVRTrait(nc, null, null); });
 			
 			var now:Date = new Date();
-			nc.streamInfo 
+			var streamInfo:DVRCastStreamInfo 
 				= new DVRCastStreamInfo
 					(	{ callTime: now
 						, offline: false
@@ -54,10 +55,14 @@ package org.osmf.net.dvr
 						}
 					);
 			
-			nc.recordingInfo = new DVRCastRecordingInfo();
+			var recordingInfo:DVRCastRecordingInfo = new DVRCastRecordingInfo();
 			
-			var stream:DVRCastNetStream = new DVRCastNetStream(nc);
-			var trait:DVRCastDVRTrait = new DVRCastDVRTrait(nc, stream);
+			var resource:StreamingURLResource = new StreamingURLResource("rtmp://example.com", StreamType.DVR);
+			resource.addMetadataValue(DVRCastConstants.STREAM_INFO_KEY, streamInfo);
+			resource.addMetadataValue(DVRCastConstants.RECORDING_INFO_KEY, recordingInfo);
+			
+			var stream:DVRCastNetStream = new DVRCastNetStream(nc, resource);
+			var trait:DVRCastDVRTrait = new DVRCastDVRTrait(nc, stream, resource);
 			assertNotNull(trait);
 			
 			assertFalse(trait.isRecording);
