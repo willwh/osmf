@@ -50,6 +50,11 @@ package org.osmf.media
 			return true;
 		}
 		
+		override protected function get expectedBytesTotalAfterLoad():Number
+		{
+			return 30439;
+		}
+		
 		override protected function get resourceForMediaElement():MediaResourceBase
 		{
 			return new URLResource(TestConstants.LOCAL_SOUND_FILE);

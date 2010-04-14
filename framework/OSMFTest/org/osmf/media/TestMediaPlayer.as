@@ -160,6 +160,7 @@ package org.osmf.media
 				
 				var eventCount:int = 0;
 				var errorCount:int = 0;
+				var waitForError:Boolean = false;
 				
 				mediaPlayer.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 				mediaPlayer.addEventListener
@@ -171,6 +172,11 @@ package org.osmf.media
 				function onMediaError(event:MediaErrorEvent):void
 				{
 					errorCount++;
+					
+					if (waitForError)
+					{
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
 				}
 				
 				function onTestSourceWithInvalidResource(event:LoadEvent):void
@@ -187,9 +193,14 @@ package org.osmf.media
 						assertTrue(event.loadState == LoadState.LOAD_ERROR);
 						assertTrue(mediaPlayer.state == MediaPlayerState.PLAYBACK_ERROR);
 
-						assertTrue(errorCount == 1);
-						
-						eventDispatcher.dispatchEvent(new Event("testComplete"));
+						if (errorCount == 1)
+						{
+							eventDispatcher.dispatchEvent(new Event("testComplete"));
+						}
+						else
+						{
+							waitForError = true;
+						}
 					}
 					else fail();
 				}
@@ -902,7 +913,7 @@ package org.osmf.media
 						// the timing model isn't precise, so we leave some wiggle
 						// room in our assertion (and in particular give ourselves
 						// more wiggle room if the duration is longer).
-						assertTrue(Math.abs(currentTimeUpdateCount - Math.ceil(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
+						assertTrue(Math.abs(currentTimeUpdateCount - Math.round(mediaPlayer.duration)) <= Math.max(1, mediaPlayer.duration * 0.10));
 					}
 					else
 					{

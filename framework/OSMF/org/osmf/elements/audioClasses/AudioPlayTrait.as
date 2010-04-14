@@ -38,7 +38,14 @@ package org.osmf.elements.audioClasses
 		{
 			super();
 			
-			this.soundAdapter = soundAdapter;				
+			this.soundAdapter = soundAdapter;
+
+			// Note that we add the listener with a high priority. The reason
+			// for this is that we want to process the COMPLETE event before
+			// the AudioTimeTrait processes it and dispatches its own COMPLETE
+			// event.  Clients who register for the COMPLETE event will expect
+			// that the media is no longer playing.
+			soundAdapter.addEventListener(Event.COMPLETE, onPlaybackComplete, false, 1, true);				
 		}
 		
 		override protected function playStateChangeStart(newPlayState:String):void
@@ -70,7 +77,12 @@ package org.osmf.elements.audioClasses
 				super.playStateChangeEnd();
 			}
 		}
-			
+		
+		private function onPlaybackComplete(event:Event):void
+		{
+			stop();
+		}
+
 		private var lastPlayFailed:Boolean = false;					
 		private var soundAdapter:SoundAdapter;			
 	}
