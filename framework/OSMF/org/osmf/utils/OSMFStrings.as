@@ -145,6 +145,13 @@ package org.osmf.utils
 		 **/
 		public static const LOADER_CANT_HANDLE_RESOURCE:String 			= "loaderCantHandleResource";
 		
+		// PlayTrait
+		
+		/**
+		 * @private
+		 **/
+		public static const PAUSE_NOT_SUPPORTED:String 					= "pauseNotSupported";
+
 		// LoaderBase
 		
 		/**
@@ -372,6 +379,8 @@ package org.osmf.utils
 			
 			resourceDict[MUST_SET_LOADER] 							= "Must set LoaderBase on a LoadTrait before calling load or unload";
 			resourceDict[LOADER_CANT_HANDLE_RESOURCE]				= "LoaderBase unable to handle the given MediaResourceBase";
+			
+			resourceDict[PAUSE_NOT_SUPPORTED]						= "PlayTrait.pause cannot be invoked when canPause is false";
 
 			resourceDict[ALREADY_READY] 							= "Loader - attempt to load an already loaded object";
 			resourceDict[ALREADY_LOADING] 							= "Loader - attempt to load a loading object";

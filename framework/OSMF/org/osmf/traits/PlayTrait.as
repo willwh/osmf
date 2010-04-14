@@ -24,6 +24,7 @@ package org.osmf.traits
 	import flash.errors.IllegalOperationError;
 	
 	import org.osmf.events.PlayEvent;
+	import org.osmf.utils.OSMFStrings;
 
 	/**
 	 * Dispatched when the canPause property has changed.
@@ -129,7 +130,7 @@ package org.osmf.traits
 			}
 			else
 			{
-				throw new IllegalOperationError("TODO");
+				throw new IllegalOperationError(OSMFStrings.getString(OSMFStrings.PAUSE_NOT_SUPPORTED));
 			}
 		}
 		
