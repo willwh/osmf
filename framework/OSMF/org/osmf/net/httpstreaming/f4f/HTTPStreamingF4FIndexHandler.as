@@ -646,19 +646,8 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			
-			if (f4fIndexInfo.dvrInfo != null)
-			{
-				f4fIndexInfo.dvrInfo.isRecording = !frt.tableComplete();
-				f4fIndexInfo.dvrInfo.curLength = abst.totalDuration/abst.timeScale;
-				f4fIndexInfo.dvrInfo.startTime = 
-					frt.tableComplete()? 0 : DVRUtils.calculateOffset(
-						f4fIndexInfo.dvrInfo.beginOffset, 
-						f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
-						abst.totalDuration/abst.timeScale);
 
-				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
-			}	
+			dispatchDVRStreamInfo(abst);
 
 			if (!dvrGetStreamInfoCall)
 			{
@@ -698,7 +687,26 @@ package org.osmf.net.httpstreaming.f4f
 			if (abst.bootstrapVersion <= event.bootstrapBox.bootstrapVersion)
 			{
 				bootstrapBoxes[currentQuality] = event.bootstrapBox;
-			}
+				dispatchDVRStreamInfo(event.bootstrapBox);
+			}			
+		}
+		
+		private function dispatchDVRStreamInfo(abst:AdobeBootstrapBox):void
+		{
+			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
+			
+			if (f4fIndexInfo.dvrInfo != null)
+			{
+				f4fIndexInfo.dvrInfo.isRecording = !frt.tableComplete();
+				f4fIndexInfo.dvrInfo.curLength = abst.totalDuration/abst.timeScale;
+				f4fIndexInfo.dvrInfo.startTime = 
+					frt.tableComplete()? 0 : DVRUtils.calculateOffset(
+						f4fIndexInfo.dvrInfo.beginOffset, 
+						f4fIndexInfo.dvrInfo.endOffset == 0? 0 : f4fIndexInfo.dvrInfo.endOffset, 
+						abst.totalDuration/abst.timeScale);
+
+				dispatchEvent(new DVRStreamInfoEvent(DVRStreamInfoEvent.DVRSTREAMINFO, false, false, f4fIndexInfo.dvrInfo)); 								
+			}	
 		}
 		
 		private function fragmentOverflow(abst:AdobeBootstrapBox, fragId:uint):Boolean

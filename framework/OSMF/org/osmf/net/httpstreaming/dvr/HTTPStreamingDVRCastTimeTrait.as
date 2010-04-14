@@ -22,10 +22,13 @@
 package org.osmf.net.httpstreaming.dvr
 {
 	import flash.net.NetConnection;
+	import flash.events.NetStatusEvent;
 	
 	import org.osmf.elements.f4mClasses.DVRInfo;
 	import org.osmf.events.DVRStreamInfoEvent;
 	import org.osmf.net.httpstreaming.HTTPNetStream
+	import org.osmf.net.NetStreamCodes;
+	import org.osmf.net.NetStreamTimeTrait;
 	import org.osmf.traits.TimeTrait;
 
 	[ExcludeClass]
@@ -43,6 +46,7 @@ package org.osmf.net.httpstreaming.dvr
 			_stream = stream; 
 			_dvrInfo = dvrInfo;
 			_stream.addEventListener(DVRStreamInfoEvent.DVRSTREAMINFO, onDVRStreamInfo);
+			_stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 		}
 		
 		override public function get duration():Number
@@ -67,8 +71,21 @@ package org.osmf.net.httpstreaming.dvr
 		private function onDVRStreamInfo(event:DVRStreamInfoEvent):void
 		{
 			_dvrInfo = event.info as DVRInfo;
+			setDuration(_dvrInfo.curLength);
 		}
 		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			switch (event.info.code)
+			{
+				case NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY:
+					// When a live stream is unpublished, we should signal that
+					// the stream has stopped.
+					signalComplete();
+					break;
+			}
+		}
+
 		private var _connection:NetConnection;
 		private var _stream:HTTPNetStream;
 		private var _dvrInfo:DVRInfo;
