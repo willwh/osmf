@@ -44,7 +44,7 @@ package org.osmf.chrome.debug
 			var currentTicks:uint = getTimer();
 			if (currentTicks - ticks > 1000)
 			{
-				text = (frames / ((currentTicks - ticks) / 1000)).toFixed(3) + " fps."; 
+				text = (frames / ((currentTicks - ticks) / 1000)).toFixed(3) + " Flash frames/sec."; 
 				frames = 0;
 				ticks = currentTicks;
 			} 

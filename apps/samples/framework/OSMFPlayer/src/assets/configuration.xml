@@ -467,6 +467,7 @@
 			type="fpsMeter"
 			top="24"
 			left="10"
+			width="200"
 			/>
 		
 	</widgets>
