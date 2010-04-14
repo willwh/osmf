@@ -378,13 +378,14 @@ package org.osmf.net.drm
 				var now:Date = new Date();
 				this.voucher = event.voucher;		
 				if (	voucher
-					 && (voucher.voucherEndDate != null
-					 && voucher.voucherEndDate.time >= now.time
-					 && voucher.voucherStartDate != null
-					 && voucher.voucherStartDate.time <= now.time)
-					 || (voucher.offlineLeaseStartDate.time <= now.time 
-					 	&& (!voucher.offlineLeaseEndDate ||
-							voucher.offlineLeaseEndDate.time > now.time))
+					 && ((  voucher.voucherEndDate != null
+						 && voucher.voucherEndDate.time >= now.time
+						 && voucher.voucherStartDate != null
+						 && voucher.voucherStartDate.time <= now.time)
+						 || (voucher.offlineLeaseStartDate 
+							 &&  voucher.offlineLeaseStartDate.time <= now.time 
+						 	 && (!voucher.offlineLeaseEndDate 
+								 ||	voucher.offlineLeaseEndDate.time > now.time)))
 				    )
 				{
 					removeEventListeners();
