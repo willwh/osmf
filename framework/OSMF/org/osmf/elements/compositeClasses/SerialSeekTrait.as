@@ -64,6 +64,8 @@ package org.osmf.elements.compositeClasses
 			
 			if (serialSeek.fromChild == serialSeek.toChild)
 			{
+				readyToExitSeekingState = true;
+				
 				// This is the case where the seek is within the current child.
 				childSeekTrait.seek(serialSeek.toChildTime);
 			}
@@ -78,10 +80,14 @@ package org.osmf.elements.compositeClasses
 				//
 				// The reason for this order is to ensure that we seek all non-current
 				// children *first*, and the current child *last*, so that we trigger
-				// events last. 
+				// events last.
+				//
+				// Note that we prevent ourselves from exiting the seeking state until
+				// we've completed all but the last operation.
 				
 				crossChildrenSeeking = true;
 				allCrossChildrenSeeksInitiated = false;
+				readyToExitSeekingState = false;
 				
 				// Remember the current state so that we can reapply it after the seek.
 				var previousPlayState:String = getCompositePlayState();
@@ -131,16 +137,33 @@ package org.osmf.elements.compositeClasses
 				if (serialSeek.seekForward)
 				{
 					// Next, update our current child to the target child.
-					traitAggregator.listenedChild = serialSeek.toChild;	
+					traitAggregator.listenedChild = serialSeek.toChild;
+					
+					// We're not ready to exit the seeking state until we initiate
+					// the last operation.  On a seek forward, the last operation
+					// is the last seek (see below).
+					readyToExitSeekingState = true;
 				}
 				
 				// Now, seek the previously current child to the appropriate time.
 				allCrossChildrenSeeksInitiated = true;
 				childSeekTrait.seek(childSeekTargetTime);
-
+				
 				if (serialSeek.seekForward == false)
 				{
+					// We're not ready to exit the seeking state until we initiate
+					// the last operation.  On a seek back, the last operation
+					// is the setting of the new current child (see below).
+					readyToExitSeekingState = true;
+					
 					traitAggregator.listenedChild = serialSeek.toChild;
+				}
+				
+				if (!isNaN(exitSeekingStateTime))
+				{
+					setSeeking(false, exitSeekingStateTime);
+					
+					exitSeekingStateTime = NaN;
 				}
 				
 				var playTrait:PlayTrait = owner.getTrait(MediaTraitType.PLAY) as PlayTrait;
@@ -278,11 +301,19 @@ package org.osmf.elements.compositeClasses
 							return; //return if any children haven't completed the seek.
 						}
 					}
-					crossChildrenSeeking = false;		
+					crossChildrenSeeking = false;
 					
-					// The child is exiting the seeking state, so we just
-					// update the composite seeking state.
-					setSeeking(false, timeTrait.currentTime);		
+					if (readyToExitSeekingState)
+					{
+						// The child is exiting the seeking state, so we just
+						// update the composite seeking state.
+						setSeeking(false, timeTrait.currentTime);
+					}
+					else
+					{
+						// Save the time which we'll pass to the setSeeking method.
+						exitSeekingStateTime = timeTrait.currentTime;
+					}		
 				}
 			}					
 			else
@@ -440,5 +471,7 @@ package org.osmf.elements.compositeClasses
 		private var owner:MediaElement;
 		private var crossChildrenSeeking:Boolean;
 		private var allCrossChildrenSeeksInitiated:Boolean;
+		private var readyToExitSeekingState:Boolean = true;
+		private var exitSeekingStateTime:Number;
 	}
 }

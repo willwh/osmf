@@ -1409,7 +1409,7 @@ package org.osmf.media
 				case MediaTraitType.SEEK:
 					changeListeners(add, traitType, SeekEvent.SEEKING_CHANGE, onSeeking);
 					_canSeek = add;					
-					if (SeekTrait(media.getTrait(MediaTraitType.SEEK)).seeking)
+					if (SeekTrait(media.getTrait(MediaTraitType.SEEK)).seeking && !inExecuteAutoRewind)
 					{
 						dispatchEvent(new SeekEvent(SeekEvent.SEEKING_CHANGE, false, false, add));
 					}					

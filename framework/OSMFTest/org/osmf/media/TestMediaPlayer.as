@@ -1446,6 +1446,7 @@ package org.osmf.media
 				mediaPlayer.loop = true;
 				
 				var states:Array = [];
+				var loopCount:int = 0;
 				
 				mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
 				mediaPlayer.addEventListener(TimeEvent.COMPLETE, onTestLoop);
@@ -1453,17 +1454,25 @@ package org.osmf.media
 				
 				function onTestLoop(event:TimeEvent):void
 				{
-					mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
-					mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestLoop);
+					loopCount++;
 					
 					assertTrue(mediaPlayer.paused == false);
 					
 					var statesStr:String = states.join(" ");
-					assertTrue(statesStr == "playing"); 
-
-					mediaPlayer.pause();
+					assertTrue(statesStr == "playing" || statesStr == "ready playing");
 					
-					eventDispatcher.dispatchEvent(new Event("testComplete"));
+					states = [];
+
+					// Make sure we actually play a second time.
+					if (loopCount == 2)
+					{
+						mediaPlayer.removeEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+						mediaPlayer.removeEventListener(TimeEvent.COMPLETE, onTestLoop);
+
+						mediaPlayer.pause();
+					
+						eventDispatcher.dispatchEvent(new Event("testComplete"));
+					}
 				}
 				
 				function onStateChange(event:MediaPlayerStateChangeEvent):void
