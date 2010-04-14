@@ -72,13 +72,12 @@ package org.osmf.net
 				setCanPause(false);
 			}
 
-			// Note that we add the listener (and handler) with a slightly
-			// higher priority.  The reason for this is that we want to process
-			// any Play.Stop (and Play.Complete) events first, so that we can
-			// update our playing state before the NetStreamTemporalTrait
-			// processes the event and dispatches the COMPLETE event.  Clients
-			// who register for the COMPLETE event will expect that the media
-			// is no longer playing.
+			// Note that we add the listener (and handler) with a high priority.
+			// The reason for this is that we want to process any Play.Stop (and
+			// Play.Complete) events first, so that we can update our playing
+			// state before the NetStreamTimeTrait processes the event and
+			// dispatches the COMPLETE event.  Clients who register for the
+			// COMPLETE event will expect that the media is no longer playing.
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 1, true);
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus, 1);
 		}
