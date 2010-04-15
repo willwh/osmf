@@ -33,9 +33,11 @@ package
 	import org.osmf.events.*;
 	import org.osmf.layout.*;
 	import org.osmf.media.*;
+	import org.osmf.net.*;
 	import org.osmf.player.configuration.*;
 	import org.osmf.player.debug.*;
 	import org.osmf.player.preloader.*;
+	import org.osmf.traits.*;
 	
 	CONFIG::DEBUG 
 	{
@@ -97,6 +99,7 @@ package
 		{
 			player.addEventListener(MediaErrorEvent.MEDIA_ERROR, onMediaError);
 			player.addEventListener(MediaPlayerCapabilityChangeEvent.IS_DYNAMIC_STREAM_CHANGE, onIsDynamicStreamChange);
+			player.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onCanBufferChange);
 			
 			container.clipChildren = true;
 			container.backgroundColor = configuration.backgroundColor;
@@ -138,6 +141,55 @@ package
 				
 		// Handlers
 		//
+		
+		private function onCanBufferChange(event:MediaPlayerCapabilityChangeEvent):void
+		{
+			var loadTrait:NetStreamLoadTrait;
+			if (event.enabled)
+			{
+				if (player.media != null)
+				{
+					loadTrait = player.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+					if (loadTrait != null)
+					{
+						loadTrait.netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					}
+				}
+			}
+			else
+			{
+				if (player.media != null)
+				{
+					loadTrait = player.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+					if (loadTrait != null)
+					{
+						loadTrait.netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					}
+				}
+			}
+		}
+		
+		private function onNetStatus(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_BUFFER_EMPTY)
+			{
+				if (player.media != null)
+				{
+					var loadTrait:NetStreamLoadTrait = player.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+					if (loadTrait != null)
+					{
+						if (loadTrait.netStream.bufferTime >= 2.0)
+						{
+							loadTrait.netStream.bufferTime += 1.0;
+						}
+						else
+						{
+							loadTrait.netStream.bufferTime = 2.0;
+						}						
+					}
+				}
+			}
+		}
 		
 		private function onStageResize(event:Event = null):void
 		{

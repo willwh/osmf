@@ -113,8 +113,6 @@ package org.osmf.net.httpstreaming
 			this.indexHandler = indexHandler;
 			this.fileHandler = fileHandler;
 			
-			this.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-			
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_INDEX_READY, onIndexReady);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.NOTIFY_RATES, onRates);
 			indexHandler.addEventListener(HTTPStreamingIndexHandlerEvent.REQUEST_LOAD_INDEX, onRequestLoadIndexFile);
@@ -1395,22 +1393,6 @@ package org.osmf.net.httpstreaming
 			CONFIG::FLASH_10_1
 			{
 				super.appendBytes(bytes);
-			}
-		}
-		
-		private function onNetStatus(event:NetStatusEvent):void
-		{
-			var code:String = event.info.code;
-			if (code == "NetStream.Buffer.Empty")
-			{
-				if (bufferTime >= 2.0)
-				{
-					bufferTime += 1.0;
-				}
-				else
-				{
-					bufferTime = 2.0;
-				}
 			}
 		}
 
