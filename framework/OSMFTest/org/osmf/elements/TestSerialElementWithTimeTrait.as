@@ -136,6 +136,81 @@ package org.osmf.elements
 			assertTrue(timeTrait.duration == 93);
 		}
 		
+		public function testTimeTraitWithNestedSerialElement():void
+		{
+			var serial:SerialElement = new SerialElement();
+			
+			// Create a few media elements with the TimeTrait and some
+			// initial properties.
+			//
+			
+			var mediaElement1:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var timeTrait1:DynamicTimeTrait = mediaElement1.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait1.duration = 5;
+			timeTrait1.currentTime = 0;
+			
+			var mediaElement2:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var timeTrait2:DynamicTimeTrait = mediaElement2.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait2.duration = 5;
+			timeTrait2.currentTime = 0;
+			
+			var mediaElement3:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var timeTrait3:DynamicTimeTrait = mediaElement3.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait3.duration = 5;
+			timeTrait3.currentTime = 0;
+
+			var mediaElement4:MediaElement = new DynamicMediaElement([MediaTraitType.PLAY, MediaTraitType.TIME], null, null, true);
+			var timeTrait4:DynamicTimeTrait = mediaElement4.getTrait(MediaTraitType.TIME) as DynamicTimeTrait;
+			timeTrait4.duration = NaN;
+			timeTrait4.currentTime = NaN;
+			
+			// Put them in nested SerialElements.
+			var serialChild1:SerialElement = new SerialElement();
+			serialChild1.addChild(mediaElement1);
+			serialChild1.addChild(mediaElement2);
+			var serialChild2:SerialElement = new SerialElement();
+			serialChild2.addChild(mediaElement3);
+			serialChild2.addChild(mediaElement4);
+			serial.addChild(serialChild1);
+			serial.addChild(serialChild2);
+			
+			var timeTrait:TimeTrait = serial.getTrait(MediaTraitType.TIME) as TimeTrait;
+			assertTrue(timeTrait != null);
+			assertTrue(timeTrait.duration == 15);
+			assertTrue(timeTrait.currentTime == 0);
+
+			// The complete event should not be dispatched until the last child's
+			// currentTime equals its duration.
+			//
+			
+			timeTrait.addEventListener(TimeEvent.COMPLETE, onComplete);
+			
+			assertTrue(completeEventCount == 0);
+			
+			timeTrait1.currentTime = 5;
+			
+			assertTrue(timeTrait.duration == 15);
+			assertTrue(timeTrait.currentTime == 5);
+			assertTrue(completeEventCount == 0);
+			
+			timeTrait2.currentTime = 5;
+
+			assertTrue(timeTrait.duration == 15);
+			assertTrue(timeTrait.currentTime == 10);
+			assertTrue(completeEventCount == 0);
+			
+			timeTrait3.currentTime = 5;
+
+			assertTrue(timeTrait.duration == 15);
+			assertTrue(timeTrait.currentTime == 15);
+			assertTrue(completeEventCount == 0);
+			
+			timeTrait4.duration = 5;
+			timeTrait4.currentTime = 5;
+			
+			assertTrue(completeEventCount == 1);
+		}
+		
 		private function onDurationChanged(event:TimeEvent):void
 		{
 			durationChangedEventCount++;

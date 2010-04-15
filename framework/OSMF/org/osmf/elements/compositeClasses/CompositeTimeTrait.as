@@ -111,19 +111,43 @@ package org.osmf.elements.compositeClasses
 		override protected function signalComplete():void
 		{
 			// The base class can cause this method to get called, sometimes
-			// inappropriately (e.g. if currentTime == duration because we don't
-			// have duration for the next child).  For serial, we should only let
-			// the call pass through if we're truly at the end.
-			// Also - Don't dispatch if the final trait doesn't have a time, wait until it either it gets its
-			// non-zero time or it dispatches complete.  -> FM-303.			
+			// inappropriately for serial elements, so we need to verify that
+			// it's truly complete.
 			if (	mode == CompositionMode.PARALLEL
-				||  (traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1 &&
-					(traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration > 0 &&
-					!isNaN((traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait).duration))  
+				||  isSerialComplete() 
 			   )
 			{
 				super.signalComplete()
 			}
+		}
+		
+		private function isSerialComplete():Boolean
+		{
+			// A serial element is only complete is it's truly at the end.
+			//
+			
+			var childTimeTrait:TimeTrait = traitAggregator.listenedChild.getTrait(MediaTraitType.TIME) as TimeTrait;
+			
+			// Conditions in which it's not at the end:
+			// 1) If currentTime == duration because we don't yet have the duration
+			//    for the next child.
+			// 2) If the next child doesn't have a duration yet (FM-303).
+			var result:Boolean =
+					traitAggregator.getChildIndex(traitAggregator.listenedChild) == traitAggregator.numChildren - 1
+				&&	childTimeTrait.duration > 0
+				&&	!isNaN(childTimeTrait.duration);
+			
+			// 3) If the last child is itself a SerialElement, then we need to 
+			// recursively apply the same rule checks, in case it appears to be
+			// complete but really isn't (FM-707).
+			if (	result
+				&&	childTimeTrait is CompositeTimeTrait
+			   )
+			{
+				result = CompositeTimeTrait(childTimeTrait).isSerialComplete();
+			}
+				
+			return result;
 		}
 				
 		// Internal
