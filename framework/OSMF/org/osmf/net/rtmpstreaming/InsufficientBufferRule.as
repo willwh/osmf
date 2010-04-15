@@ -81,9 +81,9 @@ package org.osmf.net.rtmpstreaming
 			
 			if (_panic || (rtmpMetrics.netStream.bufferLength < minBufferLength && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime))
 			{
-				if (!_panic)
+				CONFIG::LOGGING
 				{
-					CONFIG::LOGGING
+					if (!_panic)
 					{
 						debug("Buffer of " + Math.round(rtmpMetrics.netStream.bufferLength)  + " < " + minBufferLength + " seconds");
 					}
@@ -92,9 +92,9 @@ package org.osmf.net.rtmpstreaming
 				newIndex = 0;
 			}
 			
-			if (newIndex != -1)
+			CONFIG::LOGGING
 			{
-				CONFIG::LOGGING
+				if (newIndex != -1)
 				{
 					debug("getNewIndex() - about to return: " + newIndex + ", detail=" + _moreDetail);
 				}

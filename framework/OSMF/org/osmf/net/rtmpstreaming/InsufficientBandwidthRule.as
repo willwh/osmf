@@ -94,19 +94,19 @@ package org.osmf.net.rtmpstreaming
 				
 				newIndex = (newIndex == rtmpMetrics.currentIndex) ? -1 : newIndex;
 				
-				if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
+				CONFIG::LOGGING
 				{
-					CONFIG::LOGGING
+					if ((newIndex != -1) && (newIndex < rtmpMetrics.currentIndex))
 					{
 						debug("Average bandwidth of " + Math.round(rtmpMetrics.averageMaxBytesPerSecond) + " < " + bitrateMultiplier + " * rendition bitrate");
 					}
 	        	}
         	} 
         	
-        	if (newIndex != -1)
-        	{
-        		CONFIG::LOGGING
-				{
+			CONFIG::LOGGING
+			{
+        		if (newIndex != -1)
+        		{
         			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
     			}
         	}

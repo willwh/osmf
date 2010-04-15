@@ -129,10 +129,10 @@ package org.osmf.net.rtmpstreaming
 				newIndex = metrics.currentIndex;
 			}
         	
-        	if (newIndex != -1)
-        	{
-        		CONFIG::LOGGING
-				{
+			CONFIG::LOGGING
+			{
+        		if (newIndex != -1)
+        		{
         			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
     			} 
         	}

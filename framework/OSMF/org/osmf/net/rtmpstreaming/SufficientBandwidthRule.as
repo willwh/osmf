@@ -87,10 +87,10 @@ package org.osmf.net.rtmpstreaming
 	        		// a stable buffer.
 	        		newIndex = (rtmpMetrics.droppedFPS < MIN_DROPPED_FPS && rtmpMetrics.netStream.bufferLength > rtmpMetrics.netStream.bufferTime) ? newIndex : -1;
 	        		
-	        		if (newIndex != -1)
-	        		{
-	        			CONFIG::LOGGING
-	        			{
+					CONFIG::LOGGING
+					{
+		        		if (newIndex != -1)
+		        		{
 	        				debug("Move up since avg dropped FPS " + Math.round(rtmpMetrics.droppedFPS) + " < " + MIN_DROPPED_FPS + " and bufferLength > " + rtmpMetrics.netStream.bufferTime);
 	        			}
 	        		}
@@ -101,10 +101,10 @@ package org.osmf.net.rtmpstreaming
 	        	}
         	} 
         	
-        	if (newIndex != -1)
-        	{
-        		CONFIG::LOGGING
-	        	{
+			CONFIG::LOGGING
+			{
+	        	if (newIndex != -1)
+    	    	{
         			debug("getNewIndex() - about to return: " + newIndex + ", detail=" + moreDetail);
         		}
         	}
