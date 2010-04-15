@@ -246,7 +246,8 @@ package org.osmf.elements.f4mClasses
 			}
 			if (value.attribute("offline").length() > 0)
 			{
-				dvrInfo.offline = value.@offline;
+				var s:String = value.@offline;
+				dvrInfo.offline = (s.toLowerCase() == "true");
 			}
 			
 			manifest.dvrInfo = dvrInfo;
