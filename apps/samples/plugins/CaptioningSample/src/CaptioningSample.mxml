@@ -426,7 +426,7 @@
 	    			<mx:Label id="lblDuration" width="100" styleName="timeCode" />
 					<mx:VBox paddingTop="2">
 						<mx:VBox id="ccBox" paddingLeft="1" horizontalAlign="center" verticalAlign="middle" borderStyle="outset" 
-							borderColor="#00cc00" borderThickness=".5" toolTip="Toggle Captioning" 
+							borderColor="#00cc00" toolTip="Toggle Captioning" 
 							buttonMode="true" click="onClickCC(event)" verticalGap="0" horizontalGap="0" width="22" height="16">
 							<mx:Label text="CC" buttonMode="true"/>
 						</mx:VBox>							
