@@ -23,6 +23,8 @@ package org.osmf.examples
 {
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.net.NetConnection;
+	import flash.net.NetStream;
 	import flash.utils.Timer;
 	
 	import org.osmf.elements.AudioElement;
@@ -41,6 +43,7 @@ package org.osmf.examples
 	import org.osmf.examples.chromeless.ChromelessPlayerElement;
 	import org.osmf.examples.loaderproxy.AsynchLoadingProxyElement;
 	import org.osmf.examples.loaderproxy.VideoProxyElement;
+	import org.osmf.examples.netconnection.SimpleNetLoader;
 	import org.osmf.examples.posterframe.PosterFrameElement;
 	import org.osmf.examples.posterframe.RTMPPosterFrameElement;
 	import org.osmf.examples.recommendations.RecommendationsElement;
@@ -942,7 +945,19 @@ package org.osmf.examples
 				  	)
 				);
 				
-				
+			examples.push
+				( new Example
+					( 	"Video With an Injected NetConnection"
+						, 	"Demonstrates playback of a video where the NetConnection and NetStream are specified externally, rather than created by the NetLoader.  This approach is useful when you're integrating with an existing NetConnection framework.  For simplicity, this example plays a progressive video, but the approach should also work for streaming video."
+						,  	function():MediaElement
+						{
+							var netConnection:NetConnection = new NetConnection();
+							netConnection.connect(null);
+							var netStream:NetStream = new NetStream(netConnection);
+							return new VideoElement(new URLResource(REMOTE_PROGRESSIVE), new SimpleNetLoader(netConnection, netStream));
+						}
+					)
+				);
 			examples.push
 				( new Example
 					(	"Recommendations"
