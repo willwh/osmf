@@ -234,7 +234,12 @@ package org.osmf.net.httpstreaming.f4f
 		{
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
-			
+
+			if (!playInProgress && stopPlaying(abst))
+			{
+				return null;
+			}
+							
 			checkMetadata(quality, abst);
 			
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
@@ -273,11 +278,6 @@ package org.osmf.net.httpstreaming.f4f
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
-				}
-				
-				if (!playInProgress && stopPlaying(abst))
-				{
-					return null;
 				}
 				
 				playInProgress = true;
@@ -321,6 +321,11 @@ package org.osmf.net.httpstreaming.f4f
 			var abst:AdobeBootstrapBox = bootstrapBoxes[quality];
 			var streamRequest:HTTPStreamRequest = null;
 			
+			if (!playInProgress && stopPlaying(abst))
+			{
+				return null;
+			}
+
 			checkMetadata(quality, abst);
 
 			if (quality >= 0 && quality < streamInfos.length)
@@ -356,11 +361,6 @@ package org.osmf.net.httpstreaming.f4f
 						refreshBootstrapInfo(quality);
 						return new HTTPStreamRequest(null, quality, 0, delay);
 					}
-				}
-
-				if (!playInProgress && stopPlaying(abst))
-				{
-					return null;
 				}
 
 				playInProgress = true;
@@ -673,7 +673,8 @@ package org.osmf.net.httpstreaming.f4f
 		private function stopPlaying(abst:AdobeBootstrapBox):Boolean
 		{
 			var frt:AdobeFragmentRunTable = getFragmentRunTable(abst);
-			if (f4fIndexInfo.dvrInfo == null && abst.live && frt.tableComplete())
+			if ((f4fIndexInfo.dvrInfo == null && abst.live && frt.tableComplete()) ||
+				(f4fIndexInfo.dvrInfo != null && f4fIndexInfo.dvrInfo.offline))
 			{
 				return true;
 			}
