@@ -185,7 +185,19 @@ package org.osmf.net
 			catch (e:RangeError)
 			{
 			}
-			
+
+			// Switching to too low an index is illegal.
+			switchManager.autoSwitch = false;
+			try
+			{
+				switchManager.switchTo(-1);
+				
+				fail();
+			}
+			catch (e:RangeError)
+			{
+			}
+
 			// Switching to a valid index but one that's above
 			// maxAllowedIndex is illegal.
 			switchManager.maxAllowedIndex = 1; 
@@ -208,7 +220,7 @@ package org.osmf.net
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithNoSwitch);
 
 			
-			playStream(1);
+			playStream();
 		}
 		
 		private function onTestAutoSwitchWithNoSwitch(info:Object):void
@@ -226,12 +238,14 @@ package org.osmf.net
 
 		public function testAutoSwitchWithSwitchDown():void
 		{
-			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 5000));
+			eventDispatcher.addEventListener("testComplete", addAsync(mustReceiveEvent, 6000));
 			
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchDown);
 			
-			playStream(2);
+			dsResource.initialIndex = 2;
+			
+			playStream();
 			
 			// Suggest a down-switch.
 			switchingRule.newIndex = 1;
@@ -241,6 +255,21 @@ package org.osmf.net
 		{
 			if (info.code == NetStreamCodes.NETSTREAM_PLAY_TRANSITION_COMPLETE)
 			{
+				assertTrue(switchManager.currentIndex == 1);
+				
+				stream.addEventListener(NetStatusEvent.NET_STATUS, onTestAutoSwitchWithSwitchDown2);
+				
+				/// Suggest an up-switch.  This should fail, because we'll be locked
+				// out.
+				switchingRule.newIndex = 2;
+			}
+		}
+		
+		private function onTestAutoSwitchWithSwitchDown2(event:NetStatusEvent):void
+		{
+			if (event.info.code == NetStreamCodes.NETSTREAM_PLAY_STOP)
+			{
+				// Should reach the end without switching.
 				assertTrue(switchManager.currentIndex == 1);
 				
 				eventDispatcher.dispatchEvent(new Event("testComplete"));
@@ -254,7 +283,7 @@ package org.osmf.net
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUp);
 			
-			playStream(1);
+			playStream();
 			
 			// Suggest an up-switch.
 			switchingRule.newIndex = 2;
@@ -277,7 +306,7 @@ package org.osmf.net
 			assertTrue(switchManager.autoSwitch);
 			NetClient(stream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onTestAutoSwitchWithSwitchUpWithMaxIndex);
 			
-			playStream(1);
+			playStream();
 			
 			// Set our max index.
 			switchManager.maxAllowedIndex = 2;
@@ -300,13 +329,13 @@ package org.osmf.net
 			// Placeholder to ensure an event is received.
 		}
 		
-		private function playStream(index:int=0):void
+		private function playStream():void
 		{
 			var nso:NetStreamPlayOptions = new NetStreamPlayOptions();
 
 			nso.start = -2;
 			nso.len = -1;
-			nso.streamName = dsResource.streamItems[index].streamName;
+			nso.streamName = dsResource.streamItems[0].streamName;
 			nso.transition = NetStreamPlayTransitions.RESET;
 
 			stream.play2(nso);

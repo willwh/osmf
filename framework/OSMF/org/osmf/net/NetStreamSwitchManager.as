@@ -478,11 +478,6 @@ package org.osmf.net
 			initDSIFailedCounts();
 		}
 				
-		private function get isLive():Boolean
-		{
-			return dsResource.streamType == StreamType.LIVE;
-		}
-		
 		private function setThrottleLimits(index:int):void 
 		{
 			connection.call("setBandwidthLimit", null, _bandwidthLimit, _bandwidthLimit);
