@@ -281,6 +281,7 @@ package org.osmf
 			// Layout
 			//			
 			
+			addTestSuite(TestScaleModeUtils);
 			addTestSuite(TestBinarySearch);
 			addTestSuite(TestAbsoluteLayoutMetadata);
 			addTestSuite(TestAnchorLayoutMetadata);
