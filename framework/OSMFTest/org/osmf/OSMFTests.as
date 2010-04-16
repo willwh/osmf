@@ -102,6 +102,7 @@ package org.osmf
 			addTestSuite(TestDefaultTraitResolver);
 			addTestSuite(TestMediaFactoryItem);
 			addTestSuite(TestMediaFactory);
+			addTestSuite(TestDefaultMediaFactory);
 			addTestSuite(TestMediaType);
 			addTestSuite(TestMediaTypeUtil);
 			
