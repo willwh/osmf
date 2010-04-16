@@ -66,7 +66,7 @@ package org.osmf.elements.f4mClasses
 	    /**
 	     * Decodes a Base64 encoded String and adds the result to an internal
 	     * buffer. Subsequent calls to this method add on to the internal
-	     * buffer. After all data have been encoded, call <code>toByteArray()</code>
+	     * buffer. After all data have been encoded, call <code>drain()</code>
 	     * to obtain a decoded <code>flash.utils.ByteArray</code>.
 	     * 
 	     * @param encoded The Base64 encoded String to decode.
@@ -118,52 +118,6 @@ package org.osmf.elements.f4mClasses
 	        var result:ByteArray = new ByteArray();
 	        copyByteArray(data, result, filled);
 	        filled = 0;
-	        return result;
-	    }
-	
-	    /**
-	     * @private
-	     */
-	    public function flush():ByteArray
-	    {
-	        if (count > 0)
-	        {	        	
-	            throw new Error('partialBlockDropped');
-	        }
-	        return drain();
-	    }
-	
-	    /**
-	     * Clears all buffers and resets the decoder to its initial state.
-	     *  
-	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
-	     */
-	    public function reset():void
-	    {
-	        data = new ByteArray();
-	        count = 0;
-	        filled = 0;
-	    }
-	
-	    /**
-	     * Returns the current buffer as a decoded <code>flash.utils.ByteArray</code>.
-	     * Note that calling this method also clears the buffer and resets the 
-	     * decoder to its initial state.
-	     * 
-	     * @return The decoded <code>flash.utils.ByteArray</code>.
-	     *  
-	     *  @langversion 3.0
-	     *  @playerversion Flash 10
-	     *  @playerversion AIR 1.5
-	     *  @productversion OSMF 1.0
-	     */
-	    public function toByteArray():ByteArray
-	    {
-	        var result:ByteArray = flush();
-	        reset();
 	        return result;
 	    }
 	
